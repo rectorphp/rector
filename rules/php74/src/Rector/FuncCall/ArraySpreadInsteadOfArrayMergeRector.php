@@ -35,7 +35,7 @@ final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector
             'Change array_merge() to spread operator, except values with possible string key values',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($iter1, $iter2)
@@ -49,9 +49,9 @@ class SomeClass
         );
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($iter1, $iter2)
@@ -62,7 +62,7 @@ class SomeClass
         $anotherValues = [...$iter1, ...$iter2];
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

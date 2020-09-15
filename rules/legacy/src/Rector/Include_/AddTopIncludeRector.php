@@ -50,19 +50,19 @@ final class AddTopIncludeRector extends AbstractFileSystemRector implements Conf
     {
         return new RectorDefinition('Adds an include file at the top of matching files, except class definitions', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 if (isset($_POST['csrf'])) {
     processPost($_POST);
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 require_once __DIR__ . '/../autoloader.php';
 
 if (isset($_POST['csrf'])) {
     processPost($_POST);
 }
-PHP
+CODE_SAMPLE
 ,
                 [
                     self::AUTOLOAD_FILE_PATH => '/../autoloader.php',

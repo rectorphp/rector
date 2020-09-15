@@ -22,19 +22,19 @@ final class TernaryConditionVariableAssignmentRector extends AbstractRector
     {
         return new RectorDefinition('Assign outcome of ternary condition to variable, where applicable', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 function ternary($value)
 {
     $value ? $a = 1 : $a = 0;
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 function ternary($value)
 {
     $a = $value ? 1 : 0;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

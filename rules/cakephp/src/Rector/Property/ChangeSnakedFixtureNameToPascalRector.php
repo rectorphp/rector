@@ -25,7 +25,7 @@ final class ChangeSnakedFixtureNameToPascalRector extends AbstractRector
     {
         return new RectorDefinition('Changes $fixtues style from snake_case to PascalCase.', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeTest
 {
     protected $fixtures = [
@@ -33,9 +33,9 @@ class SomeTest
         'app.users',
         'some_plugin.posts/special_posts',
     ];
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeTest
 {
     protected $fixtures = [
@@ -43,7 +43,7 @@ class SomeTest
         'app.Users',
         'some_plugin.Posts/SpecialPosts',
     ];
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

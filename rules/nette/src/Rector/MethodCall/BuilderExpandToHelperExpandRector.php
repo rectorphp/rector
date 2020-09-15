@@ -28,7 +28,7 @@ final class BuilderExpandToHelperExpandRector extends AbstractRector
     {
         return new RectorDefinition('Change containerBuilder->expand() to static call with parameters', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\DI\CompilerExtension;
 
 final class SomeClass extends CompilerExtension
@@ -38,10 +38,10 @@ final class SomeClass extends CompilerExtension
         $value = $this->getContainerBuilder()->expand('%value');
     }
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\DI\CompilerExtension;
 
 final class SomeClass extends CompilerExtension
@@ -51,7 +51,7 @@ final class SomeClass extends CompilerExtension
         $value = \Nette\DI\Helpers::expand('%value', $this->getContainerBuilder()->parameters);
     }
 }
-PHP
+CODE_SAMPLE
 
             ),
         ]);

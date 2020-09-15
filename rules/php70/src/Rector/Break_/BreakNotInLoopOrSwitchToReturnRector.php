@@ -35,7 +35,7 @@ final class BreakNotInLoopOrSwitchToReturnRector extends AbstractRector
     {
         return new RectorDefinition('Convert break outside for/foreach/switch context to return', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -47,9 +47,9 @@ class SomeClass
         break;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -61,7 +61,7 @@ class SomeClass
         return;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

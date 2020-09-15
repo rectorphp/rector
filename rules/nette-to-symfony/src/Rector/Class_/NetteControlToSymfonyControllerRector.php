@@ -56,7 +56,7 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
     {
         return new RectorDefinition('Migrate Nette Component to Symfony Controller', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 
 class SomeControl extends Control
@@ -67,9 +67,9 @@ class SomeControl extends Control
         $this->template->render(__DIR__ . '/poll.latte');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -80,7 +80,7 @@ class SomeController extends AbstractController
          return $this->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
      }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

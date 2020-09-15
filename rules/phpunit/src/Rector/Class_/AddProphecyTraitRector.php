@@ -46,7 +46,7 @@ final class AddProphecyTraitRector extends AbstractPHPUnitRector
     {
         return new RectorDefinition('Add Prophecy trait for method using $this->prophesize()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class ExampleTest extends TestCase
@@ -56,9 +56,9 @@ final class ExampleTest extends TestCase
         $prophecy = $this->prophesize(\AnInterface::class);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -71,7 +71,7 @@ final class ExampleTest extends TestCase
         $prophecy = $this->prophesize(\AnInterface::class);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

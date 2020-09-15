@@ -32,11 +32,11 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
             [
                 new CodeSample(
                     '$this->setExpectedException(Exception::class, "Message", "CODE");',
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $this->setExpectedException(Exception::class);
 $this->expectExceptionMessage('Message');
 $this->expectExceptionCode('CODE');
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

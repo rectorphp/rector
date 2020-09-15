@@ -31,7 +31,7 @@ final class RenameConstantRector extends AbstractRector implements ConfigurableR
     {
         return new RectorDefinition('Replace constant by new ones', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -39,9 +39,9 @@ final class SomeClass
         return MYSQL_ASSOC;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -49,7 +49,7 @@ final class SomeClass
         return MYSQLI_ASSOC;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::OLD_TO_NEW_CONSTANTS => [

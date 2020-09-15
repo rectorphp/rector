@@ -50,7 +50,7 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     {
         return new RectorDefinition('Add missing dynamic properties', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function set()
@@ -58,9 +58,9 @@ class SomeClass
         $this->value = 5;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -72,7 +72,7 @@ class SomeClass
         $this->value = 5;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

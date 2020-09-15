@@ -26,7 +26,7 @@ final class StrposToStringsContainsRector extends AbstractRector
     {
         return new RectorDefinition('Use Nette\Utils\Strings over bare string-functions', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -35,9 +35,9 @@ class SomeClass
         return strpos($name, 'Hi') !== false;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -46,7 +46,7 @@ class SomeClass
         return \Nette\Utils\Strings::contains($name, 'Hi');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

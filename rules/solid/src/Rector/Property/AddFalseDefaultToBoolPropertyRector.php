@@ -22,7 +22,7 @@ final class AddFalseDefaultToBoolPropertyRector extends AbstractRector
     {
         return new RectorDefinition('Add false default to bool properties, to prevent null compare errors', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -30,9 +30,9 @@ class SomeClass
      */
     private $isDisabled;
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -40,7 +40,7 @@ class SomeClass
      */
     private $isDisabled = false;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

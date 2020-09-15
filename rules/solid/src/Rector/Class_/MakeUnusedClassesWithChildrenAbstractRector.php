@@ -19,7 +19,7 @@ final class MakeUnusedClassesWithChildrenAbstractRector extends AbstractRector
     {
         return new RectorDefinition('Classes that have no children nor are used, should have abstract', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass extends PossibleAbstractClass
 {
 }
@@ -27,9 +27,9 @@ class SomeClass extends PossibleAbstractClass
 class PossibleAbstractClass
 {
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass extends PossibleAbstractClass
 {
 }
@@ -37,7 +37,7 @@ class SomeClass extends PossibleAbstractClass
 abstract class PossibleAbstractClass
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

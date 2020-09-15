@@ -36,22 +36,22 @@ final class ImplicitShortClassNameUseStatementRector extends AbstractRector
     {
         return new RectorDefinition('Collect implicit class names and add imports', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use App\Foo\Plugin;
 
 class LocationsFixture extends TestFixture implements Plugin
 {
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use App\Foo\Plugin;
 use Cake\TestSuite\Fixture\TestFixture;
 
 class LocationsFixture extends TestFixture implements Plugin
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

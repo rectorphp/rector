@@ -41,7 +41,7 @@ final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
     {
         return new RectorDefinition('Convert [$this, "method"] to proper anonymous function', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -57,9 +57,9 @@ class SomeClass
         return $first <=> $second;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -77,7 +77,7 @@ class SomeClass
         return $first <=> $second;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

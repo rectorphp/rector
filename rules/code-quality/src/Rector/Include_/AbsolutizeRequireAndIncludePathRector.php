@@ -27,7 +27,7 @@ final class AbsolutizeRequireAndIncludePathRector extends AbstractRector
             'include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -37,9 +37,9 @@ class SomeClass
         require $variable;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -49,7 +49,7 @@ class SomeClass
         require $variable;
     }
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

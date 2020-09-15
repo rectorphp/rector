@@ -51,7 +51,7 @@ final class ServiceLocatorToDIRector extends AbstractRector
             'Turns $this->getRepository() in Symfony Controller to constructor injection and private property access.',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class ProductController extends Controller
 {
     public function someAction()
@@ -60,9 +60,9 @@ class ProductController extends Controller
         $entityManager->getRepository('SomethingBundle:Product')->findSomething(...);
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class ProductController extends Controller
 {
     /**
@@ -81,7 +81,7 @@ class ProductController extends Controller
         $this->productRepository->findSomething(...);
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

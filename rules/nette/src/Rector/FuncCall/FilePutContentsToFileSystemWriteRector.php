@@ -19,7 +19,7 @@ final class FilePutContentsToFileSystemWriteRector extends AbstractRector
     {
         return new RectorDefinition('Change file_put_contents() to FileSystem::write()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -29,9 +29,9 @@ class SomeClass
         file_put_contents('file.txt', 'content_to_append', FILE_APPEND);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -41,7 +41,7 @@ class SomeClass
         file_put_contents('file.txt', 'content_to_append', FILE_APPEND);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

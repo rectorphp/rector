@@ -37,7 +37,7 @@ final class AddMethodCallBasedParamTypeRector extends AbstractRector
     {
         return new RectorDefinition('Change param type of passed getId() to UuidInterface type declaration', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getById($id)
@@ -54,9 +54,9 @@ class CallerClass
         $someClass->getById($building->getId());
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getById(\Ramsey\Uuid\UuidInterface $id)
@@ -73,7 +73,7 @@ class CallerClass
         $someClass->getById($building->getId());
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -33,7 +33,7 @@ final class ChangeReturnTypeOfClassMethodWithGetIdRector extends AbstractRector
     {
         return new RectorDefinition('Change getUuid() method call to getId()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getBuildingId(): int
@@ -43,9 +43,9 @@ class SomeClass
         return $building->getId();
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getBuildingId(): \Ramsey\Uuid\UuidInterface
@@ -55,7 +55,7 @@ class SomeClass
         return $building->getId();
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

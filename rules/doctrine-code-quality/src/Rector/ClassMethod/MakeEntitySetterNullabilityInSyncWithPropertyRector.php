@@ -38,7 +38,7 @@ final class MakeEntitySetterNullabilityInSyncWithPropertyRector extends Abstract
     {
         return new RectorDefinition('Make nullability in setter class method with respect to property', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -56,10 +56,10 @@ class Product
         $this->anotherEntity = $anotherEntity;
     }
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -77,7 +77,7 @@ class Product
         $this->anotherEntity = $anotherEntity;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

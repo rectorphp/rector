@@ -35,7 +35,7 @@ final class MockeryTearDownRector extends AbstractRector
     {
         return new RectorDefinition('Add Mockery::close() in tearDown() method if not yet', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeTest extends TestCase
@@ -45,9 +45,9 @@ class SomeTest extends TestCase
         $mockUser = mock(User::class);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeTest extends TestCase
@@ -61,7 +61,7 @@ class SomeTest extends TestCase
         $mockUser = mock(User::class);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

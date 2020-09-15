@@ -56,7 +56,7 @@ final class ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositor
             'Change ServiceEntityRepository to dependency injection, with repository property',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -67,9 +67,9 @@ final class ProjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Project::class);
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -91,7 +91,7 @@ final class ProjectRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

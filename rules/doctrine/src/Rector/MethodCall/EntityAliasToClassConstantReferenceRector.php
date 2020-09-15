@@ -49,15 +49,15 @@ final class EntityAliasToClassConstantReferenceRector extends AbstractRector imp
     {
         return new RectorDefinition('Replaces doctrine alias with class.', [
             new ConfiguredCodeSample(
-<<<'PHP'
+<<<'CODE_SAMPLE'
 $entityManager = new Doctrine\ORM\EntityManager();
 $entityManager->getRepository("AppBundle:Post");
-PHP
+CODE_SAMPLE
                 ,
-<<<'PHP'
+<<<'CODE_SAMPLE'
 $entityManager = new Doctrine\ORM\EntityManager();
 $entityManager->getRepository(\App\Entity\Post::class);
-PHP
+CODE_SAMPLE
 ,
                 [
                     self::ALIASES_TO_NAMESPACES => [

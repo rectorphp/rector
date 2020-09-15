@@ -33,20 +33,20 @@ final class RemoveDeadConstructorRector extends AbstractRector
     {
         return new RectorDefinition('Remove empty constructor', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct()
     {
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

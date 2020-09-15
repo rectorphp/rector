@@ -30,7 +30,7 @@ final class SimplifyIfElseToTernaryRector extends AbstractRector
     {
         return new RectorDefinition('Changes if/else for same value as assign to ternary', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -42,9 +42,9 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -52,7 +52,7 @@ class SomeClass
         $this->arrayBuilt[][$key] = empty($value) ? true : $value;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

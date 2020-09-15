@@ -21,19 +21,19 @@ final class WrapEncapsedVariableInCurlyBracesRector extends AbstractRector
     {
         return new RectorDefinition('Wrap encapsed variables in curly braces', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 function run($world)
 {
     echo "Hello $world!"
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 function run($world)
 {
     echo "Hello {$world}!"
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -91,7 +91,7 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
             'Change @return types and type from static analysis to type declarations if not a BC-break',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -103,9 +103,9 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -114,7 +114,7 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

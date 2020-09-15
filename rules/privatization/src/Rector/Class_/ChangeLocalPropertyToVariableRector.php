@@ -52,7 +52,7 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
     {
         return new RectorDefinition('Change local property used in single method to local variable', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $count;
@@ -62,9 +62,9 @@ class SomeClass
         return $this->count;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -73,7 +73,7 @@ class SomeClass
         return $count;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

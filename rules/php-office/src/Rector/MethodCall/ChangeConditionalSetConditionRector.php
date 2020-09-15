@@ -24,7 +24,7 @@ final class ChangeConditionalSetConditionRector extends AbstractRector
     {
         return new RectorDefinition('Change argument PHPExcel_Style_Conditional->setCondition() to setConditions()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -33,9 +33,9 @@ final class SomeClass
         $someCondition = $conditional->setCondition(1);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -44,7 +44,7 @@ final class SomeClass
         $someCondition = $conditional->setConditions((array) 1);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

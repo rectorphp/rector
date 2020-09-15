@@ -67,7 +67,7 @@ final class SingleStaticServiceToDynamicRector extends AbstractRector implements
     {
         return new RectorDefinition('Change full static service, to dynamic one', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class AnotherClass
 {
     public function run()
@@ -87,9 +87,9 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class AnotherClass
 {
     /**
@@ -119,7 +119,7 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
                 [
                     self::CLASS_TYPES => ['SomeClass'],

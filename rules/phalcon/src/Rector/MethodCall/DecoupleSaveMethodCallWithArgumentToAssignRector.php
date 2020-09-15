@@ -21,7 +21,7 @@ final class DecoupleSaveMethodCallWithArgumentToAssignRector extends AbstractRec
     {
         return new RectorDefinition('Decouple Phalcon\Mvc\Model::save() with argument to assign()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(\Phalcon\Mvc\Model $model, $data)
@@ -29,9 +29,9 @@ class SomeClass
         $model->save($data);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(\Phalcon\Mvc\Model $model, $data)
@@ -40,7 +40,7 @@ class SomeClass
         $model->assign($data);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -18,7 +18,7 @@ final class DowngradeReturnObjectTypeDeclarationRector extends AbstractDowngrade
             $this->getRectorDefinitionDescription(),
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -28,9 +28,9 @@ class SomeClass
         return new SomeObject();
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -43,7 +43,7 @@ class SomeClass
         return new SomeObject();
     }
 }
-PHP
+CODE_SAMPLE
 ,
                     [
                         self::ADD_DOC_BLOCK => true,

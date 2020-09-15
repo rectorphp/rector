@@ -32,7 +32,7 @@ final class NewToStaticCallRector extends AbstractRector implements Configurable
     {
         return new RectorDefinition('Change new Object to static call', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -40,9 +40,9 @@ class SomeClass
         new Cookie($name);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,7 +50,7 @@ class SomeClass
         Cookie::create($name);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::TYPE_TO_STATIC_CALLS => [new NewToStaticCall('Cookie', 'Cookie', 'create')],

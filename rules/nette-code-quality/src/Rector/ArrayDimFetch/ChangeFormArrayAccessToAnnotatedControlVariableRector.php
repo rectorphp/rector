@@ -36,7 +36,7 @@ final class ChangeFormArrayAccessToAnnotatedControlVariableRector extends Abstra
     {
         return new RectorDefinition('Change array access magic on $form to explicit standalone typed variable', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Form;
 
 class SomePresenter
@@ -49,9 +49,9 @@ class SomePresenter
         $form['email']->value = 'hey@hi.hello';
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Form;
 
 class SomePresenter
@@ -66,7 +66,7 @@ class SomePresenter
         $emailControl->value = 'hey@hi.hello';
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

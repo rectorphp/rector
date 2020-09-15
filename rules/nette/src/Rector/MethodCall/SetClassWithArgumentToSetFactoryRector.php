@@ -22,7 +22,7 @@ final class SetClassWithArgumentToSetFactoryRector extends AbstractRector
     {
         return new RectorDefinition('Change setClass with class and arguments to separated methods', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\DI\ContainerBuilder;
 
 class SomeClass
@@ -33,9 +33,9 @@ class SomeClass
             ->setClass('SomeClass', [1, 2]);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\DI\ContainerBuilder;
 
 class SomeClass
@@ -46,7 +46,7 @@ class SomeClass
             ->setFactory('SomeClass', [1, 2]);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

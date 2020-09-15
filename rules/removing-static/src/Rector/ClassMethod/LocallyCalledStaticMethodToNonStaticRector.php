@@ -23,7 +23,7 @@ final class LocallyCalledStaticMethodToNonStaticRector extends AbstractRector
     {
         return new RectorDefinition('Change static method and local-only calls to non-static', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -35,10 +35,10 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,7 +50,7 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
 
             ),
         ]);

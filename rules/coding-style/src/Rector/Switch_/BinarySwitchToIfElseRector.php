@@ -27,7 +27,7 @@ final class BinarySwitchToIfElseRector extends AbstractRector
     {
         return new RectorDefinition('Changes switch with 2 options to if-else', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 switch ($foo) {
     case 'my string':
         $result = 'ok';
@@ -36,15 +36,15 @@ switch ($foo) {
     default:
         $result = 'not ok';
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 if ($foo == 'my string') {
     $result = 'ok;
 } else {
     $result = 'not ok';
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

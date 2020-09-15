@@ -21,7 +21,7 @@ final class GetMockBuilderGetMockToCreateMockRector extends AbstractRector
     {
         return new RectorDefinition('Remove getMockBuilder() to createMock()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -31,9 +31,9 @@ class SomeTest extends \PHPUnit\Framework\TestCase
            ->getMock();
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -41,7 +41,7 @@ class SomeTest extends \PHPUnit\Framework\TestCase
         $applicationMock = $this->createMock('SomeClass');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -51,7 +51,7 @@ final class TranslationBehaviorRector extends AbstractRector
     {
         return new RectorDefinition('Change Translation from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Translatable\Translatable;
@@ -106,9 +106,9 @@ class Article implements Translatable
         $this->locale = $locale;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 
@@ -135,7 +135,7 @@ class SomeClassTranslation implements TranslationInterface
      */
     private $content;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

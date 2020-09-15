@@ -22,7 +22,7 @@ final class ChangeDataTypeForValueRector extends AbstractRector
     {
         return new RectorDefinition('Change argument DataType::dataTypeForValue() to DefaultValueBinder', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -30,9 +30,9 @@ final class SomeClass
         $type = \PHPExcel_Cell_DataType::dataTypeForValue('value');
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -40,7 +40,7 @@ final class SomeClass
         $type = \PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder::dataTypeForValue('value');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

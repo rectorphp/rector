@@ -49,7 +49,7 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector implements 
     {
         return new RectorDefinition('Finalize every class constant that is used only locally', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class ClassWithConstantUsedOnlyHere
 {
     const LOCAL_ONLY = true;
@@ -59,9 +59,9 @@ class ClassWithConstantUsedOnlyHere
         return self::LOCAL_ONLY;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class ClassWithConstantUsedOnlyHere
 {
     private const LOCAL_ONLY = true;
@@ -71,7 +71,7 @@ class ClassWithConstantUsedOnlyHere
         return self::LOCAL_ONLY;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

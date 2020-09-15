@@ -19,7 +19,7 @@ final class DowngradeParamMixedTypeDeclarationRector extends AbstractDowngradePa
             $this->getRectorDefinitionDescription(),
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -28,9 +28,9 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -42,7 +42,7 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
                     [
                         self::ADD_DOC_BLOCK => true,

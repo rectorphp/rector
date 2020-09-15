@@ -23,7 +23,7 @@ final class ArrayKeyExistsOnPropertyRector extends AbstractRector
     {
         return new RectorDefinition('Change array_key_exists() on property to property_exists()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
      public $value;
@@ -31,9 +31,9 @@ class SomeClass
 $someClass = new SomeClass;
 
 array_key_exists('value', $someClass);
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
      public $value;
@@ -41,7 +41,7 @@ class SomeClass
 $someClass = new SomeClass;
 
 property_exists($someClass, 'value');
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -41,7 +41,7 @@ final class MakeGetterClassMethodNameStartWithGetRector extends AbstractRector
     {
         return new RectorDefinition('Change getter method names to start with get/provide', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -54,10 +54,10 @@ class SomeClass
         return $this->name;
     }
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -70,7 +70,7 @@ class SomeClass
         return $this->name;
     }
 }
-PHP
+CODE_SAMPLE
 
             ),
         ]);

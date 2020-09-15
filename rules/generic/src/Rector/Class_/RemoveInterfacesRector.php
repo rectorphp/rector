@@ -30,17 +30,17 @@ final class RemoveInterfacesRector extends AbstractRector implements Configurabl
     {
         return new RectorDefinition('Removes interfaces usage from class.', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass implements SomeInterface
 {
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::INTERFACES_TO_REMOVE => ['SomeInterface'],

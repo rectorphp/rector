@@ -22,7 +22,7 @@ final class StringifyDefineRector extends AbstractRector
     {
         return new RectorDefinition('Make first argument of define() string', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(int $a)
@@ -31,9 +31,9 @@ class SomeClass
          define('CONSTANT', 'value');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(int $a)
@@ -42,7 +42,7 @@ class SomeClass
          define('CONSTANT', 'value');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

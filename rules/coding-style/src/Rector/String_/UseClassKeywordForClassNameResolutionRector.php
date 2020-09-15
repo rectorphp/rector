@@ -24,13 +24,13 @@ final class UseClassKeywordForClassNameResolutionRector extends AbstractRector
             'Use `class` keyword for class name resolution in string instead of hardcoded string reference',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $value = 'App\SomeClass::someMethod()';
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $value = \App\SomeClass . '::someMethod()';
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

@@ -25,7 +25,7 @@ final class RemoveJmsInjectParamsAnnotationRector extends AbstractRector
     {
         return new RectorDefinition('Removes JMS\DiExtraBundle\Annotation\InjectParams annotation', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use JMS\DiExtraBundle\Annotation as DI;
 
 class SomeClass
@@ -41,9 +41,9 @@ class SomeClass
     }
 }
 
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use JMS\DiExtraBundle\Annotation as DI;
 
 class SomeClass
@@ -52,7 +52,7 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -39,7 +39,7 @@ final class OrderConstructorDependenciesByTypeAlphabeticallyRector extends Abstr
     {
         return new RectorDefinition('Order __constructor dependencies by type A-Z', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(
@@ -50,9 +50,9 @@ class SomeClass
     ) {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(
@@ -63,7 +63,7 @@ class SomeClass
     ) {
     }
 }
-PHP
+CODE_SAMPLE
 ,
                 [
                     self::SKIP_PATTERNS => ['Cla*ame', 'Ano?herClassName'],

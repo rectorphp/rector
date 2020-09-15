@@ -34,11 +34,11 @@ final class SimplifyForeachInstanceOfRector extends AbstractRector
     {
         return new RectorDefinition('Simplify unnecessary foreach check of instances', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 foreach ($foos as $foo) {
     $this->assertInstanceOf(SplFileInfo::class, $foo);
 }
-PHP
+CODE_SAMPLE
                 ,
                 '$this->assertContainsOnlyInstancesOf(\SplFileInfo::class, $foos);'
             ),

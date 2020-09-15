@@ -36,7 +36,7 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractFileMovingFile
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Move classes by their suffix to their own group/directory', [new ConfiguredCodeSample(
-            <<<'PHP'
+            <<<'CODE_SAMPLE'
 // file: app/Entity/ProductRepository.php
 
 namespace App/Entity;
@@ -44,9 +44,9 @@ namespace App/Entity;
 class ProductRepository
 {
 }
-PHP
+CODE_SAMPLE
             ,
-            <<<'PHP'
+            <<<'CODE_SAMPLE'
 // file: app/Repository/ProductRepository.php
 
 namespace App/Repository;
@@ -54,7 +54,7 @@ namespace App/Repository;
 class ProductRepository
 {
 }
-PHP
+CODE_SAMPLE
             ,
             [
                 self::GROUP_NAMES_BY_SUFFIX => ['Repository'],

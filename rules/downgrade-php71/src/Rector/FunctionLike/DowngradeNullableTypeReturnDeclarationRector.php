@@ -22,7 +22,7 @@ final class DowngradeNullableTypeReturnDeclarationRector extends AbstractDowngra
             'Remove returning nullable types, add a @return tag instead',
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -35,9 +35,9 @@ class SomeClass
         return null;
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -53,7 +53,7 @@ class SomeClass
         return null;
     }
 }
-PHP
+CODE_SAMPLE
 ,
                     [
                         self::ADD_DOC_BLOCK => true,

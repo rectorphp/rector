@@ -25,7 +25,7 @@ final class WrapTransParameterNameRector extends AbstractRector
     {
         return new RectorDefinition('Adds %% to placeholder name of trans() method if missing', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\Translation\Translator;
 
 final class SomeController
@@ -39,9 +39,9 @@ final class SomeController
         );
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\Translation\Translator;
 
 final class SomeController
@@ -55,7 +55,7 @@ final class SomeController
         );
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

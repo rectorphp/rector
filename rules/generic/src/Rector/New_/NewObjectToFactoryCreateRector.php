@@ -38,16 +38,16 @@ final class NewObjectToFactoryCreateRector extends AbstractRector implements Con
     {
         return new RectorDefinition('Replaces creating object instances with "new" keyword with factory method.', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
 	public function example() {
 		new MyClass($argument);
 	}
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
 	/**
@@ -59,7 +59,7 @@ class SomeClass
 		$this->myClassFactory->create($argument);
 	}
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::OBJECT_TO_FACTORY_METHOD => [

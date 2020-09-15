@@ -19,7 +19,7 @@ final class RemoveReferenceFromCallRector extends AbstractRector
     {
         return new RectorDefinition('Remove & from function and method calls', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one)
@@ -27,9 +27,9 @@ final class SomeClass
         return strlen(&$one);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one)
@@ -37,7 +37,7 @@ final class SomeClass
         return strlen($one);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

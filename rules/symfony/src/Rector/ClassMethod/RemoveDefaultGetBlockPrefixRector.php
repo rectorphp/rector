@@ -28,7 +28,7 @@ final class RemoveDefaultGetBlockPrefixRector extends AbstractRector
             'Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 
 class TaskType extends AbstractType
@@ -38,15 +38,15 @@ class TaskType extends AbstractType
         return 'task';
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 
 class TaskType extends AbstractType
 {
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

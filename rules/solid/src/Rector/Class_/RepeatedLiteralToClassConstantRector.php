@@ -73,7 +73,7 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
     {
         return new RectorDefinition('Replace repeated strings with constant', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($key, $items)
@@ -83,9 +83,9 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -99,7 +99,7 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

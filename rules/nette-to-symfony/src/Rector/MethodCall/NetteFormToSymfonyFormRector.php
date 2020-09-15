@@ -60,7 +60,7 @@ final class NetteFormToSymfonyFormRector extends AbstractRector
     {
         return new RectorDefinition('Migrate Nette\Forms in Presenter to Symfony', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI;
 
 class SomePresenter extends UI\Presenter
@@ -73,9 +73,9 @@ class SomePresenter extends UI\Presenter
         $form->addSubmit('login', 'Sign up');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI;
 
 class SomePresenter extends UI\Presenter
@@ -94,7 +94,7 @@ class SomePresenter extends UI\Presenter
         ]);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

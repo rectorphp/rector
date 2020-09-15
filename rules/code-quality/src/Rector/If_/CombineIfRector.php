@@ -21,7 +21,7 @@ final class CombineIfRector extends AbstractRector
     {
         return new RectorDefinition('Merges nested if statements', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -33,9 +33,9 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -45,7 +45,7 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

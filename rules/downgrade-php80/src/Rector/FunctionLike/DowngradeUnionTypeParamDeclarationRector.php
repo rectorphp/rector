@@ -21,7 +21,7 @@ final class DowngradeUnionTypeParamDeclarationRector extends AbstractDowngradePa
             'Remove the union type params, add @param tags instead',
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -31,9 +31,9 @@ class SomeClass
         echo $input;
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -46,7 +46,7 @@ class SomeClass
         echo $input;
     }
 }
-PHP
+CODE_SAMPLE
 ,
                     [
                         self::ADD_DOC_BLOCK => true,

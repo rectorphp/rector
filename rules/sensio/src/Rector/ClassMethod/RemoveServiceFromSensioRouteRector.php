@@ -25,7 +25,7 @@ final class RemoveServiceFromSensioRouteRector extends AbstractRector
     {
         return new RectorDefinition('Remove service from Sensio @Route', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 final class SomeClass
@@ -37,9 +37,9 @@ final class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 final class SomeClass
@@ -51,7 +51,7 @@ final class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

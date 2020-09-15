@@ -22,7 +22,7 @@ final class SplitGroupedConstantsAndPropertiesRector extends AbstractRector
     {
         return new RectorDefinition('Separate constant and properties to own lines', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     const HI = true, AHOJ = 'true';
@@ -32,9 +32,9 @@ class SomeClass
      */
     public $isIt, $isIsThough;
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     const HI = true;
@@ -50,7 +50,7 @@ class SomeClass
      */
     public $isIsThough;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

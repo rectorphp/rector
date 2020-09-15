@@ -52,7 +52,7 @@ final class MysqlQueryMysqlErrorWithLinkRector extends AbstractRector
     {
         return new RectorDefinition('Add mysql_query and mysql_error with connection', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -65,9 +65,9 @@ class SomeClass
         return mysql_query($sql);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -80,7 +80,7 @@ class SomeClass
         return mysqli_query($conn, $sql);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

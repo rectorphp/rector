@@ -35,7 +35,7 @@ final class ExplicitPhpErrorApiRector extends AbstractPHPUnitRector
             'Use explicit API for expecting PHP errors, warnings, and notices',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -46,9 +46,9 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\PHPUnit\Framework\TestCase\Warning::class);
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -59,7 +59,7 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
         $this->expectWarning();
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

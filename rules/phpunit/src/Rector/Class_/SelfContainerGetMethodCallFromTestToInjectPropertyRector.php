@@ -75,7 +75,7 @@ final class SelfContainerGetMethodCallFromTestToInjectPropertyRector extends Abs
             'Change $container->get() calls in PHPUnit to @inject properties autowired by jakzal/phpunit-injector',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 class SomeClassTest extends TestCase {
     public function test()
@@ -87,9 +87,9 @@ class SomeClassTest extends TestCase {
 class SomeService
 {
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 class SomeClassTest extends TestCase {
     /**
@@ -106,7 +106,7 @@ class SomeClassTest extends TestCase {
 class SomeService
 {
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

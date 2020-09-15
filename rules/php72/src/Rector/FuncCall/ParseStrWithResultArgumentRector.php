@@ -25,15 +25,15 @@ final class ParseStrWithResultArgumentRector extends AbstractRector
     {
         return new RectorDefinition('Use $result argument in parse_str() function', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 parse_str($this->query);
 $data = get_defined_vars();
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 parse_str($this->query, $result);
 $data = $result;
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

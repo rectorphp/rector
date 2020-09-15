@@ -25,7 +25,7 @@ final class ArrayAccessGetControlToGetComponentMethodCallRector extends Abstract
     {
         return new RectorDefinition('Change magic arrays access get, to explicit $this->getComponent(...) method', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 
 class SomeClass extends Presenter
@@ -35,9 +35,9 @@ class SomeClass extends Presenter
         $someControl = $this['whatever'];
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 
 class SomeClass extends Presenter
@@ -47,7 +47,7 @@ class SomeClass extends Presenter
         $someControl = $this->getComponent('whatever');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

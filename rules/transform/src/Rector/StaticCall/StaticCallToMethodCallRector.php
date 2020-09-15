@@ -38,7 +38,7 @@ final class StaticCallToMethodCallRector extends AbstractToMethodCallRector
     {
         return new RectorDefinition('Change static call to service method via constructor injection', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Utils\FileSystem;
 
 class SomeClass
@@ -48,9 +48,9 @@ class SomeClass
         return FileSystem::write('file', 'content');
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 class SomeClass
@@ -70,7 +70,7 @@ class SomeClass
         return $this->smartFileSystem->dumpFile('file', 'content');
     }
 }
-PHP
+CODE_SAMPLE
             , [
                 self::STATIC_CALLS_TO_METHOD_CALLS => [
                     new StaticCallToMethodCall(

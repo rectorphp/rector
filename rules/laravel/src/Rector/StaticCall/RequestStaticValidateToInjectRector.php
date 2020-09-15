@@ -42,7 +42,7 @@ final class RequestStaticValidateToInjectRector extends AbstractRector
     {
         return new RectorDefinition('Change static validate() method to $request->validate()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Illuminate\Http\Request;
 
 class SomeClass
@@ -52,9 +52,9 @@ class SomeClass
         $validatedData = Request::validate(['some_attribute' => 'required']);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Illuminate\Http\Request;
 
 class SomeClass
@@ -64,7 +64,7 @@ class SomeClass
         $validatedData = $request->validate(['some_attribute' => 'required']);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

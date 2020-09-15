@@ -29,23 +29,23 @@ final class Php4ConstructorRector extends AbstractRector
             'Changes PHP 4 style constructor to __construct.',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function SomeClass()
     {
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct()
     {
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

@@ -35,7 +35,7 @@ final class SpecificAssertContainsWithoutIdentityRector extends AbstractPHPUnitR
             'Change assertContains()/assertNotContains() with non-strict comparison to new specific alternatives',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -47,9 +47,9 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
         $this->assertNotContains(new \stdClass(), $objects, 'message', false, false);
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 final class SomeTest extends TestCase
@@ -61,7 +61,7 @@ final class SomeTest extends TestCase
         $this->assertNotContainsEquals(new \stdClass(), $objects, 'message');
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

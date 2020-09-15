@@ -41,15 +41,15 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
     {
         return new RectorDefinition('Turns method names to new ones.', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $someObject = new SomeExampleClass;
 $someObject->oldMethod();
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $someObject = new SomeExampleClass;
 $someObject->newMethod();
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::METHOD_CALL_RENAMES => [

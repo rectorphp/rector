@@ -19,7 +19,7 @@ final class DowngradeReturnMixedTypeDeclarationRector extends AbstractDowngradeR
             $this->getRectorDefinitionDescription(),
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -32,9 +32,9 @@ class SomeClass
         return 'Hello world'
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -50,7 +50,7 @@ class SomeClass
         return 'Hello world'
     }
 }
-PHP
+CODE_SAMPLE
 ,
                     [
                         self::ADD_DOC_BLOCK => true,

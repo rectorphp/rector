@@ -33,17 +33,17 @@ final class ToStringToMethodCallRector extends AbstractRector implements Configu
     {
         return new RectorDefinition('Turns defined code uses of "__toString()" method  to specific method calls.', [
             new ConfiguredCodeSample(
-<<<'PHP'
+<<<'CODE_SAMPLE'
 $someValue = new SomeObject;
 $result = (string) $someValue;
 $result = $someValue->__toString();
-PHP
+CODE_SAMPLE
                 ,
-<<<'PHP'
+<<<'CODE_SAMPLE'
 $someValue = new SomeObject;
 $result = $someValue->getPath();
 $result = $someValue->getPath();
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::METHOD_NAMES_BY_TYPE => [

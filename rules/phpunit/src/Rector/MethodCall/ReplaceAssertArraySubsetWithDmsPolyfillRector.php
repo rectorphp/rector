@@ -26,7 +26,7 @@ final class ReplaceAssertArraySubsetWithDmsPolyfillRector extends AbstractPHPUni
             'Change assertArraySubset() to static call of DMS\PHPUnitExtensions\ArraySubset\Assert',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -38,9 +38,9 @@ class SomeClass extends TestCase
         $this->assertArraySubset(['bar' => 0], ['bar' => '0'], true);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -52,7 +52,7 @@ class SomeClass extends TestCase
         \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset(['bar' => 0], ['bar' => '0'], true);
     }
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

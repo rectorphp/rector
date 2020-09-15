@@ -55,7 +55,7 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
     {
         return new RectorDefinition('Replace string class names by <class>::class constant', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class AnotherClass
 {
 }
@@ -67,9 +67,9 @@ class SomeClass
         return 'AnotherClass';
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class AnotherClass
 {
 }
@@ -81,7 +81,7 @@ class SomeClass
         return \AnotherClass::class;
     }
 }
-PHP
+CODE_SAMPLE
 ,
                 [
                     self::CLASSES_TO_SKIP => ['ClassName', 'AnotherClassName'],

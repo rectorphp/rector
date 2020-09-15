@@ -23,7 +23,7 @@ final class ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector exten
     {
         return new RectorDefinition('Change type in CollectionType from alias string to class reference', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -41,9 +41,9 @@ class TaskType extends AbstractType
         ]);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -61,7 +61,7 @@ class TaskType extends AbstractType
         ]);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

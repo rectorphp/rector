@@ -25,7 +25,7 @@ final class UseIncrementAssignRector extends AbstractRector
             'Use ++ increment instead of `$var += 1`',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -33,9 +33,9 @@ class SomeClass
         $style += 1;
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -43,7 +43,7 @@ class SomeClass
         ++$style
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

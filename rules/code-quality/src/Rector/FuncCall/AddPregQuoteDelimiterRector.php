@@ -30,13 +30,13 @@ final class AddPregQuoteDelimiterRector extends AbstractRector
     {
         return new RectorDefinition('Add preg_quote delimiter when missing', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 '#' . preg_quote('name') . '#';
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 '#' . preg_quote('name', '#') . '#';
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

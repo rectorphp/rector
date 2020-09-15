@@ -23,7 +23,7 @@ final class FlashWithCssClassesToExtraCallRector extends AbstractRector
     {
         return new RectorDefinition('Add $cssClasses in Flash to separated method call', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -32,9 +32,9 @@ class SomeClass
         $flash = new Phalcon\Flash($cssClasses);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,7 +44,7 @@ class SomeClass
         $flash->setCssClasses($cssClasses);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

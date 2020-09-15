@@ -22,7 +22,7 @@ final class StartsWithFunctionToNetteUtilsStringsRector extends AbstractWithFunc
     {
         return new RectorDefinition('Use Nette\Utils\Strings::startsWith() over bare string-functions', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function start($needle)
@@ -32,9 +32,9 @@ class SomeClass
         $yes = substr($content, 0, strlen($needle)) === $needle;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function start($needle)
@@ -44,7 +44,7 @@ class SomeClass
         $yes = \Nette\Utils\Strings::startsWith($content, $needle);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

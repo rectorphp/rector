@@ -27,7 +27,7 @@ final class AddRequestToHandleMethodCallRector extends AbstractRector
     {
         return new RectorDefinition('Add $_SERVER REQUEST_URI to method call', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($di)
@@ -36,9 +36,9 @@ class SomeClass
         $response = $application->handle();
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($di)
@@ -47,7 +47,7 @@ class SomeClass
         $response = $application->handle($_SERVER["REQUEST_URI"]);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

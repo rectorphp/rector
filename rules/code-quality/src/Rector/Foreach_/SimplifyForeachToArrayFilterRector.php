@@ -27,7 +27,7 @@ final class SimplifyForeachToArrayFilterRector extends AbstractRector
     {
         return new RectorDefinition('Simplify foreach with function filtering to array filter', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $directories = [];
 $possibleDirectories = [];
 foreach ($possibleDirectories as $possibleDirectory) {
@@ -35,12 +35,12 @@ foreach ($possibleDirectories as $possibleDirectory) {
         $directories[] = $possibleDirectory;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $possibleDirectories = [];
 $directories = array_filter($possibleDirectories, 'file_exists');
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

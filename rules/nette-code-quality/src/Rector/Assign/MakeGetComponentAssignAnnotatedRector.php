@@ -44,7 +44,7 @@ final class MakeGetComponentAssignAnnotatedRector extends AbstractRector
     {
         return new RectorDefinition('Add doc type for magic $control->getComponent(...) assign', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 
 final class SomeClass
@@ -67,9 +67,9 @@ final class ExternalControl extends Control
 final class AnotherControl extends Control
 {
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 
 final class SomeClass
@@ -93,7 +93,7 @@ final class ExternalControl extends Control
 final class AnotherControl extends Control
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

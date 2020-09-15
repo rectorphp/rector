@@ -21,24 +21,24 @@ final class OrderPropertiesByVisibilityRector extends AbstractConstantPropertyMe
     {
         return new RectorDefinition('Orders properties by visibility', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     protected $protectedProperty;
     private $privateProperty;
     public $publicProperty;
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public $publicProperty;
     protected $protectedProperty;
     private $privateProperty;
 }
-PHP
+CODE_SAMPLE
 
             ),
         ]);

@@ -36,7 +36,7 @@ final class FromHttpRequestGetHeaderToHeadersGetRector extends AbstractRector
     {
         return new RectorDefinition('Changes getHeader() to $request->headers->get()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Request;
 
 final class SomeController
@@ -46,9 +46,9 @@ final class SomeController
         $header = $this->httpRequest->getHeader('x');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Request;
 
 final class SomeController
@@ -58,7 +58,7 @@ final class SomeController
         $header = $request->headers->get('x');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

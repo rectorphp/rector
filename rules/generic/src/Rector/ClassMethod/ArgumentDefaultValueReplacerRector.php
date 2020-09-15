@@ -39,15 +39,15 @@ final class ArgumentDefaultValueReplacerRector extends AbstractRector implements
             'Replaces defined map of arguments in defined methods and their calls.',
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->someMethod(SomeClass::OLD_CONSTANT);
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->someMethod(false);'
-PHP
+CODE_SAMPLE
                     ,
                     [
                         self::REPLACED_ARGUMENTS => [

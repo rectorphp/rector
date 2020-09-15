@@ -32,19 +32,19 @@ final class SimplifyIfNotNullReturnRector extends AbstractRector
     {
         return new RectorDefinition('Changes redundant null check to instant return', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $newNode = 'something ;
 if ($newNode !== null) {
     return $newNode;
 }
 
 return null;
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $newNode = 'something ;
 return $newNode;
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

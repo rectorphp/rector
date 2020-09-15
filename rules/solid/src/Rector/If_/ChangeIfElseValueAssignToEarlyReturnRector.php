@@ -42,7 +42,7 @@ final class ChangeIfElseValueAssignToEarlyReturnRector extends AbstractRector
     {
         return new RectorDefinition('Change if/else value to early return', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -56,9 +56,9 @@ class SomeClass
         return $docToken;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -69,7 +69,7 @@ class SomeClass
         return null;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

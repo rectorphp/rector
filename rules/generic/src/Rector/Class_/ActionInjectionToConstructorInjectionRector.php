@@ -45,7 +45,7 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
             'Turns action injection in Controllers to constructor injection',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function default(ProductRepository $productRepository)
@@ -53,9 +53,9 @@ final class SomeController
         $products = $productRepository->fetchAll();
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeController
 {
     /**
@@ -72,7 +72,7 @@ final class SomeController
         $products = $this->productRepository->fetchAll();
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

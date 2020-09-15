@@ -42,7 +42,7 @@ final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends Abstr
     {
         return new RectorDefinition('Change property with read only status with default value to constant', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -60,9 +60,9 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -80,7 +80,7 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

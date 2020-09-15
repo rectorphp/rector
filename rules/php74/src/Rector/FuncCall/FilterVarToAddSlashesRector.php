@@ -22,15 +22,15 @@ final class FilterVarToAddSlashesRector extends AbstractRector
     {
         return new RectorDefinition('Change filter_var() with slash escaping to addslashes()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $var= "Satya's here!";
 filter_var($var, FILTER_SANITIZE_MAGIC_QUOTES);
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $var= "Satya's here!";
 addslashes($var);
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -21,7 +21,7 @@ final class RemoveSoleValueSprintfRector extends AbstractRector
     {
         return new RectorDefinition('Remove sprintf() wrapper if not needed', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -32,9 +32,9 @@ class SomeClass
         $value = sprintf('%s', $welcome);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -45,7 +45,7 @@ class SomeClass
         $value = $welcome;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

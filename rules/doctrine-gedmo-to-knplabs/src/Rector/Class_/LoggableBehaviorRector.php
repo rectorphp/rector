@@ -37,7 +37,7 @@ final class LoggableBehaviorRector extends AbstractRector
     {
         return new RectorDefinition('Change Loggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -53,9 +53,9 @@ class SomeClass
      */
     private $title;
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\Loggable\LoggableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\LoggableInterface;
@@ -72,7 +72,7 @@ class SomeClass implements LoggableInterface
      */
     private $title;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

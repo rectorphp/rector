@@ -61,7 +61,7 @@ final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRe
     {
         return new RectorDefinition('Removes unused methods and properties from Doctrine entity classes', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -84,9 +84,9 @@ class UserEntity
         $this->name = $name;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -95,7 +95,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UserEntity
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

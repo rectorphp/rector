@@ -41,7 +41,7 @@ final class TokenGetAllToObjectRector extends AbstractRector
     {
         return new RectorDefinition('Complete missing constructor dependency instance by type', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -58,9 +58,9 @@ final class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -72,7 +72,7 @@ final class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

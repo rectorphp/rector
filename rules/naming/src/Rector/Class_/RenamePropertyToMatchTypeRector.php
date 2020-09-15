@@ -59,7 +59,7 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
     {
         return new RectorDefinition('Rename property and method param to match its type', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -72,9 +72,9 @@ class SomeClass
         $this->eventManager = $eventManager;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -87,7 +87,7 @@ class SomeClass
         $this->entityManager = $entityManager;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

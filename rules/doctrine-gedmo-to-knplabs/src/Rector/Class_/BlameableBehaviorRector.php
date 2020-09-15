@@ -35,7 +35,7 @@ final class BlameableBehaviorRector extends AbstractRector
     {
         return new RectorDefinition('Change Blameable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -74,9 +74,9 @@ class SomeClass
         return $this->contentChangedBy;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\BlameableInterface;
 use Knp\DoctrineBehaviors\Model\Blameable\BlameableTrait;
@@ -88,7 +88,7 @@ class SomeClass implements BlameableInterface
 {
     use BlameableTrait;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

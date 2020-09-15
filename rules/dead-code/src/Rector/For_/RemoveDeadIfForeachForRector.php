@@ -24,7 +24,7 @@ final class RemoveDeadIfForeachForRector extends AbstractRector
     {
         return new RectorDefinition('Remove if, foreach and for that does not do anything', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($someObject)
@@ -42,9 +42,9 @@ class SomeClass
         return $value;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($someObject)
@@ -56,7 +56,7 @@ class SomeClass
         return $value;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -39,7 +39,7 @@ final class StringableForToStringRector extends AbstractRector
     {
         return new RectorDefinition('Add `Stringable` interface to classes with `__toString()` method', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __toString()
@@ -47,9 +47,9 @@ class SomeClass
         return 'I can stringz';
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass implements Stringable
 {
     public function __toString(): string
@@ -57,7 +57,7 @@ class SomeClass implements Stringable
         return 'I can stringz';
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -45,18 +45,18 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
     {
         return new RectorDefinition('Replaces parent class to specific traits', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass extends Nette\Object
 {
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     use Nette\SmartObject;
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::PARENT_CLASS_TO_TRAITS => [

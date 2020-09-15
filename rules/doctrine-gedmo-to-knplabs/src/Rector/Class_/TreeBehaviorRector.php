@@ -42,7 +42,7 @@ final class TreeBehaviorRector extends AbstractRector
     {
         return new RectorDefinition('Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -109,9 +109,9 @@ class SomeClass
         return $this->parent;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface;
 use Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait;
 
@@ -119,7 +119,7 @@ class SomeClass implements TreeNodeInterface
 {
     use TreeNodeTrait;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

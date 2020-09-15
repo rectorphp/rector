@@ -31,15 +31,15 @@ final class MethodCallRemoverRector extends AbstractRector implements Configurab
     {
         return new RectorDefinition('Turns "$this->something()->anything()" to "$this->anything()"', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $someObject = new Car;
 $someObject->something()->anything();
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $someObject = new Car;
 $someObject->anything();
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::METHOD_CALL_REMOVER_ARGUMENT => [

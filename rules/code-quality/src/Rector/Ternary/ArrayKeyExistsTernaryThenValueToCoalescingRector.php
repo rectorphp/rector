@@ -24,7 +24,7 @@ final class ArrayKeyExistsTernaryThenValueToCoalescingRector extends AbstractRec
     {
         return new RectorDefinition('Change array_key_exists() ternary to coalesing', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($values, $keyToMatch)
@@ -32,9 +32,9 @@ class SomeClass
         $result = array_key_exists($keyToMatch, $values) ? $values[$keyToMatch] : null;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($values, $keyToMatch)
@@ -42,7 +42,7 @@ class SomeClass
         $result = $values[$keyToMatch] ?? null;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

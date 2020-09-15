@@ -25,7 +25,7 @@ final class ArrayMergeOfNonArraysToSimpleArrayRector extends AbstractRector
     {
         return new RectorDefinition('Change array_merge of non arrays to array directly', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go()
@@ -36,9 +36,9 @@ class SomeClass
         return array_merge([$value], [$value2]);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go()
@@ -49,7 +49,7 @@ class SomeClass
         return [$value, $value2];
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

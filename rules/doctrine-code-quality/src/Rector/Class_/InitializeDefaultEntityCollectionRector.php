@@ -39,7 +39,7 @@ final class InitializeDefaultEntityCollectionRector extends AbstractRector
     {
         return new RectorDefinition('Initialize collection property in Entity constructor', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,9 +52,9 @@ class SomeClass
      */
     private $marketingEvents = [];
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -72,7 +72,7 @@ class SomeClass
         $this->marketingEvents = new ArrayCollection();
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

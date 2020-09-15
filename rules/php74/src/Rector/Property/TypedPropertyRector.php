@@ -83,7 +83,7 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
             'Changes property `@var` annotations from annotation to type.',
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -91,14 +91,14 @@ final class SomeClass
      */
     private count;
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private int count;
 }
-PHP
+CODE_SAMPLE
                     ,
                     [
                         self::CLASS_LIKE_TYPE_ONLY => false,

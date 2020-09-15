@@ -24,21 +24,21 @@ final class CamelCaseFunctionNamingToUnderscoreRector extends AbstractRector
     {
         return new RectorDefinition('Change CamelCase naming of functions to under_score naming', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 function someCamelCaseFunction()
 {
 }
 
 someCamelCaseFunction();
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 function some_camel_case_function()
 {
 }
 
 some_camel_case_function();
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

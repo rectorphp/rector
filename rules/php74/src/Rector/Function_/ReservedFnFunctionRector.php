@@ -35,7 +35,7 @@ final class ReservedFnFunctionRector extends AbstractRector implements Configura
     {
         return new RectorDefinition('Change fn() function name, since it will be reserved keyword', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -48,9 +48,9 @@ class SomeClass
         fn(5);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -63,7 +63,7 @@ class SomeClass
         f(5);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::RESERVED_NAMES_TO_NEW_ONES => [

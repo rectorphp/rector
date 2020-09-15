@@ -606,7 +606,7 @@ final class AddRemovedDefaultValuesRector extends AbstractRector
     {
         return new RectorDefinition('Complete removed default values explicitly', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -615,9 +615,9 @@ final class SomeClass
         $logger->setWriteDebugLog();
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -626,7 +626,7 @@ final class SomeClass
         $logger->setWriteDebugLog(false);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

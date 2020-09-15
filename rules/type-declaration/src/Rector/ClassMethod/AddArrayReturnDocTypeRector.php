@@ -67,7 +67,7 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
     {
         return new RectorDefinition('Adds @return annotation to array parameters inferred from the rest of the code', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -80,9 +80,9 @@ class SomeClass
         return $this->values;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -98,7 +98,7 @@ class SomeClass
         return $this->values;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

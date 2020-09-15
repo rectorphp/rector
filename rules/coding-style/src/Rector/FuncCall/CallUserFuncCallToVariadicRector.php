@@ -22,7 +22,7 @@ final class CallUserFuncCallToVariadicRector extends AbstractRector
     {
         return new RectorDefinition('Replace call_user_func_call with variadic', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -30,9 +30,9 @@ class SomeClass
         call_user_func_array('some_function', $items);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -40,7 +40,7 @@ class SomeClass
         some_function(...$items);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -30,7 +30,7 @@ final class RemoveUnusedPrivateConstantRector extends AbstractRector
     {
         return new RectorDefinition('Remove unused private constant', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeController
 {
     private const SOME_CONSTANT = 5;
@@ -39,9 +39,9 @@ final class SomeController
         return 5;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run()
@@ -49,7 +49,7 @@ final class SomeController
         return 5;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

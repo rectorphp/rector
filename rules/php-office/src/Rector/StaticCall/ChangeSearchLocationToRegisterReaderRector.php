@@ -23,7 +23,7 @@ final class ChangeSearchLocationToRegisterReaderRector extends AbstractRector
     {
         return new RectorDefinition('Change argument addSearchLocation() to registerReader()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -31,9 +31,9 @@ final class SomeClass
         \PHPExcel_IOFactory::addSearchLocation($type, $location, $classname);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -41,7 +41,7 @@ final class SomeClass
         \PhpOffice\PhpSpreadsheet\IOFactory::registerReader($type, $classname);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

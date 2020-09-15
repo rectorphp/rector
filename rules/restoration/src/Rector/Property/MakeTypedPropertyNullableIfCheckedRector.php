@@ -27,7 +27,7 @@ final class MakeTypedPropertyNullableIfCheckedRector extends AbstractRector
     {
         return new RectorDefinition('Make typed property nullable if checked', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private AnotherClass $anotherClass;
@@ -39,9 +39,9 @@ final class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private ?AnotherClass $anotherClass = null;
@@ -53,7 +53,7 @@ final class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

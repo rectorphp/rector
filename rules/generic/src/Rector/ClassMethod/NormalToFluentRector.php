@@ -40,17 +40,17 @@ final class NormalToFluentRector extends AbstractRector implements ConfigurableR
     {
         return new RectorDefinition('Turns fluent interface calls to classic ones.', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $someObject = new SomeClass();
 $someObject->someFunction();
 $someObject->otherFunction();
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $someObject = new SomeClass();
 $someObject->someFunction()
     ->otherFunction();
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::CALLS_TO_FLUENT => [new NormalToFluent('SomeClass', ['someFunction', 'otherFunction'])],

@@ -38,7 +38,7 @@ final class SoftDeletableBehaviorRector extends AbstractRector
             'Change SoftDeletable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -61,9 +61,9 @@ class SomeClass
         $this->deletedAt = $deletedAt;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
 
@@ -71,7 +71,7 @@ class SomeClass implements SoftDeletableInterface
 {
     use SoftDeletableTrait;
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

@@ -35,15 +35,15 @@ final class PropertyToMethodRector extends AbstractRector implements Configurabl
     {
         return new RectorDefinition('Replaces properties assign calls be defined methods.', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $result = $object->property;
 $object->property = $value;
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $result = $object->getProperty();
 $object->setProperty($value);
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::PROPERTIES_TO_METHOD_CALLS => [
@@ -52,13 +52,13 @@ PHP
                 ]
             ),
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $result = $object->property;
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $result = $object->getProperty('someArg');
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::PROPERTIES_TO_METHOD_CALLS => [

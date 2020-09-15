@@ -49,7 +49,7 @@ final class ChangeControlArrayAccessToAnnotatedControlVariableRector extends Abs
     {
         return new RectorDefinition('Change magic $this["some_component"] to variable assign with @var annotation', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
 
@@ -66,9 +66,9 @@ final class SomePresenter extends Presenter
         return new Form();
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
 
@@ -87,7 +87,7 @@ final class SomePresenter extends Presenter
         return new Form();
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

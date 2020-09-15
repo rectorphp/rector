@@ -45,7 +45,7 @@ final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
     {
         return new RectorDefinition('Adds array default value to property to prevent foreach over null error', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -58,9 +58,9 @@ class SomeClass
         return $this->values === null;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -73,7 +73,7 @@ class SomeClass
         return $this->values === [];
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

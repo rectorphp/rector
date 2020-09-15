@@ -54,7 +54,7 @@ final class FormControlToControllerAndFormTypeRector extends AbstractRector
     {
         return new RectorDefinition('Change Form that extends Control to Controller and decoupled FormType', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Control;
 
@@ -73,9 +73,9 @@ class SomeForm extends Control
         // process me
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
     /**
@@ -91,9 +91,9 @@ class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\Abst
         }
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -107,7 +107,7 @@ class SomeFormType extends AbstractType
         ]);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

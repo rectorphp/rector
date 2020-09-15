@@ -32,7 +32,7 @@ final class RemoveDeadZeroAndOneOperationRector extends AbstractRector
     {
         return new RectorDefinition('Remove operation with 1 and 0, that have no effect on the value', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -41,9 +41,9 @@ class SomeClass
         $value = 5 + 0;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -52,7 +52,7 @@ class SomeClass
         $value = 5;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

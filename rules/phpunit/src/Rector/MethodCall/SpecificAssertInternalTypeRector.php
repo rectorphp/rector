@@ -55,7 +55,7 @@ final class SpecificAssertInternalTypeRector extends AbstractPHPUnitRector
             'Change assertInternalType()/assertNotInternalType() method to new specific alternatives',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -65,9 +65,9 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
         $this->assertNotInternalType('array', $value);
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -77,7 +77,7 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
         $this->assertIsNotArray($value);
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

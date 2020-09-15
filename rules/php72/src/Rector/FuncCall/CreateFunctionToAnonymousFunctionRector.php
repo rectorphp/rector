@@ -47,7 +47,7 @@ final class CreateFunctionToAnonymousFunctionRector extends AbstractConvertToAno
     {
         return new RectorDefinition('Use anonymous functions instead of deprecated create_function()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class ClassWithCreateFunction
 {
     public function run()
@@ -55,9 +55,9 @@ class ClassWithCreateFunction
         $callable = create_function('$matches', "return '$delimiter' . strtolower(\$matches[1]);");
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class ClassWithCreateFunction
 {
     public function run()
@@ -67,7 +67,7 @@ class ClassWithCreateFunction
         };
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

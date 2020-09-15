@@ -53,7 +53,7 @@ final class RemoveAlwaysTrueConditionSetInConstructorRector extends AbstractRect
     {
         return new RectorDefinition('If conditions is always true, perform the content right away', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $value;
@@ -70,9 +70,9 @@ final class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $value;
@@ -87,7 +87,7 @@ final class SomeClass
         return 'yes';
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

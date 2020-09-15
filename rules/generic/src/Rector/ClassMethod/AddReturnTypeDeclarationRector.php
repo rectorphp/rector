@@ -32,23 +32,23 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
     {
         return new RectorDefinition('Changes defined return typehint of method and class.', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public getData()
     {
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public getData(): array
     {
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::METHOD_RETURN_TYPES => [new AddReturnTypeDeclaration('SomeClass', 'getData', 'array')],

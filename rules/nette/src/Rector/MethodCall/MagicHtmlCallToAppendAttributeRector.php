@@ -25,7 +25,7 @@ final class MagicHtmlCallToAppendAttributeRector extends AbstractRector
     {
         return new RectorDefinition('Change magic addClass() etc. calls on Html to explicit methods', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Utils\Html;
 
 final class SomeClass
@@ -36,10 +36,10 @@ final class SomeClass
         $html->setClass('first');
     }
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Utils\Html;
 
 final class SomeClass
@@ -50,7 +50,7 @@ final class SomeClass
         $html->appendAttribute('class', 'first');
     }
 }
-PHP
+CODE_SAMPLE
 
             ),
         ]);

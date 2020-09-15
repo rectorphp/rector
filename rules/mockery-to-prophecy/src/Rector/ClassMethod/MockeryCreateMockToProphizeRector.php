@@ -55,18 +55,18 @@ final class MockeryCreateMockToProphizeRector extends AbstractPHPUnitRector
             'Changes mockery mock creation to Prophesize',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $mock = \Mockery::mock(\'MyClass\');
 $service = new Service();
 $service->injectDependency($mock);
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
  $mock = $this->prophesize(\'MyClass\');
 
 $service = new Service();
 $service->injectDependency($mock->reveal());
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

@@ -23,7 +23,7 @@ final class OrderClassConstantsByIntegerValueRector extends AbstractConstantProp
     {
         return new RectorDefinition('Order class constant order by their integer value', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     const MODE_ON = 0;
@@ -32,9 +32,9 @@ class SomeClass
 
     const MODE_MAYBE = 1;
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     const MODE_ON = 0;
@@ -43,7 +43,7 @@ class SomeClass
 
     const MODE_OFF = 2;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

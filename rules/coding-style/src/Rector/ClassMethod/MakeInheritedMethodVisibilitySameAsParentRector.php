@@ -28,7 +28,7 @@ final class MakeInheritedMethodVisibilitySameAsParentRector extends AbstractRect
     {
         return new RectorDefinition('Make method visibility same as parent one', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class ChildClass extends ParentClass
 {
     public function run()
@@ -42,9 +42,9 @@ class ParentClass
     {
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class ChildClass extends ParentClass
 {
     protected function run()
@@ -58,7 +58,7 @@ class ParentClass
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

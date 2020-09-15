@@ -22,7 +22,7 @@ final class ChangeDuplicateStyleArrayToApplyFromArrayRector extends AbstractRect
     {
         return new RectorDefinition('Change method call duplicateStyleArray() to getStyle() + applyFromArray()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -31,9 +31,9 @@ final class SomeClass
         $worksheet->duplicateStyleArray($styles, $range, $advanced);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -42,7 +42,7 @@ final class SomeClass
         $worksheet->getStyle($range)->applyFromArray($styles, $advanced);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

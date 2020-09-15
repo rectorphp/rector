@@ -53,15 +53,15 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
             'Turns non-private properties with `@annotation` to private properties and constructor injection',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 /**
  * @var SomeService
  * @inject
  */
 public $someService;
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 /**
  * @var SomeService
  */
@@ -71,7 +71,7 @@ public function __construct(SomeService $someService)
 {
     $this->someService = $someService;
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

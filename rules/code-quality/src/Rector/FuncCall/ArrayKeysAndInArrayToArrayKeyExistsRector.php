@@ -22,7 +22,7 @@ final class ArrayKeysAndInArrayToArrayKeyExistsRector extends AbstractRector
     {
         return new RectorDefinition('Replace array_keys() and in_array() to array_key_exists()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($packageName, $values)
@@ -31,9 +31,9 @@ class SomeClass
         return in_array($packageName, $keys, true);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($packageName, $values)
@@ -41,7 +41,7 @@ class SomeClass
         return array_key_exists($packageName, $values);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

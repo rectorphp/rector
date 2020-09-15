@@ -43,7 +43,7 @@ final class PregFunctionToNetteUtilsStringsRector extends AbstractRector
     {
         return new RectorDefinition('Use Nette\Utils\Strings over bare preg_split() and preg_replace() functions', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -52,9 +52,9 @@ class SomeClass
         $splitted = preg_split('#Hi#', $content);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Utils\Strings;
 
 class SomeClass
@@ -65,7 +65,7 @@ class SomeClass
         $splitted = \Nette\Utils\Strings::split($content, '#Hi#');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

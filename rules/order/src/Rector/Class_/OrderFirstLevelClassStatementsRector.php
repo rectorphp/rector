@@ -24,7 +24,7 @@ final class OrderFirstLevelClassStatementsRector extends AbstractRector
     {
         return new RectorDefinition('Orders first level Class statements', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function functionName();
@@ -32,10 +32,10 @@ final class SomeClass
     private const CONST_NAME = 'constant_value';
     use TraitName;
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     use TraitName;
@@ -43,7 +43,7 @@ final class SomeClass
     protected $propertyName;
     public function functionName();
 }
-PHP
+CODE_SAMPLE
 
             ),
         ]);

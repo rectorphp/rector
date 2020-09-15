@@ -80,7 +80,7 @@ final class AnnotateThrowablesRector extends AbstractRector
             'Adds @throws DocBlock comments to methods that thrwo \Throwables.', [
                 new CodeSample(
                 // code before
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class RootExceptionInMethodWithDocblock
 {
     /**
@@ -93,10 +93,10 @@ class RootExceptionInMethodWithDocblock
         throw new \RuntimeException('', $code);
     }
 }
-PHP
+CODE_SAMPLE
                     ,
                     // code after
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class RootExceptionInMethodWithDocblock
 {
     /**
@@ -110,7 +110,7 @@ class RootExceptionInMethodWithDocblock
         throw new \RuntimeException('', $code);
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

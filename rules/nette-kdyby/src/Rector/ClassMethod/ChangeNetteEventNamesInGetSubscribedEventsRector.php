@@ -56,7 +56,7 @@ final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractRec
     {
         return new RectorDefinition('Change EventSubscriber from Kdyby to Contributte', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Kdyby\Events\Subscriber;
 use Nette\Application\Application;
 use Nette\Application\UI\Presenter;
@@ -76,9 +76,9 @@ class GetApplesSubscriber implements Subscriber
         // ...
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Contributte\Events\Extra\Event\Application\ShutdownEvent;
 use Kdyby\Events\Subscriber;
 use Nette\Application\Application;
@@ -99,7 +99,7 @@ class GetApplesSubscriber implements Subscriber
         // ...
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

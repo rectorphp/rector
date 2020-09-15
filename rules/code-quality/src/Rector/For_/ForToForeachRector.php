@@ -65,7 +65,7 @@ final class ForToForeachRector extends AbstractRector
     {
         return new RectorDefinition('Change for() to foreach() where useful', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($tokens)
@@ -81,9 +81,9 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($tokens)
@@ -99,7 +99,7 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

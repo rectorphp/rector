@@ -45,7 +45,7 @@ final class RemoveDeadRecursiveClassMethodRector extends AbstractRector implemen
     {
         return new RectorDefinition('Remove unused public method that only calls itself recursively', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -53,13 +53,13 @@ class SomeClass
         return $this->run();
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

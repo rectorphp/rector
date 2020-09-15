@@ -73,7 +73,7 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
     {
         return new RectorDefinition('Tests without assertion will have @doesNotPerformAssertion', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     public function test()
@@ -81,9 +81,9 @@ class SomeClass extends PHPUnit\Framework\TestCase
         $nothing = 5;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     /**
@@ -94,7 +94,7 @@ class SomeClass extends PHPUnit\Framework\TestCase
         $nothing = 5;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

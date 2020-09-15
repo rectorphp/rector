@@ -37,7 +37,7 @@ final class CreateMockToCreateStubRector extends AbstractPHPUnitRector
     {
         return new RectorDefinition('Replaces createMock() with createStub() when relevant', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase
 
 class MyTest extends TestCase
@@ -57,9 +57,9 @@ class MyTest extends TestCase
         self::assertSame('a message', $mock->getMessage());
     }
 }
-PHP
+CODE_SAMPLE
                  ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase
 
 class MyTest extends TestCase
@@ -79,7 +79,7 @@ class MyTest extends TestCase
         self::assertSame('a message', $mock->getMessage());
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

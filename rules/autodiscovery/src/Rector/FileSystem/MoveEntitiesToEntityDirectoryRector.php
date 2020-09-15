@@ -25,7 +25,7 @@ final class MoveEntitiesToEntityDirectoryRector extends AbstractFileMovingFileSy
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Move entities to Entity namespace', [new CodeSample(
-            <<<'PHP'
+            <<<'CODE_SAMPLE'
 // file: app/Controller/Product.php
 
 namespace App\Controller;
@@ -38,9 +38,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
 }
-PHP
+CODE_SAMPLE
             ,
-            <<<'PHP'
+            <<<'CODE_SAMPLE'
 // file: app/Entity/Product.php
 
 namespace App\Entity;
@@ -53,7 +53,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
 }
-PHP
+CODE_SAMPLE
         )]);
     }
 

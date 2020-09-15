@@ -38,7 +38,7 @@ final class RenameAnnotationRector extends AbstractPHPUnitRector implements Conf
             'Turns defined annotations above properties and methods to their new values.',
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeTest extends PHPUnit\Framework\TestCase
 {
     /**
@@ -48,9 +48,9 @@ class SomeTest extends PHPUnit\Framework\TestCase
     {
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeTest extends PHPUnit\Framework\TestCase
 {
     /**
@@ -60,7 +60,7 @@ class SomeTest extends PHPUnit\Framework\TestCase
     {
     }
 }
-PHP
+CODE_SAMPLE
                     ,
                     [
                         self::RENAMED_ANNOTATIONS_IN_TYPES => [

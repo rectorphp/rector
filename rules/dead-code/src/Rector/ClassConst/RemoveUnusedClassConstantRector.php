@@ -22,7 +22,7 @@ final class RemoveUnusedClassConstantRector extends AbstractRector implements Ze
     {
         return new RectorDefinition('Remove unused class constants', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     private const SOME_CONST = 'dead';
@@ -31,16 +31,16 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

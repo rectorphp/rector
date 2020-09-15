@@ -35,7 +35,7 @@ final class SwapClassMethodArgumentsRector extends AbstractRector implements Con
     {
         return new RectorDefinition('Reorder class method arguments, including their calls', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public static function run($first, $second)
@@ -43,9 +43,9 @@ class SomeClass
         self::run($first, $second);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public static function run($second, $first)
@@ -53,7 +53,7 @@ class SomeClass
         self::run($second, $first);
     }
 }
-PHP
+CODE_SAMPLE
 
             ,
             [

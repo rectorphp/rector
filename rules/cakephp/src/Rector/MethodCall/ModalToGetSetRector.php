@@ -39,7 +39,7 @@ final class ModalToGetSetRector extends AbstractRector implements ConfigurableRe
             'Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.',
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $object = new InstanceConfigTrait;
 
 $config = $object->config();
@@ -47,9 +47,9 @@ $config = $object->config('key');
 
 $object->config('key', 'value');
 $object->config(['key' => 'value']);
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $object = new InstanceConfigTrait;
 
 $config = $object->getConfig();
@@ -57,7 +57,7 @@ $config = $object->getConfig('key');
 
 $object->setConfig('key', 'value');
 $object->setConfig(['key' => 'value']);
-PHP
+CODE_SAMPLE
                     , [
                         self::UNPREFIXED_METHODS_TO_GET_SET => [
                             new ModalToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig'),
