@@ -14,6 +14,8 @@ class SomeClass
         isset($this->x) && isset($this->y);
     }
 }
+
+?>
 -----
 <?php
 
@@ -31,3 +33,5 @@ class SomeClass
         property_exists($this, 'x') && $this->x !== null && (property_exists($this, 'y') && $this->y !== null);
     }
 }
+
+?>
