@@ -12,5 +12,3 @@ class SomeClass3
         isset($this->x, $this->y);
     }
 }
-
-?>
