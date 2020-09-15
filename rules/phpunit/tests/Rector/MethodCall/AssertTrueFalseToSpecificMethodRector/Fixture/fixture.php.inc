@@ -40,8 +40,8 @@ final class MyTest extends Testing
 {
     public function test()
     {
-        $this->assertArrayHasKey('...', ['...'], 'argument');
-        $this->assertContains('...', ['...'], 'argument');
+        $this->assertArrayHasKey(, '...', ['...'], 'argument');
+        $this->assertContains(, '...', ['...'], 'argument');
         $this->assertNotIsReadable('...');
         $this->assertEmpty('...');
         $this->assertFileNotExists('...');
@@ -50,9 +50,9 @@ final class MyTest extends Testing
         $this->assertNan('...');
         $this->assertNotNull('...');
         $this->assertIsWritable('...');
-        $this->assertNotContains('...', ['...'], 'argument');
-        $this->assertInstanceOf('Foo', $anything, 'argument');
-        $this->assertNotInstanceOf(Foo::class, $anything, 'argument');
+        $this->assertNotContains(, '...', ['...'], 'argument');
+        $this->assertInstanceOf(, 'Foo', $anything, 'argument');
+        $this->assertNotInstanceOf(, Foo::class, $anything, 'argument');
     }
 }
 

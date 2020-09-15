@@ -28,9 +28,6 @@ namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Fixtu
 
 class VisibilityClass
 {
-    /**
-     * @var int
-     */
     private $integer;
     /**
      * @var string

@@ -47,6 +47,8 @@ final class MultipleLines
 
     public function go()
     {
+        
+
         $maybe = 'yes';
         return 'she says ' . $maybe;
         foreach ([1, 2, 3] as $number) {

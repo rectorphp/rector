@@ -25,8 +25,10 @@ use Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlph
 
 class IgnoreNamespaceClass
 {
-    public function __construct(Green $green, Red $red)
-    {
+    public function __construct(
+        Green $green,
+        Red $red
+    ) {
     }
 }
 

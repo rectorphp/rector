@@ -47,6 +47,7 @@ final class MultipleLinesRemoved
 
     public function go()
     {
+        
         $maybe = 'yes';
         return 'she says ' . $maybe;
         $callable = function () {

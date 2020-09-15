@@ -82,6 +82,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 class SomeClass implements \Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface
 {
+    
+
     use \Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait;
     /**
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")

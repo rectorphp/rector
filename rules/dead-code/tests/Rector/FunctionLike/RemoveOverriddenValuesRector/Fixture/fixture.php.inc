@@ -26,6 +26,7 @@ final class SomeController
     {
         $possibleDirectories = [];
         $directories = array_filter($possibleDirectories, 'file_exists');
+
         return $directories;
     }
 }

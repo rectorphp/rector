@@ -30,11 +30,13 @@ class SomeClass
     {
         return $foo;
     }
+
     public function whenFoo($foo)
     {
         if($foo) {
             doSomething();
         }
     }
+
 }
 ?>

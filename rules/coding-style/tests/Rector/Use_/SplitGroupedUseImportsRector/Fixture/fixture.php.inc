@@ -14,6 +14,8 @@ class SomeClass
 
 namespace Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Fixture;
 
+
+
 use A;
 use B;
 class SomeClass

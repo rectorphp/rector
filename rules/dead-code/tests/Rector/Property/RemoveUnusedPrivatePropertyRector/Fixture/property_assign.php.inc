@@ -29,10 +29,12 @@ namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRecto
 class PropertyAssign
 {
     private $c;
+
     public function run()
     {
         $this->process($this->c);
     }
+
     public function process($property)
     {
     }

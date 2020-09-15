@@ -30,9 +30,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SkipDoctrineEntityProperty
 {
-    /**
-     * @ORM\Column
-     */
     private $unusedAnnotatedProperty;
 }
 

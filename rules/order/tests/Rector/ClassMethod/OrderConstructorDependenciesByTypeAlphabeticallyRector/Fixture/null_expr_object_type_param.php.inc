@@ -21,8 +21,12 @@ namespace Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTy
 
 class NullExprObjectTypeParam
 {
-    public function __construct(LatteAndTwigFinder $latteAndTwigFinder, LatteToTwigConverter $latteToTwigConverter, SmartFileSystem $smartFileSystem, SymfonyStyle $symfonyStyle = null)
-    {
+    public function __construct(
+        LatteAndTwigFinder $latteAndTwigFinder,
+        LatteToTwigConverter $latteToTwigConverter,
+        SmartFileSystem $smartFileSystem,
+        SymfonyStyle $symfonyStyle = null
+    ) {
     }
 }
 

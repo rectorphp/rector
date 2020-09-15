@@ -23,6 +23,7 @@ namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRecto
 class SomeClass
 {
     private $anotherName = 'asdf';
+
     public function getValue()
     {
         // but it might be used :)

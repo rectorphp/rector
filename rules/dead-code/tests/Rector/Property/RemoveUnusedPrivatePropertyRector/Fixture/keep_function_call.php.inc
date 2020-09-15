@@ -26,6 +26,8 @@ class SomeClass
 {
     public function doThing()
     {
+        
+
         foo();
         bar();
         foo();

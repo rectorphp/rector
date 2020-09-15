@@ -71,16 +71,15 @@ use Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Source\Comp
 
 class ComplexTypes
 {
-    /**
-     * @var int
-     */
     private $integer;
+
     /**
      * Static cache
      *
      * @var string[][]
      */
     private static $arrayOfStringsNested = [];
+
     /**
      * @var string[]
      */
@@ -103,14 +102,17 @@ class ComplexTypes
      * @var ComplexType
      */
     private $anotherObject;
+
     /**
      * @var AnotherSimpleType
      */
     private $someObject;
+
     /**
      * @var mixed
      */
     private $mixedProperty;
+
     /**
      * @var callable
      */

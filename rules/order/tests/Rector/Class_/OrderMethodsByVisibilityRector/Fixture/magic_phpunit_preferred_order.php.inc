@@ -34,6 +34,8 @@ namespace Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector\Fixtur
 
 class MagicPhpUnitPreferredOrderClass
 {
+
+    
     public function __construct()
     {
     }
@@ -52,6 +54,7 @@ class MagicPhpUnitPreferredOrderClass
     static private function staticPrivateFunctionName()
     {
     }
+
 }
 
 ?>
