@@ -6,12 +6,15 @@ class SomeClass2
 {
     public $x;
     public $y;
-}
 
-$obj = new SomeClass2();
-isset($obj->x);
-isset($obj->y);
-isset($obj->x) && isset($obj->y);
+    public function run()
+    {
+        $obj = new self();
+        isset($obj->x);
+        isset($obj->y);
+        isset($obj->x) && isset($obj->y);
+    }
+}
 
 ?>
 -----
@@ -23,11 +26,14 @@ class SomeClass2
 {
     public $x;
     public $y;
-}
 
-$obj = new SomeClass2();
-property_exists($obj, 'x') && $obj->x !== null;
-property_exists($obj, 'y') && $obj->y !== null;
-property_exists($obj, 'x') && $obj->x !== null && (property_exists($obj, 'y') && $obj->y !== null);
+    public function run()
+    {
+        $obj = new self();
+        property_exists($obj, 'x') && $obj->x !== null;
+        property_exists($obj, 'y') && $obj->y !== null;
+        property_exists($obj, 'x') && $obj->x !== null && (property_exists($obj, 'y') && $obj->y !== null);
+    }
+}
 
 ?>
