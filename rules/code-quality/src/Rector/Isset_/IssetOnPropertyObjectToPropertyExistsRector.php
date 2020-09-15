@@ -32,7 +32,7 @@ final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
             'Change isset on property object to property_exists()',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $x;
@@ -42,9 +42,9 @@ class SomeClass
         isset($this->x);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $x;
@@ -54,7 +54,7 @@ class SomeClass
         property_exists($this, 'x') && $this->x !== null;
     }
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );
