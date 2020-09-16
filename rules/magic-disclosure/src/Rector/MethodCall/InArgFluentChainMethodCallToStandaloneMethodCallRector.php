@@ -115,6 +115,7 @@ CODE_SAMPLE
             $node,
             FluentChainMethodCallRootExtractor::KIND_IN_ARGS
         );
+
         if ($assignAndRootExprAndNodesToAdd === null) {
             return null;
         }
