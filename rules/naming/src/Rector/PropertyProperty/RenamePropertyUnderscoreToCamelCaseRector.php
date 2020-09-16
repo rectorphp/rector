@@ -65,7 +65,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $propertyName = $this->getName($node);
-        if (!Strings::contains($propertyName, '_')) {
+        if (! Strings::contains($propertyName, '_')) {
             return null;
         }
 
