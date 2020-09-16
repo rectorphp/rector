@@ -40,15 +40,17 @@ final class PropertyRenamer
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function rename(PropertyRename $propertyRename): void
+    public function rename(PropertyRename $propertyRename): bool
     {
         if ($this->breakingVariableRenameGuard->shouldSkipProperty($propertyRename)) {
-            return;
+            return false;
         }
 
         $onlyPropertyProperty = $propertyRename->getProperty()->props[0];
         $onlyPropertyProperty->name = new VarLikeIdentifier($propertyRename->getExpectedName());
         $this->renamePropertyFetchesInClass($propertyRename);
+
+        return true;
     }
 
     private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
