@@ -1,4 +1,4 @@
-# All 579 Rectors Overview
+# All 580 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -8,7 +8,7 @@
 - [Architecture](#architecture) (2)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
-- [CodeQuality](#codequality) (58)
+- [CodeQuality](#codequality) (59)
 - [CodingStyle](#codingstyle) (35)
 - [DeadCode](#deadcode) (40)
 - [Decouple](#decouple) (1)
@@ -1031,6 +1031,28 @@ Complete missing 3rd argument in case `is_a()` function in case of strings
      {
 -        return is_a($value, 'stdClass');
 +        return is_a($value, 'stdClass', true);
+     }
+ }
+```
+
+<br><br>
+
+### `IssetOnPropertyObjectToPropertyExistsRector`
+
+- class: [`Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector`](/rules/code-quality/src/Rector/Isset_/IssetOnPropertyObjectToPropertyExistsRector.php)
+- [test fixtures](/rules/code-quality/tests/Rector/Isset_/IssetOnPropertyObjectToPropertyExistsRector/Fixture)
+
+Change isset on property object to `property_exists()`
+
+```diff
+ class SomeClass
+ {
+     private $x;
+
+     public function run(): void
+     {
+-        isset($this->x);
++        property_exists($this, 'x') && $this->x !== null;
      }
  }
 ```

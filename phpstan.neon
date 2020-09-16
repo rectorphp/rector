@@ -441,3 +441,14 @@ parameters:
         - '#Class cognitive complexity for "NodeRepository" is \d+, keep it under 50#'
 
         - '#Method "autowireAbstractRectorDependencies\(\)" is using too many parameters \- 11\. Make it under 10#'
+
+        # symplify rules fix later
+        - '#Use another value object over string with value object arrays#'
+        - '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
+        - '#Use decouled factory service to create "(.*?)" object#'
+        - '#Add regex101\.org link to that shows the regex in practise, so it will be easier to maintain in case of bug/extension in the future#'
+
+        # hotskips, fix sooner
+        - '#Post operation are forbidden, as they make 2 values at the same line\. Use pre instead#'
+        - '#Use value object over multi array assign#'
+
