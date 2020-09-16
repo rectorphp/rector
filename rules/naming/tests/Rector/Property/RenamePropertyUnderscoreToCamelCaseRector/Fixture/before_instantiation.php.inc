@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\PropertyProperty\RenamePropertyUnderscoreToCamelCaseRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Property\RenamePropertyUnderscoreToCamelCaseRector\Fixture;
 
 class SomeClass
 {
@@ -16,7 +16,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\PropertyProperty\RenamePropertyUnderscoreToCamelCaseRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Property\RenamePropertyUnderscoreToCamelCaseRector\Fixture;
 
 class SomeClass
 {

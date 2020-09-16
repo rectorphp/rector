@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Rector\PropertyProperty;
+namespace Rector\Naming\Rector\Property;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -16,7 +17,7 @@ use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Naming\Tests\Rector\PropertyProperty\RenamePropertyUnderscoreToCamelCaseRector\RenamePropertyUnderscoreToCamelCaseRectorTest
+ * @see \Rector\Naming\Tests\Rector\Property\RenamePropertyUnderscoreToCamelCaseRector\RenamePropertyUnderscoreToCamelCaseRectorTest
  */
 final class RenamePropertyUnderscoreToCamelCaseRector extends AbstractRector
 {
@@ -58,11 +59,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [PropertyProperty::class, PropertyFetch::class];
+        return [Property::class, PropertyFetch::class];
     }
 
     /**
-     * @param PropertyProperty|PropertyFetch $node
+     * @param Property|PropertyFetch $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -73,14 +74,14 @@ CODE_SAMPLE
         }
 
         $propertyName = StaticRectorStrings::underscoreToCamelCase($propertyName);
-        if ($node instanceof PropertyFetch) {
-            /** @var Node $object */
-            $object = $node->var->getAttribute(AttributeKey::ORIGINAL_NODE);
-            /** @var string */
-            $objectName = $this->getName($object);
-            return new PropertyFetch(new Variable($objectName), $propertyName);
+        if ($node instanceof Property) {
+            return new Property($node->flags, [new PropertyProperty($propertyName)], $node->getAttributes());
         }
 
-        return new PropertyProperty($propertyName);
+        /** @var Node $object */
+        $object = $node->var->getAttribute(AttributeKey::ORIGINAL_NODE);
+        /** @var string */
+        $objectName = $this->getName($object);
+        return new PropertyFetch(new Variable($objectName), $propertyName);
     }
 }

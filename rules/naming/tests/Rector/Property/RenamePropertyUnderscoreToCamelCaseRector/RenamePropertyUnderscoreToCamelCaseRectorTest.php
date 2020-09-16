@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\PropertyProperty\RenamePropertyUnderscoreToCamelCaseRector;
+namespace Rector\Naming\Tests\Rector\Property\RenamePropertyUnderscoreToCamelCaseRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Naming\Rector\PropertyProperty\RenamePropertyUnderscoreToCamelCaseRector;
+use Rector\Naming\Rector\Property\RenamePropertyUnderscoreToCamelCaseRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenamePropertyUnderscoreToCamelCaseRectorTest extends AbstractRectorTestCase
