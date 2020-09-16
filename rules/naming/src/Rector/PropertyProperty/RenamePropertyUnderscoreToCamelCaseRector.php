@@ -74,11 +74,13 @@ CODE_SAMPLE
 
         $propertyName = StaticRectorStrings::underscoreToCamelCase($propertyName);
         if ($node instanceof PropertyFetch) {
+            /** @var Node $object */
             $object = $node->var->getAttribute(AttributeKey::ORIGINAL_NODE);
-            return new PropertyFetch(new Variable($this->getName($object)), $propertyName);
+            /** @var string */
+            $objectName = $this->getName($object);
+            return new PropertyFetch(new Variable($objectName), $propertyName);
         }
 
-        $node->name = $propertyName;
-        return $node;
+        return new PropertyProperty($propertyName);
     }
 }
