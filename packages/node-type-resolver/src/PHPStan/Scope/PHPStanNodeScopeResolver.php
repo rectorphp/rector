@@ -143,8 +143,11 @@ final class PHPStanNodeScopeResolver
                 $node->setAttribute(AttributeKey::SCOPE, $scope);
             }
 
-            $this->resolveDependentFiles($node, $scope);
         };
+
+        foreach ($nodes as $node) {
+            $this->resolveDependentFiles($node, $scope);
+        }
 
         /** @var MutatingScope $scope */
         $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
