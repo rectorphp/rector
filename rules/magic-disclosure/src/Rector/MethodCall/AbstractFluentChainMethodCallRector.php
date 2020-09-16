@@ -26,6 +26,7 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
         'Nette\Forms\Controls\BaseControl',
         'PHPStan\Analyser\Scope',
         'DateTime',
+        'Nette\Utils\DateTime',
         'DateTimeInterface',
         '*Finder',
         '*Builder',

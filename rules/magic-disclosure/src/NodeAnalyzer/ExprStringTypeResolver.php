@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 final class ExprStringTypeResolver
@@ -38,6 +39,10 @@ final class ExprStringTypeResolver
         if (! $exprStaticType instanceof TypeWithClassName) {
             // nothing we can do, unless
             return null;
+        }
+
+        if ($exprStaticType instanceof AliasedObjectType) {
+            return $exprStaticType->getFullyQualifiedClass();
         }
 
         return $exprStaticType->getClassName();
