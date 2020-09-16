@@ -86,8 +86,9 @@ final class MarkdownDumpNodesOutputFormatter
         $this->symfonyStyle->writeln('#### Example PHP Code');
         $this->symfonyStyle->newLine();
 
-        $message = sprintf('```php%s%s%s```', PHP_EOL, $nodeInfo->getPrintedContent(), PHP_EOL);
-        $this->symfonyStyle->writeln($message);
+        foreach ($nodeInfo->getCodeSamples() as $printedSample) {
+            $this->printPhpSnippet($printedSample);
+        }
     }
 
     private function printPublicProperties(NodeInfo $nodeInfo): void
@@ -103,5 +104,11 @@ final class MarkdownDumpNodesOutputFormatter
         foreach ($nodeInfo->getPublicPropertyInfos() as $publicPropertyInfo) {
             $this->symfonyStyle->writeln($publicPropertyInfo);
         }
+    }
+
+    private function printPhpSnippet(string $printedContent): void
+    {
+        $message = sprintf('```php%s%s%s```', PHP_EOL, $printedContent, PHP_EOL);
+        $this->symfonyStyle->writeln($message);
     }
 }

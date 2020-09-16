@@ -2253,6 +2253,9 @@ namespace {
 ```php
 public $propertyName;
 ```
+```php
+public static $propertyName, $anotherPropertyName;
+```
 
 #### Public Properties
 
