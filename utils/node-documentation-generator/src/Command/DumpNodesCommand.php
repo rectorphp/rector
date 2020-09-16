@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\DocumentationGenerator\Command;
+namespace Rector\Utils\NodeDocumentationGenerator\Command;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -104,10 +104,10 @@ use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\Console\Command\AbstractCommand;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Utils\DocumentationGenerator\Node\NodeClassProvider;
-use Rector\Utils\DocumentationGenerator\Node\NodeInfoResult;
-use Rector\Utils\DocumentationGenerator\OutputFormatter\MarkdownDumpNodesOutputFormatter;
-use Rector\Utils\DocumentationGenerator\ValueObject\NodeInfo;
+use Rector\Utils\NodeDocumentationGenerator\Node\NodeInfoCollector;
+use Rector\Utils\NodeDocumentationGenerator\OutputFormatter\MarkdownDumpNodesOutputFormatter;
+use Rector\Utils\NodeDocumentationGenerator\RobotLoader\NodeClassProvider;
+use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfo;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
@@ -120,17 +120,12 @@ final class DumpNodesCommand extends AbstractCommand
     /**
      * @var string
      */
-    private const VARIABLE_NAME = 'variable';
+    private const VARIABLE_NAME = 'variableName';
 
     /**
      * @var string
      */
     private const VALUE = 'value';
-
-    /**
-     * @var string
-     */
-    private const SOME_VARIABLE = 'variableName';
 
     /**
      * @var string
@@ -158,7 +153,7 @@ final class DumpNodesCommand extends AbstractCommand
     private $nodeClassProvider;
 
     /**
-     * @var NodeInfoResult
+     * @var NodeInfoCollector
      */
     private $nodeInfoResult;
 
@@ -171,7 +166,7 @@ final class DumpNodesCommand extends AbstractCommand
         BetterStandardPrinter $betterStandardPrinter,
         MarkdownDumpNodesOutputFormatter $markdownDumpNodesOutputFormatter,
         NodeClassProvider $nodeClassProvider,
-        NodeInfoResult $nodeInfoResult
+        NodeInfoCollector $nodeInfoResult
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeClassProvider = $nodeClassProvider;
@@ -214,11 +209,7 @@ final class DumpNodesCommand extends AbstractCommand
 
                 $category = $this->resolveCategoryByNodeClass($nodeClass);
 
-                $nodeInfo = new NodeInfo(
-                    $nodeClass,
-                    $this->createCodeSamples($node),
-                    false
-                );
+                $nodeInfo = new NodeInfo($nodeClass, $this->createCodeSamples($node), false);
                 $this->nodeInfoResult->addNodeInfo($category, $nodeInfo);
             } elseif (is_a($nodeClass, BinaryOp::class, true)) {
                 $node = new $nodeClass(new LNumber(1), new String_('a'));
@@ -254,7 +245,7 @@ final class DumpNodesCommand extends AbstractCommand
                 }
 
                 $useUseNode = new UseUse(new Name('UsedNamespace'));
-                $someVariableNode = new Variable(self::SOME_VARIABLE);
+                $someVariableNode = new Variable(self::VARIABLE_NAME);
 
                 $matchArm = new MatchArm([new LNumber(1)], new String_('yes'));
 
@@ -332,7 +323,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === UseUse::class) {
                     $node = $useUseNode;
                 } elseif ($nodeClass === Expression::class) {
-                    $node = new Expression(new Variable(self::SOME_VARIABLE));
+                    $node = new Expression(new Variable(self::VARIABLE_NAME));
                 } elseif ($nodeClass === PropertyProperty::class) {
                     $node = new PropertyProperty('someProperty');
                 } elseif ($nodeClass === Global_::class) {
@@ -361,15 +352,15 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Class_::class) {
                     $node = new Class_(new Identifier('ClassName'));
                 } elseif ($nodeClass === PostDec::class) {
-                    $node = new PostDec(new Variable(self::SOME_VARIABLE));
+                    $node = new PostDec(new Variable(self::VARIABLE_NAME));
                 } elseif ($nodeClass === PreInc::class) {
-                    $node = new PreInc(new Variable(self::SOME_VARIABLE));
+                    $node = new PreInc(new Variable(self::VARIABLE_NAME));
                 } elseif ($nodeClass === PostInc::class) {
-                    $node = new PostInc(new Variable(self::SOME_VARIABLE));
+                    $node = new PostInc(new Variable(self::VARIABLE_NAME));
                 } elseif ($nodeClass === PreDec::class) {
-                    $node = new PreDec(new Variable(self::SOME_VARIABLE));
+                    $node = new PreDec(new Variable(self::VARIABLE_NAME));
                 } elseif ($nodeClass === List_::class) {
-                    $node = new List_([new ArrayItem(new Variable(self::SOME_VARIABLE))]);
+                    $node = new List_([new ArrayItem(new Variable(self::VARIABLE_NAME))]);
                 } elseif ($nodeClass === Instanceof_::class) {
                     $node = new Instanceof_($someVariableNode, new Name(self::SOME_CLASS));
                 } elseif ($nodeClass === FuncCall::class) {

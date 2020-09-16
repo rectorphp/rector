@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\DocumentationGenerator\OutputFormatter;
+namespace Rector\Utils\NodeDocumentationGenerator\OutputFormatter;
 
 use Nette\Utils\Strings;
-use Rector\Utils\DocumentationGenerator\Node\NodeInfoResult;
-use Rector\Utils\DocumentationGenerator\ValueObject\NodeInfo;
+use Rector\Utils\NodeDocumentationGenerator\Node\NodeInfoCollector;
+use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfo;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class MarkdownDumpNodesOutputFormatter
@@ -21,7 +21,7 @@ final class MarkdownDumpNodesOutputFormatter
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function format(NodeInfoResult $nodeInfoResult): void
+    public function format(NodeInfoCollector $nodeInfoResult): void
     {
         $this->symfonyStyle->writeln('# Node Overview');
         $this->symfonyStyle->newLine();
@@ -51,7 +51,7 @@ final class MarkdownDumpNodesOutputFormatter
         }
     }
 
-    private function printCategories(NodeInfoResult $nodeInfoResult): void
+    private function printCategories(NodeInfoCollector $nodeInfoResult): void
     {
         foreach ($nodeInfoResult->getCategories() as $category) {
             $categoryTitle = $this->createCategoryTitle($category);

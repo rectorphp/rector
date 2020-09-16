@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\DocumentationGenerator\Node;
+namespace Rector\Utils\NodeDocumentationGenerator\Node;
 
-use Rector\Utils\DocumentationGenerator\ValueObject\NodeInfo;
+use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfo;
 
-final class NodeInfoResult
+final class NodeInfoCollector
 {
     /**
      * @var NodeInfo[][]

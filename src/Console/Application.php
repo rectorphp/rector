@@ -11,7 +11,7 @@ use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\DocumentationGenerator\Command\DumpRectorsCommand;
-use Rector\Utils\DocumentationGenerator\Command\DumpNodesCommand;
+use Rector\Utils\NodeDocumentationGenerator\Command\DumpNodesCommand;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;

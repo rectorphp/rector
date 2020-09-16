@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\DocumentationGenerator\ValueObject;
+namespace Rector\Utils\NodeDocumentationGenerator\ValueObject;
 
 use ReflectionClass;
 
