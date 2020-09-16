@@ -75,7 +75,8 @@ CODE_SAMPLE
 
         $propertyName = StaticRectorStrings::underscoreToCamelCase($propertyName);
         if ($node instanceof Property) {
-            return new Property($node->flags, [new PropertyProperty($propertyName)], $node->getAttributes());
+            $node->props = [new PropertyProperty($propertyName)];
+            return $node;
         }
 
         /** @var Node $object */
