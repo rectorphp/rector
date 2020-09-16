@@ -7,6 +7,7 @@ namespace Rector\Naming\Rector\PropertyProperty;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -64,13 +65,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        /** @var string $propertyName */
         $propertyName = $this->getName($node);
         if (! Strings::contains($propertyName, '_')) {
             return null;
         }
 
         $propertyName = StaticRectorStrings::underscoreToCamelCase($propertyName);
-        $node->name = $propertyName;
+        $node->name = $node instanceof PropertyFetch
+            ? new Identifier($propertyName)
+            : $propertyName;
 
         return $node;
     }
