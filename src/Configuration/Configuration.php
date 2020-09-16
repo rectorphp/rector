@@ -108,14 +108,14 @@ final class Configuration
      */
     public function __construct(
         CiDetector $ciDetector,
-        bool $isCacheEnabled,
+        bool $enableCache,
         array $fileExtensions,
         array $paths,
         OnlyRuleResolver $onlyRuleResolver,
         ParameterProvider $parameterProvider
     ) {
         $this->ciDetector = $ciDetector;
-        $this->isCacheEnabled = $isCacheEnabled;
+        $this->isCacheEnabled = $enableCache;
         $this->fileExtensions = $fileExtensions;
         $this->paths = $paths;
         $this->onlyRuleResolver = $onlyRuleResolver;

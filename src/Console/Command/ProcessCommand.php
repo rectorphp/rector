@@ -293,9 +293,14 @@ final class ProcessCommand extends AbstractCommand
             return;
         }
 
+        if ($this->configuration->shouldClearCache()) {
+            return;
+        }
+
         if (! $this->rectorNodeTraverser->hasZeroCacheRectors()) {
             return;
         }
+
         $message = sprintf(
             'Ruleset contains %d rules that need "--clear-cache" option to analyse full project',
             $this->rectorNodeTraverser->getZeroCacheRectorCount()

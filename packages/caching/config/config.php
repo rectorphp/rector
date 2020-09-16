@@ -7,6 +7,7 @@ use PHPStan\File\FileHelper;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use Rector\Caching\Cache\Adapter\FilesystemAdapterFactory;
+use Rector\Core\Configuration\Option;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
@@ -18,7 +19,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set('is_cache_enabled', false);
+    $parameters->set(Option::ENABLE_CACHE, false);
 
     $services = $containerConfigurator->services();
 

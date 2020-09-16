@@ -4861,7 +4861,7 @@ Remove null coalescing operator ??=
 ### `DowngradeTypedPropertyRector`
 
 - class: [`Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector`](/rules/downgrade-php74/src/Rector/Property/DowngradeTypedPropertyRector.php)
-- [test fixtures](/rules/downgrade-php74/tests/Rector/Property/DowngradeTypedPropertyRector/Fixture)
+- [test fixtures](/rules/downgrade-php74/tests/Rector/Property/NoDocBlockDowngradeTypedPropertyRector/Fixture)
 
 Changes property type definition from type definitions to `@var` annotations.
 
