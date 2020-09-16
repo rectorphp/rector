@@ -7,11 +7,13 @@ namespace Rector\Naming\Rector\PropertyProperty;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Naming\Tests\Rector\PropertyProperty\RenamePropertyUnderscoreToCamelCaseRector\RenamePropertyUnderscoreToCamelCaseRectorTest
@@ -70,7 +72,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->name = StaticRectorStrings::underscoreToCamelCase($propertyName);
+        $propertyName = StaticRectorStrings::underscoreToCamelCase($propertyName);
+        if ($node instanceof PropertyFetch) {
+            $object = $node->var->getAttribute(AttributeKey::ORIGINAL_NODE);
+            return new PropertyFetch(new Variable($this->getName($object)), $propertyName);
+        }
+
+        $node->name = $propertyName;
         return $node;
     }
 }
