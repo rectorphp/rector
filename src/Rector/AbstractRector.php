@@ -19,6 +19,7 @@ use Rector\AnonymousClass\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Php\PhpVersionProvider;
@@ -162,6 +163,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     public function hasParentTypes(Node $node, array $types): bool
     {
         foreach ($types as $type) {
+            if (! is_a($type, Node::class, true)) {
+                throw new ShouldNotHappenException(__METHOD__);
+            }
+
             if ($this->hasParentType($node, $type)) {
                 return true;
             }
