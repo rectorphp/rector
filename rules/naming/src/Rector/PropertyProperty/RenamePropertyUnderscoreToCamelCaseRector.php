@@ -7,7 +7,7 @@ namespace Rector\Naming\Rector\PropertyProperty;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -72,10 +72,11 @@ CODE_SAMPLE
         }
 
         $propertyName = StaticRectorStrings::underscoreToCamelCase($propertyName);
-        $node->name = $node instanceof PropertyFetch
-            ? new Identifier($propertyName)
-            : $propertyName;
+        if ($node instanceof PropertyFetch) {
+            return new PropertyFetch(new Variable('this'), $propertyName);
+        }
 
+        $node->name = $propertyName;
         return $node;
     }
 }
