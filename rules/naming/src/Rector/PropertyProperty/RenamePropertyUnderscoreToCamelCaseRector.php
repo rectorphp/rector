@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Rector\Property;
+namespace Rector\Naming\Rector\PropertyProperty;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 
 /**
- * @see \Rector\Naming\Tests\Rector\Property\RenamePropertyUnderscoreToCamelCaseRector\RenamePropertyUnderscoreToCamelCaseRectorTest
+ * @see \Rector\Naming\Tests\Rector\PropertyProperty\RenamePropertyUnderscoreToCamelCaseRector\RenamePropertyUnderscoreToCamelCaseRectorTest
  */
 final class RenamePropertyUnderscoreToCamelCaseRector extends AbstractRector
 {
