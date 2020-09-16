@@ -9,7 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -75,7 +75,9 @@ CODE_SAMPLE
 
         $propertyName = StaticRectorStrings::underscoreToCamelCase($propertyName);
         if ($node instanceof Property) {
-            $node->props = [new PropertyProperty($propertyName)];
+            $propertyProperty = $node->props[0];
+            $propertyProperty->name = new VarLikeIdentifier($propertyName);
+            $node->props = [$propertyProperty];
             return $node;
         }
 
