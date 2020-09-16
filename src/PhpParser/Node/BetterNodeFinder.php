@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -48,12 +49,18 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param string|string[] $type
+     * @param class-string|class-string[] $type
      */
     public function findFirstParentInstanceOf(Node $node, $type): ?Node
     {
         if (! is_array($type)) {
-            $type = [$type];
+            $types = [$type];
+        } else {
+            $types = $type;
+        }
+
+        foreach ($types as $singleType) {
+            $this->ensureIsNodeClass($singleType, __METHOD__, 1);
         }
 
         /** @var Node|null $parentNode */
@@ -64,7 +71,7 @@ final class BetterNodeFinder
         }
 
         do {
-            if ($this->isTypes($parentNode, $type)) {
+            if ($this->isTypes($parentNode, $types)) {
                 return $parentNode;
             }
 
@@ -115,6 +122,8 @@ final class BetterNodeFinder
      */
     public function findInstanceOf($nodes, string $type): array
     {
+        $this->ensureIsNodeClass($type, __METHOD__, 1);
+
         return $this->nodeFinder->findInstanceOf($nodes, $type);
     }
 
@@ -123,6 +132,8 @@ final class BetterNodeFinder
      */
     public function findFirstInstanceOf($nodes, string $type): ?Node
     {
+        $this->ensureIsNodeClass($type, __METHOD__, 1);
+
         return $this->nodeFinder->findFirstInstanceOf($nodes, $type);
     }
 
@@ -131,6 +142,8 @@ final class BetterNodeFinder
      */
     public function hasInstanceOfName($nodes, string $type, string $name): bool
     {
+        $this->ensureIsNodeClass($type, __METHOD__, 1);
+
         return (bool) $this->findInstanceOfName($nodes, $type, $name);
     }
 
@@ -152,11 +165,13 @@ final class BetterNodeFinder
 
     /**
      * @param Node|Node[] $nodes
-     * @param string[] $types
+     * @param class-string[] $types
      */
     public function hasInstancesOf($nodes, array $types): bool
     {
         foreach ($types as $type) {
+            $this->ensureIsNodeClass($type, __METHOD__, 1);
+
             if ($this->nodeFinder->findFirstInstanceOf($nodes, $type) === null) {
                 continue;
             }
@@ -172,6 +187,8 @@ final class BetterNodeFinder
      */
     public function findLastInstanceOf($nodes, string $type): ?Node
     {
+        $this->ensureIsNodeClass($type, __METHOD__, 1);
+
         $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
         if ($foundInstances === []) {
             return null;
@@ -281,11 +298,13 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param string[] $types
+     * @param class-string[] $types
      */
     private function isTypes(Node $node, array $types): bool
     {
         foreach ($types as $type) {
+            $this->ensureIsNodeClass($type, __METHOD__, 1);
+
             if (is_a($node, $type, true)) {
                 return true;
             }
@@ -296,9 +315,12 @@ final class BetterNodeFinder
 
     /**
      * @param Node|Node[] $nodes
+     * @param class-string $type
      */
     private function findInstanceOfName($nodes, string $type, string $name): ?Node
     {
+        $this->ensureIsNodeClass($type, __METHOD__, 1);
+
         $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
 
         foreach ($foundInstances as $foundInstance) {
@@ -308,5 +330,22 @@ final class BetterNodeFinder
         }
 
         return null;
+    }
+
+    private function ensureIsNodeClass(string $type, string $location, int $argumentPosition): void
+    {
+        if (is_a($type, Node::class, true)) {
+            return;
+        }
+
+        $errorMessage = sprintf(
+            'Type given to "%s()" method on %d position must be child of "%s". "%s" given.',
+            $argumentPosition,
+            $location,
+            Node::class,
+            $type
+        );
+
+        throw new ShouldNotHappenException($errorMessage);
     }
 }

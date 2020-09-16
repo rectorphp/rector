@@ -19,7 +19,7 @@
 #### Example PHP Code
 
 ```php
-$someVariable[0]
+$variableName[0]
 ```
 
 #### Public Properties
@@ -87,7 +87,7 @@ fn() => 1
 #### Example PHP Code
 
 ```php
-$someVariable = 'some value'
+$variableName = 'some value'
 ```
 
 #### Public Properties
@@ -104,7 +104,7 @@ $someVariable = 'some value'
 #### Example PHP Code
 
 ```php
-$someVariable =& $someOtherVariable
+$variableName =& $someOtherVariable
 ```
 
 #### Public Properties
@@ -121,7 +121,7 @@ $someVariable =& $someOtherVariable
 #### Example PHP Code
 
 ```php
-~$someVariable
+~$variableName
 ```
 
 #### Public Properties
@@ -153,7 +153,7 @@ $someVariable =& $someOtherVariable
 #### Example PHP Code
 
 ```php
-SomeClass::SOME_CONSTANT
+SomeClassName::SOME_CONSTANT
 ```
 
 #### Public Properties
@@ -170,7 +170,7 @@ SomeClass::SOME_CONSTANT
 #### Example PHP Code
 
 ```php
-clone $someVariable
+clone $variableName
 ```
 
 #### Public Properties
@@ -206,7 +206,7 @@ function () {
 #### Example PHP Code
 
 ```php
-$someVariable
+$variableName
 ```
 
 #### Public Properties
@@ -239,7 +239,7 @@ true
 #### Example PHP Code
 
 ```php
-empty($someVariable)
+empty($variableName)
 ```
 
 #### Public Properties
@@ -255,7 +255,7 @@ empty($someVariable)
 #### Example PHP Code
 
 ```php
-@$someVariable
+@$variableName
 ```
 
 #### Public Properties
@@ -318,7 +318,7 @@ functionCall()
 #### Example PHP Code
 
 ```php
-include $someVariable
+include $variableName
 ```
 
 #### Public Properties
@@ -335,7 +335,7 @@ include $someVariable
 #### Example PHP Code
 
 ```php
-$someVariable instanceof SomeClass
+$variableName instanceof SomeClassName
 ```
 
 #### Public Properties
@@ -368,7 +368,7 @@ isset($variable)
 #### Example PHP Code
 
 ```php
-list($someVariable)
+list($variableName)
 ```
 
 #### Public Properties
@@ -440,7 +440,7 @@ new class
 #### Example PHP Code
 
 ```php
-$someVariable?->someMethod()
+$variableName?->methodName()
 ```
 
 #### Public Properties
@@ -458,7 +458,7 @@ $someVariable?->someMethod()
 #### Example PHP Code
 
 ```php
-$someVariable?->somePropety
+$variableName?->somePropety
 ```
 
 #### Public Properties
@@ -475,7 +475,7 @@ $someVariable?->somePropety
 #### Example PHP Code
 
 ```php
-$someVariable--
+$variableName--
 ```
 
 #### Public Properties
@@ -491,7 +491,7 @@ $someVariable--
 #### Example PHP Code
 
 ```php
-$someVariable++
+$variableName++
 ```
 
 #### Public Properties
@@ -507,7 +507,7 @@ $someVariable++
 #### Example PHP Code
 
 ```php
---$someVariable
+--$variableName
 ```
 
 #### Public Properties
@@ -523,7 +523,7 @@ $someVariable++
 #### Example PHP Code
 
 ```php
-++$someVariable
+++$variableName
 ```
 
 #### Public Properties
@@ -539,7 +539,7 @@ $someVariable++
 #### Example PHP Code
 
 ```php
-print $someVariable
+print $variableName
 ```
 
 #### Public Properties
@@ -555,7 +555,7 @@ print $someVariable
 #### Example PHP Code
 
 ```php
-$someVariable->propertyName
+$variableName->propertyName
 ```
 
 #### Public Properties
@@ -588,7 +588,7 @@ $someVariable->propertyName
 #### Example PHP Code
 
 ```php
-SomeClass::methodName()
+SomeClassName::methodName()
 ```
 
 #### Public Properties
@@ -606,7 +606,7 @@ SomeClass::methodName()
 #### Example PHP Code
 
 ```php
-SomeClass::$someProperty
+SomeClassName::$someProperty
 ```
 
 #### Public Properties
@@ -623,7 +623,7 @@ SomeClass::$someProperty
 #### Example PHP Code
 
 ```php
-$someVariable ? true : false
+$variableName ? true : false
 ```
 
 #### Public Properties
@@ -641,7 +641,7 @@ $someVariable ? true : false
 #### Example PHP Code
 
 ```php
-throw $someVariable;
+throw $variableName;
 ```
 
 #### Public Properties
@@ -657,7 +657,7 @@ throw $someVariable;
 #### Example PHP Code
 
 ```php
--$someVariable
+-$variableName
 ```
 
 #### Public Properties
@@ -673,7 +673,7 @@ throw $someVariable;
 #### Example PHP Code
 
 ```php
-+$someVariable
++$variableName
 ```
 
 #### Public Properties
@@ -689,7 +689,7 @@ throw $someVariable;
 #### Example PHP Code
 
 ```php
-$someVariable
+$variableName
 ```
 
 #### Public Properties
@@ -705,7 +705,7 @@ $someVariable
 #### Example PHP Code
 
 ```php
-yield from $someVariable
+yield from $variableName
 ```
 
 #### Public Properties
@@ -1817,7 +1817,7 @@ const SOME_CLASS_CONSTANT = 'default value';
 #### Example PHP Code
 
 ```php
-public function someMethod()
+public function methodName()
 {
 }
 ```
@@ -1994,7 +1994,7 @@ else {
 #### Example PHP Code
 
 ```php
-$someVariable;
+$variableName;
 ```
 
 #### Public Properties
@@ -2251,7 +2251,7 @@ namespace {
 #### Example PHP Code
 
 ```php
-var $property;
+public $propertyName;
 ```
 
 #### Public Properties
@@ -2404,7 +2404,7 @@ SomeTrait::method as public aliasedMethod;
 #### Example PHP Code
 
 ```php
-SomeTrait::someMethod insteadof overriddenTrait;
+SomeTrait::methodName insteadof overriddenTrait;
 ```
 
 #### Public Properties
@@ -2535,7 +2535,7 @@ while ($variable) {
 #### Example PHP Code
 
 ```php
-$someVariable
+$variableName
 ```
 
 #### Public Properties
@@ -2621,7 +2621,7 @@ identifier
 #### Example PHP Code
 
 ```php
-$someVariable
+$variableName
 ```
 
 #### Public Properties
@@ -2642,7 +2642,7 @@ $someVariable
 #### Example PHP Code
 
 ```php
-string|null
+string|int
 ```
 
 #### Public Properties

@@ -461,3 +461,5 @@ parameters:
                  - packages/dynamic-type-analysis/src/Probe/TypeStaticProbe.php # 24
                  - packages/dynamic-type-analysis/tests/ProbeStorage/StaticInMemoryProbeStorage.php # 14
                  - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 68
+
+        - '#(.*?) expects class\-string, string given#'
