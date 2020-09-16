@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Rector\PropertyProperty;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\PropertyProperty;
@@ -64,7 +65,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $propertyName = $this->getName($node);
-        if (strpos($propertyName, '_') === false) {
+        if (!Strings::contains($propertyName, '_')) {
             return null;
         }
 
