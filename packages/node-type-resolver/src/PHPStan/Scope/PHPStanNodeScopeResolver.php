@@ -142,7 +142,6 @@ final class PHPStanNodeScopeResolver
             } else {
                 $node->setAttribute(AttributeKey::SCOPE, $scope);
             }
-
         };
 
         foreach ($nodes as $node) {
