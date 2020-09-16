@@ -84,6 +84,16 @@ final class Option
     /**
      * @var string
      */
+    public const ENABLE_CACHE = 'enable_cache';
+
+    /**
+     * @var string
+     */
+    public const CACHE_DEBUG = 'cache-debug';
+
+    /**
+     * @var string
+     */
     public const PROJECT_TYPE = 'project_type';
 
     /**
@@ -100,11 +110,6 @@ final class Option
      * @var string
      */
     public const PROJECT_TYPE_OPEN_SOURCE_UNDESCORED = 'open_source';
-
-    /**
-     * @var string
-     */
-    public const CACHE_DEBUG = 'cache-debug';
 
     /**
      * @var string
@@ -145,9 +150,4 @@ final class Option
      * @var string
      */
     public const NESTED_CHAIN_METHOD_CALL_LIMIT = 'nested_chain_method_call_limit';
-
-    /**
-     * @var string
-     */
-    public const ENABLE_CACHE = 'enable_cache';
 }
