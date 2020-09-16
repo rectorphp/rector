@@ -5,20 +5,17 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\Naming\PropertyRenamer;
+use Rector\Naming\ValueObject\PropertyRename;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\RenamePropertyToMatchTypeRectorTest
@@ -41,18 +38,18 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
     private $expectedNameResolver;
 
     /**
-     * @var BreakingVariableRenameGuard
+     * @var PropertyRenamer
      */
-    private $breakingVariableRenameGuard;
+    private $propertyRenamer;
 
     public function __construct(
-        BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ConflictingNameResolver $conflictingNameResolver,
-        ExpectedNameResolver $expectedNameResolver
+        ExpectedNameResolver $expectedNameResolver,
+        PropertyRenamer $propertyRenamer
     ) {
         $this->conflictingNameResolver = $conflictingNameResolver;
         $this->expectedNameResolver = $expectedNameResolver;
-        $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
+        $this->propertyRenamer = $propertyRenamer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -123,69 +120,38 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var string $oldName */
-            $oldName = $this->getName($property);
-
             $expectedName = $this->expectedNameResolver->resolveForPropertyIfNotYet($property);
             if ($expectedName === null) {
                 continue;
             }
 
-            if ($this->shouldSkipProperty($property, $oldName, $expectedName, $conflictingPropertyNames)) {
+            $currentName = $this->getName($property);
+            $propertyType = $this->getObjectType($property);
+            $propertyClassLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+
+            $propertyRename = new PropertyRename(
+                $property,
+                $expectedName,
+                $currentName,
+                $propertyType,
+                $propertyClassLike
+            );
+
+            if ($this->shouldSkipProperty($propertyRename, $conflictingPropertyNames)) {
                 continue;
             }
 
-            $onlyPropertyProperty = $property->props[0];
-            $onlyPropertyProperty->name = new VarLikeIdentifier($expectedName);
-            $this->renamePropertyFetchesInClass($classLike, $oldName, $expectedName);
+            $this->propertyRenamer->rename($propertyRename);
 
             $this->hasChanged = true;
         }
     }
 
-    private function shouldSkipProperty(
-        Property $property,
-        string $oldName,
-        string $expectedName,
-        array $conflictingPropertyNames
-    ): bool {
-        if ($this->isObjectType($property, 'Ramsey\Uuid\UuidInterface')) {
-            return true;
-        }
-
-        return $this->shouldSkipPropertyRename($property, $oldName, $expectedName, $conflictingPropertyNames);
-    }
-
-    private function renamePropertyFetchesInClass(ClassLike $classLike, string $oldName, string $expectedName): void
-    {
-        // 1. replace property fetch rename in whole class
-        $this->traverseNodesWithCallable([$classLike], function (Node $node) use (
-            $oldName,
-            $expectedName
-        ): ?PropertyFetch {
-            if (! $this->isLocalPropertyFetchNamed($node, $oldName)) {
-                return null;
-            }
-
-            /** @var PropertyFetch $node */
-            $node->name = new Identifier($expectedName);
-            return $node;
-        });
-    }
-
     /**
      * @param string[] $conflictingPropertyNames
      */
-    private function shouldSkipPropertyRename(
-        Property $property,
-        string $currentName,
-        string $expectedName,
-        array $conflictingPropertyNames
-    ): bool {
-        if (in_array($expectedName, $conflictingPropertyNames, true)) {
-            return true;
-        }
-
-        return $this->breakingVariableRenameGuard->shouldSkipProperty($property, $currentName);
+    private function shouldSkipProperty(PropertyRename $propertyRename, array $conflictingPropertyNames): bool
+    {
+        return in_array($propertyRename->getExpectedName(), $conflictingPropertyNames, true);
     }
 }
