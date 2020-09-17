@@ -50,10 +50,14 @@ final class VisibilityManipulator
     }
 
     /**
-     * @param ClassMethod|Property|ClassConst $node
+     * @param ClassMethod|Property $node
      */
     public function makeNonStatic(Node $node): void
     {
+        if (! $node->isStatic()) {
+            return;
+        }
+
         $node->flags -= Class_::MODIFIER_STATIC;
     }
 

@@ -195,13 +195,18 @@ CODE_SAMPLE
 
             // is the same class or external call?
             $className = $this->getName($staticCall->class);
-
             if ($className === 'self') {
                 return new MethodCall(new Variable(self::THIS), $staticCall->name, $staticCall->args);
             }
 
             $propertyName = $this->propertyNaming->fqnToVariableName($classType);
-            $propertyFetch = new PropertyFetch(new Variable(self::THIS), $propertyName);
+
+            $currentMethodName = $staticCall->getAttribute(AttributeKey::METHOD_NAME);
+            if ($currentMethodName === MethodName::CONSTRUCT) {
+                $propertyFetch = new Variable($propertyName);
+            } else {
+                $propertyFetch = new PropertyFetch(new Variable(self::THIS), $propertyName);
+            }
             return new MethodCall($propertyFetch, $staticCall->name, $staticCall->args);
         }
 
@@ -296,10 +301,30 @@ CODE_SAMPLE
         }
 
         $propertyExpectedName = $this->propertyNaming->fqnToVariableName(new ObjectType($classType));
+
+        if ($this->isTypeAlreadyInParamMethod($constructClassMethod, $classType)) {
+            return;
+        }
+
         $constructClassMethod->params[] = new Param(
             new Variable($propertyExpectedName),
             null,
-            new FullyQualified($this->classTypes)
+            new FullyQualified($classType)
         );
+    }
+
+    private function isTypeAlreadyInParamMethod(ClassMethod $classMethod, string $classType): bool
+    {
+        foreach ($classMethod->getParams() as $param) {
+            if ($param->type === null) {
+                continue;
+            }
+
+            if ($this->isName($param->type, $classType)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -95,7 +95,7 @@ trait VisibilityTrait
     }
 
     /**
-     * @param ClassMethod|Property|ClassConst $node
+     * @param ClassMethod|Property $node
      */
     public function makeNonStatic(Node $node): void
     {
