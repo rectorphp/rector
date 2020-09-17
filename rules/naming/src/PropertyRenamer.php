@@ -50,10 +50,6 @@ final class PropertyRenamer
 
     private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
     {
-        if ($propertyRename->getClassLike() === null) {
-            return;
-        }
-
         // 1. replace property fetch rename in whole class
         $this->callableNodeTraverser->traverseNodesWithCallable(
             [$propertyRename->getClassLike()],

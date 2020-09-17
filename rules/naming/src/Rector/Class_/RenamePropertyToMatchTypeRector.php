@@ -127,6 +127,7 @@ CODE_SAMPLE
 
             $currentName = $this->getName($property);
             $propertyType = $this->getObjectType($property);
+            /** @var ClassLike $propertyClassLike */
             $propertyClassLike = $property->getAttribute(AttributeKey::CLASS_NODE);
 
             $propertyRename = new PropertyRename(

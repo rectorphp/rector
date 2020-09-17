@@ -31,7 +31,7 @@ final class PropertyRename extends Property
     private $propertyType;
 
     /**
-     * @var ?ClassLike
+     * @var ClassLike
      */
     private $classLike;
 
@@ -40,7 +40,7 @@ final class PropertyRename extends Property
         string $expectedName,
         string $currentName,
         Type $type,
-        ?ClassLike $classLike
+        ClassLike $classLike
     ) {
         $this->property = $property;
         $this->expectedName = $expectedName;
@@ -69,7 +69,7 @@ final class PropertyRename extends Property
         return $this->propertyType;
     }
 
-    public function getClassLike(): ?ClassLike
+    public function getClassLike(): ClassLike
     {
         return $this->classLike;
     }
