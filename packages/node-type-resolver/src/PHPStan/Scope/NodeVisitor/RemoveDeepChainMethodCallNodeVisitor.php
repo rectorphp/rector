@@ -10,7 +10,9 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 /**
  * Skips performance trap in PHPStan: https://github.com/phpstan/phpstan/issues/254
@@ -32,10 +34,12 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
      */
     private $removingExpression;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, int $nestedChainMethodCallLimit)
+    public function __construct(BetterNodeFinder $betterNodeFinder, ParameterProvider $parameterProvider)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nestedChainMethodCallLimit = $nestedChainMethodCallLimit;
+        $this->nestedChainMethodCallLimit = (int) $parameterProvider->provideParameter(
+            Option::NESTED_CHAIN_METHOD_CALL_LIMIT
+        );
     }
 
     public function enterNode(Node $node): ?int

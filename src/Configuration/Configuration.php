@@ -102,22 +102,15 @@ final class Configuration
      */
     private $onlyRector;
 
-    /**
-     * @param string[] $fileExtensions
-     * @param string[] $paths
-     */
     public function __construct(
         CiDetector $ciDetector,
-        bool $enableCache,
-        array $fileExtensions,
-        array $paths,
         OnlyRuleResolver $onlyRuleResolver,
         ParameterProvider $parameterProvider
     ) {
         $this->ciDetector = $ciDetector;
-        $this->isCacheEnabled = $enableCache;
-        $this->fileExtensions = $fileExtensions;
-        $this->paths = $paths;
+        $this->isCacheEnabled = (bool) $parameterProvider->provideParameter(Option::ENABLE_CACHE);
+        $this->fileExtensions = (array) $parameterProvider->provideParameter(Option::FILE_EXTENSIONS);
+        $this->paths = (array) $parameterProvider->provideParameter(Option::PATHS);
         $this->onlyRuleResolver = $onlyRuleResolver;
         $this->parameterProvider = $parameterProvider;
     }

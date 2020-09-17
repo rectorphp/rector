@@ -39,12 +39,11 @@ final class NameImportingPostRector extends AbstractPostRector
     public function __construct(
         ParameterProvider $parameterProvider,
         NameImporter $nameImporter,
-        DocBlockNameImporter $docBlockNameImporter,
-        bool $importDocBlocks
+        DocBlockNameImporter $docBlockNameImporter
     ) {
         $this->parameterProvider = $parameterProvider;
         $this->nameImporter = $nameImporter;
-        $this->importDocBlocks = $importDocBlocks;
+        $this->importDocBlocks = (bool) $parameterProvider->provideParameter(Option::IMPORT_DOC_BLOCKS);
         $this->docBlockNameImporter = $docBlockNameImporter;
     }
 

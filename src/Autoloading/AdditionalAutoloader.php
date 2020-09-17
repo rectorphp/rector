@@ -8,6 +8,7 @@ use Nette\Loaders\RobotLoader;
 use Rector\Core\Configuration\Option;
 use Rector\Core\FileSystem\FileGuard;
 use Symfony\Component\Console\Input\InputInterface;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\FileSystemFilter;
 
 /**
@@ -35,19 +36,14 @@ final class AdditionalAutoloader
      */
     private $fileSystemFilter;
 
-    /**
-     * @param string[] $autoloadPaths
-     * @param string[] $excludePaths
-     */
     public function __construct(
         FileGuard $fileGuard,
         FileSystemFilter $fileSystemFilter,
-        array $autoloadPaths,
-        array $excludePaths
+        ParameterProvider $parameterProvider
     ) {
         $this->fileGuard = $fileGuard;
-        $this->autoloadPaths = $autoloadPaths;
-        $this->excludePaths = $excludePaths;
+        $this->autoloadPaths = (array) $parameterProvider->provideParameter(Option::AUTOLOAD_PATHS);
+        $this->excludePaths = (array) $parameterProvider->provideParameter(Option::EXCLUDE_PATHS);
         $this->fileSystemFilter = $fileSystemFilter;
     }
 
