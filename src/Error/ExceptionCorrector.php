@@ -32,7 +32,7 @@ final class ExceptionCorrector
     public function getAutoloadExceptionMessageAndAddLocation(AnalysedCodeException $analysedCodeException): string
     {
         return sprintf(
-            'Analyze error: "%s". Include your files in "parameters > autoload_paths".%sSee https://github.com/rectorphp/rector#extra-autoloading',
+            'Analyze error: "%s". Include your files in "parameters > autoload_paths".%sSee https://github.com/rectorphp/rector#configuration',
             $analysedCodeException->getMessage(),
             PHP_EOL
         );
