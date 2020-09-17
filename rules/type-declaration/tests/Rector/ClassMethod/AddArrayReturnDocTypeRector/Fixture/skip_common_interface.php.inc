@@ -15,8 +15,7 @@ class SkipCommonInterface extends Kernel
      */
     public function registerBundles(): array
     {
-        return [new FirstBundle(), new SecondBundle()]
-
+        return [new FirstBundle(), new SecondBundle()];
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

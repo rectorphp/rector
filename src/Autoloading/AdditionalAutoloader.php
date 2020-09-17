@@ -36,10 +36,6 @@ final class AdditionalAutoloader
      */
     private $fileSystemFilter;
 
-    /**
-     * @param string[] $autoloadPaths
-     * @param string[] $excludePaths
-     */
     public function __construct(
         FileGuard $fileGuard,
         FileSystemFilter $fileSystemFilter,

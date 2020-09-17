@@ -6,10 +6,14 @@ namespace Rector\TypeDeclaration\OverrideGuard;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitor;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\ShortenedObjectType;
 
 final class ClassMethodReturnTypeOverrideGuard
 {
@@ -47,7 +51,11 @@ final class ClassMethodReturnTypeOverrideGuard
             return false;
         }
 
-        return $oldType->isSuperTypeOf($newType)->yes();
+        if ($oldType->isSuperTypeOf($newType)->yes()) {
+            return true;
+        }
+
+        return $this->isArrayMutualType($newType, $oldType);
     }
 
     private function skipChaoticClassMethods(ClassMethod $classMethod): bool
@@ -70,5 +78,54 @@ final class ClassMethodReturnTypeOverrideGuard
         }
 
         return false;
+    }
+
+    private function isArrayMutualType(Type $newType, Type $oldType): bool
+    {
+        if (! $newType instanceof ArrayType) {
+            return false;
+        }
+
+        if (! $oldType instanceof ArrayType) {
+            return false;
+        }
+
+        $oldTypeWithClassName = $oldType->getItemType();
+        if (! $oldTypeWithClassName instanceof TypeWithClassName) {
+            return false;
+        }
+
+        $arrayItemType = $newType->getItemType();
+        if (! $arrayItemType instanceof UnionType) {
+            return false;
+        }
+
+        $isMatchingClassTypes = false;
+
+        foreach ($arrayItemType->getTypes() as $newUnionedType) {
+            if (! $newUnionedType instanceof TypeWithClassName) {
+                return false;
+            }
+
+            $oldClass = $this->resolveClass($oldTypeWithClassName);
+            $newClass = $this->resolveClass($newUnionedType);
+
+            if (is_a($oldClass, $newClass, true) || is_a($newClass, $oldClass, true)) {
+                $isMatchingClassTypes = true;
+            } else {
+                return false;
+            }
+        }
+
+        return $isMatchingClassTypes;
+    }
+
+    private function resolveClass(TypeWithClassName $typeWithClassName): string
+    {
+        if ($typeWithClassName instanceof ShortenedObjectType) {
+            return $typeWithClassName->getFullyQualifiedName();
+        }
+
+        return $typeWithClassName->getClassName();
     }
 }

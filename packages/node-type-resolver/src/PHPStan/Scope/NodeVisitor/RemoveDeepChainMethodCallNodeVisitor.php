@@ -37,7 +37,9 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
     public function __construct(BetterNodeFinder $betterNodeFinder, ParameterProvider $parameterProvider)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nestedChainMethodCallLimit = (int) $parameterProvider->provideParameter(Option::NESTED_CHAIN_METHOD_CALL_LIMIT);
+        $this->nestedChainMethodCallLimit = (int) $parameterProvider->provideParameter(
+            Option::NESTED_CHAIN_METHOD_CALL_LIMIT
+        );
     }
 
     public function enterNode(Node $node): ?int

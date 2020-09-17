@@ -43,9 +43,6 @@ final class FilesFinder
      */
     private $fileSystemFilter;
 
-    /**
-     * @param string[] $excludePaths
-     */
     public function __construct(
         FilesystemTweaker $filesystemTweaker,
         FinderSanitizer $finderSanitizer,
