@@ -13,7 +13,7 @@ final class UniqueConstraintPhpDocNodeFactory
     /**
      * @var string
      */
-    private const UNIQUE_CONSTRAINT_PATTERN = '#(?<tag>@(ORM\\\\)?UniqueConstraint)\((?<content>.*?)\),?#si';
+    private const UNIQUE_CONSTRAINT_REGEX = '#(?<tag>@(ORM\\\\)?UniqueConstraint)\((?<content>.*?)\),?#si';
 
     /**
      * @var AnnotationItemsResolver
@@ -34,7 +34,7 @@ final class UniqueConstraintPhpDocNodeFactory
             return [];
         }
 
-        $uniqueConstraintContents = Strings::matchAll($annotationContent, self::UNIQUE_CONSTRAINT_PATTERN);
+        $uniqueConstraintContents = Strings::matchAll($annotationContent, self::UNIQUE_CONSTRAINT_REGEX);
 
         $uniqueConstraintTagValueNodes = [];
         foreach ($uniqueConstraints as $key => $uniqueConstraint) {

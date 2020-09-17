@@ -31,7 +31,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Conf
      *
      * For modifiers see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
-    private const INNER_PATTERN_PATTERN = '#(?<content>.*?)(?<close>[imsxeADSUXJu]*)$#';
+    private const INNER_REGEX = '#(?<content>.*?)(?<close>[imsxeADSUXJu]*)$#';
 
     /**
      * All with pattern as 1st argument
@@ -164,7 +164,7 @@ CODE_SAMPLE
         $string = $arg->value;
         $value = $string->value;
 
-        $string->value = Strings::replace($value, self::INNER_PATTERN_PATTERN, function (array $match): string {
+        $string->value = Strings::replace($value, self::INNER_REGEX, function (array $match): string {
             $innerPattern = $match['content'];
             // change delimiter
             if (strlen($innerPattern) > 2 && $innerPattern[0] === $innerPattern[strlen($innerPattern) - 1]) {

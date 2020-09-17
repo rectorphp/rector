@@ -28,7 +28,7 @@ final class PHPStanServicesFactory
      * @see https://regex101.com/r/CWADBe/2
      * @var string
      */
-    private const BLEEDING_EDGE_PATTERN = '#\n\s+-(.*?)bleedingEdge\.neon[\'|"]?#';
+    private const BLEEDING_EDGE_REGEX = '#\n\s+-(.*?)bleedingEdge\.neon[\'|"]?#';
 
     /**
      * @var Container
@@ -57,11 +57,11 @@ final class PHPStanServicesFactory
             $phpstanNeonContent = $smartFileSystem->readFile($currentProjectConfigFile);
 
             // bleeding edge clean out, see https://github.com/rectorphp/rector/issues/2431
-            if (Strings::match($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN)) {
+            if (Strings::match($phpstanNeonContent, self::BLEEDING_EDGE_REGEX)) {
                 // Note: We need a unique file per process if rector runs in parallel
                 $pid = getmypid();
                 $temporaryPHPStanNeon = $currentWorkingDirectory . '/rector-temp-phpstan' . $pid . '.neon';
-                $clearedPhpstanNeonContent = Strings::replace($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN);
+                $clearedPhpstanNeonContent = Strings::replace($phpstanNeonContent, self::BLEEDING_EDGE_REGEX);
                 $smartFileSystem->dumpFile($temporaryPHPStanNeon, $clearedPhpstanNeonContent);
 
                 $additionalConfigFiles[] = $temporaryPHPStanNeon;

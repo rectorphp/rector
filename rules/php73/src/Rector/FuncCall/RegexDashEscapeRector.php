@@ -25,13 +25,13 @@ final class RegexDashEscapeRector extends AbstractRector
     /**
      * @var string
      */
-    private const LEFT_HAND_UNESCAPED_DASH_PATTERN = '#(\[.*?\\\\(w|s|d))-(?!\])#i';
+    private const LEFT_HAND_UNESCAPED_DASH_REGEX = '#(\[.*?\\\\(w|s|d))-(?!\])#i';
 
     /**
      * @var string
      * @see https://regex101.com/r/TBVme9/1
      */
-    private const RIGHT_HAND_UNESCAPED_DASH_PATTERN = '#(?<!\[)-(\\\\(w|s|d).*?)\]#i';
+    private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\[)-(\\\\(w|s|d).*?)\]#i';
 
     /**
      * @var RegexPatternArgumentManipulator
@@ -90,15 +90,15 @@ CODE_SAMPLE
     {
         $stringValue = $string->value;
 
-        if (Strings::match($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN)) {
-            $string->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN, '$1\-');
+        if (Strings::match($stringValue, self::LEFT_HAND_UNESCAPED_DASH_REGEX)) {
+            $string->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_REGEX, '$1\-');
             // helped needed to skip re-escaping regular expression
             $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
             return;
         }
 
-        if (Strings::match($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN)) {
-            $string->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN, '\-$1]');
+        if (Strings::match($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_REGEX)) {
+            $string->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_REGEX, '\-$1]');
             // helped needed to skip re-escaping regular expression
             $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
         }

@@ -31,7 +31,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     /**
      * @var string
      */
-    private const JOIN_COLUMN_PATTERN = '#(?<tag>@(ORM\\\\)?JoinColumn)\((?<content>.*?)\),?#si';
+    private const JOIN_COLUMN_REGEX = '#(?<tag>@(ORM\\\\)?JoinColumn)\((?<content>.*?)\),?#si';
 
     /**
      * @return string[]
@@ -136,6 +136,6 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
      */
     private function matchJoinColumnContents(string $annotationContent): array
     {
-        return Strings::matchAll($annotationContent, self::JOIN_COLUMN_PATTERN);
+        return Strings::matchAll($annotationContent, self::JOIN_COLUMN_REGEX);
     }
 }
