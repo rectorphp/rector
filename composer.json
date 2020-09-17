@@ -31,7 +31,6 @@
         "symfony/dependency-injection": "^4.4.8|^5.0.6",
         "symfony/finder": "^4.4.8|^5.0.6",
         "symfony/process": "^4.4.8|^5.0.6",
-        "symplify/auto-bind-parameter": "^8.3.5",
         "symplify/autowire-array-parameter": "^8.3.5",
         "symplify/console-color-diff": "^8.3.5",
         "symplify/easy-testing": "^8.3.5",

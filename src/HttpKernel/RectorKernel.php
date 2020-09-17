@@ -19,7 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
-use Symplify\AutoBindParameter\DependencyInjection\CompilerPass\AutoBindParameterCompilerPass;
 use Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use Symplify\ConsoleColorDiff\ConsoleColorDiffBundle;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
@@ -90,7 +89,6 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
         // autowire Rectors by default (mainly for 3rd party code)
         $containerBuilder->addCompilerPass(new AutowireInterfacesCompilerPass([RectorInterface::class]));
 
-        $containerBuilder->addCompilerPass(new AutoBindParameterCompilerPass());
         $containerBuilder->addCompilerPass(new MakeRectorsPublicCompilerPass());
 
         // add all merged arguments of Rector services
