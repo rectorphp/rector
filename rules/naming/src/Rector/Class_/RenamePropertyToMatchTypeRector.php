@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -127,8 +128,10 @@ CODE_SAMPLE
 
             $currentName = $this->getName($property);
             $propertyType = $this->getObjectType($property);
-            /** @var ClassLike $propertyClassLike */
             $propertyClassLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+            if ($propertyClassLike === null) {
+                throw new ShouldNotHappenException("There shouldn't be a property without Class Node");
+            }
 
             $propertyRename = new PropertyRename(
                 $property,
