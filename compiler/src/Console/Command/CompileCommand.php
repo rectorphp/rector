@@ -75,8 +75,8 @@ final class CompileCommand extends Command
         SmartFileSystem $smartFileSystem,
         ParameterProvider $parameterProvider
     ) {
-        $this->dataDir = $parameterProvider->provideParameter(Option::DATA_DIR);
-        $this->buildDir = $parameterProvider->provideParameter(Option::BUILD_DIR);
+        $this->dataDir = (string) $parameterProvider->provideParameter(Option::DATA_DIR);
+        $this->buildDir = (string) $parameterProvider->provideParameter(Option::BUILD_DIR);
 
         $this->composerJsonManipulator = $composerJsonManipulator;
         $this->jetbrainsStubsRenamer = $jetbrainsStubsRenamer;
