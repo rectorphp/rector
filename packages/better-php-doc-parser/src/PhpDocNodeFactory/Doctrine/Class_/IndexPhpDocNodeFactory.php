@@ -13,7 +13,7 @@ final class IndexPhpDocNodeFactory
     /**
      * @var string
      */
-    private const INDEX_PATTERN = '#(?<tag>@(ORM\\\\)?Index)\((?<content>.*?)\),?#si';
+    private const INDEX_REGEX = '#(?<tag>@(ORM\\\\)?Index)\((?<content>.*?)\),?#si';
 
     /**
      * @var AnnotationItemsResolver
@@ -35,7 +35,7 @@ final class IndexPhpDocNodeFactory
             return [];
         }
 
-        $indexContents = Strings::matchAll($annotationContent, self::INDEX_PATTERN);
+        $indexContents = Strings::matchAll($annotationContent, self::INDEX_REGEX);
 
         $indexTagValueNodes = [];
 

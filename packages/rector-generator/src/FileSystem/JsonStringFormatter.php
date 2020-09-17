@@ -11,7 +11,7 @@ final class JsonStringFormatter
     /**
      * @var string
      */
-    private const PATTERN = '#(?<start>"authors": \[\s+)(?<content>.*?)(?<end>\s+\](,))#ms';
+    private const REPLACE_REGEX = '#(?<start>"authors": \[\s+)(?<content>.*?)(?<end>\s+\](,))#ms';
 
     /**
      * @param string[] $sections
@@ -33,7 +33,7 @@ final class JsonStringFormatter
 
     public function inlineAuthors(string $jsonContent): string
     {
-        return Strings::replace($jsonContent, self::PATTERN, function (array $match): string {
+        return Strings::replace($jsonContent, self::REPLACE_REGEX, function (array $match): string {
             $inlined = Strings::replace($match['content'], '#\s+#', ' ');
             $inlined = trim($inlined);
             $inlined = Strings::replace($inlined, '#},#', "},\n       ");

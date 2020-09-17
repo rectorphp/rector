@@ -24,7 +24,7 @@ final class ValueObjectHasNoValueObjectSuffixRule implements Rule
      * @see https://regex101.com/r/3jsBnt/1
      * @var string
      */
-    private const REGEX_PATTERN = '#ValueObject$#';
+    private const VALUE_OBJECT_REGEX = '#ValueObject$#';
 
     /**
      * @var string
@@ -57,7 +57,7 @@ final class ValueObjectHasNoValueObjectSuffixRule implements Rule
         return [sprintf(
             self::ERROR,
             $node->name->toString(),
-            Strings::replace($node->name->toString(), self::REGEX_PATTERN, '')
+            Strings::replace($node->name->toString(), self::VALUE_OBJECT_REGEX, '')
         )];
     }
 
@@ -76,6 +76,6 @@ final class ValueObjectHasNoValueObjectSuffixRule implements Rule
             return false;
         }
 
-        return Strings::match($class->name->toString(), self::REGEX_PATTERN) !== null;
+        return Strings::match($class->name->toString(), self::VALUE_OBJECT_REGEX) !== null;
     }
 }

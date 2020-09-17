@@ -26,7 +26,7 @@ final class ConstantStringTypeToCallReflectionResolver implements TypeToCallRefl
      *
      * @var string
      */
-    private const STATIC_METHOD_REGEXP = '#^([a-zA-Z_\\x7f-\\xff\\\\][a-zA-Z0-9_\\x7f-\\xff\\\\]*)::([a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)\\z#';
+    private const STATIC_METHOD_REGEX = '#^([a-zA-Z_\\x7f-\\xff\\\\][a-zA-Z0-9_\\x7f-\\xff\\\\]*)::([a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)\\z#';
 
     /**
      * @var ReflectionProvider
@@ -58,7 +58,7 @@ final class ConstantStringTypeToCallReflectionResolver implements TypeToCallRefl
         }
 
         // 'MyClass::myStaticFunction'
-        $matches = Strings::match($value, self::STATIC_METHOD_REGEXP);
+        $matches = Strings::match($value, self::STATIC_METHOD_REGEX);
         if ($matches === null) {
             return null;
         }

@@ -40,7 +40,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
      * @see https://regex101.com/r/chvLgs/1/
      * @var string
      */
-    private const SPLIT_BY_UNDERSCORE_PATTERN = '#([a-zA-Z])(_)?(_)([a-zA-Z])#';
+    private const SPLIT_BY_UNDERSCORE_REGEX = '#([a-zA-Z])(_)?(_)([a-zA-Z])#';
 
     /**
      * @var PseudoNamespaceToNamespace[]
@@ -212,7 +212,7 @@ CODE_SAMPLE
         /** @var string $lastNewNamePart */
         $lastNewNamePart = Strings::after($name, '_', -1);
 
-        $newNamespace = Strings::replace($namespaceName, self::SPLIT_BY_UNDERSCORE_PATTERN, '$1$2\\\\$4');
+        $newNamespace = Strings::replace($namespaceName, self::SPLIT_BY_UNDERSCORE_REGEX, '$1$2\\\\$4');
 
         if ($this->newNamespace !== null && $this->newNamespace !== $newNamespace) {
             throw new ShouldNotHappenException('There cannot be 2 different namespaces in one file');

@@ -13,12 +13,12 @@ final class Skipper
     /**
      * @var string
      */
-    private const ONLY_ENDS_WITH_ASTERISK_PATTERN = '#^[^*](.*?)\*$#';
+    private const ONLY_ENDS_WITH_ASTERISK_REGEX = '#^[^*](.*?)\*$#';
 
     /**
      * @var string
      */
-    private const ONLY_STARTS_WITH_ASTERISK_PATTERN = '#^\*(.*?)[^*]$#';
+    private const ONLY_STARTS_WITH_ASTERISK_REGEX = '#^\*(.*?)[^*]$#';
 
     /**
      * @var mixed[]
@@ -73,12 +73,12 @@ final class Skipper
     private function normalizeForFnmatch(string $path): string
     {
         // ends with *
-        if (Strings::match($path, self::ONLY_ENDS_WITH_ASTERISK_PATTERN)) {
+        if (Strings::match($path, self::ONLY_ENDS_WITH_ASTERISK_REGEX)) {
             return '*' . $path;
         }
 
         // starts with *
-        if (Strings::match($path, self::ONLY_STARTS_WITH_ASTERISK_PATTERN)) {
+        if (Strings::match($path, self::ONLY_STARTS_WITH_ASTERISK_REGEX)) {
             return $path . '*';
         }
 
