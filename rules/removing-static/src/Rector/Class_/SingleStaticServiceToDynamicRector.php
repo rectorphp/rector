@@ -302,10 +302,29 @@ CODE_SAMPLE
 
         $propertyExpectedName = $this->propertyNaming->fqnToVariableName(new ObjectType($classType));
 
+        if ($this->isTypeAlreadyInParamMethod($constructClassMethod, $classType)) {
+            return;
+        }
+
         $constructClassMethod->params[] = new Param(
             new Variable($propertyExpectedName),
             null,
             new FullyQualified($classType)
         );
+    }
+
+    private function isTypeAlreadyInParamMethod(ClassMethod $classMethod, string $classType): bool
+    {
+        foreach ($classMethod->getParams() as $param) {
+            if ($param->type === null) {
+                continue;
+            }
+
+            if ($this->isName($param->type, $classType)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

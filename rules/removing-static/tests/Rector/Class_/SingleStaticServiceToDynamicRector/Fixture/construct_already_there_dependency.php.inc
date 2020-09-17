@@ -4,9 +4,9 @@ namespace Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamic
 
 use Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Source\FirstStaticClass;
 
-class ConstructDependency
+class ConstructAlreadyThereDependency
 {
-    public function __construct()
+    public function __construct(FirstStaticClass $firstStaticClass)
     {
         FirstStaticClass::someStaticFunction();
     }
@@ -20,9 +20,9 @@ namespace Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamic
 
 use Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Source\FirstStaticClass;
 
-class ConstructDependency
+class ConstructAlreadyThereDependency
 {
-    public function __construct(\Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Source\FirstStaticClass $firstStaticClass)
+    public function __construct(FirstStaticClass $firstStaticClass)
     {
         $firstStaticClass->someStaticFunction();
     }
