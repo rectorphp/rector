@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
@@ -184,6 +185,19 @@ final class NodeNameResolver
         }
 
         return false;
+    }
+
+    public function isLocalPropertyFetchNamed(Node $node, string $name): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        if (! $this->isName($node->var, 'this')) {
+            return false;
+        }
+
+        return $this->isName($node->name, $name);
     }
 
     /**

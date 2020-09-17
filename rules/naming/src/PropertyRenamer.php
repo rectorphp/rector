@@ -9,16 +9,12 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\Core\Rector\AbstractRector\NameResolverTrait;
-use Rector\Core\Rector\AbstractRector\NodeTypeResolverTrait;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\ValueObject\PropertyRename;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class PropertyRenamer
 {
-    use NameResolverTrait;
-    use NodeTypeResolverTrait;
-
     /**
      * @var CallableNodeTraverser
      */
@@ -29,12 +25,19 @@ final class PropertyRenamer
      */
     private $breakingVariableRenameGuard;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
-        BreakingVariableRenameGuard $breakingVariableRenameGuard
+        BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function rename(PropertyRename $propertyRename): void
@@ -54,7 +57,7 @@ final class PropertyRenamer
         $this->callableNodeTraverser->traverseNodesWithCallable(
             [$propertyRename->getClassLike()],
             function (Node $node) use ($propertyRename): ?PropertyFetch {
-                if (! $this->isLocalPropertyFetchNamed($node, $propertyRename->getCurrentName())) {
+                if (! $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyRename->getCurrentName())) {
                     return null;
                 }
 
