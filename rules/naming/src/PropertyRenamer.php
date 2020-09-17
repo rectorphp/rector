@@ -47,7 +47,7 @@ final class PropertyRenamer
             return null;
         }
 
-        $onlyPropertyProperty = $propertyRename->getProperty()->props[0];
+        $onlyPropertyProperty = $propertyRename->getPropertyProperty();
         $onlyPropertyProperty->name = new VarLikeIdentifier($propertyRename->getExpectedName());
         $this->renamePropertyFetchesInClass($propertyRename);
 

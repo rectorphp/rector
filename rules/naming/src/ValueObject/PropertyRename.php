@@ -6,7 +6,7 @@ namespace Rector\Naming\ValueObject;
 
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\Type;
+use PhpParser\Node\Stmt\PropertyProperty;
 
 final class PropertyRename
 {
@@ -26,27 +26,27 @@ final class PropertyRename
     private $property;
 
     /**
-     * @var Type
-     */
-    private $propertyType;
-
-    /**
      * @var ClassLike
      */
     private $classLike;
+
+    /**
+     * @var PropertyProperty
+     */
+    private $propertyProperty;
 
     public function __construct(
         Property $property,
         string $expectedName,
         string $currentName,
-        Type $type,
-        ClassLike $classLike
+        ClassLike $classLike,
+        PropertyProperty $propertyProperty
     ) {
         $this->property = $property;
         $this->expectedName = $expectedName;
         $this->currentName = $currentName;
-        $this->propertyType = $type;
         $this->classLike = $classLike;
+        $this->propertyProperty = $propertyProperty;
     }
 
     public function getProperty(): Property
@@ -64,13 +64,13 @@ final class PropertyRename
         return $this->currentName;
     }
 
-    public function getPropertyType(): Type
-    {
-        return $this->propertyType;
-    }
-
     public function getClassLike(): ClassLike
     {
         return $this->classLike;
+    }
+
+    public function getPropertyProperty(): PropertyProperty
+    {
+        return $this->propertyProperty;
     }
 }
