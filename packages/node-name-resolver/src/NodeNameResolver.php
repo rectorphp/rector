@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
@@ -115,7 +116,7 @@ final class NodeNameResolver
     public function getName(Node $node): ?string
     {
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            if ($node->name instanceof MethodCall || $node->name instanceof StaticCall) {
+            if ($node->name instanceof MethodCall || $node->name instanceof StaticCall || $node->name instanceof Identifier) {
                 return null;
             }
 
