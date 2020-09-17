@@ -119,6 +119,7 @@ CODE_SAMPLE
         if ($methodCall->var instanceof MethodCall) {
             return false;
         }
+
         $methodCallStaticType = $this->getStaticType($methodCall);
         $methodCallVarStaticType = $this->getStaticType($methodCall->var);
 

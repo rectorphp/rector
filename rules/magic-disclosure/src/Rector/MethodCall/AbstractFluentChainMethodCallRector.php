@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\MagicDisclosure\NodeAnalyzer\ChainCallsStaticTypeResolver;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
@@ -12,6 +13,7 @@ use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExprAndNodesToAdd;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractFluentChainMethodCallRector extends AbstractRector
 {
@@ -93,6 +95,10 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
     ): ?AssignAndRootExprAndNodesToAdd {
         $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
 
+        if (! $this->areAllClassMethodLocatedInSameClass($chainMethodCalls)) {
+            return null;
+        }
+
         $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls(
             $chainMethodCalls,
             $kind
@@ -113,6 +119,22 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
         );
 
         return new AssignAndRootExprAndNodesToAdd($assignAndRootExpr, $nodesToAdd);
+    }
+
+    protected function areAllClassMethodLocatedInSameClass(array $chainMethodCalls): bool
+    {
+        // are method calls located in the same class?
+        $classOfClassMethod = [];
+        foreach ($chainMethodCalls as $chainMethodCall) {
+            $classMethod = $this->nodeRepository->findClassMethodByMethodCall($chainMethodCall);
+
+            if ($classMethod instanceof ClassMethod) {
+                $classOfClassMethod[] = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+            } else {
+                $classOfClassMethod[] = null;
+            }
+        }
+        return count(array_unique($classOfClassMethod)) <= 1;
     }
 
     /**
