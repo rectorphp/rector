@@ -7,12 +7,14 @@ namespace Rector\Compiler\Console\Command;
 use OndraM\CiDetector\CiDetector;
 use Rector\Compiler\Composer\ComposerJsonManipulator;
 use Rector\Compiler\Renaming\JetbrainsStubsRenamer;
+use Rector\Compiler\ValueObject\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
@@ -66,16 +68,15 @@ final class CompileCommand extends Command
     private $smartFileSystem;
 
     public function __construct(
-        string $dataDir,
-        string $buildDir,
         ComposerJsonManipulator $composerJsonManipulator,
         SymfonyStyle $symfonyStyle,
         JetbrainsStubsRenamer $jetbrainsStubsRenamer,
         CiDetector $ciDetector,
-        SmartFileSystem $smartFileSystem
+        SmartFileSystem $smartFileSystem,
+        ParameterProvider $parameterProvider
     ) {
-        $this->dataDir = $dataDir;
-        $this->buildDir = $buildDir;
+        $this->dataDir = $parameterProvider->provideParameter(Option::DATA_DIR);
+        $this->buildDir = $parameterProvider->provideParameter(Option::BUILD_DIR);
 
         $this->composerJsonManipulator = $composerJsonManipulator;
         $this->jetbrainsStubsRenamer = $jetbrainsStubsRenamer;
