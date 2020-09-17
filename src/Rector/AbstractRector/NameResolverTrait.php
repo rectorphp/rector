@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -75,15 +74,7 @@ trait NameResolverTrait
 
     protected function isLocalPropertyFetchNamed(Node $node, string $name): bool
     {
-        if (! $node instanceof PropertyFetch) {
-            return false;
-        }
-
-        if (! $this->isName($node->var, 'this')) {
-            return false;
-        }
-
-        return $this->isName($node->name, $name);
+        return $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $name);
     }
 
     protected function isLocalMethodCallNamed(Node $node, string $name): bool

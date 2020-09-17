@@ -137,10 +137,6 @@ CODE_SAMPLE
         /** @var string $paramName */
         $paramName = $this->getName($param);
 
-        if ($this->breakingVariableRenameGuard->shouldSkipParam($paramName, $expectedName, $classMethod, $param)) {
-            return true;
-        }
-
-        return $this->isObjectType($param, 'Ramsey\Uuid\UuidInterface');
+        return $this->breakingVariableRenameGuard->shouldSkipParam($paramName, $expectedName, $classMethod, $param);
     }
 }

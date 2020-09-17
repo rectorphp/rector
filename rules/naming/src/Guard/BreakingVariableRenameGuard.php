@@ -6,6 +6,7 @@ namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
@@ -16,11 +17,12 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+use Ramsey\Uuid\UuidInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
+use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -118,10 +120,13 @@ final class BreakingVariableRenameGuard
         return $this->isUsedInIfAndOtherBranches($variable, $currentName);
     }
 
-    public function shouldSkipProperty(Property $property, string $currentName): bool
+    public function shouldSkipProperty(PropertyRename $propertyRename): bool
     {
-        $propertyType = $this->nodeTypeResolver->resolve($property);
-        return $this->isDateTimeAtNamingConvention($propertyType, $currentName);
+        if ($this->isRamseyUuidInterface($propertyRename->getProperty())) {
+            return true;
+        }
+
+        return $this->isDateTimeAtNamingConvention($propertyRename->getProperty());
     }
 
     public function shouldSkipParam(
@@ -152,9 +157,11 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        $paramType = $this->nodeTypeResolver->getStaticType($param);
+        if ($this->isRamseyUuidInterface($param)) {
+            return true;
+        }
 
-        return $this->isDateTimeAtNamingConvention($paramType, $currentName);
+        return $this->isDateTimeAtNamingConvention($param);
     }
 
     private function isVariableAlreadyDefined(Variable $variable, string $currentVariableName): bool
@@ -242,14 +249,31 @@ final class BreakingVariableRenameGuard
         return false;
     }
 
-    private function isDateTimeAtNamingConvention(Type $type, string $currentName): bool
+    /**
+     * @param Param|Property $node
+     */
+    private function isRamseyUuidInterface(Node $node): bool
     {
+        return $this->nodeTypeResolver->isObjectType($node, UuidInterface::class);
+    }
+
+    /**
+     * @param Param|Property $node
+     */
+    private function isDateTimeAtNamingConvention(Node $node): bool
+    {
+        $type = $this->nodeTypeResolver->resolve($node);
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
         if (! $type instanceof TypeWithClassName) {
             return false;
         }
 
         if (! is_a($type->getClassName(), DateTimeInterface::class, true)) {
+            return false;
+        }
+
+        $currentName = $this->nodeNameResolver->getName($node);
+        if ($currentName === null) {
             return false;
         }
 
