@@ -134,12 +134,7 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
                 $classOfClassMethod[] = null;
             }
         }
-
-        if (count(array_unique($classOfClassMethod)) > 1) {
-            return false;
-        }
-
-        return true;
+        return count(array_unique($classOfClassMethod)) <= 1;
     }
 
     /**
