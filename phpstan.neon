@@ -452,3 +452,12 @@ parameters:
         - '#Post operation are forbidden, as they make 2 values at the same line\. Use pre instead#'
         - '#Use value object over multi array assign#'
 
+        -
+             message: '#Do not use static property#'
+             paths:
+                 # cannot be handled any other way
+                 - packages/doctrine-annotation-generated/src/DataCollector/ResolvedConstantStaticCollector.php # 12
+                 - packages/dynamic-type-analysis/src/Probe/TypeStaticProbe.php # 19
+                 - packages/dynamic-type-analysis/src/Probe/TypeStaticProbe.php # 24
+                 - packages/dynamic-type-analysis/tests/ProbeStorage/StaticInMemoryProbeStorage.php # 14
+                 - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 68
