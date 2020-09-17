@@ -104,6 +104,7 @@ use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\Console\Command\AbstractCommand;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Utils\NodeDocumentationGenerator\Category\CategoryResolver;
 use Rector\Utils\NodeDocumentationGenerator\Node\NodeInfoCollector;
 use Rector\Utils\NodeDocumentationGenerator\OutputFormatter\MarkdownDumpNodesOutputFormatter;
 use Rector\Utils\NodeDocumentationGenerator\RobotLoader\NodeClassProvider;
@@ -161,17 +162,23 @@ final class DumpNodesCommand extends AbstractCommand
      * @var MarkdownDumpNodesOutputFormatter
      */
     private $markdownDumpNodesOutputFormatter;
+    /**
+     * @var CategoryResolver
+     */
+    private $categoryResolver;
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         MarkdownDumpNodesOutputFormatter $markdownDumpNodesOutputFormatter,
         NodeClassProvider $nodeClassProvider,
-        NodeInfoCollector $nodeInfoResult
+        NodeInfoCollector $nodeInfoResult,
+        CategoryResolver $categoryResolver
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeClassProvider = $nodeClassProvider;
         $this->nodeInfoResult = $nodeInfoResult;
         $this->markdownDumpNodesOutputFormatter = $markdownDumpNodesOutputFormatter;
+        $this->categoryResolver = $categoryResolver;
 
         parent::__construct();
     }
@@ -207,7 +214,7 @@ final class DumpNodesCommand extends AbstractCommand
                     $node->expr = new LNumber(1);
                 }
 
-                $category = $this->resolveCategoryByNodeClass($nodeClass);
+                $category = $this->categoryResolver->resolveCategoryByNodeClass($nodeClass);
 
                 $nodeInfo = new NodeInfo($nodeClass, $this->createCodeSamples($node), false);
                 $this->nodeInfoResult->addNodeInfo($category, $nodeInfo);
@@ -444,7 +451,7 @@ final class DumpNodesCommand extends AbstractCommand
                     ));
                 }
 
-                $category = $this->resolveCategoryByNodeClass($nodeClass);
+                $category = $this->categoryResolver->resolveCategoryByNodeClass($nodeClass);
                 $codeSamples = $this->createCodeSamples($node, $anotherNode);
 
                 $nodeInfo = new NodeInfo($nodeClass, $codeSamples, true);
@@ -455,23 +462,6 @@ final class DumpNodesCommand extends AbstractCommand
         $this->markdownDumpNodesOutputFormatter->format($this->nodeInfoResult);
 
         return ShellCode::SUCCESS;
-    }
-
-    private function resolveCategoryByNodeClass(string $nodeClass): string
-    {
-        if (Strings::contains($nodeClass, '\\Scalar\\')) {
-            return 'Scalar nodes';
-        }
-
-        if (Strings::contains($nodeClass, '\\Expr\\')) {
-            return 'Expressions';
-        }
-
-        if (Strings::contains($nodeClass, '\\Stmt\\')) {
-            return 'Statements';
-        }
-
-        return 'Various';
     }
 
     /**
