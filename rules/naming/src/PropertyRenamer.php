@@ -30,6 +30,11 @@ final class PropertyRenamer
      */
     private $nodeNameResolver;
 
+    /**
+     * @var bool
+     */
+    private $isRenamed;
+
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
@@ -40,17 +45,24 @@ final class PropertyRenamer
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function rename(PropertyRename $propertyRename): bool
+    public function rename(PropertyRename $propertyRename): void
     {
+        $this->isRenamed = false;
+
         if ($this->breakingVariableRenameGuard->shouldSkipProperty($propertyRename)) {
-            return false;
+            return;
         }
 
         $onlyPropertyProperty = $propertyRename->getProperty()->props[0];
         $onlyPropertyProperty->name = new VarLikeIdentifier($propertyRename->getExpectedName());
         $this->renamePropertyFetchesInClass($propertyRename);
 
-        return true;
+        $this->isRenamed = true;
+    }
+
+    public function isRenamed(): bool
+    {
+        return $this->isRenamed;
     }
 
     private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
