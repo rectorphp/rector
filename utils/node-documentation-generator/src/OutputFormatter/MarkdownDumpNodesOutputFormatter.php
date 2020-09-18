@@ -6,6 +6,7 @@ namespace Rector\Utils\NodeDocumentationGenerator\OutputFormatter;
 
 use Nette\Utils\Strings;
 use Rector\Utils\NodeDocumentationGenerator\Node\NodeInfoCollector;
+use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeCodeSample;
 use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfo;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -89,6 +90,10 @@ final class MarkdownDumpNodesOutputFormatter
         foreach ($nodeInfo->getCodeSamples() as $printedSample) {
             $this->printPhpSnippet($printedSample);
         }
+
+        foreach ($nodeInfo->getNodeCodeSamples() as $nodeCodeSample) {
+            $this->printNodeCodeSample($nodeCodeSample);
+        }
     }
 
     private function printPublicProperties(NodeInfo $nodeInfo): void
@@ -109,6 +114,19 @@ final class MarkdownDumpNodesOutputFormatter
     private function printPhpSnippet(string $printedContent): void
     {
         $message = sprintf('```php%s%s%s```', PHP_EOL, $printedContent, PHP_EOL);
+        $this->symfonyStyle->writeln($message);
+    }
+
+    private function printNodeCodeSample(NodeCodeSample $nodeCodeSample): void
+    {
+        $message = sprintf('```php%s%s%s```', PHP_EOL, $nodeCodeSample->getPhpCode(), PHP_EOL);
+        $this->symfonyStyle->writeln($message);
+
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->writeln('↓');
+        $this->symfonyStyle->newLine();
+
+        $message = sprintf('```php%s%s%s```', PHP_EOL, $nodeCodeSample->getPrintedContent(), PHP_EOL);
         $this->symfonyStyle->writeln($message);
     }
 }

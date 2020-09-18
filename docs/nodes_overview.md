@@ -352,7 +352,7 @@ $variableName instanceof SomeClassName
 #### Example PHP Code
 
 ```php
-isset($variable)
+isset($variableName)
 ```
 
 #### Public Properties
@@ -384,7 +384,7 @@ list($variableName)
 #### Example PHP Code
 
 ```php
-match ($variable) {
+match ($variableName) {
     1 => 'yes',
 }
 ```
@@ -738,7 +738,7 @@ yield
 #### Example PHP Code
 
 ```php
-$variable &= 'value'
+$variableName &= 'value'
 ```
 
 #### Public Properties
@@ -755,7 +755,7 @@ $variable &= 'value'
 #### Example PHP Code
 
 ```php
-$variable |= 'value'
+$variableName |= 'value'
 ```
 
 #### Public Properties
@@ -772,7 +772,7 @@ $variable |= 'value'
 #### Example PHP Code
 
 ```php
-$variable ^= 'value'
+$variableName ^= 'value'
 ```
 
 #### Public Properties
@@ -789,7 +789,7 @@ $variable ^= 'value'
 #### Example PHP Code
 
 ```php
-$variable ??= 'value'
+$variableName ??= 'value'
 ```
 
 #### Public Properties
@@ -806,7 +806,7 @@ $variable ??= 'value'
 #### Example PHP Code
 
 ```php
-$variable .= 'value'
+$variableName .= 'value'
 ```
 
 #### Public Properties
@@ -823,7 +823,7 @@ $variable .= 'value'
 #### Example PHP Code
 
 ```php
-$variable /= 'value'
+$variableName /= 'value'
 ```
 
 #### Public Properties
@@ -840,7 +840,7 @@ $variable /= 'value'
 #### Example PHP Code
 
 ```php
-$variable -= 'value'
+$variableName -= 'value'
 ```
 
 #### Public Properties
@@ -857,7 +857,7 @@ $variable -= 'value'
 #### Example PHP Code
 
 ```php
-$variable %= 'value'
+$variableName %= 'value'
 ```
 
 #### Public Properties
@@ -874,7 +874,7 @@ $variable %= 'value'
 #### Example PHP Code
 
 ```php
-$variable *= 'value'
+$variableName *= 'value'
 ```
 
 #### Public Properties
@@ -891,7 +891,7 @@ $variable *= 'value'
 #### Example PHP Code
 
 ```php
-$variable += 'value'
+$variableName += 'value'
 ```
 
 #### Public Properties
@@ -908,7 +908,7 @@ $variable += 'value'
 #### Example PHP Code
 
 ```php
-$variable **= 'value'
+$variableName **= 'value'
 ```
 
 #### Public Properties
@@ -925,7 +925,7 @@ $variable **= 'value'
 #### Example PHP Code
 
 ```php
-$variable <<= 'value'
+$variableName <<= 'value'
 ```
 
 #### Public Properties
@@ -942,7 +942,7 @@ $variable <<= 'value'
 #### Example PHP Code
 
 ```php
-$variable >>= 'value'
+$variableName >>= 'value'
 ```
 
 #### Public Properties
@@ -1928,7 +1928,7 @@ declare(strict_types=1);
 
 ```php
 do {
-} while ($variable);
+} while ($variableName);
 ```
 
 #### Public Properties
@@ -2256,6 +2256,24 @@ public $propertyName;
 ```php
 public static $propertyName, $anotherPropertyName;
 ```
+```php
+<?php
+
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
+
+$propertyProperty = new PropertyProperty(new Identifier('propertyName'));
+
+return new Property(Class_::MODIFIER_PUBLIC, [$propertyProperty]);
+```
+
+↓
+
+```php
+public $propertyName;
+```
 
 #### Public Properties
 
@@ -2303,7 +2321,7 @@ return;
 #### Example PHP Code
 
 ```php
-$variable
+$variableName
 ```
 
 #### Public Properties
@@ -2336,7 +2354,7 @@ static $static;
 #### Example PHP Code
 
 ```php
-switch ($variable) {
+switch ($variableName) {
     case 1:
 }
 ```
@@ -2467,7 +2485,7 @@ try {
 #### Example PHP Code
 
 ```php
-unset($variable);
+unset($variableName);
 ```
 
 #### Public Properties
@@ -2518,7 +2536,7 @@ use UsedNamespace;
 #### Example PHP Code
 
 ```php
-while ($variable) {
+while ($variableName) {
 }
 ```
 

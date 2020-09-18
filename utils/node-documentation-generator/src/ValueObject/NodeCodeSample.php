@@ -18,8 +18,8 @@ final class NodeCodeSample
 
     public function __construct(string $phpCode, string $printedContent)
     {
-        $this->phpCode = $phpCode;
-        $this->printedContent = $printedContent;
+        $this->phpCode = trim($phpCode);
+        $this->printedContent = trim($printedContent);
     }
 
     public function getPhpCode(): string

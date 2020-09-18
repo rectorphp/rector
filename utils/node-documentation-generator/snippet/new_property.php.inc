@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;

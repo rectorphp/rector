@@ -100,7 +100,6 @@ use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\Node\UnionType;
 use PhpParser\Node\VarLikeIdentifier;
-use PhpParser\Parser;
 use Rector\Core\Console\Command\AbstractCommand;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -464,10 +463,9 @@ final class DumpNodesCommand extends AbstractCommand
                 $category = $this->categoryResolver->resolveCategoryByNodeClass($nodeClass);
                 $codeSamples = $this->createCodeSamples($node, $anotherNode);
 
-                $inlinedCodeSamples = $this->findNodeCodeSamples($nodeClass);
-                dump($inlinedCodeSamples);
+                $nodeCodeSamples = $this->findNodeCodeSamples($nodeClass);
 
-                $nodeInfo = new NodeInfo($nodeClass, $codeSamples, true);
+                $nodeInfo = new NodeInfo($nodeClass, $codeSamples, true, $nodeCodeSamples);
                 $this->nodeInfoResult->addNodeInfo($category, $nodeInfo);
             }
         }
@@ -503,13 +501,17 @@ final class DumpNodesCommand extends AbstractCommand
     private function findNodeCodeSamples(string $nodeClass): array
     {
         // @todo run just once at start
-        $directory = __DIR__ . '/../../snippet';
-        $fileInfos = $this->smartFinder->find([$directory], '*.php');
+        $snippetFileInfos = $this->smartFinder->find([__DIR__ . '/../../snippet'], '*.php.inc');
 
         $nodeCodeSamples = [];
 
-        foreach ($fileInfos as $fileInfo) {
+        foreach ($snippetFileInfos as $fileInfo) {
             $node = include $fileInfo->getRealPath();
+            if (! $node instanceof Node) {
+                $message = sprintf('Snippet "%s" must return a node object', $fileInfo->getPathname());
+                throw new ShouldNotHappenException($message);
+            }
+
             if (! is_a($node, $nodeClass, true)) {
                 continue;
             }
