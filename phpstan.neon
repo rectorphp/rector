@@ -260,7 +260,7 @@ parameters:
         - '#Parameter \#2 \$name of method Rector\\NodeNameResolver\\NodeNameResolver\:\:isName\(\) expects string, string\|null given#'
 
         - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
-        - '#Method Rector\\Caching\\ChangedFilesDetector\:\:hashFile\(\) should return string but returns string\|false#'
+        - '#Method Rector\\Caching\\Detector\\ChangedFilesDetector\:\:hashFile\(\) should return string but returns string\|false#'
 
         - '#If condition is always false#'
 

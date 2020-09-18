@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Caching;
+namespace Rector\Caching\Detector;
 
 use Nette\Utils\Strings;
 use Rector\Caching\Config\FileHashComputer;
@@ -11,6 +11,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Inspired by https://github.com/symplify/symplify/pull/90/files#diff-72041b2e1029a08930e13d79d298ef11
+ * @see \Rector\Caching\Tests\Detector\ChangedFilesDetectorTest
  */
 final class ChangedFilesDetector
 {
