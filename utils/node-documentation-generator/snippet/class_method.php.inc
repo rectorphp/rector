@@ -3,4 +3,8 @@
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 
-return new ClassMethod('methodName', ['flags' => Class_::MODIFIER_PUBLIC]);
+$classMethod = new ClassMethod('methodName');
+
+$classMethod->flags = Class_::MODIFIER_PUBLIC;
+
+return $classMethod;

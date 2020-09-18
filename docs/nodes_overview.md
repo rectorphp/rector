@@ -1893,13 +1893,41 @@ public function methodName()
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 
-return new ClassMethod('methodName', ['flags' => Class_::MODIFIER_PUBLIC]);
+$classMethod = new ClassMethod('methodName');
+
+$classMethod->flags = Class_::MODIFIER_PUBLIC;
+
+return $classMethod;
 ```
 
 ↓
 
 ```php
 public function methodName()
+{
+}
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+
+$classMethod = new ClassMethod('methodName');
+
+$classMethod->flags = Class_::MODIFIER_PRIVATE;
+$classMethod->params = [new Variable('param')];
+$classMethod->returnType = new Identifier('string');
+
+return $classMethod;
+```
+
+↓
+
+```php
+private function methodName($param): string
 {
 }
 ```
@@ -1924,6 +1952,42 @@ public function methodName()
 
 ```php
 class ClassName
+{
+}
+```
+```php
+<?php
+
+use PhpParser\Node\Stmt\Class_;
+
+return new Class_('ClassName');
+```
+
+↓
+
+```php
+class ClassName
+{
+}
+```
+```php
+<?php
+
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
+
+$class = new Class_('ClassName');
+
+$class->flags = Class_::MODIFIER_FINAL;
+$class->extends = new Identifier('Parent');
+
+return $class;
+```
+
+↓
+
+```php
+final class ClassName extends Parent
 {
 }
 ```
@@ -1977,6 +2041,20 @@ continue;
 ```php
 strict_types=1
 ```
+```php
+<?php
+
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\DeclareDeclare;
+
+return new DeclareDeclare('strict_types', new LNumber(1));
+```
+
+↓
+
+```php
+strict_types=1
+```
 
 #### Public Properties
 
@@ -1990,6 +2068,23 @@ strict_types=1
 
 
 #### Example PHP Code
+
+```php
+declare(strict_types=1);
+```
+```php
+<?php
+
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\DeclareDeclare;
+
+$declareDeclare = new DeclareDeclare('strict_types', new LNumber(1));
+
+return new Declare_([$declareDeclare]);
+```
+
+↓
 
 ```php
 declare(strict_types=1);
@@ -2012,6 +2107,23 @@ declare(strict_types=1);
 do {
 } while ($variableName);
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Do_;
+
+$variable = new Variable('variableName');
+
+return new Do_($variable);
+```
+
+↓
+
+```php
+do {
+} while ($variableName);
+```
 
 #### Public Properties
 
@@ -2025,6 +2137,22 @@ do {
 
 
 #### Example PHP Code
+
+```php
+echo 'hello';
+```
+```php
+<?php
+
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Echo_;
+
+$msg = new String_('hello');
+
+return new Echo_([$msg]);
+```
+
+↓
 
 ```php
 echo 'hello';
@@ -2655,6 +2783,20 @@ $variableName
 
 
 #### Example PHP Code
+
+```php
+CONSTANT_NAME = 'default'
+```
+```php
+<?php
+
+use PhpParser\Node\Const_;
+use PhpParser\Node\Scalar\String_;
+
+return new Const_('CONSTANT_NAME', new String_('default'));
+```
+
+↓
 
 ```php
 CONSTANT_NAME = 'default'
