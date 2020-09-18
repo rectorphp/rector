@@ -19,6 +19,7 @@ final class PropertyRenamer
      * @var bool
      */
     private $isRenamed = false;
+
     /**
      * @var CallableNodeTraverser
      */
