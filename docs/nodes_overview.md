@@ -155,6 +155,22 @@ $variableName =& $someOtherVariable
 ```php
 SomeClassName::SOME_CONSTANT
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Name;
+
+$class = new Name('SomeClassName');
+
+return new ClassConstFetch($class, 'SOME_CONSTANT');
+```
+
+↓
+
+```php
+SomeClassName::SOME_CONSTANT
+```
 
 #### Public Properties
 
@@ -221,6 +237,22 @@ $variableName
 
 
 #### Example PHP Code
+
+```php
+true
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
+
+$name = new Name('true');
+
+return new ConstFetch($name);
+```
+
+↓
 
 ```php
 true
@@ -553,6 +585,22 @@ print $variableName
 
 
 #### Example PHP Code
+
+```php
+$variableName->propertyName
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new PropertyFetch($variable, 'propertyName');
+```
+
+↓
 
 ```php
 $variableName->propertyName
@@ -1802,6 +1850,24 @@ catch (CatchedType $catchedVariable) {
 ```php
 const SOME_CLASS_CONSTANT = 'default value';
 ```
+```php
+<?php
+
+use PhpParser\Node\Const_;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+
+$const = new Const_('SOME_CLASS_CONSTANT', new String_('default value'));
+
+return new ClassConst([$const], Class_::MODIFIER_PUBLIC);
+```
+
+↓
+
+```php
+public const SOME_CLASS_CONSTANT = 'default value';
+```
 
 #### Public Properties
 
@@ -1815,6 +1881,22 @@ const SOME_CLASS_CONSTANT = 'default value';
 
 
 #### Example PHP Code
+
+```php
+public function methodName()
+{
+}
+```
+```php
+<?php
+
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+
+return new ClassMethod('methodName', ['flags' => Class_::MODIFIER_PUBLIC]);
+```
+
+↓
 
 ```php
 public function methodName()
