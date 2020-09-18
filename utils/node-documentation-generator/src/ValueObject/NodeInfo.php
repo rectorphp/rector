@@ -31,7 +31,7 @@ final class NodeInfo
     /**
      * @var NodeCodeSample[]
      */
-    private $nodeCodeSamples;
+    private $nodeCodeSamples = [];
 
     /**
      * @param string[] $codeSamples

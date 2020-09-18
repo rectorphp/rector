@@ -183,13 +183,13 @@ final class DumpNodesCommand extends AbstractCommand
         BetterStandardPrinter $betterStandardPrinter,
         MarkdownDumpNodesOutputFormatter $markdownDumpNodesOutputFormatter,
         NodeClassProvider $nodeClassProvider,
-        NodeInfoCollector $nodeInfoResult,
+        NodeInfoCollector $nodeInfoCollector,
         CategoryResolver $categoryResolver,
         SmartFinder $smartFinder
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeClassProvider = $nodeClassProvider;
-        $this->nodeInfoCollector = $nodeInfoResult;
+        $this->nodeInfoCollector = $nodeInfoCollector;
         $this->markdownDumpNodesOutputFormatter = $markdownDumpNodesOutputFormatter;
         $this->categoryResolver = $categoryResolver;
         $this->smartFinder = $smartFinder;

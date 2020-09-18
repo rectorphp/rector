@@ -52,9 +52,9 @@ final class MarkdownDumpNodesOutputFormatter
         }
     }
 
-    private function printCategories(NodeInfoCollector $nodeInfoResult): void
+    private function printCategories(NodeInfoCollector $nodeInfoCollector): void
     {
-        foreach ($nodeInfoResult->getCategories() as $category) {
+        foreach ($nodeInfoCollector->getCategories() as $category) {
             $categoryTitle = $this->createCategoryTitle($category);
             $categoryLink = sprintf('* [%s](#%s)', $categoryTitle, Strings::webalize($categoryTitle));
 
