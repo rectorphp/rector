@@ -17,7 +17,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Caching\ChangedFilesDetector;
+use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Exception\ShouldNotHappenException;

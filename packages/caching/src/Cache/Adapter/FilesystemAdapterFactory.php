@@ -27,7 +27,7 @@ final class FilesystemAdapterFactory
             // unique per project
             Strings::webalize(getcwd()),
             0,
-            sys_get_temp_dir() . '/' . $this->parameterProvider->provideParameter(Option::CACHE_DIR)
+            $this->parameterProvider->provideParameter(Option::CACHE_DIR)
         );
     }
 }

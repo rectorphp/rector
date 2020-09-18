@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Caching\Tests;
+namespace Rector\Caching\Tests\Detector;
 
-use Rector\Caching\ChangedFilesDetector;
+use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -71,6 +71,6 @@ final class ChangedFilesDetectorTest extends AbstractRectorTestCase
 
     private function filePathToTest(): string
     {
-        return __DIR__ . '/ChangedFilesDetectorTest.php';
+        return __DIR__ . '/Source/file.php';
     }
 }

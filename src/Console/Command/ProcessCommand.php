@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Rector\Caching\ChangedFilesDetector;
+use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;

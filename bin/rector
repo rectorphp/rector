@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use Rector\Caching\ChangedFilesDetector;
+use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Bootstrap\ConfigShifter;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\MinimalVersionChecker;

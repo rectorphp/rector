@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Caching;
 
+use Rector\Caching\Detector\ChangedFilesDetector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UnchangedFilesFilter

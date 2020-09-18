@@ -7,5 +7,5 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::CACHE_DIR, '_rector_cached_files_test');
+    $parameters->set(Option::CACHE_DIR, sys_get_temp_dir() . '/_rector_cached_files_test');
 };
