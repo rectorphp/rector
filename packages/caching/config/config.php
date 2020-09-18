@@ -20,6 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::ENABLE_CACHE, false);
+    $parameters->set(Option::CACHE_DIR, '_rector_cached_files');
 
     $services = $containerConfigurator->services();
 
