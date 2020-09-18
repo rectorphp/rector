@@ -44,6 +44,8 @@ final class TestClassResolver
         $testShortClassName = $shortClassName . self::TEST;
 
         $phpUnitTestCaseClasses = $this->phpUnitTestCaseClassesProvider->provide();
+        sort($phpUnitTestCaseClasses);
+
         foreach ($phpUnitTestCaseClasses as $declaredClass) {
             if (Strings::endsWith($declaredClass, '\\' . $testShortClassName)) {
                 return $declaredClass;
