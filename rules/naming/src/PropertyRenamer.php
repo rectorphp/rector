@@ -16,6 +16,10 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class PropertyRenamer
 {
     /**
+     * @var bool
+     */
+    private $isRenamed = false;
+    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -29,11 +33,6 @@ final class PropertyRenamer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
-    /**
-     * @var bool
-     */
-    private $isRenamed;
 
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
