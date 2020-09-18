@@ -11,7 +11,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Inspired by https://github.com/symplify/symplify/pull/90/files#diff-72041b2e1029a08930e13d79d298ef11
- * @see \Rector\Caching\Tests\ChangedFilesDetectorTest
+ * @see \Rector\Caching\Tests\Detector\ChangedFilesDetectorTest
  */
 final class ChangedFilesDetector
 {
