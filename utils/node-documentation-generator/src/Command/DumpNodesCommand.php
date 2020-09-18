@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Utils\NodeDocumentationGenerator\Command;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Const_;
@@ -101,6 +100,7 @@ use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\Node\UnionType;
 use PhpParser\Node\VarLikeIdentifier;
+use PhpParser\Parser;
 use Rector\Core\Console\Command\AbstractCommand;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -108,6 +108,7 @@ use Rector\Utils\NodeDocumentationGenerator\Category\CategoryResolver;
 use Rector\Utils\NodeDocumentationGenerator\Node\NodeInfoCollector;
 use Rector\Utils\NodeDocumentationGenerator\OutputFormatter\MarkdownDumpNodesOutputFormatter;
 use Rector\Utils\NodeDocumentationGenerator\RobotLoader\NodeClassProvider;
+use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeCodeSample;
 use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfo;
 use ReflectionClass;
 use ReflectionMethod;
@@ -115,6 +116,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\SmartFileSystem\Finder\SmartFinder;
 
 final class DumpNodesCommand extends AbstractCommand
 {
@@ -162,23 +164,31 @@ final class DumpNodesCommand extends AbstractCommand
      * @var MarkdownDumpNodesOutputFormatter
      */
     private $markdownDumpNodesOutputFormatter;
+
     /**
      * @var CategoryResolver
      */
     private $categoryResolver;
+
+    /**
+     * @var SmartFinder
+     */
+    private $smartFinder;
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         MarkdownDumpNodesOutputFormatter $markdownDumpNodesOutputFormatter,
         NodeClassProvider $nodeClassProvider,
         NodeInfoCollector $nodeInfoResult,
-        CategoryResolver $categoryResolver
+        CategoryResolver $categoryResolver,
+        SmartFinder $smartFinder
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeClassProvider = $nodeClassProvider;
         $this->nodeInfoResult = $nodeInfoResult;
         $this->markdownDumpNodesOutputFormatter = $markdownDumpNodesOutputFormatter;
         $this->categoryResolver = $categoryResolver;
+        $this->smartFinder = $smartFinder;
 
         parent::__construct();
     }
@@ -454,6 +464,9 @@ final class DumpNodesCommand extends AbstractCommand
                 $category = $this->categoryResolver->resolveCategoryByNodeClass($nodeClass);
                 $codeSamples = $this->createCodeSamples($node, $anotherNode);
 
+                $inlinedCodeSamples = $this->findNodeCodeSamples($nodeClass);
+                dump($inlinedCodeSamples);
+
                 $nodeInfo = new NodeInfo($nodeClass, $codeSamples, true);
                 $this->nodeInfoResult->addNodeInfo($category, $nodeInfo);
             }
@@ -474,11 +487,37 @@ final class DumpNodesCommand extends AbstractCommand
         if ($anotherNode !== null) {
             $codeSamples[] = $this->printAndTrim($anotherNode);
         }
+
         return $codeSamples;
     }
 
     private function printAndTrim(Node $node): string
     {
         return trim($this->betterStandardPrinter->print($node));
+    }
+
+    /**
+     * @todo decouple to NodeCodeSampleFinder service
+     * @param class-string $nodeClass
+     */
+    private function findNodeCodeSamples(string $nodeClass): array
+    {
+        // @todo run just once at start
+        $directory = __DIR__ . '/../../snippet';
+        $fileInfos = $this->smartFinder->find([$directory], '*.php');
+
+        $nodeCodeSamples = [];
+
+        foreach ($fileInfos as $fileInfo) {
+            $node = include $fileInfo->getRealPath();
+            if (! is_a($node, $nodeClass, true)) {
+                continue;
+            }
+
+            $printedContent = $this->betterStandardPrinter->print($node);
+            $nodeCodeSamples[] = new NodeCodeSample($fileInfo->getContents(), $printedContent);
+        }
+
+        return $nodeCodeSamples;
     }
 }

@@ -24,5 +24,4 @@ final class CategoryResolver
 
         return 'Various';
     }
-
 }
