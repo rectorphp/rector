@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\DocumentationGenerator\ValueObject;
+namespace Rector\Utils\NodeDocumentationGenerator\ValueObject;
 
 use ReflectionClass;
 
@@ -14,11 +14,6 @@ final class NodeInfo
     private $class;
 
     /**
-     * @var string
-     */
-    private $printedContent;
-
-    /**
      * @var bool
      */
     private $hasRequiredArguments = false;
@@ -28,11 +23,29 @@ final class NodeInfo
      */
     private $publicPropertyInfos = [];
 
-    public function __construct(string $class, string $printedContent, bool $hasRequiredArguments)
-    {
+    /**
+     * @var string[]
+     */
+    private $codeSamples = [];
+
+    /**
+     * @var NodeCodeSample[]
+     */
+    private $nodeCodeSamples;
+
+    /**
+     * @param string[] $codeSamples
+     * @param NodeCodeSample[] $nodeCodeSamples
+     */
+    public function __construct(
+        string $class,
+        array $codeSamples,
+        bool $hasRequiredArguments,
+        array $nodeCodeSamples = []
+    ) {
         $this->class = $class;
-        $this->printedContent = $printedContent;
         $this->hasRequiredArguments = $hasRequiredArguments;
+        $this->codeSamples = $codeSamples;
 
         $reflectionClass = new ReflectionClass($class);
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
@@ -42,6 +55,7 @@ final class NodeInfo
 
             $this->publicPropertyInfos[] = ' * `$' . $reflectionProperty->name . '` - `' . $reflectionProperty->getDocComment() . '`';
         }
+        $this->nodeCodeSamples = $nodeCodeSamples;
     }
 
     public function getClass(): string
@@ -49,9 +63,12 @@ final class NodeInfo
         return $this->class;
     }
 
-    public function getPrintedContent(): string
+    /**
+     * @return string[]
+     */
+    public function getCodeSamples(): array
     {
-        return $this->printedContent;
+        return $this->codeSamples;
     }
 
     public function hasRequiredArguments(): bool
@@ -70,5 +87,13 @@ final class NodeInfo
     public function getPublicPropertyInfos(): array
     {
         return $this->publicPropertyInfos;
+    }
+
+    /**
+     * @return NodeCodeSample[]
+     */
+    public function getNodeCodeSamples(): array
+    {
+        return $this->nodeCodeSamples;
     }
 }
