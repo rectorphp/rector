@@ -150,6 +150,11 @@ final class DumpNodesCommand extends AbstractCommand
     private const PROPERTY_NAME = 'propertyName';
 
     /**
+     * @var string
+     */
+    private const SOME_PROPERTY = 'someProperty';
+
+    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -178,10 +183,6 @@ final class DumpNodesCommand extends AbstractCommand
      * @var SmartFinder
      */
     private $smartFinder;
-    /**
-     * @var string
-     */
-    private const SOME_PROPERTY = 'someProperty';
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
@@ -418,7 +419,9 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === UnaryMinus::class) {
                     $node = new UnaryMinus($someVariableNode);
                 } elseif ($nodeClass === StaticPropertyFetch::class) {
-                    $node = new StaticPropertyFetch(new Name(self::SOME_CLASS), new VarLikeIdentifier(self::SOME_PROPERTY));
+                    $node = new StaticPropertyFetch(new Name(self::SOME_CLASS), new VarLikeIdentifier(
+                        self::SOME_PROPERTY
+                    ));
                 } elseif ($nodeClass === Variable::class) {
                     $node = $someVariableNode;
                 } elseif ($nodeClass === ClosureUse::class) {
