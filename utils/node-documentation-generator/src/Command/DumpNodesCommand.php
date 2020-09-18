@@ -178,6 +178,10 @@ final class DumpNodesCommand extends AbstractCommand
      * @var SmartFinder
      */
     private $smartFinder;
+    /**
+     * @var string
+     */
+    private const SOME_PROPERTY = 'someProperty';
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
@@ -346,7 +350,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Expression::class) {
                     $node = new Expression(new Variable(self::VARIABLE_NAME));
                 } elseif ($nodeClass === PropertyProperty::class) {
-                    $node = new PropertyProperty('someProperty');
+                    $node = new PropertyProperty(self::SOME_PROPERTY);
                 } elseif ($nodeClass === Global_::class) {
                     $node = new Global_([new Variable('globalVariable')]);
                 } elseif ($nodeClass === Precedence::class) {
@@ -414,7 +418,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === UnaryMinus::class) {
                     $node = new UnaryMinus($someVariableNode);
                 } elseif ($nodeClass === StaticPropertyFetch::class) {
-                    $node = new StaticPropertyFetch(new Name(self::SOME_CLASS), new VarLikeIdentifier('someProperty'));
+                    $node = new StaticPropertyFetch(new Name(self::SOME_CLASS), new VarLikeIdentifier(self::SOME_PROPERTY));
                 } elseif ($nodeClass === Variable::class) {
                     $node = $someVariableNode;
                 } elseif ($nodeClass === ClosureUse::class) {
@@ -454,7 +458,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === NullsafeMethodCall::class) {
                     $node = new NullsafeMethodCall($someVariableNode, new Identifier(self::SOME_METHOD));
                 } elseif ($nodeClass === NullsafePropertyFetch::class) {
-                    $node = new NullsafePropertyFetch($someVariableNode, new Identifier('someProperty'));
+                    $node = new NullsafePropertyFetch($someVariableNode, new Identifier(self::SOME_PROPERTY));
                 } elseif ($nodeClass === ThrowExpr::class) {
                     $node = new Throw_($someVariableNode);
                 } else {
