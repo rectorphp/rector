@@ -22,17 +22,17 @@ final class MarkdownDumpNodesOutputFormatter
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function format(NodeInfoCollector $nodeInfoResult): void
+    public function format(NodeInfoCollector $nodeInfoCollector): void
     {
         $this->symfonyStyle->writeln('# Node Overview');
         $this->symfonyStyle->newLine();
 
-        $this->printCategories($nodeInfoResult);
+        $this->printCategories($nodeInfoCollector);
 
         $this->symfonyStyle->newLine();
 
         /** @var string $category */
-        foreach ($nodeInfoResult->getNodeInfosByCategory() as $category => $nodeInfos) {
+        foreach ($nodeInfoCollector->getNodeInfosByCategory() as $category => $nodeInfos) {
             $categoryTitle = $this->createCategoryTitle($category);
             $this->symfonyStyle->writeln('## ' . $categoryTitle);
             $this->symfonyStyle->newLine();
@@ -52,9 +52,9 @@ final class MarkdownDumpNodesOutputFormatter
         }
     }
 
-    private function printCategories(NodeInfoCollector $nodeInfoResult): void
+    private function printCategories(NodeInfoCollector $nodeInfoCollector): void
     {
-        foreach ($nodeInfoResult->getCategories() as $category) {
+        foreach ($nodeInfoCollector->getCategories() as $category) {
             $categoryTitle = $this->createCategoryTitle($category);
             $categoryLink = sprintf('* [%s](#%s)', $categoryTitle, Strings::webalize($categoryTitle));
 

@@ -6,6 +6,10 @@ namespace Rector\Utils\NodeDocumentationGenerator\RobotLoader;
 
 use Nette\Loaders\RobotLoader;
 
+/**
+ * @see \Rector\NodeDocumentationGenerator\Tests\RobotLoader\NodeClassProviderTest
+ * @see \Rector\Utils\NodeDocumentationGenerator\Tests\RobotLoader\NodeClassProviderTest
+ */
 final class NodeClassProvider
 {
     /**
