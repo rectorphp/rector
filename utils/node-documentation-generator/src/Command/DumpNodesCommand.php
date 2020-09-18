@@ -145,6 +145,11 @@ final class DumpNodesCommand extends AbstractCommand
     private const SOME_METHOD = 'methodName';
 
     /**
+     * @var string
+     */
+    private const PROPERTY_NAME = 'propertyName';
+
+    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -157,7 +162,7 @@ final class DumpNodesCommand extends AbstractCommand
     /**
      * @var NodeInfoCollector
      */
-    private $nodeInfoResult;
+    private $nodeInfoCollector;
 
     /**
      * @var MarkdownDumpNodesOutputFormatter
@@ -184,7 +189,7 @@ final class DumpNodesCommand extends AbstractCommand
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeClassProvider = $nodeClassProvider;
-        $this->nodeInfoResult = $nodeInfoResult;
+        $this->nodeInfoCollector = $nodeInfoResult;
         $this->markdownDumpNodesOutputFormatter = $markdownDumpNodesOutputFormatter;
         $this->categoryResolver = $categoryResolver;
         $this->smartFinder = $smartFinder;
@@ -226,31 +231,31 @@ final class DumpNodesCommand extends AbstractCommand
                 $category = $this->categoryResolver->resolveCategoryByNodeClass($nodeClass);
 
                 $nodeInfo = new NodeInfo($nodeClass, $this->createCodeSamples($node), false);
-                $this->nodeInfoResult->addNodeInfo($category, $nodeInfo);
+                $this->nodeInfoCollector->addNodeInfo($category, $nodeInfo);
             } elseif (is_a($nodeClass, BinaryOp::class, true)) {
                 $node = new $nodeClass(new LNumber(1), new String_('a'));
-                $this->nodeInfoResult->addNodeInfo(BinaryOp::class, new NodeInfo(
+                $this->nodeInfoCollector->addNodeInfo(BinaryOp::class, new NodeInfo(
                     $nodeClass,
                     $this->createCodeSamples($node),
                     true
                 ));
             } elseif (is_a($nodeClass, AssignOp::class, true)) {
                 $node = new $nodeClass(new Variable(self::VARIABLE_NAME), new String_(self::VALUE));
-                $this->nodeInfoResult->addNodeInfo(AssignOp::class, new NodeInfo(
+                $this->nodeInfoCollector->addNodeInfo(AssignOp::class, new NodeInfo(
                     $nodeClass,
                     $this->createCodeSamples($node),
                     true
                 ));
             } elseif (is_a($nodeClass, Cast::class, true)) {
                 $node = new $nodeClass(new Variable(self::VALUE));
-                $this->nodeInfoResult->addNodeInfo(Cast::class, new NodeInfo(
+                $this->nodeInfoCollector->addNodeInfo(Cast::class, new NodeInfo(
                     $nodeClass,
                     $this->createCodeSamples($node),
                     true
                 ));
             } elseif (is_a($nodeClass, Name::class, true)) {
                 $node = new $nodeClass('name');
-                $this->nodeInfoResult->addNodeInfo(Name::class, new NodeInfo(
+                $this->nodeInfoCollector->addNodeInfo(Name::class, new NodeInfo(
                     $nodeClass,
                     $this->createCodeSamples($node),
                     true
@@ -302,9 +307,9 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === StaticVar::class) {
                     $node = new StaticVar(new Variable(self::VARIABLE_NAME));
                 } elseif ($nodeClass === Property::class) {
-                    $node = new Property(Class_::MODIFIER_PUBLIC, [new PropertyProperty('propertyName')]);
+                    $node = new Property(Class_::MODIFIER_PUBLIC, [new PropertyProperty(self::PROPERTY_NAME)]);
                     $anotherNode = new Property(Class_::MODIFIER_STATIC | Class_::MODIFIER_PUBLIC, [
-                        new PropertyProperty('propertyName'),
+                        new PropertyProperty(self::PROPERTY_NAME),
                         new PropertyProperty('anotherPropertyName'),
                     ]);
                 } elseif ($nodeClass === Unset_::class) {
@@ -392,7 +397,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === New_::class) {
                     $node = new New_(new Class_(self::SOME_CLASS));
                 } elseif ($nodeClass === PropertyFetch::class) {
-                    $node = new PropertyFetch($someVariableNode, 'propertyName');
+                    $node = new PropertyFetch($someVariableNode, self::PROPERTY_NAME);
                 } elseif ($nodeClass === Isset_::class) {
                     $node = new Isset_([new Variable(self::VARIABLE_NAME)]);
                 } elseif ($nodeClass === ArrayDimFetch::class) {
@@ -466,11 +471,11 @@ final class DumpNodesCommand extends AbstractCommand
                 $nodeCodeSamples = $this->findNodeCodeSamples($nodeClass);
 
                 $nodeInfo = new NodeInfo($nodeClass, $codeSamples, true, $nodeCodeSamples);
-                $this->nodeInfoResult->addNodeInfo($category, $nodeInfo);
+                $this->nodeInfoCollector->addNodeInfo($category, $nodeInfo);
             }
         }
 
-        $this->markdownDumpNodesOutputFormatter->format($this->nodeInfoResult);
+        $this->markdownDumpNodesOutputFormatter->format($this->nodeInfoCollector);
 
         return ShellCode::SUCCESS;
     }
@@ -489,14 +494,10 @@ final class DumpNodesCommand extends AbstractCommand
         return $codeSamples;
     }
 
-    private function printAndTrim(Node $node): string
-    {
-        return trim($this->betterStandardPrinter->print($node));
-    }
-
     /**
      * @todo decouple to NodeCodeSampleFinder service
      * @param class-string $nodeClass
+     * @return NodeCodeSample[]
      */
     private function findNodeCodeSamples(string $nodeClass): array
     {
@@ -521,5 +522,10 @@ final class DumpNodesCommand extends AbstractCommand
         }
 
         return $nodeCodeSamples;
+    }
+
+    private function printAndTrim(Node $node): string
+    {
+        return trim($this->betterStandardPrinter->print($node));
     }
 }

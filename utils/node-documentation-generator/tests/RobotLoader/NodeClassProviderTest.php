@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeDocumentationGenerator\Tests\RobotLoader;
+namespace Rector\Utils\NodeDocumentationGenerator\Tests\RobotLoader;
 
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Utils\NodeDocumentationGenerator\RobotLoader\NodeClassProvider;

@@ -53,11 +53,7 @@ final class BetterNodeFinder
      */
     public function findFirstParentInstanceOf(Node $node, $type): ?Node
     {
-        if (! is_array($type)) {
-            $types = [$type];
-        } else {
-            $types = $type;
-        }
+        $types = ! is_array($type) ? [$type] : $type;
 
         foreach ($types as $singleType) {
             $this->ensureIsNodeClass($singleType, __METHOD__, 1);
@@ -297,6 +293,23 @@ final class BetterNodeFinder
         });
     }
 
+    private function ensureIsNodeClass(string $type, string $location, int $argumentPosition): void
+    {
+        if (is_a($type, Node::class, true)) {
+            return;
+        }
+
+        $errorMessage = sprintf(
+            'Type given to "%s()" method on %d position must be child of "%s". "%s" given.',
+            $argumentPosition,
+            $location,
+            Node::class,
+            $type
+        );
+
+        throw new ShouldNotHappenException($errorMessage);
+    }
+
     /**
      * @param class-string[] $types
      */
@@ -330,22 +343,5 @@ final class BetterNodeFinder
         }
 
         return null;
-    }
-
-    private function ensureIsNodeClass(string $type, string $location, int $argumentPosition): void
-    {
-        if (is_a($type, Node::class, true)) {
-            return;
-        }
-
-        $errorMessage = sprintf(
-            'Type given to "%s()" method on %d position must be child of "%s". "%s" given.',
-            $argumentPosition,
-            $location,
-            Node::class,
-            $type
-        );
-
-        throw new ShouldNotHappenException($errorMessage);
     }
 }

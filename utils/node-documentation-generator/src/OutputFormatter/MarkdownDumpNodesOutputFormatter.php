@@ -22,17 +22,17 @@ final class MarkdownDumpNodesOutputFormatter
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function format(NodeInfoCollector $nodeInfoResult): void
+    public function format(NodeInfoCollector $nodeInfoCollector): void
     {
         $this->symfonyStyle->writeln('# Node Overview');
         $this->symfonyStyle->newLine();
 
-        $this->printCategories($nodeInfoResult);
+        $this->printCategories($nodeInfoCollector);
 
         $this->symfonyStyle->newLine();
 
         /** @var string $category */
-        foreach ($nodeInfoResult->getNodeInfosByCategory() as $category => $nodeInfos) {
+        foreach ($nodeInfoCollector->getNodeInfosByCategory() as $category => $nodeInfos) {
             $categoryTitle = $this->createCategoryTitle($category);
             $this->symfonyStyle->writeln('## ' . $categoryTitle);
             $this->symfonyStyle->newLine();
