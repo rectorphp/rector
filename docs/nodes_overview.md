@@ -21,6 +21,24 @@
 ```php
 $variableName[0]
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\LNumber;
+
+$variable = new Variable('variableName');
+$dimension = new LNumber(0);
+
+return new ArrayDimFetch($variable, $dimension);
+```
+
+↓
+
+```php
+$variableName[0]
+```
 
 #### Public Properties
 
@@ -34,6 +52,24 @@ $variableName[0]
 
 
 #### Example PHP Code
+
+```php
+'name' => $Tom
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
+
+$value = new Variable('Tom');
+$key = new String_('name');
+
+return new ArrayItem($value, $key);
+```
+
+↓
 
 ```php
 'name' => $Tom
@@ -89,6 +125,24 @@ fn() => 1
 ```php
 $variableName = 'some value'
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
+
+$variable = new Variable('variableName');
+$value = new String_('some value');
+
+return new Assign($variable, $value);
+```
+
+↓
+
+```php
+$variableName = 'some value'
+```
 
 #### Public Properties
 
@@ -102,6 +156,23 @@ $variableName = 'some value'
 
 
 #### Example PHP Code
+
+```php
+$variableName =& $someOtherVariable
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+$variableRef = new Variable('someOtherVariable');
+
+return new AssignRef($variable, $variableRef);
+```
+
+↓
 
 ```php
 $variableName =& $someOtherVariable
@@ -123,6 +194,22 @@ $variableName =& $someOtherVariable
 ```php
 ~$variableName
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\BitwiseNot;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new BitwiseNot($variable);
+```
+
+↓
+
+```php
+~$variableName
+```
 
 #### Public Properties
 
@@ -138,6 +225,22 @@ $variableName =& $someOtherVariable
 
 ```php
 !true
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('isEligible');
+
+return new BooleanNot($variable);
+```
+
+↓
+
+```php
+!$isEligible
 ```
 
 #### Public Properties
@@ -184,6 +287,22 @@ SomeClassName::SOME_CONSTANT
 
 
 #### Example PHP Code
+
+```php
+clone $variableName
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\Clone_;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new Clone_($variable);
+```
+
+↓
 
 ```php
 clone $variableName
@@ -273,6 +392,22 @@ true
 ```php
 empty($variableName)
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\Empty_;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new Empty_($variable);
+```
+
+↓
+
+```php
+empty($variableName)
+```
 
 #### Public Properties
 
@@ -289,6 +424,22 @@ empty($variableName)
 ```php
 @$variableName
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\ErrorSuppress;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new ErrorSuppress($variable);
+```
+
+↓
+
+```php
+@$variableName
+```
 
 #### Public Properties
 
@@ -301,6 +452,22 @@ empty($variableName)
 
 
 #### Example PHP Code
+
+```php
+eval('Some php code')
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\Eval_;
+use PhpParser\Node\Scalar\String_;
+
+$phpCode = new String_('Some php code');
+
+return new Eval_($phpCode);
+```
+
+↓
 
 ```php
 eval('Some php code')
@@ -352,6 +519,22 @@ functionCall()
 ```php
 include $variableName
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\Include_;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new Include_($variable, Include_::TYPE_INCLUDE);
+```
+
+↓
+
+```php
+include $variableName
+```
 
 #### Public Properties
 
@@ -365,6 +548,24 @@ include $variableName
 
 
 #### Example PHP Code
+
+```php
+$variableName instanceof SomeClassName
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+
+$variable = new Variable('variableName');
+$class = new Name('SomeClassName');
+
+return new Instanceof_($variable, $class);
+```
+
+↓
 
 ```php
 $variableName instanceof SomeClassName
@@ -386,6 +587,22 @@ $variableName instanceof SomeClassName
 ```php
 isset($variableName)
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new Isset_([$variable]);
+```
+
+↓
+
+```php
+isset($variableName)
+```
 
 #### Public Properties
 
@@ -398,6 +615,22 @@ isset($variableName)
 
 
 #### Example PHP Code
+
+```php
+list($variableName)
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new List_([$variable]);
+```
+
+↓
 
 ```php
 list($variableName)
@@ -420,6 +653,31 @@ match ($variableName) {
     1 => 'yes',
 }
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\MatchArm;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
+
+$variable = new Variable('variableName');
+
+$body = new String_('yes');
+$cond = new LNumber(1);
+$matchArm = new MatchArm([$cond], $body);
+
+return new Match_($variable, [$matchArm]);
+```
+
+↓
+
+```php
+match ($variableName) {
+    1 => 'yes',
+}
+```
 
 #### Public Properties
 
@@ -433,6 +691,22 @@ match ($variableName) {
 
 
 #### Example PHP Code
+
+```php
+$someObject->methodName()
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('someObject');
+
+return new MethodCall($variable, 'methodName');
+```
+
+↓
 
 ```php
 $someObject->methodName()
@@ -457,6 +731,40 @@ new class
 {
 }
 ```
+```php
+<?php
+
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name;
+
+$class = new Name('SomeClass');
+
+return new New_($class);
+```
+
+↓
+
+```php
+new SomeClass()
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Stmt\Class_;
+
+$class = new Class_(null);
+
+return new New_($class);
+```
+
+↓
+
+```php
+new class
+{
+}
+```
 
 #### Public Properties
 
@@ -470,6 +778,22 @@ new class
 
 
 #### Example PHP Code
+
+```php
+$variableName?->methodName()
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new NullsafeMethodCall($variable, 'methodName');
+```
+
+↓
 
 ```php
 $variableName?->methodName()
@@ -490,7 +814,23 @@ $variableName?->methodName()
 #### Example PHP Code
 
 ```php
-$variableName?->somePropety
+$variableName?->someProperty
+```
+```php
+<?php
+
+use PhpParser\Node\Expr\NullsafePropertyFetch;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new NullsafePropertyFetch($variable, 'someProperty');
+```
+
+↓
+
+```php
+$variableName?->someProperty
 ```
 
 #### Public Properties
@@ -1829,7 +2169,7 @@ case true:
 #### Example PHP Code
 
 ```php
-catch (CatchedType $catchedVariable) {
+catch (CaughtType $CaughtVariable) {
 }
 ```
 

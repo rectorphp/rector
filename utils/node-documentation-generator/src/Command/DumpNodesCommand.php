@@ -330,7 +330,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Foreach_::class) {
                     $node = new Foreach_(new Variable('variables'), new Variable(self::VALUE));
                 } elseif ($nodeClass === Catch_::class) {
-                    $node = new Catch_([new Name('CatchedType')], new Variable('catchedVariable'));
+                    $node = new Catch_([new Name('CaughtType')], new Variable('CaughtVariable'));
                 } elseif ($nodeClass === ConstStmt::class) {
                     $node = new ConstStmt([new Const_('CONSTANT_IN_CLASS', new String_('default value'))]);
                 } elseif ($nodeClass === Declare_::class) {
@@ -454,7 +454,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === NullsafeMethodCall::class) {
                     $node = new NullsafeMethodCall($someVariableNode, new Identifier(self::SOME_METHOD));
                 } elseif ($nodeClass === NullsafePropertyFetch::class) {
-                    $node = new NullsafePropertyFetch($someVariableNode, new Identifier('somePropety'));
+                    $node = new NullsafePropertyFetch($someVariableNode, new Identifier('someProperty'));
                 } elseif ($nodeClass === ThrowExpr::class) {
                     $node = new Throw_($someVariableNode);
                 } else {
