@@ -11,8 +11,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symfony\Component\Filesystem\Filesystem;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class FactoryClassPrinter
 {
@@ -27,18 +27,18 @@ final class FactoryClassPrinter
     private $betterStandardPrinter;
 
     /**
-     * @var Filesystem
+     * @var SmartFileSystem
      */
-    private $filesystem;
+    private $smartFileSystem;
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
-        Filesystem $filesystem,
+        SmartFileSystem $smartFileSystem,
         NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->filesystem = $filesystem;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function printFactoryForClass(Class_ $factoryClass, Class_ $oldClass): void
@@ -56,7 +56,7 @@ final class FactoryClassPrinter
         $factoryClassFilePath = $this->createFactoryClassFilePath($oldClass);
         $factoryClassContent = $this->betterStandardPrinter->prettyPrintFile($nodeToPrint);
 
-        $this->filesystem->dumpFile($factoryClassFilePath, $factoryClassContent);
+        $this->smartFileSystem->dumpFile($factoryClassFilePath, $factoryClassContent);
     }
 
     private function createFactoryClassFilePath(Class_ $oldClass): string

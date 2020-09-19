@@ -9,7 +9,7 @@ use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Core\ValueObject\MovedClass;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * Adds and removes scheduled file
@@ -32,18 +32,18 @@ final class RemovedAndAddedFilesProcessor
     private $symfonyStyle;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var NodesWithFileDestinationPrinter
      */
     private $nodesWithFileDestinationPrinter;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
         Configuration $configuration,
-        Filesystem $filesystem,
+        SmartFileSystem $smartFileSystem,
         NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         SymfonyStyle $symfonyStyle
@@ -51,8 +51,8 @@ final class RemovedAndAddedFilesProcessor
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->configuration = $configuration;
         $this->symfonyStyle = $symfonyStyle;
-        $this->filesystem = $filesystem;
         $this->nodesWithFileDestinationPrinter = $nodesWithFileDestinationPrinter;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function run(): void
@@ -69,7 +69,7 @@ final class RemovedAndAddedFilesProcessor
                 $message = sprintf('File "%s" will be added:', $filePath);
                 $this->symfonyStyle->note($message);
             } else {
-                $this->filesystem->dumpFile($filePath, $fileContent);
+                $this->smartFileSystem->dumpFile($filePath, $fileContent);
                 $message = sprintf('File "%s" was added:', $filePath);
                 $this->symfonyStyle->note($message);
             }
@@ -86,7 +86,7 @@ final class RemovedAndAddedFilesProcessor
                 $message = sprintf('File "%s" will be added:', $nodesWithFileDestination->getFileDestination());
                 $this->symfonyStyle->note($message);
             } else {
-                $this->filesystem->dumpFile($nodesWithFileDestination->getFileDestination(), $fileContent);
+                $this->smartFileSystem->dumpFile($nodesWithFileDestination->getFileDestination(), $fileContent);
                 $message = sprintf('File "%s" was added:', $nodesWithFileDestination->getFileDestination());
                 $this->symfonyStyle->note($message);
             }
@@ -108,7 +108,7 @@ final class RemovedAndAddedFilesProcessor
             } else {
                 $message = sprintf('File "%s" was removed', $relativePath);
                 $this->symfonyStyle->warning($message);
-                $this->filesystem->remove($removedFile->getRealPath());
+                $this->smartFileSystem->remove($removedFile->getRealPath());
             }
         }
     }
@@ -121,9 +121,9 @@ final class RemovedAndAddedFilesProcessor
             } else {
                 $this->printFileMoveWarning($movedClassValueObject, 'was');
 
-                $this->filesystem->remove($movedClassValueObject->getOldPath());
+                $this->smartFileSystem->remove($movedClassValueObject->getOldPath());
 
-                $this->filesystem->dumpFile(
+                $this->smartFileSystem->dumpFile(
                     $movedClassValueObject->getNewPath(),
                     $movedClassValueObject->getFileContent()
                 );
