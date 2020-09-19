@@ -465,3 +465,6 @@ parameters:
                  - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 68
 
         - '#(.*?) expects class\-string, string given#'
+
+        # Temprory ignored
+        - '#Do not use scalar or array as constructor parameter\. Use ParameterProvider service instead#'
