@@ -61,7 +61,7 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
 
     public function createDataProvider(): Iterator
     {
-        yield [$this->getPropertyFromFile(__DIR__ . '/Fixture/SomeClass.php'), 'eliteManager', 'eventManager'];
+        yield [$this->getPropertyFromFile(__DIR__ . '/FixtureBasic/SomeClass.php'), 'eliteManager', 'eventManager'];
     }
 
     private function getPropertyFromFile(string $string): Property
