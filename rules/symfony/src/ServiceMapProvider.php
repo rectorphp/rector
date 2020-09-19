@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Symfony;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Rector\Symfony\Exception\XmlContainerNotExistsException;
@@ -14,6 +13,7 @@ use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use SimpleXMLElement;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * Inspired by https://github.com/phpstan/phpstan-symfony/tree/master/src/Symfony
@@ -35,9 +35,15 @@ final class ServiceMapProvider
      */
     private $parameterProvider;
 
-    public function __construct(ParameterProvider $parameterProvider)
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(ParameterProvider $parameterProvider, SmartFileSystem $smartFileSystem)
     {
         $this->parameterProvider = $parameterProvider;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function provide(): ServiceMap
@@ -47,8 +53,7 @@ final class ServiceMapProvider
             return new ServiceMap([]);
         }
 
-        $fileContents = FileSystem::read($symfonyContainerXmlPath);
-
+        $fileContents = $this->smartFileSystem->readFile($symfonyContainerXmlPath);
         return $this->createServiceMapFromXml($fileContents);
     }
 

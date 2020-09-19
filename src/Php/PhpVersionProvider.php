@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Core\Php;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class PhpVersionProvider
 {
@@ -17,9 +17,15 @@ final class PhpVersionProvider
      */
     private $parameterProvider;
 
-    public function __construct(ParameterProvider $parameterProvider)
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(ParameterProvider $parameterProvider, SmartFileSystem $smartFileSystem)
     {
         $this->parameterProvider = $parameterProvider;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function provide(): string
@@ -57,7 +63,7 @@ final class PhpVersionProvider
             return null;
         }
 
-        $projectComposerContent = FileSystem::read($projectComposerJson);
+        $projectComposerContent = $this->smartFileSystem->readFile($projectComposerJson);
         $projectComposerJson = Json::decode($projectComposerContent, Json::FORCE_ARRAY);
 
         // Rector's composer.json

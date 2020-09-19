@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Configuration\MinimalVersionChecker;
 
-use Nette\Utils\FileSystem;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ComposerJsonReader
 {
@@ -13,13 +13,19 @@ final class ComposerJsonReader
      */
     private $filename;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(string $composerJsonFilename)
     {
         $this->filename = $composerJsonFilename;
+        $this->smartFileSystem = new SmartFileSystem();
     }
 
     public function read(): string
     {
-        return FileSystem::read($this->filename);
+        return $this->smartFileSystem->readFile($this->filename);
     }
 }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Core\Rector\AbstractRector;
 
-use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -27,14 +27,21 @@ trait BetterStandardPrinterTrait
     protected $betterStandardPrinter;
 
     /**
+     * @var SmartFileSystem
+     */
+    protected $smartFileSystem;
+
+    /**
      * @required
      */
     public function autowireBetterStandardPrinter(
         BetterStandardPrinter $betterStandardPrinter,
-        BetterNodeFinder $betterNodeFinder
+        BetterNodeFinder $betterNodeFinder,
+        SmartFileSystem $smartFileSystem
     ): void {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**
@@ -67,7 +74,7 @@ trait BetterStandardPrinterTrait
     public function printToFile($node, string $filePath): void
     {
         $content = $this->betterStandardPrinter->prettyPrintFile($node);
-        FileSystem::write($filePath, $content);
+        $this->smartFileSystem->dumpFile($filePath, $content);
     }
 
     /**

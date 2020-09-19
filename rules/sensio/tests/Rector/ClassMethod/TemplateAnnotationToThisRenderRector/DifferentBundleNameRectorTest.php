@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 
 use Iterator;
-use Nette\Utils\FileSystem;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -20,11 +19,12 @@ final class DifferentBundleNameRectorTest extends AbstractRectorTestCase
         // prepare bundle path
         $originalBundleFilePath = __DIR__ . '/FixtureDifferentBundleName/SomeActionBundle/DifferentNameBundle.php';
         $temporaryBundleFilePath = $this->getTempPath() . '/DifferentNameBundle.php';
-        FileSystem::copy($originalBundleFilePath, $temporaryBundleFilePath, true);
+
+        $this->smartFileSystem->copy($originalBundleFilePath, $temporaryBundleFilePath, true);
 
         $this->doTestFileInfo($fileInfo);
 
-        FileSystem::delete($temporaryBundleFilePath);
+        $this->smartFileSystem->remove($temporaryBundleFilePath);
     }
 
     public function provideData(): Iterator

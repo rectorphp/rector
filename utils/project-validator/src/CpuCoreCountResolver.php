@@ -4,12 +4,22 @@ declare(strict_types=1);
 
 namespace Rector\Utils\ProjectValidator;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\Utils\ProjectValidator\Exception\CouldNotDeterminedCpuCoresException;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class CpuCoreCountResolver
 {
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(SmartFileSystem $smartFileSystem)
+    {
+        $this->smartFileSystem = $smartFileSystem;
+    }
+
     /**
      * @see https://gist.github.com/divinity76/01ef9ca99c111565a72d3a8a6e42f7fb
      *
@@ -31,7 +41,7 @@ final class CpuCoreCountResolver
         }
 
         if (is_readable('/proc/cpuinfo')) {
-            $cpuinfo = FileSystem::read('/proc/cpuinfo');
+            $cpuinfo = $this->smartFileSystem->readFile('/proc/cpuinfo');
             $count = substr_count($cpuinfo, 'processor');
             if ($count > 0) {
                 return $count;

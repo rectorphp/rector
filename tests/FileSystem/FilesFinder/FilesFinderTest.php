@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\FileSystem\FilesFinder;
 
 use Iterator;
-use Nette\Utils\FileSystem;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
@@ -88,6 +87,6 @@ final class FilesFinderTest extends AbstractKernelTestCase
         $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([$dir], ['php'], true);
         $this->assertCount(1, $foundFiles);
 
-        FileSystem::delete($filename);
+        $this->smartFileSystem->remove($filename);
     }
 }

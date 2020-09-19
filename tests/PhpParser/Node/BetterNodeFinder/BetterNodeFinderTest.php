@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\PhpParser\Node\BetterNodeFinder;
 
-use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NodeConnectingVisitor;
-use PhpParser\ParserFactory;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class BetterNodeFinderTest extends AbstractKernelTestCase
@@ -34,7 +31,10 @@ final class BetterNodeFinderTest extends AbstractKernelTestCase
         $this->bootKernel(RectorKernel::class);
 
         $this->betterNodeFinder = self::$container->get(BetterNodeFinder::class);
-        $this->nodes = $this->createNodesFromFile(__DIR__ . '/Source/SomeFile.php.inc');
+
+        /** @var SimplePhpParser $simplePhpParser */
+        $simplePhpParser = self::$container->get(SimplePhpParser::class);
+        $this->nodes = $simplePhpParser->parseFile(__DIR__ . '/Source/SomeFile.php.inc');
     }
 
     public function testFindFirstAncestorInstanceOf(): void
@@ -59,22 +59,5 @@ final class BetterNodeFinderTest extends AbstractKernelTestCase
         $variableNode = $this->betterNodeFinder->findFirstInstanceOf($this->nodes, Variable::class);
 
         $this->assertNull($this->betterNodeFinder->findFirstAncestorInstanceOf($variableNode, Array_::class));
-    }
-
-    /**
-     * @return Node[]
-     */
-    private function createNodesFromFile(string $filePath): array
-    {
-        $phpParser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $nodes = $phpParser->parse(FileSystem::read($filePath));
-        if ($nodes === null) {
-            return [];
-        }
-
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new NodeConnectingVisitor());
-
-        return $nodeTraverser->traverse($nodes);
     }
 }
