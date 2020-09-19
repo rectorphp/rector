@@ -12,7 +12,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\PropertyRenamer;
 use Rector\Naming\ValueObject\PropertyRename;
@@ -29,11 +28,6 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
     private $hasChanged = false;
 
     /**
-     * @var ConflictingNameResolver
-     */
-    private $conflictingNameResolver;
-
-    /**
      * @var ExpectedNameResolver
      */
     private $expectedNameResolver;
@@ -43,12 +37,8 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
      */
     private $propertyRenamer;
 
-    public function __construct(
-        ConflictingNameResolver $conflictingNameResolver,
-        ExpectedNameResolver $expectedNameResolver,
-        PropertyRenamer $propertyRenamer
-    ) {
-        $this->conflictingNameResolver = $conflictingNameResolver;
+    public function __construct(ExpectedNameResolver $expectedNameResolver, PropertyRenamer $propertyRenamer)
+    {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->propertyRenamer = $propertyRenamer;
     }
@@ -114,8 +104,6 @@ CODE_SAMPLE
 
     private function refactorClassProperties(ClassLike $classLike): void
     {
-        $conflictingPropertyNames = $this->conflictingNameResolver->resolveConflictingPropertyNames($classLike);
-
         foreach ($classLike->getProperties() as $property) {
             if (count($property->props) !== 1) {
                 continue;
@@ -141,21 +129,9 @@ CODE_SAMPLE
                 $propertyClassLike
             );
 
-            if ($this->shouldSkipProperty($propertyRename, $conflictingPropertyNames)) {
-                continue;
+            if ($this->propertyRenamer->rename($propertyRename) !== null) {
+                $this->hasChanged = true;
             }
-
-            $this->propertyRenamer->rename($propertyRename);
-
-            $this->hasChanged = true;
         }
-    }
-
-    /**
-     * @param string[] $conflictingPropertyNames
-     */
-    private function shouldSkipProperty(PropertyRename $propertyRename, array $conflictingPropertyNames): bool
-    {
-        return in_array($propertyRename->getExpectedName(), $conflictingPropertyNames, true);
     }
 }

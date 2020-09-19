@@ -122,6 +122,13 @@ final class BreakingVariableRenameGuard
 
     public function shouldSkipProperty(PropertyRename $propertyRename): bool
     {
+        $conflictingPropertyNames = $this->conflictingNameResolver->resolveConflictingPropertyNames(
+            $propertyRename->getClassLike()
+        );
+        if (in_array($propertyRename->getExpectedName(), $conflictingPropertyNames, true)) {
+            return true;
+        }
+
         if ($this->isRamseyUuidInterface($propertyRename->getProperty())) {
             return true;
         }

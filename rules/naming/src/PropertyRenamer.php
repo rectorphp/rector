@@ -7,6 +7,7 @@ namespace Rector\Naming;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
@@ -40,15 +41,17 @@ final class PropertyRenamer
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function rename(PropertyRename $propertyRename): void
+    public function rename(PropertyRename $propertyRename): ?Property
     {
         if ($this->breakingVariableRenameGuard->shouldSkipProperty($propertyRename)) {
-            return;
+            return null;
         }
 
         $onlyPropertyProperty = $propertyRename->getProperty()->props[0];
         $onlyPropertyProperty->name = new VarLikeIdentifier($propertyRename->getExpectedName());
         $this->renamePropertyFetchesInClass($propertyRename);
+
+        return $propertyRename->getProperty();
     }
 
     private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
