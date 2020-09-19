@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\PhpParser\Printer;
 
-use Nette\Utils\FileSystem;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class FormatPerservingPrinterTest extends AbstractKernelTestCase
 {
@@ -22,15 +22,21 @@ final class FormatPerservingPrinterTest extends AbstractKernelTestCase
      */
     private $formatPerservingPrinter;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
         $this->formatPerservingPrinter = self::$container->get(FormatPerservingPrinter::class);
+        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
     }
 
     protected function tearDown(): void
     {
-        FileSystem::delete(__DIR__ . '/Fixture');
+        $this->smartFileSystem->remove(__DIR__ . '/Fixture');
     }
 
     public function testFileModeIsPreserved(): void
@@ -41,7 +47,6 @@ final class FormatPerservingPrinterTest extends AbstractKernelTestCase
         chmod(__DIR__ . '/Fixture/file.php', self::EXPECTED_FILEMOD);
 
         $fileInfo = new SmartFileInfo(__DIR__ . '/Fixture/file.php');
-
         $this->formatPerservingPrinter->printToFile($fileInfo, [], [], []);
 
         $this->assertSame(self::EXPECTED_FILEMOD, fileperms(__DIR__ . '/Fixture/file.php') & 0777);

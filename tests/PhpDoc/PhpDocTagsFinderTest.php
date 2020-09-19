@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\PhpDoc;
 
-use Nette\Utils\FileSystem;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpDoc\PhpDocTagsFinder;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class PhpDocTagsFinderTest extends AbstractKernelTestCase
 {
@@ -16,15 +16,21 @@ final class PhpDocTagsFinderTest extends AbstractKernelTestCase
      */
     private $phpDocTagsFinder;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
         $this->phpDocTagsFinder = self::$container->get(PhpDocTagsFinder::class);
+        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
     }
 
     public function test(): void
     {
-        $docContent = FileSystem::read(__DIR__ . '/Source/doc_block_throws.txt');
+        $docContent = $this->smartFileSystem->readFile(__DIR__ . '/Source/doc_block_throws.txt');
 
         $throwsTags = $this->phpDocTagsFinder->extractTagsFromStringedDocblock($docContent, 'throws');
 

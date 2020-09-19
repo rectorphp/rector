@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Parser;
 
-use Nette\Utils\FileSystem;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Parser;
 use ReflectionFunction;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class FunctionParser
 {
@@ -16,9 +16,15 @@ final class FunctionParser
      */
     private $parser;
 
-    public function __construct(Parser $parser)
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(Parser $parser, SmartFileSystem $smartFileSystem)
     {
         $this->parser = $parser;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function parseFunction(ReflectionFunction $reflectionFunction): ?Namespace_
@@ -28,7 +34,7 @@ final class FunctionParser
             return null;
         }
 
-        $functionCode = FileSystem::read($fileName);
+        $functionCode = $this->smartFileSystem->readFile($fileName);
         if (! is_string($functionCode)) {
             return null;
         }

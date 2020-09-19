@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Testing\PHPUnit;
 
-use Nette\Utils\FileSystem;
 use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFile;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
@@ -122,8 +121,8 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $relativeFilePath = $fileInfo->getRelativeFilePathFromDirectory($testCaseDirectory);
         $temporaryFilePath = $this->getFixtureTempDirectory() . '/' . $relativeFilePath;
 
-        FileSystem::delete($temporaryFilePath);
-        FileSystem::copy($fileInfo->getRealPath(), $temporaryFilePath, true);
+        $this->smartFileSystem->remove($temporaryFilePath);
+        $this->smartFileSystem->copy($fileInfo->getRealPath(), $temporaryFilePath, true);
 
         return new SmartFileInfo($temporaryFilePath);
     }

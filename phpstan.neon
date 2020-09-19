@@ -52,6 +52,8 @@ parameters:
             'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
             'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
             'Hoa\Protocol\Node\Node': 'PhpParser\Node'
+            'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+            'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
 
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false

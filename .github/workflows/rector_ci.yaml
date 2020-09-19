@@ -39,7 +39,7 @@ jobs:
             -   run: composer install --no-progress --ansi
 
             ## First run Rector
-            -   run: composer rector
+            -   run: bin/rector process --config rector-ci.php --dry-run --ansi --no-progress-bar
 
             -
                 name: Check for Rector modified files
