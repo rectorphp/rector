@@ -419,6 +419,8 @@ parameters:
 
         # new symplify rules
         - '#Do not use static calls#'
+        - '#Too many public elements on class \- \d+\. Try narrow it down under 10#'
+        - '#Class has too many properties \d+\. Try narrowing it down under 10#'
 
         - '#Variable "\$attributeAwareFullyQualifiedIdentifierTypeNode" is too long with 46 chars\. Narrow it under 40 chars#'
 
