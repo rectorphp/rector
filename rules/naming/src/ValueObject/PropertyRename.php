@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 
-final class PropertyRename extends Property
+final class PropertyRename
 {
     /**
      * @var string

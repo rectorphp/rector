@@ -129,9 +129,7 @@ CODE_SAMPLE
                 $propertyClassLike
             );
 
-            $this->propertyRenamer->rename($propertyRename);
-
-            if ($this->propertyRenamer->isRenamed()) {
+            if ($this->propertyRenamer->rename($propertyRename) !== null) {
                 $this->hasChanged = true;
             }
         }
