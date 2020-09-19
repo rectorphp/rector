@@ -20,14 +20,17 @@ final class PropertyRenamer
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
+
     /**
      * @var BreakingVariableRenameGuard
      */
     private $breakingVariableRenameGuard;
+
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
+
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
@@ -37,6 +40,7 @@ final class PropertyRenamer
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->nodeNameResolver = $nodeNameResolver;
     }
+
     public function rename(PropertyRename $propertyRename): ?Property
     {
         if ($this->breakingVariableRenameGuard->shouldSkipProperty($propertyRename)) {
@@ -49,6 +53,7 @@ final class PropertyRenamer
 
         return $propertyRename->getProperty();
     }
+
     private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
     {
         // 1. replace property fetch rename in whole class
