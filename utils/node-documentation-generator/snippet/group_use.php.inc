@@ -5,7 +5,7 @@ use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\UseUse;
 
 $uses = [
-    new UseUse('useUse')
+    new UseUse(new Name('UserName'))
 ];
 
 return new GroupUse(new Name('prefix'), $uses);

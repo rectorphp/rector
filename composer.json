@@ -204,7 +204,6 @@
             "Rector\\Php74\\Tests\\": "rules/php74/tests",
             "Rector\\Php80\\Tests\\": "rules/php80/tests",
             "Rector\\Utils\\NodeDocumentationGenerator\\": "utils/node-documentation-generator/src",
-            "Rector\\Utils\\NodeDocumentationGenerator\\Tests\\": "utils/node-documentation-generator/tests",
             "Rector\\PHPOffice\\Tests\\": "rules/php-office/tests",
             "Rector\\PhpDeglobalize\\Tests\\": "rules/php-deglobalize/tests",
             "Rector\\PhpSpecToPHPUnit\\Tests\\": "rules/php-spec-to-phpunit/tests",

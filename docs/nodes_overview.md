@@ -1,10 +1,6 @@
 # Node Overview
 
 * [Expressions](#expressions)
-* [Children of "PhpParser\Node\Expr\AssignOp"](#children-of-phpparser-node-expr-assignop)
-* [Children of "PhpParser\Node\Expr\BinaryOp"](#children-of-phpparser-node-expr-binaryop)
-* [Children of "PhpParser\Node\Expr\Cast"](#children-of-phpparser-node-expr-cast)
-* [Children of "PhpParser\Node\Name"](#children-of-phpparser-node-name)
 * [Scalar nodes](#scalar-nodes)
 * [Statements](#statements)
 * [Various](#various)
@@ -73,13 +69,16 @@ return new ArrayItem($value, $key);
  * `$unpack` - `/** @var bool Whether to unpack the argument */`
 <br>
 
-### `PhpParser\Node\Expr\Array_`
+### `PhpParser\Node\Expr\ArrowFunction`
+
+ * requires arguments on construct
 
 
 #### Example PHP Code
 
 ```php
 <?php
+<<<<<<< HEAD
 
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -101,14 +100,18 @@ return new Array_([$arrayItem]);
 ```
 
 #### Public Properties
+=======
+>>>>>>> a7398c82a... update docs
 
- * `$items` - `/** @var (ArrayItem|null)[] Items */`
-<br>
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Scalar\LNumber;
 
-### `PhpParser\Node\Expr\ArrowFunction`
+$subNodes['expr'] = new LNumber(1);
 
+return new ArrowFunction($subNodes);
+```
 
-#### Example PHP Code
+↓
 
 ```php
 <?php
@@ -1411,6 +1414,180 @@ return new BooleanNot($variable);
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
+### `PhpParser\Node\Expr\Cast\Array_`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Cast\Array_;
+use PhpParser\Node\Expr\Variable;
+
+$expr = new Variable('variableName');
+
+return new Array_($expr);
+```
+
+↓
+
+```php
+(array) $variableName
+```
+
+#### Public Properties
+
+ * `$expr` - `/** @var Expr Expression */`
+<br>
+
+### `PhpParser\Node\Expr\Cast\Bool_`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Cast\Bool_;
+use PhpParser\Node\Expr\Variable;
+
+$expr = new Variable('variableName');
+
+return new Bool_($expr);
+```
+
+↓
+
+```php
+(bool) $variableName
+```
+
+#### Public Properties
+
+ * `$expr` - `/** @var Expr Expression */`
+<br>
+
+### `PhpParser\Node\Expr\Cast\Double`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Cast\Double;
+use PhpParser\Node\Expr\Variable;
+
+$expr = new Variable('variableName');
+
+return new Double($expr);
+```
+
+↓
+
+```php
+(double) $variableName
+```
+
+#### Public Properties
+
+ * `$expr` - `/** @var Expr Expression */`
+<br>
+
+### `PhpParser\Node\Expr\Cast\Int_`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Cast\Int_;
+use PhpParser\Node\Expr\Variable;
+
+$expr = new Variable('variableName');
+
+return new Int_($expr);
+```
+
+↓
+
+```php
+(int) $variableName
+```
+
+#### Public Properties
+
+ * `$expr` - `/** @var Expr Expression */`
+<br>
+
+### `PhpParser\Node\Expr\Cast\String_`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Cast\String_;
+use PhpParser\Node\Expr\Variable;
+
+$expr = new Variable('variableName');
+
+return new String_($expr);
+```
+
+↓
+
+```php
+(string) $variableName
+```
+
+#### Public Properties
+
+ * `$expr` - `/** @var Expr Expression */`
+<br>
+
+### `PhpParser\Node\Expr\Cast\Unset_`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Cast\Unset_;
+use PhpParser\Node\Expr\Variable;
+
+$expr = new Variable('variableName');
+
+return new Unset_($expr);
+```
+
+↓
+
+```php
+(unset) $variableName
+```
+
+#### Public Properties
+
+ * `$expr` - `/** @var Expr Expression */`
+<br>
+
 ### `PhpParser\Node\Expr\ClassConstFetch`
 
 
@@ -1467,6 +1644,7 @@ clone $variableName
 <br>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### `PhpParser\Node\Expr\Closure`
 =======
 ### `PhpParser\Node\Expr\Cast\Double`
@@ -1490,6 +1668,8 @@ function () {
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
+=======
+>>>>>>> a7398c82a... update docs
 ### `PhpParser\Node\Expr\ClosureUse`
 
  * requires arguments on construct
@@ -1645,6 +1825,7 @@ eval('Some php code')
 <br>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### `PhpParser\Node\Expr\Exit_`
 =======
 ### `PhpParser\Node\Expr\Clone_`
@@ -1662,6 +1843,8 @@ die
  * `$expr` - `/** @var null|Expr Expression */`
 <br>
 
+=======
+>>>>>>> a7398c82a... update docs
 ### `PhpParser\Node\Expr\FuncCall`
 
  * requires arguments on construct
@@ -2435,24 +2618,9 @@ yield from $variableName
  * `$expr` - `/** @var Expr Expression to yield from */`
 <br>
 
-### `PhpParser\Node\Expr\Yield_`
+## Scalar nodes
 
-
-#### Example PHP Code
-
-```php
-yield
-```
-
-#### Public Properties
-
- * `$key` - `/** @var null|Expr Key expression */`
- * `$value` - `/** @var null|Expr Value expression */`
-<br>
-
-## Children of "PhpParser\Node\Expr\AssignOp"
-
-### `PhpParser\Node\Expr\AssignOp\BitwiseAnd`
+### `PhpParser\Node\Scalar\DNumber`
 
  * requires arguments on construct
 
@@ -2460,16 +2628,25 @@ yield
 #### Example PHP Code
 
 ```php
-$variableName &= 'value'
+<?php
+
+use PhpParser\Node\Scalar\DNumber;
+
+return new DNumber(10.5);
+```
+
+↓
+
+```php
+10.5
 ```
 
 #### Public Properties
 
- * `$var` - `/** @var Expr Variable */`
- * `$expr` - `/** @var Expr Expression */`
+ * `$value` - `/** @var float Number value */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\BitwiseOr`
+### `PhpParser\Node\Scalar\Encapsed`
 
  * requires arguments on construct
 
@@ -2477,16 +2654,26 @@ $variableName &= 'value'
 #### Example PHP Code
 
 ```php
-$variableName |= 'value'
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\Encapsed;
+
+return new Encapsed([new Variable('variableName')]);
+```
+
+↓
+
+```php
+"{$variableName}"
 ```
 
 #### Public Properties
 
- * `$var` - `/** @var Expr Variable */`
- * `$expr` - `/** @var Expr Expression */`
+ * `$parts` - `/** @var Expr[] list of string parts */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\BitwiseXor`
+### `PhpParser\Node\Scalar\EncapsedStringPart`
 
  * requires arguments on construct
 
@@ -2494,16 +2681,25 @@ $variableName |= 'value'
 #### Example PHP Code
 
 ```php
-$variableName ^= 'value'
+<?php
+
+use PhpParser\Node\Scalar\EncapsedStringPart;
+
+return new EncapsedStringPart('enscapsed');
+```
+
+↓
+
+```php
+UNABLE_TO_PRINT_ENCAPSED_STRING
 ```
 
 #### Public Properties
 
- * `$var` - `/** @var Expr Variable */`
- * `$expr` - `/** @var Expr Expression */`
+ * `$value` - `/** @var string String value */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\Coalesce`
+### `PhpParser\Node\Scalar\LNumber`
 
  * requires arguments on construct
 
@@ -2511,15 +2707,25 @@ $variableName ^= 'value'
 #### Example PHP Code
 
 ```php
-$variableName ??= 'value'
+<?php
+
+use PhpParser\Node\Scalar\LNumber;
+
+return new LNumber(1000);
+```
+
+↓
+
+```php
+1000
 ```
 
 #### Public Properties
 
- * `$var` - `/** @var Expr Variable */`
- * `$expr` - `/** @var Expr Expression */`
+ * `$value` - `/** @var int Number value */`
 <br>
 
+<<<<<<< HEAD
 ### `PhpParser\Node\Expr\AssignOp\Concat`
 
  * requires arguments on construct
@@ -3419,6 +3625,8 @@ __TRAIT__
 ```
 <br>
 
+=======
+>>>>>>> a7398c82a... update docs
 ### `PhpParser\Node\Scalar\String_`
 
  * requires arguments on construct
@@ -3449,6 +3657,7 @@ return new String_('some string');
 ## Statements
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### `PhpParser\Node\Stmt\Break_`
 =======
 ### `PhpParser\Node\Stmt\Case_`
@@ -3466,6 +3675,8 @@ break;
  * `$num` - `/** @var null|Node\Expr Number of loops to break */`
 <br>
 
+=======
+>>>>>>> a7398c82a... update docs
 ### `PhpParser\Node\Stmt\Case_`
 
  * requires arguments on construct
@@ -3503,7 +3714,22 @@ case true:
 #### Example PHP Code
 
 ```php
-catch (CaughtType $CaughtVariable) {
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Catch_;
+
+$fullyQualified = new FullyQualified('ClassType');
+$variable = new Variable('CaughtVariable');
+
+return new Catch_([$fullyQualified], $variable);
+```
+
+↓
+
+```php
+catch (\ClassType $CaughtVariable) {
 }
 ```
 
@@ -3664,26 +3890,28 @@ final class ClassName extends ParentClass
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Const_;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Const_ as ConstStmt;
+
+$consts = [
+    new Const_('CONSTANT_IN_CLASS', new String_('default value'))
+];
+
+return new ConstStmt($consts);
+```
+
+↓
+
+```php
 const CONSTANT_IN_CLASS = 'default value';
 ```
 
 #### Public Properties
 
  * `$consts` - `/** @var Node\Const_[] Constant declarations */`
-<br>
-
-### `PhpParser\Node\Stmt\Continue_`
-
-
-#### Example PHP Code
-
-```php
-continue;
-```
-
-#### Public Properties
-
- * `$num` - `/** @var null|Node\Expr Number of loops to continue */`
 <br>
 
 ### `PhpParser\Node\Stmt\DeclareDeclare`
@@ -3818,6 +4046,7 @@ return new ElseIf_($constFetch, [$stmt]);
 ```
 
 ↓
+<<<<<<< HEAD
 
 ```php
 elseif (true) {
@@ -3879,17 +4108,18 @@ finally {
 
 
 #### Example PHP Code
+=======
+>>>>>>> a7398c82a... update docs
 
 ```php
-for (;;) {
+elseif (true) {
+    return;
 }
 ```
 
 #### Public Properties
 
- * `$init` - `/** @var Node\Expr[] Init expressions */`
- * `$cond` - `/** @var Node\Expr[] Loop conditions */`
- * `$loop` - `/** @var Node\Expr[] Loop expressions */`
+ * `$cond` - `/** @var Node\Expr Condition */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
@@ -3899,7 +4129,21 @@ for (;;) {
 #### Example PHP Code
 
 ```php
-foreach ($variables as $value) {
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Foreach_;
+
+$foreachedVariable = new Variable('foreachedVariableName');
+$asVariable = new Variable('asVariable');
+
+return new Foreach_($foreachedVariable, $asVariable);
+```
+
+↓
+
+```php
+foreach ($foreachedVariableName as $asVariable) {
 }
 ```
 
@@ -4001,7 +4245,23 @@ goto goto_break;
 #### Example PHP Code
 
 ```php
-use prefix\{UsedNamespace};
+<?php
+
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\UseUse;
+
+$uses = [
+    new UseUse(new Name('UserName'))
+];
+
+return new GroupUse(new Name('prefix'), $uses);
+```
+
+↓
+
+```php
+use prefix\{UserName};
 ```
 
 #### Public Properties
@@ -4041,6 +4301,20 @@ __halt_compiler();remaining
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Name;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Stmt\If_;
+
+$cond = new ConstFetch(new Name('true'));
+
+return new If_($cond);
+```
+
+↓
+
+```php
 if (true) {
 }
 ```
@@ -4057,6 +4331,16 @@ if (true) {
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Stmt\InlineHTML;
+
+return new InlineHTML('<strong>feel</strong>');
+```
+
+↓
 
 ```php
 ?>
@@ -4121,6 +4405,7 @@ labelName:
  * `$name` - `/** @var Identifier Name */`
 <br>
 
+<<<<<<< HEAD
 ### `PhpParser\Node\Stmt\Namespace_`
 
 
@@ -4151,6 +4436,8 @@ namespace {
 ```
 <br>
 
+=======
+>>>>>>> a7398c82a... update docs
 ### `PhpParser\Node\Stmt\Property`
 
  * requires arguments on construct
@@ -4248,6 +4535,7 @@ $propertyName
 <br>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### `PhpParser\Node\Stmt\Return_`
 =======
 ### `PhpParser\Node\Stmt\StaticVar`
@@ -4265,6 +4553,8 @@ return;
  * `$expr` - `/** @var null|Node\Expr Expression */`
 <br>
 
+=======
+>>>>>>> a7398c82a... update docs
 ### `PhpParser\Node\Stmt\StaticVar`
 
  * requires arguments on construct
@@ -4301,6 +4591,20 @@ $variableName
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Static_;
+use PhpParser\Node\Stmt\StaticVar;
+
+$staticVars = [new StaticVar(new Variable('static'))];
+
+return new Static_($staticVars);
+```
+
+↓
+
+```php
 static $static;
 ```
 
@@ -4313,6 +4617,22 @@ static $static;
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\Case_;
+use PhpParser\Node\Stmt\Switch_;
+
+$cond = new Variable('variableName');
+$cases = [new Case_(new LNumber(1))];
+
+return new Switch_($cond, $cases);
+```
+
+↓
 
 ```php
 switch ($variableName) {
@@ -4359,7 +4679,18 @@ throw 'some string';
 #### Example PHP Code
 
 ```php
-use trait;
+<?php
+
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\TraitUse;
+
+return new TraitUse([new FullyQualified('TraitName')]);
+```
+
+↓
+
+```php
+use \TraitName;
 ```
 
 #### Public Properties
@@ -4374,7 +4705,21 @@ use trait;
 #### Example PHP Code
 
 ```php
-SomeTrait::method as public aliasedMethod;
+<?php
+
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\TraitUseAdaptation\Alias;
+
+$traitFullyQualified = new FullyQualified('TraitName');
+
+return new Alias($traitFullyQualified, 'method', Class_::MODIFIER_PUBLIC, 'aliasedMethod');
+```
+
+↓
+
+```php
+\TraitName::method as public aliasedMethod;
 ```
 
 #### Public Properties
@@ -4486,6 +4831,19 @@ try {
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Unset_;
+
+$variable = new Variable('variableName');
+
+return new Unset_([$variable]);
+```
+
+↓
+
+```php
 unset($variableName);
 ```
 
@@ -4500,6 +4858,20 @@ unset($variableName);
 #### Example PHP Code
 
 ```php
+<?php
+
+<<<<<<< HEAD
+=======
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\UseUse;
+
+return new UseUse(new Name('UsedNamespace'));
+```
+>>>>>>> a7398c82a... update docs
+
+↓
+
+```php
 UsedNamespace
 ```
 
@@ -4508,21 +4880,6 @@ UsedNamespace
  * `$type` - `/** @var int One of the Stmt\Use_::TYPE_* constants. Will only differ from TYPE_UNKNOWN for mixed group uses */`
  * `$name` - `/** @var Node\Name Namespace, class, function or constant to alias */`
  * `$alias` - `/** @var Identifier|null Alias */`
-<br>
-
-### `PhpParser\Node\Stmt\Use_`
-
-
-#### Example PHP Code
-
-```php
-use UsedNamespace;
-```
-
-#### Public Properties
-
- * `$type` - `/** @var int Type of alias */`
- * `$uses` - `/** @var UseUse[] Aliases */`
 <br>
 
 ### `PhpParser\Node\Stmt\While_`
@@ -4618,7 +4975,17 @@ CONSTANT_NAME = 'default'
 #### Example PHP Code
 
 ```php
-identifier
+<?php
+
+use PhpParser\Node\Identifier;
+
+return new Identifier('identifierName');
+```
+
+↓
+
+```php
+identifierName
 ```
 
 #### Public Properties
@@ -4633,6 +5000,21 @@ identifier
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\MatchArm;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
+
+$conds = [new LNumber(1)];
+$body = new String_('yes');
+
+return new MatchArm($conds, $body);
+```
+
+↓
+
+```php
 1 => 'yes'
 ```
 
@@ -4643,8 +5025,91 @@ identifier
 <br>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 ### `PhpParser\Node\Name`
+=======
+### `PhpParser\Node\Name`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Name;
+
+return new Name('shortName');
+```
+
+↓
+
+```php
+shortName
+```
+
+#### Public Properties
+
+ * `$parts` - `/** @var string[] Parts of the name */`
+ * `$specialClassNames` - ``
+<br>
+
+### `PhpParser\Node\Name\FullyQualified`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Name\FullyQualified;
+
+return new FullyQualified('SomeNamespace\ShortName');
+```
+
+↓
+
+```php
+\SomeNamespace\ShortName
+```
+
+#### Public Properties
+
+ * `$parts` - `/** @var string[] Parts of the name */`
+<br>
+
+### `PhpParser\Node\Name\Relative`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Name\Relative;
+
+return new Relative('PartOf\SomeNamespace\ShortName');
+```
+
+↓
+
+```php
+namespace\PartOf\SomeNamespace\ShortName
+```
+
+#### Public Properties
+
+ * `$parts` - `/** @var string[] Parts of the name */`
+<br>
+
+### `PhpParser\Node\NullableType`
+>>>>>>> a7398c82a... update docs
 
 
 #### Example PHP Code
@@ -4722,6 +5187,18 @@ namespace\PartOf\SomeNamespace\ShortName
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\NullableType;
+
+return new NullableType('SomeType');
+```
+
+↓
 
 ```php
 ?SomeType
