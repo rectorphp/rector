@@ -35,7 +35,7 @@ final class NodeCodeSampleProvider
     }
 
     /**
-     * @return NodeCodeSample[][]
+     * @return array<string, NodeCodeSample[]>
      */
     public function provide(): array
     {
@@ -61,11 +61,16 @@ final class NodeCodeSampleProvider
         return $this->nodeCodeSamplesByNodeClass;
     }
 
+    /**
+     * @param mixed $node
+     */
     private function ensureReturnsNodeObject($node, SmartFileInfo $fileInfo): void
     {
-        if (! $node instanceof Node) {
-            $message = sprintf('Snippet "%s" must return a node object', $fileInfo->getPathname());
-            throw new ShouldNotHappenException($message);
+        if ($node instanceof Node) {
+            return;
         }
+
+        $message = sprintf('Snippet "%s" must return a node object', $fileInfo->getPathname());
+        throw new ShouldNotHappenException($message);
     }
 }
