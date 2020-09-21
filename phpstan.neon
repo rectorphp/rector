@@ -465,3 +465,70 @@ parameters:
                  - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 68
 
         - '#(.*?) expects class\-string, string given#'
+
+        -
+            message: '#Do not use scalar or array as constructor parameter\. Use ParameterProvider service instead#'
+            paths:
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareDataProviderTagValueNode.php # 22
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 33
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 33
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 33
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 35
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareTemplateTagValueNode.php # 24
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareTemplateTagValueNode.php # 24
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareTemplateTagValueNode.php # 26
+                - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareArrayShapeItemNode.php # 30
+                - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareArrayShapeItemNode.php # 33
+                - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareArrayShapeItemNode.php # 34
+                - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareUnionTypeNode.php # 29
+                - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php # 103
+                - packages/better-php-doc-parser/src/PhpDocNode/AbstractTagValueNode.php # 40
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/IndexTagValueNode.php # 19
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/IndexTagValueNode.php # 21
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/TableTagValueNode.php # 60
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/TableTagValueNode.php # 61
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/TableTagValueNode.php # 67
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/TableTagValueNode.php # 69
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/TableTagValueNode.php # 70
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/UniqueConstraintTagValueNode.php # 19
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/UniqueConstraintTagValueNode.php # 21
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinColumnTagValueNode.php # 28
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinColumnTagValueNode.php # 30
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinTableTagValueNode.php # 69
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinTableTagValueNode.php # 70
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinTableTagValueNode.php # 73
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/ManyToManyTagValueNode.php # 33
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/ManyToManyTagValueNode.php # 35
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/ManyToOneTagValueNode.php # 20
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/ManyToOneTagValueNode.php # 22
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/OneToManyTagValueNode.php # 24
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/OneToManyTagValueNode.php # 26
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/OneToOneTagValueNode.php # 24
+                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/OneToOneTagValueNode.php # 26
+                - packages/better-php-doc-parser/src/PhpDocNode/JMS/JMSInjectTagValueNode.php # 20
+                - packages/better-php-doc-parser/src/PhpDocNode/JMS/JMSInjectTagValueNode.php # 22
+                - rules/coding-style/src/Rector/ClassMethod/YieldClassMethodToArrayClassMethodRector.php # 47
+                - rules/php70/src/EregToPcreTransformer.php # 57
+                - rules/phpstan/src/Type/AliasedObjectType.php # 22
+                - rules/phpstan/src/Type/AliasedObjectType.php # 24
+                - rules/phpstan/src/Type/ShortenedObjectType.php # 18
+                - rules/phpstan/src/Type/ShortenedObjectType.php # 20
+                - rules/restoration/src/Rector/Class_/RemoveUselessJustForSakeInterfaceRector.php # 42
+                - rules/type-declaration/src/Rector/FunctionLike/ReturnTypeDeclarationRector.php # 81
+                - src/Configuration/MinimalVersionChecker.php # 27
+                - src/Configuration/MinimalVersionChecker/ComposerJsonParser.php # 22
+                - src/Configuration/MinimalVersionChecker/ComposerJsonReader.php # 23
+                - src/PhpParser/Builder/UseBuilder.php # 19
+                - src/RectorDefinition/CodeSample.php # 28
+                - src/RectorDefinition/CodeSample.php # 29
+                - src/RectorDefinition/CodeSample.php # 30
+                - src/RectorDefinition/ComposerJsonAwareCodeSample.php # 37
+                - src/RectorDefinition/ComposerJsonAwareCodeSample.php # 38
+                - src/RectorDefinition/ComposerJsonAwareCodeSample.php # 39
+                - src/RectorDefinition/ComposerJsonAwareCodeSample.php # 40
+                - src/RectorDefinition/ConfiguredCodeSample.php # 40
+                - src/RectorDefinition/ConfiguredCodeSample.php # 41
+                - src/RectorDefinition/ConfiguredCodeSample.php # 43
+                - src/RectorDefinition/RectorDefinition.php # 31
+                - src/Testing/PHPUnit/Runnable/NodeVisitor/PrefixingClassLikeNamesNodeVisitor.php # 35
+                - src/Testing/PHPUnit/Runnable/NodeVisitor/PrefixingClassLikeNamesNodeVisitor.php # 36
