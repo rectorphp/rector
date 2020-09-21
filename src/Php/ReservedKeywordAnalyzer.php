@@ -84,7 +84,16 @@ final class ReservedKeywordAnalyzer
     /**
      * @var string[]
      */
-    private const NATIVE_VARIABLE_NAMES = ['_ENV', '_POST', '_GET', '_COOKIE', '_SERVER', '_FILES', '_REQUEST'];
+    private const NATIVE_VARIABLE_NAMES = [
+        '_ENV',
+        '_POST',
+        '_GET',
+        '_COOKIE',
+        '_SERVER',
+        '_FILES',
+        '_REQUEST',
+        '_SESSION',
+    ];
 
     public function isNativeVariable(string $name): bool
     {
