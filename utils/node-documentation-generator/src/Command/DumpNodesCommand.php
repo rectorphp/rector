@@ -150,6 +150,11 @@ final class DumpNodesCommand extends AbstractCommand
     private const PROPERTY_NAME = 'propertyName';
 
     /**
+     * @var string
+     */
+    private const SOME_PROPERTY = 'someProperty';
+
+    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -330,7 +335,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Foreach_::class) {
                     $node = new Foreach_(new Variable('variables'), new Variable(self::VALUE));
                 } elseif ($nodeClass === Catch_::class) {
-                    $node = new Catch_([new Name('CatchedType')], new Variable('catchedVariable'));
+                    $node = new Catch_([new Name('CaughtType')], new Variable('CaughtVariable'));
                 } elseif ($nodeClass === ConstStmt::class) {
                     $node = new ConstStmt([new Const_('CONSTANT_IN_CLASS', new String_('default value'))]);
                 } elseif ($nodeClass === Declare_::class) {
@@ -346,7 +351,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Expression::class) {
                     $node = new Expression(new Variable(self::VARIABLE_NAME));
                 } elseif ($nodeClass === PropertyProperty::class) {
-                    $node = new PropertyProperty('someProperty');
+                    $node = new PropertyProperty(self::SOME_PROPERTY);
                 } elseif ($nodeClass === Global_::class) {
                     $node = new Global_([new Variable('globalVariable')]);
                 } elseif ($nodeClass === Precedence::class) {
@@ -414,7 +419,9 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === UnaryMinus::class) {
                     $node = new UnaryMinus($someVariableNode);
                 } elseif ($nodeClass === StaticPropertyFetch::class) {
-                    $node = new StaticPropertyFetch(new Name(self::SOME_CLASS), new VarLikeIdentifier('someProperty'));
+                    $node = new StaticPropertyFetch(new Name(self::SOME_CLASS), new VarLikeIdentifier(
+                        self::SOME_PROPERTY
+                    ));
                 } elseif ($nodeClass === Variable::class) {
                     $node = $someVariableNode;
                 } elseif ($nodeClass === ClosureUse::class) {
@@ -454,7 +461,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === NullsafeMethodCall::class) {
                     $node = new NullsafeMethodCall($someVariableNode, new Identifier(self::SOME_METHOD));
                 } elseif ($nodeClass === NullsafePropertyFetch::class) {
-                    $node = new NullsafePropertyFetch($someVariableNode, new Identifier('somePropety'));
+                    $node = new NullsafePropertyFetch($someVariableNode, new Identifier(self::SOME_PROPERTY));
                 } elseif ($nodeClass === ThrowExpr::class) {
                     $node = new Throw_($someVariableNode);
                 } else {
