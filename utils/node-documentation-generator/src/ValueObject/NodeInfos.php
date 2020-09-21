@@ -2,20 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\NodeDocumentationGenerator\Node;
+namespace Rector\Utils\NodeDocumentationGenerator\ValueObject;
 
-use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfo;
-
-final class NodeInfoCollector
+final class NodeInfos
 {
     /**
      * @var NodeInfo[][]
      */
-    private $nodeInfos = [];
+    private $nodeInfosByCategory = [];
 
-    public function addNodeInfo(string $category, NodeInfo $nodeInfo): void
+    /**
+     * @param NodeInfo[] $nodeInfos
+     */
+    public function __construct(array $nodeInfos)
     {
-        $this->nodeInfos[$category][] = $nodeInfo;
+        foreach ($nodeInfos as $nodeInfo) {
+            $this->nodeInfosByCategory[$nodeInfo->getCategory()][] = $nodeInfo;
+        }
     }
 
     /**
@@ -31,13 +34,13 @@ final class NodeInfoCollector
      */
     public function getNodeInfosByCategory(): array
     {
-        ksort($this->nodeInfos);
+        ksort($this->nodeInfosByCategory);
 
-        foreach ($this->nodeInfos as $category => $nodeInfos) {
-            $this->nodeInfos[$category] = $this->sortNodeInfosByClass($nodeInfos);
+        foreach ($this->nodeInfosByCategory as $category => $nodeInfos) {
+            $this->nodeInfosByCategory[$category] = $this->sortNodeInfosByClass($nodeInfos);
         }
 
-        return $this->nodeInfos;
+        return $this->nodeInfosByCategory;
     }
 
     /**
