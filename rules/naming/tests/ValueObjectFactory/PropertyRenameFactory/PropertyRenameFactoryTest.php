@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Rector\Naming\Tests\ValueObjectFactory\PropertyRenameFactory;
 
 use Iterator;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FileSystemRector\Parser\FileInfoParser;
@@ -33,10 +32,8 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
      */
     private $betterNodeFinder;
 
-    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    protected function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
-
         $this->bootKernel(RectorKernel::class);
 
         $this->propertyRenameFactory = self::$container->get(PropertyRenameFactory::class);
@@ -45,31 +42,36 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
     }
 
     /**
-     * @dataProvider createDataProvider
+     * @dataProvider provideData()
      */
-    public function testCreate(Property $property, string $expectedName, string $currentName): void
+    public function test(SmartFileInfo $fileInfoWithProperty, string $expectedName, string $currentName): void
     {
-        /** @var PropertyRename $actualPropertyRename */
-        $actualPropertyRename = $this->propertyRenameFactory->create($property);
+        $property = $this->getPropertyFromFileInfo($fileInfoWithProperty);
 
-        $this->assertSame($property, $actualPropertyRename->getProperty());
+        $actualPropertyRename = $this->propertyRenameFactory->create($property);
+        $this->assertNotNull($actualPropertyRename);
+
+        /** @var PropertyRename $actualPropertyRename */
+        $this->assertSame($fileInfoWithProperty, $actualPropertyRename->getProperty());
         $this->assertSame($expectedName, $actualPropertyRename->getExpectedName());
         $this->assertSame($currentName, $actualPropertyRename->getCurrentName());
-        $this->assertInstanceOf(PropertyProperty::class, $actualPropertyRename->getPropertyProperty());
-        $this->assertInstanceOf(ClassLike::class, $actualPropertyRename->getClassLike());
     }
 
-    public function createDataProvider(): Iterator
+    public function provideData(): Iterator
     {
-        yield [$this->getPropertyFromFile(__DIR__ . '/FixtureBasic/SomeClass.php'), 'eliteManager', 'eventManager'];
+        yield [new SmartFileInfo(__DIR__ . '/Fixture/SomeClass.php.inc'), 'eliteManager', 'eventManager'];
     }
 
-    private function getPropertyFromFile(string $string): Property
+    private function getPropertyFromFileInfo(SmartFileInfo $fileInfo): Property
     {
-        $smartFileInfo = new SmartFileInfo($string);
-        $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($smartFileInfo);
-        /** @var Property $property */
+        $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($fileInfo);
+
+        /** @var Property|null $property */
         $property = $this->betterNodeFinder->findFirstInstanceOf($nodes, Property::class);
+        if ($property === null) {
+            throw new ShouldNotHappenException();
+        }
+
         return $property;
     }
 }

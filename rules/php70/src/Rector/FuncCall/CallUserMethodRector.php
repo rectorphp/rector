@@ -28,10 +28,12 @@ final class CallUserMethodRector extends AbstractRector
     {
         return new RectorDefinition(
             'Changes call_user_method()/call_user_method_array() to call_user_func()/call_user_func_array()',
-            [new CodeSample(
-                'call_user_method($method, $obj, "arg1", "arg2");',
-                'call_user_func(array(&$obj, "method"), "arg1", "arg2");'
-            )]
+            [
+                new CodeSample(
+                                'call_user_method($method, $obj, "arg1", "arg2");',
+                                'call_user_func(array(&$obj, "method"), "arg1", "arg2");'
+                            ),
+            ]
         );
     }
 

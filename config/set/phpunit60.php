@@ -41,14 +41,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             // ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
             PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => inline_value_objects(
-                [new PseudoNamespaceToNamespace('PHPUnit_', [
-                    'PHPUnit_Framework_MockObject_MockObject',
-                    'PHPUnit_Framework_MockObject_Invocation_Object',
-                    'PHPUnit_Framework_MockObject_Matcher_Invocation',
-                    'PHPUnit_Framework_MockObject_Matcher_Parameters',
-                    'PHPUnit_Framework_MockObject_Stub_Return',
-                    'PHPUnit_Framework_MockObject_Stub',
-                ])]
+                [
+                    new PseudoNamespaceToNamespace('PHPUnit_', [
+                        'PHPUnit_Framework_MockObject_MockObject',
+                        'PHPUnit_Framework_MockObject_Invocation_Object',
+                        'PHPUnit_Framework_MockObject_Matcher_Invocation',
+                        'PHPUnit_Framework_MockObject_Matcher_Parameters',
+                        'PHPUnit_Framework_MockObject_Stub_Return',
+                        'PHPUnit_Framework_MockObject_Stub',
+                    ]),
+                ]
             ),
         ]]);
 

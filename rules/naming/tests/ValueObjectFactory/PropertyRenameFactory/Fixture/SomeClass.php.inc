@@ -1,6 +1,8 @@
 <?php
 
-namespace Rector\Naming\Tests\ValueObjectFactory\PropertyRenameFactory\FixtureBasic;
+declare(strict_types=1);
+
+namespace Rector\Naming\Tests\ValueObjectFactory\PropertyRenameFactory\Fixture;
 
 use Rector\Naming\Tests\ValueObjectFactory\PropertyRenameFactory\Source\EliteManager;
 
@@ -21,5 +23,3 @@ class SomeClass
         return $this->eventManager;
     }
 }
-
-?>

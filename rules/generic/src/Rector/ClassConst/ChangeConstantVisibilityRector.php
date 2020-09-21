@@ -32,8 +32,9 @@ final class ChangeConstantVisibilityRector extends AbstractRector implements Con
     {
         return new RectorDefinition(
             'Change visibility of constant from parent class.',
-            [new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+            [
+                new ConfiguredCodeSample(
+                                <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected const SOME_CONSTANT = 1;
@@ -44,8 +45,8 @@ class MyClass extends FrameworkClass
     public const SOME_CONSTANT = 1;
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                                ,
+                                <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected const SOME_CONSTANT = 1;
@@ -56,13 +57,14 @@ class MyClass extends FrameworkClass
     protected const SOME_CONSTANT = 1;
 }
 CODE_SAMPLE
-                ,
-                [
-                    self::CLASS_CONSTANT_VISIBILITY_CHANGES => [
-                        new ClassConstantVisibilityChange('ParentObject', 'SOME_CONSTANT', 'protected'),
-                    ],
-                ]
-            )]
+                                ,
+                                [
+                                    self::CLASS_CONSTANT_VISIBILITY_CHANGES => [
+                                        new ClassConstantVisibilityChange('ParentObject', 'SOME_CONSTANT', 'protected'),
+                                    ],
+                                ]
+                            ),
+            ]
         );
     }
 
