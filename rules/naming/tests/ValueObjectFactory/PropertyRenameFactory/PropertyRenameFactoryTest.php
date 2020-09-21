@@ -52,7 +52,7 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
         $this->assertNotNull($actualPropertyRename);
 
         /** @var PropertyRename $actualPropertyRename */
-        $this->assertSame($fileInfoWithProperty, $actualPropertyRename->getProperty());
+        $this->assertSame($property, $actualPropertyRename->getProperty());
         $this->assertSame($expectedName, $actualPropertyRename->getExpectedName());
         $this->assertSame($currentName, $actualPropertyRename->getCurrentName());
     }
