@@ -33,8 +33,9 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
     {
         return new RectorDefinition(
             'Change visibility of method from parent class.',
-            [new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+            [
+                new ConfiguredCodeSample(
+                <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected someMethod()
@@ -49,8 +50,8 @@ class MyClass extends FrameworkClass
     }
 }
 CODE_SAMPLE
-                ,
-<<<'CODE_SAMPLE'
+                                ,
+                <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected someMethod()
@@ -65,13 +66,14 @@ class MyClass extends FrameworkClass
     }
 }
 CODE_SAMPLE
-                ,
-                [
-                    self::METHOD_VISIBILITIES => [
-                        new ChangeMethodVisibility('FrameworkClass', 'someMethod', 'protected'),
-                    ],
-                ]
-            )]
+                                ,
+                                [
+                                    self::METHOD_VISIBILITIES => [
+                                        new ChangeMethodVisibility('FrameworkClass', 'someMethod', 'protected'),
+                                    ],
+                                ]
+                            ),
+            ]
         );
     }
 

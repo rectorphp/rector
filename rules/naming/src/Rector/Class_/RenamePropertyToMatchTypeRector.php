@@ -8,14 +8,11 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\PropertyRenamer;
-use Rector\Naming\ValueObject\PropertyRename;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\RenamePropertyToMatchTypeRectorTest
@@ -28,19 +25,19 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
     private $hasChanged = false;
 
     /**
-     * @var ExpectedNameResolver
-     */
-    private $expectedNameResolver;
-
-    /**
      * @var PropertyRenamer
      */
     private $propertyRenamer;
 
-    public function __construct(ExpectedNameResolver $expectedNameResolver, PropertyRenamer $propertyRenamer)
+    /**
+     * @var PropertyRenameFactory
+     */
+    private $propertyRenameFactory;
+
+    public function __construct(PropertyRenamer $propertyRenamer, PropertyRenameFactory $propertyRenameFactory)
     {
-        $this->expectedNameResolver = $expectedNameResolver;
         $this->propertyRenamer = $propertyRenamer;
+        $this->propertyRenameFactory = $propertyRenameFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -105,29 +102,10 @@ CODE_SAMPLE
     private function refactorClassProperties(ClassLike $classLike): void
     {
         foreach ($classLike->getProperties() as $property) {
-            if (count($property->props) !== 1) {
+            $propertyRename = $this->propertyRenameFactory->create($property);
+            if ($propertyRename === null) {
                 continue;
             }
-
-            $expectedName = $this->expectedNameResolver->resolveForPropertyIfNotYet($property);
-            if ($expectedName === null) {
-                continue;
-            }
-
-            $currentName = $this->getName($property);
-            $propertyType = $this->getObjectType($property);
-            $propertyClassLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-            if ($propertyClassLike === null) {
-                throw new ShouldNotHappenException("There shouldn't be a property without Class Node");
-            }
-
-            $propertyRename = new PropertyRename(
-                $property,
-                $expectedName,
-                $currentName,
-                $propertyType,
-                $propertyClassLike
-            );
 
             if ($this->propertyRenamer->rename($propertyRename) !== null) {
                 $this->hasChanged = true;
