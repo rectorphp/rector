@@ -32,6 +32,8 @@ final class DumpNodesCommand extends AbstractCommand
         $this->nodeInfosFactory = $nodeInfosFactory;
 
         parent::__construct();
+
+        $this->symfonyStyle = $symfonyStyle;
     }
 
     protected function configure(): void
