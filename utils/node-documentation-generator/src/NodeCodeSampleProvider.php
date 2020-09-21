@@ -35,14 +35,6 @@ final class NodeCodeSampleProvider
     }
 
     /**
-     * @return class-string[]
-     */
-    public function getNodeClasses(): array
-    {
-        return array_keys($this->provide());
-    }
-
-    /**
      * @return array<string, NodeCodeSample[]>
      */
     public function provide(): array

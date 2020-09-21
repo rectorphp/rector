@@ -1334,9 +1334,6 @@ return new SmallerOrEqual($left, $right);
 #### Example PHP Code
 
 ```php
-$variableName =& $someOtherVariable
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
@@ -1366,9 +1363,6 @@ return new Spaceship($left, $right);
 #### Example PHP Code
 
 ```php
-~$variableName
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\BitwiseNot;
@@ -1395,9 +1389,6 @@ return new BitwiseNot($variable);
 
 #### Example PHP Code
 
-```php
-!true
-```
 ```php
 <?php
 
@@ -1426,15 +1417,12 @@ return new BooleanNot($variable);
 #### Example PHP Code
 
 ```php
-SomeClassName::SOME_CONSTANT
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 
-$class = new Name('SomeClassName');
+$class = new FullyQualified('SomeClassName');
 
 return new ClassConstFetch($class, 'SOME_CONSTANT');
 ```
@@ -1442,7 +1430,7 @@ return new ClassConstFetch($class, 'SOME_CONSTANT');
 ↓
 
 ```php
-SomeClassName::SOME_CONSTANT
+\SomeClassName::SOME_CONSTANT
 ```
 
 #### Public Properties
@@ -1456,9 +1444,6 @@ SomeClassName::SOME_CONSTANT
 
 #### Example PHP Code
 
-```php
-clone $variableName
-```
 ```php
 <?php
 
@@ -1513,6 +1498,19 @@ function () {
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new ClosureUse($variable);
+```
+
+↓
+
+```php
 $variableName
 ```
 
@@ -1527,9 +1525,6 @@ $variableName
 
 #### Example PHP Code
 
-```php
-true
-```
 ```php
 <?php
 
@@ -1558,9 +1553,6 @@ true
 #### Example PHP Code
 
 ```php
-empty($variableName)
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\Empty_;
@@ -1588,9 +1580,6 @@ empty($variableName)
 #### Example PHP Code
 
 ```php
-@$variableName
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\ErrorSuppress;
@@ -1616,6 +1605,19 @@ return new ErrorSuppress($variable);
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Eval_;
+use PhpParser\Node\Scalar\String_;
+
+$string = new String_('Some php code');
+
+return new Eval_(new String_('Some php code'));
+```
+
+↓
 
 ```php
 eval('Some php code')
@@ -1668,7 +1670,18 @@ die
 #### Example PHP Code
 
 ```php
-functionCall()
+<?php
+
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
+
+return new FuncCall(new Name('func_call'));
+```
+
+↓
+
+```php
+func_call()
 ```
 
 #### Public Properties
@@ -1683,7 +1696,20 @@ functionCall()
 #### Example PHP Code
 
 ```php
-include $variableName
+<?php
+
+use PhpParser\Node\Expr\Include_;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new Include_($variable, Include_::TYPE_REQUIRE_ONCE);
+```
+
+↓
+
+```php
+require_once $variableName
 ```
 ```php
 <?php
@@ -1714,17 +1740,14 @@ include $variableName
 #### Example PHP Code
 
 ```php
-$variableName instanceof SomeClassName
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 
 $variable = new Variable('variableName');
-$class = new Name('SomeClassName');
+$class = new FullyQualified('SomeClassName');
 
 return new Instanceof_($variable, $class);
 ```
@@ -1732,7 +1755,7 @@ return new Instanceof_($variable, $class);
 ↓
 
 ```php
-$variableName instanceof SomeClassName
+$variableName instanceof \SomeClassName
 ```
 
 #### Public Properties
@@ -1746,9 +1769,6 @@ $variableName instanceof SomeClassName
 
 #### Example PHP Code
 
-```php
-isset($variableName)
-```
 ```php
 <?php
 
@@ -1777,23 +1797,21 @@ isset($variableName)
 #### Example PHP Code
 
 ```php
-list($variableName)
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 
 $variable = new Variable('variableName');
+$anotherVariable = new Variable('anoterVariableName');
 
-return new List_([$variable]);
+return new List_([$variable, $anotherVariable]);
 ```
 
 ↓
 
 ```php
-list($variableName)
+list($variableName, $anoterVariableName)
 ```
 
 #### Public Properties
@@ -1806,11 +1824,6 @@ list($variableName)
 
 #### Example PHP Code
 
-```php
-match ($variableName) {
-    1 => 'yes',
-}
-```
 ```php
 <?php
 
@@ -1849,9 +1862,6 @@ match ($variableName) {
 #### Example PHP Code
 
 ```php
-$someObject->methodName()
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\MethodCall;
@@ -1880,11 +1890,6 @@ $someObject->methodName()
 
 #### Example PHP Code
 
-```php
-new class
-{
-}
-```
 ```php
 <?php
 
@@ -1934,9 +1939,6 @@ new SomeClass()
 #### Example PHP Code
 
 ```php
-$variableName?->methodName()
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\NullsafeMethodCall;
@@ -1968,9 +1970,6 @@ $variableName?->methodName()
 #### Example PHP Code
 
 ```php
-$variableName?->someProperty
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\NullsafePropertyFetch;
@@ -2001,6 +2000,19 @@ $variableName?->someProperty
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\PostDec;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new PostDec($variable);
+```
+
+↓
+
+```php
 $variableName--
 ```
 
@@ -2015,6 +2027,19 @@ $variableName--
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\PostInc;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new PostInc($variable);
+```
+
+↓
 
 ```php
 $variableName++
@@ -2033,6 +2058,19 @@ $variableName++
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\PreDec;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new PreDec($variable);
+```
+
+↓
+
+```php
 --$variableName
 ```
 
@@ -2047,6 +2085,19 @@ $variableName++
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\PreInc;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new PreInc($variable);
+```
+
+↓
 
 ```php
 ++$variableName
@@ -2065,7 +2116,20 @@ $variableName++
 #### Example PHP Code
 
 ```php
-print $variableName
+<?php
+
+use PhpParser\Node\Expr\Print_;
+use PhpParser\Node\Scalar\String_;
+
+$string = new String_('Some php code');
+
+return new Print_($string);
+```
+
+↓
+
+```php
+print 'Some php code'
 ```
 
 #### Public Properties
@@ -2080,9 +2144,6 @@ print $variableName
 
 #### Example PHP Code
 
-```php
-$variableName->propertyName
-```
 ```php
 <?php
 
@@ -2114,7 +2175,20 @@ $variableName->propertyName
 #### Example PHP Code
 
 ```php
-`encapsedstring`
+<?php
+
+use PhpParser\Node\Expr\ShellExec;
+use PhpParser\Node\Scalar\EncapsedStringPart;
+
+$parts = [new EncapsedStringPart('first part'), new EncapsedStringPart('second part')];
+
+return new ShellExec($parts);
+```
+
+↓
+
+```php
+`first partsecond part`
 ```
 
 #### Public Properties
@@ -2130,7 +2204,20 @@ $variableName->propertyName
 #### Example PHP Code
 
 ```php
-SomeClassName::methodName()
+<?php
+
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name\FullyQualified;
+
+$fullyQualified = new FullyQualified('ClassName');
+
+return new StaticCall($fullyQualified, 'methodName');
+```
+
+↓
+
+```php
+\ClassName::methodName()
 ```
 
 #### Public Properties
@@ -2148,7 +2235,20 @@ SomeClassName::methodName()
 #### Example PHP Code
 
 ```php
-SomeClassName::$someProperty
+<?php
+
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Name\FullyQualified;
+
+$class = new FullyQualified('StaticClassName');
+
+return new StaticPropertyFetch($class, 'someProperty');
+```
+
+↓
+
+```php
+\StaticClassName::$someProperty
 ```
 
 #### Public Properties
@@ -2163,6 +2263,24 @@ SomeClassName::$someProperty
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+
+$variable = new Variable('variableName');
+
+$trueConstFetch = new ConstFetch(new Name('true'));
+$falseConstFetch = new ConstFetch(new Name('false'));
+
+return new Ternary($variable, $trueConstFetch, $falseConstFetch);
+```
+
+↓
 
 ```php
 $variableName ? true : false
@@ -2183,7 +2301,20 @@ $variableName ? true : false
 #### Example PHP Code
 
 ```php
-throw $variableName;
+<?php
+
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Expr\Throw_;
+
+$string = new String_('some string');
+
+return new Throw_($string);
+```
+
+↓
+
+```php
+throw 'some string'
 ```
 
 #### Public Properties
@@ -2197,6 +2328,19 @@ throw $variableName;
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new UnaryMinus($variable);
+```
+
+↓
 
 ```php
 -$variableName
@@ -2215,6 +2359,19 @@ throw $variableName;
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\UnaryPlus;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new UnaryPlus($variable);
+```
+
+↓
+
+```php
 +$variableName
 ```
 
@@ -2231,6 +2388,16 @@ throw $variableName;
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+
+return new Variable('variableName');
+```
+
+↓
+
+```php
 $variableName
 ```
 
@@ -2245,6 +2412,19 @@ $variableName
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\YieldFrom;
+
+$variable = new Variable('variableName');
+
+return new YieldFrom($variable);
+```
+
+↓
 
 ```php
 yield from $variableName
@@ -3081,6 +3261,16 @@ namespace\name
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Scalar\DNumber;
+
+return new DNumber(10.5);
+```
+
+↓
+
+```php
 10.5
 ```
 
@@ -3125,7 +3315,17 @@ UNABLE_TO_PRINT_ENCAPSED_STRING
 #### Example PHP Code
 
 ```php
-100
+<?php
+
+use PhpParser\Node\Scalar\LNumber;
+
+return new LNumber(1000);
+```
+
+↓
+
+```php
+1000
 ```
 
 #### Public Properties
@@ -3227,7 +3427,17 @@ __TRAIT__
 #### Example PHP Code
 
 ```php
-'string'
+<?php
+
+use PhpParser\Node\Scalar\String_;
+
+return new String_('some string');
+```
+
+↓
+
+```php
+'some string'
 ```
 
 #### Public Properties
@@ -3264,6 +3474,20 @@ break;
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Case_;
+
+$trueConstFetch = new ConstFetch(new Name('true'));
+
+return new Case_($trueConstFetch);
+```
+
+↓
+
+```php
 case true:
 ```
 
@@ -3296,9 +3520,6 @@ catch (CaughtType $CaughtVariable) {
 #### Example PHP Code
 
 ```php
-const SOME_CLASS_CONSTANT = 'default value';
-```
-```php
 <?php
 
 use PhpParser\Node\Const_;
@@ -3306,7 +3527,8 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 
-$const = new Const_('SOME_CLASS_CONSTANT', new String_('default value'));
+$defaultValue = new String_('default value');
+$const = new Const_('SOME_CLASS_CONSTANT', $defaultValue);
 
 return new ClassConst([$const], Class_::MODIFIER_PUBLIC);
 ```
@@ -3329,22 +3551,19 @@ public const SOME_CLASS_CONSTANT = 'default value';
 #### Example PHP Code
 
 ```php
-public function methodName()
-{
-}
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 
 $classMethod = new ClassMethod('methodName');
-
 $classMethod->flags = Class_::MODIFIER_PRIVATE;
-$classMethod->params = [new Variable('param')];
+
+$param = new Param(new Variable('paramName'));
+$classMethod->params = [$param];
 $classMethod->returnType = new Identifier('string');
 
 return $classMethod;
@@ -3353,7 +3572,7 @@ return $classMethod;
 ↓
 
 ```php
-private function methodName($param): string
+private function methodName($paramName): string
 {
 }
 ```
@@ -3364,7 +3583,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 
 $classMethod = new ClassMethod('methodName');
-
 $classMethod->flags = Class_::MODIFIER_PUBLIC;
 
 return $classMethod;
@@ -3395,11 +3613,6 @@ public function methodName()
 #### Example PHP Code
 
 ```php
-class ClassName
-{
-}
-```
-```php
 <?php
 
 use PhpParser\Node\Stmt\Class_;
@@ -3423,7 +3636,7 @@ use PhpParser\Node\Stmt\Class_;
 $class = new Class_('ClassName');
 
 $class->flags = Class_::MODIFIER_FINAL;
-$class->extends = new Identifier('Parent');
+$class->extends = new Identifier('ParentClass');
 
 return $class;
 ```
@@ -3431,7 +3644,7 @@ return $class;
 ↓
 
 ```php
-final class ClassName extends Parent
+final class ClassName extends ParentClass
 {
 }
 ```
@@ -3479,9 +3692,6 @@ continue;
 #### Example PHP Code
 
 ```php
-strict_types=1
-```
-```php
 <?php
 
 use PhpParser\Node\Scalar\LNumber;
@@ -3507,9 +3717,6 @@ strict_types=1
 
 #### Example PHP Code
 
-```php
-declare(strict_types=1);
-```
 ```php
 <?php
 
@@ -3540,10 +3747,6 @@ declare(strict_types=1);
 #### Example PHP Code
 
 ```php
-do {
-} while ($variableName);
-```
-```php
 <?php
 
 use PhpParser\Node\Expr\Variable;
@@ -3573,17 +3776,14 @@ do {
 #### Example PHP Code
 
 ```php
-echo 'hello';
-```
-```php
 <?php
 
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Echo_;
 
-$msg = new String_('hello');
+$string = new String_('hello');
 
-return new Echo_([$msg]);
+return new Echo_([$string]);
 ```
 
 ↓
@@ -3602,10 +3802,6 @@ echo 'hello';
 
 #### Example PHP Code
 
-```php
-elseif (true) {
-}
-```
 ```php
 <?php
 
@@ -3724,6 +3920,16 @@ foreach ($variables as $value) {
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Stmt\Function_;
+
+return new Function_('some_function');
+```
+
+↓
+
+```php
 function some_function()
 {
 }
@@ -3744,6 +3950,19 @@ function some_function()
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Global_;
+
+$variable = new Variable('globalVariable');
+
+return new Global_([$variable]);
+```
+
+↓
+
+```php
 global $globalVariable;
 ```
 
@@ -3756,6 +3975,16 @@ global $globalVariable;
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Stmt\Goto_;
+
+return new Goto_('goto_break');
+```
+
+↓
 
 ```php
 goto goto_break;
@@ -3786,6 +4015,16 @@ use prefix\{UsedNamespace};
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Stmt\HaltCompiler;
+
+return new HaltCompiler('remaining');
+```
+
+↓
 
 ```php
 __halt_compiler();remaining
@@ -3835,7 +4074,18 @@ if (true) {
 #### Example PHP Code
 
 ```php
-interface SomeInterface
+<?php
+
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Interface_;
+
+return new Interface_(new Identifier('InterfaceName'));
+```
+
+↓
+
+```php
+interface InterfaceName
 {
 }
 ```
@@ -3853,7 +4103,17 @@ interface SomeInterface
 #### Example PHP Code
 
 ```php
-label:
+<?php
+
+use PhpParser\Node\Stmt\Label;
+
+return new Label('labelName');
+```
+
+↓
+
+```php
+labelName:
 ```
 
 #### Public Properties
@@ -3899,10 +4159,24 @@ namespace {
 #### Example PHP Code
 
 ```php
-public $propertyName;
+<?php
+
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
+
+$propertyProperties = [
+    new PropertyProperty('firstProperty'),
+    new PropertyProperty('secondProperty'),
+];
+
+return new Property(Class_::MODIFIER_STATIC | Class_::MODIFIER_PUBLIC, $propertyProperties);
 ```
+
+↓
+
 ```php
-public static $propertyName, $anotherPropertyName;
+public static $firstProperty, $secondProperty;
 ```
 ```php
 <?php
@@ -3954,7 +4228,17 @@ public string $propertyName;
 #### Example PHP Code
 
 ```php
-$someProperty
+<?php
+
+use PhpParser\Node\Stmt\PropertyProperty;
+
+return new PropertyProperty('propertyName');
+```
+
+↓
+
+```php
+$propertyName
 ```
 
 #### Public Properties
@@ -3987,6 +4271,19 @@ return;
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\StaticVar;
+
+$variable = new Variable('variableName');
+
+return new StaticVar($variable);
+```
+
+↓
 
 ```php
 $variableName
@@ -4035,7 +4332,20 @@ switch ($variableName) {
 #### Example PHP Code
 
 ```php
-throw new \SomeException();
+<?php
+
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Throw_;
+
+$string = new String_('some string');
+
+return new Throw_($string);
+```
+
+↓
+
+```php
+throw 'some string';
 ```
 
 #### Public Properties
@@ -4081,7 +4391,21 @@ SomeTrait::method as public aliasedMethod;
 #### Example PHP Code
 
 ```php
-SomeTrait::methodName insteadof overriddenTrait;
+<?php
+
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\TraitUseAdaptation\Precedence;
+
+$firstTrait = new Name('SomeTrait');
+$secondTrait = new Name('OverriddenTrait');
+
+return new Precedence($firstTrait, 'methodName', [$secondTrait]);
+```
+
+↓
+
+```php
+SomeTrait::methodName insteadof OverriddenTrait;
 ```
 
 #### Public Properties
@@ -4095,6 +4419,16 @@ SomeTrait::methodName insteadof overriddenTrait;
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Stmt\Trait_;
+
+return new Trait_('TraitName');
+```
+
+↓
 
 ```php
 trait TraitName
@@ -4114,11 +4448,28 @@ trait TraitName
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\TryCatch;
+
+$variable = new Variable('exceptionVariableName');
+$catch = new Catch_([new FullyQualified('CatchedType')], $variable);
+$stmts = [new FuncCall(new Name('funcCallName'))];
+
+return new TryCatch($stmts, [$catch]);
+```
+
+↓
+
+```php
 try {
-    function someFunction()
-    {
-    }
-} catch (\SomeType $someTypeException) {
+    funcCallName()
+} catch (\CatchedType $exceptionVariableName) {
 }
 ```
 
@@ -4182,6 +4533,17 @@ use UsedNamespace;
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\While_;
+
+return new While_(new Variable('variableName'));
+```
+
+↓
+
+```php
 while ($variableName) {
 }
 ```
@@ -4200,6 +4562,19 @@ while ($variableName) {
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new Arg($variable);
+```
+
+↓
+
+```php
 $variableName
 ```
 
@@ -4216,9 +4591,6 @@ $variableName
 
 #### Example PHP Code
 
-```php
-CONSTANT_NAME = 'default'
-```
 ```php
 <?php
 
@@ -4366,6 +4738,19 @@ namespace\PartOf\SomeNamespace\ShortName
 #### Example PHP Code
 
 ```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
+
+$variable = new Variable('variableName');
+
+return new Param($variable);
+```
+
+↓
+
+```php
 $variableName
 ```
 
@@ -4383,6 +4768,19 @@ $variableName
 
 
 #### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Identifier;
+use PhpParser\Node\UnionType;
+
+$unionedTypes = [new Identifier('string'), new Identifier('int')];
+
+return new UnionType($unionedTypes);
+```
+
+↓
 
 ```php
 string|int

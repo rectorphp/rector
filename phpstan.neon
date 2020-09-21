@@ -468,3 +468,5 @@ parameters:
 
         # Temprory ignored
         - '#Do not use scalar or array as constructor parameter\. Use ParameterProvider service instead#'
+
+        - '#Method Rector\\Utils\\NodeDocumentationGenerator\\NodeCodeSampleProvider\:\:getNodeClasses\(\) should return array<class\-string\> but returns array<int, string\>#'
