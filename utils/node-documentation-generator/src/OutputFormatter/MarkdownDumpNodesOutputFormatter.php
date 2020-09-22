@@ -81,16 +81,16 @@ final class MarkdownDumpNodesOutputFormatter
         $this->printPhpSnippet($nodeCodeSample->getPrintedContent());
     }
 
-    private function printPhpSnippet(string $printedContent): void
-    {
-        $message = sprintf('```php%s%s%s```', PHP_EOL, $printedContent, PHP_EOL);
-        $this->symfonyStyle->writeln($message);
-    }
-
     private function newLine(): void
     {
         $this->symfonyStyle->newLine();
         $this->symfonyStyle->writeln('<br>');
         $this->symfonyStyle->newLine();
+    }
+
+    private function printPhpSnippet(string $printedContent): void
+    {
+        $message = sprintf('```php%s%s%s```', PHP_EOL, $printedContent, PHP_EOL);
+        $this->symfonyStyle->writeln($message);
     }
 }
