@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Property\UnderscoreToCamelCasePropertyNameRector\Fixture;
+namespace Rector\Naming\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector\Fixture;
 
 final class Property
 {
@@ -26,7 +26,7 @@ final class Property
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Property\UnderscoreToCamelCasePropertyNameRector\Fixture;
+namespace Rector\Naming\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector\Fixture;
 
 final class Property
 {

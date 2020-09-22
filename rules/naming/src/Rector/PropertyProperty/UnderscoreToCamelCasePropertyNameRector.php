@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Rector\PropertyProperty;
+namespace Rector\Naming\Rector\PropertyProperty;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -17,7 +17,7 @@ use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector\UnderscoreToCamelCasePropertyNameRectorTest
+ * @see \Rector\Naming\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector\UnderscoreToCamelCasePropertyNameRectorTest
  */
 final class UnderscoreToCamelCasePropertyNameRector extends AbstractRector
 {
