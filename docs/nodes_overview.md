@@ -23,6 +23,7 @@ return new Arg($variable);
 $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -52,6 +53,7 @@ return new Const_('CONSTANT_NAME', new String_('default'));
 CONSTANT_NAME = 'default'
 ```
 
+<br>
 
 ### Public Properties
 
@@ -83,6 +85,7 @@ return new ArrayDimFetch($variable, $dimension);
 $variableName[0]
 ```
 
+<br>
 
 ### Public Properties
 
@@ -114,6 +117,7 @@ return new ArrayItem($value, $key);
 'name' => $Tom
 ```
 
+<br>
 
 ### Public Properties
 
@@ -150,6 +154,7 @@ return new Array_([$arrayItem]);
 ['name' => $Tom]
 ```
 
+<br>
 
 ### Public Properties
 
@@ -178,6 +183,7 @@ return new ArrowFunction($subNodes);
 fn() => 1
 ```
 
+<br>
 
 ### Public Properties
 
@@ -212,6 +218,7 @@ return new Assign($variable, $value);
 $variableName = 'some value'
 ```
 
+<br>
 
 ### Public Properties
 
@@ -242,6 +249,7 @@ return new BitwiseAnd($left, $right);
 5 &= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -272,6 +280,7 @@ return new BitwiseOr($left, $right);
 5 |= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -302,6 +311,7 @@ return new BitwiseXor($left, $right);
 5 ^= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -332,6 +342,7 @@ return new Coalesce($left, $right);
 5 ??= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -362,6 +373,7 @@ return new Concat($left, $right);
 5 .= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -392,6 +404,7 @@ return new Div($left, $right);
 5 /= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -422,6 +435,7 @@ return new Minus($left, $right);
 5 -= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -452,6 +466,7 @@ return new Mod($left, $right);
 5 %= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -482,6 +497,7 @@ return new Mul($left, $right);
 5 *= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -512,6 +528,7 @@ return new Plus($left, $right);
 5 += 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -542,6 +559,7 @@ return new Pow($left, $right);
 5 **= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -572,6 +590,7 @@ return new ShiftLeft($left, $right);
 5 <<= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -602,6 +621,7 @@ return new ShiftRight($left, $right);
 5 >>= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -632,6 +652,7 @@ return new AssignRef($variable, $variableRef);
 $variableName =& $someOtherVariable
 ```
 
+<br>
 
 ### Public Properties
 
@@ -662,6 +683,7 @@ return new BitwiseAnd($left, $right);
 5 & 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -692,6 +714,7 @@ return new BitwiseOr($left, $right);
 5 | 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -722,6 +745,7 @@ return new BitwiseXor($left, $right);
 5 ^ 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -752,6 +776,7 @@ return new BooleanAnd($left, $right);
 5 && 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -782,6 +807,7 @@ return new Coalesce($left, $right);
 5 ?? 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -812,6 +838,7 @@ return new Concat($left, $right);
 5 . 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -842,6 +869,7 @@ return new Div($left, $right);
 5 / 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -872,6 +900,7 @@ return new Equal($left, $right);
 5 == 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -902,6 +931,7 @@ return new Greater($left, $right);
 5 > 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -932,6 +962,7 @@ return new GreaterOrEqual($left, $right);
 5 >= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -962,6 +993,7 @@ return new Identical($left, $right);
 5 === 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -992,6 +1024,7 @@ return new LogicalAnd($left, $right);
 5 and 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1022,6 +1055,7 @@ return new LogicalOr($left, $right);
 5 or 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1052,6 +1086,7 @@ return new LogicalXor($left, $right);
 5 xor 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1082,6 +1117,7 @@ return new Minus($left, $right);
 5 - 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1112,6 +1148,7 @@ return new Mod($left, $right);
 5 % 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1142,6 +1179,7 @@ return new Mul($left, $right);
 5 * 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1172,6 +1210,7 @@ return new NotEqual($left, $right);
 5 != 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1202,6 +1241,7 @@ return new NotIdentical($left, $right);
 5 !== 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1232,6 +1272,7 @@ return new Plus($left, $right);
 5 + 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1262,6 +1303,7 @@ return new Pow($left, $right);
 5 ** 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1292,6 +1334,7 @@ return new ShiftLeft($left, $right);
 5 << 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1322,6 +1365,7 @@ return new ShiftRight($left, $right);
 5 >> 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1352,6 +1396,7 @@ return new Smaller($left, $right);
 5 < 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1382,6 +1427,7 @@ return new SmallerOrEqual($left, $right);
 5 <= 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1412,6 +1458,7 @@ return new Spaceship($left, $right);
 5 <=> 10
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1441,6 +1488,7 @@ return new BitwiseNot($variable);
 ~$variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1469,6 +1517,7 @@ return new BooleanNot($variable);
 !$isEligible
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1497,6 +1546,7 @@ return new Array_($expr);
 (array) $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1525,6 +1575,7 @@ return new Bool_($expr);
 (bool) $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1553,6 +1604,7 @@ return new Double($expr);
 (double) $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1581,6 +1633,7 @@ return new Int_($expr);
 (int) $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1609,6 +1662,7 @@ return new String_($expr);
 (string) $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1637,6 +1691,7 @@ return new Unset_($expr);
 (unset) $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1665,6 +1720,7 @@ return new ClassConstFetch($class, 'SOME_CONSTANT');
 \SomeClassName::SOME_CONSTANT
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1694,6 +1750,7 @@ return new Clone_($variable);
 clone $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1722,6 +1779,7 @@ return new ClosureUse($variable);
 $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1751,6 +1809,7 @@ return new ConstFetch($name);
 true
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1779,6 +1838,7 @@ return new Empty_($variable);
 empty($variableName)
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1807,6 +1867,7 @@ return new ErrorSuppress($variable);
 @$variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1835,6 +1896,7 @@ return new Eval_(new String_('Some php code'));
 eval('Some php code')
 ```
 
+<br>
 ```php
 <?php
 
@@ -1852,6 +1914,7 @@ return new Eval_($phpCode);
 eval('Some php code')
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1878,6 +1941,7 @@ return new FuncCall(new Name('func_call'));
 func_call()
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1907,6 +1971,7 @@ return new Include_($variable, Include_::TYPE_REQUIRE_ONCE);
 require_once $variableName
 ```
 
+<br>
 ```php
 <?php
 
@@ -1924,6 +1989,7 @@ return new Include_($variable, Include_::TYPE_INCLUDE);
 include $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1955,6 +2021,7 @@ return new Instanceof_($variable, $class);
 $variableName instanceof \SomeClassName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -1984,6 +2051,7 @@ return new Isset_([$variable]);
 isset($variableName)
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2013,6 +2081,7 @@ return new List_([$variable, $anotherVariable]);
 list($variableName, $anoterVariableName)
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2050,6 +2119,7 @@ match ($variableName) {
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2079,6 +2149,7 @@ return new MethodCall($variable, 'methodName');
 $someObject->methodName()
 ```
 
+<br>
 ```php
 <?php
 
@@ -2102,6 +2173,7 @@ return new MethodCall($variable, 'methodName', $args);
 $someObject->methodName('yes', 'maybe')
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2134,6 +2206,7 @@ new class
 }
 ```
 
+<br>
 ```php
 <?php
 
@@ -2151,6 +2224,7 @@ return new New_($class);
 new SomeClass()
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2180,6 +2254,7 @@ return new NullsafeMethodCall($variable, 'methodName');
 $variableName?->methodName()
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2210,6 +2285,7 @@ return new NullsafePropertyFetch($variable, 'someProperty');
 $variableName?->someProperty
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2239,6 +2315,7 @@ return new PostDec($variable);
 $variableName--
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2267,6 +2344,7 @@ return new PostInc($variable);
 $variableName++
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2295,6 +2373,7 @@ return new PreDec($variable);
 --$variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2323,6 +2402,7 @@ return new PreInc($variable);
 ++$variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2351,6 +2431,7 @@ return new Print_($string);
 print 'Some php code'
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2379,6 +2460,7 @@ return new PropertyFetch($variable, 'propertyName');
 $variableName->propertyName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2408,6 +2490,7 @@ return new ShellExec($parts);
 `first partsecond part`
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2436,6 +2519,7 @@ return new StaticCall($fullyQualified, 'methodName');
 \ClassName::methodName()
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2466,6 +2550,7 @@ return new StaticPropertyFetch($class, 'someProperty');
 \StaticClassName::$someProperty
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2500,6 +2585,7 @@ return new Ternary($variable, $trueConstFetch, $falseConstFetch);
 $variableName ? true : false
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2530,6 +2616,7 @@ return new Throw_($string);
 throw 'some string'
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2558,6 +2645,7 @@ return new UnaryMinus($variable);
 -$variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2586,6 +2674,7 @@ return new UnaryPlus($variable);
 +$variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2611,6 +2700,7 @@ return new Variable('variableName');
 $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2639,6 +2729,7 @@ return new YieldFrom($variable);
 yield from $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2664,6 +2755,7 @@ return new Identifier('identifierName');
 identifierName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2695,6 +2787,7 @@ return new MatchArm($conds, $body);
 1 => 'yes'
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2721,6 +2814,7 @@ return new Name('shortName');
 shortName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2747,6 +2841,7 @@ return new FullyQualified('SomeNamespace\ShortName');
 \SomeNamespace\ShortName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2772,6 +2867,7 @@ return new Relative('PartOf\SomeNamespace\ShortName');
 namespace\PartOf\SomeNamespace\ShortName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2799,6 +2895,7 @@ return new NullableType('SomeType');
 ?SomeType
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2827,6 +2924,7 @@ return new Param($variable);
 $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2857,6 +2955,7 @@ return new DNumber(10.5);
 10.5
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2883,6 +2982,7 @@ return new Encapsed([new Variable('variableName')]);
 "{$variableName}"
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2908,6 +3008,7 @@ return new EncapsedStringPart('enscapsed');
 UNABLE_TO_PRINT_ENCAPSED_STRING
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2933,6 +3034,7 @@ return new LNumber(1000);
 1000
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2958,6 +3060,7 @@ return new String_('some string');
 'some string'
 ```
 
+<br>
 
 ### Public Properties
 
@@ -2988,6 +3091,7 @@ return new Case_($trueConstFetch);
 case true:
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3020,6 +3124,7 @@ catch (\ClassType $CaughtVariable) {
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3053,6 +3158,7 @@ return new ClassConst([$const], Class_::MODIFIER_PUBLIC);
 public const SOME_CLASS_CONSTANT = 'default value';
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3092,6 +3198,7 @@ private function methodName($paramName): string
 }
 ```
 
+<br>
 ```php
 <?php
 
@@ -3112,6 +3219,7 @@ public function methodName()
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3145,6 +3253,7 @@ class ClassName
 }
 ```
 
+<br>
 ```php
 <?php
 
@@ -3167,6 +3276,7 @@ final class ClassName extends ParentClass
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3202,6 +3312,7 @@ return new ConstStmt($consts);
 const CONSTANT_IN_CLASS = 'default value';
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3228,6 +3339,7 @@ return new DeclareDeclare('strict_types', new LNumber(1));
 strict_types=1
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3258,6 +3370,7 @@ return new Declare_([$declareDeclare]);
 declare(strict_types=1);
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3288,6 +3401,7 @@ do {
 } while ($variableName);
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3317,6 +3431,7 @@ return new Echo_([$string]);
 echo 'hello';
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3351,6 +3466,7 @@ elseif (true) {
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3382,6 +3498,7 @@ foreach ($foreachedVariableName as $asVariable) {
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3413,6 +3530,7 @@ function some_function()
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3445,6 +3563,7 @@ return new Global_([$variable]);
 global $globalVariable;
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3470,6 +3589,7 @@ return new Goto_('goto_break');
 goto goto_break;
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3501,6 +3621,7 @@ return new GroupUse(new Name('prefix'), $uses);
 use prefix\{UserName};
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3528,6 +3649,7 @@ return new HaltCompiler('remaining');
 __halt_compiler();remaining
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3558,6 +3680,7 @@ if (true) {
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3587,6 +3710,7 @@ return new InlineHTML('<strong>feel</strong>');
 <strong>feel</strong><?php
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3615,6 +3739,7 @@ interface InterfaceName
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3642,6 +3767,7 @@ return new Label('labelName');
 labelName:
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3674,6 +3800,7 @@ return new Property(Class_::MODIFIER_STATIC | Class_::MODIFIER_PUBLIC, $property
 public static $firstProperty, $secondProperty;
 ```
 
+<br>
 ```php
 <?php
 
@@ -3693,6 +3820,7 @@ return new Property(Class_::MODIFIER_PUBLIC, [$propertyProperty]);
 public $propertyName;
 ```
 
+<br>
 ```php
 <?php
 
@@ -3712,6 +3840,7 @@ return new Property(Class_::MODIFIER_PUBLIC, [$propertyProperty], [], 'string');
 public string $propertyName;
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3739,6 +3868,7 @@ return new PropertyProperty('propertyName');
 $propertyName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3768,6 +3898,7 @@ return new StaticVar($variable);
 $variableName
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3798,6 +3929,7 @@ return new Static_($staticVars);
 static $static;
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3831,6 +3963,7 @@ switch ($variableName) {
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3860,6 +3993,7 @@ return new Throw_($string);
 throw 'some string';
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3886,6 +4020,7 @@ return new TraitUse([new FullyQualified('TraitName')]);
 use \TraitName;
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3916,6 +4051,7 @@ return new Alias($traitFullyQualified, 'method', Class_::MODIFIER_PUBLIC, 'alias
 \TraitName::method as public aliasedMethod;
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3948,6 +4084,7 @@ return new Precedence($firstTrait, 'methodName', [$secondTrait]);
 SomeTrait::methodName insteadof OverriddenTrait;
 ```
 
+<br>
 
 ### Public Properties
 
@@ -3977,6 +4114,7 @@ trait TraitName
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -4015,6 +4153,7 @@ try {
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -4045,6 +4184,7 @@ return new Unset_([$variable]);
 unset($variableName);
 ```
 
+<br>
 
 ### Public Properties
 
@@ -4071,6 +4211,7 @@ return new UseUse(new Name('UsedNamespace'));
 UsedNamespace
 ```
 
+<br>
 
 ### Public Properties
 
@@ -4100,6 +4241,7 @@ while ($variableName) {
 }
 ```
 
+<br>
 
 ### Public Properties
 
@@ -4129,6 +4271,7 @@ return new UnionType($unionedTypes);
 string|int
 ```
 
+<br>
 
 ### Public Properties
 
