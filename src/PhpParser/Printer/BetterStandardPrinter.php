@@ -590,4 +590,20 @@ final class BetterStandardPrinter extends Standard
     {
         return $wrap . $string->value . $wrap;
     }
+
+    protected function pCommaSeparated(array $nodes): string
+    {
+        $result = parent::pCommaSeparated($nodes);
+
+        $last = end($nodes);
+
+        if ($last instanceof Node) {
+            $trailingComma = $last->getAttribute(AttributeKey::TRAILING_COMMA);
+            if ($trailingComma === false) {
+                $result = rtrim($result, ',');
+            }
+        }
+
+        return $result;
+    }
 }
