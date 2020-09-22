@@ -34,7 +34,7 @@ final class NodeCodeSampleProvider
      */
     public function provide(): array
     {
-        $snippetFileInfos = $this->smartFinder->find([__DIR__ . '/../snippet'], '*.php.inc');
+        $snippetFileInfos = $this->smartFinder->find([__DIR__ . '/../snippet'], '*.php');
 
         $nodeCodeSamplesByNodeClass = [];
 

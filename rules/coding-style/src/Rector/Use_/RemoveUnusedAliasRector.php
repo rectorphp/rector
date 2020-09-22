@@ -157,6 +157,12 @@ CODE_SAMPLE
 
     private function shouldSkipUse(Use_ $use): bool
     {
+        // skip cases without namespace, problematic to analyse
+        $namespace = $use->getAttribute(AttributeKey::NAMESPACE_NODE);
+        if ($namespace === null) {
+            return true;
+        }
+
         return ! $this->hasUseAlias($use);
     }
 

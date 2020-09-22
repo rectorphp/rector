@@ -36,6 +36,7 @@ final class MarkdownDumpNodesOutputFormatter
             $this->printCodeExample($nodeInfo);
             $this->printPublicProperties($nodeInfo);
 
+            $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln('<br>');
             $this->symfonyStyle->newLine();
         }
@@ -49,6 +50,8 @@ final class MarkdownDumpNodesOutputFormatter
 
         foreach ($nodeInfo->getNodeCodeSamples() as $nodeCodeSample) {
             $this->printNodeCodeSample($nodeCodeSample);
+
+            $this->newLine();
         }
     }
 
@@ -76,6 +79,13 @@ final class MarkdownDumpNodesOutputFormatter
         $this->symfonyStyle->newLine();
 
         $this->printPhpSnippet($nodeCodeSample->getPrintedContent());
+    }
+
+    private function newLine(): void
+    {
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->writeln('<br>');
+        $this->symfonyStyle->newLine();
     }
 
     private function printPhpSnippet(string $printedContent): void

@@ -1,9 +1,0 @@
-<?php
-
-use PhpParser\Node\Expr\BinaryOp\Mod;
-use PhpParser\Node\Scalar\LNumber;
-
-$left = new LNumber(5);
-$right = new LNumber(10);
-
-return new Mod($left, $right);

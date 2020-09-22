@@ -9,6 +9,8 @@
 ```php
 <?php
 
+declare(strict_types=1);
+
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Variable;
 
@@ -23,12 +25,16 @@ return new Arg($variable);
 $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$name` - `/** @var Identifier|null Parameter name (for named parameters) */`
  * `$value` - `/** @var Expr Value to pass */`
  * `$byRef` - `/** @var bool Whether to pass by ref */`
  * `$unpack` - `/** @var bool Whether to unpack the argument */`
+
 <br>
 
 ## `PhpParser\Node\Const_`
@@ -38,6 +44,8 @@ $variableName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Const_;
 use PhpParser\Node\Scalar\String_;
@@ -51,10 +59,14 @@ return new Const_('CONSTANT_NAME', new String_('default'));
 CONSTANT_NAME = 'default'
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$name` - `/** @var Identifier Name */`
  * `$value` - `/** @var Expr Value */`
+
 <br>
 
 ## `PhpParser\Node\Expr\ArrayDimFetch`
@@ -64,6 +76,8 @@ CONSTANT_NAME = 'default'
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Variable;
@@ -81,10 +95,14 @@ return new ArrayDimFetch($variable, $dimension);
 $variableName[0]
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$dim` - `/** @var null|Expr Array index / dim */`
+
 <br>
 
 ## `PhpParser\Node\Expr\ArrayItem`
@@ -94,6 +112,8 @@ $variableName[0]
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Variable;
@@ -111,12 +131,16 @@ return new ArrayItem($value, $key);
 'name' => $Tom
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$key` - `/** @var null|Expr Key */`
  * `$value` - `/** @var Expr Value */`
  * `$byRef` - `/** @var bool Whether to assign by reference */`
  * `$unpack` - `/** @var bool Whether to unpack the argument */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Array_`
@@ -126,6 +150,8 @@ return new ArrayItem($value, $key);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -146,9 +172,13 @@ return new Array_([$arrayItem]);
 ['name' => $Tom]
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$items` - `/** @var (ArrayItem|null)[] Items */`
+
 <br>
 
 ## `PhpParser\Node\Expr\ArrowFunction`
@@ -158,6 +188,8 @@ return new Array_([$arrayItem]);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Scalar\LNumber;
@@ -173,6 +205,9 @@ return new ArrowFunction($subNodes);
 fn() => 1
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$static` - `/** @var bool */`
@@ -180,6 +215,7 @@ fn() => 1
  * `$params` - `/** @var Node\Param[] */`
  * `$returnType` - `/** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType */`
  * `$expr` - `/** @var Expr */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Assign`
@@ -189,6 +225,8 @@ fn() => 1
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -206,10 +244,14 @@ return new Assign($variable, $value);
 $variableName = 'some value'
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\BitwiseAnd`
@@ -219,6 +261,8 @@ $variableName = 'some value'
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\BitwiseAnd;
 use PhpParser\Node\Scalar\LNumber;
@@ -235,10 +279,14 @@ return new BitwiseAnd($left, $right);
 5 &= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\BitwiseOr`
@@ -248,6 +296,8 @@ return new BitwiseAnd($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\BitwiseOr;
 use PhpParser\Node\Scalar\LNumber;
@@ -264,10 +314,14 @@ return new BitwiseOr($left, $right);
 5 |= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\BitwiseXor`
@@ -277,6 +331,8 @@ return new BitwiseOr($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\BitwiseXor;
 use PhpParser\Node\Scalar\LNumber;
@@ -293,10 +349,14 @@ return new BitwiseXor($left, $right);
 5 ^= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\Coalesce`
@@ -306,6 +366,8 @@ return new BitwiseXor($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\Coalesce;
 use PhpParser\Node\Scalar\LNumber;
@@ -322,10 +384,14 @@ return new Coalesce($left, $right);
 5 ??= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\Concat`
@@ -335,6 +401,8 @@ return new Coalesce($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\Concat;
 use PhpParser\Node\Scalar\LNumber;
@@ -351,10 +419,14 @@ return new Concat($left, $right);
 5 .= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\Div`
@@ -364,6 +436,8 @@ return new Concat($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\Div;
 use PhpParser\Node\Scalar\LNumber;
@@ -380,10 +454,14 @@ return new Div($left, $right);
 5 /= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\Minus`
@@ -393,6 +471,8 @@ return new Div($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\Minus;
 use PhpParser\Node\Scalar\LNumber;
@@ -409,10 +489,14 @@ return new Minus($left, $right);
 5 -= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\Mod`
@@ -422,6 +506,8 @@ return new Minus($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\Mod;
 use PhpParser\Node\Scalar\LNumber;
@@ -438,10 +524,14 @@ return new Mod($left, $right);
 5 %= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\Mul`
@@ -451,6 +541,8 @@ return new Mod($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\Mul;
 use PhpParser\Node\Scalar\LNumber;
@@ -467,10 +559,14 @@ return new Mul($left, $right);
 5 *= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\Plus`
@@ -480,6 +576,8 @@ return new Mul($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\Plus;
 use PhpParser\Node\Scalar\LNumber;
@@ -496,10 +594,14 @@ return new Plus($left, $right);
 5 += 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\Pow`
@@ -509,6 +611,8 @@ return new Plus($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\Pow;
 use PhpParser\Node\Scalar\LNumber;
@@ -525,10 +629,14 @@ return new Pow($left, $right);
 5 **= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\ShiftLeft`
@@ -538,6 +646,8 @@ return new Pow($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\ShiftLeft;
 use PhpParser\Node\Scalar\LNumber;
@@ -554,10 +664,14 @@ return new ShiftLeft($left, $right);
 5 <<= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignOp\ShiftRight`
@@ -567,6 +681,8 @@ return new ShiftLeft($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignOp\ShiftRight;
 use PhpParser\Node\Scalar\LNumber;
@@ -583,10 +699,14 @@ return new ShiftRight($left, $right);
 5 >>= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\AssignRef`
@@ -596,6 +716,8 @@ return new ShiftRight($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Variable;
@@ -612,10 +734,14 @@ return new AssignRef($variable, $variableRef);
 $variableName =& $someOtherVariable
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable reference is assigned to */`
  * `$expr` - `/** @var Expr Variable which is referenced */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\BitwiseAnd`
@@ -625,6 +751,8 @@ $variableName =& $someOtherVariable
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
 use PhpParser\Node\Scalar\LNumber;
@@ -641,10 +769,14 @@ return new BitwiseAnd($left, $right);
 5 & 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\BitwiseOr`
@@ -654,6 +786,8 @@ return new BitwiseAnd($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Scalar\LNumber;
@@ -670,10 +804,14 @@ return new BitwiseOr($left, $right);
 5 | 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\BitwiseXor`
@@ -683,6 +821,8 @@ return new BitwiseOr($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\BitwiseXor;
 use PhpParser\Node\Scalar\LNumber;
@@ -699,10 +839,14 @@ return new BitwiseXor($left, $right);
 5 ^ 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\BooleanAnd`
@@ -712,6 +856,8 @@ return new BitwiseXor($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Scalar\LNumber;
@@ -728,10 +874,14 @@ return new BooleanAnd($left, $right);
 5 && 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Coalesce`
@@ -741,6 +891,8 @@ return new BooleanAnd($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Scalar\LNumber;
@@ -757,10 +909,14 @@ return new Coalesce($left, $right);
 5 ?? 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Concat`
@@ -770,6 +926,8 @@ return new Coalesce($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\LNumber;
@@ -786,10 +944,14 @@ return new Concat($left, $right);
 5 . 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Div`
@@ -799,6 +961,8 @@ return new Concat($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Scalar\LNumber;
@@ -815,10 +979,14 @@ return new Div($left, $right);
 5 / 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Equal`
@@ -828,6 +996,8 @@ return new Div($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Scalar\LNumber;
@@ -844,10 +1014,14 @@ return new Equal($left, $right);
 5 == 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Greater`
@@ -857,6 +1031,8 @@ return new Equal($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Scalar\LNumber;
@@ -873,10 +1049,14 @@ return new Greater($left, $right);
 5 > 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\GreaterOrEqual`
@@ -886,6 +1066,8 @@ return new Greater($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use PhpParser\Node\Scalar\LNumber;
@@ -902,10 +1084,14 @@ return new GreaterOrEqual($left, $right);
 5 >= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Identical`
@@ -915,6 +1101,8 @@ return new GreaterOrEqual($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Scalar\LNumber;
@@ -931,10 +1119,14 @@ return new Identical($left, $right);
 5 === 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\LogicalAnd`
@@ -944,6 +1136,8 @@ return new Identical($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\LogicalAnd;
 use PhpParser\Node\Scalar\LNumber;
@@ -960,10 +1154,14 @@ return new LogicalAnd($left, $right);
 5 and 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\LogicalOr`
@@ -973,6 +1171,8 @@ return new LogicalAnd($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\LogicalOr;
 use PhpParser\Node\Scalar\LNumber;
@@ -989,10 +1189,14 @@ return new LogicalOr($left, $right);
 5 or 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\LogicalXor`
@@ -1002,6 +1206,8 @@ return new LogicalOr($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\LogicalXor;
 use PhpParser\Node\Scalar\LNumber;
@@ -1018,10 +1224,14 @@ return new LogicalXor($left, $right);
 5 xor 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Minus`
@@ -1031,6 +1241,8 @@ return new LogicalXor($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Scalar\LNumber;
@@ -1047,10 +1259,14 @@ return new Minus($left, $right);
 5 - 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Mod`
@@ -1060,6 +1276,8 @@ return new Minus($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Mod;
 use PhpParser\Node\Scalar\LNumber;
@@ -1076,10 +1294,14 @@ return new Mod($left, $right);
 5 % 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Mul`
@@ -1089,6 +1311,8 @@ return new Mod($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Mul;
 use PhpParser\Node\Scalar\LNumber;
@@ -1105,10 +1329,14 @@ return new Mul($left, $right);
 5 * 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\NotEqual`
@@ -1118,6 +1346,8 @@ return new Mul($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Scalar\LNumber;
@@ -1134,10 +1364,14 @@ return new NotEqual($left, $right);
 5 != 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\NotIdentical`
@@ -1147,6 +1381,8 @@ return new NotEqual($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Scalar\LNumber;
@@ -1163,10 +1399,14 @@ return new NotIdentical($left, $right);
 5 !== 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Plus`
@@ -1176,6 +1416,8 @@ return new NotIdentical($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Scalar\LNumber;
@@ -1192,10 +1434,14 @@ return new Plus($left, $right);
 5 + 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Pow`
@@ -1205,6 +1451,8 @@ return new Plus($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Pow;
 use PhpParser\Node\Scalar\LNumber;
@@ -1221,10 +1469,14 @@ return new Pow($left, $right);
 5 ** 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\ShiftLeft`
@@ -1234,6 +1486,8 @@ return new Pow($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\ShiftLeft;
 use PhpParser\Node\Scalar\LNumber;
@@ -1250,10 +1504,14 @@ return new ShiftLeft($left, $right);
 5 << 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\ShiftRight`
@@ -1263,6 +1521,8 @@ return new ShiftLeft($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\ShiftRight;
 use PhpParser\Node\Scalar\LNumber;
@@ -1279,10 +1539,14 @@ return new ShiftRight($left, $right);
 5 >> 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Smaller`
@@ -1292,6 +1556,8 @@ return new ShiftRight($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Scalar\LNumber;
@@ -1308,10 +1574,14 @@ return new Smaller($left, $right);
 5 < 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\SmallerOrEqual`
@@ -1321,6 +1591,8 @@ return new Smaller($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Scalar\LNumber;
@@ -1337,10 +1609,14 @@ return new SmallerOrEqual($left, $right);
 5 <= 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BinaryOp\Spaceship`
@@ -1350,6 +1626,8 @@ return new SmallerOrEqual($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Scalar\LNumber;
@@ -1366,10 +1644,14 @@ return new Spaceship($left, $right);
 5 <=> 10
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BitwiseNot`
@@ -1379,6 +1661,8 @@ return new Spaceship($left, $right);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BitwiseNot;
 use PhpParser\Node\Expr\Variable;
@@ -1394,9 +1678,13 @@ return new BitwiseNot($variable);
 ~$variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\BooleanNot`
@@ -1406,6 +1694,8 @@ return new BitwiseNot($variable);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Variable;
@@ -1421,9 +1711,13 @@ return new BooleanNot($variable);
 !$isEligible
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Cast\Array_`
@@ -1433,6 +1727,8 @@ return new BooleanNot($variable);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\Variable;
@@ -1448,9 +1744,13 @@ return new Array_($expr);
 (array) $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Cast\Bool_`
@@ -1460,6 +1760,8 @@ return new Array_($expr);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Variable;
@@ -1475,9 +1777,13 @@ return new Bool_($expr);
 (bool) $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Cast\Double`
@@ -1487,6 +1793,8 @@ return new Bool_($expr);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Cast\Double;
 use PhpParser\Node\Expr\Variable;
@@ -1502,9 +1810,13 @@ return new Double($expr);
 (double) $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Cast\Int_`
@@ -1514,6 +1826,8 @@ return new Double($expr);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Variable;
@@ -1529,9 +1843,13 @@ return new Int_($expr);
 (int) $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Cast\String_`
@@ -1541,6 +1859,8 @@ return new Int_($expr);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\Variable;
@@ -1556,9 +1876,13 @@ return new String_($expr);
 (string) $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Cast\Unset_`
@@ -1568,6 +1892,8 @@ return new String_($expr);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Cast\Unset_;
 use PhpParser\Node\Expr\Variable;
@@ -1583,9 +1909,13 @@ return new Unset_($expr);
 (unset) $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\ClassConstFetch`
@@ -1595,6 +1925,8 @@ return new Unset_($expr);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
@@ -1610,10 +1942,14 @@ return new ClassConstFetch($class, 'SOME_CONSTANT');
 \SomeClassName::SOME_CONSTANT
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$class` - `/** @var Name|Expr Class name */`
  * `$name` - `/** @var Identifier|Error Constant name */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Clone_`
@@ -1623,6 +1959,8 @@ return new ClassConstFetch($class, 'SOME_CONSTANT');
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\Variable;
@@ -1638,9 +1976,13 @@ return new Clone_($variable);
 clone $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\ClosureUse`
@@ -1650,6 +1992,8 @@ clone $variableName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
@@ -1665,10 +2009,14 @@ return new ClosureUse($variable);
 $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr\Variable Variable to use */`
  * `$byRef` - `/** @var bool Whether to use by reference */`
+
 <br>
 
 ## `PhpParser\Node\Expr\ConstFetch`
@@ -1678,6 +2026,8 @@ $variableName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
@@ -1693,9 +2043,13 @@ return new ConstFetch($name);
 true
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$name` - `/** @var Name Constant name */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Empty_`
@@ -1705,6 +2059,8 @@ true
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Variable;
@@ -1720,9 +2076,13 @@ return new Empty_($variable);
 empty($variableName)
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\ErrorSuppress`
@@ -1732,6 +2092,8 @@ empty($variableName)
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\ErrorSuppress;
 use PhpParser\Node\Expr\Variable;
@@ -1747,9 +2109,13 @@ return new ErrorSuppress($variable);
 @$variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Eval_`
@@ -1760,21 +2126,7 @@ return new ErrorSuppress($variable);
 ```php
 <?php
 
-use PhpParser\Node\Expr\Eval_;
-use PhpParser\Node\Scalar\String_;
-
-$string = new String_('Some php code');
-
-return new Eval_(new String_('Some php code'));
-```
-
-↓
-
-```php
-eval('Some php code')
-```
-```php
-<?php
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Eval_;
 use PhpParser\Node\Scalar\String_;
@@ -1790,9 +2142,34 @@ return new Eval_($phpCode);
 eval('Some php code')
 ```
 
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use PhpParser\Node\Expr\Eval_;
+use PhpParser\Node\Scalar\String_;
+
+$string = new String_('Some php code');
+
+return new Eval_(new String_('Some php code'));
+```
+
+↓
+
+```php
+eval('Some php code')
+```
+
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\FuncCall`
@@ -1802,6 +2179,8 @@ eval('Some php code')
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -1815,10 +2194,14 @@ return new FuncCall(new Name('func_call'));
 func_call()
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$name` - `/** @var Node\Name|Expr Function name */`
  * `$args` - `/** @var Node\Arg[] Arguments */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Include_`
@@ -1828,6 +2211,8 @@ func_call()
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
@@ -1842,8 +2227,13 @@ return new Include_($variable, Include_::TYPE_REQUIRE_ONCE);
 ```php
 require_once $variableName
 ```
+
+<br>
+
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
@@ -1859,10 +2249,14 @@ return new Include_($variable, Include_::TYPE_INCLUDE);
 include $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
  * `$type` - `/** @var int Type of include */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Instanceof_`
@@ -1872,6 +2266,8 @@ include $variableName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
@@ -1889,10 +2285,14 @@ return new Instanceof_($variable, $class);
 $variableName instanceof \SomeClassName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
  * `$class` - `/** @var Name|Expr Class name */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Isset_`
@@ -1902,6 +2302,8 @@ $variableName instanceof \SomeClassName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Variable;
@@ -1917,9 +2319,13 @@ return new Isset_([$variable]);
 isset($variableName)
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$vars` - `/** @var Expr[] Variables */`
+
 <br>
 
 ## `PhpParser\Node\Expr\List_`
@@ -1930,13 +2336,18 @@ isset($variableName)
 ```php
 <?php
 
+declare(strict_types=1);
+
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 
 $variable = new Variable('variableName');
 $anotherVariable = new Variable('anoterVariableName');
 
-return new List_([$variable, $anotherVariable]);
+$arrayItems = [new ArrayItem($variable), new ArrayItem($anotherVariable)];
+
+return new List_($arrayItems);
 ```
 
 ↓
@@ -1945,9 +2356,13 @@ return new List_([$variable, $anotherVariable]);
 list($variableName, $anoterVariableName)
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$items` - `/** @var (ArrayItem|null)[] List of items to assign to */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Match_`
@@ -1957,6 +2372,8 @@ list($variableName, $anoterVariableName)
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Variable;
@@ -1981,10 +2398,14 @@ match ($variableName) {
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$cond` - `/** @var Node\Expr */`
  * `$arms` - `/** @var MatchArm[] */`
+
 <br>
 
 ## `PhpParser\Node\Expr\MethodCall`
@@ -1995,21 +2416,7 @@ match ($variableName) {
 ```php
 <?php
 
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-
-$variable = new Variable('someObject');
-
-return new MethodCall($variable, 'methodName');
-```
-
-↓
-
-```php
-$someObject->methodName()
-```
-```php
-<?php
+declare(strict_types=1);
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
@@ -2031,11 +2438,36 @@ return new MethodCall($variable, 'methodName', $args);
 $someObject->methodName('yes', 'maybe')
 ```
 
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('someObject');
+
+return new MethodCall($variable, 'methodName');
+```
+
+↓
+
+```php
+$someObject->methodName()
+```
+
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable holding object */`
  * `$name` - `/** @var Identifier|Expr Method name */`
  * `$args` - `/** @var Arg[] Arguments */`
+
 <br>
 
 ## `PhpParser\Node\Expr\New_`
@@ -2045,6 +2477,31 @@ $someObject->methodName('yes', 'maybe')
 
 ```php
 <?php
+
+declare(strict_types=1);
+
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name;
+
+$class = new Name('SomeClass');
+
+return new New_($class);
+```
+
+↓
+
+```php
+new SomeClass()
+```
+
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
+// anonymous class
 
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Class_;
@@ -2061,27 +2518,15 @@ new class
 {
 }
 ```
-```php
-<?php
 
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name;
+<br>
 
-$class = new Name('SomeClass');
-
-return new New_($class);
-```
-
-↓
-
-```php
-new SomeClass()
-```
 
 ### Public Properties
 
  * `$class` - `/** @var Node\Name|Expr|Node\Stmt\Class_ Class name */`
  * `$args` - `/** @var Node\Arg[] Arguments */`
+
 <br>
 
 ## `PhpParser\Node\Expr\NullsafeMethodCall`
@@ -2091,6 +2536,8 @@ new SomeClass()
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -2106,11 +2553,15 @@ return new NullsafeMethodCall($variable, 'methodName');
 $variableName?->methodName()
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable holding object */`
  * `$name` - `/** @var Identifier|Expr Method name */`
  * `$args` - `/** @var Arg[] Arguments */`
+
 <br>
 
 ## `PhpParser\Node\Expr\NullsafePropertyFetch`
@@ -2120,6 +2571,8 @@ $variableName?->methodName()
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -2135,10 +2588,14 @@ return new NullsafePropertyFetch($variable, 'someProperty');
 $variableName?->someProperty
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable holding object */`
  * `$name` - `/** @var Identifier|Expr Property name */`
+
 <br>
 
 ## `PhpParser\Node\Expr\PostDec`
@@ -2148,6 +2605,8 @@ $variableName?->someProperty
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\Variable;
@@ -2163,9 +2622,13 @@ return new PostDec($variable);
 $variableName--
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
+
 <br>
 
 ## `PhpParser\Node\Expr\PostInc`
@@ -2175,6 +2638,8 @@ $variableName--
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\Variable;
@@ -2190,9 +2655,13 @@ return new PostInc($variable);
 $variableName++
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
+
 <br>
 
 ## `PhpParser\Node\Expr\PreDec`
@@ -2202,6 +2671,8 @@ $variableName++
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\Variable;
@@ -2217,9 +2688,13 @@ return new PreDec($variable);
 --$variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
+
 <br>
 
 ## `PhpParser\Node\Expr\PreInc`
@@ -2229,6 +2704,8 @@ return new PreDec($variable);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\Variable;
@@ -2244,9 +2721,13 @@ return new PreInc($variable);
 ++$variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Print_`
@@ -2256,6 +2737,8 @@ return new PreInc($variable);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Print_;
 use PhpParser\Node\Scalar\String_;
@@ -2271,9 +2754,13 @@ return new Print_($string);
 print 'Some php code'
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\PropertyFetch`
@@ -2283,6 +2770,8 @@ print 'Some php code'
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -2298,10 +2787,14 @@ return new PropertyFetch($variable, 'propertyName');
 $variableName->propertyName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable holding object */`
  * `$name` - `/** @var Identifier|Expr Property name */`
+
 <br>
 
 ## `PhpParser\Node\Expr\ShellExec`
@@ -2311,6 +2804,8 @@ $variableName->propertyName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\ShellExec;
 use PhpParser\Node\Scalar\EncapsedStringPart;
@@ -2326,9 +2821,13 @@ return new ShellExec($parts);
 `first partsecond part`
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$parts` - `/** @var array Encapsed string array */`
+
 <br>
 
 ## `PhpParser\Node\Expr\StaticCall`
@@ -2338,6 +2837,8 @@ return new ShellExec($parts);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
@@ -2353,11 +2854,15 @@ return new StaticCall($fullyQualified, 'methodName');
 \ClassName::methodName()
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$class` - `/** @var Node\Name|Expr Class name */`
  * `$name` - `/** @var Identifier|Expr Method name */`
  * `$args` - `/** @var Node\Arg[] Arguments */`
+
 <br>
 
 ## `PhpParser\Node\Expr\StaticPropertyFetch`
@@ -2367,6 +2872,8 @@ return new StaticCall($fullyQualified, 'methodName');
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name\FullyQualified;
@@ -2382,10 +2889,14 @@ return new StaticPropertyFetch($class, 'someProperty');
 \StaticClassName::$someProperty
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$class` - `/** @var Name|Expr Class name */`
  * `$name` - `/** @var VarLikeIdentifier|Expr Property name */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Ternary`
@@ -2395,6 +2906,8 @@ return new StaticPropertyFetch($class, 'someProperty');
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Ternary;
@@ -2415,11 +2928,15 @@ return new Ternary($variable, $trueConstFetch, $falseConstFetch);
 $variableName ? true : false
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$cond` - `/** @var Expr Condition */`
  * `$if` - `/** @var null|Expr Expression for true */`
  * `$else` - `/** @var Expr Expression for false */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Throw_`
@@ -2430,8 +2947,10 @@ $variableName ? true : false
 ```php
 <?php
 
-use PhpParser\Node\Scalar\String_;
+declare(strict_types=1);
+
 use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Scalar\String_;
 
 $string = new String_('some string');
 
@@ -2444,9 +2963,13 @@ return new Throw_($string);
 throw 'some string'
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Node\Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\UnaryMinus`
@@ -2456,6 +2979,8 @@ throw 'some string'
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\Variable;
@@ -2471,9 +2996,13 @@ return new UnaryMinus($variable);
 -$variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\UnaryPlus`
@@ -2483,6 +3012,8 @@ return new UnaryMinus($variable);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
@@ -2498,9 +3029,13 @@ return new UnaryPlus($variable);
 +$variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Expr\Variable`
@@ -2510,6 +3045,8 @@ return new UnaryPlus($variable);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 
@@ -2522,9 +3059,13 @@ return new Variable('variableName');
 $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$name` - `/** @var string|Expr Name */`
+
 <br>
 
 ## `PhpParser\Node\Expr\YieldFrom`
@@ -2534,6 +3075,8 @@ $variableName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\YieldFrom;
@@ -2549,9 +3092,13 @@ return new YieldFrom($variable);
 yield from $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression to yield from */`
+
 <br>
 
 ## `PhpParser\Node\Identifier`
@@ -2561,6 +3108,8 @@ yield from $variableName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Identifier;
 
@@ -2573,10 +3122,14 @@ return new Identifier('identifierName');
 identifierName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$name` - `/** @var string Identifier as string */`
  * `$specialClassNames` - ``
+
 <br>
 
 ## `PhpParser\Node\MatchArm`
@@ -2586,6 +3139,8 @@ identifierName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\MatchArm;
 use PhpParser\Node\Scalar\LNumber;
@@ -2603,10 +3158,14 @@ return new MatchArm($conds, $body);
 1 => 'yes'
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$conds` - `/** @var null|Node\Expr[] */`
  * `$body` - `/** @var Node\Expr */`
+
 <br>
 
 ## `PhpParser\Node\Name`
@@ -2616,6 +3175,8 @@ return new MatchArm($conds, $body);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Name;
 
@@ -2628,10 +3189,14 @@ return new Name('shortName');
 shortName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$parts` - `/** @var string[] Parts of the name */`
  * `$specialClassNames` - ``
+
 <br>
 
 ## `PhpParser\Node\Name\FullyQualified`
@@ -2641,6 +3206,8 @@ shortName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Name\FullyQualified;
 
@@ -2653,9 +3220,13 @@ return new FullyQualified('SomeNamespace\ShortName');
 \SomeNamespace\ShortName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$parts` - `/** @var string[] Parts of the name */`
+
 <br>
 
 ## `PhpParser\Node\Name\Relative`
@@ -2665,6 +3236,8 @@ return new FullyQualified('SomeNamespace\ShortName');
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Name\Relative;
 
@@ -2677,9 +3250,13 @@ return new Relative('PartOf\SomeNamespace\ShortName');
 namespace\PartOf\SomeNamespace\ShortName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$parts` - `/** @var string[] Parts of the name */`
+
 <br>
 
 ## `PhpParser\Node\NullableType`
@@ -2690,8 +3267,8 @@ namespace\PartOf\SomeNamespace\ShortName
 ```php
 <?php
 
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
+declare(strict_types=1);
+
 use PhpParser\Node\NullableType;
 
 return new NullableType('SomeType');
@@ -2703,9 +3280,13 @@ return new NullableType('SomeType');
 ?SomeType
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$type` - `/** @var Identifier|Name Type */`
+
 <br>
 
 ## `PhpParser\Node\Param`
@@ -2715,6 +3296,8 @@ return new NullableType('SomeType');
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -2730,6 +3313,9 @@ return new Param($variable);
 $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$type` - `/** @var null|Identifier|Name|NullableType|UnionType Type declaration */`
@@ -2738,6 +3324,7 @@ $variableName
  * `$var` - `/** @var Expr\Variable|Expr\Error Parameter variable */`
  * `$default` - `/** @var null|Expr Default value */`
  * `$flags` - `/** @var int */`
+
 <br>
 
 ## `PhpParser\Node\Scalar\DNumber`
@@ -2747,6 +3334,8 @@ $variableName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Scalar\DNumber;
 
@@ -2759,9 +3348,13 @@ return new DNumber(10.5);
 10.5
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$value` - `/** @var float Number value */`
+
 <br>
 
 ## `PhpParser\Node\Scalar\Encapsed`
@@ -2771,6 +3364,8 @@ return new DNumber(10.5);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
@@ -2784,9 +3379,13 @@ return new Encapsed([new Variable('variableName')]);
 "{$variableName}"
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$parts` - `/** @var Expr[] list of string parts */`
+
 <br>
 
 ## `PhpParser\Node\Scalar\EncapsedStringPart`
@@ -2796,6 +3395,8 @@ return new Encapsed([new Variable('variableName')]);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Scalar\EncapsedStringPart;
 
@@ -2808,9 +3409,13 @@ return new EncapsedStringPart('enscapsed');
 UNABLE_TO_PRINT_ENCAPSED_STRING
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$value` - `/** @var string String value */`
+
 <br>
 
 ## `PhpParser\Node\Scalar\LNumber`
@@ -2820,6 +3425,8 @@ UNABLE_TO_PRINT_ENCAPSED_STRING
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Scalar\LNumber;
 
@@ -2832,9 +3439,13 @@ return new LNumber(1000);
 1000
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$value` - `/** @var int Number value */`
+
 <br>
 
 ## `PhpParser\Node\Scalar\String_`
@@ -2844,6 +3455,8 @@ return new LNumber(1000);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Scalar\String_;
 
@@ -2856,10 +3469,14 @@ return new String_('some string');
 'some string'
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$value` - `/** @var string String value */`
  * `$replacements` - ``
+
 <br>
 
 ## `PhpParser\Node\Stmt\Case_`
@@ -2869,6 +3486,8 @@ return new String_('some string');
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
@@ -2885,10 +3504,14 @@ return new Case_($trueConstFetch);
 case true:
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$cond` - `/** @var null|Node\Expr Condition (null for default) */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Catch_`
@@ -2898,6 +3521,8 @@ case true:
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
@@ -2916,11 +3541,15 @@ catch (\ClassType $CaughtVariable) {
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$types` - `/** @var Node\Name[] Types of exceptions to catch */`
  * `$var` - `/** @var Expr\Variable|null Variable for exception */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\ClassConst`
@@ -2930,6 +3559,8 @@ catch (\ClassType $CaughtVariable) {
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Const_;
 use PhpParser\Node\Scalar\String_;
@@ -2948,10 +3579,14 @@ return new ClassConst([$const], Class_::MODIFIER_PUBLIC);
 public const SOME_CLASS_CONSTANT = 'default value';
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$flags` - `/** @var int Modifiers */`
  * `$consts` - `/** @var Node\Const_[] Constant declarations */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\ClassMethod`
@@ -2961,6 +3596,8 @@ public const SOME_CLASS_CONSTANT = 'default value';
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -2985,8 +3622,13 @@ private function methodName($paramName): string
 {
 }
 ```
+
+<br>
+
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -3005,6 +3647,9 @@ public function methodName()
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$flags` - `/** @var int Flags */`
@@ -3014,6 +3659,7 @@ public function methodName()
  * `$returnType` - `/** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType Return type */`
  * `$stmts` - `/** @var Node\Stmt[]|null Statements */`
  * `$magicNames` - ``
+
 <br>
 
 ## `PhpParser\Node\Stmt\Class_`
@@ -3023,6 +3669,34 @@ public function methodName()
 
 ```php
 <?php
+
+declare(strict_types=1);
+
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+
+$class = new Class_('ClassName');
+
+$class->flags = Class_::MODIFIER_FINAL;
+$class->extends = new FullyQualified('ParentClass');
+
+return $class;
+```
+
+↓
+
+```php
+final class ClassName extends \ParentClass
+{
+}
+```
+
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Stmt\Class_;
 
@@ -3036,27 +3710,9 @@ class ClassName
 {
 }
 ```
-```php
-<?php
 
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\Class_;
+<br>
 
-$class = new Class_('ClassName');
-
-$class->flags = Class_::MODIFIER_FINAL;
-$class->extends = new Identifier('ParentClass');
-
-return $class;
-```
-
-↓
-
-```php
-final class ClassName extends ParentClass
-{
-}
-```
 
 ### Public Properties
 
@@ -3065,6 +3721,7 @@ final class ClassName extends ParentClass
  * `$implements` - `/** @var Node\Name[] Names of implemented interfaces */`
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Const_`
@@ -3075,13 +3732,13 @@ final class ClassName extends ParentClass
 ```php
 <?php
 
+declare(strict_types=1);
+
 use PhpParser\Node\Const_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Const_ as ConstStmt;
 
-$consts = [
-    new Const_('CONSTANT_IN_CLASS', new String_('default value'))
-];
+$consts = [new Const_('CONSTANT_IN_CLASS', new String_('default value'))];
 
 return new ConstStmt($consts);
 ```
@@ -3092,9 +3749,13 @@ return new ConstStmt($consts);
 const CONSTANT_IN_CLASS = 'default value';
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$consts` - `/** @var Node\Const_[] Constant declarations */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\DeclareDeclare`
@@ -3104,6 +3765,8 @@ const CONSTANT_IN_CLASS = 'default value';
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\DeclareDeclare;
@@ -3117,10 +3780,14 @@ return new DeclareDeclare('strict_types', new LNumber(1));
 strict_types=1
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$key` - `/** @var Node\Identifier Key */`
  * `$value` - `/** @var Node\Expr Value */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Declare_`
@@ -3130,6 +3797,8 @@ strict_types=1
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Declare_;
@@ -3146,10 +3815,14 @@ return new Declare_([$declareDeclare]);
 declare(strict_types=1);
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$declares` - `/** @var DeclareDeclare[] List of declares */`
  * `$stmts` - `/** @var Node\Stmt[]|null Statements */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Do_`
@@ -3159,6 +3832,8 @@ declare(strict_types=1);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Do_;
@@ -3175,10 +3850,14 @@ do {
 } while ($variableName);
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
  * `$cond` - `/** @var Node\Expr Condition */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Echo_`
@@ -3188,6 +3867,8 @@ do {
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Echo_;
@@ -3203,9 +3884,13 @@ return new Echo_([$string]);
 echo 'hello';
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$exprs` - `/** @var Node\Expr[] Expressions */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\ElseIf_`
@@ -3216,9 +3901,11 @@ echo 'hello';
 ```php
 <?php
 
+declare(strict_types=1);
+
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Stmt\Return_;
 
 $name = new Name('true');
@@ -3236,10 +3923,14 @@ elseif (true) {
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Foreach_`
@@ -3249,6 +3940,8 @@ elseif (true) {
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
@@ -3266,6 +3959,9 @@ foreach ($foreachedVariableName as $asVariable) {
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Node\Expr Expression to iterate */`
@@ -3273,6 +3969,7 @@ foreach ($foreachedVariableName as $asVariable) {
  * `$byRef` - `/** @var bool Whether to assign value by reference */`
  * `$valueVar` - `/** @var Node\Expr Variable to assign value to */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Function_`
@@ -3282,6 +3979,8 @@ foreach ($foreachedVariableName as $asVariable) {
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Stmt\Function_;
 
@@ -3296,6 +3995,9 @@ function some_function()
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$byRef` - `/** @var bool Whether function returns by reference */`
@@ -3303,6 +4005,7 @@ function some_function()
  * `$params` - `/** @var Node\Param[] Parameters */`
  * `$returnType` - `/** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType Return type */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Global_`
@@ -3312,6 +4015,8 @@ function some_function()
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Global_;
@@ -3327,9 +4032,13 @@ return new Global_([$variable]);
 global $globalVariable;
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$vars` - `/** @var Node\Expr[] Variables */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Goto_`
@@ -3339,6 +4048,8 @@ global $globalVariable;
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Stmt\Goto_;
 
@@ -3351,9 +4062,13 @@ return new Goto_('goto_break');
 goto goto_break;
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$name` - `/** @var Identifier Name of label to jump to */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\GroupUse`
@@ -3364,13 +4079,13 @@ goto goto_break;
 ```php
 <?php
 
+declare(strict_types=1);
+
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\UseUse;
 
-$uses = [
-    new UseUse(new Name('UserName'))
-];
+$uses = [new UseUse(new Name('UserName'))];
 
 return new GroupUse(new Name('prefix'), $uses);
 ```
@@ -3381,11 +4096,15 @@ return new GroupUse(new Name('prefix'), $uses);
 use prefix\{UserName};
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$type` - `/** @var int Type of group use */`
  * `$prefix` - `/** @var Name Prefix for uses */`
  * `$uses` - `/** @var UseUse[] Uses */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\HaltCompiler`
@@ -3395,6 +4114,8 @@ use prefix\{UserName};
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Stmt\HaltCompiler;
 
@@ -3407,9 +4128,13 @@ return new HaltCompiler('remaining');
 __halt_compiler();remaining
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$remaining` - `/** @var string Remaining text after halt compiler statement. */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\If_`
@@ -3420,8 +4145,10 @@ __halt_compiler();remaining
 ```php
 <?php
 
-use PhpParser\Node\Name;
+declare(strict_types=1);
+
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\If_;
 
 $cond = new ConstFetch(new Name('true'));
@@ -3436,12 +4163,16 @@ if (true) {
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition expression */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
  * `$elseifs` - `/** @var ElseIf_[] Elseif clauses */`
  * `$else` - `/** @var null|Else_ Else clause */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\InlineHTML`
@@ -3451,6 +4182,8 @@ if (true) {
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Stmt\InlineHTML;
 
@@ -3464,9 +4197,13 @@ return new InlineHTML('<strong>feel</strong>');
 <strong>feel</strong><?php
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$value` - `/** @var string String */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Interface_`
@@ -3476,6 +4213,8 @@ return new InlineHTML('<strong>feel</strong>');
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Interface_;
@@ -3491,11 +4230,15 @@ interface InterfaceName
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$extends` - `/** @var Node\Name[] Extended interfaces */`
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Label`
@@ -3505,6 +4248,8 @@ interface InterfaceName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Stmt\Label;
 
@@ -3517,9 +4262,13 @@ return new Label('labelName');
 labelName:
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$name` - `/** @var Identifier Name */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Property`
@@ -3530,50 +4279,14 @@ labelName:
 ```php
 <?php
 
+declare(strict_types=1);
+
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\VarLikeIdentifier;
 
-$propertyProperties = [
-    new PropertyProperty('firstProperty'),
-    new PropertyProperty('secondProperty'),
-];
-
-return new Property(Class_::MODIFIER_STATIC | Class_::MODIFIER_PUBLIC, $propertyProperties);
-```
-
-↓
-
-```php
-public static $firstProperty, $secondProperty;
-```
-```php
-<?php
-
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
-
-$propertyProperty = new PropertyProperty(new Identifier('propertyName'));
-
-return new Property(Class_::MODIFIER_PUBLIC, [$propertyProperty]);
-```
-
-↓
-
-```php
-public $propertyName;
-```
-```php
-<?php
-
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
-
-$propertyProperty = new PropertyProperty(new Identifier('propertyName'));
+$propertyProperty = new PropertyProperty(new VarLikeIdentifier('propertyName'));
 
 return new Property(Class_::MODIFIER_PUBLIC, [$propertyProperty], [], 'string');
 ```
@@ -3584,11 +4297,60 @@ return new Property(Class_::MODIFIER_PUBLIC, [$propertyProperty], [], 'string');
 public string $propertyName;
 ```
 
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\VarLikeIdentifier;
+
+$propertyProperty = new PropertyProperty(new VarLikeIdentifier('propertyName'));
+
+return new Property(Class_::MODIFIER_PUBLIC, [$propertyProperty]);
+```
+
+↓
+
+```php
+public $propertyName;
+```
+
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
+
+$propertyProperties = [new PropertyProperty('firstProperty'), new PropertyProperty('secondProperty')];
+
+return new Property(Class_::MODIFIER_STATIC | Class_::MODIFIER_PUBLIC, $propertyProperties);
+```
+
+↓
+
+```php
+public static $firstProperty, $secondProperty;
+```
+
+<br>
+
+
 ### Public Properties
 
  * `$flags` - `/** @var int Modifiers */`
  * `$props` - `/** @var PropertyProperty[] Properties */`
  * `$type` - `/** @var null|Identifier|Name|NullableType|UnionType Type declaration */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\PropertyProperty`
@@ -3598,6 +4360,8 @@ public string $propertyName;
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Stmt\PropertyProperty;
 
@@ -3610,10 +4374,14 @@ return new PropertyProperty('propertyName');
 $propertyName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$name` - `/** @var Node\VarLikeIdentifier Name */`
  * `$default` - `/** @var null|Node\Expr Default */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\StaticVar`
@@ -3623,6 +4391,8 @@ $propertyName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\StaticVar;
@@ -3638,10 +4408,14 @@ return new StaticVar($variable);
 $variableName
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$var` - `/** @var Expr\Variable Variable */`
  * `$default` - `/** @var null|Node\Expr Default value */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Static_`
@@ -3651,6 +4425,8 @@ $variableName
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Static_;
@@ -3667,9 +4443,13 @@ return new Static_($staticVars);
 static $static;
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$vars` - `/** @var StaticVar[] Variable definitions */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Switch_`
@@ -3679,6 +4459,8 @@ static $static;
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
@@ -3699,10 +4481,14 @@ switch ($variableName) {
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition */`
  * `$cases` - `/** @var Case_[] Case list */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Throw_`
@@ -3712,6 +4498,8 @@ switch ($variableName) {
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Throw_;
@@ -3727,9 +4515,13 @@ return new Throw_($string);
 throw 'some string';
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$expr` - `/** @var Node\Expr Expression */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\TraitUse`
@@ -3739,6 +4531,8 @@ throw 'some string';
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\TraitUse;
@@ -3752,10 +4546,14 @@ return new TraitUse([new FullyQualified('TraitName')]);
 use \TraitName;
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$traits` - `/** @var Node\Name[] Traits */`
  * `$adaptations` - `/** @var TraitUseAdaptation[] Adaptations */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\TraitUseAdaptation\Alias`
@@ -3765,6 +4563,8 @@ use \TraitName;
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -3781,12 +4581,16 @@ return new Alias($traitFullyQualified, 'method', Class_::MODIFIER_PUBLIC, 'alias
 \TraitName::method as public aliasedMethod;
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$newModifier` - `/** @var null|int New modifier */`
  * `$newName` - `/** @var null|Node\Identifier New name */`
  * `$trait` - `/** @var Node\Name|null Trait name */`
  * `$method` - `/** @var Node\Identifier Method name */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\TraitUseAdaptation\Precedence`
@@ -3796,6 +4600,8 @@ return new Alias($traitFullyQualified, 'method', Class_::MODIFIER_PUBLIC, 'alias
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\TraitUseAdaptation\Precedence;
@@ -3812,11 +4618,15 @@ return new Precedence($firstTrait, 'methodName', [$secondTrait]);
 SomeTrait::methodName insteadof OverriddenTrait;
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$insteadof` - `/** @var Node\Name[] Overwritten traits */`
  * `$trait` - `/** @var Node\Name|null Trait name */`
  * `$method` - `/** @var Node\Identifier Method name */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Trait_`
@@ -3826,6 +4636,8 @@ SomeTrait::methodName insteadof OverriddenTrait;
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Stmt\Trait_;
 
@@ -3840,10 +4652,14 @@ trait TraitName
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\TryCatch`
@@ -3854,16 +4670,21 @@ trait TraitName
 ```php
 <?php
 
+declare(strict_types=1);
+
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TryCatch;
 
 $variable = new Variable('exceptionVariableName');
 $catch = new Catch_([new FullyQualified('CatchedType')], $variable);
-$stmts = [new FuncCall(new Name('funcCallName'))];
+
+$funcCall = new FuncCall(new Name('funcCallName'));
+$stmts = [new Expression($funcCall)];
 
 return new TryCatch($stmts, [$catch]);
 ```
@@ -3872,16 +4693,20 @@ return new TryCatch($stmts, [$catch]);
 
 ```php
 try {
-    funcCallName()
+    funcCallName();
 } catch (\CatchedType $exceptionVariableName) {
 }
 ```
+
+<br>
+
 
 ### Public Properties
 
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
  * `$catches` - `/** @var Catch_[] Catches */`
  * `$finally` - `/** @var null|Finally_ Optional finally node */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\Unset_`
@@ -3891,6 +4716,8 @@ try {
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Unset_;
@@ -3906,9 +4733,13 @@ return new Unset_([$variable]);
 unset($variableName);
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$vars` - `/** @var Node\Expr[] Variables to unset */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\UseUse`
@@ -3918,6 +4749,8 @@ unset($variableName);
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\UseUse;
@@ -3931,11 +4764,15 @@ return new UseUse(new Name('UsedNamespace'));
 UsedNamespace
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$type` - `/** @var int One of the Stmt\Use_::TYPE_* constants. Will only differ from TYPE_UNKNOWN for mixed group uses */`
  * `$name` - `/** @var Node\Name Namespace, class, function or constant to alias */`
  * `$alias` - `/** @var Identifier|null Alias */`
+
 <br>
 
 ## `PhpParser\Node\Stmt\While_`
@@ -3945,6 +4782,8 @@ UsedNamespace
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\While_;
@@ -3959,10 +4798,14 @@ while ($variableName) {
 }
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+
 <br>
 
 ## `PhpParser\Node\UnionType`
@@ -3972,6 +4815,8 @@ while ($variableName) {
 
 ```php
 <?php
+
+declare(strict_types=1);
 
 use PhpParser\Node\Identifier;
 use PhpParser\Node\UnionType;
@@ -3987,8 +4832,12 @@ return new UnionType($unionedTypes);
 string|int
 ```
 
+<br>
+
+
 ### Public Properties
 
  * `$types` - `/** @var (Identifier|Name)[] Types */`
+
 <br>
 
