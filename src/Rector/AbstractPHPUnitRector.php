@@ -13,6 +13,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const TEST_ANNOTATOIN_REGEX = '#@test\b#';
+
     protected function isTestClassMethod(ClassMethod $classMethod): bool
     {
         if (! $classMethod->isPublic()) {
@@ -25,7 +30,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
 
         $docComment = $classMethod->getDocComment();
         if ($docComment !== null) {
-            return (bool) Strings::match($docComment->getText(), '#@test\b#');
+            return (bool) Strings::match($docComment->getText(), self::TEST_ANNOTATOIN_REGEX);
         }
 
         return false;

@@ -19,6 +19,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeTransformer
 {
     /**
+     * @var string
+     */
+    private const PERCENT_TEXT_REGEX = '#^%\w$#';
+
+    /**
      * From:
      * - sprintf("Hi %s", $name);
      *
@@ -40,7 +45,7 @@ final class NodeTransformer
         $arrayMessageParts = [];
 
         foreach ($messageParts as $messagePart) {
-            if (Strings::match($messagePart, '#^%\w$#')) {
+            if (Strings::match($messagePart, self::PERCENT_TEXT_REGEX)) {
                 /** @var Expr $messagePartNode */
                 $messagePartNode = array_shift($arrayItems);
             } else {

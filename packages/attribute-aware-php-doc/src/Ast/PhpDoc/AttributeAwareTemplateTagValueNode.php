@@ -17,13 +17,18 @@ final class AttributeAwareTemplateTagValueNode extends TemplateTagValueNode impl
     /**
      * @var string
      */
+    private const AS_OF_PREPOSITOIN_REGEX = '#\s+(?<preposition>as|of)\s+#';
+
+    /**
+     * @var string
+     */
     private $preposition;
 
     public function __construct(string $name, ?TypeNode $typeNode, string $description, string $originalContent)
     {
         parent::__construct($name, $typeNode, $description);
 
-        $matches = Strings::match($originalContent, '#\s+(?<preposition>as|of)\s+#');
+        $matches = Strings::match($originalContent, self::AS_OF_PREPOSITOIN_REGEX);
         $this->preposition = $matches['preposition'] ?? 'of';
     }
 

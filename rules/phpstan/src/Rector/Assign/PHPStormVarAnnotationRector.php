@@ -22,6 +22,21 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class PHPStormVarAnnotationRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const SINGLE_ASTERISK_COMMENT_START_REGEX = '#^\/\* #';
+
+    /**
+     * @var string
+     */
+    private const VAR_ANNOTATION_REGEX = '#\@var(\s)+\$#';
+
+    /**
+     * @var string
+     */
+    private const VARIABLE_NAME_AND_TYPE_MATCH_REGEX = '#(?<variableName>\$\w+)(?<space>\s+)(?<type>[\\\\\w]+)#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change various @var annotation formats to one PHPStorm understands', [
@@ -137,16 +152,12 @@ CODE_SAMPLE
 
         // starts with "/*", instead of "/**"
         if (Strings::startsWith($docContent, '/* ')) {
-            $docContent = Strings::replace($docContent, '#^\/\* #', '/** ');
+            $docContent = Strings::replace($docContent, self::SINGLE_ASTERISK_COMMENT_START_REGEX, '/** ');
         }
 
         // $value is first, instead of type is first
-        if (Strings::match($docContent, '#\@var(\s)+\$#')) {
-            $docContent = Strings::replace(
-                $docContent,
-                '#(?<variableName>\$\w+)(?<space>\s+)(?<type>[\\\\\w]+)#',
-                '$3$2$1'
-            );
+        if (Strings::match($docContent, self::VAR_ANNOTATION_REGEX)) {
+            $docContent = Strings::replace($docContent, self::VARIABLE_NAME_AND_TYPE_MATCH_REGEX, '$3$2$1');
         }
 
         return new Doc($docContent);

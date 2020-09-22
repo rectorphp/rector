@@ -37,6 +37,11 @@ final class StaticEasyPrefixer
         'Doctrine\ORM\Mapping\*',
     ];
 
+    /**
+     * @var string
+     */
+    private const QUOTED_VALUE_REGEX = '#\'\\\\(\w|@)#';
+
     public static function prefixClass(string $class, string $prefix): string
     {
         foreach (self::EXCLUDED_NAMESPACES as $excludedNamespace) {
@@ -65,7 +70,7 @@ final class StaticEasyPrefixer
 
     public static function unPreSlashQuotedValues(string $content): string
     {
-        return Strings::replace($content, '#\'\\\\(\w|@)#', "'$1");
+        return Strings::replace($content, self::QUOTED_VALUE_REGEX, "'$1");
     }
 
     /**

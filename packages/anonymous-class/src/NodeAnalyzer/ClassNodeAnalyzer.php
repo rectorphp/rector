@@ -12,6 +12,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassNodeAnalyzer
 {
     /**
+     * @var string
+     */
+    private const ANONYMOUS_CLASS_REGEX = '#AnonymousClass\w+$#';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -33,6 +38,6 @@ final class ClassNodeAnalyzer
         }
 
         // match PHPStan pattern for anonymous classes
-        return (bool) Strings::match($className, '#AnonymousClass\w+$#');
+        return (bool) Strings::match($className, self::ANONYMOUS_CLASS_REGEX);
     }
 }

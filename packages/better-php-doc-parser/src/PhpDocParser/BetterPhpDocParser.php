@@ -35,6 +35,11 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 final class BetterPhpDocParser extends PhpDocParser
 {
     /**
+     * @var string
+     */
+    private const TAG_REGEX = '#@(var|param|return|throws|property|deprecated)#';
+
+    /**
      * @var PhpDocNodeFactoryInterface[]
      */
     private $phpDocNodeFactories = [];
@@ -271,7 +276,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->next();
 
         // basic annotation
-        if (Strings::match($tag, '#@(var|param|return|throws|property|deprecated)#')) {
+        if (Strings::match($tag, self::TAG_REGEX)) {
             return $tag;
         }
 

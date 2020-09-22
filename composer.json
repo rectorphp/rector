@@ -38,7 +38,8 @@
         "symplify/set-config-resolver": "^8.3.5",
         "symplify/smart-file-system": "^8.3.5",
         "tracy/tracy": "^2.7",
-        "webmozart/assert": "^1.8"
+        "webmozart/assert": "^1.8",
+        "jean85/pretty-package-versions": "^1.5.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
@@ -168,6 +169,7 @@
             "Rector\\Caching\\Tests\\": "packages/caching/tests",
             "Rector\\CodingStyle\\Tests\\": "rules/coding-style/tests",
             "Rector\\Core\\Tests\\": "tests",
+            "Rector\\DocumentationGenerator\\Tests\\": "packages/documentation-generator/tests",
             "Rector\\Decouple\\Tests\\": "rules/decouple/tests",
             "Rector\\DeadCode\\Tests\\": "rules/dead-code/tests",
             "Rector\\DoctrineCodeQuality\\Tests\\": "rules/doctrine-code-quality/tests",

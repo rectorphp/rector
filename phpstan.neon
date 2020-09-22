@@ -8,52 +8,65 @@ includes:
     # see https://github.com/symplify/coding-standard
     - vendor/symplify/coding-standard/config/symplify-rules.neon
 
-rules:
-    # should be fixed in next part of symplify CS release
-    - Symplify\CodingStandard\Rules\NoClassWithStaticMethodWithoutStaticNameRule
-    - Symplify\CodingStandard\Rules\SeeAnnotationToTestRule
-    - Symplify\CodingStandard\Rules\NoReferenceRule
+services:
+    -
+        class: Symplify\CodingStandard\Rules\SeeAnnotationToTestRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            requiredSeeTypes:
+                - PHPStan\Rules\Rule
+                - Rector\Core\Rector\AbstractRector
+                - Rector\FileSystemRector\Rector\AbstractFileSystemRector
+
+    -
+        class: Symplify\CodingStandard\Rules\NoStaticCallRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            allowedStaticCallClasses:
+                - PHPStan\Type\VerbosityLevel
+                - Rector\NodeTypeResolver\ClassExistenceStaticHelper
+
+    # this rule prevents bug in phar like these: https://github.com/rectorphp/rector/pull/3692/files
+    -
+        class: Symplify\CodingStandard\Rules\RequireStringArgumentInMethodCallRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            stringArgByMethodByType:
+                Rector\Core\Rector\AbstractRector:
+                    isObjectType: [1]
+
+    -
+        class: Symplify\CodingStandard\Rules\ClassNameRespectsParentSuffixRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            parentClasses:
+                - Rector
+
+    -
+        class: Symplify\CodingStandard\Rules\PreferredClassRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            oldToPrefferedClasses:
+                # prevent PHPStorm autocomplete mess
+                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
+                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
+                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
+                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
+                'Closure': 'PhpParser\Node\Expr\Closure'
+                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
+                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
+                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
+                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
+                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
 
 parameters:
     level: max
 
     # see https://github.com/symplify/coding-standard
     symplify:
-        # this rule prevents bug in phar like these: https://github.com/rectorphp/rector/pull/3692/files
-        string_arg_by_method_by_type:
-            Rector\Core\Rector\AbstractRector:
-                isObjectType: [1]
-
         max_method_cognitive_complexity: 9 # default: 8
         max_class_cognitive_complexity: 50
-
-        parent_classes:
-            - Rector
-
-        required_see_types:
-            - PHPStan\Rules\Rule
-            - Rector\Core\Rector\AbstractRector
-            - Rector\FileSystemRector\Rector\AbstractFileSystemRector
-
-        # allowed static types
-        # for \Symplify\CodingStandard\Rules\NoStaticCallRule
-        allowed_static_call_classes:
-            - PHPStan\Type\VerbosityLevel
-            - Rector\NodeTypeResolver\ClassExistenceStaticHelper
-
-        old_to_preffered_classes:
-            # prevent PHPStorm autocomplete mess
-            'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
-            'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
-            'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
-            'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
-            'Closure': 'PhpParser\Node\Expr\Closure'
-            'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
-            'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
-            'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
-            'Hoa\Protocol\Node\Node': 'PhpParser\Node'
-            'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-            'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
 
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
@@ -304,7 +317,6 @@ parameters:
 
         - '#Method (.*?) specified in iterable type Symfony\\Component\\Process\\Process#'
         - '#Cannot cast PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier to string#'
-        - '#Cognitive complexity for "Rector\\Utils\\NodeDocumentationGenerator\\Command\\DumpNodesCommand\:\:(.*?)" is \d+, keep it under 9#'
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
@@ -430,11 +442,7 @@ parameters:
         -
             message: '#Method "__construct\(\)" is using too many parameters \- \d+\. Make it under 10#'
             paths:
-                - packages/better-php-doc-parser/src/PhpDocParser/BetterPhpDocParser.php
                 - packages/node-type-resolver/src/NodeScopeAndMetadataDecorator.php
-
-        # complex command
-        - '#Method "__construct\(\)" is using too many parameters \- \d+\. Make it under 10#'
 
         # the smallest descriptive method
         - '#Variable "\$inverseJoinColumnsOpeningAndClosingSpace" is too long with \d+ chars\. Narrow it under 40 chars#'
@@ -468,4 +476,7 @@ parameters:
         # Temprory ignored
         - '#Do not use scalar or array as constructor parameter\. Use ParameterProvider service instead#'
 
-        - '#Method Rector\\Utils\\NodeDocumentationGenerator\\NodeCodeSampleProvider\:\:getNodeClasses\(\) should return array<class\-string\> but returns array<int, string\>#'
+        -
+            message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
+            paths:
+                - packages/better-php-doc-parser/src/PartPhpDocTagPrinter/Behavior/ArrayPartPhpDocTagPrinterTrait.php # 27

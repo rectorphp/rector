@@ -70,7 +70,7 @@ final class ConfigurableRectorRule implements Rule
             return false;
         }
 
-        return Strings::endsWith($class->name->toString(), 'Rector');
+        return Strings::endsWith((string) $class->namespacedName, 'Rector');
     }
 
     private function implementsConfigurableInterface(Class_ $class): bool

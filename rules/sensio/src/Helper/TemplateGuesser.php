@@ -17,6 +17,16 @@ use Rector\Sensio\BundleClassResolver;
 final class TemplateGuesser
 {
     /**
+     * @var string
+     */
+    private const BUNDLE_SUFFIX_REGEX = '#Bundle$#';
+
+    /**
+     * @var string
+     */
+    private const BUNDLE_NAME_MATCHING_REGEX = '#(?<bundle>[\w]*Bundle)#';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -60,7 +70,7 @@ final class TemplateGuesser
         $bundle = $this->resolveBundle($class, $namespace);
         $controller = $this->resolveController($class);
 
-        $action = Strings::replace($method, '#Action$#');
+        $action = Strings::endsWith($method, 'Action');
 
         $fullPath = '';
         if ($bundle !== '') {
@@ -81,8 +91,8 @@ final class TemplateGuesser
             return '@' . $shortBundleClass;
         }
 
-        $bundle = Strings::match($namespace, '#(?<bundle>[\w]*Bundle)#')['bundle'] ?? '';
-        $bundle = Strings::replace($bundle, '#Bundle$#');
+        $bundle = Strings::match($namespace, self::BUNDLE_NAME_MATCHING_REGEX)['bundle'] ?? '';
+        $bundle = Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX);
         return $bundle !== '' ? '@' . $bundle : '';
     }
 

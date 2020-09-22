@@ -106,7 +106,7 @@ final class ReturnClosurePrinter
         $rootStmts = array_merge($this->useStmts, [new Nop(), $return]);
         $printedContent = $this->betterStandardPrinter->prettyPrintFile($rootStmts);
 
-        $printedContent = $this->indentArray($printedContent);
+        //$printedContent = $this->indentArray($printedContent);
 
         return $this->indentFluentCallToNewline($printedContent);
     }

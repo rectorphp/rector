@@ -19,6 +19,16 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FilesFinder
 {
     /**
+     * @var string
+     */
+    private const STARTS_WITH_ASTERISK_REGEX = '#^\*(.*?)[^*]$#';
+
+    /**
+     * @var string
+     */
+    private const ENDS_WITH_ASTERISK_REGEX = '#^[^*](.*?)\*$#';
+
+    /**
      * @var SmartFileInfo[][]
      */
     private $fileInfosBySourceAndSuffixes = [];
@@ -186,12 +196,12 @@ final class FilesFinder
     private function normalizeForFnmatch(string $path): string
     {
         // ends with *
-        if (Strings::match($path, '#^[^*](.*?)\*$#')) {
+        if (Strings::match($path, self::ENDS_WITH_ASTERISK_REGEX)) {
             return '*' . $path;
         }
 
         // starts with *
-        if (Strings::match($path, '#^\*(.*?)[^*]$#')) {
+        if (Strings::match($path, self::STARTS_WITH_ASTERISK_REGEX)) {
             return $path . '*';
         }
 

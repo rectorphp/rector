@@ -14,6 +14,11 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class JetbrainsStubsRenamer
 {
     /**
+     * @var string
+     */
+    private const PHP_SUFFIX_COMMA_REGEX = '#\.php\',#m';
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -67,7 +72,7 @@ final class JetbrainsStubsRenamer
         }
 
         $stubsMapContents = $this->smartFileSystem->readFile($stubsMapPath);
-        $stubsMapContents = Strings::replace($stubsMapContents, '#\.php\',#m', ".stub',");
+        $stubsMapContents = Strings::replace($stubsMapContents, self::PHP_SUFFIX_COMMA_REGEX, ".stub',");
 
         $this->smartFileSystem->dumpFile($stubsMapPath, $stubsMapContents);
     }

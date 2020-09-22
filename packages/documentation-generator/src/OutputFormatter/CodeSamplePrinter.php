@@ -13,13 +13,11 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\SymfonyPhpConfig\Printer\ReturnClosurePrinter;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * @see \Rector\DocumentationGenerator\Tests\OutputFormatter\CodeSamplePrinter\CodeSamplePrinterTest
+ */
 final class CodeSamplePrinter
 {
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
     /**
      * @var MarkdownDifferAndFormatter
      */
@@ -30,17 +28,22 @@ final class CodeSamplePrinter
      */
     private $returnClosurePrinter;
 
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
+
     public function __construct(
-        SymfonyStyle $symfonyStyle,
         MarkdownDifferAndFormatter $markdownDifferAndFormatter,
-        ReturnClosurePrinter $returnClosurePrinter
+        ReturnClosurePrinter $returnClosurePrinter,
+        SymfonyStyle $symfonyStyle
     ) {
-        $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
         $this->returnClosurePrinter = $returnClosurePrinter;
+        $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function printCodeSamples(RectorDefinition $rectorDefinition, RectorInterface $rector): void
+    public function printCodeSamples(RectorDefinition $rectorDefinition, RectorInterface $rector): string
     {
         foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
             $this->symfonyStyle->newLine();
@@ -50,7 +53,7 @@ final class CodeSamplePrinter
         }
     }
 
-    private function printConfiguration(RectorInterface $rector, CodeSampleInterface $codeSample): void
+    private function printConfiguration(RectorInterface $rector, CodeSampleInterface $codeSample): string
     {
         if (! $codeSample instanceof ConfiguredCodeSample) {
             return;
@@ -68,7 +71,7 @@ final class CodeSamplePrinter
         $this->symfonyStyle->newLine();
     }
 
-    private function printCodeSample(CodeSampleInterface $codeSample): void
+    private function printCodeSample(CodeSampleInterface $codeSample): string
     {
         $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors(
             $codeSample->getCodeBefore(),
