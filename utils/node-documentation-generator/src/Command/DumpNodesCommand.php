@@ -42,8 +42,8 @@ final class DumpNodesCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $nodesInfos = $this->nodeInfosFactory->create();
-        $this->markdownDumpNodesOutputFormatter->format($nodesInfos);
+        $nodeInfos = $this->nodeInfosFactory->create();
+        $this->markdownDumpNodesOutputFormatter->format($nodeInfos);
 
         return ShellCode::SUCCESS;
     }
