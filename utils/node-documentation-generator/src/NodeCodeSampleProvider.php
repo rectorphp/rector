@@ -23,11 +23,6 @@ final class NodeCodeSampleProvider
      */
     private $betterStandardPrinter;
 
-    /**
-     * @var array<string, NodeCodeSample[]>
-     */
-    private $nodeCodeSamplesByNodeClass = [];
-
     public function __construct(SmartFinder $smartFinder, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->smartFinder = $smartFinder;
@@ -39,11 +34,9 @@ final class NodeCodeSampleProvider
      */
     public function provide(): array
     {
-        if ($this->nodeCodeSamplesByNodeClass !== []) {
-            return $this->nodeCodeSamplesByNodeClass;
-        }
-
         $snippetFileInfos = $this->smartFinder->find([__DIR__ . '/../snippet'], '*.php.inc');
+
+        $nodeCodeSamplesByNodeClass = [];
 
         foreach ($snippetFileInfos as $fileInfo) {
             $node = include $fileInfo->getRealPath();
@@ -52,15 +45,15 @@ final class NodeCodeSampleProvider
             $nodeClass = get_class($node);
 
             $printedContent = $this->betterStandardPrinter->print($node);
-            $this->nodeCodeSamplesByNodeClass[$nodeClass][] = new NodeCodeSample(
+            $nodeCodeSamplesByNodeClass[$nodeClass][] = new NodeCodeSample(
                 $fileInfo->getContents(),
                 $printedContent
             );
         }
 
-        ksort($this->nodeCodeSamplesByNodeClass);
+        ksort($nodeCodeSamplesByNodeClass);
 
-        return $this->nodeCodeSamplesByNodeClass;
+        return $nodeCodeSamplesByNodeClass;
     }
 
     /**
