@@ -52,7 +52,7 @@ final class PHPStanTypeClassFinder
                 continue;
             }
 
-            if (Strings::match($classLike, '#\\\\Accessory\\\\#')) {
+            if (Strings::contains($classLike, '\\Accessory\\#')) {
                 continue;
             }
 

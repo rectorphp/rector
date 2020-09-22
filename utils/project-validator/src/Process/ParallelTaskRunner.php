@@ -16,6 +16,11 @@ final class ParallelTaskRunner
     /**
      * @var string
      */
+    private const FATAL_ERROR_REGEX = '#(Fatal error)|(\[ERROR\])#';
+
+    /**
+     * @var string
+     */
     private $phpExecutable;
 
     /**
@@ -205,7 +210,7 @@ final class ParallelTaskRunner
         $fullOutput = array_filter([$process->getOutput(), $process->getErrorOutput()]);
 
         $output = implode("\n", $fullOutput);
-        $actualErrorHappened = Strings::match($output, '#(Fatal error)|(\[ERROR\])#');
+        $actualErrorHappened = Strings::match($output, self::FATAL_ERROR_REGEX);
 
         if (! $actualErrorHappened) {
             return;
