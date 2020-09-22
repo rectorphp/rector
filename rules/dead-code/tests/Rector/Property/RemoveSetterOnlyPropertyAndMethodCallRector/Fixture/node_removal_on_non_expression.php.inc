@@ -20,9 +20,11 @@ class NodeRemovalOnNonExpression
     }
 
 }
+
 ?>
 -----
 <?php
+
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\Fixture;
 
 class NodeRemovalOnNonExpression

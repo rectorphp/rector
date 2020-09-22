@@ -32,6 +32,7 @@ function simplifyIfReturnBool2()
     if (!strpos($docToken->getContent(), "\n")) {
         return true;
     }
+
     return 5;
 }
 

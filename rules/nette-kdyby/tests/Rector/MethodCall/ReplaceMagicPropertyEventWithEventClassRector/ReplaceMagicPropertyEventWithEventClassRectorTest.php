@@ -37,7 +37,7 @@ final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRe
     {
         yield [
             new SmartFileInfo(__DIR__ . '/Fixture/simple_event.php.inc'),
-            '/Event/DuplicatedEventParamsUploadEvent.php',
+            '/Event/FileManagerUploadEvent.php',
             __DIR__ . '/Source/ExpectedFileManagerUploadEvent.php',
         ];
 

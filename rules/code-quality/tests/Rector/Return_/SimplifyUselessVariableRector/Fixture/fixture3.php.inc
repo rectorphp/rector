@@ -29,6 +29,10 @@ namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\
 function simplifyUselessVariable3()
 {
     // keep
+
+
+
+
     return new FixerConfigurationResolver($fixerOptions);
 }
 

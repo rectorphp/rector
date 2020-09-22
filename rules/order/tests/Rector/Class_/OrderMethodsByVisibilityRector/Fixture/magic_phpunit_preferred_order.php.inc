@@ -20,10 +20,10 @@ class MagicPhpUnitPreferredOrderClass
     static private function staticPrivateFunctionName()
     {
     }
+
     public function __get($argument)
     {
     }
-
 }
 
 ?>
@@ -34,6 +34,7 @@ namespace Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector\Fixtur
 
 class MagicPhpUnitPreferredOrderClass
 {
+
     public function __construct()
     {
     }
