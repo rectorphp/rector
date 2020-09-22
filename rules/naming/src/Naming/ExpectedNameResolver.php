@@ -125,6 +125,10 @@ final class ExpectedNameResolver
             return null;
         }
 
+        if ($this->nodeTypeResolver->isPropertyBoolean($property)) {
+            return $this->propertyNaming->getExpectedNameFromBooleanPropertyType($property);
+        }
+
         $expectedName = $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
         if ($expectedName === null) {
             return null;

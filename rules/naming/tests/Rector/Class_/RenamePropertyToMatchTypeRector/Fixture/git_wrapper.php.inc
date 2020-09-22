@@ -9,7 +9,7 @@ class GitWrapperChange
     /**
      * @var \Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\GitWrapper
      */
-    protected $wrapper;
+    private $wrapper;
 
     public function __construct(GitWrapper $wrapper)
     {
@@ -30,7 +30,7 @@ class GitWrapperChange
     /**
      * @var \Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\GitWrapper
      */
-    protected $gitWrapper;
+    private $gitWrapper;
 
     public function __construct(GitWrapper $wrapper)
     {

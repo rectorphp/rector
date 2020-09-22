@@ -122,6 +122,10 @@ final class BreakingVariableRenameGuard
 
     public function shouldSkipProperty(PropertyRename $propertyRename): bool
     {
+        if (! $propertyRename->getProperty()->isPrivate()) {
+            return true;
+        }
+
         $conflictingPropertyNames = $this->conflictingNameResolver->resolveConflictingPropertyNames(
             $propertyRename->getClassLike()
         );
