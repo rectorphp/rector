@@ -8,9 +8,6 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Utils\NodeDocumentationGenerator\NodeInfosFactory;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-/**
- * @see \Rector\Utils\NodeDocumentationGenerator\Tests\NodeInfosFactoryTest
- */
 final class NodeInfosFactoryTest extends AbstractKernelTestCase
 {
     /**
@@ -29,7 +26,7 @@ final class NodeInfosFactoryTest extends AbstractKernelTestCase
     {
         $nodeInfos = $this->nodeInfosFactory->create();
 
-        $nodeInfoCount = count($nodeInfos->getNodeInfos());
+        $nodeInfoCount = count($nodeInfos->provide());
         $this->assertGreaterThan(130, $nodeInfoCount);
     }
 }

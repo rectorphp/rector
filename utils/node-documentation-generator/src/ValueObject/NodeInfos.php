@@ -9,7 +9,7 @@ final class NodeInfos
     /**
      * @var NodeInfo[]
      */
-    private $nodeInfos;
+    private $nodeInfos = [];
 
     /**
      * @param NodeInfo[] $nodeInfos
@@ -22,7 +22,7 @@ final class NodeInfos
     /**
      * @return NodeInfo[]
      */
-    public function getNodeInfos(): array
+    public function provide(): array
     {
         return $this->nodeInfos;
     }

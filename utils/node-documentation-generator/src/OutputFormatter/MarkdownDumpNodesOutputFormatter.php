@@ -28,7 +28,7 @@ final class MarkdownDumpNodesOutputFormatter
 
         $this->symfonyStyle->newLine();
 
-        foreach ($nodeInfos->getNodeInfos() as $nodeInfo) {
+        foreach ($nodeInfos->provide() as $nodeInfo) {
             $message = sprintf('## `%s`', $nodeInfo->getClass());
             $this->symfonyStyle->writeln($message);
             $this->symfonyStyle->newLine();

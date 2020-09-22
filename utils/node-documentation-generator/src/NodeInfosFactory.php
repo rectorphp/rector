@@ -7,6 +7,9 @@ namespace Rector\Utils\NodeDocumentationGenerator;
 use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfo;
 use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfos;
 
+/**
+ * @see \Rector\Utils\NodeDocumentationGenerator\Tests\NodeInfosFactoryTest
+ */
 final class NodeInfosFactory
 {
     /**
