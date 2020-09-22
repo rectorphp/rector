@@ -1,13 +1,63 @@
 # Node Overview
 
-* [Expressions](#expressions)
-* [Scalar nodes](#scalar-nodes)
-* [Statements](#statements)
-* [Various](#various)
 
-## Expressions
+## `PhpParser\Node\Arg`
 
-### `PhpParser\Node\Expr\ArrayDimFetch`
+
+### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('variableName');
+
+return new Arg($variable);
+```
+
+↓
+
+```php
+$variableName
+```
+
+### Public Properties
+
+ * `$name` - `/** @var Identifier|null Parameter name (for named parameters) */`
+ * `$value` - `/** @var Expr Value to pass */`
+ * `$byRef` - `/** @var bool Whether to pass by ref */`
+ * `$unpack` - `/** @var bool Whether to unpack the argument */`
+<br>
+
+## `PhpParser\Node\Const_`
+
+
+### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Const_;
+use PhpParser\Node\Scalar\String_;
+
+return new Const_('CONSTANT_NAME', new String_('default'));
+```
+
+↓
+
+```php
+CONSTANT_NAME = 'default'
+```
+
+### Public Properties
+
+ * `$name` - `/** @var Identifier Name */`
+ * `$value` - `/** @var Expr Value */`
+<br>
+
+## `PhpParser\Node\Expr\ArrayDimFetch`
 
 
 ### Example PHP Code
@@ -31,13 +81,13 @@ return new ArrayDimFetch($variable, $dimension);
 $variableName[0]
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$dim` - `/** @var null|Expr Array index / dim */`
 <br>
 
-### `PhpParser\Node\Expr\ArrayItem`
+## `PhpParser\Node\Expr\ArrayItem`
 
 
 ### Example PHP Code
@@ -61,7 +111,7 @@ return new ArrayItem($value, $key);
 'name' => $Tom
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$key` - `/** @var null|Expr Key */`
  * `$value` - `/** @var Expr Value */`
@@ -69,7 +119,7 @@ return new ArrayItem($value, $key);
  * `$unpack` - `/** @var bool Whether to unpack the argument */`
 <br>
 
-### `PhpParser\Node\Expr\Array_`
+## `PhpParser\Node\Expr\Array_`
 
 
 ### Example PHP Code
@@ -96,12 +146,12 @@ return new Array_([$arrayItem]);
 ['name' => $Tom]
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$items` - `/** @var (ArrayItem|null)[] Items */`
 <br>
 
-### `PhpParser\Node\Expr\ArrowFunction`
+## `PhpParser\Node\Expr\ArrowFunction`
 
 
 ### Example PHP Code
@@ -123,7 +173,7 @@ return new ArrowFunction($subNodes);
 fn() => 1
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$static` - `/** @var bool */`
  * `$byRef` - `/** @var bool */`
@@ -132,7 +182,7 @@ fn() => 1
  * `$expr` - `/** @var Expr */`
 <br>
 
-### `PhpParser\Node\Expr\Assign`
+## `PhpParser\Node\Expr\Assign`
 
 
 ### Example PHP Code
@@ -156,13 +206,13 @@ return new Assign($variable, $value);
 $variableName = 'some value'
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\BitwiseAnd`
+## `PhpParser\Node\Expr\AssignOp\BitwiseAnd`
 
 
 ### Example PHP Code
@@ -185,13 +235,13 @@ return new BitwiseAnd($left, $right);
 5 &= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\BitwiseOr`
+## `PhpParser\Node\Expr\AssignOp\BitwiseOr`
 
 
 ### Example PHP Code
@@ -214,13 +264,13 @@ return new BitwiseOr($left, $right);
 5 |= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\BitwiseXor`
+## `PhpParser\Node\Expr\AssignOp\BitwiseXor`
 
 
 ### Example PHP Code
@@ -243,13 +293,13 @@ return new BitwiseXor($left, $right);
 5 ^= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\Coalesce`
+## `PhpParser\Node\Expr\AssignOp\Coalesce`
 
 
 ### Example PHP Code
@@ -272,13 +322,13 @@ return new Coalesce($left, $right);
 5 ??= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\Concat`
+## `PhpParser\Node\Expr\AssignOp\Concat`
 
 
 ### Example PHP Code
@@ -301,13 +351,13 @@ return new Concat($left, $right);
 5 .= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\Div`
+## `PhpParser\Node\Expr\AssignOp\Div`
 
 
 ### Example PHP Code
@@ -330,13 +380,13 @@ return new Div($left, $right);
 5 /= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\Minus`
+## `PhpParser\Node\Expr\AssignOp\Minus`
 
 
 ### Example PHP Code
@@ -359,13 +409,13 @@ return new Minus($left, $right);
 5 -= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\Mod`
+## `PhpParser\Node\Expr\AssignOp\Mod`
 
 
 ### Example PHP Code
@@ -388,13 +438,13 @@ return new Mod($left, $right);
 5 %= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\Mul`
+## `PhpParser\Node\Expr\AssignOp\Mul`
 
 
 ### Example PHP Code
@@ -417,13 +467,13 @@ return new Mul($left, $right);
 5 *= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\Plus`
+## `PhpParser\Node\Expr\AssignOp\Plus`
 
 
 ### Example PHP Code
@@ -446,13 +496,13 @@ return new Plus($left, $right);
 5 += 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\Pow`
+## `PhpParser\Node\Expr\AssignOp\Pow`
 
 
 ### Example PHP Code
@@ -475,13 +525,13 @@ return new Pow($left, $right);
 5 **= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\ShiftLeft`
+## `PhpParser\Node\Expr\AssignOp\ShiftLeft`
 
 
 ### Example PHP Code
@@ -504,13 +554,13 @@ return new ShiftLeft($left, $right);
 5 <<= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignOp\ShiftRight`
+## `PhpParser\Node\Expr\AssignOp\ShiftRight`
 
 
 ### Example PHP Code
@@ -533,13 +583,13 @@ return new ShiftRight($left, $right);
 5 >>= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\AssignRef`
+## `PhpParser\Node\Expr\AssignRef`
 
 
 ### Example PHP Code
@@ -562,13 +612,13 @@ return new AssignRef($variable, $variableRef);
 $variableName =& $someOtherVariable
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable reference is assigned to */`
  * `$expr` - `/** @var Expr Variable which is referenced */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\BitwiseAnd`
+## `PhpParser\Node\Expr\BinaryOp\BitwiseAnd`
 
 
 ### Example PHP Code
@@ -591,13 +641,13 @@ return new BitwiseAnd($left, $right);
 5 & 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\BitwiseOr`
+## `PhpParser\Node\Expr\BinaryOp\BitwiseOr`
 
 
 ### Example PHP Code
@@ -620,13 +670,13 @@ return new BitwiseOr($left, $right);
 5 | 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\BitwiseXor`
+## `PhpParser\Node\Expr\BinaryOp\BitwiseXor`
 
 
 ### Example PHP Code
@@ -649,13 +699,13 @@ return new BitwiseXor($left, $right);
 5 ^ 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\BooleanAnd`
+## `PhpParser\Node\Expr\BinaryOp\BooleanAnd`
 
 
 ### Example PHP Code
@@ -678,13 +728,13 @@ return new BooleanAnd($left, $right);
 5 && 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Coalesce`
+## `PhpParser\Node\Expr\BinaryOp\Coalesce`
 
 
 ### Example PHP Code
@@ -707,13 +757,13 @@ return new Coalesce($left, $right);
 5 ?? 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Concat`
+## `PhpParser\Node\Expr\BinaryOp\Concat`
 
 
 ### Example PHP Code
@@ -736,13 +786,13 @@ return new Concat($left, $right);
 5 . 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Div`
+## `PhpParser\Node\Expr\BinaryOp\Div`
 
 
 ### Example PHP Code
@@ -765,13 +815,13 @@ return new Div($left, $right);
 5 / 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Equal`
+## `PhpParser\Node\Expr\BinaryOp\Equal`
 
 
 ### Example PHP Code
@@ -794,13 +844,13 @@ return new Equal($left, $right);
 5 == 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Greater`
+## `PhpParser\Node\Expr\BinaryOp\Greater`
 
 
 ### Example PHP Code
@@ -823,13 +873,13 @@ return new Greater($left, $right);
 5 > 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\GreaterOrEqual`
+## `PhpParser\Node\Expr\BinaryOp\GreaterOrEqual`
 
 
 ### Example PHP Code
@@ -852,13 +902,13 @@ return new GreaterOrEqual($left, $right);
 5 >= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Identical`
+## `PhpParser\Node\Expr\BinaryOp\Identical`
 
 
 ### Example PHP Code
@@ -881,13 +931,13 @@ return new Identical($left, $right);
 5 === 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\LogicalAnd`
+## `PhpParser\Node\Expr\BinaryOp\LogicalAnd`
 
 
 ### Example PHP Code
@@ -910,13 +960,13 @@ return new LogicalAnd($left, $right);
 5 and 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\LogicalOr`
+## `PhpParser\Node\Expr\BinaryOp\LogicalOr`
 
 
 ### Example PHP Code
@@ -939,13 +989,13 @@ return new LogicalOr($left, $right);
 5 or 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\LogicalXor`
+## `PhpParser\Node\Expr\BinaryOp\LogicalXor`
 
 
 ### Example PHP Code
@@ -968,13 +1018,13 @@ return new LogicalXor($left, $right);
 5 xor 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Minus`
+## `PhpParser\Node\Expr\BinaryOp\Minus`
 
 
 ### Example PHP Code
@@ -997,13 +1047,13 @@ return new Minus($left, $right);
 5 - 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Mod`
+## `PhpParser\Node\Expr\BinaryOp\Mod`
 
 
 ### Example PHP Code
@@ -1026,13 +1076,13 @@ return new Mod($left, $right);
 5 % 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Mul`
+## `PhpParser\Node\Expr\BinaryOp\Mul`
 
 
 ### Example PHP Code
@@ -1055,13 +1105,13 @@ return new Mul($left, $right);
 5 * 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\NotEqual`
+## `PhpParser\Node\Expr\BinaryOp\NotEqual`
 
 
 ### Example PHP Code
@@ -1084,13 +1134,13 @@ return new NotEqual($left, $right);
 5 != 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\NotIdentical`
+## `PhpParser\Node\Expr\BinaryOp\NotIdentical`
 
 
 ### Example PHP Code
@@ -1113,13 +1163,13 @@ return new NotIdentical($left, $right);
 5 !== 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Plus`
+## `PhpParser\Node\Expr\BinaryOp\Plus`
 
 
 ### Example PHP Code
@@ -1142,13 +1192,13 @@ return new Plus($left, $right);
 5 + 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Pow`
+## `PhpParser\Node\Expr\BinaryOp\Pow`
 
 
 ### Example PHP Code
@@ -1171,13 +1221,13 @@ return new Pow($left, $right);
 5 ** 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\ShiftLeft`
+## `PhpParser\Node\Expr\BinaryOp\ShiftLeft`
 
 
 ### Example PHP Code
@@ -1200,13 +1250,13 @@ return new ShiftLeft($left, $right);
 5 << 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\ShiftRight`
+## `PhpParser\Node\Expr\BinaryOp\ShiftRight`
 
 
 ### Example PHP Code
@@ -1229,13 +1279,13 @@ return new ShiftRight($left, $right);
 5 >> 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Smaller`
+## `PhpParser\Node\Expr\BinaryOp\Smaller`
 
 
 ### Example PHP Code
@@ -1258,13 +1308,13 @@ return new Smaller($left, $right);
 5 < 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\SmallerOrEqual`
+## `PhpParser\Node\Expr\BinaryOp\SmallerOrEqual`
 
 
 ### Example PHP Code
@@ -1287,13 +1337,13 @@ return new SmallerOrEqual($left, $right);
 5 <= 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BinaryOp\Spaceship`
+## `PhpParser\Node\Expr\BinaryOp\Spaceship`
 
 
 ### Example PHP Code
@@ -1316,13 +1366,13 @@ return new Spaceship($left, $right);
 5 <=> 10
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
  * `$right` - `/** @var Expr The right hand side expression */`
 <br>
 
-### `PhpParser\Node\Expr\BitwiseNot`
+## `PhpParser\Node\Expr\BitwiseNot`
 
 
 ### Example PHP Code
@@ -1344,12 +1394,12 @@ return new BitwiseNot($variable);
 ~$variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\BooleanNot`
+## `PhpParser\Node\Expr\BooleanNot`
 
 
 ### Example PHP Code
@@ -1371,12 +1421,12 @@ return new BooleanNot($variable);
 !$isEligible
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\Cast\Array_`
+## `PhpParser\Node\Expr\Cast\Array_`
 
 
 ### Example PHP Code
@@ -1398,12 +1448,12 @@ return new Array_($expr);
 (array) $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\Cast\Bool_`
+## `PhpParser\Node\Expr\Cast\Bool_`
 
 
 ### Example PHP Code
@@ -1425,12 +1475,12 @@ return new Bool_($expr);
 (bool) $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\Cast\Double`
+## `PhpParser\Node\Expr\Cast\Double`
 
 
 ### Example PHP Code
@@ -1452,12 +1502,12 @@ return new Double($expr);
 (double) $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\Cast\Int_`
+## `PhpParser\Node\Expr\Cast\Int_`
 
 
 ### Example PHP Code
@@ -1479,12 +1529,12 @@ return new Int_($expr);
 (int) $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\Cast\String_`
+## `PhpParser\Node\Expr\Cast\String_`
 
 
 ### Example PHP Code
@@ -1506,12 +1556,12 @@ return new String_($expr);
 (string) $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\Cast\Unset_`
+## `PhpParser\Node\Expr\Cast\Unset_`
 
 
 ### Example PHP Code
@@ -1533,12 +1583,12 @@ return new Unset_($expr);
 (unset) $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\ClassConstFetch`
+## `PhpParser\Node\Expr\ClassConstFetch`
 
 
 ### Example PHP Code
@@ -1560,13 +1610,13 @@ return new ClassConstFetch($class, 'SOME_CONSTANT');
 \SomeClassName::SOME_CONSTANT
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$class` - `/** @var Name|Expr Class name */`
  * `$name` - `/** @var Identifier|Error Constant name */`
 <br>
 
-### `PhpParser\Node\Expr\Clone_`
+## `PhpParser\Node\Expr\Clone_`
 
 
 ### Example PHP Code
@@ -1588,12 +1638,12 @@ return new Clone_($variable);
 clone $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\ClosureUse`
+## `PhpParser\Node\Expr\ClosureUse`
 
 
 ### Example PHP Code
@@ -1615,13 +1665,13 @@ return new ClosureUse($variable);
 $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr\Variable Variable to use */`
  * `$byRef` - `/** @var bool Whether to use by reference */`
 <br>
 
-### `PhpParser\Node\Expr\ConstFetch`
+## `PhpParser\Node\Expr\ConstFetch`
 
 
 ### Example PHP Code
@@ -1643,12 +1693,12 @@ return new ConstFetch($name);
 true
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$name` - `/** @var Name Constant name */`
 <br>
 
-### `PhpParser\Node\Expr\Empty_`
+## `PhpParser\Node\Expr\Empty_`
 
 
 ### Example PHP Code
@@ -1670,12 +1720,12 @@ return new Empty_($variable);
 empty($variableName)
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\ErrorSuppress`
+## `PhpParser\Node\Expr\ErrorSuppress`
 
 
 ### Example PHP Code
@@ -1697,12 +1747,12 @@ return new ErrorSuppress($variable);
 @$variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\Eval_`
+## `PhpParser\Node\Expr\Eval_`
 
 
 ### Example PHP Code
@@ -1740,12 +1790,12 @@ return new Eval_($phpCode);
 eval('Some php code')
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\FuncCall`
+## `PhpParser\Node\Expr\FuncCall`
 
 
 ### Example PHP Code
@@ -1765,13 +1815,13 @@ return new FuncCall(new Name('func_call'));
 func_call()
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$name` - `/** @var Node\Name|Expr Function name */`
  * `$args` - `/** @var Node\Arg[] Arguments */`
 <br>
 
-### `PhpParser\Node\Expr\Include_`
+## `PhpParser\Node\Expr\Include_`
 
 
 ### Example PHP Code
@@ -1809,13 +1859,13 @@ return new Include_($variable, Include_::TYPE_INCLUDE);
 include $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
  * `$type` - `/** @var int Type of include */`
 <br>
 
-### `PhpParser\Node\Expr\Instanceof_`
+## `PhpParser\Node\Expr\Instanceof_`
 
 
 ### Example PHP Code
@@ -1839,13 +1889,13 @@ return new Instanceof_($variable, $class);
 $variableName instanceof \SomeClassName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
  * `$class` - `/** @var Name|Expr Class name */`
 <br>
 
-### `PhpParser\Node\Expr\Isset_`
+## `PhpParser\Node\Expr\Isset_`
 
 
 ### Example PHP Code
@@ -1867,12 +1917,12 @@ return new Isset_([$variable]);
 isset($variableName)
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$vars` - `/** @var Expr[] Variables */`
 <br>
 
-### `PhpParser\Node\Expr\List_`
+## `PhpParser\Node\Expr\List_`
 
 
 ### Example PHP Code
@@ -1895,12 +1945,12 @@ return new List_([$variable, $anotherVariable]);
 list($variableName, $anoterVariableName)
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$items` - `/** @var (ArrayItem|null)[] List of items to assign to */`
 <br>
 
-### `PhpParser\Node\Expr\Match_`
+## `PhpParser\Node\Expr\Match_`
 
 
 ### Example PHP Code
@@ -1931,13 +1981,13 @@ match ($variableName) {
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$cond` - `/** @var Node\Expr */`
  * `$arms` - `/** @var MatchArm[] */`
 <br>
 
-### `PhpParser\Node\Expr\MethodCall`
+## `PhpParser\Node\Expr\MethodCall`
 
 
 ### Example PHP Code
@@ -1958,15 +2008,37 @@ return new MethodCall($variable, 'methodName');
 ```php
 $someObject->methodName()
 ```
+```php
+<?php
 
-#### Public Properties
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
+
+$variable = new Variable('someObject');
+
+$args = [];
+$args[] = new Arg(new String_('yes'));
+$args[] = new Arg(new String_('maybe'));
+
+return new MethodCall($variable, 'methodName', $args);
+```
+
+↓
+
+```php
+$someObject->methodName('yes', 'maybe')
+```
+
+### Public Properties
 
  * `$var` - `/** @var Expr Variable holding object */`
  * `$name` - `/** @var Identifier|Expr Method name */`
  * `$args` - `/** @var Arg[] Arguments */`
 <br>
 
-### `PhpParser\Node\Expr\New_`
+## `PhpParser\Node\Expr\New_`
 
 
 ### Example PHP Code
@@ -2006,13 +2078,13 @@ return new New_($class);
 new SomeClass()
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$class` - `/** @var Node\Name|Expr|Node\Stmt\Class_ Class name */`
  * `$args` - `/** @var Node\Arg[] Arguments */`
 <br>
 
-### `PhpParser\Node\Expr\NullsafeMethodCall`
+## `PhpParser\Node\Expr\NullsafeMethodCall`
 
 
 ### Example PHP Code
@@ -2034,14 +2106,14 @@ return new NullsafeMethodCall($variable, 'methodName');
 $variableName?->methodName()
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable holding object */`
  * `$name` - `/** @var Identifier|Expr Method name */`
  * `$args` - `/** @var Arg[] Arguments */`
 <br>
 
-### `PhpParser\Node\Expr\NullsafePropertyFetch`
+## `PhpParser\Node\Expr\NullsafePropertyFetch`
 
 
 ### Example PHP Code
@@ -2063,13 +2135,13 @@ return new NullsafePropertyFetch($variable, 'someProperty');
 $variableName?->someProperty
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable holding object */`
  * `$name` - `/** @var Identifier|Expr Property name */`
 <br>
 
-### `PhpParser\Node\Expr\PostDec`
+## `PhpParser\Node\Expr\PostDec`
 
 
 ### Example PHP Code
@@ -2091,12 +2163,12 @@ return new PostDec($variable);
 $variableName--
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
 <br>
 
-### `PhpParser\Node\Expr\PostInc`
+## `PhpParser\Node\Expr\PostInc`
 
 
 ### Example PHP Code
@@ -2118,12 +2190,12 @@ return new PostInc($variable);
 $variableName++
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
 <br>
 
-### `PhpParser\Node\Expr\PreDec`
+## `PhpParser\Node\Expr\PreDec`
 
 
 ### Example PHP Code
@@ -2145,12 +2217,12 @@ return new PreDec($variable);
 --$variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
 <br>
 
-### `PhpParser\Node\Expr\PreInc`
+## `PhpParser\Node\Expr\PreInc`
 
 
 ### Example PHP Code
@@ -2172,12 +2244,12 @@ return new PreInc($variable);
 ++$variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
 <br>
 
-### `PhpParser\Node\Expr\Print_`
+## `PhpParser\Node\Expr\Print_`
 
 
 ### Example PHP Code
@@ -2199,12 +2271,12 @@ return new Print_($string);
 print 'Some php code'
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\PropertyFetch`
+## `PhpParser\Node\Expr\PropertyFetch`
 
 
 ### Example PHP Code
@@ -2226,13 +2298,13 @@ return new PropertyFetch($variable, 'propertyName');
 $variableName->propertyName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr Variable holding object */`
  * `$name` - `/** @var Identifier|Expr Property name */`
 <br>
 
-### `PhpParser\Node\Expr\ShellExec`
+## `PhpParser\Node\Expr\ShellExec`
 
 
 ### Example PHP Code
@@ -2254,12 +2326,12 @@ return new ShellExec($parts);
 `first partsecond part`
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$parts` - `/** @var array Encapsed string array */`
 <br>
 
-### `PhpParser\Node\Expr\StaticCall`
+## `PhpParser\Node\Expr\StaticCall`
 
 
 ### Example PHP Code
@@ -2281,14 +2353,14 @@ return new StaticCall($fullyQualified, 'methodName');
 \ClassName::methodName()
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$class` - `/** @var Node\Name|Expr Class name */`
  * `$name` - `/** @var Identifier|Expr Method name */`
  * `$args` - `/** @var Node\Arg[] Arguments */`
 <br>
 
-### `PhpParser\Node\Expr\StaticPropertyFetch`
+## `PhpParser\Node\Expr\StaticPropertyFetch`
 
 
 ### Example PHP Code
@@ -2310,13 +2382,13 @@ return new StaticPropertyFetch($class, 'someProperty');
 \StaticClassName::$someProperty
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$class` - `/** @var Name|Expr Class name */`
  * `$name` - `/** @var VarLikeIdentifier|Expr Property name */`
 <br>
 
-### `PhpParser\Node\Expr\Ternary`
+## `PhpParser\Node\Expr\Ternary`
 
 
 ### Example PHP Code
@@ -2343,14 +2415,14 @@ return new Ternary($variable, $trueConstFetch, $falseConstFetch);
 $variableName ? true : false
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$cond` - `/** @var Expr Condition */`
  * `$if` - `/** @var null|Expr Expression for true */`
  * `$else` - `/** @var Expr Expression for false */`
 <br>
 
-### `PhpParser\Node\Expr\Throw_`
+## `PhpParser\Node\Expr\Throw_`
 
 
 ### Example PHP Code
@@ -2372,12 +2444,12 @@ return new Throw_($string);
 throw 'some string'
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Node\Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\UnaryMinus`
+## `PhpParser\Node\Expr\UnaryMinus`
 
 
 ### Example PHP Code
@@ -2399,12 +2471,12 @@ return new UnaryMinus($variable);
 -$variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\UnaryPlus`
+## `PhpParser\Node\Expr\UnaryPlus`
 
 
 ### Example PHP Code
@@ -2426,12 +2498,12 @@ return new UnaryPlus($variable);
 +$variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
 <br>
 
-### `PhpParser\Node\Expr\Variable`
+## `PhpParser\Node\Expr\Variable`
 
 
 ### Example PHP Code
@@ -2450,12 +2522,12 @@ return new Variable('variableName');
 $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$name` - `/** @var string|Expr Name */`
 <br>
 
-### `PhpParser\Node\Expr\YieldFrom`
+## `PhpParser\Node\Expr\YieldFrom`
 
 
 ### Example PHP Code
@@ -2477,14 +2549,198 @@ return new YieldFrom($variable);
 yield from $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Expr Expression to yield from */`
 <br>
 
-## Scalar nodes
+## `PhpParser\Node\Identifier`
 
-### `PhpParser\Node\Scalar\DNumber`
+
+### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Identifier;
+
+return new Identifier('identifierName');
+```
+
+↓
+
+```php
+identifierName
+```
+
+### Public Properties
+
+ * `$name` - `/** @var string Identifier as string */`
+ * `$specialClassNames` - ``
+<br>
+
+## `PhpParser\Node\MatchArm`
+
+
+### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\MatchArm;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
+
+$conds = [new LNumber(1)];
+$body = new String_('yes');
+
+return new MatchArm($conds, $body);
+```
+
+↓
+
+```php
+1 => 'yes'
+```
+
+### Public Properties
+
+ * `$conds` - `/** @var null|Node\Expr[] */`
+ * `$body` - `/** @var Node\Expr */`
+<br>
+
+## `PhpParser\Node\Name`
+
+
+### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Name;
+
+return new Name('shortName');
+```
+
+↓
+
+```php
+shortName
+```
+
+### Public Properties
+
+ * `$parts` - `/** @var string[] Parts of the name */`
+ * `$specialClassNames` - ``
+<br>
+
+## `PhpParser\Node\Name\FullyQualified`
+
+
+### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Name\FullyQualified;
+
+return new FullyQualified('SomeNamespace\ShortName');
+```
+
+↓
+
+```php
+\SomeNamespace\ShortName
+```
+
+### Public Properties
+
+ * `$parts` - `/** @var string[] Parts of the name */`
+<br>
+
+## `PhpParser\Node\Name\Relative`
+
+
+### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Name\Relative;
+
+return new Relative('PartOf\SomeNamespace\ShortName');
+```
+
+↓
+
+```php
+namespace\PartOf\SomeNamespace\ShortName
+```
+
+### Public Properties
+
+ * `$parts` - `/** @var string[] Parts of the name */`
+<br>
+
+## `PhpParser\Node\NullableType`
+
+
+### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\NullableType;
+
+return new NullableType('SomeType');
+```
+
+↓
+
+```php
+?SomeType
+```
+
+### Public Properties
+
+ * `$type` - `/** @var Identifier|Name Type */`
+<br>
+
+## `PhpParser\Node\Param`
+
+
+### Example PHP Code
+
+```php
+<?php
+
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
+
+$variable = new Variable('variableName');
+
+return new Param($variable);
+```
+
+↓
+
+```php
+$variableName
+```
+
+### Public Properties
+
+ * `$type` - `/** @var null|Identifier|Name|NullableType|UnionType Type declaration */`
+ * `$byRef` - `/** @var bool Whether parameter is passed by reference */`
+ * `$variadic` - `/** @var bool Whether this is a variadic argument */`
+ * `$var` - `/** @var Expr\Variable|Expr\Error Parameter variable */`
+ * `$default` - `/** @var null|Expr Default value */`
+ * `$flags` - `/** @var int */`
+<br>
+
+## `PhpParser\Node\Scalar\DNumber`
 
 
 ### Example PHP Code
@@ -2503,12 +2759,12 @@ return new DNumber(10.5);
 10.5
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$value` - `/** @var float Number value */`
 <br>
 
-### `PhpParser\Node\Scalar\Encapsed`
+## `PhpParser\Node\Scalar\Encapsed`
 
 
 ### Example PHP Code
@@ -2528,12 +2784,12 @@ return new Encapsed([new Variable('variableName')]);
 "{$variableName}"
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$parts` - `/** @var Expr[] list of string parts */`
 <br>
 
-### `PhpParser\Node\Scalar\EncapsedStringPart`
+## `PhpParser\Node\Scalar\EncapsedStringPart`
 
 
 ### Example PHP Code
@@ -2552,12 +2808,12 @@ return new EncapsedStringPart('enscapsed');
 UNABLE_TO_PRINT_ENCAPSED_STRING
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$value` - `/** @var string String value */`
 <br>
 
-### `PhpParser\Node\Scalar\LNumber`
+## `PhpParser\Node\Scalar\LNumber`
 
 
 ### Example PHP Code
@@ -2576,12 +2832,12 @@ return new LNumber(1000);
 1000
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$value` - `/** @var int Number value */`
 <br>
 
-### `PhpParser\Node\Scalar\String_`
+## `PhpParser\Node\Scalar\String_`
 
 
 ### Example PHP Code
@@ -2600,15 +2856,13 @@ return new String_('some string');
 'some string'
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$value` - `/** @var string String value */`
  * `$replacements` - ``
 <br>
 
-## Statements
-
-### `PhpParser\Node\Stmt\Case_`
+## `PhpParser\Node\Stmt\Case_`
 
 
 ### Example PHP Code
@@ -2631,13 +2885,13 @@ return new Case_($trueConstFetch);
 case true:
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$cond` - `/** @var null|Node\Expr Condition (null for default) */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
-### `PhpParser\Node\Stmt\Catch_`
+## `PhpParser\Node\Stmt\Catch_`
 
 
 ### Example PHP Code
@@ -2662,14 +2916,14 @@ catch (\ClassType $CaughtVariable) {
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$types` - `/** @var Node\Name[] Types of exceptions to catch */`
  * `$var` - `/** @var Expr\Variable|null Variable for exception */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
-### `PhpParser\Node\Stmt\ClassConst`
+## `PhpParser\Node\Stmt\ClassConst`
 
 
 ### Example PHP Code
@@ -2694,13 +2948,13 @@ return new ClassConst([$const], Class_::MODIFIER_PUBLIC);
 public const SOME_CLASS_CONSTANT = 'default value';
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$flags` - `/** @var int Modifiers */`
  * `$consts` - `/** @var Node\Const_[] Constant declarations */`
 <br>
 
-### `PhpParser\Node\Stmt\ClassMethod`
+## `PhpParser\Node\Stmt\ClassMethod`
 
 
 ### Example PHP Code
@@ -2751,7 +3005,7 @@ public function methodName()
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$flags` - `/** @var int Flags */`
  * `$byRef` - `/** @var bool Whether to return by reference */`
@@ -2762,7 +3016,7 @@ public function methodName()
  * `$magicNames` - ``
 <br>
 
-### `PhpParser\Node\Stmt\Class_`
+## `PhpParser\Node\Stmt\Class_`
 
 
 ### Example PHP Code
@@ -2804,7 +3058,7 @@ final class ClassName extends ParentClass
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$flags` - `/** @var int Type */`
  * `$extends` - `/** @var null|Node\Name Name of extended class */`
@@ -2813,7 +3067,7 @@ final class ClassName extends ParentClass
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
-### `PhpParser\Node\Stmt\Const_`
+## `PhpParser\Node\Stmt\Const_`
 
 
 ### Example PHP Code
@@ -2838,12 +3092,12 @@ return new ConstStmt($consts);
 const CONSTANT_IN_CLASS = 'default value';
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$consts` - `/** @var Node\Const_[] Constant declarations */`
 <br>
 
-### `PhpParser\Node\Stmt\DeclareDeclare`
+## `PhpParser\Node\Stmt\DeclareDeclare`
 
 
 ### Example PHP Code
@@ -2863,13 +3117,13 @@ return new DeclareDeclare('strict_types', new LNumber(1));
 strict_types=1
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$key` - `/** @var Node\Identifier Key */`
  * `$value` - `/** @var Node\Expr Value */`
 <br>
 
-### `PhpParser\Node\Stmt\Declare_`
+## `PhpParser\Node\Stmt\Declare_`
 
 
 ### Example PHP Code
@@ -2892,13 +3146,13 @@ return new Declare_([$declareDeclare]);
 declare(strict_types=1);
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$declares` - `/** @var DeclareDeclare[] List of declares */`
  * `$stmts` - `/** @var Node\Stmt[]|null Statements */`
 <br>
 
-### `PhpParser\Node\Stmt\Do_`
+## `PhpParser\Node\Stmt\Do_`
 
 
 ### Example PHP Code
@@ -2921,13 +3175,13 @@ do {
 } while ($variableName);
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
  * `$cond` - `/** @var Node\Expr Condition */`
 <br>
 
-### `PhpParser\Node\Stmt\Echo_`
+## `PhpParser\Node\Stmt\Echo_`
 
 
 ### Example PHP Code
@@ -2949,12 +3203,12 @@ return new Echo_([$string]);
 echo 'hello';
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$exprs` - `/** @var Node\Expr[] Expressions */`
 <br>
 
-### `PhpParser\Node\Stmt\ElseIf_`
+## `PhpParser\Node\Stmt\ElseIf_`
 
 
 ### Example PHP Code
@@ -2982,13 +3236,13 @@ elseif (true) {
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
-### `PhpParser\Node\Stmt\Foreach_`
+## `PhpParser\Node\Stmt\Foreach_`
 
 
 ### Example PHP Code
@@ -3012,7 +3266,7 @@ foreach ($foreachedVariableName as $asVariable) {
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Node\Expr Expression to iterate */`
  * `$keyVar` - `/** @var null|Node\Expr Variable to assign key to */`
@@ -3021,7 +3275,7 @@ foreach ($foreachedVariableName as $asVariable) {
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
-### `PhpParser\Node\Stmt\Function_`
+## `PhpParser\Node\Stmt\Function_`
 
 
 ### Example PHP Code
@@ -3042,7 +3296,7 @@ function some_function()
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$byRef` - `/** @var bool Whether function returns by reference */`
  * `$name` - `/** @var Node\Identifier Name */`
@@ -3051,7 +3305,7 @@ function some_function()
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
-### `PhpParser\Node\Stmt\Global_`
+## `PhpParser\Node\Stmt\Global_`
 
 
 ### Example PHP Code
@@ -3073,12 +3327,12 @@ return new Global_([$variable]);
 global $globalVariable;
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$vars` - `/** @var Node\Expr[] Variables */`
 <br>
 
-### `PhpParser\Node\Stmt\Goto_`
+## `PhpParser\Node\Stmt\Goto_`
 
 
 ### Example PHP Code
@@ -3097,12 +3351,12 @@ return new Goto_('goto_break');
 goto goto_break;
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$name` - `/** @var Identifier Name of label to jump to */`
 <br>
 
-### `PhpParser\Node\Stmt\GroupUse`
+## `PhpParser\Node\Stmt\GroupUse`
 
 
 ### Example PHP Code
@@ -3127,14 +3381,14 @@ return new GroupUse(new Name('prefix'), $uses);
 use prefix\{UserName};
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$type` - `/** @var int Type of group use */`
  * `$prefix` - `/** @var Name Prefix for uses */`
  * `$uses` - `/** @var UseUse[] Uses */`
 <br>
 
-### `PhpParser\Node\Stmt\HaltCompiler`
+## `PhpParser\Node\Stmt\HaltCompiler`
 
 
 ### Example PHP Code
@@ -3153,12 +3407,12 @@ return new HaltCompiler('remaining');
 __halt_compiler();remaining
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$remaining` - `/** @var string Remaining text after halt compiler statement. */`
 <br>
 
-### `PhpParser\Node\Stmt\If_`
+## `PhpParser\Node\Stmt\If_`
 
 
 ### Example PHP Code
@@ -3182,7 +3436,7 @@ if (true) {
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition expression */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
@@ -3190,7 +3444,7 @@ if (true) {
  * `$else` - `/** @var null|Else_ Else clause */`
 <br>
 
-### `PhpParser\Node\Stmt\InlineHTML`
+## `PhpParser\Node\Stmt\InlineHTML`
 
 
 ### Example PHP Code
@@ -3210,12 +3464,12 @@ return new InlineHTML('<strong>feel</strong>');
 <strong>feel</strong><?php
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$value` - `/** @var string String */`
 <br>
 
-### `PhpParser\Node\Stmt\Interface_`
+## `PhpParser\Node\Stmt\Interface_`
 
 
 ### Example PHP Code
@@ -3237,14 +3491,14 @@ interface InterfaceName
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$extends` - `/** @var Node\Name[] Extended interfaces */`
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
-### `PhpParser\Node\Stmt\Label`
+## `PhpParser\Node\Stmt\Label`
 
 
 ### Example PHP Code
@@ -3263,12 +3517,12 @@ return new Label('labelName');
 labelName:
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$name` - `/** @var Identifier Name */`
 <br>
 
-### `PhpParser\Node\Stmt\Property`
+## `PhpParser\Node\Stmt\Property`
 
 
 ### Example PHP Code
@@ -3330,14 +3584,14 @@ return new Property(Class_::MODIFIER_PUBLIC, [$propertyProperty], [], 'string');
 public string $propertyName;
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$flags` - `/** @var int Modifiers */`
  * `$props` - `/** @var PropertyProperty[] Properties */`
  * `$type` - `/** @var null|Identifier|Name|NullableType|UnionType Type declaration */`
 <br>
 
-### `PhpParser\Node\Stmt\PropertyProperty`
+## `PhpParser\Node\Stmt\PropertyProperty`
 
 
 ### Example PHP Code
@@ -3356,13 +3610,13 @@ return new PropertyProperty('propertyName');
 $propertyName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$name` - `/** @var Node\VarLikeIdentifier Name */`
  * `$default` - `/** @var null|Node\Expr Default */`
 <br>
 
-### `PhpParser\Node\Stmt\StaticVar`
+## `PhpParser\Node\Stmt\StaticVar`
 
 
 ### Example PHP Code
@@ -3384,13 +3638,13 @@ return new StaticVar($variable);
 $variableName
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$var` - `/** @var Expr\Variable Variable */`
  * `$default` - `/** @var null|Node\Expr Default value */`
 <br>
 
-### `PhpParser\Node\Stmt\Static_`
+## `PhpParser\Node\Stmt\Static_`
 
 
 ### Example PHP Code
@@ -3413,12 +3667,12 @@ return new Static_($staticVars);
 static $static;
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$vars` - `/** @var StaticVar[] Variable definitions */`
 <br>
 
-### `PhpParser\Node\Stmt\Switch_`
+## `PhpParser\Node\Stmt\Switch_`
 
 
 ### Example PHP Code
@@ -3445,13 +3699,13 @@ switch ($variableName) {
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition */`
  * `$cases` - `/** @var Case_[] Case list */`
 <br>
 
-### `PhpParser\Node\Stmt\Throw_`
+## `PhpParser\Node\Stmt\Throw_`
 
 
 ### Example PHP Code
@@ -3473,12 +3727,12 @@ return new Throw_($string);
 throw 'some string';
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$expr` - `/** @var Node\Expr Expression */`
 <br>
 
-### `PhpParser\Node\Stmt\TraitUse`
+## `PhpParser\Node\Stmt\TraitUse`
 
 
 ### Example PHP Code
@@ -3498,13 +3752,13 @@ return new TraitUse([new FullyQualified('TraitName')]);
 use \TraitName;
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$traits` - `/** @var Node\Name[] Traits */`
  * `$adaptations` - `/** @var TraitUseAdaptation[] Adaptations */`
 <br>
 
-### `PhpParser\Node\Stmt\TraitUseAdaptation\Alias`
+## `PhpParser\Node\Stmt\TraitUseAdaptation\Alias`
 
 
 ### Example PHP Code
@@ -3527,7 +3781,7 @@ return new Alias($traitFullyQualified, 'method', Class_::MODIFIER_PUBLIC, 'alias
 \TraitName::method as public aliasedMethod;
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$newModifier` - `/** @var null|int New modifier */`
  * `$newName` - `/** @var null|Node\Identifier New name */`
@@ -3535,7 +3789,7 @@ return new Alias($traitFullyQualified, 'method', Class_::MODIFIER_PUBLIC, 'alias
  * `$method` - `/** @var Node\Identifier Method name */`
 <br>
 
-### `PhpParser\Node\Stmt\TraitUseAdaptation\Precedence`
+## `PhpParser\Node\Stmt\TraitUseAdaptation\Precedence`
 
 
 ### Example PHP Code
@@ -3558,14 +3812,14 @@ return new Precedence($firstTrait, 'methodName', [$secondTrait]);
 SomeTrait::methodName insteadof OverriddenTrait;
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$insteadof` - `/** @var Node\Name[] Overwritten traits */`
  * `$trait` - `/** @var Node\Name|null Trait name */`
  * `$method` - `/** @var Node\Identifier Method name */`
 <br>
 
-### `PhpParser\Node\Stmt\Trait_`
+## `PhpParser\Node\Stmt\Trait_`
 
 
 ### Example PHP Code
@@ -3586,13 +3840,13 @@ trait TraitName
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
-### `PhpParser\Node\Stmt\TryCatch`
+## `PhpParser\Node\Stmt\TryCatch`
 
 
 ### Example PHP Code
@@ -3623,14 +3877,14 @@ try {
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
  * `$catches` - `/** @var Catch_[] Catches */`
  * `$finally` - `/** @var null|Finally_ Optional finally node */`
 <br>
 
-### `PhpParser\Node\Stmt\Unset_`
+## `PhpParser\Node\Stmt\Unset_`
 
 
 ### Example PHP Code
@@ -3652,12 +3906,12 @@ return new Unset_([$variable]);
 unset($variableName);
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$vars` - `/** @var Node\Expr[] Variables to unset */`
 <br>
 
-### `PhpParser\Node\Stmt\UseUse`
+## `PhpParser\Node\Stmt\UseUse`
 
 
 ### Example PHP Code
@@ -3677,14 +3931,14 @@ return new UseUse(new Name('UsedNamespace'));
 UsedNamespace
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$type` - `/** @var int One of the Stmt\Use_::TYPE_* constants. Will only differ from TYPE_UNKNOWN for mixed group uses */`
  * `$name` - `/** @var Node\Name Namespace, class, function or constant to alias */`
  * `$alias` - `/** @var Identifier|null Alias */`
 <br>
 
-### `PhpParser\Node\Stmt\While_`
+## `PhpParser\Node\Stmt\While_`
 
 
 ### Example PHP Code
@@ -3705,257 +3959,13 @@ while ($variableName) {
 }
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
-## Various
-
-### `PhpParser\Node\Arg`
-
-
-### Example PHP Code
-
-```php
-<?php
-
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Variable;
-
-$variable = new Variable('variableName');
-
-return new Arg($variable);
-```
-
-↓
-
-```php
-$variableName
-```
-
-#### Public Properties
-
- * `$name` - `/** @var Identifier|null Parameter name (for named parameters) */`
- * `$value` - `/** @var Expr Value to pass */`
- * `$byRef` - `/** @var bool Whether to pass by ref */`
- * `$unpack` - `/** @var bool Whether to unpack the argument */`
-<br>
-
-### `PhpParser\Node\Const_`
-
-
-### Example PHP Code
-
-```php
-<?php
-
-use PhpParser\Node\Const_;
-use PhpParser\Node\Scalar\String_;
-
-return new Const_('CONSTANT_NAME', new String_('default'));
-```
-
-↓
-
-```php
-CONSTANT_NAME = 'default'
-```
-
-#### Public Properties
-
- * `$name` - `/** @var Identifier Name */`
- * `$value` - `/** @var Expr Value */`
-<br>
-
-### `PhpParser\Node\Identifier`
-
-
-### Example PHP Code
-
-```php
-<?php
-
-use PhpParser\Node\Identifier;
-
-return new Identifier('identifierName');
-```
-
-↓
-
-```php
-identifierName
-```
-
-#### Public Properties
-
- * `$name` - `/** @var string Identifier as string */`
- * `$specialClassNames` - ``
-<br>
-
-### `PhpParser\Node\MatchArm`
-
-
-### Example PHP Code
-
-```php
-<?php
-
-use PhpParser\Node\MatchArm;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\String_;
-
-$conds = [new LNumber(1)];
-$body = new String_('yes');
-
-return new MatchArm($conds, $body);
-```
-
-↓
-
-```php
-1 => 'yes'
-```
-
-#### Public Properties
-
- * `$conds` - `/** @var null|Node\Expr[] */`
- * `$body` - `/** @var Node\Expr */`
-<br>
-
-### `PhpParser\Node\Name`
-
-
-### Example PHP Code
-
-```php
-<?php
-
-use PhpParser\Node\Name;
-
-return new Name('shortName');
-```
-
-↓
-
-```php
-shortName
-```
-
-#### Public Properties
-
- * `$parts` - `/** @var string[] Parts of the name */`
- * `$specialClassNames` - ``
-<br>
-
-### `PhpParser\Node\Name\FullyQualified`
-
-
-### Example PHP Code
-
-```php
-<?php
-
-use PhpParser\Node\Name\FullyQualified;
-
-return new FullyQualified('SomeNamespace\ShortName');
-```
-
-↓
-
-```php
-\SomeNamespace\ShortName
-```
-
-#### Public Properties
-
- * `$parts` - `/** @var string[] Parts of the name */`
-<br>
-
-### `PhpParser\Node\Name\Relative`
-
-
-### Example PHP Code
-
-```php
-<?php
-
-use PhpParser\Node\Name\Relative;
-
-return new Relative('PartOf\SomeNamespace\ShortName');
-```
-
-↓
-
-```php
-namespace\PartOf\SomeNamespace\ShortName
-```
-
-#### Public Properties
-
- * `$parts` - `/** @var string[] Parts of the name */`
-<br>
-
-### `PhpParser\Node\NullableType`
-
-
-### Example PHP Code
-
-```php
-<?php
-
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\NullableType;
-
-return new NullableType('SomeType');
-```
-
-↓
-
-```php
-?SomeType
-```
-
-#### Public Properties
-
- * `$type` - `/** @var Identifier|Name Type */`
-<br>
-
-### `PhpParser\Node\Param`
-
-
-### Example PHP Code
-
-```php
-<?php
-
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
-
-$variable = new Variable('variableName');
-
-return new Param($variable);
-```
-
-↓
-
-```php
-$variableName
-```
-
-#### Public Properties
-
- * `$type` - `/** @var null|Identifier|Name|NullableType|UnionType Type declaration */`
- * `$byRef` - `/** @var bool Whether parameter is passed by reference */`
- * `$variadic` - `/** @var bool Whether this is a variadic argument */`
- * `$var` - `/** @var Expr\Variable|Expr\Error Parameter variable */`
- * `$default` - `/** @var null|Expr Default value */`
- * `$flags` - `/** @var int */`
-<br>
-
-### `PhpParser\Node\UnionType`
+## `PhpParser\Node\UnionType`
 
 
 ### Example PHP Code
@@ -3977,7 +3987,7 @@ return new UnionType($unionedTypes);
 string|int
 ```
 
-#### Public Properties
+### Public Properties
 
  * `$types` - `/** @var (Identifier|Name)[] Types */`
 <br>
