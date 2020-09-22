@@ -23,6 +23,7 @@ return new Arg($variable);
 $variableName
 ```
 
+
 ### Public Properties
 
  * `$name` - `/** @var Identifier|null Parameter name (for named parameters) */`
@@ -50,6 +51,7 @@ return new Const_('CONSTANT_NAME', new String_('default'));
 ```php
 CONSTANT_NAME = 'default'
 ```
+
 
 ### Public Properties
 
@@ -81,6 +83,7 @@ return new ArrayDimFetch($variable, $dimension);
 $variableName[0]
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -110,6 +113,7 @@ return new ArrayItem($value, $key);
 ```php
 'name' => $Tom
 ```
+
 
 ### Public Properties
 
@@ -146,6 +150,7 @@ return new Array_([$arrayItem]);
 ['name' => $Tom]
 ```
 
+
 ### Public Properties
 
  * `$items` - `/** @var (ArrayItem|null)[] Items */`
@@ -172,6 +177,7 @@ return new ArrowFunction($subNodes);
 ```php
 fn() => 1
 ```
+
 
 ### Public Properties
 
@@ -206,6 +212,7 @@ return new Assign($variable, $value);
 $variableName = 'some value'
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -234,6 +241,7 @@ return new BitwiseAnd($left, $right);
 ```php
 5 &= 10
 ```
+
 
 ### Public Properties
 
@@ -264,6 +272,7 @@ return new BitwiseOr($left, $right);
 5 |= 10
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -292,6 +301,7 @@ return new BitwiseXor($left, $right);
 ```php
 5 ^= 10
 ```
+
 
 ### Public Properties
 
@@ -322,6 +332,7 @@ return new Coalesce($left, $right);
 5 ??= 10
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -350,6 +361,7 @@ return new Concat($left, $right);
 ```php
 5 .= 10
 ```
+
 
 ### Public Properties
 
@@ -380,6 +392,7 @@ return new Div($left, $right);
 5 /= 10
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -408,6 +421,7 @@ return new Minus($left, $right);
 ```php
 5 -= 10
 ```
+
 
 ### Public Properties
 
@@ -438,6 +452,7 @@ return new Mod($left, $right);
 5 %= 10
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -466,6 +481,7 @@ return new Mul($left, $right);
 ```php
 5 *= 10
 ```
+
 
 ### Public Properties
 
@@ -496,6 +512,7 @@ return new Plus($left, $right);
 5 += 10
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -524,6 +541,7 @@ return new Pow($left, $right);
 ```php
 5 **= 10
 ```
+
 
 ### Public Properties
 
@@ -554,6 +572,7 @@ return new ShiftLeft($left, $right);
 5 <<= 10
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -582,6 +601,7 @@ return new ShiftRight($left, $right);
 ```php
 5 >>= 10
 ```
+
 
 ### Public Properties
 
@@ -612,6 +632,7 @@ return new AssignRef($variable, $variableRef);
 $variableName =& $someOtherVariable
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable reference is assigned to */`
@@ -640,6 +661,7 @@ return new BitwiseAnd($left, $right);
 ```php
 5 & 10
 ```
+
 
 ### Public Properties
 
@@ -670,6 +692,7 @@ return new BitwiseOr($left, $right);
 5 | 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -698,6 +721,7 @@ return new BitwiseXor($left, $right);
 ```php
 5 ^ 10
 ```
+
 
 ### Public Properties
 
@@ -728,6 +752,7 @@ return new BooleanAnd($left, $right);
 5 && 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -756,6 +781,7 @@ return new Coalesce($left, $right);
 ```php
 5 ?? 10
 ```
+
 
 ### Public Properties
 
@@ -786,6 +812,7 @@ return new Concat($left, $right);
 5 . 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -814,6 +841,7 @@ return new Div($left, $right);
 ```php
 5 / 10
 ```
+
 
 ### Public Properties
 
@@ -844,6 +872,7 @@ return new Equal($left, $right);
 5 == 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -872,6 +901,7 @@ return new Greater($left, $right);
 ```php
 5 > 10
 ```
+
 
 ### Public Properties
 
@@ -902,6 +932,7 @@ return new GreaterOrEqual($left, $right);
 5 >= 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -930,6 +961,7 @@ return new Identical($left, $right);
 ```php
 5 === 10
 ```
+
 
 ### Public Properties
 
@@ -960,6 +992,7 @@ return new LogicalAnd($left, $right);
 5 and 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -988,6 +1021,7 @@ return new LogicalOr($left, $right);
 ```php
 5 or 10
 ```
+
 
 ### Public Properties
 
@@ -1018,6 +1052,7 @@ return new LogicalXor($left, $right);
 5 xor 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -1046,6 +1081,7 @@ return new Minus($left, $right);
 ```php
 5 - 10
 ```
+
 
 ### Public Properties
 
@@ -1076,6 +1112,7 @@ return new Mod($left, $right);
 5 % 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -1104,6 +1141,7 @@ return new Mul($left, $right);
 ```php
 5 * 10
 ```
+
 
 ### Public Properties
 
@@ -1134,6 +1172,7 @@ return new NotEqual($left, $right);
 5 != 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -1162,6 +1201,7 @@ return new NotIdentical($left, $right);
 ```php
 5 !== 10
 ```
+
 
 ### Public Properties
 
@@ -1192,6 +1232,7 @@ return new Plus($left, $right);
 5 + 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -1220,6 +1261,7 @@ return new Pow($left, $right);
 ```php
 5 ** 10
 ```
+
 
 ### Public Properties
 
@@ -1250,6 +1292,7 @@ return new ShiftLeft($left, $right);
 5 << 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -1278,6 +1321,7 @@ return new ShiftRight($left, $right);
 ```php
 5 >> 10
 ```
+
 
 ### Public Properties
 
@@ -1308,6 +1352,7 @@ return new Smaller($left, $right);
 5 < 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -1336,6 +1381,7 @@ return new SmallerOrEqual($left, $right);
 ```php
 5 <= 10
 ```
+
 
 ### Public Properties
 
@@ -1366,6 +1412,7 @@ return new Spaceship($left, $right);
 5 <=> 10
 ```
 
+
 ### Public Properties
 
  * `$left` - `/** @var Expr The left hand side expression */`
@@ -1394,6 +1441,7 @@ return new BitwiseNot($variable);
 ~$variableName
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
@@ -1420,6 +1468,7 @@ return new BooleanNot($variable);
 ```php
 !$isEligible
 ```
+
 
 ### Public Properties
 
@@ -1448,6 +1497,7 @@ return new Array_($expr);
 (array) $variableName
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
@@ -1474,6 +1524,7 @@ return new Bool_($expr);
 ```php
 (bool) $variableName
 ```
+
 
 ### Public Properties
 
@@ -1502,6 +1553,7 @@ return new Double($expr);
 (double) $variableName
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
@@ -1528,6 +1580,7 @@ return new Int_($expr);
 ```php
 (int) $variableName
 ```
+
 
 ### Public Properties
 
@@ -1556,6 +1609,7 @@ return new String_($expr);
 (string) $variableName
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
@@ -1583,6 +1637,7 @@ return new Unset_($expr);
 (unset) $variableName
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
@@ -1609,6 +1664,7 @@ return new ClassConstFetch($class, 'SOME_CONSTANT');
 ```php
 \SomeClassName::SOME_CONSTANT
 ```
+
 
 ### Public Properties
 
@@ -1638,6 +1694,7 @@ return new Clone_($variable);
 clone $variableName
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
@@ -1664,6 +1721,7 @@ return new ClosureUse($variable);
 ```php
 $variableName
 ```
+
 
 ### Public Properties
 
@@ -1693,6 +1751,7 @@ return new ConstFetch($name);
 true
 ```
 
+
 ### Public Properties
 
  * `$name` - `/** @var Name Constant name */`
@@ -1719,6 +1778,7 @@ return new Empty_($variable);
 ```php
 empty($variableName)
 ```
+
 
 ### Public Properties
 
@@ -1747,6 +1807,7 @@ return new ErrorSuppress($variable);
 @$variableName
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
@@ -1773,6 +1834,7 @@ return new Eval_(new String_('Some php code'));
 ```php
 eval('Some php code')
 ```
+
 ```php
 <?php
 
@@ -1789,6 +1851,7 @@ return new Eval_($phpCode);
 ```php
 eval('Some php code')
 ```
+
 
 ### Public Properties
 
@@ -1814,6 +1877,7 @@ return new FuncCall(new Name('func_call'));
 ```php
 func_call()
 ```
+
 
 ### Public Properties
 
@@ -1842,6 +1906,7 @@ return new Include_($variable, Include_::TYPE_REQUIRE_ONCE);
 ```php
 require_once $variableName
 ```
+
 ```php
 <?php
 
@@ -1858,6 +1923,7 @@ return new Include_($variable, Include_::TYPE_INCLUDE);
 ```php
 include $variableName
 ```
+
 
 ### Public Properties
 
@@ -1889,6 +1955,7 @@ return new Instanceof_($variable, $class);
 $variableName instanceof \SomeClassName
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
@@ -1917,6 +1984,7 @@ return new Isset_([$variable]);
 isset($variableName)
 ```
 
+
 ### Public Properties
 
  * `$vars` - `/** @var Expr[] Variables */`
@@ -1944,6 +2012,7 @@ return new List_([$variable, $anotherVariable]);
 ```php
 list($variableName, $anoterVariableName)
 ```
+
 
 ### Public Properties
 
@@ -1981,6 +2050,7 @@ match ($variableName) {
 }
 ```
 
+
 ### Public Properties
 
  * `$cond` - `/** @var Node\Expr */`
@@ -2008,6 +2078,7 @@ return new MethodCall($variable, 'methodName');
 ```php
 $someObject->methodName()
 ```
+
 ```php
 <?php
 
@@ -2030,6 +2101,7 @@ return new MethodCall($variable, 'methodName', $args);
 ```php
 $someObject->methodName('yes', 'maybe')
 ```
+
 
 ### Public Properties
 
@@ -2061,6 +2133,7 @@ new class
 {
 }
 ```
+
 ```php
 <?php
 
@@ -2077,6 +2150,7 @@ return new New_($class);
 ```php
 new SomeClass()
 ```
+
 
 ### Public Properties
 
@@ -2105,6 +2179,7 @@ return new NullsafeMethodCall($variable, 'methodName');
 ```php
 $variableName?->methodName()
 ```
+
 
 ### Public Properties
 
@@ -2135,6 +2210,7 @@ return new NullsafePropertyFetch($variable, 'someProperty');
 $variableName?->someProperty
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable holding object */`
@@ -2163,6 +2239,7 @@ return new PostDec($variable);
 $variableName--
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -2189,6 +2266,7 @@ return new PostInc($variable);
 ```php
 $variableName++
 ```
+
 
 ### Public Properties
 
@@ -2217,6 +2295,7 @@ return new PreDec($variable);
 --$variableName
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -2243,6 +2322,7 @@ return new PreInc($variable);
 ```php
 ++$variableName
 ```
+
 
 ### Public Properties
 
@@ -2271,6 +2351,7 @@ return new Print_($string);
 print 'Some php code'
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
@@ -2297,6 +2378,7 @@ return new PropertyFetch($variable, 'propertyName');
 ```php
 $variableName->propertyName
 ```
+
 
 ### Public Properties
 
@@ -2326,6 +2408,7 @@ return new ShellExec($parts);
 `first partsecond part`
 ```
 
+
 ### Public Properties
 
  * `$parts` - `/** @var array Encapsed string array */`
@@ -2352,6 +2435,7 @@ return new StaticCall($fullyQualified, 'methodName');
 ```php
 \ClassName::methodName()
 ```
+
 
 ### Public Properties
 
@@ -2381,6 +2465,7 @@ return new StaticPropertyFetch($class, 'someProperty');
 ```php
 \StaticClassName::$someProperty
 ```
+
 
 ### Public Properties
 
@@ -2415,6 +2500,7 @@ return new Ternary($variable, $trueConstFetch, $falseConstFetch);
 $variableName ? true : false
 ```
 
+
 ### Public Properties
 
  * `$cond` - `/** @var Expr Condition */`
@@ -2444,6 +2530,7 @@ return new Throw_($string);
 throw 'some string'
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Node\Expr Expression */`
@@ -2470,6 +2557,7 @@ return new UnaryMinus($variable);
 ```php
 -$variableName
 ```
+
 
 ### Public Properties
 
@@ -2498,6 +2586,7 @@ return new UnaryPlus($variable);
 +$variableName
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression */`
@@ -2521,6 +2610,7 @@ return new Variable('variableName');
 ```php
 $variableName
 ```
+
 
 ### Public Properties
 
@@ -2549,6 +2639,7 @@ return new YieldFrom($variable);
 yield from $variableName
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Expr Expression to yield from */`
@@ -2572,6 +2663,7 @@ return new Identifier('identifierName');
 ```php
 identifierName
 ```
+
 
 ### Public Properties
 
@@ -2603,6 +2695,7 @@ return new MatchArm($conds, $body);
 1 => 'yes'
 ```
 
+
 ### Public Properties
 
  * `$conds` - `/** @var null|Node\Expr[] */`
@@ -2627,6 +2720,7 @@ return new Name('shortName');
 ```php
 shortName
 ```
+
 
 ### Public Properties
 
@@ -2653,6 +2747,7 @@ return new FullyQualified('SomeNamespace\ShortName');
 \SomeNamespace\ShortName
 ```
 
+
 ### Public Properties
 
  * `$parts` - `/** @var string[] Parts of the name */`
@@ -2676,6 +2771,7 @@ return new Relative('PartOf\SomeNamespace\ShortName');
 ```php
 namespace\PartOf\SomeNamespace\ShortName
 ```
+
 
 ### Public Properties
 
@@ -2703,6 +2799,7 @@ return new NullableType('SomeType');
 ?SomeType
 ```
 
+
 ### Public Properties
 
  * `$type` - `/** @var Identifier|Name Type */`
@@ -2729,6 +2826,7 @@ return new Param($variable);
 ```php
 $variableName
 ```
+
 
 ### Public Properties
 
@@ -2759,6 +2857,7 @@ return new DNumber(10.5);
 10.5
 ```
 
+
 ### Public Properties
 
  * `$value` - `/** @var float Number value */`
@@ -2784,6 +2883,7 @@ return new Encapsed([new Variable('variableName')]);
 "{$variableName}"
 ```
 
+
 ### Public Properties
 
  * `$parts` - `/** @var Expr[] list of string parts */`
@@ -2807,6 +2907,7 @@ return new EncapsedStringPart('enscapsed');
 ```php
 UNABLE_TO_PRINT_ENCAPSED_STRING
 ```
+
 
 ### Public Properties
 
@@ -2832,6 +2933,7 @@ return new LNumber(1000);
 1000
 ```
 
+
 ### Public Properties
 
  * `$value` - `/** @var int Number value */`
@@ -2855,6 +2957,7 @@ return new String_('some string');
 ```php
 'some string'
 ```
+
 
 ### Public Properties
 
@@ -2884,6 +2987,7 @@ return new Case_($trueConstFetch);
 ```php
 case true:
 ```
+
 
 ### Public Properties
 
@@ -2916,6 +3020,7 @@ catch (\ClassType $CaughtVariable) {
 }
 ```
 
+
 ### Public Properties
 
  * `$types` - `/** @var Node\Name[] Types of exceptions to catch */`
@@ -2947,6 +3052,7 @@ return new ClassConst([$const], Class_::MODIFIER_PUBLIC);
 ```php
 public const SOME_CLASS_CONSTANT = 'default value';
 ```
+
 
 ### Public Properties
 
@@ -2985,6 +3091,7 @@ private function methodName($paramName): string
 {
 }
 ```
+
 ```php
 <?php
 
@@ -3004,6 +3111,7 @@ public function methodName()
 {
 }
 ```
+
 
 ### Public Properties
 
@@ -3036,6 +3144,7 @@ class ClassName
 {
 }
 ```
+
 ```php
 <?php
 
@@ -3057,6 +3166,7 @@ final class ClassName extends ParentClass
 {
 }
 ```
+
 
 ### Public Properties
 
@@ -3092,6 +3202,7 @@ return new ConstStmt($consts);
 const CONSTANT_IN_CLASS = 'default value';
 ```
 
+
 ### Public Properties
 
  * `$consts` - `/** @var Node\Const_[] Constant declarations */`
@@ -3116,6 +3227,7 @@ return new DeclareDeclare('strict_types', new LNumber(1));
 ```php
 strict_types=1
 ```
+
 
 ### Public Properties
 
@@ -3146,6 +3258,7 @@ return new Declare_([$declareDeclare]);
 declare(strict_types=1);
 ```
 
+
 ### Public Properties
 
  * `$declares` - `/** @var DeclareDeclare[] List of declares */`
@@ -3175,6 +3288,7 @@ do {
 } while ($variableName);
 ```
 
+
 ### Public Properties
 
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
@@ -3202,6 +3316,7 @@ return new Echo_([$string]);
 ```php
 echo 'hello';
 ```
+
 
 ### Public Properties
 
@@ -3236,6 +3351,7 @@ elseif (true) {
 }
 ```
 
+
 ### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition */`
@@ -3266,6 +3382,7 @@ foreach ($foreachedVariableName as $asVariable) {
 }
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Node\Expr Expression to iterate */`
@@ -3295,6 +3412,7 @@ function some_function()
 {
 }
 ```
+
 
 ### Public Properties
 
@@ -3327,6 +3445,7 @@ return new Global_([$variable]);
 global $globalVariable;
 ```
 
+
 ### Public Properties
 
  * `$vars` - `/** @var Node\Expr[] Variables */`
@@ -3350,6 +3469,7 @@ return new Goto_('goto_break');
 ```php
 goto goto_break;
 ```
+
 
 ### Public Properties
 
@@ -3381,6 +3501,7 @@ return new GroupUse(new Name('prefix'), $uses);
 use prefix\{UserName};
 ```
 
+
 ### Public Properties
 
  * `$type` - `/** @var int Type of group use */`
@@ -3406,6 +3527,7 @@ return new HaltCompiler('remaining');
 ```php
 __halt_compiler();remaining
 ```
+
 
 ### Public Properties
 
@@ -3436,6 +3558,7 @@ if (true) {
 }
 ```
 
+
 ### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition expression */`
@@ -3464,6 +3587,7 @@ return new InlineHTML('<strong>feel</strong>');
 <strong>feel</strong><?php
 ```
 
+
 ### Public Properties
 
  * `$value` - `/** @var string String */`
@@ -3491,6 +3615,7 @@ interface InterfaceName
 }
 ```
 
+
 ### Public Properties
 
  * `$extends` - `/** @var Node\Name[] Extended interfaces */`
@@ -3516,6 +3641,7 @@ return new Label('labelName');
 ```php
 labelName:
 ```
+
 
 ### Public Properties
 
@@ -3547,6 +3673,7 @@ return new Property(Class_::MODIFIER_STATIC | Class_::MODIFIER_PUBLIC, $property
 ```php
 public static $firstProperty, $secondProperty;
 ```
+
 ```php
 <?php
 
@@ -3565,6 +3692,7 @@ return new Property(Class_::MODIFIER_PUBLIC, [$propertyProperty]);
 ```php
 public $propertyName;
 ```
+
 ```php
 <?php
 
@@ -3583,6 +3711,7 @@ return new Property(Class_::MODIFIER_PUBLIC, [$propertyProperty], [], 'string');
 ```php
 public string $propertyName;
 ```
+
 
 ### Public Properties
 
@@ -3609,6 +3738,7 @@ return new PropertyProperty('propertyName');
 ```php
 $propertyName
 ```
+
 
 ### Public Properties
 
@@ -3638,6 +3768,7 @@ return new StaticVar($variable);
 $variableName
 ```
 
+
 ### Public Properties
 
  * `$var` - `/** @var Expr\Variable Variable */`
@@ -3666,6 +3797,7 @@ return new Static_($staticVars);
 ```php
 static $static;
 ```
+
 
 ### Public Properties
 
@@ -3699,6 +3831,7 @@ switch ($variableName) {
 }
 ```
 
+
 ### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition */`
@@ -3727,6 +3860,7 @@ return new Throw_($string);
 throw 'some string';
 ```
 
+
 ### Public Properties
 
  * `$expr` - `/** @var Node\Expr Expression */`
@@ -3751,6 +3885,7 @@ return new TraitUse([new FullyQualified('TraitName')]);
 ```php
 use \TraitName;
 ```
+
 
 ### Public Properties
 
@@ -3780,6 +3915,7 @@ return new Alias($traitFullyQualified, 'method', Class_::MODIFIER_PUBLIC, 'alias
 ```php
 \TraitName::method as public aliasedMethod;
 ```
+
 
 ### Public Properties
 
@@ -3812,6 +3948,7 @@ return new Precedence($firstTrait, 'methodName', [$secondTrait]);
 SomeTrait::methodName insteadof OverriddenTrait;
 ```
 
+
 ### Public Properties
 
  * `$insteadof` - `/** @var Node\Name[] Overwritten traits */`
@@ -3839,6 +3976,7 @@ trait TraitName
 {
 }
 ```
+
 
 ### Public Properties
 
@@ -3877,6 +4015,7 @@ try {
 }
 ```
 
+
 ### Public Properties
 
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
@@ -3906,6 +4045,7 @@ return new Unset_([$variable]);
 unset($variableName);
 ```
 
+
 ### Public Properties
 
  * `$vars` - `/** @var Node\Expr[] Variables to unset */`
@@ -3930,6 +4070,7 @@ return new UseUse(new Name('UsedNamespace'));
 ```php
 UsedNamespace
 ```
+
 
 ### Public Properties
 
@@ -3959,6 +4100,7 @@ while ($variableName) {
 }
 ```
 
+
 ### Public Properties
 
  * `$cond` - `/** @var Node\Expr Condition */`
@@ -3986,6 +4128,7 @@ return new UnionType($unionedTypes);
 ```php
 string|int
 ```
+
 
 ### Public Properties
 

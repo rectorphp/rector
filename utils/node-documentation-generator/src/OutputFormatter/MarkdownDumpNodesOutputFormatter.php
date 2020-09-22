@@ -49,6 +49,7 @@ final class MarkdownDumpNodesOutputFormatter
 
         foreach ($nodeInfo->getNodeCodeSamples() as $nodeCodeSample) {
             $this->printNodeCodeSample($nodeCodeSample);
+            $this->symfonyStyle->newLine();
         }
     }
 
