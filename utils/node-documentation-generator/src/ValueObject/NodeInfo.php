@@ -24,14 +24,9 @@ final class NodeInfo
     private $nodeCodeSamples = [];
 
     /**
-     * @var string
-     */
-    private $category;
-
-    /**
      * @param NodeCodeSample[] $nodeCodeSamples
      */
-    public function __construct(string $class, array $nodeCodeSamples = [], string $category)
+    public function __construct(string $class, array $nodeCodeSamples = [])
     {
         $this->class = $class;
 
@@ -44,7 +39,6 @@ final class NodeInfo
             $this->publicPropertyInfos[] = ' * `$' . $reflectionProperty->name . '` - `' . $reflectionProperty->getDocComment() . '`';
         }
         $this->nodeCodeSamples = $nodeCodeSamples;
-        $this->category = $category;
     }
 
     public function getClass(): string
@@ -71,10 +65,5 @@ final class NodeInfo
     public function getNodeCodeSamples(): array
     {
         return $this->nodeCodeSamples;
-    }
-
-    public function getCategory(): string
-    {
-        return $this->category;
     }
 }

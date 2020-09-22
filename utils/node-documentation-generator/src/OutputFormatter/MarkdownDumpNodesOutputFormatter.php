@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Utils\NodeDocumentationGenerator\OutputFormatter;
 
-use Nette\Utils\Strings;
 use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeCodeSample;
 use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfo;
 use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfos;
@@ -27,47 +26,19 @@ final class MarkdownDumpNodesOutputFormatter
         $this->symfonyStyle->writeln('# Node Overview');
         $this->symfonyStyle->newLine();
 
-        $this->printCategories($nodeInfos);
-
         $this->symfonyStyle->newLine();
 
-        /** @var string $category */
-        foreach ($nodeInfos->getNodeInfosByCategory() as $category => $nodeInfos) {
-            $categoryTitle = $this->createCategoryTitle($category);
-            $this->symfonyStyle->writeln('## ' . $categoryTitle);
+        foreach ($nodeInfos->getNodeInfos() as $nodeInfo) {
+            $message = sprintf('## `%s`', $nodeInfo->getClass());
+            $this->symfonyStyle->writeln($message);
             $this->symfonyStyle->newLine();
 
-            foreach ($nodeInfos as $nodeInfo) {
-                $message = sprintf('### `%s`', $nodeInfo->getClass());
-                $this->symfonyStyle->writeln($message);
-                $this->symfonyStyle->newLine();
+            $this->printCodeExample($nodeInfo);
+            $this->printPublicProperties($nodeInfo);
 
-                $this->printCodeExample($nodeInfo);
-                $this->printPublicProperties($nodeInfo);
-
-                $this->symfonyStyle->writeln('<br>');
-                $this->symfonyStyle->newLine();
-            }
+            $this->symfonyStyle->writeln('<br>');
+            $this->symfonyStyle->newLine();
         }
-    }
-
-    private function printCategories(NodeInfos $nodeInfos): void
-    {
-        foreach ($nodeInfos->getCategories() as $category) {
-            $categoryTitle = $this->createCategoryTitle($category);
-            $categoryLink = sprintf('* [%s](#%s)', $categoryTitle, Strings::webalize($categoryTitle));
-
-            $this->symfonyStyle->writeln($categoryLink);
-        }
-    }
-
-    private function createCategoryTitle(string $category): string
-    {
-        if (class_exists($category)) {
-            return sprintf('Children of "%s"', $category);
-        }
-
-        return $category;
     }
 
     private function printCodeExample(NodeInfo $nodeInfo): void
@@ -88,7 +59,7 @@ final class MarkdownDumpNodesOutputFormatter
         }
 
         $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln('#### Public Properties');
+        $this->symfonyStyle->writeln('### Public Properties');
         $this->symfonyStyle->newLine();
 
         foreach ($nodeInfo->getPublicPropertyInfos() as $publicPropertyInfo) {
