@@ -21,6 +21,7 @@ namespace Rector\DeadCode\Tests\Rector\Function_\RemoveUnusedFunctionRector\Fixt
 function useMe()
 {
 }
+
 useMe();
 
 ?>

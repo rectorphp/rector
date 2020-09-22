@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\MagicallyAssignedFetch;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class SomeClass
+class MagicallyAssignedFetch
 {
     private $seemsUnused;
 
@@ -18,11 +18,12 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\MagicallyAssignedFetch;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class SomeClass
+class MagicallyAssignedFetch
 {
     private $anotherName = 'asdf';
+
     public function getValue()
     {
         // but it might be used :)

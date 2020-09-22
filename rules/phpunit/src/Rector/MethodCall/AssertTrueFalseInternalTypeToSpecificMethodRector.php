@@ -21,7 +21,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const OLD_FUNCTIONS_TO_TYPES = [
         'is_array' => 'array',
@@ -104,29 +104,33 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         if (! isset(self::OLD_FUNCTIONS_TO_TYPES[$functionName])) {
             return null;
         }
-        $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
-        $this->moveFunctionArgumentsUp($node);
 
-        return $node;
+        $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
+
+        return $this->moveFunctionArgumentsUp($node);
     }
 
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function moveFunctionArgumentsUp(Node $node): void
+    private function moveFunctionArgumentsUp(Node $node): Node
     {
         /** @var FuncCall $isFunctionNode */
         $isFunctionNode = $node->args[0]->value;
 
-        $argument = $isFunctionNode->args[0];
+        $firstArgumentValue = $isFunctionNode->args[0]->value;
         $isFunctionName = $this->getName($isFunctionNode);
+
+        $newArgs = [
+            new Arg(new String_(self::OLD_FUNCTIONS_TO_TYPES[$isFunctionName])),
+            new Arg($firstArgumentValue),
+        ];
 
         $oldArguments = $node->args;
         unset($oldArguments[0]);
 
-        $node->args = array_merge([
-            new Arg(new String_(self::OLD_FUNCTIONS_TO_TYPES[$isFunctionName])),
-            $argument,
-        ], $oldArguments);
+        $node->args = $this->appendArgs($newArgs, $oldArguments);
+
+        return $node;
     }
 }

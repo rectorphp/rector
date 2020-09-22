@@ -30,10 +30,14 @@ class Items
 {
     public function lists()
     {
-        $items = [1 => 'A'];
+        $items = [
+            1 => 'A'
+        ];
 
         $key = 1;
-        $items = [$key => 'A'];
+        $items = [
+            $key => 'A',
+        ];
     }
 }
 

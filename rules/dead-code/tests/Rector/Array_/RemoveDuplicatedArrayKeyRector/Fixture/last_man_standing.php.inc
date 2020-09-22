@@ -34,9 +34,16 @@ class LastManStanding
 {
     public function lists()
     {
-        $items = [1 => 'C'];
+        $items = [
+            1 => 'C'
+        ];
 
-        $items = [1 => 'E', 2 => 'F', 3 => 'G', 4 => 'H'];
+        $items = [
+            1 => 'E',
+            2 => 'F',
+            3 => 'G',
+            4 => 'H',
+        ];
     }
 }
 

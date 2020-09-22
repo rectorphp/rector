@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector;
 
+use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -16,27 +17,35 @@ final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRe
         $this->doTestFileInfo($fixtureFileInfo);
     }
 
-    public function testSimpleEvent(): void
-    {
-        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/simple_event.php.inc');
+    /**
+     * @dataProvider provideData()
+     */
+    public function test(
+        SmartFileInfo $fixtureFileInfo,
+        string $expectedRelativeFilePath,
+        string $expectedContentFilePath
+    ): void {
         $this->doTestFileInfo($fixtureFileInfo);
 
-        $expectedEventFilePath = $this->originalTempFileInfo->getPath() . '/Event/FileManagerUploadEvent.php';
+        $expectedEventFilePath = $this->originalTempFileInfo->getPath() . $expectedRelativeFilePath;
         $this->assertFileExists($expectedEventFilePath);
-        $this->assertFileEquals(__DIR__ . '/Source/ExpectedFileManagerUploadEvent.php', $expectedEventFilePath);
+
+        $this->assertFileEquals($expectedContentFilePath, $expectedEventFilePath);
     }
 
-    public function testDuplicatedEventParams(): void
+    public function provideData(): Iterator
     {
-        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/duplicated_event_params.php.inc');
-        $this->doTestFileInfo($fixtureFileInfo);
+        yield [
+            new SmartFileInfo(__DIR__ . '/Fixture/simple_event.php.inc'),
+            '/Event/DuplicatedEventParamsUploadEvent.php',
+            __DIR__ . '/Source/ExpectedFileManagerUploadEvent.php',
+        ];
 
-        $expectedEventFilePath = $this->originalTempFileInfo->getPath() . '/Event/DuplicatedEventParamsUploadEvent.php';
-        $this->assertFileExists($expectedEventFilePath);
-        $this->assertFileEquals(
+        yield [
+            new SmartFileInfo(__DIR__ . '/Fixture/duplicated_event_params.php.inc'),
+            '/Event/DuplicatedEventParamsUploadEvent.php',
             __DIR__ . '/Source/ExpectedDuplicatedEventParamsUploadEvent.php',
-            $expectedEventFilePath
-        );
+        ];
     }
 
     protected function getRectorClass(): string

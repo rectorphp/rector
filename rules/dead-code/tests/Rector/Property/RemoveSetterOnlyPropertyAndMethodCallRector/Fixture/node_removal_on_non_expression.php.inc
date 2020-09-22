@@ -1,7 +1,8 @@
 <?php
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\node_removal_on_non_expression;
 
-class SomeClass
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\Fixture;
+
+class NodeRemovalOnNonExpression
 {
     /** @var */
     private $foo;
@@ -22,19 +23,22 @@ class SomeClass
 ?>
 -----
 <?php
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\node_removal_on_non_expression;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\Fixture;
 
-class SomeClass
+class NodeRemovalOnNonExpression
 {
     public function setFoo($foo)
     {
         return $foo;
     }
+
     public function whenFoo($foo)
     {
         if($foo) {
             doSomething();
         }
     }
+
 }
+
 ?>

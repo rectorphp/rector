@@ -78,7 +78,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
         return $node instanceof MethodCall ? new MethodCall($node->var, $name) : new StaticCall($node->class, $name);
     }
 
-    private function isPHPUnitTestCaseCall(Node $node): bool
+    protected function isPHPUnitTestCaseCall(Node $node): bool
     {
         if (! $this->isInTestClass($node)) {
             return false;

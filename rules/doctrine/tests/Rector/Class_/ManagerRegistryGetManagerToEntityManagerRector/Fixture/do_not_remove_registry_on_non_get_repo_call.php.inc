@@ -50,6 +50,7 @@ class DoNotRemoveRegistryOnNonGetRepoCall
     public function run()
     {
         $item = $this->entityManager->getItem();
+
         $this->managerRegistry->kickThat();
     }
 }

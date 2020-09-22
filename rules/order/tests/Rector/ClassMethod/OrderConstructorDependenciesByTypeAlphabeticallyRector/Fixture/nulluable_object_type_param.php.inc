@@ -21,8 +21,12 @@ namespace Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTy
 
 class NullableObjectTypeParamClass
 {
-    public function __construct(?LatteAndTwigFinder $latteAndTwigFinder, LatteToTwigConverter $latteToTwigConverter, SmartFileSystem $smartFileSystem, SymfonyStyle $symfonyStyle)
-    {
+    public function __construct(
+        ?LatteAndTwigFinder $latteAndTwigFinder,
+        LatteToTwigConverter $latteToTwigConverter,
+        SmartFileSystem $smartFileSystem,
+        SymfonyStyle $symfonyStyle
+    ) {
     }
 }
 

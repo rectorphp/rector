@@ -40,8 +40,10 @@ abstract class AbstractClass
     {
 
     }
+
     abstract static public function abstractStaticPublicFunctionName();
     abstract protected function abstractProtectedFunctionName();
+
     protected function protectedFunctionName()
     {
 
