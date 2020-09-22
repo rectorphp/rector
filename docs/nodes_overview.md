@@ -2150,6 +2150,7 @@ $someObject->methodName()
 ```
 
 <br>
+
 ```php
 <?php
 
