@@ -7,7 +7,7 @@ namespace Rector\Utils\NodeDocumentationGenerator\ValueObject;
 final class NodeInfos
 {
     /**
-     * @var NodeInfo[][]
+     * @var array<string, NodeInfo[]>
      */
     private $nodeInfosByCategory = [];
 
@@ -16,9 +16,12 @@ final class NodeInfos
      */
     public function __construct(array $nodeInfos)
     {
+        $nodeInfosByCategory = [];
         foreach ($nodeInfos as $nodeInfo) {
-            $this->nodeInfosByCategory[$nodeInfo->getCategory()][] = $nodeInfo;
+            $nodeInfosByCategory[$nodeInfo->getCategory()][] = $nodeInfo;
         }
+
+        $this->nodeInfosByCategory = $this->sortNodeInfosByCategory($nodeInfosByCategory);
     }
 
     /**
@@ -26,7 +29,7 @@ final class NodeInfos
      */
     public function getCategories(): array
     {
-        return array_keys($this->getNodeInfosByCategory());
+        return array_keys($this->nodeInfosByCategory);
     }
 
     /**
@@ -34,12 +37,6 @@ final class NodeInfos
      */
     public function getNodeInfosByCategory(): array
     {
-        ksort($this->nodeInfosByCategory);
-
-        foreach ($this->nodeInfosByCategory as $category => $nodeInfos) {
-            $this->nodeInfosByCategory[$category] = $this->sortNodeInfosByClass($nodeInfos);
-        }
-
         return $this->nodeInfosByCategory;
     }
 
@@ -54,5 +51,20 @@ final class NodeInfos
         });
 
         return $nodeInfos;
+    }
+
+    /**
+     * @param array<string, NodeInfo[]> $nodeInfosByCategory
+     * @return array<string, NodeInfo[]>
+     */
+    private function sortNodeInfosByCategory(array $nodeInfosByCategory): array
+    {
+        ksort($nodeInfosByCategory);
+
+        foreach ($nodeInfosByCategory as $category => $nodeInfos) {
+            $nodeInfosByCategory[$category] = $this->sortNodeInfosByClass($nodeInfos);
+        }
+
+        return $nodeInfosByCategory;
     }
 }
