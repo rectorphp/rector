@@ -446,7 +446,6 @@ parameters:
 
         # symplify rules fix later
         - '#Use another value object over string with value object arrays#'
-        - '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
         - '#Use decouled factory service to create "(.*?)" object#'
         - '#Add regex101\.org link to that shows the regex in practise, so it will be easier to maintain in case of bug/extension in the future#'
 
