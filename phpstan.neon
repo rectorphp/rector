@@ -304,7 +304,7 @@ parameters:
 
         - '#Method (.*?) specified in iterable type Symfony\\Component\\Process\\Process#'
         - '#Cannot cast PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier to string#'
-        - '#Cognitive complexity for "Rector\\Utils\\NodeDocumentationGenerator\\Command\\DumpNodesCommand\:\:execute\(\)" is \d+, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\Utils\\NodeDocumentationGenerator\\Command\\DumpNodesCommand\:\:(.*?)" is \d+, keep it under 9#'
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
@@ -468,3 +468,5 @@ parameters:
 
         # Temprory ignored
         - '#Do not use scalar or array as constructor parameter\. Use ParameterProvider service instead#'
+
+        - '#Method Rector\\Utils\\NodeDocumentationGenerator\\NodeCodeSampleProvider\:\:getNodeClasses\(\) should return array<class\-string\> but returns array<int, string\>#'

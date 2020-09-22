@@ -14,19 +14,9 @@ final class NodeInfo
     private $class;
 
     /**
-     * @var bool
-     */
-    private $hasRequiredArguments = false;
-
-    /**
      * @var string[]
      */
     private $publicPropertyInfos = [];
-
-    /**
-     * @var string[]
-     */
-    private $codeSamples = [];
 
     /**
      * @var NodeCodeSample[]
@@ -34,18 +24,11 @@ final class NodeInfo
     private $nodeCodeSamples = [];
 
     /**
-     * @param string[] $codeSamples
      * @param NodeCodeSample[] $nodeCodeSamples
      */
-    public function __construct(
-        string $class,
-        array $codeSamples,
-        bool $hasRequiredArguments,
-        array $nodeCodeSamples = []
-    ) {
+    public function __construct(string $class, array $nodeCodeSamples = [])
+    {
         $this->class = $class;
-        $this->hasRequiredArguments = $hasRequiredArguments;
-        $this->codeSamples = $codeSamples;
 
         $reflectionClass = new ReflectionClass($class);
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
@@ -61,19 +44,6 @@ final class NodeInfo
     public function getClass(): string
     {
         return $this->class;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getCodeSamples(): array
-    {
-        return $this->codeSamples;
-    }
-
-    public function hasRequiredArguments(): bool
-    {
-        return $this->hasRequiredArguments;
     }
 
     public function hasPublicProperties(): bool
