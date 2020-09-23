@@ -215,6 +215,7 @@ fn() => 1
  * `$params` - `/** @var Node\Param[] */`
  * `$returnType` - `/** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType */`
  * `$expr` - `/** @var Expr */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] */`
 
 <br>
 
@@ -3324,6 +3325,7 @@ $variableName
  * `$var` - `/** @var Expr\Variable|Expr\Error Parameter variable */`
  * `$default` - `/** @var null|Expr Default value */`
  * `$flags` - `/** @var int */`
+ * `$attrGroups` - `/** @var AttributeGroup[] PHP attribute groups */`
 
 <br>
 
@@ -3586,6 +3588,7 @@ public const SOME_CLASS_CONSTANT = 'default value';
 
  * `$flags` - `/** @var int Modifiers */`
  * `$consts` - `/** @var Node\Const_[] Constant declarations */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] */`
 
 <br>
 
@@ -3658,6 +3661,7 @@ private function methodName($paramName): string
  * `$params` - `/** @var Node\Param[] Parameters */`
  * `$returnType` - `/** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType Return type */`
  * `$stmts` - `/** @var Node\Stmt[]|null Statements */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
  * `$magicNames` - ``
 
 <br>
@@ -3721,6 +3725,7 @@ final class ClassName extends \ParentClass
  * `$implements` - `/** @var Node\Name[] Names of implemented interfaces */`
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
 
 <br>
 
@@ -4005,6 +4010,7 @@ function some_function()
  * `$params` - `/** @var Node\Param[] Parameters */`
  * `$returnType` - `/** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType Return type */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
 
 <br>
 
@@ -4238,6 +4244,7 @@ interface InterfaceName
  * `$extends` - `/** @var Node\Name[] Extended interfaces */`
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
 
 <br>
 
@@ -4350,6 +4357,7 @@ public static $firstProperty, $secondProperty;
  * `$flags` - `/** @var int Modifiers */`
  * `$props` - `/** @var PropertyProperty[] Properties */`
  * `$type` - `/** @var null|Identifier|Name|NullableType|UnionType Type declaration */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
 
 <br>
 
@@ -4659,6 +4667,7 @@ trait TraitName
 
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
 
 <br>
 

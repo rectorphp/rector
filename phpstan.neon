@@ -518,3 +518,5 @@ parameters:
             path: 'src/Rector/AbstractRector.php'
 
         - '#Method Rector\\DocumentationGenerator\\Tests\\Printer\\RectorsDocumentationPrinter\\RectorsDocumentationPrinterTest\:\:createRectorsFromRectorClasses\(\) should return array<Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<int, object\>#'
+
+        - '#Parameter \#1 \$rectors of method Rector\\DocumentationGenerator\\Printer\\RectorsDocumentationPrinter\:\:print\(\) expects array<Rector\\Core\\Contract\\Rector\\RectorInterface\>, array<object\> given#'
