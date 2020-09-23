@@ -33,6 +33,11 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
     private const MAX_LOOKING_FOR_ASSERT_METHOD_CALL_NESTING_LEVEL = 3;
 
     /**
+     * @var string
+     */
+    private const DOES_NOT_PERFORM_ASSERTION_REGEX = '#@(doesNotPerformAssertion|expectedException\b)#';
+
+    /**
      * This should prevent segfaults while going too deep into to parsed code.
      * Without it, it might end-up with segfault
      * @var int
@@ -135,7 +140,7 @@ CODE_SAMPLE
 
         if ($classMethod->getDocComment() !== null) {
             $doc = $classMethod->getDocComment();
-            if (Strings::match($doc->getText(), '#@(doesNotPerformAssertion|expectedException\b)#')) {
+            if (Strings::match($doc->getText(), self::DOES_NOT_PERFORM_ASSERTION_REGEX)) {
                 return true;
             }
         }

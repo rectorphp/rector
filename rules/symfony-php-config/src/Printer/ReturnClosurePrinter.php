@@ -106,8 +106,6 @@ final class ReturnClosurePrinter
         $rootStmts = array_merge($this->useStmts, [new Nop(), $return]);
         $printedContent = $this->betterStandardPrinter->prettyPrintFile($rootStmts);
 
-        //$printedContent = $this->indentArray($printedContent);
-
         return $this->indentFluentCallToNewline($printedContent);
     }
 
@@ -145,23 +143,6 @@ final class ReturnClosurePrinter
         }
 
         return $stmts;
-    }
-
-    /**
-     * @todo replace with https://github.com/symplify/symplify/issues/2055 when done
-     */
-    private function indentArray(string $printedContent): string
-    {
-        // open array
-        $printedContent = Strings::replace($printedContent, '#\[\[#', '[[' . PHP_EOL . str_repeat(' ', 12));
-
-        // nested array
-        $printedContent = Strings::replace($printedContent, '#\=> \[#', '=> [' . PHP_EOL . str_repeat(' ', 16));
-
-        // close array
-        $printedContent = Strings::replace($printedContent, '#\]\]\)#', PHP_EOL . str_repeat(' ', 8) . ']])');
-
-        return $printedContent;
     }
 
     private function indentFluentCallToNewline(string $content): string

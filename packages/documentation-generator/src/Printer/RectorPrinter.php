@@ -2,24 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Rector\DocumentationGenerator\OutputFormatter;
+namespace Rector\DocumentationGenerator\Printer;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\DocumentationGenerator\Guard\PrePrintRectorGuard;
 use Rector\DocumentationGenerator\PhpKeywordHighlighter;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
 use ReflectionClass;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\DocumentationGenerator\Tests\Printer\RectorPrinter\RectorPrinterTest
+ */
 final class RectorPrinter
 {
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
     /**
      * @var TestClassResolver
      */
@@ -35,65 +31,62 @@ final class RectorPrinter
      */
     private $phpKeywordHighlighter;
 
+    /**
+     * @var PrePrintRectorGuard
+     */
+    private $prePrintRectorGuard;
+
     public function __construct(
-        SymfonyStyle $symfonyStyle,
         TestClassResolver $testClassResolver,
         CodeSamplePrinter $rectorCodeSamplePrinter,
-        PhpKeywordHighlighter $phpKeywordHighlighter
+        PhpKeywordHighlighter $phpKeywordHighlighter,
+        PrePrintRectorGuard $prePrintRectorGuard
     ) {
-        $this->symfonyStyle = $symfonyStyle;
         $this->testClassResolver = $testClassResolver;
         $this->rectorCodeSamplePrinter = $rectorCodeSamplePrinter;
         $this->phpKeywordHighlighter = $phpKeywordHighlighter;
+        $this->prePrintRectorGuard = $prePrintRectorGuard;
     }
 
-    public function printRector(RectorInterface $rector, bool $isRectorProject): void
+    public function printRector(RectorInterface $rector, bool $isRectorProject): string
     {
+        $content = '';
         $headline = $this->getRectorClassWithoutNamespace($rector);
 
         if ($isRectorProject) {
-            $message = sprintf('### `%s`', $headline);
-            $this->symfonyStyle->writeln($message);
+            $content .= sprintf('### `%s`', $headline) . PHP_EOL;
         } else {
-            $message = sprintf('## `%s`', $headline);
-            $this->symfonyStyle->writeln($message);
+            $content .= sprintf('## `%s`', $headline) . PHP_EOL;
         }
 
         $rectorClass = get_class($rector);
 
-        $this->symfonyStyle->newLine();
-        $message = sprintf(
-            '- class: [`%s`](%s)',
-            get_class($rector),
-            $this->resolveClassFilePathOnGitHub($rectorClass)
-        );
-        $this->symfonyStyle->writeln($message);
+        $content .= PHP_EOL;
+        $content .= $this->createRectorFileLink($rector, $rectorClass) . PHP_EOL;
 
         $rectorTestClass = $this->testClassResolver->resolveFromClassName($rectorClass);
         if ($rectorTestClass !== null) {
             $fixtureDirectoryPath = $this->resolveFixtureDirectoryPathOnGitHub($rectorTestClass);
             if ($fixtureDirectoryPath !== null) {
                 $message = sprintf('- [test fixtures](%s)', $fixtureDirectoryPath);
-                $this->symfonyStyle->writeln($message);
+                $content .= $message . PHP_EOL;
             }
         }
 
+        $this->prePrintRectorGuard->ensureRectorRefinitionHasContent($rector);
+
+        $content .= PHP_EOL;
+
         $rectorDefinition = $rector->getDefinition();
-        $this->ensureRectorDefinitionExists($rectorDefinition, $rector);
-
-        $this->symfonyStyle->newLine();
-
         $description = $rectorDefinition->getDescription();
         $codeHighlightedDescription = $this->phpKeywordHighlighter->highlight($description);
-        $this->symfonyStyle->writeln($codeHighlightedDescription);
 
-        $this->ensureCodeSampleExists($rectorDefinition, $rector);
+        $content .= $codeHighlightedDescription . PHP_EOL . PHP_EOL;
 
-        $this->rectorCodeSamplePrinter->printCodeSamples($rectorDefinition, $rector);
+        $content .= $this->rectorCodeSamplePrinter->printCodeSamples($rectorDefinition, $rector);
+        $content .= PHP_EOL . '<br><br>' . PHP_EOL;
 
-        $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln('<br><br>');
-        $this->symfonyStyle->newLine();
+        return $content;
     }
 
     private function getRectorClassWithoutNamespace(RectorInterface $rector): string
@@ -122,38 +115,20 @@ final class RectorPrinter
         return null;
     }
 
-    private function ensureRectorDefinitionExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
-    {
-        if ($rectorDefinition->getDescription() !== '') {
-            return;
-        }
-
-        $message = sprintf(
-            'Rector "%s" is missing description. Complete it in "%s()" method.',
-            get_class($rector),
-            'getDefinition'
-        );
-        throw new ShouldNotHappenException($message);
-    }
-
-    private function ensureCodeSampleExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
-    {
-        if (count($rectorDefinition->getCodeSamples()) !== 0) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Rector "%s" must have at least one code sample. Complete it in "%s()" method.',
-            get_class($rector),
-            'getDefinition'
-        ));
-    }
-
     private function getClassRelativePath(string $className): string
     {
         $rectorReflectionClass = new ReflectionClass($className);
         $rectorSmartFileInfo = new SmartFileInfo($rectorReflectionClass->getFileName());
 
         return $rectorSmartFileInfo->getRelativeFilePathFromCwd();
+    }
+
+    private function createRectorFileLink(RectorInterface $rector, string $rectorClass): string
+    {
+        return sprintf(
+            '- class: [`%s`](%s)',
+            get_class($rector),
+            $this->resolveClassFilePathOnGitHub($rectorClass)
+        );
     }
 }

@@ -50,6 +50,16 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     private const CONSOLE_EVENTS_CLASS = 'Symfony\Component\Console\ConsoleEvents';
 
     /**
+     * @var string
+     */
+    private const LISTENER_MATCH_REGEX = '#^(.*?)(Listener)?$#';
+
+    /**
+     * @var string
+     */
+    private const SYMFONY_FAMILY_REGEX = '#^(Symfony|Sensio|Doctrine)\b#';
+
+    /**
      * @var bool
      */
     private $areListenerClassesLoaded = false;
@@ -204,7 +214,7 @@ CODE_SAMPLE
 
         foreach ($eventListeners as $eventListener) {
             // skip Symfony core listeners
-            if (Strings::match((string) $eventListener->getClass(), '#^(Symfony|Sensio|Doctrine)\b#')) {
+            if (Strings::match((string) $eventListener->getClass(), self::SYMFONY_FAMILY_REGEX)) {
                 continue;
             }
 
@@ -232,7 +242,7 @@ CODE_SAMPLE
 
         $classShortName = (string) $class->name;
         // remove suffix
-        $classShortName = Strings::replace($classShortName, '#^(.*?)(Listener)?$#', '$1');
+        $classShortName = Strings::replace($classShortName, self::LISTENER_MATCH_REGEX, '$1');
 
         $class->name = new Identifier($classShortName . 'EventSubscriber');
 

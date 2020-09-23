@@ -45,6 +45,11 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
     private const MINIMAL_VALUE_OCCURRENCE = 3;
 
     /**
+     * @var string
+     */
+    private const SLASH_AND_DASH_REGEX = '#[-\\\/]#';
+
+    /**
      * @var ClassInsertManipulator
      */
     private $classInsertManipulator;
@@ -229,7 +234,7 @@ CODE_SAMPLE
     private function createConstName(string $value): string
     {
         // replace slashes and dashes
-        $value = Strings::replace($value, '#[-\\\/]#', self::UNDERSCORE);
+        $value = Strings::replace($value, self::SLASH_AND_DASH_REGEX, self::UNDERSCORE);
 
         // find beginning numbers
         $beginningNumbers = '';

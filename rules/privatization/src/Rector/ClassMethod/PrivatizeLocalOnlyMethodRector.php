@@ -23,6 +23,13 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodVisibilityVendorLockResolver
 final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
+     * @var string
+     */
+    private const COMMON_PUBLIC_METHOD_CONTROLLER_REGEX = '#^(render|action|handle|inject)#';
+
+    private const CONTROLLER_PRESENTER_SUFFIX_REGEX = '#(Controller|Presenter)$#';
+
+    /**
      * @var ClassMethodVisibilityVendorLockResolver
      */
     private $classMethodVisibilityVendorLockResolver;
@@ -159,13 +166,13 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! Strings::match($className, '#(Controller|Presenter)$#')) {
+        if (! Strings::match($className, self::CONTROLLER_PRESENTER_SUFFIX_REGEX)) {
             return false;
         }
 
         $classMethodName = $this->getName($classMethod);
 
-        if ((bool) Strings::match($classMethodName, '#^(render|action|handle|inject)#')) {
+        if ((bool) Strings::match($classMethodName, self::COMMON_PUBLIC_METHOD_CONTROLLER_REGEX)) {
             return true;
         }
 

@@ -36,6 +36,14 @@ final class EregToPcreTransformer
     /**
      * @var string
      */
+    private const BOUND_REGEX = '/^(\d|[1-9]\d|1\d\d|
+                                2[0-4]\d|25[0-5])
+                               (,(\d|[1-9]\d|1\d\d|
+                                  2[0-4]\d|25[0-5])?)?$/x';
+
+    /**
+     * @var string
+     */
     private $pcreDelimiter;
 
     /**
@@ -258,10 +266,7 @@ final class EregToPcreTransformer
         $length = (int) $ii - ($i + 1);
         $bound = Strings::substring($s, $start, $length);
 
-        $matches = Strings::match($bound, '/^(\d|[1-9]\d|1\d\d|
-                                2[0-4]\d|25[0-5])
-                               (,(\d|[1-9]\d|1\d\d|
-                                  2[0-4]\d|25[0-5])?)?$/x');
+        $matches = Strings::match($bound, self::BOUND_REGEX);
         if (! $matches) {
             throw new InvalidEregException('an invalid bound');
         }

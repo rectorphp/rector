@@ -21,6 +21,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class BarewordStringRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const UNDEFINED_CONSTANT_REGEX = '#Use of undefined constant (?<constant>\w+)#';
+
+    /**
      * @var string[]
      */
     private $undefinedConstants = [];
@@ -60,7 +65,7 @@ final class BarewordStringRector extends AbstractRector
         $this->undefinedConstants = [];
         $previousErrorHandler = set_error_handler(
             function (int $severity, string $message, string $file, int $line): bool {
-                $match = Strings::match($message, '#Use of undefined constant (?<constant>\w+)#');
+                $match = Strings::match($message, self::UNDEFINED_CONSTANT_REGEX);
                 if ($match) {
                     $this->undefinedConstants[] = $match['constant'];
                 }

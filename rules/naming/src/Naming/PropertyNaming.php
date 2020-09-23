@@ -48,6 +48,11 @@ final class PropertyNaming
     private const PREFIXED_CLASS_METHODS_REGEX = '#^(is|are|was|were|has|have|had|can)[A-Z].+#';
 
     /**
+     * @var string
+     */
+    private const I_PREFIX_REGEX = '#^I[A-Z]#';
+
+    /**
      * @var TypeUnwrapper
      */
     private $typeUnwrapper;
@@ -197,8 +202,8 @@ final class PropertyNaming
     private function removePrefixesAndSuffixes(string $shortClassName): string
     {
         // is SomeInterface
-        if (Strings::endsWith($shortClassName, 'Interface')) {
-            $shortClassName = Strings::substring($shortClassName, 0, -strlen('Interface'));
+        if (Strings::endsWith($shortClassName, self::INTERFACE)) {
+            $shortClassName = Strings::substring($shortClassName, 0, -strlen(self::INTERFACE));
         }
 
         // is ISomeClass
@@ -277,11 +282,11 @@ final class PropertyNaming
         }
 
         // starts with "I\W+"?
-        if (Strings::match($shortName, '#^I[A-Z]#')) {
+        if (Strings::match($shortName, self::I_PREFIX_REGEX)) {
             return Strings::substring($shortName, 1);
         }
 
-        if (Strings::match($shortName, '#Interface$#')) {
+        if (Strings::endsWith($shortName, self::INTERFACE)) {
             return Strings::substring($shortName, -strlen(self::INTERFACE));
         }
 

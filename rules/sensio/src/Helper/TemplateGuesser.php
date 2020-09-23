@@ -27,6 +27,16 @@ final class TemplateGuesser
     private const BUNDLE_NAME_MATCHING_REGEX = '#(?<bundle>[\w]*Bundle)#';
 
     /**
+     * @var string
+     */
+    private const SMALL_LETTER_BIG_LETTER_REGEX = '#([a-z\d])([A-Z])#';
+
+    /**
+     * @var string
+     */
+    private const CONTROLLER_NAME_MATCH_REGEX = '#Controller\\\(.+)Controller$#';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -98,12 +108,12 @@ final class TemplateGuesser
 
     private function resolveController(string $class): string
     {
-        $match = Strings::match($class, '#Controller\\\(.+)Controller$#');
+        $match = Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
         if (! $match) {
             return '';
         }
 
-        $controller = Strings::replace($match[1], '#([a-z\d])([A-Z])#', '\\1_\\2');
+        $controller = Strings::replace($match[1], self::SMALL_LETTER_BIG_LETTER_REGEX, '\\1_\\2');
         return str_replace('\\', '/', $controller);
     }
 }

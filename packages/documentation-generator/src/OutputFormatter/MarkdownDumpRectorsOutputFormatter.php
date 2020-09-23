@@ -6,6 +6,7 @@ namespace Rector\DocumentationGenerator\OutputFormatter;
 
 use Nette\Utils\Strings;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\DocumentationGenerator\Printer\RectorPrinter;
 use Rector\DocumentationGenerator\RectorMetadataResolver;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
