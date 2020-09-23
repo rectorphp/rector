@@ -304,7 +304,7 @@
             "vendor/bin/changelog-linker cleanup --ansi"
         ],
         "docs": [
-            "bin/rector dump-rectors > docs/rector_rules_overview.md",
+            "bin/rector dump-rectors --output-file docs/rector_rules_overview.md --ansi",
             "bin/rector dump-nodes > docs/nodes_overview.md"
         ],
         "rector-ci": "bin/rector process --config rector-ci.php --dry-run --ansi",

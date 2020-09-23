@@ -1,0 +1,66 @@
+# All 2 Rectors Overview
+
+## `RenamePropertyRector`
+
+- class: [`Rector\Generic\Rector\PropertyFetch\RenamePropertyRector`](/rules/generic/src/Rector/PropertyFetch/RenamePropertyRector.php)
+- [test fixtures](/rules/generic/tests/Rector/PropertyFetch/RenamePropertyRector/Fixture)
+
+Replaces defined old properties by new ones.
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(RenamePropertyRector::class)
+        ->call('configure', [[RenamePropertyRector::RENAMED_PROPERTIES => [\Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty'))]]]);
+};
+```
+
+↓
+
+```diff
+-$someObject->someOldProperty;
++$someObject->someNewProperty;
+```
+
+<br><br>
+
+## `TypedPropertyRector`
+
+- class: [`Rector\Php74\Rector\Property\TypedPropertyRector`](/rules/php74/src/Rector/Property/TypedPropertyRector.php)
+- [test fixtures](/rules/php74/tests/Rector/Property/TypedPropertyRector/Fixture)
+
+Changes property `@var` annotations from annotation to type.
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Php74\Rector\Property\TypedPropertyRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(TypedPropertyRector::class)
+        ->call('configure', [[TypedPropertyRector::CLASS_LIKE_TYPE_ONLY => false]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+-    /**
+-     * @var int
+-     */
+-    private count;
++    private int count;
+ }
+```
+
+<br><br>
+

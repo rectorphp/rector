@@ -155,4 +155,9 @@ final class Option
      * @var string
      */
     public const CACHE_DIR = 'cache_dir';
+
+    /**
+     * @var string
+     */
+    public const OPTION_DEBUG = 'debug';
 }

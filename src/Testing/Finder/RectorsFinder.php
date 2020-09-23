@@ -28,7 +28,7 @@ final class RectorsFinder
      */
     public function findCoreRectorClasses(): array
     {
-        $allRectors = $this->findInDirectories(self::RECTOR_PATHS);
+        $allRectors = $this->findInDirectoriesAndCreate(self::RECTOR_PATHS);
 
         $rectorClasses = array_map(function (RectorInterface $rector): string {
             return get_class($rector);
@@ -44,7 +44,7 @@ final class RectorsFinder
      * @param string[] $directories
      * @return RectorInterface[]
      */
-    public function findInDirectories(array $directories): array
+    public function findInDirectoriesAndCreate(array $directories): array
     {
         $foundClasses = $this->findClassesInDirectoriesByName($directories, '*Rector.php');
 
