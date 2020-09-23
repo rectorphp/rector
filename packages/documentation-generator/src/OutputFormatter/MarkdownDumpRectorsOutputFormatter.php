@@ -92,7 +92,8 @@ final class MarkdownDumpRectorsOutputFormatter
             }
 
             foreach ($rectors as $rector) {
-                $this->rectorPrinter->printRector($rector, $isRectorProject);
+                $rectorContent = $this->rectorPrinter->printRector($rector, $isRectorProject);
+                $this->symfonyStyle->writeln($rectorContent);
             }
         }
     }

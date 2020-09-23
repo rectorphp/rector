@@ -2219,13 +2219,13 @@ use PhpParser\Node\Expr\Variable;
 
 $variable = new Variable('variableName');
 
-return new Include_($variable, Include_::TYPE_REQUIRE_ONCE);
+return new Include_($variable, Include_::TYPE_INCLUDE);
 ```
 
 ↓
 
 ```php
-require_once $variableName
+include $variableName
 ```
 
 <br>
@@ -2240,13 +2240,13 @@ use PhpParser\Node\Expr\Variable;
 
 $variable = new Variable('variableName');
 
-return new Include_($variable, Include_::TYPE_INCLUDE);
+return new Include_($variable, Include_::TYPE_REQUIRE_ONCE);
 ```
 
 ↓
 
 ```php
-include $variableName
+require_once $variableName
 ```
 
 <br>
@@ -2480,27 +2480,6 @@ $someObject->methodName('yes', 'maybe')
 
 declare(strict_types=1);
 
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name;
-
-$class = new Name('SomeClass');
-
-return new New_($class);
-```
-
-↓
-
-```php
-new SomeClass()
-```
-
-<br>
-
-```php
-<?php
-
-declare(strict_types=1);
-
 // anonymous class
 
 use PhpParser\Node\Expr\New_;
@@ -2517,6 +2496,27 @@ return new New_($class);
 new class
 {
 }
+```
+
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name;
+
+$class = new Name('SomeClass');
+
+return new New_($class);
+```
+
+↓
+
+```php
+new SomeClass()
 ```
 
 <br>
@@ -3672,6 +3672,26 @@ private function methodName($paramName): string
 
 declare(strict_types=1);
 
+use PhpParser\Node\Stmt\Class_;
+
+return new Class_('ClassName');
+```
+
+↓
+
+```php
+class ClassName
+{
+}
+```
+
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 
@@ -3687,26 +3707,6 @@ return $class;
 
 ```php
 final class ClassName extends \ParentClass
-{
-}
-```
-
-<br>
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use PhpParser\Node\Stmt\Class_;
-
-return new Class_('ClassName');
-```
-
-↓
-
-```php
-class ClassName
 {
 }
 ```
