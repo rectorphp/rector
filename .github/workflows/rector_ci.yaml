@@ -38,8 +38,8 @@ jobs:
 
             -   run: composer install --no-progress --ansi
 
-            ## First run Rector
-            -   run: bin/rector process --config rector-ci.php --dry-run --ansi --no-progress-bar
+            ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anyhting in the future
+            -   run: bin/rector process --config rector-ci.php --ansi --no-progress-bar
 
             -
                 name: Check for Rector modified files
