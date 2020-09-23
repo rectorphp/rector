@@ -144,11 +144,6 @@ final class Option
     /**
      * @var string
      */
-    public const RECTOR_RECIPE = 'rector_recipe';
-
-    /**
-     * @var string
-     */
     public const NESTED_CHAIN_METHOD_CALL_LIMIT = 'nested_chain_method_call_limit';
 
     /**

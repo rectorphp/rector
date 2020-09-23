@@ -130,8 +130,6 @@ final class RectorsDocumentationPrinter
             $content .= $message . PHP_EOL;
         }
 
-        $content .= PHP_EOL;
-
-        return $content;
+        return $content . PHP_EOL;
     }
 }

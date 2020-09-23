@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Rector\DocumentationGenerator\Tests\Printer\RectorsDocumentationPrinter;
 
 use Iterator;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\DocumentationGenerator\Printer\RectorsDocumentationPrinter;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use ReflectionClass;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorsDocumentationPrinterTest extends AbstractKernelTestCase
 {
@@ -33,8 +35,13 @@ final class RectorsDocumentationPrinterTest extends AbstractKernelTestCase
         $rectors = $this->createRectorsFromRectorClasses($rectorClasses);
 
         $printedContent = $this->rectorsDocumentationPrinter->print($rectors, $isRectorProject);
+        $expectedFileInfo = new SmartFileInfo($expectedContentFilePath);
 
-        $this->assertStringEqualsFile($expectedContentFilePath, $printedContent);
+        $this->assertStringEqualsFile(
+            $expectedContentFilePath,
+            $printedContent,
+            $expectedFileInfo->getRelativeFilePathFromCwd()
+        );
     }
 
     public function provideData(): Iterator
@@ -46,6 +53,9 @@ final class RectorsDocumentationPrinterTest extends AbstractKernelTestCase
         ];
     }
 
+    /**
+     * @return RectorInterface[]
+     */
     private function createRectorsFromRectorClasses(array $rectorClasses): array
     {
         $rectors = [];

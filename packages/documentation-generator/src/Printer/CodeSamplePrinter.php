@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\DocumentationGenerator\Printer;
 
+use Migrify\PhpConfigPrinter\Printer\SmartPhpConfigPrinter;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\SymfonyPhpConfig\Printer\ReturnClosurePrinter;
 
 /**
  * @see \Rector\DocumentationGenerator\Tests\Printer\CodeSamplePrinter\CodeSamplePrinterTest
@@ -23,16 +23,16 @@ final class CodeSamplePrinter
     private $markdownDifferAndFormatter;
 
     /**
-     * @var ReturnClosurePrinter
+     * @var SmartPhpConfigPrinter
      */
-    private $returnClosurePrinter;
+    private $smartPhpConfigPrinter;
 
     public function __construct(
         MarkdownDifferAndFormatter $markdownDifferAndFormatter,
-        ReturnClosurePrinter $returnClosurePrinter
+        SmartPhpConfigPrinter $smartPhpConfigPrinter
     ) {
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
-        $this->returnClosurePrinter = $returnClosurePrinter;
+        $this->smartPhpConfigPrinter = $smartPhpConfigPrinter;
     }
 
     public function printCodeSamples(RectorDefinition $rectorDefinition, RectorInterface $rector): string
@@ -57,7 +57,7 @@ final class CodeSamplePrinter
             get_class($rector) => $codeSample->getConfiguration(),
         ];
 
-        $phpConfigContent = $this->returnClosurePrinter->printServices($configuration);
+        $phpConfigContent = $this->smartPhpConfigPrinter->printConfiguredServices($configuration);
         $wrappedPhpConfigContent = $this->printCodeWrapped($phpConfigContent, 'php');
 
         return $wrappedPhpConfigContent . PHP_EOL . '↓' . PHP_EOL . PHP_EOL;

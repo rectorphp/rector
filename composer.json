@@ -16,7 +16,7 @@
         "doctrine/annotations": "^1.10.4",
         "doctrine/inflector": "^1.4|^2.0",
         "jean85/pretty-package-versions": "^1.5.1",
-        "migrify/php-config-printer": "^0.3.42",
+        "migrify/php-config-printer": "^0.3.43",
         "nette/robot-loader": "^3.2",
         "nette/utils": "^3.1",
         "nikic/php-parser": "4.10.1",
@@ -289,7 +289,7 @@
         ],
         "fix-cs": [
             "vendor/bin/ecs check --fix --ansi",
-            "vendor/bin/ecs check-markdown README.md --fix --ansi"
+            "vendor/bin/ecs check-markdown README.md docs/rector_rules_overview.md --fix --ansi"
         ],
         "phpstan": [
             "vendor/bin/phpstan analyse --ansi --error-format symplify",

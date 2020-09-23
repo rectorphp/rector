@@ -516,3 +516,5 @@ parameters:
         -
             message: '#Method call argument on position 0 must use constant over value#'
             path: 'src/Rector/AbstractRector.php'
+
+        - '#Method Rector\\DocumentationGenerator\\Tests\\Printer\\RectorsDocumentationPrinter\\RectorsDocumentationPrinterTest\:\:createRectorsFromRectorClasses\(\) should return array<Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<int, object\>#'

@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Rector\DocumentationGenerator\Tests\Printer\CodeSamplePrinter;
 
 use Iterator;
+use Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\DocumentationGenerator\Printer\CodeSamplePrinter;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use ReflectionClass;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CodeSamplePrinterTest extends AbstractKernelTestCase
 {
@@ -37,11 +39,21 @@ final class CodeSamplePrinterTest extends AbstractKernelTestCase
         $this->assertInstanceOf(RectorInterface::class, $rector);
 
         $printedCodeSamples = $this->codeSamplePrinter->printCodeSamples($rector->getDefinition(), $rector);
-        $this->assertStringEqualsFile($expectedPrintedCodeSampleFilePath, $printedCodeSamples);
+
+        $expectedFileInfo = new SmartFileInfo($expectedPrintedCodeSampleFilePath);
+        $this->assertStringEqualsFile(
+            $expectedPrintedCodeSampleFilePath,
+            $printedCodeSamples,
+            $expectedFileInfo->getRelativeFilePathFromCwd()
+        );
     }
 
     public function provideData(): Iterator
     {
         yield [TypedPropertyRector::class, __DIR__ . '/Fixture/expected_typed_property_code_sample.txt'];
+        yield [
+            MoveValueObjectsToValueObjectDirectoryRector::class,
+            __DIR__ . '/Fixture/expected_value_object_rector.txt',
+        ];
     }
 }

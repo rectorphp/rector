@@ -34,7 +34,7 @@ final class DumpRectorsCommand extends AbstractCommand
     /**
      * @var RectorsDocumentationPrinter
      */
-    private $markdownDumpRectorsOutputFormatter;
+    private $rectorsDocumentationPrinter;
 
     /**
      * @var SymfonyStyle
@@ -47,7 +47,7 @@ final class DumpRectorsCommand extends AbstractCommand
     private $smartFileSystem;
 
     public function __construct(
-        RectorsDocumentationPrinter $markdownDumpRectorsOutputFormatter,
+        RectorsDocumentationPrinter $rectorsDocumentationPrinter,
         RectorsFinder $rectorsFinder,
         SymfonyStyle $symfonyStyle,
         SmartFileSystem $smartFileSystem
@@ -55,7 +55,7 @@ final class DumpRectorsCommand extends AbstractCommand
         parent::__construct();
 
         $this->rectorsFinder = $rectorsFinder;
-        $this->markdownDumpRectorsOutputFormatter = $markdownDumpRectorsOutputFormatter;
+        $this->rectorsDocumentationPrinter = $rectorsDocumentationPrinter;
         $this->symfonyStyle = $symfonyStyle;
         $this->smartFileSystem = $smartFileSystem;
     }
@@ -88,7 +88,7 @@ final class DumpRectorsCommand extends AbstractCommand
         $rectors = $this->findRectorClassesInDirectoriesAndCreateRectorObjects($isRectorProject, $source);
 
         $outputFile = (string) $input->getOption(self::OUTPUT_FILE);
-        $printedContent = $this->markdownDumpRectorsOutputFormatter->print($rectors, $isRectorProject);
+        $printedContent = $this->rectorsDocumentationPrinter->print($rectors, $isRectorProject);
         $this->smartFileSystem->dumpFile($outputFile, $printedContent);
 
         $outputFileFileInfo = new SmartFileInfo($outputFile);
@@ -110,15 +110,13 @@ final class DumpRectorsCommand extends AbstractCommand
     {
         if ($isRectorProject) {
             // fallback to core Rectors
-            $rectors = $this->rectorsFinder->findInDirectoriesAndCreate([
+            return $this->rectorsFinder->findInDirectoriesAndCreate([
                 __DIR__ . '/../../../../rules',
                 __DIR__ . '/../../../../packages',
             ]);
-        } else {
-            // custom directory
-            $rectors = $this->rectorsFinder->findInDirectoriesAndCreate($source);
         }
 
-        return $rectors;
+        // custom directory
+        return $this->rectorsFinder->findInDirectoriesAndCreate($source);
     }
 }

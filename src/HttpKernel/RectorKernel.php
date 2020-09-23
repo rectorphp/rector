@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\HttpKernel;
 
+use Migrify\PhpConfigPrinter\Bundle\PhpConfigPrinterBundle;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
@@ -77,7 +78,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
      */
     public function registerBundles(): array
     {
-        return [new ConsoleColorDiffBundle()];
+        return [new ConsoleColorDiffBundle(), new PhpConfigPrinterBundle()];
     }
 
     protected function build(ContainerBuilder $containerBuilder): void
