@@ -10,6 +10,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Naming\ConflictingNameResolver\ConflictingNameResolverInterface;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -56,6 +57,11 @@ final class PropertyRenamer
         $this->renamePropertyFetchesInClass($propertyRename);
 
         return $propertyRename->getProperty();
+    }
+
+    public function setConflictingNameResolver(ConflictingNameResolverInterface $conflictingNameResolver): void
+    {
+        $this->breakingVariableRenameGuard->setConflictingNameResolver($conflictingNameResolver);
     }
 
     private function areNamesDifferent(PropertyRename $propertyRename): bool

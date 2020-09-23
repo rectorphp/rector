@@ -9,6 +9,8 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Naming\ConflictingNameResolver\PropertyConflictingNameResolver;
+use Rector\Naming\ExpectedNameResolver\FromPropertyTypeExpectedNameResolver;
 use Rector\Naming\PropertyRenamer;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 
@@ -28,10 +30,19 @@ final class MakeBoolPropertyRespectIsHasWasMethodNamingRector extends AbstractRe
      */
     private $propertyRenameFactory;
 
-    public function __construct(PropertyRenamer $propertyRenamer, PropertyRenameFactory $propertyRenameFactory)
-    {
+    public function __construct(
+        PropertyRenamer $propertyRenamer,
+        FromPropertyTypeExpectedNameResolver $fromPropertyTypeExpectedNameResolver,
+        PropertyConflictingNameResolver $propertyConflictingNameResolver,
+        PropertyRenameFactory $propertyRenameFactory
+    ) {
+        $propertyConflictingNameResolver->setExpectedNameResolver($fromPropertyTypeExpectedNameResolver);
+
         $this->propertyRenamer = $propertyRenamer;
+        $this->propertyRenamer->setConflictingNameResolver($propertyConflictingNameResolver);
+
         $this->propertyRenameFactory = $propertyRenameFactory;
+        $this->propertyRenameFactory->setExpectedNameResolver($fromPropertyTypeExpectedNameResolver);
     }
 
     public function getDefinition(): RectorDefinition

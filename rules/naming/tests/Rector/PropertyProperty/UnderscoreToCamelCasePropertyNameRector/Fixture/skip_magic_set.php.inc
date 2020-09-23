@@ -4,6 +4,8 @@ namespace Rector\Naming\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePrope
 
 class SkipMagicSet
 {
+    private $underscore_value;
+
     public function set()
     {
         $this->underscore_value = 5;

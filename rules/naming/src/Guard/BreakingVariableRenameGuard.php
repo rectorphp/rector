@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Guard;
 
+use _HumbugBox58fd4d9e2a25\___PHPSTORM_HELPERS\this;
 use DateTimeInterface;
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -20,7 +21,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\TypeWithClassName;
 use Ramsey\Uuid\UuidInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Naming\Naming\ConflictingNameResolver;
+use Rector\Naming\ConflictingNameResolver\ConflictingNameResolverInterface;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -44,7 +45,7 @@ final class BreakingVariableRenameGuard
     private $betterNodeFinder;
 
     /**
-     * @var ConflictingNameResolver
+     * @var ConflictingNameResolverInterface
      */
     private $conflictingNameResolver;
 
@@ -70,14 +71,12 @@ final class BreakingVariableRenameGuard
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        ConflictingNameResolver $conflictingNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         OverridenExistingNamesResolver $overridenExistingNamesResolver,
         TypeUnwrapper $typeUnwrapper,
         NodeNameResolver $nodeNameResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->conflictingNameResolver = $conflictingNameResolver;
         $this->overridenExistingNamesResolver = $overridenExistingNamesResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeUnwrapper = $typeUnwrapper;
@@ -131,9 +130,7 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        $conflictingPropertyNames = $this->conflictingNameResolver->resolveConflictingPropertyNames(
-            $propertyRename->getClassLike()
-        );
+        $conflictingPropertyNames = $this->conflictingNameResolver->resolve($propertyRename->getClassLike());
         if (in_array($propertyRename->getExpectedName(), $conflictingPropertyNames, true)) {
             return true;
         }
@@ -178,6 +175,11 @@ final class BreakingVariableRenameGuard
         }
 
         return $this->isDateTimeAtNamingConvention($param);
+    }
+
+    public function setConflictingNameResolver(ConflictingNameResolverInterface $conflictingNameResolver): void
+    {
+        $this->conflictingNameResolver = $conflictingNameResolver;
     }
 
     private function isVariableAlreadyDefined(Variable $variable, string $currentVariableName): bool

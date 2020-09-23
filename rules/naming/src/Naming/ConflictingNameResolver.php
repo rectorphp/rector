@@ -7,10 +7,10 @@ namespace Rector\Naming\Naming;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Naming\ExpectedNameResolver\ExpectedNameResolverInterface;
 use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -22,7 +22,7 @@ final class ConflictingNameResolver
     private $conflictingVariableNamesByClassMethod = [];
 
     /**
-     * @var ExpectedNameResolver
+     * @var ExpectedNameResolverInterface
      */
     private $expectedNameResolver;
 
@@ -44,32 +44,11 @@ final class ConflictingNameResolver
     public function __construct(
         ArrayFilter $arrayFilter,
         BetterNodeFinder $betterNodeFinder,
-        ExpectedNameResolver $expectedNameResolver,
         NodeNameResolver $nodeNameResolver
     ) {
-        $this->expectedNameResolver = $expectedNameResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->arrayFilter = $arrayFilter;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function resolveConflictingPropertyNames(ClassLike $classLike): array
-    {
-        $expectedNames = [];
-        foreach ($classLike->getProperties() as $property) {
-            $expectedName = $this->expectedNameResolver->resolveForProperty($property);
-            if ($expectedName === null) {
-                /** @var string $expectedName */
-                $expectedName = $this->nodeNameResolver->getName($property);
-            }
-
-            $expectedNames[] = $expectedName;
-        }
-
-        return $this->arrayFilter->filterWithAtLeastTwoOccurences($expectedNames);
     }
 
     /**
@@ -97,6 +76,11 @@ final class ConflictingNameResolver
     {
         $conflictingVariableNames = $this->resolveConflictingVariableNamesForNew($functionLike);
         return in_array($variableName, $conflictingVariableNames, true);
+    }
+
+    public function setExpectedNameResolver(ExpectedNameResolverInterface $expectedNameResolver): void
+    {
+        $this->expectedNameResolver = $expectedNameResolver;
     }
 
     /**

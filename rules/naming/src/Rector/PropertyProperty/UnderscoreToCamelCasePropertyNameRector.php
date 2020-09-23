@@ -6,14 +6,14 @@ namespace Rector\Naming\Rector\PropertyProperty;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Util\StaticRectorStrings;
+use Rector\Naming\ConflictingNameResolver\PropertyConflictingNameResolver;
+use Rector\Naming\ExpectedNameResolver\UnderscoreToCamelCaseExpectedNameResolver;
+use Rector\Naming\PropertyRenamer;
+use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -21,6 +21,31 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class UnderscoreToCamelCasePropertyNameRector extends AbstractRector
 {
+    /**
+     * @var PropertyRenameFactory
+     */
+    private $propertyRenameFactory;
+
+    /**
+     * @var PropertyRenamer
+     */
+    private $propertyRenamer;
+
+    public function __construct(
+        PropertyRenamer $propertyRenamer,
+        UnderscoreToCamelCaseExpectedNameResolver $underscoreToCamelCaseExpectedNameResolver,
+        PropertyConflictingNameResolver $propertyConflictingNameResolver,
+        PropertyRenameFactory $propertyRenameFactory
+    ) {
+        $propertyConflictingNameResolver->setExpectedNameResolver($underscoreToCamelCaseResolver);
+
+        $this->propertyRenamer = $propertyRenamer;
+        $this->propertyRenamer->setConflictingNameResolver($propertyConflictingNameResolver);
+
+        $this->propertyRenameFactory = $propertyRenameFactory;
+        $this->propertyRenameFactory->setExpectedNameResolver($underscoreToCamelCaseResolver);
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change under_score names to camelCase', [
@@ -57,16 +82,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [PropertyProperty::class, PropertyFetch::class, StaticPropertyFetch::class];
+        return [Property::class];
     }
 
     /**
-     * @param PropertyProperty|PropertyFetch|StaticPropertyFetch $node
+     * @param Property $node
      */
     public function refactor(Node $node): ?Node
     {
         $nodeName = $this->getName($node);
         if ($nodeName === null) {
+            return null;
+        }
+
+        if (! Strings::contains($nodeName, '_')) {
             return null;
         }
 
@@ -77,28 +106,16 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! Strings::contains($nodeName, '_')) {
+        $propertyRename = $this->propertyRenameFactory->create($node);
+//        dd($this->propertyRenamer);
+        if ($propertyRename === null) {
             return null;
         }
 
-        $camelCaseName = $this->createCamelName($nodeName, $node);
-
-        $node->name = new Identifier($camelCaseName);
-
-        return $node;
-    }
-
-    /**
-     * @param PropertyProperty|PropertyFetch|StaticPropertyFetch $node
-     */
-    private function createCamelName(string $nodeName, Node $node): string
-    {
-        $camelCaseName = StaticRectorStrings::underscoreToCamelCase($nodeName);
-
-        if ($node instanceof StaticPropertyFetch || $node instanceof PropertyProperty) {
-            $camelCaseName = '$' . $camelCaseName;
+        if ($this->propertyRenamer->rename($propertyRename) === null) {
+            return null;
         }
 
-        return $camelCaseName;
+        return $node;
     }
 }

@@ -4,6 +4,8 @@ namespace Rector\Naming\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePrope
 
 class SkipMagicGet
 {
+    private $underscore_value;
+
     public function get()
     {
         $this->underscore_value = 5;

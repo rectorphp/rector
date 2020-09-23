@@ -6,7 +6,7 @@ namespace Rector\Naming\ValueObjectFactory;
 
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\Naming\ExpectedNameResolver\ExpectedNameResolverInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyRenameFactory
 {
     /**
-     * @var ExpectedNameResolver
+     * @var ExpectedNameResolverInterface
      */
     private $expectedNameResolver;
 
@@ -26,9 +26,8 @@ final class PropertyRenameFactory
      */
     private $nodeNameResolver;
 
-    public function __construct(ExpectedNameResolver $expectedNameResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
-        $this->expectedNameResolver = $expectedNameResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -38,7 +37,7 @@ final class PropertyRenameFactory
             return null;
         }
 
-        $expectedName = $this->expectedNameResolver->resolveForPropertyIfNotYet($property);
+        $expectedName = $this->expectedNameResolver->resolveIfNotYet($property);
         if ($expectedName === null) {
             return null;
         }
@@ -51,5 +50,10 @@ final class PropertyRenameFactory
         }
 
         return new PropertyRename($property, $expectedName, $currentName, $propertyClassLike, $property->props[0]);
+    }
+
+    public function setExpectedNameResolver(ExpectedNameResolverInterface $expectedNameResolver): void
+    {
+        $this->expectedNameResolver = $expectedNameResolver;
     }
 }

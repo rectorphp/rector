@@ -4,13 +4,13 @@ namespace Rector\Naming\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePrope
 
 final class Property
 {
-    public $some_property;
+    private $some_property;
 
-    public static $some_static_property;
+    private static $some_static_property;
 
-    public $_first_and_multiple_underscore_property;
+    private $_first_and_multiple_underscore_property;
 
-    public $_underscore;
+    private $_underscore;
 
     public function run()
     {
@@ -30,13 +30,13 @@ namespace Rector\Naming\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePrope
 
 final class Property
 {
-    public $someProperty;
+    private $someProperty;
 
-    public static $someStaticProperty;
+    private static $someStaticProperty;
 
-    public $firstAndMultipleUnderscoreProperty;
+    private $firstAndMultipleUnderscoreProperty;
 
-    public $underscore;
+    private $underscore;
 
     public function run()
     {
