@@ -149,8 +149,8 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         unset($oldArguments[0]);
-
-        $node->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
+        $newArgs = [$firstArgument, $secondArgument];
+        $node->args = $this->appendArgs($newArgs, $oldArguments);
     }
 
     private function isConstantValue(Node $node): bool

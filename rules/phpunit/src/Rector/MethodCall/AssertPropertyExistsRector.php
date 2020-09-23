@@ -113,7 +113,9 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
 
         unset($node->args[0]);
 
-        $node->args = array_merge($this->createArgs([$secondArgument->value->value, $secondArg]), $node->args);
+        $newArgs = $this->createArgs([$secondArgument->value->value, $secondArg]);
+
+        $node->args = $this->appendArgs($newArgs, $node->args);
 
         $this->identifierManipulator->renameNodeWithMap($node, $map);
 

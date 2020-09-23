@@ -12,6 +12,7 @@ final class MyTest extends Testing
     {
         $this->assertTrue(array_key_exists('...', ['...']), 'argument');
         $this->assertTrue(in_array('...', ['...'], true), 'argument');
+
         $this->assertFalse(is_readable('...'));
         $this->assertTrue(empty('...'));
         $this->assertFalse(file_exists('...'));
@@ -42,6 +43,7 @@ final class MyTest extends Testing
     {
         $this->assertArrayHasKey('...', ['...'], 'argument');
         $this->assertContains('...', ['...'], 'argument');
+
         $this->assertNotIsReadable('...');
         $this->assertEmpty('...');
         $this->assertFileNotExists('...');

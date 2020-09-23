@@ -38,6 +38,7 @@ class MultipleUsage
     {
         foreach (self::REPLACEMENTS as $class => $method) {
         }
+
         foreach (self::REPLACEMENTS as $class => $method) {
         }
     }

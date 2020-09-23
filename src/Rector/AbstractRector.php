@@ -6,6 +6,7 @@ namespace Rector\Core\Rector;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\Bool_;
@@ -356,6 +357,20 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return false;
+    }
+
+    /**
+     * @param Arg[] $newArgs
+     * @param Arg[] $appendingArgs
+     * @return Arg[]
+     */
+    protected function appendArgs(array $newArgs, array $appendingArgs): array
+    {
+        foreach ($appendingArgs as $oldArgument) {
+            $newArgs[] = new Arg($oldArgument->value);
+        }
+
+        return $newArgs;
     }
 
     private function isMatchingNodeType(string $nodeClass): bool

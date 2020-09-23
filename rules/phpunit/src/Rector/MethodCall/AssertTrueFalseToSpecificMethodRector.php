@@ -160,8 +160,8 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param mixed[] $funcCallOrEmptyNodeArgs
-     * @param mixed[] $oldArguments
+     * @param Arg[] $funcCallOrEmptyNodeArgs
+     * @param Arg[] $oldArguments
      * @return mixed[]
      */
     private function buildNewArguments(
@@ -173,16 +173,15 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             && count($funcCallOrEmptyNodeArgs) === 3) {
             unset($funcCallOrEmptyNodeArgs[2]);
 
-            return array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
+            return $this->appendArgs($funcCallOrEmptyNodeArgs, $oldArguments);
         }
 
         if ($funcCallOrEmptyNodeName === 'is_a') {
-            $object = $funcCallOrEmptyNodeArgs[0];
-            $class = $funcCallOrEmptyNodeArgs[1];
+            $newArgs = [$funcCallOrEmptyNodeArgs[1], $funcCallOrEmptyNodeArgs[0]];
 
-            return array_merge([$class, $object], $oldArguments);
+            return $this->appendArgs($newArgs, $oldArguments);
         }
 
-        return array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
+        return $this->appendArgs($funcCallOrEmptyNodeArgs, $oldArguments);
     }
 }

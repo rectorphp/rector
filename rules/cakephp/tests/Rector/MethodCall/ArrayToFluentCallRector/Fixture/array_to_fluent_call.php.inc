@@ -37,7 +37,9 @@ function arrayToFluentCall2()
         ->setSize(3)
         ->doSomething();
 
-    $factory->buildClass('foo', ['baz' => 4])->setName('bar');
+    $factory->buildClass('foo', [
+        'baz' => 4,
+    ])->setName('bar');
 }
 
 ?>

@@ -30,9 +30,9 @@ final class CallUserMethodRector extends AbstractRector
             'Changes call_user_method()/call_user_method_array() to call_user_func()/call_user_func_array()',
             [
                 new CodeSample(
-                                'call_user_method($method, $obj, "arg1", "arg2");',
-                                'call_user_func(array(&$obj, "method"), "arg1", "arg2");'
-                            ),
+                    'call_user_method($method, $obj, "arg1", "arg2");',
+                    'call_user_func(array(&$obj, "method"), "arg1", "arg2");'
+                ),
             ]
         );
     }
@@ -58,10 +58,16 @@ final class CallUserMethodRector extends AbstractRector
         $newName = self::OLD_TO_NEW_FUNCTIONS[$this->getName($node)];
         $node->name = new Name($newName);
 
-        $argNodes = $node->args;
+        $oldArgs = $node->args;
 
-        $node->args[0] = $this->createArg([$argNodes[1]->value, $argNodes[0]->value]);
         unset($node->args[1]);
+
+        $newArgs = [$this->createArg([$oldArgs[1]->value, $oldArgs[0]->value])];
+
+        unset($oldArgs[0]);
+        unset($oldArgs[1]);
+
+        $node->args = $this->appendArgs($newArgs, $oldArgs);
 
         return $node;
     }

@@ -80,21 +80,21 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         }
 
         $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
-        $this->changeArgumentsOrder($node);
 
-        return $node;
+        return $this->changeArgumentsOrder($node);
     }
 
     /**
      * @param MethodCall|StaticCall $node
+     * @return MethodCall|StaticCall|null
      */
-    private function changeArgumentsOrder(Node $node): void
+    private function changeArgumentsOrder(Node $node): ?Node
     {
         $oldArguments = $node->args;
 
         $strposFuncCallNode = $oldArguments[0]->value;
         if (! $strposFuncCallNode instanceof FuncCall) {
-            return;
+            return null;
         }
 
         $firstArgument = $strposFuncCallNode->args[1];
@@ -102,6 +102,9 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $node->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
+        $newArgs = [$firstArgument, $secondArgument];
+        $node->args = $this->appendArgs($newArgs, $oldArguments);
+
+        return $node;
     }
 }
