@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
-use Rector\CakePHP\FullyQualifiedClassNameResolver;
+use Rector\CakePHP\Naming\CakePHPFullyQualifiedClassNameResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -27,13 +27,13 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
 final class AppUsesStaticCallToUseStatementRector extends AbstractRector
 {
     /**
-     * @var FullyQualifiedClassNameResolver
+     * @var CakePHPFullyQualifiedClassNameResolver
      */
-    private $fullyQualifiedClassNameResolver;
+    private $cakePHPFullyQualifiedClassNameResolver;
 
-    public function __construct(FullyQualifiedClassNameResolver $fullyQualifiedClassNameResolver)
+    public function __construct(CakePHPFullyQualifiedClassNameResolver $cakePHPFullyQualifiedClassNameResolver)
     {
-        $this->fullyQualifiedClassNameResolver = $fullyQualifiedClassNameResolver;
+        $this->cakePHPFullyQualifiedClassNameResolver = $cakePHPFullyQualifiedClassNameResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -105,7 +105,7 @@ CODE_SAMPLE
         /** @var string $namespaceName */
         $namespaceName = $this->getValue($staticCall->args[1]->value);
 
-        return $this->fullyQualifiedClassNameResolver->resolveFromPseudoNamespaceAndShortClassName(
+        return $this->cakePHPFullyQualifiedClassNameResolver->resolveFromPseudoNamespaceAndShortClassName(
             $namespaceName,
             $shortClassName
         );

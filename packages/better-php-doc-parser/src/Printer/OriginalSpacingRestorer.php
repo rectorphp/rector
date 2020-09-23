@@ -11,6 +11,11 @@ use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 final class OriginalSpacingRestorer
 {
     /**
+     * @var string
+     */
+    public const WHITESPACE_SPLIT_REGEX = '#\s+(\*)?#';
+
+    /**
      * @var WhitespaceDetector
      */
     private $whitespaceDetector;
@@ -39,7 +44,7 @@ final class OriginalSpacingRestorer
         $newNodeOutput = '';
 
         // replace system whitespace by old ones, include \n*
-        $nodeOutputParts = Strings::split($nodeOutput, '#\s+(\*)?#');
+        $nodeOutputParts = Strings::split($nodeOutput, self::WHITESPACE_SPLIT_REGEX);
 
         $oldWhitespaceCount = count($oldWhitespaces);
         $nodeOutputPartCount = count($nodeOutputParts);

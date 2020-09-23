@@ -1,0 +1,25 @@
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Php74\Rector\Property\TypedPropertyRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(TypedPropertyRector::class)
+        ->call('configure', [[TypedPropertyRector::CLASS_LIKE_TYPE_ONLY => false]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+-    /**
+-     * @var int
+-     */
+-    private count;
++    private int count;
+ }
+```

@@ -15,6 +15,11 @@ use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 final class WhitespaceDetector
 {
     /**
+     * @var string
+     */
+    private const SPACE_BEFORE_ASTERISK_REGEX = '#\s+\*#m';
+
+    /**
      * @param mixed[] $tokens
      * @return string[]
      */
@@ -42,7 +47,7 @@ final class WhitespaceDetector
                     $tokens[$i - 1][1] === Lexer::TOKEN_PHPDOC_EOL
                 ) {
                     $previousTokenValue = $tokens[$i - 1][0];
-                    if (Strings::match($previousTokenValue, '#\s+\*#m')) {
+                    if (Strings::match($previousTokenValue, self::SPACE_BEFORE_ASTERISK_REGEX)) {
                         $tokenValue = $previousTokenValue . $tokenValue;
                     }
                 }

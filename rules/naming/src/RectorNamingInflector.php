@@ -10,6 +10,12 @@ use Nette\Utils\Strings;
 final class RectorNamingInflector
 {
     /**
+     * @var string
+     * @see https://regex101.com/r/VqVvke/3
+     */
+    private const DATA_INFO_SUFFIX_REGEX = '#^(.+)(Data|Info)$#';
+
+    /**
      * @var Inflector
      */
     private $inflector;
@@ -21,8 +27,7 @@ final class RectorNamingInflector
 
     public function singularize(string $name): string
     {
-        // @see https://regex101.com/r/VqVvke/3
-        $matches = Strings::match($name, '#^(.+)(Data|Info)$$#');
+        $matches = Strings::match($name, self::DATA_INFO_SUFFIX_REGEX);
         if ($matches === null) {
             return $this->inflector->singularize($name);
         }

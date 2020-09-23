@@ -48,6 +48,11 @@ final class VersionCompareFuncCallToConstantRector extends AbstractRector
         'le' => SmallerOrEqual::class,
     ];
 
+    /**
+     * @var string
+     */
+    private const SEMANTIC_VERSION_REGEX = '#^\d+\.\d+\.\d+$#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes use of call to version compare function to use of PHP version constant', [
@@ -132,7 +137,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        if (! Strings::match($expr->value, '#^\d+\.\d+\.\d+$#')) {
+        if (! Strings::match($expr->value, self::SEMANTIC_VERSION_REGEX)) {
             throw new ShouldNotHappenException();
         }
 

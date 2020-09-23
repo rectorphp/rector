@@ -21,6 +21,21 @@ use Rector\Renaming\ValueObject\RenameAnnotation;
 final class DocBlockManipulator
 {
     /**
+     * @var string
+     */
+    public const SPACE_OR_ASTERISK_REGEX = '#(\s|\*)+#';
+
+    /**
+     * @var string
+     */
+    private const NEWLINE_CLOSING_DOC_REGEX = "#\n \*\/$#";
+
+    /**
+     * @var string
+     */
+    private const NEWLINE_MIDDLE_DOC_REGEX = "#\n \* #";
+
+    /**
      * @var PhpDocInfoPrinter
      */
     private $phpDocInfoPrinter;
@@ -128,12 +143,12 @@ final class DocBlockManipulator
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
-        if ($relationTagValueNode === null) {
+        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+        if ($doctrineRelationTagValueNode === null) {
             return null;
         }
 
-        return $relationTagValueNode->getFullyQualifiedTargetEntity();
+        return $doctrineRelationTagValueNode->getFullyQualifiedTargetEntity();
     }
 
     private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo): string
@@ -173,9 +188,9 @@ final class DocBlockManipulator
 
     private function inlineDocContent(string $docContent): string
     {
-        $docContent = Strings::replace($docContent, "#\n \* #", ' ');
+        $docContent = Strings::replace($docContent, self::NEWLINE_MIDDLE_DOC_REGEX, ' ');
 
-        return Strings::replace($docContent, "#\n \*\/$#", ' */');
+        return Strings::replace($docContent, self::NEWLINE_CLOSING_DOC_REGEX, ' */');
     }
 
     /**
@@ -202,6 +217,6 @@ final class DocBlockManipulator
 
     private function removeSpacesAndAsterisks(string $content): string
     {
-        return Strings::replace($content, '#(\s|\*)+#');
+        return Strings::replace($content, self::SPACE_OR_ASTERISK_REGEX);
     }
 }

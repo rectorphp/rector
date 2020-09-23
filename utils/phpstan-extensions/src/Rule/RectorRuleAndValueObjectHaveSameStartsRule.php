@@ -27,6 +27,11 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
      */
     public const ERROR = 'Value Object class name "%s" is incorrect. The correct class name is "%s".';
 
+    /**
+     * @var string
+     */
+    private const RECTOR_SUFFIX_REGEX = '#Rector$#';
+
     public function getNodeType(): string
     {
         return MethodCall::class;
@@ -60,7 +65,7 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
             self::ERROR,
             $valueObjectClassName,
             // @see https://regex101.com/r/F8z9PY/1
-            Strings::replace($rectorRuleClassName, '#Rector$#', '')
+            Strings::replace($rectorRuleClassName, self::RECTOR_SUFFIX_REGEX, '')
         )];
     }
 

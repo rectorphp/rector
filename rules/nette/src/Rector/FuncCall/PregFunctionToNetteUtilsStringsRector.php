@@ -39,6 +39,12 @@ final class PregFunctionToNetteUtilsStringsRector extends AbstractRector
         'preg_replace_callback' => 'replace',
     ];
 
+    /**
+     * @see https://regex101.com/r/05MPWa/1/
+     * @var string
+     */
+    private const SLASH_REGEX = '#[^\\\\]\(#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Use Nette\Utils\Strings over bare preg_split() and preg_replace() functions', [
@@ -196,8 +202,7 @@ CODE_SAMPLE
             return $staticCall;
         }
 
-        // @see https://regex101.com/r/05MPWa/1/
-        $match = Strings::match($patternValue, '#[^\\\\]\(#');
+        $match = Strings::match($patternValue, self::SLASH_REGEX);
         if ($match === null) {
             return $staticCall;
         }

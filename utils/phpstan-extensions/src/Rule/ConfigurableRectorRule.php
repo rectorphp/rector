@@ -66,11 +66,11 @@ final class ConfigurableRectorRule implements Rule
 
     private function hasRectorInClassName(Class_ $class): bool
     {
-        if ($class->name === null) {
+        if ($class->namespacedName === null) {
             return false;
         }
 
-        return Strings::match($class->name->toString(), '#Rector$#') !== null;
+        return Strings::endsWith((string) $class->namespacedName, 'Rector');
     }
 
     private function implementsConfigurableInterface(Class_ $class): bool

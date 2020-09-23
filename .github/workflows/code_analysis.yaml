@@ -42,8 +42,8 @@ jobs:
                     -
                         name: 'Validate PHPStan Compatibility'
                         run: |
-                            bin/rector sync-types
-                            bin/rector check-static-type-mappers
+                            bin/rector sync-types --ansi
+                            bin/rector check-static-type-mappers --ansi
 
                     -
                         name: 'PHP Linter'

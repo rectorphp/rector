@@ -34,6 +34,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
 {
     /**
+     * @var string
+     * @see https://regex101.com/r/85PZHm/1
+     */
+    private const UNQUOTED_OBJECT_HASH_REGEX = '#(?<start>[^\"])(?<hash>____\w+____)#';
+
+    /**
+     * @var string
+     */
+    private const JSON_STRING_REGEX = '#{(.*?\:.*?)}#s';
+
+    /**
      * @var ConcatJoiner
      */
     private $concatJoiner;
@@ -149,7 +160,7 @@ CODE_SAMPLE
 
     private function isJsonString(string $stringValue): bool
     {
-        if (! (bool) Strings::match($stringValue, '#{(.*?\:.*?)}#s')) {
+        if (! (bool) Strings::match($stringValue, self::JSON_STRING_REGEX)) {
             return false;
         }
 
@@ -219,8 +230,7 @@ CODE_SAMPLE
         array $placeholderNodes,
         Assign $assign
     ): ?Assign {
-        // quote object hashes if needed - https://regex101.com/r/85PZHm/1
-        $stringValue = Strings::replace($stringValue, '#(?<start>[^\"])(?<hash>____\w+____)#', '$1"$2"');
+        $stringValue = Strings::replace($stringValue, self::UNQUOTED_OBJECT_HASH_REGEX, '$1"$2"');
         if (! $this->isJsonString($stringValue)) {
             return null;
         }

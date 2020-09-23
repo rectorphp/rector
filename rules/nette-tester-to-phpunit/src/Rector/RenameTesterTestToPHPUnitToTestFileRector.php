@@ -15,6 +15,16 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class RenameTesterTestToPHPUnitToTestFileRector extends AbstractFileSystemRector
 {
+    /**
+     * @var string
+     */
+    private const PHP_SUFFIX_REGEX = '#\.php$#';
+
+    /**
+     * @var string
+     */
+    private const PHPT_SUFFIX_REGEX = '#\.phpt$#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Rename "*.phpt" file to "*Test.php" file', [
@@ -48,11 +58,11 @@ CODE_SAMPLE
     private function createNewRealPath(string $oldRealPath): string
     {
         // file suffix
-        $newRealPath = Strings::replace($oldRealPath, '#\.phpt$#', '.php');
+        $newRealPath = Strings::replace($oldRealPath, self::PHPT_SUFFIX_REGEX, '.php');
 
         // Test suffix
         if (! Strings::endsWith($newRealPath, 'Test.php')) {
-            return Strings::replace($newRealPath, '#\.php$#', 'Test.php');
+            return Strings::replace($newRealPath, self::PHP_SUFFIX_REGEX, 'Test.php');
         }
 
         return $newRealPath;

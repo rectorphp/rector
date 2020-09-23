@@ -10,6 +10,11 @@ use Nette\Utils\Strings;
 final class PHPStanTypeClassFinder
 {
     /**
+     * @var string
+     */
+    private const ACCESSORY_SEPARATED_REGEX = '#\bAccessory\b#';
+
+    /**
      * @return class-string[]
      */
     public function find(): array
@@ -52,7 +57,7 @@ final class PHPStanTypeClassFinder
                 continue;
             }
 
-            if (Strings::match($classLike, '#\\\\Accessory\\\\#')) {
+            if (Strings::match($classLike, self::ACCESSORY_SEPARATED_REGEX)) {
                 continue;
             }
 

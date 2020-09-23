@@ -15,6 +15,16 @@ final class TypeAnalyzer
     private const EXTRA_TYPES = ['object'];
 
     /**
+     * @var string
+     */
+    private const ARRAY_TYPE_REGEX = '#array<(.*?)>#';
+
+    /**
+     * @var string
+     */
+    private const SQUARE_BRACKET_REGEX = '#(\[\])+$#';
+
+    /**
      * @var string[]
      */
     private $phpSupportedTypes = [
@@ -49,7 +59,7 @@ final class TypeAnalyzer
             $singleType = strtolower($singleType);
 
             // remove [] from arrays
-            $singleType = Strings::replace($singleType, '#(\[\])+$#');
+            $singleType = Strings::replace($singleType, self::SQUARE_BRACKET_REGEX);
 
             if (in_array($singleType, array_merge($this->phpSupportedTypes, self::EXTRA_TYPES), true)) {
                 return true;
@@ -77,7 +87,7 @@ final class TypeAnalyzer
             return 'callable';
         }
 
-        if (Strings::match(strtolower($type), '#array<(.*?)>#')) {
+        if (Strings::match(strtolower($type), self::ARRAY_TYPE_REGEX)) {
             return 'array';
         }
 

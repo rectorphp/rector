@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Core\Configuration;
 
+use Jean85\PrettyVersions;
 use OndraM\CiDetector\CiDetector;
-use PackageVersions\Versions;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Rector\Core\ValueObject\Jean85\Version;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -163,7 +162,7 @@ final class Configuration
 
     public function getPrettyVersion(): string
     {
-        $version = new Version(Versions::getVersion('rector/rector'));
+        $version = PrettyVersions::getVersion('rector/rector');
         return $version->getPrettyVersion();
     }
 

@@ -17,6 +17,16 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class RenameSpecFileToTestFileRector extends AbstractFileSystemRector
 {
+    /**
+     * @var string
+     */
+    private const SPEC_REGEX = '#\/spec\/#';
+
+    /**
+     * @var string
+     */
+    private const SPEC_SUFFIX_REGEX = '#Spec\.php$#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Rename "*Spec.php" file to "*Test.php" file',
@@ -54,9 +64,9 @@ CODE_SAMPLE
     private function createNewRealPath(string $oldRealPath): string
     {
         // suffix
-        $newRealPath = Strings::replace($oldRealPath, '#Spec\.php$#', 'Test.php');
+        $newRealPath = Strings::replace($oldRealPath, self::SPEC_SUFFIX_REGEX, 'Test.php');
 
         // directory
-        return Strings::replace($newRealPath, '#\/spec\/#', '/tests/');
+        return Strings::replace($newRealPath, self::SPEC_REGEX, '/tests/');
     }
 }

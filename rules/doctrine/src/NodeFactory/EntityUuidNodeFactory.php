@@ -25,6 +25,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class EntityUuidNodeFactory
 {
     /**
+     * @var string
+     */
+    private const SERIALIZER_SHORT_ANNOTATION_REGEX = '#(\@Serializer\\\\Type\(")(int)("\))#';
+
+    /**
+     * @var string
+     */
+    private const ORM_VAR_DOC_LINE_REGEX = '#^(\s+)\*(\s+)\@(var|ORM)(.*?)$#ms';
+
+    /**
      * @var PhpDocTagNodeFactory
      */
     private $phpDocTagNodeFactory;
@@ -98,7 +108,7 @@ final class EntityUuidNodeFactory
             return;
         }
 
-        $clearedDocCommentText = Strings::replace($docComment->getText(), '#^(\s+)\*(\s+)\@(var|ORM)(.*?)$#ms');
+        $clearedDocCommentText = Strings::replace($docComment->getText(), self::ORM_VAR_DOC_LINE_REGEX);
         $node->setDocComment(new Doc($clearedDocCommentText));
     }
 
@@ -114,7 +124,7 @@ final class EntityUuidNodeFactory
 
         $stringTypeText = Strings::replace(
             $docComment->getText(),
-            '#(\@Serializer\\\\Type\(")(int)("\))#',
+            self::SERIALIZER_SHORT_ANNOTATION_REGEX,
             '$1string$3'
         );
 

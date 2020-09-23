@@ -2,15 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP;
+namespace Rector\CakePHP\Naming;
 
 use Nette\Utils\Strings;
+use Rector\CakePHP\ImplicitNameResolver;
 
 /**
  * @inspired https://github.com/cakephp/upgrade/blob/756410c8b7d5aff9daec3fa1fe750a3858d422ac/src/Shell/Task/AppUsesTask.php
  */
-final class FullyQualifiedClassNameResolver
+final class CakePHPFullyQualifiedClassNameResolver
 {
+    /**
+     * @var string
+     */
+    public const LIB_NAMESPACE_PART_REGEX = '#\\\\Lib\\\\#';
+
+    /**
+     * @var string
+     */
+    private const SLASH_REGEX = '#(/|\.)#';
+
+    /**
+     * @var string
+     */
+    private const PLUGIN_OR_LIB_REGEX = '#(Plugin|Lib)#';
+
     /**
      * @var ImplicitNameResolver
      */
@@ -38,7 +54,7 @@ final class FullyQualifiedClassNameResolver
 
         // Chop Lib out as locations moves those files to the top level.
         // But only if Lib is not the last folder.
-        if (Strings::match($pseudoNamespace, '#\\\\Lib\\\\#')) {
+        if (Strings::match($pseudoNamespace, self::LIB_NAMESPACE_PART_REGEX)) {
             $pseudoNamespace = Strings::replace($pseudoNamespace, '#\\\\Lib#');
         }
 
@@ -49,7 +65,10 @@ final class FullyQualifiedClassNameResolver
         }
 
         // C. is not plugin nor lib custom App class?
-        if (Strings::contains($pseudoNamespace, '\\') && ! Strings::match($pseudoNamespace, '#(Plugin|Lib)#')) {
+        if (Strings::contains($pseudoNamespace, '\\') && ! Strings::match(
+            $pseudoNamespace,
+            self::PLUGIN_OR_LIB_REGEX
+        )) {
             return 'App\\' . $pseudoNamespace . '\\' . $shortClass;
         }
 
@@ -58,6 +77,6 @@ final class FullyQualifiedClassNameResolver
 
     private function normalizeFileSystemSlashes(string $pseudoNamespace): string
     {
-        return Strings::replace($pseudoNamespace, '#(/|\.)#', '\\');
+        return Strings::replace($pseudoNamespace, self::SLASH_REGEX, '\\');
     }
 }

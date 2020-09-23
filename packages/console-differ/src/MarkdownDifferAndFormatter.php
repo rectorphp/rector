@@ -10,6 +10,16 @@ use SebastianBergmann\Diff\Differ;
 final class MarkdownDifferAndFormatter
 {
     /**
+     * @var string
+     */
+    private const METADATA_REGEX = '#^(.*\n){1}#';
+
+    /**
+     * @var string
+     */
+    private const SPACE_AND_NEWLINE_REGEX = '#( ){1,}\n#';
+
+    /**
      * @var Differ
      */
     private $markdownDiffer;
@@ -28,7 +38,7 @@ final class MarkdownDifferAndFormatter
         $diff = $this->markdownDiffer->diff($old, $new);
 
         // remove first line, just meta info added by UnifiedDiffOutputBuilder
-        $diff = Strings::replace($diff, '#^(.*\n){1}#');
+        $diff = Strings::replace($diff, self::METADATA_REGEX);
 
         return $this->removeTrailingWhitespaces($diff);
     }
@@ -38,7 +48,7 @@ final class MarkdownDifferAndFormatter
      */
     private function removeTrailingWhitespaces(string $diff): string
     {
-        $diff = Strings::replace($diff, '#( ){1,}\n#', PHP_EOL);
+        $diff = Strings::replace($diff, self::SPACE_AND_NEWLINE_REGEX, PHP_EOL);
 
         return rtrim($diff);
     }

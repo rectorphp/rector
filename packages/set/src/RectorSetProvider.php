@@ -17,6 +17,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class RectorSetProvider extends AbstractSetProvider
 {
     /**
+     * @var string
+     */
+    private const DASH_NUMBER_REGEX = '#\-(\d+)#';
+
+    /**
      * @var Set[]
      */
     private $sets = [];
@@ -71,7 +76,7 @@ final class RectorSetProvider extends AbstractSetProvider
             $setName = StaticRectorStrings::constantToDashes($name);
 
             // remove `-` before numbers
-            $setName = Strings::replace($setName, '#\-(\d+)#', '$1');
+            $setName = Strings::replace($setName, self::DASH_NUMBER_REGEX, '$1');
             $this->sets[] = new Set($setName, new SmartFileInfo($setPath));
         }
     }

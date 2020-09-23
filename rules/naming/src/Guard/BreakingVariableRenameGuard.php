@@ -34,6 +34,11 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class BreakingVariableRenameGuard
 {
     /**
+     * @var string
+     */
+    private const AT_NAMING_REGEX = '#[\w+]At$#';
+
+    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -288,6 +293,6 @@ final class BreakingVariableRenameGuard
             return false;
         }
 
-        return (bool) Strings::match($currentName, '#[\w+]At$#');
+        return (bool) Strings::match($currentName, self::AT_NAMING_REGEX . '');
     }
 }

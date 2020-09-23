@@ -15,6 +15,11 @@ final class AttributeAwareUnionTypeNode extends UnionTypeNode implements Attribu
     use AttributeTrait;
 
     /**
+     * @var string
+     */
+    private const BRACKET_WRAPPING_REGEX = '#^\((.*?)\)#';
+
+    /**
      * @var bool
      */
     private $isWrappedWithBrackets = false;
@@ -26,7 +31,7 @@ final class AttributeAwareUnionTypeNode extends UnionTypeNode implements Attribu
     {
         parent::__construct($types);
 
-        $this->isWrappedWithBrackets = (bool) Strings::match($originalContent, '#^\((.*?)\)#');
+        $this->isWrappedWithBrackets = (bool) Strings::match($originalContent, self::BRACKET_WRAPPING_REGEX);
     }
 
     /**

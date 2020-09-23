@@ -19,6 +19,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
 {
+    /**
+     * @var string
+     */
+    private const NO_RECTORE_ANNOTATION_WITH_CLASS_REGEX = '#\@noRector(\s)+[^\w\\\\]#i';
+
     public function isNodeSkippedByRector(PhpRectorInterface $phpRector, Node $node): bool
     {
         if ($node instanceof PropertyProperty || $node instanceof Const_) {
@@ -45,7 +50,7 @@ final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
     private function hasNoRectorComment(PhpRectorInterface $phpRector, Doc $doc): bool
     {
         // bare @noRector ignored all rules
-        if (Strings::match($doc->getText(), '#\@noRector(\s)+[^\w\\\\]#')) {
+        if (Strings::match($doc->getText(), self::NO_RECTORE_ANNOTATION_WITH_CLASS_REGEX)) {
             return true;
         }
 

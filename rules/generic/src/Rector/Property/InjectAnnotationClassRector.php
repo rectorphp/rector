@@ -49,6 +49,11 @@ final class InjectAnnotationClassRector extends AbstractRector implements Config
     ];
 
     /**
+     * @var string
+     */
+    private const BETWEEN_PERCENT_CHARS_REGEX = '#%(.*?)%#';
+
+    /**
      * @var string[]
      */
     private $annotationClasses = [];
@@ -184,7 +189,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return (bool) Strings::match($serviceName, '#%(.*?)%#');
+        return (bool) Strings::match($serviceName, self::BETWEEN_PERCENT_CHARS_REGEX);
     }
 
     private function resolveType(Node $node, PhpDocTagValueNode $phpDocTagValueNode): Type

@@ -31,6 +31,46 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class BetterStandardPrinter extends Standard
 {
     /**
+     * @var string
+     */
+    private const START_COMMENT_REGEX = '#\/*\*(.*?)\*\/#s';
+
+    /**
+     * @var string
+     */
+    private const START_GRID_COMMENT_REGEX = '#^(\s+)?\#(.*?)$#m';
+
+    /**
+     * @var string
+     */
+    private const START_DOUBLE_SLASH_COMMENT_REGEX = '#\/\/(.*?)$#m';
+
+    /**
+     * @var string
+     */
+    private const NEWLINE_END_REGEX = "#\n$#";
+
+    /**
+     * @var string
+     */
+    private const FOUR_SPACE_START_REGEX = '#^ {4}#m';
+
+    /**
+     * @var string
+     */
+    private const USE_REGEX = '#( use)\(#';
+
+    /**
+     * @var string
+     */
+    private const QUOTED_SLASH_REGEX = "#'|\\\\(?=[\\\\']|$)#";
+
+    /**
+     * @var string
+     */
+    private const EXTRA_SPACE_BEFORE_NOP_REGEX = '#^[ \t]+$#m';
+
+    /**
      * Use space by default
      * @var string
      */
@@ -80,7 +120,7 @@ final class BetterStandardPrinter extends Standard
         $content = parent::printFormatPreserving($stmts, $origStmts, $origTokens);
 
         // add new line in case of added stmts
-        if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, "#\n$#")) {
+        if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
         }
 
@@ -218,7 +258,7 @@ final class BetterStandardPrinter extends Standard
         }
 
         // remove extra spaces before new Nop_ nodes, @see https://regex101.com/r/iSvroO/1
-        return Strings::replace($content, '#^[ \t]+$#m');
+        return Strings::replace($content, self::EXTRA_SPACE_BEFORE_NOP_REGEX);
     }
 
     /**
@@ -232,7 +272,7 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pSingleQuotedString(string $string): string
     {
-        return "'" . Strings::replace($string, "#'|\\\\(?=[\\\\']|$)#", '\\\\$0') . "'";
+        return "'" . Strings::replace($string, self::QUOTED_SLASH_REGEX, '\\\\$0') . "'";
     }
 
     /**
@@ -257,7 +297,7 @@ final class BetterStandardPrinter extends Standard
     {
         $closureContent = parent::pExpr_Closure($closure);
 
-        return Strings::replace($closureContent, '#( use)\(#', '$1 (');
+        return Strings::replace($closureContent, self::USE_REGEX, '$1 (');
     }
 
     /**
@@ -398,7 +438,7 @@ final class BetterStandardPrinter extends Standard
                 continue;
             }
 
-            $whitespaces = count(Strings::matchAll($fileInfo->getContents(), '#^ {4}#m'));
+            $whitespaces = count(Strings::matchAll($fileInfo->getContents(), self::FOUR_SPACE_START_REGEX));
             $tabs = count(Strings::matchAll($fileInfo->getContents(), '#^\t#m'));
 
             // tab vs space
@@ -409,16 +449,16 @@ final class BetterStandardPrinter extends Standard
     private function removeComments(string $printerNode): string
     {
         // remove /** ... */
-        $printerNode = Strings::replace($printerNode, '#\/*\*(.*?)\*\/#s');
+        $printerNode = Strings::replace($printerNode, self::START_COMMENT_REGEX);
 
         // remove /* ... */
-        $printerNode = Strings::replace($printerNode, '#\/*\*(.*?)\*\/#s');
+        $printerNode = Strings::replace($printerNode, self::START_COMMENT_REGEX);
 
         // remove # ...
-        $printerNode = Strings::replace($printerNode, '#^(\s+)?\#(.*?)$#m');
+        $printerNode = Strings::replace($printerNode, self::START_GRID_COMMENT_REGEX);
 
         // remove // ...
-        return Strings::replace($printerNode, '#\/\/(.*?)$#m');
+        return Strings::replace($printerNode, self::START_DOUBLE_SLASH_COMMENT_REGEX);
     }
 
     private function moveCommentsFromAttributeObjectToCommentsAttribute(array $nodes): void

@@ -20,6 +20,21 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ParseFileRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const YAML_SUFFIX_IN_QUOTE_REGEX = '#\.(yml|yaml)(\'|")$#';
+
+    /**
+     * @var string
+     */
+    private const FILE_SUFFIX_REGEX = '#\File$#';
+
+    /**
+     * @var string
+     */
+    private const YAML_SUFFIX_REGEX = '#\.(yml|yaml)$#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('session > use_strict_mode is true by default and can be removed', [
@@ -67,12 +82,12 @@ final class ParseFileRector extends AbstractRector
         $possibleFileNodeAsString = $this->print($possibleFileNode);
 
         // is yml/yaml file
-        if (Strings::match($possibleFileNodeAsString, '#\.(yml|yaml)(\'|")$#')) {
+        if (Strings::match($possibleFileNodeAsString, self::YAML_SUFFIX_IN_QUOTE_REGEX)) {
             return true;
         }
 
         // is probably a file variable
-        if (Strings::match($possibleFileNodeAsString, '#\File$#')) {
+        if (Strings::match($possibleFileNodeAsString, self::FILE_SUFFIX_REGEX)) {
             return true;
         }
 
@@ -83,6 +98,9 @@ final class ParseFileRector extends AbstractRector
         }
 
         $nodeType = $nodeScope->getType($possibleFileNode);
-        return $nodeType instanceof ConstantStringType && Strings::match($nodeType->getValue(), '#\.(yml|yaml)$#');
+        return $nodeType instanceof ConstantStringType && Strings::match(
+            $nodeType->getValue(),
+            self::YAML_SUFFIX_REGEX
+        );
     }
 }

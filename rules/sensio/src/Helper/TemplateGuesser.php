@@ -17,6 +17,31 @@ use Rector\Sensio\BundleClassResolver;
 final class TemplateGuesser
 {
     /**
+     * @var string
+     */
+    private const BUNDLE_SUFFIX_REGEX = '#Bundle$#';
+
+    /**
+     * @var string
+     */
+    private const BUNDLE_NAME_MATCHING_REGEX = '#(?<bundle>[\w]*Bundle)#';
+
+    /**
+     * @var string
+     */
+    private const SMALL_LETTER_BIG_LETTER_REGEX = '#([a-z\d])([A-Z])#';
+
+    /**
+     * @var string
+     */
+    private const CONTROLLER_NAME_MATCH_REGEX = '#Controller\\\(.+)Controller$#';
+
+    /**
+     * @var string
+     */
+    private const ACTION_MATCH_REGEX = '#Action$#';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -60,7 +85,7 @@ final class TemplateGuesser
         $bundle = $this->resolveBundle($class, $namespace);
         $controller = $this->resolveController($class);
 
-        $action = Strings::replace($method, '#Action$#');
+        $action = Strings::replace($method, self::ACTION_MATCH_REGEX);
 
         $fullPath = '';
         if ($bundle !== '') {
@@ -81,19 +106,19 @@ final class TemplateGuesser
             return '@' . $shortBundleClass;
         }
 
-        $bundle = Strings::match($namespace, '#(?<bundle>[\w]*Bundle)#')['bundle'] ?? '';
-        $bundle = Strings::replace($bundle, '#Bundle$#');
+        $bundle = Strings::match($namespace, self::BUNDLE_NAME_MATCHING_REGEX)['bundle'] ?? '';
+        $bundle = Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX);
         return $bundle !== '' ? '@' . $bundle : '';
     }
 
     private function resolveController(string $class): string
     {
-        $match = Strings::match($class, '#Controller\\\(.+)Controller$#');
+        $match = Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
         if (! $match) {
             return '';
         }
 
-        $controller = Strings::replace($match[1], '#([a-z\d])([A-Z])#', '\\1_\\2');
+        $controller = Strings::replace($match[1], self::SMALL_LETTER_BIG_LETTER_REGEX, '\\1_\\2');
         return str_replace('\\', '/', $controller);
     }
 }

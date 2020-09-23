@@ -18,6 +18,11 @@ use Rector\Core\Exception\ShouldNotHappenException;
 final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
 {
     /**
+     * @var string
+     */
+    private const SPACE_BEFORE_CLOSING_BRACKET_REGEX = '#,(\s+)?}$#m';
+
+    /**
      * @var IndexPhpDocNodeFactory
      */
     private $indexPhpDocNodeFactory;
@@ -68,7 +73,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
 
         $indexesOpeningAndClosingSpace = $this->matchCurlyBracketOpeningAndClosingSpace($indexesContent);
 
-        $haveIndexesFinalComma = (bool) Strings::match($indexesContent, '#,(\s+)?}$#m');
+        $haveIndexesFinalComma = (bool) Strings::match($indexesContent, self::SPACE_BEFORE_CLOSING_BRACKET_REGEX);
         $uniqueConstraintsContent = $this->annotationContentResolver->resolveNestedKey(
             $annotationContent,
             'uniqueConstraints'
@@ -83,7 +88,10 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             $uniqueConstraintsContent
         );
 
-        $haveUniqueConstraintsFinalComma = (bool) Strings::match($uniqueConstraintsContent, '#,(\s+)?}$#m');
+        $haveUniqueConstraintsFinalComma = (bool) Strings::match(
+            $uniqueConstraintsContent,
+            self::SPACE_BEFORE_CLOSING_BRACKET_REGEX
+        );
 
         return new TableTagValueNode(
             $table->name,

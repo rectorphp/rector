@@ -48,6 +48,17 @@ final class PropertyNaming
     private const PREFIXED_CLASS_METHODS_REGEX = '#^(is|are|was|were|has|have|had|can)[A-Z].+#';
 
     /**
+     * @var string
+     */
+    private const I_PREFIX_REGEX = '#^I[A-Z]#';
+
+    /**
+     * @see https://regex101.com/r/hnU5pm/2/
+     * @var string
+     */
+    private const GET_PREFIX_REGEX = '#^get([A-Z].+)#';
+
+    /**
      * @var TypeUnwrapper
      */
     private $typeUnwrapper;
@@ -81,8 +92,7 @@ final class PropertyNaming
 
     public function getExpectedNameFromMethodName(string $methodName): ?ExpectedName
     {
-        // @see https://regex101.com/r/hnU5pm/2/
-        $matches = Strings::match($methodName, '#^get([A-Z].+)#');
+        $matches = Strings::match($methodName, self::GET_PREFIX_REGEX);
         if ($matches === null) {
             return null;
         }
@@ -197,8 +207,8 @@ final class PropertyNaming
     private function removePrefixesAndSuffixes(string $shortClassName): string
     {
         // is SomeInterface
-        if (Strings::endsWith($shortClassName, 'Interface')) {
-            $shortClassName = Strings::substring($shortClassName, 0, -strlen('Interface'));
+        if (Strings::endsWith($shortClassName, self::INTERFACE)) {
+            $shortClassName = Strings::substring($shortClassName, 0, -strlen(self::INTERFACE));
         }
 
         // is ISomeClass
@@ -277,11 +287,11 @@ final class PropertyNaming
         }
 
         // starts with "I\W+"?
-        if (Strings::match($shortName, '#^I[A-Z]#')) {
+        if (Strings::match($shortName, self::I_PREFIX_REGEX)) {
             return Strings::substring($shortName, 1);
         }
 
-        if (Strings::match($shortName, '#Interface$#')) {
+        if (Strings::endsWith($shortName, self::INTERFACE)) {
             return Strings::substring($shortName, -strlen(self::INTERFACE));
         }
 

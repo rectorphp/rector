@@ -22,6 +22,11 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class RemoveDoubleUnderscoreInMethodNameRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const DOUBLE_UNDERSCORE_START_REGEX = '#__(.*?)#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Non-magic PHP object methods cannot start with "__"', [
@@ -71,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! Strings::match($methodName, '#__(.*?)#')) {
+        if (! Strings::match($methodName, self::DOUBLE_UNDERSCORE_START_REGEX)) {
             return null;
         }
 

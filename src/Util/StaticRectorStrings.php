@@ -12,6 +12,16 @@ use Nette\Utils\Strings;
 final class StaticRectorStrings
 {
     /**
+     * @var string
+     */
+    private const UNDERSCORE_REGEX = '#_#';
+
+    /**
+     * @var string
+     */
+    private const CAMEL_CASE_SPLIT_REGEX = '#([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)#';
+
+    /**
      * @param string[] $array
      */
     public static function isInArrayInsensitive(string $checkedItem, array $array): bool
@@ -92,7 +102,7 @@ final class StaticRectorStrings
     public static function constantToDashes(string $string): string
     {
         $string = strtolower($string);
-        return Strings::replace($string, '#_#', '-');
+        return Strings::replace($string, self::UNDERSCORE_REGEX, '-');
     }
 
     private static function camelCaseToGlue(string $input, string $glue): string
@@ -101,7 +111,7 @@ final class StaticRectorStrings
             return $input;
         }
 
-        $matches = Strings::matchAll($input, '#([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)#');
+        $matches = Strings::matchAll($input, self::CAMEL_CASE_SPLIT_REGEX);
         $parts = [];
         foreach ($matches as $match) {
             $parts[] = $match[0] === strtoupper($match[0]) ? strtolower($match[0]) : lcfirst($match[0]);

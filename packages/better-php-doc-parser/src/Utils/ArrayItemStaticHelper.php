@@ -13,6 +13,16 @@ use Nette\Utils\Strings;
 final class ArrayItemStaticHelper
 {
     /**
+     * @var string
+     */
+    private const NON_EMPTY_SILENT_KEY_REGEX = '#()|\(\)#';
+
+    /**
+     * @var string
+     */
+    private const ITEM_EQUALS_REGEX = '#(?<item>\w+)(\s+)?=(\s+)?#m';
+
+    /**
      * @return string[]
      */
     public static function resolveAnnotationItemsOrder(string $content, ?string $silentKey = null): array
@@ -24,7 +34,7 @@ final class ArrayItemStaticHelper
 
         $itemsOrder = [];
 
-        $matches = Strings::matchAll($content, '#(?<item>\w+)(\s+)?=(\s+)?#m');
+        $matches = Strings::matchAll($content, self::ITEM_EQUALS_REGEX);
         foreach ($matches as $match) {
             $itemsOrder[] = $match['item'];
         }
@@ -84,7 +94,7 @@ final class ArrayItemStaticHelper
 
     private static function isNotEmptyAndHasSilentKey(string $content, ?string $silentKey, array $itemsOrder): bool
     {
-        if (! Strings::match($content, '#()|\(\)#')) {
+        if (! Strings::match($content, self::NON_EMPTY_SILENT_KEY_REGEX)) {
             return false;
         }
 

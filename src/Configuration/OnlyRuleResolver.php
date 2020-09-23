@@ -13,6 +13,11 @@ use Rector\Core\Exception\Configuration\RectorRuleNotFoundException;
 final class OnlyRuleResolver
 {
     /**
+     * @var string
+     */
+    private const SLASH_REGEX = '#\\\\#';
+
+    /**
      * @var RectorClassesProvider
      */
     private $rectorClassesProvider;
@@ -44,7 +49,7 @@ final class OnlyRuleResolver
 
         // 3. class without slashes
         foreach ($rectorClasses as $rectorClass) {
-            $rectorClassWithoutSlashes = Strings::replace($rectorClass, '#\\\\#');
+            $rectorClassWithoutSlashes = Strings::replace($rectorClass, self::SLASH_REGEX);
             if ($rectorClassWithoutSlashes === $rule) {
                 return $rectorClass;
             }

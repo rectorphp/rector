@@ -19,6 +19,21 @@ use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 abstract class AbstractPhpDocNodeFactory
 {
     /**
+     * @var string
+     */
+    private const CLASS_CONST_REGEX = '#::class#';
+
+    /**
+     * @var string
+     */
+    private const OPENING_SPACE_REGEX = '#^\{(?<opening_space>\s+)#';
+
+    /**
+     * @var string
+     */
+    private const CLOSING_SPACE_REGEX = '#(?<closing_space>\s+)\}$#';
+
+    /**
      * @var NodeAnnotationReader
      */
     protected $nodeAnnotationReader;
@@ -87,10 +102,10 @@ abstract class AbstractPhpDocNodeFactory
      */
     protected function matchCurlyBracketOpeningAndClosingSpace(string $annotationContent): OpeningAndClosingSpace
     {
-        $match = Strings::match($annotationContent, '#^\{(?<opening_space>\s+)#');
+        $match = Strings::match($annotationContent, self::OPENING_SPACE_REGEX);
         $openingSpace = $match['opening_space'] ?? '';
 
-        $match = Strings::match($annotationContent, '#(?<closing_space>\s+)\}$#');
+        $match = Strings::match($annotationContent, self::CLOSING_SPACE_REGEX);
         $closingSpace = $match['closing_space'] ?? '';
 
         return new OpeningAndClosingSpace($openingSpace, $closingSpace);
@@ -98,6 +113,6 @@ abstract class AbstractPhpDocNodeFactory
 
     private function getCleanedUpTargetEntity(string $targetEntity): string
     {
-        return Strings::replace($targetEntity, '#::class#', '');
+        return Strings::replace($targetEntity, self::CLASS_CONST_REGEX, '');
     }
 }

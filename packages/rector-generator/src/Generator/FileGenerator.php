@@ -14,6 +14,11 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class FileGenerator
 {
     /**
+     * @var string
+     */
+    public const RECTOR_UTILS_REGEX = '#Rector\\\\Utils#';
+
+    /**
      * @var TemplateFileSystem
      */
     private $templateFileSystem;
@@ -79,7 +84,7 @@ final class FileGenerator
 
         // replace "Rector\Utils\" with "Utils\Rector\" for 3rd party packages
         if (! $rectorRecipe->isRectorRepository()) {
-            $content = Strings::replace($content, '#Rector\\\\Utils#', 'Utils\Rector');
+            $content = Strings::replace($content, self::RECTOR_UTILS_REGEX, 'Utils\Rector');
         }
 
         $this->smartFileSystem->dumpFile($targetFilePath, $content);

@@ -13,6 +13,11 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class AnnotationContentResolver
 {
     /**
+     * @var string
+     */
+    private const MULTILINE_COMENT_ASTERISK_REGEX = '#(\s+)\*(\s+)#m';
+
+    /**
      * @var TokenIteratorFactory
      */
     private $tokenIteratorFactory;
@@ -141,7 +146,7 @@ final class AnnotationContentResolver
 
     private function cleanMultilineAnnotationContent(string $annotationContent): string
     {
-        return Strings::replace($annotationContent, '#(\s+)\*(\s+)#m', '$1$3');
+        return Strings::replace($annotationContent, self::MULTILINE_COMENT_ASTERISK_REGEX, '$1$3');
     }
 
     private function tryStartWithKey(string $name, bool $start, TokenIterator $localTokenIterator): bool

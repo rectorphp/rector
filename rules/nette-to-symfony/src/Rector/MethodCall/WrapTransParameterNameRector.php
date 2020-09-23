@@ -21,6 +21,11 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class WrapTransParameterNameRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const BETWEEN_PERCENT_CHARS_REGEX = '#%(.*?)%#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Adds %% to placeholder name of trans() method if missing', [
@@ -101,7 +106,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (Strings::match($arrayItem->key->value, '#%(.*?)%#')) {
+            if (Strings::match($arrayItem->key->value, self::BETWEEN_PERCENT_CHARS_REGEX)) {
                 continue;
             }
 

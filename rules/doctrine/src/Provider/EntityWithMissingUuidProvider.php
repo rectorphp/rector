@@ -18,6 +18,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class EntityWithMissingUuidProvider
 {
     /**
+     * @var string
+     */
+    private const UUID_PREFIX_REGEX = '#^uuid(_binary)?$#';
+
+    /**
      * @var Class_[]
      */
     private $entitiesWithMissingUuidProperty = [];
@@ -113,6 +118,6 @@ final class EntityWithMissingUuidProvider
             return false;
         }
 
-        return (bool) Strings::match($columnTagValueNode->getType(), '#^uuid(_binary)?$#');
+        return (bool) Strings::match($columnTagValueNode->getType(), self::UUID_PREFIX_REGEX);
     }
 }

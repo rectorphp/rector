@@ -21,6 +21,16 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 final class InlineCodeParser
 {
     /**
+     * @var string
+     */
+    private const PRESLASHED_DOLLAR_REGEX = '#\\\\\$#';
+
+    /**
+     * @var string
+     */
+    private const CURLY_BRACKET_WRAPPER_REGEX = "#'{(\\\$.*?)}'#";
+
+    /**
      * @var Parser
      */
     private $parser;
@@ -76,9 +86,9 @@ final class InlineCodeParser
             // remove "
             $content = trim($this->betterStandardPrinter->print($content), '""');
             // use \$ → $
-            $content = Strings::replace($content, '#\\\\\$#', '$');
+            $content = Strings::replace($content, self::PRESLASHED_DOLLAR_REGEX, '$');
             // use \'{$...}\' → $...
-            return Strings::replace($content, "#'{(\\\$.*?)}'#", '$1');
+            return Strings::replace($content, self::CURLY_BRACKET_WRAPPER_REGEX, '$1');
         }
 
         if ($content instanceof Concat) {

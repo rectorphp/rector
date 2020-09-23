@@ -37,23 +37,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->defaults()
         ->public()
-        ->autowire();
+        ->autowire()
+        ->autoconfigure();
 
     $services->load('Rector\Core\\', __DIR__ . '/../src')
         ->exclude([
-            __DIR__ . '/../src/Rector/*',
-            __DIR__ . '/../src/Testing/PHPUnit/*',
-            __DIR__ . '/../src/RectorDefinition/*',
-            __DIR__ . '/../src/Exception/*',
-            __DIR__ . '/../src/DependencyInjection/CompilerPass/*',
-            __DIR__ . '/../src/DependencyInjection/Loader/*',
-            __DIR__ . '/../src/PhpParser/Builder/*',
-            __DIR__ . '/../src/HttpKernel/*',
-            __DIR__ . '/../src/ValueObject/*',
-            __DIR__ . '/../src/Configuration/MinimalVersionChecker/*',
-            __DIR__ . '/../src/Bootstrap/*',
+            __DIR__ . '/../src/Rector',
+            __DIR__ . '/../src/Testing/PHPUnit',
+            __DIR__ . '/../src/RectorDefinition',
+            __DIR__ . '/../src/Exception',
+            __DIR__ . '/../src/DependencyInjection/CompilerPass',
+            __DIR__ . '/../src/DependencyInjection/Loader',
+            __DIR__ . '/../src/PhpParser/Builder',
+            __DIR__ . '/../src/HttpKernel',
+            __DIR__ . '/../src/ValueObject',
+            __DIR__ . '/../src/Configuration/MinimalVersionChecker',
+            __DIR__ . '/../src/Bootstrap',
             // loaded for PHPStan factory
-            __DIR__ . '/../src/PHPStan/Type/*',
+            __DIR__ . '/../src/PHPStan/Type',
         ]);
 
     $services->set(MinimalVersionChecker::class)
@@ -64,11 +65,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(TextDescriptor::class);
 
     $services->set(ParserFactory::class);
-
     $services->set(BuilderFactory::class);
-
     $services->set(CloningVisitor::class);
-
     $services->set(NodeFinder::class);
 
     $services->set(Parser::class)
@@ -78,16 +76,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->factory([ref(LexerFactory::class), 'create']);
 
     $services->set(Filesystem::class);
-
     $services->set(PrivatesAccessor::class);
-
-    $services->set(FinderSanitizer::class);
-
-    $services->set(FileSystemFilter::class);
-
-    $services->set(ParameterProvider::class);
-
     $services->set(PrivatesCaller::class);
+    $services->set(FinderSanitizer::class);
+    $services->set(FileSystemFilter::class);
+    $services->set(ParameterProvider::class);
+    $services->set(SmartFileSystem::class);
 
     $services->set(StringFormatConverter::class);
 
@@ -95,10 +89,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->alias(EventDispatcherInterface::class, AutowiredEventDispatcher::class);
 
-    $services->set(SmartFileSystem::class);
-
     $services->set(SymfonyStyleFactory::class);
-
     $services->set(SymfonyStyle::class)
         ->factory([ref(SymfonyStyleFactory::class), 'create']);
 

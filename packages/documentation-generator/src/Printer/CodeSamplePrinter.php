@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DocumentationGenerator\OutputFormatter;
+namespace Rector\DocumentationGenerator\Printer;
 
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Core\Contract\Rector\RectorInterface;
@@ -11,15 +11,12 @@ use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\SymfonyPhpConfig\Printer\ReturnClosurePrinter;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * @see \Rector\DocumentationGenerator\Tests\Printer\CodeSamplePrinter\CodeSamplePrinterTest
+ */
 final class CodeSamplePrinter
 {
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
     /**
      * @var MarkdownDifferAndFormatter
      */
@@ -31,29 +28,29 @@ final class CodeSamplePrinter
     private $returnClosurePrinter;
 
     public function __construct(
-        SymfonyStyle $symfonyStyle,
         MarkdownDifferAndFormatter $markdownDifferAndFormatter,
         ReturnClosurePrinter $returnClosurePrinter
     ) {
-        $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
         $this->returnClosurePrinter = $returnClosurePrinter;
     }
 
-    public function printCodeSamples(RectorDefinition $rectorDefinition, RectorInterface $rector): void
+    public function printCodeSamples(RectorDefinition $rectorDefinition, RectorInterface $rector): string
     {
-        foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
-            $this->symfonyStyle->newLine();
+        $content = '';
 
-            $this->printConfiguration($rector, $codeSample);
-            $this->printCodeSample($codeSample);
+        foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
+            $content .= $this->printConfiguration($rector, $codeSample);
+            $content .= $this->printCodeSample($codeSample);
         }
+
+        return $content;
     }
 
-    private function printConfiguration(RectorInterface $rector, CodeSampleInterface $codeSample): void
+    private function printConfiguration(RectorInterface $rector, CodeSampleInterface $codeSample): string
     {
         if (! $codeSample instanceof ConfiguredCodeSample) {
-            return;
+            return '';
         }
 
         $configuration = [
@@ -61,50 +58,43 @@ final class CodeSamplePrinter
         ];
 
         $phpConfigContent = $this->returnClosurePrinter->printServices($configuration);
-        $this->printCodeWrapped($phpConfigContent, 'php');
+        $wrappedPhpConfigContent = $this->printCodeWrapped($phpConfigContent, 'php');
 
-        $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln('↓');
-        $this->symfonyStyle->newLine();
+        return $wrappedPhpConfigContent . PHP_EOL . '↓' . PHP_EOL . PHP_EOL;
     }
 
-    private function printCodeSample(CodeSampleInterface $codeSample): void
+    private function printCodeSample(CodeSampleInterface $codeSample): string
     {
         $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors(
             $codeSample->getCodeBefore(),
             $codeSample->getCodeAfter()
         );
 
-        $this->printCodeWrapped($diff, 'diff');
+        $content = $this->printCodeWrapped($diff, 'diff');
 
         $extraFileContent = $codeSample->getExtraFileContent();
         if ($extraFileContent !== null) {
-            $this->symfonyStyle->newLine();
-            $this->symfonyStyle->writeln('**New file**');
-            $this->symfonyStyle->newLine();
-            $this->printCodeWrapped($extraFileContent, 'php');
+            $content .= PHP_EOL . '**New file**' . PHP_EOL;
+            $content .= $this->printCodeWrapped($extraFileContent, 'php');
         }
 
-        $this->printComposerJsonAwareCodeSample($codeSample);
+        return $content . $this->printComposerJsonAwareCodeSample($codeSample);
     }
 
-    private function printCodeWrapped(string $content, string $format): void
+    private function printCodeWrapped(string $content, string $format): string
     {
         $message = sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL);
-        $this->symfonyStyle->writeln($message);
+        return $message . PHP_EOL;
     }
 
-    private function printComposerJsonAwareCodeSample(CodeSampleInterface $codeSample): void
+    private function printComposerJsonAwareCodeSample(CodeSampleInterface $codeSample): string
     {
         if (! $codeSample instanceof ComposerJsonAwareCodeSample) {
-            return;
+            return '';
         }
 
         $composerJsonContent = $codeSample->getComposerJsonContent();
-        $this->symfonyStyle->newLine(1);
-        $this->symfonyStyle->writeln('`composer.json`');
-        $this->symfonyStyle->newLine(1);
-        $this->printCodeWrapped($composerJsonContent, 'json');
-        $this->symfonyStyle->newLine();
+
+        return PHP_EOL . 'composer.json' . PHP_EOL . $this->printCodeWrapped($composerJsonContent, 'json') . PHP_EOL;
     }
 }

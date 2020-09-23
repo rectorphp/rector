@@ -22,6 +22,11 @@ use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 final class AnonymousFunctionNodeFactory
 {
     /**
+     * @var string
+     */
+    private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\d+)#';
+
+    /**
      * @var Parser
      */
     private $parser;
@@ -59,7 +64,7 @@ final class AnonymousFunctionNodeFactory
                 return $node;
             }
 
-            $match = Strings::match($node->value, '#(\\$|\\\\|\\x0)(?<number>\d+)#');
+            $match = Strings::match($node->value, self::DIM_FETCH_REGEX);
             if (! $match) {
                 return $node;
             }
