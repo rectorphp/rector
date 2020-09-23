@@ -21,6 +21,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class WrapTransParameterNameRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
     private const BETWEEN_PERCENT_CHARS_REGEX = '#%(.*?)%#';
 
     public function getDefinition(): RectorDefinition

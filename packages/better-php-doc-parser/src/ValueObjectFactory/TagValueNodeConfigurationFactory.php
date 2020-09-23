@@ -18,12 +18,24 @@ use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
  */
 final class TagValueNodeConfigurationFactory
 {
+    /**
+     * @var string
+     */
     public const NEWLINE_AFTER_OPENING_REGEX = '#^(\(\s+|\n)#m';
 
+    /**
+     * @var string
+     */
     public const NEWLINE_BEFORE_CLOSING_REGEX = '#(\s+\)|\n(\s+)?)$#m';
 
+    /**
+     * @var string
+     */
     public const OPENING_BRACKET_REGEX = '#^\(#';
 
+    /**
+     * @var string
+     */
     public const CLOSING_BRACKET_REGEX = '#\)$#';
 
     public function createFromOriginalContent(

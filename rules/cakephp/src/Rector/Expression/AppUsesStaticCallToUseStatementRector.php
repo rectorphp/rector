@@ -29,11 +29,11 @@ final class AppUsesStaticCallToUseStatementRector extends AbstractRector
     /**
      * @var CakePHPFullyQualifiedClassNameResolver
      */
-    private $fullyQualifiedClassNameResolver;
+    private $cakePHPFullyQualifiedClassNameResolver;
 
-    public function __construct(CakePHPFullyQualifiedClassNameResolver $fullyQualifiedClassNameResolver)
+    public function __construct(CakePHPFullyQualifiedClassNameResolver $cakePHPFullyQualifiedClassNameResolver)
     {
-        $this->fullyQualifiedClassNameResolver = $fullyQualifiedClassNameResolver;
+        $this->cakePHPFullyQualifiedClassNameResolver = $cakePHPFullyQualifiedClassNameResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -105,7 +105,7 @@ CODE_SAMPLE
         /** @var string $namespaceName */
         $namespaceName = $this->getValue($staticCall->args[1]->value);
 
-        return $this->fullyQualifiedClassNameResolver->resolveFromPseudoNamespaceAndShortClassName(
+        return $this->cakePHPFullyQualifiedClassNameResolver->resolveFromPseudoNamespaceAndShortClassName(
             $namespaceName,
             $shortClassName
         );

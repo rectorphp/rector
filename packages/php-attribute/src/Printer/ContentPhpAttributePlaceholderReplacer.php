@@ -9,6 +9,9 @@ use Rector\PhpAttribute\Collector\PlaceholderToValueCollector;
 
 final class ContentPhpAttributePlaceholderReplacer
 {
+    /**
+     * @var string
+     */
     public const ATTRIBUTE_END_REGEX = '#>>\n\n#';
 
     /**

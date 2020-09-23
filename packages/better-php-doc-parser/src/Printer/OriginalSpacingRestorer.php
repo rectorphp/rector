@@ -10,6 +10,9 @@ use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 
 final class OriginalSpacingRestorer
 {
+    /**
+     * @var string
+     */
     public const WHITESPACE_SPLIT_REGEX = '#\s+(\*)?#';
 
     /**

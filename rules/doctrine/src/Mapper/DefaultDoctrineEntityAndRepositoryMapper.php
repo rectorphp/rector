@@ -14,8 +14,14 @@ final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAn
      */
     private const REPOSITORY = 'Repository';
 
+    /**
+     * @var string
+     */
     private const REPOSITORY_REGEX = '#Repository#';
 
+    /**
+     * @var string
+     */
     private const ENTITY_REGEX = '#Entity#';
 
     public function mapRepositoryToEntity(string $repository): ?string

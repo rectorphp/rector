@@ -17,8 +17,14 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class RenameSpecFileToTestFileRector extends AbstractFileSystemRector
 {
+    /**
+     * @var string
+     */
     private const SPEC_REGEX = '#\/spec\/#';
 
+    /**
+     * @var string
+     */
     private const SPEC_SUFFIX_REGEX = '#Spec\.php$#';
 
     public function getDefinition(): RectorDefinition

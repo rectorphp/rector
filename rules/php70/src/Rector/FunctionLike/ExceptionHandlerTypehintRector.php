@@ -22,6 +22,9 @@ use Rector\Core\ValueObject\PhpVersionFeature;
  */
 final class ExceptionHandlerTypehintRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
     private const HANDLE_INSENSITIVE_REGEX = '#handle#i';
 
     public function getDefinition(): RectorDefinition

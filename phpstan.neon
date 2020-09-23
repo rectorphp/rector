@@ -88,7 +88,7 @@ parameters:
         - compiler/src
         - utils
         # this cannot be put it, because it wipes PHPStan cache on each run :( - must run in separate
-        #- config/set
+        #- config
 
     excludes_analyse:
         # iterable types

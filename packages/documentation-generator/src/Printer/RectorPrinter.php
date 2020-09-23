@@ -97,10 +97,13 @@ final class RectorPrinter
         return $rectorClassParts[count($rectorClassParts) - 1];
     }
 
-    private function resolveClassFilePathOnGitHub(string $className): string
+    private function createRectorFileLink(RectorInterface $rector, string $rectorClass): string
     {
-        $classRelativePath = $this->getClassRelativePath($className);
-        return '/' . ltrim($classRelativePath, '/');
+        return sprintf(
+            '- class: [`%s`](%s)',
+            get_class($rector),
+            $this->resolveClassFilePathOnGitHub($rectorClass)
+        );
     }
 
     private function resolveFixtureDirectoryPathOnGitHub(string $className): ?string
@@ -115,20 +118,17 @@ final class RectorPrinter
         return null;
     }
 
+    private function resolveClassFilePathOnGitHub(string $className): string
+    {
+        $classRelativePath = $this->getClassRelativePath($className);
+        return '/' . ltrim($classRelativePath, '/');
+    }
+
     private function getClassRelativePath(string $className): string
     {
         $rectorReflectionClass = new ReflectionClass($className);
         $rectorSmartFileInfo = new SmartFileInfo($rectorReflectionClass->getFileName());
 
         return $rectorSmartFileInfo->getRelativeFilePathFromCwd();
-    }
-
-    private function createRectorFileLink(RectorInterface $rector, string $rectorClass): string
-    {
-        return sprintf(
-            '- class: [`%s`](%s)',
-            get_class($rector),
-            $this->resolveClassFilePathOnGitHub($rectorClass)
-        );
     }
 }

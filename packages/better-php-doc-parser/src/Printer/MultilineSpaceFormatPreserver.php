@@ -16,6 +16,9 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class MultilineSpaceFormatPreserver
 {
+    /**
+     * @var string
+     */
     public const NEWLINE_WITH_SPACE_REGEX = '#\n {1,}$#s';
 
     public function resolveCurrentPhpDocNodeText(Node $node): ?string

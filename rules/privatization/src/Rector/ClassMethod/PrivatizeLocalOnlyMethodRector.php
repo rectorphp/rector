@@ -27,6 +27,9 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements Zer
      */
     private const COMMON_PUBLIC_METHOD_CONTROLLER_REGEX = '#^(render|action|handle|inject)#';
 
+    /**
+     * @var string
+     */
     private const CONTROLLER_PRESENTER_SUFFIX_REGEX = '#(Controller|Presenter)$#';
 
     /**

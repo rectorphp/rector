@@ -78,9 +78,7 @@ final class CodeSamplePrinter
             $content .= $this->printCodeWrapped($extraFileContent, 'php');
         }
 
-        $content .= $this->printComposerJsonAwareCodeSample($codeSample);
-
-        return $content;
+        return $content . $this->printComposerJsonAwareCodeSample($codeSample);
     }
 
     private function printCodeWrapped(string $content, string $format): string

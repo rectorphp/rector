@@ -33,6 +33,9 @@ use ReflectionMethod;
  */
 final class RouterListToControllerAnnotationsRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
     private const ACTION_RENDER_NAME_MATCHING_REGEX = '#^(action|render)(?<short_action_name>.*?$)#sm';
 
     /**

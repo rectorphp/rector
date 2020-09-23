@@ -21,6 +21,9 @@ use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class AnonymousFunctionNodeFactory
 {
+    /**
+     * @var string
+     */
     private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\d+)#';
 
     /**

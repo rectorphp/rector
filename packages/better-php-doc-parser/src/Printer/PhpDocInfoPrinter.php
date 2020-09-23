@@ -26,6 +26,9 @@ use Rector\Core\Exception\ShouldNotHappenException;
  */
 final class PhpDocInfoPrinter
 {
+    /**
+     * @var string
+     */
     public const CLOSING_DOCBLOCK_REGEX = '#\*\/(\s+)?$#';
 
     /**

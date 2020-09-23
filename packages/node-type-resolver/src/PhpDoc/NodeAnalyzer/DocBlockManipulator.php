@@ -20,6 +20,9 @@ use Rector\Renaming\ValueObject\RenameAnnotation;
 
 final class DocBlockManipulator
 {
+    /**
+     * @var string
+     */
     public const SPACE_OR_ASTERISK_REGEX = '#(\s|\*)+#';
 
     /**
@@ -140,12 +143,12 @@ final class DocBlockManipulator
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
-        if ($relationTagValueNode === null) {
+        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+        if ($doctrineRelationTagValueNode === null) {
             return null;
         }
 
-        return $relationTagValueNode->getFullyQualifiedTargetEntity();
+        return $doctrineRelationTagValueNode->getFullyQualifiedTargetEntity();
     }
 
     private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo): string

@@ -13,6 +13,9 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class FileGenerator
 {
+    /**
+     * @var string
+     */
     public const RECTOR_UTILS_REGEX = '#Rector\\\\Utils#';
 
     /**
