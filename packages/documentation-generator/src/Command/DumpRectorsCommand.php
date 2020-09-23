@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 
-class DumpRectorsCommand extends AbstractCommand
+final class DumpRectorsCommand extends AbstractCommand
 {
     /**
      * @var RectorsFinder
