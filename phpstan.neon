@@ -480,3 +480,18 @@ parameters:
             message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
             paths:
                 - packages/better-php-doc-parser/src/PartPhpDocTagPrinter/Behavior/ArrayPartPhpDocTagPrinterTrait.php # 27
+
+        - '#Do not use trait#'
+
+        - '#Method "(.*?)" is using too many parameters \- \d+\. Make it under 8#'
+
+        -
+            message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
+            paths:
+                # trait cannot extract constant, decouple this
+                - packages/better-php-doc-parser/src/PhpDocNode/PrintTagValueNodeTrait.php # 52
+
+        -
+            message: '#Instead of "Symfony\\Component\\Finder\\SplFileInfo" class/interface use "Symplify\\SmartFileSystem\\SmartFileInfo"#'
+            paths:
+                - src/FileSystem/FilesFinder.php

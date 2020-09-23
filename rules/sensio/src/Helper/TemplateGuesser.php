@@ -37,6 +37,11 @@ final class TemplateGuesser
     private const CONTROLLER_NAME_MATCH_REGEX = '#Controller\\\(.+)Controller$#';
 
     /**
+     * @var string
+     */
+    private const ACTION_MATCH_REGEX = '#Action$#';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -80,7 +85,7 @@ final class TemplateGuesser
         $bundle = $this->resolveBundle($class, $namespace);
         $controller = $this->resolveController($class);
 
-        $action = Strings::endsWith($method, 'Action');
+        $action = Strings::replace($method, self::ACTION_MATCH_REGEX);
 
         $fullPath = '';
         if ($bundle !== '') {

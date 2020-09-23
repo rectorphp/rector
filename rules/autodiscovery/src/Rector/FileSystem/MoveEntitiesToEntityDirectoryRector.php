@@ -22,6 +22,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class MoveEntitiesToEntityDirectoryRector extends AbstractFileMovingFileSystemRector
 {
+    /**
+     * @var string
+     */
+    private const ENTITY_PATH_REGEX = '#\bEntity\b#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Move entities to Entity namespace', [new CodeSample(
@@ -65,7 +70,7 @@ CODE_SAMPLE
         }
 
         // is entity in expected directory?
-        if (Strings::match($smartFileInfo->getRealPath(), '#\bEntity\b#')) {
+        if (Strings::match($smartFileInfo->getRealPath(), self::ENTITY_PATH_REGEX)) {
             return;
         }
 

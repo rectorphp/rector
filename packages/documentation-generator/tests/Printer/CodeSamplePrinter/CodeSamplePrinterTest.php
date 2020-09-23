@@ -33,9 +33,9 @@ final class CodeSamplePrinterTest extends AbstractKernelTestCase
         $reflectionClass = new ReflectionClass($rectorClass);
         $rector = $reflectionClass->newInstanceWithoutConstructor();
 
+        /** @var RectorInterface $rector */
         $this->assertInstanceOf(RectorInterface::class, $rector);
 
-        /** @var RectorInterface $rector */
         $printedCodeSamples = $this->codeSamplePrinter->printCodeSamples($rector->getDefinition(), $rector);
         $this->assertStringEqualsFile($expectedPrintedCodeSampleFilePath, $printedCodeSamples);
     }

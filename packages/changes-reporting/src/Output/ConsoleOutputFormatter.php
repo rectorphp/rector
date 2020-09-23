@@ -24,6 +24,11 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     public const NAME = 'console';
 
     /**
+     * @var string
+     */
+    private const ON_LINE_REGEX = '# on line #';
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -160,7 +165,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private function normalizePathsToRelativeWithLine(string $errorMessage): string
     {
         $errorMessage = Strings::replace($errorMessage, '#' . preg_quote(getcwd(), '#') . '/#');
-        return $errorMessage = Strings::replace($errorMessage, '# on line #', ':');
+        return $errorMessage = Strings::replace($errorMessage, self::ON_LINE_REGEX, ':');
     }
 
     private function reportRemovedNodes(ErrorAndDiffCollector $errorAndDiffCollector): void

@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
-use Rector\CakePHP\FullyQualifiedClassNameResolver;
+use Rector\CakePHP\Naming\CakePHPFullyQualifiedClassNameResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -27,11 +27,11 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
 final class AppUsesStaticCallToUseStatementRector extends AbstractRector
 {
     /**
-     * @var FullyQualifiedClassNameResolver
+     * @var CakePHPFullyQualifiedClassNameResolver
      */
     private $fullyQualifiedClassNameResolver;
 
-    public function __construct(FullyQualifiedClassNameResolver $fullyQualifiedClassNameResolver)
+    public function __construct(CakePHPFullyQualifiedClassNameResolver $fullyQualifiedClassNameResolver)
     {
         $this->fullyQualifiedClassNameResolver = $fullyQualifiedClassNameResolver;
     }

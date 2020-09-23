@@ -14,13 +14,17 @@ final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAn
      */
     private const REPOSITORY = 'Repository';
 
+    private const REPOSITORY_REGEX = '#Repository#';
+
+    private const ENTITY_REGEX = '#Entity#';
+
     public function mapRepositoryToEntity(string $repository): ?string
     {
         // "SomeRepository" => "Some"
         $withoutSuffix = Strings::substring($repository, 0, - strlen(self::REPOSITORY));
 
         // "App\Repository\Some" => "App\Entity\Some"
-        return Strings::replace($withoutSuffix, '#Repository#', 'Entity');
+        return Strings::replace($withoutSuffix, self::REPOSITORY_REGEX, 'Entity');
     }
 
     public function mapEntityToRepository(string $entity): ?string
@@ -29,6 +33,6 @@ final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAn
         $withSuffix = $entity . self::REPOSITORY;
 
         // "App\Entity\SomeRepository" => "App\Repository\SomeRepository"
-        return Strings::replace($withSuffix, '#Entity#', self::REPOSITORY);
+        return Strings::replace($withSuffix, self::ENTITY_REGEX, self::REPOSITORY);
     }
 }

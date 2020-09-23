@@ -34,6 +34,7 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class BreakingVariableRenameGuard
 {
     private const AT_NAMING_REGEX = '#[\w+]At$#';
+
     /**
      * @var BetterNodeFinder
      */

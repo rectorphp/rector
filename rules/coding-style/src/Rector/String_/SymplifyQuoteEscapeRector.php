@@ -17,6 +17,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class SymplifyQuoteEscapeRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const ESCAPED_CHAR_REGEX = '#\\\\|\$#sim';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Prefer quote that are not inside the string', [
@@ -77,7 +82,7 @@ CODE_SAMPLE
     {
         if ($doubleQuoteCount === 0 && $singleQuoteCount > 0) {
             // contains chars tha will be newly escaped
-            $matches = Strings::match($string->value, '#\\\\|\$#sim');
+            $matches = Strings::match($string->value, self::ESCAPED_CHAR_REGEX);
             if ($matches) {
                 return;
             }

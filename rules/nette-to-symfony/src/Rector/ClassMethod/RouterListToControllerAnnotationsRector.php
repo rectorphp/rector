@@ -33,6 +33,8 @@ use ReflectionMethod;
  */
 final class RouterListToControllerAnnotationsRector extends AbstractRector
 {
+    private const ACTION_RENDER_NAME_MATCHING_REGEX = '#^(action|render)(?<short_action_name>.*?$)#sm';
+
     /**
      * @var RouteInfoFactory
      */
@@ -328,7 +330,7 @@ CODE_SAMPLE
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
         $presenterPart = StaticRectorStrings::camelCaseToDashes($presenterPart);
 
-        $match = (array) Strings::match($this->getName($classMethod), '#^(action|render)(?<short_action_name>.*?$)#sm');
+        $match = (array) Strings::match($this->getName($classMethod), self::ACTION_RENDER_NAME_MATCHING_REGEX);
         $actionPart = lcfirst($match['short_action_name']);
 
         return $presenterPart . '/' . $actionPart;

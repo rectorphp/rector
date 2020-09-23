@@ -20,6 +20,18 @@ use Rector\Renaming\ValueObject\RenameAnnotation;
 
 final class DocBlockManipulator
 {
+    public const SPACE_OR_ASTERISK_REGEX = '#(\s|\*)+#';
+
+    /**
+     * @var string
+     */
+    private const NEWLINE_CLOSING_DOC_REGEX = "#\n \*\/$#";
+
+    /**
+     * @var string
+     */
+    private const NEWLINE_MIDDLE_DOC_REGEX = "#\n \* #";
+
     /**
      * @var PhpDocInfoPrinter
      */
@@ -173,9 +185,9 @@ final class DocBlockManipulator
 
     private function inlineDocContent(string $docContent): string
     {
-        $docContent = Strings::replace($docContent, "#\n \* #", ' ');
+        $docContent = Strings::replace($docContent, self::NEWLINE_MIDDLE_DOC_REGEX, ' ');
 
-        return Strings::replace($docContent, "#\n \*\/$#", ' */');
+        return Strings::replace($docContent, self::NEWLINE_CLOSING_DOC_REGEX, ' */');
     }
 
     /**
@@ -202,6 +214,6 @@ final class DocBlockManipulator
 
     private function removeSpacesAndAsterisks(string $content): string
     {
-        return Strings::replace($content, '#(\s|\*)+#');
+        return Strings::replace($content, self::SPACE_OR_ASTERISK_REGEX);
     }
 }

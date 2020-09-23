@@ -18,6 +18,12 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class UseClassKeywordForClassNameResolutionRector extends AbstractRector
 {
+    /**
+     * @var string
+     * @see https://regex101.com/r/Vv41Qr/1/
+     */
+    private const CLASS_BEFORE_STATIC_ACCESS_REGEX = '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -68,8 +74,7 @@ CODE_SAMPLE
      */
     public function getExistingClasses(String_ $string): array
     {
-        // @see https://regex101.com/r/Vv41Qr/1/
-        $matches = Strings::matchAll($string->value, '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#', PREG_PATTERN_ORDER);
+        $matches = Strings::matchAll($string->value, self::CLASS_BEFORE_STATIC_ACCESS_REGEX, PREG_PATTERN_ORDER);
 
         return array_filter($matches[1], function (string $className): bool {
             return class_exists($className);

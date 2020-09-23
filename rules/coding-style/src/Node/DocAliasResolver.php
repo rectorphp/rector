@@ -16,6 +16,11 @@ use Rector\PHPStan\Type\AliasedObjectType;
 final class DocAliasResolver
 {
     /**
+     * @var string
+     */
+    private const DOC_ALIAS_REGEX = '#\@(?<possible_alias>\w+)(\\\\)?#s';
+
+    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -47,7 +52,7 @@ final class DocAliasResolver
             }
 
             // e.g. "use Dotrine\ORM\Mapping as ORM" etc.
-            $matches = Strings::matchAll($node->getDocComment()->getText(), '#\@(?<possible_alias>\w+)(\\\\)?#s');
+            $matches = Strings::matchAll($node->getDocComment()->getText(), self::DOC_ALIAS_REGEX);
             foreach ($matches as $match) {
                 $possibleDocAliases[] = $match['possible_alias'];
             }

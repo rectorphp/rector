@@ -9,6 +9,8 @@ use Rector\PhpAttribute\Collector\PlaceholderToValueCollector;
 
 final class ContentPhpAttributePlaceholderReplacer
 {
+    public const ATTRIBUTE_END_REGEX = '#>>\n\n#';
+
     /**
      * @var PlaceholderToValueCollector
      */
@@ -39,7 +41,7 @@ final class ContentPhpAttributePlaceholderReplacer
         }
 
         // remove extra newline between attributes and node
-        return Strings::replace($content, '#>>\n\n#', '>>' . PHP_EOL);
+        return Strings::replace($content, self::ATTRIBUTE_END_REGEX, '>>' . PHP_EOL);
     }
 
     private function addLeftIndent(string $content, string $quotedPlaceholder, string $value): string

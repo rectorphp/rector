@@ -27,6 +27,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ShortNameResolver
 {
     /**
+     * @var string
+     */
+    private const BIG_LETTER_START_REGEX = '#^[A-Z]#';
+
+    /**
      * @var string[][]
      */
     private $shortNamesByFilePath = [];
@@ -193,7 +198,7 @@ final class ShortNameResolver
         $tagName = ltrim($phpDocChildNode->name, '@');
 
         // is annotation class - big letter?
-        if (Strings::match($tagName, '#^[A-Z]#')) {
+        if (Strings::match($tagName, self::BIG_LETTER_START_REGEX)) {
             return $tagName;
         }
 

@@ -14,6 +14,16 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class RegexMatcher
 {
     /**
+     * @var string
+     */
+    private const LAST_E_REGEX = '#(\w+)?e(\w+)?$#';
+
+    /**
+     * @var string
+     */
+    private const LETTER_SUFFIX_REGEX = '#(?<modifiers>\w+)$#';
+
+    /**
      * @var ValueResolver
      */
     private $valueResolver;
@@ -68,7 +78,7 @@ final class RegexMatcher
             return null;
         }
 
-        $matches = Strings::match($lastItem->value, '#(?<modifiers>\w+)$#');
+        $matches = Strings::match($lastItem->value, self::LETTER_SUFFIX_REGEX);
         if (! isset($matches['modifiers'])) {
             return null;
         }
@@ -78,7 +88,7 @@ final class RegexMatcher
         }
 
         // replace last "e" in the code
-        $lastItem->value = Strings::replace($lastItem->value, '#(\w+)?e(\w+)?$#', '$1$2');
+        $lastItem->value = Strings::replace($lastItem->value, self::LAST_E_REGEX, '$1$2');
 
         return $expr;
     }

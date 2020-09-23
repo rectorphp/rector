@@ -23,6 +23,11 @@ use ReflectionClass;
 final class DoctrineDocBlockResolver
 {
     /**
+     * @var string
+     */
+    private const ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX = '#@ORM\\\\(Entity|Embeddable)#';
+
+    /**
      * @var ParsedNodeCollector
      */
     private $parsedNodeCollector;
@@ -142,7 +147,7 @@ final class DoctrineDocBlockResolver
         // dummy check of 3rd party code without running it
         $docCommentContent = (string) $reflectionClass->getDocComment();
 
-        return (bool) Strings::match($docCommentContent, '#@ORM\\\\(Entity|Embeddable)#');
+        return (bool) Strings::match($docCommentContent, self::ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX);
     }
 
     private function hasPropertyDoctrineIdTag(Property $property): bool

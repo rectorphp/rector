@@ -16,6 +16,8 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class MultilineSpaceFormatPreserver
 {
+    public const NEWLINE_WITH_SPACE_REGEX = '#\n {1,}$#s';
+
     public function resolveCurrentPhpDocNodeText(Node $node): ?string
     {
         if ($node instanceof PhpDocTagNode &&
@@ -88,7 +90,7 @@ final class MultilineSpaceFormatPreserver
         foreach ($newParts as $key => $newPart) {
             $newText .= $newPart;
             if (isset($oldSpaces[$key])) {
-                if (Strings::match($oldSpaces[$key][0], '#\n {1,}$#s')) {
+                if (Strings::match($oldSpaces[$key][0], self::NEWLINE_WITH_SPACE_REGEX)) {
                     // remove last extra space
                     $oldSpaces[$key][0] = Strings::substring($oldSpaces[$key][0], 0, -1);
                 }

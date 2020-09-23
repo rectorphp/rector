@@ -26,10 +26,32 @@ use Rector\Core\Exception\ShouldNotHappenException;
  */
 final class PhpDocInfoPrinter
 {
+    public const CLOSING_DOCBLOCK_REGEX = '#\*\/(\s+)?$#';
+
     /**
      * @var string
      */
     private const NEWLINE_ASTERISK = PHP_EOL . ' * ';
+
+    /**
+     * @var string
+     */
+    private const OPENING_DOCBLOCK_REGEX = '#^(/\*\*)#';
+
+    /**
+     * @var string
+     */
+    private const CALLABLE_REGEX = '#callable(\s+)\(#';
+
+    /**
+     * @var string
+     */
+    private const DOCBLOCK_START_REGEX = '#^(\/\/|\/\*\*|\/\*|\#)#';
+
+    /**
+     * @var string
+     */
+    private const SPACE_AFTER_ASTERISK_REGEX = '#([^*])\*[ \t]+$#sm';
 
     /**
      * @var int
@@ -127,7 +149,7 @@ final class PhpDocInfoPrinter
         $phpDocString = $this->removeExtraSpacesAfterAsterisk($phpDocString);
 
         // hotfix of extra space with callable ()
-        return Strings::replace($phpDocString, '#callable(\s+)\(#', 'callable(');
+        return Strings::replace($phpDocString, self::CALLABLE_REGEX, 'callable(');
     }
 
     private function printPhpDocNode(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): string
@@ -151,12 +173,15 @@ final class PhpDocInfoPrinter
         $output = $this->printEnd($output);
 
         // fix missing start
-        if (! Strings::match($output, '#^(\/\/|\/\*\*|\/\*|\#)#') && $output) {
+        if (! Strings::match($output, self::DOCBLOCK_START_REGEX) && $output) {
             $output = '/**' . $output;
         }
 
         // fix missing end
-        if (Strings::match($output, '#^(/\*\*)#') && $output && ! Strings::match($output, '#\*\/(\s+)?$#')) {
+        if (Strings::match($output, self::OPENING_DOCBLOCK_REGEX) && $output && ! Strings::match(
+            $output,
+            self::CLOSING_DOCBLOCK_REGEX
+        )) {
             $output .= ' */';
         }
 
@@ -165,7 +190,7 @@ final class PhpDocInfoPrinter
 
     private function removeExtraSpacesAfterAsterisk(string $phpDocString): string
     {
-        return Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
+        return Strings::replace($phpDocString, self::SPACE_AFTER_ASTERISK_REGEX, '$1*');
     }
 
     private function printNode(
