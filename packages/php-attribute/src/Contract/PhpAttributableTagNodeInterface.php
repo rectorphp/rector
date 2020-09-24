@@ -6,7 +6,10 @@ namespace Rector\PhpAttribute\Contract;
 
 interface PhpAttributableTagNodeInterface
 {
-    public function toAttributeString(): string;
+    public function getShortName(): string;
 
-    public function printPhpAttributeItems(array $items): string;
+    /**
+     * @return mixed[]
+     */
+    public function getAttributableItems(): array;
 }

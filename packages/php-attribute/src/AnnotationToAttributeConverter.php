@@ -5,33 +5,31 @@ declare(strict_types=1);
 namespace Rector\PhpAttribute;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\Printer\PlaceholderNodeFactory;
-use Rector\PostRector\Collector\NodesToAddCollector;
+use Rector\PhpAttribute\Printer\PhpAttributteGroupFactory;
 
 final class AnnotationToAttributeConverter
 {
     /**
-     * @var NodesToAddCollector
+     * @var PhpAttributteGroupFactory
      */
-    private $nodesToAddCollector;
-
-    /**
-     * @var PlaceholderNodeFactory
-     */
-    private $placeholderNodeFactory;
+    private $phpAttributableTagNodeToAttributeGroupsConverter;
 
     public function __construct(
-        NodesToAddCollector $nodesToAddCollector,
-        PlaceholderNodeFactory $placeholderNodeFactory
+        PhpAttributteGroupFactory $phpAttributableTagNodeToAttributeGroupsConverter
     ) {
-        $this->nodesToAddCollector = $nodesToAddCollector;
-        $this->placeholderNodeFactory = $placeholderNodeFactory;
+        $this->phpAttributableTagNodeToAttributeGroupsConverter = $phpAttributableTagNodeToAttributeGroupsConverter;
     }
 
+    /**
+     * @param Class_|ClassMethod|Property $node
+     */
     public function convertNode(Node $node): ?Node
     {
         /** @var PhpDocInfo|null $phpDocInfo */
@@ -53,8 +51,7 @@ final class AnnotationToAttributeConverter
         }
 
         // 2. convert annotations to attributes
-        $placeholderNop = $this->placeholderNodeFactory->create($phpAttributableTagNodes);
-        $this->nodesToAddCollector->addNodeBeforeNode($placeholderNop, $node);
+        $node->attrGroups = $this->phpAttributableTagNodeToAttributeGroupsConverter->create($phpAttributableTagNodes);
 
         return $node;
     }

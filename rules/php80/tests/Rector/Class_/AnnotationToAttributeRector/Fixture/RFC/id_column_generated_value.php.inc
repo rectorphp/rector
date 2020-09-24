@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 class IdColumnGeneratedvalue
 {
     /**
-     * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
@@ -24,9 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 class IdColumnGeneratedvalue
 {
-    <<ORM\Id>>
-    <<ORM\Column("integer")>>
-    <<ORM\GeneratedValue>>
+    #[@ORM\Column(['type' => 'integer'])]
+    #[@ORM\GeneratedValue]
     public $name;
 }
 

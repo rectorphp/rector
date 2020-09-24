@@ -64,6 +64,22 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $this->items[$key] = $value;
     }
 
+    /**
+     * @param mixed[] $contentItems
+     * @return mixed[]
+     */
+    public function filterOutMissingItems(array $contentItems): array
+    {
+        if ($this->tagValueNodeConfiguration->getOrderedVisibleItems() === null) {
+            return $contentItems;
+        }
+
+        return ArrayItemStaticHelper::filterAndSortVisibleItems(
+            $contentItems,
+            $this->tagValueNodeConfiguration->getOrderedVisibleItems()
+        );
+    }
+
     protected function printItems(array $items): string
     {
         $items = $this->completeItemsQuotes($items);
@@ -152,21 +168,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $this->tagValueNodeConfiguration = $tagValueNodeConfigurationFactory->createFromOriginalContent(
             $originalContent,
             $this
-        );
-    }
-
-    /**
-     * @return mixed[]|string[]
-     */
-    protected function filterOutMissingItems(array $contentItems): array
-    {
-        if ($this->tagValueNodeConfiguration->getOrderedVisibleItems() === null) {
-            return $contentItems;
-        }
-
-        return ArrayItemStaticHelper::filterAndSortVisibleItems(
-            $contentItems,
-            $this->tagValueNodeConfiguration->getOrderedVisibleItems()
         );
     }
 

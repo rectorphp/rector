@@ -7,12 +7,9 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
 
 final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implements TagAwareNodeInterface, PhpAttributableTagNodeInterface
 {
-    use PhpAttributePhpDocNodePrintTrait;
-
     /**
      * @var string
      */
@@ -55,29 +52,11 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
         $this->shortName = $shortName;
     }
 
-    public function toAttributeString(): string
-    {
-        return $this->printItemsToAttributeString($this->createAttributeItems());
-    }
-
     /**
      * @return mixed[]
      */
-    private function createAttributeItems(): array
+    public function getAttributableItems(): array
     {
-        $items = $this->items;
-
-        // specific for attributes
-        foreach ($items as $key => $value) {
-            if ($key !== 'unique') {
-                continue;
-            }
-            if ($value !== true) {
-                continue;
-            }
-            $items[$key] = 'ORM\JoinColumn::UNIQUE';
-        }
-
-        return $items;
+        return $this->filterOutMissingItems($this->items);
     }
 }
