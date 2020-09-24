@@ -14,14 +14,14 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\RenameProperty;
-use function Rector\SymfonyPhpConfig\inline_value_object;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenamePropertyRector::class)
-        ->call('configure', [[RenamePropertyRector::RENAMED_PROPERTIES => [inline_value_object(new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty'))]]]);
+        ->call('configure', [[RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')])]]);
 };
 ```
 

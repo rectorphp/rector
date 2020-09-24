@@ -16,7 +16,7 @@
         "doctrine/annotations": "^1.10.4",
         "doctrine/inflector": "^1.4|^2.0",
         "jean85/pretty-package-versions": "^1.5.1",
-        "migrify/php-config-printer": "^0.3.43",
+        "migrify/php-config-printer": "^0.3.44",
         "nette/robot-loader": "^3.2",
         "nette/utils": "^3.1",
         "nikic/php-parser": "4.10.1",
@@ -285,7 +285,7 @@
         ],
         "check-cs": [
             "vendor/bin/ecs check --ansi",
-            "vendor/bin/ecs check-markdown README.md --ansi"
+            "vendor/bin/ecs check-markdown README.md docs/rector_rules_overview.md --ansi"
         ],
         "fix-cs": [
             "vendor/bin/ecs check --fix --ansi",

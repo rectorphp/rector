@@ -6,6 +6,7 @@ namespace Rector\DocumentationGenerator\Tests\Printer\RectorsDocumentationPrinte
 
 use Iterator;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\DocumentationGenerator\Printer\RectorsDocumentationPrinter;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
@@ -64,7 +65,10 @@ final class RectorsDocumentationPrinterTest extends AbstractKernelTestCase
         foreach ($rectorClasses as $rectorClass) {
             $reflectionClass = new ReflectionClass($rectorClass);
             $rector = $reflectionClass->newInstanceWithoutConstructor();
-            /** @var RectorInterface $rector */
+            if (! $rector instanceof RectorInterface) {
+                throw new ShouldNotHappenException();
+            }
+
             $rectors[] = $rector;
         }
 
