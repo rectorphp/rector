@@ -109,12 +109,7 @@ CODE_SAMPLE
     private function isFoundInParentNode(Variable $variable): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        /** @phpstan-ignore-next-line */
-        while (! $parentNode instanceof ClassMethod || ! $parentNode instanceof Function_) {
-            if ($parentNode === null) {
-                break;
-            }
-
+        while ($parentNode) {
             /** @var ClassMethod|Function_ $parentNode */
             $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
