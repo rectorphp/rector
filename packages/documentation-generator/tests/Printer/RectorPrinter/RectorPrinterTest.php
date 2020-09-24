@@ -35,8 +35,8 @@ final class RectorPrinterTest extends AbstractKernelTestCase
         /** @var RectorInterface $rector */
         $rector = $reflectionClass->newInstanceWithoutConstructor();
 
-        $printedRector = $this->rectorPrinter->printRector($rector, false);
-        $this->assertStringEqualsFile($expectedContentFilePath, $printedRector);
+        $printedContent = $this->rectorPrinter->printRector($rector, false);
+        $this->assertStringEqualsFile($expectedContentFilePath, $printedContent);
     }
 
     public function provideData(): Iterator

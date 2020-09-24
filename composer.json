@@ -15,7 +15,8 @@
         "composer/xdebug-handler": "^1.4",
         "doctrine/annotations": "^1.10.4",
         "doctrine/inflector": "^1.4|^2.0",
-        "migrify/php-config-printer": "^0.3.31",
+        "jean85/pretty-package-versions": "^1.5.1",
+        "migrify/php-config-printer": "^0.3.44",
         "nette/robot-loader": "^3.2",
         "nette/utils": "^3.1",
         "nikic/php-parser": "4.10.1",
@@ -37,8 +38,7 @@
         "symplify/set-config-resolver": "^8.3.17",
         "symplify/smart-file-system": "^8.3.17",
         "tracy/tracy": "^2.7",
-        "webmozart/assert": "^1.8",
-        "jean85/pretty-package-versions": "^1.5.1"
+        "webmozart/assert": "^1.8"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
@@ -285,11 +285,11 @@
         ],
         "check-cs": [
             "vendor/bin/ecs check --ansi",
-            "vendor/bin/ecs check-markdown README.md --ansi"
+            "vendor/bin/ecs check-markdown README.md docs/rector_rules_overview.md --ansi"
         ],
         "fix-cs": [
             "vendor/bin/ecs check --fix --ansi",
-            "vendor/bin/ecs check-markdown README.md --fix --ansi"
+            "vendor/bin/ecs check-markdown README.md docs/rector_rules_overview.md --fix --ansi"
         ],
         "phpstan": [
             "vendor/bin/phpstan analyse --ansi --error-format symplify",
@@ -304,7 +304,7 @@
             "vendor/bin/changelog-linker cleanup --ansi"
         ],
         "docs": [
-            "bin/rector dump-rectors > docs/rector_rules_overview.md",
+            "bin/rector dump-rectors --output-file docs/rector_rules_overview.md --ansi",
             "bin/rector dump-nodes > docs/nodes_overview.md"
         ],
         "rector-ci": "bin/rector process --config rector-ci.php --dry-run --ansi",

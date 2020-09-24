@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Console\Command;
 
 use Nette\Utils\Strings;
+use Rector\Core\Configuration\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Descriptor\TextDescriptor;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -53,7 +54,7 @@ abstract class AbstractCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        if ($input->getOption('debug')) {
+        if ($input->getOption(Option::OPTION_DEBUG)) {
             if ($this->getApplication() === null) {
                 return;
             }

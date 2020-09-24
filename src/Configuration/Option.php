@@ -144,15 +144,15 @@ final class Option
     /**
      * @var string
      */
-    public const RECTOR_RECIPE = 'rector_recipe';
-
-    /**
-     * @var string
-     */
     public const NESTED_CHAIN_METHOD_CALL_LIMIT = 'nested_chain_method_call_limit';
 
     /**
      * @var string
      */
     public const CACHE_DIR = 'cache_dir';
+
+    /**
+     * @var string
+     */
+    public const OPTION_DEBUG = 'debug';
 }

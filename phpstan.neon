@@ -9,6 +9,22 @@ includes:
     - vendor/symplify/coding-standard/config/symplify-rules.neon
 
 services:
+    # require constant in argument position
+    -
+        class: Symplify\CodingStandard\Rules\ForceMethodCallArgumentConstantRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            constantArgByMethodByType:
+                Symfony\Component\Console\Command\Command:
+                    addArgument: [0]
+                    addOption: [0]
+                Symfony\Component\Console\Input\InputInterface:
+                    getOption: [0]
+                    getArgument: [0]
+                PhpParser\Node:
+                    getAttribute: [0]
+                    setAttribute: [0]
+
     -
         class: Symplify\CodingStandard\Rules\SeeAnnotationToTestRule
         tags: [phpstan.rules.rule]
@@ -495,3 +511,12 @@ parameters:
             message: '#Instead of "Symfony\\Component\\Finder\\SplFileInfo" class/interface use "Symplify\\SmartFileSystem\\SmartFileInfo"#'
             paths:
                 - src/FileSystem/FilesFinder.php
+
+        # @todo fix in symplify
+        -
+            message: '#Method call argument on position 0 must use constant over value#'
+            path: 'src/Rector/AbstractRector.php'
+
+        - '#Method Rector\\DocumentationGenerator\\Tests\\Printer\\RectorsDocumentationPrinter\\RectorsDocumentationPrinterTest\:\:createRectorsFromRectorClasses\(\) should return array<Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<int, object\>#'
+
+        - '#Parameter \#1 \$rectors of method Rector\\DocumentationGenerator\\Printer\\RectorsDocumentationPrinter\:\:print\(\) expects array<Rector\\Core\\Contract\\Rector\\RectorInterface\>, array<object\> given#'

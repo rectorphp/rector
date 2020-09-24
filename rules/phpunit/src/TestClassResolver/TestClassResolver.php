@@ -8,6 +8,9 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeNameResolver\NodeNameResolver;
 
+/**
+ * @see \Rector\PHPUnit\Tests\TestClassResolver\TestClassResolverTest
+ */
 final class TestClassResolver
 {
     /**

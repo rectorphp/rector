@@ -7,6 +7,7 @@ namespace Rector\Core\PhpParser\NodeTraverser;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
+use Rector\Core\Application\ActiveRectorsProvider;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
@@ -26,14 +27,14 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     private $enabledRectorsProvider;
 
-    /**
-     * @param PhpRectorInterface[] $phpRectors
-     */
     public function __construct(
         EnabledRectorsProvider $enabledRectorsProvider,
         Configuration $configuration,
-        array $phpRectors = []
+        ActiveRectorsProvider $activeRectorsProvider
     ) {
+        /** @var PhpRectorInterface[] $phpRectors */
+        $phpRectors = $activeRectorsProvider->provideByType(PhpRectorInterface::class);
+
         $this->allPhpRectors = $phpRectors;
         $this->enabledRectorsProvider = $enabledRectorsProvider;
 

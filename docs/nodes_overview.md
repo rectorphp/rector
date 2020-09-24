@@ -215,6 +215,7 @@ fn() => 1
  * `$params` - `/** @var Node\Param[] */`
  * `$returnType` - `/** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType */`
  * `$expr` - `/** @var Expr */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] */`
 
 <br>
 
@@ -2219,13 +2220,13 @@ use PhpParser\Node\Expr\Variable;
 
 $variable = new Variable('variableName');
 
-return new Include_($variable, Include_::TYPE_REQUIRE_ONCE);
+return new Include_($variable, Include_::TYPE_INCLUDE);
 ```
 
 ↓
 
 ```php
-require_once $variableName
+include $variableName
 ```
 
 <br>
@@ -2240,13 +2241,13 @@ use PhpParser\Node\Expr\Variable;
 
 $variable = new Variable('variableName');
 
-return new Include_($variable, Include_::TYPE_INCLUDE);
+return new Include_($variable, Include_::TYPE_REQUIRE_ONCE);
 ```
 
 ↓
 
 ```php
-include $variableName
+require_once $variableName
 ```
 
 <br>
@@ -2480,27 +2481,6 @@ $someObject->methodName('yes', 'maybe')
 
 declare(strict_types=1);
 
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name;
-
-$class = new Name('SomeClass');
-
-return new New_($class);
-```
-
-↓
-
-```php
-new SomeClass()
-```
-
-<br>
-
-```php
-<?php
-
-declare(strict_types=1);
-
 // anonymous class
 
 use PhpParser\Node\Expr\New_;
@@ -2517,6 +2497,27 @@ return new New_($class);
 new class
 {
 }
+```
+
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name;
+
+$class = new Name('SomeClass');
+
+return new New_($class);
+```
+
+↓
+
+```php
+new SomeClass()
 ```
 
 <br>
@@ -3324,6 +3325,7 @@ $variableName
  * `$var` - `/** @var Expr\Variable|Expr\Error Parameter variable */`
  * `$default` - `/** @var null|Expr Default value */`
  * `$flags` - `/** @var int */`
+ * `$attrGroups` - `/** @var AttributeGroup[] PHP attribute groups */`
 
 <br>
 
@@ -3586,6 +3588,7 @@ public const SOME_CLASS_CONSTANT = 'default value';
 
  * `$flags` - `/** @var int Modifiers */`
  * `$consts` - `/** @var Node\Const_[] Constant declarations */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] */`
 
 <br>
 
@@ -3658,6 +3661,7 @@ private function methodName($paramName): string
  * `$params` - `/** @var Node\Param[] Parameters */`
  * `$returnType` - `/** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType Return type */`
  * `$stmts` - `/** @var Node\Stmt[]|null Statements */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
  * `$magicNames` - ``
 
 <br>
@@ -3666,6 +3670,26 @@ private function methodName($paramName): string
 
 
 ### Example PHP Code
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use PhpParser\Node\Stmt\Class_;
+
+return new Class_('ClassName');
+```
+
+↓
+
+```php
+class ClassName
+{
+}
+```
+
+<br>
 
 ```php
 <?php
@@ -3693,26 +3717,6 @@ final class ClassName extends \ParentClass
 
 <br>
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use PhpParser\Node\Stmt\Class_;
-
-return new Class_('ClassName');
-```
-
-↓
-
-```php
-class ClassName
-{
-}
-```
-
-<br>
-
 
 ### Public Properties
 
@@ -3721,6 +3725,7 @@ class ClassName
  * `$implements` - `/** @var Node\Name[] Names of implemented interfaces */`
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
 
 <br>
 
@@ -4005,6 +4010,7 @@ function some_function()
  * `$params` - `/** @var Node\Param[] Parameters */`
  * `$returnType` - `/** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType Return type */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
 
 <br>
 
@@ -4238,6 +4244,7 @@ interface InterfaceName
  * `$extends` - `/** @var Node\Name[] Extended interfaces */`
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
 
 <br>
 
@@ -4350,6 +4357,7 @@ public static $firstProperty, $secondProperty;
  * `$flags` - `/** @var int Modifiers */`
  * `$props` - `/** @var PropertyProperty[] Properties */`
  * `$type` - `/** @var null|Identifier|Name|NullableType|UnionType Type declaration */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
 
 <br>
 
@@ -4659,6 +4667,7 @@ trait TraitName
 
  * `$name` - `/** @var Node\Identifier|null Name */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
+ * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
 
 <br>
 
