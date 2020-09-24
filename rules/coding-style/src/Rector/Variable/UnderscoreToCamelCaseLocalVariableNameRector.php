@@ -9,6 +9,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -71,16 +73,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Param || $parentNode instanceof Arg) {
-            return null;
-        }
-
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousNode instanceof Variable) {
-            return null;
-        }
-
         $nodeName = $this->getName($node);
         if ($nodeName === null) {
             return null;
@@ -99,8 +91,49 @@ CODE_SAMPLE
             return null;
         }
 
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (($parentNode instanceof Arg || $parentNode instanceof Param) && $this->isFoundInParentNode($node)) {
+            return null;
+        }
+
+        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($previousNode instanceof Variable && $this->isFoundInParentNode($node)) {
+            return null;
+        }
+
         $node->name = $camelCaseName;
 
         return $node;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function isFoundInParentNode(Variable $node): bool
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        while (! $parentNode instanceof ClassMethod || ! $parentNode instanceof Function_) {
+            if ($parentNode === null) {
+                break;
+            }
+
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
+                break;
+            }
+        }
+
+        if ($parentNode === null) {
+            return false;
+        }
+
+        $params = $parentNode->getParams();
+        foreach ($params as $param) {
+            if ($param->var->name === $node->name) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
