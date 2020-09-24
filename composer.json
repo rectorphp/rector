@@ -308,7 +308,8 @@
             "bin/rector dump-nodes > docs/nodes_overview.md"
         ],
         "rector-ci": "bin/rector process --config rector-ci.php --dry-run --ansi",
-        "rector": "bin/rector process --config rector-ci.php --ansi"
+        "rector": "bin/rector process --config rector-ci.php --ansi",
+        "release": "vendor/bin/monorepo-builder release patch --ansi"
     },
     "config": {
         "sort-packages": true
