@@ -6,6 +6,7 @@ namespace Rector\Naming;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
@@ -61,7 +62,7 @@ final class PropertyRenamer
 
     public function setConflictingNameResolver(ConflictingNameResolverInterface $conflictingNameResolver): void
     {
-        $this->breakingVariableRenameGuard->setConflictingNameResolver($conflictingNameResolver);
+        $this->breakingVariableRenameGuard->setInjectedConflictingNameResolver($conflictingNameResolver);
     }
 
     private function areNamesDifferent(PropertyRename $propertyRename): bool
@@ -74,14 +75,23 @@ final class PropertyRenamer
         // 1. replace property fetch rename in whole class
         $this->callableNodeTraverser->traverseNodesWithCallable(
             [$propertyRename->getClassLike()],
-            function (Node $node) use ($propertyRename): ?PropertyFetch {
-                if (! $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyRename->getCurrentName())) {
-                    return null;
+            function (Node $node) use ($propertyRename): ?Node {
+                if ($this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyRename->getCurrentName())) {
+                    /** @var PropertyFetch $node */
+                    $node->name = new Identifier($propertyRename->getExpectedName());
+                    return $node;
                 }
 
-                /** @var PropertyFetch $node */
-                $node->name = new Identifier($propertyRename->getExpectedName());
-                return $node;
+                if ($this->nodeNameResolver->isLocalStaticPropertyFetchNamed(
+                    $node,
+                    $propertyRename->getCurrentName()
+                )) {
+                    /** @var StaticPropertyFetch $node */
+                    $node->name = new VarLikeIdentifier($propertyRename->getExpectedName());
+                    return $node;
+                }
+
+                return null;
             }
         );
     }

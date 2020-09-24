@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Property;
 
 interface ExpectedNameResolverInterface
 {
-    public function resolveIfNotYet(Property $property);
+    public function resolveIfNotYet(Property $property): ?string;
 
-    public function resolve(Property $property);
+    public function resolve(Property $property): ?string;
 }

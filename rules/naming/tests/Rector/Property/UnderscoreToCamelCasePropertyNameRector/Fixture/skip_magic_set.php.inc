@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Property\UnderscoreToCamelCasePropertyNameRector\Fixture;
 
 class SkipMagicSet
 {

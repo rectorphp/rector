@@ -10,6 +10,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FileSystemRector\Parser\FileInfoParser;
+use Rector\Naming\ExpectedNameResolver\FromPropertyTypeExpectedNameResolver;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
@@ -37,6 +38,8 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
         $this->bootKernel(RectorKernel::class);
 
         $this->propertyRenameFactory = self::$container->get(PropertyRenameFactory::class);
+        $fromPropertyTypeExpectedNameResolver = self::$container->get(FromPropertyTypeExpectedNameResolver::class);
+        $this->propertyRenameFactory->setExpectedNameResolver($fromPropertyTypeExpectedNameResolver);
         $this->fileInfoParser = self::$container->get(FileInfoParser::class);
         $this->betterNodeFinder = self::$container->get(BetterNodeFinder::class);
     }

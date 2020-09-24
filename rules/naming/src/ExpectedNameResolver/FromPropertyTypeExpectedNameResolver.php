@@ -11,7 +11,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 class FromPropertyTypeExpectedNameResolver extends AbstractExpectedNameResolver
 {
-    public function resolveIfNotYet(Property $property)
+    public function resolveIfNotYet(Property $property): ?string
     {
         $expectedName = $this->resolve($property);
         if ($expectedName === null) {
@@ -31,7 +31,7 @@ class FromPropertyTypeExpectedNameResolver extends AbstractExpectedNameResolver
         return $expectedName;
     }
 
-    public function resolve(Property $property)
+    public function resolve(Property $property): ?string
     {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
