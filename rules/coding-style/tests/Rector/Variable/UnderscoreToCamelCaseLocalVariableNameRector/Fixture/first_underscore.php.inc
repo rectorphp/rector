@@ -16,7 +16,7 @@ namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVar
 
 final class FirstUnderscore
 {
-    public function run($a)
+    public function run($_a)
     {
         $someValue = $_a;
     }

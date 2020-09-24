@@ -17,7 +17,7 @@ namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVar
 
 final class ParamAssignReturn
 {
-    public function run($a)
+    public function run($_a)
     {
         $someValue = $_a;
         return $someValue;
