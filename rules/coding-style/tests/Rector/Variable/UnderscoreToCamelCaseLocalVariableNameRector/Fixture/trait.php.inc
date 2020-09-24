@@ -10,6 +10,13 @@ trait SomeTrait
 
         $this->run($a_b);
     }
+
+    public function execute()
+    {
+        $some_value = 5;
+
+        $this->run($some_value);
+    }
 }
 
 ?>
@@ -25,6 +32,13 @@ trait SomeTrait
         $someValue = 5;
 
         $this->run($a_b);
+    }
+
+    public function execute()
+    {
+        $someValue = 5;
+
+        $this->run($someValue);
     }
 }
 
