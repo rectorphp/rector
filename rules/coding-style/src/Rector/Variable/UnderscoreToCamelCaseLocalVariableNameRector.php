@@ -106,9 +106,9 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isFoundInParentNode(Variable $node): bool
+    private function isFoundInParentNode(Variable $variable): bool
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         /** @phpstan-ignore-next-line */
         while (! $parentNode instanceof ClassMethod || ! $parentNode instanceof Function_) {
             if ($parentNode === null) {
@@ -128,7 +128,7 @@ CODE_SAMPLE
 
         $params = $parentNode->getParams();
         foreach ($params as $param) {
-            if ($param->var->name === $node->name) {
+            if ($param->var->name === $variable->name) {
                 return true;
             }
         }
