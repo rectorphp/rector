@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -72,7 +73,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Param || $parentNode instanceof Arg) {
+        if ($parentNode instanceof Param || $parentNode instanceof Arg || $parentNode instanceof Return_) {
             return null;
         }
 
