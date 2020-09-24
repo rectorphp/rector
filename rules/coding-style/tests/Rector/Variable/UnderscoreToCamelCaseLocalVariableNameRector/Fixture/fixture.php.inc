@@ -1,0 +1,31 @@
+<?php
+
+namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
+
+final class SomeClass
+{
+    public function run($a_b)
+    {
+        $some_value = 5;
+
+        $this->run($a_b);
+    }
+}
+
+?>
+-----
+<?php
+
+namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
+
+final class SomeClass
+{
+    public function run($a_b)
+    {
+        $someValue = 5;
+
+        $this->run($a_b);
+    }
+}
+
+?>
