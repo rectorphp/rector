@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
@@ -98,6 +99,10 @@ CODE_SAMPLE
 
         $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         if ($previousNode instanceof Variable && $this->isFoundInParentNode($node)) {
+            return null;
+        }
+
+        if ($parentNode instanceof Stmt && $this->isFoundInParentNode($node)) {
             return null;
         }
 
