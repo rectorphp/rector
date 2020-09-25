@@ -46,7 +46,7 @@ final class RenameStaticMethod
 
     public function getNewClass(): string
     {
-        return '\\' . $this->newClass;
+        return $this->newClass;
     }
 
     public function getNewMethod(): string

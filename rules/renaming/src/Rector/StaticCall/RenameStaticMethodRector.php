@@ -96,7 +96,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
         $staticCall->name = new Identifier($renameStaticMethod->getNewMethod());
 
         if ($renameStaticMethod->hasClassChanged()) {
-            $staticCall->class = new Name($renameStaticMethod->getNewClass());
+            $staticCall->class = new Name('\\' . $renameStaticMethod->getNewClass());
         }
 
         return $staticCall;
