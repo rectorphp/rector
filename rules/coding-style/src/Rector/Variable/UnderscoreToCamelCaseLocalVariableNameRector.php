@@ -133,6 +133,7 @@ CODE_SAMPLE
 
         return false;
     }
+
     private function isFoundInPreviousOrNextNode(Variable $variable): bool
     {
         $previousNode = $variable->getAttribute(AttributeKey::PREVIOUS_NODE);
