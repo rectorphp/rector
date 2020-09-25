@@ -113,13 +113,13 @@ CODE_SAMPLE
     {
         $previousNode = $variable->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (($previousNode instanceof Variable || $previousNode instanceof PropertyFetch || $previousNode instanceof Expr)
-            && $this->isFoundInParentNode($node)) {
+            && $this->isFoundInParentNode($variable)) {
             return true;
         }
 
         $nextNode = $variable->getAttribute(AttributeKey::NEXT_NODE);
         if (($nextNode instanceof Variable || $nextNode instanceof PropertyFetch || $nextNode instanceof Expr)
-            && $this->isFoundInParentNode($node)) {
+            && $this->isFoundInParentNode($variable)) {
             return true;
         }
 
