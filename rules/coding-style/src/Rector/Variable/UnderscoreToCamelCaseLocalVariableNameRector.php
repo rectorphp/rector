@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Rector\Variable;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -19,7 +20,6 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use PhpParser\Node\Expr;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\UnderscoreToCamelCaseLocalVariableNameRectorTest
@@ -100,20 +100,30 @@ CODE_SAMPLE
             return null;
         }
 
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (($previousNode instanceof Variable || $previousNode instanceof PropertyFetch || $previousNode instanceof Expr)
-            && $this->isFoundInParentNode($node)) {
-            return null;
-        }
-
-        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if (($nextNode instanceof Variable || $nextNode instanceof PropertyFetch || $nextNode instanceof Expr) && $this->isFoundInParentNode($node)) {
+        if ($this->isFoundInPreviousOrNextNode($node)) {
             return null;
         }
 
         $node->name = $camelCaseName;
 
         return $node;
+    }
+
+    private function isFoundInPreviousOrNextNode(Variable $variable): bool
+    {
+        $previousNode = $variable->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if (($previousNode instanceof Variable || $previousNode instanceof PropertyFetch || $previousNode instanceof Expr)
+            && $this->isFoundInParentNode($node)) {
+            return true;
+        }
+
+        $nextNode = $variable->getAttribute(AttributeKey::NEXT_NODE);
+        if (($nextNode instanceof Variable || $nextNode instanceof PropertyFetch || $nextNode instanceof Expr)
+            && $this->isFoundInParentNode($node)) {
+            return true;
+        }
+
+        return false;
     }
 
     private function isFoundInParentNode(Variable $variable): bool
