@@ -6,12 +6,9 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
 
 final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface
 {
-    use PhpAttributePhpDocNodePrintTrait;
-
     public function changeType(string $type): void
     {
         $this->items['type'] = $type;
@@ -40,31 +37,11 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements P
         return $this->items['options'] ?? [];
     }
 
-    public function toAttributeString(): string
-    {
-        $items = $this->createAttributeItems();
-        return $this->printItemsToAttributeString($items);
-    }
-
     /**
      * @return mixed[]
      */
-    private function createAttributeItems(): array
+    public function getAttributableItems(): array
     {
-        $items = $this->items;
-
-        foreach ($items as $key => $value) {
-            if ($key !== 'unique') {
-                continue;
-            }
-
-            if ($value !== true) {
-                continue;
-            }
-
-            $items[$key] = 'ORM\Column::UNIQUE';
-        }
-
-        return $items;
+        return $this->filterOutMissingItems($this->items);
     }
 }

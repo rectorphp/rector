@@ -4,10 +4,10 @@ namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture\R
 
 use Doctrine\ORM\Mapping as ORM;
 
-class ManyToMany
+class JustId
 {
     /**
-     * @ORM\ManyToMany(targetEntity="Phonenumber")
+     * @ORM\Id
      */
     public $name;
 }
@@ -20,9 +20,9 @@ namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture\R
 
 use Doctrine\ORM\Mapping as ORM;
 
-class ManyToMany
+class JustId
 {
-    #[@ORM\ManyToMany(['targetEntity' => 'Phonenumber'])]
+    #[@ORM\Id]
     public $name;
 }
 

@@ -9,12 +9,9 @@ use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
 
 final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implements ToManyTagNodeInterface, MappedByNodeInterface, InversedByNodeInterface, PhpAttributableTagNodeInterface
 {
-    use PhpAttributePhpDocNodePrintTrait;
-
     /**
      * @var string
      */
@@ -75,19 +72,11 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
         return '@ORM\ManyToMany';
     }
 
-    public function toAttributeString(): string
-    {
-        return $this->printItemsToAttributeString($this->createAttributeItems());
-    }
-
     /**
      * @return mixed[]
      */
-    private function createAttributeItems(): array
+    public function getAttributableItems(): array
     {
-        $items = $this->items;
-        $items[self::TARGET_ENTITY] .= '::class';
-
-        return $items;
+        return $this->filterOutMissingItems($this->items);
     }
 }

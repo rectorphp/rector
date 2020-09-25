@@ -6,19 +6,19 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
 
 final class IdTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface
 {
-    use PhpAttributePhpDocNodePrintTrait;
-
     public function getShortName(): string
     {
         return '@ORM\Id';
     }
 
-    public function toAttributeString(): string
+    /**
+     * @return mixed[]
+     */
+    public function getAttributableItems(): array
     {
-        return $this->printItemsToAttributeString($this->items);
+        return $this->filterOutMissingItems($this->items);
     }
 }

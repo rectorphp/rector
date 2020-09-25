@@ -6,13 +6,11 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\OpeningAndClosingSpace;
+use Rector\PhpAttribute\Contract\ManyPhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
 
-final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface
+final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface, ManyPhpAttributableTagNodeInterface
 {
-    use PhpAttributePhpDocNodePrintTrait;
-
     /**
      * @var string
      */
@@ -88,25 +86,38 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         return '@ORM\JoinTable';
     }
 
-    public function toAttributeString(): string
+    /**
+     * @return mixed[]
+     */
+    public function getAttributableItems(): array
     {
-        $items = $this->createItems();
-        unset($items[self::JOIN_COLUMNS], $items[self::INVERSE_JOIN_COLUMNS]);
+        $items = [];
 
-        $content = $this->printPhpAttributeItems($items);
+        $items['name'] = $this->name;
 
-        $joinTableAttributeContent = $this->printPhpAttributeContent($content);
+        if ($this->schema !== null) {
+            $items['schema'] = $this->schema;
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return array<string, mixed[]>
+     */
+    public function provide(): array
+    {
+        $items = [];
 
         foreach ($this->joinColumns as $joinColumn) {
-            $joinTableAttributeContent .= PHP_EOL . $joinColumn->toAttributeString();
+            $items[$joinColumn->getShortName()] = $joinColumn->getAttributableItems();
         }
 
-        foreach ($this->inverseJoinColumns as $inverseJoinColumnAttributeContent) {
-            $inverseJoinColumnAttributeContent->changeShortName('ORM\InverseJoinColumn');
-            $joinTableAttributeContent .= PHP_EOL . $inverseJoinColumnAttributeContent->toAttributeString();
+        foreach ($this->inverseJoinColumns as $inverseJoinColumn) {
+            $items['@ORM\InverseJoinColumn'] = $inverseJoinColumn->getAttributableItems();
         }
 
-        return $joinTableAttributeContent;
+        return $items;
     }
 
     /**
@@ -122,8 +133,19 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
             $items['schema'] = sprintf('"%s"', $this->schema);
         }
 
+        $joinColumnItems = $this->createJoinColumnItems(self::JOIN_COLUMNS, self::INVERSE_JOIN_COLUMNS);
+        return array_merge($items, $joinColumnItems);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function createJoinColumnItems(string $joinColumnsKey, string $inverseJoinColumnsKey): array
+    {
+        $items = [];
+
         if ($this->joinColumns !== []) {
-            $items[self::JOIN_COLUMNS] = $this->printNestedTag(
+            $items[$joinColumnsKey] = $this->printNestedTag(
                 $this->joinColumns,
                 false,
                 $this->joinColumnsOpeningAndClosingSpace->getOpeningSpace(),
@@ -132,7 +154,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         }
 
         if ($this->inverseJoinColumns !== []) {
-            $items[self::INVERSE_JOIN_COLUMNS] = $this->printNestedTag(
+            $items[$inverseJoinColumnsKey] = $this->printNestedTag(
                 $this->inverseJoinColumns,
                 false,
                 $this->inverseJoinColumnsOpeningAndClosingSpace->getOpeningSpace(),
