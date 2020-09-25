@@ -7,7 +7,7 @@ namespace Rector\Renaming\Rector\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -96,7 +96,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
         $staticCall->name = new Identifier($renameStaticMethod->getNewMethod());
 
         if ($renameStaticMethod->hasClassChanged()) {
-            $staticCall->class = new Name('\\' . $renameStaticMethod->getNewClass());
+            $staticCall->class = new FullyQualified($renameStaticMethod->getNewClass());
         }
 
         return $staticCall;
