@@ -109,23 +109,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isFoundInPreviousOrNextNode(Variable $variable): bool
-    {
-        $previousNode = $variable->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (($previousNode instanceof Variable || $previousNode instanceof PropertyFetch || $previousNode instanceof Expr)
-            && $this->isFoundInParentNode($variable)) {
-            return true;
-        }
-
-        $nextNode = $variable->getAttribute(AttributeKey::NEXT_NODE);
-        if (($nextNode instanceof Variable || $nextNode instanceof PropertyFetch || $nextNode instanceof Expr)
-            && $this->isFoundInParentNode($variable)) {
-            return true;
-        }
-
-        return false;
-    }
-
     private function isFoundInParentNode(Variable $variable): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
@@ -149,5 +132,17 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+    private function isFoundInPreviousOrNextNode(Variable $variable): bool
+    {
+        $previousNode = $variable->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if (($previousNode instanceof Variable || $previousNode instanceof PropertyFetch || $previousNode instanceof Expr)
+            && $this->isFoundInParentNode($variable)) {
+            return true;
+        }
+
+        $nextNode = $variable->getAttribute(AttributeKey::NEXT_NODE);
+        return ($nextNode instanceof Variable || $nextNode instanceof PropertyFetch || $nextNode instanceof Expr)
+            && $this->isFoundInParentNode($variable);
     }
 }
