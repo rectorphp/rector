@@ -103,7 +103,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isFoundInPreviousOrNextNode($node)) {
+        if ($this->isFoundInPreviousNode($node)) {
             return null;
         }
 
@@ -137,14 +137,9 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isFoundInPreviousOrNextNode(Variable $variable): bool
+    private function isFoundInPreviousNode(Variable $variable): bool
     {
         $previousNode = $variable->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousNode instanceof Expr && $this->isFoundInParentNode($variable)) {
-            return true;
-        }
-
-        $nextNode = $variable->getAttribute(AttributeKey::NEXT_NODE);
-        return $nextNode instanceof Expr && $this->isFoundInParentNode($variable);
+        return $previousNode instanceof Expr && $this->isFoundInParentNode($variable);
     }
 }
