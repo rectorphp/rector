@@ -16,7 +16,7 @@
         "doctrine/annotations": "^1.10.4",
         "doctrine/inflector": "^1.4|^2.0",
         "jean85/pretty-package-versions": "^1.5.1",
-        "migrify/php-config-printer": "^0.3.44",
+        "migrify/php-config-printer": "^0.3.45",
         "nette/robot-loader": "^3.2",
         "nette/utils": "^3.1",
         "nikic/php-parser": "4.10.1",
@@ -43,8 +43,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
         "johnkary/phpunit-speedtrap": "^3.2",
-        "migrify/config-transformer": "^0.3.31",
-        "migrify/easy-ci": "^0.3.31",
+        "migrify/easy-ci": "^0.3.45",
         "nette/application": "^3.0",
         "nette/forms": "^3.0",
         "ocramius/package-versions": "^1.9",
