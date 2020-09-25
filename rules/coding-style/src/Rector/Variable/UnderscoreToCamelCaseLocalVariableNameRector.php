@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Rector\Variable;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
@@ -93,16 +94,14 @@ CODE_SAMPLE
         }
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (($parentNode instanceof Arg || $parentNode instanceof Param) && $this->isFoundInParentNode($node)) {
+        if (($parentNode instanceof Arg || $parentNode instanceof Param || $parentNode instanceof Stmt)
+            && $this->isFoundInParentNode($node)) {
             return null;
         }
 
         $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousNode instanceof Variable && $this->isFoundInParentNode($node)) {
-            return null;
-        }
-
-        if ($parentNode instanceof Stmt && $this->isFoundInParentNode($node)) {
+        if (($previousNode instanceof Variable || $previousNode instanceof PropertyFetch)
+            && $this->isFoundInParentNode($node)) {
             return null;
         }
 
