@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -95,6 +96,10 @@ CODE_SAMPLE
         }
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof ClosureUse && $this->isFoundInParentNode($node)) {
+            return null;
+        }
+
         if (($parentNode instanceof Arg || $parentNode instanceof Param || $parentNode instanceof Stmt)
             && $this->isFoundInParentNode($node)) {
             return null;
