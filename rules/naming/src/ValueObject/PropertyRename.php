@@ -20,6 +20,7 @@ final class PropertyRename implements RenameValueObjectInterface
      * @var string
      */
     private $currentName;
+
     /**
      * @var string
      */
