@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Guard;
 
-use _HumbugBox58fd4d9e2a25\___PHPSTORM_HELPERS\this;
 use DateTimeInterface;
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -21,10 +20,8 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\TypeWithClassName;
 use Ramsey\Uuid\UuidInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Naming\ConflictingNameResolver\ConflictingNameResolverInterface;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
-use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -49,11 +46,6 @@ final class BreakingVariableRenameGuard
      * @var ConflictingNameResolver
      */
     private $conflictingNameResolver;
-
-    /**
-     * @var ConflictingNameResolverInterface
-     */
-    private $injectedConflictingNameResolver;
 
     /**
      * @var OverridenExistingNamesResolver
@@ -84,11 +76,11 @@ final class BreakingVariableRenameGuard
         NodeNameResolver $nodeNameResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->conflictingNameResolver = $conflictingNameResolver;
         $this->overridenExistingNamesResolver = $overridenExistingNamesResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->conflictingNameResolver = $conflictingNameResolver;
     }
 
     /**
@@ -132,24 +124,6 @@ final class BreakingVariableRenameGuard
         return $this->isUsedInIfAndOtherBranches($variable, $currentName);
     }
 
-    public function shouldSkipProperty(PropertyRename $propertyRename): bool
-    {
-        if (! $propertyRename->getProperty()->isPrivate()) {
-            return true;
-        }
-
-        $conflictingPropertyNames = $this->injectedConflictingNameResolver->resolve($propertyRename->getClassLike());
-        if (in_array($propertyRename->getExpectedName(), $conflictingPropertyNames, true)) {
-            return true;
-        }
-
-        if ($this->isRamseyUuidInterface($propertyRename->getProperty())) {
-            return true;
-        }
-
-        return $this->isDateTimeAtNamingConvention($propertyRename->getProperty());
-    }
-
     public function shouldSkipParam(
         string $currentName,
         string $expectedName,
@@ -183,12 +157,6 @@ final class BreakingVariableRenameGuard
         }
 
         return $this->isDateTimeAtNamingConvention($param);
-    }
-
-    public function setInjectedConflictingNameResolver(
-        ConflictingNameResolverInterface $injectedConflictingNameResolver
-    ): void {
-        $this->injectedConflictingNameResolver = $injectedConflictingNameResolver;
     }
 
     private function isVariableAlreadyDefined(Variable $variable, string $currentVariableName): bool
@@ -277,6 +245,7 @@ final class BreakingVariableRenameGuard
     }
 
     /**
+     * @TODO Remove once ParamRenamer created
      * @param Param|Property $node
      */
     private function isRamseyUuidInterface(Node $node): bool
@@ -285,6 +254,7 @@ final class BreakingVariableRenameGuard
     }
 
     /**
+     * @TODO Remove once ParamRenamer created
      * @param Param|Property $node
      */
     private function isDateTimeAtNamingConvention(Node $node): bool

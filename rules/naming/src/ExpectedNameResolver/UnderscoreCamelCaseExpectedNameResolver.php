@@ -11,11 +11,6 @@ class UnderscoreCamelCaseExpectedNameResolver extends AbstractExpectedNameResolv
 {
     public function resolve(Property $property): string
     {
-        return $this->resolveIfNotYet($property);
-    }
-
-    public function resolveIfNotYet(Property $property): string
-    {
         $currentName = $this->nodeNameResolver->getName($property);
 
         return StaticRectorStrings::underscoreToCamelCase($currentName);

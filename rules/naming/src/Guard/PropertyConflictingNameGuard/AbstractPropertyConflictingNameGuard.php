@@ -2,15 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\ConflictingNameResolver;
+namespace Rector\Naming\Guard\PropertyConflictingNameGuard;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
+use Rector\Naming\ExpectedNameResolver\ExpectedNameResolverInterface;
+use Rector\Naming\Guard\GuardInterface;
 use Rector\Naming\PhpArray\ArrayFilter;
+use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-class PropertyConflictingNameResolver extends AbstractConflictingNameResolver
+class AbstractPropertyConflictingNameGuard implements GuardInterface
 {
+    /**
+     * @var ExpectedNameResolverInterface
+     */
+    protected $expectedNameResolver;
+
     /**
      * @var NodeNameResolver
      */
@@ -25,6 +33,12 @@ class PropertyConflictingNameResolver extends AbstractConflictingNameResolver
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayFilter = $arrayFilter;
+    }
+
+    public function check(RenameValueObjectInterface $renameValueObject): bool
+    {
+        $conflictingPropertyNames = $this->resolve($renameValueObject->getClassLike());
+        return in_array($renameValueObject->getExpectedName(), $conflictingPropertyNames, true);
     }
 
     /**

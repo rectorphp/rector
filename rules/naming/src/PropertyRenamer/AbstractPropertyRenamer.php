@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming;
+namespace Rector\Naming\PropertyRenamer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -11,45 +11,92 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\Naming\ConflictingNameResolver\ConflictingNameResolverInterface;
-use Rector\Naming\Guard\BreakingVariableRenameGuard;
+use Rector\Naming\Guard\DateTimeAtNamingConventionGuard;
+use Rector\Naming\Guard\GuardInterface;
+use Rector\Naming\Guard\HasMagicGetSetGuard;
+use Rector\Naming\Guard\NotPrivatePropertyGuard;
+use Rector\Naming\Guard\RamseyUuidInterfaceGuard;
+use Rector\Naming\RenameGuard\PropertyRenameGuard;
+use Rector\Naming\RenameGuard\RenameGuardInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-final class PropertyRenamer
+abstract class AbstractPropertyRenamer
 {
+    /**
+     * @var RenameGuardInterface
+     */
+    protected $propertyRenameGuard;
+
+    /**
+     * @var GuardInterface
+     */
+    protected $conflictingPropertyNameGuard;
+
     /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
 
     /**
-     * @var BreakingVariableRenameGuard
-     */
-    private $breakingVariableRenameGuard;
-
-    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(
+    /**
+     * @var NotPrivatePropertyGuard
+     */
+    private $notPrivatePropertyGuard;
+
+    /**
+     * @var RamseyUuidInterfaceGuard
+     */
+    private $ramseyUuidInterfaceGuard;
+
+    /**
+     * @var DateTimeAtNamingConventionGuard
+     */
+    private $dateTimeAtNamingConventionGuard;
+
+    /**
+     * @var HasMagicGetSetGuard
+     */
+    private $hasMagicGetSetGuard;
+
+    /**
+     * @required
+     */
+    public function autowireAbstractPropertyRenamer(
         CallableNodeTraverser $callableNodeTraverser,
-        BreakingVariableRenameGuard $breakingVariableRenameGuard,
-        NodeNameResolver $nodeNameResolver
-    ) {
+        NodeNameResolver $nodeNameResolver,
+        NotPrivatePropertyGuard $notPrivatePropertyGuard,
+        RamseyUuidInterfaceGuard $ramseyUuidInterfaceGuard,
+        DateTimeAtNamingConventionGuard $dateTimeAtNamingConventionGuard,
+        PropertyRenameGuard $propertyRenameGuard,
+        HasMagicGetSetGuard $hasMagicGetSetGuard
+    ): void {
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->notPrivatePropertyGuard = $notPrivatePropertyGuard;
+        $this->ramseyUuidInterfaceGuard = $ramseyUuidInterfaceGuard;
+        $this->dateTimeAtNamingConventionGuard = $dateTimeAtNamingConventionGuard;
+        $this->propertyRenameGuard = $propertyRenameGuard;
+        $this->hasMagicGetSetGuard = $hasMagicGetSetGuard;
     }
 
     public function rename(PropertyRename $propertyRename): ?Property
     {
-        if ($this->breakingVariableRenameGuard->shouldSkipProperty($propertyRename)) {
+        if ($this->areNamesDifferent($propertyRename)) {
             return null;
         }
 
-        if ($this->areNamesDifferent($propertyRename)) {
+        if ($this->propertyRenameGuard->shouldSkip($propertyRename, [
+            $this->notPrivatePropertyGuard,
+            $this->conflictingPropertyNameGuard,
+            $this->ramseyUuidInterfaceGuard,
+            $this->dateTimeAtNamingConventionGuard,
+            $this->hasMagicGetSetGuard,
+        ])) {
             return null;
         }
 
@@ -57,12 +104,7 @@ final class PropertyRenamer
         $onlyPropertyProperty->name = new VarLikeIdentifier($propertyRename->getExpectedName());
         $this->renamePropertyFetchesInClass($propertyRename);
 
-        return $propertyRename->getProperty();
-    }
-
-    public function setConflictingNameResolver(ConflictingNameResolverInterface $conflictingNameResolver): void
-    {
-        $this->breakingVariableRenameGuard->setInjectedConflictingNameResolver($conflictingNameResolver);
+        return $propertyRename->getNode();
     }
 
     private function areNamesDifferent(PropertyRename $propertyRename): bool

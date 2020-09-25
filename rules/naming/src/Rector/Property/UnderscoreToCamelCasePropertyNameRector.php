@@ -10,11 +10,9 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Naming\ConflictingNameResolver\PropertyConflictingNameResolver;
 use Rector\Naming\ExpectedNameResolver\UnderscoreCamelCaseExpectedNameResolver;
-use Rector\Naming\PropertyRenamer;
+use Rector\Naming\PropertyRenamer\UnderscoreCamelCasePropertyRenamer;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Property\UnderscoreToCamelCasePropertyNameRector\UnderscoreToCamelCasePropertyNameRectorTest
@@ -27,30 +25,23 @@ final class UnderscoreToCamelCasePropertyNameRector extends AbstractRector
     private $propertyRenameFactory;
 
     /**
-     * @var PropertyRenamer
+     * @var UnderscoreCamelCasePropertyRenamer
      */
-    private $propertyRenamer;
+    private $underscoreCamelCasePropertyRenamer;
 
     /**
      * @var UnderscoreCamelCaseExpectedNameResolver
      */
     private $underscoreCamelCaseExpectedNameResolver;
 
-    /**
-     * @var PropertyConflictingNameResolver
-     */
-    private $propertyConflictingNameResolver;
-
     public function __construct(
-        PropertyRenamer $propertyRenamer,
-        UnderscoreCamelCaseExpectedNameResolver $underscoreCamelCaseExpectedNameResolver,
-        PropertyConflictingNameResolver $propertyConflictingNameResolver,
-        PropertyRenameFactory $propertyRenameFactory
+        UnderscoreCamelCasePropertyRenamer $underscoreCamelCasePropertyRenamer,
+        PropertyRenameFactory $propertyRenameFactory,
+        UnderscoreCamelCaseExpectedNameResolver $underscoreCamelCaseExpectedNameResolver
     ) {
-        $this->propertyRenamer = $propertyRenamer;
+        $this->underscoreCamelCasePropertyRenamer = $underscoreCamelCasePropertyRenamer;
         $this->propertyRenameFactory = $propertyRenameFactory;
         $this->underscoreCamelCaseExpectedNameResolver = $underscoreCamelCaseExpectedNameResolver;
-        $this->propertyConflictingNameResolver = $propertyConflictingNameResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -97,11 +88,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->propertyConflictingNameResolver->setExpectedNameResolver($this->underscoreCamelCaseExpectedNameResolver);
-
-        $this->propertyRenameFactory->setExpectedNameResolver($this->underscoreCamelCaseExpectedNameResolver);
-        $this->propertyRenamer->setConflictingNameResolver($this->propertyConflictingNameResolver);
-
         $nodeName = $this->getName($node);
         if ($nodeName === null) {
             return null;
@@ -111,19 +97,12 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var string $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NAME);
-        // properties are accessed via magic, nothing we can do
-        if (method_exists($class, '__set') || method_exists($class, '__get')) {
-            return null;
-        }
-
-        $propertyRename = $this->propertyRenameFactory->create($node);
+        $propertyRename = $this->propertyRenameFactory->create($node, $this->underscoreCamelCaseExpectedNameResolver);
         if ($propertyRename === null) {
             return null;
         }
 
-        if ($this->propertyRenamer->rename($propertyRename) === null) {
+        if ($this->underscoreCamelCasePropertyRenamer->rename($propertyRename) === null) {
             return null;
         }
 

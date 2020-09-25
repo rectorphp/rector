@@ -11,9 +11,8 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Naming\ConflictingNameResolver\PropertyConflictingNameResolver;
-use Rector\Naming\ExpectedNameResolver\FromPropertyTypeExpectedNameResolver;
-use Rector\Naming\PropertyRenamer;
+use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
+use Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 
 /**
@@ -27,28 +26,28 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
     private $hasChanged = false;
 
     /**
-     * @var PropertyRenamer
-     */
-    private $propertyRenamer;
-
-    /**
      * @var PropertyRenameFactory
      */
     private $propertyRenameFactory;
 
+    /**
+     * @var MatchTypePropertyRenamer
+     */
+    private $matchTypePropertyRenamer;
+
+    /**
+     * @var MatchPropertyTypeExpectedNameResolver
+     */
+    private $matchPropertyTypeExpectedNameResolver;
+
     public function __construct(
-        PropertyRenamer $propertyRenamer,
-        FromPropertyTypeExpectedNameResolver $fromPropertyTypeExpectedNameResolver,
-        PropertyConflictingNameResolver $propertyConflictingNameResolver,
-        PropertyRenameFactory $propertyRenameFactory
+        MatchTypePropertyRenamer $matchTypePropertyRenamer,
+        PropertyRenameFactory $propertyRenameFactory,
+        MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver
     ) {
-        $propertyConflictingNameResolver->setExpectedNameResolver($fromPropertyTypeExpectedNameResolver);
-
-        $this->propertyRenamer = $propertyRenamer;
-        $this->propertyRenamer->setConflictingNameResolver($propertyConflictingNameResolver);
-
         $this->propertyRenameFactory = $propertyRenameFactory;
-        $this->propertyRenameFactory->setExpectedNameResolver($fromPropertyTypeExpectedNameResolver);
+        $this->matchTypePropertyRenamer = $matchTypePropertyRenamer;
+        $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -113,12 +112,15 @@ CODE_SAMPLE
     private function refactorClassProperties(ClassLike $classLike): void
     {
         foreach ($classLike->getProperties() as $property) {
-            $propertyRename = $this->propertyRenameFactory->create($property);
+            $propertyRename = $this->propertyRenameFactory->create(
+                $property,
+                $this->matchPropertyTypeExpectedNameResolver
+            );
             if ($propertyRename === null) {
                 continue;
             }
 
-            if ($this->propertyRenamer->rename($propertyRename) !== null) {
+            if ($this->matchTypePropertyRenamer->rename($propertyRename) !== null) {
                 $this->hasChanged = true;
             }
         }
