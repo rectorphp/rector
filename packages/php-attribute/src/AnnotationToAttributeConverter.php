@@ -19,12 +19,12 @@ final class AnnotationToAttributeConverter
     /**
      * @var PhpAttributteGroupFactory
      */
-    private $phpAttributableTagNodeToAttributeGroupsConverter;
+    private $phpAttributteGroupFactory;
 
     public function __construct(
-        PhpAttributteGroupFactory $phpAttributableTagNodeToAttributeGroupsConverter
+        PhpAttributteGroupFactory $phpAttributteGroupFactory
     ) {
-        $this->phpAttributableTagNodeToAttributeGroupsConverter = $phpAttributableTagNodeToAttributeGroupsConverter;
+        $this->phpAttributteGroupFactory = $phpAttributteGroupFactory;
     }
 
     /**
@@ -51,7 +51,7 @@ final class AnnotationToAttributeConverter
         }
 
         // 2. convert annotations to attributes
-        $node->attrGroups = $this->phpAttributableTagNodeToAttributeGroupsConverter->create($phpAttributableTagNodes);
+        $node->attrGroups = $this->phpAttributteGroupFactory->create($phpAttributableTagNodes);
 
         return $node;
     }
