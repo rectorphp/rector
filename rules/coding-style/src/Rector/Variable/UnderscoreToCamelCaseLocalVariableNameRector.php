@@ -19,6 +19,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node\Expr;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\UnderscoreToCamelCaseLocalVariableNameRectorTest
@@ -100,8 +101,13 @@ CODE_SAMPLE
         }
 
         $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (($previousNode instanceof Variable || $previousNode instanceof PropertyFetch)
+        if (($previousNode instanceof Variable || $previousNode instanceof PropertyFetch || $previousNode instanceof Expr)
             && $this->isFoundInParentNode($node)) {
+            return null;
+        }
+
+        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if (($nextNode instanceof Variable || $nextNode instanceof PropertyFetch || $nextNode instanceof Expr) && $this->isFoundInParentNode($node)) {
             return null;
         }
 
