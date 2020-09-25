@@ -16,8 +16,8 @@ use Rector\Renaming\Tests\Rector\StaticCall\RenameStaticMethodRector\Source\Form
 
 function staticMethodNameReplacer2()
 {
-    $result = Nette\Bridges\FormsLatte\Runtime::renderFormBegin($someArgs);
-    $result = Nette\Bridges\FormsLatte\Runtime::renderFormBegin($someArgs);
+    $result = \Nette\Bridges\FormsLatte\Runtime::renderFormBegin($someArgs);
+    $result = \Nette\Bridges\FormsLatte\Runtime::renderFormBegin($someArgs);
 }
 
 ?>
