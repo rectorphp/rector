@@ -21,9 +21,8 @@ final class AnnotationToAttributeConverter
      */
     private $phpAttributteGroupFactory;
 
-    public function __construct(
-        PhpAttributteGroupFactory $phpAttributteGroupFactory
-    ) {
+    public function __construct(PhpAttributteGroupFactory $phpAttributteGroupFactory)
+    {
         $this->phpAttributteGroupFactory = $phpAttributteGroupFactory;
     }
 
