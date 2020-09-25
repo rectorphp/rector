@@ -6,7 +6,7 @@ namespace Rector\Naming\Guard\PropertyConflictingNameGuard;
 
 use Rector\Naming\ExpectedNameResolver\UnderscoreCamelCaseExpectedNameResolver;
 
-class UnderscoreCamelCaseConflictingNameGuard extends AbstractPropertyConflictingNameGuard
+final class UnderscoreCamelCaseConflictingNameGuard extends AbstractPropertyConflictingNameGuard
 {
     /**
      * @required

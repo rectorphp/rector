@@ -8,7 +8,7 @@ use Ramsey\Uuid\UuidInterface;
 use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-class RamseyUuidInterfaceGuard implements GuardInterface
+final class RamseyUuidInterfaceGuard implements GuardInterface
 {
     /**
      * @var NodeTypeResolver

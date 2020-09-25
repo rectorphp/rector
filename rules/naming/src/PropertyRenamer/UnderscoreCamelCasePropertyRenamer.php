@@ -6,7 +6,7 @@ namespace Rector\Naming\PropertyRenamer;
 
 use Rector\Naming\Guard\PropertyConflictingNameGuard\UnderscoreCamelCaseConflictingNameGuard;
 
-class UnderscoreCamelCasePropertyRenamer extends AbstractPropertyRenamer
+final class UnderscoreCamelCasePropertyRenamer extends AbstractPropertyRenamer
 {
     public function __construct(UnderscoreCamelCaseConflictingNameGuard $underscoreCamelCaseConflictingNameGuard)
     {

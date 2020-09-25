@@ -11,7 +11,7 @@ use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
-class DateTimeAtNamingConventionGuard implements GuardInterface
+final class DateTimeAtNamingConventionGuard implements GuardInterface
 {
     /**
      * @var string
@@ -39,7 +39,7 @@ class DateTimeAtNamingConventionGuard implements GuardInterface
         return $this->isDateTimeAtNamingConvention($renameValueObject);
     }
 
-    protected function isDateTimeAtNamingConvention(RenameValueObjectInterface $renameValueObject): bool
+    private function isDateTimeAtNamingConvention(RenameValueObjectInterface $renameValueObject): bool
     {
         $type = $this->nodeTypeResolver->resolve($renameValueObject->getNode());
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);

@@ -20,6 +20,10 @@ final class PropertyRename implements RenameValueObjectInterface
      * @var string
      */
     private $currentName;
+    /**
+     * @var string
+     */
+    private $classLikeName;
 
     /**
      * @var Property
@@ -35,11 +39,6 @@ final class PropertyRename implements RenameValueObjectInterface
      * @var PropertyProperty
      */
     private $propertyProperty;
-
-    /**
-     * @var string
-     */
-    private $classLikeName;
 
     public function __construct(
         Property $property, string $expectedName, string $currentName, ClassLike $classLike, string $classLikeName, PropertyProperty $propertyProperty

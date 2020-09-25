@@ -35,7 +35,7 @@ final class RenameParamToMatchTypeRector extends AbstractRector
     /**
      * @var BreakingVariableRenameGuard
      */
-    private $variableRenameGuard;
+    private $breakingVariableRenameGuard;
 
     /**
      * @var VariableRenamer
@@ -54,7 +54,7 @@ final class RenameParamToMatchTypeRector extends AbstractRector
         PropertyDocBlockManipulator $propertyDocBlockManipulator
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
-        $this->variableRenameGuard = $breakingVariableRenameGuard;
+        $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->variableRenamer = $variableRenamer;
         $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
     }
@@ -137,6 +137,6 @@ CODE_SAMPLE
         /** @var string $paramName */
         $paramName = $this->getName($param);
 
-        return $this->variableRenameGuard->shouldSkipParam($paramName, $expectedName, $classMethod, $param);
+        return $this->breakingVariableRenameGuard->shouldSkipParam($paramName, $expectedName, $classMethod, $param);
     }
 }

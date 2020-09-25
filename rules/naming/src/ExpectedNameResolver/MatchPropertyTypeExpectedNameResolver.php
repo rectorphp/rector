@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-class MatchPropertyTypeExpectedNameResolver extends AbstractExpectedNameResolver
+final class MatchPropertyTypeExpectedNameResolver extends AbstractExpectedNameResolver
 {
     public function resolve(Property $property): ?string
     {

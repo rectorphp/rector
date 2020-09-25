@@ -6,7 +6,7 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use PhpParser\Node\Stmt\Property;
 
-class BoolPropertyExpectedNameResolver extends AbstractExpectedNameResolver
+final class BoolPropertyExpectedNameResolver extends AbstractExpectedNameResolver
 {
     public function resolve(Property $property): ?string
     {

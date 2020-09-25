@@ -6,7 +6,7 @@ namespace Rector\Naming\PropertyRenamer;
 
 use Rector\Naming\Guard\PropertyConflictingNameGuard\BoolPropertyConflictingNameGuard;
 
-class BoolPropertyRenamer extends AbstractPropertyRenamer
+final class BoolPropertyRenamer extends AbstractPropertyRenamer
 {
     public function __construct(BoolPropertyConflictingNameGuard $boolPropertyConflictingNameGuard)
     {

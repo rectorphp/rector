@@ -43,6 +43,7 @@ class AbstractPropertyConflictingNameGuard implements GuardInterface
 
     /**
      * @param ClassLike $node
+     * @return string[]
      */
     public function resolve(Node $node): array
     {

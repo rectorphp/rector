@@ -7,7 +7,7 @@ namespace Rector\Naming\RenameGuard;
 use Rector\Naming\Guard\GuardInterface;
 use Rector\Naming\ValueObject\RenameValueObjectInterface;
 
-class PropertyRenameGuard implements RenameGuardInterface
+final class PropertyRenameGuard implements RenameGuardInterface
 {
     /**
      * @param GuardInterface[] $guards
@@ -15,7 +15,7 @@ class PropertyRenameGuard implements RenameGuardInterface
     public function shouldSkip(RenameValueObjectInterface $renameValueObject, array $guards): bool
     {
         foreach ($guards as $guard) {
-            if ($guard->check($renameValueObject) === true) {
+            if ($guard->check($renameValueObject)) {
                 return true;
             }
         }

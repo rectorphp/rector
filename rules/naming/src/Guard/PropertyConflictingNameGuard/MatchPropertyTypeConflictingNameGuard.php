@@ -6,7 +6,7 @@ namespace Rector\Naming\Guard\PropertyConflictingNameGuard;
 
 use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
 
-class MatchPropertyTypeConflictingNameGuard extends AbstractPropertyConflictingNameGuard
+final class MatchPropertyTypeConflictingNameGuard extends AbstractPropertyConflictingNameGuard
 {
     /**
      * @required

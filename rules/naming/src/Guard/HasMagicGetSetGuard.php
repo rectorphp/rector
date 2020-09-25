@@ -7,7 +7,7 @@ namespace Rector\Naming\Guard;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\Naming\ValueObject\RenameValueObjectInterface;
 
-class HasMagicGetSetGuard implements GuardInterface
+final class HasMagicGetSetGuard implements GuardInterface
 {
     /**
      * @param PropertyRename $renameValueObject

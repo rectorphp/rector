@@ -7,7 +7,7 @@ namespace Rector\Naming\Guard;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\Naming\ValueObject\RenameValueObjectInterface;
 
-class NotPrivatePropertyGuard implements GuardInterface
+final class NotPrivatePropertyGuard implements GuardInterface
 {
     /**
      * @param PropertyRename $renameValueObject

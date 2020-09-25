@@ -7,7 +7,7 @@ namespace Rector\Naming\ExpectedNameResolver;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Util\StaticRectorStrings;
 
-class UnderscoreCamelCaseExpectedNameResolver extends AbstractExpectedNameResolver
+final class UnderscoreCamelCaseExpectedNameResolver extends AbstractExpectedNameResolver
 {
     public function resolve(Property $property): string
     {

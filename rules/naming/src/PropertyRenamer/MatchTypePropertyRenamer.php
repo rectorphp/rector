@@ -6,7 +6,7 @@ namespace Rector\Naming\PropertyRenamer;
 
 use Rector\Naming\Guard\PropertyConflictingNameGuard\MatchPropertyTypeConflictingNameGuard;
 
-class MatchTypePropertyRenamer extends AbstractPropertyRenamer
+final class MatchTypePropertyRenamer extends AbstractPropertyRenamer
 {
     public function __construct(MatchPropertyTypeConflictingNameGuard $matchPropertyTypeConflictingNameGuard)
     {

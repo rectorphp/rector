@@ -36,14 +36,14 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
     /**
      * @var MatchPropertyTypeExpectedNameResolver
      */
-    private $renamePropertyToMatchTypeExpectedNameResolver;
+    private $matchPropertyTypeExpectedNameResolver;
 
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
 
         $this->propertyRenameFactory = self::$container->get(PropertyRenameFactory::class);
-        $this->renamePropertyToMatchTypeExpectedNameResolver = self::$container->get(
+        $this->matchPropertyTypeExpectedNameResolver = self::$container->get(
             MatchPropertyTypeExpectedNameResolver::class
         );
 
@@ -60,7 +60,7 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
 
         $actualPropertyRename = $this->propertyRenameFactory->create(
             $property,
-            $this->renamePropertyToMatchTypeExpectedNameResolver
+            $this->matchPropertyTypeExpectedNameResolver
         );
         $this->assertNotNull($actualPropertyRename);
 
