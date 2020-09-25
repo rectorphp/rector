@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
+
 function run()
 {
     $_a = 'a';
@@ -11,6 +13,8 @@ function run()
 }
 -----
 <?php
+
+namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
 
 function run()
 {
