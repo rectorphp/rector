@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -73,6 +74,10 @@ CODE_SAMPLE
         }
 
         if (! $this->areArrayKeysExistsArgsMatchingDimFetch($node->cond, $node->if)) {
+            return null;
+        }
+
+        if ($node->else instanceof Variable) {
             return null;
         }
 
