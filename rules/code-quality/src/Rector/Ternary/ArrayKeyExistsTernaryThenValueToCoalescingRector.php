@@ -77,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->getValue($node->else) !== 'null' || $node->else instanceof String_) {
+        if (! $this->isNull($node->else)) {
             return null;
         }
 
