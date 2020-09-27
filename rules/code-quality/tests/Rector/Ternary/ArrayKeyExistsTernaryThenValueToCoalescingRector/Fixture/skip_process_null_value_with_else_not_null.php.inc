@@ -10,5 +10,3 @@ class SkipProcessNullValue
         return array_key_exists('value', $v) ? $v['value'] : 'whatever';
     }
 }
-
-?>
