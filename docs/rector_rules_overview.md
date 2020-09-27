@@ -6409,7 +6409,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### `RenamePropertyRector`
 
-- class: [`Rector\Generic\Rector\PropertyFetch\RenamePropertyRector`](/rules/generic/src/Rector/PropertyFetch/RenamePropertyRector.php)
+- class: [`Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector`](/rules/generic/src/Rector/PropertyFetch/RenamePropertyRector.php)
 - [test fixtures](/rules/generic/tests/Rector/PropertyFetch/RenamePropertyRector/Fixture)
 
 Replaces defined old properties by new ones.
@@ -6419,8 +6419,8 @@ Replaces defined old properties by new ones.
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Generic\ValueObject\RenameProperty;
+use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Renaming\ValueObject\RenameProperty;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
-use Rector\Generic\ValueObject\RenameProperty;
 use Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
+use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Renaming\ValueObject\RenameProperty;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

@@ -1,39 +1,5 @@
 # All 2 Rectors Overview
 
-## `RenamePropertyRector`
-
-- class: [`Rector\Generic\Rector\PropertyFetch\RenamePropertyRector`](/rules/generic/src/Rector/PropertyFetch/RenamePropertyRector.php)
-- [test fixtures](/rules/generic/tests/Rector/PropertyFetch/RenamePropertyRector/Fixture)
-
-Replaces defined old properties by new ones.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Generic\ValueObject\RenameProperty;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(RenamePropertyRector::class)
-        ->call('configure', [[RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')])]]);
-};
-```
-
-↓
-
-```diff
--$someObject->someOldProperty;
-+$someObject->someNewProperty;
-```
-
-<br><br>
-
 ## `TypedPropertyRector`
 
 - class: [`Rector\Php74\Rector\Property\TypedPropertyRector`](/rules/php74/src/Rector/Property/TypedPropertyRector.php)
@@ -68,6 +34,40 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -    private count;
 +    private int count;
  }
+```
+
+<br><br>
+
+## `RenamePropertyRector`
+
+- class: [`Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector`](/rules/renaming/src/Rector/PropertyFetch/RenamePropertyRector.php)
+- [test fixtures](/rules/renaming/tests/Rector/PropertyFetch/RenamePropertyRector/Fixture)
+
+Replaces defined old properties by new ones.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Renaming\ValueObject\RenameProperty;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(RenamePropertyRector::class)
+        ->call('configure', [[RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')])]]);
+};
+```
+
+↓
+
+```diff
+-$someObject->someOldProperty;
++$someObject->someNewProperty;
 ```
 
 <br><br>
