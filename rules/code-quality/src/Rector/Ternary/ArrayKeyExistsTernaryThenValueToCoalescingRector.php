@@ -76,6 +76,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $this->isNull($node->else)) {
+            return null;
+        }
+
         return new Coalesce($node->if, $node->else);
     }
 
