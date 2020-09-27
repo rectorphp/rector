@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\PropertyFetch;
+namespace Rector\Renaming\Rector\PropertyFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -11,11 +11,11 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\RenameProperty;
+use Rector\Renaming\ValueObject\RenameProperty;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\PropertyFetch\RenamePropertyRector\RenamePropertyRectorTest
+ * @see \Rector\Renaming\Tests\Rector\PropertyFetch\RenamePropertyRector\RenamePropertyRectorTest
  */
 final class RenamePropertyRector extends AbstractRector implements ConfigurableRectorInterface
 {

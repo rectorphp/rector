@@ -1,4 +1,4 @@
-# All 581 Rectors Overview
+# All 582 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -9,7 +9,7 @@
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
 - [CodeQuality](#codequality) (59)
-- [CodingStyle](#codingstyle) (35)
+- [CodingStyle](#codingstyle) (36)
 - [DeadCode](#deadcode) (40)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (17)
@@ -21,7 +21,7 @@
 - [DowngradePhp80](#downgradephp80) (6)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (38)
+- [Generic](#generic) (37)
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (3)
 - [Legacy](#legacy) (4)
@@ -61,7 +61,7 @@
 - [Privatization](#privatization) (7)
 - [RectorGenerator](#rectorgenerator) (1)
 - [RemovingStatic](#removingstatic) (6)
-- [Renaming](#renaming) (8)
+- [Renaming](#renaming) (9)
 - [Restoration](#restoration) (7)
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
@@ -2337,6 +2337,26 @@ Assign outcome of ternary condition to variable, where applicable
  {
 -    $value ? $a = 1 : $a = 0;
 +    $a = $value ? 1 : 0;
+ }
+```
+
+<br><br>
+
+### `UnderscoreToCamelCaseLocalVariableNameRector`
+
+- class: [`Rector\CodingStyle\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector`](/rules/coding-style/src/Rector/Variable/UnderscoreToCamelCaseLocalVariableNameRector.php)
+- [test fixtures](/rules/coding-style/tests/Rector/Variable/UnderscoreToCamelCaseLocalVariableNameRector/Fixture)
+
+Change under_score local variable names to camelCase
+
+```diff
+ final class SomeClass
+ {
+     public function run($a_b)
+     {
+-        $some_value = $a_b;
++        $someValue = $a_b;
+     }
  }
 ```
 
@@ -6403,40 +6423,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -$value === Nette\Configurator::DEVELOPMENT
 +$value === "development"
-```
-
-<br><br>
-
-### `RenamePropertyRector`
-
-- class: [`Rector\Generic\Rector\PropertyFetch\RenamePropertyRector`](/rules/generic/src/Rector/PropertyFetch/RenamePropertyRector.php)
-- [test fixtures](/rules/generic/tests/Rector/PropertyFetch/RenamePropertyRector/Fixture)
-
-Replaces defined old properties by new ones.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Generic\ValueObject\RenameProperty;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(RenamePropertyRector::class)
-        ->call('configure', [[RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')])]]);
-};
-```
-
-↓
-
-```diff
--$someObject->someOldProperty;
-+$someObject->someNewProperty;
 ```
 
 <br><br>
@@ -13151,6 +13137,40 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -$someObject = new SomeOldNamespace\SomeClass;
 +$someObject = new SomeNewNamespace\SomeClass;
+```
+
+<br><br>
+
+### `RenamePropertyRector`
+
+- class: [`Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector`](/rules/renaming/src/Rector/PropertyFetch/RenamePropertyRector.php)
+- [test fixtures](/rules/renaming/tests/Rector/PropertyFetch/RenamePropertyRector/Fixture)
+
+Replaces defined old properties by new ones.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Renaming\ValueObject\RenameProperty;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(RenamePropertyRector::class)
+        ->call('configure', [[RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')])]]);
+};
+```
+
+↓
+
+```diff
+-$someObject->someOldProperty;
++$someObject->someNewProperty;
 ```
 
 <br><br>

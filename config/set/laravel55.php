@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Generic\ValueObject\RenameProperty;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\RenameProperty;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
