@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -76,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->getValue($node->else) !== 'null') {
+        if ($this->getValue($node->else) !== 'null' || $node->else instanceof String_) {
             return null;
         }
 
