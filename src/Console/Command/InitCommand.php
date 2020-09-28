@@ -43,17 +43,14 @@ class InitCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        try {
-            $rectorConfigFiles = $this->smartFileSystem->exists(getcwd() . '/rector.php');
 
-            if (! $rectorConfigFiles) {
-                $this->smartFileSystem->copy('rector.php.dist', getcwd() . '/rector.php');
-                $this->symfonyStyle->success('rector.php config file has been generated successfully');
-            } else {
-                $this->symfonyStyle->error('Config file not generated. A rector.php configuration file already exists');
-            }
-        } catch (RuntimeException $runtimeException) {
-            throw $runtimeException;
+        $rectorConfigFiles = $this->smartFileSystem->exists(getcwd() . '/rector.php');
+
+        if (!$rectorConfigFiles) {
+            $this->smartFileSystem->copy('rector.php.dist', getcwd() . '/rector.php');
+            $this->symfonyStyle->success('rector.php config file has been generated successfully');
+        } else {
+            $this->symfonyStyle->error('Config file not generated. A rector.php configuration file already exists');
         }
 
         return ShellCode::SUCCESS;
