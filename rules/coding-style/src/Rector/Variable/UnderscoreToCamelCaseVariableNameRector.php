@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\Variable;
 
 use Nette\Utils\Strings;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -139,6 +138,10 @@ CODE_SAMPLE
             return;
         }
 
-        $this->propertyDocBlockManipulator->renameParameterNameInDocBlock($parentNode, $match['paramName'], $camelCaseName);
+        $this->propertyDocBlockManipulator->renameParameterNameInDocBlock(
+            $parentNode,
+            $match['paramName'],
+            $camelCaseName
+        );
     }
 }
