@@ -11,7 +11,7 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-class InitCommand extends AbstractCommand
+final class InitCommand extends AbstractCommand
 {
     /**
      * @var SmartFileSystem
