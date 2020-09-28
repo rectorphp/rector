@@ -10,6 +10,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -28,12 +29,20 @@ final class UnderscoreToCamelCaseVariableNameRector extends AbstractRector
     private const PARAM_NAME_REGEX = '#(?<paramPrefix>@param\s.*\s+\$)(?<paramName>%s)#ms';
 
     /**
+     * @var PropertyDocBlockManipulator
+     */
+    private $propertyDocBlockManipulator;
+
+    /**
      * @var ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
 
-    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
-    {
+    public function __construct(
+        PropertyDocBlockManipulator $propertyDocBlockManipulator,
+        ReservedKeywordAnalyzer $reservedKeywordAnalyzer
+    ) {
+        $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
 
@@ -121,28 +130,15 @@ CODE_SAMPLE
             return;
         }
 
-        if ($docComment->getText() === null) {
+        $docCommentText = $docComment->getText();
+        if ($docCommentText === null) {
             return;
         }
 
-        if (! Strings::match($docComment->getText(), sprintf(self::PARAM_NAME_REGEX, $variableName))) {
+        if (! $match = Strings::match($docCommentText, sprintf(self::PARAM_NAME_REGEX, $variableName))) {
             return;
         }
 
-        $newdocComment = Strings::replace(
-            $docComment->getText(),
-            sprintf(self::PARAM_NAME_REGEX, $variableName),
-            function ($match) use ($camelCaseName): string {
-                $match['paramName'] = $camelCaseName;
-                return $match['paramPrefix'] . $match['paramName'];
-            }
-        );
-
-        if ($parentNode instanceof ClassMethod) {
-            $variable->getAttribute(AttributeKey::METHOD_NODE)->setDocComment(new Doc($newdocComment));
-            return;
-        }
-
-        $variable->getAttribute(AttributeKey::FUNCTION_NODE)->setDocComment(new Doc($newdocComment));
+        $this->propertyDocBlockManipulator->renameParameterNameInDocBlock($parentNode, $match['paramName'], $camelCaseName);
     }
 }
