@@ -11796,7 +11796,7 @@ Change annotation to attribute
 -/**
 -  * @ORM\Entity
 -  */
-+<<ORM\Entity>>
++#[ORM\Entity]
  class SomeClass
  {
  }
