@@ -7,11 +7,15 @@ namespace Rector\CodingStyle\Rector\Variable;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\UnderscoreToCamelCaseVariableNameRectorTest
@@ -19,12 +23,26 @@ use Rector\Core\Util\StaticRectorStrings;
 final class UnderscoreToCamelCaseVariableNameRector extends AbstractRector
 {
     /**
+     * @var string
+     * @see https://regex101.com/r/OtFn8I/1
+     */
+    private const PARAM_NAME_REGEX = '#(?<paramPrefix>@param\s.*\s+\$)(?<paramName>%s)#ms';
+
+    /**
+     * @var PropertyDocBlockManipulator
+     */
+    private $propertyDocBlockManipulator;
+
+    /**
      * @var ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
 
-    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
-    {
+    public function __construct(
+        PropertyDocBlockManipulator $propertyDocBlockManipulator,
+        ReservedKeywordAnalyzer $reservedKeywordAnalyzer
+    ) {
+        $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
 
@@ -87,7 +105,44 @@ CODE_SAMPLE
         }
 
         $node->name = $camelCaseName;
+        $this->updateDocblock($node, $nodeName, $camelCaseName);
 
         return $node;
+    }
+
+    private function updateDocblock(Variable $variable, string $variableName, string $camelCaseName): void
+    {
+        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parentNode) {
+            /** @var ClassMethod|Function_ $parentNode */
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
+                break;
+            }
+        }
+
+        if ($parentNode === null) {
+            return;
+        }
+
+        $docComment = $parentNode->getDocComment();
+        if ($docComment === null) {
+            return;
+        }
+
+        $docCommentText = $docComment->getText();
+        if ($docCommentText === null) {
+            return;
+        }
+
+        if (! $match = Strings::match($docCommentText, sprintf(self::PARAM_NAME_REGEX, $variableName))) {
+            return;
+        }
+
+        $this->propertyDocBlockManipulator->renameParameterNameInDocBlock(
+            $parentNode,
+            $match['paramName'],
+            $camelCaseName
+        );
     }
 }
