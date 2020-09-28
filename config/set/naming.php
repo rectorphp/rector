@@ -10,6 +10,7 @@ use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 use Rector\Naming\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector;
+use Rector\Naming\Rector\Property\UnderscoreToCamelCasePropertyNameRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -22,4 +23,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MakeIsserClassMethodNameStartWithIsRector::class);
     $services->set(RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class);
     $services->set(MakeBoolPropertyRespectIsHasWasMethodNamingRector::class);
+    $services->set(UnderscoreToCamelCasePropertyNameRector::class);
 };

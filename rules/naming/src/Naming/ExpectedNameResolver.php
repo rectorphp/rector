@@ -15,12 +15,10 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -61,26 +59,6 @@ final class ExpectedNameResolver
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    public function resolveForPropertyIfNotYet(Property $property): ?string
-    {
-        $expectedName = $this->resolveForProperty($property);
-        if ($expectedName === null) {
-            return null;
-        }
-
-        /** @var string $propertyName */
-        $propertyName = $this->nodeNameResolver->getName($property);
-        if ($this->endsWith($propertyName, $expectedName)) {
-            return null;
-        }
-
-        if ($this->nodeNameResolver->isName($property, $expectedName)) {
-            return null;
-        }
-
-        return $expectedName;
-    }
-
     public function resolveForParamIfNotYet(Param $param): ?string
     {
         $expectedName = $this->resolveForParam($param);
@@ -110,26 +88,6 @@ final class ExpectedNameResolver
 
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $expectedName = $this->propertyNaming->getExpectedNameFromType($staticType);
-        if ($expectedName === null) {
-            return null;
-        }
-
-        return $expectedName->getName();
-    }
-
-    public function resolveForProperty(Property $property): ?string
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
-        if ($this->nodeTypeResolver->isPropertyBoolean($property)) {
-            return $this->propertyNaming->getExpectedNameFromBooleanPropertyType($property);
-        }
-
-        $expectedName = $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
         if ($expectedName === null) {
             return null;
         }

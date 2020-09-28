@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
@@ -195,6 +196,15 @@ final class NodeNameResolver
         }
 
         if (! $this->isName($node->var, 'this')) {
+            return false;
+        }
+
+        return $this->isName($node->name, $name);
+    }
+
+    public function isLocalStaticPropertyFetchNamed(Node $node, string $name): bool
+    {
+        if (! $node instanceof StaticPropertyFetch) {
             return false;
         }
 

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Naming\ValueObject;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 
-final class PropertyRename
+final class PropertyRename implements RenameValueObjectInterface
 {
     /**
      * @var string
@@ -19,6 +20,11 @@ final class PropertyRename
      * @var string
      */
     private $currentName;
+
+    /**
+     * @var string
+     */
+    private $classLikeName;
 
     /**
      * @var Property
@@ -36,20 +42,20 @@ final class PropertyRename
     private $propertyProperty;
 
     public function __construct(
-        Property $property,
-        string $expectedName,
-        string $currentName,
-        ClassLike $classLike,
-        PropertyProperty $propertyProperty
+        Property $property, string $expectedName, string $currentName, ClassLike $classLike, string $classLikeName, PropertyProperty $propertyProperty
     ) {
         $this->property = $property;
         $this->expectedName = $expectedName;
         $this->currentName = $currentName;
         $this->classLike = $classLike;
+        $this->classLikeName = $classLikeName;
         $this->propertyProperty = $propertyProperty;
     }
 
-    public function getProperty(): Property
+    /**
+     * @return Property
+     */
+    public function getNode(): Node
     {
         return $this->property;
     }
@@ -67,6 +73,11 @@ final class PropertyRename
     public function getClassLike(): ClassLike
     {
         return $this->classLike;
+    }
+
+    public function getClassLikeName(): string
+    {
+        return $this->classLikeName;
     }
 
     public function getPropertyProperty(): PropertyProperty

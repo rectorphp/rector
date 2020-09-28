@@ -22,7 +22,6 @@ use Ramsey\Uuid\UuidInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
-use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -123,26 +122,6 @@ final class BreakingVariableRenameGuard
         }
 
         return $this->isUsedInIfAndOtherBranches($variable, $currentName);
-    }
-
-    public function shouldSkipProperty(PropertyRename $propertyRename): bool
-    {
-        if (! $propertyRename->getProperty()->isPrivate()) {
-            return true;
-        }
-
-        $conflictingPropertyNames = $this->conflictingNameResolver->resolveConflictingPropertyNames(
-            $propertyRename->getClassLike()
-        );
-        if (in_array($propertyRename->getExpectedName(), $conflictingPropertyNames, true)) {
-            return true;
-        }
-
-        if ($this->isRamseyUuidInterface($propertyRename->getProperty())) {
-            return true;
-        }
-
-        return $this->isDateTimeAtNamingConvention($propertyRename->getProperty());
     }
 
     public function shouldSkipParam(
@@ -266,6 +245,7 @@ final class BreakingVariableRenameGuard
     }
 
     /**
+     * @TODO Remove once ParamRenamer created
      * @param Param|Property $node
      */
     private function isRamseyUuidInterface(Node $node): bool
@@ -274,6 +254,7 @@ final class BreakingVariableRenameGuard
     }
 
     /**
+     * @TODO Remove once ParamRenamer created
      * @param Param|Property $node
      */
     private function isDateTimeAtNamingConvention(Node $node): bool
