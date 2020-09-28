@@ -28,7 +28,6 @@ use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
 use Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector;
 use Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector;
-use Rector\CodingStyle\Rector\Variable\UnderscoreToCamelCaseVariableNameRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -69,6 +68,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(CamelCaseFunctionNamingToUnderscoreRector::class);
     $services->set(SplitGroupedUseImportsRector::class);
-    $services->set(UnderscoreToCamelCaseVariableNameRector::class);
     $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
 };
