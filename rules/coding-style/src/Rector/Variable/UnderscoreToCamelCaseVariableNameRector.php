@@ -23,14 +23,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class UnderscoreToCamelCaseVariableNameRector extends AbstractRector
 {
     /**
-     * @var ReservedKeywordAnalyzer
-     */
-    private $reservedKeywordAnalyzer;
-
-    /**
      * @var string
      */
     private const PARAM_NAME_REGEX = '#(?<paramPrefix>@param\s.*\s+\$)(?<paramName>%s)#ms';
+
+    /**
+     * @var ReservedKeywordAnalyzer
+     */
+    private $reservedKeywordAnalyzer;
 
     public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
     {
@@ -129,10 +129,14 @@ CODE_SAMPLE
             return;
         }
 
-        $newdocComment = Strings::replace($docComment->getText(), sprintf(self::PARAM_NAME_REGEX, $variableName), function ($match) use ($camelCaseName): string {
-            $match['paramName'] = $camelCaseName;
-            return $match['paramPrefix'] . $match['paramName'];
-        });
+        $newdocComment = Strings::replace(
+            $docComment->getText(),
+            sprintf(self::PARAM_NAME_REGEX, $variableName),
+            function ($match) use ($camelCaseName): string {
+                $match['paramName'] = $camelCaseName;
+                return $match['paramPrefix'] . $match['paramName'];
+            }
+        );
 
         $parentNode->setDocComment(new Doc($newdocComment));
     }
