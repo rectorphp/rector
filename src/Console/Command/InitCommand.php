@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -43,10 +42,9 @@ class InitCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         $rectorConfigFiles = $this->smartFileSystem->exists(getcwd() . '/rector.php');
 
-        if (!$rectorConfigFiles) {
+        if (! $rectorConfigFiles) {
             $this->smartFileSystem->copy('rector.php.dist', getcwd() . '/rector.php');
             $this->symfonyStyle->success('rector.php config file has been generated successfully');
         } else {
