@@ -138,6 +138,11 @@ CODE_SAMPLE
             }
         );
 
-        $parentNode->setDocComment(new Doc($newdocComment));
+        if ($parentNode instanceof ClassMethod) {
+            $variable->getAttribute(AttributeKey::METHOD_NODE)->setDocComment(new Doc($newdocComment));
+            return;
+        }
+
+        $variable->getAttribute(AttributeKey::FUNCTION_NODE)->setDocComment(new Doc($newdocComment));
     }
 }
