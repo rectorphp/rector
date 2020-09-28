@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\Variable;
 
 use Nette\Utils\Strings;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -15,7 +16,6 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use PhpParser\Comment\Doc;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\UnderscoreToCamelCaseVariableNameRectorTest
@@ -96,12 +96,12 @@ CODE_SAMPLE
         }
 
         $node->name = $camelCaseName;
-        $node = $this->updateDocblock($node, $nodeName, $camelCaseName);
+        $this->updateDocblock($node, $nodeName, $camelCaseName);
 
         return $node;
     }
 
-    private function updateDocblock(Variable $variable, string $variableName, string $camelCaseName): Variable
+    private function updateDocblock(Variable $variable, string $variableName, string $camelCaseName): void
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         while ($parentNode) {
@@ -113,20 +113,20 @@ CODE_SAMPLE
         }
 
         if ($parentNode === null) {
-            return $variable;
+            return;
         }
 
         $docComment = $parentNode->getDocComment();
         if ($docComment === null) {
-            return $variable;
+            return;
         }
 
         if ($docComment->getText() === null) {
-            return $variable;
+            return;
         }
 
         if (! Strings::match($docComment->getText(), sprintf(self::PARAM_NAME_REGEX, $variableName))) {
-            return $variable;
+            return;
         }
 
         $newdocComment = Strings::replace($docComment->getText(), sprintf(self::PARAM_NAME_REGEX, $variableName), function ($match) use ($camelCaseName): string {
@@ -135,13 +135,5 @@ CODE_SAMPLE
         });
 
         $parentNode->setDocComment(new Doc($newdocComment));
-
-        if ($parentNode instanceof ClassMethod) {
-            $variable->setAttribute(AttributeKey::METHOD_NODE, $parentNode);
-            return $variable;
-        }
-
-        $variable->setAttribute(AttributeKey::FUNCTION_NODE, $parentNode);
-        return $variable;
     }
 }
