@@ -49,7 +49,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 use Doctrine\ORM\Attributes as ORM;
 
-<<ORM\Entity>>
+#[ORM\Entity]
 class SomeClass
 {
 }
