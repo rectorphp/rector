@@ -6,7 +6,9 @@ namespace Rector\DowngradePhp73\Rector\String_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -47,7 +49,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [String_::class];
+        return [String_::class, Encapsed::class];
     }
 
     /**
