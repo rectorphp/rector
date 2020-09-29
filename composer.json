@@ -37,7 +37,6 @@
         "symplify/package-builder": "^8.3.17",
         "symplify/set-config-resolver": "^8.3.17",
         "symplify/smart-file-system": "^8.3.17",
-        "tracy/tracy": "^2.7",
         "webmozart/assert": "^1.8"
     },
     "require-dev": {
@@ -55,6 +54,7 @@
         "symplify/easy-testing": "^8.3.17",
         "symplify/monorepo-builder": "^8.3.17",
         "symplify/phpstan-extensions": "^8.3.17",
+        "tracy/tracy": "^2.7",
         "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
     "replace": {
