@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\PSR4\Rector\FileSystem;
 
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
@@ -86,12 +87,25 @@ CODE_SAMPLE
             return;
         }
 
+        $nodesWithStrictTypesThenNamespace = [];
+        foreach ($nodes as $key => $node) {
+            if ($node instanceof Declare_) {
+                $nodesWithStrictTypesThenNamespace[] = $node;
+                unset($nodes[$key]);
+            }
+        }
+
         $namespace = new Namespace_(new Name($expectedNamespace));
         $namespace->stmts = $nodes;
 
-        $nodesWithFileDestination = new NodesWithFileDestination([
-            $namespace,
-        ], $smartFileInfo->getRealPath(), $smartFileInfo);
+        $nodesWithStrictTypesThenNamespace[] = $namespace;
+
+        $nodesWithFileDestination = new NodesWithFileDestination(
+            $nodesWithStrictTypesThenNamespace,
+            $smartFileInfo->getRealPath(),
+            $smartFileInfo
+        );
+
         $this->printNodesWithFileDestination($nodesWithFileDestination);
     }
 }
