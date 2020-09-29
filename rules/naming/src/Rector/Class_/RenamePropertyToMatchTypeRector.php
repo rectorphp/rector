@@ -11,7 +11,8 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Naming\PropertyRenamer;
+use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
+use Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 
 /**
@@ -25,19 +26,28 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
     private $hasChanged = false;
 
     /**
-     * @var PropertyRenamer
-     */
-    private $propertyRenamer;
-
-    /**
      * @var PropertyRenameFactory
      */
     private $propertyRenameFactory;
 
-    public function __construct(PropertyRenamer $propertyRenamer, PropertyRenameFactory $propertyRenameFactory)
-    {
-        $this->propertyRenamer = $propertyRenamer;
+    /**
+     * @var MatchTypePropertyRenamer
+     */
+    private $matchTypePropertyRenamer;
+
+    /**
+     * @var MatchPropertyTypeExpectedNameResolver
+     */
+    private $matchPropertyTypeExpectedNameResolver;
+
+    public function __construct(
+        MatchTypePropertyRenamer $matchTypePropertyRenamer,
+        PropertyRenameFactory $propertyRenameFactory,
+        MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver
+    ) {
         $this->propertyRenameFactory = $propertyRenameFactory;
+        $this->matchTypePropertyRenamer = $matchTypePropertyRenamer;
+        $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -102,12 +112,15 @@ CODE_SAMPLE
     private function refactorClassProperties(ClassLike $classLike): void
     {
         foreach ($classLike->getProperties() as $property) {
-            $propertyRename = $this->propertyRenameFactory->create($property);
+            $propertyRename = $this->propertyRenameFactory->create(
+                $property,
+                $this->matchPropertyTypeExpectedNameResolver
+            );
             if ($propertyRename === null) {
                 continue;
             }
 
-            if ($this->propertyRenamer->rename($propertyRename) !== null) {
+            if ($this->matchTypePropertyRenamer->rename($propertyRename) !== null) {
                 $this->hasChanged = true;
             }
         }

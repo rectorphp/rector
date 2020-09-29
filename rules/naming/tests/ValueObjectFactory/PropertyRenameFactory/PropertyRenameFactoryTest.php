@@ -10,6 +10,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FileSystemRector\Parser\FileInfoParser;
+use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
@@ -32,11 +33,20 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
      */
     private $betterNodeFinder;
 
+    /**
+     * @var MatchPropertyTypeExpectedNameResolver
+     */
+    private $matchPropertyTypeExpectedNameResolver;
+
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
 
         $this->propertyRenameFactory = self::$container->get(PropertyRenameFactory::class);
+        $this->matchPropertyTypeExpectedNameResolver = self::$container->get(
+            MatchPropertyTypeExpectedNameResolver::class
+        );
+
         $this->fileInfoParser = self::$container->get(FileInfoParser::class);
         $this->betterNodeFinder = self::$container->get(BetterNodeFinder::class);
     }
@@ -48,11 +58,14 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
     {
         $property = $this->getPropertyFromFileInfo($fileInfoWithProperty);
 
-        $actualPropertyRename = $this->propertyRenameFactory->create($property);
+        $actualPropertyRename = $this->propertyRenameFactory->create(
+            $property,
+            $this->matchPropertyTypeExpectedNameResolver
+        );
         $this->assertNotNull($actualPropertyRename);
 
         /** @var PropertyRename $actualPropertyRename */
-        $this->assertSame($property, $actualPropertyRename->getProperty());
+        $this->assertSame($property, $actualPropertyRename->getNode());
         $this->assertSame($expectedName, $actualPropertyRename->getExpectedName());
         $this->assertSame($currentName, $actualPropertyRename->getCurrentName());
     }

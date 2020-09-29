@@ -7,7 +7,6 @@ namespace Rector\Naming\Naming;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -51,25 +50,6 @@ final class ConflictingNameResolver
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->arrayFilter = $arrayFilter;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function resolveConflictingPropertyNames(ClassLike $classLike): array
-    {
-        $expectedNames = [];
-        foreach ($classLike->getProperties() as $property) {
-            $expectedName = $this->expectedNameResolver->resolveForProperty($property);
-            if ($expectedName === null) {
-                /** @var string $expectedName */
-                $expectedName = $this->nodeNameResolver->getName($property);
-            }
-
-            $expectedNames[] = $expectedName;
-        }
-
-        return $this->arrayFilter->filterWithAtLeastTwoOccurences($expectedNames);
     }
 
     /**
