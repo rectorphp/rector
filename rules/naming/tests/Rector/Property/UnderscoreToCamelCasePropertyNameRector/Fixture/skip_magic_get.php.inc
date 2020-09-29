@@ -1,9 +1,11 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Property\UnderscoreToCamelCasePropertyNameRector\Fixture;
 
 class SkipMagicGet
 {
+    private $underscore_value;
+
     public function get()
     {
         $this->underscore_value = 5;

@@ -6,7 +6,7 @@ namespace Rector\Naming\ValueObjectFactory;
 
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\Naming\ExpectedNameResolver\ExpectedNameResolverInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -17,28 +17,22 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyRenameFactory
 {
     /**
-     * @var ExpectedNameResolver
-     */
-    private $expectedNameResolver;
-
-    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(ExpectedNameResolver $expectedNameResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
-        $this->expectedNameResolver = $expectedNameResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function create(Property $property): ?PropertyRename
+    public function create(Property $property, ExpectedNameResolverInterface $expectedNameResolver): ?PropertyRename
     {
         if (count($property->props) !== 1) {
             return null;
         }
 
-        $expectedName = $this->expectedNameResolver->resolveForPropertyIfNotYet($property);
+        $expectedName = $expectedNameResolver->resolveIfNotYet($property);
         if ($expectedName === null) {
             return null;
         }
@@ -47,9 +41,21 @@ final class PropertyRenameFactory
 
         $propertyClassLike = $property->getAttribute(AttributeKey::CLASS_NODE);
         if ($propertyClassLike === null) {
-            throw new ShouldNotHappenException("There shouldn't be a property without Class Node");
+            throw new ShouldNotHappenException("There shouldn't be a property without AttributeKey::CLASS_NODE");
         }
 
-        return new PropertyRename($property, $expectedName, $currentName, $propertyClassLike, $property->props[0]);
+        $propertyClassLikeName = $property->getAttribute(AttributeKey::CLASS_NAME);
+        if ($propertyClassLikeName === null) {
+            throw new ShouldNotHappenException("There shouldn't be a property without AttributeKey::CLASS_NAME");
+        }
+
+        return new PropertyRename(
+            $property,
+            $expectedName,
+            $currentName,
+            $propertyClassLike,
+            $propertyClassLikeName,
+            $property->props[0]
+        );
     }
 }

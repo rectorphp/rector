@@ -9,7 +9,7 @@
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
 - [CodeQuality](#codequality) (59)
-- [CodingStyle](#codingstyle) (36)
+- [CodingStyle](#codingstyle) (34)
 - [DeadCode](#deadcode) (40)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (17)
@@ -29,7 +29,7 @@
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
-- [Naming](#naming) (8)
+- [Naming](#naming) (10)
 - [Nette](#nette) (16)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
@@ -2356,50 +2356,6 @@ Change under_score local variable names to camelCase
      {
 -        $some_value = $a_b;
 +        $someValue = $a_b;
-     }
- }
-```
-
-<br><br>
-
-### `UnderscoreToCamelCasePropertyNameRector`
-
-- class: [`Rector\CodingStyle\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector`](/rules/coding-style/src/Rector/PropertyProperty/UnderscoreToCamelCasePropertyNameRector.php)
-- [test fixtures](/rules/coding-style/tests/Rector/PropertyProperty/UnderscoreToCamelCasePropertyNameRector/Fixture)
-
-Change under_score names to camelCase
-
-```diff
- final class SomeClass
- {
--    public $property_name;
-+    public $propertyName;
-
-     public function run($a)
-     {
--        $this->property_name = 5;
-+        $this->propertyName = 5;
-     }
- }
-```
-
-<br><br>
-
-### `UnderscoreToCamelCaseVariableNameRector`
-
-- class: [`Rector\CodingStyle\Rector\Variable\UnderscoreToCamelCaseVariableNameRector`](/rules/coding-style/src/Rector/Variable/UnderscoreToCamelCaseVariableNameRector.php)
-- [test fixtures](/rules/coding-style/tests/Rector/Variable/UnderscoreToCamelCaseVariableNameRector/Fixture)
-
-Change under_score names to camelCase
-
-```diff
- final class SomeClass
- {
--    public function run($a_b)
-+    public function run($aB)
-     {
--        $some_value = $a_b;
-+        $someValue = $aB;
      }
  }
 ```
@@ -7489,6 +7445,50 @@ Rename variable to match new ClassType
 -        $search->advance();
 +        $dreamSearch = new DreamSearch();
 +        $dreamSearch->advance();
+     }
+ }
+```
+
+<br><br>
+
+### `UnderscoreToCamelCasePropertyNameRector`
+
+- class: [`Rector\Naming\Rector\Property\UnderscoreToCamelCasePropertyNameRector`](/rules/naming/src/Rector/Property/UnderscoreToCamelCasePropertyNameRector.php)
+- [test fixtures](/rules/naming/tests/Rector/Property/UnderscoreToCamelCasePropertyNameRector/Fixture)
+
+Change under_score names to camelCase
+
+```diff
+ final class SomeClass
+ {
+-    public $property_name;
++    public $propertyName;
+
+     public function run($a)
+     {
+-        $this->property_name = 5;
++        $this->propertyName = 5;
+     }
+ }
+```
+
+<br><br>
+
+### `UnderscoreToCamelCaseVariableNameRector`
+
+- class: [`Rector\Naming\Rector\Variable\UnderscoreToCamelCaseVariableNameRector`](/rules/naming/src/Rector/Variable/UnderscoreToCamelCaseVariableNameRector.php)
+- [test fixtures](/rules/naming/tests/Rector/Variable/UnderscoreToCamelCaseVariableNameRector/Fixture)
+
+Change under_score names to camelCase
+
+```diff
+ final class SomeClass
+ {
+-    public function run($a_b)
++    public function run($aB)
+     {
+-        $some_value = $a_b;
++        $someValue = $aB;
      }
  }
 ```

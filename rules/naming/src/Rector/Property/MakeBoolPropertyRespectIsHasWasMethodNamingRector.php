@@ -9,7 +9,8 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Naming\PropertyRenamer;
+use Rector\Naming\ExpectedNameResolver\BoolPropertyExpectedNameResolver;
+use Rector\Naming\PropertyRenamer\BoolPropertyRenamer;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 
 /**
@@ -19,19 +20,28 @@ use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 final class MakeBoolPropertyRespectIsHasWasMethodNamingRector extends AbstractRector
 {
     /**
-     * @var PropertyRenamer
-     */
-    private $propertyRenamer;
-
-    /**
      * @var PropertyRenameFactory
      */
     private $propertyRenameFactory;
 
-    public function __construct(PropertyRenamer $propertyRenamer, PropertyRenameFactory $propertyRenameFactory)
-    {
-        $this->propertyRenamer = $propertyRenamer;
+    /**
+     * @var BoolPropertyRenamer
+     */
+    private $boolPropertyRenamer;
+
+    /**
+     * @var BoolPropertyExpectedNameResolver
+     */
+    private $boolPropertyExpectedNameResolver;
+
+    public function __construct(
+        BoolPropertyRenamer $boolPropertyRenamer,
+        PropertyRenameFactory $propertyRenameFactory,
+        BoolPropertyExpectedNameResolver $boolPropertyExpectedNameResolver
+    ) {
         $this->propertyRenameFactory = $propertyRenameFactory;
+        $this->boolPropertyRenamer = $boolPropertyRenamer;
+        $this->boolPropertyExpectedNameResolver = $boolPropertyExpectedNameResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -85,12 +95,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $propertyRename = $this->propertyRenameFactory->create($node);
+        $propertyRename = $this->propertyRenameFactory->create($node, $this->boolPropertyExpectedNameResolver);
         if ($propertyRename === null) {
             return null;
         }
 
-        if ($this->propertyRenamer->rename($propertyRename) === null) {
+//        dd($propertyRename->getClassLike());
+        if ($this->boolPropertyRenamer->rename($propertyRename) === null) {
             return null;
         }
 
