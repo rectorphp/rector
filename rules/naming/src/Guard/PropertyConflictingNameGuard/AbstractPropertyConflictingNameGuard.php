@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use Rector\Naming\ExpectedNameResolver\ExpectedNameResolverInterface;
 use Rector\Naming\Guard\GuardInterface;
 use Rector\Naming\PhpArray\ArrayFilter;
+use Rector\Naming\ValueObject\PropertyRename;
 use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -35,6 +36,9 @@ class AbstractPropertyConflictingNameGuard implements GuardInterface
         $this->arrayFilter = $arrayFilter;
     }
 
+    /**
+     * @param PropertyRename $renameValueObject
+     */
     public function check(RenameValueObjectInterface $renameValueObject): bool
     {
         $conflictingPropertyNames = $this->resolve($renameValueObject->getClassLike());

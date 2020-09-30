@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Rector\Naming\ExpectedNameResolver;
 
 use Nette\Utils\Strings;
-use PhpParser\Node\Stmt\Property;
-use Rector\Naming\Naming\PropertyNaming;
+use PhpParser\Node;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -18,39 +17,31 @@ abstract class AbstractExpectedNameResolver implements ExpectedNameResolverInter
     protected $nodeTypeResolver;
 
     /**
-     * @var PropertyNaming
-     */
-    protected $propertyNaming;
-
-    /**
      * @var NodeNameResolver
      */
     protected $nodeNameResolver;
 
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        PropertyNaming $propertyNaming
-    ) {
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->propertyNaming = $propertyNaming;
     }
 
-    public function resolveIfNotYet(Property $property): ?string
+    public function resolveIfNotYet(Node $node): ?string
     {
-        $expectedName = $this->resolve($property);
+        $expectedName = $this->resolve($node);
         if ($expectedName === null) {
             return null;
         }
 
-        /** @var string $propertyName */
-        $propertyName = $this->nodeNameResolver->getName($property);
-        if ($this->endsWith($propertyName, $expectedName)) {
+        /** @var string $currentName */
+        $currentName = $this->nodeNameResolver->getName($node);
+
+        if ($this->endsWith($currentName, $expectedName)) {
             return null;
         }
 
-        if ($this->nodeNameResolver->isName($property, $expectedName)) {
+        if ($this->nodeNameResolver->isName($node, $expectedName)) {
             return null;
         }
 

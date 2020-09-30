@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Rector\Naming\ExpectedNameResolver;
 
-use PhpParser\Node\Stmt\Property;
+use PhpParser\Node;
 use Rector\Core\Util\StaticRectorStrings;
 
 final class UnderscoreCamelCaseExpectedNameResolver extends AbstractExpectedNameResolver
 {
-    public function resolve(Property $property): string
+    public function resolve(Node $node): ?string
     {
-        $currentName = $this->nodeNameResolver->getName($property);
+        $currentName = $this->nodeNameResolver->getName($node);
+        if ($currentName === null) {
+            return null;
+        }
 
         return StaticRectorStrings::underscoreToCamelCase($currentName);
     }

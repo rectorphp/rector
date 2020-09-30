@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
-use Rector\Naming\VariableRenamer;
+use Rector\Naming\ParamRenamer\MatchTypeParamRenamer;
+use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
 
 /**
  * @see \Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\RenameParamToMatchTypeRectorTest
@@ -38,25 +37,32 @@ final class RenameParamToMatchTypeRector extends AbstractRector
     private $breakingVariableRenameGuard;
 
     /**
-     * @var VariableRenamer
+     * @var MatchTypeParamRenamer
      */
-    private $variableRenamer;
+    private $matchTypeParamRenamer;
 
     /**
-     * @var PropertyDocBlockManipulator
+     * @var ParamRenameFactory
      */
-    private $propertyDocBlockManipulator;
+    private $paramRenameFactory;
+
+    /**
+     * @var MatchParamTypeExpectedNameResolver
+     */
+    private $matchParamTypeExpectedNameResolver;
 
     public function __construct(
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ExpectedNameResolver $expectedNameResolver,
-        VariableRenamer $variableRenamer,
-        PropertyDocBlockManipulator $propertyDocBlockManipulator
+        MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
+        ParamRenameFactory $paramRenameFactory,
+        MatchTypeParamRenamer $matchTypeParamRenamer
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
-        $this->variableRenamer = $variableRenamer;
-        $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
+        $this->paramRenameFactory = $paramRenameFactory;
+        $this->matchTypeParamRenamer = $matchTypeParamRenamer;
+        $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -99,8 +105,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->hasChanged = false;
-
         foreach ($node->params as $param) {
             $expectedName = $this->expectedNameResolver->resolveForParamIfNotYet($param);
             if ($expectedName === null) {
@@ -111,16 +115,14 @@ CODE_SAMPLE
                 continue;
             }
 
-            // 1. rename param
-            /** @var string $oldName */
-            $oldName = $this->getName($param->var);
-            $param->var->name = new Identifier($expectedName);
+            $paramRename = $this->paramRenameFactory->create($param, $this->matchParamTypeExpectedNameResolver);
+            if ($paramRename === null) {
+                continue;
+            }
 
-            // 2. rename param in the rest of the method
-            $this->variableRenamer->renameVariableInFunctionLike($node, null, $oldName, $expectedName);
-
-            // 3. rename @param variable in docblock too
-            $this->propertyDocBlockManipulator->renameParameterNameInDocBlock($node, $oldName, $expectedName);
+            if ($this->matchTypeParamRenamer->rename($paramRename) === null) {
+                continue;
+            }
 
             $this->hasChanged = true;
         }
