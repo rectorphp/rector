@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\Skip;
 
 use Nette\Utils\Strings;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Skipper
@@ -25,12 +27,9 @@ final class Skipper
      */
     private $skip = [];
 
-    /**
-     * @param mixed[] $skip
-     */
-    public function __construct(array $skip = [])
+    public function __construct(ParameterProvider $parameterProvider)
     {
-        $this->skip = $skip;
+        $this->skip = (array) $parameterProvider->provideArrayParameter(Option::SKIP);
     }
 
     public function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo, AbstractRector $rector): bool
