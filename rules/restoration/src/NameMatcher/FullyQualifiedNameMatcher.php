@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Restoration\NameMatcher;
 
-use Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -12,24 +11,23 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
-use Rector\Restoration\ClassMap\ExistingClassesProvider;
 
 final class FullyQualifiedNameMatcher
 {
-    /**
-     * @var ExistingClassesProvider
-     */
-    private $existingClassesProvider;
-
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(ExistingClassesProvider $existingClassesProvider, NodeNameResolver $nodeNameResolver)
+    /**
+     * @var NameMatcher
+     */
+    private $nameMatcher;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, NameMatcher $nameMatcher)
     {
-        $this->existingClassesProvider = $existingClassesProvider;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nameMatcher = $nameMatcher;
     }
 
     /**
@@ -61,21 +59,12 @@ final class FullyQualifiedNameMatcher
                 return null;
             }
 
-            return $this->makeNodeFullyQualified($resolvedName);
-        }
-
-        return null;
-    }
-
-    private function makeNodeFullyQualified(string $desiredShortName): ?FullyQualified
-    {
-        foreach ($this->existingClassesProvider->provide() as $declaredClass) {
-            $declaredShortClass = (string) Strings::after($declaredClass, '\\', -1);
-            if ($declaredShortClass !== $desiredShortName) {
-                continue;
+            $fullyQualified = $this->nameMatcher->makeNameFullyQualified($resolvedName);
+            if ($fullyQualified === null) {
+                return null;
             }
 
-            return new FullyQualified($declaredClass);
+            return new FullyQualified($fullyQualified);
         }
 
         return null;

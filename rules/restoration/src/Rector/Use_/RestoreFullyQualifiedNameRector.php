@@ -10,10 +10,15 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Use_;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Type\MixedType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Restoration\NameMatcher\FullyQualifiedNameMatcher;
+use Rector\Restoration\NameMatcher\PhpDocTypeNodeNameMatcher;
 
 /**
  * @see \Rector\Restoration\Tests\Rector\Use_\RestoreFullyQualifiedNameRector\RestoreFullyQualifiedNameRectorTest
@@ -25,9 +30,17 @@ final class RestoreFullyQualifiedNameRector extends AbstractRector
      */
     private $fullyQualifiedNameMatcher;
 
-    public function __construct(FullyQualifiedNameMatcher $fullyQualifiedNameMatcher)
-    {
+    /**
+     * @var PhpDocTypeNodeNameMatcher
+     */
+    private $phpDocTypeNodeNameMatcher;
+
+    public function __construct(
+        FullyQualifiedNameMatcher $fullyQualifiedNameMatcher,
+        PhpDocTypeNodeNameMatcher $phpDocTypeNodeNameMatcher
+    ) {
         $this->fullyQualifiedNameMatcher = $fullyQualifiedNameMatcher;
+        $this->phpDocTypeNodeNameMatcher = $phpDocTypeNodeNameMatcher;
     }
 
     public function getDefinition(): RectorDefinition
@@ -120,6 +133,8 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
+        $this->refactorReturnTagValueNode($classMethod);
+
         $returnType = $classMethod->returnType;
         if ($returnType === null) {
             return null;
@@ -133,5 +148,33 @@ CODE_SAMPLE
         $classMethod->returnType = $fullyQualified;
 
         return $classMethod;
+    }
+
+    private function refactorReturnTagValueNode(Node $node): void
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return;
+        }
+
+        $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if ($attributeAwareReturnTagValueNode === null) {
+            return;
+        }
+        if (! $phpDocInfo->getReturnType() instanceof MixedType) {
+            return;
+        }
+
+        if ($attributeAwareReturnTagValueNode->type instanceof IdentifierTypeNode) {
+            $fullyQualifiedTypeNode = $this->phpDocTypeNodeNameMatcher->matchIdentifier(
+                $attributeAwareReturnTagValueNode->type->name
+            );
+            if ($fullyQualifiedTypeNode === null) {
+                return;
+            }
+
+            $attributeAwareReturnTagValueNode->type = $fullyQualifiedTypeNode;
+        }
     }
 }

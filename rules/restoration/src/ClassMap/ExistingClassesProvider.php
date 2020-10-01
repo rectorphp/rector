@@ -52,28 +52,33 @@ final class ExistingClassesProvider
         $composerJson = $this->composerJsonFactory->createFromFilePath($composerJsonFilePath);
 
         $psr4Paths = $composerJson->getAutoload()['psr-4'] ?? [];
-        $devPsr4Paths = $composerJson->getAutoloadDev()['psr-4'] ?? [];
+        $classmapPaths = $composerJson->getAutoload()['classmap'] ?? [];
 
-        return array_merge($psr4Paths, $devPsr4Paths);
+        return array_merge($psr4Paths, $classmapPaths);
     }
 
     /**
-     * @param string[] $psr4Paths
+     * @param string[] $directories
      * @return string[]
      */
-    private function findClassesInDirectories(array $psr4Paths): array
+    private function findClassesInDirectories(array $directories): array
     {
         $robotLoader = new RobotLoader();
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/rector_restore');
 
-        // weird test files
-        $robotLoader->ignoreDirs[] = '*Expected*';
-        $robotLoader->ignoreDirs[] = '*Fixture*';
-
-        foreach ($psr4Paths as $path) {
+        foreach ($directories as $path) {
             $robotLoader->addDirectory(getcwd() . '/' . $path);
         }
 
-        return array_keys($robotLoader->getIndexedClasses());
+        $classNames = [];
+        foreach (array_keys($robotLoader->getIndexedClasses()) as $className) {
+            if (! is_string($className)) {
+                continue;
+            }
+
+            $classNames[] = $className;
+        }
+
+        return $classNames;
     }
 }

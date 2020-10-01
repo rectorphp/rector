@@ -8,6 +8,7 @@ use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
+use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
 use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
@@ -94,9 +95,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         UnaryOperatorSpacesFixer::class => null,
         // breaks on-purpose annotated variables
         ReturnAssignmentFixer::class => null,
-
         // buggy with specific markdown snippet file in docs/rules_overview.md
         ArrayListItemNewlineFixer::class => null,
+        BlankLineAfterOpeningTagFixer::class => null,
 
         StrictComparisonFixer::class => [__DIR__ . '/rules/polyfill/src/ConditionEvaluator.php'],
     ]);

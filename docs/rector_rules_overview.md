@@ -8717,17 +8717,7 @@ Change Form that extends Control to Controller and decoupled FormType
 ```
 
 **New file**
-
 ```php
-<<<<<<< HEAD
-<<<<<<< HEAD
-<?php
-=======
->>>>>>> update docs
-=======
-<?php
->>>>>>> cs fixes
-
 declare(strict_types=1);
 
 use Symfony\Component\Form\AbstractType;
@@ -16254,15 +16244,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call(
             'configure',
             [[
-<<<<<<< HEAD
                 AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects(
                                 [new AddParamTypeDeclaration('SomeClass', 'process', 0, 'string')]
                             ),
-=======
-                AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
-                    new AddParamTypeDeclaration('SomeClass', 'process', 0, 'string'),
-                ]),
->>>>>>> update docs
             ]]
         );
 };

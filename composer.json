@@ -31,13 +31,13 @@
         "symfony/dependency-injection": "^4.4.8|^5.0.6",
         "symfony/finder": "^4.4.8|^5.0.6",
         "symfony/process": "^4.4.8|^5.0.6",
-        "symplify/autowire-array-parameter": "^8.3.17",
-        "symplify/console-color-diff": "^8.3.17",
-        "symplify/easy-testing": "^8.3.17",
-        "symplify/composer-json-manipulator": "^8.3.17",
-        "symplify/package-builder": "^8.3.17",
-        "symplify/set-config-resolver": "^8.3.17",
-        "symplify/smart-file-system": "^8.3.17",
+        "symplify/autowire-array-parameter": "^8.3.23",
+        "symplify/console-color-diff": "^8.3.23",
+        "symplify/easy-testing": "^8.3.23",
+        "symplify/composer-json-manipulator": "^8.3.23",
+        "symplify/package-builder": "^8.3.23",
+        "symplify/set-config-resolver": "^8.3.23",
+        "symplify/smart-file-system": "^8.3.23",
         "webmozart/assert": "^1.8"
     },
     "require-dev": {
@@ -155,7 +155,8 @@
             "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src"
         },
         "files": [
-            "rules/symfony-php-config/functions/functions.php"
+            "rules/symfony-php-config/functions/functions.php",
+            "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php"
         ]
     },
     "autoload-dev": {

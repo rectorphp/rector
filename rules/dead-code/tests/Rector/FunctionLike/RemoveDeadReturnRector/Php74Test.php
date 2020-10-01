@@ -11,7 +11,7 @@ use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @requires PHP >= 7.4
+ * @requires PHP 7.4
  */
 final class Php74Test extends AbstractRectorTestCase
 {

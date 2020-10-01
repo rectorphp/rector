@@ -11,7 +11,7 @@ use Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @requires PHP >= 7.4
+ * @requires PHP 7.4
  */
 final class Php74Test extends AbstractRectorTestCase
 {

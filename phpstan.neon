@@ -9,23 +9,6 @@ includes:
 
 services:
     # require constant in argument position
-<<<<<<< HEAD
-
-    #-
-    #    class: Symplify\CodingStandard\Rules\RequireMethodCallArgumentConstantRule
-    #    tags: [phpstan.rules.rule]
-    #    arguments:
-    #        constantArgByMethodByType:
-    #            Symfony\Component\Console\Command\Command:
-    #                addArgument: [0]
-    #                addOption: [0]
-    #            Symfony\Component\Console\Input\InputInterface:
-    #                getOption: [0]
-    #                getArgument: [0]
-    #            PhpParser\Node:
-    #                getAttribute: [0]
-    #               setAttribute: [0]
-=======
     -
         class: Symplify\CodingStandard\Rules\RequireMethodCallArgumentConstantRule
         tags: [phpstan.rules.rule]
@@ -40,7 +23,6 @@ services:
                 PhpParser\Node:
                     getAttribute: [0]
                     setAttribute: [0]
->>>>>>> update docs
 
     -
         class: Symplify\CodingStandard\Rules\SeeAnnotationToTestRule
@@ -738,3 +720,15 @@ parameters:
         - '#Parameter \#1 \$name of method Rector\\Restoration\\Rector\\Use_\\RestoreFullyQualifiedNameRector\:\:resolveFullyQualifiedName\(\) expects PhpParser\\Node\\Name, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name given#'
 
         - '#Class with base "CheckNotTestsNamespaceOutsideTestsDirectoryRule" name is already used in "Rector\\PHPStanExtensions\\Rule\\CheckNotTestsNamespaceOutsideTestsDirectoryRule", "Symplify\\CodingStandard\\Rules\\CheckNotTestsNamespaceOutsideTestsDirectoryRule"\. Use unique name to make classes easy to recognize#'
+
+        -
+            message: '#Do not use setter on a service#'
+            paths:
+                - src/HttpKernel/RectorKernel.php
+
+        # buggy, is fixed on symplify dev-master
+        -
+             message: '#Method call argument on position 0 must use constant over value#'
+             paths:
+                 - src/Rector/AbstractRector.php # 419
+                 - src/Rector/AbstractRector.php # 419
