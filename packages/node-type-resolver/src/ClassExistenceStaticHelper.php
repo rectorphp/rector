@@ -8,6 +8,14 @@ final class ClassExistenceStaticHelper
 {
     public static function doesClassLikeExist(string $classLike): bool
     {
-        return class_exists($classLike) || interface_exists($classLike) || trait_exists($classLike);
+        if (class_exists($classLike)) {
+            return true;
+        }
+
+        if (interface_exists($classLike)) {
+            return true;
+        }
+
+        return trait_exists($classLike);
     }
 }
