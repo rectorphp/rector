@@ -9,6 +9,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
@@ -19,6 +21,7 @@ use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -399,6 +402,22 @@ final class BetterStandardPrinter extends Standard
         $declareString = parent::pStmt_Declare($declare);
 
         return Strings::replace($declareString, '#\s+#');
+    }
+
+    /**
+     * Remove extra \\ from FQN use imports, for easier use in the code
+     */
+    protected function pStmt_Use(Use_ $use): string
+    {
+        if ($use->type === Use_::TYPE_NORMAL) {
+            foreach ($use->uses as $useUse) {
+                if ($useUse->name instanceof FullyQualified) {
+                    $useUse->name = new Name($useUse->name);
+                }
+            }
+        }
+
+        return parent::pStmt_Use($use);
     }
 
     /**

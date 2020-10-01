@@ -6,10 +6,10 @@ namespace Rector\PHPStanExtensions\Tests\Rule\KeepRectorNamespaceForRectorRule;
 
 use Iterator;
 use PHPStan\Rules\Rule;
-use PHPStan\Testing\RuleTestCase;
 use Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule;
+use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
-final class KeepRectorNamespaceForRectorRuleTest extends RuleTestCase
+final class KeepRectorNamespaceForRectorRuleTest extends AbstractServiceAwareRuleTestCase
 {
     /**
      * @dataProvider provideData()
@@ -29,6 +29,9 @@ final class KeepRectorNamespaceForRectorRuleTest extends RuleTestCase
 
     protected function getRule(): Rule
     {
-        return new KeepRectorNamespaceForRectorRule();
+        return $this->getRuleFromConfig(
+            KeepRectorNamespaceForRectorRule::class,
+            __DIR__ . '/../../../config/phpstan-extensions.neon'
+        );
     }
 }

@@ -1,4 +1,4 @@
-# All 582 Rectors Overview
+# All 583 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -62,7 +62,7 @@
 - [RectorGenerator](#rectorgenerator) (1)
 - [RemovingStatic](#removingstatic) (6)
 - [Renaming](#renaming) (9)
-- [Restoration](#restoration) (7)
+- [Restoration](#restoration) (8)
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
@@ -8718,8 +8718,6 @@ Change Form that extends Control to Controller and decoupled FormType
 
 **New file**
 ```php
-<?php
-
 declare(strict_types=1);
 
 use Symfony\Component\Form\AbstractType;
@@ -13972,6 +13970,24 @@ Remove interface, that are added just for its sake, but nowhere useful
 +    public function __construct(SomeClass $onlyHereUsed)
      {
      }
+ }
+```
+
+<br><br>
+
+### `RestoreFullyQualifiedNameRector`
+
+- class: [`Rector\Restoration\Rector\Use_\RestoreFullyQualifiedNameRector`](/rules/restoration/src/Rector/Use_/RestoreFullyQualifiedNameRector.php)
+- [test fixtures](/rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Fixture)
+
+Restore accidentally shortened class names to its fully qualified form.
+
+```diff
+-use ShortClassOnly;
++use App\Whatever\ShortClassOnly;
+
+ class AnotherClass
+ {
  }
 ```
 

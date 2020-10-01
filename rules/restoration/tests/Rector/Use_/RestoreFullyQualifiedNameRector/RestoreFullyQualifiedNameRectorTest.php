@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
+namespace Rector\Restoration\Tests\Rector\Use_\RestoreFullyQualifiedNameRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
+use Rector\Restoration\Rector\Use_\RestoreFullyQualifiedNameRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class Php74Test extends AbstractRectorTestCase
+final class RestoreFullyQualifiedNameRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 7.4
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
@@ -22,11 +21,11 @@ final class Php74Test extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp74');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string
     {
-        return RenameVariableToMatchMethodCallReturnTypeRector::class;
+        return RestoreFullyQualifiedNameRector::class;
     }
 }

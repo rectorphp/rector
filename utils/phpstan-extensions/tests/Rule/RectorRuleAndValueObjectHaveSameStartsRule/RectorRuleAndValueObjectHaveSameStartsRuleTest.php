@@ -6,10 +6,10 @@ namespace Rector\PHPStanExtensions\Tests\Rule\RectorRuleAndValueObjectHaveSameSt
 
 use Iterator;
 use PHPStan\Rules\Rule;
-use PHPStan\Testing\RuleTestCase;
 use Rector\PHPStanExtensions\Rule\RectorRuleAndValueObjectHaveSameStartsRule;
+use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
-final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends RuleTestCase
+final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends AbstractServiceAwareRuleTestCase
 {
     /**
      * @dataProvider provideData()
@@ -22,12 +22,10 @@ final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends RuleTestCase
     public function provideData(): Iterator
     {
         yield [__DIR__ . '/Fixture/HaveSameStarts.php', []];
-
         yield [__DIR__ . '/Fixture/SkipNoCall.php', []];
-
         yield [__DIR__ . '/Fixture/SkipNoCallConfigure.php', []];
-
         yield [__DIR__ . '/Fixture/SkipNoInlineValueObjects.php', []];
+        yield [__DIR__ . '/Fixture/SkipConfigureValueObjectImplementsInterface.php', []];
 
         $errorMessage = sprintf(
             RectorRuleAndValueObjectHaveSameStartsRule::ERROR,
@@ -35,12 +33,13 @@ final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends RuleTestCase
             'ChangeMethodVisibility'
         );
         yield [__DIR__ . '/Fixture/HaveDifferentStarts.php', [[$errorMessage, 15]]];
-
-        yield [__DIR__ . '/Fixture/SkipConfigureValueObjectImplementsInterface.php', []];
     }
 
     protected function getRule(): Rule
     {
-        return new RectorRuleAndValueObjectHaveSameStartsRule();
+        return $this->getRuleFromConfig(
+            RectorRuleAndValueObjectHaveSameStartsRule::class,
+            __DIR__ . '/../../../config/phpstan-extensions.neon'
+        );
     }
 }
