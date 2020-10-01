@@ -23,27 +23,28 @@ final class Skipper
     private const ONLY_STARTS_WITH_ASTERISK_REGEX = '#^\*(.*?)[^*]$#';
 
     /**
-     * @var mixed[]
+     * @var ParameterProvider
      */
-    private $skip = [];
+    private $parameterProvider;
 
     public function __construct(ParameterProvider $parameterProvider)
     {
-        $this->skip = (array) $parameterProvider->provideArrayParameter(Option::SKIP);
+        $this->parameterProvider = $parameterProvider;
     }
 
     public function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo, AbstractRector $rector): bool
     {
-        if ($this->skip === []) {
+        $skip = $this->parameterProvider->provideArrayParameter(Option::SKIP);
+        if ($skip === []) {
             return false;
         }
 
         $rectorClass = get_class($rector);
-        if (! array_key_exists($rectorClass, $this->skip)) {
+        if (! array_key_exists($rectorClass, $skip)) {
             return false;
         }
 
-        $locations = $this->skip[$rectorClass];
+        $locations = $skip[$rectorClass];
         $filePathName = $smartFileInfo->getPathName();
         if (in_array($filePathName, $locations, true)) {
             return true;
