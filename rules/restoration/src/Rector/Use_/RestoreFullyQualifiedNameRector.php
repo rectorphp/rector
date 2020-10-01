@@ -7,14 +7,12 @@ namespace Rector\Restoration\Rector\Use_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\Restoration\NameMatcher\FullyQualifiedNameMatcher;
 
 /**
@@ -88,6 +86,22 @@ CODE_SAMPLE
         return null;
     }
 
+    private function refactoryUse(Use_ $use): Use_
+    {
+        foreach ($use->uses as $useUse) {
+            $name = $useUse->name;
+
+            $fullyQualifiedName = $this->fullyQualifiedNameMatcher->matchFullyQualifiedName($name);
+            if (! $fullyQualifiedName instanceof FullyQualified) {
+                continue;
+            }
+
+            $useUse->name = $fullyQualifiedName;
+        }
+
+        return $use;
+    }
+
     private function refactorParam(Param $param): ?Param
     {
         $name = $param->type;
@@ -95,7 +109,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $fullyQualified = $this->resolveFullyQualifiedName($name);
+        $fullyQualified = $this->fullyQualifiedNameMatcher->matchFullyQualifiedName($name);
         if ($fullyQualified === null) {
             return null;
         }
@@ -106,53 +120,12 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        if ($classMethod->returnType === null) {
+        $returnType = $classMethod->returnType;
+        if ($returnType === null) {
             return null;
         }
 
-        $returnType = $classMethod->returnType;
-        if ($returnType instanceof Name) {
-            return $this->refactorClassMethodReturnTypeWithName($returnType, $classMethod);
-        }
-
-        if ($returnType instanceof NullableType) {
-            $fullyQualified = $this->resolveFullyQualifiedName($returnType->type);
-            if ($fullyQualified === null) {
-                return null;
-            }
-
-            $classMethod->returnType = new NullableType($fullyQualified);
-
-            return $classMethod;
-        }
-
-        return null;
-    }
-
-    private function refactoryUse(Use_ $use): Use_
-    {
-        foreach ($use->uses as $useUse) {
-            $name = $useUse->name;
-
-            $fullyQualifiedName = $this->resolveFullyQualifiedName($name);
-            if ($fullyQualifiedName === null) {
-                continue;
-            }
-
-            $useUse->name = $fullyQualifiedName;
-        }
-
-        return $use;
-    }
-
-    private function resolveFullyQualifiedName(Name $name): ?FullyQualified
-    {
-        return $this->fullyQualifiedNameMatcher->matchFullyQualifiedName($name);
-    }
-
-    private function refactorClassMethodReturnTypeWithName(Name $returnType, ClassMethod $classMethod): ?ClassMethod
-    {
-        $fullyQualified = $this->resolveFullyQualifiedName($returnType);
+        $fullyQualified = $this->fullyQualifiedNameMatcher->matchFullyQualifiedName($returnType);
         if ($fullyQualified === null) {
             return null;
         }

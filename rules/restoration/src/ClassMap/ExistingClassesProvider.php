@@ -10,14 +10,14 @@ use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 final class ExistingClassesProvider
 {
     /**
-     * @var ComposerJsonFactory
-     */
-    private $composerJsonFactory;
-
-    /**
      * @var string[]
      */
     private $existingClasses = [];
+
+    /**
+     * @var ComposerJsonFactory
+     */
+    private $composerJsonFactory;
 
     public function __construct(ComposerJsonFactory $composerJsonFactory)
     {
@@ -70,7 +70,7 @@ final class ExistingClassesProvider
         $robotLoader->ignoreDirs[] = '*Expected*';
         $robotLoader->ignoreDirs[] = '*Fixture*';
 
-        foreach ($psr4Paths as $namespacePrefix => $path) {
+        foreach ($psr4Paths as $path) {
             $robotLoader->addDirectory(getcwd() . '/' . $path);
         }
 

@@ -6,9 +6,7 @@ namespace Rector\PHPStanExtensions\Tests\Rule\KeepRectorNamespaceForRectorRule;
 
 use Iterator;
 use PHPStan\Rules\Rule;
-use PHPStan\Testing\RuleTestCase;
 use Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule;
-use Rector\PHPStanExtensions\Rule\RectorRuleAndValueObjectHaveSameStartsRule;
 use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
 final class KeepRectorNamespaceForRectorRuleTest extends AbstractServiceAwareRuleTestCase

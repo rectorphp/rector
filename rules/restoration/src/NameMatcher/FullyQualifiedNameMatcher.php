@@ -8,8 +8,8 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType;
-use Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\Fixture\NullableType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\Restoration\ClassMap\ExistingClassesProvider;
@@ -33,11 +33,20 @@ final class FullyQualifiedNameMatcher
     }
 
     /**
-     * @param null|string|Name|Identifier|FullyQualified|UnionType|NullableType $name
-     * @return FullyQualified|null
+     * @param string|Name|Identifier|FullyQualified|UnionType|NullableType|null $name
+     * @return NullableType|FullyQualified|null
      */
-    public function matchFullyQualifiedName($name): ?FullyQualified
+    public function matchFullyQualifiedName($name)
     {
+        if ($name instanceof NullableType) {
+            $fullyQulifiedNullableType = $this->matchFullyQualifiedName($name->type);
+            if (! $fullyQulifiedNullableType instanceof Name) {
+                return null;
+            }
+
+            return new NullableType($fullyQulifiedNullableType);
+        }
+
         if ($name instanceof Name) {
             if (count($name->parts) !== 1) {
                 return null;
@@ -58,10 +67,10 @@ final class FullyQualifiedNameMatcher
         return null;
     }
 
-    private function makeNodeFullyQualified(string $desiredShortName)
+    private function makeNodeFullyQualified(string $desiredShortName): ?FullyQualified
     {
         foreach ($this->existingClassesProvider->provide() as $declaredClass) {
-            $declaredShortClass = (string)Strings::after($declaredClass, '\\', -1);
+            $declaredShortClass = (string) Strings::after($declaredClass, '\\', -1);
             if ($declaredShortClass !== $desiredShortName) {
                 continue;
             }

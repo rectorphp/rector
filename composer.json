@@ -34,6 +34,7 @@
         "symplify/autowire-array-parameter": "^8.3.17",
         "symplify/console-color-diff": "^8.3.17",
         "symplify/easy-testing": "^8.3.17",
+        "symplify/composer-json-manipulator": "^8.3.17",
         "symplify/package-builder": "^8.3.17",
         "symplify/set-config-resolver": "^8.3.17",
         "symplify/smart-file-system": "^8.3.17",
