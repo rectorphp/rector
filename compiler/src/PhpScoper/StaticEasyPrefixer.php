@@ -33,6 +33,7 @@ final class StaticEasyPrefixer
         'Rector\*',
         'Symplify\SmartFileSystem\*',
         'Symplify\ConsoleColorDiff\*',
+        'Symplify\ComposerJsonManipulator\*',
         'Migrify\*',
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',
