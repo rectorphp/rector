@@ -10,7 +10,7 @@ includes:
 services:
     # require constant in argument position
     -
-        class: Symplify\CodingStandard\Rules\ForceMethodCallArgumentConstantRule
+        class: Symplify\CodingStandard\Rules\RequireMethodCallArgumentConstantRule
         tags: [phpstan.rules.rule]
         arguments:
             constantArgByMethodByType:
