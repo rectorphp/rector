@@ -60,7 +60,9 @@ final class PrintReportCollectorEventSubscriber implements EventSubscriberInterf
      */
     public static function getSubscribedEvents(): array
     {
-        return [AfterReportEvent::class => 'printReportCollector'];
+        return [
+            AfterReportEvent::class => 'printReportCollector',
+        ];
     }
 
     private function shouldSkip(): bool

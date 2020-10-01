@@ -61,16 +61,13 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             IdTagValueNode::class => 'Doctrine\ORM\Mapping\Id',
             GeneratedValueTagValueNode::class => 'Doctrine\ORM\Mapping\GeneratedValue',
             JoinColumnTagValueNode::class => 'Doctrine\ORM\Mapping\JoinColumn',
-
             // symfony/http-kernel
             SymfonyRouteTagValueNode::class => 'Symfony\Component\Routing\Annotation\Route',
-
             // symfony/validator
             AssertRangeTagValueNode::class => 'Symfony\Component\Validator\Constraints\Range',
             AssertTypeTagValueNode::class => 'Symfony\Component\Validator\Constraints\Type',
             AssertChoiceTagValueNode::class => 'Symfony\Component\Validator\Constraints\Choice',
             AssertEmailTagValueNode::class => 'Symfony\Component\Validator\Constraints\Email',
-
             // gedmo
             LocaleTagValueNode::class => 'Gedmo\Mapping\Annotation\Locale',
             BlameableTagValueNode::class => 'Gedmo\Mapping\Annotation\Blameable',
@@ -85,17 +82,14 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             TranslatableTagValueNode::class => 'Gedmo\Mapping\Annotation\Translatable',
             LoggableTagValueNode::class => 'Gedmo\Mapping\Annotation\Loggable',
             TreeTagValueNode::class => 'Gedmo\Mapping\Annotation\Tree',
-
             // Sensio
             SensioTemplateTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template',
             SensioMethodTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method',
             SensioRouteTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route',
-
             // JMS
             JMSInjectParamsTagValueNode::class => 'JMS\DiExtraBundle\Annotation\InjectParams',
             JMSServiceValueNode::class => 'JMS\DiExtraBundle\Annotation\Service',
             SerializerTypeTagValueNode::class => 'JMS\Serializer\Annotation\Type',
-
             PHPDIInjectTagValueNode::class => 'DI\Annotation\Inject',
         ];
     }

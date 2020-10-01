@@ -40,7 +40,8 @@ final class NameScopeFactory
         foreach ($useNodes as $useNode) {
             foreach ($useNode->uses as $useUse) {
                 /** @var UseUse $useUse */
-                $aliasName = $useUse->getAlias()->name;
+                $aliasName = $useUse->getAlias()
+                    ->name;
 
                 $useName = $useUse->name->toString();
                 if (! is_string($useName)) {

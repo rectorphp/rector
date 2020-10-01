@@ -83,7 +83,8 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         foreach ($errors as $error) {
             $errorData = [
                 'message' => $error->getMessage(),
-                'file' => $error->getFileInfo()->getPathname(),
+                'file' => $error->getFileInfo()
+                    ->getPathname(),
             ];
 
             if ($error->getRectorClass()) {

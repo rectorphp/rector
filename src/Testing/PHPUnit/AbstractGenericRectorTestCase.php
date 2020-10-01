@@ -198,7 +198,9 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
         $rectorClass = $this->getRectorClass();
         $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
 
-        return [$rectorClass => null];
+        return [
+            $rectorClass => null,
+        ];
     }
 
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator

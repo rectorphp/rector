@@ -125,7 +125,8 @@ CODE_SAMPLE
     private function getDocContent(Node $node): string
     {
         if ($node->getDocComment() !== null) {
-            return $node->getDocComment()->getText();
+            return $node->getDocComment()
+                ->getText();
         }
 
         if ($node->getComments() !== []) {

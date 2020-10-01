@@ -53,7 +53,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
             ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects([
-                new ArgumentRemover('Illuminate\Foundation\Application', 'register', 1, ['name' => 'options']),
+                new ArgumentRemover('Illuminate\Foundation\Application', 'register', 1, [
+                    'name' => 'options',
+                ]),
             ]),
         ]]);
 };

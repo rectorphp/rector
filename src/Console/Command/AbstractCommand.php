@@ -36,11 +36,13 @@ abstract class AbstractCommand extends Command
         } catch (RuntimeException $runtimeException) {
             if (Strings::contains($runtimeException->getMessage(), 'Not enough arguments')) {
                 // sometimes there is "command" argument, not really needed on fail of chosen command and missing argument
-                $arguments = $this->getDefinition()->getArguments();
+                $arguments = $this->getDefinition()
+                    ->getArguments();
                 if (isset($arguments['command'])) {
                     unset($arguments['command']);
 
-                    $this->getDefinition()->setArguments($arguments);
+                    $this->getDefinition()
+                        ->setArguments($arguments);
                 }
 
                 $this->textDescriptor->describe($output, $this);
@@ -59,7 +61,8 @@ abstract class AbstractCommand extends Command
                 return;
             }
 
-            $this->getApplication()->setCatchExceptions(false);
+            $this->getApplication()
+                ->setCatchExceptions(false);
         }
     }
 }

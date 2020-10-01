@@ -75,7 +75,8 @@ final class AssignAndRootExpr
     {
         if ($this->isFirstCallFactory && $this->getFirstAssign() !== null) {
             /** @var Assign $currentMethodCall */
-            $currentMethodCall = $this->getFirstAssign()->expr;
+            $currentMethodCall = $this->getFirstAssign()
+                ->expr;
             while ($currentMethodCall->var instanceof MethodCall) {
                 $currentMethodCall = $currentMethodCall->var;
             }

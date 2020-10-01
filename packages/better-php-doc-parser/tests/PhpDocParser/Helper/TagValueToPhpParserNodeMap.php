@@ -36,7 +36,6 @@ final class TagValueToPhpParserNodeMap
         // symfony/validation
         AssertChoiceTagValueNode::class => Property::class,
         AssertTypeTagValueNode::class => Property::class,
-
         // doctrine
         ColumnTagValueNode::class => Property::class,
         JoinTableTagValueNode::class => Property::class,
@@ -44,10 +43,8 @@ final class TagValueToPhpParserNodeMap
         TableTagValueNode::class => Class_::class,
         CustomIdGeneratorTagValueNode::class => Property::class,
         GeneratedValueTagValueNode::class => Property::class,
-
         // special case for constants
         GenericTagValueNode::class => Property::class,
-
         SensioTemplateTagValueNode::class => Class_::class,
         SensioMethodTagValueNode::class => ClassMethod::class,
         TemplateTagValueNode::class => Class_::class,

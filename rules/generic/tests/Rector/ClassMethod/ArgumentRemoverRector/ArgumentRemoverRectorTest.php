@@ -43,7 +43,9 @@ final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
                         55,
                         5.5,
                     ]),
-                    new ArgumentRemover(RemoveInTheMiddle::class, 'run', 1, ['name' => 'second']),
+                    new ArgumentRemover(RemoveInTheMiddle::class, 'run', 1, [
+                        'name' => 'second',
+                    ]),
                 ],
             ],
         ];

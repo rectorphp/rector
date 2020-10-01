@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\Skip;
 
 use Nette\Utils\Strings;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Skipper
@@ -21,30 +23,28 @@ final class Skipper
     private const ONLY_STARTS_WITH_ASTERISK_REGEX = '#^\*(.*?)[^*]$#';
 
     /**
-     * @var mixed[]
+     * @var ParameterProvider
      */
-    private $skip = [];
+    private $parameterProvider;
 
-    /**
-     * @param mixed[] $skip
-     */
-    public function __construct(array $skip = [])
+    public function __construct(ParameterProvider $parameterProvider)
     {
-        $this->skip = $skip;
+        $this->parameterProvider = $parameterProvider;
     }
 
     public function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo, AbstractRector $rector): bool
     {
-        if ($this->skip === []) {
+        $skip = $this->parameterProvider->provideArrayParameter(Option::SKIP);
+        if ($skip === []) {
             return false;
         }
 
         $rectorClass = get_class($rector);
-        if (! array_key_exists($rectorClass, $this->skip)) {
+        if (! array_key_exists($rectorClass, $skip)) {
             return false;
         }
 
-        $locations = $this->skip[$rectorClass];
+        $locations = $skip[$rectorClass];
         $filePathName = $smartFileInfo->getPathName();
         if (in_array($filePathName, $locations, true)) {
             return true;
