@@ -147,20 +147,7 @@ CODE_SAMPLE
 
     private function resolveFullyQualifiedName(Name $name): ?FullyQualified
     {
-        if (count($name->parts) !== 1) {
-            return null;
-        }
-
-        $resolvedName = $this->getName($name);
-        if ($resolvedName === null) {
-            return null;
-        }
-
-        if (ClassExistenceStaticHelper::doesClassLikeExist($resolvedName)) {
-            return null;
-        }
-
-        return $this->fullyQualifiedNameMatcher->matchFullyQualifiedName($resolvedName);
+        return $this->fullyQualifiedNameMatcher->matchFullyQualifiedName($name);
     }
 
     private function refactorClassMethodReturnTypeWithName(Name $returnType, ClassMethod $classMethod): ?ClassMethod
