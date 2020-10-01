@@ -8718,6 +8718,7 @@ Change Form that extends Control to Controller and decoupled FormType
 
 **New file**
 ```php
+<?php
 
 declare(strict_types=1);
 
