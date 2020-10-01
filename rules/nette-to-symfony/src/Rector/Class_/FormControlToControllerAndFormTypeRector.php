@@ -94,6 +94,8 @@ class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\Abst
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
+<?php
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
