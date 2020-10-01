@@ -261,7 +261,9 @@ CODE_SAMPLE
             return false;
         }
 
-        return $currentReturnType->getItemType()->isCallable()->yes();
+        return $currentReturnType->getItemType()
+            ->isCallable()
+            ->yes();
     }
 
     private function isClassStringArrayByStringArrayOverride(ArrayType $arrayType, ClassMethod $classMethod): bool

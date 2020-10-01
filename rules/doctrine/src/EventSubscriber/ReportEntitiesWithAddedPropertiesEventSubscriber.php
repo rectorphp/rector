@@ -56,7 +56,9 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
      */
     public static function getSubscribedEvents(): array
     {
-        return [AfterProcessEvent::class => 'reportEntities'];
+        return [
+            AfterProcessEvent::class => 'reportEntities'
+        ];
     }
 
     /**
@@ -68,7 +70,9 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
             return;
         }
 
-        $jsonContent = Json::encode(['new_columns_by_class' => $data], Json::PRETTY);
+        $jsonContent = Json::encode([
+            'new_columns_by_class' => $data
+        ], Json::PRETTY);
 
         $filePath = getcwd() . '/' . $fileName;
         $this->smartFileSystem->dumpFile($filePath, $jsonContent);

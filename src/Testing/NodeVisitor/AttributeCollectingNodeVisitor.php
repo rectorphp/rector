@@ -37,7 +37,9 @@ final class AttributeCollectingNodeVisitor extends NodeVisitorAbstract
         }
 
         $attributes = $this->getFilteredAttributes($node);
-        $this->attributes[] = array_merge(['node_class' => get_class($node)], $attributes);
+        $this->attributes[] = array_merge([
+            'node_class' => get_class($node)
+        ], $attributes);
 
         return null;
     }

@@ -49,7 +49,9 @@ final class RunnableClassFinder
     private function decorateNodesWithNames(array $nodes): void
     {
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new NameResolver(null, ['preserveOriginalNames' => true]));
+        $nodeTraverser->addVisitor(new NameResolver(null, [
+            'preserveOriginalNames' => true
+        ]));
         $nodeTraverser->traverse($nodes);
     }
 

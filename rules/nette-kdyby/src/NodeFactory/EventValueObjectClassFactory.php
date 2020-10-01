@@ -130,7 +130,8 @@ final class EventValueObjectClassFactory
     {
         $usedVariableNames = [];
 
-        $className = $classBuilder->getNode()->name;
+        $className = $classBuilder->getNode()
+            ->name;
 
         foreach ($variablesWithTypes as $variablesWithType) {
             if (in_array($variablesWithType->getName(), $usedVariableNames, true)) {

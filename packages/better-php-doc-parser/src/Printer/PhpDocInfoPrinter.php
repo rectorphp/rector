@@ -339,7 +339,8 @@ final class PhpDocInfoPrinter
 
         /** @var AttributeAwareNodeInterface[] $removedNodes */
         $removedNodes = array_diff(
-            $this->phpDocInfo->getOriginalPhpDocNode()->children,
+            $this->phpDocInfo->getOriginalPhpDocNode()
+                ->children,
             $this->attributeAwarePhpDocNode->children
         );
 

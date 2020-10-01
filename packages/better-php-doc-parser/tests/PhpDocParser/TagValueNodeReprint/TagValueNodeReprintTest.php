@@ -64,7 +64,6 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
             TableTagValueNode::class => __DIR__ . '/Fixture/DoctrineTable',
             CustomIdGeneratorTagValueNode::class => __DIR__ . '/Fixture/DoctrineCustomIdGenerator',
             GeneratedValueTagValueNode::class => __DIR__ . '/Fixture/DoctrineGeneratedValue',
-
             // special case
             GenericTagValueNode::class => __DIR__ . '/Fixture/ConstantReference',
             SensioTemplateTagValueNode::class => __DIR__ . '/Fixture/SensioTemplate',

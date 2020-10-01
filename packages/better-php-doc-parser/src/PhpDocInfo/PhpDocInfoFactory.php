@@ -90,7 +90,8 @@ final class PhpDocInfoFactory
             $tokens = [];
             $phpDocNode = new AttributeAwarePhpDocNode([]);
         } else {
-            $content = $node->getDocComment()->getText();
+            $content = $node->getDocComment()
+                ->getText();
             $tokens = $this->lexer->tokenize($content);
             $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
             $this->setPositionOfLastToken($phpDocNode);

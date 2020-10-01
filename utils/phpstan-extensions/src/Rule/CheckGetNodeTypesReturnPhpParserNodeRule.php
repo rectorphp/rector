@@ -50,7 +50,8 @@ final class CheckGetNodeTypesReturnPhpParserNodeRule implements Rule
 
         return [sprintf(
             self::ERROR,
-            $scope->getClassReflection()->getName(),
+            $scope->getClassReflection()
+                ->getName(),
             Node::class,
             implode(",\n", $incorrectClassNames)
         )];
