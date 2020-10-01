@@ -9,6 +9,7 @@ includes:
 
 services:
     # require constant in argument position
+<<<<<<< HEAD
 
     #-
     #    class: Symplify\CodingStandard\Rules\RequireMethodCallArgumentConstantRule
@@ -24,6 +25,22 @@ services:
     #            PhpParser\Node:
     #                getAttribute: [0]
     #               setAttribute: [0]
+=======
+    -
+        class: Symplify\CodingStandard\Rules\RequireMethodCallArgumentConstantRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            constantArgByMethodByType:
+                Symfony\Component\Console\Command\Command:
+                    addArgument: [0]
+                    addOption: [0]
+                Symfony\Component\Console\Input\InputInterface:
+                    getOption: [0]
+                    getArgument: [0]
+                PhpParser\Node:
+                    getAttribute: [0]
+                    setAttribute: [0]
+>>>>>>> update docs
 
     -
         class: Symplify\CodingStandard\Rules\SeeAnnotationToTestRule
@@ -521,6 +538,7 @@ parameters:
 
         - '#Parameter \#1 \$rectors of method Rector\\DocumentationGenerator\\Printer\\RectorsDocumentationPrinter\:\:print\(\) expects array<Rector\\Core\\Contract\\Rector\\RectorInterface\>, array<object\> given#'
 
+<<<<<<< HEAD
         - '#Use "Symplify\\SmartFileSystem\\SmartFileSystem\:\:dumpFile\(\)" static call over "file_put_contents\(\)" func call#'
         - '#Class name start with Abstract must have abstract keyword#'
         - '#Class with base "CheckNotTestsNamespaceOutsideTestsDirectoryRule" name is already used in "Rector\\PHPStanExtensions\\Rule\\CheckNotTestsNamespaceOutsideTestsDirectoryRule", "Symplify\\CodingStandard\\Rules\\CheckNotTestsNamespaceOutsideTestsDirectoryRule"\. Use unique name to make classes easy to recognize#'
@@ -531,6 +549,15 @@ parameters:
         - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\RectorRuleAndValueObjectHaveSameStartsRule\\RectorRuleAndValueObjectHaveSameStartsRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
         - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\RequireRectorCategoryByGetNodeTypesRule\\RequireRectorCategoryByGetNodeTypesRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
         - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\ValueObjectHasNoValueObjectSuffixRule\\ValueObjectHasNoValueObjectSuffixRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+=======
+
+        -
+             message: '#Use "Nette\\Utils\\Strings\:\:contains\(\)" static call over "strstr\(\)" func call#'
+             paths:
+                 - utils/phpstan-extensions/src/Rule/CheckNotTestsNamespaceOutsideTestsDirectoryRule.php # 76
+                 - utils/phpstan-extensions/src/Rule/CheckNotTestsNamespaceOutsideTestsDirectoryRule.php # 81
+
+>>>>>>> update docs
         -
             message: '#Do not call parent method if no override process#'
             paths:
@@ -538,12 +565,15 @@ parameters:
                 - src/PhpParser/Builder/UseBuilder.php # 19
 
         -
+<<<<<<< HEAD
             message: '#Use "Nette\\Utils\\Strings\:\:contains\(\)" static call over "strstr\(\)" func call#'
             paths:
                 - utils/phpstan-extensions/src/Rule/CheckNotTestsNamespaceOutsideTestsDirectoryRule.php # 76
                 - utils/phpstan-extensions/src/Rule/CheckNotTestsNamespaceOutsideTestsDirectoryRule.php # 81
 
         -
+=======
+>>>>>>> update docs
             message: '#Do not call parent method if parent method is empty#'
             paths:
                 - rules/type-declaration/src/Exception/ConflictingPriorityException.php # 26
@@ -572,6 +602,7 @@ parameters:
                 - src/FileSystem/FilesFinder.php # 56
                 - src/Php/TypeAnalyzer.php # 47
                 - src/PhpParser/NodeTraverser/RectorNodeTraverser.php # 30
+<<<<<<< HEAD
                 - src/Skip/Skipper.php # 30
                 - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareMethodTagValueNodeFactory.php # 53
                 - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareMethodTagValueParameterNodeFactory.php # 50
@@ -623,6 +654,8 @@ parameters:
         -
             message: '#Do not use factory in constructor#'
             paths:
+=======
+>>>>>>> update docs
                 - src/Testing/PHPUnit/Runnable/ClassLikeNamesSuffixer.php # 27
                 - src/Testing/PHPUnit/Runnable/RunnableClassFinder.php # 29
                 - utils/node-documentation-generator/src/ValueObject/NodeInfo.php # 29
@@ -713,9 +746,28 @@ parameters:
                 - src/Configuration/Configuration.php # 204
                 - src/Configuration/Configuration.php # 227
                 - src/Configuration/CurrentNodeProvider.php # 16
+<<<<<<< HEAD
                 - src/HttpKernel/RectorKernel.php # 70
+=======
+                - src/HttpKernel/RectorKernel.php # 71
+>>>>>>> update docs
                 - src/Rector/AbstractRector/CallableNodeTraverserTrait.php # 24
                 - src/Rector/AbstractRector/CallableNodeTraverserTrait.php # 24
                 - src/Rector/AbstractRector/ConstFetchAnalyzerTrait.php # 24
                 - src/Rector/AbstractRector/ConstFetchAnalyzerTrait.php # 24
+<<<<<<< HEAD
                 - src/Testing/NodeVisitor/AttributeCollectingNodeVisitor.php # 24
+=======
+                - src/Testing/NodeVisitor/AttributeCollectingNodeVisitor.php # 24
+
+        # todo fix later
+        - '#Use "Symplify\\SmartFileSystem\\SmartFileSystem\:\:dumpFile\(\)" static call over "file_put_contents\(\)" func call#'
+        - '#Class name start with Abstract must have abstract keyword#'
+        - '#Parameter \#1 \$name of method Rector\\Restoration\\Rector\\Use_\\RestoreFullyQualifiedNameRector\:\:resolveFullyQualifiedName\(\) expects PhpParser\\Node\\Name, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name given#'
+        - '#Class with base "CheckNotTestsNamespaceOutsideTestsDirectoryRule" name is already used in "Rector\\PHPStanExtensions\\Rule\\CheckNotTestsNamespaceOutsideTestsDirectoryRule", "Symplify\\CodingStandard\\Rules\\CheckNotTestsNamespaceOutsideTestsDirectoryRule"\. Use unique name to make classes easy to recognize#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\CheckGetNodeTypesReturnPhpParserNodeRule\\CheckGetNodeTypesReturnPhpParserNodeRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\CheckNotTestsNamespaceOutsideTestsDirectoryRule\\CheckNotTestsNamespaceOutsideTestsDirectoryRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\ConfigurableRectorRule\\ConfigurableRectorRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\KeepRectorNamespaceForRectorRule\\KeepRectorNamespaceForRectorRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        - '#Class "(.*?)" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+>>>>>>> update docs

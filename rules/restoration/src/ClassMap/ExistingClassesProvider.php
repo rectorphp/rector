@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\NameMatcher;
+namespace Rector\Restoration\ClassMap;
 
 use Nette\Loaders\RobotLoader;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;

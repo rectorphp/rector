@@ -8,13 +8,16 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
-use Rector\Restoration\NameMatcher\ExistingClassesProvider;
+use Rector\Restoration\ClassMap\ExistingClassesProvider;
+use Rector\Restoration\NameMatcher\FullyQualifiedNameMatcher;
 
 /**
  * @see \Rector\Restoration\Tests\Rector\Use_\RestoreFullyQualifiedNameRector\RestoreFullyQualifiedNameRectorTest
@@ -22,13 +25,13 @@ use Rector\Restoration\NameMatcher\ExistingClassesProvider;
 final class RestoreFullyQualifiedNameRector extends AbstractRector
 {
     /**
-     * @var ExistingClassesProvider
+     * @var FullyQualifiedNameMatcher
      */
-    private $existingClassesProvider;
+    private $fullyQualifiedNameMatcher;
 
-    public function __construct(ExistingClassesProvider $existingClassesProvider)
+    public function __construct(FullyQualifiedNameMatcher $fullyQualifiedNameMatcher)
     {
-        $this->existingClassesProvider = $existingClassesProvider;
+        $this->fullyQualifiedNameMatcher = $fullyQualifiedNameMatcher;
     }
 
     public function getDefinition(): RectorDefinition
@@ -64,11 +67,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Use_::class, Param::class];
+        return [Use_::class, Param::class, ClassMethod::class];
     }
 
     /**
-     * @param Use_|Param $node
+     * @param Use_|Param|ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -80,18 +83,8 @@ CODE_SAMPLE
             return $this->refactorParam($node);
         }
 
-        return null;
-    }
-
-    private function matchFullyQualifiedName(string $desiredShortName): ?string
-    {
-        foreach ($this->existingClassesProvider->provide() as $declaredClass) {
-            $declaredShortClass = (string) Strings::after($declaredClass, '\\', -1);
-            if ($declaredShortClass !== $desiredShortName) {
-                continue;
-            }
-
-            return $declaredClass;
+        if ($node instanceof ClassMethod) {
+            return $this->refactorClassMethod($node);
         }
 
         return null;
@@ -104,13 +97,38 @@ CODE_SAMPLE
             return null;
         }
 
-        $fullyQualifiedName = $this->resolveFullyQualifiedName($name);
-        if ($fullyQualifiedName === null) {
+        $fullyQualified = $this->resolveFullyQualifiedName($name);
+        if ($fullyQualified === null) {
             return null;
         }
 
-        $param->type = new FullyQualified($fullyQualifiedName);
+        $param->type = $fullyQualified;
         return $param;
+    }
+
+    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
+    {
+        if ($classMethod->returnType === null) {
+            return null;
+        }
+
+        $returnType = $classMethod->returnType;
+        if ($returnType instanceof Name) {
+            return $this->refactorClassMethodReturnTypeWithName($returnType, $classMethod);
+        }
+
+        if ($returnType instanceof NullableType) {
+            $fullyQualified = $this->resolveFullyQualifiedName($returnType->type);
+            if ($fullyQualified === null) {
+                return null;
+            }
+
+            $classMethod->returnType = new NullableType($fullyQualified);
+
+            return $classMethod;
+        }
+
+        return null;
     }
 
     private function refactoryUse(Use_ $use): Use_
@@ -123,13 +141,18 @@ CODE_SAMPLE
                 continue;
             }
 
-            $useUse->name = new Name($fullyQualifiedName);
+            $useUse->name = $fullyQualifiedName;
         }
 
         return $use;
     }
 
-    private function resolveFullyQualifiedName(Name $name)
+    /**
+     * @param Name $name
+     * @return FullyQualified|null
+     */
+
+    private function resolveFullyQualifiedName(Name $name): ?FullyQualified
     {
         if (count($name->parts) !== 1) {
             return null;
@@ -144,11 +167,18 @@ CODE_SAMPLE
             return null;
         }
 
-        $fullyQualifiedName = $this->matchFullyQualifiedName($resolvedName);
-        if ($fullyQualifiedName === null) {
+        return $this->fullyQualifiedNameMatcher->matchFullyQualifiedName($resolvedName);
+    }
+
+    private function refactorClassMethodReturnTypeWithName(Name $returnType, ClassMethod $classMethod): ?ClassMethod
+    {
+        $fullyQualified = $this->resolveFullyQualifiedName($returnType);
+        if ($fullyQualified === null) {
             return null;
         }
 
-        return $fullyQualifiedName;
+        $classMethod->returnType = $fullyQualified;
+
+        return $classMethod;
     }
 }
