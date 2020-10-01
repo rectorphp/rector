@@ -519,3 +519,102 @@ parameters:
         - '#Method Rector\\DocumentationGenerator\\Tests\\Printer\\RectorsDocumentationPrinter\\RectorsDocumentationPrinterTest\:\:createRectorsFromRectorClasses\(\) should return array<Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<int, object\>#'
 
         - '#Parameter \#1 \$rectors of method Rector\\DocumentationGenerator\\Printer\\RectorsDocumentationPrinter\:\:print\(\) expects array<Rector\\Core\\Contract\\Rector\\RectorInterface\>, array<object\> given#'
+
+        - '#Use "Symplify\\SmartFileSystem\\SmartFileSystem\:\:dumpFile\(\)" static call over "file_put_contents\(\)" func call#'
+        - '#Class name start with Abstract must have abstract keyword#'
+        - '#Class with base "CheckNotTestsNamespaceOutsideTestsDirectoryRule" name is already used in "Rector\\PHPStanExtensions\\Rule\\CheckNotTestsNamespaceOutsideTestsDirectoryRule", "Symplify\\CodingStandard\\Rules\\CheckNotTestsNamespaceOutsideTestsDirectoryRule"\. Use unique name to make classes easy to recognize#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\CheckGetNodeTypesReturnPhpParserNodeRule\\CheckGetNodeTypesReturnPhpParserNodeRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\CheckNotTestsNamespaceOutsideTestsDirectoryRule\\CheckNotTestsNamespaceOutsideTestsDirectoryRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\ConfigurableRectorRule\\ConfigurableRectorRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\KeepRectorNamespaceForRectorRule\\KeepRectorNamespaceForRectorRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\RectorRuleAndValueObjectHaveSameStartsRule\\RectorRuleAndValueObjectHaveSameStartsRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\RequireRectorCategoryByGetNodeTypesRule\\RequireRectorCategoryByGetNodeTypesRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        - '#Class "Rector\\PHPStanExtensions\\Tests\\Rule\\ValueObjectHasNoValueObjectSuffixRule\\ValueObjectHasNoValueObjectSuffixRuleTest" inherits from forbidden parent class "PHPStan\\Testing\\RuleTestCase"\. Use "Symplify\\PHPStanExtensions\\Testing\\AbstractServiceAwareRuleTestCase" instead#'
+        -
+            message: '#Do not call parent method if no override process#'
+            paths:
+                - rules/symfony/tests/Rector/MethodCall/StringFormTypeToClassRector/WithContainerTest.php # 30
+                - src/PhpParser/Builder/UseBuilder.php # 19
+
+        -
+            message: '#Use "Nette\\Utils\\Strings\:\:contains\(\)" static call over "strstr\(\)" func call#'
+            paths:
+                - utils/phpstan-extensions/src/Rule/CheckNotTestsNamespaceOutsideTestsDirectoryRule.php # 76
+                - utils/phpstan-extensions/src/Rule/CheckNotTestsNamespaceOutsideTestsDirectoryRule.php # 81
+
+        -
+            message: '#Do not call parent method if parent method is empty#'
+            paths:
+                - rules/type-declaration/src/Exception/ConflictingPriorityException.php # 26
+                - src/Exception/Application/FileProcessingException.php # 22
+                - src/Exception/Rector/RectorNotFoundOrNotValidRectorClassException.php # 15
+                - src/Exception/ShouldNotHappenException.php # 18
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 77
+
+        -
+            message: '#Do not use factory in constructor#'
+            paths:
+                - compiler/src/Console/Command/CompileCommand.php # 70
+                - packages/node-type-resolver/src/DependencyInjection/PHPStanServicesFactory.php # 38
+                - packages/node-type-resolver/src/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php # 37
+                - packages/phpstan-static-type-mapper/src/PHPStanStaticTypeMapper.php # 37
+                - packages/post-rector/src/Rector/NameImportingPostRector.php # 39
+                - rules/nette-code-quality/src/NodeResolver/MethodNamesByInputNamesResolver.php # 21
+                - rules/nette-to-symfony/src/Rector/ClassMethod/RenameEventNamesInEventSubscriberRector.php # 37
+                - rules/type-declaration/src/Exception/ConflictingPriorityException.php # 12
+                - src/Application/ActiveRectorsProvider.php # 27
+                - src/Autoloading/AdditionalAutoloader.php # 39
+                - src/Configuration/Configuration.php # 104
+                - src/Console/Application.php # 39
+                - src/Console/Output/OutputFormatterCollector.php # 20
+                - src/Exception/Application/FileProcessingException.php # 13
+                - src/FileSystem/FilesFinder.php # 56
+                - src/Php/TypeAnalyzer.php # 47
+                - src/PhpParser/NodeTraverser/RectorNodeTraverser.php # 30
+                - src/Skip/Skipper.php # 30
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareMethodTagValueNodeFactory.php # 53
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareMethodTagValueParameterNodeFactory.php # 50
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareParamTagValueNodeFactory.php # 48
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwarePhpDocNodeFactory.php # 61
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwarePropertyTagValueNodeFactory.php # 42
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareReturnTagValueNodeFactory.php # 42
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareThrowsTagValueNodeFactory.php # 42
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareVarTagValueNodeFactory.php # 42
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareArrayShapeItemNodeFactory.php # 41
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareArrayShapeNodeFactory.php # 45
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareArrayTypeNodeFactory.php # 42
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareCallableTypeNodeFactory.php # 48
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareGenericTypeNodeFactory.php # 47
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareIntersectionTypeNodeFactory.php # 44
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareNullableTypeNodeFactory.php # 42
+                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareUnionTypeNodeFactory.php # 44
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/PHPUnitDataProviderDocNodeFactory.php # 52
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/ParamPhpDocNodeFactory.php # 81
+                - packages/dynamic-type-analysis/src/Probe/TypeStaticProbe.php # 82
+                - packages/node-type-resolver/src/FileSystem/CurrentFileInfoProvider.php # 22
+                - packages/node-type-resolver/src/FileSystem/CurrentFileInfoProvider.php # 35
+                - packages/phpstan-static-type-mapper/src/TypeMapper/ObjectTypeMapper.php # 123
+                - packages/phpstan-static-type-mapper/src/TypeMapper/ObjectWithoutClassTypeMapper.php # 72
+                - packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php # 39
+                - rules/nette-code-quality/src/FormControlTypeResolver/AssignedVariablesMethodCallsFormTypeResolver.php # 50
+                - rules/nette-code-quality/src/FormControlTypeResolver/ClassMethodFormTypeResolver.php # 67
+                - rules/nette-code-quality/src/FormControlTypeResolver/ConstructorFormControlTypeResolver.php # 62
+                - rules/nette-code-quality/src/FormControlTypeResolver/GetComponentMethodCallFormControlTypeResolver.php # 110
+                - rules/nette-code-quality/src/FormControlTypeResolver/MagicNetteFactoryInterfaceFormControlTypeResolver.php # 95
+                - rules/nette-code-quality/src/FormControlTypeResolver/MethodCallFormControlTypeResolver.php # 59
+                - rules/nette-code-quality/src/FormControlTypeResolver/NewFormControlTypeResolver.php # 61
+                - rules/nette-code-quality/src/FormControlTypeResolver/ReturnFormControlTypeResolver.php # 54
+                - rules/nette-code-quality/src/FormControlTypeResolver/ThisVariableInAnotherMethodFormControlTypeResolver.php # 52
+                - rules/nette-code-quality/src/FormControlTypeResolver/VariableConstructorFormControlTypeResolver.php # 84
+                - src/Configuration/ChangeConfiguration.php # 17
+                - src/Configuration/Configuration.php # 149
+                - src/Configuration/Configuration.php # 172
+                - src/Configuration/Configuration.php # 204
+                - src/Configuration/Configuration.php # 227
+                - src/Configuration/CurrentNodeProvider.php # 16
+                - src/HttpKernel/RectorKernel.php # 70
+                - src/Rector/AbstractRector/CallableNodeTraverserTrait.php # 24
+                - src/Rector/AbstractRector/CallableNodeTraverserTrait.php # 24
+                - src/Rector/AbstractRector/ConstFetchAnalyzerTrait.php # 24
+                - src/Rector/AbstractRector/ConstFetchAnalyzerTrait.php # 24
+                - src/Testing/NodeVisitor/AttributeCollectingNodeVisitor.php # 24
