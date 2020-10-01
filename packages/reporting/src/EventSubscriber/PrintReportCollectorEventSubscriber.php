@@ -61,7 +61,7 @@ final class PrintReportCollectorEventSubscriber implements EventSubscriberInterf
     public static function getSubscribedEvents(): array
     {
         return [
-            AfterReportEvent::class => 'printReportCollector'
+            AfterReportEvent::class => 'printReportCollector',
         ];
     }
 

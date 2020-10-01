@@ -49,7 +49,7 @@ final class NodeFactoryTest extends AbstractKernelTestCase
         $array->items[] = new ArrayItem(new LNumber(1), new String_('a'));
 
         yield [[
-            'a' => 1
+            'a' => 1,
         ], $array];
     }
 }

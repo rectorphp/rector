@@ -199,7 +199,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
         $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
 
         return [
-            $rectorClass => null
+            $rectorClass => null,
         ];
     }
 

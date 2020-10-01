@@ -57,7 +57,7 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
     public static function getSubscribedEvents(): array
     {
         return [
-            AfterProcessEvent::class => 'reportEntities'
+            AfterProcessEvent::class => 'reportEntities',
         ];
     }
 
@@ -71,7 +71,7 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
         }
 
         $jsonContent = Json::encode([
-            'new_columns_by_class' => $data
+            'new_columns_by_class' => $data,
         ], Json::PRETTY);
 
         $filePath = getcwd() . '/' . $fileName;

@@ -50,7 +50,7 @@ final class RunnableClassFinder
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
-            'preserveOriginalNames' => true
+            'preserveOriginalNames' => true,
         ]));
         $nodeTraverser->traverse($nodes);
     }
