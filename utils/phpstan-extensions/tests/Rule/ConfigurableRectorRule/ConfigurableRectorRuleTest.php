@@ -6,10 +6,10 @@ namespace Rector\PHPStanExtensions\Tests\Rule\ConfigurableRectorRule;
 
 use Iterator;
 use PHPStan\Rules\Rule;
-use PHPStan\Testing\RuleTestCase;
 use Rector\PHPStanExtensions\Rule\ConfigurableRectorRule;
+use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
-final class ConfigurableRectorRuleTest extends RuleTestCase
+final class ConfigurableRectorRuleTest extends AbstractServiceAwareRuleTestCase
 {
     /**
      * @dataProvider provideData()
@@ -34,16 +34,16 @@ final class ConfigurableRectorRuleTest extends RuleTestCase
         ];
 
         yield [__DIR__ . '/Fixture/NotImplementsAndHasNoConfiguredCodeSampleRector.php', []];
-
         yield [__DIR__ . '/Fixture/ImplementsThroughAbstractClassRector.php', []];
-
         yield [__DIR__ . '/Fixture/SkipClassNamesWithoutRectorSuffix.php', []];
-
         yield [__DIR__ . '/Fixture/SkipAbstractRector.php', []];
     }
 
     protected function getRule(): Rule
     {
-        return new ConfigurableRectorRule();
+        return $this->getRuleFromConfig(
+            ConfigurableRectorRule::class,
+            __DIR__ . '/../../../config/phpstan-extensions.neon'
+        );
     }
 }

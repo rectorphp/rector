@@ -6,10 +6,10 @@ namespace Rector\PHPStanExtensions\Tests\Rule\ValueObjectHasNoValueObjectSuffixR
 
 use Iterator;
 use PHPStan\Rules\Rule;
-use PHPStan\Testing\RuleTestCase;
 use Rector\PHPStanExtensions\Rule\ValueObjectHasNoValueObjectSuffixRule;
+use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
-final class ValueObjectHasNoValueObjectSuffixRuleTest extends RuleTestCase
+final class ValueObjectHasNoValueObjectSuffixRuleTest extends AbstractServiceAwareRuleTestCase
 {
     /**
      * @dataProvider provideData()

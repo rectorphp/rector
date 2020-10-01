@@ -7,12 +7,12 @@ namespace Rector\PHPStanExtensions\Tests\Rule\CheckGetNodeTypesReturnPhpParserNo
 use Iterator;
 use PhpParser\Node;
 use PHPStan\Rules\Rule;
-use PHPStan\Testing\RuleTestCase;
 use Rector\PHPStanExtensions\Rule\CheckGetNodeTypesReturnPhpParserNodeRule;
 use Rector\PHPStanExtensions\Tests\Rule\CheckGetNodeTypesReturnPhpParserNodeRule\Fixture\IncorrectReturnRector;
 use Rector\PHPStanExtensions\Tests\Rule\CheckGetNodeTypesReturnPhpParserNodeRule\Source\ClassNotOfPhpParserNode;
+use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
-final class CheckGetNodeTypesReturnPhpParserNodeRuleTest extends RuleTestCase
+final class CheckGetNodeTypesReturnPhpParserNodeRuleTest extends AbstractServiceAwareRuleTestCase
 {
     /**
      * @dataProvider provideData()
@@ -39,6 +39,9 @@ final class CheckGetNodeTypesReturnPhpParserNodeRuleTest extends RuleTestCase
 
     protected function getRule(): Rule
     {
-        return new CheckGetNodeTypesReturnPhpParserNodeRule();
+        return $this->getRuleFromConfig(
+            CheckGetNodeTypesReturnPhpParserNodeRule::class,
+            __DIR__ . '/../../../config/phpstan-extensions.neon'
+        );
     }
 }

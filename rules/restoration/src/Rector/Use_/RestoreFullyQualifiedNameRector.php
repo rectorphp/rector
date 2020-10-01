@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Restoration\Rector\Use_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -16,7 +15,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
-use Rector\Restoration\ClassMap\ExistingClassesProvider;
 use Rector\Restoration\NameMatcher\FullyQualifiedNameMatcher;
 
 /**
@@ -146,11 +144,6 @@ CODE_SAMPLE
 
         return $use;
     }
-
-    /**
-     * @param Name $name
-     * @return FullyQualified|null
-     */
 
     private function resolveFullyQualifiedName(Name $name): ?FullyQualified
     {

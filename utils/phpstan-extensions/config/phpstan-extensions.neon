@@ -12,10 +12,6 @@ services:
          tags: [phpstan.rules.rule]
 
     -
-         class: Rector\PHPStanExtensions\Rule\CheckNotTestsNamespaceOutsideTestsDirectoryRule
-         tags: [phpstan.rules.rule]
-
-    -
          class: Rector\PHPStanExtensions\Rule\ConfigurableRectorRule
          tags: [phpstan.rules.rule]
 

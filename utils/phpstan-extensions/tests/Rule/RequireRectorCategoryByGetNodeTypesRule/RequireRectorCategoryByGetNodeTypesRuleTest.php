@@ -6,11 +6,11 @@ namespace Rector\PHPStanExtensions\Tests\Rule\RequireRectorCategoryByGetNodeType
 
 use Iterator;
 use PHPStan\Rules\Rule;
-use PHPStan\Testing\RuleTestCase;
 use Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule;
 use Rector\PHPStanExtensions\Tests\Rule\RequireRectorCategoryByGetNodeTypesRule\Fixture\ClassMethod\ChangeSomethingRector;
+use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
-final class RequireRectorCategoryByGetNodeTypesRuleTest extends RuleTestCase
+final class RequireRectorCategoryByGetNodeTypesRuleTest extends AbstractServiceAwareRuleTestCase
 {
     /**
      * @dataProvider provideData()
@@ -28,17 +28,18 @@ final class RequireRectorCategoryByGetNodeTypesRuleTest extends RuleTestCase
             'ClassMethod',
             'String_'
         );
+
         yield [__DIR__ . '/Fixture/ClassMethod/ChangeSomethingRector.php', [[$errorMessage, 14]]];
-
         yield [__DIR__ . '/Fixture/FunctionLike/SkipSubtypeRector.php', []];
-
         yield [__DIR__ . '/Fixture/ClassMethod/SkipInterface.php', []];
-
         yield [__DIR__ . '/Fixture/AbstractSkip.php', []];
     }
 
     protected function getRule(): Rule
     {
-        return new RequireRectorCategoryByGetNodeTypesRule();
+        return $this->getRuleFromConfig(
+            RequireRectorCategoryByGetNodeTypesRule::class,
+            __DIR__ . '/../../../config/phpstan-extensions.neon'
+        );
     }
 }
