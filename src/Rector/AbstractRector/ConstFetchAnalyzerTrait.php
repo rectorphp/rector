@@ -21,7 +21,7 @@ trait ConstFetchAnalyzerTrait
     /**
      * @required
      */
-    public function setConstFetchAnalyzer(ConstFetchManipulator $constFetchManipulator): void
+    public function autowireConstFetchAnalyzerTrait(ConstFetchManipulator $constFetchManipulator): void
     {
         $this->constFetchManipulator = $constFetchManipulator;
     }

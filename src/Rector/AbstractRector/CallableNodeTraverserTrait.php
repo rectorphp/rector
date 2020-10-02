@@ -21,7 +21,7 @@ trait CallableNodeTraverserTrait
     /**
      * @required
      */
-    public function setCallableNodeTraverser(CallableNodeTraverser $callableNodeTraverser): void
+    public function autowireCallableNodeTraverserTrait(CallableNodeTraverser $callableNodeTraverser): void
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
     }

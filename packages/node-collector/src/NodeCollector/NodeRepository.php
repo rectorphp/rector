@@ -123,7 +123,7 @@ final class NodeRepository
      * To prevent circular reference
      * @required
      */
-    public function autowireParsedNodesByType(NodeTypeResolver $nodeTypeResolver): void
+    public function autowireNodeRepository(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

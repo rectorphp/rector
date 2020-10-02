@@ -20,7 +20,7 @@ final class ClassConstFetchTypeResolver implements NodeTypeResolverInterface
     /**
      * @required
      */
-    public function autowirePropertyTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    public function autowireClassConstFetchTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

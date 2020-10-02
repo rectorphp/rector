@@ -11,7 +11,7 @@ final class MatchPropertyTypeConflictingNameGuard extends AbstractPropertyConfli
     /**
      * @required
      */
-    public function autowireMatchPropertyTypePropertyConflictingNameGuard(
+    public function autowireMatchPropertyTypeConflictingNameGuard(
         MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver
     ): void {
         $this->expectedNameResolver = $matchPropertyTypeExpectedNameResolver;

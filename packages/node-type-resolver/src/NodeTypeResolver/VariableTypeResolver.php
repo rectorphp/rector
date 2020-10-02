@@ -89,7 +89,7 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
     /**
      * @required
      */
-    public function autowireNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    public function autowireVariableTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

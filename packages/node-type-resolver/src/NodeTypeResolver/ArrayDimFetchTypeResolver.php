@@ -21,7 +21,7 @@ final class ArrayDimFetchTypeResolver implements NodeTypeResolverInterface
     /**
      * @required
      */
-    public function autowirePropertyTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    public function autowireArrayDimFetchTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

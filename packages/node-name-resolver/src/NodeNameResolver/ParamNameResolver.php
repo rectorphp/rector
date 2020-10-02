@@ -19,7 +19,7 @@ final class ParamNameResolver implements NodeNameResolverInterface
     /**
      * @required
      */
-    public function autowireClassNameResolver(NodeNameResolver $nodeNameResolver): void
+    public function autowireParamNameResolver(NodeNameResolver $nodeNameResolver): void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }

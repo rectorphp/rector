@@ -43,7 +43,7 @@ final class ParsedPropertyFetchNodeCollector
      * To prevent circular reference
      * @required
      */
-    public function autowireParsedNodesByType(NodeTypeResolver $nodeTypeResolver): void
+    public function autowireParsedPropertyFetchNodeCollector(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

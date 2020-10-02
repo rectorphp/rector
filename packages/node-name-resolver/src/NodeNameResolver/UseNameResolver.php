@@ -19,7 +19,7 @@ final class UseNameResolver implements NodeNameResolverInterface
     /**
      * @required
      */
-    public function autowireClassNameResolver(NodeNameResolver $nodeNameResolver): void
+    public function autowireUseNameResolver(NodeNameResolver $nodeNameResolver): void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }

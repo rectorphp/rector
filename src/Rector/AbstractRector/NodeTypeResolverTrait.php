@@ -56,7 +56,7 @@ trait NodeTypeResolverTrait
     /**
      * @required
      */
-    public function autowireTypeAnalyzerDependencies(
+    public function autowireNodeTypeResolverTrait(
         NodeTypeResolver $nodeTypeResolver,
         ArrayTypeAnalyzer $arrayTypeAnalyzer,
         CountableTypeAnalyzer $countableTypeAnalyzer,
