@@ -292,11 +292,11 @@
             "vendor/bin/ecs check-markdown README.md docs/rector_rules_overview.md --fix --ansi"
         ],
         "phpstan": [
-            "vendor/bin/phpstan analyse --ansi --error-format symplify",
-            "vendor/bin/phpstan analyse config --ansi --error-format symplify"
+            "vendor/bin/phpstan analyse --ansi",
+            "vendor/bin/phpstan analyse config --ansi"
         ],
         "phpstan-config": [
-            "vendor/bin/phpstan analyse config --ansi --error-format symplify"
+            "vendor/bin/phpstan analyse config --ansi"
         ],
         "changelog": [
             "vendor/bin/changelog-linker dump-merges --in-categories --ansi",
