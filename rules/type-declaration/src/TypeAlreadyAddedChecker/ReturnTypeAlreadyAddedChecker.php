@@ -130,7 +130,8 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         $classMethodReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnTypeNode);
-        return $type->isSuperTypeOf($classMethodReturnType)->yes();
+        return $type->isSuperTypeOf($classMethodReturnType)
+            ->yes();
     }
 
     private function isStaticTypeIterable(Type $type): bool

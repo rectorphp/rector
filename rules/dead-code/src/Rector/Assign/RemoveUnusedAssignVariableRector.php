@@ -154,7 +154,8 @@ CODE_SAMPLE
         /** @var string $variableName */
         $variableName = $this->getName($assign->var);
 
-        return ! $scope->hasVariableType($variableName)->no();
+        return ! $scope->hasVariableType($variableName)
+            ->no();
     }
 
     private function isPreviousVariablePartOfOverridingAssign(Assign $assign): bool

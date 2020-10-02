@@ -60,7 +60,8 @@ final class ClassMethodAndCallMatcher
         $objectType = new ObjectType($className);
         $callerStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
 
-        return $objectType->isSuperTypeOf($callerStaticType)->yes();
+        return $objectType->isSuperTypeOf($callerStaticType)
+            ->yes();
     }
 
     private function isStaticCallMatchingClassMethod(StaticCall $staticCall, ClassMethod $classMethod): bool
@@ -82,6 +83,7 @@ final class ClassMethodAndCallMatcher
             return false;
         }
 
-        return $objectType->isSuperTypeOf($callerStaticType)->yes();
+        return $objectType->isSuperTypeOf($callerStaticType)
+            ->yes();
     }
 }

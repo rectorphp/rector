@@ -173,7 +173,8 @@ final class FluentChainMethodCallNodeAnalyzer
             return false;
         }
 
-        return $variableType->isSuperTypeOf($type)->yes();
+        return $variableType->isSuperTypeOf($type)
+            ->yes();
     }
 
     public function resolveRootVariable(MethodCall $methodCall): Node

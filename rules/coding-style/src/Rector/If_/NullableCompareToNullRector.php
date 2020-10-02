@@ -120,6 +120,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return ! $staticType->isSuperTypeOf(new FloatType())->yes();
+        return ! $staticType->isSuperTypeOf(new FloatType())
+            ->yes();
     }
 }

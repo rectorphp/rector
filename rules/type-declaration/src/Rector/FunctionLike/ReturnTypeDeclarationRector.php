@@ -270,6 +270,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $inferedType->isSubTypeOf($currentType)->yes();
+        return $inferedType->isSubTypeOf($currentType)
+            ->yes();
     }
 }

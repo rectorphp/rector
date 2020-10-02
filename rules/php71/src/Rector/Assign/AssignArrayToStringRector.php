@@ -172,7 +172,8 @@ CODE_SAMPLE
 
         if ($staticType instanceof UnionType) {
             return ! ($staticType->isSuperTypeOf(new ArrayType(new MixedType(), new MixedType()))->yes() &&
-                $staticType->isSuperTypeOf(new ConstantStringType(''))->yes());
+                $staticType->isSuperTypeOf(new ConstantStringType(''))
+                    ->yes());
         }
 
         return ! $staticType instanceof StringType;

@@ -113,6 +113,7 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
             return false;
         }
 
-        return ! $keyTypes[1]->isSuperTypeOf(new ConstantIntegerType(1))->no();
+        return ! $keyTypes[1]->isSuperTypeOf(new ConstantIntegerType(1))
+            ->no();
     }
 }

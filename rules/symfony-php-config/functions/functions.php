@@ -42,11 +42,13 @@ function inline_value_object(object $object): InlineServiceConfigurator
 
     // Symfony 5.1+
     if (function_exists('Symfony\Component\DependencyInjection\Loader\Configurator\inline_service')) {
-        return inline_service($className)->args($argumentValues);
+        return inline_service($className)
+            ->args($argumentValues);
     }
 
     // Symfony 5.0-
-    return inline($className)->args($argumentValues);
+    return inline($className)
+        ->args($argumentValues);
 }
 
 /**

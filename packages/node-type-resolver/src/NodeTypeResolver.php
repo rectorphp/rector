@@ -151,7 +151,8 @@ final class NodeTypeResolver
             return false;
         }
 
-        return $nodeType->isSuperTypeOf(new NullType())->yes();
+        return $nodeType->isSuperTypeOf(new NullType())
+            ->yes();
     }
 
     /**
