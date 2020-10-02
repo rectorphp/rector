@@ -6,8 +6,21 @@ includes:
 
     # see https://github.com/symplify/coding-standard
     - vendor/symplify/coding-standard/config/symplify-rules.neon
+    - vendor/symplify/coding-standard/packages/cognitive-complexity/config/cognitive-complexity-services.neon
 
 services:
+    -
+        class: Symplify\CodingStandard\CognitiveComplexity\Rules\FunctionLikeCognitiveComplexityRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            maxMethodCognitiveComplexity: 9
+
+    -
+        class: Symplify\CodingStandard\CognitiveComplexity\Rules\ClassLikeCognitiveComplexityRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            maxClassCognitiveComplexity: 50
+
     # require constant in argument position
     -
         class: Symplify\CodingStandard\Rules\RequireMethodCallArgumentConstantRule
@@ -78,22 +91,6 @@ services:
 parameters:
     level: max
 
-    # see https://github.com/symplify/coding-standard
-    symplify:
-        max_method_cognitive_complexity: 9 # default: 8
-        max_class_cognitive_complexity: 50
-
-    # to allow installing with various phsptan versions without reporting old errors here
-    reportUnmatchedIgnoredErrors: false
-
-    checkGenericClassInNonGenericObjectType: false
-
-    scanDirectories:
-        - stubs
-
-    bootstrapFiles:
-        - vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php
-
     paths:
         - bin
         - src
@@ -104,6 +101,17 @@ parameters:
         - utils
         # this cannot be put it, because it wipes PHPStan cache on each run :( - must run in separate
         #- config
+
+    # to allow installing with various phsptan versions without reporting old errors here
+    bootstrapFiles:
+        - vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php
+
+    scanDirectories:
+        - stubs
+
+    reportUnmatchedIgnoredErrors: false
+
+    checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
         # iterable types
@@ -726,9 +734,8 @@ parameters:
             paths:
                 - src/HttpKernel/RectorKernel.php
 
-        # buggy, is fixed on symplify dev-master
         -
-             message: '#Method call argument on position 0 must use constant over value#'
-             paths:
-                 - src/Rector/AbstractRector.php # 419
-                 - src/Rector/AbstractRector.php # 419
+            message: '#Node "errorsuppress" is fobidden to use#'
+            paths:
+                - rules/symfony/src/ServiceMapProvider.php # 67
+                - utils/project-validator/src/CpuCoreCountResolver.php # 35
