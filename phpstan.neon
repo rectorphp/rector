@@ -739,4 +739,3 @@ parameters:
             paths:
                 - rules/symfony/src/ServiceMapProvider.php # 67
                 - utils/project-validator/src/CpuCoreCountResolver.php # 35
-
