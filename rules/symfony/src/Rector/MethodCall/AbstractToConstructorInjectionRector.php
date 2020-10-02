@@ -34,7 +34,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
     /**
      * @required
      */
-    public function autowireAbstractToConstructorInjectionRectorDependencies(
+    public function autowireAbstractToConstructorInjectionRector(
         PropertyNaming $propertyNaming,
         ServiceMapProvider $applicationServiceMapProvider
     ): void {

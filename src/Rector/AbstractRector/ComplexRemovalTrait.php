@@ -56,7 +56,7 @@ trait ComplexRemovalTrait
     /**
      * @required
      */
-    public function autowireComplextRemovalTrait(
+    public function autowireComplexRemovalTrait(
         PropertyManipulator $propertyManipulator,
         ParsedNodeCollector $parsedNodeCollector,
         LivingCodeManipulator $livingCodeManipulator,

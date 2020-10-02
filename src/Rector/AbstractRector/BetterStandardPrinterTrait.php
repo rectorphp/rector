@@ -34,7 +34,7 @@ trait BetterStandardPrinterTrait
     /**
      * @required
      */
-    public function autowireBetterStandardPrinter(
+    public function autowireBetterStandardPrinterTrait(
         BetterStandardPrinter $betterStandardPrinter,
         BetterNodeFinder $betterNodeFinder,
         SmartFileSystem $smartFileSystem

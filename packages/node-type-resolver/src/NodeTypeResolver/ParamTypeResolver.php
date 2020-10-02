@@ -55,7 +55,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     /**
      * @required
      */
-    public function autowirePropertyTypeResolver(
+    public function autowireParamTypeResolver(
         NodeTypeResolver $nodeTypeResolver,
         StaticTypeMapper $staticTypeMapper
     ): void {

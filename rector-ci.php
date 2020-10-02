@@ -24,6 +24,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::DEFLUENT,
         SetList::TYPE_DECLARATION,
         SetList::PHPUNIT_CODE_QUALITY,
+        Setlist::SYMFONY_AUTOWIRE,
     ]);
 
     $parameters->set(Option::PATHS, [

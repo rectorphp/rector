@@ -26,7 +26,7 @@ trait VisibilityTrait
     /**
      * @required
      */
-    public function autowireVisbilityTrait(VisibilityManipulator $visibilityManipulator): void
+    public function autowireVisibilityTrait(VisibilityManipulator $visibilityManipulator): void
     {
         $this->visibilityManipulator = $visibilityManipulator;
     }

@@ -34,7 +34,7 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
     /**
      * @required
      */
-    public function autowirePropertyTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    public function autowireStaticCallTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

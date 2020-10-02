@@ -24,7 +24,7 @@ final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInter
     /**
      * @required
      */
-    public function autowirePropertyTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    public function autowireClassMethodOrClassConstTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

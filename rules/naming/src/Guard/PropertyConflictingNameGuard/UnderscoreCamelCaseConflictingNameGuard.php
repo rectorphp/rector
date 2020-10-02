@@ -11,7 +11,7 @@ final class UnderscoreCamelCaseConflictingNameGuard extends AbstractPropertyConf
     /**
      * @required
      */
-    public function autowireUnderscoreCamelCasePropertyConflictingNameGuard(
+    public function autowireUnderscoreCamelCaseConflictingNameGuard(
         UnderscoreCamelCaseExpectedNameResolver $underscoreCamelCaseExpectedNameResolver
     ): void {
         $this->expectedNameResolver = $underscoreCamelCaseExpectedNameResolver;

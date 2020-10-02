@@ -29,7 +29,7 @@ final class NullableTypeMapper implements PhpDocTypeMapperInterface
     /**
      * @required
      */
-    public function autowireGenericPhpDocTypeMapper(PhpDocTypeMapper $phpDocTypeMapper): void
+    public function autowireNullableTypeMapper(PhpDocTypeMapper $phpDocTypeMapper): void
     {
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }

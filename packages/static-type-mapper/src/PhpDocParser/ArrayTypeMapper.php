@@ -32,7 +32,7 @@ final class ArrayTypeMapper implements PhpDocTypeMapperInterface
     /**
      * @required
      */
-    public function autowireGenericPhpDocTypeMapper(PhpDocTypeMapper $phpDocTypeMapper): void
+    public function autowireArrayTypeMapper(PhpDocTypeMapper $phpDocTypeMapper): void
     {
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }

@@ -41,7 +41,7 @@ final class ParsedClassConstFetchNodeCollector
      * To prevent circular reference
      * @required
      */
-    public function autowireParsedNodesByType(NodeTypeResolver $nodeTypeResolver): void
+    public function autowireParsedClassConstFetchNodeCollector(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
