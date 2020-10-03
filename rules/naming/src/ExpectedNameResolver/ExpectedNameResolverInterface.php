@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\Naming\ExpectedNameResolver;
 
+use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 
 interface ExpectedNameResolverInterface
 {
-    public function resolveIfNotYet(Property $property): ?string;
+    /**
+     * @param Param|Property $node
+     */
+    public function resolveIfNotYet(Node $node): ?string;
 
-    public function resolve(Property $property): ?string;
+    /**
+     * @param Param|Property $node
+     */
+    public function resolve(Node $node): ?string;
 }

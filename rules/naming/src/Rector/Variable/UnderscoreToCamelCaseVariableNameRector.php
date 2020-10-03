@@ -7,14 +7,15 @@ namespace Rector\Naming\Rector\Variable;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
+use PhpParser\Node\Param;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
+use Rector\Naming\ExpectedNameResolver\UnderscoreCamelCaseExpectedNameResolver;
+use Rector\Naming\ParamRenamer\UnderscoreCamelCaseParamRenamer;
+use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -23,27 +24,35 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class UnderscoreToCamelCaseVariableNameRector extends AbstractRector
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/OtFn8I/1
-     */
-    private const PARAM_NAME_REGEX = '#(?<paramPrefix>@param\s.*\s+\$)(?<paramName>%s)#ms';
-
-    /**
-     * @var PropertyDocBlockManipulator
-     */
-    private $propertyDocBlockManipulator;
-
-    /**
      * @var ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
 
+    /**
+     * @var ParamRenameFactory
+     */
+    private $paramRenameFactory;
+
+    /**
+     * @var UnderscoreCamelCaseExpectedNameResolver
+     */
+    private $underscoreCamelCaseExpectedNameResolver;
+
+    /**
+     * @var UnderscoreCamelCaseParamRenamer
+     */
+    private $underscoreCamelCaseParamRenamer;
+
     public function __construct(
-        PropertyDocBlockManipulator $propertyDocBlockManipulator,
-        ReservedKeywordAnalyzer $reservedKeywordAnalyzer
+        ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        ParamRenameFactory $paramRenameFactory,
+        UnderscoreCamelCaseParamRenamer $underscoreCamelCaseParamRenamer,
+        UnderscoreCamelCaseExpectedNameResolver $underscoreCamelCaseExpectedNameResolver
     ) {
-        $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+        $this->paramRenameFactory = $paramRenameFactory;
+        $this->underscoreCamelCaseExpectedNameResolver = $underscoreCamelCaseExpectedNameResolver;
+        $this->underscoreCamelCaseParamRenamer = $underscoreCamelCaseParamRenamer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -104,45 +113,32 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var Param $parentNode */
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Param) {
+            return $this->renameParam($parentNode);
+        }
+
         $node->name = $camelCaseName;
-        $this->updateDocblock($node, $nodeName, $camelCaseName);
 
         return $node;
     }
 
-    private function updateDocblock(Variable $variable, string $variableName, string $camelCaseName): void
+    private function renameParam(Param $param): ?Variable
     {
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parentNode) {
-            /** @var ClassMethod|Function_ $parentNode */
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
-                break;
-            }
+        $paramRename = $this->paramRenameFactory->create($param, $this->underscoreCamelCaseExpectedNameResolver);
+        if ($paramRename === null) {
+            return null;
         }
 
-        if ($parentNode === null) {
-            return;
+        $renamedParam = $this->underscoreCamelCaseParamRenamer->rename($paramRename);
+        if ($renamedParam === null) {
+            return null;
         }
 
-        $docComment = $parentNode->getDocComment();
-        if ($docComment === null) {
-            return;
-        }
+        /** @var Variable $variable */
+        $variable = $renamedParam->var;
 
-        $docCommentText = $docComment->getText();
-        if ($docCommentText === null) {
-            return;
-        }
-
-        if (! $match = Strings::match($docCommentText, sprintf(self::PARAM_NAME_REGEX, $variableName))) {
-            return;
-        }
-
-        $this->propertyDocBlockManipulator->renameParameterNameInDocBlock(
-            $parentNode,
-            $match['paramName'],
-            $camelCaseName
-        );
+        return $variable;
     }
 }

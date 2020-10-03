@@ -14,7 +14,7 @@ final class NotPrivatePropertyGuard implements GuardInterface
      */
     public function check(RenameValueObjectInterface $renameValueObject): bool
     {
-        return ! $renameValueObject->getNode()
+        return ! $renameValueObject->getProperty()
             ->isPrivate();
     }
 }

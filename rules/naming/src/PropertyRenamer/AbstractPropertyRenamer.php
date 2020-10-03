@@ -18,10 +18,12 @@ use Rector\Naming\Guard\NotPrivatePropertyGuard;
 use Rector\Naming\Guard\RamseyUuidInterfaceGuard;
 use Rector\Naming\RenameGuard\PropertyRenameGuard;
 use Rector\Naming\RenameGuard\RenameGuardInterface;
+use Rector\Naming\RenamerInterface;
 use Rector\Naming\ValueObject\PropertyRename;
+use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-abstract class AbstractPropertyRenamer
+abstract class AbstractPropertyRenamer implements RenamerInterface
 {
     /**
      * @var RenameGuardInterface
@@ -84,13 +86,17 @@ abstract class AbstractPropertyRenamer
         $this->hasMagicGetSetGuard = $hasMagicGetSetGuard;
     }
 
-    public function rename(PropertyRename $propertyRename): ?Property
+    /**
+     * @param PropertyRename $renameValueObject
+     * @return Property|null
+     */
+    public function rename(RenameValueObjectInterface $renameValueObject): ?Node
     {
-        if ($this->areNamesDifferent($propertyRename)) {
+        if ($this->areNamesDifferent($renameValueObject)) {
             return null;
         }
 
-        if ($this->propertyRenameGuard->shouldSkip($propertyRename, [
+        if ($this->propertyRenameGuard->shouldSkip($renameValueObject, [
             $this->notPrivatePropertyGuard,
             $this->conflictingPropertyNameGuard,
             $this->ramseyUuidInterfaceGuard,
@@ -100,36 +106,39 @@ abstract class AbstractPropertyRenamer
             return null;
         }
 
-        $onlyPropertyProperty = $propertyRename->getPropertyProperty();
-        $onlyPropertyProperty->name = new VarLikeIdentifier($propertyRename->getExpectedName());
-        $this->renamePropertyFetchesInClass($propertyRename);
+        $onlyPropertyProperty = $renameValueObject->getPropertyProperty();
+        $onlyPropertyProperty->name = new VarLikeIdentifier($renameValueObject->getExpectedName());
+        $this->renamePropertyFetchesInClass($renameValueObject);
 
-        return $propertyRename->getNode();
+        return $renameValueObject->getProperty();
     }
 
-    private function areNamesDifferent(PropertyRename $propertyRename): bool
+    private function areNamesDifferent(RenameValueObjectInterface $renameValueObject): bool
     {
-        return $propertyRename->getCurrentName() === $propertyRename->getExpectedName();
+        return $renameValueObject->getCurrentName() === $renameValueObject->getExpectedName();
     }
 
-    private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
+    /**
+     * @param PropertyRename $renameValueObject
+     */
+    private function renamePropertyFetchesInClass(RenameValueObjectInterface $renameValueObject): void
     {
         // 1. replace property fetch rename in whole class
         $this->callableNodeTraverser->traverseNodesWithCallable(
-            [$propertyRename->getClassLike()],
-            function (Node $node) use ($propertyRename): ?Node {
-                if ($this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyRename->getCurrentName())) {
+            [$renameValueObject->getClassLike()],
+            function (Node $node) use ($renameValueObject): ?Node {
+                if ($this->nodeNameResolver->isLocalPropertyFetchNamed($node, $renameValueObject->getCurrentName())) {
                     /** @var PropertyFetch $node */
-                    $node->name = new Identifier($propertyRename->getExpectedName());
+                    $node->name = new Identifier($renameValueObject->getExpectedName());
                     return $node;
                 }
 
                 if ($this->nodeNameResolver->isLocalStaticPropertyFetchNamed(
                     $node,
-                    $propertyRename->getCurrentName()
+                    $renameValueObject->getCurrentName()
                 )) {
                     /** @var StaticPropertyFetch $node */
-                    $node->name = new VarLikeIdentifier($propertyRename->getExpectedName());
+                    $node->name = new VarLikeIdentifier($renameValueObject->getExpectedName());
                     return $node;
                 }
 
