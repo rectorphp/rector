@@ -105,6 +105,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $this->hasChanged = false;
+
         foreach ($node->params as $param) {
             $expectedName = $this->expectedNameResolver->resolveForParamIfNotYet($param);
             if ($expectedName === null) {
