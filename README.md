@@ -1,7 +1,16 @@
-# Rector - Upgrade Your Legacy App to a Modern Codebase
+# Rector - Speedup Your PHP Development
 
-Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code.
-Why refactor manually if Rector can handle 80% of the task for you?
+Rector helps you with 2 areas - major code changes and in daily work.
+
+- Do you have a legacy code base? Do you want to have that latest versison of PHP or your favorite framework?
+ → **Rector gets you there with instant upgrade**.
+
+ <br>
+
+- Do you have code quality you need, but struggle to keep it with new developers in your team? Do you wish to have  code-reviews for each member of your team, but don't have time for it?
+→ **Add Rector to you CI and let it fix your code for you. Get [instant feedback](https://tomasvotruba.com/blog/2020/01/13/why-is-first-instant-feedback-crucial-to-developers/) after each commit.**
+
+Why do it manually if Rector can handle 95 % of routine work for you?
 
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
