@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Naming\ExpectedNameResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -24,6 +25,9 @@ final class MatchPropertyTypeExpectedNameResolver extends AbstractExpectedNameRe
         $this->propertyNaming = $propertyNaming;
     }
 
+    /**
+     * @param Property $node
+     */
     public function resolve(Node $node): ?string
     {
         /** @var PhpDocInfo|null $phpDocInfo */

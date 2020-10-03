@@ -6,6 +6,8 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Property;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -27,6 +29,9 @@ abstract class AbstractExpectedNameResolver implements ExpectedNameResolverInter
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
+    /**
+     * @param Param|Property $node
+     */
     public function resolveIfNotYet(Node $node): ?string
     {
         $expectedName = $this->resolve($node);
