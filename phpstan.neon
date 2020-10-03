@@ -698,3 +698,26 @@ parameters:
             paths:
                 - rules/symfony/src/ServiceMapProvider.php # 67
                 - utils/project-validator/src/CpuCoreCountResolver.php # 35
+
+        -
+            message: '#Instead of container injection, use specific service#'
+            paths:
+                - src/Configuration/RectorClassesProvider.php
+
+        -
+            message: '#Do not use factory/method call in constructor, put factory in config and get service with dependency injection#'
+            paths:
+                - packages/node-type-resolver/src/DependencyInjection/PHPStanServicesFactory.php # 57
+                - packages/node-type-resolver/src/DependencyInjection/PHPStanServicesFactory.php # 65
+                - packages/node-type-resolver/src/DependencyInjection/PHPStanServicesFactory.php # 78
+                - packages/node-type-resolver/src/DependencyInjection/PHPStanServicesFactory.php # 82
+                - rules/nette-to-symfony/src/Rector/ClassMethod/RenameEventNamesInEventSubscriberRector.php # 39
+                - rules/type-declaration/src/Exception/ConflictingPriorityException.php # 18
+                - src/Console/Application.php # 42
+                - src/Exception/Application/FileProcessingException.php # 17
+                - src/Php/TypeAnalyzer.php # 49
+                - src/PhpParser/NodeTraverser/RectorNodeTraverser.php # 36
+                - src/PhpParser/NodeTraverser/RectorNodeTraverser.php # 42
+                - src/PhpParser/NodeTraverser/RectorNodeTraverser.php # 42
+                - utils/node-documentation-generator/src/ValueObject/NodeInfo.php # 34
+                - utils/node-documentation-generator/src/ValueObject/NodeInfo.php # 39
