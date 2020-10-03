@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\PhpAttribute;
 
 use PhpParser\Node;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -37,11 +39,23 @@ final class AnnotationToAttributeConverter
             return null;
         }
 
+        // special cases without tag value node
+        $hasNewAttrGroups = false;
+        if ($phpDocInfo->hasByName('required')) {
+            $phpDocInfo->removeByName('required');
+            $node->attrGroups[] = new Attribute(new FullyQualified('Symfony\Contracts\Service\Attribute\Required'));
+            $hasNewAttrGroups = true;
+        }
+
         // 0. has 0 nodes, nothing to change
         /** @var PhpAttributableTagNodeInterface[]&PhpDocTagValueNode[] $phpAttributableTagNodes */
         $phpAttributableTagNodes = $phpDocInfo->findAllByType(PhpAttributableTagNodeInterface::class);
-        if ($phpAttributableTagNodes === []) {
+        if ($phpAttributableTagNodes === [] && $hasNewAttrGroups === false) {
             return null;
+        }
+
+        if ($phpAttributableTagNodes !== []) {
+            $hasNewAttrGroups = true;
         }
 
         // 1. remove tags
@@ -50,8 +64,13 @@ final class AnnotationToAttributeConverter
         }
 
         // 2. convert annotations to attributes
-        $node->attrGroups = $this->phpAttributteGroupFactory->create($phpAttributableTagNodes);
+        $newAttrGroups = $this->phpAttributteGroupFactory->create($phpAttributableTagNodes);
+        $node->attrGroups = array_merge($node->attrGroups, $newAttrGroups);
 
-        return $node;
+        if ($hasNewAttrGroups) {
+            return $node;
+        }
+
+        return null;
     }
 }

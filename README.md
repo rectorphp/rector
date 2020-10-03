@@ -196,8 +196,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // auto import fully qualified class names? [default: false]
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
+
     // skip root namespace classes, like \DateTime or \Exception [default: true]
     $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
+
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
 
