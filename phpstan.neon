@@ -683,7 +683,6 @@ parameters:
                 - src/Testing/NodeVisitor/AttributeCollectingNodeVisitor.php # 24
 
         - '#Use "Symplify\\SmartFileSystem\\SmartFileSystem\:\:dumpFile\(\)" static call over "file_put_contents\(\)" func call#'
-        - '#Class name start with Abstract must have abstract keyword#'
         - '#Parameter \#1 \$name of method Rector\\Restoration\\Rector\\Use_\\RestoreFullyQualifiedNameRector\:\:resolveFullyQualifiedName\(\) expects PhpParser\\Node\\Name, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name given#'
 
         - '#Class with base "CheckNotTestsNamespaceOutsideTestsDirectoryRule" name is already used in "Rector\\PHPStanExtensions\\Rule\\CheckNotTestsNamespaceOutsideTestsDirectoryRule", "Symplify\\CodingStandard\\Rules\\CheckNotTestsNamespaceOutsideTestsDirectoryRule"\. Use unique name to make classes easy to recognize#'

@@ -13,7 +13,7 @@ use Rector\Naming\ValueObject\PropertyRename;
 use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-class AbstractPropertyConflictingNameGuard implements GuardInterface
+abstract class AbstractPropertyConflictingNameGuard implements GuardInterface
 {
     /**
      * @var ExpectedNameResolverInterface
