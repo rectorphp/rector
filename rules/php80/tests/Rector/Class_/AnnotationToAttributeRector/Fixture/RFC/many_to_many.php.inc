@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 class ManyToMany
 {
-    #[@ORM\ManyToMany(['targetEntity' => 'Phonenumber'])]
+    #[@ORM\ManyToMany(targetEntity: 'Phonenumber')]
     public $name;
 }
 

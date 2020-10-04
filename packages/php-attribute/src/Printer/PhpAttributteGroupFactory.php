@@ -8,14 +8,20 @@ use PhpParser\BuilderHelpers;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\PhpAttribute\Contract\ManyPhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
 final class PhpAttributteGroupFactory
 {
+    /**
+     * @var string
+     */
+    public const TBA = 'TBA';
+
     /**
      * @param PhpAttributableTagNodeInterface[] $phpAttributableTagNodes
      * @return AttributeGroup[]
@@ -37,7 +43,13 @@ final class PhpAttributteGroupFactory
     public function printItemsToAttributeArgs(PhpAttributableTagNodeInterface $phpAttributableTagNode): array
     {
         $items = $phpAttributableTagNode->getAttributableItems();
-        return $this->createArgsFromItems($items);
+
+        $silentKey = null;
+        if ($phpAttributableTagNode instanceof SilentKeyNodeInterface) {
+            $silentKey = $phpAttributableTagNode->getSilentKey();
+        }
+
+        return $this->createArgsFromItems($items, $silentKey);
     }
 
     /**
@@ -47,16 +59,16 @@ final class PhpAttributteGroupFactory
     {
         $args = $this->printItemsToAttributeArgs($phpAttributableTagNode);
 
+        $attributeClassName = $this->resolveAttributeClassName($phpAttributableTagNode);
+
         $attributeGroups = [];
-        $attributeGroups[] = $this->createAttributeGroupFromShortNameAndArgs(
-            $phpAttributableTagNode->getShortName(),
-            $args
-        );
+        $attributeGroups[] = $this->createAttributeGroupFromNameAndArgs($attributeClassName, $args);
 
         if ($phpAttributableTagNode instanceof ManyPhpAttributableTagNodeInterface) {
             foreach ($phpAttributableTagNode->provide() as $shortName => $items) {
                 $args = $this->createArgsFromItems($items);
-                $attributeGroups[] = $this->createAttributeGroupFromShortNameAndArgs($shortName, $args);
+                $name = new Name($shortName);
+                $attributeGroups[] = $this->createAttributeGroupFromNameAndArgs($name, $args);
             }
         }
 
@@ -66,19 +78,22 @@ final class PhpAttributteGroupFactory
     /**
      * @return Arg[]
      */
-    private function createArgsFromItems(array $items): array
+    private function createArgsFromItems(array $items, ?string $silentKey = null): array
     {
         $args = [];
 
-        if ($this->isArrayArguments($items)) {
-            $arrayItems = [];
-            foreach ($items as $key => $value) {
-                $key = BuilderHelpers::normalizeValue($key);
-                $value = BuilderHelpers::normalizeValue($value);
-                $arrayItems[] = new ArrayItem($value, $key);
-            }
+        if ($silentKey !== null && isset($items[$silentKey])) {
+            $silentValue = BuilderHelpers::normalizeValue($items[$silentKey]);
+            $args[] = new Arg($silentValue);
+            unset($items[$silentKey]);
+        }
 
-            $args[] = new Arg(new Array_($arrayItems));
+        if ($this->isArrayArguments($items)) {
+            foreach ($items as $key => $value) {
+                $argumentName = new Identifier($key);
+                $value = BuilderHelpers::normalizeValue($value);
+                $args[] = new Arg($value, false, false, [], $argumentName);
+            }
         } else {
             foreach ($items as $value) {
                 $value = BuilderHelpers::normalizeValue($value);
@@ -89,12 +104,21 @@ final class PhpAttributteGroupFactory
         return $args;
     }
 
+    private function resolveAttributeClassName(PhpAttributableTagNodeInterface $phpAttributableTagNode): Name
+    {
+        if ($phpAttributableTagNode->getAttributeClassName() !== self::TBA) {
+            return new FullyQualified($phpAttributableTagNode->getAttributeClassName());
+        }
+
+        return new Name($phpAttributableTagNode->getShortName());
+    }
+
     /**
      * @param Arg[] $args
      */
-    private function createAttributeGroupFromShortNameAndArgs(string $shortName, array $args): AttributeGroup
+    private function createAttributeGroupFromNameAndArgs(Name $name, array $args): AttributeGroup
     {
-        $attribute = new Attribute(new Name($shortName), $args);
+        $attribute = new Attribute($name, $args);
         return new AttributeGroup([$attribute]);
     }
 

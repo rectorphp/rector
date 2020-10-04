@@ -120,6 +120,11 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         return $items;
     }
 
+    public function getAttributeClassName(): string
+    {
+        return 'TBA';
+    }
+
     /**
      * @return string[]
      */

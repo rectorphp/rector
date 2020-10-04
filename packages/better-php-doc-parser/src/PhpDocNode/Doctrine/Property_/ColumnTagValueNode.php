@@ -44,4 +44,9 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements P
     {
         return $this->filterOutMissingItems($this->items);
     }
+
+    public function getAttributeClassName(): string
+    {
+        return 'TBA';
+    }
 }

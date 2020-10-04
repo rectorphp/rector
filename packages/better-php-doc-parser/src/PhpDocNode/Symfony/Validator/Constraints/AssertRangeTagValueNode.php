@@ -23,4 +23,9 @@ final class AssertRangeTagValueNode extends AbstractTagValueNode implements Type
     {
         return $this->filterOutMissingItems($this->items);
     }
+
+    public function getAttributeClassName(): string
+    {
+        return 'TBA';
+    }
 }

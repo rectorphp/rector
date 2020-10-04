@@ -7,12 +7,13 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
+use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
-final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface
+final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface, PhpAttributableTagNodeInterface
 {
     /**
      * @var string
@@ -40,18 +41,31 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         $this->items['methods'] = $methods;
     }
 
-    public function getShortName(): string
-    {
-        return '@Route';
-    }
-
     public function getSilentKey(): string
     {
         return self::PATH;
     }
 
+    public function getShortName(): string
+    {
+        return '@Route';
+    }
+
     public function mimicTagValueNodeConfiguration(AbstractTagValueNode $abstractTagValueNode): void
     {
         $this->tagValueNodeConfiguration->mimic($abstractTagValueNode->tagValueNodeConfiguration);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getAttributableItems(): array
+    {
+        return $this->filterOutMissingItems($this->items);
+    }
+
+    public function getAttributeClassName(): string
+    {
+        return 'Symfony\Component\Routing\Attribute\Route';
     }
 }

@@ -30,4 +30,9 @@ final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode impl
     {
         return $this->filterOutMissingItems($this->items);
     }
+
+    public function getAttributeClassName(): string
+    {
+        return 'TBA';
+    }
 }

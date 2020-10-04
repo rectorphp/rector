@@ -8,6 +8,8 @@ interface PhpAttributableTagNodeInterface
 {
     public function getShortName(): string;
 
+    public function getAttributeClassName(): string;
+
     /**
      * @return mixed[]
      */

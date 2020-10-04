@@ -21,4 +21,9 @@ final class IdTagValueNode extends AbstractDoctrineTagValueNode implements PhpAt
     {
         return $this->filterOutMissingItems($this->items);
     }
+
+    public function getAttributeClassName(): string
+    {
+        return 'TBA';
+    }
 }
