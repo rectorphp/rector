@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SymfonyRoute
 {
     /**
-     * @Route("/path", name: "action")
+     * @Route("/path", name="action")
      */
     public function action()
     {
@@ -20,11 +20,11 @@ class SymfonyRoute
 
 namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class SymfonyRoute
 {
-    #[Route('/path', name: 'action')]
+    #[\Symfony\Component\Routing\Attribute\Route('/path', name: 'action')]
     public function action()
     {
     }
