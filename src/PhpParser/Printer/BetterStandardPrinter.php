@@ -73,6 +73,12 @@ final class BetterStandardPrinter extends Standard
     private const EXTRA_SPACE_BEFORE_NOP_REGEX = '#^[ \t]+$#m';
 
     /**
+     * @see https://regex101.com/r/qZiqGo/4
+     * @var string
+     */
+    private const REPLACE_COLON_WITH_SPACE_REGEX = '#(function .*?\(.*?\)) : #';
+
+    /**
      * Use space by default
      * @var string
      */
@@ -363,13 +369,10 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pStmt_ClassMethod(ClassMethod $classMethod): string
     {
-        return $this->pModifiers($classMethod->flags)
-            . 'function ' . ($classMethod->byRef ? '&' : '') . $classMethod->name
-            . '(' . $this->pCommaSeparated($classMethod->params) . ')'
-            . ($classMethod->returnType !== null ? ': ' . $this->p($classMethod->returnType) : '')
-            . ($classMethod->stmts !== null ? $this->nl . '{' . $this->pStmts(
-                    $classMethod->stmts
-                ) . $this->nl . '}' : ';');
+        $content = parent::pStmt_ClassMethod($classMethod);
+
+        // this approach is chosen, to keep changes in parent pStmt_ClassMethod() updated
+        return Strings::replace($content, self::REPLACE_COLON_WITH_SPACE_REGEX, '$1: ');
     }
 
     /**

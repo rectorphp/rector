@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AnonymousClass\NodeAnalyzer;
+namespace Rector\Core\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
