@@ -245,7 +245,7 @@
             "Rector\\PHPStanStaticTypeMapper\\Tests\\": "packages/phpstan-static-type-mapper/tests"
         },
         "classmap": [
-            "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
+            "rules/cakephp/tests/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector/Source",
             "rules/symfony/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",

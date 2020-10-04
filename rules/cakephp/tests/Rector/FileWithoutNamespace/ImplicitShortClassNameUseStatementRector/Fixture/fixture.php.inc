@@ -12,3 +12,5 @@ use Cake\TestSuite\Fixture\TestFixture;
 class LocationsFixture extends TestFixture
 {
 }
+
+?>

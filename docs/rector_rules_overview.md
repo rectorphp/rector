@@ -1,4 +1,4 @@
-# All 583 Rectors Overview
+# All 584 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -9,7 +9,7 @@
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
 - [CodeQuality](#codequality) (59)
-- [CodingStyle](#codingstyle) (34)
+- [CodingStyle](#codingstyle) (33)
 - [DeadCode](#deadcode) (40)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (17)
@@ -29,7 +29,7 @@
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
-- [Naming](#naming) (10)
+- [Naming](#naming) (11)
 - [Nette](#nette) (16)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
@@ -66,7 +66,7 @@
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
-- [Symfony](#symfony) (33)
+- [Symfony](#symfony) (34)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [SymfonyPhpConfig](#symfonyphpconfig) (2)
@@ -269,8 +269,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### `AppUsesStaticCallToUseStatementRector`
 
-- class: [`Rector\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector`](/rules/cakephp/src/Rector/Expression/AppUsesStaticCallToUseStatementRector.php)
-- [test fixtures](/rules/cakephp/tests/Rector/Expression/AppUsesStaticCallToUseStatementRector/Fixture)
+- class: [`Rector\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector`](/rules/cakephp/src/Rector/Namespace_/AppUsesStaticCallToUseStatementRector.php)
+- [test fixtures](/rules/cakephp/tests/Rector/Namespace_/AppUsesStaticCallToUseStatementRector/Fixture)
 
 Change `App::uses()` to use imports
 
@@ -363,8 +363,8 @@ Changes `$fixtues` style from snake_case to PascalCase.
 
 ### `ImplicitShortClassNameUseStatementRector`
 
-- class: [`Rector\CakePHP\Rector\Name\ImplicitShortClassNameUseStatementRector`](/rules/cakephp/src/Rector/Name/ImplicitShortClassNameUseStatementRector.php)
-- [test fixtures](/rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Fixture)
+- class: [`Rector\CakePHP\Rector\FileWithoutNamespace\ImplicitShortClassNameUseStatementRector`](/rules/cakephp/src/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector.php)
+- [test fixtures](/rules/cakephp/tests/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector/Fixture)
 
 Collect implicit class names and add imports
 
@@ -2398,26 +2398,6 @@ Assign outcome of ternary condition to variable, where applicable
  {
 -    $value ? $a = 1 : $a = 0;
 +    $a = $value ? 1 : 0;
- }
-```
-
-<br><br>
-
-### `UnderscoreToCamelCaseLocalVariableNameRector`
-
-- class: [`Rector\CodingStyle\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector`](/rules/coding-style/src/Rector/Variable/UnderscoreToCamelCaseLocalVariableNameRector.php)
-- [test fixtures](/rules/coding-style/tests/Rector/Variable/UnderscoreToCamelCaseLocalVariableNameRector/Fixture)
-
-Change under_score local variable names to camelCase
-
-```diff
- final class SomeClass
- {
-     public function run($a_b)
-     {
--        $some_value = $a_b;
-+        $someValue = $a_b;
-     }
  }
 ```
 
@@ -7799,6 +7779,26 @@ Rename variable to match new ClassType
 -        $search->advance();
 +        $dreamSearch = new DreamSearch();
 +        $dreamSearch->advance();
+     }
+ }
+```
+
+<br><br>
+
+### `UnderscoreToCamelCaseLocalVariableNameRector`
+
+- class: [`Rector\Naming\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector`](/rules/naming/src/Rector/Variable/UnderscoreToCamelCaseLocalVariableNameRector.php)
+- [test fixtures](/rules/naming/tests/Rector/Variable/UnderscoreToCamelCaseLocalVariableNameRector/Fixture)
+
+Change under_score local variable names to camelCase
+
+```diff
+ final class SomeClass
+ {
+     public function run($a_b)
+     {
+-        $some_value = $a_b;
++        $someValue = $a_b;
      }
  }
 ```
@@ -14422,6 +14422,26 @@ Turns long flash adding to short helper method in Controller in Symfony
      {
 -        $request->getSession()->getFlashBag()->add("success", "something");
 +        $this->addFlash("success", "something");
+     }
+ }
+```
+
+<br><br>
+
+### `AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector`
+
+- class: [`Rector\Symfony\Rector\ClassMethod\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector`](/rules/symfony/src/Rector/ClassMethod/AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector.php)
+- [test fixtures](/rules/symfony/tests/Rector/ClassMethod/AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector/Fixture)
+
+Use autowire + class name suffix for method with @required annotation
+
+```diff
+ class SomeClass
+ {
+     /** @required */
+-    public function foo()
++    public function autowireSomeClass()
+     {
      }
  }
 ```

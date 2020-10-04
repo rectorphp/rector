@@ -6,11 +6,9 @@ namespace Rector\CakePHP\Rector\Namespace_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 use Rector\CakePHP\Naming\CakePHPFullyQualifiedClassNameResolver;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
@@ -74,7 +72,8 @@ CODE_SAMPLE
 
         $this->removeNodes($appUsesStaticCalls);
 
-        $uses = $this->createUsesFromStaticCalls($appUsesStaticCalls);
+        $names = $this->resolveNamesFromStaticCalls($appUsesStaticCalls);
+        $uses = $this->nodeFactory->createUsesFromNames($names);
 
         if ($node instanceof Namespace_) {
             $node->stmts = array_merge($uses, (array) $node->stmts);
@@ -96,23 +95,6 @@ CODE_SAMPLE
             $namespaceName,
             $shortClassName
         );
-    }
-
-    /**
-     * @param StaticCall[] $staticCalls
-     * @return Use_[]
-     */
-    private function createUsesFromStaticCalls(array $staticCalls): array
-    {
-        $uses = [];
-
-        foreach ($staticCalls as $staticCall) {
-            $fullyQualifiedName = $this->createFullyQualifiedNameFromAppUsesStaticCall($staticCall);
-            $useUse = new UseUse(new Name($fullyQualifiedName));
-            $uses[] = new Use_([$useUse]);
-        }
-
-        return $uses;
     }
 
     /**
@@ -171,5 +153,19 @@ CODE_SAMPLE
         }
 
         return new FileWithoutNamespace($newStmts);
+    }
+
+    /**
+     * @param StaticCall[] $staticCalls
+     * @return string[]
+     */
+    private function resolveNamesFromStaticCalls(array $staticCalls): array
+    {
+        $names = [];
+        foreach ($staticCalls as $staticCall) {
+            $names[] = $this->createFullyQualifiedNameFromAppUsesStaticCall($staticCall);
+        }
+
+        return $names;
     }
 }

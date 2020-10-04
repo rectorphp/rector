@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Tests\Rector\Name\ImplicitShortClassNameUseStatementRector;
+namespace Rector\CakePHP\Tests\Rector\FileWithoutNamespace\ImplicitShortClassNameUseStatementRector;
 
 use Iterator;
-use Rector\CakePHP\Rector\Name\ImplicitShortClassNameUseStatementRector;
+use Rector\CakePHP\Rector\FileWithoutNamespace\ImplicitShortClassNameUseStatementRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

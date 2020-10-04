@@ -22,3 +22,5 @@ class AppUsesImplicit extends AppController implements Controller
         $url = Router::url('xyz');
     }
 }
+
+?>
