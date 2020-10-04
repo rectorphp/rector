@@ -56,7 +56,9 @@
         "symplify/monorepo-builder": "^8.3.29",
         "symplify/phpstan-extensions": "^8.3.29",
         "tracy/tracy": "^2.7",
-        "thecodingmachine/phpstan-strict-rules": "^0.12"
+        "thecodingmachine/phpstan-strict-rules": "^0.12",
+        "symfony/validator": "^5.1",
+        "tracy/tracy": "^2.7"
     },
     "replace": {
         "rector/rector-prefixed": "self.version"
