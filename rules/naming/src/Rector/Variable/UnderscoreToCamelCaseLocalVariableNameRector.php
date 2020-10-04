@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Rector\Variable;
+namespace Rector\Naming\Rector\Variable;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -21,7 +21,7 @@ use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\UnderscoreToCamelCaseLocalVariableNameRectorTest
+ * @see \Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\UnderscoreToCamelCaseLocalVariableNameRectorTest
  */
 final class UnderscoreToCamelCaseLocalVariableNameRector extends AbstractRector
 {
