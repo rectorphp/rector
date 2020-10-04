@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class EntityColumnAndAssertEmail
 {
     #[@ORM\Column(type: 'string', unique: true)]
-    #[@Assert\Email(message: 'This value is not a valid email address.')]
+    #[@Assert\Email(message: 'The email \'{{ value }}\' is not a valid email.')]
     public $name;
 }
 
