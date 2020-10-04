@@ -723,3 +723,58 @@ parameters:
 
         # intersection bug
         - '#Parameter \#1 \$phpDocTagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:removeTagValueNodeFromNode\(\) expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode, Rector\\PhpAttribute\\Contract\\PhpAttributableTagNodeInterface given#'
+
+
+        -
+            message: '#Method call argument on position 0 must use constant over value#'
+            paths:
+                - packages/node-name-resolver/src/NodeNameResolver/FuncCallNameResolver.php # 38
+                - packages/node-name-resolver/src/NodeNameResolver/FuncCallNameResolver.php # 38
+                - rules/legacy/src/Rector/Include_/RemoveIncludeRector.php # 56
+                - rules/legacy/src/Rector/Include_/RemoveIncludeRector.php # 56
+                - rules/php73/src/Rector/String_/SensitiveHereNowDocRector.php # 64
+                - rules/php73/src/Rector/String_/SensitiveHereNowDocRector.php # 64
+                - rules/php73/src/Rector/String_/SensitiveHereNowDocRector.php # 70
+                - rules/php73/src/Rector/String_/SensitiveHereNowDocRector.php # 70
+                - rules/symfony/src/Rector/ClassMethod/AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector.php # 75
+                - rules/symfony/src/Rector/ClassMethod/AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector.php # 75
+
+        -
+            message: '#Method with @required need to be named autowire\+class name#'
+            paths:
+                - packages/changes-reporting/src/Rector/AbstractRector/NotifyingRemovingNodeTrait.php # 27
+                - packages/changes-reporting/src/Rector/AbstractRector/NotifyingRemovingNodeTrait.php # 27
+                - packages/post-rector/src/Rector/AbstractRector/NodeCommandersTrait.php # 71
+                - packages/post-rector/src/Rector/AbstractRector/NodeCommandersTrait.php # 71
+                - packages/reporting/src/Rector/AbstractRector/NodeReportCollectorTrait.php # 24
+                - packages/reporting/src/Rector/AbstractRector/NodeReportCollectorTrait.php # 24
+                - rules/doctrine/src/AbstractRector/DoctrineTrait.php # 23
+                - rules/doctrine/src/AbstractRector/DoctrineTrait.php # 23
+                - rules/doctrine/src/AbstractRector/DoctrineTrait.php # 23
+                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 37
+                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 37
+                - src/Rector/AbstractRector/CallableNodeTraverserTrait.php # 24
+                - src/Rector/AbstractRector/CallableNodeTraverserTrait.php # 24
+                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 59
+                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 59
+                - src/Rector/AbstractRector/ConstFetchAnalyzerTrait.php # 24
+                - src/Rector/AbstractRector/ConstFetchAnalyzerTrait.php # 24
+                - src/Rector/AbstractRector/NameResolverTrait.php # 38
+                - src/Rector/AbstractRector/NameResolverTrait.php # 38
+                - src/Rector/AbstractRector/NameResolverTrait.php # 38
+                - src/Rector/AbstractRector/NodeCollectorTrait.php # 23
+                - src/Rector/AbstractRector/NodeCollectorTrait.php # 23
+                - src/Rector/AbstractRector/NodeFactoryTrait.php # 38
+                - src/Rector/AbstractRector/NodeFactoryTrait.php # 38
+                - src/Rector/AbstractRector/NodeTypeResolverTrait.php # 59
+                - src/Rector/AbstractRector/NodeTypeResolverTrait.php # 59
+                - src/Rector/AbstractRector/PhpDocTrait.php # 39
+                - src/Rector/AbstractRector/PhpDocTrait.php # 39
+                - src/Rector/AbstractRector/RemovedAndAddedFilesTrait.php # 29
+                - src/Rector/AbstractRector/RemovedAndAddedFilesTrait.php # 29
+                - src/Rector/AbstractRector/ValueResolverTrait.php # 24
+                - src/Rector/AbstractRector/ValueResolverTrait.php # 24
+                - src/Rector/AbstractRector/VisibilityTrait.php # 29
+                - src/Rector/AbstractRector/VisibilityTrait.php # 29
+
+        - '#Class with base "LexerFactory" name is already used in "PHPStan\\Parser\\LexerFactory", "Rector\\Core\\PhpParser\\Parser\\LexerFactory"\. Use unique name to make classes easy to recognize#'
