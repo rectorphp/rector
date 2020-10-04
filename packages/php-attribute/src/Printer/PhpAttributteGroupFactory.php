@@ -17,6 +17,9 @@ use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
 final class PhpAttributteGroupFactory
 {
+    /**
+     * @var string
+     */
     public const TBA = 'TBA';
 
     /**
@@ -100,6 +103,14 @@ final class PhpAttributteGroupFactory
 
         return $args;
     }
+    private function resolveAttributeClassName(PhpAttributableTagNodeInterface $phpAttributableTagNode): Name
+    {
+        if ($phpAttributableTagNode->getAttributeClassName() !== self::TBA) {
+            return new FullyQualified($phpAttributableTagNode->getAttributeClassName());
+        }
+
+        return new Name($phpAttributableTagNode->getShortName());
+    }
 
     /**
      * @param Arg[] $args
@@ -119,14 +130,5 @@ final class PhpAttributteGroupFactory
         }
 
         return false;
-    }
-
-    private function resolveAttributeClassName(PhpAttributableTagNodeInterface $phpAttributableTagNode): Name
-    {
-        if ($phpAttributableTagNode->getAttributeClassName() !== self::TBA) {
-            return new FullyQualified($phpAttributableTagNode->getAttributeClassName());
-        }
-
-        return new Name($phpAttributableTagNode->getShortName());
     }
 }
