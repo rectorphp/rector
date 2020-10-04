@@ -68,6 +68,8 @@ final class BetterStandardPrinter extends Standard
     private const QUOTED_SLASH_REGEX = "#'|\\\\(?=[\\\\']|$)#";
 
     /**
+     * Remove extra spaces before new Nop_ nodes
+     * @see https://regex101.com/r/iSvroO/1
      * @var string
      */
     private const EXTRA_SPACE_BEFORE_NOP_REGEX = '#^[ \t]+$#m';
@@ -255,7 +257,6 @@ final class BetterStandardPrinter extends Standard
             return $content;
         }
 
-        // remove extra spaces before new Nop_ nodes, @see https://regex101.com/r/iSvroO/1
         return Strings::replace($content, self::EXTRA_SPACE_BEFORE_NOP_REGEX);
     }
 
