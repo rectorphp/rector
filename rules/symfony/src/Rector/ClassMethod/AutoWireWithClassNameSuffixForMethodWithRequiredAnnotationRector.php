@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRectorTest
@@ -72,11 +73,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $class = $node->getAttribute('parent');
-        /** @var Identifier $name */
-        $name = $class->name;
-        $className = $name->toString();
-        $expectedMethodName = 'autowire' . $className;
+        $classShortName = $node->getAttribute(AttributeKey::CLASS_SHORT_NAME);
+        if ($classShortName === null) {
+            return null;
+        }
+
+        $expectedMethodName = 'autowire' . $classShortName;
 
         if ((string) $node->name === $expectedMethodName) {
             return null;

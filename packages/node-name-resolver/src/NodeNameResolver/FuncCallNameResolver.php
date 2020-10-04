@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class FuncCallNameResolver implements NodeNameResolverInterface
 {
@@ -35,7 +36,7 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
             return (string) $functionName;
         }
 
-        $namespaceName = $functionName->getAttribute('namespacedName');
+        $namespaceName = $functionName->getAttribute(AttributeKey::NAMESPACED_NAME);
         if ($namespaceName instanceof FullyQualified) {
             $functionFqnName = $namespaceName->toString();
             if (function_exists($functionFqnName)) {

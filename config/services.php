@@ -14,8 +14,8 @@ use PhpParser\ParserFactory;
 use Rector\Core\Configuration\MinimalVersionChecker;
 use Rector\Core\Console\Application;
 use Rector\Core\EventDispatcher\AutowiredEventDispatcher;
-use Rector\Core\PhpParser\Parser\LexerFactory;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
+use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Descriptor\TextDescriptor;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -73,7 +73,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->factory([ref(NikicPhpParserFactory::class), 'create']);
 
     $services->set(Lexer::class)
-        ->factory([ref(LexerFactory::class), 'create']);
+        ->factory([ref(PhpParserLexerFactory::class), 'create']);
 
     $services->set(Filesystem::class);
     $services->set(PrivatesAccessor::class);
