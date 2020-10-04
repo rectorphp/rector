@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 class IdColumnGeneratedvalue
 {
-    #[@ORM\Column(['type' => 'integer'])]
+    #[@ORM\Column(type: 'integer')]
     #[@ORM\GeneratedValue]
     public $name;
 }

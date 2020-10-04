@@ -10,12 +10,15 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\PhpAttribute\Contract\ManyPhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
 final class PhpAttributteGroupFactory
 {
+    public const TBA = 'TBA';
+
     /**
      * @param PhpAttributableTagNodeInterface[] $phpAttributableTagNodes
      * @return AttributeGroup[]
@@ -53,16 +56,16 @@ final class PhpAttributteGroupFactory
     {
         $args = $this->printItemsToAttributeArgs($phpAttributableTagNode);
 
+        $attributeClassName = $this->resolveAttributeClassName($phpAttributableTagNode);
+
         $attributeGroups = [];
-        $attributeGroups[] = $this->createAttributeGroupFromShortNameAndArgs(
-            $phpAttributableTagNode->getShortName(),
-            $args
-        );
+        $attributeGroups[] = $this->createAttributeGroupFromNameAndArgs($attributeClassName, $args);
 
         if ($phpAttributableTagNode instanceof ManyPhpAttributableTagNodeInterface) {
             foreach ($phpAttributableTagNode->provide() as $shortName => $items) {
                 $args = $this->createArgsFromItems($items);
-                $attributeGroups[] = $this->createAttributeGroupFromShortNameAndArgs($shortName, $args);
+                $name = new Name($shortName);
+                $attributeGroups[] = $this->createAttributeGroupFromNameAndArgs($name, $args);
             }
         }
 
@@ -76,12 +79,10 @@ final class PhpAttributteGroupFactory
     {
         $args = [];
 
-        if ($silentKey !== null) {
-            if (isset($items[$silentKey])) {
-                $silentValue = BuilderHelpers::normalizeValue($items[$silentKey]);
-                $args[] = new Arg($silentValue);
-                unset($items[$silentKey]);
-            }
+        if ($silentKey !== null && isset($items[$silentKey])) {
+            $silentValue = BuilderHelpers::normalizeValue($items[$silentKey]);
+            $args[] = new Arg($silentValue);
+            unset($items[$silentKey]);
         }
 
         if ($this->isArrayArguments($items)) {
@@ -103,9 +104,9 @@ final class PhpAttributteGroupFactory
     /**
      * @param Arg[] $args
      */
-    private function createAttributeGroupFromShortNameAndArgs(string $shortName, array $args): AttributeGroup
+    private function createAttributeGroupFromNameAndArgs(Name $name, array $args): AttributeGroup
     {
-        $attribute = new Attribute(new Name($shortName), $args);
+        $attribute = new Attribute($name, $args);
         return new AttributeGroup([$attribute]);
     }
 
@@ -118,5 +119,14 @@ final class PhpAttributteGroupFactory
         }
 
         return false;
+    }
+
+    private function resolveAttributeClassName(PhpAttributableTagNodeInterface $phpAttributableTagNode): Name
+    {
+        if ($phpAttributableTagNode->getAttributeClassName() !== self::TBA) {
+            return new FullyQualified($phpAttributableTagNode->getAttributeClassName());
+        }
+
+        return new Name($phpAttributableTagNode->getShortName());
     }
 }

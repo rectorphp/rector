@@ -41,14 +41,14 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         $this->items['methods'] = $methods;
     }
 
-    public function getShortName(): string
-    {
-        return 'Route';
-    }
-
     public function getSilentKey(): string
     {
         return self::PATH;
+    }
+
+    public function getShortName(): string
+    {
+        return '@Route';
     }
 
     public function mimicTagValueNodeConfiguration(AbstractTagValueNode $abstractTagValueNode): void
@@ -56,8 +56,16 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         $this->tagValueNodeConfiguration->mimic($abstractTagValueNode->tagValueNodeConfiguration);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAttributableItems(): array
     {
         return $this->filterOutMissingItems($this->items);
+    }
+
+    public function getAttributeClassName(): string
+    {
+        return 'Symfony\Component\Routing\Attribute\Route';
     }
 }

@@ -59,4 +59,9 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
     {
         return $this->filterOutMissingItems($this->items);
     }
+
+    public function getAttributeClassName(): string
+    {
+        return 'TBA';
+    }
 }
