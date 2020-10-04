@@ -103,6 +103,7 @@ final class PhpAttributteGroupFactory
 
         return $args;
     }
+
     private function resolveAttributeClassName(PhpAttributableTagNodeInterface $phpAttributableTagNode): Name
     {
         if ($phpAttributableTagNode->getAttributeClassName() !== self::TBA) {
