@@ -207,6 +207,7 @@
             "Rector\\Php73\\Tests\\": "rules/php73/tests",
             "Rector\\Php74\\Tests\\": "rules/php74/tests",
             "Rector\\Php80\\Tests\\": "rules/php80/tests",
+            "Rector\\Utils\\TagValueNodeGenerator\\": "utils/tag-value-node-generator/src",
             "Rector\\Utils\\NodeDocumentationGenerator\\": "utils/node-documentation-generator/src",
             "Rector\\Utils\\NodeDocumentationGenerator\\Tests\\": "utils/node-documentation-generator/tests",
             "Rector\\PHPOffice\\Tests\\": "rules/php-office/tests",

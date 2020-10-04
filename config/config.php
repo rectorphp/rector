@@ -10,6 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/../rules/**/config/config.*');
     $containerConfigurator->import(__DIR__ . '/services.php');
     $containerConfigurator->import(__DIR__ . '/../utils/**/config/config.php', null, true);
+    $containerConfigurator->import(__DIR__ . '/../utils/tag-value-node-generator/config/config.php');
 
     $parameters = $containerConfigurator->parameters();
 
