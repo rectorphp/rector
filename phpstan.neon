@@ -721,3 +721,6 @@ parameters:
                 - src/PhpParser/NodeTraverser/RectorNodeTraverser.php # 42
                 - utils/node-documentation-generator/src/ValueObject/NodeInfo.php # 34
                 - utils/node-documentation-generator/src/ValueObject/NodeInfo.php # 39
+
+        # intersection bug
+        - '#Parameter \#1 \$phpDocTagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:removeTagValueNodeFromNode\(\) expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode, Rector\\PhpAttribute\\Contract\\PhpAttributableTagNodeInterface given#'

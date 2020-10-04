@@ -6,6 +6,7 @@ namespace Rector\PhpAttribute;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -43,7 +44,9 @@ final class AnnotationToAttributeConverter
         $hasNewAttrGroups = false;
         if ($phpDocInfo->hasByName('required')) {
             $phpDocInfo->removeByName('required');
-            $node->attrGroups[] = new Attribute(new FullyQualified('Symfony\Contracts\Service\Attribute\Required'));
+            $node->attrGroups[] = new AttributeGroup([
+                new Attribute(new FullyQualified('Symfony\Contracts\Service\Attribute\Required')),
+            ]);
             $hasNewAttrGroups = true;
         }
 
