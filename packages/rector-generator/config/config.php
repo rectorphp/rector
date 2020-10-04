@@ -17,11 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->bind(AddNewServiceToSymfonyPhpConfigRector::class, ref(AddNewServiceToSymfonyPhpConfigRector::class));
 
     $services->load('Rector\RectorGenerator\\', __DIR__ . '/../src')
-        ->exclude([
-            __DIR__ . '/../src/Exception/*',
-            __DIR__ . '/../src/ValueObject/*',
-            __DIR__ . '/../src/Rector',
-        ]);
+        ->exclude([__DIR__ . '/../src/Exception', __DIR__ . '/../src/ValueObject', __DIR__ . '/../src/Rector']);
 
     $services->set(AddNewServiceToSymfonyPhpConfigRector::class)
         ->autowire(false);
