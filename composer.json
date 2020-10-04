@@ -249,7 +249,7 @@
             "rules/symfony/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
-            "rules/cakephp/tests/Rector/Expression/AppUsesStaticCallToUseStatementRector/Source",
+            "rules/cakephp/tests/Rector/Namespace_/AppUsesStaticCallToUseStatementRector/Source",
             "tests/Source",
             "rules/psr4/tests/Rector/MultipleClassFileToPsr4ClassesRector/Source",
             "rules/generic/tests/Rector/Name/PseudoNamespaceToNamespaceRector/Source"

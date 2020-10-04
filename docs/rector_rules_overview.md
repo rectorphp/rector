@@ -269,7 +269,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### `AppUsesStaticCallToUseStatementRector`
 
-- class: [`Rector\CakePHP\Rector\Expression\AppUsesStaticCallToUseStatementRector`](/rules/cakephp/src/Rector/Expression/AppUsesStaticCallToUseStatementRector.php)
+- class: [`Rector\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector`](/rules/cakephp/src/Rector/Expression/AppUsesStaticCallToUseStatementRector.php)
 - [test fixtures](/rules/cakephp/tests/Rector/Expression/AppUsesStaticCallToUseStatementRector/Fixture)
 
 Change `App::uses()` to use imports

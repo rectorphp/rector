@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -187,6 +188,13 @@ final class BetterStandardPrinter extends Standard
         }
 
         return parent::prettyPrintFile($stmts) . PHP_EOL;
+    }
+
+    public function pFileWithoutNamespace(FileWithoutNamespace $file): string
+    {
+        $content = self::pStmts((array) $file->stmts, false);
+
+        return ltrim($content);
     }
 
     /**

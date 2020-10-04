@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Tests\Rector\Expression\AppUsesStaticCallToUseStatementRector;
+namespace Rector\CakePHP\Tests\Rector\Namespace_\AppUsesStaticCallToUseStatementRector;
 
 use Iterator;
-use Rector\CakePHP\Rector\Expression\AppUsesStaticCallToUseStatementRector;
+use Rector\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Application\ActiveRectorsProvider;
@@ -12,6 +14,7 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
@@ -27,10 +30,16 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     private $enabledRectorsProvider;
 
+    /**
+     * @var NodeFinder
+     */
+    private $nodeFinder;
+
     public function __construct(
         EnabledRectorsProvider $enabledRectorsProvider,
         Configuration $configuration,
-        ActiveRectorsProvider $activeRectorsProvider
+        ActiveRectorsProvider $activeRectorsProvider,
+        NodeFinder $nodeFinder
     ) {
         /** @var PhpRectorInterface[] $phpRectors */
         $phpRectors = $activeRectorsProvider->provideByType(PhpRectorInterface::class);
@@ -45,6 +54,7 @@ final class RectorNodeTraverser extends NodeTraverser
 
             $this->addVisitor($phpRector);
         }
+        $this->nodeFinder = $nodeFinder;
     }
 
     /**
@@ -55,6 +65,12 @@ final class RectorNodeTraverser extends NodeTraverser
     {
         if ($this->enabledRectorsProvider->isConfigured()) {
             $this->configureEnabledRectorsOnly();
+        }
+
+        $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
+        if (! $hasNamespace) {
+            $fileWithoutNamespace = new FileWithoutNamespace($nodes);
+            return parent::traverse([$fileWithoutNamespace]);
         }
 
         return parent::traverse($nodes);
