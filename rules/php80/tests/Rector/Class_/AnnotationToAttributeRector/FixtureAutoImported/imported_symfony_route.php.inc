@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture;
+namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\FixtureAutoImported;
 
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,13 +18,13 @@ class SymfonyRoute
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture;
+namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\FixtureAutoImported;
 
 use Symfony\Component\Routing\Annotation\Route;
 
 class SymfonyRoute
 {
-    #[\Symfony\Component\Routing\Annotation\Route('/path', name: 'action')]
+    #[Route('/path', name: 'action')]
     public function action()
     {
     }
