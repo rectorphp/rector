@@ -66,6 +66,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
     public function getAttributeClassName(): string
     {
-        return 'Symfony\Component\Routing\Attribute\Route';
+        return 'Symfony\Component\Routing\Annotation\Route';
     }
 }
