@@ -23,6 +23,11 @@ final class SensitiveHereNowDocRector extends AbstractRector
      */
     private const WRAP_SUFFIX = '_WRAP';
 
+    /**
+     * @var string
+     */
+    private const ATTRIBUTE_DOC_LABEL = 'docLabel';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [
@@ -61,13 +66,13 @@ CODE_SAMPLE
 
         // the doc label is not in the string → ok
         /** @var string $docLabel */
-        $docLabel = $node->getAttribute('docLabel');
+        $docLabel = $node->getAttribute(self::ATTRIBUTE_DOC_LABEL);
 
         if (! Strings::contains($node->value, $docLabel)) {
             return null;
         }
 
-        $node->setAttribute('docLabel', $this->uniquateDocLabel($node->value, $docLabel));
+        $node->setAttribute(self::ATTRIBUTE_DOC_LABEL, $this->uniquateDocLabel($node->value, $docLabel));
 
         // invoke redraw
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);

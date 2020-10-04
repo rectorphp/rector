@@ -728,14 +728,6 @@ parameters:
         -
             message: '#Method call argument on position 0 must use constant over value#'
             paths:
-                - packages/node-name-resolver/src/NodeNameResolver/FuncCallNameResolver.php # 38
-                - packages/node-name-resolver/src/NodeNameResolver/FuncCallNameResolver.php # 38
-                - rules/legacy/src/Rector/Include_/RemoveIncludeRector.php # 56
-                - rules/legacy/src/Rector/Include_/RemoveIncludeRector.php # 56
-                - rules/php73/src/Rector/String_/SensitiveHereNowDocRector.php # 64
-                - rules/php73/src/Rector/String_/SensitiveHereNowDocRector.php # 64
-                - rules/php73/src/Rector/String_/SensitiveHereNowDocRector.php # 70
-                - rules/php73/src/Rector/String_/SensitiveHereNowDocRector.php # 70
                 - rules/symfony/src/Rector/ClassMethod/AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector.php # 75
                 - rules/symfony/src/Rector/ClassMethod/AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector.php # 75
 

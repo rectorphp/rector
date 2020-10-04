@@ -149,6 +149,14 @@ final class AttributeKey
      *
      * @var string
      */
+    public const NAMESPACED_NAME = 'namespacedName';
+
+    /**
+     * Internal php-parser name.
+     * Do not change this even if you want!
+     *
+     * @var string
+     */
     public const START_TOKEN_POSITION = 'startTokenPos';
 
     /**

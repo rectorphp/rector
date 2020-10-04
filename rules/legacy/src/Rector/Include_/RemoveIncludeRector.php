@@ -53,7 +53,7 @@ CODE_SAMPLE
         $nop = new Nop();
         $comments = $node->getAttribute(AttributeKey::COMMENTS);
         if ($comments) {
-            $nop->setAttribute('comments', $comments);
+            $nop->setAttribute(AttributeKey::COMMENTS, $comments);
             $this->addNodeAfterNode($nop, $node);
         }
         $this->removeNode($node);
