@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Printer;
 
 use PhpParser\Node;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\ValueObject\Application\ParsedStmtsAndTokens;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -57,8 +58,13 @@ final class FormatPerservingPrinter
 
     public function printParsedStmstAndTokensToString(ParsedStmtsAndTokens $parsedStmtsAndTokens): string
     {
-        return $this->betterStandardPrinter->printFormatPreserving($parsedStmtsAndTokens->getNewStmts(),
-            $parsedStmtsAndTokens->getOldStmts(), $parsedStmtsAndTokens->getOldTokens());
+        $newStmts = $this->resolveNewStmts($parsedStmtsAndTokens);
+
+        return $this->betterStandardPrinter->printFormatPreserving(
+            $newStmts,
+            $parsedStmtsAndTokens->getOldStmts(),
+            $parsedStmtsAndTokens->getOldTokens()
+        );
     }
 
     public function printParsedStmstAndTokens(
@@ -71,5 +77,20 @@ final class FormatPerservingPrinter
             $parsedStmtsAndTokens->getOldStmts(),
             $parsedStmtsAndTokens->getOldTokens()
         );
+    }
+
+    /**
+     * @return Node[]
+     */
+    private function resolveNewStmts(ParsedStmtsAndTokens $parsedStmtsAndTokens): array
+    {
+        if (count($parsedStmtsAndTokens->getNewStmts()) === 1) {
+            $onlyStmt = $parsedStmtsAndTokens->getNewStmts()[0];
+            if ($onlyStmt instanceof FileWithoutNamespace) {
+                return $onlyStmt->stmts;
+            }
+        }
+
+        return $parsedStmtsAndTokens->getNewStmts();
     }
 }

@@ -17,6 +17,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
@@ -35,11 +37,17 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     private $nodeFinder;
 
+    /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
+
     public function __construct(
         EnabledRectorsProvider $enabledRectorsProvider,
         Configuration $configuration,
         ActiveRectorsProvider $activeRectorsProvider,
-        NodeFinder $nodeFinder
+        NodeFinder $nodeFinder,
+        CurrentFileInfoProvider $currentFileInfoProvider
     ) {
         /** @var PhpRectorInterface[] $phpRectors */
         $phpRectors = $activeRectorsProvider->provideByType(PhpRectorInterface::class);
@@ -54,7 +62,9 @@ final class RectorNodeTraverser extends NodeTraverser
 
             $this->addVisitor($phpRector);
         }
+
         $this->nodeFinder = $nodeFinder;
+        $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
     /**
@@ -70,6 +80,10 @@ final class RectorNodeTraverser extends NodeTraverser
         $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if (! $hasNamespace) {
             $fileWithoutNamespace = new FileWithoutNamespace($nodes);
+            $fileWithoutNamespace->setAttribute(
+                AttributeKey::FILE_INFO,
+                $this->currentFileInfoProvider->getSmartFileInfo()
+            );
             return parent::traverse([$fileWithoutNamespace]);
         }
 

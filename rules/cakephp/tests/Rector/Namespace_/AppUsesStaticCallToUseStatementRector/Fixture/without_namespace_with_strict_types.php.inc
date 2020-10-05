@@ -17,7 +17,9 @@ class WithoutNamespaceWithStrictTypes
 <?php
 
 declare(strict_types=1);
+
 use Event\NotificationListener;
+
 class WithoutNamespaceWithStrictTypes
 {
     public function run()
@@ -25,3 +27,5 @@ class WithoutNamespaceWithStrictTypes
         $values = new NotificationListener();
     }
 }
+
+?>

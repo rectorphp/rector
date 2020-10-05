@@ -116,10 +116,12 @@ final class BetterStandardPrinter extends Standard
 
     public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens): string
     {
-        // detect per print
-        $this->detectTabOrSpaceIndentCharacter($stmts);
+        $newStmts = $this->resolveNewStmts($stmts);
 
-        $content = parent::printFormatPreserving($stmts, $origStmts, $origTokens);
+        // detect per print
+        $this->detectTabOrSpaceIndentCharacter($newStmts);
+
+        $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
@@ -507,5 +509,20 @@ final class BetterStandardPrinter extends Standard
     private function wrapValueWith(String_ $string, string $wrap): string
     {
         return $wrap . $string->value . $wrap;
+    }
+
+    /**
+     * @return Stmt[]
+     */
+    private function resolveNewStmts(array $stmts): array
+    {
+        if (count($stmts) === 1) {
+            $onlyStmt = $stmts[0];
+            if ($onlyStmt instanceof FileWithoutNamespace) {
+                return $onlyStmt->stmts;
+            }
+        }
+
+        return $stmts;
     }
 }

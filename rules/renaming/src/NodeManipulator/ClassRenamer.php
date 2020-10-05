@@ -90,11 +90,11 @@ final class ClassRenamer
         }
 
         if ($node instanceof Namespace_) {
-            return $this->refactorNamespaceNode($node, $oldToNewClasses);
+            return $this->refactorNamespace($node, $oldToNewClasses);
         }
 
         if ($node instanceof ClassLike) {
-            return $this->refactorClassLikeNode($node, $oldToNewClasses);
+            return $this->refactorClassLike($node, $oldToNewClasses);
         }
 
         return null;
@@ -149,7 +149,7 @@ final class ClassRenamer
         return $name;
     }
 
-    private function refactorNamespaceNode(Namespace_ $namespace, array $oldToNewClasses): ?Node
+    private function refactorNamespace(Namespace_ $namespace, array $oldToNewClasses): ?Node
     {
         $name = $this->nodeNameResolver->getName($namespace);
         if ($name === null) {
@@ -178,7 +178,7 @@ final class ClassRenamer
         return $namespace;
     }
 
-    private function refactorClassLikeNode(ClassLike $classLike, array $oldToNewClasses): ?Node
+    private function refactorClassLike(ClassLike $classLike, array $oldToNewClasses): ?Node
     {
         // rename interfaces
         $this->renameClassImplements($classLike, $oldToNewClasses);

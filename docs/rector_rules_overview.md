@@ -6341,7 +6341,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### `PseudoNamespaceToNamespaceRector`
 
-- class: [`Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector`](/rules/generic/src/Rector/Name/PseudoNamespaceToNamespaceRector.php)
+- class: [`Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector`](/rules/generic/src/Rector/Name/PseudoNamespaceToNamespaceRector.php)
 - [test fixtures](/rules/generic/tests/Rector/Name/PseudoNamespaceToNamespaceRector/Fixture)
 
 Replaces defined Pseudo_Namespaces by Namespace\Ones.
@@ -6351,8 +6351,8 @@ Replaces defined Pseudo_Namespaces by Namespace\Ones.
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector;
 use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
+use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

@@ -21,3 +21,5 @@ class Abc
         return 1;
     }
 }
+
+?>

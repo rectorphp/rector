@@ -15,6 +15,7 @@ class WithoutNamespace
 <?php
 
 use Event\NotificationListener;
+
 class WithoutNamespace
 {
     public function run()
@@ -22,3 +23,5 @@ class WithoutNamespace
         $values = new NotificationListener();
     }
 }
+
+?>

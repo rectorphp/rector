@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Configuration\ChangeConfiguration;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -100,6 +101,7 @@ CODE_SAMPLE
             Expression::class,
             ClassLike::class,
             Namespace_::class,
+            FileWithoutNamespace::class,
         ];
     }
 

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector;
 use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
+use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
