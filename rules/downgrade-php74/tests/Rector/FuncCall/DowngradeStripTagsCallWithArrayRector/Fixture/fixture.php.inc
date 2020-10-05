@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\Fixture;
 
-class SomeClass
+class FixtureClass
 {
     public function run($string)
     {
@@ -21,12 +21,12 @@ class SomeClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\Fixture;
 
-class SomeClass
+class FixtureClass
 {
     public function run($string)
     {
         // Arrays: change to string
-        strip_tags($string, '<' . (implode('><', ['a', 'p']) . '>'));
+        strip_tags($string, '<' . implode('><', ['a', 'p']) . '>');
 
         // Variables: if array, change to string
         $tags = ['a', 'p'];

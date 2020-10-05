@@ -87,17 +87,17 @@ CODE_SAMPLE
                 [
                     new Arg(
                         new Concat(
-                            new String_('<'),
                             new Concat(
+                                new String_('<'),
                                 new FuncCall(
                                     new Name('implode'),
                                     [
                                         new Arg(new String_('><')),
                                         new Arg($allowableTagsParam)
                                     ]
-                                ),
-                                new String_('>')
-                            )
+                                )
+                            ),
+                            new String_('>')
                         )
                     ),
                 ]
