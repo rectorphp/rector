@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Name;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
@@ -18,8 +16,6 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see https://www.php.net/manual/en/functions.arrow.php
- *
  * @see \Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\DowngradeStripTagsCallWithArrayRectorTest
  */
 final class DowngradeStripTagsCallWithArrayRector extends AbstractRector
@@ -75,16 +71,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isFuncCallName($node, 'strip_tags')) {
+        if (! $this->shouldRefactor($node)) {
             return null;
         }
 
         $allowableTagsParam = $node->args[1]->value;
-
-        // If it is a String, then do nothing
-        if ($allowableTagsParam instanceof String_) {
-            return null;
-        }
 
         // If it is an array, convert it to string
         if ($allowableTagsParam instanceof Array_) {
@@ -114,46 +105,25 @@ CODE_SAMPLE
             return $node;
         }
 
+        // It is a variable, add logic to maybe convert to string
         return null;
-
-        // dump($allowableTagsParam);die;
-
-        /** @var Assign|Node|null $previousAssignArraysKeysFuncCall */
-        $previousAssignArraysKeysFuncCall = $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use (
-            $allowableTagsParam
-        ): bool {
-            // breaking out of scope
-            if ($node instanceof FunctionLike) {
-                return true;
-            }
-
-            if (! $node instanceof Assign) {
-                return false;
-            }
-
-            if (! $this->areNodesEqual($allowableTagsParam, $node->var)) {
-                return false;
-            }
-
-            return $this->isFuncCallName($node->expr, 'array_keys');
-        });
-
-        if (! $previousAssignArraysKeysFuncCall instanceof Assign) {
-            return null;
-        }
-
-        /** @var FuncCall $arrayKeysFuncCall */
-        $arrayKeysFuncCall = $previousAssignArraysKeysFuncCall->expr;
-
-        $this->removeNode($previousAssignArraysKeysFuncCall);
-
-        return $this->createArrayKeyExists($node, $arrayKeysFuncCall);
     }
 
-    private function createArrayKeyExists(FuncCall $inArrayFuncCall, FuncCall $arrayKeysFuncCall): FuncCall
+    /**
+     * @param FuncCall $node
+     */
+    private function shouldRefactor(Node $node): bool
     {
-        $arguments = [$inArrayFuncCall->args[0], $arrayKeysFuncCall->args[0]];
+        if (! $this->isFuncCallName($node, 'strip_tags')) {
+            return false;
+        }
 
-        return new FuncCall(new Name('array_key_exists'), $arguments);
+        // If param not provided, do nothing
+        if (count($node->args) < 2) {
+            return false;
+        }
+
+        $allowableTagsParam = $node->args[1]->value;
+        return $allowableTagsParam instanceof Array_;
     }
 }
