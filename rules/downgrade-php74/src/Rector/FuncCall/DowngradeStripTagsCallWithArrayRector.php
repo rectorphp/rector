@@ -13,9 +13,11 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
@@ -29,8 +31,12 @@ final class DowngradeStripTagsCallWithArrayRector extends AbstractRector
         return new RectorDefinition('Convert 2nd param to `strip_tags` from array to string', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
+define ('SOME_DEFINE', ['a', 'p']);
+
 class SomeClass
 {
+    const SOME_CONST = ['a', 'p'];
+
     public function run($string)
     {
         // Arrays: change to string
@@ -40,6 +46,10 @@ class SomeClass
         $tags = ['a', 'p'];
         strip_tags($string, $tags);
 
+        // Consts: if array, change to string
+        strip_tags($string, SOME_DEFINE);
+        strip_tags($string, self::SOME_CONST);
+
         // Function/method call: if array, change to string
         strip_tags($string, getTags());
         strip_tags($string, $this->getTags());
@@ -48,8 +58,12 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
+define ('SOME_DEFINE', ['a', 'p']);
+
 class SomeClass
 {
+    const SOME_CONST = ['a', 'p'];
+
     public function run($string)
     {
         // Arrays: change to string
@@ -58,6 +72,10 @@ class SomeClass
         // Variables: if array, change to string
         $tags = ['a', 'p'];
         strip_tags($string, is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
+
+        // Consts: if array, change to string
+        strip_tags($string, is_array(SOME_DEFINE) ? '<' . implode('><', SOME_DEFINE) . '>' : SOME_DEFINE);
+        strip_tags($string, is_array(self::SOME_CONST) ? '<' . implode('><', self::SOME_CONST) . '>' : self::SOME_CONST);
 
         // Function/method call: if array, change to string
         strip_tags($string, is_array($tags = getTags()) ? '<' . implode('><', $tags) . '>' : $tags);
@@ -91,8 +109,8 @@ CODE_SAMPLE
         if ($allowableTagsParam instanceof Array_) {
             // If it is an array, convert it to string
             $newExpr = $this->getConvertArrayToStringFuncCall($allowableTagsParam);
-        } elseif ($allowableTagsParam instanceof Variable) {
-            // If it is a variable, add logic to maybe convert to string
+        } elseif ($allowableTagsParam instanceof Variable || $allowableTagsParam instanceof ConstFetch || $allowableTagsParam instanceof ClassConstFetch) {
+            // If it is a variable or a const (other than null), add logic to maybe convert to string
             $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($allowableTagsParam);
         } else {
             // It is a function or method call: assign the value to a variable,
@@ -141,6 +159,16 @@ CODE_SAMPLE
 
         // Process anything other than String and null (eg: variables, function calls)
         $allowableTagsParam = $node->args[1]->value;
-        return $allowableTagsParam instanceof Array_ || $allowableTagsParam instanceof Variable || $allowableTagsParam instanceof FuncCall || $allowableTagsParam instanceof MethodCall;
+
+        // Skip for null
+        if ($this->isNull($allowableTagsParam)) {
+            return false;
+        }
+        return $allowableTagsParam instanceof Array_
+            || $allowableTagsParam instanceof Variable
+            || $allowableTagsParam instanceof ConstFetch
+            || $allowableTagsParam instanceof ClassConstFetch
+            || $allowableTagsParam instanceof FuncCall
+            || $allowableTagsParam instanceof MethodCall;
     }
 }
