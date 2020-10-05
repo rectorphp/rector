@@ -151,30 +151,6 @@ CODE_SAMPLE
         array_splice($node->args, 1, 1, [new Arg($newExpr)]);
         return $node;
     }
-
-    private function getConvertArrayToStringFuncCall(Expr $allowableTagsParam): Expr
-    {
-        return new Concat(
-            new Concat(
-                new String_('<'),
-                new FuncCall(new Name('implode'), [new Arg(new String_('><')), new Arg($allowableTagsParam)])
-            ),
-            new String_('>')
-        );
-    }
-
-    private function getIfArrayConvertArrayToStringFuncCall(Expr $allowableTagsParam): Expr
-    {
-        return new Ternary(
-            new BooleanAnd(
-                new NotIdentical($allowableTagsParam, $this->createNull()),
-                new FuncCall(new Name('is_array'), [new Arg($allowableTagsParam)])
-            ),
-            $this->getConvertArrayToStringFuncCall($allowableTagsParam),
-            $allowableTagsParam
-        );
-    }
-
     /**
      * @param FuncCall $node
      */
@@ -196,12 +172,31 @@ CODE_SAMPLE
         if ($allowableTagsParam instanceof String_) {
             return false;
         }
-
         // Skip for null
-        if ($this->isNull($allowableTagsParam)) {
-            return false;
-        }
         // Allow for everything else (Array_, Variable, PropertyFetch, ConstFetch, ClassConstFetch, FuncCall, MethodCall, Coalesce, Ternary, others?)
-        return true;
+        return !$this->isNull($allowableTagsParam);
+    }
+
+    private function getConvertArrayToStringFuncCall(Expr $expr): Expr
+    {
+        return new Concat(
+            new Concat(
+                new String_('<'),
+                new FuncCall(new Name('implode'), [new Arg(new String_('><')), new Arg($expr)])
+            ),
+            new String_('>')
+        );
+    }
+
+    private function getIfArrayConvertArrayToStringFuncCall(Expr $expr): Expr
+    {
+        return new Ternary(
+            new BooleanAnd(
+                new NotIdentical($expr, $this->createNull()),
+                new FuncCall(new Name('is_array'), [new Arg($expr)])
+            ),
+            $this->getConvertArrayToStringFuncCall($expr),
+            $expr
+        );
     }
 }
