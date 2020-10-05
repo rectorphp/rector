@@ -157,7 +157,7 @@ CODE_SAMPLE
         return new Concat(
             new Concat(
                 new String_('<'),
-                new FuncCall(new Name('implode'), [new String_('><'), $allowableTagsParam])
+                new FuncCall(new Name('implode'), [new Arg(new String_('><')), new Arg($allowableTagsParam)])
             ),
             new String_('>')
         );
@@ -168,7 +168,7 @@ CODE_SAMPLE
         return new Ternary(
             new BooleanAnd(
                 new NotIdentical($allowableTagsParam, $this->createNull()),
-                new FuncCall(new Name('is_array'), [$allowableTagsParam])
+                new FuncCall(new Name('is_array'), [new Arg($allowableTagsParam)])
             ),
             $this->getConvertArrayToStringFuncCall($allowableTagsParam),
             $allowableTagsParam
