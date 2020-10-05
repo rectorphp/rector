@@ -6,9 +6,6 @@ class SomeClass
 {
     public function run($string)
     {
-        // Strings: do no change
-        strip_tags($string, '<a><p>');
-
         // Arrays: change to string
         strip_tags($string, ['a', 'p']);
 
@@ -28,9 +25,6 @@ class SomeClass
 {
     public function run($string)
     {
-        // Strings: do no change
-        strip_tags($string, '<a><p>');
-
         // Arrays: change to string
         strip_tags($string, '<' . (implode('><', ['a', 'p']) . '>'));
 
