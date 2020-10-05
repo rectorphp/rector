@@ -19,6 +19,7 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -128,19 +129,21 @@ CODE_SAMPLE
             // If it is a variable or a const (other than null), add logic to maybe convert to string
             $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($allowableTagsParam);
         } else {
+            // It is a function or method call, ternary or coalesce: assign the value to a variable
+            // First obtain a variable name that does not exist in the node (to not override its value)
             $variableName = $this->variableNaming->resolveFromFuncCallFirstArgumentWithSuffix(
                 $node,
                 'AllowableTags',
                 'allowableTags',
                 $node->getAttribute(AttributeKey::SCOPE)
             );
+            // Assign the value to the variable
             $newVariable = new Variable($variableName);
+            $this->addNodeBeforeNode(new Assign($newVariable, $allowableTagsParam), $node);
 
-            // It is a function or method call: assign the value to a variable,
-            // and apply same case as above
+            // Apply refactor on the variable
             $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($newVariable);
 
-            $this->addNodeBeforeNode(new Assign($newVariable, $allowableTagsParam), $node);
         }
 
         // Replace the arg with a new one
@@ -194,6 +197,8 @@ CODE_SAMPLE
             || $allowableTagsParam instanceof ConstFetch
             || $allowableTagsParam instanceof ClassConstFetch
             || $allowableTagsParam instanceof FuncCall
-            || $allowableTagsParam instanceof MethodCall;
+            || $allowableTagsParam instanceof MethodCall
+            || $allowableTagsParam instanceof Coalesce
+            || $allowableTagsParam instanceof Ternary;
     }
 }
