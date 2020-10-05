@@ -55,6 +55,10 @@ final class MarkdownNodeInfosPrinter
         return $this->implodeLinesWithSpace($contentLines);
     }
 
+    private function implodeLinesWithSpace(array $contentLines): string
+    {
+        return implode(PHP_EOL . PHP_EOL, $contentLines);
+    }
     private function printNodeCodeSample(NodeCodeSample $nodeCodeSample): string
     {
         $contentLines = [
@@ -66,18 +70,12 @@ final class MarkdownNodeInfosPrinter
         return $this->implodeLinesWithSpace($contentLines);
     }
 
-    private function printPhpSnippet(string $printedContent): string
-    {
-        return sprintf('```php%s%s%s```', PHP_EOL, $printedContent, PHP_EOL);
-    }
-
-    private function implodeLinesWithSpace(array $contentLines): string
-    {
-        return implode(PHP_EOL . PHP_EOL, $contentLines);
-    }
-
     private function implodeLines(array $contentLines): string
     {
         return implode(PHP_EOL, $contentLines);
+    }
+    private function printPhpSnippet(string $printedContent): string
+    {
+        return sprintf('```php%s%s%s```', PHP_EOL, $printedContent, PHP_EOL);
     }
 }
