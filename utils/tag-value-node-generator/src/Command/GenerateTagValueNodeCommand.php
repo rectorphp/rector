@@ -50,6 +50,8 @@ final class GenerateTagValueNodeCommand extends Command
         $this->fileSystemGuard->ensureFileExists($annotationFilePath, __METHOD__);
         $nodes = $this->simplePhpParser->parseFile($annotationFilePath);
 
+        // what to change how?
+
         dump($nodes);
         die;
     }
