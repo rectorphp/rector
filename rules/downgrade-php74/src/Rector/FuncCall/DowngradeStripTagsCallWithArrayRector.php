@@ -21,6 +21,7 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\NetteKdyby\Naming\VariableNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -131,7 +132,7 @@ CODE_SAMPLE
                 $node,
                 'AllowableTags',
                 'allowableTags',
-                null
+                $node->getAttribute(AttributeKey::SCOPE)
             );
             $newVariable = new Variable($variableName);
 
