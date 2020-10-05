@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp74\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
@@ -85,21 +86,7 @@ CODE_SAMPLE
                 1,
                 1,
                 [
-                    new Arg(
-                        new Concat(
-                            new Concat(
-                                new String_('<'),
-                                new FuncCall(
-                                    new Name('implode'),
-                                    [
-                                        new Arg(new String_('><')),
-                                        new Arg($allowableTagsParam)
-                                    ]
-                                )
-                            ),
-                            new String_('>')
-                        )
-                    ),
+                    new Arg($this->getConvertArrayToStringFuncCall($allowableTagsParam)),
                 ]
             );
             return $node;
@@ -107,6 +94,26 @@ CODE_SAMPLE
 
         // It is a variable, add logic to maybe convert to string
         return null;
+    }
+
+    /**
+     * @param Array_ $allowableTagsParam
+     */
+    private function getConvertArrayToStringFuncCall($allowableTagsParam): Expr
+    {
+        return new Concat(
+            new Concat(
+                new String_('<'),
+                new FuncCall(
+                    new Name('implode'),
+                    [
+                        new Arg(new String_('><')),
+                        new Arg($allowableTagsParam)
+                    ]
+                )
+            ),
+            new String_('>')
+        );
     }
 
     /**
