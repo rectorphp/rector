@@ -33,9 +33,6 @@ class SomeClass
 {
     public function run($string)
     {
-        // Strings: do no change
-        strip_tags($string, '<a><p>');
-
         // Arrays: change to string
         strip_tags($string, ['a', 'p']);
 
@@ -51,11 +48,8 @@ class SomeClass
 {
     public function run($string)
     {
-        // Strings: do no change
-        strip_tags($string, '<a><p>');
-
         // Arrays: change to string
-        strip_tags($string, '<' . (implode('><', ['a', 'p']) . '>'));
+        strip_tags($string, '<' . implode('><', ['a', 'p']) . '>');
 
         // Variables: if array, change to string
         $tags = ['a', 'p'];
