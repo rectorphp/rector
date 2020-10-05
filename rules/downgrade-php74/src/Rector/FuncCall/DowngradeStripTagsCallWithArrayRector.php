@@ -9,7 +9,9 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use PhpParser\Node\Expr\BinaryOp\Concat;
@@ -78,26 +80,30 @@ CODE_SAMPLE
 
         $allowableTagsParam = $node->args[1]->value;
 
-        // If it is an array, convert it to string
         if ($allowableTagsParam instanceof Array_) {
-            // Replace the arg with a new one
-            array_splice(
-                $node->args,
-                1,
-                1,
-                [
-                    new Arg($this->getConvertArrayToStringFuncCall($allowableTagsParam)),
-                ]
-            );
-            return $node;
+            // If it is an array, convert it to string
+            $newExpr = $this->getConvertArrayToStringFuncCall($allowableTagsParam);
+        } else {
+            // It is a variable, add logic to maybe convert to string
+            /** @var Variable */
+            $allowableTagsParam = $allowableTagsParam;
+            $newExpr = $this->getMaybeConvertArrayToStringFuncCall($allowableTagsParam);
         }
 
-        // It is a variable, add logic to maybe convert to string
-        return null;
+        // Replace the arg with a new one
+        array_splice(
+            $node->args,
+            1,
+            1,
+            [
+                new Arg($newExpr),
+            ]
+        );
+        return $node;
     }
 
     /**
-     * @param Array_ $allowableTagsParam
+     * @param Array_|Variable $allowableTagsParam
      */
     private function getConvertArrayToStringFuncCall($allowableTagsParam): Expr
     {
@@ -116,6 +122,20 @@ CODE_SAMPLE
         );
     }
 
+    private function getMaybeConvertArrayToStringFuncCall(Variable $allowableTagsParam): Expr
+    {
+        return new Ternary(
+            new FuncCall(
+                new Name('is_array'),
+                [
+                    new Arg($allowableTagsParam),
+                ]
+            ),
+            $this->getConvertArrayToStringFuncCall($allowableTagsParam),
+            $allowableTagsParam
+        );
+    }
+
     /**
      * @param FuncCall $node
      */
@@ -131,6 +151,6 @@ CODE_SAMPLE
         }
 
         $allowableTagsParam = $node->args[1]->value;
-        return $allowableTagsParam instanceof Array_;
+        return $allowableTagsParam instanceof Array_ || $allowableTagsParam instanceof Variable;
     }
 }
