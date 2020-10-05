@@ -59,6 +59,7 @@ final class MarkdownNodeInfosPrinter
     {
         return implode(PHP_EOL . PHP_EOL, $contentLines);
     }
+
     private function printNodeCodeSample(NodeCodeSample $nodeCodeSample): string
     {
         $contentLines = [
@@ -74,6 +75,7 @@ final class MarkdownNodeInfosPrinter
     {
         return implode(PHP_EOL, $contentLines);
     }
+
     private function printPhpSnippet(string $printedContent): string
     {
         return sprintf('```php%s%s%s```', PHP_EOL, $printedContent, PHP_EOL);
