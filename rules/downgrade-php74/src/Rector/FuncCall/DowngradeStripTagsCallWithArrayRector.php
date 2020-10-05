@@ -93,11 +93,11 @@ CODE_SAMPLE
             $newExpr = $this->getConvertArrayToStringFuncCall($allowableTagsParam);
         } elseif ($allowableTagsParam instanceof Variable) {
             // If it is a variable, add logic to maybe convert to string
-            $newExpr = $this->getMaybeConvertArrayToStringFuncCall($allowableTagsParam);
+            $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($allowableTagsParam);
         } else {
             // It is a function or method call: assign the value to a variable,
             // and apply same case as above
-            $newExpr = $this->getMaybeConvertArrayToStringFuncCall($allowableTagsParam);
+            $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($allowableTagsParam);
         }
 
         // Replace the arg with a new one
@@ -116,7 +116,7 @@ CODE_SAMPLE
         );
     }
 
-    private function getMaybeConvertArrayToStringFuncCall(Expr $allowableTagsParam): Expr
+    private function getIfArrayConvertArrayToStringFuncCall(Expr $allowableTagsParam): Expr
     {
         return new Ternary(
             new FuncCall(new Name('is_array'), [$allowableTagsParam]),
