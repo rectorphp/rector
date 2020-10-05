@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Core\Rector\AbstractRector;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -125,7 +126,7 @@ CODE_SAMPLE
         if ($allowableTagsParam instanceof Array_) {
             // If it is an array, convert it to string
             $newExpr = $this->getConvertArrayToStringFuncCall($allowableTagsParam);
-        } elseif ($allowableTagsParam instanceof Variable || $allowableTagsParam instanceof ConstFetch || $allowableTagsParam instanceof ClassConstFetch) {
+        } elseif ($allowableTagsParam instanceof Variable || $allowableTagsParam instanceof PropertyFetch || $allowableTagsParam instanceof ConstFetch || $allowableTagsParam instanceof ClassConstFetch) {
             // If it is a variable or a const (other than null), add logic to maybe convert to string
             $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($allowableTagsParam);
         } else {
@@ -194,6 +195,7 @@ CODE_SAMPLE
         }
         return $allowableTagsParam instanceof Array_
             || $allowableTagsParam instanceof Variable
+            || $allowableTagsParam instanceof PropertyFetch
             || $allowableTagsParam instanceof ConstFetch
             || $allowableTagsParam instanceof ClassConstFetch
             || $allowableTagsParam instanceof FuncCall
