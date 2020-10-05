@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
@@ -19,6 +20,7 @@ use Rector\Core\Rector\AbstractRector;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\Core\RectorDefinition\CodeSample;
+use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -26,6 +28,16 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class DowngradeStripTagsCallWithArrayRector extends AbstractRector
 {
+    /**
+     * @var VariableNaming
+     */
+    private $variableNaming;
+
+    public function __construct(VariableNaming $variableNaming)
+    {
+        $this->variableNaming = $variableNaming;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Convert 2nd param to `strip_tags` from array to string', [
@@ -78,8 +90,10 @@ class SomeClass
         strip_tags($string, is_array(self::SOME_CONST) ? '<' . implode('><', self::SOME_CONST) . '>' : self::SOME_CONST);
 
         // Function/method call: if array, change to string
-        strip_tags($string, is_array($tags = getTags()) ? '<' . implode('><', $tags) . '>' : $tags);
-        strip_tags($string, is_array($tags = $this->getTags()) ? '<' . implode('><', $tags) . '>' : $tags);
+        $tags = getTags();
+        strip_tags($string, is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
+        $tags = $this->getTags();
+        strip_tags($string, is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
     }
 }
 CODE_SAMPLE
@@ -113,9 +127,19 @@ CODE_SAMPLE
             // If it is a variable or a const (other than null), add logic to maybe convert to string
             $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($allowableTagsParam);
         } else {
+            $variableName = $this->variableNaming->resolveFromFuncCallFirstArgumentWithSuffix(
+                $node,
+                'AllowableTags',
+                'allowableTags',
+                null
+            );
+            $newVariable = new Variable($variableName);
+
             // It is a function or method call: assign the value to a variable,
             // and apply same case as above
-            $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($allowableTagsParam);
+            $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($newVariable);
+
+            $this->addNodeBeforeNode(new Assign($newVariable, $allowableTagsParam), $node);
         }
 
         // Replace the arg with a new one
