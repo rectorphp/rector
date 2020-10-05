@@ -151,6 +151,7 @@ CODE_SAMPLE
         array_splice($node->args, 1, 1, [new Arg($newExpr)]);
         return $node;
     }
+
     /**
      * @param FuncCall $node
      */
@@ -174,7 +175,7 @@ CODE_SAMPLE
         }
         // Skip for null
         // Allow for everything else (Array_, Variable, PropertyFetch, ConstFetch, ClassConstFetch, FuncCall, MethodCall, Coalesce, Ternary, others?)
-        return !$this->isNull($allowableTagsParam);
+        return ! $this->isNull($allowableTagsParam);
     }
 
     private function getConvertArrayToStringFuncCall(Expr $expr): Expr
