@@ -7,14 +7,15 @@ namespace Rector\DowngradePhp74\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
@@ -38,6 +39,10 @@ class SomeClass
         // Variables: if array, change to string
         $tags = ['a', 'p'];
         strip_tags($string, $tags);
+
+        // Function/method call: if array, change to string
+        strip_tags($string, getTags());
+        strip_tags($string, $this->getTags());
     }
 }
 CODE_SAMPLE
@@ -53,6 +58,10 @@ class SomeClass
         // Variables: if array, change to string
         $tags = ['a', 'p'];
         strip_tags($string, is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
+
+        // Function/method call: if array, change to string
+        strip_tags($string, is_array($tags = getTags()) ? '<' . implode('><', $tags) . '>' : $tags);
+        strip_tags($string, is_array($tags = $this->getTags()) ? '<' . implode('><', $tags) . '>' : $tags);
     }
 }
 CODE_SAMPLE
@@ -82,10 +91,12 @@ CODE_SAMPLE
         if ($allowableTagsParam instanceof Array_) {
             // If it is an array, convert it to string
             $newExpr = $this->getConvertArrayToStringFuncCall($allowableTagsParam);
+        } elseif ($allowableTagsParam instanceof Variable) {
+            // If it is a variable, add logic to maybe convert to string
+            $newExpr = $this->getMaybeConvertArrayToStringFuncCall($allowableTagsParam);
         } else {
-            // It is a variable, add logic to maybe convert to string
-            /** @var Variable */
-            $allowableTagsParam = $allowableTagsParam;
+            // It is a function or method call: assign the value to a variable,
+            // and apply same case as above
             $newExpr = $this->getMaybeConvertArrayToStringFuncCall($allowableTagsParam);
         }
 
@@ -94,10 +105,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param Array_|Variable $allowableTagsParam
-     */
-    private function getConvertArrayToStringFuncCall($allowableTagsParam): Expr
+    private function getConvertArrayToStringFuncCall(Expr $allowableTagsParam): Expr
     {
         return new Concat(
             new Concat(
@@ -108,7 +116,7 @@ CODE_SAMPLE
         );
     }
 
-    private function getMaybeConvertArrayToStringFuncCall(Variable $allowableTagsParam): Expr
+    private function getMaybeConvertArrayToStringFuncCall(Expr $allowableTagsParam): Expr
     {
         return new Ternary(
             new FuncCall(new Name('is_array'), [$allowableTagsParam]),
@@ -131,7 +139,8 @@ CODE_SAMPLE
             return false;
         }
 
+        // Process anything other than String and null (eg: variables, function calls)
         $allowableTagsParam = $node->args[1]->value;
-        return $allowableTagsParam instanceof Array_ || $allowableTagsParam instanceof Variable;
+        return $allowableTagsParam instanceof Array_ || $allowableTagsParam instanceof Variable || $allowableTagsParam instanceof FuncCall || $allowableTagsParam instanceof MethodCall;
     }
 }
