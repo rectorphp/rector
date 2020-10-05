@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Utils\NodeDocumentationGenerator;
 
+use Rector\Utils\NodeDocumentationGenerator\Sorter\NodeInfoSorter;
 use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfo;
-use Rector\Utils\NodeDocumentationGenerator\ValueObject\NodeInfos;
 
 /**
  * @see \Rector\Utils\NodeDocumentationGenerator\Tests\NodeInfosFactoryTest
@@ -17,18 +17,27 @@ final class NodeInfosFactory
      */
     private $nodeCodeSampleProvider;
 
-    public function __construct(NodeCodeSampleProvider $nodeCodeSampleProvider)
+    /**
+     * @var NodeInfoSorter
+     */
+    private $nodeInfoSorter;
+
+    public function __construct(NodeCodeSampleProvider $nodeCodeSampleProvider, NodeInfoSorter $nodeInfoSorter)
     {
         $this->nodeCodeSampleProvider = $nodeCodeSampleProvider;
+        $this->nodeInfoSorter = $nodeInfoSorter;
     }
 
-    public function create(): NodeInfos
+    /**
+     * @return NodeInfo[]
+     */
+    public function create(): array
     {
         $nodeInfos = [];
         foreach ($this->nodeCodeSampleProvider->provide() as $nodeClass => $nodeCodeSamples) {
             $nodeInfos[] = new NodeInfo($nodeClass, $nodeCodeSamples);
         }
 
-        return new NodeInfos($nodeInfos);
+        return $this->nodeInfoSorter->sortNodeInfosByClass($nodeInfos);
     }
 }

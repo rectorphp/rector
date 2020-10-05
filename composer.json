@@ -304,7 +304,7 @@
         ],
         "docs": [
             "bin/rector dump-rectors --output-file docs/rector_rules_overview.md --ansi",
-            "bin/rector dump-nodes > docs/nodes_overview.md"
+            "bin/rector dump-nodes --output-file docs/nodes_overview.md --ansi"
         ],
         "rector-ci": "bin/rector process --config rector-ci.php --dry-run --ansi",
         "rector": "bin/rector process --config rector-ci.php --ansi",
