@@ -7,14 +7,14 @@ namespace Rector\DowngradePhp74\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Name;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use PhpParser\Node\Expr\BinaryOp\Concat;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
@@ -60,7 +60,6 @@ CODE_SAMPLE
         ]);
     }
 
-
     /**
      * @return string[]
      */
@@ -91,14 +90,7 @@ CODE_SAMPLE
         }
 
         // Replace the arg with a new one
-        array_splice(
-            $node->args,
-            1,
-            1,
-            [
-                new Arg($newExpr),
-            ]
-        );
+        array_splice($node->args, 1, 1, [new Arg($newExpr)]);
         return $node;
     }
 
@@ -110,13 +102,7 @@ CODE_SAMPLE
         return new Concat(
             new Concat(
                 new String_('<'),
-                new FuncCall(
-                    new Name('implode'),
-                    [
-                        new String_('><'),
-                        $allowableTagsParam
-                    ]
-                )
+                new FuncCall(new Name('implode'), [new String_('><'), $allowableTagsParam])
             ),
             new String_('>')
         );
@@ -125,12 +111,7 @@ CODE_SAMPLE
     private function getMaybeConvertArrayToStringFuncCall(Variable $allowableTagsParam): Expr
     {
         return new Ternary(
-            new FuncCall(
-                new Name('is_array'),
-                [
-                    $allowableTagsParam,
-                ]
-            ),
+            new FuncCall(new Name('is_array'), [$allowableTagsParam]),
             $this->getConvertArrayToStringFuncCall($allowableTagsParam),
             $allowableTagsParam
         );
