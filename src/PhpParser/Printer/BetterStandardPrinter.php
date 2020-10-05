@@ -192,9 +192,9 @@ final class BetterStandardPrinter extends Standard
         return parent::prettyPrintFile($stmts) . PHP_EOL;
     }
 
-    public function pFileWithoutNamespace(FileWithoutNamespace $file): string
+    public function pFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace): string
     {
-        $content = self::pStmts((array) $file->stmts, false);
+        $content = self::pStmts((array) $fileWithoutNamespace->stmts, false);
 
         return ltrim($content);
     }
@@ -433,6 +433,20 @@ final class BetterStandardPrinter extends Standard
 
         return parent::pStmt_Use($use);
     }
+    /**
+     * @return \PhpParser\Node[]|mixed[]
+     */
+    private function resolveNewStmts(array $stmts): array
+    {
+        if (count($stmts) === 1) {
+            $onlyStmt = $stmts[0];
+            if ($onlyStmt instanceof FileWithoutNamespace) {
+                return $onlyStmt->stmts;
+            }
+        }
+
+        return $stmts;
+    }
 
     /**
      * Solves https://github.com/rectorphp/rector/issues/1964
@@ -509,20 +523,5 @@ final class BetterStandardPrinter extends Standard
     private function wrapValueWith(String_ $string, string $wrap): string
     {
         return $wrap . $string->value . $wrap;
-    }
-
-    /**
-     * @return Stmt[]
-     */
-    private function resolveNewStmts(array $stmts): array
-    {
-        if (count($stmts) === 1) {
-            $onlyStmt = $stmts[0];
-            if ($onlyStmt instanceof FileWithoutNamespace) {
-                return $onlyStmt->stmts;
-            }
-        }
-
-        return $stmts;
     }
 }

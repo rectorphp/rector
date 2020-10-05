@@ -128,6 +128,44 @@ CODE_SAMPLE
 
         $this->pseudoNamespacesToNamespaces = $namespacePrefixesWithExcludedClasses;
     }
+    /**
+     * @param Node[] $nodes
+     * @return Node[]
+     */
+    private function refactorStmts(array $nodes): array
+    {
+        $this->traverseNodesWithCallable($nodes, function (Node $node): ?Node {
+            if (! $this->isInstancesOf($node, [Name::class, Identifier::class, Property::class, FunctionLike::class])) {
+                return null;
+            }
+
+            // replace on @var/@param/@return/@throws
+            foreach ($this->pseudoNamespacesToNamespaces as $namespacePrefixWithExcludedClasses) {
+                $this->phpDocTypeRenamer->changeUnderscoreType($node, $namespacePrefixWithExcludedClasses);
+            }
+
+            if ($node instanceof Name || $node instanceof Identifier) {
+                return $this->processNameOrIdentifier($node);
+            }
+
+            return null;
+        });
+
+        return $nodes;
+    }
+    /**
+     * @param class-string[] $types
+     */
+    private function isInstancesOf(Node $node, array $types): bool
+    {
+        foreach ($types as $type) {
+            if (is_a($node, $type, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * @param Name|Identifier $node
@@ -199,45 +237,5 @@ CODE_SAMPLE
         $identifier->name = $lastNewNamePart;
 
         return $identifier;
-    }
-
-    /**
-     * @param class-string[] $types
-     */
-    private function isInstancesOf(Node $node, array $types): bool
-    {
-        foreach ($types as $type) {
-            if (is_a($node, $type, true)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    private function refactorStmts(array $nodes): array
-    {
-        $this->traverseNodesWithCallable($nodes, function (Node $node): ?Node {
-            if (! $this->isInstancesOf($node, [Name::class, Identifier::class, Property::class, FunctionLike::class])) {
-                return null;
-            }
-
-            // replace on @var/@param/@return/@throws
-            foreach ($this->pseudoNamespacesToNamespaces as $namespacePrefixWithExcludedClasses) {
-                $this->phpDocTypeRenamer->changeUnderscoreType($node, $namespacePrefixWithExcludedClasses);
-            }
-
-            if ($node instanceof Name || $node instanceof Identifier) {
-                return $this->processNameOrIdentifier($node);
-            }
-
-            return null;
-        });
-
-        return $nodes;
     }
 }

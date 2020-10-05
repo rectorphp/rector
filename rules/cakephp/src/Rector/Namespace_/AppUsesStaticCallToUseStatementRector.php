@@ -83,6 +83,55 @@ CODE_SAMPLE
         return $this->refactorFile($node, $uses);
     }
 
+    /**
+     * @return StaticCall[]
+     */
+    private function collectAppUseStaticCalls(Node $node): array
+    {
+        /** @var StaticCall[] $appUsesStaticCalls */
+        $appUsesStaticCalls = $this->betterNodeFinder->find($node, function (Node $node): bool {
+            if (! $node instanceof StaticCall) {
+                return false;
+            }
+
+            return $this->isStaticCallNamed($node, 'App', 'uses');
+        });
+
+        return $appUsesStaticCalls;
+    }
+    /**
+     * @param StaticCall[] $staticCalls
+     * @return string[]
+     */
+    private function resolveNamesFromStaticCalls(array $staticCalls): array
+    {
+        $names = [];
+        foreach ($staticCalls as $staticCall) {
+            $names[] = $this->createFullyQualifiedNameFromAppUsesStaticCall($staticCall);
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param Use_[] $uses
+     */
+    private function refactorFile(FileWithoutNamespace $fileWithoutNamespace, array $uses): ?FileWithoutNamespace
+    {
+        $hasNamespace = $this->betterNodeFinder->findFirstInstanceOf($fileWithoutNamespace, Namespace_::class);
+        // already handled above
+        if ($hasNamespace !== null) {
+            return null;
+        }
+
+        $hasDeclare = $this->betterNodeFinder->findFirstInstanceOf($fileWithoutNamespace, Declare_::class);
+        if ($hasDeclare !== null) {
+            return $this->refactorFileWithDeclare($fileWithoutNamespace, $uses);
+        }
+
+        $fileWithoutNamespace->stmts = array_merge($uses, (array) $fileWithoutNamespace->stmts);
+        return $fileWithoutNamespace;
+    }
     private function createFullyQualifiedNameFromAppUsesStaticCall(StaticCall $staticCall): string
     {
         /** @var string $shortClassName */
@@ -98,49 +147,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @return StaticCall[]
-     */
-    private function collectAppUseStaticCalls(Node $node): array
-    {
-        /** @var StaticCall[] $appUsesStaticCalls */
-        $appUsesStaticCalls = $this->betterNodeFinder->find($node, function (Node $node) {
-            if (! $node instanceof StaticCall) {
-                return false;
-            }
-
-            return $this->isStaticCallNamed($node, 'App', 'uses');
-        });
-
-        return $appUsesStaticCalls;
-    }
-
-    /**
      * @param Use_[] $uses
      */
-    private function refactorFile(FileWithoutNamespace $file, array $uses): ?FileWithoutNamespace
-    {
-        $hasNamespace = $this->betterNodeFinder->findFirstInstanceOf($file, Namespace_::class);
-        // already handled above
-        if ($hasNamespace) {
-            return null;
-        }
-
-        $hasDeclare = $this->betterNodeFinder->findFirstInstanceOf($file, Declare_::class);
-        if ($hasDeclare) {
-            return $this->refactorFileWithDeclare($file, $uses);
-        }
-
-        $file->stmts = array_merge($uses, (array) $file->stmts);
-        return $file;
-    }
-
-    /**
-     * @param Use_[] $uses
-     */
-    private function refactorFileWithDeclare(FileWithoutNamespace $file, array $uses): FileWithoutNamespace
+    private function refactorFileWithDeclare(FileWithoutNamespace $fileWithoutNamespace, array $uses): FileWithoutNamespace
     {
         $newStmts = [];
-        foreach ($file->stmts as $stmt) {
+        foreach ($fileWithoutNamespace->stmts as $stmt) {
             $newStmts[] = $stmt;
 
             if ($stmt instanceof Declare_) {
@@ -153,19 +165,5 @@ CODE_SAMPLE
         }
 
         return new FileWithoutNamespace($newStmts);
-    }
-
-    /**
-     * @param StaticCall[] $staticCalls
-     * @return string[]
-     */
-    private function resolveNamesFromStaticCalls(array $staticCalls): array
-    {
-        $names = [];
-        foreach ($staticCalls as $staticCall) {
-            $names[] = $this->createFullyQualifiedNameFromAppUsesStaticCall($staticCall);
-        }
-
-        return $names;
     }
 }
