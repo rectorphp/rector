@@ -433,8 +433,9 @@ final class BetterStandardPrinter extends Standard
 
         return parent::pStmt_Use($use);
     }
+
     /**
-     * @return \PhpParser\Node[]|mixed[]
+     * @return Node[]|mixed[]
      */
     private function resolveNewStmts(array $stmts): array
     {

@@ -97,7 +97,7 @@ CODE_SAMPLE
             }
 
             $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-            return !$parent instanceof New_;
+            return ! $parent instanceof New_;
         });
     }
 

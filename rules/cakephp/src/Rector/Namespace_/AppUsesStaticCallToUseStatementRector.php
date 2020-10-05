@@ -99,6 +99,7 @@ CODE_SAMPLE
 
         return $appUsesStaticCalls;
     }
+
     /**
      * @param StaticCall[] $staticCalls
      * @return string[]
@@ -132,6 +133,7 @@ CODE_SAMPLE
         $fileWithoutNamespace->stmts = array_merge($uses, (array) $fileWithoutNamespace->stmts);
         return $fileWithoutNamespace;
     }
+
     private function createFullyQualifiedNameFromAppUsesStaticCall(StaticCall $staticCall): string
     {
         /** @var string $shortClassName */
@@ -149,8 +151,10 @@ CODE_SAMPLE
     /**
      * @param Use_[] $uses
      */
-    private function refactorFileWithDeclare(FileWithoutNamespace $fileWithoutNamespace, array $uses): FileWithoutNamespace
-    {
+    private function refactorFileWithDeclare(
+        FileWithoutNamespace $fileWithoutNamespace,
+        array $uses
+    ): FileWithoutNamespace {
         $newStmts = [];
         foreach ($fileWithoutNamespace->stmts as $stmt) {
             $newStmts[] = $stmt;

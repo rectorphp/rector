@@ -128,6 +128,7 @@ CODE_SAMPLE
 
         $this->pseudoNamespacesToNamespaces = $namespacePrefixesWithExcludedClasses;
     }
+
     /**
      * @param Node[] $nodes
      * @return Node[]
@@ -153,6 +154,7 @@ CODE_SAMPLE
 
         return $nodes;
     }
+
     /**
      * @param class-string[] $types
      */
