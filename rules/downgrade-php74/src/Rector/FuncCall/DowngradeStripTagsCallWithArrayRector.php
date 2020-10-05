@@ -7,24 +7,24 @@ namespace Rector\DowngradePhp74\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Name;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Core\Rector\AbstractRector;
-use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\NetteKdyby\Naming\VariableNaming;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NetteKdyby\Naming\VariableNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\DowngradeStripTagsCallWithArrayRectorTest
@@ -145,7 +145,6 @@ CODE_SAMPLE
 
             // Apply refactor on the variable
             $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($newVariable);
-
         }
 
         // Replace the arg with a new one
