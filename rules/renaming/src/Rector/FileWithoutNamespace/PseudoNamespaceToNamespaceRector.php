@@ -2,22 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Name;
+namespace Rector\Renaming\Rector\FileWithoutNamespace;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -27,7 +24,7 @@ use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
+ * @see \Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
  */
 final class PseudoNamespaceToNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {
@@ -45,7 +42,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
     /**
      * @var PseudoNamespaceToNamespace[]
      */
-    private $namespacePrefixesWithExcludedClasses = [];
+    private $pseudoNamespacesToNamespaces = [];
 
     /**
      * @var PhpDocTypeRenamer
@@ -53,21 +50,13 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
     private $phpDocTypeRenamer;
 
     /**
-     * @var ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-
-    /**
      * @var string|null
      */
     private $newNamespace;
 
-    public function __construct(
-        ClassInsertManipulator $classInsertManipulator,
-        PhpDocTypeRenamer $phpDocTypeRenamer
-    ) {
+    public function __construct(PhpDocTypeRenamer $phpDocTypeRenamer)
+    {
         $this->phpDocTypeRenamer = $phpDocTypeRenamer;
-        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -101,55 +90,83 @@ CODE_SAMPLE
     public function getNodeTypes(): array
     {
         // property, method
-        return [Name::class, Identifier::class, Property::class, FunctionLike::class, Expression::class];
+        return [FileWithoutNamespace::class, Namespace_::class];
     }
 
     /**
-     * @param Name|Identifier|Property|FunctionLike $node
+     * @param Name|Identifier|Property|FunctionLike|FileWithoutNamespace|Namespace_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        // replace on @var/@param/@return/@throws
-        foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefixWithExcludedClasses) {
-            $this->phpDocTypeRenamer->changeUnderscoreType($node, $namespacePrefixWithExcludedClasses);
-        }
+        $this->newNamespace = null;
 
-        if ($node instanceof Name || $node instanceof Identifier) {
-            return $this->processNameOrIdentifier($node);
-        }
+        if ($node instanceof FileWithoutNamespace) {
+            $stmts = $this->refactorStmts((array) $node->stmts);
+            $node->stmts = $stmts;
 
-        return null;
-    }
+            // add a new namespace?
+            if ($this->newNamespace) {
+                $namespace = new Namespace_(new Name($this->newNamespace));
+                $namespace->stmts = $stmts;
 
-    /**
-     * @param Stmt[] $nodes
-     * @return Node[]
-     */
-    public function afterTraverse(array $nodes): array
-    {
-        if ($this->newNamespace === null) {
-            return $nodes;
-        }
-
-        $namespace = new Namespace_(new Name($this->newNamespace));
-        foreach ($nodes as $key => $node) {
-            if ($node instanceof Use_ || $node instanceof Class_) {
-                $nodes = $this->classInsertManipulator->insertBefore($nodes, $namespace, $key);
-
-                break;
+                return $namespace;
             }
         }
 
-        $this->newNamespace = null;
+        if ($node instanceof Namespace_) {
+            $this->refactorStmts([$node]);
+            return $node;
+        }
 
-        return $nodes;
+        return null;
     }
 
     public function configure(array $configuration): void
     {
         $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? [];
         Assert::allIsInstanceOf($namespacePrefixesWithExcludedClasses, PseudoNamespaceToNamespace::class);
-        $this->namespacePrefixesWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
+
+        $this->pseudoNamespacesToNamespaces = $namespacePrefixesWithExcludedClasses;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Node[]
+     */
+    private function refactorStmts(array $nodes): array
+    {
+        $this->traverseNodesWithCallable($nodes, function (Node $node): ?Node {
+            if (! $this->isInstancesOf($node, [Name::class, Identifier::class, Property::class, FunctionLike::class])) {
+                return null;
+            }
+
+            // replace on @var/@param/@return/@throws
+            foreach ($this->pseudoNamespacesToNamespaces as $namespacePrefixWithExcludedClasses) {
+                $this->phpDocTypeRenamer->changeUnderscoreType($node, $namespacePrefixWithExcludedClasses);
+            }
+
+            if ($node instanceof Name || $node instanceof Identifier) {
+                return $this->processNameOrIdentifier($node);
+            }
+
+            return null;
+        });
+
+        return $nodes;
+    }
+
+    /**
+     * @param class-string[] $types
+     */
+    private function isInstancesOf(Node $node, array $types): bool
+    {
+        foreach ($types as $type) {
+            if (is_a($node, $type, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -163,12 +180,12 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefixWithExcludedClasses) {
-            if (! $this->isName($node, $namespacePrefixWithExcludedClasses->getNamespacePrefix() . '*')) {
+        foreach ($this->pseudoNamespacesToNamespaces as $pseudoNamespacesToNamespace) {
+            if (! $this->isName($node, $pseudoNamespacesToNamespace->getNamespacePrefix() . '*')) {
                 continue;
             }
 
-            $excludedClasses = $namespacePrefixWithExcludedClasses->getExcludedClasses();
+            $excludedClasses = $pseudoNamespacesToNamespace->getExcludedClasses();
             if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
                 return null;
             }

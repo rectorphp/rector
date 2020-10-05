@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Tests\Rector\Expression\AppUsesStaticCallToUseStatementRector;
+namespace Rector\CakePHP\Tests\Rector\FileWithoutNamespace\ImplicitShortClassNameUseStatementRector;
 
 use Iterator;
-use Rector\CakePHP\Rector\Expression\AppUsesStaticCallToUseStatementRector;
+use Rector\CakePHP\Rector\FileWithoutNamespace\ImplicitShortClassNameUseStatementRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AppUsesStaticCallToUseStatementRectorTest extends AbstractRectorTestCase
+final class ImplicitShortClassNameUseStatementRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class AppUsesStaticCallToUseStatementRectorTest extends AbstractRectorTest
 
     protected function getRectorClass(): string
     {
-        return AppUsesStaticCallToUseStatementRector::class;
+        return ImplicitShortClassNameUseStatementRector::class;
     }
 }

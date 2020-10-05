@@ -53,6 +53,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/ValueObject',
             __DIR__ . '/../src/Configuration/MinimalVersionChecker',
             __DIR__ . '/../src/Bootstrap',
+            __DIR__ . '/../src/PhpParser/Node/CustomNode',
             // loaded for PHPStan factory
             __DIR__ . '/../src/PHPStan/Type',
         ]);

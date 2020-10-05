@@ -17,7 +17,6 @@ class Rector_Generic_Tests_Rector_Name_PseudoNamespaceToNamespaceRector_Fixture_
 namespace Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Fixture;
 
 use Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
-
 class UseStatement
 {
     public function run()
@@ -25,5 +24,3 @@ class UseStatement
         return new Keep_This;
     }
 }
-
-?>

@@ -35,6 +35,8 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\UnionType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
@@ -405,6 +407,21 @@ final class NodeFactory
             'stmts' => [$return],
             'returnType' => $classMethod->returnType,
         ]);
+    }
+
+    /**
+     * @param string[] $names
+     * @return Use_[]
+     */
+    public function createUsesFromNames(array $names): array
+    {
+        $uses = [];
+        foreach ($names as $resolvedName) {
+            $useUse = new UseUse(new Name($resolvedName));
+            $uses[] = new Use_([$useUse]);
+        }
+
+        return $uses;
     }
 
     /**

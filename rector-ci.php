@@ -44,7 +44,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::AUTOLOAD_PATHS, [__DIR__ . '/compiler/src']);
 
     $parameters->set(Option::EXCLUDE_PATHS, [
-        '/Fixture/', '/Source/', '/Expected/',
+        '/Fixture/',
+        '/Source/',
+        '/Expected/',
         __DIR__ . '/packages/doctrine-annotation-generated/src/*',
         // tempalte files
         __DIR__ . '/packages/rector-generator/templates/*',
