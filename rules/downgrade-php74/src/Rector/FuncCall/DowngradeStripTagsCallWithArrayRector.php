@@ -46,57 +46,38 @@ final class DowngradeStripTagsCallWithArrayRector extends AbstractRector
         return new RectorDefinition('Convert 2nd param to `strip_tags` from array to string', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-define ('SOME_DEFINE', ['a', 'p']);
-
 class SomeClass
 {
-    const SOME_CONST = ['a', 'p'];
-
     public function run($string)
     {
         // Arrays: change to string
         strip_tags($string, ['a', 'p']);
 
-        // Variables: if array, change to string
+        // Variables/consts/properties: if array, change to string
         $tags = ['a', 'p'];
         strip_tags($string, $tags);
 
-        // Consts: if array, change to string
-        strip_tags($string, SOME_DEFINE);
-        strip_tags($string, self::SOME_CONST);
-
-        // Function/method call: if array, change to string
+        // Default case (eg: function call): externalize to var, then if array, change to string
         strip_tags($string, getTags());
-        strip_tags($string, $this->getTags());
     }
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-define ('SOME_DEFINE', ['a', 'p']);
-
 class SomeClass
 {
-    const SOME_CONST = ['a', 'p'];
-
     public function run($string)
     {
         // Arrays: change to string
         strip_tags($string, '<' . implode('><', ['a', 'p']) . '>');
 
-        // Variables: if array, change to string
+        // Variables/consts/properties: if array, change to string
         $tags = ['a', 'p'];
-        strip_tags($string, is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
+        strip_tags($string, $tags !== null && is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
 
-        // Consts: if array, change to string
-        strip_tags($string, is_array(SOME_DEFINE) ? '<' . implode('><', SOME_DEFINE) . '>' : SOME_DEFINE);
-        strip_tags($string, is_array(self::SOME_CONST) ? '<' . implode('><', self::SOME_CONST) . '>' : self::SOME_CONST);
-
-        // Function/method call: if array, change to string
-        $tags = getTags();
-        strip_tags($string, is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
-        $tags = $this->getTags();
-        strip_tags($string, is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
+        // Default case (eg: function call): externalize to var, then if array, change to string
+        $expr = getTags();
+        strip_tags($string, is_array($expr) ? '<' . implode('><', $expr) . '>' : $expr);
     }
 }
 CODE_SAMPLE
