@@ -24,13 +24,13 @@ class AssignToVarClass
     public function run($string)
     {
         $stringAllowableTags = getTags();
-        strip_tags($string, is_array($stringAllowableTags) ? '<' . implode('><', $stringAllowableTags) . '>' : $stringAllowableTags);
+        strip_tags($string, $stringAllowableTags !== null && is_array($stringAllowableTags) ? '<' . implode('><', $stringAllowableTags) . '>' : $stringAllowableTags);
         $stringAllowableTags = $this->getTags();
-        strip_tags($string, is_array($stringAllowableTags) ? '<' . implode('><', $stringAllowableTags) . '>' : $stringAllowableTags);
+        strip_tags($string, $stringAllowableTags !== null && is_array($stringAllowableTags) ? '<' . implode('><', $stringAllowableTags) . '>' : $stringAllowableTags);
         $stringAllowableTags = useGeneralTags() ? getTags() : $this->getTags();
-        strip_tags($string, is_array($stringAllowableTags) ? '<' . implode('><', $stringAllowableTags) . '>' : $stringAllowableTags);
+        strip_tags($string, $stringAllowableTags !== null && is_array($stringAllowableTags) ? '<' . implode('><', $stringAllowableTags) . '>' : $stringAllowableTags);
         $stringAllowableTags = $someVar ?? getTags();
-        strip_tags($string, is_array($stringAllowableTags) ? '<' . implode('><', $stringAllowableTags) . '>' : $stringAllowableTags);
+        strip_tags($string, $stringAllowableTags !== null && is_array($stringAllowableTags) ? '<' . implode('><', $stringAllowableTags) . '>' : $stringAllowableTags);
     }
 }
 

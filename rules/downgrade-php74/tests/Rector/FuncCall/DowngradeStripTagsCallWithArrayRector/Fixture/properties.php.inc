@@ -20,7 +20,7 @@ class PropertyClass
 {
     public function run($string)
     {
-        strip_tags($string, is_array($this->tags) ? '<' . implode('><', $this->tags) . '>' : $this->tags);
+        strip_tags($string, $this->tags !== null && is_array($this->tags) ? '<' . implode('><', $this->tags) . '>' : $this->tags);
     }
 }
 

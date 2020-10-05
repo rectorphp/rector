@@ -21,8 +21,10 @@ use Rector\Core\Rector\AbstractRector;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\NetteKdyby\Naming\VariableNaming;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
@@ -166,7 +168,10 @@ CODE_SAMPLE
     private function getIfArrayConvertArrayToStringFuncCall(Expr $allowableTagsParam): Expr
     {
         return new Ternary(
-            new FuncCall(new Name('is_array'), [$allowableTagsParam]),
+            new BooleanAnd(
+                new NotIdentical($allowableTagsParam, $this->createNull()),
+                new FuncCall(new Name('is_array'), [$allowableTagsParam])
+            ),
             $this->getConvertArrayToStringFuncCall($allowableTagsParam),
             $allowableTagsParam
         );

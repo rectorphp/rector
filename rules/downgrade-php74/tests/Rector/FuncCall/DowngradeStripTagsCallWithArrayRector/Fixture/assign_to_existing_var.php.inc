@@ -24,9 +24,9 @@ class AssignToExistingVarClass
     {
         $stringAllowableTags = 'foo';
         $stringAllowableTags2 = getTags();
-        strip_tags($string, is_array($stringAllowableTags2) ? '<' . implode('><', $stringAllowableTags2) . '>' : $stringAllowableTags2);
+        strip_tags($string, $stringAllowableTags2 !== null && is_array($stringAllowableTags2) ? '<' . implode('><', $stringAllowableTags2) . '>' : $stringAllowableTags2);
         $stringAllowableTags2 = $this->getTags();
-        strip_tags($string, is_array($stringAllowableTags2) ? '<' . implode('><', $stringAllowableTags2) . '>' : $stringAllowableTags2);
+        strip_tags($string, $stringAllowableTags2 !== null && is_array($stringAllowableTags2) ? '<' . implode('><', $stringAllowableTags2) . '>' : $stringAllowableTags2);
     }
 }
 

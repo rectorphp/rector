@@ -24,7 +24,7 @@ class VariableClass
     {
         // Variables: if array, change to string
         $tags = ['a', 'p'];
-        strip_tags($string, is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
+        strip_tags($string, $tags !== null && is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
     }
 }
 
