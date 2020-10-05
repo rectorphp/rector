@@ -50,14 +50,13 @@
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpunit/phpunit": "^8.5|^9.2",
         "psr/event-dispatcher": "^1.0",
+        "symfony/validator": "^5.1",
         "symplify/changelog-linker": "^8.3.29",
         "symplify/easy-coding-standard": "^8.3.29",
         "symplify/easy-testing": "^8.3.29",
         "symplify/monorepo-builder": "^8.3.29",
         "symplify/phpstan-extensions": "^8.3.29",
-        "tracy/tracy": "^2.7",
         "thecodingmachine/phpstan-strict-rules": "^0.12",
-        "symfony/validator": "^5.1",
         "tracy/tracy": "^2.7"
     },
     "replace": {
