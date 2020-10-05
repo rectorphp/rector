@@ -113,8 +113,8 @@ CODE_SAMPLE
                 new FuncCall(
                     new Name('implode'),
                     [
-                        new Arg(new String_('><')),
-                        new Arg($allowableTagsParam)
+                        new String_('><'),
+                        $allowableTagsParam
                     ]
                 )
             ),
@@ -128,7 +128,7 @@ CODE_SAMPLE
             new FuncCall(
                 new Name('is_array'),
                 [
-                    new Arg($allowableTagsParam),
+                    $allowableTagsParam,
                 ]
             ),
             $this->getConvertArrayToStringFuncCall($allowableTagsParam),
