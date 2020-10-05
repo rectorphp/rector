@@ -173,32 +173,31 @@ CODE_SAMPLE
         if ($allowableTagsParam instanceof String_) {
             return false;
         }
-
         // Skip for null
         // Allow for everything else (Array_, Variable, PropertyFetch, ConstFetch, ClassConstFetch, FuncCall, MethodCall, Coalesce, Ternary, others?)
-        return !$this->isNull($allowableTagsParam);
+        return ! $this->isNull($allowableTagsParam);
     }
 
-    private function getConvertArrayToStringFuncCall(Expr $allowableTagsParam): Expr
+    private function getConvertArrayToStringFuncCall(Expr $expr): Expr
     {
         return new Concat(
             new Concat(
                 new String_('<'),
-                new FuncCall(new Name('implode'), [new Arg(new String_('><')), new Arg($allowableTagsParam)])
+                new FuncCall(new Name('implode'), [new Arg(new String_('><')), new Arg($expr)])
             ),
             new String_('>')
         );
     }
 
-    private function getIfArrayConvertArrayToStringFuncCall(Expr $allowableTagsParam): Expr
+    private function getIfArrayConvertArrayToStringFuncCall(Expr $expr): Expr
     {
         return new Ternary(
             new BooleanAnd(
-                new NotIdentical($allowableTagsParam, $this->createNull()),
-                new FuncCall(new Name('is_array'), [new Arg($allowableTagsParam)])
+                new NotIdentical($expr, $this->createNull()),
+                new FuncCall(new Name('is_array'), [new Arg($expr)])
             ),
-            $this->getConvertArrayToStringFuncCall($allowableTagsParam),
-            $allowableTagsParam
+            $this->getConvertArrayToStringFuncCall($expr),
+            $expr
         );
     }
 }
