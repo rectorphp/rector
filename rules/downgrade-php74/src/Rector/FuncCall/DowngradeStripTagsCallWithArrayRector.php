@@ -15,12 +15,10 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Core\Rector\AbstractRector;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\NetteKdyby\Naming\VariableNaming;
@@ -132,7 +130,8 @@ CODE_SAMPLE
             // If it is a variable or a const (other than null), add logic to maybe convert to string
             $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($allowableTagsParam);
         } else {
-            // It is a function or method call, ternary or coalesce: assign the value to a variable
+            // It is a function or method call, ternary or coalesce, or any other:
+            // Assign the value to a variable
             // First obtain a variable name that does not exist in the node (to not override its value)
             $variableName = $this->variableNaming->resolveFromFuncCallFirstArgumentWithSuffix(
                 $node,
@@ -194,18 +193,16 @@ CODE_SAMPLE
         // Process anything other than String and null (eg: variables, function calls)
         $allowableTagsParam = $node->args[1]->value;
 
+        // Skip for string
+        if ($allowableTagsParam instanceof String_) {
+            return false;
+        }
+
         // Skip for null
         if ($this->isNull($allowableTagsParam)) {
             return false;
         }
-        return $allowableTagsParam instanceof Array_
-            || $allowableTagsParam instanceof Variable
-            || $allowableTagsParam instanceof PropertyFetch
-            || $allowableTagsParam instanceof ConstFetch
-            || $allowableTagsParam instanceof ClassConstFetch
-            || $allowableTagsParam instanceof FuncCall
-            || $allowableTagsParam instanceof MethodCall
-            || $allowableTagsParam instanceof Coalesce
-            || $allowableTagsParam instanceof Ternary;
+        // Allow for everything else (Array_, Variable, PropertyFetch, ConstFetch, ClassConstFetch, FuncCall, MethodCall, Coalesce, Ternary, others?)
+        return true;
     }
 }
