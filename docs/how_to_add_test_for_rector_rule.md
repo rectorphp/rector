@@ -74,7 +74,7 @@ There are 2 fixture formats.
 <code after>
 ```
 
-### 2. The Code Should not Be Touched
+### 2. The Code Should Be Skipped
 
 ```bash
 <code before>
