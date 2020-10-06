@@ -164,6 +164,11 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const BEFORE_LITERAL_SEPARATOR = '7.3';
+
+    /**
+     * @var string
+     */
     public const BEFORE_OBJECT_TYPE = '7.1';
 
     /**
