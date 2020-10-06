@@ -14,11 +14,11 @@ See "Applied rules" under the diff:
 
 Our rule in this example is: `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`
 
-Job of this rule is to add `final` to every class, that has no children and is not a Doctrine entity = everywhere it can without breaking our code.
+This rule's job is to add `final` to every class that has no children and is not a Doctrine entity = everywhere it can without breaking our code.
 
 ## 2. Detect the Minimal File
 
-Usually the Rector diff output is long and contains many other errors related to other rules. It's a mess, we can't use that for test fixture. We need to find **1 responsible line**.
+Usually, the Rector diff output is long and contains many other errors related to other rules. It's a mess; we can't use that for a test fixture. We need to find **1 responsible line**.
 
 The best way is to copy the file to local code, e.g. `app/SomeFile.php` a put only the broken line there.
 
@@ -30,7 +30,7 @@ class StaticEasyPrefixer
 }
 ```
 
-Then run Rector again to confirm:
+Then rerun Rector to confirm:
 
 ```bash
 vendor/bin/rector process app/SomeFile.php
@@ -58,11 +58,11 @@ Right here:
 
 ## 4. Add Change or No-Change Test Fixture File
 
-Next to test case, there is `/Fixture` directory. It contains many test fixture files, that verified the Rector rule work correctly in all possible cases.
+Next to the test case, there is `/Fixture` directory. It contains many test fixture files that verified the Rector rule work correctly in all possible cases.
 
-Do you see *test fixture file* first time? It's a file with real-life PHP code, that test 1 specific case that rule should cover or avoid. E.g. one test fixture file can contain a Doctrine entity, that cannot be final and should be skipped by this rule. By convention, the first fixture file has name `fixture.php.inc`.
+Do you see *test fixture file* first time? It's a file with real-life PHP code that test 1 specific case that rule should cover or avoid. E.g., one test fixture file can contain a Doctrine entity that cannot be final and should be skipped by this rule. By convention, the first fixture file has the name `fixture.php.inc`.
 
-In the `/Fixture` directory we create our test fixture file, e.g. `add_final.php.inc`. The `.php.inc` is there on purpose, so the file is hidden from coding standard tools and static analysis.
+In the `/Fixture` directory, we create our test fixture file, e.g., `add_final.php.inc`. The `.php.inc` is there on purpose, so the file is hidden from coding standard tools and static analysis.
 
 There are 2 fixture formats.
 
@@ -74,7 +74,7 @@ There are 2 fixture formats.
 <code after>
 ```
 
-### 2. The Code Should not be Touched
+### 2. The Code Should not Be Touched
 
 ```bash
 <code before>
@@ -82,7 +82,7 @@ There are 2 fixture formats.
 
 <br>
 
-In this particular case, the code should change - `final` should be added, so the test fixture would look like this:
+In this particular case, the code should change - `final` should be added so that the test fixture would look like this:
 
 ```php
 <?php
@@ -107,7 +107,7 @@ final class AddFinal
 ```
 
 - The closing `?>` is there for slightly better PHPStorm.
-- The PSR-4 namespace is there to make each class unique, because the test classes are loaded to analysis by reflection and must be unique
+- The PSR-4 namespace is there to make each class unique because the test classes are loaded to an analysis by reflection and must be unique
 - The file name conventions => class is `add_final.php.inc` => `AddFinal` class
 
 Run PHPUnit with the test file to confirm:
@@ -116,7 +116,7 @@ Run PHPUnit with the test file to confirm:
 vendor/bin/phpunit rules/solid/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php
 ```
 
-To run only the single test fixture, add `--filter test#X`, where X is the order number of fixture.
+To run only the single test fixture, add `--filter test#X`, where X is the fixture's order number.
 
 ```bash
 vendor/bin/phpunit rules/solid/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php --filter test#4
