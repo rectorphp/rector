@@ -12,7 +12,9 @@ See "Applied rules" under the diff:
 
 ![Applied Rules](/docs/images/docs_applied_rules.png)
 
-Our rule in this case is: `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`
+Our rule in this example is: `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`
+
+Job of this rule is to add `final` to every class, that has no children and is not a Doctrine entity = everywhere it can without breaking our code.
 
 ## 2. Detect the Minimal File
 
@@ -54,9 +56,13 @@ Right here:
 
 ![Rule Test Case](/docs/images/docs_rule_test_case.png)
 
-## 4. Add Change or No-Change fixture
+## 4. Add Change or No-Change Test Fixture File
 
-Next to test case, there is `/Fixture` directory, there we create our test fixture file, e.g. `add_final.php.inc`. The `.php.inc` is there on purpose, so the file is hidden from coding standard tools and static analysis.
+Next to test case, there is `/Fixture` directory. It contains many test fixture files, that verified the Rector rule work correctly in all possible cases.
+
+Do you see *test fixture file* first time? It's a file with real-life PHP code, that test 1 specific case that rule should cover or avoid. E.g. one test fixture file can contain a Doctrine entity, that cannot be final and should be skipped by this rule. By convention, the first fixture file has name `fixture.php.inc`.
+
+In the `/Fixture` directory we create our test fixture file, e.g. `add_final.php.inc`. The `.php.inc` is there on purpose, so the file is hidden from coding standard tools and static analysis.
 
 There are 2 fixture formats.
 
@@ -76,7 +82,7 @@ There are 2 fixture formats.
 
 <br>
 
-In this perticular case, the code should change - `final` should be added, so the test fixture would look like this:
+In this particular case, the code should change - `final` should be added, so the test fixture would look like this:
 
 ```php
 <?php
