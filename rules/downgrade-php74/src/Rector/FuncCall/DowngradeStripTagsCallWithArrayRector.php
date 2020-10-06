@@ -106,10 +106,10 @@ CODE_SAMPLE
 
         if ($allowableTagsParam instanceof Array_) {
             // If it is an array, convert it to string
-            $newExpr = $this->getConvertArrayToStringFuncCall($allowableTagsParam);
+            $newExpr = $this->createArrayFromString($allowableTagsParam);
         } elseif ($allowableTagsParam instanceof Variable || $allowableTagsParam instanceof PropertyFetch || $allowableTagsParam instanceof ConstFetch || $allowableTagsParam instanceof ClassConstFetch) {
             // If it is a variable or a const (other than null), add logic to maybe convert to string
-            $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($allowableTagsParam);
+            $newExpr = $this->createIsArrayTernaryFromExpression($allowableTagsParam);
         } else {
             // It is a function or method call, ternary or coalesce, or any other:
             // Assign the value to a variable
@@ -125,7 +125,7 @@ CODE_SAMPLE
             $this->addNodeBeforeNode(new Assign($newVariable, $allowableTagsParam), $node);
 
             // Apply refactor on the variable
-            $newExpr = $this->getIfArrayConvertArrayToStringFuncCall($newVariable);
+            $newExpr = $this->createIsArrayTernaryFromExpression($newVariable);
         }
 
         // Replace the arg with a new one
@@ -159,7 +159,10 @@ CODE_SAMPLE
         return ! $this->isNull($allowableTagsParam);
     }
 
-    private function getConvertArrayToStringFuncCall(Expr $expr): Expr
+    /**
+     * @param Array_|Variable|PropertyFetch|ConstFetch|ClassConstFetch $expr
+     */
+    private function createArrayFromString(Expr $expr): Concat
     {
         return new Concat(
             new Concat(
@@ -170,14 +173,17 @@ CODE_SAMPLE
         );
     }
 
-    private function getIfArrayConvertArrayToStringFuncCall(Expr $expr): Expr
+    /**
+     * @param Variable|PropertyFetch|ConstFetch|ClassConstFetch $expr
+     */
+    private function createIsArrayTernaryFromExpression(Expr $expr): Ternary
     {
         return new Ternary(
             new BooleanAnd(
                 new NotIdentical($expr, $this->createNull()),
                 new FuncCall(new Name('is_array'), [new Arg($expr)])
             ),
-            $this->getConvertArrayToStringFuncCall($expr),
+            $this->createArrayFromString($expr),
             $expr
         );
     }
