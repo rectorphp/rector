@@ -14,12 +14,13 @@ jobs:
                 php: ['7.2', '7.3', '7.4']
                 dependencies: ['locked']
                 include:
-                    - php: '7.2'
+                    - php: '7.1'
                       dependencies: 'lowest'
 
         name: PHP ${{ matrix.php }} tests
         steps:
             -   uses: actions/checkout@v2
+
             -   uses: shivammathur/setup-php@v1
                 with:
                     php-version: ${{ matrix.php }}
@@ -31,6 +32,8 @@ jobs:
 
             -   run: composer update --prefer-lowest --no-progress --ansi
                 if: "matrix.dependencies == 'lowest'"
+
             -   run: composer install --no-progress --ansi
                 if: "matrix.dependencies != 'lowest'"
+
             -   run: vendor/bin/phpunit

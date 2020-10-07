@@ -72,9 +72,7 @@ jobs:
                 if: steps.cs-git-check.outputs.modified == 'true'
                 run: git commit -am "[cs] ${COMMIT_MESSAGE}"
 
-
             -   name: Push changes
                 if: steps.rector-git-check.outputs.modified == 'true'
                 run: git push
                 # In case we want to fail this job when there are changed files, just add "exit 1"
-
