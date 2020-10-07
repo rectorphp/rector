@@ -487,7 +487,6 @@ parameters:
         # symplify rules fix later
         - '#Use another value object over string with value object arrays#'
         - '#Use decouled factory service to create "(.*?)" object#'
-        - '#Add regex101\.org link to that shows the regex in practise, so it will be easier to maintain in case of bug/extension in the future#'
 
         # hotskips, fix sooner
         - '#Post operation are forbidden, as they make 2 values at the same line\. Use pre instead#'
@@ -727,3 +726,156 @@ parameters:
 
         # intersection bug
         - '#Parameter \#1 \$phpDocTagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:removeTagValueNodeFromNode\(\) expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode, Rector\\PhpAttribute\\Contract\\PhpAttributableTagNodeInterface given#'
+
+        -
+            message: '#Use namespaceName on Class_ node#'
+            paths:
+                - packages/node-collector/src/NodeCollector/ParsedNodeCollector.php # 332
+                - packages/node-collector/src/NodeCollector/ParsedNodeCollector.php # 337
+                - packages/node-name-resolver/src/NodeNameResolver/ClassNameResolver.php # 41
+                - packages/node-name-resolver/src/NodeNameResolver/ClassNameResolver.php # 45
+                - rules/coding-style/src/Rector/Use_/RemoveUnusedAliasRector.php # 293
+                - rules/coding-style/src/Rector/Use_/RemoveUnusedAliasRector.php # 293
+                - rules/coding-style/src/Rector/Use_/RemoveUnusedAliasRector.php # 294
+                - rules/doctrine-gedmo-to-knplabs/src/Rector/Class_/TranslationBehaviorRector.php # 247
+                - rules/generic/src/Rector/Class_/ActionInjectionToConstructorInjectionRector.php # 94
+                - rules/nette-to-symfony/src/Rector/Class_/NetteControlToSymfonyControllerRector.php # 114
+                - rules/nette-to-symfony/src/Rector/Class_/NetteControlToSymfonyControllerRector.php # 119
+                - rules/php-spec-to-phpunit/src/Naming/PhpSpecRenaming.php # 89
+                - rules/php-spec-to-phpunit/src/Naming/PhpSpecRenaming.php # 94
+                - rules/php-spec-to-phpunit/src/Naming/PhpSpecRenaming.php # 97
+                - rules/php-spec-to-phpunit/src/Naming/PhpSpecRenaming.php # 103
+                - rules/php-spec-to-phpunit/src/Naming/PhpSpecRenaming.php # 107
+                - rules/php70/src/Rector/ClassMethod/Php4ConstructorRector.php # 120
+                - rules/symfony-code-quality/src/Rector/Class_/EventListenerToEventSubscriberRector.php # 169
+                - rules/symfony-code-quality/src/Rector/Class_/EventListenerToEventSubscriberRector.php # 243
+                - rules/symfony-code-quality/src/Rector/Class_/EventListenerToEventSubscriberRector.php # 247
+                - utils/doctrine-annotation-parser-syncer/src/Rector/Namespace_/RenameAnnotationReaderClassRector.php # 41
+                - utils/doctrine-annotation-parser-syncer/src/Rector/Namespace_/RenameDocParserClassRector.php # 41
+                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 45
+                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 59
+                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 60
+                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 75
+                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 79
+
+        -
+            message: '#Add regex101\.com link to that shows the regex in practise, so it will be easier to maintain in case of bug/extension in the future#'
+            paths:
+                - compiler/src/PhpScoper/StaticEasyPrefixer.php # 45
+                - compiler/src/Renaming/JetbrainsStubsRenamer.php # 19
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareTemplateTagValueNode.php # 20
+                - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareUnionTypeNode.php # 20
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php # 24
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php # 29
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php # 34
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/Doctrine/Class_/IndexPhpDocNodeFactory.php # 16
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/Doctrine/Class_/TablePhpDocNodeFactory.php # 23
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/Doctrine/Class_/UniqueConstraintPhpDocNodeFactory.php # 16
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/Doctrine/Property_/JoinTablePhpDocNodeFactory.php # 34
+                - packages/better-php-doc-parser/src/PhpDocParser/AnnotationContentResolver.php # 18
+                - packages/better-php-doc-parser/src/PhpDocParser/BetterPhpDocParser.php # 40
+                - packages/better-php-doc-parser/src/Printer/MultilineSpaceFormatPreserver.php # 22
+                - packages/better-php-doc-parser/src/Printer/OriginalSpacingRestorer.php # 16
+                - packages/better-php-doc-parser/src/Printer/PhpDocInfoPrinter.php # 32
+                - packages/better-php-doc-parser/src/Printer/PhpDocInfoPrinter.php # 42
+                - packages/better-php-doc-parser/src/Printer/PhpDocInfoPrinter.php # 47
+                - packages/better-php-doc-parser/src/Printer/PhpDocInfoPrinter.php # 52
+                - packages/better-php-doc-parser/src/Printer/PhpDocInfoPrinter.php # 57
+                - packages/better-php-doc-parser/src/Printer/WhitespaceDetector.php # 20
+                - packages/better-php-doc-parser/src/Utils/ArrayItemStaticHelper.php # 18
+                - packages/better-php-doc-parser/src/Utils/ArrayItemStaticHelper.php # 23
+                - packages/better-php-doc-parser/src/ValueObjectFactory/TagValueNodeConfigurationFactory.php # 24
+                - packages/better-php-doc-parser/src/ValueObjectFactory/TagValueNodeConfigurationFactory.php # 29
+                - packages/better-php-doc-parser/src/ValueObjectFactory/TagValueNodeConfigurationFactory.php # 34
+                - packages/better-php-doc-parser/src/ValueObjectFactory/TagValueNodeConfigurationFactory.php # 39
+                - packages/changes-reporting/src/Output/ConsoleOutputFormatter.php # 29
+                - packages/console-differ/src/MarkdownDifferAndFormatter.php # 15
+                - packages/console-differ/src/MarkdownDifferAndFormatter.php # 20
+                - packages/node-type-resolver/src/PHPStan/Scope/PHPStanNodeScopeResolver.php # 39
+                - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php # 26
+                - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php # 31
+                - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php # 36
+                - packages/rector-generator/src/FileSystem/JsonStringFormatter.php # 14
+                - packages/rector-generator/src/FileSystem/TemplateFileSystem.php # 18
+                - packages/rector-generator/src/FileSystem/TemplateFileSystem.php # 23
+                - packages/rector-generator/src/FileSystem/TemplateFileSystem.php # 28
+                - packages/rector-generator/src/Generator/FileGenerator.php # 19
+                - packages/set/src/RectorSetProvider.php # 22
+                - rules/autodiscovery/src/Rector/FileSystem/MoveEntitiesToEntityDirectoryRector.php # 28
+                - rules/cakephp/src/Naming/CakePHPFullyQualifiedClassNameResolver.php # 18
+                - rules/cakephp/src/Naming/CakePHPFullyQualifiedClassNameResolver.php # 23
+                - rules/cakephp/src/Naming/CakePHPFullyQualifiedClassNameResolver.php # 28
+                - rules/coding-style/src/Imports/ShortNameResolver.php # 32
+                - rules/coding-style/src/Node/DocAliasResolver.php # 21
+                - rules/coding-style/src/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php # 45
+                - rules/coding-style/src/Rector/Catch_/CatchExceptionNameMatchingTypeRector.php # 23
+                - rules/coding-style/src/Rector/ClassMethod/RemoveDoubleUnderscoreInMethodNameRector.php # 28
+                - rules/coding-style/src/Rector/FuncCall/ConsistentPregDelimiterRector.php # 34
+                - rules/coding-style/src/Rector/FuncCall/VersionCompareFuncCallToConstantRector.php # 54
+                - rules/coding-style/src/Rector/String_/SymplifyQuoteEscapeRector.php # 23
+                - rules/doctrine/src/Mapper/DefaultDoctrineEntityAndRepositoryMapper.php # 20
+                - rules/doctrine/src/Mapper/DefaultDoctrineEntityAndRepositoryMapper.php # 25
+                - rules/doctrine/src/NodeFactory/EntityUuidNodeFactory.php # 30
+                - rules/doctrine/src/NodeFactory/EntityUuidNodeFactory.php # 35
+                - rules/doctrine/src/PhpDocParser/DoctrineDocBlockResolver.php # 28
+                - rules/doctrine/src/Provider/EntityWithMissingUuidProvider.php # 23
+                - rules/generic/src/Rector/Property/InjectAnnotationClassRector.php # 54
+                - rules/naming/src/Guard/BreakingVariableRenameGuard.php # 38
+                - rules/naming/src/Guard/DateTimeAtNamingConventionGuard.php # 20
+                - rules/naming/src/Naming/PropertyNaming.php # 53
+                - rules/nette-tester-to-phpunit/src/Rector/RenameTesterTestToPHPUnitToTestFileRector.php # 21
+                - rules/nette-tester-to-phpunit/src/Rector/RenameTesterTestToPHPUnitToTestFileRector.php # 26
+                - rules/nette-to-symfony/src/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php # 39
+                - rules/nette-to-symfony/src/Rector/MethodCall/WrapTransParameterNameRector.php # 27
+                - rules/php-spec-to-phpunit/src/Rector/FileSystem/RenameSpecFileToTestFileRector.php # 23
+                - rules/php-spec-to-phpunit/src/Rector/FileSystem/RenameSpecFileToTestFileRector.php # 28
+                - rules/php55/src/NodeFactory/AnonymousFunctionNodeFactory.php # 27
+                - rules/php55/src/RegexMatcher.php # 19
+                - rules/php55/src/RegexMatcher.php # 24
+                - rules/php70/src/EregToPcreTransformer.php # 39
+                - rules/php70/src/Rector/FunctionLike/ExceptionHandlerTypehintRector.php # 28
+                - rules/php72/src/Rector/ConstFetch/BarewordStringRector.php # 26
+                - rules/php73/src/Rector/FuncCall/RegexDashEscapeRector.php # 28
+                - rules/phpstan/src/Rector/Assign/PHPStormVarAnnotationRector.php # 28
+                - rules/phpstan/src/Rector/Assign/PHPStormVarAnnotationRector.php # 33
+                - rules/phpstan/src/Rector/Assign/PHPStormVarAnnotationRector.php # 38
+                - rules/phpunit/src/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php # 38
+                - rules/privatization/src/Rector/ClassMethod/PrivatizeLocalOnlyMethodRector.php # 28
+                - rules/privatization/src/Rector/ClassMethod/PrivatizeLocalOnlyMethodRector.php # 33
+                - rules/sensio/src/Helper/TemplateGuesser.php # 22
+                - rules/sensio/src/Helper/TemplateGuesser.php # 27
+                - rules/sensio/src/Helper/TemplateGuesser.php # 32
+                - rules/sensio/src/Helper/TemplateGuesser.php # 37
+                - rules/sensio/src/Helper/TemplateGuesser.php # 42
+                - rules/solid/src/Rector/Class_/RepeatedLiteralToClassConstantRector.php # 50
+                - rules/symfony-code-quality/src/Rector/Class_/EventListenerToEventSubscriberRector.php # 55
+                - rules/symfony-code-quality/src/Rector/Class_/EventListenerToEventSubscriberRector.php # 60
+                - rules/symfony/src/Rector/StaticCall/ParseFileRector.php # 26
+                - rules/symfony/src/Rector/StaticCall/ParseFileRector.php # 31
+                - rules/symfony/src/Rector/StaticCall/ParseFileRector.php # 36
+                - src/Configuration/OnlyRuleResolver.php # 18
+                - src/Exclusion/Check/ExcludeByDocBlockExclusionCheck.php # 25
+                - src/FileSystem/FilesFinder.php # 24
+                - src/FileSystem/FilesFinder.php # 29
+                - src/NodeAnalyzer/ClassNodeAnalyzer.php # 17
+                - src/Php/TypeAnalyzer.php # 20
+                - src/Php/TypeAnalyzer.php # 25
+                - src/PhpDoc/PhpDocTagsFinder.php # 21
+                - src/PhpParser/NodeTransformer.php # 24
+                - src/PhpParser/Parser/InlineCodeParser.php # 26
+                - src/PhpParser/Parser/InlineCodeParser.php # 31
+                - src/PhpParser/Printer/BetterStandardPrinter.php # 39
+                - src/PhpParser/Printer/BetterStandardPrinter.php # 44
+                - src/PhpParser/Printer/BetterStandardPrinter.php # 49
+                - src/PhpParser/Printer/BetterStandardPrinter.php # 54
+                - src/PhpParser/Printer/BetterStandardPrinter.php # 59
+                - src/PhpParser/Printer/BetterStandardPrinter.php # 64
+                - src/PhpParser/Printer/BetterStandardPrinter.php # 69
+                - src/Rector/AbstractPHPUnitRector.php # 19
+                - src/Skip/Skipper.php # 18
+                - src/Skip/Skipper.php # 23
+                - src/Util/StaticRectorStrings.php # 22
+                - utils/phpstan-extensions/src/Rule/RectorRuleAndValueObjectHaveSameStartsRule.php # 33
+                - utils/phpstan-static-type-mapper-checker/src/Finder/PHPStanTypeClassFinder.php # 15
+                - utils/project-validator/src/Process/ParallelTaskRunner.php # 19
+
