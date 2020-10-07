@@ -17,11 +17,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class StringFormTypeToClassRector extends AbstractFormAddRector
 {
+    /**
+     * @var string
+     */
+    private const DESCRIPTION = 'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"';
     public function getDefinition(): RectorDefinition
     {
-        $description = 'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"';
-
-        return new RectorDefinition($description, [
+        return new RectorDefinition(self::DESCRIPTION, [
             new CodeSample(
 <<<'CODE_SAMPLE'
 $formBuilder = new Symfony\Component\Form\FormBuilder;
