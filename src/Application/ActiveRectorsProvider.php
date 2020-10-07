@@ -94,9 +94,9 @@ final class ActiveRectorsProvider
         }
 
         throw new ShouldNotHappenException(sprintf(
-            'Class "%s" defined in "parameters > %s" was not found ',
+            'Class "%s" defined in "$parameters->set(Option::%s, [...])" was not found ',
             $excludedRector,
-            Option::EXCLUDE_RECTORS
+            'EXCLUDE_RECTORS'
         ));
     }
 
@@ -107,9 +107,9 @@ final class ActiveRectorsProvider
         }
 
         throw new ShouldNotHappenException(sprintf(
-            'Class "%s" defined in "parameters > %s" is not a Rector rule = does not implement "%s" ',
+            'Class "%s" defined in "$parameters->set(Option::%s, [...]))" is not a Rector rule = does not implement "%s" ',
             $excludedRector,
-            Option::EXCLUDE_RECTORS,
+            'EXCLUDE_RECTORS',
             RectorInterface::class
         ));
     }

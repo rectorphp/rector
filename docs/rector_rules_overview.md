@@ -1,4 +1,4 @@
-# All 584 Rectors Overview
+# All 586 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -17,7 +17,7 @@
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [DowngradePhp71](#downgradephp71) (3)
 - [DowngradePhp72](#downgradephp72) (2)
-- [DowngradePhp74](#downgradephp74) (3)
+- [DowngradePhp74](#downgradephp74) (5)
 - [DowngradePhp80](#downgradephp80) (6)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
@@ -235,8 +235,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
+                'ValueObjectInterfaceClassName',
+            ],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
+                'Search',
+            ],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -305,12 +309,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[
-            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects(
-                [new ArrayToFluentCall('ArticlesTable', [
-                    'foreignKey' => 'setForeignKey',
-                    'propertyName' => 'setProperty',
-                ])]
-            ),
+            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects([new ArrayToFluentCall('ArticlesTable', [
+                'foreignKey' => 'setForeignKey',
+                'propertyName' => 'setProperty',
+            ])]),
         ]]);
 };
 ```
@@ -451,7 +453,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'paging',
                     'getAttribute',
                     'ServerRequest'
-                ), new RenameMethodCallBasedOnParameter('withParam', 'paging', 'withAttribute', 'ServerRequest')]
+                ), new RenameMethodCallBasedOnParameter(
+                    'withParam',
+                    'paging',
+                    'withAttribute',
+                    'ServerRequest'
+                )]
             ),
         ]]);
 };
@@ -4890,6 +4897,59 @@ Remove null coalescing operator ??=
 
 <br><br>
 
+### `DowngradeNumericLiteralSeparatorRector`
+
+- class: [`Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector`](/rules/downgrade-php74/src/Rector/LNumber/DowngradeNumericLiteralSeparatorRector.php)
+- [test fixtures](/rules/downgrade-php74/tests/Rector/LNumber/DowngradeNumericLiteralSeparatorRector/Fixture)
+
+Remove "_" as thousands separator in numbers
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $int = 1_000;
+-        $float = 1_000_500.001;
++        $int = 1000;
++        $float = 1000500.001;
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeStripTagsCallWithArrayRector`
+
+- class: [`Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector`](/rules/downgrade-php74/src/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector.php)
+- [test fixtures](/rules/downgrade-php74/tests/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector/Fixture)
+
+Convert 2nd param to `strip_tags` from array to string
+
+```diff
+ class SomeClass
+ {
+     public function run($string)
+     {
+         // Arrays: change to string
+-        strip_tags($string, ['a', 'p']);
++        strip_tags($string, '<' . implode('><', ['a', 'p']) . '>');
+
+         // Variables/consts/properties: if array, change to string
+         $tags = ['a', 'p'];
+-        strip_tags($string, $tags);
++        strip_tags($string, $tags !== null && is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
+
+         // Default case (eg: function call): externalize to var, then if array, change to string
+-        strip_tags($string, getTags());
++        $expr = getTags();
++        strip_tags($string, is_array($expr) ? '<' . implode('><', $expr) . '>' : $expr);
+     }
+ }
+```
+
+<br><br>
+
 ### `DowngradeTypedPropertyRector`
 
 - class: [`Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector`](/rules/downgrade-php74/src/Rector/Property/DowngradeTypedPropertyRector.php)
@@ -5618,15 +5678,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
             ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects(
-                [
-                    new ArgumentDefaultValueReplacer(
-                        'SomeExampleClass',
-                        'someMethod',
-                        0,
-                        'SomeClass::OLD_CONSTANT',
-                        'false'
-                    ),
-                ]
+                [new ArgumentDefaultValueReplacer('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', 'false')]
             ),
         ]]);
 };
@@ -6919,7 +6971,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
+            AddTopIncludeRector::PATTERNS => [
+                'pat*/*/?ame.php',
+                'somepath/?ame.php',
+            ],
         ]]);
 };
 ```
@@ -9461,14 +9516,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArrayArgumentInTestToDataProviderRector::class)
         ->call('configure', [[
             ArrayArgumentInTestToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => inline_value_objects(
-                [
-                    new ArrayArgumentToDataProvider(
-                        'PHPUnit\Framework\TestCase',
-                        'doTestMultiple',
-                        'doTestSingle',
-                        'number'
-                    ),
-                ]
+                [new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number')]
             ),
         ]]);
 };
@@ -14723,10 +14771,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
-                'SymfonyControllerClassName',
-                'GetTraitClassName',
-            ],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
         ]]);
 };
 ```
@@ -15020,7 +15065,7 @@ Simplify use of assertions in WebTestCase
 - class: [`Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector`](/rules/symfony/src/Rector/MethodCall/StringFormTypeToClassRector.php)
 - [test fixtures](/rules/symfony/tests/Rector/MethodCall/StringFormTypeToClassRector/Fixture)
 
-Turns string Form Type references to their `CONSTANT` alternatives in FormTypes in Form in Symfony. To enable custom types, add `link` to your container XML `dump` in "parameters > symfony_container_xml_path"
+Turns string Form Type references to their `CONSTANT` alternatives in FormTypes in Form in Symfony. To enable custom types, add `link` to your container XML `dump` in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"
 
 ```diff
  $formBuilder = new Symfony\Component\Form\FormBuilder;
@@ -15515,9 +15560,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NewToStaticCallRector::class)
         ->call('configure', [[
-            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => inline_value_objects(
-                [new NewToStaticCall('Cookie', 'Cookie', 'create')]
-            ),
+            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => inline_value_objects([new NewToStaticCall('Cookie', 'Cookie', 'create')]),
         ]]);
 };
 ```

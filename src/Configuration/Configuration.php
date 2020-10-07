@@ -287,9 +287,9 @@ final class Configuration
         }
 
         $message = sprintf(
-            'Path "%s" for "parameters > %s" in your config was not found. Correct it',
+            'Path "%s" for "$parameters->set(Option::%s, ...);" in your config was not found. Correct it',
             $symfonyContainerXmlPath,
-            Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER
+            'SYMFONY_CONTAINER_XML_PATH_PARAMETER'
         );
         throw new InvalidConfigurationException($message);
     }

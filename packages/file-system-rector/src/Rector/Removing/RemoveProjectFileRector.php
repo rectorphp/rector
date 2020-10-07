@@ -84,9 +84,8 @@ CODE_SAMPLE
             return;
         }
 
-        throw new ShouldNotHappenException(sprintf(
-            'Complete "parameters > %s" in rector.php, so Rector can found your directory',
-            Option::PROJECT_DIRECTORY_PARAMETER
-        ));
+        throw new ShouldNotHappenException(
+            'Complete "$parameters->setParameter(Option::PROJECT_DIRECTORY_PARAMETER, ...);" in rector.php, so Rector can found your directory'
+        );
     }
 }
