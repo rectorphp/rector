@@ -177,10 +177,6 @@ CODE_SAMPLE
      */
     private function shouldSkipNonClassLikeType(Node $node): bool
     {
-        if (! $this->classLikeTypeOnly) {
-            return false;
-        }
-
         // unwrap nullable type
         if ($node instanceof NullableType) {
             $node = $node->type;
@@ -188,6 +184,13 @@ CODE_SAMPLE
 
         $typeName = $this->getName($node);
         if ($typeName === null) {
+            return false;
+        }
+        if ($typeName === 'callable') {
+            return true;
+        }
+
+        if (! $this->classLikeTypeOnly) {
             return false;
         }
 

@@ -23,6 +23,11 @@ final class ClassWithProperty
      * @var callable
      */
     private $shouldBeSkippedToo;
+
+    /**
+     * @var callable|null
+     */
+    private $shouldBeSkippedAlso;
 }
 
 ?>
@@ -49,6 +54,11 @@ final class ClassWithProperty
      * @var callable
      */
     private $shouldBeSkippedToo;
+
+    /**
+     * @var callable|null
+     */
+    private $shouldBeSkippedAlso;
 }
 
 ?>
