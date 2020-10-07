@@ -41,6 +41,10 @@ RUN bin/rector list
 
 ENTRYPOINT [ "bin/rector" ]
 
+ENV PATH /rector/bin:$PATH
+
+VOLUME ["/project"]
+WORKDIR "/project"
 
 ## Used for getrector.org/demo
 FROM rector as rector-secured
