@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Legacy\Rector\Include_;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Scalar\MagicConst\Dir;
@@ -12,9 +13,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -22,7 +24,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Legacy\Tests\Rector\Include_\AddTopIncludeRector\AddTopIncludeRectorTest
  */
-final class AddTopIncludeRector extends AbstractFileSystemRector implements ConfigurableRectorInterface
+final class AddTopIncludeRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api
@@ -72,28 +74,44 @@ CODE_SAMPLE
         ]);
     }
 
-    public function refactor(SmartFileInfo $smartFileInfo): void
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $this->isFileInfoMatch($smartFileInfo->getRelativeFilePath())) {
-            return;
+        return [FileWithoutNamespace::class];
+    }
+
+    /**
+     * @param FileWithoutNamespace $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $smartFileInfo = $node->getAttribute(SmartFileInfo::class);
+        if ($smartFileInfo === null) {
+            return null;
         }
 
-        $nodes = $this->parseFileInfoToNodes($smartFileInfo);
+        if (! $this->isFileInfoMatch($smartFileInfo->getRelativeFilePath())) {
+            return null;
+        }
+
+        $fileStmts = $node->getStmts();
 
         // we are done if there is a class definition in this file
-        if ($this->betterNodeFinder->hasInstancesOf($nodes, [Class_::class])) {
-            return;
+        if ($this->betterNodeFinder->hasInstancesOf($fileStmts, [Class_::class])) {
+            return null;
         }
 
-        if ($this->hasIncludeAlready($nodes)) {
-            return;
+        if ($this->hasIncludeAlready($fileStmts)) {
+            return null;
         }
 
         // add the include to the statements and print it
-        array_unshift($nodes, new Nop());
-        array_unshift($nodes, new Expression($this->createInclude()));
+        array_unshift($fileStmts, new Nop());
+        array_unshift($fileStmts, new Expression($this->createInclude()));
 
-        $this->printNodesToFilePath($nodes, $smartFileInfo->getRelativeFilePath());
+        return new FileWithoutNamespace($fileStmts);
     }
 
     public function configure(array $configuration): void

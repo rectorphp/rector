@@ -4,28 +4,24 @@ declare(strict_types=1);
 
 namespace Rector\Legacy\Tests\Rector\Include_\AddTopIncludeRector;
 
-use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
+use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Legacy\Rector\Include_\AddTopIncludeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AddTopIncludeRectorTest extends AbstractFileSystemRectorTestCase
+final class AddTopIncludeRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideData()
+     */
+    public function test(SmartFileInfo $fixtureFileInfo): void
     {
-        $fileInfo = new SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc');
-        $temporaryFileInfo = $this->doTestFileInfo($fileInfo);
-
-        $this->assertStringEqualsFile(__DIR__ . '/Expected/expected_autoload.php', $temporaryFileInfo->getContents());
+        $this->doTestFileInfo($fixtureFileInfo);
     }
 
-    public function testSkip(): void
+    public function provideData(): Iterator
     {
-        $this->doTestFileInfoRemainsUntouched(__DIR__ . '/Fixture/skip_has_include.php.inc');
-    }
-
-    public function testSkipClass(): void
-    {
-        $this->doTestFileInfoRemainsUntouched(__DIR__ . '/Fixture/skip_has_class.php.inc');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**
@@ -38,13 +34,5 @@ final class AddTopIncludeRectorTest extends AbstractFileSystemRectorTestCase
                 AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
             ],
         ];
-    }
-
-    private function doTestFileInfoRemainsUntouched(string $filePath): void
-    {
-        $fileInfo = new SmartFileInfo($filePath);
-        $temporaryFileInfo = $this->doTestFileInfo($fileInfo);
-
-        $this->assertSame($fileInfo->getContents(), $temporaryFileInfo->getContents());
     }
 }
