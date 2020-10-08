@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -89,12 +90,18 @@ CODE_SAMPLE
         // Their position is kept in the array
         $newNodes = [];
         foreach ($itemsByRef as $position => $itemByRef) {
+            // Change to not assign by reference in the present node
             $itemByRef->byRef = false;
             // Assign the value by reference on a new assignment
             /** @var Variable */
             $itemVariable = $itemByRef->value;
             $assignVariable = new Variable($itemVariable->name);
-            $newNodes[] = $this->createAssignRefWithArrayDimFetch($assignVariable, $exprVariable, $position);
+            // Access the array under the key, if provided, or the position otherwise
+            $key = $position;
+            if ($itemByRef->key !== null && $itemByRef->key instanceof String_) {
+                $key = $itemByRef->key->value;
+            }
+            $newNodes[] = $this->createAssignRefWithArrayDimFetch($assignVariable, $exprVariable, $key);
         }
         $this->addNodesAfterNode($newNodes, $node);
         return $node;
