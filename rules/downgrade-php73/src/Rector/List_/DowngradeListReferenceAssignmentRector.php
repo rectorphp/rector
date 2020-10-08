@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp73\Rector\List_;
 
-use PhpParser\Node;
 use PhpParser\BuilderHelpers;
-use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://wiki.php.net/rfc/list_reference_assignment
@@ -25,9 +25,11 @@ final class DowngradeListReferenceAssignmentRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Convert `list()` reference assignment to PHP 7.2 code: `list($a, &$b) = $array;` => `list($a, $b) = $array; $b =& $array[1];`', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Convert `list()` reference assignment to PHP 7.2 code: `list($a, &$b) = $array;` => `list($a, $b) = $array; $b =& $array[1];`',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($string)
@@ -39,8 +41,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($string)
@@ -55,8 +57,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     /**
@@ -107,7 +110,7 @@ CODE_SAMPLE
         // Check it follows `list(...) = $foo`
         if ($parentNode instanceof Assign && $parentNode->expr instanceof Variable && $parentNode->var === $node) {
             // There must be at least one param by reference
-            return !empty($this->getItemsByRef($node));
+            return ! empty($this->getItemsByRef($node));
         }
 
         return false;
@@ -126,6 +129,7 @@ CODE_SAMPLE
             }
         );
     }
+
     /**
      * @param string|int $dimValue
      */
