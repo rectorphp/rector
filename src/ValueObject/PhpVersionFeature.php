@@ -169,6 +169,11 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const BEFORE_LIST_REFERENCE_ASSIGNMENT = '7.2';
+
+    /**
+     * @var string
+     */
     public const BEFORE_OBJECT_TYPE = '7.1';
 
     /**
