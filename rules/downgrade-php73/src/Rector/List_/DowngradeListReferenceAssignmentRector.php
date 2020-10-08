@@ -102,6 +102,9 @@ CODE_SAMPLE
         // Their position is kept in the array
         $newNodes = [];
         foreach ($listItems as $position => $listItem) {
+            if ($listItem === null) {
+                continue;
+            }
             // If it's a variable by value, not by reference, then skip
             if ($listItem->value instanceof Variable && !$listItem->byRef) {
                 continue;
