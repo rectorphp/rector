@@ -1,4 +1,4 @@
-# All 586 Rectors Overview
+# All 585 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -41,7 +41,7 @@
 - [PHPStan](#phpstan) (3)
 - [PHPUnit](#phpunit) (38)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
-- [PSR4](#psr4) (3)
+- [PSR4](#psr4) (2)
 - [Performance](#performance) (1)
 - [Phalcon](#phalcon) (4)
 - [Php52](#php52) (2)
@@ -10396,48 +10396,16 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 
 ### `NormalizeNamespaceByPSR4ComposerAutoloadRector`
 
-- class: [`Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector`](/rules/psr4/src/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
-- [test fixtures](/rules/psr4/tests/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadRector/Fixture)
+- class: [`Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector`](/rules/psr4/src/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
+- [test fixtures](/rules/psr4/tests/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector/Fixture)
 
-Adds namespace to namespace-less files to match PSR-4 in `composer.json` autoload section. Run with combination with `Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector`
+Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with `Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector`
 
 ```diff
  // src/SomeClass.php
 
 +namespace App\CustomNamespace;
 +
- class SomeClass
- {
- }
-```
-
-composer.json
-```json
-{
-    "autoload": {
-        "psr-4": {
-            "App\\CustomNamespace\\": "src"
-        }
-    }
-}
-```
-
-
-<br><br>
-
-### `NormalizeNamespaceByPSR4ComposerAutoloadRector`
-
-- class: [`Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector`](/rules/psr4/src/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
-- [test fixtures](/rules/psr4/tests/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector/Fixture)
-
-Changes namespace and class names to match PSR-4 in `composer.json` autoload section
-
-```diff
- // src/SomeClass.php
-
--namespace App\DifferentNamespace;
-+namespace App\CustomNamespace;
-
  class SomeClass
  {
  }
