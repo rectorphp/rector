@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp73\Rector\List_;
 
-use PhpParser\Node;
 use PhpParser\BuilderHelpers;
-use PhpParser\Node\Expr\List_;
+use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://wiki.php.net/rfc/list_reference_assignment
