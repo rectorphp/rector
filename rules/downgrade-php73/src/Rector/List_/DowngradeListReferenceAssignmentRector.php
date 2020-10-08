@@ -53,7 +53,7 @@ class SomeClass
         list($a, $b) = $array;
         $b =& $array[1];
 
-        [&$c, $d, &$e] = $array;
+        [$c, $d, $e] = $array;
         $c =& $array[0];
         $e =& $array[2];
     }
