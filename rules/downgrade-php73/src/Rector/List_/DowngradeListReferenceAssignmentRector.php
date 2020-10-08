@@ -141,7 +141,7 @@ CODE_SAMPLE
         // Check it follows `list(...) = $foo`
         if ($parentNode instanceof Assign && $parentNode->var === $node && $parentNode->expr instanceof Variable) {
             // There must be at least one param by reference
-            return count($this->getItemsByRef($node->items)) > 0;
+            return $this->hasItemsByRef($node->items);
         }
 
         return false;
@@ -149,12 +149,11 @@ CODE_SAMPLE
 
     /**
      * @param (ArrayItem|null)[] $items
-     * @return ArrayItem[] Nested lists `list($a, list($b, $c))` are supported, so each item in the array is either an ArrayItem or a recursive array of ArrayItem. Array keys from the original are preserved
      */
-    private function getItemsByRef(array $items): array
+    private function hasItemsByRef(array $items): bool
     {
         /** @var ArrayItem[] */
-        return array_filter(array_map(
+        $filteredItemsByRef = array_filter(array_map(
             /**
              * @var ArrayItem|null $item
              */
@@ -167,13 +166,14 @@ CODE_SAMPLE
                     // Recursive call
                     /** @var List_ */
                     $nestedList = $item->value;
-                    $hasItemsByRef = count($this->getItemsByRef($nestedList->items)) > 0;
+                    $hasItemsByRef = $this->hasItemsByRef($nestedList->items);
                     return $hasItemsByRef ? $item : null;
                 }
                 return $item->value instanceof Variable && $item->byRef ? $item : null;
             },
             $items
         ));
+        return count($filteredItemsByRef) > 0;
     }
 
     /**
