@@ -88,6 +88,11 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->assertFileEquals($expectedExtraContentFilePath, $expectedFilePath);
     }
 
+    protected function getFixtureTempDirectory(): string
+    {
+        return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
+    }
+
     private function doTestFileMatchesExpectedContent(
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo,

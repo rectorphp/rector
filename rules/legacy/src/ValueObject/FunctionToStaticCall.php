@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Legacy\ValueObject;
 
-final class StaticCallPointer
+final class FunctionToStaticCall
 {
     /**
      * @var string
@@ -16,10 +16,16 @@ final class StaticCallPointer
      */
     private $method;
 
-    public function __construct(string $class, string $method)
+    /**
+     * @var string
+     */
+    private $function;
+
+    public function __construct(string $function, string $class, string $method)
     {
         $this->class = $class;
         $this->method = $method;
+        $this->function = $function;
     }
 
     public function getClass(): string
@@ -30,5 +36,10 @@ final class StaticCallPointer
     public function getMethod(): string
     {
         return $this->method;
+    }
+
+    public function getFunction(): string
+    {
+        return $this->function;
     }
 }
