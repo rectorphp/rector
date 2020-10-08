@@ -168,10 +168,10 @@ CODE_SAMPLE
                 if ($item === null) {
                     return null;
                 }
-                // Check if the item is a nested list
-                if ($item->value instanceof List_) {
+                // Check if the item is a nested list/nested array destructuring
+                if ($item->value instanceof List_ || $item->value instanceof Array_) {
                     // Recursive call
-                    /** @var List_ */
+                    /** @var List_|Array_ */
                     $nestedList = $item->value;
                     $hasItemByRef = $this->hasItemByRef($nestedList->items);
                     return $hasItemByRef ? $item : null;
