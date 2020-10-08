@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
@@ -79,11 +80,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FileWithoutNamespace::class];
+        return [FileWithoutNamespace::class, Namespace_::class];
     }
 
     /**
-     * @param FileWithoutNamespace $node
+     * @param FileWithoutNamespace|Namespace_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -96,22 +97,23 @@ CODE_SAMPLE
             return null;
         }
 
-        $fileStmts = $node->getStmts();
+        $stmts = $node->stmts;
 
         // we are done if there is a class definition in this file
-        if ($this->betterNodeFinder->hasInstancesOf($fileStmts, [Class_::class])) {
+        if ($this->betterNodeFinder->hasInstancesOf($stmts, [Class_::class])) {
             return null;
         }
 
-        if ($this->hasIncludeAlready($fileStmts)) {
+        if ($this->hasIncludeAlready($stmts)) {
             return null;
         }
 
         // add the include to the statements and print it
-        array_unshift($fileStmts, new Nop());
-        array_unshift($fileStmts, new Expression($this->createInclude()));
+        array_unshift($stmts, new Nop());
+        array_unshift($stmts, new Expression($this->createInclude()));
+        $node->stmts = $stmts;
 
-        return new FileWithoutNamespace($fileStmts);
+        return $node;
     }
 
     public function configure(array $configuration): void

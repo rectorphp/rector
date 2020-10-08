@@ -20,6 +20,10 @@ use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @deprecated Use
+ * @see \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace node instead
+ */
 abstract class AbstractFileSystemRector implements FileSystemRectorInterface
 {
     use AbstractRectorTrait;

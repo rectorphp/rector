@@ -39,12 +39,4 @@ final class FileWithoutNamespace extends NodeAbstract
     {
         return ['stmts'];
     }
-
-    /**
-     * @return Node[]
-     */
-    public function getStmts(): array
-    {
-        return $this->stmts;
-    }
 }
