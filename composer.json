@@ -149,6 +149,7 @@
             "Rector\\NetteCodeQuality\\": "rules/nette-code-quality/src",
             "Rector\\DowngradePhp71\\": "rules/downgrade-php71/src",
             "Rector\\DowngradePhp72\\": "rules/downgrade-php72/src",
+            "Rector\\DowngradePhp73\\": "rules/downgrade-php73/src",
             "Rector\\DowngradePhp74\\": "rules/downgrade-php74/src",
             "Rector\\DowngradePhp80\\": "rules/downgrade-php80/src",
             "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src"
@@ -239,6 +240,7 @@
             "Rector\\NetteCodeQuality\\Tests\\": "rules/nette-code-quality/tests",
             "Rector\\DowngradePhp71\\Tests\\": "rules/downgrade-php71/tests",
             "Rector\\DowngradePhp72\\Tests\\": "rules/downgrade-php72/tests",
+            "Rector\\DowngradePhp73\\Tests\\": "rules/downgrade-php73/tests",
             "Rector\\DowngradePhp74\\Tests\\": "rules/downgrade-php74/tests",
             "Rector\\DowngradePhp80\\Tests\\": "rules/downgrade-php80/tests",
             "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests",

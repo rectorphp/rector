@@ -184,6 +184,11 @@ final class SetList
     /**
      * @var string
      */
+    public const DOWNGRADE_PHP73 = __DIR__ . '/../../../../config/set/downgrade-php73.php';
+
+    /**
+     * @var string
+     */
     public const DOWNGRADE_PHP74 = __DIR__ . '/../../../../config/set/downgrade-php74.php';
 
     /**
