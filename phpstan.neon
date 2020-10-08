@@ -879,3 +879,6 @@ parameters:
                 - utils/phpstan-static-type-mapper-checker/src/Finder/PHPStanTypeClassFinder.php # 15
                 - utils/project-validator/src/Process/ParallelTaskRunner.php # 19
 
+
+        # nodes/stmts mixup
+        - '#Parameter \#2 \$stmts of class PhpParser\\Node\\Stmt\\Namespace_ constructor expects array<PhpParser\\Node\\Stmt\>\|null, array<PhpParser\\Node\> given#'

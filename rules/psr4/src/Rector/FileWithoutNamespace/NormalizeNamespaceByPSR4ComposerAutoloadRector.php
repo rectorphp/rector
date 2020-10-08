@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PSR4\Rector\FileSystem;
+namespace Rector\PSR4\Rector\FileWithoutNamespace;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
@@ -18,9 +18,9 @@ use Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector;
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
- * @see \Rector\PSR4\Tests\Rector\FileSystem\NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector\NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRectorTest
+ * @see \Rector\PSR4\Tests\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\NormalizeNamespaceByPSR4ComposerAutoloadRectorTest
  */
-final class NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector extends AbstractRector
+final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRector
 {
     /**
      * @var PSR4AutoloadNamespaceMatcherInterface
@@ -73,6 +73,14 @@ CODE_SAMPLE
     }
 
     /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [Namespace_::class, FileWithoutNamespace::class];
+    }
+
+    /**
      * @param FileWithoutNamespace|Namespace_ $node
      */
     public function refactor(Node $node): ?Node
@@ -89,21 +97,7 @@ CODE_SAMPLE
 
         // to put declare_strict types on correct place
         if ($node instanceof FileWithoutNamespace) {
-            $nodes = $node->stmts;
-
-            $nodesWithStrictTypesThenNamespace = [];
-            foreach ($nodes as $key => $node) {
-                if ($node instanceof Declare_) {
-                    $nodesWithStrictTypesThenNamespace[] = $node;
-                    unset($nodes[$key]);
-                }
-            }
-
-            $namespace = new Namespace_(new Name($expectedNamespace), $nodes);
-            $nodesWithStrictTypesThenNamespace[] = $namespace;
-
-            // @todo update to a new class node, like FileWithNamespace
-            return new FileWithoutNamespace($nodesWithStrictTypesThenNamespace);
+            return $this->refactorFileWithoutNamespace($node, $expectedNamespace);
         }
 
         if ($node instanceof Namespace_) {
@@ -113,11 +107,24 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getNodeTypes(): array
-    {
-        return [Namespace_::class, FileWithoutNamespace::class];
+    private function refactorFileWithoutNamespace(
+        FileWithoutNamespace $fileWithoutNamespace,
+        string $expectedNamespace
+    ): FileWithoutNamespace {
+        $nodes = $fileWithoutNamespace->stmts;
+
+        $nodesWithStrictTypesThenNamespace = [];
+        foreach ($nodes as $key => $fileWithoutNamespace) {
+            if ($fileWithoutNamespace instanceof Declare_) {
+                $nodesWithStrictTypesThenNamespace[] = $fileWithoutNamespace;
+                unset($nodes[$key]);
+            }
+        }
+
+        $namespace = new Namespace_(new Name($expectedNamespace), (array) $nodes);
+        $nodesWithStrictTypesThenNamespace[] = $namespace;
+
+        // @todo update to a new class node, like FileWithNamespace
+        return new FileWithoutNamespace($nodesWithStrictTypesThenNamespace);
     }
 }

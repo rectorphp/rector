@@ -7,6 +7,7 @@ namespace Rector\PSR4\Rector\Namespace_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -97,18 +98,30 @@ CODE_SAMPLE
             return null;
         }
 
-        $currentNamespace = $this->getName($node);
-
-        // namespace is correct → skip
-        if ($currentNamespace === $expectedNamespace) {
+        // already correct namespace
+        if ($this->isName($node, $expectedNamespace)) {
             return null;
+        }
+
+        $currentNamespace = $this->getName($node);
+        if (! is_string($currentNamespace)) {
+            throw new ShouldNotHappenException();
         }
 
         // change it
         $node->name = new Name($expectedNamespace);
 
         // add use import for classes from the same namespace
-        $this->traverseNodesWithCallable($node, function (Node $node) use ($currentNamespace) {
+        $this->addUseImportClassesFromSameNamespace($node, $currentNamespace);
+        $this->addClassRename($node, $currentNamespace, $expectedNamespace);
+
+        // collect changed class
+        return $node;
+    }
+
+    private function addUseImportClassesFromSameNamespace(Namespace_ $namespace, string $currentNamespace): void
+    {
+        $this->traverseNodesWithCallable($namespace, function (Node $node) use ($currentNamespace) {
             if (! $node instanceof Name) {
                 return null;
             }
@@ -129,15 +142,15 @@ CODE_SAMPLE
             $objectType = $this->getName($node);
             $this->addUseType(new FullyQualifiedObjectType($objectType), $node);
         });
+    }
 
+    private function addClassRename(Namespace_ $namespace, string $currentNamespace, string $expectedNamespace): void
+    {
         /** @var SmartFileInfo $smartFileInfo */
-        $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        $smartFileInfo = $namespace->getAttribute(AttributeKey::FILE_INFO);
         $oldClassName = $currentNamespace . '\\' . $smartFileInfo->getBasenameWithoutSuffix();
         $newClassName = $expectedNamespace . '\\' . $smartFileInfo->getBasenameWithoutSuffix();
 
         $this->renamedClassesCollector->addClassRename($oldClassName, $newClassName);
-
-        // collect changed class
-        return $node;
     }
 }

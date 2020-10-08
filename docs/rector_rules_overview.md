@@ -10394,10 +10394,10 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 
 <br><br>
 
-### `NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector`
+### `NormalizeNamespaceByPSR4ComposerAutoloadRector`
 
-- class: [`Rector\PSR4\Rector\FileSystem\NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector`](/rules/psr4/src/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector.php)
-- [test fixtures](/rules/psr4/tests/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector/Fixture)
+- class: [`Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector`](/rules/psr4/src/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
+- [test fixtures](/rules/psr4/tests/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadRector/Fixture)
 
 Adds namespace to namespace-less files to match PSR-4 in `composer.json` autoload section. Run with combination with `Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector`
 

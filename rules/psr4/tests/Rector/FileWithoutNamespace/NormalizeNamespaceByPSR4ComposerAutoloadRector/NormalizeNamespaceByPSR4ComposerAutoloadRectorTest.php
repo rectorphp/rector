@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\PSR4\Tests\Rector\FileSystem\NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector;
+namespace Rector\PSR4\Tests\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\PSR4\Rector\FileSystem\NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector;
+use Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRectorTest extends AbstractRectorTestCase
+final class NormalizeNamespaceByPSR4ComposerAutoloadRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -31,6 +31,6 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRectorTest extends
 
     protected function getRectorClass(): string
     {
-        return NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector::class;
+        return NormalizeNamespaceByPSR4ComposerAutoloadRector::class;
     }
 }
