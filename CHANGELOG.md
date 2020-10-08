@@ -765,7 +765,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 - [#3351] [CodingStyle] Add SplitGroupedUseImportsRector
 - [#3358] [Legacy] Add FunctionToStaticMethodRector
-- [#3369] [PSR-4] Add NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector
+- [#3369] [PSR-4] Add NormalizeNamespaceByPSR4ComposerAutoloadRector
 - [#3362] [PHP 5.5] Fix StringClassNameToClassConstantRector for importing freshly added class names
 - [#3355] [docs] add counter next to Rector group
 
