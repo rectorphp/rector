@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp73\Rector\List_;
 
-use PhpParser\BuilderHelpers;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignRef;
+use PhpParser\BuilderHelpers;
 use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/list_reference_assignment
@@ -82,29 +82,53 @@ CODE_SAMPLE
         }
 
         // Get all the params passed by reference
-        $itemsByRef = $this->getItemsByRef($node);
         /** @var Assign */
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         /** @var Variable */
         $exprVariable = $parentNode->expr;
         // Their position is kept in the array
-        $newNodes = [];
-        foreach ($itemsByRef as $position => $itemByRef) {
-            // Change to not assign by reference in the present node
-            $itemByRef->byRef = false;
-            // Assign the value by reference on a new assignment
-            /** @var Variable */
-            $itemVariable = $itemByRef->value;
-            $assignVariable = new Variable($itemVariable->name);
-            // Access the array under the key, if provided, or the position otherwise
-            $key = $position;
-            if ($itemByRef->key !== null && $itemByRef->key instanceof String_) {
-                $key = $itemByRef->key->value;
-            }
-            $newNodes[] = $this->createAssignRefWithArrayDimFetch($assignVariable, $exprVariable, $key);
-        }
+        $newNodes = $this->createAssignRefArrayFromListReferences($node->items, $exprVariable, []);
         $this->addNodesAfterNode($newNodes, $node);
         return $node;
+    }
+
+    /**
+     * @param (ArrayItem|null)[] $listItems
+     * @param (int|string)[] $nestedKeys
+     * @return AssignRef[]
+     */
+    public function createAssignRefArrayFromListReferences(array $listItems, Variable $exprVariable, array $nestedKeys): array
+    {
+        // Their position is kept in the array
+        $newNodes = [];
+        foreach ($listItems as $position => $listItem) {
+            if ($listItem->value instanceof Variable && !$listItem->byRef) {
+                continue;
+            }
+            // Access the array under the key, if provided, or the position otherwise
+            $key = $position;
+            if ($listItem->key !== null && $listItem->key instanceof String_) {
+                $key = $listItem->key->value;
+            }
+            // Either the item is a variable, or a nested list
+            if ($listItem->value instanceof Variable) {
+                // Change to not assign by reference in the present node
+                $listItem->byRef = false;
+                /** @var Variable */
+                $itemVariable = $listItem->value;
+                // Assign the value by reference on a new assignment
+                $assignVariable = new Variable($itemVariable->name);
+                $newNodes[] = $this->createAssignRefWithArrayDimFetch($assignVariable, $exprVariable, $nestedKeys, $key);
+            } else {
+                /** @var List_ */
+                $nestedList = $listItem->value;
+                $newNodes = array_merge(
+                    $newNodes,
+                    $this->createAssignRefArrayFromListReferences($nestedList->items, $exprVariable, array_merge($nestedKeys, [$key]))
+                );
+            }
+        }
+        return $newNodes;
     }
 
     /**
@@ -117,43 +141,58 @@ CODE_SAMPLE
         // Check it follows `list(...) = $foo`
         if ($parentNode instanceof Assign && $parentNode->var === $node && $parentNode->expr instanceof Variable) {
             // There must be at least one param by reference
-            return count($this->getItemsByRef($node)) > 0;
+            return count($this->getItemsByRef($node->items)) > 0;
         }
 
         return false;
     }
 
     /**
-     * @param List_|Array_ $node
-     * @return ArrayItem[] It maintains the same keys from the original
+     * @param (ArrayItem|null)[] $items
+     * @return ArrayItem[] Nested lists `list($a, list($b, $c))` are supported, so each item in the array is either an ArrayItem or a recursive array of ArrayItem. Array keys from the original are preserved
      */
-    private function getItemsByRef(Node $node): array
+    private function getItemsByRef(array $items): array
     {
         /** @var ArrayItem[] */
-        return array_filter(
-            $node->items,
+        return array_filter(array_map(
             /**
              * @var ArrayItem|null $item
              */
-            function ($item): bool {
+            function ($item): ?ArrayItem {
                 if ($item === null) {
-                    return false;
+                    return null;
                 }
-                return $item->value instanceof Variable && $item->byRef;
-            }
-        );
+                // Check if the item is a nested list
+                if ($item->value instanceof List_) {
+                    // Recursive call
+                    /** @var List_ */
+                    $nestedList = $item->value;
+                    $hasItemsByRef = count($this->getItemsByRef($nestedList->items)) > 0;
+                    return $hasItemsByRef ? $item : null;
+                }
+                return $item->value instanceof Variable && $item->byRef ? $item : null;
+            },
+            $items
+        ));
     }
 
     /**
+     * @param (string|int)[] $nestedKeys
      * @param string|int $dimValue
      */
     private function createAssignRefWithArrayDimFetch(
         Variable $assignVariable,
         Variable $exprVariable,
+        array $nestedKeys,
         $dimValue
     ): AssignRef {
+        $nestedExprVariable = $exprVariable;
+        foreach ($nestedKeys as $nestedKey) {
+            $nestedKeyDim = BuilderHelpers::normalizeValue($nestedKey);
+            $nestedExprVariable = new ArrayDimFetch($nestedExprVariable, $nestedKeyDim);
+        }
         $dim = BuilderHelpers::normalizeValue($dimValue);
-        $arrayDimFetch = new ArrayDimFetch($exprVariable, $dim);
+        $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
         return new AssignRef($assignVariable, $arrayDimFetch);
     }
 }
