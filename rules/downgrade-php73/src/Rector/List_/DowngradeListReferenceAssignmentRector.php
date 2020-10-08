@@ -183,6 +183,7 @@ CODE_SAMPLE
         $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
         return new AssignRef($assignVariable, $arrayDimFetch);
     }
+
     /**
      * Indicates if there is at least 1 item passed by reference, as in:
      * - list(&$a, $b)
