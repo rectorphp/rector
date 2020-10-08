@@ -26,9 +26,11 @@ final class DowngradeListReferenceAssignmentRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Convert `list()` reference assignment to PHP 7.2 code: `list($a, &$b) = $array;` => `list($a, $b) = $array; $b =& $array[1];`', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Convert `list()` reference assignment to PHP 7.2 code: `list($a, &$b) = $array;` => `list($a, $b) = $array; $b =& $array[1];`',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($string)
@@ -40,8 +42,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($string)
@@ -56,8 +58,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     /**
@@ -69,7 +72,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param List_ $node
+     * @param List_|Array_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -83,7 +86,6 @@ CODE_SAMPLE
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         /** @var Variable */
         $exprVariable = $parentNode->expr;
-        // dump($assignExpr);die;
         // Their position is kept in the array
         $newNodes = [];
         foreach ($itemsByRef as $position => $itemByRef) {
@@ -99,19 +101,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param string|int $dimValue
-     */
-    private function createAssignRefWithArrayDimFetch(
-        Variable $assignVariable,
-        Variable $exprVariable,
-        $dimValue
-    ): AssignRef {
-        $dim = BuilderHelpers::normalizeValue($dimValue);
-        $arrayDimFetch = new ArrayDimFetch($exprVariable, $dim);
-        return new AssignRef($assignVariable, $arrayDimFetch);
-    }
-
-    /**
      * @param List_|Array_ $node
      */
     private function shouldRefactor(Node $node): bool
@@ -119,9 +108,9 @@ CODE_SAMPLE
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         // Check it follows `list(...) = $foo`
-        if ($parentNode instanceof Assign && $parentNode->expr instanceof Variable && $parentNode->var === $node) {
+        if ($parentNode instanceof Assign && $parentNode->var === $node && $parentNode->expr instanceof Variable) {
             // There must be at least one param by reference
-            return !empty($this->getItemsByRef($node));
+            return ! empty($this->getItemsByRef($node));
         }
 
         return false;
@@ -139,5 +128,18 @@ CODE_SAMPLE
                 return $item->value instanceof Variable && $item->byRef;
             }
         );
+    }
+
+    /**
+     * @param string|int $dimValue
+     */
+    private function createAssignRefWithArrayDimFetch(
+        Variable $assignVariable,
+        Variable $exprVariable,
+        $dimValue
+    ): AssignRef {
+        $dim = BuilderHelpers::normalizeValue($dimValue);
+        $arrayDimFetch = new ArrayDimFetch($exprVariable, $dim);
+        return new AssignRef($assignVariable, $arrayDimFetch);
     }
 }
