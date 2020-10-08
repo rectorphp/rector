@@ -123,7 +123,7 @@ CODE_SAMPLE
     private function getItemsByRef(Node $node): array
     {
         /** @var ArrayItem[] */
-        $itemsByRef = array_filter(
+        return array_filter(
             $node->items,
             /**
              * @var ArrayItem|null $item
@@ -135,7 +135,6 @@ CODE_SAMPLE
                 return $item->value instanceof Variable && $item->byRef;
             }
         );
-        return $itemsByRef;
     }
 
     /**
