@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -129,7 +130,7 @@ CODE_SAMPLE
             }
             // Access the array under the key, if provided, or the position otherwise
             $key = $position;
-            if ($listItem->key !== null && $listItem->key instanceof String_) {
+            if ($listItem->key !== null && ($listItem->key instanceof String_ || $listItem->key instanceof LNumber)) {
                 $key = $listItem->key->value;
             }
             // Either the item is a variable, or a nested list

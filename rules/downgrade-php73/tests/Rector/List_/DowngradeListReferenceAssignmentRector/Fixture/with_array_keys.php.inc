@@ -8,6 +8,9 @@ class WithArrayKeysClass
     {
         $array = ['a' => 1, 'b' => 2];
         list('a' => $a, 'b' => &$b) = $array;
+
+        $array = [0 => 1, 3 => 2];
+        list(0 => $a, 3 => &$b) = $array;
     }
 }
 
@@ -24,6 +27,10 @@ class WithArrayKeysClass
         $array = ['a' => 1, 'b' => 2];
         list('a' => $a, 'b' => $b) = $array;
         $b =& $array['b'];
+
+        $array = [0 => 1, 3 => 2];
+        list(0 => $a, 3 => $b) = $array;
+        $b =& $array[3];
     }
 }
 

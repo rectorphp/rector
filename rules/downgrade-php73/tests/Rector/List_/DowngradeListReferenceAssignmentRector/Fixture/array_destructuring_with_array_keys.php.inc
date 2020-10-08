@@ -8,6 +8,9 @@ class ArrayDestructuringWithArrayKeysClass
     {
         $array = ['a' => 1, 'b' => 2];
         ['a' => $a, 'b' => &$b] = $array;
+
+        $array = [3 => 1, 5 => 2];
+        [3 => $a, 5 => &$b] = $array;
     }
 }
 
@@ -24,6 +27,10 @@ class ArrayDestructuringWithArrayKeysClass
         $array = ['a' => 1, 'b' => 2];
         ['a' => $a, 'b' => $b] = $array;
         $b =& $array['b'];
+
+        $array = [3 => 1, 5 => 2];
+        [3 => $a, 5 => $b] = $array;
+        $b =& $array[5];
     }
 }
 
