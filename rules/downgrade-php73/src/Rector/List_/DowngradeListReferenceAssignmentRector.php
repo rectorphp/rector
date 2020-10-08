@@ -89,7 +89,7 @@ CODE_SAMPLE
         // Their position is kept in the array
         $newNodes = [];
         foreach ($itemsByRef as $position => $itemByRef) {
-            $node->items[$position]->byRef = false;
+            $itemByRef->byRef = false;
             // Assign the value by reference on a new assignment
             /** @var Variable */
             $itemVariable = $itemByRef->value;
@@ -110,7 +110,7 @@ CODE_SAMPLE
         // Check it follows `list(...) = $foo`
         if ($parentNode instanceof Assign && $parentNode->var === $node && $parentNode->expr instanceof Variable) {
             // There must be at least one param by reference
-            return ! empty($this->getItemsByRef($node));
+            return count($this->getItemsByRef($node)) > 0;
         }
 
         return false;
@@ -122,12 +122,20 @@ CODE_SAMPLE
      */
     private function getItemsByRef(Node $node): array
     {
-        return array_filter(
+        /** @var ArrayItem[] */
+        $itemsByRef = array_filter(
             $node->items,
-            function (ArrayItem $item): bool {
+            /**
+             * @var ArrayItem|null $item
+             */
+            function ($item): bool {
+                if ($item === null) {
+                    return false;
+                }
                 return $item->value instanceof Variable && $item->byRef;
             }
         );
+        return $itemsByRef;
     }
 
     /**
