@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp73\Rector\List_;
 use PhpParser\Node;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\ArrayItem;
@@ -64,7 +65,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [List_::class];
+        return [List_::class, Array_::class];
     }
 
     /**
@@ -111,7 +112,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param List_ $node
+     * @param List_|Array_ $node
      */
     private function shouldRefactor(Node $node): bool
     {
@@ -127,7 +128,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param List_ $node
+     * @param List_|Array_ $node
      * @return ArrayItem[] It maintains the same keys from the original
      */
     private function getItemsByRef(Node $node): array
