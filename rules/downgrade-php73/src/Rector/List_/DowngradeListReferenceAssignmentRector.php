@@ -98,19 +98,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param string|int $dimValue
-     */
-    private function createAssignRefWithArrayDimFetch(
-        Variable $assignVariable,
-        Variable $exprVariable,
-        $dimValue
-    ): AssignRef {
-        $dim = BuilderHelpers::normalizeValue($dimValue);
-        $arrayDimFetch = new ArrayDimFetch($exprVariable, $dim);
-        return new AssignRef($assignVariable, $arrayDimFetch);
-    }
-
-    /**
      * @param List_ $node
      */
     private function shouldRefactor(Node $node): bool
@@ -128,7 +115,7 @@ CODE_SAMPLE
 
     /**
      * @param List_ $node
-     * @return ArrayItem[] It maintains the same keys from the original
+     * @return ArrayItem[]|null[] It maintains the same keys from the original
      */
     private function getItemsByRef(Node $node): array
     {
@@ -138,5 +125,17 @@ CODE_SAMPLE
                 return $item->value instanceof Variable && $item->byRef;
             }
         );
+    }
+    /**
+     * @param string|int $dimValue
+     */
+    private function createAssignRefWithArrayDimFetch(
+        Variable $assignVariable,
+        Variable $exprVariable,
+        $dimValue
+    ): AssignRef {
+        $dim = BuilderHelpers::normalizeValue($dimValue);
+        $arrayDimFetch = new ArrayDimFetch($exprVariable, $dim);
+        return new AssignRef($assignVariable, $arrayDimFetch);
     }
 }
