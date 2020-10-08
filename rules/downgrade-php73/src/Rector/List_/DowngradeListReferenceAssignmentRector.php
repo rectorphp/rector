@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp73\Rector\List_;
 
-use PhpParser\Node;
 use PhpParser\BuilderHelpers;
-use PhpParser\Node\Expr\List_;
+use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\AssignRef;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://wiki.php.net/rfc/list_reference_assignment
@@ -97,8 +97,11 @@ CODE_SAMPLE
      * @param (int|string)[] $nestedArrayIndexes
      * @return AssignRef[]
      */
-    public function createAssignRefArrayFromListReferences(array $listItems, Variable $exprVariable, array $nestedArrayIndexes): array
-    {
+    public function createAssignRefArrayFromListReferences(
+        array $listItems,
+        Variable $exprVariable,
+        array $nestedArrayIndexes
+    ): array {
         // Their position is kept in the array
         $newNodes = [];
         foreach ($listItems as $position => $listItem) {
@@ -106,7 +109,7 @@ CODE_SAMPLE
                 continue;
             }
             // If it's a variable by value, not by reference, then skip
-            if ($listItem->value instanceof Variable && !$listItem->byRef) {
+            if ($listItem->value instanceof Variable && ! $listItem->byRef) {
                 continue;
             }
             // Access the array under the key, if provided, or the position otherwise
@@ -122,13 +125,22 @@ CODE_SAMPLE
                 $itemVariable = $listItem->value;
                 // Assign the value by reference on a new assignment
                 $assignVariable = new Variable($itemVariable->name);
-                $newNodes[] = $this->createAssignRefWithArrayDimFetch($assignVariable, $exprVariable, $nestedArrayIndexes, $key);
+                $newNodes[] = $this->createAssignRefWithArrayDimFetch(
+                    $assignVariable,
+                    $exprVariable,
+                    $nestedArrayIndexes,
+                    $key
+                );
             } else {
                 /** @var List_ */
                 $nestedList = $listItem->value;
                 $newNodes = array_merge(
                     $newNodes,
-                    $this->createAssignRefArrayFromListReferences($nestedList->items, $exprVariable, array_merge($nestedArrayIndexes, [$key]))
+                    $this->createAssignRefArrayFromListReferences(
+                        $nestedList->items,
+                        $exprVariable,
+                        array_merge($nestedArrayIndexes, [$key])
+                    )
                 );
             }
         }
