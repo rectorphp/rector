@@ -28,7 +28,7 @@ final class DowngradeListReferenceAssignmentRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Convert `list()` reference assignment to PHP 7.2 code: `list($a, &$b) = $array;` => `list($a, $b) = $array; $b =& $array[1];`',
+            'Convert the list reference assignment to its equivalent PHP 7.2 code',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
