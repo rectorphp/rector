@@ -14,6 +14,11 @@ use Rector\FileSystemRector\FileSystemFileProcessor;
 use ReflectionClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @deprecated Move to
+ * @see \Rector\Core\Testing\PHPUnit\AbstractRectorTestCase with use of
+ * @see \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace node class
+ */
 abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTestCase
 {
     /**

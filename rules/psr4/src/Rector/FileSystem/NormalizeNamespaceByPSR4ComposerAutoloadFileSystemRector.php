@@ -78,12 +78,14 @@ CODE_SAMPLE
 
         /** @var Namespace_|null $namespace */
         $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
-        if ($namespace !== null) {
-            return;
-        }
 
         $expectedNamespace = $this->psr4AutoloadNamespaceMatcher->getExpectedNamespace($nodes[0]);
         if ($expectedNamespace === null) {
+            return;
+        }
+
+        // is namespace and already correctly named?
+        if ($namespace && $this->isName($namespace->name, $expectedNamespace)) {
             return;
         }
 
@@ -95,10 +97,14 @@ CODE_SAMPLE
             }
         }
 
-        $namespace = new Namespace_(new Name($expectedNamespace));
-        $namespace->stmts = $nodes;
-
-        $nodesWithStrictTypesThenNamespace[] = $namespace;
+        if ($namespace === null) {
+            $namespace = new Namespace_(new Name($expectedNamespace));
+            $namespace->stmts = $nodes;
+            $nodesWithStrictTypesThenNamespace[] = $namespace;
+        } else {
+            $namespace->name = new Name($expectedNamespace);
+            $nodesWithStrictTypesThenNamespace = [$namespace];
+        }
 
         $nodesWithFileDestination = new NodesWithFileDestination(
             $nodesWithStrictTypesThenNamespace,

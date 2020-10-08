@@ -23,6 +23,19 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRectorTest extends
         );
     }
 
+    public function testNamespaceCorrection(): void
+    {
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/wrong_namespace.php.inc');
+        $this->doTestFileInfo($fixtureFileInfo);
+
+        $this->assertFileExists($this->getFixtureTempDirectory() . '/Fixture/wrong_namespace.php.inc');
+
+        $this->assertFileEquals(
+            __DIR__ . '/Source/ExpectedWrongNamespace.php',
+            $this->getFixtureTempDirectory() . '/Fixture/wrong_namespace.php.inc'
+        );
+    }
+
     protected function provideConfigFileInfo(): SmartFileInfo
     {
         return new SmartFileInfo(__DIR__ . '/config/normalize_namespace_without_namespace_config.php');
