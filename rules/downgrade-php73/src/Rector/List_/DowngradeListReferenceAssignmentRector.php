@@ -93,11 +93,26 @@ CODE_SAMPLE
     }
 
     /**
+     * @param List_|Array_ $node
+     */
+    private function shouldRefactor(Node $node): bool
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        // Check it follows `list(...) = $foo`
+        if ($parentNode instanceof Assign && $parentNode->var === $node && $parentNode->expr instanceof Variable) {
+            return $this->hasItemByRef($node->items);
+        }
+
+        return false;
+    }
+
+    /**
      * @param (ArrayItem|null)[] $listItems
      * @param (int|string)[] $nestedArrayIndexes
      * @return AssignRef[]
      */
-    public function createAssignRefArrayFromListReferences(
+    private function createAssignRefArrayFromListReferences(
         array $listItems,
         Variable $exprVariable,
         array $nestedArrayIndexes
@@ -149,42 +164,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param List_|Array_ $node
-     */
-    private function shouldRefactor(Node $node): bool
-    {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        // Check it follows `list(...) = $foo`
-        if ($parentNode instanceof Assign && $parentNode->var === $node && $parentNode->expr instanceof Variable) {
-            return $this->hasItemByRef($node->items);
-        }
-
-        return false;
-    }
-
-    /**
-     * Re-build the path to the variable with all accumulated indexes
-     * @param (string|int)[] $nestedArrayIndexes The path to build nested lists
-     * @param string|int $arrayIndex
-     */
-    private function createAssignRefWithArrayDimFetch(
-        Variable $assignVariable,
-        Variable $exprVariable,
-        array $nestedArrayIndexes,
-        $arrayIndex
-    ): AssignRef {
-        $nestedExprVariable = $exprVariable;
-        foreach ($nestedArrayIndexes as $nestedArrayIndex) {
-            $nestedArrayIndexDim = BuilderHelpers::normalizeValue($nestedArrayIndex);
-            $nestedExprVariable = new ArrayDimFetch($nestedExprVariable, $nestedArrayIndexDim);
-        }
-        $dim = BuilderHelpers::normalizeValue($arrayIndex);
-        $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
-        return new AssignRef($assignVariable, $arrayDimFetch);
-    }
-
-    /**
      * Indicates if there is at least 1 item passed by reference, as in:
      * - list(&$a, $b)
      * - list($a, $b, list(&$c, $d))
@@ -215,5 +194,26 @@ CODE_SAMPLE
             $items
         ));
         return count($filteredItemsByRef) > 0;
+    }
+
+    /**
+     * Re-build the path to the variable with all accumulated indexes
+     * @param (string|int)[] $nestedArrayIndexes The path to build nested lists
+     * @param string|int $arrayIndex
+     */
+    private function createAssignRefWithArrayDimFetch(
+        Variable $assignVariable,
+        Variable $exprVariable,
+        array $nestedArrayIndexes,
+        $arrayIndex
+    ): AssignRef {
+        $nestedExprVariable = $exprVariable;
+        foreach ($nestedArrayIndexes as $nestedArrayIndex) {
+            $nestedArrayIndexDim = BuilderHelpers::normalizeValue($nestedArrayIndex);
+            $nestedExprVariable = new ArrayDimFetch($nestedExprVariable, $nestedArrayIndexDim);
+        }
+        $dim = BuilderHelpers::normalizeValue($arrayIndex);
+        $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
+        return new AssignRef($assignVariable, $arrayDimFetch);
     }
 }
