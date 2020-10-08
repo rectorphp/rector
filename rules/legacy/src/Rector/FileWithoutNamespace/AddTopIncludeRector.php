@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Legacy\Rector\Include_;
+namespace Rector\Legacy\Rector\FileWithoutNamespace;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
@@ -22,7 +22,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see https://github.com/rectorphp/rector/issues/3679
  *
- * @see \Rector\Legacy\Tests\Rector\Include_\AddTopIncludeRector\AddTopIncludeRectorTest
+ * @see \Rector\Legacy\Tests\Rector\FileWithoutNamespace\AddTopIncludeRector\AddTopIncludeRectorTest
  */
 final class AddTopIncludeRector extends AbstractRector implements ConfigurableRectorInterface
 {

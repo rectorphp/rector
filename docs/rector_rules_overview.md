@@ -6953,8 +6953,8 @@ Change static `validate()` method to `$request->validate()`
 
 ### `AddTopIncludeRector`
 
-- class: [`Rector\Legacy\Rector\Include_\AddTopIncludeRector`](/rules/legacy/src/Rector/Include_/AddTopIncludeRector.php)
-- [test fixtures](/rules/legacy/tests/Rector/Include_/AddTopIncludeRector/Fixture)
+- class: [`Rector\Legacy\Rector\FileWithoutNamespace\AddTopIncludeRector`](/rules/legacy/src/Rector/FileWithoutNamespace/AddTopIncludeRector.php)
+- [test fixtures](/rules/legacy/tests/Rector/FileWithoutNamespace/AddTopIncludeRector/Fixture)
 
 Adds an include file at the top of matching files, except class definitions
 
@@ -6963,7 +6963,7 @@ Adds an include file at the top of matching files, except class definitions
 
 declare(strict_types=1);
 
-use Rector\Legacy\Rector\Include_\AddTopIncludeRector;
+use Rector\Legacy\Rector\FileWithoutNamespace\AddTopIncludeRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

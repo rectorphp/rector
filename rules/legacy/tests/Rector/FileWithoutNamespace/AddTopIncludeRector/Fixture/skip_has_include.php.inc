@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Legacy\Tests\Rector\Include_\AddTopIncludeRector\Fixture;
+namespace Rector\Legacy\Tests\Rector\FileWithoutNamespace\AddTopIncludeRector\Fixture;
 
 function someFunction() : void
 {

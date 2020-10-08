@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Legacy\Tests\Rector\Include_\AddTopIncludeRector;
+namespace Rector\Legacy\Tests\Rector\FileWithoutNamespace\AddTopIncludeRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Legacy\Rector\Include_\AddTopIncludeRector;
+use Rector\Legacy\Rector\FileWithoutNamespace\AddTopIncludeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddTopIncludeRectorTest extends AbstractRectorTestCase
