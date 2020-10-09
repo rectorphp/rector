@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
 use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 use Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
 use Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector;
@@ -16,4 +17,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeNullCoalescingOperatorRector::class);
     $services->set(DowngradeNumericLiteralSeparatorRector::class);
     $services->set(DowngradeStripTagsCallWithArrayRector::class);
+    $services->set(DowngradeArraySpreadRector::class);
 };
