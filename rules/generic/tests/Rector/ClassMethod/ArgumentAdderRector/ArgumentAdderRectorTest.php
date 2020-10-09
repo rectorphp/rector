@@ -35,6 +35,16 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
         return [
             ArgumentAdderRector::class => [
                 ArgumentAdderRector::ADDED_ARGUMENTS => [
+                    // covers https://github.com/rectorphp/rector/issues/4267
+                    new ArgumentAdder(
+                        SomeContainerBuilder::class,
+                        'sendResetLinkResponse',
+                        0,
+                        'request',
+                        null,
+                        'Illuminate\Http\Illuminate\Http'
+                    ),
+
                     new ArgumentAdder(SomeContainerBuilder::class, 'compile', 0, 'isCompiled', false),
                     new ArgumentAdder(SomeContainerBuilder::class, 'addCompilerPass', 2, 'priority', 0, 'int'),
 
