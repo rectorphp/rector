@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
-
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
 use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
@@ -11,7 +10,6 @@ use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
 use Rector\Nette\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector;
-use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
 use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -24,15 +22,13 @@ use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $containerConfigurator->import(__DIR__ . '/nette-30-dependency-injection.php');
     $containerConfigurator->import(__DIR__ . '/nette-30-return-types.php');
-
     $containerConfigurator->import(__DIR__ . '/nette-30-param-types.php');
 
     $services = $containerConfigurator->services();
 
     $services->set(AddDatePickerToDateControlRector::class);
-
-    $services->set(SetClassWithArgumentToSetFactoryRector::class);
 
     $services->set(ChangeFormArrayAccessToAnnotatedControlVariableRector::class);
 
