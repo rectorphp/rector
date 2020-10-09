@@ -2,31 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\Rector\FileSystem;
+namespace Rector\Restoration\Rector\ClassLike;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
- * @see \Rector\Restoration\Tests\Rector\FileSystem\UpdateFileNameByClassNameFileSystemRector\UpdateFileNameByClassNameFileSystemRectorTest
+ * @see \Rector\Restoration\Tests\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector\UpdateFileNameByClassNameFileSystemRectorTest
  */
-final class UpdateFileNameByClassNameFileSystemRector extends AbstractFileSystemRector
+final class UpdateFileNameByClassNameFileSystemRector extends AbstractRector
 {
     /**
      * @var ClassNaming
      */
     private $classNaming;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, ClassNaming $classNaming)
+    public function __construct(ClassNaming $classNaming)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->classNaming = $classNaming;
     }
 
@@ -51,31 +50,43 @@ CODE_SAMPLE
         ]);
     }
 
-    public function refactor(SmartFileInfo $smartFileInfo): void
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        $nodes = $this->parseFileInfoToNodes($smartFileInfo);
-        $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, ClassLike::class);
-        if ($classLike === null) {
-            return;
-        }
+        return [ClassLike::class];
+    }
 
-        $className = $this->getName($classLike);
+    /**
+     * @param ClassLike $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $className = $this->getName($node);
         if ($className === null) {
-            return;
+            return null;
         }
 
         $classShortName = $this->classNaming->getShortName($className);
         if ($classShortName === null) {
-            return;
+            return null;
+        }
+
+        $smartFileInfo = $node->getAttribute(SmartFileInfo::class);
+        if ($smartFileInfo === null) {
+            return null;
         }
 
         // matches
         if ($classShortName === $smartFileInfo->getBasenameWithoutSuffix()) {
-            return;
+            return null;
         }
 
         // no match → rename file
         $newFileLocation = $smartFileInfo->getPath() . DIRECTORY_SEPARATOR . $classShortName . '.php';
         $this->moveFile($smartFileInfo, $newFileLocation);
+
+        return null;
     }
 }

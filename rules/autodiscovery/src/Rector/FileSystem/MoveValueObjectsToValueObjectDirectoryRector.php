@@ -141,6 +141,10 @@ CODE_SAMPLE
             'ValueObject'
         );
 
+        if ($nodesWithFileDestination === null) {
+            return;
+        }
+
         $this->processNodesWithFileDestination($nodesWithFileDestination);
     }
 

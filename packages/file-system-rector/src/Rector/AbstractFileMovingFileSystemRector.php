@@ -22,13 +22,8 @@ abstract class AbstractFileMovingFileSystemRector extends AbstractFileSystemRect
         $this->fileMover = $fileMover;
     }
 
-    protected function processNodesWithFileDestination(?NodesWithFileDestination $nodesWithFileDestination): void
+    protected function processNodesWithFileDestination(NodesWithFileDestination $nodesWithFileDestination): void
     {
-        // nothing to move
-        if ($nodesWithFileDestination === null) {
-            return;
-        }
-
         $this->removeFile($nodesWithFileDestination->getOriginalSmartFileInfo());
 
         $this->addClassRename(

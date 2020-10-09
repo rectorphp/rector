@@ -79,6 +79,9 @@ CODE_SAMPLE
         }
 
         $nodesWithFileDestination = $this->fileMover->createMovedNodesAndFilePath($smartFileInfo, $nodes, 'Contract');
+        if ($nodesWithFileDestination === null) {
+            return;
+        }
 
         $this->processNodesWithFileDestination($nodesWithFileDestination);
     }

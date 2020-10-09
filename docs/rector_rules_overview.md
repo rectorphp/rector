@@ -13839,7 +13839,7 @@ Restore accidentally shortened class names to its fully qualified form.
 
 ### `UpdateFileNameByClassNameFileSystemRector`
 
-- class: [`Rector\Restoration\Rector\FileSystem\UpdateFileNameByClassNameFileSystemRector`](/rules/restoration/src/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector.php)
+- class: [`Rector\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector`](/rules/restoration/src/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector.php)
 - [test fixtures](/rules/restoration/tests/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector/Fixture)
 
 Rename file to respect class name

@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Php\Regex\RegexPatternArgumentManipulator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -38,11 +37,8 @@ final class RegexDashEscapeRector extends AbstractRector
      */
     private $regexPatternArgumentManipulator;
 
-    public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        RegexPatternArgumentManipulator $regexPatternArgumentManipulator
-    ) {
-        $this->betterNodeFinder = $betterNodeFinder;
+    public function __construct(RegexPatternArgumentManipulator $regexPatternArgumentManipulator)
+    {
         $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
     }
 
