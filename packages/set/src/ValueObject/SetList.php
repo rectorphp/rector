@@ -319,6 +319,21 @@ final class SetList
     /**
      * @var string
      */
+    public const NETTE_30_PARAM_TYPES = __DIR__ . '/../../../../config/set/nette-30-param-types.php';
+
+    /**
+     * @var string
+     */
+    public const NETTE_30_RETURN_TYPES = __DIR__ . '/../../../../config/set/nette-30-return-types.php';
+
+    /**
+     * @var string
+     */
+    public const NETTE_30_DEPENDENCY_INJECTION = __DIR__ . '/../../../../config/set/nette-30-dependency-injection.php';
+
+    /**
+     * @var string
+     */
     public const NETTE_CODE_QUALITY = __DIR__ . '/../../../../config/set/nette-code-quality.php';
 
     /**
