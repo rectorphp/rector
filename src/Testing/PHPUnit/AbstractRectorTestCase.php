@@ -56,7 +56,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->originalTempFileInfo = $inputFileInfo;
 
         // runnable?
-        if (Strings::contains($inputFileInfo->getContents(), RunnableInterface::class)) {
+        if (file_exists($inputFileInfo->getPathname()) && Strings::contains(
+            $inputFileInfo->getContents(),
+            RunnableInterface::class
+        )) {
             $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
         }
     }
@@ -91,6 +94,14 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     protected function getFixtureTempDirectory(): string
     {
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
+    }
+
+    protected function doTestFileIsDeleted(SmartFileInfo $smartFileInfo): void
+    {
+        $this->doTestFileInfo($smartFileInfo);
+
+        //$temporaryFilePath = $this->getFixtureTempDirectory() . '/SomeFactoryInterface.php';
+        $this->assertFileMissing($this->originalTempFileInfo->getPathname());
     }
 
     private function doTestFileMatchesExpectedContent(

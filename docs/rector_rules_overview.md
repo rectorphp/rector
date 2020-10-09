@@ -8559,7 +8559,7 @@ Rename "*.phpt" file to "*Test.php" file
 
 ### `DeleteFactoryInterfaceRector`
 
-- class: [`Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector`](/rules/nette-to-symfony/src/Rector/FileSystem/DeleteFactoryInterfaceRector.php)
+- class: [`Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector`](/rules/nette-to-symfony/src/Rector/FileSystem/DeleteFactoryInterfaceRector.php)
 
 Interface factories are not needed in Symfony. Clear constructor injection is used instead
 

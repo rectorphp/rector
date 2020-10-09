@@ -53,7 +53,6 @@ final class RemoveProjectFileRector extends AbstractFileSystemRector implements 
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-
 CODE_SAMPLE
                 ,
                 [

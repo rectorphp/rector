@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Rector\FileSystem;
+namespace Rector\NetteToSymfony\Rector\Interface_;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\NetteToSymfony\Analyzer\NetteControlFactoryInterfaceAnalyzer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @see \Rector\NetteToSymfony\Tests\Rector\FIleSystem\DeleteFactoryInterfaceRector\DeleteFactoryInterfaceFileSystemRectorTest
+ * @see \Rector\NetteToSymfony\Tests\Rector\Interface_\DeleteFactoryInterfaceRector\DeleteFactoryInterfaceFileSystemRectorTest
  */
-final class DeleteFactoryInterfaceRector extends AbstractFileSystemRector
+final class DeleteFactoryInterfaceRector extends AbstractRector
 {
     /**
      * @var NetteControlFactoryInterfaceAnalyzer
@@ -45,20 +46,27 @@ CODE_SAMPLE
         );
     }
 
-    public function refactor(SmartFileInfo $smartFileInfo): void
+    public function getNodeTypes(): array
     {
-        $nodes = $this->parseFileInfoToNodes($smartFileInfo);
+        return [Interface_::class];
+    }
 
-        /** @var Interface_|null $interface */
-        $interface = $this->betterNodeFinder->findFirstInstanceOf($nodes, Interface_::class);
-        if ($interface === null) {
-            return;
+    /**
+     * @param Interface_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $smartFileInfo = $node->getAttribute(SmartFileInfo::class);
+        if ($smartFileInfo === null) {
+            return null;
         }
 
-        if (! $this->netteControlFactoryInterfaceAnalyzer->isComponentFactoryInterface($interface)) {
-            return;
+        if (! $this->netteControlFactoryInterfaceAnalyzer->isComponentFactoryInterface($node)) {
+            return null;
         }
 
         $this->removeFile($smartFileInfo);
+
+        return null;
     }
 }

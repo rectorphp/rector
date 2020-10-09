@@ -8,7 +8,7 @@ use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
 use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector;
-use Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector;
+use Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector;
 use Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector;
 use Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
