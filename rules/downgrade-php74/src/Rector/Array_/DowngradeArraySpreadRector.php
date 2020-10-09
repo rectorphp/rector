@@ -47,6 +47,11 @@ class SomeClass
         $parts = ['apple', 'pear'];
         $fruits = ['banana', 'orange', ...$parts, 'watermelon'];
     }
+
+    public function runWithIterable()
+    {
+        $fruits = ['banana', 'orange', ...new ArrayIterator(['durian', 'kiwi']), 'watermelon'];
+    }
 }
 CODE_SAMPLE
                 ,
@@ -57,6 +62,12 @@ class SomeClass
     {
         $parts = ['apple', 'pear'];
         $fruits = array_merge(['banana', 'orange'], $parts, ['watermelon']);
+    }
+
+    public function runWithIterable()
+    {
+        $item0Unpacked = new ArrayIterator(['durian', 'kiwi']);
+        $fruits = array_merge(['banana', 'orange'], is_array($item0Unpacked) ? $item0Unpacked : iterator_to_array($item0Unpacked), ['watermelon']);
     }
 }
 CODE_SAMPLE
