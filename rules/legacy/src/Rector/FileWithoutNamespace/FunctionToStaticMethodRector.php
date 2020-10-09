@@ -118,7 +118,7 @@ CODE_SAMPLE
     /**
      * @param Node[] $stmts
      * @param Function_[] $functions
-     * @return \Rector\Legacy\ValueObject\FunctionToStaticCall[]
+     * @return FunctionToStaticCall[]
      */
     private function resolveFunctionsToStaticCalls(array $stmts, string $shortClassName, array $functions): array
     {
@@ -137,6 +137,7 @@ CODE_SAMPLE
 
         return $functionsToStaticCalls;
     }
+
     /**
      * @param Node[] $stmts
      * @param FunctionToStaticCall[] $functionsToStaticCalls
@@ -183,6 +184,7 @@ CODE_SAMPLE
         $nodesToPrint = $this->resolveNodeToPrint($node, $class);
         $this->printNodesToFilePath($nodesToPrint, $classFileDestination);
     }
+
     /**
      * @param Namespace_|FileWithoutNamespace $node
      * @return Namespace_|Class_
