@@ -1,4 +1,4 @@
-# All 586 Rectors Overview
+# All 588 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -18,7 +18,7 @@
 - [DowngradePhp71](#downgradephp71) (3)
 - [DowngradePhp72](#downgradephp72) (2)
 - [DowngradePhp73](#downgradephp73) (1)
-- [DowngradePhp74](#downgradephp74) (5)
+- [DowngradePhp74](#downgradephp74) (6)
 - [DowngradePhp80](#downgradephp80) (6)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
@@ -31,7 +31,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (11)
-- [Nette](#nette) (16)
+- [Nette](#nette) (17)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -4906,6 +4906,34 @@ Replace arrow functions with anonymous functions
 
 <br><br>
 
+### `DowngradeArraySpreadRector`
+
+- class: [`Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector`](/rules/downgrade-php74/src/Rector/Array_/DowngradeArraySpreadRector.php)
+- [test fixtures](/rules/downgrade-php74/tests/Rector/Array_/DowngradeArraySpreadRector/Fixture)
+
+Replace array spread with `array_merge` function
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $parts = ['apple', 'pear'];
+-        $fruits = ['banana', 'orange', ...$parts, 'watermelon'];
++        $fruits = array_merge(['banana', 'orange'], $parts, ['watermelon']);
+     }
+
+     public function runWithIterable()
+     {
+-        $fruits = ['banana', 'orange', ...new ArrayIterator(['durian', 'kiwi']), 'watermelon'];
++        $item0Unpacked = new ArrayIterator(['durian', 'kiwi']);
++        $fruits = array_merge(['banana', 'orange'], is_array($item0Unpacked) ? $item0Unpacked : iterator_to_array($item0Unpacked), ['watermelon']);
+     }
+ }
+```
+
+<br><br>
+
 ### `DowngradeNullCoalescingOperatorRector`
 
 - class: [`Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector`](/rules/downgrade-php74/src/Rector/Coalesce/DowngradeNullCoalescingOperatorRector.php)
@@ -8045,6 +8073,28 @@ Use `Nette\Utils\Strings` over bare `preg_match()` and `preg_match_all()` functi
          $content = 'Hi my name is Tom';
 -        preg_match('#Hi#', $content, $matches);
 +        $matches = Strings::match($content, '#Hi#');
+     }
+ }
+```
+
+<br><br>
+
+### `RequestGetCookieDefaultArgumentToCoalesceRector`
+
+- class: [`Rector\Nette\Rector\MethodCall\RequestGetCookieDefaultArgumentToCoalesceRector`](/rules/nette/src/Rector/MethodCall/RequestGetCookieDefaultArgumentToCoalesceRector.php)
+- [test fixtures](/rules/nette/tests/Rector/MethodCall/RequestGetCookieDefaultArgumentToCoalesceRector/Fixture)
+
+Add removed `Nette\Http\Request::getCookies()` default value as coalesce
+
+```diff
+ use Nette\Http\Request;
+
+ class SomeClass
+ {
+     public function run(Request $request)
+     {
+-        return $request->getCookie('name', 'default');
++        return $request->getCookie('name') ?? 'default';
      }
  }
 ```
