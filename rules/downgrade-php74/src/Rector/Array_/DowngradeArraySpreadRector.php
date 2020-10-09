@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp74\Rector\Array_;
 
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -15,6 +16,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantArrayType;
+use Rector\Core\Comments\CommentableNodeResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -31,9 +33,15 @@ final class DowngradeArraySpreadRector extends AbstractRector
      */
     private $variableNaming;
 
-    public function __construct(VariableNaming $variableNaming)
+    /**
+     * @var CommentableNodeResolver
+     */
+    private $commentableNodeResolver;
+
+    public function __construct(VariableNaming $variableNaming, CommentableNodeResolver $commentableNodeResolver)
     {
         $this->variableNaming = $variableNaming;
+        $this->commentableNodeResolver = $commentableNodeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -114,6 +122,7 @@ CODE_SAMPLE
         $newItems = [];
         $accumulatedItems = [];
         $variableNames = [];
+        $hasNonVariables = false;
         foreach ($array->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
@@ -124,6 +133,7 @@ CODE_SAMPLE
                 } else {
                     // If it is a not variable, transform it to a variable
                     $item->value = $this->createVariableFromNonVariable($array, $item, $position);
+                    $hasNonVariables = true;
                 }
                 if ($accumulatedItems !== []) {
                     // If previous items were in the new array, add them first
@@ -144,7 +154,13 @@ CODE_SAMPLE
             $newItems[] = $this->createArrayItem($accumulatedItems);
         }
         // Replace this array node with an `array_merge`
-        return $this->createArrayMerge($array, $newItems, $variableNames);
+        $newNode = $this->createArrayMerge($array, $newItems, $variableNames);
+        if ($hasNonVariables) {
+            $commentableNode = $this->commentableNodeResolver->resolve($newNode);
+            $commentableNode->setAttribute(AttributeKey::COMMENTS, [new Comment('/** @phpstan-ignore-next-line */')]);
+            // $this->addComment($newNode, '/** @phpstan-ignore-next-line */');
+        }
+        return $newNode;
     }
 
     /**
@@ -200,14 +216,13 @@ CODE_SAMPLE
                 // By now every item is a variable
                 /** @var Variable */
                 $variable = $item->value;
+                $variableName = $this->getName($variable) ?? '';
                 // If we know it is an array, then print it directly
                 // Otherwise PHPStan throws an error:
                 // "Else branch is unreachable because ternary operator condition is always true."
-                if (in_array($variable->name, $variableNames, true) && $nodeScope->hasVariableType(
-                    $variable->name
-                )->yes() && $nodeScope->getVariableType(
-                    $variable->name
-                ) instanceof ConstantArrayType) {
+                if (in_array($variableName, $variableNames, true) && $nodeScope->hasVariableType(
+                    $variableName
+                )->yes() && $nodeScope->getVariableType($variableName) instanceof ConstantArrayType) {
                     return new Arg($item);
                 }
                 // Print a ternary, handling either an array or an iterator
