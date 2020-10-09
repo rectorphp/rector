@@ -1,4 +1,4 @@
-# All 585 Rectors Overview
+# All 586 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -17,6 +17,7 @@
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [DowngradePhp71](#downgradephp71) (3)
 - [DowngradePhp72](#downgradephp72) (2)
+- [DowngradePhp73](#downgradephp73) (1)
 - [DowngradePhp74](#downgradephp74) (5)
 - [DowngradePhp80](#downgradephp80) (6)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
@@ -4850,6 +4851,36 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br><br>
 
+## DowngradePhp73
+
+### `DowngradeListReferenceAssignmentRector`
+
+- class: [`Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector`](/rules/downgrade-php73/src/Rector/List_/DowngradeListReferenceAssignmentRector.php)
+- [test fixtures](/rules/downgrade-php73/tests/Rector/List_/DowngradeListReferenceAssignmentRector/Fixture)
+
+Convert the list reference assignment to its equivalent PHP 7.2 code
+
+```diff
+ class SomeClass
+ {
+     public function run($string)
+     {
+-        $array = [1, 2, 3];
+-        list($a, &$b) = $array;
++        $array = [1, 2];
++        list($a, $b) = $array;
++        $b =& $array[1];
+
+-        [&$c, $d, &$e] = $array;
++        [$c, $d, $e] = $array;
++        $c =& $array[0];
++        $e =& $array[2];
+     }
+ }
+```
+
+<br><br>
+
 ## DowngradePhp74
 
 ### `ArrowFunctionToAnonymousFunctionRector`
@@ -7021,7 +7052,8 @@ Change singleton class to normal class that can be registered as a service
 
 ### `FunctionToStaticMethodRector`
 
-- class: [`Rector\Legacy\Rector\FileSystem\FunctionToStaticMethodRector`](/rules/legacy/src/Rector/FileSystem/FunctionToStaticMethodRector.php)
+- class: [`Rector\Legacy\Rector\FileWithoutNamespace\FunctionToStaticMethodRector`](/rules/legacy/src/Rector/FileWithoutNamespace/FunctionToStaticMethodRector.php)
+- [test fixtures](/rules/legacy/tests/Rector/FileWithoutNamespace/FunctionToStaticMethodRector/Fixture)
 
 Change functions to static calls, so composer can autoload them
 

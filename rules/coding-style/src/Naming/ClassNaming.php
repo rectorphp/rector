@@ -9,12 +9,19 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ClassNaming
 {
+    /**
+     * @see https://regex101.com/r/8BdrI3/1
+     * @var string
+     */
+    private const INPUT_HASH_NAMING_REGEX = '#input_(.*?)_#';
+
     /**
      * @var NodeNameResolver
      */
@@ -61,6 +68,11 @@ final class ClassNaming
     public function getNameFromFileInfo(SmartFileInfo $smartFileInfo): string
     {
         $basenameWithoutSuffix = $smartFileInfo->getBasenameWithoutSuffix();
+
+        // remove PHPUnit fixture file prefix
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            $basenameWithoutSuffix = Strings::replace($basenameWithoutSuffix, self::INPUT_HASH_NAMING_REGEX);
+        }
 
         return StaticRectorStrings::underscoreToPascalCase($basenameWithoutSuffix);
     }

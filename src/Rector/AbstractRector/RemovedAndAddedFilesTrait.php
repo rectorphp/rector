@@ -37,8 +37,9 @@ trait RemovedAndAddedFilesTrait
      */
     protected function printNodesToFilePath($node, string $fileLocation): void
     {
-        $eventContent = $this->betterStandardPrinter->prettyPrintFile($node);
-        $this->removedAndAddedFilesCollector->addFileWithContent($fileLocation, $eventContent);
+        $fileContent = $this->betterStandardPrinter->prettyPrintFile($node);
+
+        $this->removedAndAddedFilesCollector->addFileWithContent($fileLocation, $fileContent);
     }
 
     protected function moveFile(SmartFileInfo $oldFileInfo, string $newFileLocation, ?string $fileContent = null): void
