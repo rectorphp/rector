@@ -17,6 +17,12 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ClassNaming
 {
     /**
+     * @see https://regex101.com/r/8BdrI3/1
+     * @var string
+     */
+    private const INPUT_HASH_NAMING_REGEX = '#input_(.*?)_#';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -65,7 +71,7 @@ final class ClassNaming
 
         // remove PHPUnit fixture file prefix
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            $basenameWithoutSuffix = Strings::replace($basenameWithoutSuffix, '#input_(.*?)_#');
+            $basenameWithoutSuffix = Strings::replace($basenameWithoutSuffix, self::INPUT_HASH_NAMING_REGEX);
         }
 
         return StaticRectorStrings::underscoreToPascalCase($basenameWithoutSuffix);
