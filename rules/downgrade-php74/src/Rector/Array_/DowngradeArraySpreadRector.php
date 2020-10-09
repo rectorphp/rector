@@ -117,10 +117,12 @@ CODE_SAMPLE
         foreach ($array->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
-                // If it is a not variable, transform it to a variable
                 if ($item->value instanceof Variable) {
+                    // If it is a variable, store the name,
+                    // to print it directly without checking `is_array`
                     $variableNames[] = $item->value->name;
                 } else {
+                    // If it is a not variable, transform it to a variable
                     $item->value = $this->createVariableFromNonVariable($array, $item, $position);
                 }
                 if ($accumulatedItems !== []) {
