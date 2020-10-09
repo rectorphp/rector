@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\SOLID\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
@@ -112,23 +113,21 @@ CODE_SAMPLE
 
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-        $invertedLeftCondition = $this->conditionInverter->createInvertedCondition($expr->left);
-        $invertedRightCondition = $this->conditionInverter->createInvertedCondition($expr->right);
+        $firstIf = $this->createInvertedIfConditionNodeFromExpr($expr->left);
+        $secondIf = $this->createInvertedIfConditionNodeFromExpr($expr->right);
 
-        $firstIf = new If_($invertedLeftCondition);
-        $firstIf->stmts = [new Return_()];
-        $secondIf = new If_($invertedRightCondition);
-        $secondIf->stmts = [new Return_()];
+        $nodeComments = $node->getAttribute(AttributeKey::COMMENTS);
+        $firstIf->setAttribute(AttributeKey::COMMENTS, $nodeComments);
 
-        $this->addNodeAfterNode($firstIf, $node);
-        $this->addNodeAfterNode($secondIf, $node);
-        $this->addNodeAfterNode($ifReturn, $node);
-        $this->removeNode($node);
+        $this->addNodesAfterNode([$firstIf, $secondIf, $ifReturn], $node);
+
 
         $functionLikeReturn = $this->getFunctionLikeReturn($node);
         if ($functionLikeReturn !== null) {
             $this->removeNode($functionLikeReturn);
         }
+
+        $this->removeNode($node);
 
         return null;
     }
@@ -223,5 +222,14 @@ CODE_SAMPLE
             return true;
         }
         return $nextNode instanceof Return_;
+    }
+
+    private function createInvertedIfConditionNodeFromExpr(Expr $expr): If_
+    {
+        $invertedCondition = $this->conditionInverter->createInvertedCondition($expr);
+        $if = new If_($invertedCondition);
+        $if->stmts = [new Return_()];
+
+        return $if;
     }
 }
