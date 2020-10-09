@@ -69,25 +69,25 @@ CODE_SAMPLE
         // 1. If they are the spread, replace with the normal variable
         // 2. If not, make them part of an array
         $newItems = [];
-        $itemArray = [];
+        $accumulatedItems = [];
         foreach ($node->items as $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
                 // If previous items were in the new array, add them first
-                if ($itemArray) {
-                    $newItems[] = new ArrayItem(new Array_($itemArray));
-                    $itemArray = [];
+                if ($accumulatedItems) {
+                    $newItems[] = $this->createArrayItem($accumulatedItems);
+                    $accumulatedItems = [];
                 }
                 // The item still has "unpack = true" here.
                 // It will be removed later on
                 $newItems[] = $item;
             } else {
-                $itemArray[] = $item;
+                $accumulatedItems[] = $item;
             }
         }
         // Add the remaining items from the last run
-        if ($itemArray) {
-            $newItems[] = new ArrayItem(new Array_($itemArray));
+        if ($accumulatedItems) {
+            $newItems[] = $this->createArrayItem($accumulatedItems);
         }
         // Replace this array node with an `array_merge`
         return $this->createArrayMerge($newItems);
@@ -99,6 +99,14 @@ CODE_SAMPLE
         return count(array_filter($node->items, function (?ArrayItem $item) {
             return $item !== null && $item->unpack;
         })) > 0;
+    }
+
+    /**
+     * @param (ArrayItem|null)[] $items
+     */
+    private function createArrayItem(array $items): ArrayItem
+    {
+        return new ArrayItem(new Array_($items));
     }
 
     /**
