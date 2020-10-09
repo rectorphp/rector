@@ -111,6 +111,22 @@ CODE_SAMPLE
         })) > 0;
     }
 
+    private function refactorNode(Array_ $array): Node
+    {
+        $newItems = $this->createArrayItems($array);
+        // If it is a variable, store the name,
+        // to print it directly without checking `is_array`
+        $variableNames = $this->getVariableNames($array);
+        // Replace this array node with an `array_merge`
+        $newNode = $this->createArrayMerge($array, $newItems, $variableNames);
+        if ($this->hasNonVariableArraySpreadItems($array)) {
+            $commentableNode = $this->commentableNodeResolver->resolve($newNode);
+            $commentableNode->setAttribute(AttributeKey::COMMENTS, [new Comment('/** @phpstan-ignore-next-line */')]);
+            // $this->addComment($newNode, '/** @phpstan-ignore-next-line */');
+        }
+        return $newNode;
+    }
+
     /**
      * Iterate all array items:
      * 1. If they use the spread, remove it
@@ -150,27 +166,6 @@ CODE_SAMPLE
         return $newItems;
     }
 
-    private function refactorNode(Array_ $array): Node
-    {
-        $newItems = $this->createArrayItems($array);
-        // If it is a variable, store the name,
-        // to print it directly without checking `is_array`
-        $variableNames = $this->getVariableNames($array);
-        // Replace this array node with an `array_merge`
-        $newNode = $this->createArrayMerge($array, $newItems, $variableNames);
-        if ($this->hasNonVariableArraySpreadItems($array)) {
-            $commentableNode = $this->commentableNodeResolver->resolve($newNode);
-            $commentableNode->setAttribute(AttributeKey::COMMENTS, [new Comment('/** @phpstan-ignore-next-line */')]);
-            // $this->addComment($newNode, '/** @phpstan-ignore-next-line */');
-        }
-        return $newNode;
-    }
-
-    private function hasNonVariableArraySpreadItems(Array_ $array): bool
-    {
-        return count($this->getArraySpreadItems($array, false)) !== count($this->getArraySpreadItems($array, true));
-    }
-
     /**
      * @return string[]
      */
@@ -185,52 +180,6 @@ CODE_SAMPLE
             $this->getArraySpreadItems($array, true)
         );
     }
-
-    /**
-     * @return ArrayItem[]
-     */
-    private function getArraySpreadItems(Array_ $array, bool $onlyVariables): array
-    {
-        return array_filter($array->items, function (ArrayItem $item) use ($onlyVariables): bool {
-            return $item !== null && $item->unpack && (! $onlyVariables || $item->value instanceof Variable);
-        });
-    }
-
-    /**
-     * If it is a variable, we add it directly
-     * Otherwise it could be a function, method, ternary, traversable, etc
-     * We must then first extract it into a variable,
-     * as to invoke it only once and avoid potential bugs,
-     * such as a method executing some side-effect
-     * @param int|string $position
-     */
-    private function createVariableFromNonVariable(Array_ $array, ArrayItem $arrayItem, $position): Variable
-    {
-        /** @var Scope */
-        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
-        // The variable name will be item0Unpacked, item1Unpacked, etc,
-        // depending on their position.
-        // The number can't be at the end of the var name, or it would
-        // conflict with the counter (for if that name is already taken)
-        $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
-            $array,
-            $nodeScope,
-            'item' . $position . 'Unpacked'
-        );
-        // Assign the value to the variable, and replace the element with the variable
-        $newVariable = new Variable($variableName);
-        $this->addNodeBeforeNode(new Assign($newVariable, $arrayItem->value), $array);
-        return $newVariable;
-    }
-
-    /**
-     * @param (ArrayItem|null)[] $items
-     */
-    private function createArrayItem(array $items): ArrayItem
-    {
-        return new ArrayItem(new Array_($items));
-    }
-
     /**
      * @see https://wiki.php.net/rfc/spread_operator_for_array
      * @param (ArrayItem|null)[] $items
@@ -269,5 +218,54 @@ CODE_SAMPLE
             }
             return new Arg($item);
         }, $items));
+    }
+    private function hasNonVariableArraySpreadItems(Array_ $array): bool
+    {
+        return count($this->getArraySpreadItems($array, false)) !== count($this->getArraySpreadItems($array, true));
+    }
+
+    /**
+     * If it is a variable, we add it directly
+     * Otherwise it could be a function, method, ternary, traversable, etc
+     * We must then first extract it into a variable,
+     * as to invoke it only once and avoid potential bugs,
+     * such as a method executing some side-effect
+     * @param int|string $position
+     */
+    private function createVariableFromNonVariable(Array_ $array, ArrayItem $arrayItem, $position): Variable
+    {
+        /** @var Scope */
+        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
+        // The variable name will be item0Unpacked, item1Unpacked, etc,
+        // depending on their position.
+        // The number can't be at the end of the var name, or it would
+        // conflict with the counter (for if that name is already taken)
+        $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
+            $array,
+            $nodeScope,
+            'item' . $position . 'Unpacked'
+        );
+        // Assign the value to the variable, and replace the element with the variable
+        $newVariable = new Variable($variableName);
+        $this->addNodeBeforeNode(new Assign($newVariable, $arrayItem->value), $array);
+        return $newVariable;
+    }
+
+    /**
+     * @param (ArrayItem|null)[] $items
+     */
+    private function createArrayItem(array $items): ArrayItem
+    {
+        return new ArrayItem(new Array_($items));
+    }
+
+    /**
+     * @return ArrayItem[]
+     */
+    private function getArraySpreadItems(Array_ $array, bool $onlyVariables): array
+    {
+        return array_filter($array->items, function (ArrayItem $item) use ($onlyVariables): bool {
+            return $item !== null && $item->unpack && (! $onlyVariables || $item->value instanceof Variable);
+        });
     }
 }
