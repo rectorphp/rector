@@ -117,12 +117,11 @@ CODE_SAMPLE
     }
 
     /**
-      * If it is a variable, we add it directly
-      * Otherwise it could be a function, method, ternary, traversable, etc
-      * We must then first extract it into a variable,
-      * as to invoke it only once and avoid potential bugs,
-      * such as a method executing some side-effect
-     * @param Array_ $node
+     * If it is a variable, we add it directly
+     * Otherwise it could be a function, method, ternary, traversable, etc
+     * We must then first extract it into a variable,
+     * as to invoke it only once and avoid potential bugs,
+     * such as a method executing some side-effect
      * @param int|string $position
      */
     private function createVariableFromNonVariable(Array_ $node, ArrayItem $item, $position): Variable
