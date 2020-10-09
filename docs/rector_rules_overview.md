@@ -236,12 +236,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
-                'ValueObjectInterfaceClassName',
-            ],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
-                'Search',
-            ],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -310,10 +306,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[
-            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects([new ArrayToFluentCall('ArticlesTable', [
-                'foreignKey' => 'setForeignKey',
-                'propertyName' => 'setProperty',
-            ])]),
+            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects(
+                [new ArrayToFluentCall('ArticlesTable', [
+                    'foreignKey' => 'setForeignKey',
+                    'propertyName' => 'setProperty',
+                ])]
+            ),
         ]]);
 };
 ```
@@ -454,12 +452,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'paging',
                     'getAttribute',
                     'ServerRequest'
-                ), new RenameMethodCallBasedOnParameter(
-                    'withParam',
-                    'paging',
-                    'withAttribute',
-                    'ServerRequest'
-                )]
+                ), new RenameMethodCallBasedOnParameter('withParam', 'paging', 'withAttribute', 'ServerRequest')]
             ),
         ]]);
 };
@@ -5737,7 +5730,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
             ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects(
-                [new ArgumentDefaultValueReplacer('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', 'false')]
+                [
+                    new ArgumentDefaultValueReplacer(
+                        'SomeExampleClass',
+                        'someMethod',
+                        0,
+                        'SomeClass::OLD_CONSTANT',
+                        'false'
+                    ),
+                ]
             ),
         ]]);
 };
@@ -7030,10 +7031,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => [
-                'pat*/*/?ame.php',
-                'somepath/?ame.php',
-            ],
+            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
         ]]);
 };
 ```
@@ -9598,7 +9596,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArrayArgumentInTestToDataProviderRector::class)
         ->call('configure', [[
             ArrayArgumentInTestToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => inline_value_objects(
-                [new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number')]
+                [
+                    new ArrayArgumentToDataProvider(
+                        'PHPUnit\Framework\TestCase',
+                        'doTestMultiple',
+                        'doTestSingle',
+                        'number'
+                    ),
+                ]
             ),
         ]]);
 };
@@ -14851,7 +14856,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
+                'SymfonyControllerClassName',
+                'GetTraitClassName',
+            ],
         ]]);
 };
 ```
@@ -15640,7 +15648,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NewToStaticCallRector::class)
         ->call('configure', [[
-            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => inline_value_objects([new NewToStaticCall('Cookie', 'Cookie', 'create')]),
+            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => inline_value_objects(
+                [new NewToStaticCall('Cookie', 'Cookie', 'create')]
+            ),
         ]]);
 };
 ```
