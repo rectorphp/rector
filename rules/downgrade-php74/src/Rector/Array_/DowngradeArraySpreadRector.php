@@ -80,20 +80,26 @@ CODE_SAMPLE
         if (! $this->shouldRefactor($node)) {
             return null;
         }
-        // Iterate all array items:
-        // 1. If they are the spread, replace with the normal variable
-        // 2. If not, make them part of an array
+        return $this->refactorNode($node);
+    }
+
+    /**
+     * Iterate all array items:
+     * 1. If they use the spread, remove it
+     * 2. If not, make the item part of an accumulating array,
+     *    to be added once the next spread is found, or at the end
+     */
+    private function refactorNode(Array_ $node): Node
+    {
         $newItems = [];
         $accumulatedItems = [];
         foreach ($node->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
-                // If it is a variable, we add it directly
-                // Otherwise transform it to a variable
+                // If it is a not variable, transform it to a variable
                 if (! $item->value instanceof Variable) {
                     $item->value = $this->createVariableFromNonVariable($node, $item, $position);
                 }
-
                 if ($accumulatedItems) {
                     // If previous items were in the new array, add them first
                     $newItems[] = $this->createArrayItem($accumulatedItems);
