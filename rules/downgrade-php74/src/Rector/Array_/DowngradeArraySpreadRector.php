@@ -116,14 +116,12 @@ CODE_SAMPLE
      * 1. If they use the spread, remove it
      * 2. If not, make the item part of an accumulating array,
      *    to be added once the next spread is found, or at the end
+     * @return ArrayItem[]
      */
-    private function refactorNode(Array_ $array): Node
+    private function createArrayItems(Array_ $array): array
     {
         $newItems = [];
         $accumulatedItems = [];
-        // If it is a variable, store the name,
-        // to print it directly without checking `is_array`
-        $variableNames = $this->getVariableNames($array);
         foreach ($array->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
@@ -149,6 +147,15 @@ CODE_SAMPLE
         if ($accumulatedItems !== []) {
             $newItems[] = $this->createArrayItem($accumulatedItems);
         }
+        return $newItems;
+    }
+
+    private function refactorNode(Array_ $array): Node
+    {
+        $newItems = $this->createArrayItems($array);
+        // If it is a variable, store the name,
+        // to print it directly without checking `is_array`
+        $variableNames = $this->getVariableNames($array);
         // Replace this array node with an `array_merge`
         $newNode = $this->createArrayMerge($array, $newItems, $variableNames);
         if ($this->hasNonVariableArraySpreadItems($array)) {
