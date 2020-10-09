@@ -174,6 +174,14 @@ CODE_SAMPLE
 
         return $ifStmt;
     }
+    private function createInvertedIfConditionNodeFromExpr(Expr $expr): If_
+    {
+        $invertedCondition = $this->conditionInverter->createInvertedCondition($expr);
+        $if = new If_($invertedCondition);
+        $if->stmts = [new Return_()];
+
+        return $if;
+    }
 
     private function getFunctionLikeReturn(If_ $if): ?Return_
     {
@@ -222,14 +230,5 @@ CODE_SAMPLE
             return true;
         }
         return $nextNode instanceof Return_;
-    }
-
-    private function createInvertedIfConditionNodeFromExpr(Expr $expr): If_
-    {
-        $invertedCondition = $this->conditionInverter->createInvertedCondition($expr);
-        $if = new If_($invertedCondition);
-        $if->stmts = [new Return_()];
-
-        return $if;
     }
 }

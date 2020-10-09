@@ -32,11 +32,14 @@ final class EnabledRectorsProvider
     public function addEnabledRector(string $rector, array $configuration = []): void
     {
         $this->enabledRectorsWithConfiguration[$rector] = $configuration;
-
-        if (StaticPHPUnitEnvironment::isPHPUnitRun() && is_a($rector, RenameClassRector::class, true)) {
-            // only in unit tests
-            $this->changeConfiguration->setOldToNewClasses($configuration[RenameClassRector::OLD_TO_NEW_CLASSES] ?? []);
+        if (!StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            return;
         }
+        if (!is_a($rector, RenameClassRector::class, true)) {
+            return;
+        }
+        // only in unit tests
+        $this->changeConfiguration->setOldToNewClasses($configuration[RenameClassRector::OLD_TO_NEW_CLASSES] ?? []);
     }
 
     public function reset(): void
