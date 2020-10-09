@@ -313,7 +313,7 @@ CODE_SAMPLE
         if ($parentNode->type === null) {
             return;
         }
-        if (!$this->areNamesEqual($parentNode->type, $usedNameNode)) {
+        if (! $this->areNamesEqual($parentNode->type, $usedNameNode)) {
             return;
         }
         $parentNode->type = new Name($lastName);

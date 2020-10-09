@@ -55,13 +55,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
         $this->originalTempFileInfo = $inputFileInfo;
         // runnable?
-        if (!file_exists($inputFileInfo->getPathname())) {
+        if (! file_exists($inputFileInfo->getPathname())) {
             return;
         }
-        if (!Strings::contains(
-            $inputFileInfo->getContents(),
-            RunnableInterface::class
-        )) {
+        if (! Strings::contains($inputFileInfo->getContents(), RunnableInterface::class)) {
             return;
         }
         $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);

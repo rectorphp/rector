@@ -121,7 +121,6 @@ CODE_SAMPLE
 
         $this->addNodesAfterNode([$firstIf, $secondIf, $ifReturn], $node);
 
-
         $functionLikeReturn = $this->getFunctionLikeReturn($node);
         if ($functionLikeReturn !== null) {
             $this->removeNode($functionLikeReturn);
@@ -174,6 +173,7 @@ CODE_SAMPLE
 
         return $ifStmt;
     }
+
     private function createInvertedIfConditionNodeFromExpr(Expr $expr): If_
     {
         $invertedCondition = $this->conditionInverter->createInvertedCondition($expr);
