@@ -73,19 +73,21 @@ CODE_SAMPLE
         foreach ($node->items as $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
-                // If previous items were in the new array, add them first
                 if ($accumulatedItems) {
+                    // If previous items were in the new array, add them first
                     $newItems[] = $this->createArrayItem($accumulatedItems);
+                    // Reset the accumulated items
                     $accumulatedItems = [];
                 }
-                // The item still has "unpack = true" here.
-                // It will be removed later on
+                // Add the current item, still with "unpack = true" (it will be removed later on)
                 $newItems[] = $item;
-            } else {
-                $accumulatedItems[] = $item;
+                continue;
             }
+
+            // Normal item, it goes into the accumulated array
+            $accumulatedItems[] = $item;
         }
-        // Add the remaining items from the last run
+        // Add the remaining accumulated items
         if ($accumulatedItems) {
             $newItems[] = $this->createArrayItem($accumulatedItems);
         }
@@ -115,7 +117,7 @@ CODE_SAMPLE
      */
     private function createArrayMerge(array $items): FuncCall
     {
-        return new FuncCall(new Name('array_merge'), array_map(function (?ArrayItem $item) {
+        return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item) {
             if ($item !== null && $item->unpack) {
                 // Do not unpack anymore
                 $item->unpack = false;
