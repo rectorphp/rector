@@ -169,6 +169,11 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const BEFORE_ARRAY_SPREAD = '7.3';
+
+    /**
+     * @var string
+     */
     public const BEFORE_LIST_REFERENCE_ASSIGNMENT = '7.2';
 
     /**
