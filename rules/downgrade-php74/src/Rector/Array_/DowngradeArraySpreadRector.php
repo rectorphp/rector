@@ -161,7 +161,7 @@ CODE_SAMPLE
         if ($this->hasNonVariableArraySpreadItems($array)) {
             $commentableNode = $this->commentableNodeResolver->resolve($newNode);
             $commentableNode->setAttribute(AttributeKey::COMMENTS, [new Comment('/** @phpstan-ignore-next-line */')]);
-        //     // $this->addComment($newNode, '/** @phpstan-ignore-next-line */');
+            // $this->addComment($newNode, '/** @phpstan-ignore-next-line */');
         }
         return $newNode;
     }
@@ -177,7 +177,7 @@ CODE_SAMPLE
     private function getVariableNames(Array_ $array): array
     {
         return array_map(
-            function (ArrayItem $item) : string {
+            function (ArrayItem $item): string {
                 /** @var Variable */
                 $variable = $item->value;
                 return $this->getName($variable) ?? '';
