@@ -82,6 +82,13 @@ CODE_SAMPLE
         }
         return $this->refactorNode($node);
     }
+    private function shouldRefactor(Array_ $array): bool
+    {
+        // Check that any item in the array is the spread
+        return count(array_filter($array->items, function (?ArrayItem $item): bool {
+            return $item !== null && $item->unpack;
+        })) > 0;
+    }
 
     /**
      * Iterate all array items:
@@ -89,18 +96,18 @@ CODE_SAMPLE
      * 2. If not, make the item part of an accumulating array,
      *    to be added once the next spread is found, or at the end
      */
-    private function refactorNode(Array_ $node): Node
+    private function refactorNode(Array_ $array): Node
     {
         $newItems = [];
         $accumulatedItems = [];
-        foreach ($node->items as $position => $item) {
+        foreach ($array->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
                 // If it is a not variable, transform it to a variable
                 if (! $item->value instanceof Variable) {
-                    $item->value = $this->createVariableFromNonVariable($node, $item, $position);
+                    $item->value = $this->createVariableFromNonVariable($array, $item, $position);
                 }
-                if ($accumulatedItems) {
+                if ($accumulatedItems !== []) {
                     // If previous items were in the new array, add them first
                     $newItems[] = $this->createArrayItem($accumulatedItems);
                     // Reset the accumulated items
@@ -115,7 +122,7 @@ CODE_SAMPLE
             $accumulatedItems[] = $item;
         }
         // Add the remaining accumulated items
-        if ($accumulatedItems) {
+        if ($accumulatedItems !== []) {
             $newItems[] = $this->createArrayItem($accumulatedItems);
         }
         // Replace this array node with an `array_merge`
@@ -130,31 +137,23 @@ CODE_SAMPLE
      * such as a method executing some side-effect
      * @param int|string $position
      */
-    private function createVariableFromNonVariable(Array_ $node, ArrayItem $item, $position): Variable
+    private function createVariableFromNonVariable(Array_ $array, ArrayItem $arrayItem, $position): Variable
     {
         /** @var Scope */
-        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
         // The variable name will be item0Unpacked, item1Unpacked, etc,
         // depending on their position.
         // The number can't be at the end of the var name, or it would
         // conflict with the counter (for if that name is already taken)
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
-            $node,
+            $array,
             $nodeScope,
             'item' . $position . 'Unpacked'
         );
         // Assign the value to the variable, and replace the element with the variable
         $newVariable = new Variable($variableName);
-        $this->addNodeBeforeNode(new Assign($newVariable, $item->value), $node);
+        $this->addNodeBeforeNode(new Assign($newVariable, $arrayItem->value), $array);
         return $newVariable;
-    }
-
-    private function shouldRefactor(Array_ $node): bool
-    {
-        // Check that any item in the array is the spread
-        return count(array_filter($node->items, function (?ArrayItem $item) {
-            return $item !== null && $item->unpack;
-        })) > 0;
     }
 
     /**
@@ -171,7 +170,7 @@ CODE_SAMPLE
      */
     private function createArrayMerge(array $items): FuncCall
     {
-        return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item) {
+        return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item): Arg {
             if ($item !== null && $item->unpack) {
                 // Do not unpack anymore
                 $item->unpack = false;
