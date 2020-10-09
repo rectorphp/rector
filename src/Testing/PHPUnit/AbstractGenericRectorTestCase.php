@@ -262,6 +262,17 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
         return '';
     }
 
+    protected function assertFileMissing(string $temporaryFilePath): void
+    {
+        // PHPUnit 9.0 ready
+        if (method_exists($this, 'assertFileDoesNotExist')) {
+            $this->assertFileDoesNotExist($temporaryFilePath);
+        } else {
+            // PHPUnit 8.0 ready
+            $this->assertFileNotExists($temporaryFilePath);
+        }
+    }
+
     /**
      * @return SmartFileInfo[]
      */

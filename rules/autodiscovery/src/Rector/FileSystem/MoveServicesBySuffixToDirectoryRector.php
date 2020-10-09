@@ -134,6 +134,9 @@ CODE_SAMPLE
             $nodes,
             $desiredGroupName
         );
+        if ($nodesWithFileDestination === null) {
+            return;
+        }
 
         $this->processNodesWithFileDestination($nodesWithFileDestination);
     }

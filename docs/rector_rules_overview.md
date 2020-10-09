@@ -8559,7 +8559,7 @@ Rename "*.phpt" file to "*Test.php" file
 
 ### `DeleteFactoryInterfaceRector`
 
-- class: [`Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector`](/rules/nette-to-symfony/src/Rector/FileSystem/DeleteFactoryInterfaceRector.php)
+- class: [`Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector`](/rules/nette-to-symfony/src/Rector/FileSystem/DeleteFactoryInterfaceRector.php)
 
 Interface factories are not needed in Symfony. Clear constructor injection is used instead
 
@@ -13839,7 +13839,7 @@ Restore accidentally shortened class names to its fully qualified form.
 
 ### `UpdateFileNameByClassNameFileSystemRector`
 
-- class: [`Rector\Restoration\Rector\FileSystem\UpdateFileNameByClassNameFileSystemRector`](/rules/restoration/src/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector.php)
+- class: [`Rector\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector`](/rules/restoration/src/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector.php)
 - [test fixtures](/rules/restoration/tests/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector/Fixture)
 
 Rename file to respect class name

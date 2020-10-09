@@ -17,13 +17,7 @@ final class RenameTesterTestToPHPUnitToTestFileRectorTest extends AbstractFileSy
 
         $temporaryFilePath = $this->getFixtureTempDirectory() . '/Source/SomeCase.phpt';
 
-        // PHPUnit 9.0 ready
-        if (method_exists($this, 'assertFileDoesNotExist')) {
-            $this->assertFileDoesNotExist($temporaryFilePath);
-        } else {
-            // PHPUnit 8.0 ready
-            $this->assertFileNotExists($temporaryFilePath);
-        }
+        $this->assertFileMissing($temporaryFilePath);
 
         $this->assertFileExists($this->getFixtureTempDirectory() . '/Source/SomeCaseTest.php');
     }
