@@ -82,6 +82,7 @@ CODE_SAMPLE
         }
         return $this->refactorNode($node);
     }
+
     private function shouldRefactor(Array_ $array): bool
     {
         // Check that any item in the array is the spread
