@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -84,29 +85,13 @@ CODE_SAMPLE
         // 2. If not, make them part of an array
         $newItems = [];
         $accumulatedItems = [];
-        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
         foreach ($node->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
                 // If it is a variable, we add it directly
-                // Otherwise it could be a function, method, ternary, traversable, etc
-                // We must then first extract it into a variable,
-                // as to invoke it only once and avoid potential bugs,
-                // such as a method executing some side-effect
+                // Otherwise transform it to a variable
                 if (! $item->value instanceof Variable) {
-                    // The variable name will be item0Unpacked, item1Unpacked, etc,
-                    // depending on their position.
-                    // The number can't be at the end of the var name, or it would
-                    // conflict with the counter (for if that name is already taken)
-                    $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
-                        $node,
-                        $nodeScope,
-                        'item' . $position . 'Unpacked'
-                    );
-                    // Assign the value to the variable, and replace the element with the variable
-                    $newVariable = new Variable($variableName);
-                    $this->addNodeBeforeNode(new Assign($newVariable, $item->value), $node);
-                    $item->value = $newVariable;
+                    $item->value = $this->createVariableFromNonVariable($node, $item, $position);
                 }
 
                 if ($accumulatedItems) {
@@ -129,6 +114,34 @@ CODE_SAMPLE
         }
         // Replace this array node with an `array_merge`
         return $this->createArrayMerge($newItems);
+    }
+
+    /**
+      * If it is a variable, we add it directly
+      * Otherwise it could be a function, method, ternary, traversable, etc
+      * We must then first extract it into a variable,
+      * as to invoke it only once and avoid potential bugs,
+      * such as a method executing some side-effect
+     * @param Array_ $node
+     * @param int|string $position
+     */
+    private function createVariableFromNonVariable(Array_ $node, ArrayItem $item, $position): Variable
+    {
+        /** @var Scope */
+        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+        // The variable name will be item0Unpacked, item1Unpacked, etc,
+        // depending on their position.
+        // The number can't be at the end of the var name, or it would
+        // conflict with the counter (for if that name is already taken)
+        $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
+            $node,
+            $nodeScope,
+            'item' . $position . 'Unpacked'
+        );
+        // Assign the value to the variable, and replace the element with the variable
+        $newVariable = new Variable($variableName);
+        $this->addNodeBeforeNode(new Assign($newVariable, $item->value), $node);
+        return $newVariable;
     }
 
     private function shouldRefactor(Array_ $node): bool
