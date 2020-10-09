@@ -24,7 +24,8 @@ class WithArrayIteratorItemClass
 {
     public function run()
     {
-        $arr7 = array_merge(is_array(new ArrayIterator(['a', 'b', 'c'])) ? new ArrayIterator(['a', 'b', 'c']) : iterator_to_array(new ArrayIterator(['a', 'b', 'c'])));
+        $item0Unpacked = new ArrayIterator(['a', 'b', 'c']);
+        $arr7 = array_merge(is_array($item0Unpacked) ? $item0Unpacked : iterator_to_array($item0Unpacked));
     }
 }
 

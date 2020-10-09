@@ -6,13 +6,17 @@ namespace Rector\DowngradePhp74\Rector\Array_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\ArrayItem;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
+use Rector\NetteKdyby\Naming\VariableNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -20,6 +24,16 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class DowngradeArraySpreadRector extends AbstractRector
 {
+    /**
+     * @var VariableNaming
+     */
+    private $variableNaming;
+
+    public function __construct(VariableNaming $variableNaming)
+    {
+        $this->variableNaming = $variableNaming;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replace array spread with array_merge function', [
@@ -70,9 +84,27 @@ CODE_SAMPLE
         // 2. If not, make them part of an array
         $newItems = [];
         $accumulatedItems = [];
-        foreach ($node->items as $item) {
+        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+        foreach ($node->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
+                // If it is a variable, we add it directly
+                // Otherwise it could be a function, method, ternary, traversable, etc
+                // We must then first extract it into a variable,
+                // as to invoke it only once and avoid potential bugs,
+                // such as a method executing some side-effect
+                if (! $item->value instanceof Variable) {
+                    $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
+                        $node,
+                        $nodeScope,
+                        'item' . $position . 'Unpacked'
+                    );
+                    // Assign the value to the variable, and replace the element with the variable
+                    $newVariable = new Variable($variableName);
+                    $this->addNodeBeforeNode(new Assign($newVariable, $item->value), $node);
+                    $item->value = $newVariable;
+                }
+
                 if ($accumulatedItems) {
                     // If previous items were in the new array, add them first
                     $newItems[] = $this->createArrayItem($accumulatedItems);
