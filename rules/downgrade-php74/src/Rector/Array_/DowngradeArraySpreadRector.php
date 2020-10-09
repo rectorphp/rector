@@ -94,6 +94,10 @@ CODE_SAMPLE
                 // as to invoke it only once and avoid potential bugs,
                 // such as a method executing some side-effect
                 if (! $item->value instanceof Variable) {
+                    // The variable name will be item0Unpacked, item1Unpacked, etc,
+                    // depending on their position.
+                    // The number can't be at the end of the var name, or it would
+                    // conflict with the counter (for if that name is already taken)
                     $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
                         $node,
                         $nodeScope,
