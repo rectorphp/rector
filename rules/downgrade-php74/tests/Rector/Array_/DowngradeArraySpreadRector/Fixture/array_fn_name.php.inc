@@ -22,7 +22,7 @@ class ArrayFunctionNameClass
     public function run()
     {
         $parts = array('apple', 'pear');
-        $fruits = array_merge(['banana', 'orange'], is_array($parts) ? $parts : iterator_to_array($parts), ['watermelon']);
+        $fruits = array_merge(['banana', 'orange'], $parts, ['watermelon']);
     }
 }
 

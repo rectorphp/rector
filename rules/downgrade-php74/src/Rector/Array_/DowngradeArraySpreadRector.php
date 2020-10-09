@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -112,11 +113,14 @@ CODE_SAMPLE
     {
         $newItems = [];
         $accumulatedItems = [];
+        $variableNames = [];
         foreach ($array->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
                 // If it is a not variable, transform it to a variable
-                if (! $item->value instanceof Variable) {
+                if ($item->value instanceof Variable) {
+                    $variableNames[] = $item->value->name;
+                } else {
                     $item->value = $this->createVariableFromNonVariable($array, $item, $position);
                 }
                 if ($accumulatedItems !== []) {
@@ -138,7 +142,7 @@ CODE_SAMPLE
             $newItems[] = $this->createArrayItem($accumulatedItems);
         }
         // Replace this array node with an `array_merge`
-        return $this->createArrayMerge($newItems);
+        return $this->createArrayMerge($array, $newItems, $variableNames);
     }
 
     /**
@@ -180,13 +184,31 @@ CODE_SAMPLE
      * @see https://wiki.php.net/rfc/spread_operator_for_array
      * @param (ArrayItem|null)[] $items
      */
-    private function createArrayMerge(array $items): FuncCall
+    private function createArrayMerge(Array_ $array, array $items, array $variableNames): FuncCall
     {
-        return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item): Arg {
+        /** @var Scope */
+        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
+        return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item) use (
+            $nodeScope,
+            $variableNames
+        ): Arg {
             if ($item !== null && $item->unpack) {
                 // Do not unpack anymore
                 $item->unpack = false;
-                // array_merge only supports array, while spread operator also supports objects implementing Traversable.
+                // By now every item is a variable
+                /** @var Variable */
+                $variable = $item->value;
+                // If we know it is an array, then print it directly
+                // Otherwise PHPStan throws an error:
+                // "Else branch is unreachable because ternary operator condition is always true."
+                if (in_array($variable->name, $variableNames, true) && $nodeScope->hasVariableType(
+                    $variable->name
+                )->yes() && $nodeScope->getVariableType(
+                    $variable->name
+                ) instanceof ConstantArrayType) {
+                    return new Arg($item);
+                }
+                // Print a ternary, handling either an array or an iterator
                 return new Arg(
                     new Ternary(
                         new FuncCall(new Name('is_array'), [new Arg($item)]),

@@ -22,7 +22,7 @@ class SingleUnpackClass
     public function run()
     {
         $parts = ['apple', 'pear'];
-        $fruits = array_merge(is_array($parts) ? $parts : iterator_to_array($parts));
+        $fruits = array_merge($parts);
     }
 }
 
