@@ -121,19 +121,15 @@ CODE_SAMPLE
     {
         $newItems = [];
         $accumulatedItems = [];
-        $variableNames = [];
-        $hasNonVariables = false;
+        // If it is a variable, store the name,
+        // to print it directly without checking `is_array`
+        $variableNames = $this->getVariableNames($array);
         foreach ($array->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
-                if ($item->value instanceof Variable) {
-                    // If it is a variable, store the name,
-                    // to print it directly without checking `is_array`
-                    $variableNames[] = $item->value->name;
-                } else {
+                if (! $item->value instanceof Variable) {
                     // If it is a not variable, transform it to a variable
                     $item->value = $this->createVariableFromNonVariable($array, $item, $position);
-                    $hasNonVariables = true;
                 }
                 if ($accumulatedItems !== []) {
                     // If previous items were in the new array, add them first
@@ -155,12 +151,42 @@ CODE_SAMPLE
         }
         // Replace this array node with an `array_merge`
         $newNode = $this->createArrayMerge($array, $newItems, $variableNames);
-        if ($hasNonVariables) {
+        if ($this->hasNonVariableArraySpreadItems($array)) {
             $commentableNode = $this->commentableNodeResolver->resolve($newNode);
             $commentableNode->setAttribute(AttributeKey::COMMENTS, [new Comment('/** @phpstan-ignore-next-line */')]);
-            // $this->addComment($newNode, '/** @phpstan-ignore-next-line */');
+        //     // $this->addComment($newNode, '/** @phpstan-ignore-next-line */');
         }
         return $newNode;
+    }
+
+    private function hasNonVariableArraySpreadItems(Array_ $array): bool
+    {
+        return count($this->getArraySpreadItems($array, false)) !== count($this->getArraySpreadItems($array, true));
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getVariableNames(Array_ $array): array
+    {
+        return array_map(
+            function (ArrayItem $item) : string {
+                /** @var Variable */
+                $variable = $item->value;
+                return $this->getName($variable) ?? '';
+            },
+            $this->getArraySpreadItems($array, true)
+        );
+    }
+
+    /**
+     * @return ArrayItem[]
+     */
+    private function getArraySpreadItems(Array_ $array, bool $onlyVariables): array
+    {
+        return array_filter($array->items, function (ArrayItem $item) use ($onlyVariables): bool {
+            return $item !== null && $item->unpack && (! $onlyVariables || $item->value instanceof Variable);
+        });
     }
 
     /**
