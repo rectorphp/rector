@@ -7,7 +7,6 @@ use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
 use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
-use Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
 use Rector\Nette\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector;
 use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
@@ -79,8 +78,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
             ],
         ]]);
-
-    $services->set(BuilderExpandToHelperExpandRector::class);
 
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
