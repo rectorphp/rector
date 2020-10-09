@@ -182,19 +182,15 @@ CODE_SAMPLE
         $position = $argumentAdder->getPosition();
 
         if ($node instanceof ClassMethod) {
-            $argumentName = $argumentAdder->getArgumentName();
-            if ($argumentName === null) {
-                throw new ShouldNotHappenException();
-            }
-            $this->addClassMethodParam($node, $argumentName, $defaultValue, $argumentType, $position);
+            $this->addClassMethodParam($node, $argumentAdder, $defaultValue, $argumentType, $position);
         } elseif ($node instanceof StaticCall) {
-            $argumentName = $argumentAdder->getArgumentName();
-            if ($argumentName === null) {
-                throw new ShouldNotHappenException();
-            }
-            $this->processStaticCall($node, $position, $argumentName);
+            $this->processStaticCall($node, $position, $argumentAdder);
         } else {
             $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
+            if (isset($node->args[$position])) {
+                return;
+            }
+
             $node->args[$position] = $arg;
         }
     }
@@ -226,12 +222,17 @@ CODE_SAMPLE
      */
     private function addClassMethodParam(
         ClassMethod $classMethod,
-        string $name,
+        ArgumentAdder $argumentAdder,
         $defaultValue,
         ?string $type,
         int $position
     ): void {
-        $param = new Param(new Variable($name), BuilderHelpers::normalizeValue($defaultValue));
+        $argumentName = $argumentAdder->getArgumentName();
+        if ($argumentName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $param = new Param(new Variable($argumentName), BuilderHelpers::normalizeValue($defaultValue));
         if ($type) {
             $param->type = ctype_upper($type[0]) ? new FullyQualified($type) : new Identifier($type);
         }
@@ -239,8 +240,13 @@ CODE_SAMPLE
         $classMethod->params[$position] = $param;
     }
 
-    private function processStaticCall(StaticCall $staticCall, int $position, string $name): void
+    private function processStaticCall(StaticCall $staticCall, int $position, ArgumentAdder $argumentAdder): void
     {
+        $argumentName = $argumentAdder->getArgumentName();
+        if ($argumentName === null) {
+            throw new ShouldNotHappenException();
+        }
+
         if (! $staticCall->class instanceof Name) {
             return;
         }
@@ -249,7 +255,7 @@ CODE_SAMPLE
             return;
         }
 
-        $staticCall->args[$position] = new Arg(new Variable($name));
+        $staticCall->args[$position] = new Arg(new Variable($argumentName));
     }
 
     /**
