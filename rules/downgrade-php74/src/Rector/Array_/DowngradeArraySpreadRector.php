@@ -180,6 +180,7 @@ CODE_SAMPLE
             $this->getArraySpreadItems($array, true)
         );
     }
+
     /**
      * @see https://wiki.php.net/rfc/spread_operator_for_array
      * @param (ArrayItem|null)[] $items
@@ -219,6 +220,7 @@ CODE_SAMPLE
             return new Arg($item);
         }, $items));
     }
+
     private function hasNonVariableArraySpreadItems(Array_ $array): bool
     {
         return count($this->getArraySpreadItems($array, false)) !== count($this->getArraySpreadItems($array, true));
