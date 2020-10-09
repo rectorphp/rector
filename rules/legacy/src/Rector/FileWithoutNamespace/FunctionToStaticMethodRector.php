@@ -116,18 +116,27 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Namespace_|FileWithoutNamespace $node
-     * @return Namespace_|Class_
+     * @param Node[] $stmts
+     * @param Function_[] $functions
+     * @return \Rector\Legacy\ValueObject\FunctionToStaticCall[]
      */
-    private function resolveNodeToPrint(Node $node, Class_ $class): Node
+    private function resolveFunctionsToStaticCalls(array $stmts, string $shortClassName, array $functions): array
     {
-        if ($node instanceof Namespace_) {
-            return new Namespace_($node->name, [$class]);
+        $functionsToStaticCalls = [];
+
+        $className = $this->fullyQualifiedNameResolver->resolveFullyQualifiedName($stmts, $shortClassName);
+        foreach ($functions as $function) {
+            $functionName = $this->getName($function);
+            if ($functionName === null) {
+                continue;
+            }
+
+            $methodName = $this->classNaming->createMethodNameFromFunction($function);
+            $functionsToStaticCalls[] = new FunctionToStaticCall($functionName, $className, $methodName);
         }
 
-        return $class;
+        return $functionsToStaticCalls;
     }
-
     /**
      * @param Node[] $stmts
      * @param FunctionToStaticCall[] $functionsToStaticCalls
@@ -161,28 +170,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node[] $stmts
-     * @param Function_[] $functions
-     */
-    private function resolveFunctionsToStaticCalls(array $stmts, string $shortClassName, array $functions): array
-    {
-        $functionsToStaticCalls = [];
-
-        $className = $this->fullyQualifiedNameResolver->resolveFullyQualifiedName($stmts, $shortClassName);
-        foreach ($functions as $function) {
-            $functionName = $this->getName($function);
-            if ($functionName === null) {
-                continue;
-            }
-
-            $methodName = $this->classNaming->createMethodNameFromFunction($function);
-            $functionsToStaticCalls[] = new FunctionToStaticCall($functionName, $className, $methodName);
-        }
-
-        return $functionsToStaticCalls;
-    }
-
-    /**
      * @param Namespace_|FileWithoutNamespace $node
      */
     private function printStaticMethodClass(
@@ -195,5 +182,17 @@ CODE_SAMPLE
 
         $nodesToPrint = $this->resolveNodeToPrint($node, $class);
         $this->printNodesToFilePath($nodesToPrint, $classFileDestination);
+    }
+    /**
+     * @param Namespace_|FileWithoutNamespace $node
+     * @return Namespace_|Class_
+     */
+    private function resolveNodeToPrint(Node $node, Class_ $class): Node
+    {
+        if ($node instanceof Namespace_) {
+            return new Namespace_($node->name, [$class]);
+        }
+
+        return $class;
     }
 }
