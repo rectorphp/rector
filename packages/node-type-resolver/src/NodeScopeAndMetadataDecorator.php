@@ -76,7 +76,7 @@ final class NodeScopeAndMetadataDecorator
     /**
      * @var FunctionLikeParamArgPositionNodeVisitor
      */
-    private $functionLikeParamPositionNodeVisitor;
+    private $functionLikeParamArgPositionNodeVisitor;
 
     public function __construct(
         CloningVisitor $cloningVisitor,
@@ -89,7 +89,7 @@ final class NodeScopeAndMetadataDecorator
         PhpDocInfoNodeVisitor $phpDocInfoNodeVisitor,
         StatementNodeVisitor $statementNodeVisitor,
         NodeConnectingVisitor $nodeConnectingVisitor,
-        FunctionLikeParamArgPositionNodeVisitor $functionLikeParamPositionNodeVisitor
+        FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor
     ) {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->cloningVisitor = $cloningVisitor;
@@ -101,7 +101,7 @@ final class NodeScopeAndMetadataDecorator
         $this->configuration = $configuration;
         $this->phpDocInfoNodeVisitor = $phpDocInfoNodeVisitor;
         $this->nodeConnectingVisitor = $nodeConnectingVisitor;
-        $this->functionLikeParamPositionNodeVisitor = $functionLikeParamPositionNodeVisitor;
+        $this->functionLikeParamArgPositionNodeVisitor = $functionLikeParamArgPositionNodeVisitor;
     }
 
     /**
@@ -141,7 +141,7 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
         $nodeTraverser->addVisitor($this->phpDocInfoNodeVisitor);
-        $nodeTraverser->addVisitor($this->functionLikeParamPositionNodeVisitor);
+        $nodeTraverser->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
 
         $nodes = $nodeTraverser->traverse($nodes);
 

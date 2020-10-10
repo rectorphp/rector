@@ -122,6 +122,21 @@ final class CallReflectionResolver
 
         return ParametersAcceptorSelector::selectFromArgs($scope, $node->args, $variants);
     }
+    private function matchConstructorMethodInUnionType(UnionType $unionType, Scope $scope): ?MethodReflection
+    {
+        foreach ($unionType->getTypes() as $unionedType) {
+            if (! $unionedType instanceof TypeWithClassName) {
+                continue;
+            }
+            if (! $unionedType->hasMethod(MethodName::CONSTRUCT)->yes()) {
+                continue;
+            }
+
+            return $unionedType->getMethod(MethodName::CONSTRUCT, $scope);
+        }
+
+        return null;
+    }
 
     /**
      * @return FunctionReflection|MethodReflection|null
@@ -165,21 +180,5 @@ final class CallReflectionResolver
         }
 
         return $classType->getMethod($methodName, $scope);
-    }
-
-    private function matchConstructorMethodInUnionType(UnionType $unionType, Scope $scope): ?MethodReflection
-    {
-        foreach ($unionType->getTypes() as $unionedType) {
-            if (! $unionedType instanceof TypeWithClassName) {
-                continue;
-            }
-            if (! $unionedType->hasMethod(MethodName::CONSTRUCT)->yes()) {
-                continue;
-            }
-
-            return $unionedType->getMethod(MethodName::CONSTRUCT, $scope);
-        }
-
-        return null;
     }
 }
