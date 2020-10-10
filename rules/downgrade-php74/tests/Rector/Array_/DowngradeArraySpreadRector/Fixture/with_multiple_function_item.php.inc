@@ -42,7 +42,7 @@ class WithMultipleFunctionItemClass
     {
         $item2Unpacked = $this->getFirstArray();
         $item4Unpacked = $this->getSecondArray();
-        $fruits = array_merge(['banana', 'orange'], is_array($item2Unpacked) ? $item2Unpacked : iterator_to_array($item2Unpacked), ['watermelon'], is_array($item4Unpacked) ? $item4Unpacked : iterator_to_array($item4Unpacked));
+        $fruits = array_merge(['banana', 'orange'], $item2Unpacked, ['watermelon'], $item4Unpacked);
     }
 }
 

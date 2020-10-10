@@ -2,11 +2,12 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class ArrayFunctionNameClass
+use Traversable;
+
+class KnownIteratorTypeClass
 {
-    public function run()
+    public function run(Traversable $parts)
     {
-        $parts = array('apple', 'pear');
         $fruits = array('banana', 'orange', ...$parts, 'watermelon');
     }
 }
@@ -17,12 +18,13 @@ class ArrayFunctionNameClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class ArrayFunctionNameClass
+use Traversable;
+
+class KnownIteratorTypeClass
 {
-    public function run()
+    public function run(Traversable $parts)
     {
-        $parts = array('apple', 'pear');
-        $fruits = array_merge(['banana', 'orange'], $parts, ['watermelon']);
+        $fruits = array_merge(['banana', 'orange'], iterator_to_array($parts), ['watermelon']);
     }
 }
 

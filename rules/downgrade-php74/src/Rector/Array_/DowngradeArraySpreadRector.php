@@ -14,11 +14,14 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Traversable;
 
 /**
  * @see \Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\DowngradeArraySpreadRectorTest
@@ -102,21 +105,33 @@ CODE_SAMPLE
         })) > 0;
     }
 
+    private function refactorNode(Array_ $array): Node
+    {
+        $newItems = $this->createArrayItems($array);
+        // Replace this array node with an `array_merge`
+        return $this->createArrayMerge($array, $newItems);
+    }
+
     /**
      * Iterate all array items:
      * 1. If they use the spread, remove it
      * 2. If not, make the item part of an accumulating array,
      *    to be added once the next spread is found, or at the end
+     * @return ArrayItem[]
      */
-    private function refactorNode(Array_ $array): Node
+    private function createArrayItems(Array_ $array): array
     {
         $newItems = [];
         $accumulatedItems = [];
+        /** @var Scope */
+        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
         foreach ($array->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
-                // If it is a not variable, transform it to a variable
                 if (! $item->value instanceof Variable) {
+                    // If it is a not variable, transform it to a variable
+                    // Keep the original type, will be needed later
+                    $item->setAttribute(AttributeKey::ORIGINAL_TYPE, $nodeScope->getType($item->value));
                     $item->value = $this->createVariableFromNonVariable($array, $item, $position);
                 }
                 if ($accumulatedItems !== []) {
@@ -137,8 +152,25 @@ CODE_SAMPLE
         if ($accumulatedItems !== []) {
             $newItems[] = $this->createArrayItem($accumulatedItems);
         }
-        // Replace this array node with an `array_merge`
-        return $this->createArrayMerge($newItems);
+        return $newItems;
+    }
+
+    /**
+     * @see https://wiki.php.net/rfc/spread_operator_for_array
+     * @param (ArrayItem|null)[] $items
+     */
+    private function createArrayMerge(Array_ $array, array $items): FuncCall
+    {
+        /** @var Scope */
+        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
+        return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item) use ($nodeScope): Arg {
+            if ($item !== null && $item->unpack) {
+                // Do not unpack anymore
+                $item->unpack = false;
+                return $this->createArgFromSpreadArrayItem($nodeScope, $item);
+            }
+            return new Arg($item);
+        }, $items));
     }
 
     /**
@@ -176,26 +208,37 @@ CODE_SAMPLE
         return new ArrayItem(new Array_($items));
     }
 
-    /**
-     * @see https://wiki.php.net/rfc/spread_operator_for_array
-     * @param (ArrayItem|null)[] $items
-     */
-    private function createArrayMerge(array $items): FuncCall
+    private function createArgFromSpreadArrayItem(Scope $nodeScope, ArrayItem $arrayItem): Arg
     {
-        return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item): Arg {
-            if ($item !== null && $item->unpack) {
-                // Do not unpack anymore
-                $item->unpack = false;
-                // array_merge only supports array, while spread operator also supports objects implementing Traversable.
-                return new Arg(
-                    new Ternary(
-                        new FuncCall(new Name('is_array'), [new Arg($item)]),
-                        $item,
-                        new FuncCall(new Name('iterator_to_array'), [new Arg($item)])
-                    )
-                );
+        // By now every item is a variable
+        /** @var Variable */
+        $variable = $arrayItem->value;
+        $variableName = $this->getName($variable) ?? '';
+        // If the variable is not in scope, it's one we just added.
+        // Then get the type from the attribute
+        $type = $nodeScope->hasVariableType($variableName)
+            ->yes() ? $nodeScope->getVariableType($variableName) : $arrayItem->getAttribute(
+                AttributeKey::ORIGINAL_TYPE
+            );
+        if ($type !== null) {
+            // If we know it is an array, then print it directly
+            // Otherwise PHPStan throws an error:
+            // "Else branch is unreachable because ternary operator condition is always true."
+            if ($type instanceof ArrayType) {
+                return new Arg($arrayItem);
             }
-            return new Arg($item);
-        }, $items));
+            // If it is iterable, then directly return `iterator_to_array`
+            if ($type instanceof ObjectType && is_a($type->getClassName(), Traversable::class, true)) {
+                return new Arg(new FuncCall(new Name('iterator_to_array'), [new Arg($arrayItem)]));
+            }
+        }
+        // Print a ternary, handling either an array or an iterator
+        return new Arg(
+            new Ternary(
+                new FuncCall(new Name('is_array'), [new Arg($arrayItem)]),
+                $arrayItem,
+                new FuncCall(new Name('iterator_to_array'), [new Arg($arrayItem)])
+            )
+        );
     }
 }

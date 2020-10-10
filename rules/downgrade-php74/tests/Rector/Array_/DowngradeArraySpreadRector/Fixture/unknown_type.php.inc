@@ -2,11 +2,10 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class ArrayFunctionNameClass
+class UnknownTypeClass
 {
-    public function run()
+    public function run($parts)
     {
-        $parts = array('apple', 'pear');
         $fruits = array('banana', 'orange', ...$parts, 'watermelon');
     }
 }
@@ -17,12 +16,11 @@ class ArrayFunctionNameClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class ArrayFunctionNameClass
+class UnknownTypeClass
 {
-    public function run()
+    public function run($parts)
     {
-        $parts = array('apple', 'pear');
-        $fruits = array_merge(['banana', 'orange'], $parts, ['watermelon']);
+        $fruits = array_merge(['banana', 'orange'], is_array($parts) ? $parts : iterator_to_array($parts), ['watermelon']);
     }
 }
 

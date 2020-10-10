@@ -35,7 +35,7 @@ class WithFunctionItemAndExistingVarClass
         $item2Unpacked = 'foo';
         $item2Unpacked1 = 'bar';
         $item2Unpacked2 = $this->getArray();
-        $fruits = array_merge(['banana', 'orange'], is_array($item2Unpacked2) ? $item2Unpacked2 : iterator_to_array($item2Unpacked2), ['watermelon']);
+        $fruits = array_merge(['banana', 'orange'], $item2Unpacked2, ['watermelon']);
     }
 }
 

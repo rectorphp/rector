@@ -76,6 +76,11 @@ final class AttributeKey
     public const FUNCTION_NODE = Function_::class;
 
     /**
+     * @var string
+     */
+    public const ORIGINAL_TYPE = 'originalType';
+
+    /**
      * Internal php-parser name.
      * Do not change this even if you want!
      *

@@ -26,7 +26,7 @@ class WithMultipleArrayIteratorItemsClass
     {
         $item0Unpacked = new ArrayIterator(['a', 'b', 'c']);
         $item1Unpacked = new ArrayIterator(['e', 'f']);
-        $arr7 = array_merge(is_array($item0Unpacked) ? $item0Unpacked : iterator_to_array($item0Unpacked), is_array($item1Unpacked) ? $item1Unpacked : iterator_to_array($item1Unpacked));
+        $arr7 = array_merge(iterator_to_array($item0Unpacked), iterator_to_array($item1Unpacked));
     }
 }
 
