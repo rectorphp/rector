@@ -117,14 +117,13 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         )) {
             $methodCall->name = new Identifier($functionNameWithAssertMethods->getAssetMethodName());
         }
-
-        if ($functionNameWithAssertMethods->getNotAssertMethodName() && in_array(
-            $oldMethodName,
-            ['assertFalse', 'assertNotTrue'],
-            true
-        )) {
-            $methodCall->name = new Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
+        if ($functionNameWithAssertMethods->getNotAssertMethodName() === '') {
+            return;
         }
+        if (! in_array($oldMethodName, ['assertFalse', 'assertNotTrue'], true)) {
+            return;
+        }
+        $methodCall->name = new Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
     }
 
     /**

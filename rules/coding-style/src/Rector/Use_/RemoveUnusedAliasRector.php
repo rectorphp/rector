@@ -310,9 +310,13 @@ CODE_SAMPLE
      */
     private function renameParam(string $lastName, Node $parentNode, Node $usedNameNode): void
     {
-        if ($parentNode->type !== null && $this->areNamesEqual($parentNode->type, $usedNameNode)) {
-            $parentNode->type = new Name($lastName);
+        if ($parentNode->type === null) {
+            return;
         }
+        if (! $this->areNamesEqual($parentNode->type, $usedNameNode)) {
+            return;
+        }
+        $parentNode->type = new Name($lastName);
     }
 
     /**

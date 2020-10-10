@@ -33,6 +33,10 @@ final class ConditionInverter
             return $inversedCondition;
         }
 
+        if ($expr instanceof BooleanNot) {
+            return $expr->expr;
+        }
+
         return new BooleanNot($expr);
     }
 }

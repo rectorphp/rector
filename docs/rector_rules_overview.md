@@ -64,7 +64,7 @@
 - [RemovingStatic](#removingstatic) (6)
 - [Renaming](#renaming) (10)
 - [Restoration](#restoration) (8)
-- [SOLID](#solid) (12)
+- [SOLID](#solid) (13)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
 - [Symfony](#symfony) (34)
@@ -13921,6 +13921,36 @@ Add false default to bool properties, to prevent null compare errors
       */
 -    private $isDisabled;
 +    private $isDisabled = false;
+ }
+```
+
+<br><br>
+
+### `ChangeAndIfToEarlyReturnRector`
+
+- class: [`Rector\SOLID\Rector\If_\ChangeAndIfToEarlyReturnRector`](/rules/solid/src/Rector/If_/ChangeAndIfToEarlyReturnRector.php)
+- [test fixtures](/rules/solid/tests/Rector/If_/ChangeAndIfToEarlyReturnRector/Fixture)
+
+Changes if && to early return
+
+```diff
+ class SomeClass
+ {
+     public function canDrive(Car $car)
+     {
+-        if ($car->hasWheels && $car->hasFuel) {
+-            return true;
++        if (!$car->hasWheels) {
++            return false;
+         }
+
+-        return false;
++        if (!$car->hasFuel) {
++            return false;
++        }
++
++        return true;
+     }
  }
 ```
 

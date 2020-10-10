@@ -54,14 +54,14 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
 
         $this->originalTempFileInfo = $inputFileInfo;
-
         // runnable?
-        if (file_exists($inputFileInfo->getPathname()) && Strings::contains(
-            $inputFileInfo->getContents(),
-            RunnableInterface::class
-        )) {
-            $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
+        if (! file_exists($inputFileInfo->getPathname())) {
+            return;
         }
+        if (! Strings::contains($inputFileInfo->getContents(), RunnableInterface::class)) {
+            return;
+        }
+        $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
     }
 
     protected function assertOriginalAndFixedFileResultEquals(
