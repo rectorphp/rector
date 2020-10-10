@@ -187,7 +187,12 @@ CODE_SAMPLE
                 $variableName = $this->getName($variable) ?? '';
                 // If the variable is not in scope, it's one we just added.
                 // Then get the type from the attribute
-                $type = $nodeScope->hasVariableType($variableName)->yes() ? $nodeScope->getVariableType($variableName) : $item->getAttribute(AttributeKey::ORIGINAL_TYPE);
+                $type = $nodeScope->hasVariableType($variableName)
+                    ->yes() ? $nodeScope->getVariableType(
+                    $variableName
+                ) : $item->getAttribute(
+                    AttributeKey::ORIGINAL_TYPE
+                );
                 if ($type !== null) {
                     // If we know it is an array, then print it directly
                     // Otherwise PHPStan throws an error:
@@ -196,11 +201,7 @@ CODE_SAMPLE
                         return new Arg($item);
                     }
                     // If it is iterable, then directly return `iterator_to_array`
-                    if ($type instanceof ObjectType && is_a(
-                        $type->getClassName(),
-                        Traversable::class,
-                        true
-                    )) {
+                    if ($type instanceof ObjectType && is_a($type->getClassName(), Traversable::class, true)) {
                         return new Arg(new FuncCall(new Name('iterator_to_array'), [new Arg($item)]));
                     }
                 }
