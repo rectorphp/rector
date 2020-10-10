@@ -60,7 +60,7 @@ final class CallReflectionResolver
     /**
      * @return MethodReflection|FunctionReflection|null
      */
-    public function resolveConstructor(New_ $new)
+    public function resolveConstructor(New_ $new): ?MethodReflection
     {
         /** @var Scope|null $scope */
         $scope = $new->getAttribute(AttributeKey::SCOPE);
@@ -70,7 +70,7 @@ final class CallReflectionResolver
 
         $classType = $this->nodeTypeResolver->resolve($new->class);
 
-        if ($classType->hasMethod(MethodName::CONSTRUCT)->yes() === false) {
+        if (!$classType->hasMethod(MethodName::CONSTRUCT)->yes()) {
             return null;
         }
 
