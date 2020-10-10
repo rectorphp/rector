@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\Core\Comments\CommentableNodeResolver;
 use Rector\Core\Rector\AbstractRector;
@@ -205,8 +206,11 @@ CODE_SAMPLE
                 // "Else branch is unreachable because ternary operator condition is always true."
                 if (in_array($variableName, $variableNames, true) && $nodeScope->hasVariableType(
                     $variableName
-                )->yes() && $nodeScope->getVariableType($variableName) instanceof ConstantArrayType) {
-                    return new Arg($item);
+                )->yes()) {
+                    $variableType = $nodeScope->getVariableType($variableName);
+                    if ($variableType instanceof ConstantArrayType || $variableType instanceof ArrayType) {
+                        return new Arg($item);
+                    }
                 }
                 // Print a ternary, handling either an array or an iterator
                 return new Arg(
