@@ -51,10 +51,19 @@ final class ExistingClassesProvider
         $composerJsonFilePath = getcwd() . '/composer.json';
         $composerJson = $this->composerJsonFactory->createFromFilePath($composerJsonFilePath);
 
-        $psr4Paths = $composerJson->getAutoload()['psr-4'] ?? [];
+        $directories = [];
+
+        foreach ($composerJson->getAutoload()['psr-4'] ?? [] as $paths) {
+            if (is_array($paths)) {
+                $directories = array_merge($directories, $paths);
+            } else {
+                $directories[] = $paths;
+            }
+        }
+
         $classmapPaths = $composerJson->getAutoload()['classmap'] ?? [];
 
-        return array_merge($psr4Paths, $classmapPaths);
+        return array_merge($directories, $classmapPaths);
     }
 
     /**

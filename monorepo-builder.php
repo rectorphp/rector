@@ -13,4 +13,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // release workers - in order to execute
     $services->set(Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersionReleaseWorker::class);
     $services->set(Symplify\MonorepoBuilder\Release\ReleaseWorker\PushTagReleaseWorker::class);
+
+    $parameters = $containerConfigurator->parameters();
+    $parameters->set(Option::DIRECTORIES_TO_REPOSITORIES, [
+        __DIR__ . '/packages/symfony-php-config' => 'git@github.com:rectorphp/symfony-php-config.git',
+    ]);
 };

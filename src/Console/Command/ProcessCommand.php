@@ -87,11 +87,6 @@ final class ProcessCommand extends AbstractCommand
     private $unchangedFilesFilter;
 
     /**
-     * @var ChangedFilesDetector
-     */
-    private $changedFilesDetector;
-
-    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Console\Command;
 
 use Nette\Utils\Strings;
+use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Configuration\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Descriptor\TextDescriptor;
@@ -16,6 +17,11 @@ use Symplify\PackageBuilder\Console\ShellCode;
 abstract class AbstractCommand extends Command
 {
     /**
+     * @var ChangedFilesDetector
+     */
+    protected $changedFilesDetector;
+
+    /**
      * @var TextDescriptor
      */
     private $textDescriptor;
@@ -23,9 +29,12 @@ abstract class AbstractCommand extends Command
     /**
      * @required
      */
-    public function autowireAbstractCommand(TextDescriptor $textDescriptor): void
-    {
+    public function autowireAbstractCommand(
+        TextDescriptor $textDescriptor,
+        ChangedFilesDetector $changedFilesDetector
+    ): void {
         $this->textDescriptor = $textDescriptor;
+        $this->changedFilesDetector = $changedFilesDetector;
     }
 
     public function run(InputInterface $input, OutputInterface $output): int
@@ -63,6 +72,14 @@ abstract class AbstractCommand extends Command
 
             $this->getApplication()
                 ->setCatchExceptions(false);
+
+            // clear cache
+            $this->changedFilesDetector->clear();
+        }
+
+        // clear cache
+        if ($input->getOption(Option::OPTION_CLEAR_CACHE)) {
+            $this->changedFilesDetector->clear();
         }
     }
 }

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\SymfonyPhpConfig;
 
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\SymfonyPhpConfig\Exception\ValueObjectException;
 use Rector\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory;
 use ReflectionClass;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 use Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
@@ -27,10 +28,10 @@ function inline_single_object(object $object, ServicesConfigurator $servicesConf
     $servicesConfigurator->set(ArgumentAndParameterFactory::class);
 
     $servicesConfigurator->set($className)
-        ->factory([service(ArgumentAndParameterFactory::class), 'create'])
+        ->factory([ref(ArgumentAndParameterFactory::class), 'create'])
         ->args([$className, $argumentValues, $propertyValues]);
 
-    return service($className);
+    return ref($className);
 }
 
 function inline_value_object(object $object): InlineServiceConfigurator
@@ -78,11 +79,11 @@ function resolve_argument_values(ReflectionClass $reflectionClass, object $objec
             'Constructor for "%s" was not found. Be sure to use only value objects',
             $reflectionClass->getName()
         );
-        throw new ShouldNotHappenException($message);
+        throw new ValueObjectException($message);
     }
 
-    foreach ($constructorMethodReflection->getParameters() as $constructorParameter) {
-        $parameterName = $constructorParameter->getName();
+    foreach ($constructorMethodReflection->getParameters() as $reflectionParameter) {
+        $parameterName = $reflectionParameter->getName();
         $propertyReflection = $reflectionClass->getProperty($parameterName);
         $propertyReflection->setAccessible(true);
 

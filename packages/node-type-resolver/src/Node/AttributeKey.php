@@ -199,4 +199,9 @@ final class AttributeKey
      * @var string
      */
     public const PARAMETER_POSITION = 'parameter_position';
+
+    /**
+     * @var string
+     */
+    public const ARGUMENT_POSITION = 'argument_position';
 }

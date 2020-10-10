@@ -7,6 +7,7 @@ namespace Rector\Core\PHPStan\Reflection;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
@@ -16,7 +17,10 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
 use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -55,6 +59,27 @@ final class CallReflectionResolver
         $this->typeToCallReflectionResolverRegistry = $typeToCallReflectionResolverRegistry;
     }
 
+    public function resolveConstructor(New_ $new): ?MethodReflection
+    {
+        /** @var Scope|null $scope */
+        $scope = $new->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            return null;
+        }
+
+        $classType = $this->nodeTypeResolver->resolve($new->class);
+
+        if ($classType instanceof UnionType) {
+            return $this->matchConstructorMethodInUnionType($classType, $scope);
+        }
+
+        if (! $classType->hasMethod(MethodName::CONSTRUCT)->yes()) {
+            return null;
+        }
+
+        return $classType->getMethod(MethodName::CONSTRUCT, $scope);
+    }
+
     /**
      * @param FuncCall|MethodCall|StaticCall $node
      * @return MethodReflection|FunctionReflection|null
@@ -70,7 +95,7 @@ final class CallReflectionResolver
 
     /**
      * @param FunctionReflection|MethodReflection|null $reflection
-     * @param FuncCall|MethodCall|StaticCall $node
+     * @param FuncCall|MethodCall|StaticCall|New_ $node
      */
     public function resolveParametersAcceptor($reflection, Node $node): ?ParametersAcceptor
     {
@@ -96,6 +121,22 @@ final class CallReflectionResolver
         }
 
         return ParametersAcceptorSelector::selectFromArgs($scope, $node->args, $variants);
+    }
+
+    private function matchConstructorMethodInUnionType(UnionType $unionType, Scope $scope): ?MethodReflection
+    {
+        foreach ($unionType->getTypes() as $unionedType) {
+            if (! $unionedType instanceof TypeWithClassName) {
+                continue;
+            }
+            if (! $unionedType->hasMethod(MethodName::CONSTRUCT)->yes()) {
+                continue;
+            }
+
+            return $unionedType->getMethod(MethodName::CONSTRUCT, $scope);
+        }
+
+        return null;
     }
 
     /**

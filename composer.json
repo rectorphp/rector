@@ -152,11 +152,11 @@
             "Rector\\DowngradePhp73\\": "rules/downgrade-php73/src",
             "Rector\\DowngradePhp74\\": "rules/downgrade-php74/src",
             "Rector\\DowngradePhp80\\": "rules/downgrade-php80/src",
-            "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src"
+            "Rector\\SymfonyPhpConfig\\": ["packages/symfony-php-config/src", "rules/symfony-php-config/src"]
         },
         "files": [
-            "rules/symfony-php-config/functions/functions.php",
-            "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php"
+            "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
+            "packages/symfony-php-config/functions/functions.php"
         ]
     },
     "autoload-dev": {
@@ -243,7 +243,7 @@
             "Rector\\DowngradePhp73\\Tests\\": "rules/downgrade-php73/tests",
             "Rector\\DowngradePhp74\\Tests\\": "rules/downgrade-php74/tests",
             "Rector\\DowngradePhp80\\Tests\\": "rules/downgrade-php80/tests",
-            "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests",
+            "Rector\\SymfonyPhpConfig\\Tests\\": ["rules/symfony-php-config/tests", "packages/symfony-php-config/tests"],
             "Rector\\PHPStanStaticTypeMapper\\Tests\\": "packages/phpstan-static-type-mapper/tests"
         },
         "classmap": [
@@ -274,7 +274,8 @@
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/YetAnotherClass.php",
             "rules/solid/tests/Rector/ClassMethod/UseInterfaceOverImplementationInConstructorRector/Source/Coconut.php",
-            "stubs/Nette/Localization/ITranslation.php"
+            "stubs/Nette/Localization/ITranslation.php",
+            "vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php"
         ]
     },
     "scripts": {
@@ -310,7 +311,10 @@
         ],
         "rector-ci": "bin/rector process --config rector-ci.php --dry-run --ansi",
         "rector": "bin/rector process --config rector-ci.php --ansi",
-        "release": "vendor/bin/monorepo-builder release patch --ansi"
+        "release": "vendor/bin/monorepo-builder release patch --ansi",
+        "merge": "vendor/bin/monorepo-builder merge --ansi",
+        "propagate": "vendor/bin/monorepo-builder propagate --ansi",
+        "validate-monorepo": "vendor/bin/monorepo-builder validate --ansi"
     },
     "config": {
         "sort-packages": true

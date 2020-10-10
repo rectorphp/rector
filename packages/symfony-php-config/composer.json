@@ -1,0 +1,37 @@
+{
+    "name": "rector/symfony-php-config",
+    "description": "Tools that easy work with Symfony PHP Configs",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tomas Votruba",
+            "email": "tomas.vot@gmail.com",
+            "homepage": "https://tomasvotruba.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2.4|^8.0",
+        "symfony/dependency-injection": "^4.4.8|^5.1",
+        "symfony/http-kernel": "^4.4.8|^5.0.6",
+        "symplify/package-builder": "^8.3.29"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5|^9.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rector\\SymfonyPhpConfig\\": "src"
+        },
+        "files": [
+            "functions/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rector\\SymfonyPhpConfig\\Tests\\": "tests"
+        },
+        "files": [
+            "../../vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php"
+        ]
+    }
+}

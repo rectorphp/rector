@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Bootstrap\ConfigShifter;
+use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\MinimalVersionChecker;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
@@ -13,11 +14,11 @@ use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Console\Application;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
+use Rector\Core\Exception\NoRectorsLoadedException;
 use Symplify\SetConfigResolver\Bootstrap\InvalidSetReporter;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\SetConfigResolver\Exception\SetNotFoundException;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 @ini_set('memory_limit', '-1'); // @ intentionally: continue anyway
 
@@ -78,6 +79,7 @@ try {
     exit(ShellCode::ERROR);
 }
 
+/** @var Application $application */
 $application = $container->get(Application::class);
 exit($application->run());
 
