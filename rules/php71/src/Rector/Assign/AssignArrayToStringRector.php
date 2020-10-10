@@ -104,10 +104,17 @@ CODE_SAMPLE
     public function beforeTraverse(array $nodes): ?array
     {
         // collect all known "{anything} = '';" assigns
-        $this->traverseNodesWithCallable($nodes, function (Node $node): void {
-            if ($node instanceof PropertyProperty && $node->default && $this->isEmptyStringNode($node->default)) {
-                $this->emptyStringPropertyNodes[] = $node;
+        $this->traverseNodesWithCallable($nodes, function (Node $node) : void {
+            if (!$node instanceof PropertyProperty) {
+                return;
             }
+            if (!$node->default) {
+                return;
+            }
+            if (!$this->isEmptyStringNode($node->default)) {
+                return;
+            }
+            $this->emptyStringPropertyNodes[] = $node;
         });
 
         return $nodes;
