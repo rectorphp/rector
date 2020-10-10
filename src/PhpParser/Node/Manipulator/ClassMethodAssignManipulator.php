@@ -269,6 +269,7 @@ final class ClassMethodAssignManipulator
 
         return $referencedVariables;
     }
+
     private function findParentForeach(Assign $assign): ?Foreach_
     {
         /** @var Foreach_|FunctionLike|null $foreach */
@@ -279,6 +280,7 @@ final class ClassMethodAssignManipulator
 
         return $foreach;
     }
+
     private function isExplicitlyReferenced(Node $node): bool
     {
         if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
@@ -299,6 +301,7 @@ final class ClassMethodAssignManipulator
         }
         return $this->isConstructorWithReference($node, $variableName);
     }
+
     private function isMethodCallWithReferencedArgument(Node $node, Variable $variable): bool
     {
         if (! $node instanceof MethodCall) {
@@ -328,6 +331,7 @@ final class ClassMethodAssignManipulator
 
         return false;
     }
+
     /**
      * Matches e.g:
      * - array_shift($value)
@@ -355,6 +359,7 @@ final class ClassMethodAssignManipulator
 
         return $this->isParameterReferencedInMethodReflection($node, $variableName);
     }
+
     private function isParameterReferencedInMethodReflection(New_ $new, string $variableName): bool
     {
         $methodReflection = $this->callReflectionResolver->resolveConstructor($new);

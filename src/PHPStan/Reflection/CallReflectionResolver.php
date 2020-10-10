@@ -70,7 +70,7 @@ final class CallReflectionResolver
 
         $classType = $this->nodeTypeResolver->resolve($new->class);
 
-        if (!$classType->hasMethod(MethodName::CONSTRUCT)->yes()) {
+        if (! $classType->hasMethod(MethodName::CONSTRUCT)->yes()) {
             return null;
         }
 

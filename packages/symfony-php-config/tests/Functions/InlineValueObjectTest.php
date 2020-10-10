@@ -19,6 +19,7 @@ final class InlineValueObjectTest extends TestCase
      * @var mixed[]
      */
     private const INSTANCEOF = [];
+
     public function test(): void
     {
         $containerBuilder = new ContainerBuilder();
