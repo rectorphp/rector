@@ -10,6 +10,7 @@ use ReflectionClass;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 use Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
@@ -27,10 +28,10 @@ function inline_single_object(object $object, ServicesConfigurator $servicesConf
     $servicesConfigurator->set(ArgumentAndParameterFactory::class);
 
     $servicesConfigurator->set($className)
-        ->factory([service(ArgumentAndParameterFactory::class), 'create'])
+        ->factory([ref(ArgumentAndParameterFactory::class), 'create'])
         ->args([$className, $argumentValues, $propertyValues]);
 
-    return service($className);
+    return ref($className);
 }
 
 function inline_value_object(object $object): InlineServiceConfigurator
