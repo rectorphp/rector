@@ -882,3 +882,13 @@ parameters:
 
         # nodes/stmts mixup
         - '#Parameter \#2 \$stmts of class PhpParser\\Node\\Stmt\\Namespace_ constructor expects array<PhpParser\\Node\\Stmt\>\|null, array<PhpParser\\Node\> given#'
+
+        -
+            message: '#Nested foreach with empty statement is not allowed#'
+            paths:
+                 - packages/better-php-doc-parser/tests/PhpDocParser/TagValueNodeReprint/TagValueNodeReprintTest.php
+
+        -
+            message: '#Multiple class/interface/trait is not allowed in a file#'
+            paths:
+                - src/PhpParser/NodeTraverser/CallableNodeTraverser.php

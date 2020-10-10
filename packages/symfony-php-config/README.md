@@ -2,7 +2,7 @@
 
 Tools that easy work with Symfony PHP Configs.
 
-Read [How to Inline Value Object in Symfony PHP Config](https://getrector.org/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config) to learn more.
+Read [How to Inline Value Object in Symfony PHP Config](https://getrector.org/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config) to learn more.TagValueNodeReprintTest
 
 ## 1. Install
 

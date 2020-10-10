@@ -35,8 +35,10 @@ final class CpuCoreCountResolver
         $ret = @shell_exec('nproc');
         if (is_string($ret)) {
             $ret = trim($ret);
-            if (($tmp = filter_var($ret, FILTER_VALIDATE_INT)) !== false) {
-                return (int) $tmp;
+            $intValue = filter_var($ret, FILTER_VALIDATE_INT);
+
+            if ($intValue !== false) {
+                return (int) $intValue;
             }
         }
 
