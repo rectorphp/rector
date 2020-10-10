@@ -16,7 +16,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\Core\Comments\CommentableNodeResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -201,14 +200,12 @@ CODE_SAMPLE
                 /** @var Variable */
                 $variable = $item->value;
                 $variableName = $this->getName($variable) ?? '';
-                // If we know it is an array, then print it directly
-                // Otherwise PHPStan throws an error:
-                // "Else branch is unreachable because ternary operator condition is always true."
-                if (in_array($variableName, $variableNames, true) && $nodeScope->hasVariableType(
-                    $variableName
-                )->yes()) {
+                if ($nodeScope->hasVariableType($variableName)->yes()) {
                     $variableType = $nodeScope->getVariableType($variableName);
-                    if ($variableType instanceof ConstantArrayType || $variableType instanceof ArrayType) {
+                    // If we know it is an array, then print it directly
+                    // Otherwise PHPStan throws an error:
+                    // "Else branch is unreachable because ternary operator condition is always true."
+                    if (in_array($variableName, $variableNames, true) && $variableType instanceof ArrayType) {
                         return new Arg($item);
                     }
                 }
