@@ -4,11 +4,12 @@ namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\F
 
 use ArrayIterator;
 
-class WithArrayIteratorItemClass
+class WithUnknownItemClass
 {
     public function run()
     {
-        $arr7 = [...new ArrayIterator(['a', 'b', 'c'])];
+        $rand = rand() ? new ArrayIterator(['a', 'b', 'c']) : ['a', 'b', 'c'];
+        $arr7 = [...$rand];
     }
 }
 
@@ -20,12 +21,12 @@ namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\F
 
 use ArrayIterator;
 
-class WithArrayIteratorItemClass
+class WithUnknownItemClass
 {
     public function run()
     {
-        $item0Unpacked = new ArrayIterator(['a', 'b', 'c']);
-        $arr7 = array_merge(iterator_to_array($item0Unpacked));
+        $rand = rand() ? new ArrayIterator(['a', 'b', 'c']) : ['a', 'b', 'c'];
+        $arr7 = array_merge(is_array($rand) ? $rand : iterator_to_array($rand));
     }
 }
 

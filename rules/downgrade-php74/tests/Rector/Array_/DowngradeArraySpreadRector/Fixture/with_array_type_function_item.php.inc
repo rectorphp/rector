@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class WithFunctionItemClass
+class WithArrayTypeFunctionItemClass
 {
     function getArray(): array
     {
@@ -21,7 +21,7 @@ class WithFunctionItemClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class WithFunctionItemClass
+class WithArrayTypeFunctionItemClass
 {
     function getArray(): array
     {
@@ -31,7 +31,7 @@ class WithFunctionItemClass
     public function run()
     {
         $item2Unpacked = $this->getArray();
-        $fruits = array_merge(['banana', 'orange'], is_array($item2Unpacked) ? $item2Unpacked : iterator_to_array($item2Unpacked), ['watermelon']);
+        $fruits = array_merge(['banana', 'orange'], $item2Unpacked, ['watermelon']);
     }
 }
 

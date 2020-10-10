@@ -27,7 +27,7 @@ class CombinedItemsClass
     {
         $parts = ['apple', 'pear'];
         $item4Unpacked = new ArrayIterator(['durian', 'kiwi']);
-        $fruits = array_merge(['banana', 'orange'], $parts, ['watermelon'], is_array($item4Unpacked) ? $item4Unpacked : iterator_to_array($item4Unpacked));
+        $fruits = array_merge(['banana', 'orange'], $parts, ['watermelon'], iterator_to_array($item4Unpacked));
     }
 }
 

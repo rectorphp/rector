@@ -137,11 +137,15 @@ CODE_SAMPLE
     {
         $newItems = [];
         $accumulatedItems = [];
+        /** @var Scope */
+        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
         foreach ($array->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
                 if (! $item->value instanceof Variable) {
                     // If it is a not variable, transform it to a variable
+                    // Keep the original type, will be needed later
+                    $item->setAttribute(AttributeKey::ORIGINAL_TYPE, $nodeScope->getType($item->value));
                     $item->value = $this->createVariableFromNonVariable($array, $item, $position);
                 }
                 if ($accumulatedItems !== []) {
@@ -181,17 +185,19 @@ CODE_SAMPLE
                 /** @var Variable */
                 $variable = $item->value;
                 $variableName = $this->getName($variable) ?? '';
-                if ($nodeScope->hasVariableType($variableName)->yes()) {
-                    $variableType = $nodeScope->getVariableType($variableName);
+                // If the variable is not in scope, it's one we just added.
+                // Then get the type from the attribute
+                $type = $nodeScope->hasVariableType($variableName)->yes() ? $nodeScope->getVariableType($variableName) : $item->getAttribute(AttributeKey::ORIGINAL_TYPE);
+                if ($type !== null) {
                     // If we know it is an array, then print it directly
                     // Otherwise PHPStan throws an error:
                     // "Else branch is unreachable because ternary operator condition is always true."
-                    if ($variableType instanceof ArrayType) {
+                    if ($type instanceof ArrayType) {
                         return new Arg($item);
                     }
                     // If it is iterable, then directly return `iterator_to_array`
-                    if ($variableType instanceof ObjectType && is_a(
-                        $variableType->getClassName(),
+                    if ($type instanceof ObjectType && is_a(
+                        $type->getClassName(),
                         Traversable::class,
                         true
                     )) {
