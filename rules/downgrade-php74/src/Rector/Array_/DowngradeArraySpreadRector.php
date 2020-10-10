@@ -109,8 +109,7 @@ CODE_SAMPLE
     {
         $newItems = $this->createArrayItems($array);
         // Replace this array node with an `array_merge`
-        $newNode = $this->createArrayMerge($array, $newItems);
-        return $newNode;
+        return $this->createArrayMerge($array, $newItems);
     }
 
     /**
@@ -177,9 +176,7 @@ CODE_SAMPLE
                 $type = $nodeScope->hasVariableType($variableName)
                     ->yes() ? $nodeScope->getVariableType(
                     $variableName
-                ) : $item->getAttribute(
-                    AttributeKey::ORIGINAL_TYPE
-                );
+                ) : $item->getAttribute(AttributeKey::ORIGINAL_TYPE);
                 if ($type !== null) {
                     // If we know it is an array, then print it directly
                     // Otherwise PHPStan throws an error:
