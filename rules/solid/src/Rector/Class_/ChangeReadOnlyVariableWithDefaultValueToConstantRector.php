@@ -180,12 +180,12 @@ CODE_SAMPLE
 
             /** @var Variable|ClassConstFetch $variable */
             $variable = $readOnlyVariableAssign->var;
-            // already overriden
+            // already overridden
             if (! $variable instanceof Variable) {
                 continue;
             }
 
-            $classConst = $this->createClassConst($variable, $readOnlyVariableAssign->expr);
+            $classConst = $this->createPrivateClassConst($variable, $readOnlyVariableAssign->expr);
 
             // replace $variable usage in the code with constant
             $this->addConstantToClass($class, $classConst);
@@ -199,7 +199,7 @@ CODE_SAMPLE
         }
     }
 
-    private function createClassConst(Variable $variable, Expr $expr): ClassConst
+    private function createPrivateClassConst(Variable $variable, Expr $expr): ClassConst
     {
         $constantName = $this->createConstantNameFromVariable($variable);
 

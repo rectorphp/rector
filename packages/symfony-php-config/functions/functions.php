@@ -81,8 +81,8 @@ function resolve_argument_values(ReflectionClass $reflectionClass, object $objec
         throw new ValueObjectException($message);
     }
 
-    foreach ($constructorMethodReflection->getParameters() as $constructorParameter) {
-        $parameterName = $constructorParameter->getName();
+    foreach ($constructorMethodReflection->getParameters() as $reflectionParameter) {
+        $parameterName = $reflectionParameter->getName();
         $propertyReflection = $reflectionClass->getProperty($parameterName);
         $propertyReflection->setAccessible(true);
 
