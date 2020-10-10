@@ -122,6 +122,7 @@ final class CallReflectionResolver
 
         return ParametersAcceptorSelector::selectFromArgs($scope, $node->args, $variants);
     }
+
     private function matchConstructorMethodInUnionType(UnionType $unionType, Scope $scope): ?MethodReflection
     {
         foreach ($unionType->getTypes() as $unionedType) {
