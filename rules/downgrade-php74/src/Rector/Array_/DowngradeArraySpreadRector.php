@@ -167,39 +167,42 @@ CODE_SAMPLE
             if ($item !== null && $item->unpack) {
                 // Do not unpack anymore
                 $item->unpack = false;
-                // By now every item is a variable
-                /** @var Variable */
-                $variable = $item->value;
-                $variableName = $this->getName($variable) ?? '';
-                // If the variable is not in scope, it's one we just added.
-                // Then get the type from the attribute
-                $type = $nodeScope->hasVariableType($variableName)
-                    ->yes() ? $nodeScope->getVariableType(
-                    $variableName
-                ) : $item->getAttribute(AttributeKey::ORIGINAL_TYPE);
-                if ($type !== null) {
-                    // If we know it is an array, then print it directly
-                    // Otherwise PHPStan throws an error:
-                    // "Else branch is unreachable because ternary operator condition is always true."
-                    if ($type instanceof ArrayType) {
-                        return new Arg($item);
-                    }
-                    // If it is iterable, then directly return `iterator_to_array`
-                    if ($type instanceof ObjectType && is_a($type->getClassName(), Traversable::class, true)) {
-                        return new Arg(new FuncCall(new Name('iterator_to_array'), [new Arg($item)]));
-                    }
-                }
-                // Print a ternary, handling either an array or an iterator
-                return new Arg(
-                    new Ternary(
-                        new FuncCall(new Name('is_array'), [new Arg($item)]),
-                        $item,
-                        new FuncCall(new Name('iterator_to_array'), [new Arg($item)])
-                    )
-                );
+                return $this->createSpreadArrayItemArg($nodeScope, $item);
             }
             return new Arg($item);
         }, $items));
+    }
+
+    private function createSpreadArrayItemArg(Scope $nodeScope, ArrayItem $item): Arg
+    {
+        // By now every item is a variable
+        /** @var Variable */
+        $variable = $item->value;
+        $variableName = $this->getName($variable) ?? '';
+        // If the variable is not in scope, it's one we just added.
+        // Then get the type from the attribute
+        $type = $nodeScope->hasVariableType($variableName)
+            ->yes() ? $nodeScope->getVariableType($variableName) : $item->getAttribute(AttributeKey::ORIGINAL_TYPE);
+        if ($type !== null) {
+            // If we know it is an array, then print it directly
+            // Otherwise PHPStan throws an error:
+            // "Else branch is unreachable because ternary operator condition is always true."
+            if ($type instanceof ArrayType) {
+                return new Arg($item);
+            }
+            // If it is iterable, then directly return `iterator_to_array`
+            if ($type instanceof ObjectType && is_a($type->getClassName(), Traversable::class, true)) {
+                return new Arg(new FuncCall(new Name('iterator_to_array'), [new Arg($item)]));
+            }
+        }
+        // Print a ternary, handling either an array or an iterator
+        return new Arg(
+            new Ternary(
+                new FuncCall(new Name('is_array'), [new Arg($item)]),
+                $item,
+                new FuncCall(new Name('iterator_to_array'), [new Arg($item)])
+            )
+        );
     }
 
     /**
