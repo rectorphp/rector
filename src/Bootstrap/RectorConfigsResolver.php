@@ -55,7 +55,6 @@ final class RectorConfigsResolver
 
     /**
      * @return SmartFileInfo[]
-     * @noRector
      */
     public function provide(): array
     {

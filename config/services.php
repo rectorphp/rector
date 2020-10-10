@@ -11,6 +11,7 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
 use Rector\Core\Configuration\MinimalVersionChecker;
 use Rector\Core\Console\Application;
 use Rector\Core\EventDispatcher\AutowiredEventDispatcher;
@@ -62,6 +63,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire(false);
 
     $services->alias(SymfonyApplication::class, Application::class);
+
+    $services->set(NoRectorsLoadedReporter::class);
 
     $services->set(TextDescriptor::class);
 
