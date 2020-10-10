@@ -22,7 +22,7 @@ jobs:
 
                     -
                         name: 'Show command'
-                        run: bin/rector show --config rector-ci.php
+                        run: bin/rector show --config rector-ci.php --ansi
 
                     -
                         name: Validate Fixtures
