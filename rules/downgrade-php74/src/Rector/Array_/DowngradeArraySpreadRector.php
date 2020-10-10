@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp74\Rector\Array_;
 
-use Traversable;
-use PhpParser\Node;
 use PhpParser\Comment;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ObjectType;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Expr\ArrayItem;
+use Rector\Core\Comments\CommentableNodeResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Core\Comments\CommentableNodeResolver;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Traversable;
 
 /**
  * @see \Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\DowngradeArraySpreadRectorTest
@@ -173,9 +173,7 @@ CODE_SAMPLE
     {
         /** @var Scope */
         $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
-        return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item) use (
-            $nodeScope
-        ): Arg {
+        return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item) use ($nodeScope): Arg {
             if ($item !== null && $item->unpack) {
                 // Do not unpack anymore
                 $item->unpack = false;
@@ -192,7 +190,11 @@ CODE_SAMPLE
                         return new Arg($item);
                     }
                     // If it is iterable, then directly return `iterator_to_array`
-                    if ($variableType instanceof ObjectType && is_a($variableType->getClassName(), Traversable::class, true)) {
+                    if ($variableType instanceof ObjectType && is_a(
+                        $variableType->getClassName(),
+                        Traversable::class,
+                        true
+                    )) {
                         return new Arg(new FuncCall(new Name('iterator_to_array'), [new Arg($item)]));
                     }
                 }
