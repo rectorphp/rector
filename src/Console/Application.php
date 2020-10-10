@@ -10,6 +10,7 @@ use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Exception\NoRectorsLoadedException;
 use Rector\DocumentationGenerator\Command\DumpRectorsCommand;
@@ -173,7 +174,7 @@ final class Application extends SymfonyApplication
     private function addCustomOptions(InputDefinition $inputDefinition): void
     {
         $inputDefinition->addOption(new InputOption(
-            'config',
+            Option::OPTION_CONFIG,
             'c',
             InputOption::VALUE_REQUIRED,
             'Path to config file',
@@ -181,24 +182,31 @@ final class Application extends SymfonyApplication
         ));
 
         $inputDefinition->addOption(new InputOption(
-            'set',
+            Option::OPTION_SET,
             's',
             InputOption::VALUE_REQUIRED,
             'Finds config by shortcut name'
         ));
 
         $inputDefinition->addOption(new InputOption(
-            'debug',
+            Option::OPTION_DEBUG,
             null,
             InputOption::VALUE_NONE,
             'Enable debug verbosity (-vvv)'
         ));
 
         $inputDefinition->addOption(new InputOption(
-            'xdebug',
+            Option::XDEBUG,
             null,
             InputOption::VALUE_NONE,
             'Allow running xdebug'
+        ));
+
+        $inputDefinition->addOption(new InputOption(
+            Option::OPTION_CLEAR_CACHE,
+            null,
+            InputOption::VALUE_NONE,
+            'Clear cache'
         ));
 
         $inputDefinition->addOption(new InputOption(
