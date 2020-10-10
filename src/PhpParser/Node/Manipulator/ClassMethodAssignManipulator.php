@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
@@ -330,17 +331,59 @@ final class ClassMethodAssignManipulator
             /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($node);
 
-            if ($this->isMethodCallWithReferencedArgument($parentNode, $node)) {
+            if ($this->isCallOrConstructorWithReference($parentNode, $node, $variableName)) {
                 $referencedVariables[] = $variableName;
-                return null;
-            }
-
-            if ($this->isFuncCallWithReferencedArgument($parentNode, $node)) {
-                $referencedVariables[] = $variableName;
-                return null;
             }
         });
 
         return $referencedVariables;
+    }
+
+    private function isParameterReferencedInMethodReflection(New_ $new, string $variableName): bool
+    {
+        $methodReflection = $this->callReflectionResolver->resolveConstructor($new);
+
+        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection, $new);
+        if ($parametersAcceptor === null) {
+            return false;
+        }
+
+        /** @var ParameterReflection $parameter */
+        foreach ($parametersAcceptor->getParameters() as $parameter) {
+            if ($parameter->getName() !== $variableName) {
+                continue;
+            }
+
+            return $parameter->passedByReference()
+                ->yes();
+        }
+
+        return false;
+    }
+
+    private function isCallOrConstructorWithReference(Node $node, Variable $variable, string $variableName): bool
+    {
+        if ($this->isMethodCallWithReferencedArgument($node, $variable)) {
+            return true;
+        }
+
+        if ($this->isFuncCallWithReferencedArgument($node, $variable)) {
+            return true;
+        }
+
+        if ($this->isConstructorWithReference($node, $variableName)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isConstructorWithReference(Node $node, string $variableName): bool
+    {
+        if (! $node instanceof New_) {
+            return false;
+        }
+
+        return $this->isParameterReferencedInMethodReflection($node, $variableName);
     }
 }

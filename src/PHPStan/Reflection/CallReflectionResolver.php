@@ -7,6 +7,7 @@ namespace Rector\Core\PHPStan\Reflection;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
@@ -17,6 +18,7 @@ use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -56,6 +58,26 @@ final class CallReflectionResolver
     }
 
     /**
+     * @return MethodReflection|FunctionReflection|null
+     */
+    public function resolveConstructor(New_ $new)
+    {
+        /** @var Scope|null $scope */
+        $scope = $new->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            return null;
+        }
+
+        $classType = $this->nodeTypeResolver->resolve($new->class);
+
+        if ($classType->hasMethod(MethodName::CONSTRUCT)->yes() === false) {
+            return null;
+        }
+
+        return $classType->getMethod(MethodName::CONSTRUCT, $scope);
+    }
+
+    /**
      * @param FuncCall|MethodCall|StaticCall $node
      * @return MethodReflection|FunctionReflection|null
      */
@@ -70,7 +92,7 @@ final class CallReflectionResolver
 
     /**
      * @param FunctionReflection|MethodReflection|null $reflection
-     * @param FuncCall|MethodCall|StaticCall $node
+     * @param FuncCall|MethodCall|StaticCall|New_ $node
      */
     public function resolveParametersAcceptor($reflection, Node $node): ?ParametersAcceptor
     {
