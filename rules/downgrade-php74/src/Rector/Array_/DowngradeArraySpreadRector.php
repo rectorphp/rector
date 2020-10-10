@@ -114,11 +114,8 @@ CODE_SAMPLE
     private function refactorNode(Array_ $array): Node
     {
         $newItems = $this->createArrayItems($array);
-        // If it is a variable, store the name,
-        // to print it directly without checking `is_array`
-        $variableNames = $this->getVariableNames($array);
         // Replace this array node with an `array_merge`
-        $newNode = $this->createArrayMerge($array, $newItems, $variableNames);
+        $newNode = $this->createArrayMerge($array, $newItems);
         if ($this->hasNonVariableArraySpreadItems($array)) {
             $commentableNode = $this->commentableNodeResolver->resolve($newNode);
             $commentableNode->setAttribute(AttributeKey::COMMENTS, [new Comment('/** @phpstan-ignore-next-line */')]);
@@ -167,31 +164,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @return string[]
-     */
-    private function getVariableNames(Array_ $array): array
-    {
-        return array_map(
-            function (ArrayItem $item): string {
-                /** @var Variable */
-                $variable = $item->value;
-                return $this->getName($variable) ?? '';
-            },
-            $this->getArraySpreadItems($array, true)
-        );
-    }
-
-    /**
      * @see https://wiki.php.net/rfc/spread_operator_for_array
      * @param (ArrayItem|null)[] $items
      */
-    private function createArrayMerge(Array_ $array, array $items, array $variableNames): FuncCall
+    private function createArrayMerge(Array_ $array, array $items): FuncCall
     {
         /** @var Scope */
         $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
         return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item) use (
-            $nodeScope,
-            $variableNames
+            $nodeScope
         ): Arg {
             if ($item !== null && $item->unpack) {
                 // Do not unpack anymore
@@ -205,7 +186,7 @@ CODE_SAMPLE
                     // If we know it is an array, then print it directly
                     // Otherwise PHPStan throws an error:
                     // "Else branch is unreachable because ternary operator condition is always true."
-                    if (in_array($variableName, $variableNames, true) && $variableType instanceof ArrayType) {
+                    if ($variableType instanceof ArrayType) {
                         return new Arg($item);
                     }
                 }
