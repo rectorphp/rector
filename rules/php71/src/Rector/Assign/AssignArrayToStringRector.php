@@ -108,7 +108,7 @@ CODE_SAMPLE
             if (! $node instanceof PropertyProperty) {
                 return;
             }
-            if (! $node->default) {
+            if ($node->default === null) {
                 return;
             }
             if (! $this->isEmptyStringNode($node->default)) {
