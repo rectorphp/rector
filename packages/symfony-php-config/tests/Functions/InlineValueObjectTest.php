@@ -15,16 +15,13 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 final class InlineValueObjectTest extends TestCase
 {
-    /**
-     * @var mixed[]
-     */
-    private const INSTANCEOF = [];
-
     public function test(): void
     {
         $containerBuilder = new ContainerBuilder();
         $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator());
-        $servicesConfigurator = new ServicesConfigurator($containerBuilder, $phpFileLoader, self::INSTANCEOF);
+
+        $instanceOf = [];
+        $servicesConfigurator = new ServicesConfigurator($containerBuilder, $phpFileLoader, $instanceOf);
 
         $someValueObject = new SomeValueObject('Rector');
         $referenceConfigurator = inline_single_object($someValueObject, $servicesConfigurator);
