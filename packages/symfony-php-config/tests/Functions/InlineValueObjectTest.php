@@ -17,11 +17,7 @@ final class InlineValueObjectTest extends TestCase
 {
     public function test(): void
     {
-        $containerBuilder = new ContainerBuilder();
-        $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator());
-
-        $instanceOf = [];
-        $servicesConfigurator = new ServicesConfigurator($containerBuilder, $phpFileLoader, $instanceOf);
+        $servicesConfigurator = $this->createServiceConfigurator();
 
         $someValueObject = new SomeValueObject('Rector');
         $referenceConfigurator = inline_single_object($someValueObject, $servicesConfigurator);
@@ -30,5 +26,15 @@ final class InlineValueObjectTest extends TestCase
 
         $id = (string) $referenceConfigurator;
         $this->assertSame(SomeValueObject::class, $id);
+    }
+
+    private function createServiceConfigurator(): ServicesConfigurator
+    {
+        $containerBuilder = new ContainerBuilder();
+        $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator());
+
+        $instanceOf = [];
+
+        return new ServicesConfigurator($containerBuilder, $phpFileLoader, $instanceOf);
     }
 }

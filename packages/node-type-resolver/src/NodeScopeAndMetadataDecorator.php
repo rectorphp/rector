@@ -13,7 +13,7 @@ use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use Rector\Core\Configuration\Configuration;
 use Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamPositionNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\PhpDocInfoNodeVisitor;
@@ -74,7 +74,7 @@ final class NodeScopeAndMetadataDecorator
     private $nodeConnectingVisitor;
 
     /**
-     * @var FunctionLikeParamPositionNodeVisitor
+     * @var FunctionLikeParamArgPositionNodeVisitor
      */
     private $functionLikeParamPositionNodeVisitor;
 
@@ -89,7 +89,7 @@ final class NodeScopeAndMetadataDecorator
         PhpDocInfoNodeVisitor $phpDocInfoNodeVisitor,
         StatementNodeVisitor $statementNodeVisitor,
         NodeConnectingVisitor $nodeConnectingVisitor,
-        FunctionLikeParamPositionNodeVisitor $functionLikeParamPositionNodeVisitor
+        FunctionLikeParamArgPositionNodeVisitor $functionLikeParamPositionNodeVisitor
     ) {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->cloningVisitor = $cloningVisitor;

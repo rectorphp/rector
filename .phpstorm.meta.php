@@ -47,6 +47,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::CLOSURE_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
+    \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
 );
 
 expectedArguments(
@@ -79,6 +80,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::CLOSURE_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
+    \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
 );
 
 expectedArguments(

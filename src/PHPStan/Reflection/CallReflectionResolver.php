@@ -17,6 +17,8 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
 use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -57,9 +59,6 @@ final class CallReflectionResolver
         $this->typeToCallReflectionResolverRegistry = $typeToCallReflectionResolverRegistry;
     }
 
-    /**
-     * @return MethodReflection|FunctionReflection|null
-     */
     public function resolveConstructor(New_ $new): ?MethodReflection
     {
         /** @var Scope|null $scope */
@@ -69,6 +68,10 @@ final class CallReflectionResolver
         }
 
         $classType = $this->nodeTypeResolver->resolve($new->class);
+
+        if ($classType instanceof UnionType) {
+            return $this->matchConstructorMethodInUnionType($classType, $scope);
+        }
 
         if (! $classType->hasMethod(MethodName::CONSTRUCT)->yes()) {
             return null;
@@ -162,5 +165,21 @@ final class CallReflectionResolver
         }
 
         return $classType->getMethod($methodName, $scope);
+    }
+
+    private function matchConstructorMethodInUnionType(UnionType $unionType, Scope $scope): ?MethodReflection
+    {
+        foreach ($unionType->getTypes() as $unionedType) {
+            if (! $unionedType instanceof TypeWithClassName) {
+                continue;
+            }
+            if (! $unionedType->hasMethod(MethodName::CONSTRUCT)->yes()) {
+                continue;
+            }
+
+            return $unionedType->getMethod(MethodName::CONSTRUCT, $scope);
+        }
+
+        return null;
     }
 }

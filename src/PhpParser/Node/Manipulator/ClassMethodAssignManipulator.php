@@ -251,7 +251,9 @@ final class ClassMethodAssignManipulator
                 return null;
             }
 
+            $argumentPosition = null;
             if ($parentNode instanceof Arg) {
+                $argumentPosition = $parentNode->getAttribute(AttributeKey::ARGUMENT_POSITION);
                 $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             }
 
@@ -259,10 +261,14 @@ final class ClassMethodAssignManipulator
                 return null;
             }
 
+            if ($argumentPosition === null) {
+                return null;
+            }
+
             /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($node);
 
-            if ($this->isCallOrConstructorWithReference($parentNode, $node, $variableName)) {
+            if ($this->isCallOrConstructorWithReference($parentNode, $node, $argumentPosition)) {
                 $referencedVariables[] = $variableName;
             }
         });
@@ -290,7 +296,7 @@ final class ClassMethodAssignManipulator
         return false;
     }
 
-    private function isCallOrConstructorWithReference(Node $node, Variable $variable, string $variableName): bool
+    private function isCallOrConstructorWithReference(Node $node, Variable $variable, int $argumentPosition): bool
     {
         if ($this->isMethodCallWithReferencedArgument($node, $variable)) {
             return true;
@@ -299,7 +305,7 @@ final class ClassMethodAssignManipulator
         if ($this->isFuncCallWithReferencedArgument($node, $variable)) {
             return true;
         }
-        return $this->isConstructorWithReference($node, $variableName);
+        return $this->isConstructorWithReference($node, $argumentPosition);
     }
 
     private function isMethodCallWithReferencedArgument(Node $node, Variable $variable): bool
@@ -351,27 +357,27 @@ final class ClassMethodAssignManipulator
         return $node->args[0]->value !== $variable;
     }
 
-    private function isConstructorWithReference(Node $node, string $variableName): bool
+    private function isConstructorWithReference(Node $node, int $argumentPosition): bool
     {
         if (! $node instanceof New_) {
             return false;
         }
 
-        return $this->isParameterReferencedInMethodReflection($node, $variableName);
+        return $this->isParameterReferencedInMethodReflection($node, $argumentPosition);
     }
 
-    private function isParameterReferencedInMethodReflection(New_ $new, string $variableName): bool
+    private function isParameterReferencedInMethodReflection(New_ $new, int $argumentPosition): bool
     {
         $methodReflection = $this->callReflectionResolver->resolveConstructor($new);
-
         $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection, $new);
+
         if ($parametersAcceptor === null) {
             return false;
         }
 
         /** @var ParameterReflection $parameter */
-        foreach ($parametersAcceptor->getParameters() as $parameter) {
-            if ($parameter->getName() !== $variableName) {
+        foreach ($parametersAcceptor->getParameters() as $parameterPosition => $parameter) {
+            if ($parameterPosition !== $argumentPosition) {
                 continue;
             }
 
