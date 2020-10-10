@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp74\Rector\Array_;
 
-use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -17,7 +16,6 @@ use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Comments\CommentableNodeResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -35,15 +33,9 @@ final class DowngradeArraySpreadRector extends AbstractRector
      */
     private $variableNaming;
 
-    /**
-     * @var CommentableNodeResolver
-     */
-    private $commentableNodeResolver;
-
-    public function __construct(VariableNaming $variableNaming, CommentableNodeResolver $commentableNodeResolver)
+    public function __construct(VariableNaming $variableNaming)
     {
         $this->variableNaming = $variableNaming;
-        $this->commentableNodeResolver = $commentableNodeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -118,11 +110,6 @@ CODE_SAMPLE
         $newItems = $this->createArrayItems($array);
         // Replace this array node with an `array_merge`
         $newNode = $this->createArrayMerge($array, $newItems);
-        if ($this->hasNonVariableArraySpreadItems($array)) {
-            $commentableNode = $this->commentableNodeResolver->resolve($newNode);
-            $commentableNode->setAttribute(AttributeKey::COMMENTS, [new Comment('/** @phpstan-ignore-next-line */')]);
-            // $this->addComment($newNode, '/** @phpstan-ignore-next-line */');
-        }
         return $newNode;
     }
 
@@ -218,11 +205,6 @@ CODE_SAMPLE
         }, $items));
     }
 
-    private function hasNonVariableArraySpreadItems(Array_ $array): bool
-    {
-        return count($this->getArraySpreadItems($array, false)) !== count($this->getArraySpreadItems($array, true));
-    }
-
     /**
      * If it is a variable, we add it directly
      * Otherwise it could be a function, method, ternary, traversable, etc
@@ -256,15 +238,5 @@ CODE_SAMPLE
     private function createArrayItem(array $items): ArrayItem
     {
         return new ArrayItem(new Array_($items));
-    }
-
-    /**
-     * @return ArrayItem[]
-     */
-    private function getArraySpreadItems(Array_ $array, bool $onlyVariables): array
-    {
-        return array_filter($array->items, function (ArrayItem $item) use ($onlyVariables): bool {
-            return $item !== null && $item->unpack && (! $onlyVariables || $item->value instanceof Variable);
-        });
     }
 }
