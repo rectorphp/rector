@@ -14,7 +14,7 @@ jobs:
             name: "Split Monorepo"
             if: (branch = master OR tag IS present) && type = push
             script:
-                - composer update
+                - composer update --ansi
                 # travis_retry to prevent fails
                 - travis_retry vendor/bin/monorepo-builder split --ansi
 
