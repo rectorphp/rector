@@ -2,12 +2,12 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class FixtureClass
+class FixtureEndByValueClass
 {
     public function run($string)
     {
-        $array = [1, 2];
-        list($a, &$b) = $array;
+        $array = [1, 2, 3];
+        list($a, &$b, $c) = $array;
     }
 }
 
@@ -17,12 +17,12 @@ class FixtureClass
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class FixtureClass
+class FixtureEndByValueClass
 {
     public function run($string)
     {
-        $array = [1, 2];
-        list($a, $b) = $array;
+        $array = [1, 2, 3];
+        list($a, $b, $c) = $array;
         $b =& $array[1];
     }
 }

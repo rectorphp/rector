@@ -26,6 +26,15 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class DowngradeListReferenceAssignmentRector extends AbstractRector
 {
+    /**
+     * @var int
+     */
+    private const ALL = 0;
+    /**
+     * @var int
+     */
+    private const ANY = 1;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -87,9 +96,24 @@ CODE_SAMPLE
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         /** @var Variable */
         $exprVariable = $parentNode->expr;
+        // Count number of params by ref on the right side, to remove them later on
+        $rightSideParamsByRefCount = $this->countRightSideMostParamsByRef($node->items);
         // Their position is kept in the array
         $newNodes = $this->createAssignRefArrayFromListReferences($node->items, $exprVariable, []);
         $this->addNodesAfterNode($newNodes, $node);
+        // Remove the right-side-most params by reference from `list()`,
+        // since they are not needed anymore
+        // If all of them are by ref, then directly remove `list()`
+        $nodeItemsCount = count($node->items);
+        if ($rightSideParamsByRefCount === $nodeItemsCount) {
+            // Remove the Assign node
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            $this->removeNode($parentNode);
+            return null;
+        }
+        if ($rightSideParamsByRefCount > 0) {
+            array_splice($node->items, $nodeItemsCount - $rightSideParamsByRefCount);
+        }
         return $node;
     }
 
@@ -102,7 +126,7 @@ CODE_SAMPLE
 
         // Check it follows `list(...) = $foo`
         if ($parentNode instanceof Assign && $parentNode->var === $node && $parentNode->expr instanceof Variable) {
-            return $this->hasItemByRef($node->items);
+            return $this->hasAnyItemByRef($node->items);
         }
 
         return false;
@@ -165,20 +189,17 @@ CODE_SAMPLE
     }
 
     /**
-     * Indicates if there is at least 1 item passed by reference, as in:
-     * - list(&$a, $b)
-     * - list($a, $b, list(&$c, $d))
-     *
      * @param (ArrayItem|null)[] $items
+     * @return ArrayItem[]
      */
-    private function hasItemByRef(array $items): bool
+    private function getItemsByRef(array $items, int $condition): array
     {
         /** @var ArrayItem[] */
-        $filteredItemsByRef = array_filter(array_map(
+        return array_filter(array_map(
             /**
              * @var ArrayItem|null $item
              */
-            function ($item): ?ArrayItem {
+            function ($item) use ($condition): ?ArrayItem {
                 if ($item === null) {
                     return null;
                 }
@@ -187,14 +208,42 @@ CODE_SAMPLE
                     // Recursive call
                     /** @var List_|Array_ */
                     $nestedList = $item->value;
-                    $hasItemByRef = $this->hasItemByRef($nestedList->items);
+                    $hasItemByRef = false;
+                    if ($condition == self::ALL) {
+                        $hasItemByRef = $this->hasAllItemsByRef($nestedList->items);
+                    } elseif ($condition == self::ANY) {
+                        $hasItemByRef = $this->hasAnyItemByRef($nestedList->items);
+                    }
                     return $hasItemByRef ? $item : null;
                 }
                 return $item->value instanceof Variable && $item->byRef ? $item : null;
             },
             $items
         ));
-        return count($filteredItemsByRef) > 0;
+    }
+
+    /**
+     * Indicates if there is at least 1 item passed by reference, as in:
+     * - list(&$a, $b)
+     * - list($a, $b, list(&$c, $d))
+     *
+     * @param (ArrayItem|null)[] $items
+     */
+    private function hasAnyItemByRef(array $items): bool
+    {
+        return count($this->getItemsByRef($items, self::ANY)) > 0;
+    }
+
+    /**
+     * Indicates if there is at least 1 item passed by reference, as in:
+     * - list(&$a, $b)
+     * - list($a, $b, list(&$c, $d))
+     *
+     * @param (ArrayItem|null)[] $items
+     */
+    private function hasAllItemsByRef(array $items): bool
+    {
+        return count($this->getItemsByRef($items, self::ALL)) === count($items);
     }
 
     /**
@@ -216,5 +265,40 @@ CODE_SAMPLE
         $dim = BuilderHelpers::normalizeValue($arrayIndex);
         $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
         return new AssignRef($assignVariable, $arrayDimFetch);
+    }
+
+    /**
+     * Count the number of params by reference placed at the end
+     * These params are not needed anymore, so they can be removed
+     * @param (ArrayItem|null)[] $listItems
+     */
+    private function countRightSideMostParamsByRef(
+        array $listItems
+    ): int {
+        // Their position is kept in the array
+        $count = 0;
+        $listItemsCount = count($listItems);
+        // Start from the end => right-side-most params
+        for ($i = $listItemsCount - 1; $i >= 0; $i--) {
+            $listItem = $listItems[$i];
+            // Also include null items, since they can be removed
+            if ($listItem === null || $listItem->byRef) {
+                $count++;
+                continue;
+            }
+            // If it is a nested list, check if if all its items are by reference
+            if ($listItem->value instanceof List_ || $listItem->value instanceof Array_) {
+                // Recursive call
+                /** @var List_|Array_ */
+                $nestedList = $listItem->value;
+                if ($this->hasAllItemsByRef($nestedList->items)) {
+                    $count++;
+                    continue;
+                }
+            }
+            // Item not by reference. Reach the end
+            return $count;
+        }
+        return $count;
     }
 }

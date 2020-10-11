@@ -2,12 +2,12 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class SkippedValuesClass
+class NestedListAllByRefRefClass
 {
     public function run($string)
     {
-        $array = [1, 2, 3, [3, 4]];
-        list(&$a, $b,, $d, &$e) = $array;
+        $array = [1, 2, [3, 4]];
+        list(&$a, &$b, list(&$c, &$d)) = $array;
     }
 }
 
@@ -17,14 +17,15 @@ class SkippedValuesClass
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class SkippedValuesClass
+class NestedListAllByRefRefClass
 {
     public function run($string)
     {
-        $array = [1, 2, 3, [3, 4]];
-        list($a, $b,, $d) = $array;
+        $array = [1, 2, [3, 4]];
         $a =& $array[0];
-        $e =& $array[4];
+        $b =& $array[1];
+        $c =& $array[2][0];
+        $d =& $array[2][1];
     }
 }
 
