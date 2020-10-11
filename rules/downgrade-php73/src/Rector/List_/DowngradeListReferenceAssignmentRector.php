@@ -132,6 +132,7 @@ CODE_SAMPLE
 
         return false;
     }
+
     /**
      * Count the number of params by reference placed at the end
      * These params are not needed anymore, so they can be removed
@@ -233,6 +234,7 @@ CODE_SAMPLE
     {
         return count($this->getItemsByRef($items, self::ANY)) > 0;
     }
+
     /**
      * Indicates if there is at least 1 item passed by reference, as in:
      * - list(&$a, $b)
