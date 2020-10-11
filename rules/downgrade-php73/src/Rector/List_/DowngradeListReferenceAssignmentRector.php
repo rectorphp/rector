@@ -277,10 +277,7 @@ CODE_SAMPLE
     {
         /** @var ArrayItem[] */
         return array_filter(array_map(
-            /**
-             * @var ArrayItem|null $item
-             */
-            function ($item) use ($condition): ?ArrayItem {
+            function (?ArrayItem $item) use ($condition): ?ArrayItem {
                 if ($item === null) {
                     return null;
                 }
