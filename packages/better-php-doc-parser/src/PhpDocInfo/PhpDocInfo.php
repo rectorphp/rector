@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
@@ -408,14 +407,7 @@ final class PhpDocInfo
 
     public function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
-        /** @var AttributeAwareParamTagValueNode $paramTagValue */
-        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
-            if (Strings::match($paramTagValue->parameterName, '#^(\$)?' . $name . '$#')) {
-                return $paramTagValue;
-            }
-        }
-
-        return null;
+        return $this->phpDocNode->getParam($name);
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type
@@ -473,13 +465,9 @@ final class PhpDocInfo
     {
         $throwsTypes = [];
 
-        foreach ($this->getTagsByName('throws') as $throwsPhpDocNode) {
-            if (! $throwsPhpDocNode->value instanceof ThrowsTagValueNode) {
-                continue;
-            }
-
+        foreach ($this->phpDocNode->getThrowsTagValues() as $throwsPhpDocNode) {
             $throwsTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
-                $throwsPhpDocNode->value,
+                $throwsPhpDocNode,
                 $this->node
             );
         }

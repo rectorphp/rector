@@ -61,13 +61,18 @@ final class SomeClass
 
     public function some()
     {
-        $docBlock = '/** @var int */';
+        $docBlock = '/** @param int $name */';
 
         /** @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode */
         $phpDocNode = $this->simplePhpDocParser->parseDocBlock($docBlock);
 
-        // @todo
-        $phpDocNode->getParamType();
+        // param extras
+
+        /** @var \PHPStan\PhpDocParser\Ast\Type\TypeNode $nameParamType */
+        $nameParamType = $phpDocNode->getParamType('name');
+
+        /** @var \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode $nameParamTagValueNode */
+        $nameParamTagValueNode = $phpDocNode->getParam('name');
     }
 }
 ```

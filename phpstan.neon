@@ -123,6 +123,8 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
+
+
         # iterable types
         - '#with no value type specified in iterable type array#'
         - '#type specified in iterable type (array|iterable)#'
@@ -131,6 +133,9 @@ parameters:
         - utils/phpstan-extensions/src/Rule/PreventParentMethodVisibilityOverrideRule.php
         - utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
         - packages/rector-generator/templates/*
+        # this invalidates whole cache everytime
+        - 'packages/symfony-php-config/*'
+        - 'packages/simple-php-doc-parser'
 
         # generated files
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
