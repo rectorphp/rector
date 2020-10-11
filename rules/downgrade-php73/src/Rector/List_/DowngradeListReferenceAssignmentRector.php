@@ -51,6 +51,8 @@ class SomeClass
         list($a, &$b) = $array;
 
         [&$c, $d, &$e] = $array;
+
+        list(&$a, &$b) = $array;
     }
 }
 CODE_SAMPLE
@@ -67,6 +69,9 @@ class SomeClass
         [$c, $d, $e] = $array;
         $c =& $array[0];
         $e =& $array[2];
+
+        $a =& $array[0];
+        $b =& $array[1];
     }
 }
 CODE_SAMPLE
