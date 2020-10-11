@@ -113,13 +113,14 @@ CODE_SAMPLE
 
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-        $firstIf = $this->createInvertedIfConditionNodeFromExpr($expr->left);
-        $secondIf = $this->createInvertedIfConditionNodeFromExpr($expr->right);
 
-        $nodeComments = $node->getAttribute(AttributeKey::COMMENTS);
-        $firstIf->setAttribute(AttributeKey::COMMENTS, $nodeComments);
+        $conditions = $this->getBooleanAndConditions($expr);
+        $ifs = $this->createInvertedIfNodesFromConditions($conditions);
 
-        $this->addNodesAfterNode([$firstIf, $secondIf, $ifReturn], $node);
+        $this->keepCommentIfExists($node, $ifs);
+
+        $this->addNodesAfterNode($ifs, $node);
+        $this->addNodeAfterNode($ifReturn, $node);
 
         $functionLikeReturn = $this->getFunctionLikeReturn($node);
         if ($functionLikeReturn !== null) {
@@ -142,10 +143,6 @@ CODE_SAMPLE
         }
 
         if (! $if->cond instanceof BooleanAnd) {
-            return true;
-        }
-
-        if ($this->hasMoreThanTwoConditions($if)) {
             return true;
         }
 
@@ -174,13 +171,50 @@ CODE_SAMPLE
         return $ifStmt;
     }
 
-    private function createInvertedIfConditionNodeFromExpr(Expr $expr): If_
+    /**
+     * @return Expr[]
+     */
+    private function getBooleanAndConditions(BooleanAnd $booleanAnd): array
     {
-        $invertedCondition = $this->conditionInverter->createInvertedCondition($expr);
-        $if = new If_($invertedCondition);
-        $if->stmts = [new Return_()];
+        $ifs = [];
+        while (property_exists($booleanAnd, 'left')) {
+            $ifs[] = $booleanAnd->right;
+            $booleanAnd = $booleanAnd->left;
+            if (! $booleanAnd instanceof BooleanAnd) {
+                $ifs[] = $booleanAnd;
+                break;
+            }
+        }
 
-        return $if;
+        krsort($ifs);
+        return $ifs;
+    }
+
+    /**
+     * @param Expr[] $conditions
+     * @return If_[]
+     */
+    private function createInvertedIfNodesFromConditions(array $conditions): array
+    {
+        $ifs = [];
+        foreach ($conditions as $condition) {
+            $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
+            $if = new If_($invertedCondition);
+            $if->stmts = [new Return_()];
+
+            $ifs[] = $if;
+        }
+
+        return $ifs;
+    }
+
+    /**
+     * @param If_[] $ifs
+     */
+    private function keepCommentIfExists(If_ $if, array $ifs): void
+    {
+        $nodeComments = $if->getAttribute(AttributeKey::COMMENTS);
+        $ifs[0]->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 
     private function getFunctionLikeReturn(If_ $if): ?Return_
@@ -205,12 +239,6 @@ CODE_SAMPLE
         }
 
         return $return;
-    }
-
-    private function hasMoreThanTwoConditions(If_ $if): bool
-    {
-        $binaryOps = $this->betterNodeFinder->findInstanceOf($if->cond, BooleanAnd::class);
-        return count($binaryOps) >= 2;
     }
 
     private function isFunctionLikeReturnsVoid(If_ $if): bool
