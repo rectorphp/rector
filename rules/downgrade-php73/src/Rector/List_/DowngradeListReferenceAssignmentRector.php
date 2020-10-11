@@ -132,6 +132,39 @@ CODE_SAMPLE
 
         return false;
     }
+    /**
+     * Count the number of params by reference placed at the end
+     * These params are not needed anymore, so they can be removed
+     * @param (ArrayItem|null)[] $listItems
+     */
+    private function countRightSideMostParamsByRef(array $listItems): int
+    {
+        // Their position is kept in the array
+        $count = 0;
+        $listItemsCount = count($listItems);
+        // Start from the end => right-side-most params
+        for ($i = $listItemsCount - 1; $i >= 0; $i--) {
+            $listItem = $listItems[$i];
+            // Also include null items, since they can be removed
+            if ($listItem === null || $listItem->byRef) {
+                $count++;
+                continue;
+            }
+            // If it is a nested list, check if if all its items are by reference
+            if ($listItem->value instanceof List_ || $listItem->value instanceof Array_) {
+                // Recursive call
+                /** @var List_|Array_ */
+                $nestedList = $listItem->value;
+                if ($this->hasAllItemsByRef($nestedList->items)) {
+                    $count++;
+                    continue;
+                }
+            }
+            // Item not by reference. Reach the end
+            return $count;
+        }
+        return $count;
+    }
 
     /**
      * @param (ArrayItem|null)[] $listItems
@@ -200,6 +233,17 @@ CODE_SAMPLE
     {
         return count($this->getItemsByRef($items, self::ANY)) > 0;
     }
+    /**
+     * Indicates if there is at least 1 item passed by reference, as in:
+     * - list(&$a, $b)
+     * - list($a, $b, list(&$c, $d))
+     *
+     * @param (ArrayItem|null)[] $items
+     */
+    private function hasAllItemsByRef(array $items): bool
+    {
+        return count($this->getItemsByRef($items, self::ALL)) === count($items);
+    }
 
     /**
      * Re-build the path to the variable with all accumulated indexes
@@ -254,51 +298,5 @@ CODE_SAMPLE
             },
             $items
         ));
-    }
-
-    /**
-     * Count the number of params by reference placed at the end
-     * These params are not needed anymore, so they can be removed
-     * @param (ArrayItem|null)[] $listItems
-     */
-    private function countRightSideMostParamsByRef(array $listItems): int
-    {
-        // Their position is kept in the array
-        $count = 0;
-        $listItemsCount = count($listItems);
-        // Start from the end => right-side-most params
-        for ($i = $listItemsCount - 1; $i >= 0; $i--) {
-            $listItem = $listItems[$i];
-            // Also include null items, since they can be removed
-            if ($listItem === null || $listItem->byRef) {
-                $count++;
-                continue;
-            }
-            // If it is a nested list, check if if all its items are by reference
-            if ($listItem->value instanceof List_ || $listItem->value instanceof Array_) {
-                // Recursive call
-                /** @var List_|Array_ */
-                $nestedList = $listItem->value;
-                if ($this->hasAllItemsByRef($nestedList->items)) {
-                    $count++;
-                    continue;
-                }
-            }
-            // Item not by reference. Reach the end
-            return $count;
-        }
-        return $count;
-    }
-
-    /**
-     * Indicates if there is at least 1 item passed by reference, as in:
-     * - list(&$a, $b)
-     * - list($a, $b, list(&$c, $d))
-     *
-     * @param (ArrayItem|null)[] $items
-     */
-    private function hasAllItemsByRef(array $items): bool
-    {
-        return count($this->getItemsByRef($items, self::ALL)) === count($items);
     }
 }
