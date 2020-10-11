@@ -278,25 +278,30 @@ CODE_SAMPLE
         /** @var ArrayItem[] */
         return array_filter(array_map(
             function (?ArrayItem $item) use ($condition): ?ArrayItem {
-                if ($item === null) {
-                    return null;
-                }
-                // Check if the item is a nested list/nested array destructuring
-                if ($item->value instanceof List_ || $item->value instanceof Array_) {
-                    // Recursive call
-                    /** @var List_|Array_ */
-                    $nestedList = $item->value;
-                    $hasItemByRef = false;
-                    if ($condition === self::ALL) {
-                        $hasItemByRef = $this->hasAllItemsByRef($nestedList->items);
-                    } elseif ($condition === self::ANY) {
-                        $hasItemByRef = $this->hasAnyItemByRef($nestedList->items);
-                    }
-                    return $hasItemByRef ? $item : null;
-                }
-                return $item->value instanceof Variable && $item->byRef ? $item : null;
+                return $this->getItemByRefOrNull($item, $condition);
             },
             $items
         ));
+    }
+
+    private function getItemByRefOrNull(?ArrayItem $item, int $condition): ?ArrayItem
+    {
+        if ($item === null) {
+            return null;
+        }
+        // Check if the item is a nested list/nested array destructuring
+        if ($item->value instanceof List_ || $item->value instanceof Array_) {
+            // Recursive call
+            /** @var List_|Array_ */
+            $nestedList = $item->value;
+            $hasItemByRef = false;
+            if ($condition === self::ALL) {
+                $hasItemByRef = $this->hasAllItemsByRef($nestedList->items);
+            } elseif ($condition === self::ANY) {
+                $hasItemByRef = $this->hasAnyItemByRef($nestedList->items);
+            }
+            return $hasItemByRef ? $item : null;
+        }
+        return $item->value instanceof Variable && $item->byRef ? $item : null;
     }
 }
