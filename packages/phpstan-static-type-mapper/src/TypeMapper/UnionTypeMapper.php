@@ -204,11 +204,16 @@ final class UnionTypeMapper implements TypeMapperInterface
     {
         $phpParserUnionType = $this->matchPhpParserUnionType($unionType);
         if ($phpParserUnionType !== null) {
+            if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::UNION_TYPES)) {
+                return null;
+            }
+
             return $phpParserUnionType;
         }
 
         // the type should be compatible with all other types, e.g. A extends B, B
         $compatibleObjectCandidate = $this->resolveCompatibleObjectCandidate($unionType);
+
         if ($compatibleObjectCandidate === null) {
             return null;
         }

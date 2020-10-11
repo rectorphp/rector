@@ -13,7 +13,8 @@ use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 /**
  * Special case of type inferer - it is always added in the end of the resolved types
  */
-final class DefaultValuePropertyTypeInferer implements PropertyTypeInfererInterface
+//implements PropertyTypeInfererInterface
+final class DefaultValuePropertyTypeInferer
 {
     /**
      * @var NodeTypeResolver

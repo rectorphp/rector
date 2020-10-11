@@ -254,6 +254,12 @@ CODE_SAMPLE
         }
 
         $onlyProperty = $property->props[0];
+
+        // skip is already has value
+        if ($onlyProperty->default !== null) {
+            return;
+        }
+
         $onlyProperty->default = $this->createNull();
     }
 

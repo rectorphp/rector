@@ -48,6 +48,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::CLOSURE_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
+    \Rector\NodeTypeResolver\Node\AttributeKey::IS_FIRST_LEVEL_STATEMENT,
 );
 
 expectedArguments(
@@ -81,6 +82,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::CLOSURE_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
+    \Rector\NodeTypeResolver\Node\AttributeKey::IS_FIRST_LEVEL_STATEMENT,
 );
 
 expectedArguments(

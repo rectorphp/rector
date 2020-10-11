@@ -45,7 +45,7 @@ use Symfony\Component\Console\Helper\HelperSet;
 class SymfonyConsoleHelperSet
 {
     /**
-     * @var HelperSet
+     * @var \Symfony\Component\Console\Helper\HelperSet|null
      */
     private $helperSet;
 

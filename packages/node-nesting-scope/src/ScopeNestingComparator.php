@@ -35,6 +35,11 @@ final class ScopeNestingComparator
             $node,
             ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [FunctionLike::class]
         );
+
+        if ($foundParentType === null) {
+            return false;
+        }
+
         return ! $foundParentType instanceof FunctionLike;
     }
 
