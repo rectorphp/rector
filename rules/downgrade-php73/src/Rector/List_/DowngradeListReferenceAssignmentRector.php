@@ -190,6 +190,39 @@ CODE_SAMPLE
     }
 
     /**
+     * Indicates if there is at least 1 item passed by reference, as in:
+     * - list(&$a, $b)
+     * - list($a, $b, list(&$c, $d))
+     *
+     * @param (ArrayItem|null)[] $items
+     */
+    private function hasAnyItemByRef(array $items): bool
+    {
+        return count($this->getItemsByRef($items, self::ANY)) > 0;
+    }
+
+    /**
+     * Re-build the path to the variable with all accumulated indexes
+     * @param (string|int)[] $nestedArrayIndexes The path to build nested lists
+     * @param string|int $arrayIndex
+     */
+    private function createAssignRefWithArrayDimFetch(
+        Variable $assignVariable,
+        Variable $exprVariable,
+        array $nestedArrayIndexes,
+        $arrayIndex
+    ): AssignRef {
+        $nestedExprVariable = $exprVariable;
+        foreach ($nestedArrayIndexes as $nestedArrayIndex) {
+            $nestedArrayIndexDim = BuilderHelpers::normalizeValue($nestedArrayIndex);
+            $nestedExprVariable = new ArrayDimFetch($nestedExprVariable, $nestedArrayIndexDim);
+        }
+        $dim = BuilderHelpers::normalizeValue($arrayIndex);
+        $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
+        return new AssignRef($assignVariable, $arrayDimFetch);
+    }
+
+    /**
      * @param (ArrayItem|null)[] $items
      * @return ArrayItem[]
      */
@@ -224,51 +257,6 @@ CODE_SAMPLE
     }
 
     /**
-     * Indicates if there is at least 1 item passed by reference, as in:
-     * - list(&$a, $b)
-     * - list($a, $b, list(&$c, $d))
-     *
-     * @param (ArrayItem|null)[] $items
-     */
-    private function hasAnyItemByRef(array $items): bool
-    {
-        return count($this->getItemsByRef($items, self::ANY)) > 0;
-    }
-
-    /**
-     * Indicates if there is at least 1 item passed by reference, as in:
-     * - list(&$a, $b)
-     * - list($a, $b, list(&$c, $d))
-     *
-     * @param (ArrayItem|null)[] $items
-     */
-    private function hasAllItemsByRef(array $items): bool
-    {
-        return count($this->getItemsByRef($items, self::ALL)) === count($items);
-    }
-
-    /**
-     * Re-build the path to the variable with all accumulated indexes
-     * @param (string|int)[] $nestedArrayIndexes The path to build nested lists
-     * @param string|int $arrayIndex
-     */
-    private function createAssignRefWithArrayDimFetch(
-        Variable $assignVariable,
-        Variable $exprVariable,
-        array $nestedArrayIndexes,
-        $arrayIndex
-    ): AssignRef {
-        $nestedExprVariable = $exprVariable;
-        foreach ($nestedArrayIndexes as $nestedArrayIndex) {
-            $nestedArrayIndexDim = BuilderHelpers::normalizeValue($nestedArrayIndex);
-            $nestedExprVariable = new ArrayDimFetch($nestedExprVariable, $nestedArrayIndexDim);
-        }
-        $dim = BuilderHelpers::normalizeValue($arrayIndex);
-        $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
-        return new AssignRef($assignVariable, $arrayDimFetch);
-    }
-
-    /**
      * Count the number of params by reference placed at the end
      * These params are not needed anymore, so they can be removed
      * @param (ArrayItem|null)[] $listItems
@@ -300,5 +288,17 @@ CODE_SAMPLE
             return $count;
         }
         return $count;
+    }
+
+    /**
+     * Indicates if there is at least 1 item passed by reference, as in:
+     * - list(&$a, $b)
+     * - list($a, $b, list(&$c, $d))
+     *
+     * @param (ArrayItem|null)[] $items
+     */
+    private function hasAllItemsByRef(array $items): bool
+    {
+        return count($this->getItemsByRef($items, self::ALL)) === count($items);
     }
 }
