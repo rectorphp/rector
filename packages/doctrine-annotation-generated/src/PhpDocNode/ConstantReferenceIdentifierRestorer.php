@@ -75,6 +75,7 @@ final class ConstantReferenceIdentifierRestorer
     }
 
     /**
+     * @param array<string, mixed> $identifierToResolvedValues
      * @param mixed $value
      * @return mixed|null
      */
@@ -91,6 +92,10 @@ final class ConstantReferenceIdentifierRestorer
         return null;
     }
 
+    /**
+     * @param mixed[] $value
+     * @param array<string, mixed> $identifierToResolvedValues
+     */
     private function restoreNestedValue(
         array $value,
         array $identifierToResolvedValues,

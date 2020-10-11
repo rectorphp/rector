@@ -14,6 +14,7 @@ final class RequireRectorCategoryByGetNodeTypesRuleTest extends AbstractServiceA
 {
     /**
      * @dataProvider provideData()
+     * @param array<string|string[]|int[]> $expectedErrorsWithLines
      */
     public function testRule(string $filePath, array $expectedErrorsWithLines): void
     {

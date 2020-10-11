@@ -80,6 +80,7 @@ final class ComposerJsonManipulator
     }
 
     /**
+     * @param mixed[] $json
      * @return mixed[]
      */
     private function removeDevKeys(array $json): array
@@ -92,6 +93,7 @@ final class ComposerJsonManipulator
 
     /**
      * Use phpstan/phpstan-src, because the phpstan.phar cannot be packed into rector.phar
+     * @param mixed[] $json
      * @return mixed[]
      */
     private function replacePHPStanWithPHPStanSrc(array $json): array
@@ -118,6 +120,7 @@ final class ComposerJsonManipulator
     }
 
     /**
+     * @param mixed[] $json
      * @return mixed[]
      */
     private function addDevDependenciesFromPHPStan(array $json, string $phpstanVersion): array

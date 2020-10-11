@@ -57,7 +57,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param double $node
+     * @param Double $node
      */
     public function refactor(Node $node): ?Node
     {

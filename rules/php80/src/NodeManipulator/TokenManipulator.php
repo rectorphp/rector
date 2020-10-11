@@ -160,6 +160,9 @@ final class TokenManipulator
         });
     }
 
+    /**
+     * @param Node[] $nodes
+     */
     public function refactorTokenIsKind(array $nodes, Expr $singleTokenExpr): void
     {
         $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use (

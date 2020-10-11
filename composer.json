@@ -303,13 +303,8 @@
             "vendor/bin/ecs check --fix --ansi",
             "vendor/bin/ecs check-markdown README.md docs/rector_rules_overview.md --fix --ansi"
         ],
-        "phpstan": [
-            "vendor/bin/phpstan analyse --ansi --error-format symplify",
-            "vendor/bin/phpstan analyse config --ansi --error-format symplify"
-        ],
-        "phpstan-config": [
-            "vendor/bin/phpstan analyse config --ansi --error-format symplify"
-        ],
+        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
+        "phpstan-config": "vendor/bin/phpstan analyse config --ansi --error-format symplify",
         "changelog": [
             "vendor/bin/changelog-linker dump-merges --in-categories --ansi",
             "vendor/bin/changelog-linker link --ansi",

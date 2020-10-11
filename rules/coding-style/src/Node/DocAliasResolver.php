@@ -78,6 +78,7 @@ final class DocAliasResolver
     }
 
     /**
+     * @param string[] $possibleDocAliases
      * @return string[]
      */
     private function appendPossibleAliases(Type $varType, array $possibleDocAliases): array

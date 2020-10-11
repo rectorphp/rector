@@ -98,7 +98,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // buggy with specific markdown snippet file in docs/rules_overview.md
         ArrayListItemNewlineFixer::class => null,
         BlankLineAfterOpeningTagFixer::class => null,
-
         StrictComparisonFixer::class => [__DIR__ . '/rules/polyfill/src/ConditionEvaluator.php'],
     ]);
 

@@ -103,6 +103,8 @@ final class ClassRenamer
     /**
      * Replace types in @var/@param/@return/@throws,
      * Doctrine @ORM entity targetClass, Serialize, Assert etc.
+     *
+     * @param array<string, string> $oldToNewClasses
      */
     private function refactorPhpDoc(Node $node, array $oldToNewClasses): void
     {
@@ -120,6 +122,9 @@ final class ClassRenamer
         $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $oldToNewClasses);
     }
 
+    /**
+     * @param array<string, string> $oldToNewClasses
+     */
     private function refactorName(Name $name, array $oldToNewClasses): ?Name
     {
         $stringName = $this->nodeNameResolver->getName($name);
@@ -149,6 +154,9 @@ final class ClassRenamer
         return $name;
     }
 
+    /**
+     * @param array<string, string> $oldToNewClasses
+     */
     private function refactorNamespace(Namespace_ $namespace, array $oldToNewClasses): ?Node
     {
         $name = $this->nodeNameResolver->getName($namespace);
@@ -178,6 +186,9 @@ final class ClassRenamer
         return $namespace;
     }
 
+    /**
+     * @param array<string, string> $oldToNewClasses
+     */
     private function refactorClassLike(ClassLike $classLike, array $oldToNewClasses): ?Node
     {
         // rename interfaces
@@ -257,6 +268,9 @@ final class ClassRenamer
         return true;
     }
 
+    /**
+     * @param array<string, string> $oldToNewClasses
+     */
     private function getClassOfNamespaceToRefactor(Namespace_ $namespace, array $oldToNewClasses): ?ClassLike
     {
         $foundClass = $this->betterNodeFinder->findFirst($namespace, function (Node $node) use (

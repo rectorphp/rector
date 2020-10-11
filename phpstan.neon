@@ -123,6 +123,8 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
+
+
         # iterable types
         - '#with no value type specified in iterable type array#'
         - '#type specified in iterable type (array|iterable)#'
@@ -131,6 +133,9 @@ parameters:
         - utils/phpstan-extensions/src/Rule/PreventParentMethodVisibilityOverrideRule.php
         - utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
         - packages/rector-generator/templates/*
+        # this invalidates whole cache everytime
+        - 'packages/symfony-php-config/*'
+        - 'packages/simple-php-doc-parser'
 
         # generated files
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
@@ -152,8 +157,8 @@ parameters:
     ignoreErrors:
         # @todo remove
         # iterable types
-        - '#with no value type specified in iterable type array#'
-        - '#type specified in iterable type (array|iterable)#'
+#        - '#with no value type specified in iterable type array#'
+#        - '#type specified in iterable type (array|iterable)#'
 
         # false positive
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
@@ -752,11 +757,6 @@ parameters:
                 - rules/symfony-code-quality/src/Rector/Class_/EventListenerToEventSubscriberRector.php # 247
                 - utils/doctrine-annotation-parser-syncer/src/Rector/Namespace_/RenameAnnotationReaderClassRector.php # 41
                 - utils/doctrine-annotation-parser-syncer/src/Rector/Namespace_/RenameDocParserClassRector.php # 41
-                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 45
-                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 59
-                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 60
-                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 75
-                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 79
 
         -
             message: '#Add regex101\.com link to that shows the regex in practise, so it will be easier to maintain in case of bug/extension in the future#'

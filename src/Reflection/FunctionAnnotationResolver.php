@@ -56,6 +56,7 @@ final class FunctionAnnotationResolver
     }
 
     /**
+     * @param mixed[] $classNames
      * @return mixed[]
      */
     private function expandAnnotatedClasses(ReflectionFunction $reflectionFunction, array $classNames): array

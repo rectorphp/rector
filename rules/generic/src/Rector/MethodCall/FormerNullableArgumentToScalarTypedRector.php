@@ -15,6 +15,7 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -106,6 +107,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param Type[] $methodParameterTypes
+     */
     private function refactorArg(Arg $arg, array $methodParameterTypes, int $key): void
     {
         if (! isset($methodParameterTypes[$key])) {

@@ -168,6 +168,9 @@ final class TypeNormalizer
         return $this->typeFactory->createMixedPassedOrUnionType($nonNeverTypes);
     }
 
+    /**
+     * @param array<string|int, Type> $nonConstantValueTypes
+     */
     private function createArrayTypeFromNonConstantValueTypes(array $nonConstantValueTypes): ArrayType
     {
         $nonConstantValueTypes = array_values($nonConstantValueTypes);

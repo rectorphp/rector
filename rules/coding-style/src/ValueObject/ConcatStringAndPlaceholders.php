@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\ValueObject;
 
+use PhpParser\Node\Expr;
+
 final class ConcatStringAndPlaceholders
 {
     /**
@@ -12,10 +14,13 @@ final class ConcatStringAndPlaceholders
     private $content;
 
     /**
-     * @var array
+     * @var Expr[]
      */
     private $placeholderNodes = [];
 
+    /**
+     * @param Expr[] $placeholderNodes
+     */
     public function __construct(string $content, array $placeholderNodes)
     {
         $this->content = $content;
@@ -28,7 +33,7 @@ final class ConcatStringAndPlaceholders
     }
 
     /**
-     * @return mixed[]
+     * @return Expr[]
      */
     public function getPlaceholderNodes(): array
     {

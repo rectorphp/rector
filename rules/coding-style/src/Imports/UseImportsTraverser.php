@@ -45,6 +45,9 @@ final class UseImportsTraverser
         $this->traverseForType($stmts, $callable, Use_::TYPE_NORMAL);
     }
 
+    /**
+     * @param Stmt[] $stmts
+     */
     private function traverseForType(array $stmts, callable $callable, int $desiredType): void
     {
         $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (

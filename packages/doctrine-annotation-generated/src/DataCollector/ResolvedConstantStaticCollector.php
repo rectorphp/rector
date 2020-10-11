@@ -7,7 +7,7 @@ namespace Rector\DoctrineAnnotationGenerated\DataCollector;
 final class ResolvedConstantStaticCollector
 {
     /**
-     * @var mixed[]
+     * @var array<string, mixed>
      */
     private static $valuesByIdentifier = [];
 
@@ -26,7 +26,7 @@ final class ResolvedConstantStaticCollector
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public static function provide(): array
     {

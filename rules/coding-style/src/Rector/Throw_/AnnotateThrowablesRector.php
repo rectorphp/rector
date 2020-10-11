@@ -34,7 +34,7 @@ use ReflectionFunction;
 final class AnnotateThrowablesRector extends AbstractRector
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $throwablesToAnnotate = [];
 
@@ -273,6 +273,10 @@ CODE_SAMPLE
         return $callePhpDocInfo->getThrowsClassNames();
     }
 
+    /**
+     * @param string[] $foundThrownThrowables
+     * @param string[] $alreadyAnnotatedThrowables
+     */
     private function diffThrowables(array $foundThrownThrowables, array $alreadyAnnotatedThrowables): int
     {
         $normalizeNamespace = static function (string $class): string {
@@ -296,7 +300,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<class-string>
+     * @return class-string[]
      */
     private function extractMethodReturns(FullyQualified $fullyQualified, Identifier $identifier): array
     {
@@ -311,7 +315,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<class-string>
+     * @return class-string[]
      */
     private function extractMethodThrows(FullyQualified $fullyQualified, Identifier $identifier): array
     {

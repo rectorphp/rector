@@ -156,6 +156,7 @@ final class PHPStanServicesFactory
     }
 
     /**
+     * @param string[] $additionalConfigFiles
      * @return mixed[]
      */
     private function appendPhpstanPHPUnitExtensionIfExists(

@@ -25,6 +25,7 @@ final class ArrayPartPhpDocTagPrinterTest extends TestCase
     }
 
     /**
+     * @param mixed[] $items
      * @dataProvider provideData()
      */
     public function test(array $items, string $key, string $expectedContent): void

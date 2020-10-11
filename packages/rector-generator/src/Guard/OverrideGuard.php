@@ -28,6 +28,7 @@ final class OverrideGuard
     }
 
     /**
+     * @param array<string, mixed> $templateVariables
      * @param SmartFileInfo[] $templateFileInfos
      */
     public function isUnwantedOverride(
@@ -52,6 +53,9 @@ final class OverrideGuard
         return false;
     }
 
+    /**
+     * @param array<string, mixed> $templateVariables
+     */
     private function doesFileInfoAlreadyExist(
         array $templateVariables,
         RectorRecipe $rectorRecipe,

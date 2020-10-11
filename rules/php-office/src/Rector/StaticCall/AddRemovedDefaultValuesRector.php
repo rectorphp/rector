@@ -22,7 +22,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AddRemovedDefaultValuesRector extends AbstractRector
 {
     /**
-     * @var mixed[][]
+     * @var array<string, array<string, array<int, mixed[]>>>
      */
     private const METHOD_NAMES_BY_TYPE_WITH_VALUE = [
         'PHPExcel' => [
@@ -663,6 +663,7 @@ CODE_SAMPLE
 
     /**
      * @param StaticCall|MethodCall $node
+     * @param array<int, mixed> $defaultValuesByPosition
      */
     private function refactorArgs(Node $node, array $defaultValuesByPosition): void
     {

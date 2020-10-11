@@ -26,6 +26,9 @@ final class MethodCallToAnotherMethodCallWithArguments
      */
     private $newArguments = [];
 
+    /**
+     * @param mixed[] $newArguments
+     */
     public function __construct(string $type, string $oldMethod, string $newMethod, array $newArguments)
     {
         $this->type = $type;

@@ -7,6 +7,7 @@ namespace Rector\Naming\PhpArray;
 final class ArrayFilter
 {
     /**
+     * @param mixed[] $values
      * @return string[]
      */
     public function filterWithAtLeastTwoOccurences(array $values): array

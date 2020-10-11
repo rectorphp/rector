@@ -80,6 +80,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         );
     }
 
+    /**
+     * @param mixed[] $items
+     */
     protected function printItems(array $items): string
     {
         $items = $this->completeItemsQuotes($items);
@@ -184,6 +187,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         return $this->tagValueNodeConfiguration->hasOpeningBracket() && $this->tagValueNodeConfiguration->hasClosingBracket();
     }
 
+    /**
+     * @param mixed[] $value
+     */
     private function correctArraySingleItemPrint(array $value, string $arrayItemAsString): string
     {
         if (count($value) !== 1) {

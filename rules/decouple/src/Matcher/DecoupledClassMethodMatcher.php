@@ -28,6 +28,9 @@ final class DecoupledClassMethodMatcher
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
+    /**
+     * @param array<string, array<mixed>> $methodNamesByClass
+     */
     public function matchDecoupled(ClassMethod $classMethod, array $methodNamesByClass): ?DecoupleClassMethodMatch
     {
         $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);

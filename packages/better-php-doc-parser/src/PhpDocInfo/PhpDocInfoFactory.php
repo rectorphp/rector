@@ -111,6 +111,9 @@ final class PhpDocInfoFactory
         return $this->createFromPhpDocNode($attributeAwarePhpDocNode, '', [], $node);
     }
 
+    /**
+     * @param mixed[][] $tokens
+     */
     private function parseTokensToPhpDocNode(array $tokens): AttributeAwarePhpDocNode
     {
         $tokenIterator = new TokenIterator($tokens);
@@ -139,6 +142,9 @@ final class PhpDocInfoFactory
         }
     }
 
+    /**
+     * @param mixed[] $tokens
+     */
     private function createFromPhpDocNode(
         AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
         string $content,
@@ -158,8 +164,10 @@ final class PhpDocInfoFactory
             $this->staticTypeMapper,
             $node,
             $this->phpDocTypeChanger,
-            $this->phpDocRemover
+            $this->phpDocRemover,
+            $this->attributeAwareNodeFactory
         );
+
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
 
         return $phpDocInfo;

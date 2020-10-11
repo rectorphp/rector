@@ -13,6 +13,7 @@ final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends AbstractServi
 {
     /**
      * @dataProvider provideData()
+     * @param array<string|string[]|int[]> $expectedErrorsWithLines
      */
     public function testRule(string $filePath, array $expectedErrorsWithLines): void
     {

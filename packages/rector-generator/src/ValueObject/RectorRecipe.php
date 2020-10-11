@@ -84,6 +84,9 @@ final class RectorRecipe
      */
     private $extraFileContent;
 
+    /**
+     * @param class-string[] $nodeTypes
+     */
     public function __construct(
         string $name,
         array $nodeTypes,

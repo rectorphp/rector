@@ -236,6 +236,9 @@ final class PHPStanNodeScopeResolver
         return $classLike->name->toString();
     }
 
+    /**
+     * @param string[] $dependentFiles
+     */
     private function reportCacheDebug(SmartFileInfo $smartFileInfo, array $dependentFiles): void
     {
         if (! $this->configuration->isCacheDebug()) {

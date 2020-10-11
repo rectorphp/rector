@@ -143,6 +143,7 @@ CODE_SAMPLE
 
     /**
      * Find all includes and see if any match what we want to insert
+     * @param Node[] $nodes
      */
     private function hasIncludeAlready(array $nodes): bool
     {
