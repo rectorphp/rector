@@ -13,6 +13,7 @@ jobs:
         -
             name: "Split Monorepo"
             if: (branch = master OR tag IS present) && type = push
+            php: 7.4
             script:
                 - composer update --ansi
                 # travis_retry to prevent fails
