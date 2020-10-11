@@ -1,6 +1,6 @@
 {
     "name": "rector/simple-php-doc-parser",
-    "description": "Simple service integration of phpstan/phpdoc-parser",
+    "description": "Simple service integration of phpstan/phpdoc-parser, with few extra goodies for practical use",
     "license": "MIT",
     "require": {
         "php": "^7.2.4|^8.0",
