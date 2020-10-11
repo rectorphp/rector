@@ -157,8 +157,8 @@ parameters:
     ignoreErrors:
         # @todo remove
         # iterable types
-        - '#with no value type specified in iterable type array#'
-        - '#type specified in iterable type (array|iterable)#'
+#        - '#with no value type specified in iterable type array#'
+#        - '#type specified in iterable type (array|iterable)#'
 
         # false positive
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
