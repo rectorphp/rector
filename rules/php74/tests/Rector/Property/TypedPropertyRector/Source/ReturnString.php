@@ -10,4 +10,13 @@ final class ReturnString
     {
         return 'name';
     }
+
+    public function getNameOrNull(): ?string
+    {
+        if (mt_rand(0, 100)) {
+            return null;
+        }
+
+        return 'name';
+    }
 }

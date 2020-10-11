@@ -16,6 +16,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class AssignToPropertyTypeInferer extends AbstractTypeInferer
@@ -24,6 +25,16 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
      * @var bool
      */
     private $isAssignedInConstructor = false;
+
+    /**
+     * @var ScopeNestingComparator
+     */
+    private $scopeNestingComparator;
+
+    public function __construct(ScopeNestingComparator $scopeNestingComparator)
+    {
+        $this->scopeNestingComparator = $scopeNestingComparator;
+    }
 
     public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): Type
     {
@@ -59,6 +70,10 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
             }
 
             $assignedExprStaticTypes[] = $exprStaticType;
+
+            if ($this->scopeNestingComparator->isNodeConditionallyScoped($node)) {
+                $assignedExprStaticTypes[] = new NullType();
+            }
 
             return null;
         });

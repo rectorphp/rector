@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeNestingScope;
 
 use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
 
@@ -26,6 +27,15 @@ final class ScopeNestingComparator
         $secondNodeScopeNode = $this->findParentControlStructure($secondNode);
 
         return $firstNodeScopeNode === $secondNodeScopeNode;
+    }
+
+    public function isNodeConditionallyScoped(Node $node): bool
+    {
+        $foundParentType = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $node,
+            ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [FunctionLike::class]
+        );
+        return ! $foundParentType instanceof FunctionLike;
     }
 
     private function findParentControlStructure(Node $node): ?Node
