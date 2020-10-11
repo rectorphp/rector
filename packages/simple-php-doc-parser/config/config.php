@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -12,6 +14,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire()
         ->autoconfigure();
 
-    $services->load('Rector\FileSystemRector\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Rector']);
+    $services->load('Rector\SimplePhpDocParser\\', __DIR__ . '/../src');
+
+    $services->set(PhpDocParser::class);
+    $services->set(Lexer::class);
 };

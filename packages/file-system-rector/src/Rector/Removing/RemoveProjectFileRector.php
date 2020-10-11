@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\FileSystemRector\Rector\Removing;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Configuration\Option;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -31,7 +29,7 @@ final class RemoveProjectFileRector extends AbstractFileSystemRector implements 
             return;
         }
 
-        $projectDirectory = $this->getProjectDirectory();
+        $projectDirectory = getcwd();
 
         $relativePathInProject = $smartFileInfo->getRelativeFilePathFromDirectory($projectDirectory);
 
@@ -65,26 +63,5 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $this->filePathsToRemove = $configuration[self::FILE_PATHS_TO_REMOVE] ?? [];
-    }
-
-    private function getProjectDirectory(): string
-    {
-        $this->ensureProjectDirectoryIsSet();
-
-        return (string) $this->parameterProvider->provideParameter(Option::PROJECT_DIRECTORY_PARAMETER);
-    }
-
-    private function ensureProjectDirectoryIsSet(): void
-    {
-        $projectDirectory = $this->parameterProvider->provideParameter(Option::PROJECT_DIRECTORY_PARAMETER);
-
-        // has value? → skip
-        if ($projectDirectory) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(
-            'Complete "$parameters->setParameter(Option::PROJECT_DIRECTORY_PARAMETER, ...);" in rector.php, so Rector can found your directory'
-        );
     }
 }
