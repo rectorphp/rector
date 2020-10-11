@@ -195,6 +195,9 @@ CODE_SAMPLE
         return $phpDocInfo->hasByType(TreeLevelTagValueNode::class);
     }
 
+    /**
+     * @param string[] $removedPropertyNames
+     */
     private function removeClassMethodsForProperties(Class_ $class, array $removedPropertyNames): void
     {
         foreach ($removedPropertyNames as $removedPropertyName) {

@@ -92,6 +92,9 @@ final class ArrayItemStaticHelper
         return $contentItems;
     }
 
+    /**
+     * @param mixed[] $itemsOrder
+     */
     private static function isNotEmptyAndHasSilentKey(string $content, ?string $silentKey, array $itemsOrder): bool
     {
         if (! Strings::match($content, self::NON_EMPTY_SILENT_KEY_REGEX)) {

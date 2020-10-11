@@ -121,6 +121,9 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
         return new AssignAndRootExprAndNodesToAdd($assignAndRootExpr, $nodesToAdd);
     }
 
+    /**
+     * @param MethodCall[] $chainMethodCalls
+     */
     protected function areAllClassMethodLocatedInSameClass(array $chainMethodCalls): bool
     {
         // are method calls located in the same class?

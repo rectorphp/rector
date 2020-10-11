@@ -114,6 +114,11 @@ final class BetterStandardPrinter extends Standard
         $this->docBlockManipulator = $docBlockManipulator;
     }
 
+    /**
+     * @param Node[] $stmts
+     * @param Node[] $origStmts
+     * @param mixed[] $origTokens
+     */
     public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens): string
     {
         $newStmts = $this->resolveNewStmts($stmts);
@@ -435,6 +440,7 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
+     * @param Node[] $stmts
      * @return Node[]|mixed[]
      */
     private function resolveNewStmts(array $stmts): array
@@ -495,6 +501,9 @@ final class BetterStandardPrinter extends Standard
         return Strings::replace($printerNode, self::START_DOUBLE_SLASH_COMMENT_REGEX);
     }
 
+    /**
+     * @param Node[] $nodes
+     */
     private function moveCommentsFromAttributeObjectToCommentsAttribute(array $nodes): void
     {
         // move phpdoc from node to "comment" attribute

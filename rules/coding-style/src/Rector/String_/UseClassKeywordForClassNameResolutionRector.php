@@ -22,7 +22,7 @@ final class UseClassKeywordForClassNameResolutionRector extends AbstractRector
      * @var string
      * @see https://regex101.com/r/Vv41Qr/1/
      */
-    private const CLASS_BEFORE_STATIC_ACCESS_REGEX = '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#';
+    private const CLASS_BEFORE_STATIC_ACCESS_REGEX = '#(?<class_name>[\\\\a-zA-Z0-9_\\x80-\\xff]*)::#';
 
     public function getDefinition(): RectorDefinition
     {
@@ -70,18 +70,31 @@ CODE_SAMPLE
     }
 
     /**
-     * @return mixed[]
+     * @return string[]
      */
     public function getExistingClasses(String_ $string): array
     {
+        /** @var mixed[] $matches */
         $matches = Strings::matchAll($string->value, self::CLASS_BEFORE_STATIC_ACCESS_REGEX, PREG_PATTERN_ORDER);
+        if (! isset($matches['class_name'])) {
+            return [];
+        }
 
-        return array_filter($matches[1], function (string $className): bool {
-            return class_exists($className);
-        });
+        $classNames = [];
+
+        foreach ($matches['class_name'] as $matchedClassName) {
+            if (! class_exists($matchedClassName)) {
+                continue;
+            }
+
+            $classNames[] = $matchedClassName;
+        }
+
+        return $classNames;
     }
 
     /**
+     * @param string[] $classNames
      * @return mixed[]
      */
     public function getParts(String_ $string, array $classNames): array

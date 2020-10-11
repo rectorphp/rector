@@ -100,6 +100,9 @@ trait ArrayPartPhpDocTagPrinterTrait
         return ! $tagValueNodeConfiguration->getKeysByQuotedStatus()[$key];
     }
 
+    /**
+     * @param mixed[] $item
+     */
     private function quoteKeys(array $item, string $key, string $json, string $originalContent): string
     {
         foreach (array_keys($item) as $itemKey) {

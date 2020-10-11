@@ -17,12 +17,12 @@ class SimplePhpDocNode extends PhpDocNode
     {
         $desiredParamNameWithDollar = '$' . ltrim($desiredParamName, '$');
 
-        foreach ($this->getParamTagValues() as $paramTagValue) {
-            if ($paramTagValue->parameterName !== $desiredParamNameWithDollar) {
+        foreach ($this->getParamTagValues() as $paramTagValueNode) {
+            if ($paramTagValueNode->parameterName !== $desiredParamNameWithDollar) {
                 continue;
             }
 
-            return $paramTagValue;
+            return $paramTagValueNode;
         }
 
         return null;

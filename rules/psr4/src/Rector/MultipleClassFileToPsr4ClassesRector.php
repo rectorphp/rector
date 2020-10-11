@@ -183,6 +183,9 @@ CODE_SAMPLE
         return $nodes;
     }
 
+    /**
+     * @param Stmt[] $newStmtsSet
+     */
     private function refactorClassLike(
         SmartFileInfo $smartFileInfo,
         bool $shouldDeleteFile,

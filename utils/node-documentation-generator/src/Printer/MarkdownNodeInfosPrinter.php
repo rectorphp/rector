@@ -55,6 +55,9 @@ final class MarkdownNodeInfosPrinter
         return $this->implodeLinesWithSpace($contentLines);
     }
 
+    /**
+     * @param string[] $contentLines
+     */
     private function implodeLinesWithSpace(array $contentLines): string
     {
         return implode(PHP_EOL . PHP_EOL, $contentLines);
@@ -71,6 +74,9 @@ final class MarkdownNodeInfosPrinter
         return $this->implodeLinesWithSpace($contentLines);
     }
 
+    /**
+     * @param string[] $contentLines
+     */
     private function implodeLines(array $contentLines): string
     {
         return implode(PHP_EOL, $contentLines);

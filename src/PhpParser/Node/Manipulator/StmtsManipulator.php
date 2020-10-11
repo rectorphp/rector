@@ -31,6 +31,9 @@ final class StmtsManipulator
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
+    /**
+     * @param Stmt[] $stmts
+     */
     public function getUnwrappedLastStmt(array $stmts): ?Node
     {
         $lastStmtKey = array_key_last($stmts);

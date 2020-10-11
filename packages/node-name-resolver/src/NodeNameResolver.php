@@ -264,6 +264,10 @@ final class NodeNameResolver
         return $this->getName($classLike->name);
     }
 
+    /**
+     * @param mixed[] $backtrace
+     * @return mixed[]|null
+     */
     private function matchRectorBacktraceCall(array $backtrace): ?array
     {
         foreach ($backtrace as $singleTrace) {

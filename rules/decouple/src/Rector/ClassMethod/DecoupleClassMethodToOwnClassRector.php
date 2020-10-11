@@ -35,7 +35,7 @@ final class DecoupleClassMethodToOwnClassRector extends AbstractRector implement
     public const METHOD_NAMES_BY_CLASS = '$methodNamesByClass';
 
     /**
-     * @var mixed[][]
+     * @var array<string, string[]>
      */
     private $methodNamesByClass = [];
 
@@ -209,6 +209,9 @@ CODE_SAMPLE
         ]);
     }
 
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->methodNamesByClass = $configuration[self::METHOD_NAMES_BY_CLASS] ?? [];

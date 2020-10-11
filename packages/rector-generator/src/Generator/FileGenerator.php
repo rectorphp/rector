@@ -44,6 +44,7 @@ final class FileGenerator
     }
 
     /**
+     * @param SmartFileInfo[] $templateFileInfos
      * @param string[] $templateVariables
      * @return string[]
      */
@@ -67,6 +68,9 @@ final class FileGenerator
         return $generatedFilePaths;
     }
 
+    /**
+     * @param array<string, mixed> $templateVariables
+     */
     private function generateFileInfoWithTemplateVariables(
         SmartFileInfo $smartFileInfo,
         array $templateVariables,

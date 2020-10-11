@@ -76,6 +76,7 @@ final class PhpAttributteGroupFactory
     }
 
     /**
+     * @param mixed[] $items
      * @return Arg[]
      */
     private function createArgsFromItems(array $items, ?string $silentKey = null): array
@@ -122,6 +123,9 @@ final class PhpAttributteGroupFactory
         return new AttributeGroup([$attribute]);
     }
 
+    /**
+     * @param mixed[] $items
+     */
     private function isArrayArguments(array $items): bool
     {
         foreach (array_keys($items) as $key) {

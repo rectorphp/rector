@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Application\UseImportsAdder;
@@ -119,6 +120,9 @@ final class UseAddingPostRector extends AbstractPostRector
         return new RectorDefinition('Post Rector that adds use statements');
     }
 
+    /**
+     * @param Node[] $nodes
+     */
     private function getSmartFileInfo(array $nodes): ?SmartFileInfo
     {
         foreach ($nodes as $node) {

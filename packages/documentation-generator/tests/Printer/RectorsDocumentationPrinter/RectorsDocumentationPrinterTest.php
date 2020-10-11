@@ -29,6 +29,7 @@ final class RectorsDocumentationPrinterTest extends AbstractKernelTestCase
     }
 
     /**
+     * @param string[] $rectorClasses
      * @dataProvider provideData()
      */
     public function test(array $rectorClasses, bool $isRectorProject, string $expectedContentFilePath): void
@@ -55,7 +56,7 @@ final class RectorsDocumentationPrinterTest extends AbstractKernelTestCase
     }
 
     /**
-     * @param class-string[] $rectorClasses
+     * @param string[] $rectorClasses
      * @return RectorInterface[]
      */
     private function createRectorsFromRectorClasses(array $rectorClasses): array

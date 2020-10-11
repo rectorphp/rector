@@ -29,8 +29,8 @@ final class ClassAnnotationMatcher
 
         $tag = ltrim($tag, '@');
 
-        /** @var Use_[]|null $useNodes */
-        $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
+        /** @var Use_[] $useNodes */
+        $useNodes = (array) $node->getAttribute(AttributeKey::USE_NODES);
 
         $fullyQualifiedClass = $this->resolveFullyQualifiedClass($useNodes, $node, $tag);
         $this->fullyQualifiedNameByHash[$uniqueHash] = $fullyQualifiedClass;
@@ -38,9 +38,12 @@ final class ClassAnnotationMatcher
         return $fullyQualifiedClass;
     }
 
-    private function resolveFullyQualifiedClass(?array $useNodes, Node $node, string $tag): string
+    /**
+     * @param Use_[] $uses
+     */
+    private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag): string
     {
-        if ($useNodes === null) {
+        if ($uses === []) {
             /** @var string|null $namespace */
             $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
             if ($namespace !== null) {
@@ -53,7 +56,7 @@ final class ClassAnnotationMatcher
             return $tag;
         }
 
-        return $this->matchFullAnnotationClassWithUses($tag, $useNodes) ?? $tag;
+        return $this->matchFullAnnotationClassWithUses($tag, $uses) ?? $tag;
     }
 
     /**

@@ -8,5 +8,8 @@ interface RankeableInterface
 {
     public function getName(): string;
 
+    /**
+     * @return bool[]|int[]
+     */
     public function getRanks(): array;
 }
