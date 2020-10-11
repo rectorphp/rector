@@ -63,7 +63,7 @@ class SomeClass
     public function run($string)
     {
         $array = [1, 2];
-        list($a, $b) = $array;
+        list($a) = $array;
         $b =& $array[1];
 
         [$c, $d, $e] = $array;
