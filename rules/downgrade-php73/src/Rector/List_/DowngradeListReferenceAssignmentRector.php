@@ -30,6 +30,7 @@ final class DowngradeListReferenceAssignmentRector extends AbstractRector
      * @var int
      */
     private const ALL = 0;
+
     /**
      * @var int
      */
@@ -209,9 +210,9 @@ CODE_SAMPLE
                     /** @var List_|Array_ */
                     $nestedList = $item->value;
                     $hasItemByRef = false;
-                    if ($condition == self::ALL) {
+                    if ($condition === self::ALL) {
                         $hasItemByRef = $this->hasAllItemsByRef($nestedList->items);
-                    } elseif ($condition == self::ANY) {
+                    } elseif ($condition === self::ANY) {
                         $hasItemByRef = $this->hasAnyItemByRef($nestedList->items);
                     }
                     return $hasItemByRef ? $item : null;
@@ -272,9 +273,8 @@ CODE_SAMPLE
      * These params are not needed anymore, so they can be removed
      * @param (ArrayItem|null)[] $listItems
      */
-    private function countRightSideMostParamsByRef(
-        array $listItems
-    ): int {
+    private function countRightSideMostParamsByRef(array $listItems): int
+    {
         // Their position is kept in the array
         $count = 0;
         $listItemsCount = count($listItems);
