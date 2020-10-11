@@ -12,14 +12,12 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class IfManipulator
 {
@@ -273,12 +271,6 @@ final class IfManipulator
     public function isIfWithOnlyOneStmt(If_ $if): bool
     {
         return count($if->stmts) === 1;
-    }
-
-    public function isIfFirstLevelStmt(If_ $if): bool
-    {
-        $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
-        return $parent instanceof FunctionLike;
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr

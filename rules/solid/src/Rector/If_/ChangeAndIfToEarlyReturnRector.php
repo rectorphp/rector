@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
-use Rector\Core\PhpParser\Node\Manipulator\StmtsManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -34,19 +33,10 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
      */
     private $conditionInverter;
 
-    /**
-     * @var StmtsManipulator
-     */
-    private $stmtsManipulator;
-
-    public function __construct(
-        ConditionInverter $conditionInverter,
-        IfManipulator $ifManipulator,
-        StmtsManipulator $stmtsManipulator
-    ) {
+    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
+    {
         $this->ifManipulator = $ifManipulator;
         $this->conditionInverter = $conditionInverter;
-        $this->stmtsManipulator = $stmtsManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -122,9 +112,9 @@ CODE_SAMPLE
         $this->addNodesAfterNode($ifs, $node);
         $this->addNodeAfterNode($ifReturn, $node);
 
-        $functionLikeReturn = $this->getFunctionLikeReturn($node);
-        if ($functionLikeReturn !== null) {
-            $this->removeNode($functionLikeReturn);
+        $ifParentReturn = $this->getIfParentReturn($node);
+        if ($ifParentReturn !== null) {
+            $this->removeNode($ifParentReturn);
         }
 
         $this->removeNode($node);
@@ -135,10 +125,6 @@ CODE_SAMPLE
     private function shouldSkip(If_ $if): bool
     {
         if (! $this->ifManipulator->isIfWithOnlyOneStmt($if)) {
-            return true;
-        }
-
-        if (! $this->ifManipulator->isIfFirstLevelStmt($if)) {
             return true;
         }
 
@@ -217,38 +203,38 @@ CODE_SAMPLE
         $ifs[0]->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 
-    private function getFunctionLikeReturn(If_ $if): ?Return_
+    private function getIfParentReturn(If_ $if): ?Return_
     {
-        /** @var FunctionLike|null $functionLike */
-        $functionLike = $this->betterNodeFinder->findFirstParentInstanceOf($if, FunctionLike::class);
-        if ($functionLike === null) {
+        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $nextNode instanceof Return_) {
             return null;
         }
 
-        if ($functionLike->getStmts() === null) {
-            return null;
-        }
-
-        $return = $this->stmtsManipulator->getUnwrappedLastStmt($functionLike->getStmts());
-        if ($return === null) {
-            return null;
-        }
-
-        if (! $return instanceof Return_) {
-            return null;
-        }
-
-        return $return;
+        return $nextNode;
     }
 
     private function isFunctionLikeReturnsVoid(If_ $if): bool
     {
-        $return = $this->getFunctionLikeReturn($if);
-        if ($return === null) {
+        /** @var FunctionLike|null $functionLike */
+        $functionLike = $this->betterNodeFinder->findFirstParentInstanceOf($if, FunctionLike::class);
+        if ($functionLike === null) {
             return true;
         }
 
-        return $return->expr === null;
+        if ($functionLike->getStmts() === null) {
+            return true;
+        }
+
+        $returns = $this->betterNodeFinder->findInstanceOf($functionLike->getStmts(), Return_::class);
+        if ($returns === []) {
+            return true;
+        }
+
+        $nonVoidReturns = array_filter($returns, function (Return_ $return): bool {
+            return $return->expr !== null;
+        });
+
+        return $nonVoidReturns === [];
     }
 
     private function isLastIfOrBeforeLastReturn(If_ $if): bool
