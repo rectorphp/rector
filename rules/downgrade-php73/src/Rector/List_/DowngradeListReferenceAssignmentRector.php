@@ -108,6 +108,7 @@ CODE_SAMPLE
         $nodeItemsCount = count($node->items);
         if ($rightSideParamsByRefCount === $nodeItemsCount) {
             // Remove the Assign node
+            /** @var Assign */
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             $this->removeNode($parentNode);
             return null;
