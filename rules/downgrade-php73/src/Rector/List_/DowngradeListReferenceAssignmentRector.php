@@ -284,24 +284,24 @@ CODE_SAMPLE
         ));
     }
 
-    private function getItemByRefOrNull(?ArrayItem $item, int $condition): ?ArrayItem
+    private function getItemByRefOrNull(?ArrayItem $arrayItem, int $condition): ?ArrayItem
     {
-        if ($item === null) {
+        if ($arrayItem === null) {
             return null;
         }
         // Check if the item is a nested list/nested array destructuring
-        if ($item->value instanceof List_ || $item->value instanceof Array_) {
+        if ($arrayItem->value instanceof List_ || $arrayItem->value instanceof Array_) {
             // Recursive call
             /** @var List_|Array_ */
-            $nestedList = $item->value;
+            $nestedList = $arrayItem->value;
             $hasItemByRef = false;
             if ($condition === self::ALL) {
                 $hasItemByRef = $this->hasAllItemsByRef($nestedList->items);
             } elseif ($condition === self::ANY) {
                 $hasItemByRef = $this->hasAnyItemByRef($nestedList->items);
             }
-            return $hasItemByRef ? $item : null;
+            return $hasItemByRef ? $arrayItem : null;
         }
-        return $item->value instanceof Variable && $item->byRef ? $item : null;
+        return $arrayItem->value instanceof Variable && $arrayItem->byRef ? $arrayItem : null;
     }
 }
