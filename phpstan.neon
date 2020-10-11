@@ -757,11 +757,6 @@ parameters:
                 - rules/symfony-code-quality/src/Rector/Class_/EventListenerToEventSubscriberRector.php # 247
                 - utils/doctrine-annotation-parser-syncer/src/Rector/Namespace_/RenameAnnotationReaderClassRector.php # 41
                 - utils/doctrine-annotation-parser-syncer/src/Rector/Namespace_/RenameDocParserClassRector.php # 41
-                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 45
-                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 59
-                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 60
-                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 75
-                - utils/phpstan-extensions/src/Rule/ValueObjectHasNoValueObjectSuffixRule.php # 79
 
         -
             message: '#Add regex101\.com link to that shows the regex in practise, so it will be easier to maintain in case of bug/extension in the future#'
