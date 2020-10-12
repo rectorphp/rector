@@ -9,8 +9,10 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PHPStan\Type\ResourceType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -130,22 +132,18 @@ CODE_SAMPLE
             return true;
         }
 
-        $st = $this->getStaticType($node);
+        $staticType = $this->getStaticType($node);
         $resourceType = new ResourceType();
 
-        if ($st->equals($resourceType)) {
+        if ($staticType->equals($resourceType)) {
             return true;
         }
 
-        if ($st instanceof UnionType) {
-            foreach ($st->getTypes() as $type) {
-                if ($type->equals($resourceType)) {
-                    return true;
-                }
-            }
+        if ($this->isUnionTypeWithResourceSubType($staticType, $resourceType)) {
+            return true;
         }
 
-        return false;
+        return $node instanceof Variable && $this->isName($node, 'connection');
     }
 
     private function findConnectionVariable(FuncCall $funcCall): ?Expr
@@ -159,5 +157,18 @@ CODE_SAMPLE
         });
 
         return $connectionAssign !== null ? $connectionAssign->var : null;
+    }
+
+    private function isUnionTypeWithResourceSubType(Type $staticType, ResourceType $resourceType): bool
+    {
+        if ($staticType instanceof UnionType) {
+            foreach ($staticType->getTypes() as $type) {
+                if ($type->equals($resourceType)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
