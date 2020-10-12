@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Utils\PHPStanStaticTypeMapperChecker\Command;
 
 use PHPStan\Type\NonexistentParentClassType;
+use PHPStan\Type\ParserNodeTypeToPHPStanType;
 use Rector\Core\Console\Command\AbstractCommand;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\Utils\PHPStanStaticTypeMapperChecker\Finder\PHPStanTypeClassFinder;
@@ -61,14 +62,15 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
             return ShellCode::SUCCESS;
         }
 
-        $errorMessage = sprintf(
-            'Add new class to "%s" that implements "%s" for this type',
-            'packages/phpstan-static-type-mapper/src/TypeMapper',
-            TypeMapperInterface::class
-        );
-        $this->symfonyStyle->error($errorMessage);
-
-        $this->symfonyStyle->listing($missingNodeClasses);
+        foreach ($missingNodeClasses as $missingNodeClass) {
+            $errorMessage = sprintf(
+                'Add new class to "%s" that implements "%s" for "%s" type',
+                'packages/phpstan-static-type-mapper/src/TypeMapper',
+                TypeMapperInterface::class,
+                $missingNodeClass
+            );
+            $this->symfonyStyle->error($errorMessage);
+        }
 
         return ShellCode::ERROR;
     }
@@ -92,7 +94,7 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
             $unsupportedTypeClasses[] = $phpStanTypeClass;
         }
 
-        $typesToRemove = [NonexistentParentClassType::class];
+        $typesToRemove = [NonexistentParentClassType::class, ParserNodeTypeToPHPStanType::class];
 
         return array_diff($unsupportedTypeClasses, $typesToRemove);
     }
