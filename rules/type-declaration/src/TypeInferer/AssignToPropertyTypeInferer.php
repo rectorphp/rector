@@ -113,17 +113,8 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
         }
 
         if ($shouldAddNullType === true) {
-            if ($isAssignedInConstructor || $hasPropertyDefaultValue) {
-                return false;
-            }
-
-            return true;
+            return !$isAssignedInConstructor && !$hasPropertyDefaultValue;
         }
-
-        if ((count($assignedExprTypes) > 0) && (! $isAssignedInConstructor && ! $hasPropertyDefaultValue)) {
-            return true;
-        }
-
-        return false;
+        return (count($assignedExprTypes) > 0) && (! $isAssignedInConstructor && ! $hasPropertyDefaultValue);
     }
 }
