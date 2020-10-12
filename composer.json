@@ -274,7 +274,7 @@
                 "packages/symfony-php-config/tests",
                 "rules/symfony-php-config/tests"
             ],
-            "Rector\\SymfonyPhpDocParser\\Tests\\": "packages/simple-php-doc-parser/tests",
+            "Rector\\SimplePhpDocParser\\Tests\\": "packages/simple-php-doc-parser/tests",
             "Rector\\Symfony\\Tests\\": "rules/symfony/tests",
             "Rector\\Transform\\Tests\\": "rules/transform/tests",
             "Rector\\Twig\\Tests\\": "rules/twig/tests",

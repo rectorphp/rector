@@ -15,12 +15,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\SymfonyPhpDocParser\\": "src"
+            "Rector\\SimplePhpDocParser\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\SymfonyPhpDocParser\\Tests\\": "tests"
+            "Rector\\SimplePhpDocParser\\Tests\\": "tests"
         }
     }
 }
