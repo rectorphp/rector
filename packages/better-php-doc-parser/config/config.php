@@ -29,10 +29,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(Lexer::class);
 
-    $services->set(TypeParser::class);
-
-    $services->set(ConstExprParser::class);
-
     $services->alias(PhpDocParser::class, BetterPhpDocParser::class);
 
     $services->alias(Reader::class, ConstantPreservingAnnotationReader::class);
