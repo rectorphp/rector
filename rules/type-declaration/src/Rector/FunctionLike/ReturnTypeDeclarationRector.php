@@ -20,6 +20,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\ChildPopulator\ChildReturnPopulator;
 use Rector\TypeDeclaration\OverrideGuard\ClassMethodReturnTypeOverrideGuard;
 use Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover;
@@ -142,7 +143,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType);
+        $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+            $inferedType,
+            PHPStanStaticTypeMapper::KIND_RETURN
+        );
+
         if ($this->shouldSkipInferredReturnNode($node, $inferredReturnNode)) {
             return null;
         }

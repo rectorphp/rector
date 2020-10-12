@@ -204,4 +204,9 @@ final class AttributeKey
      * @var string
      */
     public const ARGUMENT_POSITION = 'argument_position';
+
+    /**
+     * @var string
+     */
+    public const IS_FIRST_LEVEL_STATEMENT = 'is_first_level_statement';
 }

@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\VarDocPropertyTypeInferer;
 
 final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
 {
@@ -37,11 +39,17 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
     private $doctrineTypeAnalyzer;
 
     /**
+     * @var VarDocPropertyTypeInferer
+     */
+    private $varDocPropertyTypeInferer;
+
+    /**
      * @param PropertyTypeInfererInterface[] $propertyTypeInferers
      */
     public function __construct(
         array $propertyTypeInferers,
         DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer,
+        VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
         TypeFactory $typeFactory,
         DoctrineTypeAnalyzer $doctrineTypeAnalyzer
     ) {
@@ -49,45 +57,73 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
         $this->defaultValuePropertyTypeInferer = $defaultValuePropertyTypeInferer;
         $this->typeFactory = $typeFactory;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
+        $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
     }
 
     public function inferProperty(Property $property): Type
     {
+        $resolvedTypes = [];
+
         foreach ($this->propertyTypeInferers as $propertyTypeInferer) {
             $type = $propertyTypeInferer->inferProperty($property);
             if ($type instanceof VoidType || $type instanceof MixedType) {
                 continue;
             }
 
-            // default value type must be added to each resolved type
-            $defaultValueType = $this->defaultValuePropertyTypeInferer->inferProperty($property);
-            if ($this->shouldUnionWithDefaultValue($defaultValueType, $type)) {
-                return $this->unionWithDefaultValueType($type, $defaultValueType);
-            }
-
-            return $type;
+            $resolvedTypes[] = $type;
         }
 
-        return new MixedType();
+        // if nothing is clear from variable use, we use @var doc as fallback
+        if (count($resolvedTypes) > 0) {
+            $resolvedType = $this->typeFactory->createMixedPassedOrUnionType($resolvedTypes);
+        } else {
+            $resolvedType = $this->varDocPropertyTypeInferer->inferProperty($property);
+        }
+
+        // default value type must be added to each resolved type if set
+        // @todo include in one of inferrers above
+        $propertyDefaultValue = $property->props[0]->default;
+
+        if ($propertyDefaultValue !== null) {
+            $defaultValueType = $this->defaultValuePropertyTypeInferer->inferProperty($property);
+
+            if ($this->shouldUnionWithDefaultValue($defaultValueType, $resolvedType)) {
+                return $this->unionWithDefaultValueType($defaultValueType, $resolvedType);
+            }
+        }
+
+        if ($resolvedType === null) {
+            return new MixedType();
+        }
+
+        return $resolvedType;
     }
 
-    private function shouldUnionWithDefaultValue(Type $defaultValueType, Type $type): bool
+    private function shouldUnionWithDefaultValue(Type $defaultValueType, ?Type $type = null): bool
     {
         if ($defaultValueType instanceof MixedType) {
             return false;
         }
 
+        // skip empty array type (mixed[])
+        if ($defaultValueType instanceof ArrayType && $defaultValueType->getItemType() instanceof NeverType && $type !== null) {
+            return false;
+        }
+
+        if ($type === null) {
+            return true;
+        }
+
         return ! $this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type);
     }
 
-    private function unionWithDefaultValueType(Type $type, Type $defaultValueType): Type
+    private function unionWithDefaultValueType(Type $defaultValueType, ?Type $resolvedType): Type
     {
-        // default type has bigger priority than @var type, if not nullable type
-        if (! $defaultValueType instanceof NullType) {
-            return $defaultValueType;
-        }
+        $types[] = $defaultValueType;
 
-        $types = [$type, $defaultValueType];
+        if ($resolvedType !== null) {
+            $types[] = $resolvedType;
+        }
 
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }

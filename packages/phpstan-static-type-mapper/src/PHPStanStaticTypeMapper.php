@@ -27,6 +27,11 @@ final class PHPStanStaticTypeMapper
     public const KIND_PROPERTY = 'property';
 
     /**
+     * @var string
+     */
+    public const KIND_RETURN = 'return';
+
+    /**
      * @var TypeMapperInterface[]
      */
     private $typeMappers = [];

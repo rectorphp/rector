@@ -5,9 +5,11 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropert
 final class DefaultValue
 {
     private $number = 5;
+
     private $maybe = false;
-    private $dreams = [];
+
     private $name = 'John';
+
     private $longName = 'Elton' . 'John';
 }
 
@@ -23,18 +25,17 @@ final class DefaultValue
      * @var int
      */
     private $number = 5;
+
     /**
      * @var bool
      */
     private $maybe = false;
-    /**
-     * @var mixed[]
-     */
-    private $dreams = [];
+
     /**
      * @var string
      */
     private $name = 'John';
+
     /**
      * @var string
      */
