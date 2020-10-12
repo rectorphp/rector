@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\StmtsManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -33,10 +34,19 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
      */
     private $conditionInverter;
 
-    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
-    {
+    /**
+     * @var StmtsManipulator
+     */
+    private $stmtsManipulator;
+
+    public function __construct(
+        ConditionInverter $conditionInverter,
+        IfManipulator $ifManipulator,
+        StmtsManipulator $stmtsManipulator
+    ) {
         $this->ifManipulator = $ifManipulator;
         $this->conditionInverter = $conditionInverter;
+        $this->stmtsManipulator = $stmtsManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -128,6 +138,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->isIfReturnsVoid($if)) {
+            return true;
+        }
+
         if (! $if->cond instanceof BooleanAnd) {
             return true;
         }
@@ -211,6 +225,12 @@ CODE_SAMPLE
         }
 
         return $nextNode;
+    }
+
+    private function isIfReturnsVoid(If_ $if): bool
+    {
+        $lastStmt = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
+        return $lastStmt instanceof Return_ && $lastStmt->expr === null;
     }
 
     private function isFunctionLikeReturnsVoid(If_ $if): bool
