@@ -142,6 +142,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->isParentIfReturnsVoid($if)) {
+            return true;
+        }
+
         if (! $if->cond instanceof BooleanAnd) {
             return true;
         }
@@ -231,6 +235,16 @@ CODE_SAMPLE
     {
         $lastStmt = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
         return $lastStmt instanceof Return_ && $lastStmt->expr === null;
+    }
+
+    private function isParentIfReturnsVoid(If_ $if): bool
+    {
+        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof If_) {
+            return false;
+        }
+
+        return $this->isIfReturnsVoid($parentNode);
     }
 
     private function isFunctionLikeReturnsVoid(If_ $if): bool

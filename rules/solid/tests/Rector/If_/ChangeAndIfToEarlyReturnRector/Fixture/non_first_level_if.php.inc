@@ -10,11 +10,7 @@ class NonFirstLevelIfClass
             if ($car->hasWheels && $car->hasFuel) {
                 $this->canDrive = true;
             }
-
-            return;
         }
-
-        $this->canDrive = true;
     }
 }
 
@@ -37,8 +33,6 @@ class NonFirstLevelIfClass
             }
             $this->canDrive = true;
         }
-
-        $this->canDrive = true;
     }
 }
 
