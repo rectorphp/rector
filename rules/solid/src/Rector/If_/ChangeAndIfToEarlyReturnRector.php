@@ -122,9 +122,9 @@ CODE_SAMPLE
         $this->addNodesAfterNode($ifs, $node);
         $this->addNodeAfterNode($ifReturn, $node);
 
-        $functionLikeReturn = $this->getFunctionLikeReturn($node);
-        if ($functionLikeReturn !== null) {
-            $this->removeNode($functionLikeReturn);
+        $ifParentReturn = $this->getIfParentReturn($node);
+        if ($ifParentReturn !== null) {
+            $this->removeNode($ifParentReturn);
         }
 
         $this->removeNode($node);
@@ -138,7 +138,11 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->ifManipulator->isIfFirstLevelStmt($if)) {
+        if ($this->isIfReturnsVoid($if)) {
+            return true;
+        }
+
+        if ($this->isParentIfReturnsVoid($if)) {
             return true;
         }
 
@@ -217,38 +221,54 @@ CODE_SAMPLE
         $ifs[0]->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 
-    private function getFunctionLikeReturn(If_ $if): ?Return_
+    private function getIfParentReturn(If_ $if): ?Return_
     {
-        /** @var FunctionLike|null $functionLike */
-        $functionLike = $this->betterNodeFinder->findFirstParentInstanceOf($if, FunctionLike::class);
-        if ($functionLike === null) {
+        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $nextNode instanceof Return_) {
             return null;
         }
 
-        if ($functionLike->getStmts() === null) {
-            return null;
+        return $nextNode;
+    }
+
+    private function isIfReturnsVoid(If_ $if): bool
+    {
+        $lastStmt = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
+        return $lastStmt instanceof Return_ && $lastStmt->expr === null;
+    }
+
+    private function isParentIfReturnsVoid(If_ $if): bool
+    {
+        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof If_) {
+            return false;
         }
 
-        $return = $this->stmtsManipulator->getUnwrappedLastStmt($functionLike->getStmts());
-        if ($return === null) {
-            return null;
-        }
-
-        if (! $return instanceof Return_) {
-            return null;
-        }
-
-        return $return;
+        return $this->isIfReturnsVoid($parentNode);
     }
 
     private function isFunctionLikeReturnsVoid(If_ $if): bool
     {
-        $return = $this->getFunctionLikeReturn($if);
-        if ($return === null) {
+        /** @var FunctionLike|null $functionLike */
+        $functionLike = $this->betterNodeFinder->findFirstParentInstanceOf($if, FunctionLike::class);
+        if ($functionLike === null) {
             return true;
         }
 
-        return $return->expr === null;
+        if ($functionLike->getStmts() === null) {
+            return true;
+        }
+
+        $returns = $this->betterNodeFinder->findInstanceOf($functionLike->getStmts(), Return_::class);
+        if ($returns === []) {
+            return true;
+        }
+
+        $nonVoidReturns = array_filter($returns, function (Return_ $return): bool {
+            return $return->expr !== null;
+        });
+
+        return $nonVoidReturns === [];
     }
 
     private function isLastIfOrBeforeLastReturn(If_ $if): bool
