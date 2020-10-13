@@ -18,7 +18,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class MoveVariableDeclarationNearReferenceRector extends AbstractRector
 {
-    /** @var ParentScopeFinder */
+    /**
+     * @var ParentScopeFinder
+     */
     private $parentScopeFinder;
 
     public function __construct(ParentScopeFinder $parentScopeFinder)
@@ -62,7 +64,7 @@ CODE_SAMPLE
     {
         $assign = $node;
         $variable = $node->var;
-        if (!$variable instanceof Variable) {
+        if (! $variable instanceof Variable) {
             return null;
         }
 
@@ -92,11 +94,10 @@ CODE_SAMPLE
     private function findFirstVariableUsageInScope(Variable $variable, Assign $assign, Node $parentScope): ?Node
     {
         return $this->betterNodeFinder->findFirst(
-            (array)$parentScope->getStmts(),
+            (array) $parentScope->getStmts(),
             function (Node $node) use ($variable, $assign): bool {
-                return
-                    $this->isVariable($node) &&
-                    !$this->isOriginalAssign($node, $assign) &&
+                return $this->isVariable($node) &&
+                    ! $this->isOriginalAssign($node, $assign) &&
                     $this->betterStandardPrinter->areNodesEqual($node, $variable);
             }
         );
