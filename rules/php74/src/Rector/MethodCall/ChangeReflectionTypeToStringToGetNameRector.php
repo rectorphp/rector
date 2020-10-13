@@ -150,10 +150,13 @@ CODE_SAMPLE
         if ($node->var instanceof Variable) {
             $variableName = $this->getName($node->var);
             $methodName = $this->getName($node->name);
-
-            if ($variableName && $methodName) {
-                $this->callsByVariable[$variableName][] = $methodName;
+            if (!$variableName) {
+                return;
             }
+            if (!$methodName) {
+                return;
+            }
+            $this->callsByVariable[$variableName][] = $methodName;
         }
     }
 
