@@ -1,4 +1,4 @@
-# All 588 Rectors Overview
+# All 590 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -26,7 +26,7 @@
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (3)
 - [Legacy](#legacy) (4)
-- [MagicDisclosure](#magicdisclosure) (8)
+- [MagicDisclosure](#magicdisclosure) (9)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
@@ -7272,6 +7272,23 @@ Change method call on setter to standalone assign before the setter
 
 <br><br>
 
+### `NewFluentChainMethodCallToNonFluentRector`
+
+- class: [`Rector\MagicDisclosure\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector`](/rules/magic-disclosure/src/Rector/MethodCall/NewFluentChainMethodCallToNonFluentRector.php)
+- [test fixtures](/rules/magic-disclosure/tests/Rector/MethodCall/NewFluentChainMethodCallToNonFluentRector/Fixture)
+
+Turns fluent interface calls to classic ones.
+
+```diff
+-(new SomeClass())->someFunction()
+-            ->otherFunction();
++$someClass = new SomeClass();
++$someClass->someFunction();
++$someClass->otherFunction();
+```
+
+<br><br>
+
 ### `ReturnThisRemoveRector`
 
 - class: [`Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector`](/rules/magic-disclosure/src/Rector/ClassMethod/ReturnThisRemoveRector.php)
@@ -8609,7 +8626,7 @@ Rename "*.phpt" file to "*Test.php" file
 
 ### `DeleteFactoryInterfaceRector`
 
-- class: [`Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector`](/rules/nette-to-symfony/src/Rector/FileSystem/DeleteFactoryInterfaceRector.php)
+- class: [`Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector`](/rules/nette-to-symfony/src/Rector/Interface_/DeleteFactoryInterfaceRector.php)
 
 Interface factories are not needed in Symfony. Clear constructor injection is used instead
 
@@ -13889,8 +13906,8 @@ Restore accidentally shortened class names to its fully qualified form.
 
 ### `UpdateFileNameByClassNameFileSystemRector`
 
-- class: [`Rector\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector`](/rules/restoration/src/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector.php)
-- [test fixtures](/rules/restoration/tests/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector/Fixture)
+- class: [`Rector\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector`](/rules/restoration/src/Rector/ClassLike/UpdateFileNameByClassNameFileSystemRector.php)
+- [test fixtures](/rules/restoration/tests/Rector/ClassLike/UpdateFileNameByClassNameFileSystemRector/Fixture)
 
 Rename file to respect class name
 

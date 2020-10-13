@@ -7,7 +7,6 @@ namespace Rector\MagicDisclosure\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -21,7 +20,7 @@ use Rector\MagicDisclosure\ValueObject\FluentCallsKind;
  *
  * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\FluentChainMethodCallToNormalMethodCallRectorTest
  */
-final class FluentChainMethodCallToNormalMethodCallRector extends AbstractFluentChainMethodCallRector
+final class NewFluentChainMethodCallToNonFluentRector extends AbstractFluentChainMethodCallRector
 {
     /**
      * @var GetterMethodCallAnalyzer
@@ -38,8 +37,7 @@ final class FluentChainMethodCallToNormalMethodCallRector extends AbstractFluent
         return new RectorDefinition('Turns fluent interface calls to classic ones.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-$someClass = new SomeClass();
-$someClass->someFunction()
+(new SomeClass())->someFunction()
             ->otherFunction();
 CODE_SAMPLE
                 ,
@@ -126,16 +124,6 @@ CODE_SAMPLE
      */
     private function isHandledByAnotherRule(Node $node): bool
     {
-        if ($node instanceof MethodCall && $node->var instanceof New_) {
-            /** handled by @see \Rector\MagicDisclosure\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector */
-            return true;
-        }
-
-        if ($node instanceof Return_ && $this->isHandledByAnotherRule($node->expr)) {
-            /** handled by @see \Rector\MagicDisclosure\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector */
-            return true;
-        }
-
         return $this->hasParentTypes($node, [Return_::class, Arg::class]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector\Fixture;
 
 use Symfony\Component\Finder\Finder;
 

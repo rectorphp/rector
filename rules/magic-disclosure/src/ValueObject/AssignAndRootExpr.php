@@ -74,17 +74,10 @@ final class AssignAndRootExpr
     public function createFirstAssign(): Assign
     {
         if ($this->isFirstCallFactory && $this->getFirstAssign() !== null) {
-            /** @var Assign $currentMethodCall */
-            $currentMethodCall = $this->getFirstAssign()
-                ->expr;
-            while ($currentMethodCall->var instanceof MethodCall) {
-                $currentMethodCall = $currentMethodCall->var;
-            }
-
-            return new Assign($this->getFirstAssign()->var, $currentMethodCall);
+            return $this->createFactoryAssign();
         }
 
-        return new Assign($this->assignExpr, $this->rootExpr);
+        return $this->createAssign($this->assignExpr, $this->rootExpr);
     }
 
     public function getCallerExpr(): Expr
@@ -123,5 +116,42 @@ final class AssignAndRootExpr
         }
 
         return null;
+    }
+
+    private function createAssign(Expr $assignVar, Expr $assignExpr): Assign
+    {
+        if ($assignVar === $assignExpr) {
+            throw new ShouldNotHappenException();
+        }
+
+        return new Assign($assignVar, $assignExpr);
+    }
+
+    private function createFactoryAssign(): Assign
+    {
+        /** @var Assign $firstAssign */
+        $firstAssign = $this->getFirstAssign();
+        $currentMethodCall = $firstAssign->expr;
+
+        if (! $currentMethodCall instanceof MethodCall) {
+            throw new ShouldNotHappenException();
+        }
+
+        $currentMethodCall = $this->resolveLastMethodCall($currentMethodCall);
+
+        // ensure var and expr are different
+        $assignVar = $firstAssign->var;
+        $assignExpr = $currentMethodCall;
+
+        return $this->createAssign($assignVar, $assignExpr);
+    }
+
+    private function resolveLastMethodCall(MethodCall $currentMethodCall): MethodCall
+    {
+        while ($currentMethodCall->var instanceof MethodCall) {
+            $currentMethodCall = $currentMethodCall->var;
+        }
+
+        return $currentMethodCall;
     }
 }

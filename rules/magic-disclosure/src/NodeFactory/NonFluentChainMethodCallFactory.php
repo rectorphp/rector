@@ -13,8 +13,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
+use Rector\MagicDisclosure\ValueObject\FluentCallsKind;
 use Rector\NetteKdyby\Naming\VariableNaming;
 
 final class NonFluentChainMethodCallFactory
@@ -73,7 +73,7 @@ final class NonFluentChainMethodCallFactory
     public function createFromAssignObjectAndMethodCalls(
         AssignAndRootExpr $assignAndRootExpr,
         array $chainMethodCalls,
-        string $kind = 'normal'
+        string $kind
     ): array {
         $nodesToAdd = [];
 
@@ -90,7 +90,7 @@ final class NonFluentChainMethodCallFactory
 
         $nodesToAdd = array_merge($nodesToAdd, $decoupledMethodCalls);
 
-        if ($assignAndRootExpr->getSilentVariable() !== null && $kind !== FluentChainMethodCallRootExtractor::KIND_IN_ARGS) {
+        if ($assignAndRootExpr->getSilentVariable() !== null && $kind !== FluentCallsKind::IN_ARGS) {
             $nodesToAdd[] = $assignAndRootExpr->getReturnSilentVariable();
         }
 

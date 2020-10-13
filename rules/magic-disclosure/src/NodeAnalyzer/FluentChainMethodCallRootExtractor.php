@@ -2,31 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Rector\MagicDisclosure\NodeManipulator;
+namespace Rector\MagicDisclosure\NodeAnalyzer;
 
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\MagicDisclosure\NodeAnalyzer\ExprStringTypeResolver;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
+use Rector\MagicDisclosure\ValueObject\FluentCallsKind;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
+/**
+ * @see \Rector\MagicDisclosure\Tests\NodeFactory\FluentChainMethodCallRootExtractor\FluentChainMethodCallRootExtractorTest
+ */
 final class FluentChainMethodCallRootExtractor
 {
-    /**
-     * @var string
-     */
-    public const KIND_IN_ARGS = 'in_args';
-
     /**
      * @var PropertyNaming
      */
@@ -52,18 +52,25 @@ final class FluentChainMethodCallRootExtractor
      */
     private $exprStringTypeResolver;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         NodeNameResolver $nodeNameResolver,
         PropertyNaming $propertyNaming,
         VariableNaming $variableNaming,
-        ExprStringTypeResolver $exprStringTypeResolver
+        ExprStringTypeResolver $exprStringTypeResolver,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableNaming = $variableNaming;
         $this->exprStringTypeResolver = $exprStringTypeResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
@@ -71,15 +78,34 @@ final class FluentChainMethodCallRootExtractor
      */
     public function extractFromMethodCalls(array $methodCalls, string $kind): ?AssignAndRootExpr
     {
+        // we need at least 2 method call for fluent
+        if (count($methodCalls) < 2) {
+            return null;
+        }
+
         foreach ($methodCalls as $methodCall) {
             if ($methodCall->var instanceof Variable || $methodCall->var instanceof PropertyFetch) {
                 $isFirstCallFactory = $this->resolveIsFirstCallFactory($methodCall);
+
+                // the method call, does not belong to the
+                $staticType = $this->nodeTypeResolver->getStaticType($methodCall);
+
+                // no assign
+                if ($methodCall->getAttribute(AttributeKey::PARENT_NODE) instanceof Expression) {
+                    $variableName = $this->propertyNaming->fqnToVariableName($staticType);
+
+                    // the assign expresison must be break
+                    // pesuero code bsaed on type
+                    $variable = new Variable($variableName);
+                    return new AssignAndRootExpr($methodCall->var, $methodCall->var, $variable, $isFirstCallFactory);
+                }
+
                 return new AssignAndRootExpr($methodCall->var, $methodCall->var, null, $isFirstCallFactory);
             }
 
             if ($methodCall->var instanceof New_) {
                 // direct = no parent
-                if ($kind === self::KIND_IN_ARGS) {
+                if ($kind === FluentCallsKind::IN_ARGS) {
                     return $this->resolveKindInArgs($methodCall);
                 }
 

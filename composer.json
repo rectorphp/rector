@@ -44,6 +44,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
         "nette/application": "^3.0",
+        "nette/di": "^3.0",
         "nette/forms": "^3.0",
         "ocramius/package-versions": "^1.9",
         "php-parallel-lint/php-parallel-lint": "^1.2",
@@ -194,7 +195,8 @@
             "rules/type-declaration/tests/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
             "rules/type-declaration/tests/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
             "stubs/Nette/Localization/ITranslation.php",
-            "vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php"
+            "vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php",
+            "tests/debug_functions.php"
         ],
         "psr-4": {
             "Rector\\Architecture\\Tests\\": "rules/architecture/tests",

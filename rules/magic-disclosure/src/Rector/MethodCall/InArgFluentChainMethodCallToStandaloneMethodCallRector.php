@@ -13,7 +13,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MagicDisclosure\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
+use Rector\MagicDisclosure\ValueObject\FluentCallsKind;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -113,7 +113,7 @@ CODE_SAMPLE
 
         $assignAndRootExprAndNodesToAdd = $this->createStandaloneNodesToAddFromChainMethodCalls(
             $node,
-            FluentChainMethodCallRootExtractor::KIND_IN_ARGS
+            FluentCallsKind::IN_ARGS
         );
 
         if ($assignAndRootExprAndNodesToAdd === null) {

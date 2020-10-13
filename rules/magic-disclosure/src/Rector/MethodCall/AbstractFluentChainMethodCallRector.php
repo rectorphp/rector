@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\MagicDisclosure\NodeAnalyzer\ChainCallsStaticTypeResolver;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallRootExtractor;
+use Rector\MagicDisclosure\NodeAnalyzer\SameClassMethodCallAnalyzer;
 use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
-use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExprAndNodesToAdd;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -23,9 +27,12 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
      *
      * @var string[]
      */
-    private const ALLOWED_TYPES = [
+    private const ALLOWED_FLUENT_TYPES = [
         'Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator',
         'Nette\Forms\Controls\BaseControl',
+        'Nette\DI\ContainerBuilder',
+        'Nette\DI\Definitions\Definition',
+        'Nette\DI\Definitions\ServiceDefinition',
         'PHPStan\Analyser\Scope',
         'DateTime',
         'Nette\Utils\DateTime',
@@ -56,18 +63,25 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
     private $chainCallsStaticTypeResolver;
 
     /**
+     * @var SameClassMethodCallAnalyzer
+     */
+    private $sameClassMethodCallAnalyzer;
+
+    /**
      * @required
      */
     public function autowireAbstractFluentChainMethodCallRector(
         FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
         FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor,
         NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
-        ChainCallsStaticTypeResolver $chainCallsStaticTypeResolver
+        ChainCallsStaticTypeResolver $chainCallsStaticTypeResolver,
+        SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer
     ): void {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
         $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
         $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
         $this->chainCallsStaticTypeResolver = $chainCallsStaticTypeResolver;
+        $this->sameClassMethodCallAnalyzer = $sameClassMethodCallAnalyzer;
     }
 
     /**
@@ -80,13 +94,13 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
             $chainMethodCalls
         );
 
-        if (! $this->isCorrectTypeCount($calleeUniqueTypes, $assignAndRootExpr)) {
+        if (! $this->sameClassMethodCallAnalyzer->isCorrectTypeCount($calleeUniqueTypes, $assignAndRootExpr)) {
             return true;
         }
 
         $calleeUniqueType = $this->resolveCalleeUniqueType($assignAndRootExpr, $calleeUniqueTypes);
 
-        return $this->isAllowedType($calleeUniqueType, self::ALLOWED_TYPES);
+        return $this->isAllowedType($calleeUniqueType, self::ALLOWED_FLUENT_TYPES);
     }
 
     protected function createStandaloneNodesToAddFromChainMethodCalls(
@@ -94,8 +108,7 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
         string $kind
     ): ?AssignAndRootExprAndNodesToAdd {
         $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
-
-        if (! $this->areAllClassMethodLocatedInSameClass($chainMethodCalls)) {
+        if (! $this->sameClassMethodCallAnalyzer->haveSingleClass($chainMethodCalls)) {
             return null;
         }
 
@@ -122,39 +135,27 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall[] $chainMethodCalls
+     * @duplicated
+     * @param MethodCall|Return_ $node
      */
-    protected function areAllClassMethodLocatedInSameClass(array $chainMethodCalls): bool
+    protected function removeCurrentNode(Node $node): void
     {
-        // are method calls located in the same class?
-        $classOfClassMethod = [];
-        foreach ($chainMethodCalls as $chainMethodCall) {
-            $classMethod = $this->nodeRepository->findClassMethodByMethodCall($chainMethodCall);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Assign) {
+            $this->removeNode($parent);
+            return;
+        }
 
-            if ($classMethod instanceof ClassMethod) {
-                $classOfClassMethod[] = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-            } else {
-                $classOfClassMethod[] = null;
+        // part of method call
+        if ($parent instanceof Arg) {
+            $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentParent instanceof MethodCall) {
+                $this->removeNode($parentParent);
             }
+            return;
         }
 
-        return count(array_unique($classOfClassMethod)) <= 1;
-    }
-
-    /**
-     * @param string[] $calleeUniqueTypes
-     */
-    private function isCorrectTypeCount(array $calleeUniqueTypes, AssignAndRootExpr $assignAndRootExpr): bool
-    {
-        if (count($calleeUniqueTypes) === 0) {
-            return false;
-        }
-
-        if ($assignAndRootExpr->isFirstCallFactory()) {
-            return count($calleeUniqueTypes) === 2;
-        }
-
-        return count($calleeUniqueTypes) === 1;
+        $this->removeNode($node);
     }
 
     /**
