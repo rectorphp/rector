@@ -28,7 +28,7 @@ final class ConfigurableRectorRule implements Rule
     /**
      * @var string
      */
-    public const ERROR_NOT_IMPLEMENTS_INTERFACE = 'Configurable code sample is used but interface is not implemented';
+    public const ERROR_NOT_IMPLEMENTS_INTERFACE = 'Configurable code sample is used but "%s" interface is not implemented';
 
     public function getNodeType(): string
     {
@@ -51,7 +51,8 @@ final class ConfigurableRectorRule implements Rule
 
         if (! $this->implementsConfigurableInterface($node)) {
             if ($this->hasConfiguredCodeSample($node)) {
-                return [self::ERROR_NOT_IMPLEMENTS_INTERFACE];
+                $errorMessage = sprintf(self::ERROR_NOT_IMPLEMENTS_INTERFACE, ConfigurableRectorInterface::class);
+                return [$errorMessage];
             }
 
             return [];
@@ -79,7 +80,8 @@ final class ConfigurableRectorRule implements Rule
             return false;
         }
 
-        return is_a($class->namespacedName->toString(), ConfigurableRectorInterface::class, true);
+        $fullyQualifiedClassName = (string) $class->namespacedName;
+        return is_a($fullyQualifiedClassName, ConfigurableRectorInterface::class, true);
     }
 
     private function hasConfiguredCodeSample(Class_ $class): bool

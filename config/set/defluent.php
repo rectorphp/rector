@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
-use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
-use Rector\MagicDisclosure\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector;
-use Rector\MagicDisclosure\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector;
-use Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector;
+use Rector\Defluent\Rector\ClassMethod\ReturnThisRemoveRector;
+use Rector\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
+use Rector\Defluent\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector;
+use Rector\Defluent\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector;
+use Rector\Defluent\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector;
+use Rector\Defluent\Rector\Return_\DefluentReturnMethodCallRector;
+use Rector\Defluent\Rector\Return_\ReturnFluentChainMethodCallToNormalMethodCallRector;
+use Rector\Defluent\Rector\Return_\ReturnNewFluentChainMethodCallToNonFluentRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/
@@ -15,9 +18,16 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
+    // variable/property
+    $services->set(FluentChainMethodCallToNormalMethodCallRector::class);
+    $services->set(ReturnFluentChainMethodCallToNormalMethodCallRector::class);
+
+    // new
+    $services->set(NewFluentChainMethodCallToNonFluentRector::class);
+    $services->set(ReturnNewFluentChainMethodCallToNonFluentRector::class);
+
     $services->set(ReturnThisRemoveRector::class);
     $services->set(DefluentReturnMethodCallRector::class);
-    $services->set(FluentChainMethodCallToNormalMethodCallRector::class);
     $services->set(MethodCallOnSetterMethodCallToStandaloneAssignRector::class);
     $services->set(InArgFluentChainMethodCallToStandaloneMethodCallRector::class);
 };
