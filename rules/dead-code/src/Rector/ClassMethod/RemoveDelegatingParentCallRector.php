@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -14,21 +13,27 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\ValueObject\MethodName;
+use Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
-use ReflectionMethod;
-use ReflectionParameter;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\RemoveDelegatingParentCallRectorTest
  */
 final class RemoveDelegatingParentCallRector extends AbstractRector
 {
+    /**
+     * @var CurrentAndParentClassMethodComparator
+     */
+    private $currentAndParentClassMethodComparator;
+
+    public function __construct(CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator)
+    {
+        $this->currentAndParentClassMethodComparator = $currentAndParentClassMethodComparator;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Removed dead parent call, that does not change anything', [
@@ -83,7 +88,7 @@ CODE_SAMPLE
         }
 
         $staticCall = $this->matchStaticCall($onlyStmt);
-        if (! $this->isParentCallMatching($node, $staticCall)) {
+        if (! $this->currentAndParentClassMethodComparator->isParentCallMatching($node, $staticCall)) {
             return null;
         }
 
@@ -144,26 +149,6 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isParentCallMatching(ClassMethod $classMethod, ?StaticCall $staticCall): bool
-    {
-        if ($staticCall === null) {
-            return false;
-        }
-
-        if (! $this->areNamesEqual($staticCall->name, $classMethod->name)) {
-            return false;
-        }
-
-        if (! $this->isName($staticCall->class, 'parent')) {
-            return false;
-        }
-
-        if (! $this->areArgsAndParamsEqual($staticCall->args, $classMethod->params)) {
-            return false;
-        }
-        return ! $this->isParentClassMethodVisibilityOrDefaultOverride($classMethod, $staticCall);
-    }
-
     private function hasRequiredAnnotation(Node $node): bool
     {
         /** @var PhpDocInfo|null $phpDocInfo */
@@ -172,120 +157,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return (bool) $phpDocInfo->hasByName('required');
-    }
-
-    /**
-     * @param Arg[] $args
-     * @param Param[] $params
-     */
-    private function areArgsAndParamsEqual(array $args, array $params): bool
-    {
-        if (count($args) !== count($params)) {
-            return false;
-        }
-
-        foreach ($args as $key => $arg) {
-            if (! isset($params[$key])) {
-                return false;
-            }
-
-            $param = $params[$key];
-
-            if (! $this->areNodesEqual($param->var, $arg->value)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function isParentClassMethodVisibilityOrDefaultOverride(
-        ClassMethod $classMethod,
-        StaticCall $staticCall
-    ): bool {
-        /** @var string $className */
-        $className = $staticCall->getAttribute(AttributeKey::CLASS_NAME);
-
-        $parentClassName = get_parent_class($className);
-        if (! $parentClassName) {
-            throw new ShouldNotHappenException();
-        }
-
-        /** @var string $methodName */
-        $methodName = $this->getName($staticCall->name);
-
-        $parentClassMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
-        if ($parentClassMethod !== null && $parentClassMethod->isProtected() && $classMethod->isPublic()) {
-            return true;
-        }
-
-        return $this->checkOverrideUsingReflection($classMethod, $parentClassName, $methodName);
-    }
-
-    private function checkOverrideUsingReflection(
-        ClassMethod $classMethod,
-        string $parentClassName,
-        string $methodName
-    ): bool {
-        $parentMethodReflection = $this->getReflectionMethod($parentClassName, $methodName);
-        // 3rd party code
-        if ($parentMethodReflection !== null) {
-            if ($parentMethodReflection->isProtected() && $classMethod->isPublic()) {
-                return true;
-            }
-            if ($parentMethodReflection->isInternal()) {
-                //we can't know for certain so we assume its an override
-                return true;
-            }
-            if ($this->areParameterDefaultsDifferent($classMethod, $parentMethodReflection)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function getReflectionMethod(string $className, string $methodName): ?ReflectionMethod
-    {
-        if (! method_exists($className, $methodName)) {
-            //internal classes don't have __construct method
-            if ($methodName === MethodName::CONSTRUCT && class_exists($className)) {
-                return (new ReflectionClass($className))->getConstructor();
-            }
-            return null;
-        }
-        return new ReflectionMethod($className, $methodName);
-    }
-
-    private function areParameterDefaultsDifferent(
-        ClassMethod $classMethod,
-        ReflectionMethod $reflectionMethod
-    ): bool {
-        foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
-            if (! isset($classMethod->params[$key])) {
-                if ($reflectionParameter->isDefaultValueAvailable()) {
-                    continue;
-                }
-                return true;
-            }
-
-            $methodParam = $classMethod->params[$key];
-
-            if ($this->areDefaultValuesDifferent($reflectionParameter, $methodParam)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function areDefaultValuesDifferent(ReflectionParameter $reflectionParameter, Param $methodParam): bool
-    {
-        if ($reflectionParameter->isDefaultValueAvailable() !== isset($methodParam->default)) {
-            return true;
-        }
-
-        return $reflectionParameter->isDefaultValueAvailable() && $methodParam->default !== null &&
-            ! $this->isValue($methodParam->default, $reflectionParameter->getDefaultValue());
+        return $phpDocInfo->hasByName('required');
     }
 }
