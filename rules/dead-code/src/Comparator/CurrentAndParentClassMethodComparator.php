@@ -83,6 +83,7 @@ final class CurrentAndParentClassMethodComparator
 
         return ! $this->isParentClassMethodVisibilityOrDefaultOverride($classMethod, $staticCall);
     }
+
     private function isSameMethodParentCall(ClassMethod $classMethod, StaticCall $staticCall): bool
     {
         if (! $this->nodeNameResolver->areNamesEqual($staticCall->name, $classMethod->name)) {

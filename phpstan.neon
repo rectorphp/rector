@@ -899,17 +899,6 @@ parameters:
                 - tests/debug_functions.php
 
         -
-                message: '#Do not use @method tag in class docblock#'
-                paths:
-                    - src/PhpParser/Builder/ClassBuilder.php # 15
-                    - src/PhpParser/Builder/MethodBuilder.php # 15
-                    - src/PhpParser/Builder/NamespaceBuilder.php # 15
-                    - src/PhpParser/Builder/ParamBuilder.php # 15
-                    - src/PhpParser/Builder/PropertyBuilder.php # 15
-                    - src/PhpParser/Builder/TraitUseBuilder.php # 15
-                    - src/PhpParser/Builder/UseBuilder.php # 15
-
-        -
             message: '#Property with protected modifier is not allowed\. Use interface instead#'
             paths:
                 - packages/better-php-doc-parser/src/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php # 39
@@ -993,3 +982,7 @@ parameters:
                 - src/Testing/PHPUnit/AbstractNodeVisitorTestCase.php # 30
                 - src/Testing/PHPUnit/AbstractRectorTestCase.php # 24
                 - utils/doctrine-annotation-parser-syncer/src/FileSyncer/AbstractClassSyncer.php # 19
+
+        - '#Method Rector\\Core\\PhpParser\\Builder\\NamespaceBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+        - '#Method Rector\\Core\\PhpParser\\Builder\\TraitUseBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\TraitUse but returns PhpParser\\Node#'
+        - '#Method Rector\\Core\\PhpParser\\Builder\\UseBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\Use_ but returns PhpParser\\Node#'

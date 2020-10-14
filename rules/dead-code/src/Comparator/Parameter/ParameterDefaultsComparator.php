@@ -56,6 +56,7 @@ final class ParameterDefaultsComparator
 
         return $parameterReflection->getDefaultValue() !== null && $param->default === null;
     }
+
     /**
      * @return bool|float|int|string|mixed[]|null
      */
