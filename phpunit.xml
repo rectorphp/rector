@@ -16,6 +16,7 @@
 			<exclude>
 				<directory suffix=".php">./packages/*/tests</directory>
 				<directory suffix=".php">./rules/*/tests</directory>
+                <directory suffix=".php">./packages/rector-generator/templates</directory>
 			</exclude>
 		</whitelist>
 	</filter>
