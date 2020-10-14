@@ -7,6 +7,19 @@
     <php>
         <const name="RECTOR_REPOSITORY" value="true"/>
     </php>
+
+    <filter>
+		<whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./packages</directory>
+            <directory suffix=".php">./rules</directory>
+            <directory suffix=".php">./src</directory>
+			<exclude>
+				<directory suffix=".php">./packages/*/tests<</directory>
+				<directory suffix=".php">./rules/*/tests<</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+
     <testsuites>
         <testsuite name="main">
             <directory>rules/*/tests</directory>
