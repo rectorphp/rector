@@ -214,6 +214,35 @@ CODE_SAMPLE
             }
         );
     }
+    /**
+     * @param Param[] $unusedParameters
+     */
+    private function clearPhpDocInfo(ClassMethod $classMethod, array $unusedParameters): void
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return;
+        }
+
+        foreach ($unusedParameters as $unusedParameter) {
+            $parameterName = $this->getName($unusedParameter->var);
+            if ($parameterName === null) {
+                continue;
+            }
+
+            $paramTagValueNode = $phpDocInfo->getParamTagValueByName($parameterName);
+            if ($paramTagValueNode === null) {
+                continue;
+            }
+
+            if ($paramTagValueNode->parameterName !== '$' . $parameterName) {
+                continue;
+            }
+
+            $phpDocInfo->removeTagValueNodeFromNode($paramTagValueNode);
+        }
+    }
 
     private function shouldSkipOpenSourceAbstract(ClassMethod $classMethod, Class_ $class): bool
     {
@@ -288,35 +317,5 @@ CODE_SAMPLE
         }
 
         return $unusedParameters;
-    }
-
-    /**
-     * @param Param[] $unusedParameters
-     */
-    private function clearPhpDocInfo(ClassMethod $classMethod, array $unusedParameters): void
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
-
-        foreach ($unusedParameters as $unusedParameter) {
-            $parameterName = $this->getName($unusedParameter->var);
-            if ($parameterName === null) {
-                continue;
-            }
-
-            $paramTagValueNode = $phpDocInfo->getParamTagValueByName($parameterName);
-            if ($paramTagValueNode === null) {
-                continue;
-            }
-
-            if ($paramTagValueNode->parameterName !== '$' . $parameterName) {
-                continue;
-            }
-
-            $phpDocInfo->removeTagValueNodeFromNode($paramTagValueNode);
-        }
     }
 }
