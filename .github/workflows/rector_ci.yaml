@@ -49,8 +49,8 @@ jobs:
             -   name: Git config
                 if: steps.rector-git-check.outputs.modified == 'true'
                 run: |
-                    git config user.name 'rector-bot'
-                    git config user.email 'tomas@getrector.org'
+                    git config --global user.name 'rector-bot'
+                    git config --global user.email 'tomas@getrector.org'
                     echo ::set-env name=COMMIT_MESSAGE::$(git log -1 --pretty=format:"%s")
 
             -   name: Commit Rector changes
