@@ -986,3 +986,7 @@ parameters:
         - '#Method Rector\\Core\\PhpParser\\Builder\\NamespaceBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
         - '#Method Rector\\Core\\PhpParser\\Builder\\TraitUseBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\TraitUse but returns PhpParser\\Node#'
         - '#Method Rector\\Core\\PhpParser\\Builder\\UseBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\Use_ but returns PhpParser\\Node#'
+
+        - '#Method Rector\\Utils\\PHPStanAttributeTypeSyncer\\NodeFactory\\AttributeAwareClassFactoryFactory\:\:createFromPhpDocParserNodeClass\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+        - '#Method Rector\\Utils\\PHPStanAttributeTypeSyncer\\NodeFactory\\AttributeAwareClassFactory\:\:createFromPhpDocParserNodeClass\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+        - '#Method Rector\\NetteKdyby\\NodeFactory\\EventValueObjectClassFactory\:\:wrapClassToNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
