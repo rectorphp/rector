@@ -320,6 +320,7 @@
         "rector-ci": "bin/rector process --config rector-ci.php --dry-run --ansi",
         "rector": "bin/rector process --config rector-ci.php --ansi",
         "release": "vendor/bin/monorepo-builder release patch --ansi",
+        "split": "vendor/bin/monorepo-builder split --ansi",
         "merge": "vendor/bin/monorepo-builder merge --ansi",
         "propagate": "vendor/bin/monorepo-builder propagate --ansi",
         "validate-monorepo": "vendor/bin/monorepo-builder validate --ansi"
