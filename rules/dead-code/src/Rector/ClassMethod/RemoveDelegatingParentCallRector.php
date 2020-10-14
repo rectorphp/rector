@@ -88,6 +88,10 @@ CODE_SAMPLE
         }
 
         $staticCall = $this->matchStaticCall($onlyStmt);
+        if ($staticCall === null) {
+            return null;
+        }
+
         if (! $this->currentAndParentClassMethodComparator->isParentCallMatching($node, $staticCall)) {
             return null;
         }
