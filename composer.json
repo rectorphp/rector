@@ -39,7 +39,7 @@
         "symplify/package-builder": "^8.3.35",
         "symplify/set-config-resolver": "^8.3.35",
         "symplify/smart-file-system": "^8.3.35",
-        "webmozart/assert": "^1.8"
+        "webmozart/assert": "^1.9"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
