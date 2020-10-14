@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Defluent\ValueObject\FirstAssignFluentCall;
 use Rector\Defluent\ValueObject\FluentMethodCalls;
@@ -23,7 +24,9 @@ final class SeparateReturnMethodCallFactory
     ): array {
         $nodesToAdd = [];
 
-        $nodesToAdd[] = $firstAssignFluentCall->createFirstAssign();
+        if (! $firstAssignFluentCall->getAssignExpr() instanceof PropertyFetch) {
+            $nodesToAdd[] = $firstAssignFluentCall->createFirstAssign();
+        }
 
         $decoupledMethodCalls = $this->createNonFluentMethodCalls(
             $fluentMethodCalls->getFluentMethodCalls(),

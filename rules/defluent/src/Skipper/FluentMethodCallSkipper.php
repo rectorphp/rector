@@ -80,7 +80,6 @@ final class FluentMethodCallSkipper
     public function shouldSkipFirstAssignFluentCall(FirstAssignFluentCall $firstAssignFluentCall): bool
     {
         $calleeUniqueTypes = $this->fluentCallStaticTypeResolver->resolveCalleeUniqueTypes(
-            $firstAssignFluentCall,
             $firstAssignFluentCall->getFluentMethodCalls()
                 ->getFluentMethodCalls()
         );
@@ -99,10 +98,7 @@ final class FluentMethodCallSkipper
      */
     public function shouldSkipMethodCalls(AssignAndRootExpr $assignAndRootExpr, array $fluentMethodCalls): bool
     {
-        $calleeUniqueTypes = $this->fluentCallStaticTypeResolver->resolveCalleeUniqueTypes(
-            $assignAndRootExpr,
-            $fluentMethodCalls
-        );
+        $calleeUniqueTypes = $this->fluentCallStaticTypeResolver->resolveCalleeUniqueTypes($fluentMethodCalls);
 
         if (! $this->sameClassMethodCallAnalyzer->isCorrectTypeCount($calleeUniqueTypes, $assignAndRootExpr)) {
             return true;

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Defluent\Contract\ValueObject\RootExprAwareInterface;
 
 final class FluentCallStaticTypeResolver
 {
@@ -23,15 +22,14 @@ final class FluentCallStaticTypeResolver
      * @param MethodCall[] $chainMethodCalls
      * @return string[]
      */
-    public function resolveCalleeUniqueTypes(RootExprAwareInterface $assignAndRootExpr, array $chainMethodCalls): array
+    public function resolveCalleeUniqueTypes(array $chainMethodCalls): array
     {
-        $rootClassType = $this->exprStringTypeResolver->resolve($assignAndRootExpr->getRootExpr());
-        if ($rootClassType === null) {
-            return [];
-        }
-
         $callerClassTypes = [];
-        $callerClassTypes[] = $rootClassType;
+
+        $lastMethodCallKey = array_key_last($chainMethodCalls);
+        $lastMethodCall = $chainMethodCalls[$lastMethodCallKey];
+
+        $callerClassTypes[] = $chainMethodCallType = $this->exprStringTypeResolver->resolve($lastMethodCall->var);
 
         // chain method calls are inversed
         $lastChainMethodCallKey = array_key_first($chainMethodCalls);

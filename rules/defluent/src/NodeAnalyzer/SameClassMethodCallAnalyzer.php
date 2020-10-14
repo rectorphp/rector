@@ -56,7 +56,7 @@ final class SameClassMethodCallAnalyzer
 
         // in case of factory method, 2 methods are allowed
         if ($firstCallFactoryAware->isFirstCallFactory()) {
-            return count($calleeUniqueTypes) <= 2;
+            return count($calleeUniqueTypes) === 2;
         }
 
         return count($calleeUniqueTypes) === 1;

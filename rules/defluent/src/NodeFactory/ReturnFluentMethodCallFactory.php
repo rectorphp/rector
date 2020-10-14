@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Defluent\NodeFactory;
 
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallRootExtractor;
 use Rector\Defluent\ValueObject\FirstAssignFluentCall;
@@ -49,11 +50,17 @@ final class ReturnFluentMethodCallFactory
             $rootMethodCall
         );
 
-        // we need a variable to assign the stuff into
-        // the method call, does not belong to the
-        $staticType = $this->nodeTypeResolver->getStaticType($rootMethodCall);
-        $variableName = $this->propertyNaming->fqnToVariableName($staticType);
-        $assignExpr = new Variable($variableName);
+        $lastMethodCall = $fluentMethodCalls->getRootMethodCall();
+
+        if ($lastMethodCall->var instanceof PropertyFetch) {
+            $assignExpr = $lastMethodCall->var;
+        } else {
+            // we need a variable to assign the stuff into
+            // the method call, does not belong to the
+            $staticType = $this->nodeTypeResolver->getStaticType($rootMethodCall);
+            $variableName = $this->propertyNaming->fqnToVariableName($staticType);
+            $assignExpr = new Variable($variableName);
+        }
 
         return new FirstAssignFluentCall(
             $assignExpr,
