@@ -6,7 +6,6 @@ namespace Rector\Defluent\NodeFactory;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Return_;
@@ -44,7 +43,7 @@ final class SeparateReturnMethodCallFactory
 
     /**
      * @param MethodCall[] $chainMethodCalls
-     * @return \PhpParser\Node\Expr\MethodCall[]
+     * @return MethodCall[]
      */
     private function createNonFluentMethodCalls(
         array $chainMethodCalls,

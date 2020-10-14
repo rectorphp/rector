@@ -128,6 +128,7 @@ final class FluentChainMethodCallRootExtractor
 
         return $variableStaticType !== $calledMethodStaticType;
     }
+
     private function createAssignAndRootExprForVariableOrPropertyFetch(MethodCall $methodCall): AssignAndRootExpr
     {
         $isFirstCallFactory = $this->resolveIsFirstMethodCallFactory($methodCall);

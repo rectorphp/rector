@@ -123,6 +123,7 @@ final class FirstAssignFluentCall implements RootExprAwareInterface, FirstCallFa
 
         return $this->createAssign($assignVar, $assignExpr);
     }
+
     private function createAssign(Expr $assignVar, Expr $assignExpr): Assign
     {
         if ($assignVar === $assignExpr) {

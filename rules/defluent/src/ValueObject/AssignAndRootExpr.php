@@ -138,6 +138,7 @@ final class AssignAndRootExpr implements RootExprAwareInterface, FirstCallFactor
 
         return $this->createAssign($assignVar, $assignExpr);
     }
+
     private function createAssign(Expr $assignVar, Expr $assignExpr): Assign
     {
         if ($assignVar === $assignExpr) {

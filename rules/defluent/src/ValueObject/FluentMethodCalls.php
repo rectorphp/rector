@@ -12,6 +12,7 @@ final class FluentMethodCalls
      * @var MethodCall[]
      */
     private $fluentMethodCalls = [];
+
     /**
      * @var MethodCall
      */
