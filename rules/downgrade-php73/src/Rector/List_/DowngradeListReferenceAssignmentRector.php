@@ -183,7 +183,7 @@ CODE_SAMPLE
         Variable $exprVariable,
         array $nestedArrayIndexes
     ): array {
-        // Their position is kept in the array
+        // After filtering, their original position is kept in the array
         $newNodes = [];
         foreach ($listItems as $position => $listItem) {
             if ($listItem === null) {
@@ -211,6 +211,7 @@ CODE_SAMPLE
                 );
                 continue;
             }
+            // Nested list. Combine with the nodes from the recursive call
             /** @var List_ */
             $nestedList = $listItem->value;
             $listNestedArrayIndexes = array_merge($nestedArrayIndexes, [$key]);
