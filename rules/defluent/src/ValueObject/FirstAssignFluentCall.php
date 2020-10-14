@@ -80,7 +80,7 @@ final class FirstAssignFluentCall implements RootExprAwareInterface, FirstCallFa
     {
         $firstAssign = $this->getFirstAssign();
         if ($firstAssign === null) {
-            return $this->getCallerExpr();
+            return $this->assignExpr;
         }
 
         return $firstAssign->var;
@@ -105,15 +105,6 @@ final class FirstAssignFluentCall implements RootExprAwareInterface, FirstCallFa
         return null;
     }
 
-    private function createAssign(Expr $assignVar, Expr $assignExpr): Assign
-    {
-        if ($assignVar === $assignExpr) {
-            throw new ShouldNotHappenException();
-        }
-
-        return new Assign($assignVar, $assignExpr);
-    }
-
     private function createFactoryAssign(): Assign
     {
         /** @var Assign $firstAssign */
@@ -131,5 +122,13 @@ final class FirstAssignFluentCall implements RootExprAwareInterface, FirstCallFa
         $assignExpr = $currentMethodCall;
 
         return $this->createAssign($assignVar, $assignExpr);
+    }
+    private function createAssign(Expr $assignVar, Expr $assignExpr): Assign
+    {
+        if ($assignVar === $assignExpr) {
+            throw new ShouldNotHappenException();
+        }
+
+        return new Assign($assignVar, $assignExpr);
     }
 }

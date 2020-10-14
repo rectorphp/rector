@@ -128,6 +128,25 @@ final class FluentChainMethodCallRootExtractor
 
         return $variableStaticType !== $calledMethodStaticType;
     }
+    private function createAssignAndRootExprForVariableOrPropertyFetch(MethodCall $methodCall): AssignAndRootExpr
+    {
+        $isFirstCallFactory = $this->resolveIsFirstMethodCallFactory($methodCall);
+
+        // the method call, does not belong to the
+        $staticType = $this->nodeTypeResolver->getStaticType($methodCall);
+
+        // no assign
+        if ($methodCall->getAttribute(AttributeKey::PARENT_NODE) instanceof Expression) {
+            $variableName = $this->propertyNaming->fqnToVariableName($staticType);
+
+            // the assign expresison must be break
+            // pesuero code bsaed on type
+            $variable = new Variable($variableName);
+            return new AssignAndRootExpr($methodCall->var, $methodCall->var, $variable, $isFirstCallFactory);
+        }
+
+        return new AssignAndRootExpr($methodCall->var, $methodCall->var, null, $isFirstCallFactory);
+    }
 
     private function resolveKindInArgs(MethodCall $methodCall): AssignAndRootExpr
     {
@@ -170,25 +189,5 @@ final class FluentChainMethodCallRootExtractor
 
         // no assign, just standalone call
         return null;
-    }
-
-    private function createAssignAndRootExprForVariableOrPropertyFetch(MethodCall $methodCall): AssignAndRootExpr
-    {
-        $isFirstCallFactory = $this->resolveIsFirstMethodCallFactory($methodCall);
-
-        // the method call, does not belong to the
-        $staticType = $this->nodeTypeResolver->getStaticType($methodCall);
-
-        // no assign
-        if ($methodCall->getAttribute(AttributeKey::PARENT_NODE) instanceof Expression) {
-            $variableName = $this->propertyNaming->fqnToVariableName($staticType);
-
-            // the assign expresison must be break
-            // pesuero code bsaed on type
-            $variable = new Variable($variableName);
-            return new AssignAndRootExpr($methodCall->var, $methodCall->var, $variable, $isFirstCallFactory);
-        }
-
-        return new AssignAndRootExpr($methodCall->var, $methodCall->var, null, $isFirstCallFactory);
     }
 }

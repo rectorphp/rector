@@ -44,7 +44,7 @@ final class SeparateReturnMethodCallFactory
 
     /**
      * @param MethodCall[] $chainMethodCalls
-     * @return Assign[]|MethodCall[]
+     * @return \PhpParser\Node\Expr\MethodCall[]
      */
     private function createNonFluentMethodCalls(
         array $chainMethodCalls,

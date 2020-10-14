@@ -16,6 +16,7 @@ use Rector\Defluent\ValueObject\FluentCallsKind;
  * @see https://www.yegor256.com/2018/03/13/fluent-interfaces.html
  *
  * @see \Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\FluentChainMethodCallToNormalMethodCallRectorTest
+ * @see \Rector\Defluent\Tests\Rector\Return_\ReturnNewFluentChainMethodCallToNonFluentRector\ReturnNewFluentChainMethodCallToNonFluentRectorTest
  */
 final class ReturnNewFluentChainMethodCallToNonFluentRector extends AbstractFluentChainMethodCallRector
 {

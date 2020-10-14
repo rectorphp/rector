@@ -36,16 +36,16 @@ final class ReturnFluentChainMethodCallToNormalMethodCallRector extends Abstract
     /**
      * @var SeparateReturnMethodCallFactory
      */
-    private $separateMethodCallFactory;
+    private $separateReturnMethodCallFactory;
 
     public function __construct(
         ReturnFluentMethodCallFactory $returnFluentMethodCallFactory,
         FluentMethodCallsFactory $fluentMethodCallsFactory,
-        SeparateReturnMethodCallFactory $separateMethodCallFactory
+        SeparateReturnMethodCallFactory $separateReturnMethodCallFactory
     ) {
         $this->returnFluentMethodCallFactory = $returnFluentMethodCallFactory;
         $this->fluentMethodCallsFactory = $fluentMethodCallsFactory;
-        $this->separateMethodCallFactory = $separateMethodCallFactory;
+        $this->separateReturnMethodCallFactory = $separateReturnMethodCallFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -108,15 +108,11 @@ CODE_SAMPLE
         }
 
         $rootVariable = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($methodCall);
-        if ($rootVariable instanceof New_) {
-            return true;
-        }
-
-        return false;
+        return $rootVariable instanceof New_;
     }
 
     /**
-     * @return Node[]
+     * @return mixed[]|mixed
      */
     private function createStandaloneNodesToAddFromReturnFluentMethodCalls(MethodCall $methodCall): array
     {
@@ -138,7 +134,7 @@ CODE_SAMPLE
             return [];
         }
 
-        return $this->separateMethodCallFactory->createReturnFromFirstAssignFluentCallAndFluentMethodCalls(
+        return $this->separateReturnMethodCallFactory->createReturnFromFirstAssignFluentCallAndFluentMethodCalls(
             $firstAssignFluentCall,
             $fluentMethodCalls
         );

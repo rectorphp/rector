@@ -120,15 +120,6 @@ final class AssignAndRootExpr implements RootExprAwareInterface, FirstCallFactor
         return null;
     }
 
-    private function createAssign(Expr $assignVar, Expr $assignExpr): Assign
-    {
-        if ($assignVar === $assignExpr) {
-            throw new ShouldNotHappenException();
-        }
-
-        return new Assign($assignVar, $assignExpr);
-    }
-
     private function createFactoryAssign(): Assign
     {
         /** @var Assign $firstAssign */
@@ -146,6 +137,14 @@ final class AssignAndRootExpr implements RootExprAwareInterface, FirstCallFactor
         $assignExpr = $currentMethodCall;
 
         return $this->createAssign($assignVar, $assignExpr);
+    }
+    private function createAssign(Expr $assignVar, Expr $assignExpr): Assign
+    {
+        if ($assignVar === $assignExpr) {
+            throw new ShouldNotHappenException();
+        }
+
+        return new Assign($assignVar, $assignExpr);
     }
 
     private function resolveLastMethodCall(MethodCall $currentMethodCall): MethodCall

@@ -40,7 +40,7 @@ final class ReturnFluentMethodCallFactory
         $this->propertyNaming = $propertyNaming;
     }
 
-    public function createFromFluentMethodCalls(FluentMethodCalls $fluentMethodCalls): ?FirstAssignFluentCall
+    public function createFromFluentMethodCalls(FluentMethodCalls $fluentMethodCalls): FirstAssignFluentCall
     {
         $rootMethodCall = $fluentMethodCalls->getRootMethodCall();
 

@@ -9,14 +9,13 @@ use PhpParser\Node\Expr\MethodCall;
 final class FluentMethodCalls
 {
     /**
+     * @var MethodCall[]
+     */
+    private $fluentMethodCalls = [];
+    /**
      * @var MethodCall
      */
     private $rootMethodCall;
-
-    /**
-     * @var MethodCall[]
-     */
-    private $fluentMethodCalls;
 
     /**
      * @var MethodCall
