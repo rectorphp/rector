@@ -15,7 +15,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\IterableType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -228,7 +230,7 @@ CODE_SAMPLE
                 return new Arg($arrayItem);
             }
             // If it is iterable, then directly return `iterator_to_array`
-            if ($type instanceof ObjectType && is_a($type->getClassName(), Traversable::class, true)) {
+            if ($this->isIterableType($type)) {
                 return new Arg(new FuncCall(new Name('iterator_to_array'), [new Arg($arrayItem)]));
             }
         }
@@ -240,5 +242,14 @@ CODE_SAMPLE
                 new FuncCall(new Name('iterator_to_array'), [new Arg($arrayItem)])
             )
         );
+    }
+
+    /**
+     * Iterables: either objects declaring the interface Traversable,
+     * or the pseudo-type iterable
+     */
+    private function isIterableType(Type $type): bool
+    {
+        return $type instanceof IterableType || ($type instanceof ObjectType && is_a($type->getClassName(), Traversable::class, true));
     }
 }
