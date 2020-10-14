@@ -26,14 +26,3 @@ jobs:
                     vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
                 env:
                     COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                    COVERALLS_PARALLEL: true
-
-    coveralls-finish:
-        needs: [code_coverage]
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Coveralls Finished
-                uses: coverallsapp/github-action@master
-                with:
-                    github-token: ${{ secrets.GITHUB_TOKEN }}
-                    parallel-finished: true
