@@ -193,15 +193,15 @@ CODE_SAMPLE
             if ($listItem->value instanceof Variable && ! $listItem->byRef) {
                 continue;
             }
-            // Access the array under the key, if provided, or the position otherwise
+            // Access the key, if provided, or the position otherwise
             $key = $this->getArrayItemKey($listItem, $position);
             // Either the item is a variable, or a nested list
             if ($listItem->value instanceof Variable) {
-                // Change to not assign by reference in the present node
-                $listItem->byRef = false;
                 /** @var Variable */
                 $itemVariable = $listItem->value;
-                // Assign the value by reference on a new assignment
+                // Remove the reference in the present node
+                $listItem->byRef = false;
+                // In its place, assign the value by reference on a new node
                 $assignVariable = new Variable($itemVariable->name);
                 $newNodes[] = $this->createAssignRefWithArrayDimFetch(
                     $assignVariable,
@@ -254,9 +254,9 @@ CODE_SAMPLE
     }
 
     /**
-     * Indicates if there is at least 1 item passed by reference, as in:
-     * - list(&$a, $b)
-     * - list($a, $b, list(&$c, $d))
+     * Indicates if there is all items are passed by reference, as in:
+     * - list(&$a, &$b)
+     * - list(&$a, &$b, list(&$c, &$d))
      *
      * @param (ArrayItem|null)[] $items
      */
@@ -301,24 +301,49 @@ CODE_SAMPLE
         ));
     }
 
+    /**
+     * If the item is a variable by reference,
+     * or a nested list containing variables by reference,
+     * return the same item.
+     * Otherwise, return null
+     *
+     * @param ArrayItem|null $arrayItem
+     * @param integer $condition
+     * @return ArrayItem|null
+     */
     private function getItemByRefOrNull(?ArrayItem $arrayItem, int $condition): ?ArrayItem
     {
+        if ($this->isItemByRef($arrayItem, $condition)) {
+            return $arrayItem;
+        }
+        return null;
+    }
+
+    /**
+     * Indicate if the item is a variable by reference,
+     * or a nested list containing variables by reference
+     *
+     * @param ArrayItem|null $arrayItem
+     * @param integer $condition
+     */
+    private function isItemByRef(?ArrayItem $arrayItem, int $condition): bool
+    {
         if ($arrayItem === null) {
-            return null;
+            return false;
         }
         // Check if the item is a nested list/nested array destructuring
-        if ($arrayItem->value instanceof List_ || $arrayItem->value instanceof Array_) {
+        $isNested = $arrayItem->value instanceof List_ || $arrayItem->value instanceof Array_;
+        if ($isNested) {
             // Recursive call
             /** @var List_|Array_ */
             $nestedList = $arrayItem->value;
-            $hasItemByRef = false;
             if ($condition === self::ALL) {
-                $hasItemByRef = $this->hasAllItemsByRef($nestedList->items);
+                return $this->hasAllItemsByRef($nestedList->items);
             } elseif ($condition === self::ANY) {
-                $hasItemByRef = $this->hasAnyItemByRef($nestedList->items);
+                return $this->hasAnyItemByRef($nestedList->items);
             }
-            return $hasItemByRef ? $arrayItem : null;
+            return false;
         }
-        return $arrayItem->value instanceof Variable && $arrayItem->byRef ? $arrayItem : null;
+        return $arrayItem->value instanceof Variable && $arrayItem->byRef;
     }
 }
