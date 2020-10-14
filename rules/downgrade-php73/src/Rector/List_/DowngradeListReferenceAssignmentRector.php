@@ -194,10 +194,7 @@ CODE_SAMPLE
                 continue;
             }
             // Access the array under the key, if provided, or the position otherwise
-            $key = $position;
-            if ($listItem->key !== null && ($listItem->key instanceof String_ || $listItem->key instanceof LNumber)) {
-                $key = $listItem->key->value;
-            }
+            $key = $this->getArrayItemKey($listItem, $position);
             // Either the item is a variable, or a nested list
             if ($listItem->value instanceof Variable) {
                 // Change to not assign by reference in the present node
@@ -227,6 +224,21 @@ CODE_SAMPLE
             }
         }
         return $newNodes;
+    }
+
+    /**
+     * Return the key inside the ArrayItem, if provided, or the position otherwise
+     * @param int|string $position
+     * @return int|string
+     */
+    private function getArrayItemKey(
+        ArrayItem $listItem,
+        $position
+    ) {
+        if ($listItem->key !== null && ($listItem->key instanceof String_ || $listItem->key instanceof LNumber)) {
+            return $listItem->key->value;
+        }
+        return $position;
     }
 
     /**
