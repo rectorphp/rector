@@ -112,6 +112,29 @@ CODE_SAMPLE
     }
 
     /**
+     * Remove the right-side-most params by reference or empty from `list()`,
+     * since they are not needed anymore.
+     * If all of them can be removed, then directly remove `list()`.
+     * @param List_|Array_ $node
+     * @return List_|Array_|null
+     */
+    public function removeStaleParams(Node $node, int $rightSideRemovableParamsCount): ?Node
+    {
+        $nodeItemsCount = count($node->items);
+        if ($rightSideRemovableParamsCount === $nodeItemsCount) {
+            // Remove the parent Assign node
+            /** @var Assign */
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            $this->removeNode($parentNode);
+            return null;
+        }
+        if ($rightSideRemovableParamsCount > 0) {
+            array_splice($node->items, $nodeItemsCount - $rightSideRemovableParamsCount);
+        }
+        return $node;
+    }
+
+    /**
      * @param List_|Array_ $node
      */
     private function shouldRefactor(Node $node): bool
@@ -219,10 +242,8 @@ CODE_SAMPLE
      * @param int|string $position
      * @return int|string
      */
-    private function getArrayItemKey(
-        ArrayItem $listItem,
-        $position
-    ) {
+    private function getArrayItemKey(ArrayItem $listItem, $position)
+    {
         if ($listItem->key !== null && ($listItem->key instanceof String_ || $listItem->key instanceof LNumber)) {
             return $listItem->key->value;
         }
@@ -325,28 +346,5 @@ CODE_SAMPLE
             return $this->hasAnyItemByRef($nestedList->items);
         }
         return $arrayItem->value instanceof Variable && $arrayItem->byRef;
-    }
-
-    /**
-     * Remove the right-side-most params by reference or empty from `list()`,
-     * since they are not needed anymore.
-     * If all of them can be removed, then directly remove `list()`.
-     * @param List_|Array_ $node
-     * @return List_|Array_|null
-     */
-    public function removeStaleParams(Node $node, int $rightSideRemovableParamsCount): ?Node
-    {
-        $nodeItemsCount = count($node->items);
-        if ($rightSideRemovableParamsCount === $nodeItemsCount) {
-            // Remove the parent Assign node
-            /** @var Assign */
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            $this->removeNode($parentNode);
-            return null;
-        }
-        if ($rightSideRemovableParamsCount > 0) {
-            array_splice($node->items, $nodeItemsCount - $rightSideRemovableParamsCount);
-        }
-        return $node;
     }
 }
