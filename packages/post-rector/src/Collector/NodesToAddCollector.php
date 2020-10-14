@@ -103,7 +103,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
     private function resolveNearestExpressionPosition(Node $node): string
     {
-        if ($node instanceof Expression) {
+        if ($node instanceof Expression || $node instanceof Stmt) {
             return spl_object_hash($node);
         }
 
