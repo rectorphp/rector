@@ -250,6 +250,10 @@ CODE_SAMPLE
      */
     private function isIterableType(Type $type): bool
     {
-        return $type instanceof IterableType || ($type instanceof ObjectType && is_a($type->getClassName(), Traversable::class, true));
+        return $type instanceof IterableType || ($type instanceof ObjectType && is_a(
+            $type->getClassName(),
+            Traversable::class,
+            true
+        ));
     }
 }
