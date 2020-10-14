@@ -26,5 +26,3 @@ jobs:
                     vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
                 env:
                     COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-                    COVERALLS_PARALLEL: true
-                    COVERALLS_FLAG_NAME: PHP 7.3
