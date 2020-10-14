@@ -48,6 +48,14 @@ final class ParameterDefaultsComparator
         return $firstParameterValue !== $secondParameterValue;
     }
 
+    private function isMutuallyExclusiveNull(ParameterReflection $parameterReflection, Param $param): bool
+    {
+        if ($parameterReflection->getDefaultValue() === null && $param->default !== null) {
+            return true;
+        }
+
+        return $parameterReflection->getDefaultValue() !== null && $param->default === null;
+    }
     /**
      * @return bool|float|int|string|mixed[]|null
      */
@@ -64,14 +72,5 @@ final class ParameterDefaultsComparator
 
         /** @var ConstantStringType|ConstantIntegerType|ConstantFloatType|ConstantBooleanType|NullType $defaultValue */
         return $defaultValue->getValue();
-    }
-
-    private function isMutuallyExclusiveNull(ParameterReflection $parameterReflection, Param $param): bool
-    {
-        if ($parameterReflection->getDefaultValue() === null && $param->default !== null) {
-            return true;
-        }
-
-        return $parameterReflection->getDefaultValue() !== null && $param->default === null;
     }
 }

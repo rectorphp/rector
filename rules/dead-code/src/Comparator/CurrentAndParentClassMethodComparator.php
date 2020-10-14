@@ -44,7 +44,7 @@ final class CurrentAndParentClassMethodComparator
     /**
      * @var ParameterDefaultsComparator
      */
-    private $parameterReflectionAndParamComparator;
+    private $parameterDefaultsComparator;
 
     /**
      * @var ParameterTypeComparator
@@ -56,14 +56,14 @@ final class CurrentAndParentClassMethodComparator
         BetterStandardPrinter $betterStandardPrinter,
         NodeRepository $nodeRepository,
         MethodReflectionProvider $methodReflectionProvider,
-        ParameterDefaultsComparator $parameterReflectionAndParamComparator,
+        ParameterDefaultsComparator $parameterDefaultsComparator,
         ParameterTypeComparator $parameterTypeComparator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeRepository = $nodeRepository;
         $this->methodReflectionProvider = $methodReflectionProvider;
-        $this->parameterReflectionAndParamComparator = $parameterReflectionAndParamComparator;
+        $this->parameterDefaultsComparator = $parameterDefaultsComparator;
         $this->parameterTypeComparator = $parameterTypeComparator;
     }
 
@@ -82,6 +82,14 @@ final class CurrentAndParentClassMethodComparator
         }
 
         return ! $this->isParentClassMethodVisibilityOrDefaultOverride($classMethod, $staticCall);
+    }
+    private function isSameMethodParentCall(ClassMethod $classMethod, StaticCall $staticCall): bool
+    {
+        if (! $this->nodeNameResolver->areNamesEqual($staticCall->name, $classMethod->name)) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($staticCall->class, 'parent');
     }
 
     /**
@@ -182,7 +190,7 @@ final class CurrentAndParentClassMethodComparator
 
         foreach ($parameterReflections as $key => $parameterReflection) {
             if (! isset($classMethod->params[$key])) {
-                if ($parameterReflection->getDefaultValue()) {
+                if ($parameterReflection->getDefaultValue() !== null) {
                     continue;
                 }
 
@@ -191,7 +199,7 @@ final class CurrentAndParentClassMethodComparator
 
             $methodParam = $classMethod->params[$key];
 
-            if ($this->parameterReflectionAndParamComparator->areDefaultValuesDifferent(
+            if ($this->parameterDefaultsComparator->areDefaultValuesDifferent(
                 $parameterReflection,
                 $methodParam
             )) {
@@ -200,14 +208,5 @@ final class CurrentAndParentClassMethodComparator
         }
 
         return false;
-    }
-
-    private function isSameMethodParentCall(ClassMethod $classMethod, StaticCall $staticCall): bool
-    {
-        if (! $this->nodeNameResolver->areNamesEqual($staticCall->name, $classMethod->name)) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($staticCall->class, 'parent');
     }
 }

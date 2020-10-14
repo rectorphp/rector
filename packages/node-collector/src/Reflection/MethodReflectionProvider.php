@@ -59,7 +59,7 @@ final class MethodReflectionProvider
         $parameterTypes = [];
 
         $parameterReflections = $this->getParameterReflectionsFromMethodReflection($methodReflection);
-        foreach ($parameterReflections as $key => $phpParameterReflection) {
+        foreach ($parameterReflections as $phpParameterReflection) {
             $parameterTypes[] = $phpParameterReflection->getType();
         }
 
@@ -68,12 +68,12 @@ final class MethodReflectionProvider
 
     public function provideByClassAndMethodName(string $class, string $method, Scope $scope): ?MethodReflection
     {
-        $reflectionClass = $this->reflectionProvider->getClass($class);
-        if (! $reflectionClass->hasMethod($method)) {
+        $classReflection = $this->reflectionProvider->getClass($class);
+        if (! $classReflection->hasMethod($method)) {
             return null;
         }
 
-        return $reflectionClass->getMethod($method, $scope);
+        return $classReflection->getMethod($method, $scope);
     }
 
     /**
