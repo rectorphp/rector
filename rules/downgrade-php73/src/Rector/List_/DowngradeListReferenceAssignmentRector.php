@@ -209,19 +209,19 @@ CODE_SAMPLE
                     $nestedArrayIndexes,
                     $key
                 );
-            } else {
-                /** @var List_ */
-                $nestedList = $listItem->value;
-                $listNestedArrayIndexes = array_merge($nestedArrayIndexes, [$key]);
-                $newNodes = array_merge(
-                    $newNodes,
-                    $this->createAssignRefArrayFromListReferences(
-                        $nestedList->items,
-                        $exprVariable,
-                        $listNestedArrayIndexes
-                    )
-                );
+                continue;
             }
+            /** @var List_ */
+            $nestedList = $listItem->value;
+            $listNestedArrayIndexes = array_merge($nestedArrayIndexes, [$key]);
+            $newNodes = array_merge(
+                $newNodes,
+                $this->createAssignRefArrayFromListReferences(
+                    $nestedList->items,
+                    $exprVariable,
+                    $listNestedArrayIndexes
+                )
+            );
         }
         return $newNodes;
     }
