@@ -112,7 +112,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return mixed[]|mixed
+     * @return Node[]
      */
     private function createStandaloneNodesToAddFromReturnFluentMethodCalls(MethodCall $methodCall): array
     {
@@ -124,10 +124,6 @@ CODE_SAMPLE
         $firstAssignFluentCall = $this->returnFluentMethodCallFactory->createFromFluentMethodCalls(
             $fluentMethodCalls
         );
-
-        if ($firstAssignFluentCall === null) {
-            return [];
-        }
 
         // should be skipped?
         if ($this->fluentMethodCallSkipper->shouldSkipFirstAssignFluentCall($firstAssignFluentCall)) {
