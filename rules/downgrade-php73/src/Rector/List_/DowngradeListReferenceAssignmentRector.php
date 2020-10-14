@@ -238,19 +238,6 @@ CODE_SAMPLE
     }
 
     /**
-     * Return the key inside the ArrayItem, if provided, or the position otherwise
-     * @param int|string $position
-     * @return int|string
-     */
-    private function getArrayItemKey(ArrayItem $listItem, $position)
-    {
-        if ($listItem->key !== null && ($listItem->key instanceof String_ || $listItem->key instanceof LNumber)) {
-            return $listItem->key->value;
-        }
-        return $position;
-    }
-
-    /**
      * Indicates if there is at least 1 item passed by reference, as in:
      * - list(&$a, $b)
      * - list($a, $b, list(&$c, $d))
@@ -272,6 +259,19 @@ CODE_SAMPLE
     private function hasAllItemsByRef(array $items): bool
     {
         return count($this->getItemsByRef($items, self::ALL)) === count($items);
+    }
+
+    /**
+     * Return the key inside the ArrayItem, if provided, or the position otherwise
+     * @param int|string $position
+     * @return int|string
+     */
+    private function getArrayItemKey(ArrayItem $arrayItem, $position)
+    {
+        if ($arrayItem->key !== null && ($arrayItem->key instanceof String_ || $arrayItem->key instanceof LNumber)) {
+            return $arrayItem->key->value;
+        }
+        return $position;
     }
 
     /**
