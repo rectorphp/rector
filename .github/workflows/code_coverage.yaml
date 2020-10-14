@@ -14,7 +14,7 @@ jobs:
             -   uses: shivammathur/setup-php@v1
                 with:
                     php-version: 7.3
-                    coverage: xdebug
+                    coverage: pcov
             -   run: composer install --no-progress --ansi
             -   run: |
                     vendor/bin/phpunit --coverage-clover build/logs/clover.xml
