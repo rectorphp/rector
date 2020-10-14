@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
-            -   uses: shivammathur/setup-php@v1
+            -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.3
                     coverage: pcov
@@ -20,8 +20,13 @@ jobs:
 
             # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
             -   run: |
+                    # try mkdir first
+                    mkdir -p build/logs
+
+                    # run test with generate clover.xml inside build/logs
                     vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-                    # Coveralls.io
+
+                    # Coveralls.io reporting
                     composer global require php-coveralls/php-coveralls:^2.4
                     php-coveralls --coverage_clover=build/logs/clover.xml -v
                 env:
