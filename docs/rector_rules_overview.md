@@ -1,4 +1,4 @@
-# All 588 Rectors Overview
+# All 592 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -12,6 +12,7 @@
 - [CodingStyle](#codingstyle) (33)
 - [DeadCode](#deadcode) (40)
 - [Decouple](#decouple) (1)
+- [Defluent](#defluent) (8)
 - [Doctrine](#doctrine) (17)
 - [DoctrineCodeQuality](#doctrinecodequality) (8)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
@@ -26,7 +27,7 @@
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (3)
 - [Legacy](#legacy) (4)
-- [MagicDisclosure](#magicdisclosure) (8)
+- [MagicDisclosure](#magicdisclosure) (3)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
@@ -3488,6 +3489,171 @@ class NewDecoupledClass extends AddedParentClass
     {
     }
 }
+```
+
+<br><br>
+
+## Defluent
+
+### `DefluentReturnMethodCallRector`
+
+- class: [`Rector\Defluent\Rector\Return_\DefluentReturnMethodCallRector`](/rules/defluent/src/Rector/Return_/DefluentReturnMethodCallRector.php)
+- [test fixtures](/rules/defluent/tests/Rector/Return_/DefluentReturnMethodCallRector/Fixture)
+
+Turns return of fluent, to standalone call line and return of value
+
+```diff
+ $someClass = new SomeClass();
+-return $someClass->someFunction();
++$someClass->someFunction();
++return $someClass;
+```
+
+<br><br>
+
+### `FluentChainMethodCallToNormalMethodCallRector`
+
+- class: [`Rector\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector`](/rules/defluent/src/Rector/MethodCall/FluentChainMethodCallToNormalMethodCallRector.php)
+- [test fixtures](/rules/defluent/tests/Rector/MethodCall/FluentChainMethodCallToNormalMethodCallRector/Fixture)
+
+Turns fluent interface calls to classic ones.
+
+```diff
+ $someClass = new SomeClass();
+-$someClass->someFunction()
+-            ->otherFunction();
++$someClass->someFunction();
++$someClass->otherFunction();
+```
+
+<br><br>
+
+### `InArgFluentChainMethodCallToStandaloneMethodCallRector`
+
+- class: [`Rector\Defluent\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector`](/rules/defluent/src/Rector/MethodCall/InArgFluentChainMethodCallToStandaloneMethodCallRector.php)
+
+Turns fluent interface calls to classic ones.
+
+```diff
+ class UsedAsParameter
+ {
+     public function someFunction(FluentClass $someClass)
+     {
+-        $this->processFluentClass($someClass->someFunction()->otherFunction());
++        $someClass->someFunction();
++        $someClass->otherFunction();
++        $this->processFluentClass($someClass);
+     }
+
+     public function processFluentClass(FluentClass $someClass)
+     {
+     }
+-}
++}
+```
+
+<br><br>
+
+### `MethodCallOnSetterMethodCallToStandaloneAssignRector`
+
+- class: [`Rector\Defluent\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector`](/rules/defluent/src/Rector/MethodCall/MethodCallOnSetterMethodCallToStandaloneAssignRector.php)
+- [test fixtures](/rules/defluent/tests/Rector/MethodCall/MethodCallOnSetterMethodCallToStandaloneAssignRector/Fixture)
+
+Change method call on setter to standalone assign before the setter
+
+```diff
+ class SomeClass
+ {
+     public function some()
+     {
+-        $this->anotherMethod(new AnotherClass())
+-            ->someFunction();
++        $anotherClass = new AnotherClass();
++        $anotherClass->someFunction();
++        $this->anotherMethod($anotherClass);
+     }
+
+     public function anotherMethod(AnotherClass $anotherClass)
+     {
+     }
+ }
+```
+
+<br><br>
+
+### `NewFluentChainMethodCallToNonFluentRector`
+
+- class: [`Rector\Defluent\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector`](/rules/defluent/src/Rector/MethodCall/NewFluentChainMethodCallToNonFluentRector.php)
+- [test fixtures](/rules/defluent/tests/Rector/MethodCall/NewFluentChainMethodCallToNonFluentRector/Fixture)
+
+Turns fluent interface calls to classic ones.
+
+```diff
+-(new SomeClass())->someFunction()
+-            ->otherFunction();
++$someClass = new SomeClass();
++$someClass->someFunction();
++$someClass->otherFunction();
+```
+
+<br><br>
+
+### `ReturnFluentChainMethodCallToNormalMethodCallRector`
+
+- class: [`Rector\Defluent\Rector\Return_\ReturnFluentChainMethodCallToNormalMethodCallRector`](/rules/defluent/src/Rector/Return_/ReturnFluentChainMethodCallToNormalMethodCallRector.php)
+- [test fixtures](/rules/defluent/tests/Rector/Return_/ReturnFluentChainMethodCallToNormalMethodCallRector/Fixture)
+
+Turns fluent interface calls to classic ones.
+
+```diff
+ $someClass = new SomeClass();
+-return $someClass->someFunction()
+-            ->otherFunction();
++$someClass->someFunction();
++$someClass->otherFunction();
++return $someClass;
+```
+
+<br><br>
+
+### `ReturnNewFluentChainMethodCallToNonFluentRector`
+
+- class: [`Rector\Defluent\Rector\Return_\ReturnNewFluentChainMethodCallToNonFluentRector`](/rules/defluent/src/Rector/Return_/ReturnNewFluentChainMethodCallToNonFluentRector.php)
+- [test fixtures](/rules/defluent/tests/Rector/Return_/ReturnNewFluentChainMethodCallToNonFluentRector/Fixture)
+
+Turns fluent interface calls to classic ones.
+
+```diff
+-return (new SomeClass())->someFunction()
+-            ->otherFunction();
++$someClass = new SomeClass();
++$someClass->someFunction();
++$someClass->otherFunction();
++return $someClass;
+```
+
+<br><br>
+
+### `ReturnThisRemoveRector`
+
+- class: [`Rector\Defluent\Rector\ClassMethod\ReturnThisRemoveRector`](/rules/defluent/src/Rector/ClassMethod/ReturnThisRemoveRector.php)
+- [test fixtures](/rules/defluent/tests/Rector/ClassMethod/ReturnThisRemoveRector/Fixture)
+
+Removes "return `$this;"` from *fluent interfaces* for specified classes.
+
+```diff
+ class SomeExampleClass
+ {
+     public function someFunction()
+     {
+-        return $this;
+     }
+
+     public function otherFunction()
+     {
+-        return $this;
+     }
+ }
 ```
 
 <br><br>
@@ -7118,39 +7284,6 @@ Remove includes (include, include_once, require, require_once) from source
 
 ## MagicDisclosure
 
-### `DefluentReturnMethodCallRector`
-
-- class: [`Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector`](/rules/magic-disclosure/src/Rector/Return_/DefluentReturnMethodCallRector.php)
-- [test fixtures](/rules/magic-disclosure/tests/Rector/Return_/DefluentReturnMethodCallRector/Fixture)
-
-Turns return of fluent, to standalone call line and return of value
-
-```diff
- $someClass = new SomeClass();
--return $someClass->someFunction();
-+$someClass->someFunction();
-+return $someClass;
-```
-
-<br><br>
-
-### `FluentChainMethodCallToNormalMethodCallRector`
-
-- class: [`Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector`](/rules/magic-disclosure/src/Rector/MethodCall/FluentChainMethodCallToNormalMethodCallRector.php)
-- [test fixtures](/rules/magic-disclosure/tests/Rector/MethodCall/FluentChainMethodCallToNormalMethodCallRector/Fixture)
-
-Turns fluent interface calls to classic ones.
-
-```diff
- $someClass = new SomeClass();
--$someClass->someFunction()
--            ->otherFunction();
-+$someClass->someFunction();
-+$someClass->otherFunction();
-```
-
-<br><br>
-
 ### `GetAndSetToMethodCallRector`
 
 - class: [`Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector`](/rules/magic-disclosure/src/Rector/Assign/GetAndSetToMethodCallRector.php)
@@ -7215,83 +7348,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  $container = new SomeContainer;
 -$someService = $container->someService;
 +$someService = $container->getService("someService");
-```
-
-<br><br>
-
-### `InArgFluentChainMethodCallToStandaloneMethodCallRector`
-
-- class: [`Rector\MagicDisclosure\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector`](/rules/magic-disclosure/src/Rector/MethodCall/InArgFluentChainMethodCallToStandaloneMethodCallRector.php)
-
-Turns fluent interface calls to classic ones.
-
-```diff
- class UsedAsParameter
- {
-     public function someFunction(FluentClass $someClass)
-     {
--        $this->processFluentClass($someClass->someFunction()->otherFunction());
-+        $someClass->someFunction();
-+        $someClass->otherFunction();
-+        $this->processFluentClass($someClass);
-     }
-
-     public function processFluentClass(FluentClass $someClass)
-     {
-     }
--}
-+}
-```
-
-<br><br>
-
-### `MethodCallOnSetterMethodCallToStandaloneAssignRector`
-
-- class: [`Rector\MagicDisclosure\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector`](/rules/magic-disclosure/src/Rector/MethodCall/MethodCallOnSetterMethodCallToStandaloneAssignRector.php)
-- [test fixtures](/rules/magic-disclosure/tests/Rector/MethodCall/MethodCallOnSetterMethodCallToStandaloneAssignRector/Fixture)
-
-Change method call on setter to standalone assign before the setter
-
-```diff
- class SomeClass
- {
-     public function some()
-     {
--        $this->anotherMethod(new AnotherClass())
--            ->someFunction();
-+        $anotherClass = new AnotherClass();
-+        $anotherClass->someFunction();
-+        $this->anotherMethod($anotherClass);
-     }
-
-     public function anotherMethod(AnotherClass $anotherClass)
-     {
-     }
- }
-```
-
-<br><br>
-
-### `ReturnThisRemoveRector`
-
-- class: [`Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector`](/rules/magic-disclosure/src/Rector/ClassMethod/ReturnThisRemoveRector.php)
-- [test fixtures](/rules/magic-disclosure/tests/Rector/ClassMethod/ReturnThisRemoveRector/Fixture)
-
-Removes "return `$this;"` from *fluent interfaces* for specified classes.
-
-```diff
- class SomeExampleClass
- {
-     public function someFunction()
-     {
--        return $this;
-     }
-
-     public function otherFunction()
-     {
--        return $this;
-     }
- }
 ```
 
 <br><br>
@@ -8609,7 +8665,7 @@ Rename "*.phpt" file to "*Test.php" file
 
 ### `DeleteFactoryInterfaceRector`
 
-- class: [`Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector`](/rules/nette-to-symfony/src/Rector/FileSystem/DeleteFactoryInterfaceRector.php)
+- class: [`Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector`](/rules/nette-to-symfony/src/Rector/Interface_/DeleteFactoryInterfaceRector.php)
 
 Interface factories are not needed in Symfony. Clear constructor injection is used instead
 
@@ -13889,8 +13945,8 @@ Restore accidentally shortened class names to its fully qualified form.
 
 ### `UpdateFileNameByClassNameFileSystemRector`
 
-- class: [`Rector\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector`](/rules/restoration/src/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector.php)
-- [test fixtures](/rules/restoration/tests/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector/Fixture)
+- class: [`Rector\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector`](/rules/restoration/src/Rector/ClassLike/UpdateFileNameByClassNameFileSystemRector.php)
+- [test fixtures](/rules/restoration/tests/Rector/ClassLike/UpdateFileNameByClassNameFileSystemRector/Fixture)
 
 Rename file to respect class name
 
