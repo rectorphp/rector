@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Builder;
 
 use PhpParser\Builder\Use_;
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_ as UseStmt;
 
 /**
