@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EmbeddedTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
@@ -43,6 +44,7 @@ final class TagValueToPhpParserNodeMap
         TableTagValueNode::class => Class_::class,
         CustomIdGeneratorTagValueNode::class => Property::class,
         GeneratedValueTagValueNode::class => Property::class,
+        EmbeddedTagValueNode::class => Property::class,
         // special case for constants
         GenericTagValueNode::class => Property::class,
         SensioTemplateTagValueNode::class => Class_::class,
