@@ -306,10 +306,6 @@ CODE_SAMPLE
      * or a nested list containing variables by reference,
      * return the same item.
      * Otherwise, return null
-     *
-     * @param ArrayItem|null $arrayItem
-     * @param integer $condition
-     * @return ArrayItem|null
      */
     private function getItemByRefOrNull(?ArrayItem $arrayItem, int $condition): ?ArrayItem
     {
@@ -322,9 +318,6 @@ CODE_SAMPLE
     /**
      * Indicate if the item is a variable by reference,
      * or a nested list containing variables by reference
-     *
-     * @param ArrayItem|null $arrayItem
-     * @param integer $condition
      */
     private function isItemByRef(?ArrayItem $arrayItem, int $condition): bool
     {
@@ -339,10 +332,9 @@ CODE_SAMPLE
             $nestedList = $arrayItem->value;
             if ($condition === self::ALL) {
                 return $this->hasAllItemsByRef($nestedList->items);
-            } elseif ($condition === self::ANY) {
-                return $this->hasAnyItemByRef($nestedList->items);
             }
-            return false;
+            // $condition === self::ANY
+            return $this->hasAnyItemByRef($nestedList->items);
         }
         return $arrayItem->value instanceof Variable && $arrayItem->byRef;
     }
