@@ -29,8 +29,10 @@ final class FluentCallStaticTypeResolver
         $lastMethodCallKey = array_key_last($chainMethodCalls);
         $lastMethodCall = $chainMethodCalls[$lastMethodCallKey];
 
-        $callerClassTypes[] = $this->exprStringTypeResolver->resolve($lastMethodCall->var);
-        $chainMethodCallType = $this->exprStringTypeResolver->resolve($lastMethodCall->var);
+        $rootType = $this->exprStringTypeResolver->resolve($lastMethodCall->var);
+        if ($rootType !== null) {
+            $callerClassTypes[] = $rootType;
+        }
 
         // chain method calls are inversed
         $lastChainMethodCallKey = array_key_first($chainMethodCalls);
