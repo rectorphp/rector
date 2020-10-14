@@ -13,11 +13,4 @@ use PhpParser\Node\Stmt\Property as PropertyNode;
  */
 final class PropertyBuilder extends Property
 {
-    /**
-     * @return PropertyNode
-     */
-    public function getNode(): Node
-    {
-        return parent::getNode();
-    }
 }

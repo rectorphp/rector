@@ -13,11 +13,4 @@ use PhpParser\Node\Param as ParamNode;
  */
 final class ParamBuilder extends Param
 {
-    /**
-     * @return ParamNode
-     */
-    public function getNode(): Node
-    {
-        return parent::getNode();
-    }
 }

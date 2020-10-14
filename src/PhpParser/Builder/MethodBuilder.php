@@ -13,11 +13,4 @@ use PhpParser\Node\Stmt\ClassMethod;
  */
 final class MethodBuilder extends Method
 {
-    /**
-     * @return ClassMethod
-     */
-    public function getNode(): Node
-    {
-        return parent::getNode();
-    }
 }

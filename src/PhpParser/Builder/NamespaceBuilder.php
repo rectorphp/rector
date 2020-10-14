@@ -13,11 +13,4 @@ use PhpParser\Node\Stmt\Namespace_ as NamespaceStmt;
  */
 final class NamespaceBuilder extends Namespace_
 {
-    /**
-     * @return NamespaceStmt
-     */
-    public function getNode(): Node
-    {
-        return parent::getNode();
-    }
 }

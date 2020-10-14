@@ -13,11 +13,4 @@ use PhpParser\Node\Stmt\TraitUse as TraitUseStmt;
  */
 final class TraitUseBuilder extends TraitUse
 {
-    /**
-     * @return TraitUseStmt
-     */
-    public function getNode(): Node
-    {
-        return parent::getNode();
-    }
 }

@@ -17,12 +17,4 @@ final class UseBuilder extends Use_
     {
         parent::__construct($name, $type);
     }
-
-    /**
-     * @return UseStmt
-     */
-    public function getNode(): Node
-    {
-        return parent::getNode();
-    }
 }

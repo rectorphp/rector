@@ -13,11 +13,4 @@ use PhpParser\Node\Stmt\Class_ as ClassStmt;
  */
 final class ClassBuilder extends Class_
 {
-    /**
-     * @return ClassStmt
-     */
-    public function getNode(): Node
-    {
-        return parent::getNode();
-    }
 }
