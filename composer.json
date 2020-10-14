@@ -326,6 +326,7 @@
         "validate-monorepo": "vendor/bin/monorepo-builder validate --ansi"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "process-timeout": 0
     }
 }
