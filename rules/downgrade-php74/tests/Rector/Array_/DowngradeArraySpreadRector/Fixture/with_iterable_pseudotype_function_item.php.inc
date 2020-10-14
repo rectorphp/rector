@@ -6,14 +6,14 @@ use ArrayIterator;
 
 class WithIterablePseudotypeFunctionItemClass
 {
-    function getIterator(): iterable
+    function getIterable(): iterable
     {
         return new ArrayIterator(['apple', 'pear']);
     }
 
     public function run()
     {
-        $fruits = ['banana', 'orange', ...$this->getIterator(), 'watermelon'];
+        $fruits = ['banana', 'orange', ...$this->getIterable(), 'watermelon'];
     }
 }
 
@@ -27,14 +27,14 @@ use ArrayIterator;
 
 class WithIterablePseudotypeFunctionItemClass
 {
-    function getIterator(): iterable
+    function getIterable(): iterable
     {
         return new ArrayIterator(['apple', 'pear']);
     }
 
     public function run()
     {
-        $item2Unpacked = $this->getIterator();
+        $item2Unpacked = $this->getIterable();
         $fruits = array_merge(['banana', 'orange'], iterator_to_array($item2Unpacked), ['watermelon']);
     }
 }
