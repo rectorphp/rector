@@ -103,7 +103,7 @@ CODE_SAMPLE
         /** @var Variable */
         $exprVariable = $parentNode->expr;
         // Count number of params by ref on the right side, to remove them later on
-        $rightSideParamsByRefCount = $this->countRightSideMostParamsByRef($node->items);
+        $rightSideParamsByRefCount = $this->countRightSideMostParamsByRefOrEmpty($node->items);
         // Their position is kept in the array
         $newNodes = $this->createAssignRefArrayFromListReferences($node->items, $exprVariable, []);
         $this->addNodesAfterNode($newNodes, $node);
@@ -144,7 +144,7 @@ CODE_SAMPLE
      * These params are not needed anymore, so they can be removed
      * @param (ArrayItem|null)[] $listItems
      */
-    private function countRightSideMostParamsByRef(array $listItems): int
+    private function countRightSideMostParamsByRefOrEmpty(array $listItems): int
     {
         // Their position is kept in the array
         $count = 0;
@@ -157,7 +157,7 @@ CODE_SAMPLE
                 $count++;
                 continue;
             }
-            // If it is a nested list, check if if all its items are by reference
+            // If it is a nested list, check if all its items are by reference
             if ($listItem->value instanceof List_ || $listItem->value instanceof Array_) {
                 // Recursive call
                 /** @var List_|Array_ */
