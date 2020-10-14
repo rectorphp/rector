@@ -158,8 +158,8 @@ CODE_SAMPLE
                 continue;
             }
             // If it is a nested list, check if all its items are by reference
-            if ($listItem->value instanceof List_ || $listItem->value instanceof Array_) {
-                // Recursive call
+            $isNested = $listItem->value instanceof List_ || $listItem->value instanceof Array_;
+            if ($isNested) {
                 /** @var List_|Array_ */
                 $nestedList = $listItem->value;
                 if ($this->hasAllItemsByRef($nestedList->items)) {
