@@ -11,14 +11,14 @@ class RenameVariableExpression
 {
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        /** @var ClassLike|null $classLike */
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        /** @var ClassLike|null $class */
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($class === null) {
             return true;
         }
 
         /** @var Interface_ $class */
-        return ! (bool) $classLike->extends;
+        return ! (bool) $class->extends;
     }
 }
 

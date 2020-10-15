@@ -91,6 +91,23 @@ final class ClassConstManipulator
         });
     }
 
+    /**
+     * @see https://github.com/myclabs/php-enum#declaration
+     */
+    public function isEnum(ClassConst $classConst): bool
+    {
+        $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return false;
+        }
+
+        if ($classLike->extends === null) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($classLike->extends, '*Enum');
+    }
+
     private function isNameMatch(Node $node, ClassConst $classConst): bool
     {
         return $this->nodeNameResolver->getName($node) === 'self::' . $this->nodeNameResolver->getName($classConst)
