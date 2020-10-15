@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\ClassConst;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
+use Rector\Core\PhpParser\Node\Manipulator\ClassConstManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -19,6 +19,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RemoveUnusedClassConstantRector extends AbstractRector implements ZeroCacheRectorInterface
 {
+    /**
+     * @var ClassConstManipulator
+     */
+    private $classConstManipulator;
+
+    public function __construct(ClassConstManipulator $classConstManipulator)
+    {
+        $this->classConstManipulator = $classConstManipulator;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove unused class constants', [
@@ -106,7 +116,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isEnumClass($node)) {
+        if ($this->classConstManipulator->isEnum($node)) {
             return true;
         }
 
@@ -117,21 +127,5 @@ CODE_SAMPLE
         }
 
         return $phpDocInfo->hasByName('api');
-    }
-
-    /**
-     * @see https://github.com/myclabs/php-enum#declaration
-     */
-    private function isEnumClass(ClassConst $classConst): bool
-    {
-        $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return false;
-        }
-        if ($classLike->extends === null) {
-            return false;
-        }
-
-        return $this->isName($classLike->extends, '*Enum');
     }
 }

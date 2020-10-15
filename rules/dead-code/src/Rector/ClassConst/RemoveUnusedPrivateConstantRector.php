@@ -75,12 +75,18 @@ CODE_SAMPLE
             return null;
         }
 
-        $classConstFetches = $this->classConstManipulator->getAllClassConstFetch($node);
-
         // never used
-        if ($classConstFetches === []) {
-            $this->removeNode($node);
+        $classConstFetches = $this->classConstManipulator->getAllClassConstFetch($node);
+        if ($classConstFetches !== []) {
+            return null;
         }
+
+        // skip enum
+        if ($this->classConstManipulator->isEnum($node)) {
+            return null;
+        }
+
+        $this->removeNode($node);
 
         return $node;
     }
