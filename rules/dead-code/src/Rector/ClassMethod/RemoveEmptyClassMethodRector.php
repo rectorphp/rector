@@ -11,6 +11,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\DeadCode\NodeManipulator\ControllerClassMethodManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -23,9 +24,17 @@ final class RemoveEmptyClassMethodRector extends AbstractRector
      */
     private $classMethodManipulator;
 
-    public function __construct(ClassMethodManipulator $classMethodManipulator)
-    {
+    /**
+     * @var ControllerClassMethodManipulator
+     */
+    private $controllerClassMethodManipulator;
+
+    public function __construct(
+        ClassMethodManipulator $classMethodManipulator,
+        ControllerClassMethodManipulator $controllerClassMethodManipulator
+    ) {
         $this->classMethodManipulator = $classMethodManipulator;
+        $this->controllerClassMethodManipulator = $controllerClassMethodManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -76,7 +85,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $classLike->isFinal() && ($node->isProtected() || $node->isPublic()) && ! $this->isName($node, '__*')) {
+        if ($this->shouldSkipNonFinalNonPrivateClassMethod($classLike, $node)) {
             return null;
         }
 
@@ -88,8 +97,29 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->controllerClassMethodManipulator->isControllerClassMethodWithBehaviorAnnotation($node)) {
+            return null;
+        }
+
         $this->removeNode($node);
 
         return $node;
+    }
+
+    private function shouldSkipNonFinalNonPrivateClassMethod(Class_ $class, ClassMethod $classMethod): bool
+    {
+        if ($class->isFinal()) {
+            return false;
+        }
+
+        if ($this->isName($classMethod, '__*')) {
+            return false;
+        }
+
+        if ($classMethod->isProtected()) {
+            return true;
+        }
+
+        return $classMethod->isPublic();
     }
 }
