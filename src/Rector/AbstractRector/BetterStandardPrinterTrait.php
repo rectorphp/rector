@@ -7,7 +7,6 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
@@ -85,21 +84,7 @@ trait BetterStandardPrinterTrait
      */
     protected function isNodeEqual(Node $singleNode, array $availableNodes): bool
     {
-        // remove comments, only content is relevant
-        $singleNode = clone $singleNode;
-        $singleNode->setAttribute(AttributeKey::COMMENTS, null);
-
-        foreach ($availableNodes as $availableNode) {
-            // remove comments, only content is relevant
-            $availableNode = clone $availableNode;
-            $availableNode->setAttribute(AttributeKey::COMMENTS, null);
-
-            if ($this->areNodesEqual($singleNode, $availableNode)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->betterStandardPrinter->isNodeEqual($singleNode, $availableNodes);
     }
 
     /**

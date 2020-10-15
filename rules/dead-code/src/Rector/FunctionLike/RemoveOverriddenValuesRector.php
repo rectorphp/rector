@@ -12,8 +12,9 @@ use Rector\Core\Context\ContextAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\DeadCode\FlowControl\VariableUseFinder;
+use Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector;
 use Rector\DeadCode\ValueObject\VariableNodeUse;
-use Rector\NodeNestingScope\FlowOfControlLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -27,14 +28,23 @@ final class RemoveOverriddenValuesRector extends AbstractRector
     private $contextAnalyzer;
 
     /**
-     * @var FlowOfControlLocator
+     * @var NodeByTypeAndPositionCollector
      */
-    private $flowOfControlLocator;
+    private $nodeByTypeAndPositionCollector;
 
-    public function __construct(ContextAnalyzer $contextAnalyzer, FlowOfControlLocator $flowOfControlLocator)
-    {
+    /**
+     * @var VariableUseFinder
+     */
+    private $variableUseFinder;
+
+    public function __construct(
+        ContextAnalyzer $contextAnalyzer,
+        NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector,
+        VariableUseFinder $variableUseFinder
+    ) {
         $this->contextAnalyzer = $contextAnalyzer;
-        $this->flowOfControlLocator = $flowOfControlLocator;
+        $this->nodeByTypeAndPositionCollector = $nodeByTypeAndPositionCollector;
+        $this->variableUseFinder = $variableUseFinder;
     }
 
     public function getDefinition(): RectorDefinition
@@ -85,9 +95,9 @@ CODE_SAMPLE
         $assignedVariableNames = $this->getNodeNames($assignedVariables);
 
         // 2. collect use of those variables
-        $assignedVariablesUse = $this->resolveUsedVariables($node, $assignedVariables);
+        $assignedVariablesUse = $this->variableUseFinder->resolveUsedVariables($node, $assignedVariables);
 
-        $nodesByTypeAndPosition = $this->collectNodesByTypeAndPosition(
+        $nodesByTypeAndPosition = $this->nodeByTypeAndPositionCollector->collectNodesByTypeAndPosition(
             $assignedVariables,
             $assignedVariablesUse,
             $node
@@ -152,92 +162,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Variable[] $assignedVariables
-     * @return Variable[]
-     */
-    private function resolveUsedVariables(Node $node, array $assignedVariables): array
-    {
-        return $this->betterNodeFinder->find($node, function (Node $node) use ($assignedVariables): bool {
-            if (! $node instanceof Variable) {
-                return false;
-            }
-
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            // is the left assign - not use of one
-            if ($parentNode instanceof Assign && ($parentNode->var instanceof Variable && $parentNode->var === $node)) {
-                return false;
-            }
-
-            // simple variable only
-            if ($this->getName($node) === null) {
-                return false;
-            }
-
-            return $this->isNodeEqual($node, $assignedVariables);
-        });
-    }
-
-    /**
-     * @param Variable[] $assignedVariables
-     * @param Variable[] $assignedVariablesUse
-     * @return VariableNodeUse[]
-     */
-    private function collectNodesByTypeAndPosition(
-        array $assignedVariables,
-        array $assignedVariablesUse,
-        FunctionLike $functionLike
-    ): array {
-        $nodesByTypeAndPosition = [];
-
-        foreach ($assignedVariables as $assignedVariable) {
-            /** @var int $startTokenPos */
-            $startTokenPos = $assignedVariable->getAttribute(AttributeKey::START_TOKEN_POSITION);
-
-            // not in different scope, than previous one - e.g. if/while/else...
-            // get nesting level to $classMethodNode
-            /** @var Assign $assignNode */
-            $assignNode = $assignedVariable->getAttribute(AttributeKey::PARENT_NODE);
-            $nestingHash = $this->flowOfControlLocator->resolveNestingHashFromFunctionLike($functionLike, $assignNode);
-
-            /** @var string $variableName */
-            $variableName = $this->getName($assignedVariable);
-
-            $nodesByTypeAndPosition[] = new VariableNodeUse(
-                $startTokenPos,
-                $variableName,
-                VariableNodeUse::TYPE_ASSIGN,
-                $assignedVariable,
-                $nestingHash
-            );
-        }
-
-        foreach ($assignedVariablesUse as $assignedVariableUse) {
-            /** @var int $startTokenPos */
-            $startTokenPos = $assignedVariableUse->getAttribute(AttributeKey::START_TOKEN_POSITION);
-
-            /** @var string $variableName */
-            $variableName = $this->getName($assignedVariableUse);
-
-            $nodesByTypeAndPosition[] = new VariableNodeUse(
-                $startTokenPos,
-                $variableName,
-                VariableNodeUse::TYPE_USE,
-                $assignedVariableUse
-            );
-        }
-
-        // sort
-        usort(
-            $nodesByTypeAndPosition,
-            function (VariableNodeUse $firstVariableNodeUse, VariableNodeUse $secondVariableNodeUse): int {
-                return $firstVariableNodeUse->getStartTokenPosition() <=> $secondVariableNodeUse->getStartTokenPosition();
-            }
-        );
-
-        return $nodesByTypeAndPosition;
-    }
-
-    /**
      * @param string[] $assignedVariableNames
      * @param VariableNodeUse[] $nodesByTypeAndPosition
      * @return Node[]
@@ -295,9 +219,11 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN) || ! $nodeByTypeAndPosition->isType(
-            VariableNodeUse::TYPE_ASSIGN
-        )) {
+        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN)) {
+            return false;
+        }
+
+        if (! $nodeByTypeAndPosition->isType(VariableNodeUse::TYPE_ASSIGN)) {
             return false;
         }
 
