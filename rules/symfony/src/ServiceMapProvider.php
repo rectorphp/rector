@@ -122,6 +122,7 @@ final class ServiceMapProvider
     }
 
     /**
+     * @param mixed[] $def
      * @return mixed[]
      */
     private function createTagFromXmlElement(array $def): array
@@ -190,6 +191,7 @@ final class ServiceMapProvider
     }
 
     /**
+     * @param mixed[] $data
      * @return mixed[]
      */
     private function unWrapAttributes(array $data): array
@@ -206,6 +208,8 @@ final class ServiceMapProvider
     }
 
     /**
+     * @param mixed[] $value
+     * @param mixed[] $data
      * @param string|int $key
      * @return mixed[]
      */

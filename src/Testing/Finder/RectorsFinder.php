@@ -117,6 +117,10 @@ final class RectorsFinder
             return true;
         }
 
+        if (! class_exists($class)) {
+            throw new ShouldNotHappenException($class);
+        }
+
         $reflectionClass = new ReflectionClass($class);
         return $reflectionClass->isAbstract();
     }

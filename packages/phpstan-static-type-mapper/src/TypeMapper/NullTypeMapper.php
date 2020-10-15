@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
 final class NullTypeMapper implements TypeMapperInterface
 {
@@ -32,7 +34,11 @@ final class NullTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
-        return null;
+        if ($kind !== PHPStanStaticTypeMapper::KIND_PROPERTY) {
+            return null;
+        }
+
+        return new Name('null');
     }
 
     public function mapToDocString(Type $type, ?Type $parentType = null): string

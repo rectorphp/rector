@@ -24,6 +24,9 @@ final class ConfigureCallValuesCollector
         $this->parametersMerger = new ParametersMerger();
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getConfigureCallValues(string $rectorClass): array
     {
         return $this->configureCallValuesByRectorClass[$rectorClass] ?? [];

@@ -12,6 +12,7 @@ final class ConfigShifter
      * Shift input config as last, so the parameters override previous rules loaded from sets
      *
      * @param SmartFileInfo[] $configFileInfos
+     * @return SmartFileInfo[]
      * @noRector
      */
     public function shiftInputConfigAsLast(array $configFileInfos, ?SmartFileInfo $inputConfigFileInfo): array

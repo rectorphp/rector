@@ -113,17 +113,18 @@ CODE_SAMPLE
 
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-        $firstIf = $this->createInvertedIfConditionNodeFromExpr($expr->left);
-        $secondIf = $this->createInvertedIfConditionNodeFromExpr($expr->right);
 
-        $nodeComments = $node->getAttribute(AttributeKey::COMMENTS);
-        $firstIf->setAttribute(AttributeKey::COMMENTS, $nodeComments);
+        $conditions = $this->getBooleanAndConditions($expr);
+        $ifs = $this->createInvertedIfNodesFromConditions($conditions);
 
-        $this->addNodesAfterNode([$firstIf, $secondIf, $ifReturn], $node);
+        $this->keepCommentIfExists($node, $ifs);
 
-        $functionLikeReturn = $this->getFunctionLikeReturn($node);
-        if ($functionLikeReturn !== null) {
-            $this->removeNode($functionLikeReturn);
+        $this->addNodesAfterNode($ifs, $node);
+        $this->addNodeAfterNode($ifReturn, $node);
+
+        $ifParentReturn = $this->getIfParentReturn($node);
+        if ($ifParentReturn !== null) {
+            $this->removeNode($ifParentReturn);
         }
 
         $this->removeNode($node);
@@ -137,15 +138,15 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->ifManipulator->isIfFirstLevelStmt($if)) {
+        if ($this->isIfReturnsVoid($if)) {
+            return true;
+        }
+
+        if ($this->isParentIfReturnsVoid($if)) {
             return true;
         }
 
         if (! $if->cond instanceof BooleanAnd) {
-            return true;
-        }
-
-        if ($this->hasMoreThanTwoConditions($if)) {
             return true;
         }
 
@@ -174,53 +175,100 @@ CODE_SAMPLE
         return $ifStmt;
     }
 
-    private function createInvertedIfConditionNodeFromExpr(Expr $expr): If_
+    /**
+     * @return Expr[]
+     */
+    private function getBooleanAndConditions(BooleanAnd $booleanAnd): array
     {
-        $invertedCondition = $this->conditionInverter->createInvertedCondition($expr);
-        $if = new If_($invertedCondition);
-        $if->stmts = [new Return_()];
+        $ifs = [];
+        while (property_exists($booleanAnd, 'left')) {
+            $ifs[] = $booleanAnd->right;
+            $booleanAnd = $booleanAnd->left;
+            if (! $booleanAnd instanceof BooleanAnd) {
+                $ifs[] = $booleanAnd;
+                break;
+            }
+        }
 
-        return $if;
+        krsort($ifs);
+        return $ifs;
     }
 
-    private function getFunctionLikeReturn(If_ $if): ?Return_
+    /**
+     * @param Expr[] $conditions
+     * @return If_[]
+     */
+    private function createInvertedIfNodesFromConditions(array $conditions): array
     {
-        /** @var FunctionLike|null $functionLike */
-        $functionLike = $this->betterNodeFinder->findFirstParentInstanceOf($if, FunctionLike::class);
-        if ($functionLike === null) {
-            return null;
+        $ifs = [];
+        foreach ($conditions as $condition) {
+            $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
+            $if = new If_($invertedCondition);
+            $if->stmts = [new Return_()];
+
+            $ifs[] = $if;
         }
 
-        if ($functionLike->getStmts() === null) {
-            return null;
-        }
-
-        $return = $this->stmtsManipulator->getUnwrappedLastStmt($functionLike->getStmts());
-        if ($return === null) {
-            return null;
-        }
-
-        if (! $return instanceof Return_) {
-            return null;
-        }
-
-        return $return;
+        return $ifs;
     }
 
-    private function hasMoreThanTwoConditions(If_ $if): bool
+    /**
+     * @param If_[] $ifs
+     */
+    private function keepCommentIfExists(If_ $if, array $ifs): void
     {
-        $binaryOps = $this->betterNodeFinder->findInstanceOf($if->cond, BooleanAnd::class);
-        return count($binaryOps) >= 2;
+        $nodeComments = $if->getAttribute(AttributeKey::COMMENTS);
+        $ifs[0]->setAttribute(AttributeKey::COMMENTS, $nodeComments);
+    }
+
+    private function getIfParentReturn(If_ $if): ?Return_
+    {
+        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $nextNode instanceof Return_) {
+            return null;
+        }
+
+        return $nextNode;
+    }
+
+    private function isIfReturnsVoid(If_ $if): bool
+    {
+        $lastStmt = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
+        return $lastStmt instanceof Return_ && $lastStmt->expr === null;
+    }
+
+    private function isParentIfReturnsVoid(If_ $if): bool
+    {
+        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof If_) {
+            return false;
+        }
+
+        return $this->isIfReturnsVoid($parentNode);
     }
 
     private function isFunctionLikeReturnsVoid(If_ $if): bool
     {
-        $return = $this->getFunctionLikeReturn($if);
-        if ($return === null) {
+        /** @var FunctionLike|null $functionLike */
+        $functionLike = $this->betterNodeFinder->findFirstParentInstanceOf($if, FunctionLike::class);
+        if ($functionLike === null) {
             return true;
         }
 
-        return $return->expr === null;
+        if ($functionLike->getStmts() === null) {
+            return true;
+        }
+
+        $returns = $this->betterNodeFinder->findInstanceOf($functionLike->getStmts(), Return_::class);
+        if ($returns === []) {
+            return true;
+        }
+
+        $nonVoidReturns = array_filter($returns, function (Return_ $return): bool {
+            return $return->expr !== null;
+        });
+
+        return $nonVoidReturns === [];
     }
 
     private function isLastIfOrBeforeLastReturn(If_ $if): bool

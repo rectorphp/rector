@@ -6,6 +6,7 @@ namespace Rector\PHPStanExtensions\Tests\Rule\ConfigurableRectorRule;
 
 use Iterator;
 use PHPStan\Rules\Rule;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\PHPStanExtensions\Rule\ConfigurableRectorRule;
 use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
@@ -13,6 +14,7 @@ final class ConfigurableRectorRuleTest extends AbstractServiceAwareRuleTestCase
 {
     /**
      * @dataProvider provideData()
+     * @param array<string|string[]|int[]> $expectedErrorsWithLines
      */
     public function testRule(string $filePath, array $expectedErrorsWithLines): void
     {
@@ -28,9 +30,13 @@ final class ConfigurableRectorRuleTest extends AbstractServiceAwareRuleTestCase
             [[ConfigurableRectorRule::ERROR_NO_CONFIGURED_CODE_SAMPLE, 13]],
         ];
 
+        $notImplementErrorMessage = sprintf(
+            ConfigurableRectorRule::ERROR_NOT_IMPLEMENTS_INTERFACE,
+            ConfigurableRectorInterface::class
+        );
         yield [
             __DIR__ . '/Fixture/NotImplementsAndHasConfiguredCodeSampleRector.php',
-            [[ConfigurableRectorRule::ERROR_NOT_IMPLEMENTS_INTERFACE, 12]],
+            [[$notImplementErrorMessage, 12]],
         ];
 
         yield [__DIR__ . '/Fixture/NotImplementsAndHasNoConfiguredCodeSampleRector.php', []];

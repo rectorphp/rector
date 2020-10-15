@@ -169,6 +169,9 @@ CODE_SAMPLE
         return $stringsToReplace;
     }
 
+    /**
+     * @param string[] $stringsToReplace
+     */
     private function replaceStringsWithClassConstReferences(Class_ $class, array $stringsToReplace): void
     {
         $this->traverseNodesWithCallable($class, function (Node $node) use ($stringsToReplace): ?ClassConstFetch {

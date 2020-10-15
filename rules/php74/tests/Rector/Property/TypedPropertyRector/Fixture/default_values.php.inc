@@ -5,48 +5,16 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 final class DefaultValues
 {
     /**
-     * @var bool
-     */
-    private $name = 'not_a_bool';
-
-    /**
-     * @var bool
-     */
-    private $isItRealName = false;
-
-    /**
-     * @var bool
-     */
-    private $isItRealNameNull = null;
-
-    /**
-     * @var string
-     */
-    private $size = false;
-
-    /**
      * @var float
      */
     private $a = 42.42;
 
-    /**
-     * @var float
-     */
     private $b = 42;
 
-    /**
-     * @var float
-     */
     private $c = 'hey';
 
-    /**
-     * @var int
-     */
     private $e = 42.42;
 
-    /**
-     * @var int
-     */
     private $f = 42;
 
     /**
@@ -68,14 +36,6 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 final class DefaultValues
 {
-    private string $name = 'not_a_bool';
-
-    private bool $isItRealName = false;
-
-    private ?bool $isItRealNameNull = null;
-
-    private bool $size = false;
-
     private float $a = 42.42;
 
     private int $b = 42;
@@ -88,7 +48,7 @@ final class DefaultValues
 
     private array $g = [1, 2, 3];
 
-    private array $h = [1, 2, 3];
+    private iterable $h = [1, 2, 3];
 }
 
 ?>

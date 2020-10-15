@@ -10,6 +10,9 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class SlugTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface
 {
+    /**
+     * @return mixed[]
+     */
     public function getFields(): array
     {
         return $this->items['fields'];

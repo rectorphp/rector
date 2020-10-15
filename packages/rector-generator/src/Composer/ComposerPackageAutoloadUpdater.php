@@ -94,6 +94,9 @@ final class ComposerPackageAutoloadUpdater
         );
     }
 
+    /**
+     * @param mixed[] $composerJson
+     */
     private function isPackageAlreadyLoaded(array $composerJson, Package $package): bool
     {
         foreach (['autoload', self::AUTOLOAD_DEV] as $autoloadSection) {

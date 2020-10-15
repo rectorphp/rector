@@ -15,7 +15,7 @@ final class MagicTemplatePropertyCalls
     private $nodesToRemove = [];
 
     /**
-     * @var Node[]
+     * @var Expr[]
      */
     private $templateVariables = [];
 
@@ -25,7 +25,7 @@ final class MagicTemplatePropertyCalls
     private $templateFileExpr;
 
     /**
-     * @param Node[] $templateVariables
+     * @param Expr[] $templateVariables
      * @param Node[] $nodesToRemove
      */
     public function __construct(?Expr $templateFileExpr, array $templateVariables, array $nodesToRemove)
@@ -41,7 +41,7 @@ final class MagicTemplatePropertyCalls
     }
 
     /**
-     * @return Node[]
+     * @return Expr[]
      */
     public function getTemplateVariables(): array
     {

@@ -9,8 +9,6 @@ use PhpParser\Node\Stmt\Use_ as UseStmt;
 
 /**
  * Fixed duplicated naming in php-parser and prevents confusion
- *
- * @method UseStmt getNode()
  */
 final class UseBuilder extends Use_
 {

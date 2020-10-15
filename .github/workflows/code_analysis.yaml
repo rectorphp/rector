@@ -21,6 +21,10 @@ jobs:
                         run: composer phpstan
 
                     -
+                        name: 'PHPStan for config'
+                        run: composer phpstan-config
+
+                    -
                         name: 'Show command'
                         run: bin/rector show --config rector-ci.php --ansi
 
@@ -40,10 +44,12 @@ jobs:
                         run: bin/rector validate-sets --ansi
 
                     -
-                        name: 'Validate PHPStan Compatibility'
-                        run: |
-                            bin/rector sync-types --ansi
-                            bin/rector check-static-type-mappers --ansi
+                        name: 'Validate PHPStan Types Compatibility'
+                        run: bin/rector sync-types --ansi
+
+                    -
+                        name: 'Validate PHPStan Mappers Compatibility'
+                        run: bin/rector check-static-type-mappers --ansi
 
                     -
                         name: 'PHP Linter'

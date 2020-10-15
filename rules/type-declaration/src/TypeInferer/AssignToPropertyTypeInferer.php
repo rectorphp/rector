@@ -5,100 +5,116 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
-use Rector\Core\ValueObject\MethodName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
+use Rector\TypeDeclaration\AlreadyAssignDetector\NullTypeAssignDetector;
+use Rector\TypeDeclaration\AlreadyAssignDetector\PropertyDefaultAssignDetector;
+use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
 
 final class AssignToPropertyTypeInferer extends AbstractTypeInferer
 {
     /**
-     * @var bool
+     * @var ConstructorAssignDetector
      */
-    private $isAssignedInConstructor = false;
+    private $constructorAssignDetector;
+
+    /**
+     * @var PropertyAssignMatcher
+     */
+    private $propertyAssignMatcher;
+
+    /**
+     * @var PropertyDefaultAssignDetector
+     */
+    private $propertyDefaultAssignDetector;
+
+    /**
+     * @var NullTypeAssignDetector
+     */
+    private $nullTypeAssignDetector;
+
+    public function __construct(
+        ConstructorAssignDetector $constructorAssignDetector,
+        PropertyAssignMatcher $propertyAssignMatcher,
+        PropertyDefaultAssignDetector $propertyDefaultAssignDetector,
+        NullTypeAssignDetector $nullTypeAssignDetector
+    ) {
+        $this->constructorAssignDetector = $constructorAssignDetector;
+        $this->propertyAssignMatcher = $propertyAssignMatcher;
+        $this->propertyDefaultAssignDetector = $propertyDefaultAssignDetector;
+        $this->nullTypeAssignDetector = $nullTypeAssignDetector;
+    }
 
     public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): Type
     {
-        $assignedExprStaticTypes = [];
-        $this->isAssignedInConstructor = false;
+        $assignedExprTypes = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
             $propertyName,
-            &$assignedExprStaticTypes
+            &$assignedExprTypes
         ) {
             if (! $node instanceof Assign) {
                 return null;
             }
 
-            $expr = $this->matchPropertyAssignExpr($node, $propertyName);
+            $expr = $this->propertyAssignMatcher->matchPropertyAssignExpr($node, $propertyName);
             if ($expr === null) {
                 return null;
             }
 
-            $exprStaticType = $this->nodeTypeResolver->getStaticType($node->expr);
-            if ($exprStaticType instanceof MixedType) {
+            $exprStaticType = $this->resolveExprStaticTypeIncludingDimFetch($node);
+            if ($exprStaticType === null) {
                 return null;
             }
 
-            if ($node->var instanceof ArrayDimFetch) {
-                $exprStaticType = new ArrayType(new MixedType(), $exprStaticType);
-            }
-
-            // is in constructor?
-            $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
-            if ($methodName === MethodName::CONSTRUCT) {
-                $this->isAssignedInConstructor = true;
-            }
-
-            $assignedExprStaticTypes[] = $exprStaticType;
+            $assignedExprTypes[] = $exprStaticType;
 
             return null;
         });
 
-        // add default type, as not initialized in the constructor
-        if (count($assignedExprStaticTypes) && ! $this->isAssignedInConstructor) {
-            $assignedExprStaticTypes[] = new NullType();
+        if ($this->shouldAddNullType($classLike, $propertyName, $assignedExprTypes)) {
+            $assignedExprTypes[] = new NullType();
         }
 
-        return $this->typeFactory->createMixedPassedOrUnionType($assignedExprStaticTypes);
+        return $this->typeFactory->createMixedPassedOrUnionType($assignedExprTypes);
+    }
+
+    private function resolveExprStaticTypeIncludingDimFetch(Assign $assign): ?Type
+    {
+        $exprStaticType = $this->nodeTypeResolver->getStaticType($assign->expr);
+        if ($exprStaticType instanceof MixedType) {
+            return null;
+        }
+
+        if ($assign->var instanceof ArrayDimFetch) {
+            return new ArrayType(new MixedType(), $exprStaticType);
+        }
+
+        return $exprStaticType;
     }
 
     /**
-     * Covers:
-     * - $this->propertyName = $expr;
-     * - $this->propertyName[] = $expr;
+     * @param Type[] $assignedExprTypes
      */
-    private function matchPropertyAssignExpr(Assign $assign, string $propertyName): ?Expr
+    private function shouldAddNullType(ClassLike $classLike, string $propertyName, array $assignedExprTypes): bool
     {
-        if ($this->isPropertyFetch($assign->var)) {
-            if (! $this->nodeNameResolver->isName($assign->var, $propertyName)) {
-                return null;
-            }
+        $hasPropertyDefaultValue = $this->propertyDefaultAssignDetector->detect($classLike, $propertyName);
+        $isAssignedInConstructor = $this->constructorAssignDetector->detect($classLike, $propertyName);
+        $shouldAddNullType = $this->nullTypeAssignDetector->detect($classLike, $propertyName);
 
-            return $assign->expr;
+        if ((count($assignedExprTypes) === 0) && ($isAssignedInConstructor || $hasPropertyDefaultValue)) {
+            return false;
         }
 
-        if ($assign->var instanceof ArrayDimFetch && $this->isPropertyFetch($assign->var->var)) {
-            if (! $this->nodeNameResolver->isName($assign->var->var, $propertyName)) {
-                return null;
-            }
-
-            return $assign->expr;
+        if ($shouldAddNullType === true) {
+            return ! $isAssignedInConstructor && ! $hasPropertyDefaultValue;
         }
-
-        return null;
-    }
-
-    private function isPropertyFetch(Node $node): bool
-    {
-        return $node instanceof PropertyFetch || $node instanceof StaticPropertyFetch;
+        return (count($assignedExprTypes) > 0) && (! $isAssignedInConstructor && ! $hasPropertyDefaultValue);
     }
 }

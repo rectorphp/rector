@@ -98,6 +98,9 @@ trait NameResolverTrait
         return $this->isName($node->name, $name);
     }
 
+    /**
+     * @param string[] $names
+     */
     protected function isLocalMethodCallsNamed(Node $node, array $names): bool
     {
         foreach ($names as $name) {

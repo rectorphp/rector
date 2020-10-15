@@ -4,6 +4,10 @@ dist: bionic
 
 language: php
 
+php: 7.4
+
+if: (branch = master OR tag IS present) && type = push
+
 before_install:
     # turn off XDebug
     - phpenv config-rm xdebug.ini
@@ -12,7 +16,6 @@ jobs:
     include:
         -
             name: "Split Monorepo"
-            if: (branch = master OR tag IS present) && type = push
             script:
                 - composer update --ansi
                 # travis_retry to prevent fails
@@ -22,8 +25,6 @@ jobs:
         # "Deploy to https://github.com/rectorphp/rector-prefixed"
         -
             name: Compile and Release rector.phar
-            if: (branch = master OR tag IS present) && type = push
-            php: 7.4
             script:
                 - cd compiler
 

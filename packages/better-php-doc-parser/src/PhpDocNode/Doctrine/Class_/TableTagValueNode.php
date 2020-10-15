@@ -95,6 +95,7 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
     }
 
     /**
+     * @param mixed[] $items
      * @return mixed[]
      */
     private function addCustomItems(array $items): array

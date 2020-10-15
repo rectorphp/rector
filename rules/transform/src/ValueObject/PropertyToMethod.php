@@ -22,7 +22,7 @@ final class PropertyToMethod
     private $newGetMethod;
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private $newGetArguments = [];
 
@@ -31,6 +31,9 @@ final class PropertyToMethod
      */
     private $newSetMethod;
 
+    /**
+     * @param mixed[] $newGetArguments
+     */
     public function __construct(
         string $oldType,
         string $oldProperty,

@@ -10,8 +10,8 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -146,14 +146,8 @@ CODE_SAMPLE
             return;
         }
 
-        if ($inferedType instanceof ObjectType) {
-            $fqcn = $inferedType instanceof ShortenedObjectType
-                ? $inferedType->getFullyQualifiedName()
-                : $inferedType->getClassName();
-            $reflectionClass = new ReflectionClass($fqcn);
-            if ($reflectionClass->isTrait()) {
-                return;
-            }
+        if ($this->isTraitType($inferedType)) {
+            return;
         }
 
         $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
@@ -186,5 +180,26 @@ CODE_SAMPLE
 
         // already set → skip
         return ! $param->type->getAttribute(NewType::HAS_NEW_INHERITED_TYPE, false);
+    }
+
+    private function isTraitType(Type $type): bool
+    {
+        if (! $type instanceof TypeWithClassName) {
+            return false;
+        }
+
+        $fullyQualifiedName = $this->getFullyQualifiedName($type);
+        $reflectionClass = new ReflectionClass($fullyQualifiedName);
+
+        return $reflectionClass->isTrait();
+    }
+
+    private function getFullyQualifiedName(TypeWithClassName $typeWithClassName): string
+    {
+        if ($typeWithClassName instanceof ShortenedObjectType) {
+            return $typeWithClassName->getFullyQualifiedName();
+        }
+
+        return $typeWithClassName->getClassName();
     }
 }

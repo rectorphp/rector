@@ -39,7 +39,7 @@ final class TagValueNodeConfiguration
     private $arrayEqualSign;
 
     /**
-     * @var array
+     * @var array<string, bool>
      */
     private $keysByQuotedStatus = [];
 
@@ -49,7 +49,7 @@ final class TagValueNodeConfiguration
     private $originalContent;
 
     /**
-     * @var array|null
+     * @var string[]|null
      */
     private $orderedVisibleItems;
 
@@ -58,6 +58,10 @@ final class TagValueNodeConfiguration
      */
     private $silentKey;
 
+    /**
+     * @param array<string, bool> $keysByQuotedStatus
+     * @param string[] $orderedVisibleItems
+     */
     public function __construct(
         ?string $originalContent = null,
         ?array $orderedVisibleItems = null,
@@ -87,6 +91,9 @@ final class TagValueNodeConfiguration
         return $this->originalContent;
     }
 
+    /**
+     * @return string[]|null
+     */
     public function getOrderedVisibleItems(): ?array
     {
         return $this->orderedVisibleItems;
@@ -113,7 +120,7 @@ final class TagValueNodeConfiguration
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, bool>
      */
     public function getKeysByQuotedStatus(): array
     {

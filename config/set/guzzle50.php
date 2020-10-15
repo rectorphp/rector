@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
+use Rector\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
@@ -16,7 +16,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     # both uses "%classes_to_defluent%
-    #diff-810cdcfdd8a6b9e1fc0d1e96d7786874
     $services->set(FluentChainMethodCallToNormalMethodCallRector::class);
 
     $configuration = [

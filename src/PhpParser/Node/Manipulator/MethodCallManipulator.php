@@ -12,7 +12,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
+use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -135,7 +135,7 @@ final class MethodCallManipulator
             }
 
             // cover fluent interfaces too
-            $callerNode = $this->fluentChainMethodCallNodeAnalyzer->resolveRootVariable($node);
+            $callerNode = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($node);
             if (! $callerNode instanceof Variable) {
                 return false;
             }

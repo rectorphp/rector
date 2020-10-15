@@ -18,6 +18,8 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStan\TypeFactoryStaticHelper;
 
 final class TypeFactory
@@ -72,6 +74,10 @@ final class TypeFactory
         foreach ($types as $type) {
             if (! $keepConstant) {
                 $type = $this->removeValueFromConstantType($type);
+            }
+
+            if ($type instanceof ShortenedObjectType) {
+                $type = new FullyQualifiedObjectType($type->getFullyQualifiedName());
             }
 
             $typeHash = md5($type->describe(VerbosityLevel::cache()));

@@ -22,7 +22,7 @@ final class ToStringToMethodCallRector extends AbstractRector implements Configu
      * @api
      * @var string
      */
-    public const METHOD_NAMES_BY_TYPE = '$methodNamesByType';
+    public const METHOD_NAMES_BY_TYPE = 'method_names_by_type';
 
     /**
      * @var string[]

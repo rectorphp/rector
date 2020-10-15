@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
@@ -132,6 +133,8 @@ CODE_SAMPLE
 
         $this->removeNodes($unusedParameters);
 
+        $this->clearPhpDocInfo($node, $unusedParameters);
+
         return $node;
     }
 
@@ -210,6 +213,36 @@ CODE_SAMPLE
                 return $this->areNodesEqual($firstParam, $secondParam) ? 0 : 1;
             }
         );
+    }
+
+    /**
+     * @param Param[] $unusedParameters
+     */
+    private function clearPhpDocInfo(ClassMethod $classMethod, array $unusedParameters): void
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return;
+        }
+
+        foreach ($unusedParameters as $unusedParameter) {
+            $parameterName = $this->getName($unusedParameter->var);
+            if ($parameterName === null) {
+                continue;
+            }
+
+            $paramTagValueNode = $phpDocInfo->getParamTagValueByName($parameterName);
+            if ($paramTagValueNode === null) {
+                continue;
+            }
+
+            if ($paramTagValueNode->parameterName !== '$' . $parameterName) {
+                continue;
+            }
+
+            $phpDocInfo->removeTagValueNodeFromNode($paramTagValueNode);
+        }
     }
 
     private function shouldSkipOpenSourceAbstract(ClassMethod $classMethod, Class_ $class): bool

@@ -8,7 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PHPStan\Type\ObjectType;
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -50,11 +51,11 @@ final class ParsedPropertyFetchNodeCollector
 
     public function collect(Node $node): void
     {
-        if (! $node instanceof PropertyFetch) {
+        if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
             return;
         }
 
-        $propertyType = $this->nodeTypeResolver->getStaticType($node->var);
+        $propertyType = $this->resolvePropertyCallerType($node);
 
         // make sure name is valid
         if ($node->name instanceof StaticCall || $node->name instanceof MethodCall) {
@@ -62,20 +63,11 @@ final class ParsedPropertyFetchNodeCollector
         }
 
         $propertyName = $this->nodeNameResolver->getName($node->name);
-
-        if ($propertyType instanceof TypeWithClassName) {
-            $this->propertyFetchesByTypeAndName[$propertyType->getClassName()][$propertyName][] = $node;
+        if ($propertyName === null) {
+            return;
         }
 
-        if ($propertyType instanceof UnionType) {
-            foreach ($propertyType->getTypes() as $unionedType) {
-                if (! $unionedType instanceof ObjectType) {
-                    continue;
-                }
-
-                $this->propertyFetchesByTypeAndName[$unionedType->getClassName()][$propertyName][] = $node;
-            }
-        }
+        $this->addPropertyFetchWithTypeAndName($propertyType, $node, $propertyName);
     }
 
     /**
@@ -84,5 +76,36 @@ final class ParsedPropertyFetchNodeCollector
     public function findPropertyFetchesByTypeAndName(string $className, string $propertyName): array
     {
         return $this->propertyFetchesByTypeAndName[$className][$propertyName] ?? [];
+    }
+
+    /**
+     * @param PropertyFetch|StaticPropertyFetch $node
+     */
+    private function resolvePropertyCallerType(Node $node): Type
+    {
+        if ($node instanceof PropertyFetch) {
+            return $this->nodeTypeResolver->getStaticType($node->var);
+        }
+
+        return $this->nodeTypeResolver->getStaticType($node->class);
+    }
+
+    /**
+     * @param PropertyFetch|StaticPropertyFetch $propertyFetchNode
+     */
+    private function addPropertyFetchWithTypeAndName(
+        Type $propertyType,
+        Node $propertyFetchNode,
+        string $propertyName
+    ): void {
+        if ($propertyType instanceof TypeWithClassName) {
+            $this->propertyFetchesByTypeAndName[$propertyType->getClassName()][$propertyName][] = $propertyFetchNode;
+        }
+
+        if ($propertyType instanceof UnionType) {
+            foreach ($propertyType->getTypes() as $unionedType) {
+                $this->addPropertyFetchWithTypeAndName($unionedType, $propertyFetchNode, $propertyName);
+            }
+        }
     }
 }

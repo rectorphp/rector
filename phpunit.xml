@@ -3,11 +3,24 @@
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     bootstrap="tests/bootstrap.php"
     colors="true"
-    verbose="true"
 >
     <php>
         <const name="RECTOR_REPOSITORY" value="true"/>
     </php>
+
+    <filter>
+		<whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./packages</directory>
+            <directory suffix=".php">./rules</directory>
+            <directory suffix=".php">./src</directory>
+			<exclude>
+				<directory suffix=".php">./packages/*/tests</directory>
+				<directory suffix=".php">./rules/*/tests</directory>
+                <directory suffix=".php">./packages/rector-generator/templates</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+
     <testsuites>
         <testsuite name="main">
             <directory>rules/*/tests</directory>
@@ -19,31 +32,4 @@
             <exclude>rules/nette-tester-to-phpunit/tests/Rector/RenameTesterTestToPHPUnitToTestFileRector/Source/*</exclude>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="false">
-            <directory suffix=".php">rules/*/src</directory>
-            <directory suffix=".php">packages/*/src</directory>
-            <directory>src</directory>
-
-            <exclude>
-                <file>rules/nette-tester-to-phpunit/tests/Rector/RenameTesterTestToPHPUnitToTestFileRector/Source/SomeCase.phpt</file>
-            </exclude>
-        </whitelist>
-    </filter>
-
-    <listeners>
-        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
-            <arguments>
-                <array>
-                    <element key="slowThreshold">
-                        <integer>800</integer>
-                    </element>
-                    <element key="reportLength">
-                        <integer>3</integer>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
-    </listeners>
 </phpunit>

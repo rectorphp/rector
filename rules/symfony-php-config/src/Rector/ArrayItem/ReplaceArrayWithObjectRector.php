@@ -6,6 +6,7 @@ namespace Rector\SymfonyPhpConfig\Rector\ArrayItem;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -47,7 +48,7 @@ final class ReplaceArrayWithObjectRector extends AbstractRector implements Confi
     private $arguments = [];
 
     /**
-     * @var array
+     * @var Expr[]
      */
     private $nestedArguments = [];
 
