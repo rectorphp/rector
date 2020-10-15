@@ -48,9 +48,9 @@ final class NodeByTypeAndPositionCollector
 
             // not in different scope, than previous one - e.g. if/while/else...
             // get nesting level to $classMethodNode
-            /** @var Assign $assignNode */
-            $assignNode = $assignedVariable->getAttribute(AttributeKey::PARENT_NODE);
-            $nestingHash = $this->flowOfControlLocator->resolveNestingHashFromFunctionLike($functionLike, $assignNode);
+            /** @var Assign $assign */
+            $assign = $assignedVariable->getAttribute(AttributeKey::PARENT_NODE);
+            $nestingHash = $this->flowOfControlLocator->resolveNestingHashFromFunctionLike($functionLike, $assign);
 
             /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($assignedVariable);

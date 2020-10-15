@@ -12,6 +12,7 @@ use Rector\Core\Context\ContextAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\DeadCode\FlowControl\VariableUseFinder;
 use Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector;
 use Rector\DeadCode\ValueObject\VariableNodeUse;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -31,12 +32,19 @@ final class RemoveOverriddenValuesRector extends AbstractRector
      */
     private $nodeByTypeAndPositionCollector;
 
+    /**
+     * @var VariableUseFinder
+     */
+    private $variableUseFinder;
+
     public function __construct(
         ContextAnalyzer $contextAnalyzer,
-        NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector
+        NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector,
+        VariableUseFinder $variableUseFinder
     ) {
         $this->contextAnalyzer = $contextAnalyzer;
         $this->nodeByTypeAndPositionCollector = $nodeByTypeAndPositionCollector;
+        $this->variableUseFinder = $variableUseFinder;
     }
 
     public function getDefinition(): RectorDefinition
@@ -87,7 +95,7 @@ CODE_SAMPLE
         $assignedVariableNames = $this->getNodeNames($assignedVariables);
 
         // 2. collect use of those variables
-        $assignedVariablesUse = $this->resolveUsedVariables($node, $assignedVariables);
+        $assignedVariablesUse = $this->variableUseFinder->resolveUsedVariables($node, $assignedVariables);
 
         $nodesByTypeAndPosition = $this->nodeByTypeAndPositionCollector->collectNodesByTypeAndPosition(
             $assignedVariables,
@@ -154,32 +162,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Variable[] $assignedVariables
-     * @return Variable[]
-     */
-    private function resolveUsedVariables(Node $node, array $assignedVariables): array
-    {
-        return $this->betterNodeFinder->find($node, function (Node $node) use ($assignedVariables): bool {
-            if (! $node instanceof Variable) {
-                return false;
-            }
-
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            // is the left assign - not use of one
-            if ($parentNode instanceof Assign && ($parentNode->var instanceof Variable && $parentNode->var === $node)) {
-                return false;
-            }
-
-            // simple variable only
-            if ($this->getName($node) === null) {
-                return false;
-            }
-
-            return $this->isNodeEqual($node, $assignedVariables);
-        });
-    }
-
-    /**
      * @param string[] $assignedVariableNames
      * @param VariableNodeUse[] $nodesByTypeAndPosition
      * @return Node[]
@@ -237,9 +219,11 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN) || ! $nodeByTypeAndPosition->isType(
-            VariableNodeUse::TYPE_ASSIGN
-        )) {
+        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN)) {
+            return false;
+        }
+
+        if (! $nodeByTypeAndPosition->isType(VariableNodeUse::TYPE_ASSIGN)) {
             return false;
         }
 
