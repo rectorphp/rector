@@ -36,21 +36,6 @@ final class BetterStandardPrinter extends Standard
     /**
      * @var string
      */
-    private const START_COMMENT_REGEX = '#\/*\*(.*?)\*\/#s';
-
-    /**
-     * @var string
-     */
-    private const START_GRID_COMMENT_REGEX = '#^(\s+)?\#(.*?)$#m';
-
-    /**
-     * @var string
-     */
-    private const START_DOUBLE_SLASH_COMMENT_REGEX = '#\/\/(.*?)$#m';
-
-    /**
-     * @var string
-     */
     private const NEWLINE_END_REGEX = "#\n$#";
 
     /**
@@ -93,9 +78,14 @@ final class BetterStandardPrinter extends Standard
     private $docBlockManipulator;
 
     /**
+     * @var CommentRemover
+     */
+    private $commentRemover;
+
+    /**
      * @param mixed[] $options
      */
-    public function __construct(array $options = [])
+    public function __construct(CommentRemover $commentRemover, array $options = [])
     {
         parent::__construct($options);
 
@@ -104,6 +94,8 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Stmt_Function->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Expr_Closure->returnType'] = [')', false, ': ', null];
+
+        $this->commentRemover = $commentRemover;
     }
 
     /**
@@ -143,7 +135,7 @@ final class BetterStandardPrinter extends Standard
     {
         $printerNode = $this->print($node);
 
-        $nodeWithoutComments = $this->removeComments($printerNode);
+        $nodeWithoutComments = $this->commentRemover->remove($printerNode);
         return trim($nodeWithoutComments);
     }
 
@@ -476,21 +468,6 @@ final class BetterStandardPrinter extends Standard
             // tab vs space
             $this->tabOrSpaceIndentCharacter = ($whitespaces <=> $tabs) >= 0 ? ' ' : "\t";
         }
-    }
-
-    private function removeComments(string $printerNode): string
-    {
-        // remove /** ... */
-        $printerNode = Strings::replace($printerNode, self::START_COMMENT_REGEX);
-
-        // remove /* ... */
-        $printerNode = Strings::replace($printerNode, self::START_COMMENT_REGEX);
-
-        // remove # ...
-        $printerNode = Strings::replace($printerNode, self::START_GRID_COMMENT_REGEX);
-
-        // remove // ...
-        return Strings::replace($printerNode, self::START_DOUBLE_SLASH_COMMENT_REGEX);
     }
 
     /**
