@@ -147,7 +147,7 @@ final class DecoupleClassMethodToOwnClassRector extends AbstractRector implement
         );
 
         $newClassLocation = $this->createNewClassLocation($node, $decoupleClassMethodMatch->getClassName());
-        $this->printNodesToFilePath($namespace, $newClassLocation);
+        $this->printNodesToFilePath([$namespace], $newClassLocation);
 
         // 7. cleanup this class method
         $this->removeNode($node);

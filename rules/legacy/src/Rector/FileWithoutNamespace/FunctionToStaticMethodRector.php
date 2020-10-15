@@ -181,7 +181,7 @@ CODE_SAMPLE
     ): void {
         $classFileDestination = $smartFileInfo->getPath() . DIRECTORY_SEPARATOR . $shortClassName . '.php';
 
-        $nodesToPrint = $this->resolveNodeToPrint($node, $class);
+        $nodesToPrint = [$this->resolveNodeToPrint($node, $class)];
         $this->printNodesToFilePath($nodesToPrint, $classFileDestination);
     }
 
