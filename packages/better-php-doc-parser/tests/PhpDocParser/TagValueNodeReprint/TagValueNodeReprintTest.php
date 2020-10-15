@@ -8,6 +8,7 @@ use Iterator;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EmbeddedTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
@@ -64,6 +65,7 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
             TableTagValueNode::class => __DIR__ . '/Fixture/DoctrineTable',
             CustomIdGeneratorTagValueNode::class => __DIR__ . '/Fixture/DoctrineCustomIdGenerator',
             GeneratedValueTagValueNode::class => __DIR__ . '/Fixture/DoctrineGeneratedValue',
+            EmbeddedTagValueNode::class => __DIR__ . '/Fixture/DoctrineEmbedded',
             // special case
             GenericTagValueNode::class => __DIR__ . '/Fixture/ConstantReference',
             SensioTemplateTagValueNode::class => __DIR__ . '/Fixture/SensioTemplate',
