@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\ClassConst;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
@@ -105,6 +106,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->isEnumClass($node)) {
+            return true;
+        }
+
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
@@ -112,5 +117,21 @@ CODE_SAMPLE
         }
 
         return $phpDocInfo->hasByName('api');
+    }
+
+    /**
+     * @see https://github.com/myclabs/php-enum#declaration
+     */
+    private function isEnumClass(ClassConst $classConst): bool
+    {
+        $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return false;
+        }
+        if ($classLike->extends === null) {
+            return false;
+        }
+
+        return $this->isName($classLike->extends, '*Enum');
     }
 }
