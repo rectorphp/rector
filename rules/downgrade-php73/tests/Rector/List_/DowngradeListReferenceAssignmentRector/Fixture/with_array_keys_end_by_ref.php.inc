@@ -2,15 +2,15 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class ArrayDestructuringWithArrayKeysClass
+class WithArrayKeysEndByRefClass
 {
     public function run($string)
     {
         $array = ['a' => 1, 'b' => 2];
-        ['a' => $a, 'b' => &$b] = $array;
+        list('a' => $a, 'b' => &$b) = $array;
 
-        $array = [3 => 1, 5 => 2];
-        [3 => $a, 5 => &$b] = $array;
+        $array = [0 => 1, 3 => 2];
+        list(0 => $a, 3 => &$b) = $array;
     }
 }
 
@@ -20,17 +20,17 @@ class ArrayDestructuringWithArrayKeysClass
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class ArrayDestructuringWithArrayKeysClass
+class WithArrayKeysEndByRefClass
 {
     public function run($string)
     {
         $array = ['a' => 1, 'b' => 2];
-        ['a' => $a, 'b' => $b] = $array;
+        list('a' => $a) = $array;
         $b =& $array['b'];
 
-        $array = [3 => 1, 5 => 2];
-        [3 => $a, 5 => $b] = $array;
-        $b =& $array[5];
+        $array = [0 => 1, 3 => 2];
+        list(0 => $a) = $array;
+        $b =& $array[3];
     }
 }
 

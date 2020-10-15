@@ -2,12 +2,12 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class SkippedValuesClass
+class ArrayDestructuringEndByValueClass
 {
     public function run($string)
     {
-        $array = [1, 2, 3, [3, 4]];
-        list(&$a, $b,, $d, &$e) = $array;
+        $array = [1, 2, 3, 4];
+        [&$c, $d, &$e, $f] = $array;
     }
 }
 
@@ -17,14 +17,14 @@ class SkippedValuesClass
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class SkippedValuesClass
+class ArrayDestructuringEndByValueClass
 {
     public function run($string)
     {
-        $array = [1, 2, 3, [3, 4]];
-        list($a, $b,, $d) = $array;
-        $a =& $array[0];
-        $e =& $array[4];
+        $array = [1, 2, 3, 4];
+        [$c, $d, $e, $f] = $array;
+        $c =& $array[0];
+        $e =& $array[2];
     }
 }
 

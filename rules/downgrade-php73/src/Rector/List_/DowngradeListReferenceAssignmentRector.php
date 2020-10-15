@@ -26,6 +26,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class DowngradeListReferenceAssignmentRector extends AbstractRector
 {
+    /**
+     * @var int
+     */
+    private const ALL = 0;
+
+    /**
+     * @var int
+     */
+    private const ANY = 1;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -41,6 +51,8 @@ class SomeClass
         list($a, &$b) = $array;
 
         [&$c, $d, &$e] = $array;
+
+        list(&$a, &$b) = $array;
     }
 }
 CODE_SAMPLE
@@ -51,12 +63,15 @@ class SomeClass
     public function run($string)
     {
         $array = [1, 2];
-        list($a, $b) = $array;
+        list($a) = $array;
         $b =& $array[1];
 
         [$c, $d, $e] = $array;
         $c =& $array[0];
         $e =& $array[2];
+
+        $a =& $array[0];
+        $b =& $array[1];
     }
 }
 CODE_SAMPLE
@@ -87,9 +102,35 @@ CODE_SAMPLE
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         /** @var Variable */
         $exprVariable = $parentNode->expr;
-        // Their position is kept in the array
+        // Count number of params by ref on the right side, to remove them later on
+        $rightSideRemovableParamsCount = $this->countRightSideMostParamsByRefOrEmpty($node->items);
+        // Add new nodes to do the assignment by reference
         $newNodes = $this->createAssignRefArrayFromListReferences($node->items, $exprVariable, []);
         $this->addNodesAfterNode($newNodes, $node);
+        // Remove the stale params right-most-side
+        return $this->removeStaleParams($node, $rightSideRemovableParamsCount);
+    }
+
+    /**
+     * Remove the right-side-most params by reference or empty from `list()`,
+     * since they are not needed anymore.
+     * If all of them can be removed, then directly remove `list()`.
+     * @param List_|Array_ $node
+     * @return List_|Array_|null
+     */
+    public function removeStaleParams(Node $node, int $rightSideRemovableParamsCount): ?Node
+    {
+        $nodeItemsCount = count($node->items);
+        if ($rightSideRemovableParamsCount === $nodeItemsCount) {
+            // Remove the parent Assign node
+            /** @var Assign */
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            $this->removeNode($parentNode);
+            return null;
+        }
+        if ($rightSideRemovableParamsCount > 0) {
+            array_splice($node->items, $nodeItemsCount - $rightSideRemovableParamsCount);
+        }
         return $node;
     }
 
@@ -102,10 +143,44 @@ CODE_SAMPLE
 
         // Check it follows `list(...) = $foo`
         if ($parentNode instanceof Assign && $parentNode->var === $node && $parentNode->expr instanceof Variable) {
-            return $this->hasItemByRef($node->items);
+            return $this->hasAnyItemByRef($node->items);
         }
 
         return false;
+    }
+
+    /**
+     * Count the number of params by reference placed at the end
+     * These params are not needed anymore, so they can be removed
+     * @param (ArrayItem|null)[] $listItems
+     */
+    private function countRightSideMostParamsByRefOrEmpty(array $listItems): int
+    {
+        // Their position is kept in the array
+        $count = 0;
+        $listItemsCount = count($listItems);
+        // Start from the end => right-side-most params
+        for ($i = $listItemsCount - 1; $i >= 0; $i--) {
+            $listItem = $listItems[$i];
+            // Also include null items, since they can be removed
+            if ($listItem === null || $listItem->byRef) {
+                $count++;
+                continue;
+            }
+            // If it is a nested list, check if all its items are by reference
+            $isNested = $listItem->value instanceof List_ || $listItem->value instanceof Array_;
+            if ($isNested) {
+                /** @var List_|Array_ */
+                $nestedList = $listItem->value;
+                if ($this->hasAllItemsByRef($nestedList->items)) {
+                    $count++;
+                    continue;
+                }
+            }
+            // Item not by reference. Reach the end
+            return $count;
+        }
+        return $count;
     }
 
     /**
@@ -118,7 +193,7 @@ CODE_SAMPLE
         Variable $exprVariable,
         array $nestedArrayIndexes
     ): array {
-        // Their position is kept in the array
+        // After filtering, their original position is kept in the array
         $newNodes = [];
         foreach ($listItems as $position => $listItem) {
             if ($listItem === null) {
@@ -128,18 +203,15 @@ CODE_SAMPLE
             if ($listItem->value instanceof Variable && ! $listItem->byRef) {
                 continue;
             }
-            // Access the array under the key, if provided, or the position otherwise
-            $key = $position;
-            if ($listItem->key !== null && ($listItem->key instanceof String_ || $listItem->key instanceof LNumber)) {
-                $key = $listItem->key->value;
-            }
+            // Access the key, if provided, or the position otherwise
+            $key = $this->getArrayItemKey($listItem, $position);
             // Either the item is a variable, or a nested list
             if ($listItem->value instanceof Variable) {
-                // Change to not assign by reference in the present node
-                $listItem->byRef = false;
                 /** @var Variable */
                 $itemVariable = $listItem->value;
-                // Assign the value by reference on a new assignment
+                // Remove the reference in the present node
+                $listItem->byRef = false;
+                // In its place, assign the value by reference on a new node
                 $assignVariable = new Variable($itemVariable->name);
                 $newNodes[] = $this->createAssignRefWithArrayDimFetch(
                     $assignVariable,
@@ -147,19 +219,20 @@ CODE_SAMPLE
                     $nestedArrayIndexes,
                     $key
                 );
-            } else {
-                /** @var List_ */
-                $nestedList = $listItem->value;
-                $listNestedArrayIndexes = array_merge($nestedArrayIndexes, [$key]);
-                $newNodes = array_merge(
-                    $newNodes,
-                    $this->createAssignRefArrayFromListReferences(
-                        $nestedList->items,
-                        $exprVariable,
-                        $listNestedArrayIndexes
-                    )
-                );
+                continue;
             }
+            // Nested list. Combine with the nodes from the recursive call
+            /** @var List_ */
+            $nestedList = $listItem->value;
+            $listNestedArrayIndexes = array_merge($nestedArrayIndexes, [$key]);
+            $newNodes = array_merge(
+                $newNodes,
+                $this->createAssignRefArrayFromListReferences(
+                    $nestedList->items,
+                    $exprVariable,
+                    $listNestedArrayIndexes
+                )
+            );
         }
         return $newNodes;
     }
@@ -171,30 +244,34 @@ CODE_SAMPLE
      *
      * @param (ArrayItem|null)[] $items
      */
-    private function hasItemByRef(array $items): bool
+    private function hasAnyItemByRef(array $items): bool
     {
-        /** @var ArrayItem[] */
-        $filteredItemsByRef = array_filter(array_map(
-            /**
-             * @var ArrayItem|null $item
-             */
-            function ($item): ?ArrayItem {
-                if ($item === null) {
-                    return null;
-                }
-                // Check if the item is a nested list/nested array destructuring
-                if ($item->value instanceof List_ || $item->value instanceof Array_) {
-                    // Recursive call
-                    /** @var List_|Array_ */
-                    $nestedList = $item->value;
-                    $hasItemByRef = $this->hasItemByRef($nestedList->items);
-                    return $hasItemByRef ? $item : null;
-                }
-                return $item->value instanceof Variable && $item->byRef ? $item : null;
-            },
-            $items
-        ));
-        return count($filteredItemsByRef) > 0;
+        return count($this->getItemsByRef($items, self::ANY)) > 0;
+    }
+
+    /**
+     * Indicates if there is all items are passed by reference, as in:
+     * - list(&$a, &$b)
+     * - list(&$a, &$b, list(&$c, &$d))
+     *
+     * @param (ArrayItem|null)[] $items
+     */
+    private function hasAllItemsByRef(array $items): bool
+    {
+        return count($this->getItemsByRef($items, self::ALL)) === count($items);
+    }
+
+    /**
+     * Return the key inside the ArrayItem, if provided, or the position otherwise
+     * @param int|string $position
+     * @return int|string
+     */
+    private function getArrayItemKey(ArrayItem $arrayItem, $position)
+    {
+        if ($arrayItem->key !== null && ($arrayItem->key instanceof String_ || $arrayItem->key instanceof LNumber)) {
+            return $arrayItem->key->value;
+        }
+        return $position;
     }
 
     /**
@@ -216,5 +293,58 @@ CODE_SAMPLE
         $dim = BuilderHelpers::normalizeValue($arrayIndex);
         $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
         return new AssignRef($assignVariable, $arrayDimFetch);
+    }
+
+    /**
+     * @param (ArrayItem|null)[] $items
+     * @return ArrayItem[]
+     */
+    private function getItemsByRef(array $items, int $condition): array
+    {
+        /** @var ArrayItem[] */
+        return array_filter(array_map(
+            function (?ArrayItem $item) use ($condition): ?ArrayItem {
+                return $this->getItemByRefOrNull($item, $condition);
+            },
+            $items
+        ));
+    }
+
+    /**
+     * If the item is a variable by reference,
+     * or a nested list containing variables by reference,
+     * return the same item.
+     * Otherwise, return null
+     */
+    private function getItemByRefOrNull(?ArrayItem $arrayItem, int $condition): ?ArrayItem
+    {
+        if ($this->isItemByRef($arrayItem, $condition)) {
+            return $arrayItem;
+        }
+        return null;
+    }
+
+    /**
+     * Indicate if the item is a variable by reference,
+     * or a nested list containing variables by reference
+     */
+    private function isItemByRef(?ArrayItem $arrayItem, int $condition): bool
+    {
+        if ($arrayItem === null) {
+            return false;
+        }
+        // Check if the item is a nested list/nested array destructuring
+        $isNested = $arrayItem->value instanceof List_ || $arrayItem->value instanceof Array_;
+        if ($isNested) {
+            // Recursive call
+            /** @var List_|Array_ */
+            $nestedList = $arrayItem->value;
+            if ($condition === self::ALL) {
+                return $this->hasAllItemsByRef($nestedList->items);
+            }
+            // $condition === self::ANY
+            return $this->hasAnyItemByRef($nestedList->items);
+        }
+        return $arrayItem->value instanceof Variable && $arrayItem->byRef;
     }
 }
