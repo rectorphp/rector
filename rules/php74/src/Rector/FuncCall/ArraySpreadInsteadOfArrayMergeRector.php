@@ -89,10 +89,6 @@ CODE_SAMPLE
             return $this->refactorArray($node);
         }
 
-        if ($this->isName($node, 'iterator_to_array')) {
-            return $this->refactorIteratorToArray($node);
-        }
-
         return null;
     }
 
@@ -114,20 +110,6 @@ CODE_SAMPLE
             $value = $this->resolveValue($value);
             $array->items[] = $this->createUnpackedArrayItem($value);
         }
-
-        return $array;
-    }
-
-    private function refactorIteratorToArray(FuncCall $funcCall): ?Array_
-    {
-        $value = $funcCall->args[0]->value;
-
-        if ($this->isMethodCallWithFinderAndGetIterator($value)) {
-            return null;
-        }
-
-        $array = new Array_();
-        $array->items[] = $this->createUnpackedArrayItem($value);
 
         return $array;
     }
@@ -181,23 +163,6 @@ CODE_SAMPLE
     private function createUnpackedArrayItem(Expr $expr): ArrayItem
     {
         return new ArrayItem($expr, null, false, [], true);
-    }
-
-    /**
-     * Special type, not resolved by PHPStan correctly.
-     * Has string keys, has to be skipped
-     */
-    private function isMethodCallWithFinderAndGetIterator(Expr $expr): bool
-    {
-        if (! $expr instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isObjectType($expr->var, 'Symfony\Component\Finder\Finder')) {
-            return false;
-        }
-
-        return $this->isName($expr->name, 'getIterator');
     }
 
     private function isConstantArrayTypeWithStringKeyType(Type $type): bool

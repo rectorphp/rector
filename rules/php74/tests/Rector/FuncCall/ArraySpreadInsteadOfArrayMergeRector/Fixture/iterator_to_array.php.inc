@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Fixture;
 
-class IteratorToArray
+final class IteratorToArray
 {
     public function run($items)
     {
@@ -16,11 +16,11 @@ class IteratorToArray
 
 namespace Rector\Php74\Tests\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Fixture;
 
-class IteratorToArray
+final class IteratorToArray
 {
     public function run($items)
     {
-        $values = [...$items];
+        $values = iterator_to_array($items);
     }
 }
 
