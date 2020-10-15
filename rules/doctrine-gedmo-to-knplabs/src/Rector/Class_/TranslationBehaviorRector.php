@@ -273,6 +273,6 @@ CODE_SAMPLE
 
         $namespace->stmts[] = $class;
 
-        $this->printToFile($namespace, $filePath);
+        $this->printToFile([$namespace], $filePath);
     }
 }

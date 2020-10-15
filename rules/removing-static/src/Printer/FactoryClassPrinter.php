@@ -54,7 +54,7 @@ final class FactoryClassPrinter
         }
 
         $factoryClassFilePath = $this->createFactoryClassFilePath($oldClass);
-        $factoryClassContent = $this->betterStandardPrinter->prettyPrintFile($nodeToPrint);
+        $factoryClassContent = $this->betterStandardPrinter->prettyPrintFile([$nodeToPrint]);
 
         $this->smartFileSystem->dumpFile($factoryClassFilePath, $factoryClassContent);
     }

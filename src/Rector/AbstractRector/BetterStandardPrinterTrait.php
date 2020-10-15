@@ -61,11 +61,11 @@ trait BetterStandardPrinterTrait
     }
 
     /**
-     * @param Node|Node[]|null $node
+     * @param Node[] $nodes
      */
-    public function printToFile($node, string $filePath): void
+    public function printToFile(array $nodes, string $filePath): void
     {
-        $content = $this->betterStandardPrinter->prettyPrintFile($node);
+        $content = $this->betterStandardPrinter->prettyPrintFile($nodes);
         $this->smartFileSystem->dumpFile($filePath, $content);
     }
 
