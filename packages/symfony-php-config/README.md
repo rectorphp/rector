@@ -36,7 +36,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 // it handles multiple items without duplicated call
                 new FuncCallToStaticCall('d', 'Tracy\Debugger', 'dump'),
                 new FuncCallToStaticCall('dd', 'Tracy\Debugger', 'dump'),
-        ])
-    ]]);
+            ])
+        ]]);
 };
 ```
