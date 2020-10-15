@@ -897,3 +897,96 @@ parameters:
             message: '#Function "dump\(\)" cannot be used/left in the code#'
             paths:
                 - tests/debug_functions.php
+
+        -
+            message: '#Property with protected modifier is not allowed\. Use interface instead#'
+            paths:
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php # 39
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php # 44
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php # 49
+                - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php # 24
+                - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php # 29
+                - packages/file-system-rector/src/Rector/AbstractFileMovingFileSystemRector.php # 15
+                - packages/file-system-rector/src/Rector/AbstractFileSystemRector.php # 34
+                - packages/file-system-rector/src/Rector/AbstractFileSystemRector.php # 39
+                - packages/node-type-resolver/tests/PerNodeTypeResolver/AbstractNodeTypeResolverTest.php # 19
+                - packages/post-rector/src/Rector/AbstractRector/NodeCommandersTrait.php # 36
+                - packages/post-rector/src/Rector/AbstractRector/NodeCommandersTrait.php # 36
+                - packages/reporting/src/Rector/AbstractRector/NodeReportCollectorTrait.php # 19
+                - packages/reporting/src/Rector/AbstractRector/NodeReportCollectorTrait.php # 19
+                - packages/vendor-locker/src/NodeVendorLocker/AbstractNodeVendorLockResolver.php # 21
+                - packages/vendor-locker/src/NodeVendorLocker/AbstractNodeVendorLockResolver.php # 26
+                - packages/vendor-locker/src/NodeVendorLocker/AbstractNodeVendorLockResolver.php # 31
+                - rules/defluent/src/Rector/AbstractFluentChainMethodCallRector.php # 27
+                - rules/defluent/src/Rector/AbstractFluentChainMethodCallRector.php # 32
+                - rules/defluent/src/Rector/AbstractFluentChainMethodCallRector.php # 37
+                - rules/defluent/src/Rector/AbstractFluentChainMethodCallRector.php # 42
+                - rules/defluent/src/Rector/AbstractFluentChainMethodCallRector.php # 47
+                - rules/downgrade-php71/src/Rector/FunctionLike/AbstractMaybeAddDocBlockRector.php # 20
+                - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php # 31
+                - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php # 36
+                - rules/nette-code-quality/src/Rector/ArrayDimFetch/AbstractArrayDimFetchToAnnotatedControlVariableRector.php # 32
+                - rules/nette-code-quality/src/Rector/ArrayDimFetch/AbstractArrayDimFetchToAnnotatedControlVariableRector.php # 37
+                - rules/nette-code-quality/src/Rector/ArrayDimFetch/AbstractArrayDimFetchToAnnotatedControlVariableRector.php # 42
+                - rules/order/src/Rector/AbstractConstantPropertyMethodOrderRector.php # 16
+                - rules/order/src/Rector/AbstractConstantPropertyMethodOrderRector.php # 21
+                - rules/php80/src/MatchAndRefactor/StrStartsWithMatchAndRefactor/AbstractMatchAndRefactor.php # 22
+                - rules/php80/src/MatchAndRefactor/StrStartsWithMatchAndRefactor/AbstractMatchAndRefactor.php # 27
+                - rules/php80/src/MatchAndRefactor/StrStartsWithMatchAndRefactor/AbstractMatchAndRefactor.php # 32
+                - rules/symfony/src/Rector/MethodCall/AbstractFormAddRector.php # 23
+                - rules/symfony/src/Rector/MethodCall/AbstractToConstructorInjectionRector.php # 27
+                - rules/type-declaration/src/AlreadyAssignDetector/AbstractAssignDetector.php # 18
+                - rules/type-declaration/src/Rector/FunctionLike/AbstractTypeDeclarationRector.php # 24
+                - rules/type-declaration/src/Rector/FunctionLike/AbstractTypeDeclarationRector.php # 29
+                - rules/type-declaration/src/TypeInferer/AbstractTypeInferer.php # 18
+                - rules/type-declaration/src/TypeInferer/AbstractTypeInferer.php # 23
+                - rules/type-declaration/src/TypeInferer/AbstractTypeInferer.php # 28
+                - rules/type-declaration/src/TypeInferer/AbstractTypeInferer.php # 33
+                - rules/type-declaration/src/TypeInferer/AbstractTypeInferer.php # 38
+                - src/Console/Command/AbstractCommand.php # 22
+                - src/Rector/AbstractRector.php # 65
+                - src/Rector/AbstractRector.php # 70
+                - src/Rector/AbstractRector.php # 75
+                - src/Rector/AbstractRector.php # 80
+                - src/Rector/AbstractRector.php # 85
+                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 22
+                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 27
+                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 32
+                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 22
+                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 27
+                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 32
+                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 39
+                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 44
+                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 49
+                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 39
+                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 44
+                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 49
+                - src/Rector/AbstractRector/NodeCollectorTrait.php # 18
+                - src/Rector/AbstractRector/NodeCollectorTrait.php # 18
+                - src/Rector/AbstractRector/NodeFactoryTrait.php # 33
+                - src/Rector/AbstractRector/NodeFactoryTrait.php # 33
+                - src/Rector/AbstractRector/PhpDocTrait.php # 24
+                - src/Rector/AbstractRector/PhpDocTrait.php # 29
+                - src/Rector/AbstractRector/PhpDocTrait.php # 34
+                - src/Rector/AbstractRector/PhpDocTrait.php # 24
+                - src/Rector/AbstractRector/PhpDocTrait.php # 29
+                - src/Rector/AbstractRector/PhpDocTrait.php # 34
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 38
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 43
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 48
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 53
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 58
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 63
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 68
+                - src/Testing/PHPUnit/AbstractNodeVisitorTestCase.php # 25
+                - src/Testing/PHPUnit/AbstractNodeVisitorTestCase.php # 30
+                - src/Testing/PHPUnit/AbstractRectorTestCase.php # 24
+                - utils/doctrine-annotation-parser-syncer/src/FileSyncer/AbstractClassSyncer.php # 19
+
+        - '#Method Rector\\Core\\PhpParser\\Builder\\NamespaceBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+        - '#Method Rector\\Core\\PhpParser\\Builder\\TraitUseBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\TraitUse but returns PhpParser\\Node#'
+        - '#Method Rector\\Core\\PhpParser\\Builder\\UseBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\Use_ but returns PhpParser\\Node#'
+
+        - '#Method Rector\\Utils\\PHPStanAttributeTypeSyncer\\NodeFactory\\AttributeAwareClassFactoryFactory\:\:createFromPhpDocParserNodeClass\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+        - '#Method Rector\\Utils\\PHPStanAttributeTypeSyncer\\NodeFactory\\AttributeAwareClassFactory\:\:createFromPhpDocParserNodeClass\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+        - '#Method Rector\\NetteKdyby\\NodeFactory\\EventValueObjectClassFactory\:\:wrapClassToNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
