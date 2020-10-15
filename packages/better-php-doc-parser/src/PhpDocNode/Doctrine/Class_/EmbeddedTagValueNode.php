@@ -29,7 +29,7 @@ final class EmbeddedTagValueNode extends AbstractDoctrineTagValueNode
         return $this->items['class'];
     }
 
-    public function fullyQualifiedClassName(): string
+    public function getFullyQualifiedClassName(): string
     {
         return $this->fullyQualifiedClassName;
     }
