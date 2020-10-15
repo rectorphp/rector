@@ -54,16 +54,12 @@ final class ControllerClassMethodManipulator
             return false;
         }
 
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return false;
         }
 
-        if (! $this->hasParentClassController($class)) {
-            return false;
-        }
-
-        return true;
+        return $this->hasParentClassController($classLike);
     }
 
     private function hasParentClassController(Class_ $class): bool
@@ -72,10 +68,6 @@ final class ControllerClassMethodManipulator
             return false;
         }
 
-        if (! $this->nodeNameResolver->isName($class->extends, '#(Controller|Presenter)$#')) {
-            return false;
-        }
-
-        return true;
+        return $this->nodeNameResolver->isName($class->extends, '#(Controller|Presenter)$#');
     }
 }

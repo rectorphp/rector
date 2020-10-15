@@ -124,14 +124,14 @@ CODE_SAMPLE
      */
     private function isEnumClass(ClassConst $classConst): bool
     {
-        $class = $classConst->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return false;
         }
-        if ($class->extends === null) {
+        if ($classLike->extends === null) {
             return false;
         }
 
-        return $this->isName($class->extends, '*Enum');
+        return $this->isName($classLike->extends, '*Enum');
     }
 }

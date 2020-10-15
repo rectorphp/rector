@@ -284,12 +284,12 @@ CODE_SAMPLE
             return true;
         }
 
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return false;
         }
 
-        if ($class->isFinal()) {
+        if ($classLike->isFinal()) {
             return false;
         }
 
