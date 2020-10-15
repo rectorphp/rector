@@ -12,7 +12,7 @@ Rector helps you with 2 areas - major code changes and in daily work.
 
 It's a tool that [we develop](https://getrector.org/) and share for free, so you anyone can automate their refactoring.
 
-Would you like to skip learning Rector, AST and nodes, educate your team about Rectors benefits and setup Rector in your CI that will speedup your development by 300 %, [hire us](https://getrector.org/contact)?
+[Hire us](https://getrector.org/contact) to skip learning Rector, AST and nodes, to educate your team about Rectors benefits and to setup Rector in your project - so you can enjoy the 300 % development speed :+1:
 
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
