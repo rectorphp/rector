@@ -106,7 +106,7 @@ CODE_SAMPLE
 
         // 3. create new event class with args
         $eventClassInNamespace = $eventAndListenerTree->getEventClassInNamespace();
-        $this->printNodesToFilePath($eventClassInNamespace, $eventAndListenerTree->getEventFileLocation());
+        $this->printNodesToFilePath([$eventClassInNamespace], $eventAndListenerTree->getEventFileLocation());
 
         // 4. ad dispatch method call
         $dispatchMethodCall = $eventAndListenerTree->getEventDispatcherDispatchMethodCall();

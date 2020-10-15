@@ -209,7 +209,7 @@ CODE_SAMPLE
 
         $filePath = dirname($fileInfo->getRealPath()) . DIRECTORY_SEPARATOR . 'SomeFormController.php';
 
-        $this->printToFile($namespace, $filePath);
+        $this->printToFile([$namespace], $filePath);
     }
 
     private function createBuildFormClassMethod(Variable $formBuilderVariable): ClassMethod

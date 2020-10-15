@@ -33,11 +33,11 @@ trait RemovedAndAddedFilesTrait
     }
 
     /**
-     * @param Node|Node[]|null $node
+     * @param Node[] $nodes
      */
-    protected function printNodesToFilePath($node, string $fileLocation): void
+    protected function printNodesToFilePath(array $nodes, string $fileLocation): void
     {
-        $fileContent = $this->betterStandardPrinter->prettyPrintFile($node);
+        $fileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
 
         $this->removedAndAddedFilesCollector->addFileWithContent($fileLocation, $fileContent);
     }

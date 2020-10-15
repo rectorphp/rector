@@ -161,7 +161,7 @@ CODE_SAMPLE
             $fileInfo
         );
 
-        $this->printNodesToFilePath($eventClassInNamespace, $eventFileLocation);
+        $this->printNodesToFilePath([$eventClassInNamespace], $eventFileLocation);
 
         return $node;
     }
