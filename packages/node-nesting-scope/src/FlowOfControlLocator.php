@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeNestingScope;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -18,6 +19,10 @@ final class FlowOfControlLocator
         $parentNode = $checkedNode;
         while ($parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE)) {
             if ($parentNode instanceof Expression) {
+                continue;
+            }
+
+            if ($parentNode instanceof BooleanOr) {
                 continue;
             }
 
