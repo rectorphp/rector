@@ -184,15 +184,7 @@ final class BetterStandardPrinter extends Standard
     public function prettyPrintFile(array $stmts): string
     {
         // to keep indexes from 0
-        if (is_array($stmts)) {
-            $stmts = array_values($stmts);
-        }
-
-        if ($stmts === null) {
-            $stmts = [];
-        } elseif (! is_array($stmts)) {
-            $stmts = [$stmts];
-        }
+        $stmts = array_values($stmts);
 
         return parent::prettyPrintFile($stmts) . PHP_EOL;
     }
