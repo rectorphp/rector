@@ -24,7 +24,7 @@ use Rector\Doctrine\AbstractRector\DoctrineTrait;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
+use Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer;
 use Rector\SOLID\Guard\VariableToConstantGuard;
 
 /**
@@ -64,10 +64,15 @@ final class PropertyManipulator
      */
     private $nodeRepository;
 
+//    /**
+//     * @var ReadWritePropertyAnalyzer
+//     */
+//    private $readWritePropertyAnalyzer;
+
     /**
-     * @var ReadWritePropertyAnalyzer
+     * @var ReadExprAnalyzer
      */
-    private $readWritePropertyAnalyzer;
+    private $readExprAnalyzer;
 
     public function __construct(
         AssignManipulator $assignManipulator,
@@ -76,7 +81,7 @@ final class PropertyManipulator
         NodeNameResolver $nodeNameResolver,
         VariableToConstantGuard $variableToConstantGuard,
         NodeRepository $nodeRepository,
-        ReadWritePropertyAnalyzer $readWritePropertyAnalyzer
+        ReadExprAnalyzer $readExprAnalyzer
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -84,7 +89,7 @@ final class PropertyManipulator
         $this->assignManipulator = $assignManipulator;
         $this->variableToConstantGuard = $variableToConstantGuard;
         $this->nodeRepository = $nodeRepository;
-        $this->readWritePropertyAnalyzer = $readWritePropertyAnalyzer;
+        $this->readExprAnalyzer = $readExprAnalyzer;
     }
 
     /**
@@ -143,7 +148,7 @@ final class PropertyManipulator
 
         $privatePropertyFetches = $this->getPrivatePropertyFetches($property);
         foreach ($privatePropertyFetches as $propertyFetch) {
-            if ($this->readWritePropertyAnalyzer->isRead($propertyFetch)) {
+            if ($this->readExprAnalyzer->isExprRead($propertyFetch)) {
                 return true;
             }
         }
@@ -157,7 +162,7 @@ final class PropertyManipulator
                 return false;
             }
 
-            if (! $this->readWritePropertyAnalyzer->isRead($node)) {
+            if (! $this->readExprAnalyzer->isExprRead($node)) {
                 return false;
             }
 

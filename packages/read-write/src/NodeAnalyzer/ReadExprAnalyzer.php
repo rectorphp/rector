@@ -6,6 +6,7 @@ namespace Rector\ReadWrite\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\ReadWrite\Contract\ReadExprAnalyzerAwareInterface;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 
 final class ReadExprAnalyzer
@@ -20,6 +21,12 @@ final class ReadExprAnalyzer
      */
     public function __construct(array $readNodeAnalyzers)
     {
+        foreach ($readNodeAnalyzers as $readNodeAnalyzer) {
+            if ($readNodeAnalyzer instanceof ReadExprAnalyzerAwareInterface) {
+                $readNodeAnalyzer->setReadExprAnalyzer($this);
+            }
+        }
+
         $this->readNodeAnalyzers = $readNodeAnalyzers;
     }
 
