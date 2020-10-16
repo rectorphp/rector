@@ -35,7 +35,7 @@ final class NodeUsageFinder
     {
         $variableName = $this->nodeNameResolver->getName($variable);
 
-        return $this->betterNodeFinder->find($nodes, function (Node $node) use ($variable, $variableName) {
+        return $this->betterNodeFinder->find($nodes, function (Node $node) use ($variable, $variableName): bool {
             if (! $node instanceof Variable) {
                 return false;
             }
