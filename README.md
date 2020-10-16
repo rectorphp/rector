@@ -224,6 +224,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/src/*/Tests/*',
         ],
     ]);
+
+    // Run Rector only on changed files
+    $parameters->set(Option::ENABLE_CACHE, true);
 };
 ```
 
