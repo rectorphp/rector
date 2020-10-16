@@ -5,19 +5,15 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\MethodCall;
 
 use Nette\Utils\FileSystem;
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Parser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use PHPStan\Node\Method\MethodCall as PHPStanMethodCall;
-use PhpParser\Parser;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\RemoveEmptyMethodCallRectorTest
@@ -79,11 +75,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $type = $node->var
-                     ->getAttribute(AttributeKey::SCOPE)
-                     ->getType($node->var);
+            ->getAttribute(AttributeKey::SCOPE)
+            ->getType($node->var);
 
         $fileClass = $type->getClassReflection()
-                          ->getFileName();
+            ->getFileName();
         $className = $type->getClassName();
 
         $contentNodes = $this->parser->parse(FileSystem::read($fileClass));
