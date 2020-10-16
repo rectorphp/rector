@@ -91,7 +91,7 @@ trait ComplexRemovalTrait
     {
         $shouldKeepProperty = false;
 
-        $propertyFetches = $this->propertyManipulator->getAllPropertyFetch($property);
+        $propertyFetches = $this->propertyManipulator->getPrivatePropertyFetches($property);
         foreach ($propertyFetches as $propertyFetch) {
             if ($this->shouldSkipPropertyForClassMethod($propertyFetch, $classMethodNamesToSkip)) {
                 $shouldKeepProperty = true;
