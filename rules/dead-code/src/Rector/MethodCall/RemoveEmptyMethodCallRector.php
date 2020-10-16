@@ -124,11 +124,11 @@ CODE_SAMPLE
         foreach ($classes as $class) {
             $shortClassName = $class->name;
             if ($reflectionClassName === $className) {
-                break;
+                return $class;
             }
         }
 
-        return $class;
+        return null;
     }
 
     private function isNonEmptyMethod(Class_ $class, MethodCall $methodCall): bool
