@@ -6,7 +6,7 @@ namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -86,8 +86,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $node->var instanceof Variable) {
-            return null;
+        if ($node->var instanceof PropertyFetch) {
+            $type = $scope->getType($node->var->var)->getStaticObjectType();
         }
 
         /** @var ClassReflection|null $classReflection */
