@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Rector\MethodCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -118,13 +117,10 @@ CODE_SAMPLE
             return null;
         }
 
+        $reflectionClassName = $classReflection->getName();
         foreach ($classes as $class) {
             $shortClassName = $class->name;
-            if (
-                Strings::endsWith($className, '\\' . $shortClassName)
-                    ||
-                $className === (string) $shortClassName
-            ) {
+            if ($reflectionClassName === $className) {
                 break;
             }
         }
