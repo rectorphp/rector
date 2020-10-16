@@ -107,11 +107,11 @@ CODE_SAMPLE
 
     private function getClass(ClassReflection $classReflection, string $className): ?Class_
     {
-        /** @var string $fileClass */
-        $fileClass = $classReflection->getFileName();
+        /** @var string $fileName */
+        $fileName = $classReflection->getFileName();
 
         /** @var Node[] $contentNodes */
-        $contentNodes = $this->parser->parse($this->smartFileSystem->readFile($fileClass));
+        $contentNodes = $this->parser->parse($this->smartFileSystem->readFile($fileName));
         $classes = $this->betterNodeFinder->findInstanceOf($contentNodes, Class_::class);
 
         if ($classes === []) {
@@ -121,7 +121,7 @@ CODE_SAMPLE
         foreach ($classes as $class) {
             $shortClassName = $class->name;
             if (
-                Strings::endsWith($className, '\\' . (string) $shortClassName)
+                Strings::endsWith($className, '\\' . $shortClassName)
                     ||
                 $className === (string) $shortClassName
             ) {
