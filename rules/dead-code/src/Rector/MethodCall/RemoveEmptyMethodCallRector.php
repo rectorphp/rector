@@ -90,9 +90,25 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var Class_|null $class */
+        $class = $this->getClass($classReflection, $type->getClassName());
+
+        if ($class === null) {
+            return null;
+        }
+
+        if ($this->isNonEmptyMethod($class, $node)) {
+            return null;
+        }
+
+        $this->removeNode($node);
+        return $node;
+    }
+
+    private function getClass(ClassReflection $classReflection, string $className): ?Class_
+    {
         /** @var string $fileClass */
         $fileClass = $classReflection->getFileName();
-        $className = $type->getClassName();
 
         /** @var Node[] $contentNodes */
         $contentNodes = $this->parser->parse($this->smartFileSystem->readFile($fileClass));
@@ -104,28 +120,27 @@ CODE_SAMPLE
 
         foreach ($classes as $class) {
             $shortClassName = $class->name;
-            if (Strings::endsWith(
-                $className,
-                '\\' . (string) $shortClassName
-            ) || $className === (string) $shortClassName) {
+            if (
+                Strings::endsWith($className, '\\' . (string) $shortClassName)
+                    ||
+                $className === (string) $shortClassName
+            ) {
                 break;
             }
         }
 
+        return $class;
+    }
+
+    private function isNonEmptyMethod(Class_ $class, MethodCall $methodCall): bool
+    {
         /** @var Identifier $methodIdentifier */
-        $methodIdentifier = $node->name;
+        $methodIdentifier = $methodCall->name;
         /** @var ClassMethod $classMethod */
         $classMethod = $class->getMethod((string) $methodIdentifier);
 
-        $isNonEmpty = $this->betterNodeFinder->find($classMethod->stmts, function ($node): bool {
+        return (bool) $this->betterNodeFinder->find($classMethod->stmts, function ($node): bool {
             return ! $node instanceof Nop;
         });
-
-        if ($isNonEmpty !== []) {
-            return null;
-        }
-
-        $this->removeNode($node);
-        return $node;
     }
 }
