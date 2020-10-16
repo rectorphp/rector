@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Rector\MethodCall;
 
-use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Parser;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -74,18 +79,44 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $type = $node->var
-            ->getAttribute(AttributeKey::SCOPE)
-            ->getType($node->var);
+        /** @var Scope $scope */
+        $scope = $node->var->getAttribute(AttributeKey::SCOPE);
+        /** @var ObjectType $type */
+        $type = $scope->getType($node->var);
+        /** @var ClassReflection|null $classReflection */
+        $classReflection = $type->getClassReflection();
 
-        $fileClass = $type->getClassReflection()
-            ->getFileName();
+        if ($classReflection === null) {
+            return null;
+        }
+
+        /** @var string $fileClass */
+        $fileClass = $classReflection->getFileName();
         $className = $type->getClassName();
 
-        $contentNodes = $this->parser->parse(FileSystem::read($fileClass));
-        $class = $this->betterNodeFinder->findFirstInstanceOf($contentNodes, Class_::class);
+        /** @var Node[] $contentNodes */
+        $contentNodes = $this->parser->parse($this->smartFileSystem->readFile($fileClass));
+        $classes = $this->betterNodeFinder->findInstanceOf($contentNodes, Class_::class);
 
-        $classMethod = $class->getMethod((string) $node->name);
+        if ($classes === []) {
+            return null;
+        }
+
+        foreach ($classes as $class) {
+            $shortClassName = $class->name;
+            if (Strings::endsWith(
+                $className,
+                '\\' . (string) $shortClassName
+            ) || $className === (string) $shortClassName) {
+                break;
+            }
+        }
+
+        /** @var Identifier $methodIdentifier */
+        $methodIdentifier = $node->name;
+        /** @var ClassMethod $classMethod */
+        $classMethod = $class->getMethod((string) $methodIdentifier);
+
         $isNonEmpty = $this->betterNodeFinder->find($classMethod->stmts, function ($node): bool {
             return ! $node instanceof Nop;
         });
