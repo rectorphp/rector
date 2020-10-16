@@ -80,7 +80,7 @@ CODE_SAMPLE
     {
         /** @var Scope $scope */
         $scope = $node->var->getAttribute(AttributeKey::SCOPE);
-        /** @var ObjectType|ThisType $type */
+        /** @var ObjectType $type */
         $type = $scope->getType($node->var);
         if (! $type instanceof ObjectType) {
             return null;
