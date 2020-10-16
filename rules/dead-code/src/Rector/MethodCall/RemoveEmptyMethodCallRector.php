@@ -59,7 +59,6 @@ class SomeClass
 }
 
 $some = new SomeClass();
-$some->callThis();
 CODE_SAMPLE
             ),
         ]);
