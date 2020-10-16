@@ -90,6 +90,7 @@
             "Rector\\DowngradePhp71\\": "rules/downgrade-php71/src",
             "Rector\\DowngradePhp72\\": "rules/downgrade-php72/src",
             "Rector\\DowngradePhp73\\": "rules/downgrade-php73/src",
+            "Rector\\ReadWrite\\": "packages/read-write/src",
             "Rector\\DowngradePhp74\\": "rules/downgrade-php74/src",
             "Rector\\DowngradePhp80\\": "rules/downgrade-php80/src",
             "Rector\\DynamicTypeAnalysis\\": "packages/dynamic-type-analysis/src",

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\NodeAnalyzer;
+namespace Rector\ReadWrite\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -19,6 +19,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\Guard\VariableToConstantGuard;
 use Webmozart\Assert\Assert;
 
+/**
+ * @todo possibly a collector by node type?
+ */
 final class ReadWritePropertyAnalyzer
 {
     /**

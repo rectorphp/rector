@@ -33,6 +33,7 @@ use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
@@ -293,6 +294,28 @@ final class NodeRepository
 
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
+
+        return $this->parsedPropertyFetchNodeCollector->findPropertyFetchesByTypeAndName($className, $propertyName);
+    }
+
+    /**
+     * @return PropertyFetch[]
+     */
+    public function findPropertyFetchesByPropertyFetch(PropertyFetch $propertyFetch): array
+    {
+        $propertyFetcheeType = $this->nodeTypeResolver->getStaticType($propertyFetch->var);
+        if (! $propertyFetcheeType instanceof TypeWithClassName) {
+            return [];
+        }
+
+        if ($propertyFetcheeType instanceof ShortenedObjectType) {
+            $className = $propertyFetcheeType->getFullyQualifiedName();
+        } else {
+            $className = $propertyFetcheeType->getClassName();
+        }
+
+        /** @var string $propertyName */
+        $propertyName = $this->nodeNameResolver->getName($propertyFetch);
 
         return $this->parsedPropertyFetchNodeCollector->findPropertyFetchesByTypeAndName($className, $propertyName);
     }

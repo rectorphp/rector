@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\NodeAnalyzer;
+namespace Rector\ReadWrite\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -36,19 +37,11 @@ final class ReadExprAnalyzer
     public function isExprRead(Expr $expr): bool
     {
         if ($expr instanceof Variable) {
-            $parentScope = $this->parentScopeFinder->find($expr);
-            if ($parentScope === null) {
-                return false;
-            }
+            return $this->isVariableRead($expr);
+        }
 
-            $variableUsages = $this->nodeUsageFinder->findVariableUsages((array) $parentScope->stmts, $expr);
-            foreach ($variableUsages as $variableUsage) {
-                if ($this->isCurrentContextRead($variableUsage)) {
-                    return true;
-                }
-            }
-
-            return false;
+        if ($expr instanceof PropertyFetch) {
+            return $this->isPropertyFetchRead($expr);
         }
 
         throw new NotImplementedYetException(get_class($expr));
@@ -62,5 +55,34 @@ final class ReadExprAnalyzer
         }
 
         throw new NotImplementedYetException();
+    }
+
+    private function isVariableRead(Variable $variable): bool
+    {
+        $parentScope = $this->parentScopeFinder->find($variable);
+        if ($parentScope === null) {
+            return false;
+        }
+
+        $variableUsages = $this->nodeUsageFinder->findVariableUsages((array) $parentScope->stmts, $variable);
+        foreach ($variableUsages as $variableUsage) {
+            if ($this->isCurrentContextRead($variableUsage)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isPropertyFetchRead(PropertyFetch $propertyFetch): bool
+    {
+        $propertyFetchUsages = $this->nodeUsageFinder->findPropertyFetchUsages($propertyFetch);
+        foreach ($propertyFetchUsages as $propertyFetchUsage) {
+            if ($this->isCurrentContextRead($propertyFetchUsage)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
