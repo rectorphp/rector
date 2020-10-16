@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Rector\MethodCall;
 
+use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -85,7 +86,7 @@ CODE_SAMPLE
                           ->getFileName();
         $className = $type->getClassName();
 
-        $contentNodes = $this->parser->parse(file_get_contents($fileClass));
+        $contentNodes = $this->parser->parse(FileSystem::read($fileClass));
         $class = $this->betterNodeFinder->findFirstInstanceOf($contentNodes, Class_::class);
 
         $classMethod = $class->getMethod((string) $node->name);
@@ -93,7 +94,7 @@ CODE_SAMPLE
             return ! $node instanceof Nop;
         });
 
-        if ($isNonEmpty) {
+        if ($isNonEmpty !== []) {
             return null;
         }
 
