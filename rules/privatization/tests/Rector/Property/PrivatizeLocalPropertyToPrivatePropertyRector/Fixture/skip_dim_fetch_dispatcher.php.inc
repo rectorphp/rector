@@ -11,7 +11,7 @@ final class SkipDimFetchDispatcher
      */
     private $dispatched = [];
 
-    public function dispatch(EventInterface $event): void
+    public function dispatch(EventInterface $event)
     {
         $this->dispatched[] = $event;
 

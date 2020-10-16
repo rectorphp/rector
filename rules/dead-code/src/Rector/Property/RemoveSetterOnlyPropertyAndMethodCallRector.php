@@ -102,7 +102,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $propertyFetches = $this->propertyManipulator->getAllPropertyFetch($node);
+        $propertyFetches = $this->propertyManipulator->getPrivatePropertyFetches($node);
         $classMethodsToCheck = $this->collectClassMethodsToCheck($propertyFetches);
 
         $vendorLockedClassMethodNames = $this->getVendorLockedClassMethodNames($classMethodsToCheck);

@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
+use Rector\Core\NodeAnalyzer\ReadWritePropertyAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
@@ -63,13 +64,19 @@ final class PropertyManipulator
      */
     private $nodeRepository;
 
+    /**
+     * @var ReadWritePropertyAnalyzer
+     */
+    private $readWritePropertyAnalyzer;
+
     public function __construct(
         AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         VariableToConstantGuard $variableToConstantGuard,
-        NodeRepository $nodeRepository
+        NodeRepository $nodeRepository,
+        ReadWritePropertyAnalyzer $readWritePropertyAnalyzer
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -77,12 +84,13 @@ final class PropertyManipulator
         $this->assignManipulator = $assignManipulator;
         $this->variableToConstantGuard = $variableToConstantGuard;
         $this->nodeRepository = $nodeRepository;
+        $this->readWritePropertyAnalyzer = $readWritePropertyAnalyzer;
     }
 
     /**
-     * @return PropertyFetch[]
+     * @return PropertyFetch[]|StaticPropertyFetch[]
      */
-    public function getAllPropertyFetch(Property $property): array
+    public function getPrivatePropertyFetches(Property $property): array
     {
         /** @var Class_|null $classLike */
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
@@ -95,7 +103,7 @@ final class PropertyManipulator
 
         $singleProperty = $property->props[0];
 
-        /** @var PropertyFetch[] $propertyFetches */
+        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
         $propertyFetches = $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use (
             $singleProperty,
             $nodesToSearch
@@ -133,8 +141,9 @@ final class PropertyManipulator
             return true;
         }
 
-        foreach ($this->getAllPropertyFetch($property) as $propertyFetch) {
-            if ($this->isReadContext($propertyFetch)) {
+        $privatePropertyFetches = $this->getPrivatePropertyFetches($property);
+        foreach ($privatePropertyFetches as $propertyFetch) {
+            if ($this->readWritePropertyAnalyzer->isRead($propertyFetch)) {
                 return true;
             }
         }
@@ -148,7 +157,7 @@ final class PropertyManipulator
                 return false;
             }
 
-            if (! $this->isReadContext($node)) {
+            if (! $this->readWritePropertyAnalyzer->isRead($node)) {
                 return false;
             }
 
@@ -158,33 +167,13 @@ final class PropertyManipulator
 
     public function isPropertyChangeable(Property $property): bool
     {
-        foreach ($this->getAllPropertyFetch($property) as $propertyFetch) {
+        foreach ($this->getPrivatePropertyFetches($property) as $propertyFetch) {
             if ($this->isChangeableContext($propertyFetch)) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    /**
-     * @param PropertyFetch|StaticPropertyFetch $node
-     */
-    private function isReadContext(Node $node): bool
-    {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof PreInc || $parent instanceof PreDec || $parent instanceof PostInc || $parent instanceof PostDec) {
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        if ($parent instanceof Arg) {
-            $readArg = $this->variableToConstantGuard->isReadArg($parent);
-            if ($readArg) {
-                return true;
-            }
-        }
-
-        return ! $this->assignManipulator->isNodeLeftPartOfAssign($node);
     }
 
     /**
