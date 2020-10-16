@@ -125,6 +125,7 @@ final class Configuration
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
 
+        /** @var string $outputFileOption */
         $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
         $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
 
