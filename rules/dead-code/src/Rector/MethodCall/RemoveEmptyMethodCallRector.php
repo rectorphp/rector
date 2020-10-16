@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -79,9 +80,13 @@ CODE_SAMPLE
     {
         /** @var Scope $scope */
         $scope = $node->var->getAttribute(AttributeKey::SCOPE);
-        /** @var ObjectType $type */
+        /** @var ObjectType|ThisType $type */
         $type = $scope->getType($node->var);
         if (! $type instanceof ObjectType) {
+            return null;
+        }
+
+        if ($node->var instanceof PropertyFetch) {
             return null;
         }
 
