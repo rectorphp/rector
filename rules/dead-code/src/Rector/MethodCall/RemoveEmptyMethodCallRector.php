@@ -46,7 +46,7 @@ class SomeClass
     }
 }
 
-$some = new Some();
+$some = new SomeClass();
 $some->callThis();
 CODE_SAMPLE
                 ,
@@ -58,7 +58,7 @@ class SomeClass
     }
 }
 
-$some = new Some();
+$some = new SomeClass();
 $some->callThis();
 CODE_SAMPLE
             ),
