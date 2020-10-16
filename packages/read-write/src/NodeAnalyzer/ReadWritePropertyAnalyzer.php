@@ -19,9 +19,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\Guard\VariableToConstantGuard;
 use Webmozart\Assert\Assert;
 
-/**
- * @todo possibly a collector by node type?
- */
 final class ReadWritePropertyAnalyzer
 {
     /**
