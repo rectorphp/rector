@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\NodeAnalyzer;
+namespace Rector\ReadWrite\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
