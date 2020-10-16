@@ -135,8 +135,11 @@ CODE_SAMPLE
     {
         /** @var Identifier $methodIdentifier */
         $methodIdentifier = $methodCall->name;
-        /** @var ClassMethod $classMethod */
+        /** @var ClassMethod|null $classMethod */
         $classMethod = $class->getMethod((string) $methodIdentifier);
+        if ($classMethod === null) {
+            return false;
+        }
 
         return (bool) $this->betterNodeFinder->find($classMethod->stmts, function ($node): bool {
             return ! $node instanceof Nop;
