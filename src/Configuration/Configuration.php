@@ -127,7 +127,7 @@ final class Configuration
 
         /** @var string $outputFileOption */
         $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
-        $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
+        $this->outputFile = $outputFileOption !== '' ? (string) $outputFileOption : null;
 
         $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
 
