@@ -80,8 +80,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Scope $scope */
+        /** @var Scope|null $scope */
         $scope = $node->var->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            return null;
+        }
+
         /** @var ObjectType $type */
         $type = $scope->getType($node->var);
 
