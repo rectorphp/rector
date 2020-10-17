@@ -31,6 +31,7 @@ use Rector\DeadCode\Rector\FunctionLike\RemoveOverriddenValuesRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector;
 use Rector\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector;
+use Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector;
 use Rector\DeadCode\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector;
@@ -120,4 +121,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveAssignOfVoidReturnFunctionRector::class);
 
     $services->set(RemoveDeadRecursiveClassMethodRector::class);
+
+    $services->set(RemoveEmptyMethodCallRector::class);
 };
