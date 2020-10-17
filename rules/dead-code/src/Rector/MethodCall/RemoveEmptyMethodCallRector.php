@@ -86,9 +86,11 @@ CODE_SAMPLE
         $type = $scope->getType($node->var);
 
         if ($node->var instanceof PropertyFetch) {
-            /** @var ThisType $thisType */
-            $thisType = $scope->getType($node->var->var);
-            $type = $thisType->getStaticObjectType();
+            /** @var ObjectType|ThisType $type */
+            $type = $scope->getType($node->var->var);
+            if ($type instanceof ThisType) {
+                $type = $type->getStaticObjectType();
+            }
         }
 
         if (! $type instanceof ObjectType) {
