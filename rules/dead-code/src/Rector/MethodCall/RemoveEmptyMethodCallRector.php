@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Rector\MethodCall;
 
+use LogicException;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -123,6 +124,8 @@ CODE_SAMPLE
         try {
             $this->removeNode($node);
         } catch (ShouldNotHappenException $shouldNotHappenException) {
+            return null;
+        } catch (LogicException $logicException) {
             return null;
         }
 
