@@ -122,7 +122,7 @@ CODE_SAMPLE
 
         try {
             $this->removeNode($node);
-        } catch (ShouldNotHappenException $e) {
+        } catch (ShouldNotHappenException $shouldNotHappenException) {
             return null;
         }
 
