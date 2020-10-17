@@ -155,15 +155,16 @@ CODE_SAMPLE
 
     private function isNonEmptyMethod(Class_ $class, MethodCall $methodCall): bool
     {
+        $shortClassName = $class->name;
+        if (class_exists('\\' . $shortClassName)) {
+            return true;
+        }
+
         /** @var Identifier $methodIdentifier */
         $methodIdentifier = $methodCall->name;
         /** @var ClassMethod|null $classMethod */
         $classMethod = $class->getMethod((string) $methodIdentifier);
         if ($classMethod === null) {
-            return true;
-        }
-
-        if ($classMethod->returnType === null) {
             return true;
         }
 
