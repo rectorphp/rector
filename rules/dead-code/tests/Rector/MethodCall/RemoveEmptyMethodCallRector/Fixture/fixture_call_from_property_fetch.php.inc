@@ -4,15 +4,18 @@ namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fi
 
 use Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Source\EmptyMethod;
 
-class A
+class ParentClass
 {
-    private $obj;
+    public $obj;
 
     public function __construct(EmptyMethod $obj)
     {
         $this->obj = $obj;
     }
+}
 
+class A extends ParentClass
+{
     public function execute()
     {
         $this->obj->run();
@@ -27,15 +30,18 @@ namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fi
 
 use Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Source\EmptyMethod;
 
-class A
+class ParentClass
 {
-    private $obj;
+    public $obj;
 
     public function __construct(EmptyMethod $obj)
     {
         $this->obj = $obj;
     }
+}
 
+class A extends ParentClass
+{
     public function execute()
     {
     }
