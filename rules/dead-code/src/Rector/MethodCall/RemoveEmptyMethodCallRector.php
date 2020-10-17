@@ -82,12 +82,13 @@ CODE_SAMPLE
         $scope = $node->var->getAttribute(AttributeKey::SCOPE);
         /** @var ObjectType $type */
         $type = $scope->getType($node->var);
-        if (! $type instanceof ObjectType) {
-            return null;
-        }
 
         if ($node->var instanceof PropertyFetch) {
             $type = $scope->getType($node->var->var)->getStaticObjectType();
+        }
+
+        if (! $type instanceof ObjectType) {
+            return null;
         }
 
         /** @var ClassReflection|null $classReflection */
