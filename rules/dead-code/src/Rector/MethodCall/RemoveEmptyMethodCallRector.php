@@ -136,6 +136,10 @@ CODE_SAMPLE
 
     private function getClass(ClassReflection $classReflection, string $className): ?Class_
     {
+        if ($classReflection->isBuiltin()) {
+            return null;
+        }
+
         /** @var string $fileName */
         $fileName = $classReflection->getFileName();
 
@@ -160,11 +164,6 @@ CODE_SAMPLE
 
     private function isNonEmptyMethod(Class_ $class, MethodCall $methodCall): bool
     {
-        $shortClassName = $class->name;
-        if (class_exists('\\' . $shortClassName)) {
-            return true;
-        }
-
         /** @var Identifier $methodIdentifier */
         $methodIdentifier = $methodCall->name;
         /** @var ClassMethod|null $classMethod */
