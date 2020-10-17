@@ -95,7 +95,7 @@ CODE_SAMPLE
         }
 
         if ($type instanceof ThisType) {
-            $type = $type->getStaticObjectType();
+            return null;
         }
 
         if (! $type instanceof ObjectType) {
