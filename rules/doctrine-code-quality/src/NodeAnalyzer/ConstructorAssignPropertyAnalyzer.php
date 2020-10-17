@@ -6,8 +6,6 @@ namespace Rector\DoctrineCodeQuality\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -57,28 +55,11 @@ final class ConstructorAssignPropertyAnalyzer
                 return null;
             }
 
-            if (! $this->isLocalPropertyNamed($node->var, $propertyName)) {
+            if (! $this->nodeNameResolver->isLocalPropertyFetchNamed($node->var, $propertyName)) {
                 return null;
             }
 
             return $node;
         });
-    }
-
-    private function isLocalPropertyNamed(Node $node, string $propertyName): bool
-    {
-        if (! $node instanceof PropertyFetch) {
-            return false;
-        }
-
-        if (! $node->var instanceof Variable) {
-            return false;
-        }
-
-        if (! $this->nodeNameResolver->isName($node->var, 'this')) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($node->name, $propertyName);
     }
 }

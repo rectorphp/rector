@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\FamilyTree\NodeAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -75,7 +74,7 @@ final class PropertyUsageAnalyzer
             $isPropertyFetched = (bool) $this->betterNodeFinder->findFirst(
                 (array) $childClass->stmts,
                 function (Node $node) use ($propertyName): bool {
-                    return $this->isLocalPropertyFetchNamed($node, $propertyName);
+                    return $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyName);
                 }
             );
 
@@ -85,18 +84,5 @@ final class PropertyUsageAnalyzer
         }
 
         return false;
-    }
-
-    private function isLocalPropertyFetchNamed(Node $node, string $name): bool
-    {
-        if (! $node instanceof PropertyFetch) {
-            return false;
-        }
-
-        if (! $this->nodeNameResolver->isName($node->var, 'this')) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($node->name, $name);
     }
 }

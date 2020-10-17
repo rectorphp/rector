@@ -900,6 +900,7 @@ parameters:
             paths:
                 - tests/debug_functions.php
 
+<<<<<<< HEAD
         -
             message: '#Property with protected modifier is not allowed\. Use interface instead#'
             paths:

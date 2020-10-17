@@ -21,7 +21,6 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
-use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
@@ -29,7 +28,6 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 /**
  * Located in another trait ↓
  * @property NodesToRemoveCollector $nodesToRemoveCollector
- * @property FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder
  */
 trait ComplexRemovalTrait
 {
