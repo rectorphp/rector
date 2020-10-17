@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Rector\MethodCall;
 
-use LogicException;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -110,8 +109,13 @@ CODE_SAMPLE
             return null;
         }
 
+        $className = $type->getClassName();
+        if (is_a($className, Node::class, true)) {
+            return null;
+        }
+
         /** @var Class_|null $class */
-        $class = $this->getClass($classReflection, $type->getClassName());
+        $class = $this->getClass($classReflection, $className);
 
         if ($class === null) {
             return null;
@@ -124,8 +128,6 @@ CODE_SAMPLE
         try {
             $this->removeNode($node);
         } catch (ShouldNotHappenException $shouldNotHappenException) {
-            return null;
-        } catch (LogicException $logicException) {
             return null;
         }
 
