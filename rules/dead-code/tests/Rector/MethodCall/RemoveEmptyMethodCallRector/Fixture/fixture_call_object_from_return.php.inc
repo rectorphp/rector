@@ -6,7 +6,7 @@ use Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Source\E
 
 class B
 {
-    private function getObj()
+    private function getObj(): EmptyMethod
     {
         $obj = new EmptyMethod();
         return $obj;
@@ -29,7 +29,7 @@ use Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Source\E
 
 class B
 {
-    private function getObj()
+    private function getObj(): EmptyMethod
     {
         $obj = new EmptyMethod();
         return $obj;
