@@ -10,12 +10,12 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Parser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -86,7 +86,9 @@ CODE_SAMPLE
         $type = $scope->getType($node->var);
 
         if ($node->var instanceof PropertyFetch) {
-            $type = $scope->getType($node->var->var)->getStaticObjectType();
+            /** @var ThisType $thisType */
+            $thisType = $scope->getType($node->var->var);
+            $type = $thisType->getStaticObjectType();
         }
 
         if (! $type instanceof ObjectType) {
