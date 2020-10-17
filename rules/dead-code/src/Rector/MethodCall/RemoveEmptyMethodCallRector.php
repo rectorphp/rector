@@ -114,10 +114,6 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($classReflection->isBuiltin()) {
-            return null;
-        }
-
         /** @var Class_|null $class */
         $class = $this->getClass($classReflection, $className);
 
@@ -140,6 +136,10 @@ CODE_SAMPLE
 
     private function getClass(ClassReflection $classReflection, string $className): ?Class_
     {
+        if ($classReflection->isBuiltin()) {
+            return null;
+        }
+
         /** @var string $fileName */
         $fileName = $classReflection->getFileName();
 
