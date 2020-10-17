@@ -8,9 +8,9 @@ class A
 {
     private $obj;
 
-    public function __construct()
+    public function __construct(EmptyMethod $obj)
     {
-        $this->obj = new EmptyMethod();
+        $this->obj = $obj;
     }
 
     public function execute()
@@ -31,9 +31,9 @@ class A
 {
     private $obj;
 
-    public function __construct()
+    public function __construct(EmptyMethod $obj)
     {
-        $this->obj = new EmptyMethod();
+        $this->obj = $obj;
     }
 
     public function execute()
