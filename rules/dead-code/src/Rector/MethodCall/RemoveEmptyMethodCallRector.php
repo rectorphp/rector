@@ -160,7 +160,7 @@ CODE_SAMPLE
         /** @var ClassMethod|null $classMethod */
         $classMethod = $class->getMethod((string) $methodIdentifier);
         if ($classMethod === null) {
-            return false;
+            return true;
         }
 
         return (bool) $this->betterNodeFinder->find($classMethod->stmts, function ($node): bool {
