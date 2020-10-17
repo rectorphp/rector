@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
+use Rector\Caching\Application\CachedFileInfoFilterAndReporter;
 use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Caching\UnchangedFilesFilter;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\RectorApplication;
@@ -27,7 +27,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ProcessCommand extends AbstractCommand
 {
@@ -82,11 +81,6 @@ final class ProcessCommand extends AbstractCommand
     private $nonPhpFileProcessor;
 
     /**
-     * @var UnchangedFilesFilter
-     */
-    private $unchangedFilesFilter;
-
-    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -95,6 +89,11 @@ final class ProcessCommand extends AbstractCommand
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+
+    /**
+     * @var CachedFileInfoFilterAndReporter
+     */
+    private $cachedFileInfoFilterAndReporter;
 
     public function __construct(
         AdditionalAutoloader $additionalAutoloader,
@@ -110,7 +109,7 @@ final class ProcessCommand extends AbstractCommand
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
         SymfonyStyle $symfonyStyle,
-        UnchangedFilesFilter $unchangedFilesFilter
+        CachedFileInfoFilterAndReporter $cachedFileInfoFilterAndReporter
     ) {
         $this->filesFinder = $phpFilesFinder;
         $this->additionalAutoloader = $additionalAutoloader;
@@ -122,12 +121,13 @@ final class ProcessCommand extends AbstractCommand
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->stubLoader = $stubLoader;
         $this->nonPhpFileProcessor = $nonPhpFileProcessor;
-        $this->unchangedFilesFilter = $unchangedFilesFilter;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
         $this->eventDispatcher = $eventDispatcher;
 
         parent::__construct();
+
+        $this->cachedFileInfoFilterAndReporter = $cachedFileInfoFilterAndReporter;
     }
 
     protected function configure(): void
@@ -218,7 +218,7 @@ final class ProcessCommand extends AbstractCommand
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $paths);
 
-        $phpFileInfos = $this->processWithCache($phpFileInfos);
+        $phpFileInfos = $this->cachedFileInfoFilterAndReporter->filterFileInfos($phpFileInfos);
 
         if ($this->configuration->isCacheDebug()) {
             $message = sprintf('[cache] %d files after cache filter', count($phpFileInfos));
@@ -257,29 +257,6 @@ final class ProcessCommand extends AbstractCommand
         }
 
         return ShellCode::SUCCESS;
-    }
-
-    /**
-     * @param SmartFileInfo[] $phpFileInfos
-     * @return SmartFileInfo[]
-     */
-    private function processWithCache(array $phpFileInfos): array
-    {
-        if (! $this->configuration->isCacheEnabled()) {
-            return $phpFileInfos;
-        }
-
-        // cache stuff
-        if ($this->configuration->shouldClearCache()) {
-            $this->changedFilesDetector->clear();
-        }
-
-        if ($this->configuration->isCacheDebug()) {
-            $message = sprintf('[cache] %d files before cache filter', count($phpFileInfos));
-            $this->symfonyStyle->note($message);
-        }
-
-        return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($phpFileInfos);
     }
 
     private function reportZeroCacheRectorsCondition(): void
