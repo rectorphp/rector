@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Parser;
 use PHPStan\Analyser\Scope;
@@ -106,6 +107,11 @@ CODE_SAMPLE
         }
 
         if ($this->isNonEmptyMethod($class, $node)) {
+            return null;
+        }
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof If_) {
             return null;
         }
 
