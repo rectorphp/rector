@@ -163,6 +163,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($classMethod->returnType === null) {
+            return true;
+        }
+
         return (bool) $this->betterNodeFinder->find($classMethod->stmts, function ($node): bool {
             return ! $node instanceof Nop;
         });
