@@ -16,6 +16,7 @@ use PhpParser\Parser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -110,12 +111,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof If_) {
+        try {
+            $this->removeNode($node);
+        } catch (ShouldNotHappenException $e) {
             return null;
         }
 
-        $this->removeNode($node);
         return $node;
     }
 
