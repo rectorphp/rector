@@ -19,7 +19,7 @@ jobs:
             script:
                 - composer update --ansi
                 # travis_retry to prevent fails
-                - travis_retry vendor/bin/monorepo-builder split --ansi
+                - travis_retry vendor/bin/monorepo-builder split --max-processes 6 --ansi
 
         # inspired by https://github.com/phpstan/phpstan-src/blob/088b9fab470632cea07f08a936fb0923a59b2ecb/.travis.yml#L47-L59
         # "Deploy to https://github.com/rectorphp/rector-prefixed"
