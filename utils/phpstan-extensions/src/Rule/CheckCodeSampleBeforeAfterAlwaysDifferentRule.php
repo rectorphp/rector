@@ -6,6 +6,7 @@ namespace Rector\PHPStanExtensions\Rule;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
@@ -33,7 +34,7 @@ final class CheckCodeSampleBeforeAfterAlwaysDifferentRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $class = $node->class;
-        if ($class === null) {
+        if (! $class instanceof FullyQualified) {
             return [];
         }
 
