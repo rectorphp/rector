@@ -68,17 +68,14 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param FuncCall $node
-     */
-    private function shouldRefactor(Node $node): bool
+    private function shouldRefactor(FuncCall $funcCall): bool
     {
-        if (! $this->isFuncCallName($node, 'array_merge') && ! $this->isFuncCallName($node, 'array_merge_recursive')) {
+        if (! $this->isNames($funcCall, ['array_merge', 'array_merge_recursive'])) {
             return false;
         }
 
         // If param is provided, do nothing
-        if ($node->args !== []) {
+        if ($funcCall->args !== []) {
             return false;
         }
 
