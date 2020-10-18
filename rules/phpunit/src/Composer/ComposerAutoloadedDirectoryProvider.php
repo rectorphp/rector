@@ -33,7 +33,7 @@ final class ComposerAutoloadedDirectoryProvider
     }
 
     /**
-     * @return string[]
+     * @return string[]|mixed[]
      */
     public function provide(): array
     {

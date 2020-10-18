@@ -46,11 +46,11 @@ final class CollectionTypeResolver
             return null;
         }
 
-        $class = $oneToManyTagValueNode->getFullyQualifiedTargetEntity();
-        if ($class === null) {
+        $fullyQualifiedTargetEntity = $oneToManyTagValueNode->getFullyQualifiedTargetEntity();
+        if ($fullyQualifiedTargetEntity === null) {
             throw new ShouldNotHappenException();
         }
 
-        return new AttributeAwareIdentifierTypeNode($class);
+        return new AttributeAwareIdentifierTypeNode($fullyQualifiedTargetEntity);
     }
 }
