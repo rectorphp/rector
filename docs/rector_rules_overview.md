@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# All 593 Rectors Overview
-=======
-# All 594 Rectors Overview
->>>>>>> dd872ac07... update docs
+# All 595 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -5139,8 +5135,7 @@ Add missing param to `array_merge` and `array_merge_recursive`
 ```diff
  class SomeClass
  {
--    public function run()
-+    public function run()
+     public function run()
      {
 -        array_merge();
 -        array_merge_recursive();

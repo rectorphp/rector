@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PHPUnit\Composer;
 
+use Nette\Utils\Arrays;
 use Nette\Utils\Json;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -52,7 +53,7 @@ final class ComposerAutoloadedDirectoryProvider
             $autoloadDirectories = array_merge($autoloadDirectories, $sectionDirectories);
         }
 
-        return $autoloadDirectories;
+        return Arrays::flatten($autoloadDirectories);
     }
 
     /**
