@@ -34,12 +34,12 @@ final class NodeClassFinder
     private function findClassesByNamePatternInDirectories(string $namePattern, array $directories): array
     {
         $robotLoader = new RobotLoader();
-        foreach ($directories as $directory) {
-            $robotLoader->addDirectory($directory);
-        }
+        $robotLoader->addDirectory(...$directories);
 
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_phpdoc_parser_ast');
+
         $robotLoader->acceptFiles = [$namePattern];
+
         $robotLoader->rebuild();
 
         $indexedClasses = $robotLoader->getIndexedClasses();

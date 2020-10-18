@@ -13,6 +13,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
@@ -33,6 +34,7 @@ use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
@@ -152,7 +154,7 @@ final class PhpDocInfo
         return count($this->tokens);
     }
 
-    public function getVarTagValue(): ?VarTagValueNode
+    public function getVarTagValueNode(): ?VarTagValueNode
     {
         return $this->phpDocNode->getVarTagValues()[0] ?? null;
     }
@@ -212,7 +214,7 @@ final class PhpDocInfo
 
     public function getVarType(): Type
     {
-        return $this->getTypeOrMixed($this->getVarTagValue());
+        return $this->getTypeOrMixed($this->getVarTagValueNode());
     }
 
     public function getReturnType(): Type
@@ -370,8 +372,13 @@ final class PhpDocInfo
         return $this->tokens === [];
     }
 
-    public function changeParamType(Type $type, Param $param, string $paramName): void
+    /**
+     * @param Type|TypeNode $type
+     */
+    public function changeParamType($type, Param $param, string $paramName): void
     {
+        Assert::isAnyOf($type, [Type::class, TypeNode::class]);
+
         $this->phpDocTypeChanger->changeParamType($this, $type, $param, $paramName);
     }
 

@@ -9,6 +9,7 @@ use Rector\DoctrineCodeQuality\Rector\ClassMethod\MakeEntityDateTimePropertyDate
 use Rector\DoctrineCodeQuality\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector;
 use Rector\DoctrineCodeQuality\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector;
 use Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector;
+use Rector\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -20,4 +21,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MoveCurrentDateTimeDefaultInEntityToConstructorRector::class);
     $services->set(CorrectDefaultTypesOnEntityPropertyRector::class);
     $services->set(ChangeBigIntEntityPropertyToIntTypeRector::class);
+    $services->set(ImproveDoctrineCollectionDocTypeInEntityRector::class);
 };

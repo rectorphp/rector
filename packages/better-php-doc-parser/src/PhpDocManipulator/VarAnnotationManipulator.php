@@ -35,7 +35,7 @@ final class VarAnnotationManipulator
         $phpDocInfo = $this->resolvePhpDocInfo($node);
 
         // already done
-        if ($phpDocInfo->getVarTagValue() !== null) {
+        if ($phpDocInfo->getVarTagValueNode() !== null) {
             return;
         }
 

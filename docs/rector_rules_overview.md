@@ -1,4 +1,4 @@
-# All 593 Rectors Overview
+# All 595 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -10,11 +10,11 @@
 - [CakePHP](#cakephp) (6)
 - [CodeQuality](#codequality) (59)
 - [CodingStyle](#codingstyle) (33)
-- [DeadCode](#deadcode) (40)
+- [DeadCode](#deadcode) (41)
 - [Decouple](#decouple) (1)
 - [Defluent](#defluent) (8)
 - [Doctrine](#doctrine) (17)
-- [DoctrineCodeQuality](#doctrinecodequality) (8)
+- [DoctrineCodeQuality](#doctrinecodequality) (9)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [DowngradePhp71](#downgradephp71) (3)
 - [DowngradePhp72](#downgradephp72) (2)
@@ -2983,6 +2983,28 @@ Remove empty method calls not required by parents
 
 <br><br>
 
+### `RemoveEmptyMethodCallRector`
+
+- class: [`Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector`](/rules/dead-code/src/Rector/MethodCall/RemoveEmptyMethodCallRector.php)
+- [test fixtures](/rules/dead-code/tests/Rector/MethodCall/RemoveEmptyMethodCallRector/Fixture)
+
+Remove empty method call
+
+```diff
+ class SomeClass
+ {
+     public function callThis()
+     {
+     }
+ }
+
+-$some = new SomeClass();
+-$some->callThis();
++$some = new SomeClass();
+```
+
+<br><br>
+
 ### `RemoveNullPropertyInitializationRector`
 
 - class: [`Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector`](/rules/dead-code/src/Rector/PropertyProperty/RemoveNullPropertyInitializationRector.php)
@@ -4287,6 +4309,33 @@ Change default value types to match Doctrine annotation type
 
 <br><br>
 
+### `ImproveDoctrineCollectionDocTypeInEntityRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector`](/rules/doctrine-code-quality/src/Rector/Property/ImproveDoctrineCollectionDocTypeInEntityRector.php)
+- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Property/ImproveDoctrineCollectionDocTypeInEntityRector/Fixture)
+
+Improve @var, @param and @return types for Doctrine collections to make them useful both for PHPStan and PHPStorm
+
+```diff
+ use Doctrine\Common\Collections\Collection;
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class SomeClass
+ {
+     /**
+      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
+-     * @var Collection|Trainer[]
++     * @var Collection<int, Training>|Trainer[]
+      */
+     private $trainings = [];
+ }
+```
+
+<br><br>
+
 ### `InitializeDefaultEntityCollectionRector`
 
 - class: [`Rector\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector`](/rules/doctrine-code-quality/src/Rector/Class_/InitializeDefaultEntityCollectionRector.php)
@@ -5034,13 +5083,17 @@ Convert the list reference assignment to its equivalent PHP 7.2 code
 -        $array = [1, 2, 3];
 -        list($a, &$b) = $array;
 +        $array = [1, 2];
-+        list($a, $b) = $array;
++        list($a) = $array;
 +        $b =& $array[1];
 
 -        [&$c, $d, &$e] = $array;
 +        [$c, $d, $e] = $array;
 +        $c =& $array[0];
 +        $e =& $array[2];
+
+-        list(&$a, &$b) = $array;
++        $a =& $array[0];
++        $b =& $array[1];
      }
  }
 ```
@@ -5082,8 +5135,7 @@ Add missing param to `array_merge` and `array_merge_recursive`
 ```diff
  class SomeClass
  {
--    public function run()
-+    public function run()
+     public function run()
      {
 -        array_merge();
 -        array_merge_recursive();

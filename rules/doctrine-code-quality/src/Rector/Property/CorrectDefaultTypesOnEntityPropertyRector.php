@@ -14,7 +14,7 @@ use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DoctrineCodeQuality\NodeAnalyzer\ColumnPropertyAnalyzer;
+use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
 
 /**
  * @sponsor Thanks https://www.luzanky.cz/ for sponsoring this rule
@@ -24,13 +24,13 @@ use Rector\DoctrineCodeQuality\NodeAnalyzer\ColumnPropertyAnalyzer;
 final class CorrectDefaultTypesOnEntityPropertyRector extends AbstractRector
 {
     /**
-     * @var ColumnPropertyAnalyzer
+     * @var DoctrinePropertyAnalyzer
      */
-    private $columnPropertyAnalyzer;
+    private $doctrinePropertyAnalyzer;
 
-    public function __construct(ColumnPropertyAnalyzer $columnPropertyAnalyzer)
+    public function __construct(DoctrinePropertyAnalyzer $doctrinePropertyAnalyzer)
     {
-        $this->columnPropertyAnalyzer = $columnPropertyAnalyzer;
+        $this->doctrinePropertyAnalyzer = $doctrinePropertyAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -84,7 +84,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $columnTagValueNode = $this->columnPropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
+        $columnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
         if ($columnTagValueNode === null) {
             return null;
         }

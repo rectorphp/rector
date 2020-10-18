@@ -83,13 +83,13 @@ final class RectorsFinder
     private function findClassesInDirectoriesByName(array $directories, string $name): array
     {
         $robotLoader = new RobotLoader();
-        foreach ($directories as $directory) {
-            $robotLoader->addDirectory($directory);
-        }
+        $robotLoader->addDirectory(...$directories);
 
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_finder');
+
         $robotLoader->acceptFiles = [$name];
         $robotLoader->excludeDirectory(__DIR__ . '/../../../packages/rector-generator/tests');
+
         $robotLoader->rebuild();
 
         $classNames = [];

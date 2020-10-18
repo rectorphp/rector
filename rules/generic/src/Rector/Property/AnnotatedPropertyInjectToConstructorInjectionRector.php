@@ -143,7 +143,7 @@ CODE_SAMPLE
         }
 
         // it needs @var tag as well, to get the type
-        if ($phpDocInfo->getVarTagValue() !== null) {
+        if ($phpDocInfo->getVarTagValueNode() !== null) {
             return false;
         }
 

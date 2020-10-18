@@ -209,6 +209,15 @@ final class RectorRecipe
      */
     public function setPackage(string $package): void
     {
+        if (is_file($package)) {
+            $message = sprintf(
+                'The "%s()" method only accepts package name, file path "%s" given',
+                __METHOD__,
+                $package
+            );
+            throw new ShouldNotHappenException($message);
+        }
+
         $this->package = $package;
     }
 

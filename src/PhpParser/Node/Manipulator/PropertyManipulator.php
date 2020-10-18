@@ -193,6 +193,6 @@ final class PropertyManipulator
             }
         }
 
-        return $this->assignManipulator->isNodeLeftPartOfAssign($node);
+        return $this->assignManipulator->isLeftPartOfAssign($node);
     }
 }

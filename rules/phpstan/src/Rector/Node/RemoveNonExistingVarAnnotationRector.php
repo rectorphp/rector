@@ -98,7 +98,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValue();
+        $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValueNode();
         if ($attributeAwareVarTagValueNode === null) {
             return null;
         }
