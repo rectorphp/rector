@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\ReadWrite\ReadNodeAnalyzer;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -38,6 +39,10 @@ abstract class AbstractReadNodeAnalyzer
     {
         $parent = $expr->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Return_) {
+            return true;
+        }
+
+        if ($parent instanceof Arg) {
             return true;
         }
 
