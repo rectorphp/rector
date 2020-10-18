@@ -728,6 +728,8 @@ parameters:
                 - src/PhpParser/NodeTraverser/RectorNodeTraverser.php # 42
                 - utils/node-documentation-generator/src/ValueObject/NodeInfo.php # 34
                 - utils/node-documentation-generator/src/ValueObject/NodeInfo.php # 39
+                - packages/phpstan-static-type-mapper/src/PHPStanStaticTypeMapper.php # 46
+                - rules/nette-code-quality/src/NodeResolver/MethodNamesByInputNamesResolver.php # 25
 
         # intersection bug
         - '#Parameter \#1 \$phpDocTagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:removeTagValueNodeFromNode\(\) expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode, Rector\\PhpAttribute\\Contract\\PhpAttributableTagNodeInterface given#'
@@ -982,6 +984,41 @@ parameters:
                 - src/Testing/PHPUnit/AbstractNodeVisitorTestCase.php # 30
                 - src/Testing/PHPUnit/AbstractRectorTestCase.php # 24
                 - utils/doctrine-annotation-parser-syncer/src/FileSyncer/AbstractClassSyncer.php # 19
+                - packages/better-php-doc-parser/src/PhpDocNode/AbstractTagValueNode.php # 32
+                - rules/naming/src/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php # 21
+
+        -
+            message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\. You have \d+ nesting#'
+            paths:
+                - packages/phpstan-static-type-mapper/tests/TypeMapper/ArrayTypeMapperTest.php # 55
+                - packages/phpstan-static-type-mapper/tests/TypeMapper/ArrayTypeMapperTest.php # 80
+                - rules/code-quality/src/Rector/If_/SimplifyIfIssetToNullCoalescingRector.php # 103
+                - rules/downgrade-php74/src/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector.php # 181
+                - rules/code-quality/src/Rector/Isset_/IssetOnPropertyObjectToPropertyExistsRector.php # 99
+                - rules/downgrade-php74/src/Rector/Array_/DowngradeArraySpreadRector.php # 239
+                - rules/downgrade-php74/src/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector.php # 168
+                - packages/caching/src/Config/FileHashComputer.php # 51
+                - packages/phpstan-static-type-mapper/tests/TypeMapper/ArrayTypeMapperTest.php # 55
+                - rules/cakephp/src/Rector/MethodCall/RenameMethodCallBasedOnParameterRector.php # 37
+                - rules/code-quality/src/Rector/Foreach_/SimplifyForeachToArrayFilterRector.php # 134
+                - rules/downgrade-php74/src/Rector/Array_/DowngradeArraySpreadRector.php # 234
+                - rules/nette/src/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector.php # 174
+                - rules/php71/src/Rector/FuncCall/CountOnNullRector.php # 84
+                - rules/php72/src/Rector/FuncCall/GetClassOnNullRector.php # 100
+                - rules/renaming/src/Rector/ClassConstFetch/RenameClassConstantRector.php # 36
+                - rules/symfony/src/Rector/MethodCall/CascadeValidationFormBuilderRector.php # 152
+                - packages/phpstan-static-type-mapper/tests/TypeMapper/ArrayTypeMapperTest.php # 65
+                - packages/phpstan-static-type-mapper/tests/TypeMapper/ArrayTypeMapperTest.php # 77
+                - packages/phpstan-static-type-mapper/tests/TypeMapper/ArrayTypeMapperTest.php # 80
+                - rules/code-quality/src/Rector/Isset_/IssetOnPropertyObjectToPropertyExistsRector.php # 100
+                - rules/doctrine/src/PhpDocParser/Ast/PhpDoc/PhpDocTagNodeFactory.php # 68
+                - rules/downgrade-php74/src/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector.php # 170
+                - rules/downgrade-php74/src/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector.php # 182
+                - rules/nette/src/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector.php # 174
+                - rules/renaming/src/Rector/StaticCall/RenameStaticMethodRector.php # 39
+                - rules/transform/src/Rector/Assign/PropertyToMethodRector.php # 36
+                - rules/type-declaration/tests/TypeNormalizerTest.php # 55
+                - rules/type-declaration/tests/TypeNormalizerTest.php # 58
 
         - '#Method Rector\\Core\\PhpParser\\Builder\\NamespaceBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
         - '#Method Rector\\Core\\PhpParser\\Builder\\TraitUseBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\TraitUse but returns PhpParser\\Node#'
