@@ -110,7 +110,7 @@ CODE_SAMPLE
 
                 $isPropertyAlwaysExists = property_exists($className, $property);
                 if ($isPropertyAlwaysExists) {
-                    return null;
+                    return new NotIdentical($issetVar, $this->createNull());
                 }
             }
 
