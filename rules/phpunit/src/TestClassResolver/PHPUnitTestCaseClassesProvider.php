@@ -49,9 +49,7 @@ final class PHPUnitTestCaseClassesProvider
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/tests_add_see_rector_tests');
 
         $directories = $this->composerAutoloadedDirectoryProvider->provide();
-        foreach ($directories as $directory) {
-            $robotLoader->addDirectory($directory);
-        }
+        $robotLoader->addDirectory(...$directories);
 
         $robotLoader->acceptFiles = ['*Test.php'];
         $robotLoader->ignoreDirs[] = '*Expected*';

@@ -6,12 +6,12 @@ namespace Rector\DoctrineCodeQuality\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
@@ -111,7 +111,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function resolveCollectionVarTagValueNode(Property $property): ?AttributeAwareVarTagValueNode
+    private function resolveCollectionVarTagValueNode(Property $property): ?VarTagValueNode
     {
         $doctrineOneToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineOneToManyTagValueNode($property);
         if ($doctrineOneToManyTagValueNode === null) {

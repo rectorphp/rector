@@ -100,10 +100,7 @@ final class AdditionalAutoloader
         }
         // last argument is workaround: https://github.com/nette/robot-loader/issues/12
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_robot_loader');
-
-        foreach ($directories as $autoloadDirectory) {
-            $robotLoader->addDirectory($autoloadDirectory);
-        }
+        $robotLoader->addDirectory(...$directories);
 
         $robotLoader->register();
     }
