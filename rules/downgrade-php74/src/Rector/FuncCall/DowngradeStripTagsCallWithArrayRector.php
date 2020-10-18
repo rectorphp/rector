@@ -167,8 +167,8 @@ CODE_SAMPLE
         $args = [new Arg(new String_('><')), new Arg($expr)];
         $implodeFuncCall = new FuncCall(new Name('implode'), $args);
 
-        $concatOpening = new Concat(new String_('<'), $implodeFuncCall);
-        return new Concat($concatOpening, new String_('>'));
+        $concat = new Concat(new String_('<'), $implodeFuncCall);
+        return new Concat($concat, new String_('>'));
     }
 
     /**

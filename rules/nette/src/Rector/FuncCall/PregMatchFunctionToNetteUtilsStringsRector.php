@@ -172,8 +172,8 @@ CODE_SAMPLE
         }
 
         $constFetch = new ConstFetch(new Name('PREG_SET_ORDER'));
-        $constFetchMinusOne = new Minus($constFetch, new LNumber(1));
-        $args[] = new Arg($constFetchMinusOne);
+        $minus = new Minus($constFetch, new LNumber(1));
+        $args[] = new Arg($minus);
 
         return $args;
     }

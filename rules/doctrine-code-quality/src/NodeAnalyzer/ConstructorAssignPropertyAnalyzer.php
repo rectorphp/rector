@@ -31,14 +31,14 @@ final class ConstructorAssignPropertyAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function resolveConstructorAssign(Property $property): ?Assign
+    public function resolveConstructorAssign(Property $property): ?Node
     {
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
-        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod === null) {
             return null;
         }
@@ -50,7 +50,7 @@ final class ConstructorAssignPropertyAnalyzer
 
         return $this->betterNodeFinder->findFirst((array) $constructClassMethod->stmts, function (Node $node) use (
             $propertyName
-        ) {
+        ): ?Assign {
             if (! $node instanceof Assign) {
                 return null;
             }
