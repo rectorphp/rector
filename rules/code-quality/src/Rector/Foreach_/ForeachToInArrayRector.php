@@ -139,7 +139,7 @@ CODE_SAMPLE
 
     private function shouldSkipForeach(Foreach_ $foreach): bool
     {
-        if (isset($foreach->keyVar)) {
+        if ($foreach->keyVar !== null) {
             return true;
         }
 
