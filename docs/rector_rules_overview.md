@@ -1,4 +1,4 @@
-# All 592 Rectors Overview
+# All 593 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -19,7 +19,7 @@
 - [DowngradePhp71](#downgradephp71) (3)
 - [DowngradePhp72](#downgradephp72) (2)
 - [DowngradePhp73](#downgradephp73) (1)
-- [DowngradePhp74](#downgradephp74) (6)
+- [DowngradePhp74](#downgradephp74) (7)
 - [DowngradePhp80](#downgradephp80) (6)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
@@ -5066,6 +5066,29 @@ Replace arrow functions with anonymous functions
 +        $callable = function ($matches) use ($delimiter) {
 +            return $delimiter . strtolower($matches[1]);
 +        };
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeArrayMergeCallWithoutArgumentsRector`
+
+- class: [`Rector\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector`](/rules/downgrade-php74/src/Rector/FuncCall/DowngradeArrayMergeCallWithoutArgumentsRector.php)
+- [test fixtures](/rules/downgrade-php74/tests/Rector/FuncCall/DowngradeArrayMergeCallWithoutArgumentsRector/Fixture)
+
+Add missing param to `array_merge` and `array_merge_recursive`
+
+```diff
+ class SomeClass
+ {
+-    public function run()
++    public function run()
+     {
+-        array_merge();
+-        array_merge_recursive();
++        array_merge([]);
++        array_merge_recursive([]);
      }
  }
 ```

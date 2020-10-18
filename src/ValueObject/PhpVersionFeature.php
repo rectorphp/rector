@@ -226,4 +226,9 @@ final class PhpVersionFeature
      * @var string
      */
     public const IS_ITERABLE = '7.1';
+
+    /**
+     * @var string
+     */
+    public const BEFORE_ARRAY_MERGE_WITHOUT_ARGUMENTS = '7.3';
 }
