@@ -41,8 +41,10 @@ abstract class AbstractDowngradeTypedPropertyRector extends AbstractDowngradeRec
                 $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
             }
 
-            $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->type);
-            $phpDocInfo->changeVarType($newType);
+            if ($phpDocInfo->getVarTagValueNode() === null) {
+                $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->type);
+                $phpDocInfo->changeVarType($newType);
+            }
         }
         $node->type = null;
 
