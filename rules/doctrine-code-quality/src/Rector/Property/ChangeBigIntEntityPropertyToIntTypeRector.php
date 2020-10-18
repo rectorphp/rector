@@ -14,7 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DoctrineCodeQuality\NodeAnalyzer\ColumnPropertyAnalyzer;
+use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 
@@ -28,7 +28,7 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 final class ChangeBigIntEntityPropertyToIntTypeRector extends AbstractRector
 {
     /**
-     * @var ColumnPropertyAnalyzer
+     * @var DoctrinePropertyAnalyzer
      */
     private $columnPropertyAnalyzer;
 
@@ -38,7 +38,7 @@ final class ChangeBigIntEntityPropertyToIntTypeRector extends AbstractRector
     private $docBlockClassRenamer;
 
     public function __construct(
-        ColumnPropertyAnalyzer $columnPropertyAnalyzer,
+        DoctrinePropertyAnalyzer $columnPropertyAnalyzer,
         DocBlockClassRenamer $docBlockClassRenamer
     ) {
         $this->columnPropertyAnalyzer = $columnPropertyAnalyzer;
@@ -112,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValue();
+        $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValueNode();
         if ($attributeAwareVarTagValueNode === null) {
             return null;
         }

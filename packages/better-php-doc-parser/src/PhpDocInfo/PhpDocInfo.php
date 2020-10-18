@@ -19,6 +19,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
@@ -152,7 +153,7 @@ final class PhpDocInfo
         return count($this->tokens);
     }
 
-    public function getVarTagValue(): ?VarTagValueNode
+    public function getVarTagValueNode(): ?AttributeAwareVarTagValueNode
     {
         return $this->phpDocNode->getVarTagValues()[0] ?? null;
     }
@@ -212,7 +213,7 @@ final class PhpDocInfo
 
     public function getVarType(): Type
     {
-        return $this->getTypeOrMixed($this->getVarTagValue());
+        return $this->getTypeOrMixed($this->getVarTagValueNode());
     }
 
     public function getReturnType(): Type

@@ -14,7 +14,7 @@ use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DoctrineCodeQuality\NodeAnalyzer\ColumnPropertyAnalyzer;
+use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
 
 /**
  * @sponsor Thanks https://www.luzanky.cz/ for sponsoring this rule
@@ -24,11 +24,11 @@ use Rector\DoctrineCodeQuality\NodeAnalyzer\ColumnPropertyAnalyzer;
 final class CorrectDefaultTypesOnEntityPropertyRector extends AbstractRector
 {
     /**
-     * @var ColumnPropertyAnalyzer
+     * @var DoctrinePropertyAnalyzer
      */
     private $columnPropertyAnalyzer;
 
-    public function __construct(ColumnPropertyAnalyzer $columnPropertyAnalyzer)
+    public function __construct(DoctrinePropertyAnalyzer $columnPropertyAnalyzer)
     {
         $this->columnPropertyAnalyzer = $columnPropertyAnalyzer;
     }

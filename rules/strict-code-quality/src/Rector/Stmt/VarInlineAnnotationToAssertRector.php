@@ -110,7 +110,7 @@ CODE_SAMPLE
 
     private function getVarDocVariableName(PhpDocInfo $phpDocInfo): ?string
     {
-        $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValue();
+        $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValueNode();
         if ($attributeAwareVarTagValueNode === null) {
             return null;
         }
@@ -166,7 +166,7 @@ CODE_SAMPLE
 
     private function refactorAlreadyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
     {
-        $varTagValue = $phpDocInfo->getVarTagValue();
+        $varTagValue = $phpDocInfo->getVarTagValueNode();
         if ($varTagValue === null) {
             throw new ShouldNotHappenException();
         }
