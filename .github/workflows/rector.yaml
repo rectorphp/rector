@@ -13,11 +13,6 @@ jobs:
             matrix:
                 actions:
                     -
-                        name: Rector CI
-                        install: composer install --no-progress --ansi
-                        run: composer rector-ci
-
-                    -
                         name: Rector without Dev Dependencies
                         install: composer install --no-progress --ansi --no-dev
                         run: |
