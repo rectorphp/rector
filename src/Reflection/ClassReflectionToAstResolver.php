@@ -37,6 +37,10 @@ final class ClassReflectionToAstResolver
 
     public function getClass(ClassReflection $classReflection, string $className): ?Class_
     {
+        if ($classReflection->isBuiltin()) {
+            return null;
+        }
+
         /** @var string $fileName */
         $fileName = $classReflection->getFileName();
 
