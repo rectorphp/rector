@@ -6,6 +6,8 @@ namespace Rector\ReadWrite\ReadNodeAnalyzer;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\NodeFinder\NodeUsageFinder;
@@ -44,6 +46,15 @@ abstract class AbstractReadNodeAnalyzer
 
         if ($parent instanceof Arg) {
             return true;
+        }
+
+        if ($parent instanceof ArrayDimFetch) {
+            $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parentParent instanceof Assign) {
+                return true;
+            }
+
+            return $parentParent->var !== $parent;
         }
 
         throw new NotImplementedYetException();
