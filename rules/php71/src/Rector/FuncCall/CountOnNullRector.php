@@ -81,9 +81,10 @@ CODE_SAMPLE
             if ($this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
                 $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
             } else {
+                $countableInstanceOf = new Instanceof_($countedNode, new FullyQualified('Countable'));
                 $conditionNode = new BooleanOr(
                     $this->createFuncCall('is_array', [new Arg($countedNode)]),
-                    new Instanceof_($countedNode, new FullyQualified('Countable'))
+                    $countableInstanceOf
                 );
             }
 

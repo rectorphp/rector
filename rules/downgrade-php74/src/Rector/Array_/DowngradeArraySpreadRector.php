@@ -222,6 +222,9 @@ CODE_SAMPLE
             ->yes() ? $nodeScope->getVariableType($variableName) : $arrayItem->getAttribute(
                 AttributeKey::ORIGINAL_TYPE
             );
+
+        $iteratorToArrayFuncCall = new FuncCall(new Name('iterator_to_array'), [new Arg($arrayItem)]);
+
         if ($type !== null) {
             // If we know it is an array, then print it directly
             // Otherwise PHPStan throws an error:
@@ -231,17 +234,13 @@ CODE_SAMPLE
             }
             // If it is iterable, then directly return `iterator_to_array`
             if ($this->isIterableType($type)) {
-                return new Arg(new FuncCall(new Name('iterator_to_array'), [new Arg($arrayItem)]));
+                return new Arg($iteratorToArrayFuncCall);
             }
         }
+
         // Print a ternary, handling either an array or an iterator
-        return new Arg(
-            new Ternary(
-                new FuncCall(new Name('is_array'), [new Arg($arrayItem)]),
-                $arrayItem,
-                new FuncCall(new Name('iterator_to_array'), [new Arg($arrayItem)])
-            )
-        );
+        $inArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($arrayItem)]);
+        return new Arg(new Ternary($inArrayFuncCall, $arrayItem, $iteratorToArrayFuncCall));
     }
 
     /**

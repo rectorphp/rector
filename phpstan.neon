@@ -900,54 +900,6 @@ parameters:
             paths:
                 - tests/debug_functions.php
 
-<<<<<<< HEAD
-        -
-            message: '#Property with protected modifier is not allowed\. Use interface instead#'
-            paths:
-                - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php # 24
-                - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php # 29
-                - packages/node-type-resolver/tests/PerNodeTypeResolver/AbstractNodeTypeResolverTest.php # 19
-                - packages/post-rector/src/Rector/AbstractRector/NodeCommandersTrait.php # 36
-                - packages/post-rector/src/Rector/AbstractRector/NodeCommandersTrait.php # 36
-                - packages/reporting/src/Rector/AbstractRector/NodeReportCollectorTrait.php # 19
-                - packages/reporting/src/Rector/AbstractRector/NodeReportCollectorTrait.php # 19
-                - rules/downgrade-php71/src/Rector/FunctionLike/AbstractMaybeAddDocBlockRector.php # 20
-                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 21
-                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 26
-                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 31
-                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 21
-                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 26
-                - src/Rector/AbstractRector/BetterStandardPrinterTrait.php # 31
-                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 39
-                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 44
-                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 49
-                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 39
-                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 44
-                - src/Rector/AbstractRector/ComplexRemovalTrait.php # 49
-                - src/Rector/AbstractRector/NodeCollectorTrait.php # 18
-                - src/Rector/AbstractRector/NodeCollectorTrait.php # 18
-                - src/Rector/AbstractRector/NodeFactoryTrait.php # 33
-                - src/Rector/AbstractRector/NodeFactoryTrait.php # 33
-                - src/Rector/AbstractRector/PhpDocTrait.php # 24
-                - src/Rector/AbstractRector/PhpDocTrait.php # 29
-                - src/Rector/AbstractRector/PhpDocTrait.php # 34
-                - src/Rector/AbstractRector/PhpDocTrait.php # 24
-                - src/Rector/AbstractRector/PhpDocTrait.php # 29
-                - src/Rector/AbstractRector/PhpDocTrait.php # 34
-                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 38
-                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 43
-                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 48
-                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 53
-                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 58
-                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 63
-                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 68
-                - src/Testing/PHPUnit/AbstractNodeVisitorTestCase.php # 25
-                - src/Testing/PHPUnit/AbstractNodeVisitorTestCase.php # 30
-                - src/Testing/PHPUnit/AbstractRectorTestCase.php # 24
-                - utils/doctrine-annotation-parser-syncer/src/FileSyncer/AbstractClassSyncer.php # 19
-                - packages/better-php-doc-parser/src/PhpDocNode/AbstractTagValueNode.php # 32
-                - rules/naming/src/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php # 21
-
         - '#Method Rector\\Core\\PhpParser\\Builder\\NamespaceBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
         - '#Method Rector\\Core\\PhpParser\\Builder\\TraitUseBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\TraitUse but returns PhpParser\\Node#'
         - '#Method Rector\\Core\\PhpParser\\Builder\\UseBuilder\:\:getNode\(\) should return PhpParser\\Node\\Stmt\\Use_ but returns PhpParser\\Node#'
@@ -958,3 +910,33 @@ parameters:
 
         - '#Cannot cast \(array<string\>&nonEmpty\)\|string\|true to string#'
         - '#Method Rector\\DoctrineCodeQuality\\NodeAnalyzer\\ConstructorAssignPropertyAnalyzer\:\:resolveConstructorAssign\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
+
+        -
+             message: '#Do not use factory/method call in constructor, put factory in config and get service with dependency injection#'
+             paths:
+                 - packages/phpstan-static-type-mapper/src/PHPStanStaticTypeMapper.php # 46
+                 - rules/nette-code-quality/src/NodeResolver/MethodNamesByInputNamesResolver.php # 25
+
+        -
+            message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\. You have \d+ nesting#'
+            paths:
+                - *Rector.php
+                - packages/caching/src/Config/FileHashComputer.php
+
+        -
+            message: '#Property with protected modifier is not allowed\. Use interface instead#'
+            paths:
+                - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php # 24
+                - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php # 29
+                - packages/node-type-resolver/tests/PerNodeTypeResolver/AbstractNodeTypeResolverTest.php # 19
+                - rules/downgrade-php71/src/Rector/FunctionLike/AbstractMaybeAddDocBlockRector.php # 20
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 38
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 43
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 48
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 53
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 58
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 63
+                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 68
+                - src/Testing/PHPUnit/AbstractNodeVisitorTestCase.php # 25
+                - src/Testing/PHPUnit/AbstractNodeVisitorTestCase.php # 30
+                - src/Testing/PHPUnit/AbstractRectorTestCase.php # 24

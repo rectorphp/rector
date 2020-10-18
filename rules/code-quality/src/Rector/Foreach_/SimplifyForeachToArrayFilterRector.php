@@ -131,7 +131,9 @@ CODE_SAMPLE
     private function createAssignNode(Foreach_ $foreach, string $name, ArrayDimFetch $arrayDimFetch): Assign
     {
         $string = new String_($name);
-        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), [new Arg($foreach->expr), new Arg($string)]);
+
+        $args = [new Arg($foreach->expr), new Arg($string)];
+        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), $args);
 
         return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
     }

@@ -52,10 +52,11 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
 
     public function provideDataNormalizeArrayOfUnionToUnionArray(): Iterator
     {
-        $arrayType = new ArrayType(new MixedType(), new UnionType([new StringType(), new IntegerType()]));
+        $stringAndIntegerUnionTypes = new UnionType([new StringType(), new IntegerType()]);
+        $arrayType = new ArrayType(new MixedType(), $stringAndIntegerUnionTypes);
         yield [$arrayType, 'int[]|string[]'];
 
-        $arrayType = new ArrayType(new MixedType(), new UnionType([new StringType(), new IntegerType()]));
+        $arrayType = new ArrayType(new MixedType(), $stringAndIntegerUnionTypes);
         $moreNestedArrayType = new ArrayType(new MixedType(), $arrayType);
         yield [$moreNestedArrayType, 'int[][]|string[][]'];
 

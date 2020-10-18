@@ -97,9 +97,9 @@ CODE_SAMPLE
         $notIdentical = new NotIdentical($valueNode, $this->createNull());
 
         $funcCall = new FuncCall($node->name, $node->args);
-        $ternary = new Ternary($notIdentical, $funcCall, new ClassConstFetch(new Name('self'), new Identifier(
-            'class'
-        )));
+
+        $selfClassConstFetch = new ClassConstFetch(new Name('self'), new Identifier('class'));
+        $ternary = new Ternary($notIdentical, $funcCall, $selfClassConstFetch);
 
         $funcCall->setAttribute(AttributeKey::PARENT_NODE, $ternary);
 

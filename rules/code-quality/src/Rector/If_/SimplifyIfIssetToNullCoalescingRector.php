@@ -100,10 +100,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $funcCall = new FuncCall(new Name('array_merge'), [
-            new Arg(new Coalesce($valueNode, new Array_([]))),
-            new Arg($secondAssign->expr),
-        ]);
+        $args = [new Arg(new Coalesce($valueNode, new Array_([]))), new Arg($secondAssign->expr)];
+        $funcCall = new FuncCall(new Name('array_merge'), $args);
 
         return new Assign($valueNode, $funcCall);
     }
