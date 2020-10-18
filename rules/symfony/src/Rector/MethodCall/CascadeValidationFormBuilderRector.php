@@ -149,10 +149,8 @@ CODE_SAMPLE
 
     private function addConstraintsOptionToFollowingAddMethodCalls(Node $node): void
     {
-        $constraintsArrayItem = new ArrayItem(
-            new New_(new FullyQualified('Symfony\Component\Validator\Constraints\Valid')),
-            new String_('constraints')
-        );
+        $new = new New_(new FullyQualified('Symfony\Component\Validator\Constraints\Valid'));
+        $constraintsArrayItem = new ArrayItem($new, new String_('constraints'));
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 

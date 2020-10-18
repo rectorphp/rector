@@ -48,6 +48,7 @@ final class FileHashComputer
     private function createFileLoader(SmartFileInfo $fileInfo, ContainerBuilder $containerBuilder): LoaderInterface
     {
         $fileLocator = new FileLocator([$fileInfo->getPath()]);
+
         $loaderResolver = new LoaderResolver([
             new GlobFileLoader($containerBuilder, $fileLocator),
             new PhpFileLoader($containerBuilder, $fileLocator),

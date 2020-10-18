@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -24,18 +25,18 @@ final class FunctionLikeManipulator
     private $callableNodeTraverser;
 
     /**
-     * @var PropertyFetchManipulator
+     * @var PropertyFetchAnalyzer
      */
-    private $propertyFetchManipulator;
+    private $propertyFetchAnalyzer;
 
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
-        PropertyFetchManipulator $propertyFetchManipulator
+        PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
     /**
@@ -56,7 +57,7 @@ final class FunctionLikeManipulator
                 return null;
             }
 
-            if (! $this->propertyFetchManipulator->isLocalPropertyFetch($node->expr)) {
+            if (! $this->propertyFetchAnalyzer->isLocalPropertyFetch($node->expr)) {
                 return null;
             }
 

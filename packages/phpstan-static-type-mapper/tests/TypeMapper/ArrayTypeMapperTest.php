@@ -50,19 +50,17 @@ final class ArrayTypeMapperTest extends AbstractKernelTestCase
     public function provideDataWithoutKeys(): Iterator
     {
         $arrayType = new ArrayType(new MixedType(), new StringType());
-        yield[$arrayType, 'string[]'];
+        yield [$arrayType, 'string[]'];
 
-        $arrayType = new ArrayType(new MixedType(), new UnionType([
-            new StringType(),
-            new StringType(),
-            new StringType(),
-        ]));
-        yield[$arrayType, 'string[]'];
+        $stringStringUnionType = new UnionType([new StringType(), new StringType()]);
+        $arrayType = new ArrayType(new MixedType(), $stringStringUnionType);
+        yield [$arrayType, 'string[]'];
     }
 
     public function provideDataUnionedWithoutKeys(): Iterator
     {
-        $unionArrayType = new ArrayType(new MixedType(), new UnionType([new StringType(), new IntegerType()]));
+        $stringAndIntegerUnionType = new UnionType([new StringType(), new IntegerType()]);
+        $unionArrayType = new ArrayType(new MixedType(), $stringAndIntegerUnionType);
         yield [$unionArrayType, 'int[]|string[]'];
 
         $moreNestedUnionArrayType = new ArrayType(new MixedType(), $unionArrayType);
@@ -74,16 +72,17 @@ final class ArrayTypeMapperTest extends AbstractKernelTestCase
 
     public function provideDataWithKeys(): Iterator
     {
-        $arrayType = new ArrayType(new StringType(), new ArrayType(new MixedType(), new StringType()));
-        yield[$arrayType, 'array<string, string[]>'];
+        $arrayMixedToStringType = new ArrayType(new MixedType(), new StringType());
+        $arrayType = new ArrayType(new StringType(), $arrayMixedToStringType);
+        yield [$arrayType, 'array<string, string[]>'];
 
-        $arrayType = new ArrayType(new StringType(), new ArrayType(new MixedType(), new UnionType([
-            new StringType(),
-            new IntegerType(),
-        ])));
-        yield[$arrayType, 'array<string, array<int|string>>'];
+        $stringAndIntegerUnionType = new UnionType([new StringType(), new IntegerType()]);
+
+        $stringAndIntegerUnionArrayType = new ArrayType(new MixedType(), $stringAndIntegerUnionType);
+        $arrayType = new ArrayType(new StringType(), $stringAndIntegerUnionArrayType);
+        yield [$arrayType, 'array<string, array<int|string>>'];
 
         $arrayType = new ArrayType(new StringType(), new IntegerType());
-        yield[$arrayType, 'array<string, int>'];
+        yield [$arrayType, 'array<string, int>'];
     }
 }

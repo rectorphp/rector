@@ -96,10 +96,10 @@ CODE_SAMPLE
             $name = $issetVar->name;
             $property = $name->toString();
 
-            return new BooleanAnd(
-                new FuncCall(new Name('property_exists'), [new Arg($object), new Arg(new String_($property))]),
-                new NotIdentical($issetVar, $this->createNull())
-            );
+            $args = [new Arg($object), new Arg(new String_($property))];
+            $propertyExistsFuncCall = new FuncCall(new Name('property_exists'), $args);
+
+            return new BooleanAnd($propertyExistsFuncCall, new NotIdentical($issetVar, $this->createNull()));
         }
 
         return null;

@@ -8,14 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -33,9 +32,15 @@ final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends Abstr
      */
     private $propertyManipulator;
 
-    public function __construct(PropertyManipulator $propertyManipulator)
+    /**
+     * @var PropertyFetchAnalyzer
+     */
+    private $propertyFetchAnalyzer;
+
+    public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->propertyManipulator = $propertyManipulator;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -152,7 +157,7 @@ CODE_SAMPLE
             $propertyName,
             $constantName
         ): ?ClassConstFetch {
-            if (! $this->isLocalPropertyFetch($node)) {
+            if (! $this->propertyFetchAnalyzer->isLocalPropertyFetch($node)) {
                 return null;
             }
 
@@ -187,18 +192,5 @@ CODE_SAMPLE
         $constantName = StaticRectorStrings::camelCaseToUnderscore($propertyName);
 
         return strtoupper($constantName);
-    }
-
-    private function isLocalPropertyFetch(Node $node): bool
-    {
-        if ($node instanceof PropertyFetch) {
-            return $this->isName($node->var, 'this');
-        }
-
-        if ($node instanceof StaticPropertyFetch) {
-            return $this->isName($node->class, 'self');
-        }
-
-        return false;
     }
 }

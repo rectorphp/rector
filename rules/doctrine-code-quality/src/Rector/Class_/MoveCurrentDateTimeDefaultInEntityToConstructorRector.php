@@ -12,6 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DoctrineCodeQuality\NodeAnalyzer\ColumnDatetimePropertyAnalyzer;
+use Rector\DoctrineCodeQuality\NodeAnalyzer\ConstructorAssignPropertyAnalyzer;
 use Rector\DoctrineCodeQuality\NodeFactory\ValueAssignFactory;
 use Rector\DoctrineCodeQuality\NodeManipulator\ColumnDatetimePropertyManipulator;
 use Rector\DoctrineCodeQuality\NodeManipulator\ConstructorManipulator;
@@ -45,16 +46,23 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends Abstra
      */
     private $columnDatetimePropertyManipulator;
 
+    /**
+     * @var ConstructorAssignPropertyAnalyzer
+     */
+    private $constructorAssignPropertyAnalyzer;
+
     public function __construct(
         ColumnDatetimePropertyAnalyzer $columnDatetimePropertyAnalyzer,
         ConstructorManipulator $constructorManipulator,
         ValueAssignFactory $valueAssignFactory,
-        ColumnDatetimePropertyManipulator $columnDatetimePropertyManipulator
+        ColumnDatetimePropertyManipulator $columnDatetimePropertyManipulator,
+        ConstructorAssignPropertyAnalyzer $constructorAssignPropertyAnalyzer
     ) {
         $this->columnDatetimePropertyAnalyzer = $columnDatetimePropertyAnalyzer;
         $this->constructorManipulator = $constructorManipulator;
         $this->valueAssignFactory = $valueAssignFactory;
         $this->columnDatetimePropertyManipulator = $columnDatetimePropertyManipulator;
+        $this->constructorAssignPropertyAnalyzer = $constructorAssignPropertyAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -134,6 +142,13 @@ CODE_SAMPLE
             return null;
         }
 
+        $constructorAssign = $this->constructorAssignPropertyAnalyzer->resolveConstructorAssign($property);
+
+        // 0. already has default
+        if ($constructorAssign !== null) {
+            return null;
+        }
+
         // 1. remove default options from database level
         $this->columnDatetimePropertyManipulator->removeDefaultOption($columnTagValueNode);
 
@@ -153,8 +168,11 @@ CODE_SAMPLE
         $propertyName = $this->getName($property);
         $onlyProperty = $property->props[0];
 
-        /** @var Expr $defaultExpr */
+        /** @var Expr|null $defaultExpr */
         $defaultExpr = $onlyProperty->default;
+        if ($defaultExpr === null) {
+            return;
+        }
 
         $expression = $this->valueAssignFactory->createDefaultDateTimeWithValueAssign($propertyName, $defaultExpr);
         $this->constructorManipulator->addStmtToConstructor($class, $expression);

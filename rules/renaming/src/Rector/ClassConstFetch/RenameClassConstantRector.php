@@ -33,6 +33,13 @@ final class RenameClassConstantRector extends AbstractRector implements Configur
 
     public function getDefinition(): RectorDefinition
     {
+        $configuration = [
+            self::CLASS_CONSTANT_RENAME => [
+                new RenameClassConstant('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
+                new RenameClassConstant('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'),
+            ],
+        ];
+
         return new RectorDefinition('Replaces defined class constants in their calls.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
@@ -45,12 +52,7 @@ $value = SomeClass::NEW_CONSTANT;
 $value = DifferentClass::NEW_CONSTANT;
 CODE_SAMPLE
                 ,
-                [
-                    self::CLASS_CONSTANT_RENAME => [
-                        new RenameClassConstant('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
-                        new RenameClassConstant('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'),
-                    ],
-                ]
+                $configuration
             ),
         ]);
     }

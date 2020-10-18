@@ -34,6 +34,12 @@ final class RenameMethodCallBasedOnParameterRector extends AbstractRector implem
 
     public function getDefinition(): RectorDefinition
     {
+        $configuration = [
+            self::CALLS_WITH_PARAM_RENAMES => [
+                new RenameMethodCallBasedOnParameter('ServerRequest', 'getParam', 'paging', 'getAttribute'),
+                new RenameMethodCallBasedOnParameter('ServerRequest', 'withParam', 'paging', 'withAttribute'),
+            ],
+        ];
         return new RectorDefinition(
             'Changes method calls based on matching the first parameter value.',
             [
@@ -52,17 +58,7 @@ $config = $object->getAttribute('paging');
 $object = $object->withAttribute('paging', ['a value']);
 CODE_SAMPLE
                     ,
-                    [
-                        self::CALLS_WITH_PARAM_RENAMES => [
-                            new RenameMethodCallBasedOnParameter('ServerRequest', 'getParam', 'paging', 'getAttribute'),
-                            new RenameMethodCallBasedOnParameter(
-                                'ServerRequest',
-                                'withParam',
-                                'paging',
-                                'withAttribute'
-                            ),
-                        ],
-                    ]
+                    $configuration
                 ),
             ]
         );

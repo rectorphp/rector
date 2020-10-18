@@ -164,13 +164,11 @@ CODE_SAMPLE
      */
     private function createArrayFromString(Expr $expr): Concat
     {
-        return new Concat(
-            new Concat(
-                new String_('<'),
-                new FuncCall(new Name('implode'), [new Arg(new String_('><')), new Arg($expr)])
-            ),
-            new String_('>')
-        );
+        $args = [new Arg(new String_('><')), new Arg($expr)];
+        $implodeFuncCall = new FuncCall(new Name('implode'), $args);
+
+        $concat = new Concat(new String_('<'), $implodeFuncCall);
+        return new Concat($concat, new String_('>'));
     }
 
     /**
@@ -178,13 +176,10 @@ CODE_SAMPLE
      */
     private function createIsArrayTernaryFromExpression(Expr $expr): Ternary
     {
-        return new Ternary(
-            new BooleanAnd(
-                new NotIdentical($expr, $this->createNull()),
-                new FuncCall(new Name('is_array'), [new Arg($expr)])
-            ),
-            $this->createArrayFromString($expr),
-            $expr
-        );
+        $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($expr)]);
+        $nullNotIdentical = new NotIdentical($expr, $this->createNull());
+        $booleanAnd = new BooleanAnd($nullNotIdentical, $isArrayFuncCall);
+
+        return new Ternary($booleanAnd, $this->createArrayFromString($expr), $expr);
     }
 }
