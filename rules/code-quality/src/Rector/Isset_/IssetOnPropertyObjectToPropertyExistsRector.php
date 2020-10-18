@@ -124,17 +124,12 @@ CODE_SAMPLE
      * @param Node $previous
      * @param Node $next
      */
-    private function isFoundInPreviuosOrNext($previous = null, $next = null, Isset_ $isset): bool
+    private function isFoundInPreviuosOrNext(\PhpParser\Node $previous = null, \PhpParser\Node $next = null, Isset_ $isset): bool
     {
         if ($previous && $previous->getAttribute(AttributeKey::PARENT_NODE) === $isset) {
             return true;
         }
-
-        if ($next && $next->getAttribute(AttributeKey::PARENT_NODE) === $isset) {
-            return true;
-        }
-
-        return false;
+        return $next && $next->getAttribute(AttributeKey::PARENT_NODE) === $isset;
     }
 
     private function replaceToPropertyExistsWithNullCheck(Expr $expr, string $property, Expr $issetVar): BooleanAnd
