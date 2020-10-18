@@ -26,11 +26,11 @@ final class CorrectDefaultTypesOnEntityPropertyRector extends AbstractRector
     /**
      * @var DoctrinePropertyAnalyzer
      */
-    private $columnPropertyAnalyzer;
+    private $doctrinePropertyAnalyzer;
 
-    public function __construct(DoctrinePropertyAnalyzer $columnPropertyAnalyzer)
+    public function __construct(DoctrinePropertyAnalyzer $doctrinePropertyAnalyzer)
     {
-        $this->columnPropertyAnalyzer = $columnPropertyAnalyzer;
+        $this->doctrinePropertyAnalyzer = $doctrinePropertyAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -84,7 +84,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $columnTagValueNode = $this->columnPropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
+        $columnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
         if ($columnTagValueNode === null) {
             return null;
         }

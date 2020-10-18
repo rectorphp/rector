@@ -96,17 +96,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $varTagValueNode = $this->resolveCollectionVarTagValueNode($node);
-        if ($varTagValueNode === null) {
+        $attributeAwareVarTagValueNode = $this->resolveCollectionVarTagValueNode($node);
+        if ($attributeAwareVarTagValueNode === null) {
             return null;
         }
 
-        $collectionObjectType = $this->resolveCollectionObjectType($varTagValueNode->type);
+        $collectionObjectType = $this->resolveCollectionObjectType($attributeAwareVarTagValueNode->type);
         if ($collectionObjectType === null) {
             return null;
         }
 
-        $varTagValueNode->type = $this->createCollectionUnionType($collectionObjectType);
+        $attributeAwareVarTagValueNode->type = $this->createCollectionUnionType($collectionObjectType);
 
         return $node;
     }
@@ -130,30 +130,28 @@ CODE_SAMPLE
     {
         if ($typeNode instanceof UnionTypeNode) {
             foreach ($typeNode->types as $unionedTypeNode) {
-                if ($this->resolveCollectionObjectType($unionedTypeNode)) {
+                if ($this->resolveCollectionObjectType($unionedTypeNode) !== null) {
                     return $this->resolveCollectionObjectType($unionedTypeNode);
                 }
             }
         }
 
-        if ($typeNode instanceof ArrayTypeNode) {
-            if ($typeNode->type instanceof IdentifierTypeNode) {
-                return $typeNode->type;
-            }
+        if ($typeNode instanceof ArrayTypeNode && $typeNode->type instanceof IdentifierTypeNode) {
+            return $typeNode->type;
         }
 
         return null;
     }
 
-    private function createCollectionUnionType(IdentifierTypeNode $collectionObjectType): AttributeAwareUnionTypeNode
+    private function createCollectionUnionType(IdentifierTypeNode $identifierTypeNode): AttributeAwareUnionTypeNode
     {
-        $genericTypesNodes = [new AttributeAwareIdentifierTypeNode('int'), $collectionObjectType];
+        $genericTypesNodes = [new AttributeAwareIdentifierTypeNode('int'), $identifierTypeNode];
         $genericTypeNode = new GenericTypeNode(new AttributeAwareIdentifierTypeNode('Collection'), $genericTypesNodes);
 
         return new AttributeAwareUnionTypeNode([
             // new CollectionType
             $genericTypeNode,
-            new AttributeAwareArrayTypeNode($collectionObjectType),
+            new AttributeAwareArrayTypeNode($identifierTypeNode),
         ]);
     }
 }

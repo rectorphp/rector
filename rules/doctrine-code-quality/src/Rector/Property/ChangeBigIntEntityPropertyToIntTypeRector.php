@@ -30,7 +30,7 @@ final class ChangeBigIntEntityPropertyToIntTypeRector extends AbstractRector
     /**
      * @var DoctrinePropertyAnalyzer
      */
-    private $columnPropertyAnalyzer;
+    private $doctrinePropertyAnalyzer;
 
     /**
      * @var DocBlockClassRenamer
@@ -38,10 +38,10 @@ final class ChangeBigIntEntityPropertyToIntTypeRector extends AbstractRector
     private $docBlockClassRenamer;
 
     public function __construct(
-        DoctrinePropertyAnalyzer $columnPropertyAnalyzer,
+        DoctrinePropertyAnalyzer $doctrinePropertyAnalyzer,
         DocBlockClassRenamer $docBlockClassRenamer
     ) {
-        $this->columnPropertyAnalyzer = $columnPropertyAnalyzer;
+        $this->doctrinePropertyAnalyzer = $doctrinePropertyAnalyzer;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
     }
 
@@ -97,7 +97,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $columnTagValueNode = $this->columnPropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
+        $columnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
         if ($columnTagValueNode === null) {
             return null;
         }
