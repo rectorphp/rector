@@ -11,7 +11,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Nop;
-use PhpParser\Parser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
@@ -20,6 +19,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\Reflection\ClassReflectionToAstResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -28,13 +28,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RemoveEmptyMethodCallRector extends AbstractRector
 {
     /**
-     * @var Parser
+     * @var ClassReflectionToAstResolver
      */
-    private $parser;
+    private $classReflectionToAstResolver;
 
-    public function __construct(Parser $parser)
+    public function __construct(ClassReflectionToAstResolver $classReflectionToAstResolver)
     {
-        $this->parser = $parser;
+        $this->classReflectionToAstResolver = $classReflectionToAstResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -115,7 +115,7 @@ CODE_SAMPLE
         }
 
         /** @var Class_|null $class */
-        $class = $this->getClass($classReflection, $className);
+        $class = $this->classReflectionToAstResolver->getClass($classReflection, $className);
 
         if ($class === null) {
             return null;
@@ -132,34 +132,6 @@ CODE_SAMPLE
         }
 
         return $node;
-    }
-
-    private function getClass(ClassReflection $classReflection, string $className): ?Class_
-    {
-        if ($classReflection->isBuiltin()) {
-            return null;
-        }
-
-        /** @var string $fileName */
-        $fileName = $classReflection->getFileName();
-
-        /** @var Node[] $contentNodes */
-        $contentNodes = $this->parser->parse($this->smartFileSystem->readFile($fileName));
-        $classes = $this->betterNodeFinder->findInstanceOf($contentNodes, Class_::class);
-
-        if ($classes === []) {
-            return null;
-        }
-
-        $reflectionClassName = $classReflection->getName();
-        foreach ($classes as $class) {
-            $shortClassName = $class->name;
-            if ($reflectionClassName === $className) {
-                return $class;
-            }
-        }
-
-        return null;
     }
 
     private function isNonEmptyMethod(Class_ $class, MethodCall $methodCall): bool
