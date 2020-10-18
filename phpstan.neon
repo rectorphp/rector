@@ -940,3 +940,10 @@ parameters:
                 - src/Testing/PHPUnit/AbstractNodeVisitorTestCase.php # 25
                 - src/Testing/PHPUnit/AbstractNodeVisitorTestCase.php # 30
                 - src/Testing/PHPUnit/AbstractRectorTestCase.php # 24
+
+        -
+            message: '#Property with protected modifier is not allowed\. Use interface instead#'
+            paths:
+                - packages/better-php-doc-parser/src/PhpDocNode/AbstractTagValueNode.php # 32
+                - rules/naming/src/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php # 21
+                - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php # 36
