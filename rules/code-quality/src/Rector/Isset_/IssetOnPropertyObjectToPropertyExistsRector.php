@@ -124,7 +124,7 @@ CODE_SAMPLE
      * @param Node $previous
      * @param Node $next
      */
-    private function isFoundInPreviuosOrNext(\PhpParser\Node $previous = null, \PhpParser\Node $next = null, Isset_ $isset): bool
+    private function isFoundInPreviuosOrNext(?Node $previous = null, ?Node $next = null, Isset_ $isset): bool
     {
         if ($previous && $previous->getAttribute(AttributeKey::PARENT_NODE) === $isset) {
             return true;
