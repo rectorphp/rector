@@ -65,15 +65,15 @@ final class PhpDocTagNodeFactory
     {
         $uuidJoinTable = $this->joinTableNameResolver->resolveManyToManyUuidTableNameForProperty($property);
 
-        $uuidJoinColumnTagValueNode = [new JoinColumnTagValueNode([
+        $uuidJoinColumnTagValueNodes = [new JoinColumnTagValueNode([
             'referencedColumnName' => self::UUID,
         ])];
 
         $joinTableTagValueNode = new JoinTableTagValueNode(
             $uuidJoinTable,
             null,
-            $uuidJoinColumnTagValueNode,
-            $uuidJoinColumnTagValueNode,
+            $uuidJoinColumnTagValueNodes,
+            $uuidJoinColumnTagValueNodes,
             '',
             new OpeningAndClosingSpace('', ''),
             new OpeningAndClosingSpace('', '')
