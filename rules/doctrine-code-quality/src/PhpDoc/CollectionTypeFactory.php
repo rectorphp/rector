@@ -4,31 +4,28 @@ declare(strict_types=1);
 
 namespace Rector\DoctrineCodeQuality\PhpDoc;
 
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 final class CollectionTypeFactory
 {
-    public function createFromIdentifierType(IdentifierTypeNode $identifierTypeNode): AttributeAwareUnionTypeNode
+    public function createType(FullyQualifiedObjectType $fullyQualifiedObjectType): UnionType
     {
-        $genericTypeNode = $this->createGenericTypeNode($identifierTypeNode);
+        $genericType = $this->createGenericObjectType($fullyQualifiedObjectType);
+        $arrayType = new ArrayType(new MixedType(), $fullyQualifiedObjectType);
 
-        return new AttributeAwareUnionTypeNode([
-            $genericTypeNode,
-            new AttributeAwareArrayTypeNode($identifierTypeNode),
-        ]);
+        return new UnionType([$genericType, $arrayType]);
     }
 
-    private function createGenericTypeNode(IdentifierTypeNode $identifierTypeNode): GenericTypeNode
+    private function createGenericObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType): Type
     {
-        $genericTypesNodes = [new AttributeAwareIdentifierTypeNode('int'), $identifierTypeNode];
+        $genericTypes = [new IntegerType(), $fullyQualifiedObjectType];
 
-        return new GenericTypeNode(new AttributeAwareFullyQualifiedIdentifierTypeNode(
-            'Doctrine\Common\Collections\Collection'
-        ), $genericTypesNodes);
+        return new GenericObjectType('Doctrine\Common\Collections\Collection', $genericTypes);
     }
 }

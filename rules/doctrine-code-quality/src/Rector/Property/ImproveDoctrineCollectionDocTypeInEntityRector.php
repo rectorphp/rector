@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
@@ -139,27 +138,25 @@ CODE_SAMPLE
 
         $attributeAwareVarTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
         if ($attributeAwareVarTagValueNode !== null) {
-            $collectionObjectType = $this->collectionTypeResolver->resolveFromType(
-                $attributeAwareVarTagValueNode->type
+            $collectionObjectType = $this->collectionTypeResolver->resolveFromTypeNode(
+                $attributeAwareVarTagValueNode->type,
+                $property
             );
+
             if ($collectionObjectType === null) {
                 return null;
             }
 
-            $attributeAwareVarTagValueNode->type = $this->collectionTypeFactory->createFromIdentifierType(
-                $collectionObjectType
-            );
+            $newVarType = $this->collectionTypeFactory->createType($collectionObjectType);
+            $phpDocInfo->changeVarType($newVarType);
         } else {
             $collectionObjectType = $this->collectionTypeResolver->resolveFromOneToManyProperty($property);
             if ($collectionObjectType === null) {
                 return null;
             }
 
-            $attributeAwareUnionTypeNode = $this->collectionTypeFactory->createFromIdentifierType(
-                $collectionObjectType
-            );
-            $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode($attributeAwareUnionTypeNode, '', '');
-            $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
+            $newVarType = $this->collectionTypeFactory->createType($collectionObjectType);
+            $phpDocInfo->changeVarType($newVarType);
         }
 
         return $property;

@@ -7,6 +7,7 @@ namespace Rector\NodeTypeResolver\PHPStan;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ConstantType;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
@@ -38,6 +39,10 @@ final class TypeHasher
 
         if ($type instanceof ShortenedObjectType) {
             return $type->getFullyQualifiedName();
+        }
+
+        if ($type instanceof GenericObjectType) {
+            return $this->phpStanStaticTypeMapper->mapToDocString($type);
         }
 
         if ($type instanceof TypeWithClassName) {

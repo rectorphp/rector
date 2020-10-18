@@ -337,9 +337,9 @@ final class PhpDocInfo
         return $paramTypesByName;
     }
 
-    public function changeVarType(Type $newType): void
+    public function changeVarType(Type $type): void
     {
-        $this->phpDocTypeChanger->changeVarType($this, $newType);
+        $this->phpDocTypeChanger->changeVarType($this, $type);
     }
 
     public function changeReturnType(Type $newType): void
