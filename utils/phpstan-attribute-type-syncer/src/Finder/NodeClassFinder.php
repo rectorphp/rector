@@ -38,6 +38,7 @@ final class NodeClassFinder
 
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_phpdoc_parser_ast');
         $robotLoader->acceptFiles = [$namePattern];
+
         $robotLoader->rebuild();
 
         $indexedClasses = $robotLoader->getIndexedClasses();

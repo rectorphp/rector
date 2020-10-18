@@ -17,9 +17,9 @@ use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DoctrineCodeQuality\PhpDoc\CollectionVarTagValueNodeResolver;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeFactory;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeResolver;
+use Rector\DoctrineCodeQuality\PhpDoc\CollectionVarTagValueNodeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -155,8 +155,8 @@ CODE_SAMPLE
                 return null;
             }
 
-            $type = $this->collectionTypeFactory->createFromIdentifierType($collectionObjectType);
-            $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode($type, '', '');
+            $unionTypeNode = $this->collectionTypeFactory->createFromIdentifierType($collectionObjectType);
+            $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode($unionTypeNode, '', '');
             $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
         }
 
@@ -174,10 +174,22 @@ CODE_SAMPLE
         }
 
         $collectionObjectType = $this->resolveCollectionSetterAssignType($classMethod);
+        if ($collectionObjectType === null) {
+            return null;
+        }
 
-        // @todo
+        if (count($classMethod->params) !== 1) {
+            return null;
+        }
 
-        return null;
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        $param = $classMethod->params[0];
+        $parameterName = $this->getName($param);
+        $phpDocInfo->changeParamType($collectionObjectType, $param, $parameterName);
+
+        return $classMethod;
     }
 
     private function resolveCollectionSetterAssignType(ClassMethod $classMethod): ?TypeNode

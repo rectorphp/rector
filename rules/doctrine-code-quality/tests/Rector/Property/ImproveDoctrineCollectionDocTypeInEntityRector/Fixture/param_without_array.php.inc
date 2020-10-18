@@ -40,11 +40,12 @@ class ParamWithoutArray
 {
     /**
      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
+     * @var \Doctrine\Common\Collections\Collection<int, Training>|Training[]
      */
     private $trainings = [];
 
     /**
-     * @param Collection<int, Training>|Training[] $collection
+     * @param \Doctrine\Common\Collections\Collection<int, Training>|Training[] $collection
      */
     public function setTrainings($collection): void
     {
