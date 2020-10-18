@@ -71,7 +71,7 @@ final class ReadWritePropertyAnalyzer
             return $this->isArrayDimFetchRead($parent);
         }
 
-        return ! $this->assignManipulator->isNodeLeftPartOfAssign($node);
+        return ! $this->assignManipulator->isLeftPartOfAssign($node);
     }
 
     private function unwrapPostPreIncDec(Node $node): Node
@@ -93,7 +93,7 @@ final class ReadWritePropertyAnalyzer
             throw new MissingParentNodeException();
         }
 
-        if (! $this->assignManipulator->isNodeLeftPartOfAssign($arrayDimFetch)) {
+        if (! $this->assignManipulator->isLeftPartOfAssign($arrayDimFetch)) {
             return false;
         }
 
@@ -102,6 +102,6 @@ final class ReadWritePropertyAnalyzer
             return true;
         }
 
-        return ! $this->assignManipulator->isNodeLeftPartOfAssign($arrayDimFetch);
+        return ! $this->assignManipulator->isLeftPartOfAssign($arrayDimFetch);
     }
 }

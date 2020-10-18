@@ -14,7 +14,11 @@ use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -42,10 +46,26 @@ final class AssignManipulator
      */
     private $betterStandardPrinter;
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var PropertyFetchAnalyzer
+     */
+    private $propertyFetchAnalyzer;
+
+    public function __construct(
+        BetterStandardPrinter $betterStandardPrinter,
+        NodeNameResolver $nodeNameResolver,
+        BetterNodeFinder $betterNodeFinder,
+        PropertyFetchAnalyzer $propertyFetchAnalyzer
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
     /**
@@ -65,7 +85,7 @@ final class AssignManipulator
         return $this->nodeNameResolver->isName($assign->expr, 'each');
     }
 
-    public function isNodeLeftPartOfAssign(Node $node): bool
+    public function isLeftPartOfAssign(Node $node): bool
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Assign && $parentNode->var === $node) {
@@ -114,6 +134,20 @@ final class AssignManipulator
         }
 
         return false;
+    }
+
+    /**
+     * @return PropertyFetch[]
+     */
+    public function resolveAssignsToLocalPropertyFetches(FunctionLike $functionLike): array
+    {
+        return $this->betterNodeFinder->find($functionLike->getStmts(), function (Node $node): bool {
+            if (! $this->propertyFetchAnalyzer->isLocalPropertyFetch($node)) {
+                return false;
+            }
+
+            return $this->isLeftPartOfAssign($node);
+        });
     }
 
     private function isValueModifyingNode(Node $node): bool

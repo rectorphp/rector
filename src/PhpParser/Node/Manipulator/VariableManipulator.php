@@ -154,7 +154,7 @@ final class VariableManipulator
                 return false;
             }
 
-            if (! $this->assignManipulator->isNodeLeftPartOfAssign($variableUsage)) {
+            if (! $this->assignManipulator->isLeftPartOfAssign($variableUsage)) {
                 continue;
             }
 

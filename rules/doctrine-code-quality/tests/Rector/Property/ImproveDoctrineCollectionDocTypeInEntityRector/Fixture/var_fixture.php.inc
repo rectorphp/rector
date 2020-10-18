@@ -8,11 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class WithoutArray
+class VarSomeClass
 {
     /**
      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
-     * @var Training[]
+     * @var Collection<int, string>|Training[]
      */
     private $trainings = [];
 }
@@ -29,11 +29,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class WithoutArray
+class VarSomeClass
 {
     /**
      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
-     * @var Collection<int, Training>|Training[]
+     * @var \Doctrine\Common\Collections\Collection<int, Training>|Training[]
      */
     private $trainings = [];
 }

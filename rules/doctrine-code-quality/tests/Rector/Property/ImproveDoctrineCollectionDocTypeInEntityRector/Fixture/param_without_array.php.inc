@@ -8,13 +8,20 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class WithoutCollection
+class ParamWithoutArray
 {
     /**
      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
-     * @var Training[]
      */
     private $trainings = [];
+
+    /**
+     * @param Collection $collection
+     */
+    public function setTrainings($collection): void
+    {
+        $this->trainings = $collection;
+    }
 }
 
 ?>
@@ -29,13 +36,20 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class WithoutCollection
+class ParamWithoutArray
 {
     /**
      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
-     * @var Collection<int, Training>|Training[]
      */
     private $trainings = [];
+
+    /**
+     * @param Collection<int, Training>|Training[] $collection
+     */
+    public function setTrainings($collection): void
+    {
+        $this->trainings = $collection;
+    }
 }
 
 ?>

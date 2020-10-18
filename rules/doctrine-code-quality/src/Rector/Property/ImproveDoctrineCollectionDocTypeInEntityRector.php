@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
+use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
+use Rector\DoctrineCodeQuality\PhpDoc\CollectionVarTagValueNodeResolver;
+use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeFactory;
+use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -28,13 +28,35 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ImproveDoctrineCollectionDocTypeInEntityRector extends AbstractRector
 {
     /**
-     * @var DoctrinePropertyAnalyzer
+     * @var CollectionTypeFactory
      */
-    private $doctrinePropertyAnalyzer;
+    private $collectionTypeFactory;
 
-    public function __construct(DoctrinePropertyAnalyzer $doctrinePropertyAnalyzer)
-    {
-        $this->doctrinePropertyAnalyzer = $doctrinePropertyAnalyzer;
+    /**
+     * @var AssignManipulator
+     */
+    private $assignManipulator;
+
+    /**
+     * @var CollectionTypeResolver
+     */
+    private $collectionTypeResolver;
+
+    /**
+     * @var CollectionVarTagValueNodeResolver
+     */
+    private $collectionVarTagValueNodeResolver;
+
+    public function __construct(
+        CollectionTypeFactory $collectionTypeFactory,
+        AssignManipulator $assignManipulator,
+        CollectionTypeResolver $collectionTypeResolver,
+        CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver
+    ) {
+        $this->collectionTypeFactory = $collectionTypeFactory;
+        $this->assignManipulator = $assignManipulator;
+        $this->collectionTypeResolver = $collectionTypeResolver;
+        $this->collectionVarTagValueNodeResolver = $collectionVarTagValueNodeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -59,7 +81,6 @@ class SomeClass
     private $trainings = [];
 }
 CODE_SAMPLE
-
                     ,
                     <<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
@@ -77,7 +98,6 @@ class SomeClass
     private $trainings = [];
 }
 CODE_SAMPLE
-
                 ),
             ]
         );
@@ -88,70 +108,120 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Property::class];
+        return [Property::class, ClassMethod::class];
     }
 
     /**
-     * @param Property $node
+     * @param Property|ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
-        $attributeAwareVarTagValueNode = $this->resolveCollectionVarTagValueNode($node);
-        if ($attributeAwareVarTagValueNode === null) {
-            return null;
+        if ($node instanceof Property) {
+            return $this->refactorProperty($node);
         }
 
-        $collectionObjectType = $this->resolveCollectionObjectType($attributeAwareVarTagValueNode->type);
-        if ($collectionObjectType === null) {
-            return null;
-        }
-
-        $attributeAwareVarTagValueNode->type = $this->createCollectionUnionType($collectionObjectType);
-
-        return $node;
-    }
-
-    private function resolveCollectionVarTagValueNode(Property $property): ?VarTagValueNode
-    {
-        $doctrineOneToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineOneToManyTagValueNode($property);
-        if ($doctrineOneToManyTagValueNode === null) {
-            return null;
-        }
-
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
-
-        return $phpDocInfo->getVarTagValueNode();
-    }
-
-    private function resolveCollectionObjectType(TypeNode $typeNode): ?IdentifierTypeNode
-    {
-        if ($typeNode instanceof UnionTypeNode) {
-            foreach ($typeNode->types as $unionedTypeNode) {
-                if ($this->resolveCollectionObjectType($unionedTypeNode) !== null) {
-                    return $this->resolveCollectionObjectType($unionedTypeNode);
-                }
-            }
-        }
-
-        if ($typeNode instanceof ArrayTypeNode && $typeNode->type instanceof IdentifierTypeNode) {
-            return $typeNode->type;
+        if ($node instanceof ClassMethod) {
+            return $this->refactorClassMethod($node);
         }
 
         return null;
     }
 
-    private function createCollectionUnionType(IdentifierTypeNode $identifierTypeNode): AttributeAwareUnionTypeNode
+    private function refactorProperty(Property $property): ?Property
     {
-        $genericTypesNodes = [new AttributeAwareIdentifierTypeNode('int'), $identifierTypeNode];
-        $genericTypeNode = new GenericTypeNode(new AttributeAwareIdentifierTypeNode('Collection'), $genericTypesNodes);
+        if (! $this->hasNodeTagValueNode($property, OneToManyTagValueNode::class)) {
+            return null;
+        }
 
-        return new AttributeAwareUnionTypeNode([
-            // new CollectionType
-            $genericTypeNode,
-            new AttributeAwareArrayTypeNode($identifierTypeNode),
-        ]);
+        // @todo make an own local property on enter node?
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        $attributeAwareVarTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
+        if ($attributeAwareVarTagValueNode !== null) {
+            $collectionObjectType = $this->collectionTypeResolver->resolveFromType(
+                $attributeAwareVarTagValueNode->type
+            );
+            if ($collectionObjectType === null) {
+                return null;
+            }
+
+            $attributeAwareVarTagValueNode->type = $this->collectionTypeFactory->createFromIdentifierType(
+                $collectionObjectType
+            );
+        } else {
+            $collectionObjectType = $this->collectionTypeResolver->resolveFromOneToManyProperty($property);
+            if ($collectionObjectType === null) {
+                return null;
+            }
+
+            $type = $this->collectionTypeFactory->createFromIdentifierType($collectionObjectType);
+            $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode($type, '', '');
+            $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
+        }
+
+        return $property;
+    }
+
+    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
+    {
+        if (! $this->isInDoctrineEntityClass($classMethod)) {
+            return null;
+        }
+
+        if (! $classMethod->isPublic()) {
+            return null;
+        }
+
+        $collectionObjectType = $this->resolveCollectionSetterAssignType($classMethod);
+
+        // @todo
+
+        return null;
+    }
+
+    private function resolveCollectionSetterAssignType(ClassMethod $classMethod): ?TypeNode
+    {
+        $propertyFetches = $this->assignManipulator->resolveAssignsToLocalPropertyFetches($classMethod);
+        if (count($propertyFetches) !== 1) {
+            return null;
+        }
+
+        $property = $this->matchPropertyFetchToClassProperty($propertyFetches[0]);
+        if ($property === null) {
+            return null;
+        }
+
+        $varTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
+        if ($varTagValueNode === null) {
+            return null;
+        }
+
+        return $varTagValueNode->type;
+    }
+
+    private function matchPropertyFetchToClassProperty(PropertyFetch $propertyFetch): ?Property
+    {
+        $propertyName = $this->getName($propertyFetch);
+        if ($propertyName === null) {
+            return null;
+        }
+
+        $class = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return null;
+        }
+
+        return $class->getProperty($propertyName);
+    }
+
+    private function hasNodeTagValueNode(Node $node, string $tagValueNodeClass): bool
+    {
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return false;
+        }
+
+        return $phpDocInfo->hasByType($tagValueNodeClass);
     }
 }
