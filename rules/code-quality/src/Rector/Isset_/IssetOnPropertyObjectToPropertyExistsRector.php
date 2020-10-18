@@ -15,6 +15,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -92,9 +94,29 @@ CODE_SAMPLE
 
             /** @var Expr $object */
             $object = $issetVar->var->getAttribute(AttributeKey::ORIGINAL_NODE);
+
+            /** @var string $objectName */
+            $scope = $object->getAttribute(AttributeKey::SCOPE);
+            /** @var ThisType|ObjectType $type */
+            $type = $scope->getType($object);
+
+            if ($type instanceof ThisType) {
+                return new NotIdentical($issetVar, $this->createNull());
+            }
+
             /** @var Identifier $name */
             $name = $issetVar->name;
             $property = $name->toString();
+
+            if ($type instanceof ObjectType) {
+                /** @var string $className */
+                $className = $type->getClassName();
+
+                $isPropertyAlwaysExists = property_exists($className, $property);
+                if ($isPropertyAlwaysExists) {
+                    return null;
+                }
+            }
 
             $args = [new Arg($object), new Arg(new String_($property))];
             $propertyExistsFuncCall = new FuncCall(new Name('property_exists'), $args);

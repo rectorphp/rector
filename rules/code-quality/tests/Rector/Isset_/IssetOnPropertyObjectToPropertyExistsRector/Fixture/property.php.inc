@@ -28,9 +28,9 @@ class SomeClass
 
     public function run()
     {
-        property_exists($this, 'x') && $this->x !== null;
-        property_exists($this, 'y') && $this->y !== null;
-        property_exists($this, 'x') && $this->x !== null && (property_exists($this, 'y') && $this->y !== null);
+        $this->x !== null;
+        $this->y !== null;
+        $this->x !== null && $this->y !== null;
     }
 }
 
