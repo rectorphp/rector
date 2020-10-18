@@ -81,7 +81,7 @@ final class ServiceMapProvider
         foreach ($xml->services->service as $def) {
             /** @var SimpleXMLElement $attrs */
             $attrs = $def->attributes();
-            if (! isset($attrs->id)) {
+            if (! (property_exists($attrs, 'id') && $attrs->id !== null)) {
                 continue;
             }
 
@@ -152,10 +152,10 @@ final class ServiceMapProvider
 
         return new ServiceDefinition(
             strpos((string) $attrs->id, '.') === 0 ? Strings::substring((string) $attrs->id, 1) : (string) $attrs->id,
-            isset($attrs->class) ? (string) $attrs->class : null,
-            ! isset($attrs->public) || (string) $attrs->public !== 'false',
-            isset($attrs->synthetic) && (string) $attrs->synthetic === 'true',
-            isset($attrs->alias) ? (string) $attrs->alias : null,
+            property_exists($attrs, 'class') && $attrs->class !== null ? (string) $attrs->class : null,
+            ! (property_exists($attrs, 'public') && $attrs->public !== null) || (string) $attrs->public !== 'false',
+            property_exists($attrs, 'synthetic') && $attrs->synthetic !== null && (string) $attrs->synthetic === 'true',
+            property_exists($attrs, 'alias') && $attrs->alias !== null ? (string) $attrs->alias : null,
             $tags
         );
     }

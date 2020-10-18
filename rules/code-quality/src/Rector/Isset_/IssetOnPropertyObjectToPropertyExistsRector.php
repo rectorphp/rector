@@ -15,6 +15,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -79,29 +82,61 @@ CODE_SAMPLE
             }
 
             $previous = $issetVar->getAttribute(AttributeKey::PREVIOUS_NODE);
-            $current = $issetVar->getAttribute(AttributeKey::PARENT_NODE);
             $next = $issetVar->getAttribute(AttributeKey::NEXT_NODE);
 
-            if ($previous && $previous->getAttribute(AttributeKey::PARENT_NODE) === $current) {
-                continue;
-            }
-
-            if ($next && $next->getAttribute(AttributeKey::PARENT_NODE) === $current) {
+            if ($this->isFoundInPreviuosOrNext($previous, $next, $node)) {
                 continue;
             }
 
             /** @var Expr $object */
             $object = $issetVar->var->getAttribute(AttributeKey::ORIGINAL_NODE);
+
+            /** @var Scope $scope */
+            $scope = $object->getAttribute(AttributeKey::SCOPE);
+            /** @var ThisType|ObjectType $type */
+            $type = $scope->getType($object);
+
+            if ($type instanceof ThisType) {
+                return new NotIdentical($issetVar, $this->createNull());
+            }
+
             /** @var Identifier $name */
             $name = $issetVar->name;
             $property = $name->toString();
 
-            $args = [new Arg($object), new Arg(new String_($property))];
-            $propertyExistsFuncCall = new FuncCall(new Name('property_exists'), $args);
+            if ($type instanceof ObjectType) {
+                /** @var string $className */
+                $className = $type->getClassName();
 
-            return new BooleanAnd($propertyExistsFuncCall, new NotIdentical($issetVar, $this->createNull()));
+                $isPropertyAlwaysExists = property_exists($className, $property);
+                if ($isPropertyAlwaysExists) {
+                    return new NotIdentical($issetVar, $this->createNull());
+                }
+            }
+
+            return $this->replaceToPropertyExistsWithNullCheck($object, $property, $issetVar);
         }
 
         return null;
+    }
+
+    /**
+     * @param Node $previous
+     * @param Node $next
+     */
+    private function isFoundInPreviuosOrNext(?Node $previous = null, ?Node $next = null, Isset_ $isset): bool
+    {
+        if ($previous && $previous->getAttribute(AttributeKey::PARENT_NODE) === $isset) {
+            return true;
+        }
+        return $next && $next->getAttribute(AttributeKey::PARENT_NODE) === $isset;
+    }
+
+    private function replaceToPropertyExistsWithNullCheck(Expr $expr, string $property, Expr $issetVar): BooleanAnd
+    {
+        $args = [new Arg($expr), new Arg(new String_($property))];
+        $propertyExistsFuncCall = new FuncCall(new Name('property_exists'), $args);
+
+        return new BooleanAnd($propertyExistsFuncCall, new NotIdentical($issetVar, $this->createNull()));
     }
 }

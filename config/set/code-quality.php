@@ -51,6 +51,7 @@ use Rector\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
+use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
 use Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector;
 use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
 use Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;
@@ -219,4 +220,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(VarToPublicPropertyRector::class);
 
     $services->set(FixClassCaseSensitivityNameRector::class);
+
+    $services->set(IssetOnPropertyObjectToPropertyExistsRector::class);
 };
