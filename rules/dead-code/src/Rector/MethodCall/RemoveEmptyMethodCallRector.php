@@ -6,16 +6,9 @@ namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Nop;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -86,66 +79,37 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var ObjectType $type */
         $type = $scope->getType($node->var);
-
-        if ($node->var instanceof PropertyFetch) {
-            /** @var ObjectType|ThisType $type */
-            $type = $scope->getType($node->var->var);
-        }
-
-        if ($type instanceof ThisType) {
-            return null;
-        }
-
         if (! $type instanceof ObjectType) {
             return null;
         }
 
-        /** @var ClassReflection|null $classReflection */
-        $classReflection = $type->getClassReflection();
-
-        if ($classReflection === null) {
-            return null;
-        }
-
-        $className = $type->getClassName();
-        if (is_a($className, Node::class, true)) {
-            return null;
-        }
-
-        /** @var Class_|null $class */
-        $class = $this->classReflectionToAstResolver->getClass($classReflection, $className);
-
+        $class = $this->classReflectionToAstResolver->getClassFromObjectType($type);
         if ($class === null) {
             return null;
         }
 
-        if ($this->isNonEmptyMethod($class, $node)) {
+        if (! $this->isEmptyMethod($class, $node)) {
             return null;
         }
 
-        try {
-            $this->removeNode($node);
-        } catch (ShouldNotHappenException $shouldNotHappenException) {
-            return null;
-        }
+        $this->removeNode($node);
 
         return $node;
     }
 
-    private function isNonEmptyMethod(Class_ $class, MethodCall $methodCall): bool
+    private function isEmptyMethod(Class_ $class, MethodCall $methodCall): bool
     {
-        /** @var Identifier $methodIdentifier */
-        $methodIdentifier = $methodCall->name;
-        /** @var ClassMethod|null $classMethod */
-        $classMethod = $class->getMethod((string) $methodIdentifier);
-        if ($classMethod === null) {
-            return true;
+        $methodName = $this->getName($methodCall->name);
+        if ($methodName === null) {
+            return false;
         }
 
-        return (bool) $this->betterNodeFinder->find($classMethod->stmts, function ($node): bool {
-            return ! $node instanceof Nop;
-        });
+        $classMethod = $class->getMethod($methodName);
+        if ($classMethod === null) {
+            return false;
+        }
+
+        return count((array) $classMethod->stmts) === 0;
     }
 }
