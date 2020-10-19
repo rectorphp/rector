@@ -89,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isEmptyMethod($class, $node)) {
+        if ($this->shouldSkipClassMethod($class, $node)) {
             return null;
         }
 
@@ -98,18 +98,22 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isEmptyMethod(Class_ $class, MethodCall $methodCall): bool
+    private function shouldSkipClassMethod(Class_ $class, MethodCall $methodCall): bool
     {
         $methodName = $this->getName($methodCall->name);
         if ($methodName === null) {
-            return false;
+            return true;
         }
 
         $classMethod = $class->getMethod($methodName);
         if ($classMethod === null) {
-            return false;
+            return true;
         }
 
-        return count((array) $classMethod->stmts) === 0;
+        if ($classMethod->isAbstract()) {
+            return true;
+        }
+
+        return count((array) $classMethod->stmts) !== 0;
     }
 }
