@@ -17,6 +17,15 @@ on:
 
 jobs:
     rector-ci:
+        strategy:
+            fail-fast: false
+            matrix:
+                directories:
+                    - packages
+                    - rules
+                    - src
+                    - tests
+
         runs-on: ubuntu-latest
         if: github.event.pull_request.head.repo.full_name == github.repository
         steps:
@@ -36,7 +45,7 @@ jobs:
             -   run: composer install --no-progress --ansi
 
             ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anyhting in the future
-            -   run: bin/rector process --config rector-ci.php --ansi --no-progress-bar
+            -   run: bin/rector process ${{ matrix.directories }} --config rector-ci.php --ansi --no-progress-bar
 
             -
                 name: Check for Rector modified files
