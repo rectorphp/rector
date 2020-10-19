@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Parser;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -33,6 +34,18 @@ final class ClassReflectionToAstResolver
         $this->parser = $parser;
         $this->smartFileSystem = $smartFileSystem;
         $this->betterNodeFinder = $betterNodeFinder;
+    }
+
+    public function getClassFromObjectType(ObjectType $objectType): ?Class_
+    {
+        $classReflection = $objectType->getClassReflection();
+        if ($classReflection === null) {
+            return null;
+        }
+
+        $className = $objectType->getClassName();
+
+        return $this->getClass($classReflection, $className);
     }
 
     public function getClass(ClassReflection $classReflection, string $className): ?Class_
