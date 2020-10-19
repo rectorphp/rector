@@ -26,6 +26,7 @@ use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\Core\Skip\Skipper;
+use Rector\Core\ValueObject\ProjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -324,7 +325,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return in_array(
             $projectType,
             // make it typo proof
-            [Option::PROJECT_TYPE_OPEN_SOURCE, Option::PROJECT_TYPE_OPEN_SOURCE_UNDESCORED],
+            [ProjectType::OPEN_SOURCE, ProjectType::OPEN_SOURCE_UNDESCORED],
             true
         );
     }

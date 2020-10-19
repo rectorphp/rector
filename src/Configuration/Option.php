@@ -99,21 +99,6 @@ final class Option
     /**
      * @var string
      */
-    public const PROJECT_TYPE_OPEN_SOURCE = 'open-source';
-
-    /**
-     * @var string
-     */
-    public const PROJECT_TYPE_PROPRIETARY = 'proprietary';
-
-    /**
-     * @var string
-     */
-    public const PROJECT_TYPE_OPEN_SOURCE_UNDESCORED = 'open_source';
-
-    /**
-     * @var string
-     */
     public const PATHS = 'paths';
 
     /**
