@@ -7,6 +7,7 @@ namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedClassConstantRecto
 use Iterator;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\ProjectType;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -17,7 +18,7 @@ final class OpenSourceRectorTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        $this->setParameter(Option::PROJECT_TYPE, Option::PROJECT_TYPE_OPEN_SOURCE);
+        $this->setParameter(Option::PROJECT_TYPE, ProjectType::OPEN_SOURCE);
         $this->doTestFileInfo($fileInfo);
     }
 
