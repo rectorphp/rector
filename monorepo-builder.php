@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::DIRECTORIES_TO_REPOSITORIES, [
-        __DIR__ . '/packages/symfony-php-config' => 'git@github.com:rectorphp/symfony-php-config.git',
+        __DIR__ . '/packages/symfony-php-config' => 'git@github.com:rectorphp/symfony-php-config-test.git',
         __DIR__ . '/packages/simple-php-doc-parser' => 'git@github.com:rectorphp/simple-php-doc-parser.git',
     ]);
 };
