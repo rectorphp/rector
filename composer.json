@@ -57,9 +57,7 @@
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
-        "cweagans/composer-patches": "^1.7",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "migrify/vendor-patches": "^0.3.49",
         "nette/application": "^3.0",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
@@ -346,12 +344,5 @@
     "config": {
         "sort-packages": true,
         "process-timeout": 0
-    },
-    "extra": {
-        "patches": {
-            "symplify/monorepo-builder": [
-                "patches/symplify-monorepo-builder-packages-split-src-packagetorepositorysplitter-php.patch"
-            ]
-        }
     }
 }
