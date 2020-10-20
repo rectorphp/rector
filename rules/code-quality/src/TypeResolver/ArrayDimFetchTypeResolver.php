@@ -32,20 +32,19 @@ final class ArrayDimFetchTypeResolver
         return new ArrayType($keyStaticType, $valueStaticType);
     }
 
+    private function resolveDimType(ArrayDimFetch $arrayDimFetch): Type
+    {
+        if ($arrayDimFetch->dim !== null) {
+            return $this->nodeTypeResolver->getStaticType($arrayDimFetch->dim);
+        }
+
+        return new MixedType();
+    }
     private function resolveValueStaticType(ArrayDimFetch $arrayDimFetch): Type
     {
         $parentParent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentParent instanceof Assign) {
             return $this->nodeTypeResolver->getStaticType($parentParent->expr);
-        }
-
-        return new MixedType();
-    }
-
-    private function resolveDimType(ArrayDimFetch $arrayDimFetch): Type
-    {
-        if ($arrayDimFetch->dim !== null) {
-            return $this->nodeTypeResolver->getStaticType($arrayDimFetch->dim);
         }
 
         return new MixedType();
