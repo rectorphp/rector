@@ -55,6 +55,7 @@ use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector
 use Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector;
 use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
 use Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;
+use Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector;
 use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
@@ -69,157 +70,94 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(CombinedAssignRector::class);
-
     $services->set(SimplifyEmptyArrayCheckRector::class);
-
     $services->set(ForeachToInArrayRector::class);
-
     $services->set(SimplifyForeachToCoalescingRector::class);
-
     $services->set(InArrayAndArrayKeysToArrayKeyExistsRector::class);
-
     $services->set(SimplifyFuncGetArgsCountRector::class);
-
     $services->set(SimplifyInArrayValuesRector::class);
-
     $services->set(SimplifyStrposLowerRector::class);
-
     $services->set(GetClassToInstanceOfRector::class);
-
     $services->set(SimplifyArraySearchRector::class);
-
     $services->set(SimplifyConditionsRector::class);
-
     $services->set(SimplifyIfNotNullReturnRector::class);
-
     $services->set(SimplifyIfReturnBoolRector::class);
-
     $services->set(SimplifyUselessVariableRector::class);
-
     $services->set(UnnecessaryTernaryExpressionRector::class);
-
     $services->set(RemoveExtraParametersRector::class);
-
     $services->set(SimplifyDeMorganBinaryRector::class);
-
     $services->set(SimplifyTautologyTernaryRector::class);
-
     $services->set(SimplifyForeachToArrayFilterRector::class);
-
     $services->set(SingleInArrayToCompareRector::class);
-
     $services->set(SimplifyIfElseToTernaryRector::class);
-
     $services->set(JoinStringConcatRector::class);
-
     $services->set(ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class);
-
     $services->set(SimplifyIfIssetToNullCoalescingRector::class);
-
     $services->set(ExplicitBoolCompareRector::class);
-
     $services->set(CombineIfRector::class);
-
     $services->set(UseIdenticalOverEqualWithSameTypeRector::class);
-
     $services->set(SimplifyDuplicatedTernaryRector::class);
-
     $services->set(SimplifyBoolIdenticalTrueRector::class);
-
     $services->set(SimplifyRegexPatternRector::class);
-
     $services->set(BooleanNotIdenticalToNotIdenticalRector::class);
-
     $services->set(CallableThisArrayToAnonymousFunctionRector::class);
-
     $services->set(AndAssignsToSeparateLinesRector::class);
-
     $services->set(ForToForeachRector::class);
-
     $services->set(CompactToVariablesRector::class);
-
     $services->set(CompleteDynamicPropertiesRector::class);
-
     $services->set(IsAWithStringWithThirdArgumentRector::class);
-
     $services->set(StrlenZeroToIdenticalEmptyStringRector::class);
-
     $services->set(RemoveAlwaysTrueConditionSetInConstructorRector::class);
-
     $services->set(ThrowWithPreviousExceptionRector::class);
-
     $services->set(RemoveSoleValueSprintfRector::class);
-
     $services->set(ShortenElseIfRector::class);
-
     $services->set(UseInterfaceOverImplementationInConstructorRector::class);
-
     $services->set(AddPregQuoteDelimiterRector::class);
-
     $services->set(ArrayMergeOfNonArraysToSimpleArrayRector::class);
-
     $services->set(IntvalToTypeCastRector::class);
-
     $services->set(ArrayKeyExistsTernaryThenValueToCoalescingRector::class);
-
     $services->set(AbsolutizeRequireAndIncludePathRector::class);
-
     $services->set(ChangeArrayPushToArrayAssignRector::class);
-
     $services->set(ForRepeatedCountToOwnVariableRector::class);
-
     $services->set(ForeachItemsAssignToEmptyArrayToAssignRector::class);
-
     $services->set(InlineIfToExplicitIfRector::class);
-
     $services->set(ArrayKeysAndInArrayToArrayKeyExistsRector::class);
-
     $services->set(SplitListAssignToSeparateLineRector::class);
-
     $services->set(UnusedForeachValueToArrayKeysRector::class);
-
     $services->set(ArrayThisCallToThisMethodCallRector::class);
-
     $services->set(CommonNotEqualRector::class);
-
-    $services->set(RenameFunctionRector::class)
-        ->call('configure', [[
-            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
-                'split' => 'explode',
-                'join' => 'implode',
-                'sizeof' => 'count',
-                # https://www.php.net/manual/en/aliases.php
-                'chop' => 'rtrim',
-                'doubleval' => 'floatval',
-                'gzputs' => 'gzwrites',
-                'fputs' => 'fwrite',
-                'ini_alter' => 'ini_set',
-                'is_double' => 'is_float',
-                'is_integer' => 'is_int',
-                'is_long' => 'is_int',
-                'is_real' => 'is_float',
-                'is_writeable' => 'is_writable',
-                'key_exists' => 'array_key_exists',
-                'pos' => 'current',
-                'strchr' => 'strstr',
-                # mb
-                'mbstrcut' => 'mb_strcut',
-                'mbstrlen' => 'mb_strlen',
-                'mbstrpos' => 'mb_strpos',
-                'mbstrrpos' => 'mb_strrpos',
-                'mbsubstr' => 'mb_substr',
-            ],
-        ]]);
-
+    $services->set(RenameFunctionRector::class)->call('configure', [[
+        RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
+            'split' => 'explode',
+            'join' => 'implode',
+            'sizeof' => 'count',
+            # https://www.php.net/manual/en/aliases.php
+            'chop' => 'rtrim',
+            'doubleval' => 'floatval',
+            'gzputs' => 'gzwrites',
+            'fputs' => 'fwrite',
+            'ini_alter' => 'ini_set',
+            'is_double' => 'is_float',
+            'is_integer' => 'is_int',
+            'is_long' => 'is_int',
+            'is_real' => 'is_float',
+            'is_writeable' => 'is_writable',
+            'key_exists' => 'array_key_exists',
+            'pos' => 'current',
+            'strchr' => 'strstr',
+            # mb
+            'mbstrcut' => 'mb_strcut',
+            'mbstrlen' => 'mb_strlen',
+            'mbstrpos' => 'mb_strpos',
+            'mbstrrpos' => 'mb_strrpos',
+            'mbsubstr' => 'mb_substr',
+        ],
+    ]]);
     $services->set(SetTypeToCastRector::class);
-
     $services->set(LogicalToBooleanRector::class);
-
     $services->set(VarToPublicPropertyRector::class);
-
     $services->set(FixClassCaseSensitivityNameRector::class);
-
     $services->set(IssetOnPropertyObjectToPropertyExistsRector::class);
+    $services->set(NewStaticToNewSelfRector::class);
 };
