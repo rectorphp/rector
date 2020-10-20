@@ -6,9 +6,7 @@ namespace Rector\CodeQuality\Rector\Foreach_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
-use PHPStan\Analyser\Scope;
 use Rector\CodeQuality\NodeAnalyzer\ForeachNodeAnalyzer;
 use Rector\Core\NodeFinder\NodeUsageFinder;
 use Rector\Core\Rector\AbstractRector;
@@ -88,14 +86,12 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Scope $scope */
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        $previousDeclaration = $this->nodeUsageFinder->findPreviousForeachNodeUsage($node, $assignVariable);
-        if ($previousDeclaration === null) {
+        if ($this->shouldSkipAsPartOfNestedForeach($node)) {
             return null;
         }
 
-        if ($this->shouldSkipAsPartOfNestedForeach($node)) {
+        $previousDeclaration = $this->nodeUsageFinder->findPreviousForeachNodeUsage($node, $assignVariable);
+        if ($previousDeclaration === null) {
             return null;
         }
 
@@ -115,26 +111,7 @@ CODE_SAMPLE
 
     private function shouldSkipAsPartOfNestedForeach(Foreach_ $foreach): bool
     {
-        /** @var Variable|null $foreachedVariable */
-        $foreachedVariable = $this->betterNodeFinder->findFirstInstanceOf($foreach->expr, Variable::class);
-        if ($foreachedVariable === null) {
-            return false;
-        }
-
-        $previousForeachVariableUsage = $this->nodeUsageFinder->findPreviousForeachNodeUsage(
-            $foreach,
-            $foreachedVariable
-        );
-
-        if ($previousForeachVariableUsage === null) {
-            return false;
-        }
-
-        $parent = $previousForeachVariableUsage->getAttribute(AttributeKey::PARENT_NODE);
-
-        /** @var Foreach_ $previousForeachVariableUsageParentNode */
-        $previousForeachVariableUsageParentNode = $parent;
-
-        return $this->areNodesEqual($previousForeachVariableUsageParentNode->valueVar, $foreachedVariable);
+        $foreachParent = $this->betterNodeFinder->findFirstParentInstanceOf($foreach, Foreach_::class);
+        return $foreachParent !== null;
     }
 }
