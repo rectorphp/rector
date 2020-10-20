@@ -126,22 +126,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param NotIdentical[]|BooleanAnd[] $exprs
-     * @todo decouple to StackNodeFactory
-     */
-    private function createBooleanAndFromNodes(array $exprs): BooleanAnd
-    {
-        /** @var NotIdentical|BooleanAnd $booleanAnd */
-        $booleanAnd = array_shift($exprs);
-        foreach ($exprs as $expr) {
-            $booleanAnd = new BooleanAnd($booleanAnd, $expr);
-        }
-
-        /** @var BooleanAnd $booleanAnd */
-        return $booleanAnd;
-    }
-
-    /**
      * @param NotIdentical[]|BooleanAnd[] $newNodes
      */
     private function createReturnNodes(array $newNodes): ?Expr
@@ -155,5 +139,20 @@ CODE_SAMPLE
         }
 
         return $this->createBooleanAndFromNodes($newNodes);
+    }
+    /**
+     * @param NotIdentical[]|BooleanAnd[] $exprs
+     * @todo decouple to StackNodeFactory
+     */
+    private function createBooleanAndFromNodes(array $exprs): BooleanAnd
+    {
+        /** @var NotIdentical|BooleanAnd $booleanAnd */
+        $booleanAnd = array_shift($exprs);
+        foreach ($exprs as $expr) {
+            $booleanAnd = new BooleanAnd($booleanAnd, $expr);
+        }
+
+        /** @var BooleanAnd $booleanAnd */
+        return $booleanAnd;
     }
 }
