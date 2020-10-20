@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Reflection\ParametersAcceptor;
+use PHPStan\Reflection\Type\UnionTypeMethodReflection;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -58,9 +59,15 @@ final class RemoveExtraParametersRector extends AbstractRector
             return null;
         }
 
+        // unreliable count of arguments
+        $functionLikeReflection = $this->callReflectionResolver->resolveCall($node);
+        if ($functionLikeReflection instanceof UnionTypeMethodReflection) {
+            return null;
+        }
+
         /** @var ParametersAcceptor $parametersAcceptor */
         $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor(
-            $this->callReflectionResolver->resolveCall($node),
+            $functionLikeReflection,
             $node
         );
 
