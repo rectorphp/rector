@@ -1,4 +1,4 @@
-# All 595 Rectors Overview
+# All 596 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -8,7 +8,7 @@
 - [Architecture](#architecture) (2)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
-- [CodeQuality](#codequality) (59)
+- [CodeQuality](#codequality) (60)
 - [CodingStyle](#codingstyle) (33)
 - [DeadCode](#deadcode) (41)
 - [Decouple](#decouple) (1)
@@ -941,11 +941,12 @@ Change `foreach()` items assign to empty array to direct assign
  {
      public function run($items)
      {
-         $items2 = [];
+         $collectedItems = [];
+
 -        foreach ($items as $item) {
--             $items2[] = $item;
+-             $collectedItems[] = $item;
 -        }
-+        $items2 = $items;
++        $collectedItems = $items;
      }
  }
 ```
@@ -1117,6 +1118,26 @@ Change OR, AND to ||, && with more common understanding
 -if ($f = false or true) {
 +if (($f = false) || true) {
      return $f;
+ }
+```
+
+<br><br>
+
+### `NewStaticToNewSelfRector`
+
+- class: [`Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector`](/rules/code-quality/src/Rector/New_/NewStaticToNewSelfRector.php)
+- [test fixtures](/rules/code-quality/tests/Rector/New_/NewStaticToNewSelfRector/Fixture)
+
+Change unsafe new `static()` to new `self()`
+
+```diff
+ class SomeClass
+ {
+     public function build()
+     {
+-        return new static();
++        return new self();
+     }
  }
 ```
 
