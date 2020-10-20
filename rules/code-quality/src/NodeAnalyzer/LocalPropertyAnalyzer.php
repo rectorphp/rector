@@ -133,6 +133,19 @@ final class LocalPropertyAnalyzer
 
         return $this->normalizeToSingleType($fetchedLocalPropertyNameToTypes);
     }
+    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch): bool
+    {
+        // special Laravel collection scope
+        if ($this->shouldSkipForLaravelCollection($propertyFetch)) {
+            return true;
+        }
+
+        if ($this->isPartOfClosureBind($propertyFetch)) {
+            return true;
+        }
+
+        return $this->isPartOfClosureBindTo($propertyFetch);
+    }
 
     private function resolvePropertyFetchType(PropertyFetch $propertyFetch): Type
     {
@@ -163,20 +176,6 @@ final class LocalPropertyAnalyzer
         }
 
         return $propertyNameToType;
-    }
-
-    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch): bool
-    {
-        // special Laravel collection scope
-        if ($this->shouldSkipForLaravelCollection($propertyFetch)) {
-            return true;
-        }
-
-        if ($this->isPartOfClosureBind($propertyFetch)) {
-            return true;
-        }
-
-        return $this->isPartOfClosureBindTo($propertyFetch);
     }
 
     private function shouldSkipForLaravelCollection(PropertyFetch $propertyFetch): bool
