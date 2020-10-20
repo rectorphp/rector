@@ -57,7 +57,7 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface, PHPStan
             return $this->phpStanStaticTypeMapper->mapToPhpParserNode($subtractedType);
         }
 
-        if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::OBJECT_TYPE)) {
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::OBJECT_TYPE)) {
             return null;
         }
 

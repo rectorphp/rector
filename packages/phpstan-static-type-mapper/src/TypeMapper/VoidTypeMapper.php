@@ -49,7 +49,7 @@ final class VoidTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
-        if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::VOID_TYPE)) {
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
             return null;
         }
 
@@ -62,7 +62,7 @@ final class VoidTypeMapper implements TypeMapperInterface
 
     public function mapToDocString(Type $type, ?Type $parentType = null): string
     {
-        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             // the void type is better done in PHP code
             return '';
         }

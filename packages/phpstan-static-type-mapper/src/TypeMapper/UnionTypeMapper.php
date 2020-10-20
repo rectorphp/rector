@@ -204,7 +204,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     {
         $phpParserUnionType = $this->matchPhpParserUnionType($unionType);
         if ($phpParserUnionType !== null) {
-            if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::UNION_TYPES)) {
+            if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
                 return null;
             }
 
@@ -223,7 +223,7 @@ final class UnionTypeMapper implements TypeMapperInterface
 
     private function matchPhpParserUnionType(UnionType $unionType): ?PhpParserUnionType
     {
-        if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::UNION_TYPES)) {
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             return null;
         }
 
