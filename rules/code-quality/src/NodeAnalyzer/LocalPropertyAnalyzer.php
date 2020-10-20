@@ -7,6 +7,8 @@ namespace Rector\CodeQuality\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
@@ -139,16 +141,11 @@ final class LocalPropertyAnalyzer
             return true;
         }
 
-        $parentStaticCall = $this->betterNodeFinder->findFirstParentInstanceOf($propertyFetch, StaticCall::class);
-        if (! $parentStaticCall instanceof StaticCall) {
-            return false;
+        if ($this->isPartOfClosureBind($propertyFetch)) {
+            return true;
         }
 
-        /** magic static call to get private property - see https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection/ */
-        return $this->nodeNameResolver->isName($parentStaticCall->class, 'Closure') && $this->nodeNameResolver->isName(
-            $parentStaticCall->name,
-            'bind'
-        );
+        return $this->isPartOfClosureBindTo($propertyFetch);
     }
 
     private function resolvePropertyFetchType(PropertyFetch $propertyFetch): Type
@@ -194,5 +191,37 @@ final class LocalPropertyAnalyzer
         }
 
         return $this->nodeNameResolver->isName($staticCallOrClassMethod->class, self::LARAVEL_COLLECTION_CLASS);
+    }
+
+    /**
+     * Local property is actually not local one, but belongs to passed object
+     * See https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection/
+     */
+    private function isPartOfClosureBind(PropertyFetch $propertyFetch): bool
+    {
+        $parentStaticCall = $this->betterNodeFinder->findFirstParentInstanceOf($propertyFetch, StaticCall::class);
+        if (! $parentStaticCall instanceof StaticCall) {
+            return false;
+        }
+
+        if (! $this->nodeNameResolver->isName($parentStaticCall->class, 'Closure')) {
+            return true;
+        }
+
+        return $this->nodeNameResolver->isName($parentStaticCall->name, 'bind');
+    }
+
+    private function isPartOfClosureBindTo(PropertyFetch $propertyFetch): bool
+    {
+        $parentMethodCall = $this->betterNodeFinder->findFirstParentInstanceOf($propertyFetch, MethodCall::class);
+        if (! $parentMethodCall instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $parentMethodCall->var instanceof Closure) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($parentMethodCall->name, 'bindTo');
     }
 }
