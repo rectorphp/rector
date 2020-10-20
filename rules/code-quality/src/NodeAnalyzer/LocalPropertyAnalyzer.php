@@ -131,6 +131,7 @@ final class LocalPropertyAnalyzer
 
         return $this->normalizeToSingleType($fetchedLocalPropertyNameToTypes);
     }
+
     private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch): bool
     {
         // special Laravel collection scope

@@ -139,6 +139,7 @@ CODE_SAMPLE
 
         return method_exists($className, '__get');
     }
+
     /**
      * @param array<string, Type> $fetchedLocalPropertyNameToTypes
      * @return string[]
