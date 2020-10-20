@@ -329,7 +329,11 @@ final class ParsedNodeCollector
 
     private function isClassAnonymous(Class_ $class): bool
     {
-        if ($class->isAnonymous() || $class->name === null) {
+        if ($class->isAnonymous()) {
+            return true;
+        }
+
+        if ($class->name === null) {
             return true;
         }
 

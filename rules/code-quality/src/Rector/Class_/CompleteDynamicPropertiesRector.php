@@ -5,22 +5,14 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeTraverser;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\CodeQuality\NodeAnalyzer\ClassLikeAnalyzer;
+use Rector\CodeQuality\NodeAnalyzer\LocalPropertyAnalyzer;
 use Rector\CodeQuality\NodeFactory\MissingPropertiesFactory;
-use Rector\CodeQuality\TypeResolver\ArrayDimFetchTypeResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 
 /**
  * @see https://3v4l.org/GL6II
@@ -32,33 +24,28 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 final class CompleteDynamicPropertiesRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var ArrayDimFetchTypeResolver
-     */
-    private $arrayDimFetchTypeResolver;
-
-    /**
      * @var MissingPropertiesFactory
      */
     private $missingPropertiesFactory;
 
+    /**
+     * @var LocalPropertyAnalyzer
+     */
+    private $localPropertyAnalyzer;
+
+    /**
+     * @var ClassLikeAnalyzer
+     */
+    private $classLikeAnalyzer;
+
     public function __construct(
-        TypeFactory $typeFactory,
-        ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver,
-        MissingPropertiesFactory $missingPropertiesFactory
+        MissingPropertiesFactory $missingPropertiesFactory,
+        LocalPropertyAnalyzer $localPropertyAnalyzer,
+        ClassLikeAnalyzer $classLikeAnalyzer
     ) {
-        $this->typeFactory = $typeFactory;
-        $this->arrayDimFetchTypeResolver = $arrayDimFetchTypeResolver;
         $this->missingPropertiesFactory = $missingPropertiesFactory;
+        $this->localPropertyAnalyzer = $localPropertyAnalyzer;
+        $this->classLikeAnalyzer = $classLikeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -105,72 +92,61 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isNonAnonymousClass($node)) {
-            return null;
-        }
-
-        /** @var string $class */
-        $class = $this->getName($node);
-
-        // properties are accessed via magic, nothing we can do
-        if (method_exists($class, '__set') || method_exists($class, '__get')) {
+        if ($this->shouldSkipClass($node)) {
             return null;
         }
 
         // special case for Laravel Collection macro magic
-        $fetchedLocalPropertyNameToTypes = $this->resolveFetchedLocalPropertyNameToType($node);
+        $fetchedLocalPropertyNameToTypes = $this->localPropertyAnalyzer->resolveFetchedPropertiesToTypesFromClass(
+            $node
+        );
 
         $propertiesToComplete = $this->resolvePropertiesToComplete($node, $fetchedLocalPropertyNameToTypes);
         if ($propertiesToComplete === []) {
             return null;
         }
 
-        // remove other properties that are accessible from this scope
-        /** @var string $class */
-        $class = $this->getName($node);
+        /** @var string $className */
+        $className = $this->getName($node);
 
-        foreach ($propertiesToComplete as $key => $propertyToComplete) {
-            /** @var string $propertyToComplete */
-            if (! property_exists($class, $propertyToComplete)) {
-                continue;
-            }
-
-            unset($propertiesToComplete[$key]);
-        }
+        $propertiesToComplete = $this->filterOutExistingProperties($className, $propertiesToComplete);
 
         $newProperties = $this->missingPropertiesFactory->create(
             $fetchedLocalPropertyNameToTypes,
             $propertiesToComplete
         );
 
-        $node->stmts = array_merge($newProperties, $node->stmts);
+        $node->stmts = array_merge($newProperties, (array) $node->stmts);
 
         return $node;
     }
 
-    /**
-     * @return array<string, Type>
-     */
-    private function resolveFetchedLocalPropertyNameToType(Class_ $class): array
+    private function shouldSkipClass(Class_ $class): bool
     {
-        $fetchedLocalPropertyNameToTypes = $this->resolveFetchedLocalPropertyNamesToTypes($class);
-
-        // normalize types to union
-        $fetchedLocalPropertyNameToType = [];
-        foreach ($fetchedLocalPropertyNameToTypes as $name => $types) {
-            $fetchedLocalPropertyNameToType[$name] = $this->typeFactory->createMixedPassedOrUnionType($types);
+        if (! $this->isNonAnonymousClass($class)) {
+            return true;
         }
 
-        return $fetchedLocalPropertyNameToType;
+        $className = $this->getName($class);
+        if ($className === null) {
+            return true;
+        }
+
+        // properties are accessed via magic, nothing we can do
+        if (method_exists($className, '__set')) {
+            return true;
+        }
+
+        return method_exists($className, '__get');
     }
 
     /**
      * @param array<string, Type> $fetchedLocalPropertyNameToTypes
-     * @return array<int, string>
+     * @return string[]
      */
     private function resolvePropertiesToComplete(Class_ $class, array $fetchedLocalPropertyNameToTypes): array
     {
-        $propertyNames = $this->getClassPropertyNames($class);
+        $propertyNames = $this->classLikeAnalyzer->resolvePropertyNames($class);
 
         /** @var string[] $fetchedLocalPropertyNames */
         $fetchedLocalPropertyNames = array_keys($fetchedLocalPropertyNameToTypes);
@@ -179,88 +155,23 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<string, Type[]>
-     */
-    private function resolveFetchedLocalPropertyNamesToTypes(Class_ $class): array
-    {
-        $fetchedLocalPropertyNameToTypes = [];
-
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
-            &$fetchedLocalPropertyNameToTypes
-        ): ?int {
-            // skip anonymous class scope
-            if ($this->isAnonymousClass($node)) {
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-            }
-
-            if (! $node instanceof PropertyFetch) {
-                return null;
-            }
-
-            if (! $this->isVariableName($node->var, 'this')) {
-                return null;
-            }
-
-            // special Laravel collection scope
-            if ($this->shouldSkipForLaravelCollection($node)) {
-                return null;
-            }
-
-            $propertyName = $this->getName($node->name);
-            if ($propertyName === null) {
-                return null;
-            }
-
-            $propertyFetchType = $this->resolvePropertyFetchType($node);
-            $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
-
-            return null;
-        });
-
-        return $fetchedLocalPropertyNameToTypes;
-    }
-
-    /**
+     * @param string[] $propertiesToComplete
      * @return string[]
      */
-    private function getClassPropertyNames(Class_ $class): array
+    private function filterOutExistingProperties(string $className, array $propertiesToComplete): array
     {
-        $propertyNames = [];
+        $missingPropertyNames = [];
 
-        foreach ($class->getProperties() as $property) {
-            $propertyNames[] = $this->getName($property);
+        // remove other properties that are accessible from this scope
+        foreach ($propertiesToComplete as $propertyToComplete) {
+            /** @var string $propertyToComplete */
+            if (property_exists($className, $propertyToComplete)) {
+                continue;
+            }
+
+            $missingPropertyNames[] = $propertyToComplete;
         }
 
-        return $propertyNames;
-    }
-
-    private function shouldSkipForLaravelCollection(Node $node): bool
-    {
-        $staticCallOrClassMethod = $this->betterNodeFinder->findFirstAncestorInstancesOf(
-            $node,
-            [ClassMethod::class, StaticCall::class]
-        );
-
-        if (! $staticCallOrClassMethod instanceof StaticCall) {
-            return false;
-        }
-
-        return $this->isName($staticCallOrClassMethod->class, self::LARAVEL_COLLECTION_CLASS);
-    }
-
-    private function resolvePropertyFetchType(PropertyFetch $propertyFetch): Type
-    {
-        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
-
-        // possible get type
-        if ($parentNode instanceof Assign) {
-            return $this->getStaticType($parentNode->expr);
-        }
-
-        if ($parentNode instanceof ArrayDimFetch) {
-            return $this->arrayDimFetchTypeResolver->resolve($parentNode);
-        }
-
-        return new MixedType();
+        return $missingPropertyNames;
     }
 }
