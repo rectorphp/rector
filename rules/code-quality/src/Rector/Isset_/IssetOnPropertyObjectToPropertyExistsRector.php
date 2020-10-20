@@ -140,6 +140,7 @@ CODE_SAMPLE
 
         return $this->createBooleanAndFromNodes($newNodes);
     }
+
     /**
      * @param NotIdentical[]|BooleanAnd[] $exprs
      * @todo decouple to StackNodeFactory
