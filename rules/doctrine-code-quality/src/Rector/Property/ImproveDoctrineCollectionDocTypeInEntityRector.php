@@ -208,6 +208,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $propertyFetches[0] instanceof PropertyFetch) {
+            return null;
+        }
+
         $property = $this->matchPropertyFetchToClassProperty($propertyFetches[0]);
         if ($property === null) {
             return null;
