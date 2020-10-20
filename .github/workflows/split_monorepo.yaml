@@ -1,0 +1,23 @@
+name: Split Monorepo
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    split_monorepo:
+        runs-on: ubuntu-latest
+        steps:
+            -
+                uses: actions/checkout@v2
+
+            -
+                uses: shivammathur/setup-php@v2.7
+                with:
+                    php-version: 7.4
+                    coverage: none
+
+            -   run: composer install --no-progress --ansi
+
+            -   run: vendor/bin/monorepo-builder split --max-processes 6 --ansi
