@@ -79,7 +79,7 @@ final class ReturnTypeDeclarationUpdater
 
     private function updatePhp(ClassMethod $classMethod, string $className): void
     {
-        if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return;
         }
 

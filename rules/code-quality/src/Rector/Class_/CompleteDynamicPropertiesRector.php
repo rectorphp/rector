@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\CodeQuality\NodeFactory\MissingPropertiesFactory;
+use Rector\CodeQuality\TypeResolver\ArrayDimFetchTypeResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 
@@ -41,9 +41,24 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
      */
     private $typeFactory;
 
-    public function __construct(TypeFactory $typeFactory)
-    {
+    /**
+     * @var ArrayDimFetchTypeResolver
+     */
+    private $arrayDimFetchTypeResolver;
+
+    /**
+     * @var MissingPropertiesFactory
+     */
+    private $missingPropertiesFactory;
+
+    public function __construct(
+        TypeFactory $typeFactory,
+        ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver,
+        MissingPropertiesFactory $missingPropertiesFactory
+    ) {
         $this->typeFactory = $typeFactory;
+        $this->arrayDimFetchTypeResolver = $arrayDimFetchTypeResolver;
+        $this->missingPropertiesFactory = $missingPropertiesFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -123,7 +138,10 @@ CODE_SAMPLE
             unset($propertiesToComplete[$key]);
         }
 
-        $newProperties = $this->createNewProperties($fetchedLocalPropertyNameToTypes, $propertiesToComplete);
+        $newProperties = $this->missingPropertiesFactory->create(
+            $fetchedLocalPropertyNameToTypes,
+            $propertiesToComplete
+        );
 
         $node->stmts = array_merge($newProperties, $node->stmts);
 
@@ -161,43 +179,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Type[] $fetchedLocalPropertyNameToTypes
-     * @param string[] $propertiesToComplete
-     * @return Property[]
-     */
-    private function createNewProperties(array $fetchedLocalPropertyNameToTypes, array $propertiesToComplete): array
-    {
-        $newProperties = [];
-        foreach ($fetchedLocalPropertyNameToTypes as $propertyName => $propertyType) {
-            if (! in_array($propertyName, $propertiesToComplete, true)) {
-                continue;
-            }
-
-            $property = $this->nodeFactory->createPublicProperty($propertyName);
-
-            // fallback to doc type in PHP 7.4
-            /** @var PhpDocInfo $phpDocInfo */
-            $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-            if ($this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
-                $phpStanNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
-                if ($phpStanNode !== null) {
-                    $property->type = $phpStanNode;
-                } else {
-                    // fallback to doc type in PHP 7.4
-                    $phpDocInfo->changeVarType($propertyType);
-                }
-            } else {
-                $phpDocInfo->changeVarType($propertyType);
-            }
-
-            $newProperties[] = $property;
-        }
-
-        return $newProperties;
-    }
-
-    /**
      * @return array<string, Type[]>
      */
     private function resolveFetchedLocalPropertyNamesToTypes(Class_ $class): array
@@ -231,7 +212,6 @@ CODE_SAMPLE
             }
 
             $propertyFetchType = $this->resolvePropertyFetchType($node);
-
             $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
 
             return null;
@@ -268,13 +248,17 @@ CODE_SAMPLE
         return $this->isName($staticCallOrClassMethod->class, self::LARAVEL_COLLECTION_CLASS);
     }
 
-    private function resolvePropertyFetchType(Node $node): Type
+    private function resolvePropertyFetchType(PropertyFetch $propertyFetch): Type
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
 
         // possible get type
         if ($parentNode instanceof Assign) {
             return $this->getStaticType($parentNode->expr);
+        }
+
+        if ($parentNode instanceof ArrayDimFetch) {
+            return $this->arrayDimFetchTypeResolver->resolve($parentNode);
         }
 
         return new MixedType();

@@ -38,7 +38,7 @@ final class FunctionSupportResolver
                     continue;
                 }
 
-                if (! $this->phpVersionProvider->isAtLeast($version)) {
+                if (! $this->phpVersionProvider->isAtLeastPhpVersion($version)) {
                     continue;
                 }
 
