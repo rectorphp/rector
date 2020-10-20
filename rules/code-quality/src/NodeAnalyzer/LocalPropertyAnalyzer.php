@@ -131,6 +131,24 @@ final class LocalPropertyAnalyzer
 
         return $this->normalizeToSingleType($fetchedLocalPropertyNameToTypes);
     }
+    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch): bool
+    {
+        // special Laravel collection scope
+        if ($this->shouldSkipForLaravelCollection($propertyFetch)) {
+            return true;
+        }
+
+        $parentStaticCall = $this->betterNodeFinder->findFirstParentInstanceOf($propertyFetch, StaticCall::class);
+        if (! $parentStaticCall instanceof StaticCall) {
+            return false;
+        }
+
+        /** magic static call to get private property - see https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection/ */
+        return $this->nodeNameResolver->isName($parentStaticCall->class, 'Closure') && $this->nodeNameResolver->isName(
+            $parentStaticCall->name,
+            'bind'
+        );
+    }
 
     private function resolvePropertyFetchType(PropertyFetch $propertyFetch): Type
     {
@@ -161,25 +179,6 @@ final class LocalPropertyAnalyzer
         }
 
         return $propertyNameToType;
-    }
-
-    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch): bool
-    {
-        // special Laravel collection scope
-        if ($this->shouldSkipForLaravelCollection($propertyFetch)) {
-            return true;
-        }
-
-        $parentStaticCall = $this->betterNodeFinder->findFirstParentInstanceOf($propertyFetch, StaticCall::class);
-        if (! $parentStaticCall instanceof StaticCall) {
-            return false;
-        }
-
-        /** magic static call to get private property - see https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection/ */
-        return $this->nodeNameResolver->isName($parentStaticCall->class, 'Closure') && $this->nodeNameResolver->isName(
-            $parentStaticCall->name,
-            'bind'
-        );
     }
 
     private function shouldSkipForLaravelCollection(PropertyFetch $propertyFetch): bool

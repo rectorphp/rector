@@ -121,20 +121,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param array<string, Type> $fetchedLocalPropertyNameToTypes
-     * @return string[]
-     */
-    private function resolvePropertiesToComplete(Class_ $class, array $fetchedLocalPropertyNameToTypes): array
-    {
-        $propertyNames = $this->classLikeAnalyzer->resolvePropertyNames($class);
-
-        /** @var string[] $fetchedLocalPropertyNames */
-        $fetchedLocalPropertyNames = array_keys($fetchedLocalPropertyNameToTypes);
-
-        return array_diff($fetchedLocalPropertyNames, $propertyNames);
-    }
-
     private function shouldSkipClass(Class_ $class): bool
     {
         if (! $this->isNonAnonymousClass($class)) {
@@ -152,6 +138,19 @@ CODE_SAMPLE
         }
 
         return method_exists($className, '__get');
+    }
+    /**
+     * @param array<string, Type> $fetchedLocalPropertyNameToTypes
+     * @return string[]
+     */
+    private function resolvePropertiesToComplete(Class_ $class, array $fetchedLocalPropertyNameToTypes): array
+    {
+        $propertyNames = $this->classLikeAnalyzer->resolvePropertyNames($class);
+
+        /** @var string[] $fetchedLocalPropertyNames */
+        $fetchedLocalPropertyNames = array_keys($fetchedLocalPropertyNameToTypes);
+
+        return array_diff($fetchedLocalPropertyNames, $propertyNames);
     }
 
     /**
