@@ -947,3 +947,6 @@ parameters:
                 - packages/better-php-doc-parser/src/PhpDocNode/AbstractTagValueNode.php # 32
                 - rules/naming/src/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php # 21
                 - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php # 36
+
+        - '#Method call in if or elseif is not allowed#'
+        - '#Method or Static call in foreach is not allowed#'
