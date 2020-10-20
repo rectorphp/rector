@@ -74,8 +74,6 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->runnableRectorFactory = new RunnableRectorFactory();
         $this->smartFileSystem = new SmartFileSystem();
 
