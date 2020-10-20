@@ -376,6 +376,7 @@ final class NodeFactory
     }
 
     /**
+     * @todo decouple to StackNodeFactory
      * @param Expr[] $exprs
      */
     public function createConcat(array $exprs): ?Concat
