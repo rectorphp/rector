@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Rector\Restoration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -141,6 +144,10 @@ CODE_SAMPLE
                 continue;
             }
 
+            if ($this->isParamDocTypeEqualToPhpType($firstParam, $paramType)) {
+                return null;
+            }
+
             $currentPhpDocInfo->changeParamType($paramType, $firstParam, $paramName);
 
             return $node;
@@ -178,5 +185,15 @@ CODE_SAMPLE
         }
 
         return $class->getMethod($inferParamFromClassMethodReturn->getReturnMethod());
+    }
+
+    private function isParamDocTypeEqualToPhpType(Param $param, Type $paramType): bool
+    {
+        $currentParamType = $this->getObjectType($param);
+        if ($currentParamType instanceof UnionType) {
+            $currentParamType = $currentParamType->getTypes()[0];
+        }
+
+        return $currentParamType->equals($paramType);
     }
 }

@@ -35,7 +35,6 @@ final class ConstantReturnToParamTypeConverter
 
     private function unwrapConstantTypeToObjectType(Type $type): Type
     {
-        $paramTypes = [];
         if ($type instanceof ConstantArrayType) {
             return $this->unwrapConstantTypeToObjectType($type->getItemType());
         } elseif ($type instanceof ConstantStringType) {

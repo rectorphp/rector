@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Restoration\ClassMap;
 
 use Nette\Loaders\RobotLoader;
+use Nette\Utils\Arrays;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 
 final class ExistingClassesProvider
@@ -51,19 +52,8 @@ final class ExistingClassesProvider
         $composerJsonFilePath = getcwd() . '/composer.json';
         $composerJson = $this->composerJsonFactory->createFromFilePath($composerJsonFilePath);
 
-        $directories = [];
-
-        foreach ($composerJson->getAutoload()['psr-4'] ?? [] as $paths) {
-            if (is_array($paths)) {
-                $directories = array_merge($directories, $paths);
-            } else {
-                $directories[] = $paths;
-            }
-        }
-
-        $classmapPaths = $composerJson->getAutoload()['classmap'] ?? [];
-
-        return array_merge($directories, $classmapPaths);
+        $psr4AndClassmapDirectories = $composerJson->getPsr4AndClassmapDirectories();
+        return Arrays::flatten($psr4AndClassmapDirectories);
     }
 
     /**

@@ -117,7 +117,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node|Throw_|MethodCall|FuncCall $node
+     * @param Throw_|MethodCall|FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
