@@ -78,6 +78,7 @@ final class TypeHasher
 
         return $type->getClassName();
     }
+
     private function createUnionTypeHash(UnionType $unionType): string
     {
         $unionedTypesHashes = [];
