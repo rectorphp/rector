@@ -66,19 +66,6 @@ final class TypeHasher
         return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
     }
 
-    private function createUnionTypeHash(UnionType $unionType): string
-    {
-        $unionedTypesHashes = [];
-        foreach ($unionType->getTypes() as $unionedType) {
-            $unionedTypesHashes[] = $this->createTypeHash($unionedType);
-        }
-
-        sort($unionedTypesHashes);
-        $unionedTypesHashes = array_unique($unionedTypesHashes);
-
-        return implode('|', $unionedTypesHashes);
-    }
-
     private function resolveUniqueTypeWithClassNameHash(Type $type): string
     {
         if ($type instanceof ShortenedObjectType) {
@@ -90,5 +77,17 @@ final class TypeHasher
         }
 
         return $type->getClassName();
+    }
+    private function createUnionTypeHash(UnionType $unionType): string
+    {
+        $unionedTypesHashes = [];
+        foreach ($unionType->getTypes() as $unionedType) {
+            $unionedTypesHashes[] = $this->createTypeHash($unionedType);
+        }
+
+        sort($unionedTypesHashes);
+        $unionedTypesHashes = array_unique($unionedTypesHashes);
+
+        return implode('|', $unionedTypesHashes);
     }
 }
