@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use PhpParser\Node\Param;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -19,7 +18,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
-use Webmozart\Assert\Assert;
 
 final class PhpDocTypeChanger
 {
@@ -115,23 +113,24 @@ final class PhpDocTypeChanger
         $this->notifyChange();
     }
 
-    /**
-     * @param Type|TypeNode $type
-     */
-    public function changeParamType(PhpDocInfo $phpDocInfo, $type, Param $param, string $paramName): void
+    public function changeParamType(PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName): void
     {
-        Assert::isAnyOf($type, [Type::class, TypeNode::class]);
-
-        if (! $type instanceof TypeNode) {
-            $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($type);
-        } else {
-            $phpDocType = $type;
-        }
+        $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
 
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
 
         // override existing type
         if ($paramTagValueNode !== null) {
+            // already set
+            $currentType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
+                $paramTagValueNode->type,
+                $param
+            );
+
+            if ($this->typeComparator->areTypesEquals($currentType, $newType)) {
+                return;
+            }
+
             $paramTagValueNode->type = $phpDocType;
         } else {
             $paramTagValueNode = $this->paramPhpDocNodeFactory->create($phpDocType, $param);

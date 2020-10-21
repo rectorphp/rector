@@ -7,20 +7,14 @@ namespace Rector\Restoration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\Restoration\Type\ConstantReturnToParamTypeConverter;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Webmozart\Assert\Assert;
@@ -48,14 +42,16 @@ final class InferParamFromClassMethodReturnRector extends AbstractRector impleme
     private $returnTypeInferer;
 
     /**
-     * @var TypeFactory
+     * @var ConstantReturnToParamTypeConverter
      */
-    private $typeFactory;
+    private $constantReturnToParamTypeConverter;
 
-    public function __construct(ReturnTypeInferer $returnTypeInferer, TypeFactory $typeFactory)
-    {
+    public function __construct(
+        ReturnTypeInferer $returnTypeInferer,
+        ConstantReturnToParamTypeConverter $constantReturnToParamTypeConverter
+    ) {
         $this->returnTypeInferer = $returnTypeInferer;
-        $this->typeFactory = $typeFactory;
+        $this->constantReturnToParamTypeConverter = $constantReturnToParamTypeConverter;
     }
 
     public function getDefinition(): RectorDefinition
@@ -133,9 +129,6 @@ CODE_SAMPLE
             }
 
             $returnType = $this->returnTypeInferer->inferFunctionLike($returnClassMethod);
-            if (! $returnType instanceof ConstantStringType && ! $returnType instanceof ConstantArrayType) {
-                continue;
-            }
 
             /** @var PhpDocInfo|null $currentPhpDocInfo */
             $currentPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -143,7 +136,11 @@ CODE_SAMPLE
                 $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
             }
 
-            $paramType = $this->createParamTypeFromReturnType($returnType);
+            $paramType = $this->constantReturnToParamTypeConverter->convert($returnType);
+            if ($paramType === null) {
+                continue;
+            }
+
             $currentPhpDocInfo->changeParamType($paramType, $firstParam, $paramName);
 
             return $node;
@@ -181,27 +178,5 @@ CODE_SAMPLE
         }
 
         return $class->getMethod($inferParamFromClassMethodReturn->getReturnMethod());
-    }
-
-    private function createParamTypeFromReturnType($returnType): Type
-    {
-        $paramTypes = [];
-        if ($returnType instanceof ConstantArrayType) {
-            $itemType = $returnType->getItemType();
-
-            if ($itemType instanceof ConstantStringType) {
-                $paramTypes[] = new ObjectType($itemType->getValue());
-            } elseif ($itemType instanceof UnionType) {
-                foreach ($itemType->getTypes() as $unionedType) {
-                    if ($unionedType instanceof ConstantStringType) {
-                        $paramTypes[] = new ObjectType($unionedType->getValue());
-                    }
-                }
-            }
-        } else {
-            throw new NotImplementedYetException();
-        }
-
-        return $this->typeFactory->createMixedPassedOrUnionType($paramTypes);
     }
 }

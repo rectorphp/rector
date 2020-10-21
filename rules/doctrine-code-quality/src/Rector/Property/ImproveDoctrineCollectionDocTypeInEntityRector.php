@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
@@ -201,7 +201,7 @@ CODE_SAMPLE
         return $phpDocInfo->hasByType($tagValueNodeClass);
     }
 
-    private function resolveCollectionSetterAssignType(ClassMethod $classMethod): ?TypeNode
+    private function resolveCollectionSetterAssignType(ClassMethod $classMethod): ?Type
     {
         $propertyFetches = $this->assignManipulator->resolveAssignsToLocalPropertyFetches($classMethod);
         if (count($propertyFetches) !== 1) {
@@ -218,7 +218,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $varTagValueNode->type;
+        return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($varTagValueNode->type, $property);
     }
 
     private function matchPropertyFetchToClassProperty(PropertyFetch $propertyFetch): ?Property
