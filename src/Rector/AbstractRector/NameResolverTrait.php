@@ -196,7 +196,12 @@ trait NameResolverTrait
 
     protected function isInClassNamed(Node $node, string $desiredClassName): bool
     {
-        return $node->getAttribute(AttributeKey::CLASS_NAME) === $desiredClassName;
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return false;
+        }
+
+        return is_a($className, $desiredClassName, true);
     }
 
     /**

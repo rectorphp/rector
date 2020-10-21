@@ -75,7 +75,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param AssignOp|BinaryOp $node
+     * @param Plus|Minus|Mul|Div|AssignPlus|AssignMinus|AssignMul|AssignDiv $node
      */
     public function refactor(Node $node): ?Node
     {

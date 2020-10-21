@@ -64,7 +64,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FunctionLike::class];
+        return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
     }
 
     /**

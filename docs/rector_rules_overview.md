@@ -1,4 +1,4 @@
-# All 596 Rectors Overview
+# All 597 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -64,7 +64,7 @@
 - [RectorGenerator](#rectorgenerator) (1)
 - [RemovingStatic](#removingstatic) (6)
 - [Renaming](#renaming) (10)
-- [Restoration](#restoration) (8)
+- [Restoration](#restoration) (9)
 - [SOLID](#solid) (13)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
@@ -13921,6 +13921,56 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  class RandomValueObject
  {
      public function __construct(RandomDependency $randomDependency)
+     {
+     }
+ }
+```
+
+<br><br>
+
+### `InferParamFromClassMethodReturnRector`
+
+- class: [`Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector`](/rules/restoration/src/Rector/ClassMethod/InferParamFromClassMethodReturnRector.php)
+- [test fixtures](/rules/restoration/tests/Rector/ClassMethod/InferParamFromClassMethodReturnRector/Fixture)
+
+Change @param doc based on another method return type
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
+use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(InferParamFromClassMethodReturnRector::class)
+        ->call('configure', [[
+            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => inline_value_objects(
+                [new InferParamFromClassMethodReturn('SomeClass', 'process', 'getNodeTypes')]
+            ),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function getNodeTypes(): array
+     {
+         return [String_::class];
+     }
+
++    /**
++     * @param String_ $node
++     */
+     public function process(Node $node)
      {
      }
  }
