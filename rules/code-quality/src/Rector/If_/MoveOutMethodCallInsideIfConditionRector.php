@@ -142,7 +142,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $variableName = $this->expectedNameResolver->resolveForCall($methodCall) ?? $methodCallVarName . ucfirst($methodCallName);
+        $variableName = $this->expectedNameResolver->resolveForCall($methodCall) ?? $methodCallVarName . ucfirst(
+            $methodCallName
+        );
         $variable = new Variable($variableName);
         $methodCallAssign = new Assign($variable, $methodCall);
 
