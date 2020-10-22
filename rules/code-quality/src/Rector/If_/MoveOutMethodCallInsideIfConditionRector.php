@@ -182,6 +182,6 @@ CODE_SAMPLE
             return $methodCallVarName . ucfirst(strtolower((string) end($explodeUnderscore)));
         }
 
-        return $methodCallVarName . ucfirst(strtolower($methodCallName));
+        return $methodCallVarName . ucfirst($methodCallName);
     }
 }
