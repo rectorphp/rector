@@ -157,7 +157,7 @@ CODE_SAMPLE
         return $if;
     }
 
-    private function getVariableName(MethodCall $methodCall): string
+    private function getVariableName(MethodCall $methodCall): ?string
     {
         $methodCallVarName = $this->getName($methodCall->var);
         $methodCallIdentifier = $methodCall->name;
@@ -177,9 +177,9 @@ CODE_SAMPLE
         }
 
         $arg0 = $methodCall->args[0]->value;
-        if ($arg0 instanceof ClassConstFetch) {
+        if ($arg0 instanceof ClassConstFetch && $arg0->name instanceof Identifier) {
             $explodeUnderscore = explode('_', $arg0->name->toString());
-            return $methodCallVarName . ucfirst(strtolower(end($explodeUnderscore)));
+            return $methodCallVarName . ucfirst(strtolower((string) end($explodeUnderscore)));
         }
 
         return $methodCallVarName . ucfirst(strtolower($methodCallName));
