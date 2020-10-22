@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -130,21 +131,11 @@ CODE_SAMPLE
 
     private function moveOutMethodCall(MethodCall $methodCall, If_ $if): ?If_
     {
-        $methodCallVarName = $this->getName($methodCall->var);
-        $methodCallIdentifier = $methodCall->name;
-
-        if (! $methodCallIdentifier instanceof Identifier) {
+        $variableName = $this->getVariableName($methodCall);
+        if ($variableName === null) {
             return null;
         }
 
-        $methodCallName = $methodCallIdentifier->toString();
-        if ($methodCallVarName === null || $methodCallName === null) {
-            return null;
-        }
-
-        $variableName = $this->expectedNameResolver->resolveForCall($methodCall) ?? $methodCallVarName . ucfirst(
-            $methodCallName
-        );
         $variable = new Variable($variableName);
         $methodCallAssign = new Assign($variable, $methodCall);
 
@@ -164,5 +155,33 @@ CODE_SAMPLE
         });
 
         return $if;
+    }
+
+    private function getVariableName(MethodCall $methodCall): string
+    {
+        $methodCallVarName = $this->getName($methodCall->var);
+        $methodCallIdentifier = $methodCall->name;
+
+        if (! $methodCallIdentifier instanceof Identifier) {
+            return null;
+        }
+
+        $methodCallName = $methodCallIdentifier->toString();
+        if ($methodCallVarName === null || $methodCallName === null) {
+            return null;
+        }
+
+        $variableName = $this->expectedNameResolver->resolveForCall($methodCall);
+        if ($variableName !== null) {
+            return $variableName;
+        }
+
+        $arg0 = $methodCall->args[0]->value;
+        if ($arg0 instanceof ClassConstFetch) {
+            $explodeUnderscore = explode('_', $arg0->name->toString());
+            return $methodCallVarName . ucfirst(strtolower(end($explodeUnderscore)));
+        }
+
+        return $methodCallVarName . ucfirst(strtolower($methodCallName));
     }
 }
