@@ -102,12 +102,13 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         return null;
     }
 
-    private function renameMethod(
-        MethodCall $methodCall,
-        FunctionNameWithAssertMethods $functionNameWithAssertMethods
-    ): void {
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function renameMethod(Node $node, FunctionNameWithAssertMethods $functionNameWithAssertMethods): void
+    {
         /** @var Identifier $identifierNode */
-        $identifierNode = $methodCall->name;
+        $identifierNode = $node->name;
         $oldMethodName = $identifierNode->toString();
 
         if ($functionNameWithAssertMethods->getAssetMethodName() && in_array(
@@ -115,7 +116,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             ['assertTrue', 'assertNotFalse'],
             true
         )) {
-            $methodCall->name = new Identifier($functionNameWithAssertMethods->getAssetMethodName());
+            $node->name = new Identifier($functionNameWithAssertMethods->getAssetMethodName());
         }
         if ($functionNameWithAssertMethods->getNotAssertMethodName() === '') {
             return;
@@ -123,7 +124,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         if (! in_array($oldMethodName, ['assertFalse', 'assertNotTrue'], true)) {
             return;
         }
-        $methodCall->name = new Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
+        $node->name = new Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
     }
 
     /**
@@ -132,10 +133,12 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
      *
      * After:
      * - $this->assertArrayHasKey('...', ['...'], 'second argument');
+     *
+     * @param MethodCall|StaticCall $node
      */
-    private function moveFunctionArgumentsUp(MethodCall $methodCall): void
+    private function moveFunctionArgumentsUp(Node $node): void
     {
-        $funcCallOrEmptyNode = $methodCall->args[0]->value;
+        $funcCallOrEmptyNode = $node->args[0]->value;
         if ($funcCallOrEmptyNode instanceof FuncCall) {
             $funcCallOrEmptyNodeName = $this->getName($funcCallOrEmptyNode);
             if ($funcCallOrEmptyNodeName === null) {
@@ -143,10 +146,10 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             }
 
             $funcCallOrEmptyNodeArgs = $funcCallOrEmptyNode->args;
-            $oldArguments = $methodCall->args;
+            $oldArguments = $node->args;
             unset($oldArguments[0]);
 
-            $methodCall->args = $this->buildNewArguments(
+            $node->args = $this->buildNewArguments(
                 $funcCallOrEmptyNodeName,
                 $funcCallOrEmptyNodeArgs,
                 $oldArguments
@@ -154,7 +157,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         if ($funcCallOrEmptyNode instanceof Empty_) {
-            $methodCall->args[0] = new Arg($funcCallOrEmptyNode->expr);
+            $node->args[0] = new Arg($funcCallOrEmptyNode->expr);
         }
     }
 
