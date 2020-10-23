@@ -20,7 +20,7 @@ final class EndsWithFunctionToNetteUtilsStringsRector extends AbstractWithFuncti
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Use Nette\Utils\Strings::endWith() over bare string-functions', [
+        return new RectorDefinition('Use Nette\Utils\Strings::endsWith() over bare string-functions', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

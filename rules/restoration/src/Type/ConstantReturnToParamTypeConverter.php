@@ -37,14 +37,15 @@ final class ConstantReturnToParamTypeConverter
     {
         if ($type instanceof ConstantArrayType) {
             return $this->unwrapConstantTypeToObjectType($type->getItemType());
-        } elseif ($type instanceof ConstantStringType) {
+        }
+        if ($type instanceof ConstantStringType) {
             return new ObjectType($type->getValue());
-        } elseif ($type instanceof UnionType) {
+        }
+        if ($type instanceof UnionType) {
             $types = [];
             foreach ($type->getTypes() as $unionedType) {
                 $types[] = $this->unwrapConstantTypeToObjectType($unionedType);
             }
-
             return $this->typeFactory->createMixedPassedOrUnionType($types);
         }
 

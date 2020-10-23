@@ -179,12 +179,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
-        return $class->getMethod($inferParamFromClassMethodReturn->getReturnMethod());
+        return $classLike->getMethod($inferParamFromClassMethodReturn->getReturnMethod());
     }
 
     private function isParamDocTypeEqualToPhpType(Param $param, Type $paramType): bool
