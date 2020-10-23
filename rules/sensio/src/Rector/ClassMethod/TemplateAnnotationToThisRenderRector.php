@@ -104,7 +104,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\Class_|ClassMethod $node
+     * @param Class_|ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {

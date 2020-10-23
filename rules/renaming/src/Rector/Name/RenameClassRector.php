@@ -106,7 +106,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param \PhpParser\Node\FunctionLike|Name|\PhpParser\Node\Stmt\ClassLike|Expression|Namespace_|Property|FileWithoutNamespace $node
+     * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace $node
      */
     public function refactor(Node $node): ?Node
     {
