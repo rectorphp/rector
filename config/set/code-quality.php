@@ -45,6 +45,7 @@ use Rector\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector;
 use Rector\CodeQuality\Rector\If_\CombineIfRector;
 use Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector;
 use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
+use Rector\CodeQuality\Rector\If_\MoveOutMethodCallInsideIfConditionRector;
 use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector;
@@ -160,4 +161,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FixClassCaseSensitivityNameRector::class);
     $services->set(IssetOnPropertyObjectToPropertyExistsRector::class);
     $services->set(NewStaticToNewSelfRector::class);
+    $services->set(MoveOutMethodCallInsideIfConditionRector::class);
 };
