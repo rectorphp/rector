@@ -103,6 +103,9 @@ CODE_SAMPLE
         return [ClassMethod::class, Class_::class];
     }
 
+    /**
+     * @param \PhpParser\Node\Stmt\Class_|ClassMethod $node
+     */
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Class_) {

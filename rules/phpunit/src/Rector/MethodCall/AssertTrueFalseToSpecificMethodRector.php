@@ -66,7 +66,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
