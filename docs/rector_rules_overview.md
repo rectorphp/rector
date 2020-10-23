@@ -8063,7 +8063,7 @@ Move dependency get via `$context->getByType()` to constructor injection
 - class: [`Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector`](/rules/nette/src/Rector/Identical/EndsWithFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/rules/nette/tests/Rector/Identical/EndsWithFunctionToNetteUtilsStringsRector/Fixture)
 
-Use `Nette\Utils\Strings::endWith()` over bare string-functions
+Use `Nette\Utils\Strings::endsWith()` over bare string-functions
 
 ```diff
  class SomeClass
