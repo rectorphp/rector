@@ -94,7 +94,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\Namespace_|FileWithoutNamespace $node
+     * @param Namespace_|FileWithoutNamespace $node
      */
     public function refactor(Node $node): ?Node
     {
