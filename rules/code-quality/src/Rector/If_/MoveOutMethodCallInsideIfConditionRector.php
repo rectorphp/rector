@@ -185,7 +185,11 @@ CODE_SAMPLE
 
         if ($arg0 instanceof String_) {
             $get = str_ireplace('get', '', $arg0->value . $methodCallVarName . ucfirst($methodCallName));
-            return str_ireplace('by', '', $get);
+            $by = str_ireplace('by', '', $get);
+
+            if ($by !== $methodCallVarName) {
+                return $by;
+            }
         }
 
         return $methodCallVarName . ucfirst($methodCallName);
