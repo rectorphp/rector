@@ -772,3 +772,13 @@ parameters:
                 - utils/project-validator/src/Process/ParallelTaskRunner.php # 19
 
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector\:\:refactor\(\) expects PhpParser\\Node\\Expr\\AssignOp\\Div\|PhpParser\\Node\\Expr\\AssignOp\\Minus\|PhpParser\\Node\\Expr\\AssignOp\\Mul\|PhpParser\\Node\\Expr\\AssignOp\\Plus\|PhpParser\\Node\\Expr\\BinaryOp\\Div\|PhpParser\\Node\\Expr\\BinaryOp\\Minus\|PhpParser\\Node\\Expr\\BinaryOp\\Mul\|PhpParser\\Node\\Expr\\BinaryOp\\Plus, PhpParser\\Node\\Expr\\AssignOp\|PhpParser\\Node\\Expr\\BinaryOp given#'
+
+        -
+            message: '#Cannot access property \$default on PhpParser\\Node\|null#'
+            paths:
+                - rules/dead-code/src/Rector/PropertyProperty/RemoveNullPropertyInitializationRector.php # 74
+
+        -
+            message: '#Parameter \#1 \$constructorClassMethod of method Rector\\Symfony\\NodeFactory\\BuilderFormNodeFactory\:\:create\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, null given#'
+            paths:
+                - rules/symfony/src/Rector/MethodCall/FormTypeInstanceToClassConstRector.php # 267
