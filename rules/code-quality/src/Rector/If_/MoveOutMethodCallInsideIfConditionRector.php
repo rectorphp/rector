@@ -173,7 +173,7 @@ CODE_SAMPLE
         }
 
         $variableName = $this->expectedNameResolver->resolveForCall($methodCall);
-        if ($variableName !== null) {
+        if ($methodCall->args === [] && $variableName !== null && $variableName !== $methodCallVarName) {
             return $variableName;
         }
 
@@ -185,11 +185,7 @@ CODE_SAMPLE
 
         if ($arg0 instanceof String_) {
             $get = str_ireplace('get', '', $arg0->value . $methodCallVarName . ucfirst($methodCallName));
-            $by = str_ireplace('by', '', $get);
-
-            if ($by !== $variableName) {
-                return $by;
-            }
+            return str_ireplace('by', '', $get);
         }
 
         return $methodCallVarName . ucfirst($methodCallName);
