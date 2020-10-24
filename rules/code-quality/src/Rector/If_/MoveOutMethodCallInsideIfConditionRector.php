@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\BooleanType;
@@ -180,6 +181,11 @@ CODE_SAMPLE
         if ($arg0 instanceof ClassConstFetch && $arg0->name instanceof Identifier) {
             $explodeUnderscore = explode('_', $arg0->name->toString());
             return $methodCallVarName . ucfirst(strtolower((string) end($explodeUnderscore)));
+        }
+
+        if ($arg0 instanceof String_) {
+            $get = str_ireplace('get', '', $arg0->value . $methodCallVarName . ucfirst($methodCallName));
+            return str_ireplace('by', '', $get);
         }
 
         return $methodCallVarName . ucfirst($methodCallName);
