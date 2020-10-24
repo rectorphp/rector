@@ -183,15 +183,28 @@ CODE_SAMPLE
             return $methodCallVarName . ucfirst(strtolower((string) end($explodeUnderscore)));
         }
 
+        $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);
         if ($arg0 instanceof String_) {
-            $get = str_ireplace('get', '', $arg0->value . $methodCallVarName . ucfirst($methodCallName));
-            $by = str_ireplace('by', '', $get);
-
-            if ($by !== $methodCallVarName) {
-                return $by;
-            }
+            return $this->getStringVarName($arg0, $methodCallVarName, $fallbackVarName);
         }
 
+        return $fallbackVarName;
+    }
+
+    private function getStringVarName(String_ $string, string $methodCallVarName, string $fallbackVarName): string
+    {
+        $get = str_ireplace('get', '', $string->value . $fallbackVarName);
+        $by = str_ireplace('by', '', $get);
+
+        if ($by !== $methodCallVarName) {
+            return $by;
+        }
+
+        return $fallbackVarName;
+    }
+
+    private function getFallbackVarName(string $methodCallVarName, string $methodCallName): string
+    {
         return $methodCallVarName . ucfirst($methodCallName);
     }
 }
