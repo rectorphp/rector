@@ -49,6 +49,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::IS_FIRST_LEVEL_STATEMENT,
+    \Rector\NodeTypeResolver\Node\AttributeKey::IS_FRESH_NODE,
 );
 
 expectedArguments(
@@ -83,6 +84,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::IS_FIRST_LEVEL_STATEMENT,
+    \Rector\NodeTypeResolver\Node\AttributeKey::IS_FRESH_NODE,
 );
 
 expectedArguments(

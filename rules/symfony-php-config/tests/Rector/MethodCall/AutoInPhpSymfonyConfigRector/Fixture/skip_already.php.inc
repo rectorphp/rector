@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+namespace Rector\SymfonyPhpConfig\Tests\Rector\MethodCall\AutoInPhpSymfonyConfigRector\Fixture;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -8,10 +8,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->defaults()
-        ->public()
         ->autowire()
+        ->public()
         ->autoconfigure();
-
-    $services->load('Rector\Defluent\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/ValueObject']);
 };

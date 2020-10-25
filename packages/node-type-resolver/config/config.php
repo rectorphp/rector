@@ -20,7 +20,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->defaults()
         ->public()
-        ->autowire();
+        ->autowire()
+        ->autoconfigure();
 
     $services->load('Rector\NodeTypeResolver\\', __DIR__ . '/../src')
         ->exclude([__DIR__ . '/../src/Contract', __DIR__ . '/../src/PHPStan/TypeExtension']);

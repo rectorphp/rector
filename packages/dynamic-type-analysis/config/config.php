@@ -9,7 +9,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->defaults()
         ->autowire()
-        ->public();
+        ->public()
+        ->autoconfigure();
 
     $services->load('Rector\DynamicTypeAnalysis\\', __DIR__ . '/../src')
         ->exclude([__DIR__ . '/../src/Rector']);

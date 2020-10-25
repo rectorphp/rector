@@ -1,4 +1,4 @@
-# All 597 Rectors Overview
+# All 599 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -8,7 +8,7 @@
 - [Architecture](#architecture) (2)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
-- [CodeQuality](#codequality) (60)
+- [CodeQuality](#codequality) (61)
 - [CodingStyle](#codingstyle) (33)
 - [DeadCode](#deadcode) (41)
 - [Decouple](#decouple) (1)
@@ -71,7 +71,7 @@
 - [Symfony](#symfony) (34)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
-- [SymfonyPhpConfig](#symfonyphpconfig) (2)
+- [SymfonyPhpConfig](#symfonyphpconfig) (3)
 - [Transform](#transform) (11)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
@@ -1118,6 +1118,23 @@ Change OR, AND to ||, && with more common understanding
 -if ($f = false or true) {
 +if (($f = false) || true) {
      return $f;
+ }
+```
+
+<br><br>
+
+### `MoveOutMethodCallInsideIfConditionRector`
+
+- class: [`Rector\CodeQuality\Rector\If_\MoveOutMethodCallInsideIfConditionRector`](/rules/code-quality/src/Rector/If_/MoveOutMethodCallInsideIfConditionRector.php)
+- [test fixtures](/rules/code-quality/tests/Rector/If_/MoveOutMethodCallInsideIfConditionRector/Fixture)
+
+Move out method call inside If condition
+
+```diff
+-if ($obj->run($arg) === 1) {
++$objRun = $obj->run($arg);
++if ($objRun === 1) {
+
  }
 ```
 
@@ -15483,6 +15500,29 @@ Move self::$container service fetching from test methods up to setUp method
 <br><br>
 
 ## SymfonyPhpConfig
+
+### `AutoInPhpSymfonyConfigRector`
+
+- class: [`Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector`](/rules/symfony-php-config/src/Rector/MethodCall/AutoInPhpSymfonyConfigRector.php)
+- [test fixtures](/rules/symfony-php-config/tests/Rector/MethodCall/AutoInPhpSymfonyConfigRector/Fixture)
+
+Make sure there is public(), autowire(), `autoconfigure()` calls on `defaults()` in Symfony configs
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
+
+     $services->defaults()
+-        ->autowire();
++        ->autowire()
++        ->public()
++        ->autoconfigure();
+ };
+```
+
+<br><br>
 
 ### `ChangeServiceArgumentsToMethodCallRector`
 

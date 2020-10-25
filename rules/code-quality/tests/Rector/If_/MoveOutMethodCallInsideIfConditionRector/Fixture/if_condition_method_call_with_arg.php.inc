@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
 class IfConditionMethodCallWithArg
 {
@@ -25,7 +25,7 @@ class IfConditionMethodCallWithArg
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
 class IfConditionMethodCallWithArg
 {

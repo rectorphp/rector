@@ -209,4 +209,9 @@ final class AttributeKey
      * @var string
      */
     public const IS_FIRST_LEVEL_STATEMENT = 'is_first_level_statement';
+
+    /**
+     * @var string
+     */
+    public const IS_FRESH_NODE = 'is_fresh_node';
 }
