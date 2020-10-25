@@ -16,16 +16,16 @@ jobs:
                         check_run: "composer validate-monorepo --ansi"
 
                     -
-                        name: "Validate Monorepo"
-                        write_run: "composer propagate --ansi"
-                        commit_message: "propagate monorepo dependencies"
-                        check_run: "composer validate-monorepo --ansi"
-
-                    -
                         name: "Sync Doctrine Annotation Parser"
                         write_run: "bin/rector sync-annotation-parser --ansi"
                         commit_message: "sync doctrine/annotations parser"
                         check_run: "bin/rector sync-annotation-parser --dry-run --ansi"
+
+                    -
+                        name: "Sync Rector & Nodes Docs"
+                        write_run: "composer docs"
+                        commit_message: "sync Rector & Nodes docs"
+                        check_run: "composer docs"
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest

@@ -32,8 +32,8 @@ jobs:
             -
                 uses: actions/checkout@v2
                 with:
-                    # Solves the not "You are not currently on a branch" problem, see https://github
-                    ref: ${{ github.event.pull_request.head.ref }} .com/actions/checkout/issues/124#issuecomment-586664611
+                    # Solves the not "You are not currently on a branch" problem, see https://github.com/actions/checkout/issues/124#issuecomment-586664611
+                    ref: ${{ github.event.pull_request.head.ref }}
                     # Must be used to trigger workflow after push
                     token: ${{ secrets.ACCESS_TOKEN }}
 
