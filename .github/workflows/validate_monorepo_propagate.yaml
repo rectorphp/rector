@@ -27,7 +27,7 @@ jobs:
                 with:
                     # The arguments for the `git add` command (see the paragraph below for more info)
                     add: 'packages'
-                    message: 'update monorepo dependencies'
+                    message: '[ci-review] propagate monorepo dependencies'
                 env:
                     # to get push access
                     token: ${{ secrets.ACCESS_TOKEN }}
