@@ -10,6 +10,7 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectWithoutClassType;
@@ -49,6 +50,10 @@ final class ScalarStringToTypeMapper
 
         if ($loweredScalarName === 'array') {
             return new ArrayType(new MixedType(), new MixedType());
+        }
+
+        if ($loweredScalarName === 'iterable') {
+            return new IterableType(new MixedType(), new MixedType());
         }
 
         if ($loweredScalarName === 'mixed') {
