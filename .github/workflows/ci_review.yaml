@@ -16,6 +16,12 @@ jobs:
                         check_run: "composer validate-monorepo --ansi"
 
                     -
+                        name: "Validate Monorepo"
+                        write_run: "composer propagate --ansi"
+                        commit_message: "propagate monorepo dependencies"
+                        check_run: "composer validate-monorepo --ansi"
+
+                    -
                         name: "Sync Doctrine Annotation Parser"
                         write_run: "bin/rector sync-annotation-parser --ansi"
                         commit_message: "sync doctrine/annotations parser"
@@ -43,7 +49,7 @@ jobs:
                 uses: EndBug/add-and-commit@v5
                 with:
                     # The arguments for the `git add` command (see the paragraph below for more info)
-                    add: 'packages'
+                    add: .
                     message: '[ci-review] ${{ matrix.actions.commit_message }}'
                     author_name: rector-bot
                     author_email: tomas@getrector.org
