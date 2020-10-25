@@ -316,11 +316,11 @@
         ],
         "check-cs": [
             "vendor/bin/ecs check --ansi",
-            "vendor/bin/ecs check-markdown README.md docs/rector_rules_overview.md --ansi"
+            "vendor/bin/ecs check-markdown README.md --ansi"
         ],
         "fix-cs": [
             "vendor/bin/ecs check --fix --ansi",
-            "vendor/bin/ecs check-markdown README.md docs/rector_rules_overview.md --fix --ansi"
+            "vendor/bin/ecs check-markdown README.md --fix --ansi"
         ],
         "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
         "phpstan-config": "vendor/bin/phpstan analyse config --ansi --error-format symplify",
@@ -331,6 +331,7 @@
         ],
         "docs": [
             "bin/rector dump-rectors --output-file docs/rector_rules_overview.md --ansi",
+            "vendor/bin/ecs check-markdown docs/rector_rules_overview.md --ansi --fix",
             "bin/rector dump-nodes --output-file docs/nodes_overview.md --ansi"
         ],
         "rector-ci": "bin/rector process --config rector-ci.php --dry-run --ansi",
