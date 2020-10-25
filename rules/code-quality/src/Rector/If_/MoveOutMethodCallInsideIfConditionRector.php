@@ -193,7 +193,7 @@ CODE_SAMPLE
 
     private function getStringVarName(String_ $string, string $methodCallVarName, string $fallbackVarName): string
     {
-        $get = str_ireplace('get', '', $string->value . $fallbackVarName);
+        $get = str_ireplace('get', '', $string->value . ucfirst($fallbackVarName));
         $by = str_ireplace('by', '', $get);
 
         if ($by !== $methodCallVarName) {
