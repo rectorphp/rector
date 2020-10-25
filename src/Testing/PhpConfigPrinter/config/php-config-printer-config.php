@@ -12,7 +12,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->defaults()
-        ->autowire();
+        ->autowire()
+        ->public()
+        ->autoconfigure();
 
     $services->set(SymfonyVersionFeatureGuard::class);
     $services->alias(SymfonyVersionFeatureGuardInterface::class, SymfonyVersionFeatureGuard::class);

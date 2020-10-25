@@ -14,7 +14,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->defaults()
         ->autowire()
-        ->public();
+        ->public()
+        ->autoconfigure();
 
     $services->load('Rector\BetterPhpDocParser\\', __DIR__ . '/../src')
         ->exclude([

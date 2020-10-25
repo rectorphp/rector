@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
 use Rector\Core\Configuration\Option;
 use Symfony\Component\Console\Command\Command;
@@ -26,7 +26,7 @@ abstract class AbstractCommand extends Command
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
 use Rector\Core\Configuration\Option;
 use Symfony\Component\Console\Command\Command;

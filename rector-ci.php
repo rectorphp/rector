@@ -11,6 +11,7 @@ use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -22,6 +23,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
             ]),
         ]]);
+
+    $services->set(AutoInPhpSymfonyConfigRector::class);
 
     $parameters = $containerConfigurator->parameters();
 
