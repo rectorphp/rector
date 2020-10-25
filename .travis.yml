@@ -12,6 +12,8 @@ before_install:
     # turn off XDebug
     - phpenv config-rm xdebug.ini
 
+    # autoload has changed on Composer 2 and is broken
+    - composer self-update --1
 jobs:
     include:
         -
