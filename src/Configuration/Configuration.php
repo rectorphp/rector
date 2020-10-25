@@ -308,11 +308,6 @@ final class Configuration
         return $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== CheckstyleOutputFormatter::NAME;
     }
 
-    private function setOnlyRector(string $rector): void
-    {
-        $this->onlyRector = $this->onlyRuleResolver->resolve($rector);
-    }
-
     private function sanitizeOutputFileValue(?string $outputFileOption): ?string
     {
         if ($outputFileOption === '') {
@@ -320,5 +315,9 @@ final class Configuration
         }
 
         return $outputFileOption;
+    }
+    private function setOnlyRector(string $rector): void
+    {
+        $this->onlyRector = $this->onlyRuleResolver->resolve($rector);
     }
 }
