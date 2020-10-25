@@ -35,10 +35,6 @@ jobs:
                             bin/rector validate-fixture-suffix --ansi
 
                     -
-                        name: 'Sync Annotation Parser'
-                        run: bin/rector sync-annotation-parser --dry-run --ansi
-
-                    -
                         name: 'Validate Sets Loading'
                         # this is very slow, so it has to be in own workflow
                         run: bin/rector validate-sets --ansi
