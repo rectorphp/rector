@@ -316,6 +316,7 @@ final class Configuration
 
         return $outputFileOption;
     }
+
     private function setOnlyRector(string $rector): void
     {
         $this->onlyRector = $this->onlyRuleResolver->resolve($rector);
