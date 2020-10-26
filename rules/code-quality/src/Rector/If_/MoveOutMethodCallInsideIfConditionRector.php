@@ -163,13 +163,17 @@ CODE_SAMPLE
 
     private function isVariableExists(If_ $if, string $variableName): bool
     {
-        $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($variableName): bool {
-            if ($node instanceof Variable && $node->name === $variableName) {
-                return true;
+        $isExistsInPreviousStatement = $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($variableName): bool {
+            if (! $node instanceof If_) {
+                return false;
             }
 
-            return false;
+            return $node instanceof Variable && $node->name === $variableName;
         });
+
+        if ($isExistsInPreviousStatement) {
+            return true;
+        }
 
         $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
         while ($parentNode) {
