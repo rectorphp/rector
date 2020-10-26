@@ -41,7 +41,7 @@ final class MoveOutMethodCallInsideIfConditionRector extends AbstractRector
      * @var string
      * @see https://regex101.com/r/sYIKpj/1
      */
-    private const CONTANT_REGEX = '#(_)([a-z])#';
+    private const CONSTANT_REGEX = '#(_)([a-z])#';
 
     /**
      * @var ExpectedNameResolver
