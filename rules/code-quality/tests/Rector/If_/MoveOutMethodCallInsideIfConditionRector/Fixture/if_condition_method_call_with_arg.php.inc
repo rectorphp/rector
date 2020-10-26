@@ -10,9 +10,6 @@ class IfConditionMethodCallWithArg
         if ($obj->condition($arg + 1) === 1) {
 
         }
-        if ($obj->condition($arg + 2) === 2) {
-
-        }
     }
 
     public function condition($arg): int
@@ -34,10 +31,6 @@ class IfConditionMethodCallWithArg
         $obj = new self();
         $objCondition = $obj->condition($arg + 1);
         if ($objCondition === 1) {
-
-        }
-        $objCondition = $obj->condition($arg + 2);
-        if ($objCondition === 2) {
 
         }
     }

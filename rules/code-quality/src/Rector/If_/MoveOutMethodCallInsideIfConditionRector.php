@@ -164,10 +164,6 @@ CODE_SAMPLE
     private function isVariableExists(If_ $if, string $variableName): bool
     {
         return (bool) $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($variableName): bool {
-            if (! $node instanceof If_) {
-                return false;
-            }
-
             return $node instanceof Variable && $node->name === $variableName;
         });
     }
