@@ -201,7 +201,7 @@ CODE_SAMPLE
         if ($arg0 instanceof ClassConstFetch && $arg0->name instanceof Identifier) {
             return Strings::replace(
                 strtolower($arg0->name->toString()),
-                self::CONTANT_REGEX,
+                self::CONSTANT_REGEX,
                 function ($matches): string {
                     return strtoupper($matches[2]);
                 }
