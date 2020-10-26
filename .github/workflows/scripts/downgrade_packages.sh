@@ -3,8 +3,8 @@
 # This bash script downgrades the code to the selected PHP version
 #
 # Usage from within a GitHub workflow:
-# .github/workflows/scripts/downgrade_packages.sh $target_version
-# where $target_version is one of the following values:
+# .github/workflows/scripts/downgrade_packages.sh $target_php_version
+# where $target_php_version is one of the following values:
 # - 7.1
 # - 7.2
 # - 7.3
@@ -15,7 +15,7 @@
 ########################################################################
 # Variables to modify when new PHP versions are released
 
-possible_target_versions=(7.1 7.2 7.3 7.4)
+supported_target_php_versions=(7.1 7.2 7.3 7.4)
 
 ########################################################################
 # Helper functions
@@ -29,16 +29,16 @@ function fail {
 function join_by { local d=$1; shift; local f=$1; shift; printf %s "$f" "${@/#/$d}"; }
 ########################################################################
 
-target_version=$1
-if [ -z "$target_version" ]; then
-    versions=$(join_by ", " ${possible_target_versions[@]})
+target_php_version=$1
+if [ -z "$target_php_version" ]; then
+    versions=$(join_by ", " ${supported_target_php_versions[@]})
     fail "Please provide to which PHP version to downgrade to ($versions) as first argument to the bash script"
 fi
 
 # Check the version is supported
-if [[ ! " ${possible_target_versions[@]} " =~ " ${version} " ]]; then
-    versions=$(join_by ", " ${possible_target_versions[@]})
-    fail "Version $target_version is not supported for downgrading. Supported versions: $versions"
+if [[ ! " ${supported_target_php_versions[@]} " =~ " ${version} " ]]; then
+    versions=$(join_by ", " ${supported_target_php_versions[@]})
+    fail "Version $target_php_version is not supported for downgrading. Supported versions: $versions"
 fi
 
 # This variable contains all paths to be downgraded, separated by space
@@ -51,10 +51,10 @@ composer install --no-dev
 
 for version in "$versions"
 do
-    echo Downgrading to PHP version "$target_version"
+    echo Downgrading to PHP version "$target_php_version"
     # Obtain the list of packages for production that need a higher version that the input one.
     # Those must be downgraded
-    PACKAGES=$(composer why-not php "$target_version.*" --no-interaction | grep -o "\S*\/\S*")
+    PACKAGES=$(composer why-not php "$target_php_version.*" --no-interaction | grep -o "\S*\/\S*")
     if [ -n "$PACKAGES" ]; then
         for package in $PACKAGES
         do
