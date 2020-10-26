@@ -5,17 +5,34 @@
 # Usage from within a GitHub workflow:
 # .github/workflows/scripts/downgrade_packages.sh $target_php_version
 # where $target_php_version is one of the following values:
-# - 7.1
-# - 7.2
-# - 7.3
-# - 7.4
+# - 70 (for PHP 7.0)
+# - 71 (for PHP 7.1)
+# - 72 (for PHP 7.2)
+# - 73 (for PHP 7.3)
+# - 74 (for PHP 7.4)
+#
+# Currently highest PHP version from which we can downgrade:
+# - 8.0
 #
 # Eg: To downgrade to PHP 7.1, execute:
-# .github/workflows/scripts/downgrade_packages.sh 7.1
+# .github/workflows/scripts/downgrade_packages.sh 71
 ########################################################################
 # Variables to modify when new PHP versions are released
 
-supported_target_php_versions=(7.1 7.2 7.3 7.4)
+supported_target_php_versions=(70 71 72 73 74)
+
+declare downgrade_php_versions=( \
+    [70]="7.1 7.2 7.3 7.4 8.0" \
+    [71]="7.2 7.3 7.4 8.0" \
+)
+declare downgrade_php_whynots=( \
+    [70]="7.0.* 7.1.* 7.2.* 7.3.* 7.4.*" \
+    [71]="7.1.* 7.2.* 7.3.* 7.4.*" \
+)
+declare downgrade_php_sets=( \
+    [70]="downgrade-71 downgrade-72 downgrade-73 downgrade-74 downgrade-80" \
+    [71]="downgrade-72 downgrade-73 downgrade-74 downgrade-80" \
+)
 
 ########################################################################
 # Helper functions
@@ -36,48 +53,64 @@ if [ -z "$target_php_version" ]; then
 fi
 
 # Check the version is supported
-if [[ ! " ${supported_target_php_versions[@]} " =~ " ${version} " ]]; then
+if [[ ! " ${supported_target_php_versions[@]} " =~ " ${target_php_version} " ]]; then
     versions=$(join_by ", " ${supported_target_php_versions[@]})
     fail "Version $target_php_version is not supported for downgrading. Supported versions: $versions"
 fi
 
+target_downgrade_php_versions=($(echo ${downgrade_php_versions[$target_php_version]} | tr " " "\n"))
+target_downgrade_php_whynots=($(echo ${downgrade_php_whynots[$target_php_version]} | tr " " "\n"))
+target_downgrade_php_sets=($(echo ${downgrade_php_sets[$target_php_version]} | tr " " "\n"))
+
 # This variable contains all paths to be downgraded, separated by space
-PATHS_TO_DOWNGRADE=""
+paths_to_downgrade=""
 # This variable contains which sets to run on the path, separated by space
-SETS_TO_RUN_ON_PATH=""
+sets_to_downgrade=""
 
 # Switch to production
-composer install --no-dev
+# composer install --no-dev
 
-for version in "$versions"
+counter=1
+while [ $counter -le ${#target_downgrade_php_versions[@]} ]
 do
-    echo Downgrading to PHP version "$target_php_version"
+    pos=$(( $counter - 1 ))
+    version=${target_downgrade_php_versions[$pos]}
+    whynot=${target_downgrade_php_whynots[$pos]}
+    set=${target_downgrade_php_sets[$pos]}
+    setFile="/../../../../config/set/$set.php"
+    echo Downgrading to PHP version "$version"
+
     # Obtain the list of packages for production that need a higher version that the input one.
     # Those must be downgraded
-    PACKAGES=$(composer why-not php "$target_php_version.*" --no-interaction | grep -o "\S*\/\S*")
+    PACKAGES=$(composer why-not php $whynot --no-interaction | grep -o "\S*\/\S*")
     if [ -n "$PACKAGES" ]; then
         for package in $PACKAGES
         do
             echo Analyzing package $package
             # Obtain the package's path from Composer
             # Format is "package path", so extract the 2nd word with awk to obtain the path
-            PATHS_TO_DOWNGRADE="$PATHS_TO_DOWNGRADE $(composer info $package --path | awk '{print $2;}')"
+            paths_to_downgrade="$paths_to_downgrade $(composer info $package --path | awk '{print $2;}')"
+            sets_to_downgrade="$sets_to_downgrade $setFile"
             # echo Path is $packagePath
             # # Execute the downgrade
-            # ./vendor/bin/rector process $packagePath --set=downgrade-74 --dry-run
+            # ./vendor/bin/rector process $packagePath --set=$setFile --dry-run
         done
     else
         echo No packages to downgrade
     fi
+    ((counter++))
 done
 
-# Switch to dev again
-composer install
+# # Switch to dev again
+# composer install
 
-# Execute Rector on all the paths
-for package in $PATHS_TO_DOWNGRADE
-do
-    echo Downgrading package $package
-    # Execute the downgrade
-    ./vendor/bin/rector process $packagePath --set=downgrade-74 --dry-run
-done
+echo Paths to downgrade: $paths_to_downgrade
+echo Sets to downgrade: $sets_to_downgrade
+
+# # Execute Rector on all the paths
+# for package in $paths_to_downgrade
+# do
+#     echo Downgrading package $package
+#     # Execute the downgrade
+#     ./vendor/bin/rector process $packagePath --set=downgrade-74 --dry-run
+# done
