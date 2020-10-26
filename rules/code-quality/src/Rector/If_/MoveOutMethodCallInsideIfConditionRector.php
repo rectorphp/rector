@@ -42,12 +42,6 @@ final class MoveOutMethodCallInsideIfConditionRector extends AbstractRector
      */
     private $expectedNameResolver;
 
-    /**
-     * @var string
-     * @see https://regex101.com/r/LTykey/1
-     */
-    private const START_ALPHA_REGEX = '#^[a-zA-Z]#';
-
     public function __construct(ExpectedNameResolver $expectedNameResolver)
     {
         $this->expectedNameResolver = $expectedNameResolver;
