@@ -199,7 +199,7 @@ CODE_SAMPLE
 
         $arg0 = $methodCall->args[0]->value;
         if ($arg0 instanceof ClassConstFetch && $arg0->name instanceof Identifier) {
-            return strtolower($arg0->name->toString()) = Strings::replace(
+            return Strings::replace(
                 strtolower($arg0->name->toString()),
                 self::CONTANT_REGEX,
                 function ($matches): string {
