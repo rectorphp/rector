@@ -156,7 +156,7 @@ CODE_SAMPLE
 
         // is next node Return?
         if ($nextNode instanceof Return_) {
-            $this->return = $foreach->getAttribute(AttributeKey::NEXT_NODE);
+            $this->return = $nextNode;
             $this->removeNode($this->return);
         }
 
