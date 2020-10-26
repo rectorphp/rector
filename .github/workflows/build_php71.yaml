@@ -27,5 +27,5 @@ jobs:
                     php-version: 7.1
                     coverage: none
 
-            -   run: composer install
+            -   run: composer install --ignore-platform-req=php
             -   run: composer phpstan
