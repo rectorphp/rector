@@ -30,8 +30,8 @@ declare downgrade_php_whynots=( \
     [71]="7.1.* 7.2.* 7.3.* 7.4.*" \
 )
 declare downgrade_php_sets=( \
-    [70]="downgrade-71 downgrade-72 downgrade-73 downgrade-74 downgrade-80" \
-    [71]="downgrade-72 downgrade-73 downgrade-74 downgrade-80" \
+    [70]="downgrade-php71 downgrade-php72 downgrade-php73 downgrade-php74 downgrade-php80" \
+    [71]="downgrade-php72 downgrade-php73 downgrade-php74 downgrade-php80" \
 )
 
 ########################################################################
