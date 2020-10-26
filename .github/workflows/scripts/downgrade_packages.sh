@@ -22,28 +22,28 @@
 supported_target_php_versions=(7.0 7.1 7.2 7.3 7.4)
 
 declare -A downgrade_php_versions=( \
-    [7.0]="8.0 7.4 7.3 7.2 7.1" \
-    [7.1]="8.0 7.4 7.3 7.2" \
-    [7.2]="8.0 7.4 7.3" \
-    [7.3]="8.0 7.4" \
-    [7.4]="8.0" \
+    ["7.0"]="8.0 7.4 7.3 7.2 7.1" \
+    ["7.1"]="8.0 7.4 7.3 7.2" \
+    ["7.2"]="8.0 7.4 7.3" \
+    ["7.3"]="8.0 7.4" \
+    ["7.4"]="8.0" \
 )
 declare -A downgrade_php_whynots=( \
-    [7.0]="7.4.* 7.3.* 7.2.* 7.1.* 7.0.*" \
-    [7.1]="7.4.* 7.3.* 7.2.* 7.1.*" \
-    [7.2]="7.4.* 7.3.* 7.2.*" \
-    [7.3]="7.4.* 7.3.*" \
-    [7.4]="7.4.*" \
+    ["7.0"]="7.4.* 7.3.* 7.2.* 7.1.* 7.0.*" \
+    ["7.1"]="7.4.* 7.3.* 7.2.* 7.1.*" \
+    ["7.2"]="7.4.* 7.3.* 7.2.*" \
+    ["7.3"]="7.4.* 7.3.*" \
+    ["7.4"]="7.4.*" \
 )
 declare -A downgrade_php_sets=( \
-    [7.0]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72 downgrade-php71" \
-    [7.1]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72" \
-    [7.2]="downgrade-php80 downgrade-php74 downgrade-php73" \
-    [7.3]="downgrade-php80 downgrade-php74" \
-    [7.4]="downgrade-php80" \
+    ["7.0"]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72 downgrade-php71" \
+    ["7.1"]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72" \
+    ["7.2"]="downgrade-php80 downgrade-php74 downgrade-php73" \
+    ["7.3"]="downgrade-php80 downgrade-php74" \
+    ["7.4"]="downgrade-php80" \
 )
 declare -A package_excludes=( \
-    [rector/rector]="$(pwd)/.docker/*;$(pwd)/.github/*;$(pwd)/bin/*;$(pwd)/ci/*;$(pwd)/docs/*;$(pwd)/tests/*;$(pwd)/**/tests/*;$(pwd)/packages/rector-generator/templates/*" \
+    ["rector/rector"]="$(pwd)/.docker/*;$(pwd)/.github/*;$(pwd)/bin/*;$(pwd)/ci/*;$(pwd)/docs/*;$(pwd)/tests/*;$(pwd)/**/tests/*;$(pwd)/packages/rector-generator/templates/*" \
 )
 
 ########################################################################
