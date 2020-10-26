@@ -16,7 +16,7 @@ jobs:
                         name: 'Rector Recipe'
                         run: |
                             cp rector-recipe.php.dist rector-recipe.php
-                            bin/rector generate
+                            bin/rector generate --ansi
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
