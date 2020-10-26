@@ -101,9 +101,9 @@ CODE_SAMPLE
         if ($propertyRename === null) {
             return null;
         }
-        $underscoreCamelCasePropertyRenamerRename = $this->underscoreCamelCasePropertyRenamer->rename($propertyRename);
+        $property = $this->underscoreCamelCasePropertyRenamer->rename($propertyRename);
 
-        if ($underscoreCamelCasePropertyRenamerRename === null) {
+        if ($property === null) {
             return null;
         }
 

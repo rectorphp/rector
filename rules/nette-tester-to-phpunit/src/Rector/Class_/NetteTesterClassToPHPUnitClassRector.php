@@ -99,8 +99,8 @@ CODE_SAMPLE
 
     private function processAboveTestInclude(Include_ $include): void
     {
-        $classNode = $include->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $include->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             $this->removeNode($include);
         }
     }

@@ -94,10 +94,10 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
 
         $this->testedObjectType = new ObjectType($testedClass);
         $this->classInsertManipulator->addPropertyToClass($node, $propertyName, $this->testedObjectType);
-        $letNodeMethod = $node->getMethod('let');
+        $classMethod = $node->getMethod('let');
 
         // add let if missing
-        if ($letNodeMethod === null) {
+        if ($classMethod === null) {
             if (! $this->letManipulator->isLetNeededInClass($node)) {
                 return null;
             }
