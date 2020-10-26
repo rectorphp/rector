@@ -66,9 +66,10 @@ final class EntityWithMissingUuidProvider
             if (! $this->doctrineDocBlockResolver->isDoctrineEntityClassWithIdProperty($class)) {
                 continue;
             }
+            $uuidClassProperty = $class->getProperty('uuid');
 
             // already has $uuid property
-            if ($class->getProperty('uuid') !== null) {
+            if ($uuidClassProperty !== null) {
                 continue;
             }
 

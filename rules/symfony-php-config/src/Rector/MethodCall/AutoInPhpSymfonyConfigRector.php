@@ -110,7 +110,8 @@ CODE_SAMPLE
 
     private function shouldSkipMethodCall(MethodCall $methodCall): bool
     {
-        if ($methodCall->getAttribute(AttributeKey::IS_FRESH_NODE)) {
+        $isFreshNode = $methodCall->getAttribute(AttributeKey::IS_FRESH_NODE);
+        if ($isFreshNode) {
             return true;
         }
 

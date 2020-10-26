@@ -98,9 +98,10 @@ CODE_SAMPLE
 
         // Remember when we have already processed this constant recursively
         $node->setAttribute(self::HAS_NEW_ACCESS_LEVEL, true);
+        $nodeRepositoryFindInterface = $this->nodeRepository->findInterface($class);
 
         // 0. constants declared in interfaces have to be public
-        if ($this->nodeRepository->findInterface($class) !== null) {
+        if ($nodeRepositoryFindInterface !== null) {
             $this->makePublic($node);
             return $node;
         }
@@ -132,7 +133,8 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassConst $classConst): bool
     {
-        if ($classConst->getAttribute(self::HAS_NEW_ACCESS_LEVEL)) {
+        $hasNewAccessLevel = $classConst->getAttribute(self::HAS_NEW_ACCESS_LEVEL);
+        if ($hasNewAccessLevel) {
             return true;
         }
 

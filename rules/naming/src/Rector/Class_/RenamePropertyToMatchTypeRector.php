@@ -119,8 +119,9 @@ CODE_SAMPLE
             if ($propertyRename === null) {
                 continue;
             }
+            $matchTypePropertyRenamerRename = $this->matchTypePropertyRenamer->rename($propertyRename);
 
-            if ($this->matchTypePropertyRenamer->rename($propertyRename) !== null) {
+            if ($matchTypePropertyRenamerRename !== null) {
                 $this->hasChanged = true;
             }
         }

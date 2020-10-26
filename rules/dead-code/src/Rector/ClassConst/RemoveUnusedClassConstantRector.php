@@ -78,9 +78,10 @@ CODE_SAMPLE
         if ($class === null) {
             return null;
         }
+        $nodeRepositoryFindInterface = $this->nodeRepository->findInterface($class);
 
         // 0. constants declared in interfaces have to be public
-        if ($this->nodeRepository->findInterface($class) !== null) {
+        if ($nodeRepositoryFindInterface !== null) {
             $this->makePublic($node);
             return $node;
         }

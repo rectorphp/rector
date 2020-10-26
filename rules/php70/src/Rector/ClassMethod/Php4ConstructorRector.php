@@ -80,9 +80,10 @@ CODE_SAMPLE
         if (! $this->isName($classLike, $this->getName($node))) {
             return null;
         }
+        $construct = $classLike->getMethod(MethodName::CONSTRUCT);
 
         // does it already have a __construct method?
-        if ($classLike->getMethod(MethodName::CONSTRUCT) === null) {
+        if ($construct === null) {
             $node->name = new Identifier(MethodName::CONSTRUCT);
         }
 

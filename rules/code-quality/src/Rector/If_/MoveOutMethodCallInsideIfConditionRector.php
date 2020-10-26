@@ -199,9 +199,13 @@ CODE_SAMPLE
 
         $arg0 = $methodCall->args[0]->value;
         if ($arg0 instanceof ClassConstFetch && $arg0->name instanceof Identifier) {
-            return preg_replace_callback(self::CONTANT_REGEX, function ($matches) {
-                return strtoupper($matches[2]);
-            }, strtolower($arg0->name->toString()));
+            return strtolower($arg0->name->toString()) = Strings::replace(
+                strtolower($arg0->name->toString()),
+                self::CONTANT_REGEX,
+                function ($matches): string {
+                    return strtoupper($matches[2]);
+                }
+            );
         }
 
         $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);
