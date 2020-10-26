@@ -133,6 +133,12 @@ do
     set_to_downgrade=${sets_to_downgrade[$pos]}
     exclude=${package_excludes[$package_to_downgrade]}
 
+    # If there's no explicit path to exclude, set to exclude the "tests" folders
+    if [ -z $exclude ]
+    then
+        exclude="${path_to_downgrade}/**/tests/*"
+    fi
+
     # If more than one path, these are split with ";". Replace with space
     path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
     exclude=$(echo "$exclude" | tr ";" " --exclude-path=")
@@ -140,7 +146,7 @@ do
     echo "Running set ${set_to_downgrade} on package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
 
     # Execute the downgrade
-    # echo "bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --dry-run --ansi"
+    echo "bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --dry-run --ansi"
     bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --dry-run --ansi
 
     ((counter++))
