@@ -21,17 +21,20 @@
 
 supported_target_php_versions=(70 71 72 73 74)
 
-declare downgrade_php_versions=( \
+declare -A downgrade_php_versions=( \
     [70]="7.1 7.2 7.3 7.4 8.0" \
     [71]="7.2 7.3 7.4 8.0" \
 )
-declare downgrade_php_whynots=( \
+declare -A downgrade_php_whynots=( \
     [70]="7.0.* 7.1.* 7.2.* 7.3.* 7.4.*" \
     [71]="7.1.* 7.2.* 7.3.* 7.4.*" \
 )
-declare downgrade_php_sets=( \
+declare -A downgrade_php_sets=( \
     [70]="downgrade-php71 downgrade-php72 downgrade-php73 downgrade-php74 downgrade-php80" \
     [71]="downgrade-php72 downgrade-php73 downgrade-php74 downgrade-php80" \
+)
+declare -A package_excludes=( \
+    ["rector/rector"]="$(pwd)/.docker/*';$(pwd)/.github/*';$(pwd)/bin/*';$(pwd)/ci/*';$(pwd)/docs/*';$(pwd)/tests/*';$(pwd)/**/tests/*';$(pwd)/packages/rector-generator/templates/*'" \
 )
 
 ########################################################################
@@ -62,9 +65,8 @@ target_downgrade_php_versions=($(echo ${downgrade_php_versions[$target_php_versi
 target_downgrade_php_whynots=($(echo ${downgrade_php_whynots[$target_php_version]} | tr " " "\n"))
 target_downgrade_php_sets=($(echo ${downgrade_php_sets[$target_php_version]} | tr " " "\n"))
 
-# This variable contains all paths to be downgraded, separated by space
+packages_to_downgrade=()
 paths_to_downgrade=()
-# This variable contains which sets to run on the path, separated by space
 sets_to_downgrade=()
 
 # Switch to production
@@ -87,17 +89,16 @@ do
         do
             echo Analyzing package $package
             # Composer also analyzes the root project "rector/rector",
-            # but its behavior is different:
-            # 1. Path is the root folder
-            # 2. Analyze several paths
+            # but its path is the root folder
             if [ $package = "rector/rector" ]
             then
-                path="$(pwd)/src/;$(pwd)/rules/"
+                path=$(pwd)
             else
+                # Obtain the package's path from Composer
+                # Format is "package path", so extract the 2nd word with awk to obtain the path
                 path=$(composer info $package --path | awk '{print $2;}')
             fi
-            # Obtain the package's path from Composer
-            # Format is "package path", so extract the 2nd word with awk to obtain the path
+            packages_to_downgrade+=($package)
             paths_to_downgrade+=($path)
             sets_to_downgrade+=($set)
         done
@@ -110,28 +111,37 @@ done
 # Switch to dev again
 composer install
 
-# Make sure that the number of paths and sets is the same, otherwise something went wrong
+# Make sure that the number of packages, paths and sets is the same
+# otherwise something went wrong
+numberPackages=${#packages_to_downgrade[@]}
 numberPaths=${#paths_to_downgrade[@]}
 numberSets=${#sets_to_downgrade[@]}
-if [ ! $numberSets -eq $numberPaths ]; then
-    fail "Number of sets ($numberSets) and number of paths ($numberPaths) must not be different"
+if [ ! $numberPaths -eq $numberPackages ]; then
+    fail "Number of paths ($numberPaths) and number of packages ($numberPackages) should not be different"
+fi
+if [ ! $numberSets -eq $numberPackages ]; then
+    fail "Number of sets ($numberSets) and number of packages ($numberPackages) should not be different"
 fi
 
 # Execute Rector on all the paths
 counter=1
-while [ $counter -le $numberPaths ]
+while [ $counter -le $numberPackages ]
 do
     pos=$(( $counter - 1 ))
+    package_to_downgrade=${packages_to_downgrade[$pos]}
     path_to_downgrade=${paths_to_downgrade[$pos]}
     set_to_downgrade=${sets_to_downgrade[$pos]}
+    exclude=${package_excludes[$package_to_downgrade]}
 
     # If more than one path, these are split with ";". Replace with space
     path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
+    exclude=$(echo "$exclude" | tr ";" " --exclude_paths=")
 
-    echo "Downgrading set ${set_to_downgrade} on path(s) ${path_to_downgrade}"
+    echo "Running set ${set_to_downgrade} on package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
 
     # Execute the downgrade
-    bin/rector process $path_to_downgrade --set=$set_to_downgrade --dry-run --ansi
+    # echo "bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude_paths=$exclude --dry-run --ansi"
+    bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude_paths=$exclude --dry-run --ansi
 
     ((counter++))
 done
