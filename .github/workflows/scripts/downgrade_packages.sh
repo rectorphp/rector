@@ -22,16 +22,16 @@
 supported_target_php_versions=(70 71 72 73 74)
 
 declare -A downgrade_php_versions=( \
-    [70]="7.1 7.2 7.3 7.4 8.0" \
-    [71]="7.2 7.3 7.4 8.0" \
+    [70]="8.0 7.4 7.3 7.2 7.1" \
+    [71]="8.0 7.4 7.3 7.2" \
 )
 declare -A downgrade_php_whynots=( \
-    [70]="7.0.* 7.1.* 7.2.* 7.3.* 7.4.*" \
-    [71]="7.1.* 7.2.* 7.3.* 7.4.*" \
+    [70]="7.4.* 7.3.* 7.2.* 7.1.* 7.0.*" \
+    [71]="7.4.* 7.3.* 7.2.* 7.1.*" \
 )
 declare -A downgrade_php_sets=( \
-    [70]="downgrade-php71 downgrade-php72 downgrade-php73 downgrade-php74 downgrade-php80" \
-    [71]="downgrade-php72 downgrade-php73 downgrade-php74 downgrade-php80" \
+    [70]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72 downgrade-php71" \
+    [71]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72" \
 )
 declare -A package_excludes=( \
     ["rector/rector"]="$(pwd)/.docker/*';$(pwd)/.github/*';$(pwd)/bin/*';$(pwd)/ci/*';$(pwd)/docs/*';$(pwd)/tests/*';$(pwd)/**/tests/*';$(pwd)/packages/rector-generator/templates/*'" \
@@ -79,7 +79,7 @@ do
     version=${target_downgrade_php_versions[$pos]}
     whynot=${target_downgrade_php_whynots[$pos]}
     set=${target_downgrade_php_sets[$pos]}
-    echo Downgrading to PHP version "$version"
+    echo Analyzing packages to downgrade from PHP version "$version"
 
     # Obtain the list of packages for production that need a higher version that the input one.
     # Those must be downgraded
@@ -87,7 +87,7 @@ do
     if [ -n "$PACKAGES" ]; then
         for package in $PACKAGES
         do
-            echo Analyzing package $package
+            echo "Queueing to run set $set on package $package"
             # Composer also analyzes the root project "rector/rector",
             # but its path is the root folder
             if [ $package = "rector/rector" ]
@@ -143,10 +143,9 @@ do
     path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
     exclude=$(echo "$exclude" | tr ";" " --exclude-path=")
 
-    echo "Running set ${set_to_downgrade} on package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
+    echo "Running set ${set_to_downgrade} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
 
     # Execute the downgrade
-    echo "bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --dry-run --ansi"
     bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --dry-run --ansi
 
     ((counter++))
