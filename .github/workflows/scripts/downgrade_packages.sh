@@ -34,7 +34,7 @@ declare -A downgrade_php_sets=( \
     [71]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72" \
 )
 declare -A package_excludes=( \
-    ["rector/rector"]="$(pwd)/.docker/*';$(pwd)/.github/*';$(pwd)/bin/*';$(pwd)/ci/*';$(pwd)/docs/*';$(pwd)/tests/*';$(pwd)/**/tests/*';$(pwd)/packages/rector-generator/templates/*'" \
+    ["rector/rector"]="$(pwd)/.docker/*;$(pwd)/.github/*;$(pwd)/bin/*;$(pwd)/ci/*;$(pwd)/docs/*;$(pwd)/tests/*;$(pwd)/**/tests/*;$(pwd)/packages/rector-generator/templates/*" \
 )
 
 ########################################################################
@@ -141,11 +141,12 @@ do
 
     # If more than one path, these are split with ";". Replace with space
     path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
-    exclude=$(echo "$exclude" | tr ";" " --exclude-path=")
+    exclude=$(echo "$exclude" | sed "s/;/ --exclude-path=/g")
 
     echo "Running set ${set_to_downgrade} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
 
     # Execute the downgrade
+    echo "bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --dry-run --ansi"
     bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --dry-run --ansi
 
     ((counter++))
