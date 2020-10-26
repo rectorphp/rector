@@ -6,3 +6,5 @@ merge.method = "squash"
 
 # see https://kodiakhq.com/docs/config-reference#approveauto_approve_usernames
 approve.auto_approve_usernames = ["TomasVotruba"]
+
+update.always = true
