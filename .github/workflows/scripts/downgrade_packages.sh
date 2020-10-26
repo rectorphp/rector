@@ -156,8 +156,13 @@ do
 
     # Execute the downgrade
     # set -x
-    bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi 2>&1
+    bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi
     # set +x
+
+    # If Rector fails, already exit
+    if [ "$?" -gt 0 ]; then
+        fail "Rector downgrade failed on set ${set_to_downgrade} for package ${package_to_downgrade}"
+    fi
 
     ((counter++))
 done
