@@ -67,7 +67,7 @@ paths_to_downgrade=()
 # This variable contains which sets to run on the path, separated by space
 sets_to_downgrade=()
 
-Switch to production
+# Switch to production
 composer install --no-dev
 
 counter=1
@@ -86,9 +86,13 @@ do
         for package in $PACKAGES
         do
             echo Analyzing package $package
+            # Composer also analyzes the root project "rector/rector",
+            # but its behavior is different:
+            # 1. Path is the root folder
+            # 2. Analyze several paths
             if [ $package = "rector/rector" ]
             then
-                path="$(pwd)/src"
+                path="$(pwd)/src/;$(pwd)/rules/"
             else
                 path=$(composer info $package --path | awk '{print $2;}')
             fi
@@ -121,7 +125,10 @@ do
     path_to_downgrade=${paths_to_downgrade[$pos]}
     set_to_downgrade=${sets_to_downgrade[$pos]}
 
-    echo Downgrading set $set_to_downgrade on path $path_to_downgrade
+    # If more than one path, these are split with ";". Replace with space
+    path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
+
+    echo "Downgrading set ${set_to_downgrade} on path(s) ${path_to_downgrade}"
 
     # Execute the downgrade
     bin/rector process $path_to_downgrade --set=$set_to_downgrade --dry-run --ansi
