@@ -8,3 +8,4 @@ merge.method = "squash"
 approve.auto_approve_usernames = ["TomasVotruba"]
 
 update.always = true
+update.require_automerge_label = false
