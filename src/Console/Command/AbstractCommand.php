@@ -65,7 +65,8 @@ abstract class AbstractCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        if ($input->getOption(Option::OPTION_DEBUG)) {
+        $optionDebug = $input->getOption(Option::OPTION_DEBUG);
+        if ($optionDebug) {
             if ($this->getApplication() === null) {
                 return;
             }
@@ -76,9 +77,10 @@ abstract class AbstractCommand extends Command
             // clear cache
             $this->changedFilesDetector->clear();
         }
+        $optionClearCache = $input->getOption(Option::OPTION_CLEAR_CACHE);
 
         // clear cache
-        if ($input->getOption(Option::OPTION_CLEAR_CACHE)) {
+        if ($optionClearCache) {
             $this->changedFilesDetector->clear();
         }
     }

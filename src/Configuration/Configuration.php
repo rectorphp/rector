@@ -301,8 +301,9 @@ final class Configuration
         if ($noProgressBar) {
             return false;
         }
+        $optionOutputFormat = $input->getOption(Option::OPTION_OUTPUT_FORMAT);
 
-        if ($input->getOption(Option::OPTION_OUTPUT_FORMAT) === JsonOutputFormatter::NAME) {
+        if ($optionOutputFormat === JsonOutputFormatter::NAME) {
             return false;
         }
         return $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== CheckstyleOutputFormatter::NAME;
