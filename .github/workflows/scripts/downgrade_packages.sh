@@ -67,8 +67,8 @@ paths_to_downgrade=()
 # This variable contains which sets to run on the path, separated by space
 sets_to_downgrade=()
 
-# Switch to production
-# composer install --no-dev
+Switch to production
+composer install --no-dev
 
 counter=1
 while [ $counter -le ${#target_downgrade_php_versions[@]} ]
@@ -77,7 +77,6 @@ do
     version=${target_downgrade_php_versions[$pos]}
     whynot=${target_downgrade_php_whynots[$pos]}
     set=${target_downgrade_php_sets[$pos]}
-    setFile="/../../../../config/set/$set.php"
     echo Downgrading to PHP version "$version"
 
     # Obtain the list of packages for production that need a higher version that the input one.
@@ -96,10 +95,7 @@ do
             # Obtain the package's path from Composer
             # Format is "package path", so extract the 2nd word with awk to obtain the path
             paths_to_downgrade+=($path)
-            sets_to_downgrade+=($setFile)
-            # echo Path is $packagePath
-            # # Execute the downgrade
-            # ./vendor/bin/rector process $packagePath --set=$setFile --dry-run
+            sets_to_downgrade+=($set)
         done
     else
         echo No packages to downgrade
@@ -107,26 +103,28 @@ do
     ((counter++))
 done
 
-# # Switch to dev again
-# composer install
+# Switch to dev again
+composer install
 
-echo Number of paths to downgrade: ${#paths_to_downgrade[@]}
-echo Number of sets to downgrade: ${#sets_to_downgrade[@]}
+# Make sure that the number of paths and sets is the same, otherwise something went wrong
+numberPaths=${#paths_to_downgrade[@]}
+numberSets=${#sets_to_downgrade[@]}
+if [ ! $numberSets -eq $numberPaths ]; then
+    fail "Number of sets ($numberSets) and number of paths ($numberPaths) must not be different"
+fi
 
 # Execute Rector on all the paths
 counter=1
-while [ $counter -le ${#paths_to_downgrade[@]} ]
+while [ $counter -le $numberPaths ]
 do
     pos=$(( $counter - 1 ))
     path_to_downgrade=${paths_to_downgrade[$pos]}
     set_to_downgrade=${sets_to_downgrade[$pos]}
 
-    echo Pos: $pos
-    echo Path to downgrade: $path_to_downgrade
-    echo Set to downgrade: $set_to_downgrade
+    echo Downgrading set $set_to_downgrade on path $path_to_downgrade
 
     # Execute the downgrade
-    # ./vendor/bin/rector process $path_to_downgrade --set=$set_to_downgrade --dry-run
+    bin/rector process $path_to_downgrade --set=$set_to_downgrade --dry-run --ansi
 
     ((counter++))
 done
