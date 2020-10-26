@@ -65,6 +65,11 @@ jobs:
                         --set doctrine-id-to-uuid-step-5 \
                         --set doctrine-repository-as-service \
                         --set doctrine-services \
+                        --set downgrade-php71 \
+                        --set downgrade-php72 \
+                        --set downgrade-php73 \
+                        --set downgrade-php74 \
+                        --set downgrade-php80 \
                         --set easy-admin-bundle20 \
                         --set framework-extra-bundle-40 \
                         --set framework-extra-bundle-50 \
