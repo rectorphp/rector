@@ -36,12 +36,12 @@ class IfConditionMethodCallWithArgClassConstant
     public function run($arg)
     {
         $obj = new self();
-        $objArg1 = $obj->condition(SomeClassWithConstants::ARG1);
-        if ($objArg1 === 1) {
+        $arg1 = $obj->condition(SomeClassWithConstants::ARG1);
+        if ($arg1 === 1) {
 
         }
-        $objArg2 = $obj->condition(SomeClassWithConstants::ARG2);
-        if ($objArg2 === 2) {
+        $arg2 = $obj->condition(SomeClassWithConstants::ARG2);
+        if ($arg2 === 2) {
 
         }
     }

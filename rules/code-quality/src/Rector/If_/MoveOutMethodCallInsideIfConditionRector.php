@@ -38,6 +38,12 @@ final class MoveOutMethodCallInsideIfConditionRector extends AbstractRector
     private const START_ALPHA_REGEX = '#^[a-zA-Z]#';
 
     /**
+     * @var string
+     * @see https://regex101.com/r/sYIKpj/1
+     */
+    private const CONTANT_REGEX = '#(_)([a-z])#';
+
+    /**
      * @var ExpectedNameResolver
      */
     private $expectedNameResolver;
@@ -193,8 +199,9 @@ CODE_SAMPLE
 
         $arg0 = $methodCall->args[0]->value;
         if ($arg0 instanceof ClassConstFetch && $arg0->name instanceof Identifier) {
-            $explodeUnderscore = explode('_', $arg0->name->toString());
-            return $methodCallVarName . ucfirst(strtolower((string) end($explodeUnderscore)));
+            return preg_replace_callback(self::CONTANT_REGEX, function ($matches) {
+                return strtoupper($matches[2]);
+            }, strtolower($arg0->name->toString()));
         }
 
         $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);

@@ -42,8 +42,8 @@ abstract class AbstractCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $inputDebug = $input->getOption(Option::OPTION_DEBUG);
-        if ($inputDebug) {
+        $optionDebug = $input->getOption(Option::OPTION_DEBUG);
+        if ($optionDebug) {
             return;
         }
     }
