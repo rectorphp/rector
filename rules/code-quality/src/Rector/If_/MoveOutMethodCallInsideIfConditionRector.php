@@ -136,7 +136,7 @@ CODE_SAMPLE
     private function moveOutMethodCall(MethodCall $methodCall, If_ $if): ?If_
     {
         $variableName = $this->getVariableName($methodCall);
-        if ($variableName === null || $this->isVariableExists($if, $variableName)) {
+        if ($variableName === null || $this->isVariableExists($if, $variableName) || $this->isVariableExistsInParentNode($if, $variableName)) {
             return null;
         }
 
@@ -163,18 +163,17 @@ CODE_SAMPLE
 
     private function isVariableExists(If_ $if, string $variableName): bool
     {
-        $isExistsInPreviousStatement = $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($variableName): bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($variableName): bool {
             if (! $node instanceof If_) {
                 return false;
             }
 
             return $node instanceof Variable && $node->name === $variableName;
         });
+    }
 
-        if ($isExistsInPreviousStatement) {
-            return true;
-        }
-
+    private function isVariableExistsInParentNode(If_ $if, string $variableName): bool
+    {
         $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
         while ($parentNode) {
             if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
