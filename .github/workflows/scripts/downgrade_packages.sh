@@ -87,7 +87,7 @@ do
     if [ -n "$PACKAGES" ]; then
         for package in $PACKAGES
         do
-            echo "Queueing to run set $set on package $package"
+            echo "Enqueueing to run set $set on package $package"
             # Composer also analyzes the root project "rector/rector",
             # but its path is the root folder
             if [ $package = "rector/rector" ]
