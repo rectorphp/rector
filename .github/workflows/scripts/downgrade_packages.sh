@@ -5,36 +5,36 @@
 # Usage from within a GitHub workflow:
 # .github/workflows/scripts/downgrade_packages.sh $target_php_version
 # where $target_php_version is one of the following values:
-# - 70 (for PHP 7.0)
-# - 71 (for PHP 7.1)
-# - 72 (for PHP 7.2)
-# - 73 (for PHP 7.3)
-# - 74 (for PHP 7.4)
+# - 7.0
+# - 7.1
+# - 7.2
+# - 7.3
+# - 7.4
 #
 # Currently highest PHP version from which we can downgrade:
 # - 8.0
 #
 # Eg: To downgrade to PHP 7.1, execute:
-# .github/workflows/scripts/downgrade_packages.sh 71
+# .github/workflows/scripts/downgrade_packages.sh 7.1
 ########################################################################
 # Variables to modify when new PHP versions are released
 
-supported_target_php_versions=(70 71 72 73 74)
+supported_target_php_versions=(7.0 7.1 7.2 7.3 7.4)
 
 declare -A downgrade_php_versions=( \
-    [70]="8.0 7.4 7.3 7.2 7.1" \
-    [71]="8.0 7.4 7.3 7.2" \
+    [7.0]="8.0 7.4 7.3 7.2 7.1" \
+    [7.1]="8.0 7.4 7.3 7.2" \
 )
 declare -A downgrade_php_whynots=( \
-    [70]="7.4.* 7.3.* 7.2.* 7.1.* 7.0.*" \
-    [71]="7.4.* 7.3.* 7.2.* 7.1.*" \
+    [7.0]="7.4.* 7.3.* 7.2.* 7.1.* 7.0.*" \
+    [7.1]="7.4.* 7.3.* 7.2.* 7.1.*" \
 )
 declare -A downgrade_php_sets=( \
-    [70]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72 downgrade-php71" \
-    [71]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72" \
+    [7.0]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72 downgrade-php71" \
+    [7.1]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72" \
 )
 declare -A package_excludes=( \
-    ["rector/rector"]="$(pwd)/.docker/*;$(pwd)/.github/*;$(pwd)/bin/*;$(pwd)/ci/*;$(pwd)/docs/*;$(pwd)/tests/*;$(pwd)/**/tests/*;$(pwd)/packages/rector-generator/templates/*" \
+    [rector/rector]="$(pwd)/.docker/*;$(pwd)/.github/*;$(pwd)/bin/*;$(pwd)/ci/*;$(pwd)/docs/*;$(pwd)/tests/*;$(pwd)/**/tests/*;$(pwd)/packages/rector-generator/templates/*" \
 )
 
 ########################################################################
@@ -146,7 +146,7 @@ do
     echo "Running set ${set_to_downgrade} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
 
     # Execute the downgrade
-    echo "bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --dry-run --ansi"
+    # echo "bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --dry-run --ansi"
     bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --dry-run --ansi
 
     ((counter++))
