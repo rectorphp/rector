@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\If_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -11,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -29,6 +31,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class MoveOutMethodCallInsideIfConditionRector extends AbstractRector
 {
+    /**
+     * @var string
+     * @see https://regex101.com/r/LTykey/1
+     */
+    private const START_ALPHA_REGEX = '#^[a-zA-Z]#';
+
     /**
      * @var ExpectedNameResolver
      */
@@ -136,7 +144,10 @@ CODE_SAMPLE
     private function moveOutMethodCall(MethodCall $methodCall, If_ $if): ?If_
     {
         $variableName = $this->getVariableName($methodCall);
-        if ($variableName === null || $this->isVariableExists($if, $variableName) || $this->isVariableExistsInParentNode($if, $variableName)) {
+        if ($variableName === null || $this->isVariableExists(
+            $if,
+            $variableName
+        ) || $this->isVariableExistsInParentNode($if, $variableName)) {
             return null;
         }
 
@@ -159,32 +170,6 @@ CODE_SAMPLE
         });
 
         return $if;
-    }
-
-    private function isVariableExists(If_ $if, string $variableName): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($variableName): bool {
-            return $node instanceof Variable && $node->name === $variableName;
-        });
-    }
-
-    private function isVariableExistsInParentNode(If_ $if, string $variableName): bool
-    {
-        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parentNode) {
-            if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
-                $params = $parentNode->params;
-                foreach ($params as $param) {
-                    if ($param->var instanceof Variable && $param->var->name === $variableName) {
-                        return true;
-                    }
-                }
-            }
-
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        return false;
     }
 
     private function getVariableName(MethodCall $methodCall): ?string
@@ -220,20 +205,56 @@ CODE_SAMPLE
         return $fallbackVarName;
     }
 
+    private function isVariableExists(If_ $if, string $variableName): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($variableName): bool {
+            return $node instanceof Variable && $node->name === $variableName;
+        });
+    }
+
+    private function isVariableExistsInParentNode(If_ $if, string $variableName): bool
+    {
+        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parentNode) {
+            if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
+                return $this->isVariableExistsInParams($parentNode->params, $variableName);
+            }
+
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
+    }
+
+    private function getFallbackVarName(string $methodCallVarName, string $methodCallName): string
+    {
+        return $methodCallVarName . ucfirst($methodCallName);
+    }
+
     private function getStringVarName(String_ $string, string $methodCallVarName, string $fallbackVarName): string
     {
         $get = str_ireplace('get', '', $string->value . ucfirst($fallbackVarName));
         $by = str_ireplace('by', '', $get);
+        $by = str_replace('-', '', $by);
 
-        if ($by !== $methodCallVarName) {
+        if (Strings::match($by, self::START_ALPHA_REGEX) && $by !== $methodCallVarName) {
             return $by;
         }
 
         return $fallbackVarName;
     }
 
-    private function getFallbackVarName(string $methodCallVarName, string $methodCallName): string
+    /**
+     * @param Param[] $parameters
+     */
+    private function isVariableExistsInParams(array $parameters, string $variableName): bool
     {
-        return $methodCallVarName . ucfirst($methodCallName);
+        foreach ($parameters as $param) {
+            if ($param->var instanceof Variable && $param->var->name === $variableName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

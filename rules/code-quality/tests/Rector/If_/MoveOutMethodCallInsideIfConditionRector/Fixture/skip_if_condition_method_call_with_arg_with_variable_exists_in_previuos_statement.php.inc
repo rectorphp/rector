@@ -14,9 +14,6 @@ class SkipIfConditionMethodCallWithArgWithVariableExistsInPreviousStatement
         if ($obj->condition($arg + 1) === 1) {
 
         }
-        if ($obj->condition($arg + 2) === 2) {
-
-        }
     }
 
     public function condition($arg): int
