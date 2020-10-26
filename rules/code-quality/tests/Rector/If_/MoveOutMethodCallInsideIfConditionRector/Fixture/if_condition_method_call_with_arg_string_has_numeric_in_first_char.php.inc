@@ -2,12 +2,12 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
-class IfConditionMethodCallWithArg
+class IfConditionMethodCallWithArgHasNumericStringInFirstArg
 {
-    public function run($arg)
+    public function run()
     {
         $obj = new self();
-        if ($obj->condition($arg + 1) === 1) {
+        if ($obj->condition('1a') === 1) {
 
         }
     }
@@ -24,12 +24,12 @@ class IfConditionMethodCallWithArg
 
 namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
-class IfConditionMethodCallWithArg
+class IfConditionMethodCallWithArgHasNumericStringInFirstArg
 {
-    public function run($arg)
+    public function run()
     {
         $obj = new self();
-        $objCondition = $obj->condition($arg + 1);
+        $objCondition = $obj->condition('1a');
         if ($objCondition === 1) {
 
         }

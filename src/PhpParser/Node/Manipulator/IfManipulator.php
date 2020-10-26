@@ -226,8 +226,9 @@ final class IfManipulator
         if (! $this->isIfWithoutElseAndElseIfs($currentIf)) {
             return [];
         }
+        $betterNodeFinderFindInstanceOf = $this->betterNodeFinder->findInstanceOf($currentIf->stmts, Return_::class);
 
-        if ($this->betterNodeFinder->findInstanceOf($currentIf->stmts, Return_::class) !== []) {
+        if ($betterNodeFinderFindInstanceOf !== []) {
             return [];
         }
 

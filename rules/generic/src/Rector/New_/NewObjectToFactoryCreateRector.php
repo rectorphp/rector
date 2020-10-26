@@ -93,8 +93,9 @@ CODE_SAMPLE
 
             $factoryClass = $factoryInfo['class'];
             $factoryMethod = $factoryInfo['method'];
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
-            if ($node->getAttribute(AttributeKey::CLASS_NAME) === $factoryClass) {
+            if ($className === $factoryClass) {
                 continue;
             }
 

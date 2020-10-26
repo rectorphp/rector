@@ -45,8 +45,9 @@ final class NetteInjectDetector
             if ($phpDocInfo === null) {
                 continue;
             }
+            $injectPhpDocInfoTagsName = $phpDocInfo->getTagsByName('inject');
 
-            if ($phpDocInfo->getTagsByName('inject') === []) {
+            if ($injectPhpDocInfoTagsName === []) {
                 continue;
             }
 

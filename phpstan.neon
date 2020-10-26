@@ -773,3 +773,9 @@ parameters:
                 - utils/project-validator/src/Process/ParallelTaskRunner.php # 19
 
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector\:\:refactor\(\) expects PhpParser\\Node\\Expr\\AssignOp\\Div\|PhpParser\\Node\\Expr\\AssignOp\\Minus\|PhpParser\\Node\\Expr\\AssignOp\\Mul\|PhpParser\\Node\\Expr\\AssignOp\\Plus\|PhpParser\\Node\\Expr\\BinaryOp\\Div\|PhpParser\\Node\\Expr\\BinaryOp\\Minus\|PhpParser\\Node\\Expr\\BinaryOp\\Mul\|PhpParser\\Node\\Expr\\BinaryOp\\Plus, PhpParser\\Node\\Expr\\AssignOp\|PhpParser\\Node\\Expr\\BinaryOp given#'
+
+        -
+            message: '#Variable "\$underscoreCamelCasePropertyRenamerRename" is too long with 40 chars\. Narrow it under 40 chars#'
+            paths:
+                - rules/naming/src/Rector/Property/UnderscoreToCamelCasePropertyNameRector.php # 104
+                - rules/naming/src/Rector/Property/UnderscoreToCamelCasePropertyNameRector.php # 106

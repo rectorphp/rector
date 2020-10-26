@@ -221,9 +221,10 @@ final class ClassRenamer
         }
 
         $classLike->name = new Identifier($newClassNamePart);
+        $classNamingGetNamespace = $this->classNaming->getNamespace($name);
 
         // Old class did not have any namespace, we need to wrap class with Namespace_ node
-        if ($newNamespacePart && ! $this->classNaming->getNamespace($name)) {
+        if ($newNamespacePart && ! $classNamingGetNamespace) {
             $this->changeNameToFullyQualifiedName($classLike);
 
             $nameNode = new Name($newNamespacePart);
@@ -301,8 +302,9 @@ final class ClassRenamer
             if (! $implementName instanceof Name) {
                 continue;
             }
+            $virtualNode = $implementName->getAttribute(AttributeKey::VIRTUAL_NODE);
 
-            if (! $implementName->getAttribute(AttributeKey::VIRTUAL_NODE)) {
+            if (! $virtualNode) {
                 continue;
             }
 

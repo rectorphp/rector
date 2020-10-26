@@ -259,7 +259,8 @@ CODE_SAMPLE
 
     private function addBuildFormMethod(Class_ $class, ClassMethod $classMethod): void
     {
-        if ($class->getMethod('buildForm') !== null) {
+        $buildFormClassMethod = $class->getMethod('buildForm');
+        if ($buildFormClassMethod !== null) {
             return;
         }
 
@@ -271,7 +272,8 @@ CODE_SAMPLE
      */
     private function addConfigureOptionsMethod(Class_ $class, array $namesToArgs): void
     {
-        if ($class->getMethod('configureOptions') !== null) {
+        $configureOptionsClassMethod = $class->getMethod('configureOptions');
+        if ($configureOptionsClassMethod !== null) {
             return;
         }
 

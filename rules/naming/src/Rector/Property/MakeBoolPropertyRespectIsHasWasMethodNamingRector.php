@@ -99,9 +99,10 @@ CODE_SAMPLE
         if ($propertyRename === null) {
             return null;
         }
+        $property = $this->boolPropertyRenamer->rename($propertyRename);
 
 //        dd($propertyRename->getClassLike());
-        if ($this->boolPropertyRenamer->rename($propertyRename) === null) {
+        if ($property === null) {
             return null;
         }
 

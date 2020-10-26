@@ -55,9 +55,10 @@ final class VariableUseFinder
             if ($parentNode instanceof Assign && ($parentNode->var instanceof Variable && $parentNode->var === $node)) {
                 return false;
             }
+            $nodeNameResolverGetName = $this->nodeNameResolver->getName($node);
 
             // simple variable only
-            if ($this->nodeNameResolver->getName($node) === null) {
+            if ($nodeNameResolverGetName === null) {
                 return false;
             }
 

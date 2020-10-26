@@ -102,9 +102,10 @@ CODE_SAMPLE
         if (! $this->isName($funcCall, 'count')) {
             return true;
         }
+        $alreadyChangedOnCount = $funcCall->getAttribute(self::ALREADY_CHANGED_ON_COUNT);
 
         // check if it has some condition before already, if so, probably it's already handled
-        if ($funcCall->getAttribute(self::ALREADY_CHANGED_ON_COUNT)) {
+        if ($alreadyChangedOnCount) {
             return true;
         }
 

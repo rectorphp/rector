@@ -59,19 +59,22 @@ CODE_SAMPLE
         if ($className === null) {
             return null;
         }
+        $nodeRepositoryFindMethodCallsOnClass = $this->nodeRepository->findMethodCallsOnClass($className);
 
         // 1. is in static call?
-        if ($this->nodeRepository->findMethodCallsOnClass($className) !== []) {
+        if ($nodeRepositoryFindMethodCallsOnClass !== []) {
             return null;
         }
+        $parsedNodeCollectorFindNewsByClass = $this->parsedNodeCollector->findNewsByClass($className);
 
         // 2. is in new?
-        if ($this->parsedNodeCollector->findNewsByClass($className) !== []) {
+        if ($parsedNodeCollectorFindNewsByClass !== []) {
             return null;
         }
+        $nodeRepositoryFindChildrenOfClass = $this->nodeRepository->findChildrenOfClass($className);
 
         // 3. does it have any children
-        if ($this->nodeRepository->findChildrenOfClass($className) === []) {
+        if ($nodeRepositoryFindChildrenOfClass === []) {
             return null;
         }
 
