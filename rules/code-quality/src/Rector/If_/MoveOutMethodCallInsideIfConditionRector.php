@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\BooleanType;
@@ -20,6 +22,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\MoveOutMethodCallInsideIfConditionRectorTest
@@ -133,7 +136,7 @@ CODE_SAMPLE
     private function moveOutMethodCall(MethodCall $methodCall, If_ $if): ?If_
     {
         $variableName = $this->getVariableName($methodCall);
-        if ($variableName === null) {
+        if ($variableName === null || $this->isVariableExists($if, $variableName)) {
             return null;
         }
 
@@ -156,6 +159,33 @@ CODE_SAMPLE
         });
 
         return $if;
+    }
+
+    private function isVariableExists(If_ $if, string $variableName): bool
+    {
+        $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($variableName): bool {
+            if ($node instanceof Variable && $node->name === $variableName) {
+                return true;
+            }
+
+            return false;
+        });
+
+        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parentNode) {
+            if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
+                $params = $parentNode->params;
+                foreach ($params as $param) {
+                    if ($param->var instanceof Variable && $param->var->name === $variableName) {
+                        return true;
+                    }
+                }
+            }
+
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
     }
 
     private function getVariableName(MethodCall $methodCall): ?string
