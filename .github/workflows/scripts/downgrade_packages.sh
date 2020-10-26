@@ -155,8 +155,9 @@ do
     echo "Running set ${set_to_downgrade} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
 
     # Execute the downgrade
-    echo "bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi"
-    bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi
+    # set -x
+    bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi 2>&1
+    # set +x
 
     ((counter++))
 done
