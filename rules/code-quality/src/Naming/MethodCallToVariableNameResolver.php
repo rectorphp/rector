@@ -42,17 +42,18 @@ final class MethodCallToVariableNameResolver
         $this->expectedNameResolver = $expectedNameResolver;
     }
 
+    /**
+     * @todo decouple to collector by arg type
+     */
     public function resolveVariableName(MethodCall $methodCall): ?string
     {
         $methodCallVarName = $this->nodeNameResolver->getName($methodCall->var);
-        $methodCallIdentifier = $methodCall->name;
-
-        if (! $methodCallIdentifier instanceof Identifier) {
+        if ($methodCallVarName === null) {
             return null;
         }
 
-        $methodCallName = $methodCallIdentifier->toString();
-        if ($methodCallVarName === null || $methodCallName === null) {
+        $methodCallName = $this->nodeNameResolver->getName($methodCall->name);
+        if ($methodCallName === null) {
             return null;
         }
 
@@ -61,10 +62,10 @@ final class MethodCallToVariableNameResolver
             return $variableName;
         }
 
-        $arg0 = $methodCall->args[0]->value;
-        if ($arg0 instanceof ClassConstFetch && $arg0->name instanceof Identifier) {
+        $argValue = $methodCall->args[0]->value;
+        if ($argValue instanceof ClassConstFetch && $argValue->name instanceof Identifier) {
             return Strings::replace(
-                strtolower($arg0->name->toString()),
+                strtolower($argValue->name->toString()),
                 self::CONSTANT_REGEX,
                 function ($matches): string {
                     return strtoupper($matches[2]);
@@ -73,13 +74,13 @@ final class MethodCallToVariableNameResolver
         }
 
         $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);
-        if ($arg0 instanceof String_) {
-            return $this->getStringVarName($arg0, $methodCallVarName, $fallbackVarName);
+        if ($argValue instanceof String_) {
+            return $this->getStringVarName($argValue, $methodCallVarName, $fallbackVarName);
         }
 
-        if ($arg0 instanceof Variable) {
-            $argumentName = $this->nodeNameResolver->getName($arg0);
-            if ($argumentName !== null) {
+        if ($argValue instanceof Variable) {
+            $argumentName = $this->nodeNameResolver->getName($argValue);
+            if ($argumentName !== null && $variableName !== null) {
                 return $argumentName . ucfirst($variableName);
             }
         }

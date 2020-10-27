@@ -173,6 +173,7 @@ CODE_SAMPLE
         /** @var Scope $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
 
-        return $scope->hasVariableType($variableName)->yes();
+        return $scope->hasVariableType($variableName)
+            ->yes();
     }
 }
