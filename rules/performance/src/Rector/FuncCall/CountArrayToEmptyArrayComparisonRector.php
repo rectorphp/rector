@@ -63,12 +63,12 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Variable|MethodCall $variable */
-        $variable = $node->args[0]->value;
+        /** @var Variable|MethodCall $expr */
+        $expr = $node->args[0]->value;
 
         /** @var Scope $scope */
-        $scope = $variable->getAttribute(AttributeKey::SCOPE);
-        $type = $scope->getType($variable);
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+        $type = $scope->getType($expr);
 
         // not pass array type, skip
         if (! $type instanceof ArrayType) {
@@ -81,12 +81,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $processIdentical = $this->processIdentical($parent, $node, $variable);
+        $processIdentical = $this->processIdentical($parent, $node, $expr);
         if ($processIdentical !== null) {
             return $processIdentical;
         }
 
-        return $this->processGreaterOrSmaller($parent, $node, $variable);
+        return $this->processGreaterOrSmaller($parent, $node, $expr);
     }
 
     private function processIdentical(BinaryOp $binaryOp, FuncCall $funcCall, Expr $expr): ?Expr
