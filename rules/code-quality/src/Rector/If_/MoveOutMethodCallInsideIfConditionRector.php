@@ -168,11 +168,11 @@ CODE_SAMPLE
         return $this->isInsideMethodCallHasMethodCall($methodCall);
     }
 
-    private function isVariableNameAlreadyDefined(If_ $if, string $variableName): bool
+    private function isVariableNameAlreadyDefined(Node $node, string $variableName): bool
     {
         /** @var Scope $scope */
-        $scope = $if->getAttribute(AttributeKey::SCOPE);
-        return $scope->hasVariableType($variableName)
-            ->yes();
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        return $scope->hasVariableType($variableName)->yes();
     }
 }
