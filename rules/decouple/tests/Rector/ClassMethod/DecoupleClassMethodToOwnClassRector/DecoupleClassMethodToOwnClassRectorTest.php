@@ -43,7 +43,7 @@ final class DecoupleClassMethodToOwnClassRectorTest extends AbstractRectorTestCa
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed[]>
      */
     protected function getRectorsWithConfiguration(): array
     {

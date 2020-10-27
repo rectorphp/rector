@@ -33,7 +33,7 @@ final class FunctionAutoImportNamesParameterTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed[]>
      */
     protected function getRectorsWithConfiguration(): array
     {

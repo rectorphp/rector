@@ -54,4 +54,4 @@ jobs:
                     author_email: tomas@getrector.org
                 env:
                     # to get push access
-                    token: ${{ secrets.ACCESS_TOKEN }}
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}

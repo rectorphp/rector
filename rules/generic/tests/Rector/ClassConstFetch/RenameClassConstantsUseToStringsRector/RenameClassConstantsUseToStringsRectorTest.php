@@ -26,7 +26,7 @@ final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTes
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed[]>
      */
     protected function getRectorsWithConfiguration(): array
     {
