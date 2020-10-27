@@ -7,9 +7,11 @@ namespace Rector\Performance\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Type\ArrayType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRule\CountArrayToEmptyArrayComparisonRuleTest
@@ -59,8 +61,24 @@ CODE_SAMPLE
             return null;
         }
 
+        $args = $node->args;
+
+        // more than 1 arg, skip
+        // not check possible mode: COUNT_RECURSIVE in 2nd parameter
+        if (isset($args[1])) {
+            return null;
+        }
+
+        $variable = $args[0]->value;
+        $scope = $variable->getAttribute(AttributeKey::SCOPE);
+        $type = $scope->getType($variable);
+
+        // no pass array type, skip
+        if (! $type instanceof ArrayType) {
+            return null;
+        }
+
         // @todo
-        // 1. check arg is an array, no? skip
         // 2. check parent is a comparison with === 0 or >= 0, no? skip
         // 3. replace with comparison to [] or !== []
 
