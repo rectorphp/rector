@@ -97,7 +97,7 @@ CODE_SAMPLE
             return $processIdentical;
         }
 
-        return $this->processGreater($parent, $node, $compareVariable, $constFetch);
+        return $this->processGreaterOrSmaller($parent, $node, $compareVariable, $constFetch);
     }
 
     private function processIdentical(
@@ -123,7 +123,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processGreater(
+    private function processGreaterOrSmaller(
         BinaryOp $binaryOp,
         FuncCall $funcCall,
         Variable $compareVariable,
