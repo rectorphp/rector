@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Naming;
 use Nette\Utils\Strings;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\Naming\Naming\ExpectedNameResolver;
@@ -74,6 +75,13 @@ final class MethodCallToVariableNameResolver
         $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);
         if ($arg0 instanceof String_) {
             return $this->getStringVarName($arg0, $methodCallVarName, $fallbackVarName);
+        }
+
+        if ($arg0 instanceof Variable) {
+            $argumentName = $this->nodeNameResolver->getName($arg0);
+            if ($argumentName !== null) {
+                return $argumentName . ucfirst($variableName);
+            }
         }
 
         return $fallbackVarName;
