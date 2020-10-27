@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Performance\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Greater;
@@ -12,6 +13,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
@@ -70,15 +72,15 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Variable $variable */
+        /** @var Variable|MethodCall $variable */
         $variable = $node->args[0]->value;
 
         /** @var Scope $scope */
         $scope = $variable->getAttribute(AttributeKey::SCOPE);
         $type = $scope->getType($variable);
 
-        // no pass array type or passed value is not a variable, skip
-        if (! $type instanceof ArrayType || ! $variable instanceof Variable) {
+        // not pass array type, skip
+        if (! $type instanceof ArrayType) {
             return null;
         }
 
@@ -96,42 +98,39 @@ CODE_SAMPLE
         return $this->processGreaterOrSmaller($parent, $node, $variable);
     }
 
-    private function processIdentical(BinaryOp $binaryOp, FuncCall $funcCall, Variable $variable): ?Variable
+    private function processIdentical(BinaryOp $binaryOp, FuncCall $funcCall, Expr $expr): ?Expr
     {
         if ($binaryOp instanceof Identical && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
             $this->removeNode($funcCall);
             $binaryOp->right = new Array_([]);
 
-            return $variable;
+            return $expr;
         }
 
         if ($binaryOp instanceof Identical && $binaryOp->left instanceof LNumber && $binaryOp->left->value === 0) {
             $this->removeNode($funcCall);
             $binaryOp->left = new Array_([]);
 
-            return $variable;
+            return $expr;
         }
 
         return null;
     }
 
-    private function processGreaterOrSmaller(
-        BinaryOp $binaryOp,
-        FuncCall $funcCall,
-        Variable $variable
-    ): ?NotIdentical {
+    private function processGreaterOrSmaller(BinaryOp $binaryOp, FuncCall $funcCall, Expr $expr): ?NotIdentical
+    {
         if ($binaryOp instanceof Greater && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
             $this->removeNode($funcCall);
             $this->removeNode($binaryOp->right);
 
-            return new NotIdentical($variable, new Array_([]));
+            return new NotIdentical($expr, new Array_([]));
         }
 
         if ($binaryOp instanceof Smaller && $binaryOp->left instanceof LNumber && $binaryOp->left->value === 0) {
             $this->removeNode($funcCall);
             $this->removeNode($binaryOp->left);
 
-            return new NotIdentical(new Array_([]), $variable);
+            return new NotIdentical(new Array_([]), $expr);
         }
 
         return null;

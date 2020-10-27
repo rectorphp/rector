@@ -2,17 +2,10 @@
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClass
+class SomeClassFromLocalVar
 {
-    public function run(array $array)
+    public function run()
     {
-        // from parameter
-        count($array) === 0;
-        0 === count($array);
-        count($array) > 0;
-        0 < count($array);
-
-        // from local variable
         $localArray = [];
         count($localArray) === 0;
         0 === count($localArray);
@@ -27,17 +20,10 @@ class SomeClass
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClass
+class SomeClassFromLocalVar
 {
-    public function run(array $array)
+    public function run()
     {
-        // from parameter
-        $array === [];
-        [] === $array;
-        $array !== [];
-        [] !== $array;
-
-        // from local variable
         $localArray = [];
         $localArray === [];
         [] === $localArray;
