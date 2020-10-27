@@ -10,8 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\BooleanType;
@@ -103,13 +101,11 @@ CODE_SAMPLE
     private function moveOutMethodCall(MethodCall $methodCall, If_ $if): ?If_
     {
         $variableName = $this->methodCallToVariableNameResolver->resolveVariableName($methodCall);
-        if ($variableName === null || $this->isVariableExists(
-            $if,
-            $variableName
-        ) || $this->isVariableExistsInParentNode(
-            $if,
-            $variableName
-        )) {
+        if ($variableName === null) {
+            return null;
+        }
+
+        if ($this->isVariableNameAlreadyDefined($if, $variableName)) {
             return null;
         }
 
@@ -118,11 +114,13 @@ CODE_SAMPLE
 
         $this->addNodebeforeNode($methodCallAssign, $if);
 
+        // replace if cond with variable
         if ($if->cond === $methodCall) {
             $if->cond = $variable;
             return $if;
         }
 
+        // replace method call with variable
         $this->traverseNodesWithCallable($if->cond, function (Node $node) use ($variable): ?Variable {
             if ($node instanceof MethodCall) {
                 return $variable;
@@ -132,41 +130,6 @@ CODE_SAMPLE
         });
 
         return $if;
-    }
-
-    private function isVariableExists(If_ $if, string $variableName): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($variableName): bool {
-            return $node instanceof Variable && $node->name === $variableName;
-        });
-    }
-
-    private function isVariableExistsInParentNode(If_ $if, string $variableName): bool
-    {
-        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parentNode) {
-            if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
-                return $this->isVariableExistsInParams($parentNode->params, $variableName);
-            }
-
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Param[] $parameters
-     */
-    private function isVariableExistsInParams(array $parameters, string $variableName): bool
-    {
-        foreach ($parameters as $param) {
-            if ($param->var instanceof Variable && $param->var->name === $variableName) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private function shouldSkipMethodCall(MethodCall $methodCall): bool
@@ -203,5 +166,13 @@ CODE_SAMPLE
 
         // Inside Method calls args has Method Call again → skip
         return $this->isInsideMethodCallHasMethodCall($methodCall);
+    }
+
+    private function isVariableNameAlreadyDefined(If_ $if, string $variableName): bool
+    {
+        /** @var Scope $scope */
+        $scope = $if->getAttribute(AttributeKey::SCOPE);
+        return $scope->hasVariableType($variableName)
+            ->yes();
     }
 }
