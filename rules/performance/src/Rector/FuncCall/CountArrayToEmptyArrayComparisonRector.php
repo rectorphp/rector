@@ -16,6 +16,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use Rector\Core\Rector\AbstractRector;
@@ -77,7 +79,7 @@ CODE_SAMPLE
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        if (! $parent instanceof Identical && ! $parent instanceof Greater && ! $parent instanceof Smaller) {
+        if (! $parent instanceof Identical && ! $parent instanceof Greater && ! $parent instanceof Smaller && ! $parent instanceof If_) {
             return null;
         }
 
@@ -86,10 +88,15 @@ CODE_SAMPLE
             return $processIdentical;
         }
 
-        return $this->processGreaterOrSmaller($parent, $node, $expr);
+        $processGreaterOrSmaller = $this->processGreaterOrSmaller($parent, $node, $expr);
+        if ($processGreaterOrSmaller !== null) {
+            return $processGreaterOrSmaller;
+        }
+
+        return $this->processMarkTruthy($parent, $node, $expr);
     }
 
-    private function processIdentical(BinaryOp $binaryOp, FuncCall $funcCall, Expr $expr): ?Expr
+    private function processIdentical(Node $binaryOp, FuncCall $funcCall, Expr $expr): ?Expr
     {
         if ($binaryOp instanceof Identical && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
             $this->removeNode($funcCall);
@@ -108,7 +115,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processGreaterOrSmaller(BinaryOp $binaryOp, FuncCall $funcCall, Expr $expr): ?NotIdentical
+    private function processGreaterOrSmaller(Node $binaryOp, FuncCall $funcCall, Expr $expr): ?NotIdentical
     {
         if ($binaryOp instanceof Greater && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
             $this->removeNode($funcCall);
@@ -122,6 +129,16 @@ CODE_SAMPLE
             $this->removeNode($binaryOp->left);
 
             return new NotIdentical(new Array_([]), $expr);
+        }
+
+        return null;
+    }
+
+    private function processMarkTruthy(Node $stmt, FuncCall $funcCall, Expr $expr): ?NotIdentical
+    {
+        if ($stmt instanceof If_ && $stmt->cond === $funcCall) {
+            $stmt->cond = new NotIdentical($expr, new Array_([]));
+            return $stmt->cond;
         }
 
         return null;
