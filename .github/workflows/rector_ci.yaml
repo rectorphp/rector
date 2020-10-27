@@ -29,6 +29,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
+                with:
+                    # Must be used to trigger workflow after push
+                    token: ${{ secrets.ACCESS_TOKEN }}
 
             -
                 uses: shivammathur/setup-php@v1
