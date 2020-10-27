@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
@@ -75,7 +76,7 @@ CODE_SAMPLE
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        if (! $parent instanceof Identical && ! $parent instanceof Greater && ! $parent instanceof Smaller && ! $parent instanceof If_) {
+        if (! $parent instanceof Identical && ! $parent instanceof Greater && ! $parent instanceof Smaller && ! $parent instanceof If_ && ! $parent instanceof ElseIf_) {
             return null;
         }
 
@@ -132,7 +133,7 @@ CODE_SAMPLE
 
     private function processMarkTruthy(Node $stmt, FuncCall $funcCall, Expr $expr): ?NotIdentical
     {
-        if ($stmt instanceof If_ && $stmt->cond === $funcCall) {
+        if (($stmt instanceof If_ || $stmt instanceof ElseIf_) && $stmt->cond === $funcCall) {
             $stmt->cond = new NotIdentical($expr, new Array_([]));
             return $stmt->cond;
         }

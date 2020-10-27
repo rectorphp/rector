@@ -7,8 +7,11 @@ class SomeClassMarkTruthyCheck
     public function run()
     {
         $data = [];
+        $otherData = [];
 
         if (count($data)) {
+
+        } elseif (count($otherData)) {
 
         }
     }
@@ -25,8 +28,11 @@ class SomeClassMarkTruthyCheck
     public function run()
     {
         $data = [];
+        $otherData = [];
 
         if ($data !== []) {
+
+        } elseif ($otherData !== []) {
 
         }
     }
