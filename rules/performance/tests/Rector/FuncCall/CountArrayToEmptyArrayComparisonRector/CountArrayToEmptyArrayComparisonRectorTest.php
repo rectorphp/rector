@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRule;
+namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Performance\Rector\FuncCall\CountArrayToEmptyArrayComparisonRule;
+use Rector\Performance\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class CountArrayToEmptyArrayComparisonRuleTest extends AbstractRectorTestCase
+final class CountArrayToEmptyArrayComparisonRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class CountArrayToEmptyArrayComparisonRuleTest extends AbstractRectorTestC
 
     protected function getRectorClass(): string
     {
-        return CountArrayToEmptyArrayComparisonRule::class;
+        return CountArrayToEmptyArrayComparisonRector::class;
     }
 }

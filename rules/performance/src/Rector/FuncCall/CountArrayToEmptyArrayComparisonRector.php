@@ -23,9 +23,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRule\CountArrayToEmptyArrayComparisonRuleTest
+ * @see \Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\CountArrayToEmptyArrayComparisonRectorTest
  */
-final class CountArrayToEmptyArrayComparisonRule extends AbstractRector
+final class CountArrayToEmptyArrayComparisonRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
