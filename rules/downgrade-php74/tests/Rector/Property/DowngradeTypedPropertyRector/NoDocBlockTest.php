@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp74\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector;
+namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
@@ -10,7 +10,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeTypedPropertyRectorTest extends AbstractRectorTestCase
+final class NoDocBlockTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP 7.4
@@ -23,7 +23,7 @@ final class DowngradeTypedPropertyRectorTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureNoDocBlock');
     }
 
     /**

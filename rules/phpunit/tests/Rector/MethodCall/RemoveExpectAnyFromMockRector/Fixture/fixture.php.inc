@@ -8,7 +8,7 @@ class SomeClass extends TestCase
 {
     public function test()
     {
-        $translator = $this->createMock('SomeClass');
+        $translator = $this->createMock('SeeSomeClass');
         $translator->expects($this->any())
             ->method('trans')
             ->willReturn('translated max {{ max }}!');
@@ -27,7 +27,7 @@ class SomeClass extends TestCase
 {
     public function test()
     {
-        $translator = $this->createMock('SomeClass');
+        $translator = $this->createMock('SeeSomeClass');
         $translator
             ->method('trans')
             ->willReturn('translated max {{ max }}!');

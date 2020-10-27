@@ -6,7 +6,7 @@ class GetMockOnly extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $applicationMock = $this->getMockBuilder('SomeClass')
+        $applicationMock = $this->getMockBuilder('SeeSomeClass')
             ->getMock();
     }
 }
@@ -21,7 +21,7 @@ class GetMockOnly extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $applicationMock = $this->createMock('SomeClass');
+        $applicationMock = $this->createMock('SeeSomeClass');
     }
 }
 

@@ -8,7 +8,7 @@ class SkipInvoke
 {
     public function run($traitMock)
     {
-        $reflectionClass = new ReflectionClass('SomeClass');
+        $reflectionClass = new ReflectionClass('SeeSomeClass');
         $method = $reflectionClass->getMethod('getSetItems');
 
         $method->invoke($traitMock, 'some-param', 4, 5, 6);

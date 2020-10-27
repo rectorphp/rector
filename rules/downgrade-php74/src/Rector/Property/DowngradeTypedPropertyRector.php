@@ -10,7 +10,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
- * @see \Rector\DowngradePhp74\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
+ * @see \Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  */
 final class DowngradeTypedPropertyRector extends AbstractDowngradeTypedPropertyRector
 {

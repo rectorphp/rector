@@ -86,7 +86,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         yield [
             new SmartFileInfo(__DIR__ . '/Source/SomeClass.php'),
             [
-                $this->getFixtureTempDirectory() . '/Source/SomeClass.php' => __DIR__ . '/Expected/SomeClass.php',
+                $this->getFixtureTempDirectory() . '/Source/SeeSomeClass.php' => __DIR__ . '/Expected/SomeClass.php',
                 $this->getFixtureTempDirectory() . '/Source/SomeClass_Exception.php' => __DIR__ . '/Expected/SomeClass_Exception.php',
             ],
             false,

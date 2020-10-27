@@ -43,16 +43,38 @@ final class TestClassResolver
             return $className . self::TEST;
         }
 
-        $shortClassName = Strings::after($className, '\\', -1);
+        $shortClassName = $this->resolveShortClassName($className);
+
         $testShortClassName = $shortClassName . self::TEST;
 
         $phpUnitTestCaseClasses = $this->phpUnitTestCaseClassesProvider->provide();
-        sort($phpUnitTestCaseClasses);
 
-        foreach ($phpUnitTestCaseClasses as $declaredClass) {
-            if (Strings::endsWith($declaredClass, '\\' . $testShortClassName)) {
-                return $declaredClass;
+        $classNamespaceParts = $this->resolveNamespaceParts($className);
+        $classNamespaceParts[] = 'Tests';
+        sort($classNamespaceParts);
+
+        foreach ($phpUnitTestCaseClasses as $phpUnitTestCaseClass) {
+            // 1. is short class match
+            if (! Strings::endsWith($phpUnitTestCaseClass, '\\' . $testShortClassName)) {
+                continue;
             }
+
+            // 2. is namespace match
+            $phpUnitTestNamespaceParts = $this->resolveNamespaceParts($phpUnitTestCaseClass);
+            sort($phpUnitTestNamespaceParts);
+
+            $nestedPhpUnitTestNamespaceParts = array_merge($classNamespaceParts, [$shortClassName]);
+            sort($nestedPhpUnitTestNamespaceParts);
+
+            if ($classNamespaceParts === $phpUnitTestNamespaceParts) {
+                return $phpUnitTestCaseClass;
+            }
+
+            if ($nestedPhpUnitTestNamespaceParts === $phpUnitTestNamespaceParts) {
+                return $phpUnitTestCaseClass;
+            }
+
+            return null;
         }
 
         return null;
@@ -66,5 +88,19 @@ final class TestClassResolver
         }
 
         return $this->resolveFromClassName($className);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveNamespaceParts(string $className): array
+    {
+        $namespacePart = (string) Strings::before($className, '\\', -1);
+        return explode('\\', $namespacePart);
+    }
+
+    private function resolveShortClassName(string $className): ?string
+    {
+        return Strings::after($className, '\\', -1);
     }
 }

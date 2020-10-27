@@ -36,7 +36,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(SomeClass::class)
+    $services->set(SeeSomeClass::class)
         ->arg('$key', 'value');
 }
 PHP
@@ -47,14 +47,14 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(SomeClass::class)
+    $services->set(SeeSomeClass::class)
         ->call('configure', [[
             '$key' => 'value'
         ]]);
 }
 PHP
 ,
-                [self::CLASS_TYPE_TO_METHOD_NAME => ['SomeClass' => 'configure']]
+                [self::CLASS_TYPE_TO_METHOD_NAME => ['SeeSomeClass' => 'configure']]
             )
         ]);
     }

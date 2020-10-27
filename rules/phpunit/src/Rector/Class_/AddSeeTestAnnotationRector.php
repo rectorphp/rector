@@ -97,6 +97,8 @@ CODE_SAMPLE
         $seeTagNode = $this->createSeePhpDocTagNode($testCaseClassName);
         $phpDocInfo->addPhpDocTagNode($seeTagNode);
 
+        $this->notifyNodeFileInfo($node);
+
         return $node;
     }
 
