@@ -4,7 +4,7 @@ namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\
 
 class SomeClass
 {
-    public function shorten(array $array)
+    public function run(array $array)
     {
         count($array) === 0;
     }
@@ -18,7 +18,7 @@ namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\
 
 class SomeClass
 {
-    public function shorten(array $array)
+    public function run(array $array)
     {
         $array === [];
     }

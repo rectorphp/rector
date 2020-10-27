@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace Rector\Performance\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Type\ArrayType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -78,9 +83,22 @@ CODE_SAMPLE
             return null;
         }
 
+        $compareVariable = new Variable($args[0]->value->name);
+        $compareValue = new ConstFetch(new Name('[]'));
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        if ($parent instanceof Identical && $parent->right instanceof LNumber && $parent->right->value === 0) {
+            $this->removeNode($node);
+
+            $parent->right = $compareValue;
+            $node = $compareVariable;
+
+            return $node;
+        }
+
         // @todo
-        // 2. check parent is a comparison with === 0 or >= 0, no? skip
-        // 3. replace with comparison to [] or !== []
+        // 2. check parent is a >= 0, no? skip
+        // 3. replace with !== []
 
         return $node;
     }
