@@ -111,10 +111,13 @@ CODE_SAMPLE
 
     /**
      * @param Identical $binaryOp
-     * @param FuncCall $funcCall
      */
-    private function processIdentical(BinaryOp $binaryOp, FuncCall $funcCall, Variable $compareVariable, ConstFetch $constFetch): ?Variable
-    {
+    private function processIdentical(
+        BinaryOp $binaryOp,
+        FuncCall $funcCall,
+        Variable $compareVariable,
+        ConstFetch $constFetch
+    ): ?Variable {
         if ($binaryOp instanceof Identical && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
             $this->removeNode($funcCall);
             $binaryOp->right = $constFetch;
@@ -127,10 +130,13 @@ CODE_SAMPLE
 
     /**
      * @param Greater $binaryOp
-     * @param FuncCall $funcCall
      */
-    private function processGreater(BinaryOp $binaryOp, FuncCall $funcCall, Variable $compareVariable, ConstFetch $constFetch): ?NotIdentical
-    {
+    private function processGreater(
+        BinaryOp $binaryOp,
+        FuncCall $funcCall,
+        Variable $compareVariable,
+        ConstFetch $constFetch
+    ): ?NotIdentical {
         if ($binaryOp instanceof Greater && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
             $this->removeNode($funcCall);
             $this->removeNode($binaryOp->right);
