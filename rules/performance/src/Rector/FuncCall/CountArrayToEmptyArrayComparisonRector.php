@@ -63,7 +63,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Variable|MethodCall $expr */
+        /** @var Expr $expr */
         $expr = $node->args[0]->value;
 
         /** @var Scope $scope */
