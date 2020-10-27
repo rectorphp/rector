@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\Performance\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
@@ -29,7 +31,7 @@ final class CountArrayToEmptyArrayComparisonRule extends AbstractRector
             new CodeSample(
                 <<<'CODE_SAMPLE'
 count($array) === 0;
-count($array) >= 0;
+count($array) > 0;
 CODE_SAMPLE
 ,
                 <<<'CODE_SAMPLE'
@@ -89,16 +91,18 @@ CODE_SAMPLE
 
         if ($parent instanceof Identical && $parent->right instanceof LNumber && $parent->right->value === 0) {
             $this->removeNode($node);
-
             $parent->right = $constFetch;
 
             return $compareVariable;
         }
 
-        // @todo
-        // 2. check parent is a >= 0, no? skip
-        // 3. replace with !== []
+        if ($parent instanceof Greater && $parent->right instanceof LNumber && $parent->right->value === 0) {
+            $this->removeNode($node);
+            $this->removeNode($parent->right);
 
-        return $node;
+            return new NotIdentical($compareVariable, $constFetch);
+        }
+
+        return null;
     }
 }
