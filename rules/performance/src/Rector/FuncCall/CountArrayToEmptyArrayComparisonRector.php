@@ -101,12 +101,7 @@ CODE_SAMPLE
             return $processIdentical;
         }
 
-        $processGreater = $this->processGreater($parent, $node, $compareVariable, $constFetch);
-        if ($processGreater !== null) {
-            return $processGreater;
-        }
-
-        return null;
+        return $this->processGreater($parent, $node, $compareVariable, $constFetch);
     }
 
     /**
