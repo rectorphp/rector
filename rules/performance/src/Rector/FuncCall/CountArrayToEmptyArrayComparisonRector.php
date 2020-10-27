@@ -93,18 +93,18 @@ CODE_SAMPLE
         return $this->processMarkTruthy($parent, $node, $expr);
     }
 
-    private function processIdentical(Node $binaryOp, FuncCall $funcCall, Expr $expr): ?Expr
+    private function processIdentical(Node $node, FuncCall $funcCall, Expr $expr): ?Expr
     {
-        if ($binaryOp instanceof Identical && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
+        if ($node instanceof Identical && $node->right instanceof LNumber && $node->right->value === 0) {
             $this->removeNode($funcCall);
-            $binaryOp->right = new Array_([]);
+            $node->right = new Array_([]);
 
             return $expr;
         }
 
-        if ($binaryOp instanceof Identical && $binaryOp->left instanceof LNumber && $binaryOp->left->value === 0) {
+        if ($node instanceof Identical && $node->left instanceof LNumber && $node->left->value === 0) {
             $this->removeNode($funcCall);
-            $binaryOp->left = new Array_([]);
+            $node->left = new Array_([]);
 
             return $expr;
         }
@@ -112,18 +112,18 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processGreaterOrSmaller(Node $binaryOp, FuncCall $funcCall, Expr $expr): ?NotIdentical
+    private function processGreaterOrSmaller(Node $node, FuncCall $funcCall, Expr $expr): ?NotIdentical
     {
-        if ($binaryOp instanceof Greater && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
+        if ($node instanceof Greater && $node->right instanceof LNumber && $node->right->value === 0) {
             $this->removeNode($funcCall);
-            $this->removeNode($binaryOp->right);
+            $this->removeNode($node->right);
 
             return new NotIdentical($expr, new Array_([]));
         }
 
-        if ($binaryOp instanceof Smaller && $binaryOp->left instanceof LNumber && $binaryOp->left->value === 0) {
+        if ($node instanceof Smaller && $node->left instanceof LNumber && $node->left->value === 0) {
             $this->removeNode($funcCall);
-            $this->removeNode($binaryOp->left);
+            $this->removeNode($node->left);
 
             return new NotIdentical(new Array_([]), $expr);
         }
@@ -131,11 +131,11 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processMarkTruthy(Node $stmt, FuncCall $funcCall, Expr $expr): ?NotIdentical
+    private function processMarkTruthy(Node $node, FuncCall $funcCall, Expr $expr): ?NotIdentical
     {
-        if (($stmt instanceof If_ || $stmt instanceof ElseIf_) && $stmt->cond === $funcCall) {
-            $stmt->cond = new NotIdentical($expr, new Array_([]));
-            return $stmt->cond;
+        if (($node instanceof If_ || $node instanceof ElseIf_) && $node->cond === $funcCall) {
+            $node->cond = new NotIdentical($expr, new Array_([]));
+            return $node->cond;
         }
 
         return null;
