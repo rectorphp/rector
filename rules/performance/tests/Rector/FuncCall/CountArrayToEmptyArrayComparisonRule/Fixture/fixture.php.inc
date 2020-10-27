@@ -8,6 +8,7 @@ class SomeClass
     {
         // from parameter
         count($array) === 0;
+        0 === count($array);
         count($array) > 0;
 
         // from local variable
@@ -29,6 +30,7 @@ class SomeClass
     {
         // from parameter
         $array === [];
+        [] === $array;
         $array !== [];
 
         // from local variable

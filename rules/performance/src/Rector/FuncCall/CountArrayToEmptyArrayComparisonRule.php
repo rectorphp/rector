@@ -125,6 +125,13 @@ CODE_SAMPLE
             return $compareVariable;
         }
 
+        if ($binaryOp instanceof Identical && $binaryOp->left instanceof LNumber && $binaryOp->left->value === 0) {
+            $this->removeNode($funcCall);
+            $binaryOp->left = $constFetch;
+
+            return $compareVariable;
+        }
+
         return null;
     }
 
