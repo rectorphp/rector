@@ -26,7 +26,7 @@ final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCas
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed[]>
      */
     protected function getRectorsWithConfiguration(): array
     {

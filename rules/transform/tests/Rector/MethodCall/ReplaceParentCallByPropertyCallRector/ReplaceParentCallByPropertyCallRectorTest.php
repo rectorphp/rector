@@ -27,7 +27,7 @@ final class ReplaceParentCallByPropertyCallRectorTest extends AbstractRectorTest
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed[]>
      */
     protected function getRectorsWithConfiguration(): array
     {

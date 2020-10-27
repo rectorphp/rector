@@ -33,7 +33,7 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed[]>
      */
     protected function getRectorsWithConfiguration(): array
     {
