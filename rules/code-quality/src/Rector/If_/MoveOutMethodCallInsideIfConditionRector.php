@@ -87,15 +87,40 @@ CODE_SAMPLE
         return $this->moveOutMethodCall($methodCall, $node);
     }
 
-    private function isInsideMethodCallHasMethodCall(MethodCall $methodCall): bool
+    private function shouldSkipMethodCall(MethodCall $methodCall): bool
     {
-        foreach ($methodCall->args as $arg) {
-            if ($arg->value instanceof MethodCall) {
-                return true;
-            }
+        $methodCallVar = $methodCall->var;
+
+        $scope = $methodCallVar->getAttribute(Scope::class);
+        if ($scope === null) {
+            return true;
         }
 
-        return false;
+        $type = $scope->getType($methodCallVar);
+
+        // From PropertyFetch → skip
+        if ($type instanceof ThisType) {
+            return true;
+        }
+
+        // Is Boolean return → skip
+        $scope = $methodCall->getAttribute(Scope::class);
+        if ($scope === null) {
+            return true;
+        }
+
+        $type = $scope->getType($methodCall);
+        if ($type instanceof BooleanType) {
+            return true;
+        }
+
+        // No Args → skip
+        if ($methodCall->args === []) {
+            return true;
+        }
+
+        // Inside Method calls args has Method Call again → skip
+        return $this->isInsideMethodCallHasMethodCall($methodCall);
     }
 
     private function moveOutMethodCall(MethodCall $methodCall, If_ $if): ?If_
@@ -132,40 +157,15 @@ CODE_SAMPLE
         return $if;
     }
 
-    private function shouldSkipMethodCall(MethodCall $methodCall): bool
+    private function isInsideMethodCallHasMethodCall(MethodCall $methodCall): bool
     {
-        $methodCallVar = $methodCall->var;
-
-        $scope = $methodCallVar->getAttribute(Scope::class);
-        if ($scope === null) {
-            return true;
+        foreach ($methodCall->args as $arg) {
+            if ($arg->value instanceof MethodCall) {
+                return true;
+            }
         }
 
-        $type = $scope->getType($methodCallVar);
-
-        // From PropertyFetch → skip
-        if ($type instanceof ThisType) {
-            return true;
-        }
-
-        // Is Boolean return → skip
-        $scope = $methodCall->getAttribute(Scope::class);
-        if ($scope === null) {
-            return true;
-        }
-
-        $type = $scope->getType($methodCall);
-        if ($type instanceof BooleanType) {
-            return true;
-        }
-
-        // No Args → skip
-        if ($methodCall->args === []) {
-            return true;
-        }
-
-        // Inside Method calls args has Method Call again → skip
-        return $this->isInsideMethodCallHasMethodCall($methodCall);
+        return false;
     }
 
     private function isVariableNameAlreadyDefined(Node $node, string $variableName): bool
