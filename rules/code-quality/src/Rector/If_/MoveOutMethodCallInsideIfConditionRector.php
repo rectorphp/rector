@@ -4,26 +4,22 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\If_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\ThisType;
+use Rector\CodeQuality\Naming\MethodCallToVariableNameResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -32,25 +28,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class MoveOutMethodCallInsideIfConditionRector extends AbstractRector
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/LTykey/1
+     * @var MethodCallToVariableNameResolver
      */
-    private const START_ALPHA_REGEX = '#^[a-zA-Z]#';
+    private $methodCallToVariableNameResolver;
 
-    /**
-     * @var string
-     * @see https://regex101.com/r/sYIKpj/1
-     */
-    private const CONSTANT_REGEX = '#(_)([a-z])#';
-
-    /**
-     * @var ExpectedNameResolver
-     */
-    private $expectedNameResolver;
-
-    public function __construct(ExpectedNameResolver $expectedNameResolver)
+    public function __construct(MethodCallToVariableNameResolver $methodCallToVariableNameResolver)
     {
-        $this->expectedNameResolver = $expectedNameResolver;
+        $this->methodCallToVariableNameResolver = $methodCallToVariableNameResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -118,11 +102,14 @@ CODE_SAMPLE
 
     private function moveOutMethodCall(MethodCall $methodCall, If_ $if): ?If_
     {
-        $variableName = $this->getVariableName($methodCall);
+        $variableName = $this->methodCallToVariableNameResolver->resolveVariableName($methodCall);
         if ($variableName === null || $this->isVariableExists(
             $if,
             $variableName
-        ) || $this->isVariableExistsInParentNode($if, $variableName)) {
+        ) || $this->isVariableExistsInParentNode(
+            $if,
+            $variableName
+        )) {
             return null;
         }
 
@@ -147,44 +134,6 @@ CODE_SAMPLE
         return $if;
     }
 
-    private function getVariableName(MethodCall $methodCall): ?string
-    {
-        $methodCallVarName = $this->getName($methodCall->var);
-        $methodCallIdentifier = $methodCall->name;
-
-        if (! $methodCallIdentifier instanceof Identifier) {
-            return null;
-        }
-
-        $methodCallName = $methodCallIdentifier->toString();
-        if ($methodCallVarName === null || $methodCallName === null) {
-            return null;
-        }
-
-        $variableName = $this->expectedNameResolver->resolveForCall($methodCall);
-        if ($methodCall->args === [] && $variableName !== null && $variableName !== $methodCallVarName) {
-            return $variableName;
-        }
-
-        $arg0 = $methodCall->args[0]->value;
-        if ($arg0 instanceof ClassConstFetch && $arg0->name instanceof Identifier) {
-            return Strings::replace(
-                strtolower($arg0->name->toString()),
-                self::CONSTANT_REGEX,
-                function ($matches): string {
-                    return strtoupper($matches[2]);
-                }
-            );
-        }
-
-        $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);
-        if ($arg0 instanceof String_) {
-            return $this->getStringVarName($arg0, $methodCallVarName, $fallbackVarName);
-        }
-
-        return $fallbackVarName;
-    }
-
     private function isVariableExists(If_ $if, string $variableName): bool
     {
         return (bool) $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($variableName): bool {
@@ -204,24 +153,6 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    private function getFallbackVarName(string $methodCallVarName, string $methodCallName): string
-    {
-        return $methodCallVarName . ucfirst($methodCallName);
-    }
-
-    private function getStringVarName(String_ $string, string $methodCallVarName, string $fallbackVarName): string
-    {
-        $get = str_ireplace('get', '', $string->value . ucfirst($fallbackVarName));
-        $by = str_ireplace('by', '', $get);
-        $by = str_replace('-', '', $by);
-
-        if (Strings::match($by, self::START_ALPHA_REGEX) && $by !== $methodCallVarName) {
-            return $by;
-        }
-
-        return $fallbackVarName;
     }
 
     /**
