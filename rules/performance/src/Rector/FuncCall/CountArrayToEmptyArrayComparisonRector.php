@@ -77,8 +77,8 @@ CODE_SAMPLE
         $scope = $variable->getAttribute(AttributeKey::SCOPE);
         $type = $scope->getType($variable);
 
-        // no pass array type, skip
-        if (! $type instanceof ArrayType) {
+        // no pass array type or passed value is not a variable, skip
+        if (! $type instanceof ArrayType || ! $variable instanceof Variable) {
             return null;
         }
 
@@ -88,35 +88,28 @@ CODE_SAMPLE
             return null;
         }
 
-        $compareVariable = new Variable($variable->name);
-        $array = new Array_([]);
-
-        $processIdentical = $this->processIdentical($parent, $node, $compareVariable, $array);
+        $processIdentical = $this->processIdentical($parent, $node, $variable);
         if ($processIdentical !== null) {
             return $processIdentical;
         }
 
-        return $this->processGreaterOrSmaller($parent, $node, $compareVariable, $array);
+        return $this->processGreaterOrSmaller($parent, $node, $variable);
     }
 
-    private function processIdentical(
-        BinaryOp $binaryOp,
-        FuncCall $funcCall,
-        Variable $compareVariable,
-        Array_ $array
-    ): ?Variable {
+    private function processIdentical(BinaryOp $binaryOp, FuncCall $funcCall, Variable $variable): ?Variable
+    {
         if ($binaryOp instanceof Identical && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
             $this->removeNode($funcCall);
-            $binaryOp->right = $array;
+            $binaryOp->right = new Array_([]);
 
-            return $compareVariable;
+            return $variable;
         }
 
         if ($binaryOp instanceof Identical && $binaryOp->left instanceof LNumber && $binaryOp->left->value === 0) {
             $this->removeNode($funcCall);
-            $binaryOp->left = $array;
+            $binaryOp->left = new Array_([]);
 
-            return $compareVariable;
+            return $variable;
         }
 
         return null;
@@ -125,21 +118,20 @@ CODE_SAMPLE
     private function processGreaterOrSmaller(
         BinaryOp $binaryOp,
         FuncCall $funcCall,
-        Variable $compareVariable,
-        Array_ $array
+        Variable $variable
     ): ?NotIdentical {
         if ($binaryOp instanceof Greater && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
             $this->removeNode($funcCall);
             $this->removeNode($binaryOp->right);
 
-            return new NotIdentical($compareVariable, $array);
+            return new NotIdentical($variable, new Array_([]));
         }
 
         if ($binaryOp instanceof Smaller && $binaryOp->left instanceof LNumber && $binaryOp->left->value === 0) {
             $this->removeNode($funcCall);
             $this->removeNode($binaryOp->left);
 
-            return new NotIdentical($array, $compareVariable);
+            return new NotIdentical(new Array_([]), $variable);
         }
 
         return null;
