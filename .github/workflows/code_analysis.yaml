@@ -13,10 +13,6 @@ jobs:
             matrix:
                 actions:
                     -
-                        name: 'Coding Standard'
-                        run: composer check-cs
-
-                    -
                         name: 'PHPStan'
                         run: composer phpstan
 
