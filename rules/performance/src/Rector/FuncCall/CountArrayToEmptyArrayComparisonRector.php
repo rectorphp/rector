@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -70,8 +71,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $args = $node->args;
-        $variable = $args[0]->value;
+        /** @var Variable $variable */
+        $variable = $node->args[0]->value;
+
+        /** @var Scope $scope */
         $scope = $variable->getAttribute(AttributeKey::SCOPE);
         $type = $scope->getType($variable);
 
@@ -86,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $compareVariable = new Variable($args[0]->value->name);
+        $compareVariable = new Variable($variable->name);
         $constFetch = new ConstFetch(new Name('[]'));
 
         $processIdentical = $this->processIdentical($parent, $node, $compareVariable, $constFetch);
@@ -97,9 +100,6 @@ CODE_SAMPLE
         return $this->processGreater($parent, $node, $compareVariable, $constFetch);
     }
 
-    /**
-     * @param Identical $binaryOp
-     */
     private function processIdentical(
         BinaryOp $binaryOp,
         FuncCall $funcCall,
@@ -123,9 +123,6 @@ CODE_SAMPLE
         return null;
     }
 
-    /**
-     * @param Greater|Smaller $binaryOp
-     */
     private function processGreater(
         BinaryOp $binaryOp,
         FuncCall $funcCall,
