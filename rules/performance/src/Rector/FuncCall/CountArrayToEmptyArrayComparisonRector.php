@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\While_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use Rector\Core\Rector\AbstractRector;
@@ -76,7 +77,7 @@ CODE_SAMPLE
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        if (! $parent instanceof Identical && ! $parent instanceof Greater && ! $parent instanceof Smaller && ! $parent instanceof If_ && ! $parent instanceof ElseIf_) {
+        if (! $parent instanceof Node) {
             return null;
         }
 
@@ -133,7 +134,7 @@ CODE_SAMPLE
 
     private function processMarkTruthy(Node $node, FuncCall $funcCall, Expr $expr): ?NotIdentical
     {
-        if (($node instanceof If_ || $node instanceof ElseIf_) && $node->cond === $funcCall) {
+        if (($node instanceof If_ || $node instanceof ElseIf_ || $node instanceof While_) && $node->cond === $funcCall) {
             $node->cond = new NotIdentical($expr, new Array_([]));
             return $node->cond;
         }

@@ -14,6 +14,10 @@ class SomeClassMarkTruthyCheck
         } elseif (count($otherData)) {
 
         }
+
+        while (count($data)) {
+            $data = [];
+        }
     }
 }
 
@@ -34,6 +38,10 @@ class SomeClassMarkTruthyCheck
 
         } elseif ($otherData !== []) {
 
+        }
+
+        while ($data !== []) {
+            $data = [];
         }
     }
 }
