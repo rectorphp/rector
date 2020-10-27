@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\Performance\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
@@ -85,20 +87,53 @@ CODE_SAMPLE
             return null;
         }
 
-        $compareVariable = new Variable($args[0]->value->name);
-        $constFetch = new ConstFetch(new Name('[]'));
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        if ($parent instanceof Identical && $parent->right instanceof LNumber && $parent->right->value === 0) {
-            $this->removeNode($node);
-            $parent->right = $constFetch;
+        if (! $parent instanceof Identical && ! $parent instanceof Greater && ! $parent instanceof Smaller) {
+            return null;
+        }
+
+        $compareVariable = new Variable($args[0]->value->name);
+        $constFetch = new ConstFetch(new Name('[]'));
+
+        $processIdentical = $this->processIdentical($parent, $node, $compareVariable, $constFetch);
+        if ($processIdentical !== null) {
+            return $processIdentical;
+        }
+
+        $processGreater = $this->processGreater($parent, $node, $compareVariable, $constFetch);
+        if ($processGreater !== null) {
+            return $processGreater;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Identical $binaryOp
+     * @param FuncCall $funcCall
+     */
+    private function processIdentical(BinaryOp $binaryOp, FuncCall $funcCall, Variable $compareVariable, ConstFetch $constFetch): ?Variable
+    {
+        if ($binaryOp instanceof Identical && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
+            $this->removeNode($funcCall);
+            $binaryOp->right = $constFetch;
 
             return $compareVariable;
         }
 
-        if ($parent instanceof Greater && $parent->right instanceof LNumber && $parent->right->value === 0) {
-            $this->removeNode($node);
-            $this->removeNode($parent->right);
+        return null;
+    }
+
+    /**
+     * @param Greater $binaryOp
+     * @param FuncCall $funcCall
+     */
+    private function processGreater(BinaryOp $binaryOp, FuncCall $funcCall, Variable $compareVariable, ConstFetch $constFetch): ?NotIdentical
+    {
+        if ($binaryOp instanceof Greater && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
+            $this->removeNode($funcCall);
+            $this->removeNode($binaryOp->right);
 
             return new NotIdentical($compareVariable, $constFetch);
         }
