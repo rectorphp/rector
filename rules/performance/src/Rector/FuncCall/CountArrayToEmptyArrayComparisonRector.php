@@ -71,13 +71,6 @@ CODE_SAMPLE
         }
 
         $args = $node->args;
-
-        // more than 1 arg, skip
-        // not check possible mode: COUNT_RECURSIVE in 2nd parameter
-        if (isset($args[1])) {
-            return null;
-        }
-
         $variable = $args[0]->value;
         $scope = $variable->getAttribute(AttributeKey::SCOPE);
         $type = $scope->getType($variable);
