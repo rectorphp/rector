@@ -79,6 +79,11 @@ final class SetList
     /**
      * @var string
      */
+    public const CODE_QUALITY_STRICT = __DIR__ . '/../../../../config/set/code-quality-strict.php';
+
+    /**
+     * @var string
+     */
     public const CODING_STYLE = __DIR__ . '/../../../../config/set/coding-style.php';
 
     /**
@@ -710,4 +715,9 @@ final class SetList
      * @var string
      */
     public const UNWRAP_COMPAT = __DIR__ . '/../../../../config/set/unwrap-compat.php';
+
+    /**
+     * @var string
+     */
+    public const EARLY_RETURN = __DIR__ . '/../../../../config/set/early-return.php';
 }

@@ -7,10 +7,6 @@ use Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantR
 use Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 use Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector;
-use Rector\SOLID\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector;
-use Rector\SOLID\Rector\If_\ChangeAndIfToEarlyReturnRector;
-use Rector\SOLID\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
-use Rector\SOLID\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
 use Rector\SOLID\Rector\If_\RemoveAlwaysElseRector;
 use Rector\SOLID\Rector\Property\AddFalseDefaultToBoolPropertyRector;
 use Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector;
@@ -20,26 +16,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(FinalizeClassesWithoutChildrenRector::class);
-
     $services->set(MakeUnusedClassesWithChildrenAbstractRector::class);
-
     $services->set(ChangeReadOnlyPropertyWithDefaultValueToConstantRector::class);
-
     $services->set(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
-
-    $services->set(ChangeNestedForeachIfsToEarlyContinueRector::class);
-
     $services->set(AddFalseDefaultToBoolPropertyRector::class);
-
     $services->set(RepeatedLiteralToClassConstantRector::class);
-
     $services->set(RemoveAlwaysElseRector::class);
-
-    $services->set(ChangeNestedIfsToEarlyReturnRector::class);
-
-    $services->set(ChangeIfElseValueAssignToEarlyReturnRector::class);
-
     $services->set(UseMessageVariableForSprintfInSymfonyStyleRector::class);
-
-    $services->set(ChangeAndIfToEarlyReturnRector::class);
 };

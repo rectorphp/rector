@@ -24,8 +24,15 @@ jobs:
                     -
                         name: "Sync Rector & Nodes Docs"
                         write_run: "composer docs"
-                        commit_message: "sync Rector & Nodes docs"
+                        commit_message: "Generate Rector & Nodes documentation"
                         check_run: "composer docs"
+
+                    -
+                        name: 'Apply Coding Standard'
+                        write_run: "composer fix-cs"
+                        commit_message: "Apply coding standards"
+                        check_run: "composer check-cs"
+
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
