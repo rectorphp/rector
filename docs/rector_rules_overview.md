@@ -3510,9 +3510,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                         'method' => 'someRenamedMethod',
                         'parent_class' => 'AddedParentClass',
                     ],
-                ],
-            ],
-        ]]);
+],
+],
+                        ]]);
 };
 ```
 
@@ -6132,8 +6132,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeClass' => [
                     'getNode' => 'getNodes',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6230,8 +6230,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'FrameworkClass' => [
                     'someProperty' => 'protected',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6467,8 +6467,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 '$methodCallRemoverArgument' => [
                     'Car' => 'something',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6554,8 +6554,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'class' => 'MyClassFactory',
                     'method' => 'create',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6901,8 +6901,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'DEVELOPMENT' => 'development',
                     'PRODUCTION' => 'production',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -7370,8 +7370,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeContainer' => [
                     'set' => 'addService',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -7399,8 +7399,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeContainer' => [
                     'get' => 'getService',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -9247,8 +9247,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             OrderPublicInterfaceMethodRector::METHOD_ORDER_BY_INTERFACES => [
                 'FoodRecipeInterface' => ['getDescription', 'process'],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
