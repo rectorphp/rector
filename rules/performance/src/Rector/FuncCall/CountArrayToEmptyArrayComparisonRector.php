@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Rector\Performance\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Analyser\Scope;
@@ -90,32 +89,32 @@ CODE_SAMPLE
         }
 
         $compareVariable = new Variable($variable->name);
-        $constFetch = new ConstFetch(new Name('[]'));
+        $array = new Array_([]);
 
-        $processIdentical = $this->processIdentical($parent, $node, $compareVariable, $constFetch);
+        $processIdentical = $this->processIdentical($parent, $node, $compareVariable, $array);
         if ($processIdentical !== null) {
             return $processIdentical;
         }
 
-        return $this->processGreaterOrSmaller($parent, $node, $compareVariable, $constFetch);
+        return $this->processGreaterOrSmaller($parent, $node, $compareVariable, $array);
     }
 
     private function processIdentical(
         BinaryOp $binaryOp,
         FuncCall $funcCall,
         Variable $compareVariable,
-        ConstFetch $constFetch
+        Array_ $array
     ): ?Variable {
         if ($binaryOp instanceof Identical && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
             $this->removeNode($funcCall);
-            $binaryOp->right = $constFetch;
+            $binaryOp->right = $array;
 
             return $compareVariable;
         }
 
         if ($binaryOp instanceof Identical && $binaryOp->left instanceof LNumber && $binaryOp->left->value === 0) {
             $this->removeNode($funcCall);
-            $binaryOp->left = $constFetch;
+            $binaryOp->left = $array;
 
             return $compareVariable;
         }
@@ -127,20 +126,20 @@ CODE_SAMPLE
         BinaryOp $binaryOp,
         FuncCall $funcCall,
         Variable $compareVariable,
-        ConstFetch $constFetch
+        Array_ $array
     ): ?NotIdentical {
         if ($binaryOp instanceof Greater && $binaryOp->right instanceof LNumber && $binaryOp->right->value === 0) {
             $this->removeNode($funcCall);
             $this->removeNode($binaryOp->right);
 
-            return new NotIdentical($compareVariable, $constFetch);
+            return new NotIdentical($compareVariable, $array);
         }
 
         if ($binaryOp instanceof Smaller && $binaryOp->left instanceof LNumber && $binaryOp->left->value === 0) {
             $this->removeNode($funcCall);
             $this->removeNode($binaryOp->left);
 
-            return new NotIdentical($constFetch, $compareVariable);
+            return new NotIdentical($array, $compareVariable);
         }
 
         return null;
