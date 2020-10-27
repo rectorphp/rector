@@ -84,16 +84,15 @@ CODE_SAMPLE
         }
 
         $compareVariable = new Variable($args[0]->value->name);
-        $compareValue = new ConstFetch(new Name('[]'));
+        $constFetch = new ConstFetch(new Name('[]'));
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         if ($parent instanceof Identical && $parent->right instanceof LNumber && $parent->right->value === 0) {
             $this->removeNode($node);
 
-            $parent->right = $compareValue;
-            $node = $compareVariable;
+            $parent->right = $constFetch;
 
-            return $node;
+            return $compareVariable;
         }
 
         // @todo
