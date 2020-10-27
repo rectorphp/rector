@@ -86,50 +86,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $methodCalls = $this->betterNodeFinder->find($node->cond, function (Node $node): bool {
-            return $node instanceof MethodCall;
-        });
+        /** @var MethodCall[] $methodCalls */
+        $methodCalls = $this->betterNodeFinder->findInstanceOf($node->cond, MethodCall::class);
 
         $countMethodCalls = count($methodCalls);
 
         // No method call or Multiple method calls inside if → skip
-        if ($countMethodCalls === 0 || $countMethodCalls > 1) {
+        if ($countMethodCalls !== 1) {
             return null;
         }
 
-        /** @var MethodCall $methodCall */
         $methodCall = $methodCalls[0];
-        $methodCallVar = $methodCall->var;
-        $scope = $methodCallVar->getAttribute(Scope::class);
-        if ($scope === null) {
-            return null;
-        }
 
-        $type = $scope->getType($methodCallVar);
-
-        // From PropertyFetch → skip
-        if ($type instanceof ThisType) {
-            return null;
-        }
-
-        // Is Boolean return → skip
-        $scope = $methodCall->getAttribute(Scope::class);
-        if ($scope === null) {
-            return null;
-        }
-
-        $type = $scope->getType($methodCall);
-        if ($type instanceof BooleanType) {
-            return null;
-        }
-
-        // No Args → skip
-        if ($methodCall->args === []) {
-            return null;
-        }
-
-        // Inside Method calls args has Method Call again → skip
-        if ($this->isInsideMethodCallHasMethodCall($methodCall)) {
+        if ($this->shouldSkipMethodCall($methodCall)) {
             return null;
         }
 
@@ -267,5 +236,41 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function shouldSkipMethodCall(MethodCall $methodCall): bool
+    {
+        $methodCallVar = $methodCall->var;
+
+        $scope = $methodCallVar->getAttribute(Scope::class);
+        if ($scope === null) {
+            return true;
+        }
+
+        $type = $scope->getType($methodCallVar);
+
+        // From PropertyFetch → skip
+        if ($type instanceof ThisType) {
+            return true;
+        }
+
+        // Is Boolean return → skip
+        $scope = $methodCall->getAttribute(Scope::class);
+        if ($scope === null) {
+            return true;
+        }
+
+        $type = $scope->getType($methodCall);
+        if ($type instanceof BooleanType) {
+            return true;
+        }
+
+        // No Args → skip
+        if ($methodCall->args === []) {
+            return true;
+        }
+
+        // Inside Method calls args has Method Call again → skip
+        return $this->isInsideMethodCallHasMethodCall($methodCall);
     }
 }
