@@ -1,4 +1,4 @@
-# All 599 Rectors Overview
+# All 600 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -44,7 +44,7 @@
 - [PHPUnit](#phpunit) (38)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
 - [PSR4](#psr4) (2)
-- [Performance](#performance) (1)
+- [Performance](#performance) (2)
 - [Phalcon](#phalcon) (4)
 - [Php52](#php52) (2)
 - [Php53](#php53) (4)
@@ -10619,6 +10619,22 @@ composer.json
 <br><br>
 
 ## Performance
+
+### `CountArrayToEmptyArrayComparisonRector`
+
+- class: [`Rector\Performance\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector`](/rules/performance/src/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector.php)
+- [test fixtures](/rules/performance/tests/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector/Fixture)
+
+Change `count` array comparison to empty array comparison to improve performance
+
+```diff
+-count($array) === 0;
+-count($array) > 0;
++$array === [];
++$array !== [];
+```
+
+<br><br>
 
 ### `PreslashSimpleFunctionRector`
 
