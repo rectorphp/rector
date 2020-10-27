@@ -6,7 +6,7 @@ final class MyGetMockTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $firstMock = $this->getMock('SeeSomeClass');
+        $firstMock = $this->getMock('SomeClass');
     }
 }
 
@@ -20,7 +20,7 @@ final class MyGetMockTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $firstMock = $this->createMock('SeeSomeClass');
+        $firstMock = $this->createMock('SomeClass');
     }
 }
 

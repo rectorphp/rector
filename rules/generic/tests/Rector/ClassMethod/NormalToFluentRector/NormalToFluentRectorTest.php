@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\MethodCall\NormalToFluentRector;
+namespace Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
-use Rector\Generic\Tests\Rector\MethodCall\NormalToFluentRector\Source\FluentInterfaceClass;
+use Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\Source\FluentInterfaceClass;
 use Rector\Generic\ValueObject\NormalToFluent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

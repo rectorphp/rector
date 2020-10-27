@@ -40,7 +40,7 @@ final class ValueResolverTest extends AbstractKernelTestCase
     {
         $builderFactory = new BuilderFactory();
 
-        $classConstFetchNode = $builderFactory->classConstFetch('SeeSomeClass', 'SOME_CONSTANT');
+        $classConstFetchNode = $builderFactory->classConstFetch('SomeClass', 'SOME_CONSTANT');
         $classConstFetchNode->class->setAttribute(
             AttributeKey::RESOLVED_NAME,
             new FullyQualified('SomeClassResolveName')

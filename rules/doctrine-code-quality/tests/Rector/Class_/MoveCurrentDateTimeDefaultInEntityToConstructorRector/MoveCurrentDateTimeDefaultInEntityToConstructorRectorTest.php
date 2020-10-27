@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector;
+use Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RouterListToControllerAnnotationsRectorTest extends AbstractRectorTestCase
+final class MoveCurrentDateTimeDefaultInEntityToConstructorRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class RouterListToControllerAnnotationsRectorTest extends AbstractRectorTe
 
     protected function getRectorClass(): string
     {
-        return RouterListToControllerAnnotationsRector::class;
+        return MoveCurrentDateTimeDefaultInEntityToConstructorRector::class;
     }
 }

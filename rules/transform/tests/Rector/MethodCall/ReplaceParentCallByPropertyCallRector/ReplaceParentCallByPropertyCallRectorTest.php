@@ -6,7 +6,7 @@ namespace Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCa
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
+use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
 use Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy;
 use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 use Symplify\SmartFileSystem\SmartFileInfo;

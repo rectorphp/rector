@@ -9,7 +9,7 @@ class SomeClass
     public function run(ContainerBuilder $containerBuilder)
     {
         $containerBuilder->addDefinition('...')
-            ->setClass('SeeSomeClass', [1, 2]);
+            ->setClass('SomeClass', [1, 2]);
     }
 }
 
@@ -26,7 +26,7 @@ class SomeClass
     public function run(ContainerBuilder $containerBuilder)
     {
         $containerBuilder->addDefinition('...')
-            ->setFactory('SeeSomeClass', [1, 2]);
+            ->setFactory('SomeClass', [1, 2]);
     }
 }
 

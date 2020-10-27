@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\MethodCall\NormalToFluentRector\Fixture;
+namespace Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\Fixture;
 
-use Rector\Generic\Tests\Rector\MethodCall\NormalToFluentRector\Source\FluentInterfaceClass;
+use Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\Source\FluentInterfaceClass;
 
 class ActionClass2
 {
@@ -18,9 +18,9 @@ class ActionClass2
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\MethodCall\NormalToFluentRector\Fixture;
+namespace Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\Fixture;
 
-use Rector\Generic\Tests\Rector\MethodCall\NormalToFluentRector\Source\FluentInterfaceClass;
+use Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\Source\FluentInterfaceClass;
 
 class ActionClass2
 {

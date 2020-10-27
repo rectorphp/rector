@@ -7,7 +7,7 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\Fixtu
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
- * @Template("SeeSomeClass::some.template.twig")
+ * @Template("SomeClass::some.template.twig")
  */
 final class SensioTemplateSimilarToConstant
 {

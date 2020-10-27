@@ -90,6 +90,11 @@ final class TestClassResolver
         return $this->resolveFromClassName($className);
     }
 
+    private function resolveShortClassName(string $className): ?string
+    {
+        return Strings::after($className, '\\', -1);
+    }
+
     /**
      * @return string[]
      */
@@ -97,10 +102,5 @@ final class TestClassResolver
     {
         $namespacePart = (string) Strings::before($className, '\\', -1);
         return explode('\\', $namespacePart);
-    }
-
-    private function resolveShortClassName(string $className): ?string
-    {
-        return Strings::after($className, '\\', -1);
     }
 }

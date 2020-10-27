@@ -23,7 +23,7 @@
 - [DowngradePhp80](#downgradephp80) (6)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (36)
+- [Generic](#generic) (35)
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (3)
 - [Legacy](#legacy) (4)
@@ -72,7 +72,7 @@
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [SymfonyPhpConfig](#symfonyphpconfig) (3)
-- [Transform](#transform) (11)
+- [Transform](#transform) (12)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -4288,7 +4288,7 @@ Change database type "bigint" for @var/type declaration to string
 ### `ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`
 
 - class: [`Rector\DoctrineCodeQuality\Rector\MethodCall\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`](/rules/doctrine-code-quality/src/Rector/MethodCall/ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector.php)
-- [test fixtures](/rules/doctrine-code-quality/tests/Rector/MethodCall/ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection/Fixture)
+- [test fixtures](/rules/doctrine-code-quality/tests/Rector/MethodCall/ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector/Fixture)
 
 Change array to ArrayCollection in setParameters method of query builder
 
@@ -4464,7 +4464,7 @@ Make nullability in setter class method with respect to property
 ### `MoveCurrentDateTimeDefaultInEntityToConstructorRector`
 
 - class: [`Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector`](/rules/doctrine-code-quality/src/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php)
-- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Property/MoveCurrentDateTimeDefaultInEntityToConstructorRector/Fixture)
+- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector/Fixture)
 
 Move default value for entity property to constructor, the safest place
 
@@ -6581,7 +6581,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ### `NormalToFluentRector`
 
 - class: [`Rector\Generic\Rector\ClassMethod\NormalToFluentRector`](/rules/generic/src/Rector/ClassMethod/NormalToFluentRector.php)
-- [test fixtures](/rules/generic/tests/Rector/MethodCall/NormalToFluentRector/Fixture)
+- [test fixtures](/rules/generic/tests/Rector/ClassMethod/NormalToFluentRector/Fixture)
 
 Turns fluent interface calls to classic ones.
 
@@ -6911,50 +6911,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -$value === Nette\Configurator::DEVELOPMENT
 +$value === "development"
-```
-
-<br><br>
-
-### `ReplaceParentCallByPropertyCallRector`
-
-- class: [`Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector`](/rules/generic/src/Rector/MethodCall/ReplaceParentCallByPropertyCallRector.php)
-- [test fixtures](/rules/transform/tests/Rector/MethodCall/ReplaceParentCallByPropertyCallRector/Fixture)
-
-Changes method calls in child of specific types to defined property method call
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
-use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ReplaceParentCallByPropertyCallRector::class)
-        ->call('configure', [[
-            ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => inline_value_objects([
-                new ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     public function run(SomeTypeToReplace $someTypeToReplace)
-     {
--        $someTypeToReplace->someMethodCall();
-+        $this->someProperty->someMethodCall();
-     }
- }
 ```
 
 <br><br>
@@ -8975,7 +8931,7 @@ Changes event names from Nette ones to Symfony ones
 ### `RouterListToControllerAnnotationsRector`
 
 - class: [`Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector`](/rules/nette-to-symfony/src/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php)
-- [test fixtures](/rules/nette-to-symfony/tests/Rector/ClassMethod/RouterListToControllerAnnotationsRetor/Fixture)
+- [test fixtures](/rules/nette-to-symfony/tests/Rector/ClassMethod/RouterListToControllerAnnotationsRector/Fixture)
 
 Change new `Route()` from RouteFactory to @Route annotation above controller method
 
@@ -11909,7 +11865,6 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
 ### `SetCookieRector`
 
 - class: [`Rector\Php73\Rector\FuncCall\SetCookieRector`](/rules/php73/src/Rector/FuncCall/SetCookieRector.php)
-- [test fixtures](/rules/php73/tests/Rector/FuncCall/SetcookieRector/Fixture)
 
 Convert `setcookie` argument to PHP7.3 option array
 
@@ -15993,6 +15948,50 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -$result = $object->property;
 +$result = $object->getProperty('someArg');
+```
+
+<br><br>
+
+### `ReplaceParentCallByPropertyCallRector`
+
+- class: [`Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector`](/rules/transform/src/Rector/MethodCall/ReplaceParentCallByPropertyCallRector.php)
+- [test fixtures](/rules/transform/tests/Rector/MethodCall/ReplaceParentCallByPropertyCallRector/Fixture)
+
+Changes method calls in child of specific types to defined property method call
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
+use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ReplaceParentCallByPropertyCallRector::class)
+        ->call('configure', [[
+            ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => inline_value_objects([
+                new ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function run(SomeTypeToReplace $someTypeToReplace)
+     {
+-        $someTypeToReplace->someMethodCall();
++        $this->someProperty->someMethodCall();
+     }
+ }
 ```
 
 <br><br>

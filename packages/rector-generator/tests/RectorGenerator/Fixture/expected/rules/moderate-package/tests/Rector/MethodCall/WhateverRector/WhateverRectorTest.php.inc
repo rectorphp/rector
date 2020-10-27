@@ -28,7 +28,7 @@ final class WhateverRectorTest extends AbstractRectorTestCase
     {
         return [
             \Rector\ModeratePackage\Rector\MethodCall\WhateverRector::class =>
-                [\Rector\ModeratePackage\Rector\MethodCall\WhateverRector::CLASS_TYPE_TO_METHOD_NAME => ['SeeSomeClass' => 'configure']]
+                [\Rector\ModeratePackage\Rector\MethodCall\WhateverRector::CLASS_TYPE_TO_METHOD_NAME => ['SomeClass' => 'configure']]
         ];
     }
 }

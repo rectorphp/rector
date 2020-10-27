@@ -6,7 +6,7 @@ final class StaticCallTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $firstMock = self::getMock('SeeSomeClass');
+        $firstMock = self::getMock('SomeClass');
     }
 }
 
@@ -20,7 +20,7 @@ final class StaticCallTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $firstMock = self::createMock('SeeSomeClass');
+        $firstMock = self::createMock('SomeClass');
     }
 }
 
