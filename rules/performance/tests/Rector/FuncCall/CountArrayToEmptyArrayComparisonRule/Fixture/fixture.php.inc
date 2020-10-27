@@ -11,9 +11,9 @@ class SomeClass
         count($array) > 0;
 
         // from local variable
-        $array = [];
-        count($array) === 0;
-        count($array) > 0;
+        $localArray = [];
+        count($localArray) === 0;
+        count($localArray) > 0;
     }
 }
 
@@ -32,9 +32,9 @@ class SomeClass
         $array !== [];
 
         // from local variable
-        $array = [];
-        $array === [];
-        $array !== [];
+        $localArray = [];
+        $localArray === [];
+        $localArray !== [];
     }
 }
 
