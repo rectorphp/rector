@@ -15,7 +15,6 @@ use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
@@ -59,16 +58,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->name instanceof FullyQualified) {
-            return null;
-        }
-
         $functionName = $this->getName($node);
-        if ($functionName === null) {
-            return null;
-        }
-
-        if ($functionName !== 'count') {
+        if ($functionName === null || $functionName !== 'count') {
             return null;
         }
 
