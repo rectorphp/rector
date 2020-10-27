@@ -136,7 +136,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Greater $binaryOp
+     * @param Greater|Smaller $binaryOp
      */
     private function processGreater(
         BinaryOp $binaryOp,
@@ -149,6 +149,13 @@ CODE_SAMPLE
             $this->removeNode($binaryOp->right);
 
             return new NotIdentical($compareVariable, $constFetch);
+        }
+
+        if ($binaryOp instanceof Smaller && $binaryOp->left instanceof LNumber && $binaryOp->left->value === 0) {
+            $this->removeNode($funcCall);
+            $this->removeNode($binaryOp->left);
+
+            return new NotIdentical($constFetch, $compareVariable);
         }
 
         return null;

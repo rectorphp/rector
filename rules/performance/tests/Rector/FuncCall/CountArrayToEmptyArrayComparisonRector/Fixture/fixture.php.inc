@@ -10,11 +10,14 @@ class SomeClass
         count($array) === 0;
         0 === count($array);
         count($array) > 0;
+        0 < count($array);
 
         // from local variable
         $localArray = [];
         count($localArray) === 0;
+        0 === count($localArray);
         count($localArray) > 0;
+        0 < count($localArray);
     }
 }
 
@@ -32,11 +35,14 @@ class SomeClass
         $array === [];
         [] === $array;
         $array !== [];
+        [] !== $array;
 
         // from local variable
         $localArray = [];
         $localArray === [];
+        [] === $localArray;
         $localArray !== [];
+        [] !== $localArray;
     }
 }
 
