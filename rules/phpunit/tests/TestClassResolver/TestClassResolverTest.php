@@ -11,6 +11,8 @@ use Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Dow
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\TypedPropertyRectorTest;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
+use Rector\PHPUnit\Tests\TestClassResolver\Source\SeeSomeClass;
+use Rector\PHPUnit\Tests\TestClassResolver\Source\SeeSomeClassTest;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class TestClassResolverTest extends AbstractKernelTestCase
@@ -37,6 +39,7 @@ final class TestClassResolverTest extends AbstractKernelTestCase
 
     public function provideData(): Iterator
     {
+        yield [SeeSomeClass::class, SeeSomeClassTest::class];
         yield [TypedPropertyRector::class, TypedPropertyRectorTest::class];
         yield [DowngradeTypedPropertyRector::class, DowngradeTypedPropertyRectorTest::class];
     }

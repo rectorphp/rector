@@ -17,7 +17,7 @@ use Rector\Generic\ValueObject\NormalToFluent;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\MethodCall\NormalToFluentRector\NormalToFluentRectorTest
+ * @see \Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\NormalToFluentRectorTest
  */
 final class NormalToFluentRector extends AbstractRector implements ConfigurableRectorInterface
 {
