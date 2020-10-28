@@ -70,17 +70,9 @@ CODE_SAMPLE
 
         /** @var Expr $expr */
         $expr = $node->args[0]->value;
-        /** @var Scope|null $scope */
-        $scope = $expr->getAttribute(AttributeKey::SCOPE);
-
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        $type = $scope->getType($expr);
 
         // not pass array type, skip
-        if (! $type instanceof ArrayType) {
+        if (! $this->isArray($expr)) {
             return null;
         }
 
@@ -170,6 +162,18 @@ CODE_SAMPLE
 
         /** @var Expr $expr */
         $expr = $node->cond->expr->args[0]->value;
+
+        // not pass array type, skip
+        if (! $this->isArray($expr)) {
+            return null;
+        }
+
+        $node->cond = new Identical($expr, new Array_([]));
+        return $node;
+    }
+
+    private function isArray(Expr $expr): bool
+    {
         /** @var Scope|null $scope */
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
 
@@ -177,15 +181,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $type = $scope->getType($expr);
-
-        // not pass array type, skip
-        if (! $type instanceof ArrayType) {
-            return null;
-        }
-
-        $node->cond = new Identical($expr, new Array_([]));
-        return $node;
+        return $scope->getType($expr) instanceof ArrayType;
     }
 
     private function isConditional(?Node $node): bool
