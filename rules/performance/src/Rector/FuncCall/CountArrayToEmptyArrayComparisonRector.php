@@ -56,7 +56,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param FuncCall $node
+     * @param FuncCall|ElseIf_|If_ $node
      */
     public function refactor(Node $node): ?Node
     {
