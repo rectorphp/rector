@@ -8,6 +8,8 @@ on:
 
 jobs:
     automated_rebase:
+        if: github.event.issue.pull_request != ''
+
         name: Rebase
         runs-on: ubuntu-latest
 
