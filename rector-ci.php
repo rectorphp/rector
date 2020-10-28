@@ -9,6 +9,7 @@ use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
+use Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector;
 use Rector\Set\ValueObject\SetList;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
@@ -34,6 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::DEAD_CODE,
         SetList::NETTE_UTILS_CODE_QUALITY,
         SetList::SOLID,
+        Setlist::PERFORMANCE,
         SetList::PRIVATIZATION,
         SetList::NAMING,
         SetList::ORDER,
@@ -76,6 +78,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SplitStringClassConstantToClassConstFetchRector::class,
         // false positives on constants used in rector-ci.php
         RemoveUnusedClassConstantRector::class,
+        PreslashSimpleFunctionRector::class,
     ]);
 
     # so Rector code is still PHP 7.2 compatible
