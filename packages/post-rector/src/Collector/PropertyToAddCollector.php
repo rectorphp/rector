@@ -39,15 +39,15 @@ final class PropertyToAddCollector implements NodeCollectorInterface
 
     public function isActive(): bool
     {
-        if (count($this->propertiesByClass) > 0) {
+        if ($this->propertiesByClass !== []) {
             return true;
         }
 
-        if (count($this->propertiesWithoutConstructorByClass) > 0) {
+        if ($this->propertiesWithoutConstructorByClass !== []) {
             return true;
         }
 
-        return count($this->constantsByClass) > 0;
+        return $this->constantsByClass !== [];
     }
 
     public function addPropertyToClass(string $propertyName, ?Type $propertyType, Class_ $class): void

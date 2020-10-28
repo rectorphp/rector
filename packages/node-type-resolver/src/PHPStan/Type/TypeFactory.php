@@ -116,7 +116,7 @@ final class TypeFactory
      */
     private function createUnionOrSingleType(array $types): Type
     {
-        if (count($types) === 0) {
+        if ($types === []) {
             return new MixedType();
         }
 
