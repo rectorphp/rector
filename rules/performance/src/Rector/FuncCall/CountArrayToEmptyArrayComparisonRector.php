@@ -65,9 +65,13 @@ CODE_SAMPLE
 
         /** @var Expr $expr */
         $expr = $node->args[0]->value;
-
         /** @var Scope $scope */
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
+
+        if (! $expr instanceof Expr || ! $scope instanceof Scope) {
+            return null;
+        }
+
         $type = $scope->getType($expr);
 
         // not pass array type, skip
