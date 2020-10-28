@@ -34,7 +34,7 @@ final class PropertyNameResolver implements NodeNameResolverInterface
      */
     public function resolve(Node $node): ?string
     {
-        if (count($node->props) === 0) {
+        if ($node->props === []) {
             return null;
         }
 

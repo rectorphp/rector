@@ -34,7 +34,7 @@ final class UseNameResolver implements NodeNameResolverInterface
      */
     public function resolve(Node $node): ?string
     {
-        if (count($node->uses) === 0) {
+        if ($node->uses === []) {
             return null;
         }
 

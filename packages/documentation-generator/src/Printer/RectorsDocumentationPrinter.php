@@ -86,7 +86,7 @@ final class RectorsDocumentationPrinter
      */
     private function printRectorsWithHeadline(array $rectors, string $headline): string
     {
-        if (count($rectors) === 0) {
+        if ($rectors === []) {
             return '';
         }
 
