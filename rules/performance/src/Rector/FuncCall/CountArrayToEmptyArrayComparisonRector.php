@@ -155,7 +155,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isConditional(Node $node): bool
+    private function isConditional(?Node $node): bool
     {
         return $node instanceof If_ || $node instanceof ElseIf_;
     }
