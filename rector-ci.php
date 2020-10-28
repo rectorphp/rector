@@ -6,10 +6,10 @@ use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchR
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
+use Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
-use Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector;
 use Rector\Set\ValueObject\SetList;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
