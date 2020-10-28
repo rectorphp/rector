@@ -95,11 +95,6 @@ CODE_SAMPLE
         return $this->processMarkTruthyAndTruthyNegation($parent, $node, $expr);
     }
 
-    private function isConditional(?Node $node): bool
-    {
-        return $node instanceof If_ || $node instanceof ElseIf_;
-    }
-
     private function processMarkTruthyNegationInsideConditional(Node $node): ?Node
     {
         if (! $node->cond instanceof BooleanNot || ! $node->cond->expr instanceof FuncCall || $this->getName(
@@ -187,5 +182,10 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function isConditional(?Node $node): bool
+    {
+        return $node instanceof If_ || $node instanceof ElseIf_;
     }
 }
