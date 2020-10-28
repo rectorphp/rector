@@ -1,4 +1,4 @@
-# All 599 Rectors Overview
+# All 600 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -44,7 +44,7 @@
 - [PHPUnit](#phpunit) (38)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
 - [PSR4](#psr4) (2)
-- [Performance](#performance) (1)
+- [Performance](#performance) (2)
 - [Phalcon](#phalcon) (4)
 - [Php52](#php52) (2)
 - [Php53](#php53) (4)
@@ -3510,9 +3510,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                         'method' => 'someRenamedMethod',
                         'parent_class' => 'AddedParentClass',
                     ],
-                ],
-            ],
-        ]]);
+],
+],
+                        ]]);
 };
 ```
 
@@ -6132,8 +6132,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeClass' => [
                     'getNode' => 'getNodes',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6230,8 +6230,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'FrameworkClass' => [
                     'someProperty' => 'protected',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6467,8 +6467,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 '$methodCallRemoverArgument' => [
                     'Car' => 'something',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6554,8 +6554,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'class' => 'MyClassFactory',
                     'method' => 'create',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6901,8 +6901,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'DEVELOPMENT' => 'development',
                     'PRODUCTION' => 'production',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -7370,8 +7370,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeContainer' => [
                     'set' => 'addService',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -7399,8 +7399,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeContainer' => [
                     'get' => 'getService',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -9247,8 +9247,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             OrderPublicInterfaceMethodRector::METHOD_ORDER_BY_INTERFACES => [
                 'FoodRecipeInterface' => ['getDescription', 'process'],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -10619,6 +10619,24 @@ composer.json
 <br><br>
 
 ## Performance
+
+### `CountArrayToEmptyArrayComparisonRector`
+
+- class: [`Rector\Performance\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector`](/rules/performance/src/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector.php)
+- [test fixtures](/rules/performance/tests/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector/Fixture)
+
+Change `count` array comparison to empty array comparison to improve performance
+
+```diff
+-count($array) === 0;
+-count($array) > 0;
+-! count($array);
++$array === [];
++$array !== [];
++$array === [];
+```
+
+<br><br>
 
 ### `PreslashSimpleFunctionRector`
 
