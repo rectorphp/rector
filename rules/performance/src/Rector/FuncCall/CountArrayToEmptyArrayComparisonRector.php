@@ -63,9 +63,9 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Expr $expr */
+        /** @var Expr|null $expr */
         $expr = $node->args[0]->value;
-        /** @var Scope $scope */
+        /** @var Scope|null $scope */
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
 
         if (! $expr instanceof Expr || ! $scope instanceof Scope) {
