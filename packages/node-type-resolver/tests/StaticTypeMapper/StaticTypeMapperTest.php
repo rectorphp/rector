@@ -56,6 +56,8 @@ final class StaticTypeMapperTest extends AbstractKernelTestCase
         ]);
 
         yield [$genericTypeNode, IterableType::class];
+
+        yield [new IdentifierTypeNode('mixed'), MixedType::class];
     }
 
     public function testMapPHPStanTypeToPHPStanPhpDocTypeNode(): void
