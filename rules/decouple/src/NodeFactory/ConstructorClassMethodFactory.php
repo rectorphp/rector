@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Decouple\NodeFactory;
 
-use function count;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -21,7 +20,7 @@ final class ConstructorClassMethodFactory
      */
     public function create(array $properties): ?ClassMethod
     {
-        if (count($properties) === 0) {
+        if ($properties === []) {
             return null;
         }
 

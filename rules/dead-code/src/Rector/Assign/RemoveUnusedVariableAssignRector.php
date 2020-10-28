@@ -68,7 +68,7 @@ CODE_SAMPLE
 
         // variable is used
         $variableUsages = $this->findVariableUsages($classMethod, $node);
-        if (count($variableUsages) > 0) {
+        if ($variableUsages !== []) {
             return null;
         }
 

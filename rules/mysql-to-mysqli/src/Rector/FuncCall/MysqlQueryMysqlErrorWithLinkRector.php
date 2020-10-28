@@ -106,7 +106,7 @@ CODE_SAMPLE
             }
 
             if (
-                count($node->args) === 0
+                $node->args === []
                 || ! $this->isProbablyMysql($node->args[0]->value)
             ) {
                 $connectionVariable = $this->findConnectionVariable($node);

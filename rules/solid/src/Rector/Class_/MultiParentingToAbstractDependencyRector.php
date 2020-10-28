@@ -277,7 +277,7 @@ CODE_SAMPLE
         /** @var string $className */
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
 
-        if (count($this->objectTypesToInject) === 0) {
+        if ($this->objectTypesToInject === []) {
             return;
         }
 

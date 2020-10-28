@@ -81,7 +81,7 @@ final class EventValueObjectClassFactory
      */
     private function decorateWithConstructorIfHasArgs(ClassBuilder $classBuilder, array $args): void
     {
-        if (count($args) === 0) {
+        if ($args === []) {
             return;
         }
 

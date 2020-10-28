@@ -173,7 +173,7 @@ final class ExpectedNameResolver
         }
 
         // call with args can return different value, so skip there if not sure about the type
-        if (count($expr->args) > 0) {
+        if ($expr->args !== []) {
             return null;
         }
 

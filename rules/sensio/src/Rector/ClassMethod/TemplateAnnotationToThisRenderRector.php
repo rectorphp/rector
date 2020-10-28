@@ -175,7 +175,7 @@ CODE_SAMPLE
             $this->refactorReturn($return, $classMethod, $sensioTemplateTagValueNode, $hasThisRenderOrReturnsResponse);
         }
 
-        if (count($returns) === 0) {
+        if ($returns === []) {
             $thisRenderMethodCall = $this->thisRenderFactory->create(
                 $classMethod,
                 null,

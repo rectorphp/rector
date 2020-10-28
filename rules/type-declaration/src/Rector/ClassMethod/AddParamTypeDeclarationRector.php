@@ -106,7 +106,7 @@ CODE_SAMPLE
     private function shouldSkip(ClassMethod $classMethod): bool
     {
         // skip class methods without args
-        if (count((array) $classMethod->params) === 0) {
+        if ((array) $classMethod->params === []) {
             return true;
         }
 

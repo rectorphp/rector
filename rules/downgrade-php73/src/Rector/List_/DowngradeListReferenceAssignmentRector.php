@@ -246,7 +246,7 @@ CODE_SAMPLE
      */
     private function hasAnyItemByRef(array $items): bool
     {
-        return count($this->getItemsByRef($items, self::ANY)) > 0;
+        return $this->getItemsByRef($items, self::ANY) !== [];
     }
 
     /**

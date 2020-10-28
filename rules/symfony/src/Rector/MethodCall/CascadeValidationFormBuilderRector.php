@@ -137,7 +137,7 @@ CODE_SAMPLE
             unset($optionsArrayNode->items[$key]);
 
             // remove empty array
-            if (count($optionsArrayNode->items) === 0) {
+            if ($optionsArrayNode->items === []) {
                 unset($methodCall->args[1]);
             }
 
