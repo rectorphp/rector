@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -135,11 +136,19 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processMarkTruthy(Node $node, FuncCall $funcCall, Expr $expr): ?NotIdentical
+    private function processMarkTruthy(Node $node, FuncCall $funcCall, Expr $expr): ?Expr
     {
         if (($node instanceof If_ || $node instanceof ElseIf_) && $node->cond === $funcCall) {
             $node->cond = new NotIdentical($expr, new Array_([]));
             return $node->cond;
+        }
+
+        if ($node instanceof BooleanNot && $node->expr === $funcCall) {
+            $identical = new Identical($expr, new Array_([]));
+            $this->addNodeBeforeNode($identical, $node);
+            $this->removeNode($node);
+
+            return $identical;
         }
 
         return null;
