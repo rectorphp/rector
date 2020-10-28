@@ -12,6 +12,7 @@ use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
 use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
+use PhpCsFixer\Fixer\Whitespace\ArrayIndentationFixer;
 use SlevomatCodingStandard\Sniffs\Variables\UnusedVariableSniff;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
@@ -99,6 +100,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ArrayListItemNewlineFixer::class => null,
         BlankLineAfterOpeningTagFixer::class => null,
         StrictComparisonFixer::class => [__DIR__ . '/rules/polyfill/src/ConditionEvaluator.php'],
+
+        // bugged for some reason
+        ArrayIndentationFixer::class => [
+            __DIR__ . '/rules/order/src/Rector/Class_/OrderPublicInterfaceMethodRector.php',
+        ],
     ]);
 
     $parameters->set(Option::LINE_ENDING, "\n");
