@@ -67,7 +67,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($node->stmts) > 0) {
+        if ($node->stmts !== []) {
             return null;
         }
 

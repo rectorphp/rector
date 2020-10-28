@@ -135,7 +135,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($argValue->args) > 0) {
+        if ($argValue->args !== []) {
             $methodCall = $this->moveArgumentsToOptions(
                 $methodCall,
                 $position,

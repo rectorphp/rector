@@ -50,7 +50,7 @@ final class SameClassMethodCallAnalyzer
         array $calleeUniqueTypes,
         FirstCallFactoryAwareInterface $firstCallFactoryAware
     ): bool {
-        if (count($calleeUniqueTypes) === 0) {
+        if ($calleeUniqueTypes === []) {
             return false;
         }
 

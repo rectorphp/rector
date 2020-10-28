@@ -118,7 +118,7 @@ CODE_SAMPLE
 
         // 1. find self::$container->get(<X>)
         $serviceTypes = $this->selfContainerMethodCallCollector->collectContainerGetServiceTypes($node);
-        if (count($serviceTypes) === 0) {
+        if ($serviceTypes === []) {
             return null;
         }
 

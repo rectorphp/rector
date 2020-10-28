@@ -103,7 +103,7 @@ final class CurrentAndParentClassMethodComparator
             return false;
         }
 
-        if (count($parentStaticCallArgs) === 0) {
+        if ($parentStaticCallArgs === []) {
             return true;
         }
 

@@ -102,9 +102,9 @@ CODE_SAMPLE
     private function shouldRefactor(Array_ $array): bool
     {
         // Check that any item in the array is the spread
-        return count(array_filter($array->items, function (?ArrayItem $item): bool {
+        return array_filter($array->items, function (?ArrayItem $item): bool {
             return $item !== null && $item->unpack;
-        })) > 0;
+        }) !== [];
     }
 
     private function refactorNode(Array_ $array): Node

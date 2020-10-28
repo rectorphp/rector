@@ -70,7 +70,7 @@ CODE_SAMPLE
         // special case of nested array items
         if ($node->valueVar instanceof Array_) {
             $node->valueVar = $this->refactorArrayForeachValue($node->valueVar, $node);
-            if (count($node->valueVar->items) > 0) {
+            if ($node->valueVar->items !== []) {
                 return null;
             }
         } elseif ($node->valueVar instanceof Variable) {

@@ -87,7 +87,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (count($node->getParams()) === 0) {
+        if ($node->getParams() === []) {
             return null;
         }
 
