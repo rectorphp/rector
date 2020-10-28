@@ -74,10 +74,10 @@ class SomeClass implements FoodRecipeInterface
 }
 CODE_SAMPLE
            , [
-               self::METHOD_ORDER_BY_INTERFACES => [
-                   'FoodRecipeInterface' => ['getDescription', 'process'],
-               ],
-           ]),
+            self::METHOD_ORDER_BY_INTERFACES => [
+                'FoodRecipeInterface' => ['getDescription', 'process'],
+            ],
+        ]),
         ]);
     }
 
