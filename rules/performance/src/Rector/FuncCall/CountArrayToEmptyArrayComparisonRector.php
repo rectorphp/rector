@@ -138,12 +138,13 @@ CODE_SAMPLE
 
     private function processMarkTruthy(Node $node, FuncCall $funcCall, Expr $expr): ?Expr
     {
-        if (($node instanceof If_ || $node instanceof ElseIf_) && $node->cond === $funcCall) {
+        if ($this->isConditional($node) && $node->cond === $funcCall) {
             $node->cond = new NotIdentical($expr, new Array_([]));
             return $node->cond;
         }
 
-        if ($node instanceof BooleanNot && $node->expr === $funcCall) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($node instanceof BooleanNot && $node->expr === $funcCall && ! $this->isConditional($parent)) {
             $identical = new Identical($expr, new Array_([]));
             $this->addNodeBeforeNode($identical, $node);
             $this->removeNode($node);
@@ -152,5 +153,10 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function isConditional(Node $node): bool
+    {
+        return $node instanceof If_ || $node instanceof ElseIf_;
     }
 }
