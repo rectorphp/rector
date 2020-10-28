@@ -1,0 +1,18 @@
+name: Automatic Rebase
+
+on:
+    pull_request: null
+    schedule:
+        # every 10 minutes, https://crontab.guru/#0/10_*_*_*_*
+        - cron: 0/10 * * * *
+
+jobs:
+    automated_rebase:
+        name: Rebase
+        runs-on: ubuntu-latest
+        steps:
+            # see https://github.com/peter-evans/rebase
+            -
+                uses: peter-evans/rebase@v1
+                env:
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}

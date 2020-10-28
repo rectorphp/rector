@@ -345,5 +345,6 @@
     "config": {
         "sort-packages": true,
         "process-timeout": 0
-    }
+    },
+    "prefer-stable": true
 }
