@@ -11,3 +11,5 @@ class SkipNotArray
         count($countable);
     }
 }
+
+?>

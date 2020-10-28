@@ -9,3 +9,5 @@ class SkipNotCount
         empty($array);
     }
 }
+
+?>
