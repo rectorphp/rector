@@ -66,7 +66,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param FuncCall|If_|ElseIf_ $node
+     * @param FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -75,7 +75,7 @@ CODE_SAMPLE
         }
 
         $functionName = $this->getName($node);
-        if ($functionName === null || $functionName !== 'count') {
+        if ($functionName !== 'count') {
             return null;
         }
 
@@ -113,9 +113,9 @@ CODE_SAMPLE
 
     private function processMarkTruthyNegationInsideConditional(Node $node): ?Node
     {
-        if (! $node->cond instanceof BooleanNot || ! $node->cond->expr instanceof FuncCall || ! $this->getName(
+        if (! $node->cond instanceof BooleanNot || ! $node->cond->expr instanceof FuncCall || $this->getName(
             $node->cond->expr
-        ) === 'count') {
+        ) !== 'count') {
             return null;
         }
 
@@ -137,7 +137,7 @@ CODE_SAMPLE
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
 
         if (! $scope instanceof Scope) {
-            return null;
+            return false;
         }
 
         return $scope->getType($expr) instanceof ArrayType;
