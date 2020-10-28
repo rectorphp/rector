@@ -162,7 +162,9 @@ CODE_SAMPLE
 
     private function processMarkTruthyNegationInsideConditional(Node $node): ?Stmt
     {
-        if (! $node->cond instanceof BooleanNot || ! $node->cond->expr instanceof FuncCall || ! $this->getName($node->cond->expr) === 'count') {
+        if (! $node->cond instanceof BooleanNot || ! $node->cond->expr instanceof FuncCall || ! $this->getName(
+            $node->cond->expr
+        ) === 'count') {
             return null;
         }
 
