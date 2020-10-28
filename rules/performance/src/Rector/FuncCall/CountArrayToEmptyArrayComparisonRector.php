@@ -36,11 +36,23 @@ final class CountArrayToEmptyArrayComparisonRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 count($array) === 0;
 count($array) > 0;
+if (count($array)) {
+
+}
+if (! count($array)) {
+
+}
 CODE_SAMPLE
 ,
                 <<<'CODE_SAMPLE'
 $array === [];
 $array !== [];
+if ($array !== []) {
+
+}
+if ($array === []) {
+
+}
 CODE_SAMPLE
             ),
         ]);
