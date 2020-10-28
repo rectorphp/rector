@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
@@ -107,6 +106,43 @@ CODE_SAMPLE
         return $this->processMarkTruthyAndTruthyNegation($parent, $node, $expr);
     }
 
+    private function isConditional(?Node $node): bool
+    {
+        return $node instanceof If_ || $node instanceof ElseIf_;
+    }
+
+    private function processMarkTruthyNegationInsideConditional(Node $node): ?Node
+    {
+        if (! $node->cond instanceof BooleanNot || ! $node->cond->expr instanceof FuncCall || ! $this->getName(
+            $node->cond->expr
+        ) === 'count') {
+            return null;
+        }
+
+        /** @var Expr $expr */
+        $expr = $node->cond->expr->args[0]->value;
+
+        // not pass array type, skip
+        if (! $this->isArray($expr)) {
+            return null;
+        }
+
+        $node->cond = new Identical($expr, new Array_([]));
+        return $node;
+    }
+
+    private function isArray(Expr $expr): bool
+    {
+        /** @var Scope|null $scope */
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        return $scope->getType($expr) instanceof ArrayType;
+    }
+
     private function processIdentical(Node $node, FuncCall $funcCall, Expr $expr): ?Expr
     {
         if ($node instanceof Identical && $node->right instanceof LNumber && $node->right->value === 0) {
@@ -162,42 +198,5 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    private function processMarkTruthyNegationInsideConditional(Node $node): ?Stmt
-    {
-        if (! $node->cond instanceof BooleanNot || ! $node->cond->expr instanceof FuncCall || ! $this->getName(
-            $node->cond->expr
-        ) === 'count') {
-            return null;
-        }
-
-        /** @var Expr $expr */
-        $expr = $node->cond->expr->args[0]->value;
-
-        // not pass array type, skip
-        if (! $this->isArray($expr)) {
-            return null;
-        }
-
-        $node->cond = new Identical($expr, new Array_([]));
-        return $node;
-    }
-
-    private function isArray(Expr $expr): bool
-    {
-        /** @var Scope|null $scope */
-        $scope = $expr->getAttribute(AttributeKey::SCOPE);
-
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        return $scope->getType($expr) instanceof ArrayType;
-    }
-
-    private function isConditional(?Node $node): bool
-    {
-        return $node instanceof If_ || $node instanceof ElseIf_;
     }
 }
