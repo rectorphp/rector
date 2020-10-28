@@ -35,23 +35,13 @@ final class CountArrayToEmptyArrayComparisonRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 count($array) === 0;
 count($array) > 0;
-if (count($array)) {
-
-}
-if (! count($array)) {
-
-}
+! count($array);
 CODE_SAMPLE
 ,
                 <<<'CODE_SAMPLE'
 $array === [];
 $array !== [];
-if ($array !== []) {
-
-}
-if ($array === []) {
-
-}
+$array === [];
 CODE_SAMPLE
             ),
         ]);
@@ -74,8 +64,7 @@ CODE_SAMPLE
             return $this->processMarkTruthyNegationInsideConditional($node);
         }
 
-        $functionName = $this->getName($node);
-        if ($functionName !== 'count') {
+        if ($this->getName($node) !== 'count') {
             return null;
         }
 
