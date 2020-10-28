@@ -60,7 +60,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isConditional($node)) {
+        if (! $node instanceof FuncCall) {
             return $this->processMarkTruthyNegationInsideConditional($node);
         }
 
