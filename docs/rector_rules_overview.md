@@ -10630,16 +10630,10 @@ Change `count` array comparison to empty array comparison to improve performance
 ```diff
 -count($array) === 0;
 -count($array) > 0;
--if (count($array)) {
+-! count($array);
 +$array === [];
 +$array !== [];
-+if ($array !== []) {
-
- }
--if (! count($array)) {
-+if ($array === []) {
-
- }
++$array === [];
 ```
 
 <br><br>
