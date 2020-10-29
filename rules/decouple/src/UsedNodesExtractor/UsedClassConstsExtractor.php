@@ -70,14 +70,14 @@ final class UsedClassConstsExtractor
     private function getClassConstByName(Class_ $class, string $classConstName): ClassConst
     {
         $classConstantNames = [];
-        foreach ($class->getConstants() as $constant) {
-            $classConstantNames[] = $this->nodeNameResolver->getName($constant);
+        foreach ($class->getConstants() as $classConst) {
+            $classConstantNames[] = $this->nodeNameResolver->getName($classConst);
 
-            if (! $this->nodeNameResolver->isName($constant, $classConstName)) {
+            if (! $this->nodeNameResolver->isName($classConst, $classConstName)) {
                 continue;
             }
 
-            return $constant;
+            return $classConst;
         }
 
         $className = $this->nodeNameResolver->getName($class);
