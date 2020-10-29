@@ -20,17 +20,16 @@ jobs:
         name: PHP ${{ matrix.php }} tests
         steps:
             -   uses: actions/checkout@v2
+
             -   uses: shivammathur/setup-php@v1
                 with:
                     php-version: ${{ matrix.php }}
                     coverage: none # disable xdebug, pcov
-            # report phpunit errors into files-changed PR tab
-            # https://github.com/actions/toolkit/blob/master/docs/problem-matchers.md
-            -   name: Setup Problem Matchers for PHPUnit
-                run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
             -   run: composer update --prefer-lowest --no-progress --ansi
                 if: "matrix.dependencies == 'lowest'"
+
             -   run: composer install --no-progress --ansi
                 if: "matrix.dependencies != 'lowest'"
+
             -   run: vendor/bin/phpunit

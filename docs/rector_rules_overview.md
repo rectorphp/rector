@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# All 597 Rectors Overview
-=======
-# All 601 Rectors Overview
->>>>>>> update docs
+# All 598 Rectors Overview
 
 - [Projects](#projects)
 ---

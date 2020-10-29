@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\SOLID\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
@@ -12,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -73,17 +75,23 @@ CODE_SAMPLE
             return null;
         }
 
+        $variableType = $this->getStaticType($variable);
+
         $parentScope = $this->parentScopeFinder->find($assign);
         if ($parentScope === null) {
             return null;
         }
 
-        $firstVariableUsage = $this->findFirstVariableUsageInScope($variable, $assign, $parentScope);
-        if ($firstVariableUsage === null) {
+        $firstUsedVariable = $this->findFirstVariableUsageInScope($variable, $assign, $parentScope);
+        if ($firstUsedVariable === null) {
             return null;
         }
 
-        $firstVariableUsageStatement = $firstVariableUsage->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if ($this->shouldSkipUsedVariable($firstUsedVariable)) {
+            return null;
+        }
+
+        $firstVariableUsageStatement = $firstUsedVariable->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
         $assignStatement = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
         $this->addNodeBeforeNode($assignStatement, $firstVariableUsageStatement);
@@ -126,5 +134,18 @@ CODE_SAMPLE
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         return $parentNode === $assign;
+    }
+
+    private function shouldSkipUsedVariable(Variable $variable): bool
+    {
+        $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof ArrayDimFetch) {
+            return true;
+        }
+
+        $variableType = $this->getStaticType($variable);
+
+        // possibly service of value object, that changes inner state
+        return $variableType instanceof TypeWithClassName;
     }
 }

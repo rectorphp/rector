@@ -359,11 +359,6 @@ parameters:
         - '#Property PhpParser\\Node\\Stmt\\Foreach_\:\:\$valueVar \(PhpParser\\Node\\Expr\) does not accept PhpParser\\Node\\Expr\|null#'
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$type#'
 
-        # local type
-        -
-            message: '#Method call "isObjectType\(\)" argument on position 1 cannot use "\:\:class" reference#'
-            path: 'packages/dynamic-type-analysis/src/Rector/StaticCall/RemoveArgumentTypeProbeRector.php'
-
         # only local use
         -
             message: '#Class "Rector\\RectorGenerator\\Rector\\Closure\\AddNewServiceToSymfonyPhpConfigRector" is missing @see annotation with test case class reference#'
@@ -528,8 +523,6 @@ parameters:
                 # 3rd party code
                 - packages/doctrine-annotation-generated/src/DataCollector/ResolvedConstantStaticCollector.php
                 # on purpose
-                - packages/dynamic-type-analysis/src/Probe/TypeStaticProbe.php
-                - packages/dynamic-type-analysis/tests/ProbeStorage/StaticInMemoryProbeStorage.php
                 - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 251
 
         -
@@ -581,7 +574,6 @@ parameters:
                 - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareUnionTypeNodeFactory.php # 44
                 - packages/better-php-doc-parser/src/PhpDocNodeFactory/PHPUnitDataProviderDocNodeFactory.php # 52
                 - packages/better-php-doc-parser/src/PhpDocNodeFactory/ParamPhpDocNodeFactory.php # 81
-                - packages/dynamic-type-analysis/src/Probe/TypeStaticProbe.php # 82
                 - packages/node-type-resolver/src/FileSystem/CurrentFileInfoProvider.php # 35
                 - packages/phpstan-static-type-mapper/src/TypeMapper/ObjectTypeMapper.php # 123
                 - packages/phpstan-static-type-mapper/src/TypeMapper/ObjectWithoutClassTypeMapper.php # 72
