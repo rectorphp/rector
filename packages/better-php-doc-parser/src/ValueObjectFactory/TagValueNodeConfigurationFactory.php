@@ -20,21 +20,25 @@ final class TagValueNodeConfigurationFactory
 {
     /**
      * @var string
+     * @see https://regex101.com/r/y3U6s4/1
      */
     public const NEWLINE_AFTER_OPENING_REGEX = '#^(\(\s+|\n)#m';
 
     /**
      * @var string
+     * @see https://regex101.com/r/bopnKI/1
      */
     public const NEWLINE_BEFORE_CLOSING_REGEX = '#(\s+\)|\n(\s+)?)$#m';
 
     /**
      * @var string
+     * @see https://regex101.com/r/IMT6GF/1
      */
     public const OPENING_BRACKET_REGEX = '#^\(#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/nsFq7m/1
      */
     public const CLOSING_BRACKET_REGEX = '#\)$#';
 
