@@ -16,6 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages/doctrine-annotation-generated/src/*',
         __DIR__ . '/packages/rector-generator/templates/*',
         __DIR__ . '/vendor/*',
+        __DIR__ . '/ci/*',
         '/tests/',
         // '*.php.inc',
     ]);
