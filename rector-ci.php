@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\If_\MoveOutMethodCallInsideIfConditionRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
@@ -78,7 +77,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SplitStringClassConstantToClassConstFetchRector::class,
         // false positives on constants used in rector-ci.php
         RemoveUnusedClassConstantRector::class,
-        MoveOutMethodCallInsideIfConditionRector::class,
     ]);
 
     # so Rector code is still PHP 7.2 compatible

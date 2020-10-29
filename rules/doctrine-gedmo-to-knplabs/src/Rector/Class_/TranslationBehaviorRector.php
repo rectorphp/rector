@@ -190,13 +190,15 @@ CODE_SAMPLE
             if ($propertyPhpDocInfo === null) {
                 continue;
             }
+            $hasTypeLocaleTagValueNode = $propertyPhpDocInfo->hasByType(LocaleTagValueNode::class);
 
-            if ($propertyPhpDocInfo->hasByType(LocaleTagValueNode::class)) {
+            if ($hasTypeLocaleTagValueNode) {
                 $this->removeNode($property);
                 continue;
             }
+            $hasTypeTranslatableTagValueNode = $propertyPhpDocInfo->hasByType(TranslatableTagValueNode::class);
 
-            if (! $propertyPhpDocInfo->hasByType(TranslatableTagValueNode::class)) {
+            if (! $hasTypeTranslatableTagValueNode) {
                 continue;
             }
 
