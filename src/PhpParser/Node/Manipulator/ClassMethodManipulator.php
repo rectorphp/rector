@@ -92,12 +92,12 @@ final class ClassMethodManipulator
             return false;
         }
 
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return false;
         }
 
-        return $classMethod->isPrivate() || (! $classNode->isFinal() && $classMethod->isProtected());
+        return $classMethod->isPrivate() || (! $classLike->isFinal() && $classMethod->isProtected());
     }
 
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null): bool

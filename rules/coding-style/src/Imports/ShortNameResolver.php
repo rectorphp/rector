@@ -115,9 +115,9 @@ final class ShortNameResolver
             return $fileInfo->getRealPath();
         }
 
-        $currentFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($currentFileInfo !== null) {
-            return $currentFileInfo->getRealPath();
+        $smartFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        if ($smartFileInfo !== null) {
+            return $smartFileInfo->getRealPath();
         }
 
         return null;

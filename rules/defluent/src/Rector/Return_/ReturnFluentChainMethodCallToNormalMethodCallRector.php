@@ -125,6 +125,10 @@ CODE_SAMPLE
             $fluentMethodCalls
         );
 
+        if ($firstAssignFluentCall === null) {
+            return [];
+        }
+
         // should be skipped?
         if ($this->fluentMethodCallSkipper->shouldSkipFirstAssignFluentCall($firstAssignFluentCall)) {
             return [];
