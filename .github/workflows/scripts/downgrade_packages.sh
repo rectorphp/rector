@@ -153,20 +153,21 @@ do
     set_to_downgrade=${sets_to_downgrade[$pos]}
     packages_to_downgrade_by_set=$(echo "${packages_by_set[$set_to_downgrade]}" | tr " " "\n")
 
-    echo Analyzing package $package_to_downgrade
     dependents_to_downgrade=()
     # Obtain recursively the list of dependents, keep the first word only,
     # (which is the package name), and remove duplicates
     dependentsAsString=$(composer why "$package" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
     IFS=' ' read -r -a dependents <<< "$dependentsAsString"
-    # Only add the ones which must themselves be downgraded
+    # Only add the ones which must themselves be downgraded for that same set
     for dependent in "${dependents[@]}"; do
         if [[ " ${packages_to_downgrade_by_set[@]} " =~ " ${dependent} " ]]; then
             dependents_to_downgrade+=($dependent)
         fi
     done
-    package_dependents[$package]=$(echo "${dependents_to_downgrade[@]}")
-    echo Dependent packages: "${dependents_to_downgrade[@]}"
+    # The dependents are identified per package and set, because a same dependency
+    # downgraded for 2 set might have dependencies downgraded for one set and not the other
+    package_dependents["$package|$set_to_downgrade"]=$(echo "${dependents_to_downgrade[@]}")
+    echo "Dependencies for package ${package_to_downgrade} and set ${set_to_downgrade}: ${dependents_to_downgrade[@]}"
     ((counter++))
 done
 
@@ -192,8 +193,8 @@ do
             ((counter++))
             continue
         fi
-        # Check if all dependents have already been migrated. Otherwise, keep iterating
-        dependents=${package_dependents[$package_to_downgrade]}
+        # Check if all dependents have already been downgraded. Otherwise, keep iterating
+        dependents=${package_dependents["$package_to_downgrade|$set_to_downgrade"]}
         for dependent in "${dependents[@]}"; do
             if [[ ! " ${downgraded_packages[@]} " =~ " ${dependent} " ]]; then
                 ((counter++))
