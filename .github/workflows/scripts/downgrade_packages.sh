@@ -79,7 +79,7 @@ paths_to_downgrade=()
 sets_to_downgrade=()
 
 # Switch to production
-# composer install --no-dev
+composer install --no-dev
 
 counter=1
 while [ $counter -le ${#target_downgrade_php_versions[@]} ]
@@ -118,7 +118,7 @@ do
 done
 
 # Switch to dev again
-# composer install
+composer install
 
 # Make sure that the number of packages, paths and sets is the same
 # otherwise something went wrong
@@ -161,47 +161,69 @@ for package in "${packages_to_downgrade[@]}"; do
     fi
 done
 
-
-# Execute Rector on all the paths
-counter=1
-while [ $counter -le $numberPackages ]
+echo Executing Rector on the packages
+downgraded_packages=()
+numberDowngradedPackages=1
+until [ $numberDowngradedPackages -gt $numberPackages ]
 do
-    pos=$(( $counter - 1 ))
-    package_to_downgrade=${packages_to_downgrade[$pos]}
-    path_to_downgrade=${paths_to_downgrade[$pos]}
-    set_to_downgrade=${sets_to_downgrade[$pos]}
-    # exclude=${package_excludes[$package_to_downgrade]}
+    counter=1
+    while [ $counter -le $numberPackages ]
+    do
+        pos=$(( $counter - 1 ))
+        package_to_downgrade=${packages_to_downgrade[$pos]}
+        # Check if this package has already been downgraded on a previous iteration
+        if [[ " ${downgraded_packages[@]} " =~ " ${package_to_downgrade} " ]]; then
+            ((counter++))
+            continue
+        fi
+        # Check if all dependents have already been migrated. Otherwise, keep iterating
+        dependents=${package_dependents[$package_to_downgrade]}
+        for dependent in "${dependents[@]}"; do
+            if [[ ! " ${downgraded_packages[@]} " =~ " ${dependent} " ]]; then
+                ((counter++))
+                continue
+            fi
+        done
 
-    # # If there's no explicit path to exclude, set to exclude the "tests" folders
-    # if [ -z $exclude ]
-    # then
-    #     exclude="${path_to_downgrade}/**/tests/*"
-    # fi
+        # Mark this package as downgraded
+        downgraded_packages+=($package_to_downgrade)
+        ((numberDowngradedPackages++))
 
-    # If more than one path, these are split with ";". Replace with space
-    path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
-    # exclude=$(echo "$exclude" | sed "s/;/ --exclude-path=/g")
+        path_to_downgrade=${paths_to_downgrade[$pos]}
+        set_to_downgrade=${sets_to_downgrade[$pos]}
+        # exclude=${package_excludes[$package_to_downgrade]}
 
-    if [ $package_to_downgrade = "rector/rector" ]
-    then
-        config=rector-downgrade-rector.php
-    else
-        config=rector-downgrade-dependency.php
-    fi
+        # # If there's no explicit path to exclude, set to exclude the "tests" folders
+        # if [ -z $exclude ]
+        # then
+        #     exclude="${path_to_downgrade}/**/tests/*"
+        # fi
 
-    echo "Running set ${set_to_downgrade} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
+        # If more than one path, these are split with ";". Replace with space
+        path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
+        # exclude=$(echo "$exclude" | sed "s/;/ --exclude-path=/g")
 
-    # Execute the downgrade
-    # Print command in output for testing
-    # set -x
-    # bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi
-    bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --ansi
-    # set +x
+        if [ $package_to_downgrade = "rector/rector" ]
+        then
+            config=rector-downgrade-rector.php
+        else
+            config=rector-downgrade-dependency.php
+        fi
 
-    # If Rector fails, already exit
-    if [ "$?" -gt 0 ]; then
-        fail "Rector downgrade failed on set ${set_to_downgrade} for package ${package_to_downgrade}"
-    fi
+        echo "Running set ${set_to_downgrade} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
 
-    ((counter++))
+        # Execute the downgrade
+        # Print command in output for testing
+        # set -x
+        # bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi
+        bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --ansi
+        # set +x
+
+        # If Rector fails, already exit
+        if [ "$?" -gt 0 ]; then
+            fail "Rector downgrade failed on set ${set_to_downgrade} for package ${package_to_downgrade}"
+        fi
+
+        ((counter++))
+    done
 done
