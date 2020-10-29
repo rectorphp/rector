@@ -154,9 +154,15 @@ do
     IFS=' ' read -r -a packages_to_downgrade_by_set <<< "${packages_by_set[$set_to_downgrade]}"
 
     dependents_to_downgrade=()
-    # Obtain recursively the list of dependents, keep the first word only,
-    # (which is the package name), and remove duplicates
-    dependentsAsString=$(composer why "$package_to_downgrade" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
+    # composer why rector/rector also produces rector/rector, but it must be empty
+    if [ $package_to_downgrade = "rector/rector" ]
+    then
+        dependentsAsString=""
+    else
+        # Obtain recursively the list of dependents, keep the first word only,
+        # (which is the package name), and remove duplicates
+        dependentsAsString=$(composer why "$package_to_downgrade" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
+    fi
     IFS=' ' read -r -a dependents <<< "$dependentsAsString"
     # Only add the ones which must themselves be downgraded for that same set
     for dependent in "${dependents[@]}"; do
