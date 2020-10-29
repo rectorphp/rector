@@ -151,7 +151,7 @@ do
     pos=$(( $counter - 1 ))
     package_to_downgrade=${packages_to_downgrade[$pos]}
     set_to_downgrade=${sets_to_downgrade[$pos]}
-    packages_to_downgrade_by_set=$(echo "${packages_by_set[$set_to_downgrade]}" | tr " " "\n")
+    IFS=' ' read -r -a packages_to_downgrade_by_set <<< "${packages_by_set[$set_to_downgrade]}"
 
     dependents_to_downgrade=()
     # Obtain recursively the list of dependents, keep the first word only,
@@ -174,10 +174,10 @@ done
 echo Executing Rector on the packages
 declare -A set_downgraded_packages
 numberDowngradedPackages=1
-echo Number packages: $numberPackages
-for package in "${packages_to_downgrade[@]}"; do
-    echo Package: $package
-done
+# echo Number packages: $numberPackages
+# for package in "${packages_to_downgrade[@]}"; do
+#     echo Package: $package
+# done
 until [ $numberDowngradedPackages -gt $numberPackages ]
 do
     counter=1
