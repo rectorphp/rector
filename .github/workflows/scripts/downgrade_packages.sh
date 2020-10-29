@@ -162,15 +162,22 @@ for package in "${packages_to_downgrade[@]}"; do
 done
 
 echo Executing Rector on the packages
-downgraded_packages=()
+declare -A set_downgraded_packages
 numberDowngradedPackages=1
+echo Number packages: $numberPackages
+for package in "${packages_to_downgrade[@]}"; do
+    echo Package: $package
+done
 until [ $numberDowngradedPackages -gt $numberPackages ]
 do
     counter=1
+    echo Number downgraded packages: $numberDowngradedPackages
     while [ $counter -le $numberPackages ]
     do
         pos=$(( $counter - 1 ))
         package_to_downgrade=${packages_to_downgrade[$pos]}
+        set_to_downgrade=${sets_to_downgrade[$pos]}
+        downgraded_packages=$(echo "${set_downgraded_packages[$set_to_downgrade]}" | tr " " "\n")
         # Check if this package has already been downgraded on a previous iteration
         if [[ " ${downgraded_packages[@]} " =~ " ${package_to_downgrade} " ]]; then
             ((counter++))
@@ -187,10 +194,10 @@ do
 
         # Mark this package as downgraded
         downgraded_packages+=($package_to_downgrade)
+        set_downgraded_packages[$set_to_downgrade]=$(echo "${downgraded_packages}" | tr "|n" " ")
         ((numberDowngradedPackages++))
 
         path_to_downgrade=${paths_to_downgrade[$pos]}
-        set_to_downgrade=${sets_to_downgrade[$pos]}
         # exclude=${package_excludes[$package_to_downgrade]}
 
         # # If there's no explicit path to exclude, set to exclude the "tests" folders
@@ -216,7 +223,7 @@ do
         # Print command in output for testing
         # set -x
         # bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi
-        bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --ansi
+        # bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --ansi --dry-run
         # set +x
 
         # If Rector fails, already exit
