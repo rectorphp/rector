@@ -21,5 +21,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/vendor/symfony/dependency-injection/ExpressionLanguage.php',
         __DIR__ . '/vendor/symfony/dependency-injection/ExpressionLanguageProvider.php',
         __DIR__ . '/vendor/symfony/http-kernel/HttpKernelBrowser.php',
+        __DIR__ . '/vendor/symfony/string/Slugger/AsciiSlugger.php',
     ]);
 };
