@@ -18,6 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/vendor/*',
         __DIR__ . '/ci/*',
         __DIR__ . '/compiler/*',
+        __DIR__ . '/stubs/*',
         '/tests/',
         // '*.php.inc',
     ]);
