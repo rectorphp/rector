@@ -7,7 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\UniqueConstraintTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\UniqueConstraintTagValueNode;
 
 final class UniqueConstraintPhpDocNodeFactory
 {

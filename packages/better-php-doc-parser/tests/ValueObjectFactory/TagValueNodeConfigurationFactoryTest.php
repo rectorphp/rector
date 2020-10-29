@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\ValueObjectFactory;
 
 use PHPUnit\Framework\TestCase;
-use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
 
 final class TagValueNodeConfigurationFactoryTest extends TestCase
