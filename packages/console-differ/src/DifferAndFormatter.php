@@ -7,6 +7,9 @@ namespace Rector\ConsoleDiffer;
 use SebastianBergmann\Diff\Differ;
 use Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter;
 
+/**
+ * @deprecated Move to symplify
+ */
 final class DifferAndFormatter
 {
     /**
