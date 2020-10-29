@@ -24,16 +24,19 @@ final class PHPStormVarAnnotationRector extends AbstractRector
 {
     /**
      * @var string
+     * @see https://regex101.com/r/YY5stJ/1
      */
     private const SINGLE_ASTERISK_COMMENT_START_REGEX = '#^\/\* #';
 
     /**
      * @var string
+     * @see https://regex101.com/r/meD7rP/1
      */
     private const VAR_ANNOTATION_REGEX = '#\@var(\s)+\$#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/yz2AZ7/1
      */
     private const VARIABLE_NAME_AND_TYPE_MATCH_REGEX = '#(?<variableName>\$\w+)(?<space>\s+)(?<type>[\\\\\w]+)#';
 

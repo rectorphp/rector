@@ -16,11 +16,13 @@ final class TypeAnalyzer
 
     /**
      * @var string
+     * @see https://regex101.com/r/fKFtfL/1
      */
     private const ARRAY_TYPE_REGEX = '#array<(.*?)>#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/57HGpC/1
      */
     private const SQUARE_BRACKET_REGEX = '#(\[\])+$#';
 

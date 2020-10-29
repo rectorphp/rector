@@ -23,6 +23,7 @@ final class RegexDashEscapeRector extends AbstractRector
 {
     /**
      * @var string
+     * @see https://regex101.com/r/YgVJFp/1
      */
     private const LEFT_HAND_UNESCAPED_DASH_REGEX = '#(\[.*?\\\\(w|s|d))-(?!\])#i';
 

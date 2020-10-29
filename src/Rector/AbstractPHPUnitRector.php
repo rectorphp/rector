@@ -15,6 +15,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
 {
     /**
      * @var string
+     * @see https://regex101.com/r/76ZfTX/1
      */
     private const TEST_ANNOTATOIN_REGEX = '#@test\b#';
 

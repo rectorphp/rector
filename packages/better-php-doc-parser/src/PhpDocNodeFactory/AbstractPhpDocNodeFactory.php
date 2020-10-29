@@ -20,16 +20,19 @@ abstract class AbstractPhpDocNodeFactory
 {
     /**
      * @var string
+     * @see https://regex101.com/r/548EJJ/1
      */
     private const CLASS_CONST_REGEX = '#::class#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/CsmMaz/1
      */
     private const OPENING_SPACE_REGEX = '#^\{(?<opening_space>\s+)#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/Rrbi3V/1
      */
     private const CLOSING_SPACE_REGEX = '#(?<closing_space>\s+)\}$#';
 

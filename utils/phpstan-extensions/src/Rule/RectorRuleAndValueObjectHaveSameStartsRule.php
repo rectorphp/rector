@@ -29,6 +29,7 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
 
     /**
      * @var string
+     * @see https://regex101.com/r/Fk6iou/1
      */
     private const RECTOR_SUFFIX_REGEX = '#Rector$#';
 

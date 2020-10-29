@@ -35,6 +35,7 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
 {
     /**
      * @var string
+     * @see https://regex101.com/r/qVlXk2/2
      */
     private const ACTION_RENDER_NAME_MATCHING_REGEX = '#^(action|render)(?<short_action_name>.*?$)#sm';
 

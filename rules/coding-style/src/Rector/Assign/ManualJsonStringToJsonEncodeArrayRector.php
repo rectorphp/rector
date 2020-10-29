@@ -41,6 +41,7 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
 
     /**
      * @var string
+     * @see https://regex101.com/r/jdJ6n9/1
      */
     private const JSON_STRING_REGEX = '#{(.*?\:.*?)}#s';
 

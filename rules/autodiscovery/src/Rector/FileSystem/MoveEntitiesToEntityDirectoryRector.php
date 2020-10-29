@@ -24,6 +24,7 @@ final class MoveEntitiesToEntityDirectoryRector extends AbstractFileMovingFileSy
 {
     /**
      * @var string
+     * @see https://regex101.com/r/auSMk3/1
      */
     private const ENTITY_PATH_REGEX = '#\bEntity\b#';
 

@@ -16,11 +16,13 @@ final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAn
 
     /**
      * @var string
+     * @see https://regex101.com/r/WrYZ0d/1
      */
     private const REPOSITORY_REGEX = '#Repository#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/2a2CY6/1
      */
     private const ENTITY_REGEX = '#Entity#';
 

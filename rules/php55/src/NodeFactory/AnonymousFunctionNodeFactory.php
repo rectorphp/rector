@@ -23,6 +23,7 @@ final class AnonymousFunctionNodeFactory
 {
     /**
      * @var string
+     * @see https://regex101.com/r/jkLLlM/2
      */
     private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\d+)#';
 

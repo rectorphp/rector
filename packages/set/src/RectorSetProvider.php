@@ -18,6 +18,7 @@ final class RectorSetProvider extends AbstractSetProvider
 {
     /**
      * @var string
+     * @see https://regex101.com/r/8gO8w6/1
      */
     private const DASH_NUMBER_REGEX = '#\-(\d+)#';
 

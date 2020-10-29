@@ -20,11 +20,13 @@ final class FilesFinder
 {
     /**
      * @var string
+     * @see https://regex101.com/r/e1jm7v/1
      */
     private const STARTS_WITH_ASTERISK_REGEX = '#^\*(.*?)[^*]$#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/EgJQyZ/1
      */
     private const ENDS_WITH_ASTERISK_REGEX = '#^[^*](.*?)\*$#';
 

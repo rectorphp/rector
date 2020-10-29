@@ -22,16 +22,19 @@ final class DocBlockManipulator
 {
     /**
      * @var string
+     * @see https://regex101.com/r/VdaVGL/1
      */
     public const SPACE_OR_ASTERISK_REGEX = '#(\s|\*)+#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/Mjb0qi/1
      */
     private const NEWLINE_CLOSING_DOC_REGEX = "#\n \*\/$#";
 
     /**
      * @var string
+     * @see https://regex101.com/r/U5OUV4/2
      */
     private const NEWLINE_MIDDLE_DOC_REGEX = "#\n \* #";
 

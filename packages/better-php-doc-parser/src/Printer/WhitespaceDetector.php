@@ -16,6 +16,7 @@ final class WhitespaceDetector
 {
     /**
      * @var string
+     * @see https://regex101.com/r/w7yAt8/1
      */
     private const SPACE_BEFORE_ASTERISK_REGEX = '#\s+\*#m';
 

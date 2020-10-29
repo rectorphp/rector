@@ -34,6 +34,7 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
 
     /**
      * @var string
+     * @see https://regex101.com/r/pn4Kma/1
      */
     private const DOES_NOT_PERFORM_ASSERTION_REGEX = '#@(doesNotPerformAssertion|expectedException\b)#';
 

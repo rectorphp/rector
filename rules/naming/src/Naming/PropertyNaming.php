@@ -49,6 +49,7 @@ final class PropertyNaming
 
     /**
      * @var string
+     * @see https://regex101.com/r/U78rUF/1
      */
     private const I_PREFIX_REGEX = '#^I[A-Z]#';
 
