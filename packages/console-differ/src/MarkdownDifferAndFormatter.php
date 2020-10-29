@@ -7,6 +7,9 @@ namespace Rector\ConsoleDiffer;
 use Nette\Utils\Strings;
 use SebastianBergmann\Diff\Differ;
 
+/**
+ * @deprecated Move to symplify
+ */
 final class MarkdownDifferAndFormatter
 {
     /**
