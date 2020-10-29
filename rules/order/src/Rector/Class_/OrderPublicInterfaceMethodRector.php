@@ -74,8 +74,8 @@ class SomeClass implements FoodRecipeInterface
 }
 CODE_SAMPLE
            , [
-               self::METHOD_ORDER_BY_INTERFACES => [
-                   'FoodRecipeInterface' => ['getDescription', 'process'],
+            self::METHOD_ORDER_BY_INTERFACES => [
+                'FoodRecipeInterface' => ['getDescription', 'process'],
             ],
         ]),
         ]);
@@ -104,14 +104,14 @@ CODE_SAMPLE
         foreach ($implementedInterfaces as $implementedInterface) {
             $methodOrder = $this->methodOrderByInterfaces[$implementedInterface] ?? null;
             if ($methodOrder === null) {
-                   continue;
+                continue;
             }
 
             $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($publicMethodOrderByKey, $methodOrder);
 
             // nothing to re-order
             if (array_keys($oldToNewKeys) === array_values($oldToNewKeys)) {
-                   return null;
+                return null;
             }
 
             $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
@@ -136,11 +136,11 @@ CODE_SAMPLE
 
         foreach ($class->stmts as $key => $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
-                   continue;
+                continue;
             }
 
             if (! $classStmt->isPublic()) {
-                   continue;
+                continue;
             }
 
             /** @var string $classMethodName */
