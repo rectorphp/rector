@@ -74,7 +74,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($node->elseifs) > 0) {
+        if ($node->elseifs !== []) {
             return null;
         }
 

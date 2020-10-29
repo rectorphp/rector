@@ -38,7 +38,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
     public function isActive(): bool
     {
-        return count($this->nodesToAddAfter) > 0 || count($this->nodesToAddBefore) > 0;
+        return $this->nodesToAddAfter !== [] || $this->nodesToAddBefore !== [];
     }
 
     public function addNodeBeforeNode(Node $addedNode, Node $positionNode): void

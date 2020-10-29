@@ -76,7 +76,7 @@ CODE_SAMPLE
         /** @var Namespace_[] $namespaceNodes */
         $namespaceNodes = $this->betterNodeFinder->findInstanceOf($nodes, Namespace_::class);
 
-        if (count($namespaceNodes) > 0) {
+        if ($namespaceNodes !== []) {
             $this->processNamespaceNodes($smartFileInfo, $namespaceNodes, $nodes, $shouldDelete);
         } else {
             $this->processNodesWithoutNamespace($nodes, $smartFileInfo, $shouldDelete);

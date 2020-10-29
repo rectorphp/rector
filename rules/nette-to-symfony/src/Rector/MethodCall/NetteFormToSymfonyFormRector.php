@@ -167,7 +167,7 @@ CODE_SAMPLE
 
         $methodCall->args[1] = new Arg($this->createClassConstantReference($classType));
 
-        if (count($optionsArray->items) > 0) {
+        if ($optionsArray->items !== []) {
             $methodCall->args[2] = new Arg($optionsArray);
         }
     }

@@ -100,7 +100,7 @@ CODE_SAMPLE
         }
 
         if ($node instanceof FuncCall) {
-            if (count($node->args) === 0) {
+            if ($node->args === []) {
                 return $variable;
             }
 

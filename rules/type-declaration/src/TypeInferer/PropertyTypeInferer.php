@@ -74,7 +74,7 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
         }
 
         // if nothing is clear from variable use, we use @var doc as fallback
-        if (count($resolvedTypes) > 0) {
+        if ($resolvedTypes !== []) {
             $resolvedType = $this->typeFactory->createMixedPassedOrUnionType($resolvedTypes);
         } else {
             $resolvedType = $this->varDocPropertyTypeInferer->inferProperty($property);

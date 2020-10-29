@@ -109,7 +109,7 @@ CODE_SAMPLE
         ]);
 
         // is key included? add it to foreach
-        if (count($listNode->items) > 0) {
+        if ($listNode->items !== []) {
             /** @var ArrayItem|null $keyItem */
             $keyItem = array_pop($listNode->items);
 

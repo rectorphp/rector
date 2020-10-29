@@ -66,7 +66,7 @@ final class UseAddingPostRector extends AbstractPostRector
     public function beforeTraverse(array $nodes): array
     {
         // no nodes → just return
-        if (count($nodes) === 0) {
+        if ($nodes === []) {
             return $nodes;
         }
 

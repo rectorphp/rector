@@ -69,7 +69,7 @@ final class BundleClassResolver
             $controllerDirectory = dirname($controllerDirectory);
         }
 
-        if (count($bundleFiles) === 0) {
+        if ($bundleFiles === []) {
             return null;
         }
 

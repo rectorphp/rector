@@ -186,7 +186,7 @@ CODE_SAMPLE
 
         $propertyFetchNode = $this->createPropertyFetch('this', $expectedName->getName());
 
-        if (count($funcCall->args) === 0) {
+        if ($funcCall->args === []) {
             if ($argumentFuncCallToMethodCall->getMethodIfNoArgs()) {
                 return new MethodCall($propertyFetchNode, $argumentFuncCallToMethodCall->getMethodIfNoArgs());
             }
@@ -246,7 +246,7 @@ CODE_SAMPLE
         ArrayFuncCallToMethodCall $arrayFuncCallToMethodCall,
         PropertyFetch $propertyFetch
     ): ?Node {
-        if (count($funcCall->args) === 0) {
+        if ($funcCall->args === []) {
             return $propertyFetch;
         }
 
