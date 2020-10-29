@@ -182,7 +182,7 @@ done
 # for x in "${!package_dependents[@]}"; do printf "[%s]=%s\n" "$x" "${package_dependents[$x]}" ; done
 
 echo Executing Rector to downgrade $numberDowngradedPackages packages
-declare -A set_downgraded_packages
+downgraded_packages=()
 numberDowngradedPackages=1
 # echo Number packages: $numberPackages
 # for package in "${packages_to_downgrade[@]}"; do
@@ -197,18 +197,17 @@ do
         ((counter++))
         package_to_downgrade=${packages_to_downgrade[$pos]}
         set_to_downgrade=${sets_to_downgrade[$pos]}
-        # downgraded_packages=$(echo "${set_downgraded_packages[$set_to_downgrade]}" | tr " " "\n")
-        IFS=' ' read -r -a downgraded_packages <<< "${set_downgraded_packages[$set_to_downgrade]}"
+        key="${package_to_downgrade}_${set_to_downgrade}"
         # Check if this package has already been downgraded on a previous iteration
-        if [[ " ${downgraded_packages[@]} " =~ " ${package_to_downgrade} " ]]; then
+        if [[ " ${downgraded_packages[@]} " =~ " ${key} " ]]; then
             continue
         fi
         # Check if all dependents have already been downgraded. Otherwise, keep iterating
         hasNonDowngradedDependent=""
-        key="${package_to_downgrade}_${set_to_downgrade}"
         IFS=' ' read -r -a dependents <<< "${package_dependents[$key]}"
         for dependent in "${dependents[@]}"; do
-            if [[ ! " ${downgraded_packages[@]} " =~ " ${dependent} " ]]; then
+            dependentKey="${dependent}_${set_to_downgrade}"
+            if [[ ! " ${downgraded_packages[@]} " =~ " ${dependentKey} " ]]; then
                 hasNonDowngradedDependent="true"
             fi
         done
@@ -217,8 +216,7 @@ do
         fi
 
         # Mark this package as downgraded
-        downgraded_packages+=($package_to_downgrade)
-        set_downgraded_packages[$set_to_downgrade]=$(echo "${downgraded_packages}" | tr "\n" " ")
+        downgraded_packages+=($key)
         ((numberDowngradedPackages++))
 
         path_to_downgrade=${paths_to_downgrade[$pos]}
