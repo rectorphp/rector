@@ -198,13 +198,17 @@ do
             continue
         fi
         # Check if all dependents have already been downgraded. Otherwise, keep iterating
+        hasNonDowngradedDependent=""
         key="${package_to_downgrade}_${set_to_downgrade}"
         IFS=' ' read -r -a dependents <<< "${package_dependents[$key]}"
         for dependent in "${dependents[@]}"; do
             if [[ ! " ${downgraded_packages[@]} " =~ " ${dependent} " ]]; then
-                continue
+                hasNonDowngradedDependent="true"
             fi
         done
+        if [ -n "${hasNonDowngradedDependent}" ]; then
+            continue
+        fi
 
         # Mark this package as downgraded
         downgraded_packages+=($package_to_downgrade)
