@@ -11,8 +11,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::EXCLUDE_PATHS, [
         '/tests/',
         // Individual classes that can be excluded because
-        // they are not used by Rector,
-        // and they produce some error
+        // they are not used by Rector, and they use classes
+        // loaded with "require-dev" so it'd throw an error
         __DIR__ . '/vendor/symfony/cache/DoctrineProvider.php',
+        __DIR__ . '/vendor/symfony/dependency-injection/Compiler/AbstractRecursivePass.php',
+        __DIR__ . '/vendor/symfony/dependency-injection/Compiler/CheckTypeDeclarationsPass.php',
+        __DIR__ . '/vendor/symfony/dependency-injection/ContainerBuilder.php',
+        __DIR__ . '/vendor/symfony/dependency-injection/Dumper/PhpDumper.php',
+        __DIR__ . '/vendor/symfony/dependency-injection/ExpressionLanguage.php',
+        __DIR__ . '/vendor/symfony/dependency-injection/ExpressionLanguageProvider.php',
     ]);
 };
