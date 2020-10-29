@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # All 597 Rectors Overview
+=======
+# All 601 Rectors Overview
+>>>>>>> update docs
 
 - [Projects](#projects)
 ---
@@ -64,7 +68,7 @@
 - [RemovingStatic](#removingstatic) (6)
 - [Renaming](#renaming) (10)
 - [Restoration](#restoration) (9)
-- [SOLID](#solid) (13)
+- [SOLID](#solid) (14)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
 - [Symfony](#symfony) (34)
@@ -14229,19 +14233,16 @@ Classes that have no children nor are used, should have abstract
 
 ### `MoveVariableDeclarationNearReferenceRector`
 
-- class: [`Rector\SOLID\Rector\Variable\MoveVariableDeclarationNearReferenceRector`](/rules/solid/src/Rector/Variable_/MoveVariableDeclarationNearReferenceRector.php)
-- [test fixtures](/rules/solid/tests/Rector/Variable_/MoveVariableDeclarationNearReferenceRector/Fixture)
+- class: [`Rector\SOLID\Rector\Assign\MoveVariableDeclarationNearReferenceRector`](/rules/solid/src/Rector/Assign/MoveVariableDeclarationNearReferenceRector.php)
+- [test fixtures](/rules/solid/tests/Rector/Assign/MoveVariableDeclarationNearReferenceRector/Fixture)
 
-Variable declarations should be moved directly above the first usage of those variables
+Move variable declaration near its reference
 
 ```diff
- function foo()
- {
-     -$var = 1;
-     if (mktime() === false) {
-        +$var = 1;
-         return $var;
-     }
+-$var = 1;
+ if ($condition === null) {
++    $var = 1;
+     return $var;
  }
 ```
 

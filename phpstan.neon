@@ -684,3 +684,10 @@ parameters:
         -
              message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\. You have \d+ nesting#'
              path: config/set/*
+
+        - '#Cognitive complexity for "Rector\\CodeQuality\\Naming\\MethodCallToVariableNameResolver\:\:resolveVariableName\(\)" is 12, keep it under 9#'
+
+        # nodes/stmts
+        - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
+        # finder type
+        - '#Method Rector\\SOLID\\Rector\\Assign\\MoveVariableDeclarationNearReferenceRector\:\:findFirstVariableUsageInScope\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'

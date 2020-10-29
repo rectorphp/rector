@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\Assign\MoveVariableDeclarationNearReferenceRector\Fixture;
 
 class VariableInMethod
 {
@@ -17,7 +17,7 @@ class VariableInMethod
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\Assign\MoveVariableDeclarationNearReferenceRector\Fixture;
 
 class VariableInMethod
 {

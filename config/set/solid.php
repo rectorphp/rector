@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
+use Rector\SOLID\Rector\Assign\MoveVariableDeclarationNearReferenceRector;
 use Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector;
 use Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
@@ -10,7 +11,6 @@ use Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector;
 use Rector\SOLID\Rector\If_\RemoveAlwaysElseRector;
 use Rector\SOLID\Rector\Property\AddFalseDefaultToBoolPropertyRector;
 use Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector;
-use Rector\SOLID\Rector\Variable\MoveVariableDeclarationNearReferenceRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

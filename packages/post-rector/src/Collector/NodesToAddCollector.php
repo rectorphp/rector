@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\If_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -104,11 +103,6 @@ final class NodesToAddCollector implements NodeCollectorInterface
     private function resolveNearestExpressionPosition(Node $node): string
     {
         if ($node instanceof Expression || $node instanceof Stmt) {
-            return spl_object_hash($node);
-        }
-
-        // special case for "If_"
-        if ($node instanceof If_) {
             return spl_object_hash($node);
         }
 
