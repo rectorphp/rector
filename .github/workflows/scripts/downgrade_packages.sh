@@ -187,7 +187,7 @@ do
         pos=$(( $counter - 1 ))
         package_to_downgrade=${packages_to_downgrade[$pos]}
         set_to_downgrade=${sets_to_downgrade[$pos]}
-        downgraded_packages=$(echo "${set_downgraded_packages[$set_to_downgrade]}" | tr " " "\n")
+        IFS=' ' read -r -a downgraded_packages <<< "${set_downgraded_packages[$set_to_downgrade]}"
         # Check if this package has already been downgraded on a previous iteration
         if [[ " ${downgraded_packages[@]} " =~ " ${package_to_downgrade} " ]]; then
             ((counter++))
