@@ -127,7 +127,7 @@ parameters:
         - tests/debug_functions.php
 
         # broken in PHPStan https://github.com/rectorphp/rector/runs/1305002460#step:5:56
-        - packages/better-php-doc-parser/src/PhpDocNode/AbstractTagValueNode.php
+        - packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
         - packages/file-system-rector/src/Rector/AbstractFileSystemRector.php
 
         # phsptan bug
@@ -515,6 +515,7 @@ parameters:
         -
             message: '#Property with protected modifier is not allowed\. Use interface instead#'
             paths:
+                - packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
                 - rules/naming/src/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php # 21
                 - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php # 36
                 - rules/downgrade-php71/src/Rector/FunctionLike/AbstractMaybeAddDocBlockRector.php # 20
@@ -648,32 +649,6 @@ parameters:
                 - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareArrayShapeItemNode.php # 34
                 - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareUnionTypeNode.php # 35
                 - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php # 108
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/EmbeddedTagValueNode.php # 17
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/EmbeddedTagValueNode.php # 19
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/IndexTagValueNode.php # 19
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/IndexTagValueNode.php # 21
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/TableTagValueNode.php # 60
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/TableTagValueNode.php # 61
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/TableTagValueNode.php # 67
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/TableTagValueNode.php # 69
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/TableTagValueNode.php # 70
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/UniqueConstraintTagValueNode.php # 19
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Class_/UniqueConstraintTagValueNode.php # 21
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinColumnTagValueNode.php # 25
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinColumnTagValueNode.php # 27
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinTableTagValueNode.php # 67
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinTableTagValueNode.php # 68
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinTableTagValueNode.php # 71
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/ManyToManyTagValueNode.php # 30
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/ManyToManyTagValueNode.php # 32
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/ManyToOneTagValueNode.php # 20
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/ManyToOneTagValueNode.php # 22
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/OneToManyTagValueNode.php # 24
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/OneToManyTagValueNode.php # 26
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/OneToOneTagValueNode.php # 24
-                - packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/OneToOneTagValueNode.php # 26
-                - packages/better-php-doc-parser/src/PhpDocNode/JMS/JMSInjectTagValueNode.php # 20
-                - packages/better-php-doc-parser/src/PhpDocNode/JMS/JMSInjectTagValueNode.php # 22
                 - rules/coding-style/src/Rector/ClassMethod/YieldClassMethodToArrayClassMethodRector.php # 47
                 - rules/php70/src/EregToPcreTransformer.php # 66
                 - rules/phpstan/src/Type/AliasedObjectType.php # 22
@@ -699,3 +674,12 @@ parameters:
                 - src/RectorDefinition/RectorDefinition.php # 31
                 - src/Testing/PHPUnit/Runnable/NodeVisitor/PrefixingClassLikeNamesNodeVisitor.php # 35
                 - src/Testing/PHPUnit/Runnable/NodeVisitor/PrefixingClassLikeNamesNodeVisitor.php # 36
+
+        -
+            message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
+            paths:
+                - packages/better-php-doc-parser/src/PartPhpDocTagPrinter/Behavior/ArrayPartPhpDocTagPrinterTrait.php # 30
+                - packages/better-php-doc-parser/src/PartPhpDocTagPrinter/Behavior/ArrayPartPhpDocTagPrinterTrait.php # 33
+                - packages/better-php-doc-parser/src/PartPhpDocTagPrinter/Behavior/ArrayPartPhpDocTagPrinterTrait.php # 70
+                - packages/better-php-doc-parser/src/PhpDocNode/PrintTagValueNodeTrait.php # 54
+
