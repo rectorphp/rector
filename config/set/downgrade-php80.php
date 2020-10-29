@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Core\Configuration\Option;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector;
@@ -18,4 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeParamMixedTypeDeclarationRector::class);
     $services->set(DowngradeReturnMixedTypeDeclarationRector::class);
     $services->set(DowngradeReturnStaticTypeDeclarationRector::class);
+
+    $parameters = $containerConfigurator->parameters();
+    $parameters->set(Option::PHP_VERSION_FEATURES, '7.4');
 };
