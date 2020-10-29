@@ -24,8 +24,9 @@ final class RemoveDoubleUnderscoreInMethodNameRector extends AbstractRector
 {
     /**
      * @var string
+     * @see https://regex101.com/r/oRrhDJ/2
      */
-    private const DOUBLE_UNDERSCORE_START_REGEX = '#__(.*?)#';
+    private const DOUBLE_UNDERSCORE_START_REGEX = '#^__(.*?)#';
 
     public function getDefinition(): RectorDefinition
     {

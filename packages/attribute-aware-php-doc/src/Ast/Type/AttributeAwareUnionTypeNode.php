@@ -16,6 +16,7 @@ final class AttributeAwareUnionTypeNode extends UnionTypeNode implements Attribu
 
     /**
      * @var string
+     * @see https://regex101.com/r/Hwk7Cg/1
      */
     private const BRACKET_WRAPPING_REGEX = '#^\((.*?)\)#';
 

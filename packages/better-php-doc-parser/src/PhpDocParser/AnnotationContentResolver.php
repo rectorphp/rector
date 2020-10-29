@@ -14,6 +14,7 @@ final class AnnotationContentResolver
 {
     /**
      * @var string
+     * @see https://regex101.com/r/D3sbiI/1
      */
     private const MULTILINE_COMENT_ASTERISK_REGEX = '#(\s+)\*(\s+)#m';
 

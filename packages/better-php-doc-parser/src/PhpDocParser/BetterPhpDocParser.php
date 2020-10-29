@@ -36,6 +36,7 @@ final class BetterPhpDocParser extends PhpDocParser
 {
     /**
      * @var string
+     * @see https://regex101.com/r/HlGzME/1
      */
     private const TAG_REGEX = '#@(var|param|return|throws|property|deprecated)#';
 

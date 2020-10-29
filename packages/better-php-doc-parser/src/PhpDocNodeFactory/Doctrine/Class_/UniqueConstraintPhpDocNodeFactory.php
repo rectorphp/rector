@@ -13,6 +13,7 @@ final class UniqueConstraintPhpDocNodeFactory
 {
     /**
      * @var string
+     * @see https://regex101.com/r/ZBL6Uf/1
      */
     private const UNIQUE_CONSTRAINT_REGEX = '#(?<tag>@(ORM\\\\)?UniqueConstraint)\((?<content>.*?)\),?#si';
 
