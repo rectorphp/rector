@@ -77,12 +77,14 @@ target_downgrade_php_sets=($(echo ${downgrade_php_sets[$target_php_version]} | t
 packages_to_downgrade=()
 paths_to_downgrade=()
 sets_to_downgrade=()
+declare -A packages_by_set
 
 # Switch to production
 composer install --no-dev
 
+numberTargetPHPVersions=${#target_downgrade_php_versions[@]}
 counter=1
-while [ $counter -le ${#target_downgrade_php_versions[@]} ]
+while [ $counter -le $numberTargetPHPVersions ]
 do
     pos=$(( $counter - 1 ))
     version=${target_downgrade_php_versions[$pos]}
@@ -110,6 +112,7 @@ do
             packages_to_downgrade+=($package)
             paths_to_downgrade+=($path)
             sets_to_downgrade+=($set)
+            packages_by_set[$set]=$(echo "${packages_by_set[$set]} ${package}")
         done
     else
         echo No packages to downgrade
@@ -142,23 +145,29 @@ fi
 # including only packages to be downgraded
 echo Calculating package execution order
 declare -A package_dependents
-for package in "${packages_to_downgrade[@]}"; do
-    if [[ -z ${package_dependents[$package]} ]]; then
-        echo Analyzing package $package
-        dependents_to_downgrade=()
-        # Obtain recursively the list of dependents, keep the first word only,
-        # (which is the package name), and remove duplicates
-        dependentsAsString=$(composer why "$package" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
-        IFS=' ' read -r -a dependents <<< "$dependentsAsString"
-        # Only add the ones which must themselves be downgraded
-        for dependent in "${dependents[@]}"; do
-            if [[ " ${packages_to_downgrade[@]} " =~ " ${dependent} " ]]; then
-                dependents_to_downgrade+=($dependent)
-            fi
-        done
-        package_dependents[$package]=$(echo "${dependents_to_downgrade[@]}")
-        echo Dependent packages: "${dependents_to_downgrade[@]}"
-    fi
+counter=1
+while [ $counter -le $numberPackages ]
+do
+    pos=$(( $counter - 1 ))
+    package_to_downgrade=${packages_to_downgrade[$pos]}
+    set_to_downgrade=${sets_to_downgrade[$pos]}
+    packages_to_downgrade_by_set=$(echo "${packages_by_set[$set_to_downgrade]}" | tr " " "\n")
+
+    echo Analyzing package $package_to_downgrade
+    dependents_to_downgrade=()
+    # Obtain recursively the list of dependents, keep the first word only,
+    # (which is the package name), and remove duplicates
+    dependentsAsString=$(composer why "$package" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
+    IFS=' ' read -r -a dependents <<< "$dependentsAsString"
+    # Only add the ones which must themselves be downgraded
+    for dependent in "${dependents[@]}"; do
+        if [[ " ${packages_to_downgrade_by_set[@]} " =~ " ${dependent} " ]]; then
+            dependents_to_downgrade+=($dependent)
+        fi
+    done
+    package_dependents[$package]=$(echo "${dependents_to_downgrade[@]}")
+    echo Dependent packages: "${dependents_to_downgrade[@]}"
+    ((counter++))
 done
 
 echo Executing Rector on the packages
