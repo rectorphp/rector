@@ -35,6 +35,7 @@ final class BetterStandardPrinter extends Standard
 {
     /**
      * @var string
+     * @see https://regex101.com/r/jUFizd/1
      */
     private const NEWLINE_END_REGEX = "#\n$#";
 
@@ -52,6 +53,7 @@ final class BetterStandardPrinter extends Standard
 
     /**
      * @var string
+     * @see https://regex101.com/r/DrsMY4/1
      */
     private const QUOTED_SLASH_REGEX = "#'|\\\\(?=[\\\\']|$)#";
 

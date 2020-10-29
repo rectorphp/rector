@@ -18,7 +18,7 @@ final class CatchExceptionNameMatchingTypeRector extends AbstractRector
 {
     /**
      * @var string
-     * @link https://regex101.com/r/xmfMAX/1
+     * @see https://regex101.com/r/xmfMAX/1
      */
     private const STARTS_WITH_ABBREVIATION_REGEX = '#^([A-Za-z]+?)([A-Z]{1}[a-z]{1})([A-Za-z]*)#';
 

@@ -28,6 +28,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Conf
 
     /**
      * @var string
+     * @see https://regex101.com/r/isdgEN/1
      *
      * For modifiers see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
