@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_;
 
 use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\IndexTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\IndexTagValueNode;
 
 final class IndexPhpDocNodeFactory
 {
