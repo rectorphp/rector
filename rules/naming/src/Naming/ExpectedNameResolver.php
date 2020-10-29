@@ -200,7 +200,6 @@ final class ExpectedNameResolver
         }
 
         $returnedType = $this->nodeTypeResolver->getStaticType($expr);
-
         if ($returnedType->isIterable()->no()) {
             return null;
         }

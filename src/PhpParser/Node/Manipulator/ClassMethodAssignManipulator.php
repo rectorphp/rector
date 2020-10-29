@@ -325,13 +325,13 @@ final class ClassMethodAssignManipulator
             return false;
         }
 
-        /** @var ParameterReflection $parameter */
-        foreach ($parametersAcceptor->getParameters() as $parameter) {
-            if ($parameter->getName() !== $variableName) {
+        /** @var ParameterReflection $parameterReflection */
+        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
+            if ($parameterReflection->getName() !== $variableName) {
                 continue;
             }
 
-            return $parameter->passedByReference()
+            return $parameterReflection->passedByReference()
                 ->yes();
         }
 
