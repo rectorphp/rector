@@ -30,10 +30,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddDatePickerToDateControlRector::class);
     $services->set(ChangeFormArrayAccessToAnnotatedControlVariableRector::class);
     $services->set(GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector::class);
+
     // Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
     $services->set(RemoveParentCallWithoutParentRector::class);
     // https://github.com/nette/utils/commit/d0041ba59f5d8bf1f5b3795fd76d43fb13ea2e15
+
     $services->set(FormerNullableArgumentToScalarTypedRector::class);
+
     $services->set(StaticCallToMethodCallRector::class)
         ->call('configure', [[
             StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_value_objects([
@@ -69,7 +72,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
             ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects([
-                // json 2nd argument is now int typed
+                // json 2nd argument is now `int` typed
                 new ArgumentDefaultValueReplacer(
                     'Nette\Utils\Json',
                     'decode',
@@ -77,6 +80,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     true,
                     'Nette\Utils\Json::FORCE_ARRAY'
                 ),
+
                 // @see https://github.com/nette/forms/commit/574b97f9d5e7a902a224e57d7d584e7afc9fefec
                 new ArgumentDefaultValueReplacer('Nette\Forms\Form', 'decode', 0, true, 'array'),
             ]),
@@ -86,12 +90,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setAttribute', 'setHtmlAttribute'),
-                new MethodCallRename(
-                    'Nette\Forms\Controls\BaseControl',
-                    # see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
-                    'setType',
-                    'setHtmlType'
-                ),
+                // see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
+                new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setType', 'setHtmlType'),
                 new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setAttribute', 'setHtmlAttribute'),
                 new MethodCallRename(
                     'Nette\DI\Definitions\ServiceDefinition',

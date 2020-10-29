@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
@@ -11,7 +9,9 @@ use Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
+use Rector\TypeDeclaratoin\ValueObject\AddReturnTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

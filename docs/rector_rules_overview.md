@@ -22,7 +22,7 @@
 - [DowngradePhp74](#downgradephp74) (7)
 - [DowngradePhp80](#downgradephp80) (6)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (35)
+- [Generic](#generic) (34)
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (3)
 - [Legacy](#legacy) (4)
@@ -73,7 +73,7 @@
 - [SymfonyPhpConfig](#symfonyphpconfig) (3)
 - [Transform](#transform) (12)
 - [Twig](#twig) (1)
-- [TypeDeclaration](#typedeclaration) (9)
+- [TypeDeclaration](#typedeclaration) (10)
 
 ## Architecture
 
@@ -5779,49 +5779,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +    {
 +        $this->someDependency = $someDependency;
 +    }
- }
-```
-
-<br><br>
-
-### `AddReturnTypeDeclarationRector`
-
-- class: [`Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector`](/rules/generic/src/Rector/ClassMethod/AddReturnTypeDeclarationRector.php)
-- [test fixtures](/rules/generic/tests/Rector/ClassMethod/AddReturnTypeDeclarationRector/Fixture)
-
-Changes defined return typehint of method and class.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddReturnTypeDeclarationRector::class)
-        ->call('configure', [[
-            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
-                new AddReturnTypeDeclaration('SomeClass', 'getData', 'array'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
--    public getData()
-+    public getData(): array
-     {
-     }
  }
 ```
 
@@ -16304,6 +16261,49 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  {
 -    public function process($name)
 +    public function process(string $name)
+     {
+     }
+ }
+```
+
+<br><br>
+
+### `AddReturnTypeDeclarationRector`
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector`](/rules/type-declaration/src/Rector/ClassMethod/AddReturnTypeDeclarationRector.php)
+- [test fixtures](/rules/type-declaration/tests/Rector/ClassMethod/AddReturnTypeDeclarationRector/Fixture)
+
+Changes defined return typehint of method and class.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddReturnTypeDeclarationRector::class)
+        ->call('configure', [[
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+                new AddReturnTypeDeclaration('SomeClass', 'getData', 'array'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public getData()
++    public getData(): array
      {
      }
  }

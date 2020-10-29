@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
-use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
+use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
