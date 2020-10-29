@@ -87,24 +87,6 @@ final class MethodCallToVariableNameResolver
         return $methodCallVarName . ucfirst($methodCallName);
     }
 
-    private function getStringVarName(String_ $string, string $methodCallVarName, string $fallbackVarName): string
-    {
-        $replaceGetByDash = $this->replaceGetByDash($string->value . ucfirst($fallbackVarName));
-        if (Strings::match($replaceGetByDash, self::START_ALPHA_REGEX) && $replaceGetByDash !== $methodCallVarName) {
-            return $replaceGetByDash;
-        }
-
-        return $fallbackVarName;
-    }
-
-    private function replaceGetByDash(string $string): string
-    {
-        $get = str_ireplace('get', '', $string);
-        $by = str_ireplace('by', '', $get);
-
-        return str_replace('-', '', $by);
-    }
-
     private function getClassConstFetchVarName(ClassConstFetch $classConstFetch, string $methodCallName): string
     {
         /** @var Identifier $name */
@@ -126,5 +108,23 @@ final class MethodCallToVariableNameResolver
         }
 
         return $this->replaceGetByDash($methodCallName);
+    }
+
+    private function getStringVarName(String_ $string, string $methodCallVarName, string $fallbackVarName): string
+    {
+        $replaceGetByDash = $this->replaceGetByDash($string->value . ucfirst($fallbackVarName));
+        if (Strings::match($replaceGetByDash, self::START_ALPHA_REGEX) && $replaceGetByDash !== $methodCallVarName) {
+            return $replaceGetByDash;
+        }
+
+        return $fallbackVarName;
+    }
+
+    private function replaceGetByDash(string $string): string
+    {
+        $get = str_ireplace('get', '', $string);
+        $by = str_ireplace('by', '', $get);
+
+        return str_replace('-', '', $by);
     }
 }

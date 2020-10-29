@@ -95,8 +95,9 @@ CODE_SAMPLE
         if ($classPhpDocInfo === null) {
             return null;
         }
+        $hasTypeLoggableTagValueNode = $classPhpDocInfo->hasByType(LoggableTagValueNode::class);
 
-        if (! $classPhpDocInfo->hasByType(LoggableTagValueNode::class)) {
+        if (! $hasTypeLoggableTagValueNode) {
             return null;
         }
 
@@ -119,8 +120,9 @@ CODE_SAMPLE
             if ($propertyPhpDocInfo === null) {
                 continue;
             }
+            $hasTypeVersionedTagValueNode = $propertyPhpDocInfo->hasByType(VersionedTagValueNode::class);
 
-            if (! $propertyPhpDocInfo->hasByType(VersionedTagValueNode::class)) {
+            if (! $hasTypeVersionedTagValueNode) {
                 continue;
             }
 
