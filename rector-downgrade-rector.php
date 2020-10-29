@@ -9,13 +9,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::EXCLUDE_PATHS, [
-        '/Source/',
-        '/*Source/',
-        '/Fixture/',
-        '/Expected/',
+        // '/Source/',
+        // '/*Source/',
+        // '/Fixture/',
+        // '/Expected/',
         __DIR__ . '/packages/doctrine-annotation-generated/src/*',
         __DIR__ . '/packages/rector-generator/templates/*',
         __DIR__ . '/vendor/*',
-        '*.php.inc',
+        '/tests/',
+        // '*.php.inc',
     ]);
 };
