@@ -22,6 +22,7 @@ final class BarewordStringRector extends AbstractRector
 {
     /**
      * @var string
+     * @see https://regex101.com/r/jfIpz4/1
      */
     private const UNDEFINED_CONSTANT_REGEX = '#Use of undefined constant (?<constant>\w+)#';
 

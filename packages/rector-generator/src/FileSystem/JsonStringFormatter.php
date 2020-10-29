@@ -10,6 +10,7 @@ final class JsonStringFormatter
 {
     /**
      * @var string
+     * @see https://regex101.com/r/T0Aq6F/1
      */
     private const REPLACE_REGEX = '#(?<start>"authors": \[\s+)(?<content>.*?)(?<end>\s+\](,))#ms';
 

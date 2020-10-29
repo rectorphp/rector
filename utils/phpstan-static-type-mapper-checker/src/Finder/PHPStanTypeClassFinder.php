@@ -11,6 +11,7 @@ final class PHPStanTypeClassFinder
 {
     /**
      * @var string
+     * @see https://regex101.com/r/3PWhG9/1
      */
     private const ACCESSORY_SEPARATED_REGEX = '#\bAccessory\b#';
 

@@ -19,11 +19,13 @@ final class RenameSpecFileToTestFileRector extends AbstractFileSystemRector
 {
     /**
      * @var string
+     * @see https://regex101.com/r/r1VkPt/1
      */
     private const SPEC_REGEX = '#\/spec\/#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/WD4U43/1
      */
     private const SPEC_SUFFIX_REGEX = '#Spec\.php$#';
 

@@ -12,6 +12,7 @@ final class IndexPhpDocNodeFactory
 {
     /**
      * @var string
+     * @see https://regex101.com/r/wkjfUt/1
      */
     private const INDEX_REGEX = '#(?<tag>@(ORM\\\\)?Index)\((?<content>.*?)\),?#si';
 

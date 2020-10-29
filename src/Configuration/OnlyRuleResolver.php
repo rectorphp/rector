@@ -14,6 +14,7 @@ final class OnlyRuleResolver
 {
     /**
      * @var string
+     * @see https://regex101.com/r/WOQuBL/1
      */
     private const SLASH_REGEX = '#\\\\#';
 

@@ -24,6 +24,7 @@ final class ExceptionHandlerTypehintRector extends AbstractRector
 {
     /**
      * @var string
+     * @see https://regex101.com/r/VBFXCR/1
      */
     private const HANDLE_INSENSITIVE_REGEX = '#handle#i';
 

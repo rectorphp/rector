@@ -14,16 +14,19 @@ final class TemplateFileSystem
 {
     /**
      * @var string
+     * @see https://regex101.com/r/fw3jBe/1
      */
     private const FIXTURE_SHORT_REGEX = '#/Fixture/#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/HBcfXd/1
      */
     private const PACKAGE_RULES_PATH_REGEX = '#(packages|rules)\/__package__#i';
 
     /**
      * @var string
+     * @see https://regex101.com/r/tOidWU/1
      */
     private const CONFIGURED_OR_EXTRA_REGEX = '#(__Configured|__Extra)#';
 

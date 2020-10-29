@@ -19,6 +19,7 @@ final class EntityWithMissingUuidProvider
 {
     /**
      * @var string
+     * @see https://regex101.com/r/3OnLHU/1
      */
     private const UUID_PREFIX_REGEX = '#^uuid(_binary)?$#';
 

@@ -28,6 +28,7 @@ final class ShortNameResolver
 {
     /**
      * @var string
+     * @see https://regex101.com/r/KphLd2/1
      */
     private const BIG_LETTER_START_REGEX = '#^[A-Z]#';
 

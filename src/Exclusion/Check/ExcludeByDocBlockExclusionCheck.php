@@ -21,6 +21,7 @@ final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
 {
     /**
      * @var string
+     * @see https://regex101.com/r/d1NMi6/1
      */
     private const NO_RECTORE_ANNOTATION_WITH_CLASS_REGEX = '#\@noRector(\s)+[^\w\\\\]#i';
 

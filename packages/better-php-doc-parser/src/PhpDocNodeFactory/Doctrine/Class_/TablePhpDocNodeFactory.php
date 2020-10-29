@@ -19,6 +19,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
 {
     /**
      * @var string
+     * @see https://regex101.com/r/HKjBVt/1
      */
     private const SPACE_BEFORE_CLOSING_BRACKET_REGEX = '#,(\s+)?}$#m';
 
