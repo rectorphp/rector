@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 
 use Iterator;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\UnionType;
+use PHPStan\Type\VoidType;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
@@ -31,30 +37,34 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
+        $arrayType = new ArrayType(new MixedType(), new MixedType());
+
+        $nullableObjectType = new UnionType([new ObjectType('SomeType'), new NullType()]);
+
         return [
             AddReturnTypeDeclarationRector::class => [
                 AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => [
                     new AddReturnTypeDeclaration(
-                        'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass',
+                        'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\SomeClass',
                         'parse',
-                        'array'
+                        $arrayType
                     ),
                     new AddReturnTypeDeclaration(
-                        'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass',
+                        'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\SomeClass',
                         'resolve',
-                        'SomeType'
+                        new ObjectType('SomeType')
                     ),
                     new AddReturnTypeDeclaration(
-                        'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass',
+                        'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\SomeClass',
                         'nullable',
-                        '?SomeType'
+                        $nullableObjectType
                     ),
                     new AddReturnTypeDeclaration(
-                        'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\RemoveReturnType',
+                        'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\RemoveReturnType',
                         'clear',
-                        ''
+                        new MixedType()
                     ),
-                    new AddReturnTypeDeclaration(PHPUnitTestCase::class, 'tearDown', 'void'),
+                    new AddReturnTypeDeclaration(PHPUnitTestCase::class, 'tearDown', new VoidType()),
                 ],
             ],
         ];

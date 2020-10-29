@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture;
 
 class RemoveReturnType
 {
@@ -13,7 +13,7 @@ class RemoveReturnType
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture;
 
 class RemoveReturnType
 {

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\ValueObject;
 
+use PHPStan\Type\Type;
+
 final class AddReturnTypeDeclaration
 {
     /**
@@ -17,11 +19,11 @@ final class AddReturnTypeDeclaration
     private $method;
 
     /**
-     * @var string
+     * @var Type
      */
     private $returnType;
 
-    public function __construct(string $class, string $method, string $returnType)
+    public function __construct(string $class, string $method, Type $returnType)
     {
         $this->class = $class;
         $this->method = $method;
@@ -38,7 +40,7 @@ final class AddReturnTypeDeclaration
         return $this->method;
     }
 
-    public function getReturnType(): string
+    public function getReturnType(): Type
     {
         return $this->returnType;
     }

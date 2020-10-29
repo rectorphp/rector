@@ -31,7 +31,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ### Changed
 
-- 
+-
 ### Fixed
 
 - [#4422] [DeadCode] Fix binary different nesting in RemoveOverriddenValuesRector
@@ -372,7 +372,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 ### Fixed
 
 - [#4111] show command - display loaded sets + fix set provider
-- 
+-
 ## [v0.8.3] - 2020-09-02
 
 ### Added
@@ -2746,7 +2746,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 ### Changed
 
 - [#1769] [Restoration] Return removed class annotations
-- [#1788] infer from [@return] doc type in PropertyTypeDeclaratoin
+- [#1788] infer from [@return] doc type in PropertyTypeDeclaration
 
 ### Fixed
 

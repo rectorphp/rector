@@ -6,10 +6,14 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Webmozart\Assert\Assert;
 
@@ -27,6 +31,16 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
      * @var AddReturnTypeDeclaration[]
      */
     private $methodReturnTypes = [];
+
+    /**
+     * @var TypeComparator
+     */
+    private $typeComparator;
+
+    public function __construct(TypeComparator $typeComparator)
+    {
+        $this->typeComparator = $typeComparator;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -51,7 +65,12 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    self::METHOD_RETURN_TYPES => [new AddReturnTypeDeclaration('SomeClass', 'getData', 'array')],
+                    self::METHOD_RETURN_TYPES => [
+                        new AddReturnTypeDeclaration('SomeClass', 'getData', new ArrayType(
+                            new MixedType(),
+                            new MixedType()
+                        )),
+                    ],
                 ]
             ),
         ]);
@@ -95,20 +114,23 @@ CODE_SAMPLE
         $this->methodReturnTypes = $methodReturnTypes;
     }
 
-    private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, string $newType): void
+    private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, Type $newType): void
     {
         // remove it
-        if ($newType === '') {
+        if ($newType instanceof MixedType) {
             $classMethod->returnType = null;
             return;
         }
 
         // already set → no change
-        if ($classMethod->returnType && $this->isName($classMethod->returnType, $newType)) {
-            return;
+        if ($classMethod->returnType) {
+            $currentReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
+            if ($this->typeComparator->areTypesEquals($currentReturnType, $newType)) {
+                return;
+            }
         }
 
-        $returnTypeNode = $this->staticTypeMapper->mapStringToPhpParserNode($newType);
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($newType);
         $classMethod->returnType = $returnTypeNode;
     }
 }
