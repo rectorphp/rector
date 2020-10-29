@@ -186,9 +186,15 @@ done
 # echo Package dependents:
 # for x in "${!package_dependents[@]}"; do printf "[%s]=%s\n" "$x" "${package_dependents[$x]}" ; done
 
+# In case of circular dependencies (eg: package1 requires package2
+# and package2 requires package1), the process will fail
+hasNonDowngradedDependents=()
+previousNonDowngradedDependentsString=""
+
 echo Executing Rector to downgrade $numberDowngradedPackages packages
 downgraded_packages=()
 numberDowngradedPackages=1
+previousNumberDowngradedPackages=1
 # echo Number packages: $numberPackages
 # for package in "${packages_to_downgrade[@]}"; do
 #     echo Package: $package
@@ -214,6 +220,7 @@ do
             dependentKey="${dependent}_${set_to_downgrade}"
             if [[ ! " ${downgraded_packages[@]} " =~ " ${dependentKey} " ]]; then
                 hasNonDowngradedDependent="true"
+                hasNonDowngradedDependents+=("${dependent}=>${package_to_downgrade}")
                 # echo "${package_to_downgrade} has non-downgraded dependent: ${dependentKey}"
             fi
         done
@@ -259,4 +266,16 @@ do
             fail "Rector downgrade failed on set ${set_to_downgrade} for package ${package_to_downgrade}"
         fi
     done
+    # In case of circular dependencies, make the process fail
+    if [ $numberDowngradedPackages -eq $previousNumberDowngradedPackages ]
+    then
+        hasNonDowngradedDependentsString=$(join_by ", " ${hasNonDowngradedDependents[@]})
+        if [ "$hasNonDowngradedDependentsString" == "$previousNonDowngradedDependentsString" ]
+        then
+            fail "There are circular dependencies, so the process can't decide in which order to execute them: $hasNonDowngradedDependentsString"
+        fi
+    fi
+    hasNonDowngradedDependents=()
+    previousNumberDowngradedPackages=$numberDowngradedPackages
+    previousNonDowngradedDependentsString=$hasNonDowngradedDependentsString
 done
