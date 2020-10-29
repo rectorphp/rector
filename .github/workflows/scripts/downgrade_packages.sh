@@ -156,7 +156,7 @@ do
     dependents_to_downgrade=()
     # Obtain recursively the list of dependents, keep the first word only,
     # (which is the package name), and remove duplicates
-    dependentsAsString=$(composer why "$package" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
+    dependentsAsString=$(composer why "$package_to_downgrade" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
     IFS=' ' read -r -a dependents <<< "$dependentsAsString"
     # Only add the ones which must themselves be downgraded for that same set
     for dependent in "${dependents[@]}"; do
@@ -166,10 +166,13 @@ do
     done
     # The dependents are identified per package and set, because a same dependency
     # downgraded for 2 set might have dependencies downgraded for one set and not the other
-    package_dependents["$package|$set_to_downgrade"]=$(echo "${dependents_to_downgrade[@]}")
+    package_dependents["${package_to_downgrade}|${set_to_downgrade}"]=$(echo "${dependents_to_downgrade[@]}")
     echo "Dependencies for package ${package_to_downgrade} and set ${set_to_downgrade}: ${dependents_to_downgrade[@]}"
     ((counter++))
 done
+
+# echo Package dependents:
+# for x in "${!package_dependents[@]}"; do printf "[%s]=%s\n" "$x" "${package_dependents[$x]}" ; done
 
 echo Executing Rector to downgrade $numberDowngradedPackages packages
 declare -A set_downgraded_packages
@@ -197,7 +200,7 @@ do
             continue
         fi
         # Check if all dependents have already been downgraded. Otherwise, keep iterating
-        dependents=${package_dependents["$package_to_downgrade|$set_to_downgrade"]}
+        dependents=${package_dependents["${package_to_downgrade}|${set_to_downgrade}"]}
         if [ $package_to_downgrade = "sebastian/diff" ]; then
             echo "Estoy en package $package_to_downgrade on set $set_to_downgrade and dependents ${dependents[@]} - 2"
         fi
