@@ -79,7 +79,7 @@ paths_to_downgrade=()
 sets_to_downgrade=()
 
 # Switch to production
-composer install --no-dev
+# composer install --no-dev
 
 counter=1
 while [ $counter -le ${#target_downgrade_php_versions[@]} ]
@@ -118,7 +118,7 @@ do
 done
 
 # Switch to dev again
-composer install
+# composer install
 
 # Make sure that the number of packages, paths and sets is the same
 # otherwise something went wrong
@@ -131,6 +131,36 @@ fi
 if [ ! $numberSets -eq $numberPackages ]; then
     fail "Number of sets ($numberSets) and number of packages ($numberPackages) should not be different"
 fi
+
+# We must downgrade packages in the strict dependency order,
+# such as sebastian/diff => symfony/event-dispatcher-contracts => psr/event-dispatcher,
+# or otherwise there may be PHP error from inconsistencies (such as from a modified interface)
+# To do this, have a double loop to downgrade packages,
+# asking if all the "ancestors" for the package have already been downgraded,
+# or let it keep iterating until next loop
+# Calculate all the dependents for all packages,
+# including only packages to be downgraded
+echo Calculating package execution order
+declare -A package_dependents
+for package in "${packages_to_downgrade[@]}"; do
+    if [[ -z ${package_dependents[$package]} ]]; then
+        echo Analyzing package $package
+        dependents_to_downgrade=()
+        # Obtain recursively the list of dependents, keep the first word only,
+        # (which is the package name), and remove duplicates
+        dependentsAsString=$(composer why "$package" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
+        IFS=' ' read -r -a dependents <<< "$dependentsAsString"
+        # Only add the ones which must themselves be downgraded
+        for dependent in "${dependents[@]}"; do
+            if [[ " ${packages_to_downgrade[@]} " =~ " ${dependent} " ]]; then
+                dependents_to_downgrade+=($dependent)
+            fi
+        done
+        package_dependents[$package]=$(echo "${dependents_to_downgrade[@]}")
+        echo Dependent packages: "${dependents_to_downgrade[@]}"
+    fi
+done
+
 
 # Execute Rector on all the paths
 counter=1
