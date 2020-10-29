@@ -17,6 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages/rector-generator/templates/*',
         __DIR__ . '/vendor/*',
         __DIR__ . '/ci/*',
+        __DIR__ . '/compiler/*',
         '/tests/',
         // '*.php.inc',
     ]);
