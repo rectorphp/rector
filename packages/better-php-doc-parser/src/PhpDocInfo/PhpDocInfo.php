@@ -190,8 +190,8 @@ final class PhpDocInfo
     public function getParamTypes(): array
     {
         $paramTypes = [];
-        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
-            $paramTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValue, $this->node);
+        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValueNode) {
+            $paramTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValueNode, $this->node);
         }
 
         return $paramTypes;
@@ -199,12 +199,12 @@ final class PhpDocInfo
 
     public function getParamTagValueNodeByName(string $parameterName): ?ParamTagValueNode
     {
-        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
-            if ($paramTagValue->parameterName !== '$' . $parameterName) {
+        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValueNode) {
+            if ($paramTagValueNode->parameterName !== '$' . $parameterName) {
                 continue;
             }
 
-            return $paramTagValue;
+            return $paramTagValueNode;
         }
 
         return null;
@@ -485,9 +485,9 @@ final class PhpDocInfo
     {
         $throwsTypes = [];
 
-        foreach ($this->phpDocNode->getThrowsTagValues() as $throwsPhpDocNode) {
+        foreach ($this->phpDocNode->getThrowsTagValues() as $throwsTagValueNode) {
             $throwsTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
-                $throwsPhpDocNode,
+                $throwsTagValueNode,
                 $this->node
             );
         }
