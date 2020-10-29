@@ -75,6 +75,7 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 - [How Run One Rule From Command Line](/docs/how_to_run_one_rule_from_command_line.md)
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
+- [How run Rector in Docker](/docs/how_to_run_rector_in_docker.md)
 - [Add Checkstyle with your CI](/docs/checkstyle.md)
 
 ## Install
@@ -84,7 +85,7 @@ composer require rector/rector --dev
 ```
 
 - Having conflicts during `composer require`? → Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed)
-- Using a different PHP version than Rector supports? → Use the [Docker image](#run-rector-in-docker)
+- Using a different PHP version than Rector supports? → Use the [Docker image](/docs/how_to_run_rector_in_docker.md)
 
 <br>
 
@@ -153,7 +154,6 @@ vendor/bin/rector process src
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -217,27 +217,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ## How to Contribute
 
 See [the contribution guide](/CONTRIBUTING.md).
-
-<br>
-
-## Run Rector in Docker
-
-You can run Rector on your project using Docker.
-To make sure you are running latest version, use `docker pull rector/rector`.
-
-*Note that Rector inside Docker expects your application in `/project` directory - it is mounted via volume from the current directory (`$pwd`).*
-
-```bash
-docker run --rm -v $(pwd):/project rector/rector:latest process src --set symfony40 --dry-run
-```
-
-Using `rector.php` config:
-
-```bash
-docker run --rm -v $(pwd):/project rector/rector:latest process src \
-    --config rector.php \
-    --dry-run
-```
 
 <br>
 

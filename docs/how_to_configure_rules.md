@@ -1,6 +1,8 @@
 # How To Configure Rules
 
-Every rector can have its own configuration. E.g. the `DowngradeTypedPropertyRector` rule will add a docblock or not depending on its property `ADD_DOC_BLOCK`:
+Rector rules that implement `Rector\Core\Contract\Rector\ConfigurableRectorInterface` can be configured.
+
+Typical example is `Rector\Renaming\Rector\Name\RenameClassRector`:
 
 ```php
 <?php
@@ -9,16 +11,18 @@ Every rector can have its own configuration. E.g. the `DowngradeTypedPropertyRec
 
 declare(strict_types=1);
 
-use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    // Don't output the docBlocks when removing typed properties
-    $services->set(DowngradeTypedPropertyRector::class)
+    $services->set(RenameClassRector::class)
         ->call('configure', [[
-            DowngradeTypedPropertyRector::ADD_DOC_BLOCK => false,
+            // we use constant for keys to save you from typos
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'App\SomeOldClass' => 'App\SomeNewClass',
+            ],
         ]]);
 };
 ```
