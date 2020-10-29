@@ -31,7 +31,7 @@
         "doctrine/annotations": "^1.11",
         "doctrine/inflector": "^1.4|^2.0",
         "jean85/pretty-package-versions": "^1.5.1",
-        "migrify/php-config-printer": "^0.3.45",
+        "migrify/php-config-printer": "^0.3.52",
         "nette/robot-loader": "^3.2",
         "nette/utils": "^3.1",
         "nikic/php-parser": "4.10.2",

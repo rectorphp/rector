@@ -170,7 +170,7 @@ CODE_SAMPLE
     private function refactorParameter(Param $param, AddParamTypeDeclaration $addParamTypeDeclaration): void
     {
         // already set → no change
-        if ($param->type) {
+        if ($param->type !== null) {
             $currentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
             if ($this->typeComparator->areTypesEquals($currentParamType, $addParamTypeDeclaration->getParamType())) {
                 return;
@@ -186,6 +186,7 @@ CODE_SAMPLE
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $addParamTypeDeclaration->getParamType()
         );
+
         $param->type = $returnTypeNode;
     }
 }
