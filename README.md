@@ -1,5 +1,10 @@
-
 # Rector - Speedup Your PHP Development
+
+[![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
+[![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
+[![SonarCube](https://img.shields.io/badge/SonarCube_Debt-%3C30-brightgreen.svg?style=flat-square)](https://sonarcloud.io/dashboard?id=rectorphp_rector)
+
+<br>
 
 Rector helps you with 2 areas - major code changes and in daily work.
 
@@ -11,47 +16,28 @@ Rector helps you with 2 areas - major code changes and in daily work.
 - Do you have code quality you need, but struggle to keep it with new developers in your team? Do you wish to have  code-reviews for each member of your team, but don't have time for it?
 → **Add Rector to you CI and let it fix your code for you. Get [instant feedback](https://tomasvotruba.com/blog/2020/01/13/why-is-first-instant-feedback-crucial-to-developers/) after each commit.**
 
+<br>
+
 It's a tool that [we develop](https://getrector.org/) and share for free, so you anyone can automate their refactoring.
 
 [Hire us](https://getrector.org/contact) to skip learning Rector, AST and nodes, to educate your team about Rectors benefits and to setup Rector in your project - so you can enjoy the 300 % development speed :+1:
 
-[![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
-[![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
-[![SonarCube](https://img.shields.io/badge/SonarCube_Debt-%3C30-brightgreen.svg?style=flat-square)](https://sonarcloud.io/dashboard?id=rectorphp_rector)
-
 <br>
 
-- **[Online DEMO](https://getrector.org/demo)**
-- [Explore 500+ Rector Rules](/docs/rector_rules_overview.md)
+- **[Try Rector Online](https://getrector.org/demo)**
 
----
+## Show Case: Complete 2700 `@var` annotations in 2 mins
 
 ![Rector-showcase](docs/images/rector-showcase-var.gif)
 
-<br>
-
-## Sponsors
-
-Rector grows faster with your help, the more you help the more work it saves you.
-Check out [Rector's Patreon](https://www.patreon.com/rectorphp). One-time donations are welcome [through PayPal](https://www.paypal.me/rectorphp).
-
-Thank you:
-
-<p>
-    <a href="https://www.startupjobs.cz/en/startup/scrumworks-s-r-o"><img src="/docs/images/amateri.png"></a>
-    <img src="/docs/images/space.png" width=40>
-    <a href="https://zenika.ca/en/en"><img src="/docs/images/zenika.png"></a>
-    <img src="/docs/images/space.png" width=40>
-    <a href="https://spaceflow.io/en"><img src="/docs/images/spaceflow.png"></a>
-</p>
+[How does this work?](https://tomasvotruba.com/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/)
 
 <br>
 
 ## Open-Source First
 
-Rector **instantly upgrades and instantly refactors the PHP code of your application**.
-
-It supports all versions of PHP from 5.2 and many open-source projects:
+Rector **instantly upgrades and refactors the PHP code of your application**.
+It supports all versions of PHP from 5.2 and major open-source projects:
 
 <br>
 
@@ -60,30 +46,36 @@ It supports all versions of PHP from 5.2 and many open-source projects:
     <img src="/docs/images/space.png" width=40>
     <a href="/config/set/"><img src="/docs/images/symfony.png"></a>
     <img src="/docs/images/space.png" width=40>
-    <a href="/config/set/"><img src="/docs/images/laravel.png"></a>
-    <img src="/docs/images/space.png" width=40>
-    <a href="/config/set/"><img src="/docs/images/twig.png"></a>
-    <br>
     <a href="https://github.com/palantirnet/drupal-rector/tree/master/config/drupal-8"><img src="/docs/images/drupal.png" alt="Drupal Rector rules"></a>
     <img src="/docs/images/space.png" width=40>
     <a href="/config/set/"><img src="/docs/images/cakephp.png"></a>
-    <img src="/docs/images/space.png" width=40>
-    <a href="/config/set/"><img src="/docs/images/phpunit.png"></a>
 </p>
 
-<br>
-
-## What Can Rector Do for You?
+### What Can Rector Do for You?
 
 - [Upgrade 30 000 unit tests from PHPUnit 6 to 9 in 2 weeks](https://twitter.com/LBajsarowicz/status/1272947900016967683)
-- Complete [@var annotations or parameter/return type declarations](https://tomasvotruba.com/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/)
 - [Complete PHP 7.4 property type declarations](https://tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
-- Upgrade your code from **PHP 5.3 to 8.0**
 - [Migrate your project from Nette to Symfony](https://tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
-- [Refactor Laravel facades to dependency injection](https://tomasvotruba.com/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
+- [Refactor Laravel Facades to Dependency Injection](https://tomasvotruba.com/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
 - And much more...
 
 <br>
+
+## Documentation
+
+- [Explore 600+ Rector Rules](/docs/rector_rules_overview.md)
+- [How Does Rector Work?](/docs/how_it_works.md)
+- [PHP Parser Nodes Overview](/docs/nodes_overview.md)
+- [How Does Rector Work?](/docs/how_it_works.md)
+- [How to Add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
+
+### Advanced
+
+- [How To Run Rector on Changed Files Only](/docs/how_to_run_rector_on_changed_files_only.md)
+- [How Run One Rule From Command Line](/docs/how_to_run_one_rule_from_command_line.md)
+- [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
+- [How to Configure Rule](/docs/how_to_configure_rules.md)
+- [Add Checkstyle with your CI](/docs/checkstyle.md)
 
 ## Install
 
@@ -100,12 +92,16 @@ composer require rector/rector --dev
 
 There a 2 main ways to use Rector:
 
-- a *single rule*, to have the change under control - pick [from over 550 rules](/docs/rector_rules_overview.md)
+- a *single rule*, to have the change under control - you can choose [from over 600 rules](/docs/rector_rules_overview.md)
 - or group of rules called *sets* - pick from [sets](/config/set)
 
-Sets are suitable for open-source projects and design patterns, like .
-
 To use them, create a `rector.php` in your root directory:
+
+```bash
+vendor/bin/rector init
+```
+
+And modify it:
 
 ```php
 <?php
@@ -120,16 +116,12 @@ use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    // get parameters
-    $parameters = $containerConfigurator->parameters();
-
     // here we can define, what sets of rules will be applied
+    $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::SETS, [SetList::CODE_QUALITY]);
 
-    // get services
-    $services = $containerConfigurator->services();
-
     // register single rule
+    $services = $containerConfigurator->services();
     $services->set(TypedPropertyRector::class);
 };
 ```
@@ -148,13 +140,11 @@ Rector will show you diff of files that it *would* change. To *make* the changes
 vendor/bin/rector process src
 ```
 
-<br>
-
 *Note: `rector.php` is loaded by default. For different location, use `--config` option.*
 
 <br>
 
-## Configuration
+## Full Config Configuration
 
 ```php
 <?php
@@ -173,16 +163,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // paths to refactor; solid alternative to CLI arguments
     $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
 
-    // is there a file you need to skip?
-    $parameters->set(Option::EXCLUDE_PATHS, [
-        // single file
-        __DIR__ . '/src/ComplicatedFile.php',
-        // or directory
-        __DIR__ . '/src',
-        // or fnmatch
-        __DIR__ . '/src/*/Tests/*',
-    ]);
-
     // Rector relies on autoload setup of your project; Composer autoload is included by default; to add more:
     $parameters->set(Option::AUTOLOAD_PATHS, [
         // autoload specific file
@@ -190,9 +170,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // or full directory
         __DIR__ . '/vendor/project-without-composer',
     ]);
-
-    // is there single rule you don't like from a set you use?
-    $parameters->set(Option::EXCLUDE_RECTORS, [SimplifyIfReturnBoolRector::class]);
 
     // is your PHP version different from the one your refactor to? [default: your PHP version]
     $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
@@ -206,108 +183,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
 
-    // skip directory/file by rule
-    $parameters->set(Option::SKIP, [
-        Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector::class => [
-            // single file
-            __DIR__ . '/src/ComplicatedFile.php',
-            // or directory
-            __DIR__ . '/src',
-            // or fnmatch
-            __DIR__ . '/src/*/Tests/*',
-        ],
-        Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector::class => [
-            // single file
-            __DIR__ . '/src/ComplicatedFile.php',
-            // or directory
-            __DIR__ . '/src',
-            // or fnmatch
-            __DIR__ . '/src/*/Tests/*',
-        ],
-    ]);
-
     // Run Rector only on changed files
     $parameters->set(Option::ENABLE_CACHE, true);
 };
 ```
-
-### Configuring Rectors
-
-Every rector can have its own configuration. E.g. the `DowngradeTypedPropertyRector` rule will add a docblock or not depending on its property `ADD_DOC_BLOCK`:
-
-```php
-<?php
-
-// rector.php
-
-declare(strict_types=1);
-
-use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    // Set configuration
-    // ...
-
-    // get services
-    $services = $containerConfigurator->services();
-
-    // Don't output the docBlocks when removing typed properties
-    $services->set(DowngradeTypedPropertyRector::class)
-        ->call('configure', [[
-            DowngradeTypedPropertyRector::ADD_DOC_BLOCK => false,
-        ]]);
-};
-```
-
-### Ignore Rector Rule in File
-
-For in-file exclusion, use `@noRector \FQN name` annotation:
-
-```php
-<?php
-
-declare(strict_types=1);
-
-class SomeClass
-{
-    /**
-     * @noRector
-     */
-    public const NAME = '102';
-
-    /**
-     * @noRector
-     */
-    public function foo(): void
-    {
-        /** @noRector \Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector */
-        round(1 + 0);
-    }
-}
-```
-
-### Run Just 1 Rector Rule
-
-Do you have config that includes many sets and Rectors? You might want to run only a single Rector. The `--only` argument allows that, e.g.:
-
-```bash
-vendor/bin/rector process src --set solid --only Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector
-
-# or just a short class name
-vendor/bin/rector process src --set solid --only FinalizeClassesWithoutChildrenRector
-```
-
-### Limit Execution to Changed Files
-
-Execution can be limited to changed files using the `process` option `--match-git-diff`.
-This option will filter the files included by the configuration, creating an intersection with the files listed in `git diff`.
-
-```bash
-vendor/bin/rector process src --match-git-diff
-```
-
-This option is useful in CI with pull-requests that only change few files.
 
 ### Symfony Container
 
@@ -332,17 +211,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     );
 };
 ```
-
-<br>
-
-## More Detailed Documentation
-
-- **[All Rectors Overview](/docs/rector_rules_overview.md)**
-- [Create own Rule](/docs/create_own_rule.md)
-- [Generate Rector from Recipe](/docs/rector_recipe.md)
-- [How Does Rector Work?](/docs/how_it_works.md)
-- [PHP Parser Nodes Overview](/docs/nodes_overview.md)
-- [Add Checkstyle with your CI](/docs/checkstyle.md)
 
 <br>
 
