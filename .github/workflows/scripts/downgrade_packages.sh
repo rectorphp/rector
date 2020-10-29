@@ -104,8 +104,8 @@ do
                 path=$(pwd)
             else
                 # Obtain the package's path from Composer
-                # Format is "package path", so extract the 2nd word with awk to obtain the path
-                path=$(composer info $package --path | awk '{print $2;}')
+                # Format is "package path", so extract everything after the 1st word with cut to obtain the path
+                path=$(composer info $package --path | cut -d' ' -f2-)
             fi
             packages_to_downgrade+=($package)
             paths_to_downgrade+=($path)
