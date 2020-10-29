@@ -199,8 +199,8 @@ CODE_SAMPLE
         }
 
         if ($type instanceof FloatType) {
-            $isFloat = $this->createFuncCall('is_float', [$variable]);
-            return $this->createFuncCall(self::ASSERT, [$isFloat]);
+            $funcCall = $this->createFuncCall('is_float', [$variable]);
+            return $this->createFuncCall(self::ASSERT, [$funcCall]);
         }
 
         if ($type instanceof StringType) {

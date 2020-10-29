@@ -18,9 +18,10 @@ final class ParentScopeFinder
      */
     public function find(Node $node): ?Node
     {
-        return $node->getAttribute(AttributeKey::METHOD_NODE)
-            ?? $node->getAttribute(AttributeKey::FUNCTION_NODE)
-            ?? $node->getAttribute(AttributeKey::CLASS_NODE)
-            ?? $node->getAttribute(AttributeKey::NAMESPACE_NODE);
+        return $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
+            $node->getAttribute(AttributeKey::FUNCTION_NODE) ??
+            $node->getAttribute(AttributeKey::METHOD_NODE) ??
+            $node->getAttribute(AttributeKey::CLASS_NODE) ??
+            $node->getAttribute(AttributeKey::NAMESPACE_NODE);
     }
 }

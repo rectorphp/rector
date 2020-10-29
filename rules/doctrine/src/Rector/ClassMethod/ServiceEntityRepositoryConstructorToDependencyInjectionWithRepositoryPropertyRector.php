@@ -181,7 +181,7 @@ CODE_SAMPLE
 
     private function addRepositoryProperty(Class_ $class, Expr $entityReferenceExpr): void
     {
-        $repositoryPropertyType = $this->repositoryTypeFactory->createRepositoryPropertyType($entityReferenceExpr);
-        $this->addPropertyToClass($class, $repositoryPropertyType, 'repository');
+        $genericObjectType = $this->repositoryTypeFactory->createRepositoryPropertyType($entityReferenceExpr);
+        $this->addPropertyToClass($class, $genericObjectType, 'repository');
     }
 }

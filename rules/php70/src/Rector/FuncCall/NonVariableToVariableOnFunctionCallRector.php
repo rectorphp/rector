@@ -26,6 +26,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteKdyby\Naming\VariableNaming;
+use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\ValueObject\VariableAssignPair;
 
@@ -46,10 +47,19 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
      */
     private $variableNaming;
 
-    public function __construct(CallReflectionResolver $callReflectionResolver, VariableNaming $variableNaming)
-    {
+    /**
+     * @var ParentScopeFinder
+     */
+    private $parentScopeFinder;
+
+    public function __construct(
+        CallReflectionResolver $callReflectionResolver,
+        VariableNaming $variableNaming,
+        ParentScopeFinder $parentScopeFinder
+    ) {
         $this->callReflectionResolver = $callReflectionResolver;
         $this->variableNaming = $variableNaming;
+        $this->parentScopeFinder = $parentScopeFinder;
     }
 
     public function getDefinition(): RectorDefinition
@@ -78,7 +88,10 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
             return null;
         }
 
-        $scopeNode = $this->resolveScopeNode($node);
+        $scopeNode = $this->parentScopeFinder->find($node);
+        if ($scopeNode === null) {
+            return null;
+        }
 
         $currentScope = $scopeNode->getAttribute(AttributeKey::SCOPE);
         if (! $currentScope instanceof MutatingScope) {
@@ -149,13 +162,6 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         }
 
         return $arguments;
-    }
-
-    private function resolveScopeNode(Node $node): Node
-    {
-        return $node->getAttribute(AttributeKey::METHOD_NODE) ??
-            $node->getAttribute(AttributeKey::FUNCTION_NODE) ??
-            $node->getAttribute(AttributeKey::CLOSURE_NODE);
     }
 
     private function getReplacementsFor(Expr $expr, MutatingScope $mutatingScope, Node $scopeNode): VariableAssignPair
