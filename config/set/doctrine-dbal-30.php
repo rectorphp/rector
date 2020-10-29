@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\VoidType;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
@@ -28,7 +29,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
-                new AddReturnTypeDeclaration('Doctrine\DBAL\Connection', 'ping', 'void'),
+                new AddReturnTypeDeclaration('Doctrine\DBAL\Connection', 'ping', new VoidType()),
             ]),
         ]]);
 };

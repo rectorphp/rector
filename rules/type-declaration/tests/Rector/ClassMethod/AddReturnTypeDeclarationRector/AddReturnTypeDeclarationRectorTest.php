@@ -39,7 +39,7 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
     {
         $arrayType = new ArrayType(new MixedType(), new MixedType());
 
-        $nullableObjectType = new UnionType([new ObjectType('SomeType'), new NullType()]);
+        $nullableObjectUnionType = new UnionType([new ObjectType('SomeType'), new NullType()]);
 
         return [
             AddReturnTypeDeclarationRector::class => [
@@ -57,7 +57,7 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
                     new AddReturnTypeDeclaration(
                         'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\SomeClass',
                         'nullable',
-                        $nullableObjectType
+                        $nullableObjectUnionType
                     ),
                     new AddReturnTypeDeclaration(
                         'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\RemoveReturnType',

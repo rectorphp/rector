@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\BooleanType;
 use Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\ValueObject\RenameProperty;
@@ -23,11 +24,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'put', 'bool'),
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'forever', 'bool'),
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'put', 'bool'),
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'putMany', 'bool'),
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'forever', 'bool'), ]
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'put', new BooleanType()),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'forever', new BooleanType()),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'put', new BooleanType()),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'putMany', new BooleanType()),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'forever', new BooleanType()), ]
             ),
         ]]);
 

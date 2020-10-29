@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\IterableType;
+use PHPStan\Type\MixedType;
+
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
-
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
@@ -161,13 +163,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
+    $iterableType = new IterableType(new MixedType(), new MixedType());
+
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
                 new AddReturnTypeDeclaration(
                     'Symfony\Component\Form\AbstractTypeExtension',
                     'getExtendedTypes',
-                    'iterable'
+                    $iterableType
                 ),
             ]),
         ]]);

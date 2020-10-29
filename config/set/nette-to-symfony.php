@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\ObjectType;
 use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
 
 use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
@@ -38,7 +39,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AddReturnTypeDeclaration(
                     'Nette\Application\IPresenter',
                     'run',
-                    'Symfony\Component\HttpFoundation\Response'
+                    new ObjectType('Symfony\Component\HttpFoundation\Response')
                 ),
             ]),
         ]]);
