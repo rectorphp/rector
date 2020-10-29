@@ -88,6 +88,11 @@ final class CallTypeAnalyzer
             return [];
         }
 
+        // method not found
+        if (! $classReflection->hasMethod($methodName)) {
+            return [];
+        }
+
         $methodReflection = $classReflection->getMethod($methodName, $scope);
         $functionVariant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
 
