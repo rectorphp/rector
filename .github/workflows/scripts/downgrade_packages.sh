@@ -164,11 +164,16 @@ do
         dependentsAsString=$(composer why "$package_to_downgrade" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
     fi
     IFS=' ' read -r -a dependents <<< "$dependentsAsString"
-    # Only add the ones which must themselves be downgraded for that same set
     for dependent in "${dependents[@]}"; do
-        if [[ " ${packages_to_downgrade_by_set[@]} " =~ " ${dependent} " ]]; then
-            dependents_to_downgrade+=($dependent)
+        # A package could provide itself in why (as when using "replaces"). Ignore them
+        if [ $dependent = $package_to_downgrade ]; then
+            continue
         fi
+        # Only add the ones which must themselves be downgraded for that same set
+        if [[ ! " ${packages_to_downgrade_by_set[@]} " =~ " ${dependent} " ]]; then
+            continue;
+        fi
+        dependents_to_downgrade+=($dependent)
     done
     # The dependents are identified per package and set, because a same dependency
     # downgraded for 2 set might have dependencies downgraded for one set and not the other
@@ -209,6 +214,7 @@ do
             dependentKey="${dependent}_${set_to_downgrade}"
             if [[ ! " ${downgraded_packages[@]} " =~ " ${dependentKey} " ]]; then
                 hasNonDowngradedDependent="true"
+                # echo "${package_to_downgrade} has non-downgraded dependent: ${dependentKey}"
             fi
         done
         if [ -n "${hasNonDowngradedDependent}" ]; then
