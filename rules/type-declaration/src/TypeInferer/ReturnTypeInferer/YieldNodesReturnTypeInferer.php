@@ -58,7 +58,7 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
             $types[] = new ArrayType(new MixedType(), $yieldValueStaticType);
         }
 
-        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::ITERABLE_TYPE)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ITERABLE_TYPE)) {
             // @see https://www.php.net/manual/en/language.types.iterable.php
             $types[] = new IterableType(new MixedType(), new MixedType());
         } else {

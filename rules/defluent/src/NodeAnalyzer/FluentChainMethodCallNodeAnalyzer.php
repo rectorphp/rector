@@ -100,6 +100,21 @@ final class FluentChainMethodCallNodeAnalyzer
     }
 
     /**
+     * @return string[]|null[]
+     */
+    public function collectMethodCallNamesInChain(MethodCall $desiredMethodCall): array
+    {
+        $methodCalls = $this->collectAllMethodCallsInChain($desiredMethodCall);
+
+        $methodNames = [];
+        foreach ($methodCalls as $methodCall) {
+            $methodNames[] = $this->nodeNameResolver->getName($methodCall->name);
+        }
+
+        return $methodNames;
+    }
+
+    /**
      * @return MethodCall[]
      */
     public function collectAllMethodCallsInChain(MethodCall $methodCall): array

@@ -7,9 +7,12 @@ namespace Rector\PhpAttribute;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -30,7 +33,7 @@ final class AnnotationToAttributeConverter
     }
 
     /**
-     * @param Class_|ClassMethod|Property $node
+     * @param Class_|Property|ClassMethod|Function_|Closure|ArrowFunction $node
      */
     public function convertNode(Node $node): ?Node
     {

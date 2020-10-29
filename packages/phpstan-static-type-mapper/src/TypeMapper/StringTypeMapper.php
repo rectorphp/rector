@@ -42,7 +42,7 @@ final class StringTypeMapper implements TypeMapperInterface
 
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
-        if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return null;
         }
 

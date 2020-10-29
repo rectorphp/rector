@@ -23,9 +23,10 @@ use Rector\Naming\Naming\MethodNameResolver;
 final class MakeIsserClassMethodNameStartWithIsRector extends AbstractRector
 {
     /**
+     * @see https://regex101.com/r/Hc73ar/1
      * @var string
      */
-    private const ISSER_NAME_PATTERN = '#^(is|has|was|must|should|__)#';
+    private const ISSER_NAME_REGEX = '#^(is|has|was|must|does|have|should|__)#';
 
     /**
      * @var MethodNameResolver
@@ -116,7 +117,7 @@ CODE_SAMPLE
 
     private function isAlreadyIsserNamedClassMethod(ClassMethod $classMethod): bool
     {
-        return $this->isName($classMethod, self::ISSER_NAME_PATTERN);
+        return $this->isName($classMethod, self::ISSER_NAME_REGEX);
     }
 
     private function matchIsserClassMethodReturnedExpr(ClassMethod $classMethod): ?Expr

@@ -376,6 +376,7 @@ final class NodeFactory
     }
 
     /**
+     * @todo decouple to StackNodeFactory
      * @param Expr[] $exprs
      */
     public function createConcat(array $exprs): ?Concat
@@ -492,7 +493,7 @@ final class NodeFactory
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::TYPED_PROPERTIES)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
 
             if ($phpParserType !== null) {

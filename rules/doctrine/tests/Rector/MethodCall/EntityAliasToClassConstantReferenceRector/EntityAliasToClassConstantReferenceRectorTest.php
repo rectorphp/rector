@@ -25,7 +25,7 @@ final class EntityAliasToClassConstantReferenceRectorTest extends AbstractRector
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed[]>
      */
     protected function getRectorsWithConfiguration(): array
     {

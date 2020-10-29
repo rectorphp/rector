@@ -12,6 +12,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
@@ -37,16 +38,12 @@ final class TypeHasher
             return $this->createTypeHash($type->getItemType()) . '[]';
         }
 
-        if ($type instanceof ShortenedObjectType) {
-            return $type->getFullyQualifiedName();
-        }
-
         if ($type instanceof GenericObjectType) {
             return $this->phpStanStaticTypeMapper->mapToDocString($type);
         }
 
         if ($type instanceof TypeWithClassName) {
-            return $type->getClassName();
+            return $this->resolveUniqueTypeWithClassNameHash($type);
         }
 
         if ($type instanceof ConstantType) {
@@ -67,6 +64,19 @@ final class TypeHasher
     public function areTypesEqual(Type $firstType, Type $secondType): bool
     {
         return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
+    }
+
+    private function resolveUniqueTypeWithClassNameHash(Type $type): string
+    {
+        if ($type instanceof ShortenedObjectType) {
+            return $type->getFullyQualifiedName();
+        }
+
+        if ($type instanceof AliasedObjectType) {
+            return $type->getFullyQualifiedClass();
+        }
+
+        return $type->getClassName();
     }
 
     private function createUnionTypeHash(UnionType $unionType): string

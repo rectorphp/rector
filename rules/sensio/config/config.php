@@ -9,7 +9,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->defaults()
         ->public()
-        ->autowire();
+        ->autowire()
+        ->autoconfigure();
 
     $services->load('Rector\Sensio\\', __DIR__ . '/../src')
         ->exclude([__DIR__ . '/../src/Rector']);

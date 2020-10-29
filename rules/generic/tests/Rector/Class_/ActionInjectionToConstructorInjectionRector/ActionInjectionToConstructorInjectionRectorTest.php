@@ -29,7 +29,7 @@ final class ActionInjectionToConstructorInjectionRectorTest extends AbstractRect
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed[]>
      */
     protected function getRectorsWithConfiguration(): array
     {

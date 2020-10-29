@@ -360,7 +360,8 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pScalar_String(String_ $string): string
     {
-        if ($string->getAttribute(AttributeKey::IS_REGULAR_PATTERN)) {
+        $isRegularPattern = $string->getAttribute(AttributeKey::IS_REGULAR_PATTERN);
+        if ($isRegularPattern) {
             $kind = $string->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
             if ($kind === String_::KIND_DOUBLE_QUOTED) {
                 return $this->wrapValueWith($string, '"');

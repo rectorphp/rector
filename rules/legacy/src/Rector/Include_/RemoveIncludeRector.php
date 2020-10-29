@@ -48,6 +48,9 @@ CODE_SAMPLE
         return [Include_::class];
     }
 
+    /**
+     * @param Include_ $node
+     */
     public function refactor(Node $node): ?Node
     {
         $nop = new Nop();

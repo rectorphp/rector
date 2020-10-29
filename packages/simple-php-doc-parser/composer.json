@@ -1,17 +1,17 @@
 {
     "name": "rector/simple-php-doc-parser",
-    "description": "Simple service integration of phpstan/phpdoc-parser, with few extra goodies for practical use",
+    "description": "Service integration of phpstan/phpdoc-parser, with few extra goodies for practical use",
     "license": "MIT",
     "require": {
         "php": "^7.2.4|^8.0",
         "symfony/dependency-injection": "^4.4.8|^5.1",
         "symfony/config": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
-        "symplify/package-builder": "^8.3.40"
+        "symplify/package-builder": "^8.3.48"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5|^9.2",
-        "symplify/easy-testing": "^8.3.40"
+        "symplify/easy-testing": "^8.3.48"
     },
     "autoload": {
         "psr-4": {

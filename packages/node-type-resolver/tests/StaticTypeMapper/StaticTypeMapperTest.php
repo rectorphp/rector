@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\Tests\StaticTypeMapper;
 
 use Iterator;
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
@@ -54,6 +56,8 @@ final class StaticTypeMapperTest extends AbstractKernelTestCase
         ]);
 
         yield [$genericTypeNode, IterableType::class];
+
+        yield [new IdentifierTypeNode('mixed'), MixedType::class];
     }
 
     public function testMapPHPStanTypeToPHPStanPhpDocTypeNode(): void
@@ -73,5 +77,19 @@ final class StaticTypeMapperTest extends AbstractKernelTestCase
 
         $phpStanDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($mixedType);
         $this->assertInstanceOf(IdentifierTypeNode::class, $phpStanDocTypeNode);
+    }
+
+    /**
+     * @dataProvider provideDataForMapPhpParserNodePHPStanType()
+     */
+    public function testMapPhpParserNodePHPStanType(Node $node, string $expectedType): void
+    {
+        $phpStanType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node);
+        $this->assertInstanceOf($expectedType, $phpStanType);
+    }
+
+    public function provideDataForMapPhpParserNodePHPStanType(): Iterator
+    {
+        yield [new Identifier('iterable'), IterableType::class];
     }
 }

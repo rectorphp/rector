@@ -1,7 +1,6 @@
 name: Code Coverage
 
 on:
-    pull_request:
     push:
         branches:
             - master
@@ -15,6 +14,7 @@ jobs:
                 with:
                     php-version: 7.3
                     coverage: pcov
+                    tools: composer:v1
 
             -   run: composer install --no-progress --ansi
 

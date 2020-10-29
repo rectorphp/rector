@@ -75,7 +75,7 @@ final class IterableTypeMapper implements TypeMapperInterface
      */
     public function mapToDocString(Type $type, ?Type $parentType = null): string
     {
-        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             // iterable type is better done in PHP code, than in doc
             return '';
         }

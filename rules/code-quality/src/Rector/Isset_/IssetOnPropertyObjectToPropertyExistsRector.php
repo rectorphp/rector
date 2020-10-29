@@ -76,15 +76,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $newNodes = [];
+
         foreach ($node->vars as $issetVar) {
             if (! $issetVar instanceof PropertyFetch) {
-                continue;
-            }
-
-            $previous = $issetVar->getAttribute(AttributeKey::PREVIOUS_NODE);
-            $next = $issetVar->getAttribute(AttributeKey::NEXT_NODE);
-
-            if ($this->isFoundInPreviuosOrNext($previous, $next, $node)) {
                 continue;
             }
 
@@ -97,7 +92,8 @@ CODE_SAMPLE
             $type = $scope->getType($object);
 
             if ($type instanceof ThisType) {
-                return new NotIdentical($issetVar, $this->createNull());
+                $newNodes[] = new NotIdentical($issetVar, $this->createNull());
+                continue;
             }
 
             /** @var Identifier $name */
@@ -110,26 +106,15 @@ CODE_SAMPLE
 
                 $isPropertyAlwaysExists = property_exists($className, $property);
                 if ($isPropertyAlwaysExists) {
-                    return new NotIdentical($issetVar, $this->createNull());
+                    $newNodes[] = new NotIdentical($issetVar, $this->createNull());
+                    continue;
                 }
             }
 
-            return $this->replaceToPropertyExistsWithNullCheck($object, $property, $issetVar);
+            $newNodes[] = $this->replaceToPropertyExistsWithNullCheck($object, $property, $issetVar);
         }
 
-        return null;
-    }
-
-    /**
-     * @param Node $previous
-     * @param Node $next
-     */
-    private function isFoundInPreviuosOrNext(?Node $previous = null, ?Node $next = null, Isset_ $isset): bool
-    {
-        if ($previous && $previous->getAttribute(AttributeKey::PARENT_NODE) === $isset) {
-            return true;
-        }
-        return $next && $next->getAttribute(AttributeKey::PARENT_NODE) === $isset;
+        return $this->createReturnNodes($newNodes);
     }
 
     private function replaceToPropertyExistsWithNullCheck(Expr $expr, string $property, Expr $issetVar): BooleanAnd
@@ -138,5 +123,37 @@ CODE_SAMPLE
         $propertyExistsFuncCall = new FuncCall(new Name('property_exists'), $args);
 
         return new BooleanAnd($propertyExistsFuncCall, new NotIdentical($issetVar, $this->createNull()));
+    }
+
+    /**
+     * @param NotIdentical[]|BooleanAnd[] $newNodes
+     */
+    private function createReturnNodes(array $newNodes): ?Expr
+    {
+        if (count($newNodes) === 0) {
+            return null;
+        }
+
+        if (count($newNodes) === 1) {
+            return $newNodes[0];
+        }
+
+        return $this->createBooleanAndFromNodes($newNodes);
+    }
+
+    /**
+     * @param NotIdentical[]|BooleanAnd[] $exprs
+     * @todo decouple to StackNodeFactory
+     */
+    private function createBooleanAndFromNodes(array $exprs): BooleanAnd
+    {
+        /** @var NotIdentical|BooleanAnd $booleanAnd */
+        $booleanAnd = array_shift($exprs);
+        foreach ($exprs as $expr) {
+            $booleanAnd = new BooleanAnd($booleanAnd, $expr);
+        }
+
+        /** @var BooleanAnd $booleanAnd */
+        return $booleanAnd;
     }
 }

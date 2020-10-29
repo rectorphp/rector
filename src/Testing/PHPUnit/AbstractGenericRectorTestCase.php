@@ -74,8 +74,6 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->runnableRectorFactory = new RunnableRectorFactory();
         $this->smartFileSystem = new SmartFileSystem();
 
@@ -174,6 +172,9 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
     }
 
     /**
+     * @deprecated Use config instead, just to narrow 2 ways to add configured config to just 1. Now
+     * with PHP its easy pick.
+     *
      * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array

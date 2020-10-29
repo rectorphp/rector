@@ -106,7 +106,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Name|FunctionLike|Property $node
+     * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace $node
      */
     public function refactor(Node $node): ?Node
     {

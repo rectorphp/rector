@@ -46,7 +46,7 @@ final class TypeAnalyzer
 
     public function __construct(PhpVersionProvider $phpVersionProvider)
     {
-        if ($phpVersionProvider->isAtLeast(PhpVersionFeature::OBJECT_TYPE)) {
+        if ($phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::OBJECT_TYPE)) {
             $this->phpSupportedTypes[] = 'object';
         }
     }

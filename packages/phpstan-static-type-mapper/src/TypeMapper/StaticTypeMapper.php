@@ -51,7 +51,7 @@ final class StaticTypeMapper implements TypeMapperInterface
     {
         if ($type instanceof ThisType) {
             // @todo wait for PHPStan to differentiate between self/static
-            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::STATIC_RETURN_TYPE)) {
+            if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::STATIC_RETURN_TYPE)) {
                 return new Name('static');
             }
 

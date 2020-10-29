@@ -1,4 +1,4 @@
-# All 595 Rectors Overview
+# All 600 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -8,7 +8,7 @@
 - [Architecture](#architecture) (2)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
-- [CodeQuality](#codequality) (59)
+- [CodeQuality](#codequality) (61)
 - [CodingStyle](#codingstyle) (33)
 - [DeadCode](#deadcode) (41)
 - [Decouple](#decouple) (1)
@@ -23,7 +23,7 @@
 - [DowngradePhp80](#downgradephp80) (6)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (36)
+- [Generic](#generic) (35)
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (3)
 - [Legacy](#legacy) (4)
@@ -44,7 +44,7 @@
 - [PHPUnit](#phpunit) (38)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
 - [PSR4](#psr4) (2)
-- [Performance](#performance) (1)
+- [Performance](#performance) (2)
 - [Phalcon](#phalcon) (4)
 - [Php52](#php52) (2)
 - [Php53](#php53) (4)
@@ -64,15 +64,15 @@
 - [RectorGenerator](#rectorgenerator) (1)
 - [RemovingStatic](#removingstatic) (6)
 - [Renaming](#renaming) (10)
-- [Restoration](#restoration) (8)
+- [Restoration](#restoration) (9)
 - [SOLID](#solid) (13)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
 - [Symfony](#symfony) (34)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
-- [SymfonyPhpConfig](#symfonyphpconfig) (2)
-- [Transform](#transform) (11)
+- [SymfonyPhpConfig](#symfonyphpconfig) (3)
+- [Transform](#transform) (12)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -237,8 +237,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
+                'ValueObjectInterfaceClassName',
+            ],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
+                'Search',
+            ],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -307,12 +311,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[
-            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects(
-                [new ArrayToFluentCall('ArticlesTable', [
-                    'foreignKey' => 'setForeignKey',
-                    'propertyName' => 'setProperty',
-                ])]
-            ),
+            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects([new ArrayToFluentCall('ArticlesTable', [
+                'foreignKey' => 'setForeignKey',
+                'propertyName' => 'setProperty',
+            ])]),
         ]]);
 };
 ```
@@ -400,9 +402,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects(
-                [new ModalToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig', 1, null)]
-            ),
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
+                new ModalToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig', 1, null),
+            ]),
         ]]);
 };
 ```
@@ -447,14 +449,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->call('configure', [[
-            RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => inline_value_objects(
-                [new RenameMethodCallBasedOnParameter(
-                    'getParam',
-                    'paging',
-                    'getAttribute',
-                    'ServerRequest'
-                ), new RenameMethodCallBasedOnParameter('withParam', 'paging', 'withAttribute', 'ServerRequest')]
-            ),
+            RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => inline_value_objects([
+                new RenameMethodCallBasedOnParameter('getParam', 'paging', 'getAttribute', 'ServerRequest'),
+                new RenameMethodCallBasedOnParameter('withParam', 'paging', 'withAttribute', 'ServerRequest'),
+            ]),
         ]]);
 };
 ```
@@ -941,11 +939,12 @@ Change `foreach()` items assign to empty array to direct assign
  {
      public function run($items)
      {
-         $items2 = [];
+         $collectedItems = [];
+
 -        foreach ($items as $item) {
--             $items2[] = $item;
+-             $collectedItems[] = $item;
 -        }
-+        $items2 = $items;
++        $collectedItems = $items;
      }
  }
 ```
@@ -1117,6 +1116,43 @@ Change OR, AND to ||, && with more common understanding
 -if ($f = false or true) {
 +if (($f = false) || true) {
      return $f;
+ }
+```
+
+<br><br>
+
+### `MoveOutMethodCallInsideIfConditionRector`
+
+- class: [`Rector\CodeQuality\Rector\If_\MoveOutMethodCallInsideIfConditionRector`](/rules/code-quality/src/Rector/If_/MoveOutMethodCallInsideIfConditionRector.php)
+- [test fixtures](/rules/code-quality/tests/Rector/If_/MoveOutMethodCallInsideIfConditionRector/Fixture)
+
+Move out method call inside If condition
+
+```diff
+-if ($obj->run($arg) === 1) {
++$objRun = $obj->run($arg);
++if ($objRun === 1) {
+
+ }
+```
+
+<br><br>
+
+### `NewStaticToNewSelfRector`
+
+- class: [`Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector`](/rules/code-quality/src/Rector/New_/NewStaticToNewSelfRector.php)
+- [test fixtures](/rules/code-quality/tests/Rector/New_/NewStaticToNewSelfRector/Fixture)
+
+Change unsafe new `static()` to new `self()`
+
+```diff
+ class SomeClass
+ {
+     public function build()
+     {
+-        return new static();
++        return new self();
+     }
  }
 ```
 
@@ -2216,9 +2252,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->call('configure', [[
-            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => inline_value_objects(
-                [new ReturnArrayClassMethodToYield('EventSubscriberInterface', 'getSubscribedEvents')]
-            ),
+            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => inline_value_objects([
+                new ReturnArrayClassMethodToYield('EventSubscriberInterface', 'getSubscribedEvents'),
+            ]),
         ]]);
 };
 ```
@@ -3474,9 +3510,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                         'method' => 'someRenamedMethod',
                         'parent_class' => 'AddedParentClass',
                     ],
-                ],
-            ],
-        ]]);
+],
+],
+                        ]]);
 };
 ```
 
@@ -4252,7 +4288,7 @@ Change database type "bigint" for @var/type declaration to string
 ### `ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`
 
 - class: [`Rector\DoctrineCodeQuality\Rector\MethodCall\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`](/rules/doctrine-code-quality/src/Rector/MethodCall/ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector.php)
-- [test fixtures](/rules/doctrine-code-quality/tests/Rector/MethodCall/ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection/Fixture)
+- [test fixtures](/rules/doctrine-code-quality/tests/Rector/MethodCall/ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector/Fixture)
 
 Change array to ArrayCollection in setParameters method of query builder
 
@@ -4428,7 +4464,7 @@ Make nullability in setter class method with respect to property
 ### `MoveCurrentDateTimeDefaultInEntityToConstructorRector`
 
 - class: [`Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector`](/rules/doctrine-code-quality/src/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php)
-- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Property/MoveCurrentDateTimeDefaultInEntityToConstructorRector/Fixture)
+- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector/Fixture)
 
 Move default value for entity property to constructor, the safest place
 
@@ -5832,9 +5868,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects(
-                [new AddReturnTypeDeclaration('SomeClass', 'getData', 'array')]
-            ),
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+                new AddReturnTypeDeclaration('SomeClass', 'getData', 'array'),
+            ]),
         ]]);
 };
 ```
@@ -5898,9 +5934,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects(
-                [new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null)]
-            ),
+            ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
+                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
+            ]),
         ]]);
 };
 ```
@@ -5927,9 +5963,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects(
-                [new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null)]
-            ),
+            ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
+                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
+            ]),
         ]]);
 };
 ```
@@ -5970,17 +6006,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
-            ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects(
-                [
-                    new ArgumentDefaultValueReplacer(
-                        'SomeExampleClass',
-                        'someMethod',
-                        0,
-                        'SomeClass::OLD_CONSTANT',
-                        'false'
-                    ),
-                ]
-            ),
+            ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects([
+                new ArgumentDefaultValueReplacer('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', 'false'),
+            ]),
         ]]);
 };
 ```
@@ -6017,9 +6045,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects(
-                [new ArgumentRemover('ExampleClass', 'someMethod', 0, 'true')]
-            ),
+            ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects([
+                new ArgumentRemover('ExampleClass', 'someMethod', 0, 'true'),
+            ]),
         ]]);
 };
 ```
@@ -6056,9 +6084,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeConstantVisibilityRector::class)
         ->call('configure', [[
-            ChangeConstantVisibilityRector::CLASS_CONSTANT_VISIBILITY_CHANGES => inline_value_objects(
-                [new ClassConstantVisibilityChange('ParentObject', 'SOME_CONSTANT', 'protected')]
-            ),
+            ChangeConstantVisibilityRector::CLASS_CONSTANT_VISIBILITY_CHANGES => inline_value_objects([
+                new ClassConstantVisibilityChange('ParentObject', 'SOME_CONSTANT', 'protected'),
+            ]),
         ]]);
 };
 ```
@@ -6104,8 +6132,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeClass' => [
                     'getNode' => 'getNodes',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6150,9 +6178,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects(
-                [new ChangeMethodVisibility('FrameworkClass', 'someMethod', 'protected')]
-            ),
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
+                new ChangeMethodVisibility('FrameworkClass', 'someMethod', 'protected'),
+            ]),
         ]]);
 };
 ```
@@ -6202,8 +6230,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'FrameworkClass' => [
                     'someProperty' => 'protected',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6312,9 +6340,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
-            FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => inline_value_objects(
-                [new FuncCallToStaticCall('view', 'SomeStaticClass', 'render')]
-            ),
+            FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => inline_value_objects([
+                new FuncCallToStaticCall('view', 'SomeStaticClass', 'render'),
+            ]),
         ]]);
 };
 ```
@@ -6439,8 +6467,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 '$methodCallRemoverArgument' => [
                     'Car' => 'something',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6526,8 +6554,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'class' => 'MyClassFactory',
                     'method' => 'create',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6553,7 +6581,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ### `NormalToFluentRector`
 
 - class: [`Rector\Generic\Rector\ClassMethod\NormalToFluentRector`](/rules/generic/src/Rector/ClassMethod/NormalToFluentRector.php)
-- [test fixtures](/rules/generic/tests/Rector/MethodCall/NormalToFluentRector/Fixture)
+- [test fixtures](/rules/generic/tests/Rector/ClassMethod/NormalToFluentRector/Fixture)
 
 Turns fluent interface calls to classic ones.
 
@@ -6572,8 +6600,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
-            NormalToFluentRector::CALLS_TO_FLUENT => inline_value_objects(
-                [new NormalToFluent('SomeClass', ['someFunction', 'otherFunction'])]
+            NormalToFluentRector::CALLS_TO_FLUENT => inline_value_objects([
+                new NormalToFluent('SomeClass', ['someFunction', 'otherFunction']), ]
             ),
         ]]);
 };
@@ -6690,9 +6718,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RemoveFuncCallArgRector::class)
         ->call('configure', [[
-            RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => inline_value_objects(
-                [new RemoveFuncCallArg('remove_last_arg', 1)]
-            ),
+            RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => inline_value_objects([
+                new RemoveFuncCallArg('remove_last_arg', 1),
+            ]),
         ]]);
 };
 ```
@@ -6873,8 +6901,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'DEVELOPMENT' => 'development',
                     'PRODUCTION' => 'production',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -6883,50 +6911,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -$value === Nette\Configurator::DEVELOPMENT
 +$value === "development"
-```
-
-<br><br>
-
-### `ReplaceParentCallByPropertyCallRector`
-
-- class: [`Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector`](/rules/generic/src/Rector/MethodCall/ReplaceParentCallByPropertyCallRector.php)
-- [test fixtures](/rules/transform/tests/Rector/MethodCall/ReplaceParentCallByPropertyCallRector/Fixture)
-
-Changes method calls in child of specific types to defined property method call
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
-use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ReplaceParentCallByPropertyCallRector::class)
-        ->call('configure', [[
-            ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => inline_value_objects(
-                [new ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty')]
-            ),
-        ]]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     public function run(SomeTypeToReplace $someTypeToReplace)
-     {
--        $someTypeToReplace->someMethodCall();
-+        $this->someProperty->someMethodCall();
-     }
- }
 ```
 
 <br><br>
@@ -6982,9 +6966,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StringToClassConstantRector::class)
         ->call('configure', [[
-            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => inline_value_objects(
-                [new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT')]
-            ),
+            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => inline_value_objects([
+                new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT'),
+            ]),
         ]]);
 };
 ```
@@ -7026,8 +7010,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(SwapClassMethodArgumentsRector::class)
         ->call('configure', [[
-            SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => inline_value_objects(
-                [new SwapClassMethodArguments('SomeClass', 'run', [1, 0])]
+            SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => inline_value_objects([
+                new SwapClassMethodArguments('SomeClass', 'run', [1, 0]), ]
             ),
         ]]);
 };
@@ -7071,8 +7055,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(SwapFuncCallArgumentsRector::class)
         ->call('configure', [[
-            SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => inline_value_objects(
-                [new SwapFuncCallArguments('some_function', [1, 0])]
+            SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => inline_value_objects([
+                new SwapFuncCallArguments('some_function', [1, 0]), ]
             ),
         ]]);
 };
@@ -7272,7 +7256,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
+            AddTopIncludeRector::PATTERNS => [
+                'pat*/*/?ame.php',
+                'somepath/?ame.php',
+            ],
         ]]);
 };
 ```
@@ -7383,8 +7370,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeContainer' => [
                     'set' => 'addService',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -7412,8 +7399,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeContainer' => [
                     'get' => 'getService',
                 ],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -7488,9 +7475,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
-            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => inline_value_objects(
-                [new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService')]
-            ),
+            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => inline_value_objects([
+                new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService'),
+            ]),
         ]]);
 };
 ```
@@ -7517,9 +7504,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
-            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => inline_value_objects(
-                [new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService')]
-            ),
+            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => inline_value_objects([
+                new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService'),
+            ]),
         ]]);
 };
 ```
@@ -8042,7 +8029,7 @@ Move dependency get via `$context->getByType()` to constructor injection
 - class: [`Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector`](/rules/nette/src/Rector/Identical/EndsWithFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/rules/nette/tests/Rector/Identical/EndsWithFunctionToNetteUtilsStringsRector/Fixture)
 
-Use `Nette\Utils\Strings::endWith()` over bare string-functions
+Use `Nette\Utils\Strings::endsWith()` over bare string-functions
 
 ```diff
  class SomeClass
@@ -8944,7 +8931,7 @@ Changes event names from Nette ones to Symfony ones
 ### `RouterListToControllerAnnotationsRector`
 
 - class: [`Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector`](/rules/nette-to-symfony/src/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php)
-- [test fixtures](/rules/nette-to-symfony/tests/Rector/ClassMethod/RouterListToControllerAnnotationsRetor/Fixture)
+- [test fixtures](/rules/nette-to-symfony/tests/Rector/ClassMethod/RouterListToControllerAnnotationsRector/Fixture)
 
 Change new `Route()` from RouteFactory to @Route annotation above controller method
 
@@ -9260,8 +9247,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             OrderPublicInterfaceMethodRector::METHOD_ORDER_BY_INTERFACES => [
                 'FoodRecipeInterface' => ['getDescription', 'process'],
-            ],
-        ]]);
+],
+                    ]]);
 };
 ```
 
@@ -9726,16 +9713,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArrayArgumentInTestToDataProviderRector::class)
         ->call('configure', [[
-            ArrayArgumentInTestToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => inline_value_objects(
-                [
-                    new ArrayArgumentToDataProvider(
-                        'PHPUnit\Framework\TestCase',
-                        'doTestMultiple',
-                        'doTestSingle',
-                        'number'
-                    ),
-                ]
-            ),
+            ArrayArgumentInTestToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => inline_value_objects([
+                new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number'),
+            ]),
         ]]);
 };
 ```
@@ -10639,6 +10619,24 @@ composer.json
 <br><br>
 
 ## Performance
+
+### `CountArrayToEmptyArrayComparisonRector`
+
+- class: [`Rector\Performance\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector`](/rules/performance/src/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector.php)
+- [test fixtures](/rules/performance/tests/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector/Fixture)
+
+Change `count` array comparison to empty array comparison to improve performance
+
+```diff
+-count($array) === 0;
+-count($array) > 0;
+-! count($array);
++$array === [];
++$array !== [];
++$array === [];
+```
+
+<br><br>
 
 ### `PreslashSimpleFunctionRector`
 
@@ -11885,7 +11883,6 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
 ### `SetCookieRector`
 
 - class: [`Rector\Php73\Rector\FuncCall\SetCookieRector`](/rules/php73/src/Rector/FuncCall/SetCookieRector.php)
-- [test fixtures](/rules/php73/tests/Rector/FuncCall/SetcookieRector/Fixture)
 
 Convert `setcookie` argument to PHP7.3 option array
 
@@ -13396,8 +13393,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
-            PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => inline_value_objects(
-                [new PseudoNamespaceToNamespace('Some_', ['Some_Class_To_Keep'])]
+            PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => inline_value_objects([
+                new PseudoNamespaceToNamespace('Some_', ['Some_Class_To_Keep']), ]
             ),
         ]]);
 };
@@ -13437,9 +13434,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameAnnotationRector::class)
         ->call('configure', [[
-            RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => inline_value_objects(
-                [new RenameAnnotation('PHPUnit\Framework\TestCase', 'test', 'scenario')]
-            ),
+            RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => inline_value_objects([
+                new RenameAnnotation('PHPUnit\Framework\TestCase', 'test', 'scenario'),
+            ]),
         ]]);
 };
 ```
@@ -13483,13 +13480,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects(
-                [new RenameClassConstant('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'), new RenameClassConstant(
-                    'SomeClass',
-                    'OTHER_OLD_CONSTANT',
-                    'DifferentClass::NEW_CONSTANT'
-                )]
-            ),
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
+                new RenameClassConstant('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
+                new RenameClassConstant('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'),
+            ]),
         ]]);
 };
 ```
@@ -13654,9 +13648,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects(
-                [new MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod')]
-            ),
+            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+                new MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'),
+            ]),
         ]]);
 };
 ```
@@ -13729,9 +13723,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects(
-                [new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')]
-            ),
+            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
+                new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty'),
+            ]),
         ]]);
 };
 ```
@@ -13767,9 +13761,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_value_objects(
-                [new RenameStaticMethod('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod')]
-            ),
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_value_objects([
+                new RenameStaticMethod('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'),
+            ]),
         ]]);
 };
 ```
@@ -13795,9 +13789,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_value_objects(
-                [new RenameStaticMethod('SomeClass', 'oldMethod', 'SomeClass', 'newStaticMethod')]
-            ),
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_value_objects([
+                new RenameStaticMethod('SomeClass', 'oldMethod', 'SomeClass', 'newStaticMethod'),
+            ]),
         ]]);
 };
 ```
@@ -13835,9 +13829,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(CompleteImportForPartialAnnotationRector::class)
         ->call('configure', [[
-            CompleteImportForPartialAnnotationRector::USE_IMPORTS_TO_RESTORE => inline_value_objects(
-                [new UseWithAlias('Doctrine\ORM\Mapping', 'ORM')]
-            ),
+            CompleteImportForPartialAnnotationRector::USE_IMPORTS_TO_RESTORE => inline_value_objects([
+                new UseWithAlias('Doctrine\ORM\Mapping', 'ORM'),
+            ]),
         ]]);
 };
 ```
@@ -13900,6 +13894,56 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  class RandomValueObject
  {
      public function __construct(RandomDependency $randomDependency)
+     {
+     }
+ }
+```
+
+<br><br>
+
+### `InferParamFromClassMethodReturnRector`
+
+- class: [`Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector`](/rules/restoration/src/Rector/ClassMethod/InferParamFromClassMethodReturnRector.php)
+- [test fixtures](/rules/restoration/tests/Rector/ClassMethod/InferParamFromClassMethodReturnRector/Fixture)
+
+Change @param doc based on another method return type
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
+use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(InferParamFromClassMethodReturnRector::class)
+        ->call('configure', [[
+            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => inline_value_objects([
+                new InferParamFromClassMethodReturn('SomeClass', 'process', 'getNodeTypes'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function getNodeTypes(): array
+     {
+         return [String_::class];
+     }
+
++    /**
++     * @param String_ $node
++     */
+     public function process(Node $node)
      {
      }
  }
@@ -14987,10 +15031,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
-                'SymfonyControllerClassName',
-                'GetTraitClassName',
-            ],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
         ]]);
 };
 ```
@@ -15413,6 +15454,29 @@ Move self::$container service fetching from test methods up to setUp method
 
 ## SymfonyPhpConfig
 
+### `AutoInPhpSymfonyConfigRector`
+
+- class: [`Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector`](/rules/symfony-php-config/src/Rector/MethodCall/AutoInPhpSymfonyConfigRector.php)
+- [test fixtures](/rules/symfony-php-config/tests/Rector/MethodCall/AutoInPhpSymfonyConfigRector/Fixture)
+
+Make sure there is public(), autowire(), `autoconfigure()` calls on `defaults()` in Symfony configs
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
+
+     $services->defaults()
+-        ->autowire();
++        ->autowire()
++        ->public()
++        ->autoconfigure();
+ };
+```
+
+<br><br>
+
 ### `ChangeServiceArgumentsToMethodCallRector`
 
 - class: [`Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector`](/rules/symfony-php-config/src/Rector/MethodCall/ChangeServiceArgumentsToMethodCallRector.php)
@@ -15537,9 +15601,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentFuncCallToMethodCallRector::class)
         ->call('configure', [[
-            ArgumentFuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => inline_value_objects(
-                [new ArgumentFuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', null, 'make')]
-            ),
+            ArgumentFuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => inline_value_objects([
+                new ArgumentFuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', null, 'make'),
+            ]),
         ]]);
 };
 ```
@@ -15593,9 +15657,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FuncCallToMethodCallRector::class)
         ->call('configure', [[
-            FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => inline_value_objects(
-                [new FuncNameToMethodCallName('view', 'Namespaced\SomeRenderer', 'render')]
-            ),
+            FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => inline_value_objects([
+                new FuncNameToMethodCallName('view', 'Namespaced\SomeRenderer', 'render'),
+            ]),
         ]]);
 };
 ```
@@ -15647,9 +15711,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
         ->call('configure', [[
-            MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => inline_value_objects(
-                [new MethodCallRenameWithArrayKey('Nette\DI\ServiceDefinition', 'setInject', 'addTag', 'inject')]
-            ),
+            MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => inline_value_objects([
+                new MethodCallRenameWithArrayKey('Nette\DI\ServiceDefinition', 'setInject', 'addTag', 'inject'),
+            ]),
         ]]);
 };
 ```
@@ -15728,9 +15792,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MethodCallToStaticCallRector::class)
         ->call('configure', [[
-            MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => inline_value_objects(
-                [new MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod')]
-            ),
+            MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => inline_value_objects([
+                new MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod'),
+            ]),
         ]]);
 };
 ```
@@ -15779,9 +15843,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NewToStaticCallRector::class)
         ->call('configure', [[
-            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => inline_value_objects(
-                [new NewToStaticCall('Cookie', 'Cookie', 'create')]
-            ),
+            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => inline_value_objects([new NewToStaticCall('Cookie', 'Cookie', 'create')]),
         ]]);
 };
 ```
@@ -15823,9 +15885,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyAssignToMethodCallRector::class)
         ->call('configure', [[
-            PropertyAssignToMethodCallRector::PROPERTY_ASSIGNS_TO_METHODS_CALLS => inline_value_objects(
-                [new PropertyAssignToMethodCall('SomeClass', 'oldProperty', 'newMethodCall')]
-            ),
+            PropertyAssignToMethodCallRector::PROPERTY_ASSIGNS_TO_METHODS_CALLS => inline_value_objects([
+                new PropertyAssignToMethodCall('SomeClass', 'oldProperty', 'newMethodCall'),
+            ]),
         ]]);
 };
 ```
@@ -15862,9 +15924,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects(
-                [new PropertyToMethod('SomeObject', 'property', 'getProperty', [], 'setProperty')]
-            ),
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
+                new PropertyToMethod('SomeObject', 'property', 'getProperty', [], 'setProperty'),
+            ]),
         ]]);
 };
 ```
@@ -15892,9 +15954,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects(
-                [new PropertyToMethod('SomeObject', 'property', 'getConfig', ['someArg'], null)]
-            ),
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
+                new PropertyToMethod('SomeObject', 'property', 'getConfig', ['someArg'], null),
+            ]),
         ]]);
 };
 ```
@@ -15904,6 +15966,50 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -$result = $object->property;
 +$result = $object->getProperty('someArg');
+```
+
+<br><br>
+
+### `ReplaceParentCallByPropertyCallRector`
+
+- class: [`Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector`](/rules/transform/src/Rector/MethodCall/ReplaceParentCallByPropertyCallRector.php)
+- [test fixtures](/rules/transform/tests/Rector/MethodCall/ReplaceParentCallByPropertyCallRector/Fixture)
+
+Changes method calls in child of specific types to defined property method call
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
+use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ReplaceParentCallByPropertyCallRector::class)
+        ->call('configure', [[
+            ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => inline_value_objects([
+                new ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function run(SomeTypeToReplace $someTypeToReplace)
+     {
+-        $someTypeToReplace->someMethodCall();
++        $this->someProperty->someMethodCall();
+     }
+ }
 ```
 
 <br><br>
@@ -15930,9 +16036,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ServiceGetterToConstructorInjectionRector::class)
         ->call('configure', [[
-            ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => inline_value_objects(
-                [new ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService')]
-            ),
+            ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => inline_value_objects([
+                new ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService'),
+            ]),
         ]]);
 };
 ```
@@ -16007,9 +16113,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StaticCallToFuncCallRector::class)
         ->call('configure', [[
-            StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => inline_value_objects(
-                [new StaticCallToFuncCall('OldClass', 'oldMethod', 'new_function')]
-            ),
+            StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => inline_value_objects([
+                new StaticCallToFuncCall('OldClass', 'oldMethod', 'new_function'),
+            ]),
         ]]);
 };
 ```
@@ -16045,14 +16151,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StaticCallToMethodCallRector::class)
         ->call('configure', [[
-            StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_value_objects(
-                [new StaticCallToMethodCall(
+            StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_value_objects([
+                new StaticCallToMethodCall(
                     'Nette\Utils\FileSystem',
                     'write',
                     'Symplify\SmartFileSystem\SmartFileSystem',
                     'dumpFile'
-                )]
-            ),
+                ),
+            ]),
         ]]);
 };
 ```
@@ -16246,9 +16352,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects(
-                [new AddParamTypeDeclaration('SomeClass', 'process', 0, 'string')]
-            ),
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
+                new AddParamTypeDeclaration('SomeClass', 'process', 0, 'string'),
+            ]),
         ]]);
 };
 ```

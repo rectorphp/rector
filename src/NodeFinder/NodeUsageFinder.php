@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace Rector\Core\NodeFinder;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 
 final class NodeUsageFinder
 {
@@ -28,14 +32,28 @@ final class NodeUsageFinder
      */
     private $nodeRepository;
 
+    /**
+     * @var ScopeAwareNodeFinder
+     */
+    private $scopeAwareNodeFinder;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
-        NodeRepository $nodeRepository
+        NodeRepository $nodeRepository,
+        ScopeAwareNodeFinder $scopeAwareNodeFinder,
+        BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeRepository = $nodeRepository;
+        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -76,5 +94,17 @@ final class NodeUsageFinder
         }
 
         return $propertyFetchesWithoutPropertyFetch;
+    }
+
+    public function findPreviousForeachNodeUsage(Foreach_ $foreach, Expr $expr): ?Node
+    {
+        return $this->scopeAwareNodeFinder->findParent($foreach, function (Node $node) use ($expr): bool {
+            // skip itself
+            if ($node === $expr) {
+                return false;
+            }
+
+            return $this->betterStandardPrinter->areNodesEqual($node, $expr);
+        }, [Foreach_::class]);
     }
 }

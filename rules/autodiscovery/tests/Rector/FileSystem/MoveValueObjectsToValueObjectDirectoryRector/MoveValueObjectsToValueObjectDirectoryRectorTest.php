@@ -48,7 +48,7 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractFil
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed[]>
      */
     protected function getRectorsWithConfiguration(): array
     {

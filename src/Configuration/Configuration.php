@@ -125,9 +125,9 @@ final class Configuration
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
 
-        /** @var string $outputFileOption */
+        /** @var string|null $outputFileOption */
         $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
-        $this->outputFile = $outputFileOption !== '' ? (string) $outputFileOption : null;
+        $this->outputFile = $this->sanitizeOutputFileValue($outputFileOption);
 
         $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
 
@@ -301,11 +301,21 @@ final class Configuration
         if ($noProgressBar) {
             return false;
         }
+        $optionOutputFormat = $input->getOption(Option::OPTION_OUTPUT_FORMAT);
 
-        if ($input->getOption(Option::OPTION_OUTPUT_FORMAT) === JsonOutputFormatter::NAME) {
+        if ($optionOutputFormat === JsonOutputFormatter::NAME) {
             return false;
         }
         return $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== CheckstyleOutputFormatter::NAME;
+    }
+
+    private function sanitizeOutputFileValue(?string $outputFileOption): ?string
+    {
+        if ($outputFileOption === '') {
+            return null;
+        }
+
+        return $outputFileOption;
     }
 
     private function setOnlyRector(string $rector): void

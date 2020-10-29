@@ -21,7 +21,7 @@ final class FunctionCallToConstantRector extends AbstractRector implements Confi
     /**
      * @var string
      */
-    public const FUNCTIONS_TO_CONSTANTS = '$functionsToConstants';
+    public const FUNCTIONS_TO_CONSTANTS = 'functions_to_constants';
 
     /**
      * @var string[]

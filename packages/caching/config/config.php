@@ -26,7 +26,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->defaults()
         ->autowire()
-        ->public();
+        ->public()
+        ->autoconfigure();
 
     $services->load('Rector\Caching\\', __DIR__ . '/../src');
 

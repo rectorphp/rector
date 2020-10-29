@@ -187,8 +187,9 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
 
         /** @var Class_ $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classMethod = $classLike->getMethod($methodName);
         // it's a method call, skip
-        if ($classLike->getMethod($methodName) !== null) {
+        if ($classMethod !== null) {
             return null;
         }
 

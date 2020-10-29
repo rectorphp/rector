@@ -66,8 +66,9 @@ CODE_SAMPLE
     {
         $doubleQuoteCount = substr_count($node->value, '"');
         $singleQuoteCount = substr_count($node->value, "'");
+        $kind = $node->getAttribute(AttributeKey::KIND);
 
-        if ($node->getAttribute(AttributeKey::KIND) === String_::KIND_SINGLE_QUOTED) {
+        if ($kind === String_::KIND_SINGLE_QUOTED) {
             $this->processSingleQuoted($node, $doubleQuoteCount, $singleQuoteCount);
         }
 

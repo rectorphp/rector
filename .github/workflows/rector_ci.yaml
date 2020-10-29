@@ -17,14 +17,30 @@ on:
 
 jobs:
     rector-ci:
+        strategy:
+            fail-fast: false
+            matrix:
+                directories:
+                    - packages
+                    - rules
+                    - src
+                    - tests
+
         runs-on: ubuntu-latest
-        if: github.event.pull_request.head.repo.full_name == github.repository
         steps:
+            # workaround for missing secret in fork PRs - see https://github.com/actions/checkout/issues/298
+            # see https://github.com/rectorphp/rector/commit/d395e1c28b8e6a56711dcc2e10490a82965850e4
             -
+                if: github.event.pull_request.head.repo.full_name == github.repository
                 uses: actions/checkout@v2
                 with:
-                    ref: ${{ github.event.pull_request.head.ref }} # Solves the not "You are not currently on a branch" problem, see https://github.com/actions/checkout/issues/124#issuecomment-586664611
-                    token: ${{ secrets.ACCESS_TOKEN }} # Must be used to trigger workflow after push
+                    # Must be used to trigger workflow after push
+                    token: ${{ secrets.ACCESS_TOKEN }}
+
+            # in forks, the token is not available - so we cannot us eit
+            -
+                if: github.event.pull_request.head.repo.full_name != github.repository
+                uses: actions/checkout@v2
 
             -
                 uses: shivammathur/setup-php@v1
@@ -32,46 +48,22 @@ jobs:
                     # PHP 7.2 is required, so Rector's code is PHP 7.2 compatible even after refactoring
                     php-version: 7.2
                     coverage: none
+                    tools: composer:v1
 
             -   run: composer install --no-progress --ansi
 
-            ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anyhting in the future
-            -   run: bin/rector process --config rector-ci.php --ansi --no-progress-bar
+            ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anything in the future
+            -   run: bin/rector rectify ${{ matrix.directories }} --config rector-ci.php --ansi --no-progress-bar
+            -   run: vendor/bin/ecs check --match-git-diff --fix --ansi
 
             -
-                name: Check for Rector modified files
-                id: rector-git-check
-                run: echo ::set-output name=modified::$(if git diff --exit-code --no-patch; then echo "false"; else echo "true"; fi)
-
-            -   name: Git config
-                if: steps.rector-git-check.outputs.modified == 'true'
-                run: |
-                    git config --global user.name 'rector-bot'
-                    git config --global user.email 'tomas@getrector.org'
-                    echo ::set-env name=COMMIT_MESSAGE::$(git log -1 --pretty=format:"%s")
-
-            -   name: Commit Rector changes
-                if: steps.rector-git-check.outputs.modified == 'true'
-                run: git commit -am "[rector] ${COMMIT_MESSAGE}"
-
-            ## Now, there might be coding standard issues after running Rector
-            -
-                if: steps.rector-git-check.outputs.modified == 'true'
-                run: composer fix-cs
-
-            -
-                name: Check for CS modified files
-                if: steps.rector-git-check.outputs.modified == 'true'
-                id: cs-git-check
-                run: echo ::set-output name=modified::$(if git diff --exit-code --no-patch; then echo "false"; else echo "true"; fi)
-
-            -   name: Commit CS changes
-                if: steps.cs-git-check.outputs.modified == 'true'
-                run: git commit -am "[cs] ${COMMIT_MESSAGE}"
-
-
-            -   name: Push changes
-                if: steps.rector-git-check.outputs.modified == 'true'
-                run: git push
-                # In case we want to fail this job when there are changed files, just add "exit 1"
-
+                uses: EndBug/add-and-commit@v5
+                with:
+                    # The arguments for the `git add` command (see the paragraph below for more info)
+                    add: .
+                    message: "[ci-review] Rector Rectify"
+                    author_name: rector-bot
+                    author_email: tomas@getrector.org
+                env:
+                    # to get push access
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}

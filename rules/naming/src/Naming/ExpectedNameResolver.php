@@ -258,7 +258,8 @@ final class ExpectedNameResolver
 
     private function resolveReturnTypeFromArrayType(Expr $expr, ArrayType $arrayType): ?Type
     {
-        if (! $expr->getAttribute(AttributeKey::PARENT_NODE) instanceof Foreach_) {
+        $parentNode = $expr->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Foreach_) {
             return null;
         }
 

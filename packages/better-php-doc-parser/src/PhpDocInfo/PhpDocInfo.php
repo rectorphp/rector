@@ -13,7 +13,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
@@ -34,7 +33,6 @@ use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
@@ -372,13 +370,8 @@ final class PhpDocInfo
         return $this->tokens === [];
     }
 
-    /**
-     * @param Type|TypeNode $type
-     */
-    public function changeParamType($type, Param $param, string $paramName): void
+    public function changeParamType(Type $type, Param $param, string $paramName): void
     {
-        Assert::isAnyOf($type, [Type::class, TypeNode::class]);
-
         $this->phpDocTypeChanger->changeParamType($this, $type, $param, $paramName);
     }
 

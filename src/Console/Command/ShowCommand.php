@@ -13,6 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ShowCommand extends AbstractCommand
 {
@@ -99,19 +100,17 @@ final class ShowCommand extends AbstractCommand
         }
 
         $this->symfonyStyle->newLine(2);
-
         $this->symfonyStyle->title('Loaded Sets');
 
         sort($sets);
 
+        $setFilePaths = [];
         foreach ($sets as $set) {
-            $filename = realpath($set);
-            // resolve fallback for PHAR
-            if ($filename === false) {
-                $filename = $set;
-            }
-            $this->symfonyStyle->writeln(' * ' . $filename);
+            $setFileInfo = new SmartFileInfo($set);
+            $setFilePaths[] = $setFileInfo->getRelativeFilePathFromCwd();
         }
+
+        $this->symfonyStyle->listing($setFilePaths);
 
         $message = sprintf('%d loaded sets', count($sets));
         $this->symfonyStyle->success($message);

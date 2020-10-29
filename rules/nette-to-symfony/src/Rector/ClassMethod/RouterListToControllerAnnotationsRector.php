@@ -29,7 +29,7 @@ use ReflectionMethod;
  * @see https://doc.nette.org/en/2.4/routing
  * @see https://symfony.com/doc/current/routing.html
  *
- * @see \Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\RouterListToControllerAnnotationsRectorTest
+ * @see \Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\RouterListToControllerAnnotationsRectorTest
  */
 final class RouterListToControllerAnnotationsRector extends AbstractRector
 {
@@ -307,8 +307,9 @@ CODE_SAMPLE
         if (! $this->isName($node, '#^(render|action)#')) {
             return true;
         }
+        $hasRouteAnnotation = $node->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION);
 
-        if ($node->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION)) {
+        if ($hasRouteAnnotation) {
             return true;
         }
 

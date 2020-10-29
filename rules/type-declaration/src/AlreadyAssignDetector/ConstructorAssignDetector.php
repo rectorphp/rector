@@ -33,9 +33,10 @@ final class ConstructorAssignDetector extends AbstractAssignDetector
 
             /** @var Assign $assign */
             $assign = $node;
+            $isFirstLevelStatement = $assign->getAttribute(AttributeKey::IS_FIRST_LEVEL_STATEMENT);
 
             // cannot be nested
-            if ($assign->getAttribute(AttributeKey::IS_FIRST_LEVEL_STATEMENT) !== true) {
+            if ($isFirstLevelStatement !== true) {
                 return null;
             }
 

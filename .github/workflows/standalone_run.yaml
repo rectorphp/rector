@@ -15,6 +15,7 @@ jobs:
                     php-version: 7.2
                     coverage: none # disable xdebug, pcov
                     extensions: "intl"
+                    tools: composer:v1
 
             # see https://github.com/rlespinasse/github-slug-action
             -   name: Inject slug/short variables
