@@ -185,20 +185,19 @@ do
     while [ $counter -le $numberPackages ]
     do
         pos=$(( $counter - 1 ))
+        ((counter++))
         package_to_downgrade=${packages_to_downgrade[$pos]}
         set_to_downgrade=${sets_to_downgrade[$pos]}
         downgraded_packages=$(echo "${set_downgraded_packages[$set_to_downgrade]}" | tr " " "\n")
         # IFS=' ' read -r -a downgraded_packages <<< "${set_downgraded_packages[$set_to_downgrade]}"
         # Check if this package has already been downgraded on a previous iteration
         if [[ " ${downgraded_packages[@]} " =~ " ${package_to_downgrade} " ]]; then
-            ((counter++))
             continue
         fi
         # Check if all dependents have already been downgraded. Otherwise, keep iterating
         dependents=${package_dependents["$package_to_downgrade|$set_to_downgrade"]}
         for dependent in "${dependents[@]}"; do
             if [[ ! " ${downgraded_packages[@]} " =~ " ${dependent} " ]]; then
-                ((counter++))
                 continue
             fi
         done
@@ -241,7 +240,5 @@ do
         if [ "$?" -gt 0 ]; then
             fail "Rector downgrade failed on set ${set_to_downgrade} for package ${package_to_downgrade}"
         fi
-
-        ((counter++))
     done
 done
