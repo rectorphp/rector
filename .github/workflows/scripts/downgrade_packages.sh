@@ -171,7 +171,7 @@ do
     ((counter++))
 done
 
-echo Executing Rector on the packages
+echo Executing Rector to downgrade $numberDowngradedPackages packages
 declare -A set_downgraded_packages
 numberDowngradedPackages=1
 # echo Number packages: $numberPackages
@@ -181,26 +181,34 @@ numberDowngradedPackages=1
 until [ $numberDowngradedPackages -gt $numberPackages ]
 do
     counter=1
-    echo Number downgraded packages: $numberDowngradedPackages
     while [ $counter -le $numberPackages ]
     do
         pos=$(( $counter - 1 ))
         ((counter++))
         package_to_downgrade=${packages_to_downgrade[$pos]}
         set_to_downgrade=${sets_to_downgrade[$pos]}
-        downgraded_packages=$(echo "${set_downgraded_packages[$set_to_downgrade]}" | tr " " "\n")
-        # IFS=' ' read -r -a downgraded_packages <<< "${set_downgraded_packages[$set_to_downgrade]}"
+        # downgraded_packages=$(echo "${set_downgraded_packages[$set_to_downgrade]}" | tr " " "\n")
+        IFS=' ' read -r -a downgraded_packages <<< "${set_downgraded_packages[$set_to_downgrade]}"
         # Check if this package has already been downgraded on a previous iteration
+        if [ $package_to_downgrade = "sebastian/diff" ]; then
+            echo "Estoy en package $package_to_downgrade on set $set_to_downgrade and downgraded_packages ${downgraded_packages[@]} - 1"
+        fi
         if [[ " ${downgraded_packages[@]} " =~ " ${package_to_downgrade} " ]]; then
             continue
         fi
         # Check if all dependents have already been downgraded. Otherwise, keep iterating
         dependents=${package_dependents["$package_to_downgrade|$set_to_downgrade"]}
+        if [ $package_to_downgrade = "sebastian/diff" ]; then
+            echo "Estoy en package $package_to_downgrade on set $set_to_downgrade and dependents ${dependents[@]} - 2"
+        fi
         for dependent in "${dependents[@]}"; do
             if [[ ! " ${downgraded_packages[@]} " =~ " ${dependent} " ]]; then
                 continue
             fi
         done
+        if [ $package_to_downgrade = "sebastian/diff" ]; then
+            echo "Estoy en package $package_to_downgrade on set $set_to_downgrade - 3"
+        fi
 
         # Mark this package as downgraded
         downgraded_packages+=($package_to_downgrade)
