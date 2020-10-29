@@ -270,12 +270,12 @@ final class RectorApplication
             return;
         }
 
-        $contents = $fileInfo->getContents();
+        $oldContents = $fileInfo->getContents();
 
         $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString($fileInfo)
             : $this->fileProcessor->printToFile($fileInfo);
 
-        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $contents);
+        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContents);
     }
 
     /**
