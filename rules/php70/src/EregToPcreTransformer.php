@@ -35,6 +35,7 @@ final class EregToPcreTransformer
 
     /**
      * @var string
+     * @see https://regex101.com/r/htpXFg/1
      */
     private const BOUND_REGEX = '/^(\d|[1-9]\d|1\d\d|
                                 2[0-4]\d|25[0-5])

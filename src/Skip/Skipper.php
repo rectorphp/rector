@@ -14,11 +14,13 @@ final class Skipper
 {
     /**
      * @var string
+     * @see https://regex101.com/r/s7Rv0c/1
      */
     private const ONLY_ENDS_WITH_ASTERISK_REGEX = '#^[^*](.*?)\*$#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/I2z414/1
      */
     private const ONLY_STARTS_WITH_ASTERISK_REGEX = '#^\*(.*?)[^*]$#';
 
