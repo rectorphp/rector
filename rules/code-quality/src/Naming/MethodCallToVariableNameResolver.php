@@ -62,18 +62,23 @@ final class MethodCallToVariableNameResolver
             return $variableName;
         }
 
+        $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);
         $argValue = $methodCall->args[0]->value;
         if ($argValue instanceof ClassConstFetch && $argValue->name instanceof Identifier) {
-            return Strings::replace(
-                strtolower($argValue->name->toString()),
-                self::CONSTANT_REGEX,
-                function ($matches): string {
-                    return strtoupper($matches[2]);
-                }
-            );
+            $argValueName = strtolower($argValue->name->toString());
+            if ($argValueName !== 'class') {
+                return Strings::replace(
+                    $argValueName,
+                    self::CONSTANT_REGEX,
+                    function ($matches): string {
+                        return strtoupper($matches[2]);
+                    }
+                );
+            }
+
+            return $this->replaceGetByDash($methodCallName) . $argValue->class->getLast();
         }
 
-        $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);
         if ($argValue instanceof String_) {
             return $this->getStringVarName($argValue, $methodCallVarName, $fallbackVarName);
         }
@@ -95,14 +100,19 @@ final class MethodCallToVariableNameResolver
 
     private function getStringVarName(String_ $string, string $methodCallVarName, string $fallbackVarName): string
     {
-        $get = str_ireplace('get', '', $string->value . ucfirst($fallbackVarName));
-        $by = str_ireplace('by', '', $get);
-        $by = str_replace('-', '', $by);
-
-        if (Strings::match($by, self::START_ALPHA_REGEX) && $by !== $methodCallVarName) {
-            return $by;
+        $replaceGetByDash = $this->replaceGetByDash($string->value . ucfirst($fallbackVarName));
+        if (Strings::match($replaceGetByDash, self::START_ALPHA_REGEX) && $replaceGetByDash !== $methodCallVarName) {
+            return $replaceGetByDash;
         }
 
         return $fallbackVarName;
+    }
+
+    private function replaceGetByDash(string $string): string
+    {
+        $get = str_ireplace('get', '', $string);
+        $by = str_ireplace('by', '', $get);
+
+        return str_replace('-', '', $by);
     }
 }
