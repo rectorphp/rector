@@ -26,11 +26,13 @@ final class EntityUuidNodeFactory
 {
     /**
      * @var string
+     * @see https://regex101.com/r/vQ8f2v/1
      */
     private const SERIALIZER_SHORT_ANNOTATION_REGEX = '#(\@Serializer\\\\Type\(")(int)("\))#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/AkLsy1/1
      */
     private const ORM_VAR_DOC_LINE_REGEX = '#^(\s+)\*(\s+)\@(var|ORM)(.*?)$#ms';
 

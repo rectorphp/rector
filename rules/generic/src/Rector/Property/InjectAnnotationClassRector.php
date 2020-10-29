@@ -50,6 +50,7 @@ final class InjectAnnotationClassRector extends AbstractRector implements Config
 
     /**
      * @var string
+     * @see https://regex101.com/r/pjusUN/1
      */
     private const BETWEEN_PERCENT_CHARS_REGEX = '#%(.*?)%#';
 

@@ -15,6 +15,7 @@ final class ParallelTaskRunner
 {
     /**
      * @var string
+     * @see https://regex101.com/r/WMRFCz/1
      */
     private const FATAL_ERROR_REGEX = '#(Fatal error)|(\[ERROR\])#';
 

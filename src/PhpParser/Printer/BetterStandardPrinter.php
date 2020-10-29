@@ -40,11 +40,13 @@ final class BetterStandardPrinter extends Standard
 
     /**
      * @var string
+     * @see https://regex101.com/r/w5E8Rh/1
      */
     private const FOUR_SPACE_START_REGEX = '#^ {4}#m';
 
     /**
      * @var string
+     * @see https://regex101.com/r/F5x783/1
      */
     private const USE_REGEX = '#( use)\(#';
 
