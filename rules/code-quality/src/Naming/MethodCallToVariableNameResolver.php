@@ -113,7 +113,10 @@ final class MethodCallToVariableNameResolver
     private function getStringVarName(String_ $string, string $methodCallVarName, string $fallbackVarName): string
     {
         $normalizeStringVariableName = $this->normalizeStringVariableName($string->value . ucfirst($fallbackVarName));
-        if (Strings::match($normalizeStringVariableName, self::START_ALPHA_REGEX) && $normalizeStringVariableName !== $methodCallVarName) {
+        if (Strings::match(
+            $normalizeStringVariableName,
+            self::START_ALPHA_REGEX
+        ) && $normalizeStringVariableName !== $methodCallVarName) {
             return $normalizeStringVariableName;
         }
 
