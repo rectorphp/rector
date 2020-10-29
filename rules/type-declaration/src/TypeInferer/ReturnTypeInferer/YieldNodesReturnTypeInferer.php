@@ -43,7 +43,7 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
     {
         $yieldNodes = $this->findCurrentScopeYieldNodes($functionLike);
 
-        if (count($yieldNodes) === 0) {
+        if ($yieldNodes === []) {
             return new MixedType();
         }
 

@@ -25,7 +25,7 @@ final class UseImportsRemover
             $this->removeUseFromUse($removedShortUses, $stmt);
 
             // nothing left → remove
-            if (count($stmt->uses) === 0) {
+            if ($stmt->uses === []) {
                 unset($stmts[$stmtKey]);
             }
         }
@@ -46,7 +46,7 @@ final class UseImportsRemover
             $this->removeUseFromUse($removedShortUses, $stmt);
 
             // nothing left → remove
-            if (count($stmt->uses) === 0) {
+            if ($stmt->uses === []) {
                 unset($namespace->stmts[$namespaceKey]);
             }
         }

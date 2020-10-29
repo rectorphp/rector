@@ -35,12 +35,12 @@ abstract class AbstractArgumentProbeRector extends AbstractRector
         }
 
         // we need some params to analyze
-        if (count((array) $classMethod->params) === 0) {
+        if ((array) $classMethod->params === []) {
             return true;
         }
 
         // method without body doesn't need analysis
-        return count((array) $classMethod->stmts) === 0;
+        return (array) $classMethod->stmts === [];
     }
 
     protected function getClassMethodReference(ClassMethod $classMethod): ?string

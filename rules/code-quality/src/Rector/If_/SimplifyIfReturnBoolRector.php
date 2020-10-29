@@ -118,7 +118,7 @@ CODE_SAMPLE
 
     private function shouldSkip(If_ $if): bool
     {
-        if (count($if->elseifs) > 0) {
+        if ($if->elseifs !== []) {
             return true;
         }
 
@@ -211,7 +211,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (count($if->elseifs) > 0) {
+        if ($if->elseifs !== []) {
             return false;
         }
 

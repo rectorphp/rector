@@ -34,7 +34,7 @@ final class ClassConstNameResolver implements NodeNameResolverInterface
      */
     public function resolve(Node $node): ?string
     {
-        if (count($node->consts) === 0) {
+        if ($node->consts === []) {
             return null;
         }
 

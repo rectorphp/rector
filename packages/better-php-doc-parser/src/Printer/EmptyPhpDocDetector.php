@@ -11,7 +11,7 @@ final class EmptyPhpDocDetector
 {
     public function isPhpDocNodeEmpty(PhpDocNode $phpDocNode): bool
     {
-        if (count($phpDocNode->children) === 0) {
+        if ($phpDocNode->children === []) {
             return true;
         }
 

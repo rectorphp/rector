@@ -121,7 +121,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             }
         }
 
-        if (count($paramOnPositionTypes) === 0) {
+        if ($paramOnPositionTypes === []) {
             return new MixedType();
         }
 

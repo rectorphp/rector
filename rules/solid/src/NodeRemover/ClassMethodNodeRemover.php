@@ -45,11 +45,11 @@ final class ClassMethodNodeRemover
 
     public function removeClassMethodIfUseless(ClassMethod $classMethod): void
     {
-        if (count((array) $classMethod->params) > 0) {
+        if ((array) $classMethod->params !== []) {
             return;
         }
 
-        if (count((array) $classMethod->stmts) > 0) {
+        if ((array) $classMethod->stmts !== []) {
             return;
         }
 
@@ -71,7 +71,7 @@ final class ClassMethodNodeRemover
             /** @var StaticCall $node */
             $this->removeParamFromArgs($node, $paramName);
 
-            if (count($node->args) === 0) {
+            if ($node->args === []) {
                 $this->nodesToRemoveCollector->addNodeToRemove($node);
             }
 
@@ -88,7 +88,7 @@ final class ClassMethodNodeRemover
             }
 
             /** @var StaticCall $stmt */
-            if (count($stmt->args) > 0) {
+            if ($stmt->args !== []) {
                 continue;
             }
 

@@ -42,7 +42,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
 
     public function isActive(): bool
     {
-        return count($this->useImportTypesInFilePath) > 0 || count($this->functionUseImportTypesInFilePath) > 0;
+        return $this->useImportTypesInFilePath !== [] || $this->functionUseImportTypesInFilePath !== [];
     }
 
     /**

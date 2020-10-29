@@ -59,7 +59,7 @@ final class RandomFunctionRector extends AbstractRector
                 $node->name = new Name($newFunctionName);
 
                 // special case: random_int(); → random_int(0, getrandmax());
-                if ($newFunctionName === 'random_int' && count($node->args) === 0) {
+                if ($newFunctionName === 'random_int' && $node->args === []) {
                     $node->args[0] = new Arg(new LNumber(0));
                     $node->args[1] = new Arg($this->createFuncCall('mt_getrandmax'));
                 }

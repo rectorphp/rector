@@ -21,7 +21,7 @@ final class NodesToReplaceCollector implements NodeCollectorInterface
 
     public function isActive(): bool
     {
-        return count($this->nodesToReplace) > 0;
+        return $this->nodesToReplace !== [];
     }
 
     /**
