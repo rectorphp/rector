@@ -165,7 +165,7 @@ do
     # Print command in output for testing
     # set -x
     # bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi
-    bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --dry-run --ansi
+    bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --ansi
     # set +x
 
     # If Rector fails, already exit
