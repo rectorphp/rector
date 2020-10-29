@@ -222,10 +222,20 @@ See [the contribution guide](/CONTRIBUTING.md).
 
 ### Debugging
 
+You can use `--debug` option, that will print nested exceptions output:
+
+```bash
+vendor/bin/rector process src/Controller --dry-run --debug
+```
+
+Or with XDebug:
+
 1. Make sure XDebug is installed and configured
 2. Add `--xdebug` option when running Rector
 
-Without XDebug, you can use `--debug` option, that will print nested exceptions output.
+```bash
+vendor/bin/rector process src/Controller --dry-run --xdebug
+```
 
 <br>
 
