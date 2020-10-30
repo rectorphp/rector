@@ -167,7 +167,7 @@ final class NodeTypeResolver
         }
 
         if ($node instanceof Arg) {
-            throw new ShouldNotHappenException('Arg does not have a type, use $arg->value instead');
+            $node = $node->value;
         }
 
         if ($node instanceof Param || $node instanceof Scalar) {
