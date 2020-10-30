@@ -1,4 +1,4 @@
-# All 600 Rectors Overview
+# All 597 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -21,7 +21,6 @@
 - [DowngradePhp73](#downgradephp73) (1)
 - [DowngradePhp74](#downgradephp74) (7)
 - [DowngradePhp80](#downgradephp80) (6)
-- [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (35)
 - [JMS](#jms) (2)
@@ -5586,67 +5585,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +    * @var string|int
 +    */
 +    private $property;
- }
-```
-
-<br><br>
-
-## DynamicTypeAnalysis
-
-### `AddArgumentTypeWithProbeDataRector`
-
-- class: [`Rector\DynamicTypeAnalysis\Rector\ClassMethod\AddArgumentTypeWithProbeDataRector`](/packages/dynamic-type-analysis/src/Rector/ClassMethod/AddArgumentTypeWithProbeDataRector.php)
-- [test fixtures](/packages/dynamic-type-analysis/tests/Rector/ClassMethod/AddArgumentTypeWithProbeDataRector/Fixture)
-
-Add argument type based on probed data
-
-```diff
- class SomeClass
- {
--    public function run($arg)
-+    public function run(string $arg)
-     {
-     }
- }
-```
-
-<br><br>
-
-### `DecorateMethodWithArgumentTypeProbeRector`
-
-- class: [`Rector\DynamicTypeAnalysis\Rector\ClassMethod\DecorateMethodWithArgumentTypeProbeRector`](/packages/dynamic-type-analysis/src/Rector/ClassMethod/DecorateMethodWithArgumentTypeProbeRector.php)
-- [test fixtures](/packages/dynamic-type-analysis/tests/Rector/ClassMethod/DecorateMethodWithArgumentTypeProbeRector/Fixture)
-
-Add probe that records argument types to `each` method
-
-```diff
- class SomeClass
- {
-     public function run($arg)
-     {
-+        \Rector\DynamicTypeAnalysis\Probe\TypeStaticProbe::recordArgumentType($arg, __METHOD__, 0);
-     }
- }
-```
-
-<br><br>
-
-### `RemoveArgumentTypeProbeRector`
-
-- class: [`Rector\DynamicTypeAnalysis\Rector\StaticCall\RemoveArgumentTypeProbeRector`](/packages/dynamic-type-analysis/src/Rector/StaticCall/RemoveArgumentTypeProbeRector.php)
-- [test fixtures](/packages/dynamic-type-analysis/tests/Rector/StaticCall/RemoveArgumentTypeProbeRector/Fixture)
-
-Clean up probe that records argument types
-
-```diff
--use Rector\DynamicTypeAnalysis\Probe\TypeStaticProbe;
--
- class SomeClass
- {
-     public function run($arg)
-     {
--        TypeStaticProbe::recordArgumentType($arg, __METHOD__, 0);
-     }
  }
 ```
 
