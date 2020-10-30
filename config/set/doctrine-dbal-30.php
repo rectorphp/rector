@@ -18,7 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 new MethodCallRename(
-                    'DBAL\Platforms\AbstractPlatform',
+                    'Doctrine\DBAL\Platforms\AbstractPlatform',
                     'getVarcharTypeDeclarationSQL',
                     'getStringTypeDeclarationSQL'
                 ),
