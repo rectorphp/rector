@@ -1,4 +1,4 @@
-# All 598 Rectors Overview
+# All 599 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -31,7 +31,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (11)
-- [Nette](#nette) (17)
+- [Nette](#nette) (18)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -7838,10 +7838,10 @@ Change under_score names to camelCase
 
 ## Nette
 
-### `AddDatePickerToDateControlRector`
+### `AddNextrasDatePickerToDateControlRector`
 
-- class: [`Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector`](/rules/nette/src/Rector/MethodCall/AddDatePickerToDateControlRector.php)
-- [test fixtures](/rules/nette/tests/Rector/MethodCall/AddDatePickerToDateControlRector/Fixture)
+- class: [`Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector`](/rules/nette/src/Rector/MethodCall/AddNextrasDatePickerToDateControlRector.php)
+- [test fixtures](/rules/nette/tests/Rector/MethodCall/AddNextrasDatePickerToDateControlRector/Fixture)
 
 Nextras/Form upgrade of addDatePicker method call to DateControl assign
 
@@ -8085,6 +8085,29 @@ Use `Nette\Utils\Strings` over bare `preg_match()` and `preg_match_all()` functi
          $content = 'Hi my name is Tom';
 -        preg_match('#Hi#', $content, $matches);
 +        $matches = Strings::match($content, '#Hi#');
+     }
+ }
+```
+
+<br><br>
+
+### `RemoveParentAndNameFromComponentConstructorRector`
+
+- class: [`Rector\Nette\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector`](/rules/nette/src/Rector/ClassMethod/RemoveParentAndNameFromComponentConstructorRector.php)
+- [test fixtures](/rules/nette/tests/Rector/ClassMethod/RemoveParentAndNameFromComponentConstructorRector/Fixture)
+
+Remove `$parent` and `$name` in control constructor
+
+```diff
+ use Nette\Application\UI\Control;
+
+ class SomeControl extends Control
+ {
+-    public function __construct(IContainer $parent = null, $name = null, int $value)
++    public function __construct(int $value)
+     {
+-        parent::__construct($parent, $name);
+         $this->value = $value;
      }
  }
 ```

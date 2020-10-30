@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\MethodCall\AddDatePickerToDateControlRector;
+namespace Rector\Nette\Tests\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
+use Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AddDatePickerToDateControlRectorTest extends AbstractRectorTestCase
+final class AddNextrasDatePickerToDateControlRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class AddDatePickerToDateControlRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return AddDatePickerToDateControlRector::class;
+        return AddNextrasDatePickerToDateControlRector::class;
     }
 }
