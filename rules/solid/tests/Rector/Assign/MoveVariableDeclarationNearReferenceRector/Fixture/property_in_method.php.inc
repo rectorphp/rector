@@ -5,6 +5,7 @@ namespace Rector\SOLID\Tests\Rector\Assign\MoveVariableDeclarationNearReferenceR
 class PropertyInMethod
 {
     private $var;
+
     function myMethod()
     {
         $this->var = 1;

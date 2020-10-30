@@ -17,6 +17,7 @@ use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\Contract\RectorInterfaceAwareInterface;
 use Rector\Core\Testing\Finder\RectorsFinder;
+use Rector\Core\Testing\Guard\FixtureGuard;
 use Rector\Core\Testing\PhpConfigPrinter\PhpConfigPrinterFactory;
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
 use Rector\Set\RectorSetProvider;
@@ -68,6 +69,11 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
     protected static $allRectorContainer;
 
     /**
+     * @var FixtureGuard
+     */
+    protected $fixtureGuard;
+
+    /**
      * @var mixed[]
      */
     private $oldParameterValues = [];
@@ -76,6 +82,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
     {
         $this->runnableRectorFactory = new RunnableRectorFactory();
         $this->smartFileSystem = new SmartFileSystem();
+        $this->fixtureGuard = new FixtureGuard();
 
         if ($this->provideConfigFileInfo() !== null) {
             $configFileInfos = $this->resolveConfigs($this->provideConfigFileInfo());
