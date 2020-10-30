@@ -16,7 +16,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->defaults()
-        ->public();
+        ->public()
+        ->autowire()
+        ->autoconfigure();
 
     $withType = new WithType(new IntegerType());
 

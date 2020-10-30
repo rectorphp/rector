@@ -97,11 +97,7 @@ function resolve_argument_values(ReflectionClass $reflectionClass, object $objec
             }
         }
 
-        if (is_object($resolvedValue)) {
-            $argumentValues[] = inline_value_object($resolvedValue);
-        } else {
-            $argumentValues[] = $resolvedValue;
-        }
+        $argumentValues[] = is_object($resolvedValue) ? inline_value_object($resolvedValue) : $resolvedValue;
     }
 
     return $argumentValues;
