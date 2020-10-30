@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture;
 
 class SomeClass
 {
@@ -21,7 +21,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture;
 
 class SomeClass
 {
