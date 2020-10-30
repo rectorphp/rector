@@ -6,13 +6,16 @@ namespace Rector\Nette\Rector\ClassMethod;
 
 use Nette\Application\UI\Control;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 
 /**
  * @see https://github.com/nette/component-model/commit/1fb769f4602cf82694941530bac1111b3c5cd11b
@@ -21,6 +24,16 @@ use Rector\Core\ValueObject\MethodName;
  */
 final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRector
 {
+    /**
+     * @var StaticCallAnalyzer
+     */
+    private $staticCallAnalyzer;
+
+    public function __construct(StaticCallAnalyzer $staticCallAnalyzer)
+    {
+        $this->staticCallAnalyzer = $staticCallAnalyzer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove $parent and $name in control constructor', [
@@ -72,6 +85,10 @@ CODE_SAMPLE
             return $this->refactorClassMethod($node);
         }
 
+        if ($node instanceof StaticCall) {
+            return $this->refactorStaticCall($node);
+        }
+
         return null;
     }
 
@@ -87,7 +104,10 @@ CODE_SAMPLE
 
         $hasClassMethodChanged = false;
         foreach ($classMethod->params as $param) {
-            if ($param->type !== null && $this->isName($param->type, 'Nette\ComponentModel\IContainer')) {
+            if ($this->isName($param, 'parent') && $param->type !== null && $this->isName(
+                $param->type,
+                'Nette\ComponentModel\IContainer'
+            )) {
                 $this->removeNode($param);
                 $hasClassMethodChanged = true;
             }
@@ -103,5 +123,54 @@ CODE_SAMPLE
         }
 
         return $classMethod;
+    }
+
+    private function refactorStaticCall(StaticCall $staticCall): ?StaticCall
+    {
+        if (! $this->staticCallAnalyzer->isParentCallNamed($staticCall, MethodName::CONSTRUCT)) {
+            return null;
+        }
+
+        $hasStaticCallChanged = false;
+
+        /** @var Arg $staticCallArg */
+        foreach ((array) $staticCall->args as $staticCallArg) {
+            if (! $staticCallArg->value instanceof Variable) {
+                continue;
+            }
+
+            /** @var Variable $variable */
+            $variable = $staticCallArg->value;
+            if (! $this->isNames($variable, ['name', 'parent'])) {
+                continue;
+            }
+
+            $this->removeNode($staticCallArg);
+            $hasStaticCallChanged = true;
+        }
+
+        if ($hasStaticCallChanged === false) {
+            return null;
+        }
+
+        if ($this->shouldRemoveEmptyCall($staticCall)) {
+            $this->removeNode($staticCall);
+            return null;
+        }
+
+        return $staticCall;
+    }
+
+    private function shouldRemoveEmptyCall(StaticCall $staticCall): bool
+    {
+        foreach ($staticCall->args as $arg) {
+            if ($this->isNodeRemoved($arg)) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }
