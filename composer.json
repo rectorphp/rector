@@ -57,6 +57,7 @@
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
+        "cweagans/composer-patches": "^1.7",
         "friendsofphp/php-cs-fixer": "^2.16",
         "nette/application": "^3.0",
         "nette/di": "^3.0",

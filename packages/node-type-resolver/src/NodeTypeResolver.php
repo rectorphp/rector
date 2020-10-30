@@ -259,14 +259,9 @@ final class NodeTypeResolver
         return false;
     }
 
-    public function isBooleanType(Node $node): bool
-    {
-        return $this->isStaticType($node, BooleanType::class);
-    }
-
     public function isPropertyBoolean(Property $property): bool
     {
-        if ($this->isBooleanType($property)) {
+        if ($this->isStaticType($property, BooleanType::class)) {
             return true;
         }
 
@@ -275,7 +270,7 @@ final class NodeTypeResolver
             return false;
         }
 
-        return $this->isBooleanType($defaultNodeValue);
+        return $this->isStaticType($defaultNodeValue, BooleanType::class);
     }
 
     private function addNodeTypeResolver(NodeTypeResolverInterface $nodeTypeResolver): void

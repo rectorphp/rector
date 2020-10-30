@@ -82,11 +82,6 @@ trait NodeTypeResolverTrait
         return $objectType->equals($desiredObjectType);
     }
 
-    public function isBooleanType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isBooleanType($node);
-    }
-
     public function isPropertyBoolean(Property $property): bool
     {
         return $this->nodeTypeResolver->isPropertyBoolean($property);
