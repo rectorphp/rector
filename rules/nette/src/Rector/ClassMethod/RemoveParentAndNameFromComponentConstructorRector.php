@@ -69,26 +69,39 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassMethod) {
-            if (! $this->isInObjectType($node, Control::class)) {
-                return null;
+            return $this->refactorClassMethod($node);
+        }
+
+        return null;
+    }
+
+    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
+    {
+        if (! $this->isInObjectType($classMethod, Control::class)) {
+            return null;
+        }
+
+        if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
+            return null;
+        }
+
+        $hasClassMethodChanged = false;
+        foreach ($classMethod->params as $param) {
+            if ($param->type !== null && $this->isName($param->type, 'Nette\ComponentModel\IContainer')) {
+                $this->removeNode($param);
+                $hasClassMethodChanged = true;
             }
 
-            if (! $this->isName($node, MethodName::CONSTRUCT)) {
-                return null;
-            }
-
-//            if ((array) $node->params === []) {
-//                return null;
-//            }
-
-            foreach ((array) $node->params as $param) {
-                if ($this->isObjectType($param, 'Nette\ComponentModel\IContainer')) {
-                    $this->removeNode($param);
-                }
+            if ($this->isName($param, 'name')) {
+                $this->removeNode($param);
+                $hasClassMethodChanged = true;
             }
         }
-        // change the node
 
-        return $node;
+        if ($hasClassMethodChanged === false) {
+            return null;
+        }
+
+        return $classMethod;
     }
 }
