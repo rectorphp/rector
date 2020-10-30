@@ -26,9 +26,7 @@ jobs:
 
                     -
                         name: Validate Fixtures
-                        run: |
-                            bin/rector validate-fixture-content --ansi
-                            bin/rector validate-fixture-suffix --ansi
+                        run: bin/rector validate-fixture-suffix --ansi
 
                     -
                         name: 'Validate Sets Loading'
@@ -57,7 +55,7 @@ jobs:
                 with:
                     php-version: 7.4
                     coverage: none
-                    tools: composer:v1
+                    tools: composer:v2
 
             -   run: composer install --no-progress --ansi
 
