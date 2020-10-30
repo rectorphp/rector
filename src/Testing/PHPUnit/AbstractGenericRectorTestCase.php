@@ -64,14 +64,14 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
     protected $nodeScopeResolver;
 
     /**
-     * @var Container|ContainerInterface|null
-     */
-    protected static $allRectorContainer;
-
-    /**
      * @var FixtureGuard
      */
     protected $fixtureGuard;
+
+    /**
+     * @var Container|ContainerInterface|null
+     */
+    protected static $allRectorContainer;
 
     /**
      * @var mixed[]
