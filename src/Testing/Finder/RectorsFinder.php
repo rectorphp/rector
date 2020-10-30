@@ -6,6 +6,7 @@ namespace Rector\Core\Testing\Finder;
 
 use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Error\ExceptionCorrector;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -74,6 +75,18 @@ final class RectorsFinder
         }
 
         return $this->sortRectorObjectsByShortClassName($rectors);
+    }
+
+    /**
+     * @return PhpRectorInterface[]
+     */
+    public function findAndCreatePhpRectors(): array
+    {
+        $coreRectors = $this->findInDirectoriesAndCreate(self::RECTOR_PATHS);
+
+        return array_filter($coreRectors, function (RectorInterface $rector): bool {
+            return $rector instanceof PhpRectorInterface;
+        });
     }
 
     /**
