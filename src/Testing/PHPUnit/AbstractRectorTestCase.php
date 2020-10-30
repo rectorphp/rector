@@ -11,6 +11,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Core\Testing\Guard\FixtureGuard;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
@@ -42,6 +43,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
     {
+        $fixtureGuard = new FixtureGuard();
+
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $fixtureFileInfo,
             $this->autoloadTestFixture
