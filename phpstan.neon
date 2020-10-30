@@ -237,9 +237,6 @@ parameters:
 
         - '#Method Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:createUnionOrSingleType\(\) should return PHPStan\\Type\\MixedType\|PHPStan\\Type\\UnionType but returns PHPStan\\Type\\Type#'
 
-        # test
-        - '#Class Rector\\DynamicTypeAnalysis\\Tests\\Rector\\ClassMethod\\AddArgumentTypeWithProbeDataRector\\Fixture\\SomeClass not found#'
-
         -
             message: '#Class Rector\\Generic\\Tests\\Rector\\StaticCall\\SwapClassMethodArgumentsRector\\Fixture\\SomeClass not found#'
             path: rules/generic/tests/Rector/StaticCall/SwapClassMethodArgumentsRector/SwapClassMethodArgumentsRectorTest.php
