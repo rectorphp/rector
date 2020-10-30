@@ -31,6 +31,16 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
     private const COMPONENT_CONTAINER_CLASS = 'Nette\ComponentModel\IContainer';
 
     /**
+     * @var string
+     */
+    private const PARENT = 'parent';
+
+    /**
+     * @var string
+     */
+    private const NAME = 'name';
+
+    /**
      * @var StaticCallAnalyzer
      */
     private $staticCallAnalyzer;
@@ -122,7 +132,7 @@ CODE_SAMPLE
 
         $hasClassMethodChanged = false;
         foreach ($classMethod->params as $param) {
-            if ($this->isName($param, 'parent') && $param->type !== null && $this->isName(
+            if ($this->isName($param, self::PARENT) && $param->type !== null && $this->isName(
                 $param->type,
                     self::COMPONENT_CONTAINER_CLASS
             )) {
@@ -130,7 +140,7 @@ CODE_SAMPLE
                 $hasClassMethodChanged = true;
             }
 
-            if ($this->isName($param, 'name')) {
+            if ($this->isName($param, self::NAME)) {
                 $this->removeNode($param);
                 $hasClassMethodChanged = true;
             }
@@ -159,7 +169,7 @@ CODE_SAMPLE
 
             /** @var Variable $variable */
             $variable = $staticCallArg->value;
-            if (! $this->isNames($variable, ['name', 'parent'])) {
+            if (! $this->isNames($variable, [self::NAME, self::PARENT])) {
                 continue;
             }
 
@@ -179,19 +189,6 @@ CODE_SAMPLE
         return $staticCall;
     }
 
-    private function shouldRemoveEmptyCall(StaticCall $staticCall): bool
-    {
-        foreach ($staticCall->args as $arg) {
-            if ($this->isNodeRemoved($arg)) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
-    }
-
     private function refactorNew(New_ $new): ?New_
     {
         $parameterNames = $this->methodReflectionProvider->provideParameterNamesByNew($new);
@@ -204,7 +201,7 @@ CODE_SAMPLE
             }
 
             $parameterName = $parameterNames[$position];
-            if (! in_array($parameterName, ['parent', 'name'], true)) {
+            if (! in_array($parameterName, [self::PARENT, self::NAME], true)) {
                 continue;
             }
 
@@ -212,10 +209,23 @@ CODE_SAMPLE
             $this->removeNode($arg);
         }
 
-        if ($hasNewChanged === false) {
+        if (! $hasNewChanged) {
             return null;
         }
 
         return $new;
+    }
+
+    private function shouldRemoveEmptyCall(StaticCall $staticCall): bool
+    {
+        foreach ($staticCall->args as $arg) {
+            if ($this->isNodeRemoved($arg)) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }
