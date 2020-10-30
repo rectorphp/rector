@@ -2,7 +2,7 @@
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClassMarkTruthyInsideOrAnd
+class SkipSomeClassMarkTruthyInsideOrAnd
 {
     public function run()
     {
