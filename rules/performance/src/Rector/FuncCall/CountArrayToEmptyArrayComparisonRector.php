@@ -176,22 +176,6 @@ CODE_SAMPLE
             return $node->cond;
         }
 
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($node instanceof BooleanNot && $node->expr === $funcCall) {
-            $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-            $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-
-            if ($previous instanceof Expr || $next instanceof Expr) {
-                return null;
-            }
-
-            $identical = new Identical($expr, new Array_([]));
-            $this->addNodeBeforeNode($identical, $node);
-            $this->removeNode($node);
-
-            return $identical;
-        }
-
         return null;
     }
 
