@@ -9,6 +9,7 @@ use Rector\Core\Console\Command\AbstractCommand;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Testing\Finder\RectorsFinder;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
@@ -16,6 +17,7 @@ use Symplify\PackageBuilder\Console\ShellCode;
 
 final class NodeTypesStatisticsCommand extends AbstractCommand
 {
+    const UNUSED = 'unused';
     /**
      * @var SymfonyStyle
      */
@@ -32,6 +34,8 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
     {
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[DOCS] Show statistics of used and unused node types in PHP Rector');
+
+        $this->addOption(self::UNUSED, null, InputOption::VALUE_NONE, 'Show unused nodes');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -42,8 +46,8 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
         $nodeTypesCount = $this->resolveNodeTypesByCount($nodeTypes);
         $this->printMostUsedNodeTypesTable($nodeTypesCount);
 
-        $uniqueNodeTypes = array_unique($nodeTypes);
-        $uniqueNodeTypesCount = count($uniqueNodeTypes);
+        $uniqueUsedNodeTypes = array_unique($nodeTypes);
+        $uniqueNodeTypesCount = count($uniqueUsedNodeTypes);
         $message = sprintf(
             'In total, %d Rectors listens to %d node types - with only %d unique types',
             count($phpRectors),
@@ -53,17 +57,14 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
 
         $this->symfonyStyle->success($message);
 
-        $robotLoader= new RobotLoader();
-        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/nodes');
-        $robotLoader->addDirectory(__DIR__ . '/../../../../vendor/nikic/php-parser/lib/PhpParser/Node');
-        $robotLoader->rebuild();
+        if ($input->getOption(self::UNUSED)) {
+            $unusedNodeTypes = array_diff($this->getNodeClasses(), $uniqueUsedNodeTypes);
+            sort($unusedNodeTypes);
+            $this->symfonyStyle->listing($unusedNodeTypes);
 
-        $allNodeTypes = array_keys($robotLoader->getIndexedClasses());
-        $unusedNodeTypes = array_diff($allNodeTypes, $uniqueNodeTypes);
-
-        // explicitly,
-        $this->symfonyStyle->listing($unusedNodeTypes);
-        // @todo - print nodes that are not used at all
+            $message = sprintf('Found %d unused nodes', count($unusedNodeTypes));
+            $this->symfonyStyle->title($message);
+        }
 
         return ShellCode::SUCCESS;
     }
@@ -127,5 +128,18 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
             ++$i;
         }
         return $rows;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getNodeClasses(): array
+    {
+        $robotLoader = new RobotLoader();
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/php_parser_nodes');
+        $robotLoader->addDirectory(__DIR__ . '/../../../../vendor/nikic/php-parser/lib/PhpParser/Node');
+        $robotLoader->rebuild();
+
+        return array_keys($robotLoader->getIndexedClasses());
     }
 }
