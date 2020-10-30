@@ -174,6 +174,13 @@ CODE_SAMPLE
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($node instanceof BooleanNot && $node->expr === $funcCall && ! $this->isConditional($parent)) {
+            $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+            $next = $node->getAttribute(AttributeKey::NEXT_NODE);
+
+            if ($previous instanceof Expr || $next instanceof Expr) {
+                return null;
+            }
+
             $identical = new Identical($expr, new Array_([]));
             $this->addNodeBeforeNode($identical, $node);
             $this->removeNode($node);
