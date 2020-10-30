@@ -160,13 +160,9 @@ CODE_SAMPLE
         return $node instanceof If_ || $node instanceof ElseIf_;
     }
 
-    private function processMarkTruthyNegation(BooleanNot $booleanNot)
+    private function processMarkTruthyNegation(BooleanNot $booleanNot): ?Identical
     {
-        if (! $booleanNot->expr instanceof FuncCall) {
-            return null;
-        }
-
-        if ($this->getName($booleanNot->expr) !== 'count') {
+        if (! $booleanNot->expr instanceof FuncCall || $this->getName($booleanNot->expr) !== 'count') {
             return null;
         }
 
