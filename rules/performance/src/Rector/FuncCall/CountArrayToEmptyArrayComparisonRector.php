@@ -52,15 +52,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class, If_::class, ElseIf_::class];
+        return [FuncCall::class, If_::class, ElseIf_::class, BooleanNot::class];
     }
 
     /**
-     * @param FuncCall|ElseIf_|If_ $node
+     * @param FuncCall|If_|ElseIf_|BooleanNot $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node instanceof FuncCall) {
+        if ($node instanceof BooleanNot) {
+            return $this->processMarkTruthyNegation($node);
+        }
+
+        if (! $node instanceof FuncCall && ! $node instanceof BooleanNot) {
             return $this->processMarkTruthyNegationInsideConditional($node);
         }
 
@@ -173,7 +177,7 @@ CODE_SAMPLE
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($node instanceof BooleanNot && $node->expr === $funcCall && ! $this->isConditional($parent)) {
+        if ($node instanceof BooleanNot && $node->expr === $funcCall) {
             $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
             $next = $node->getAttribute(AttributeKey::NEXT_NODE);
 
@@ -194,5 +198,26 @@ CODE_SAMPLE
     private function isConditional(?Node $node): bool
     {
         return $node instanceof If_ || $node instanceof ElseIf_;
+    }
+
+    private function processMarkTruthyNegation(BooleanNot $booleanNot)
+    {
+        if (! $booleanNot->expr instanceof FuncCall) {
+            return null;
+        }
+
+        if ($this->getName($booleanNot->expr) !== 'count') {
+            return null;
+        }
+
+        /** @var Expr $expr */
+        $expr = $booleanNot->expr->args[0]->value;
+
+        // not pass array type, skip
+        if (! $this->isArray($expr)) {
+            return null;
+        }
+
+        return new Identical($expr, new Array_([]));
     }
 }
