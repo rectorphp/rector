@@ -114,7 +114,8 @@ CODE_SAMPLE
     ): ?Variable {
         $desiredVariableName = $this->getName($desiredVariable);
 
-        return $this->betterNodeFinder->findFirst(
+        /** @var Variable|null $foundVariable */
+        $foundVariable = $this->betterNodeFinder->findFirst(
             (array) $parentScopeNode->stmts,
             function (Node $node) use ($desiredVariableName, $assign): bool {
                 if (! $node instanceof Variable) {
@@ -128,12 +129,8 @@ CODE_SAMPLE
                 return $this->isName($node, $desiredVariableName);
             }
         );
-    }
 
-    private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
-    {
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentNode === $assign;
+        return $foundVariable;
     }
 
     private function shouldSkipUsedVariable(Variable $variable): bool
@@ -147,5 +144,11 @@ CODE_SAMPLE
 
         // possibly service of value object, that changes inner state
         return $variableType instanceof TypeWithClassName;
+    }
+
+    private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
+    {
+        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        return $parentNode === $assign;
     }
 }
