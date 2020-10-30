@@ -2,12 +2,17 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\UnionType;
+use PHPStan\Type\VoidType;
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter;
-use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -19,7 +24,9 @@ use Rector\Renaming\ValueObject\RenameProperty;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
+use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # source: https://book.cakephp.org/4/en/appendices/4-0-migration-guide.html
@@ -79,89 +86,102 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
-                new AddReturnTypeDeclaration('Cake\Http\BaseApplication', 'bootstrap', 'void'),
-                new AddReturnTypeDeclaration('Cake\Http\BaseApplication', 'bootstrapCli', 'void'),
-                new AddReturnTypeDeclaration('Cake\Http\BaseApplication', 'middleware', 'Cake\Http\MiddlewareQueue'),
-                new AddReturnTypeDeclaration('Cake\Console\Shell', 'initialize', 'void'),
-                new AddReturnTypeDeclaration('Cake\Controller\Component', 'initialize', 'void'),
-                new AddReturnTypeDeclaration('Cake\Controller\Controller', 'initialize', 'void'),
-                new AddReturnTypeDeclaration('Cake\Controller\Controller', 'render', 'Cake\Http\Response'),
-                new AddReturnTypeDeclaration('Cake\Form\Form', 'validate', 'bool'),
-                new AddReturnTypeDeclaration('Cake\Form\Form', '_buildSchema', 'Cake\Form\Schema'),
-                new AddReturnTypeDeclaration('Cake\ORM\Behavior', 'initialize', 'void'),
-                new AddReturnTypeDeclaration('Cake\ORM\Table', 'initialize', 'void'),
-                new AddReturnTypeDeclaration('Cake\ORM\Table', 'updateAll', 'int'),
-                new AddReturnTypeDeclaration('Cake\ORM\Table', 'deleteAll', 'int'),
-                new AddReturnTypeDeclaration('Cake\ORM\Table', 'validationDefault', 'Cake\Validation\Validator'),
-                new AddReturnTypeDeclaration('Cake\ORM\Table', 'buildRules', 'Cake\ORM\RulesChecker'),
-                new AddReturnTypeDeclaration('Cake\View\Helper', 'initialize', 'void'), ]),
+                new AddReturnTypeDeclaration('Cake\Http\BaseApplication', 'bootstrap', new VoidType()),
+                new AddReturnTypeDeclaration('Cake\Http\BaseApplication', 'bootstrapCli', new VoidType()),
+                new AddReturnTypeDeclaration('Cake\Http\BaseApplication', 'middleware', new ObjectType(
+                    'Cake\Http\MiddlewareQueue'
+                )),
+                new AddReturnTypeDeclaration('Cake\Console\Shell', 'initialize', new VoidType()),
+                new AddReturnTypeDeclaration('Cake\Controller\Component', 'initialize', new VoidType()),
+                new AddReturnTypeDeclaration('Cake\Controller\Controller', 'initialize', new VoidType()),
+                new AddReturnTypeDeclaration('Cake\Controller\Controller', 'render', new ObjectType(
+                    'Cake\Http\Response'
+                )),
+                new AddReturnTypeDeclaration('Cake\Form\Form', 'validate', new BooleanType()),
+                new AddReturnTypeDeclaration('Cake\Form\Form', '_buildSchema', new ObjectType('Cake\Form\Schema')),
+                new AddReturnTypeDeclaration('Cake\ORM\Behavior', 'initialize', new VoidType()),
+                new AddReturnTypeDeclaration('Cake\ORM\Table', 'initialize', new VoidType()),
+                new AddReturnTypeDeclaration('Cake\ORM\Table', 'updateAll', new IntegerType()),
+                new AddReturnTypeDeclaration('Cake\ORM\Table', 'deleteAll', new IntegerType()),
+                new AddReturnTypeDeclaration('Cake\ORM\Table', 'validationDefault', new ObjectType(
+                    'Cake\Validation\Validator'
+                )),
+                new AddReturnTypeDeclaration('Cake\ORM\Table', 'buildRules', new ObjectType('Cake\ORM\RulesChecker')),
+                new AddReturnTypeDeclaration('Cake\View\Helper', 'initialize', new VoidType()), ]),
         ]]);
+
+    $eventInterfaceObjectType = new ObjectType('Cake\Event\EventInterface');
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
-                new AddParamTypeDeclaration('Cake\Form\Form', 'getData', 0, '?string'),
-                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeFind', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'buildValidator', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'buildRules', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeRules', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'afterRules', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeSave', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'afterSave', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeDelete', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'afterDelete', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeFind', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Table', 'buildValidator', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Table', 'buildRules', 0, 'Cake\ORM\RulesChecker'),
-                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeRules', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Table', 'afterRules', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeSave', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Table', 'afterSave', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeDelete', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\ORM\Table', 'afterDelete', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration(
+                    'Cake\Form\Form',
+                    'getData',
+                    0,
+                    new UnionType([new StringType(), new NullType()])
+                ),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeFind', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'buildValidator', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'buildRules', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeRules', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'afterRules', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeSave', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'afterSave', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeDelete', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'afterDelete', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeFind', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'buildValidator', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'buildRules', 0, new ObjectType('Cake\ORM\RulesChecker')),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeRules', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'afterRules', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeSave', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'afterSave', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeDelete', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'afterDelete', 0, $eventInterfaceObjectType),
                 new AddParamTypeDeclaration(
                     'Cake\Controller\Controller',
                     'beforeFilter',
                     0,
-                    'Cake\Event\EventInterface'
+                    $eventInterfaceObjectType
                 ),
                 new AddParamTypeDeclaration(
                     'Cake\Controller\Controller',
                     'afterFilter',
                     0,
-                    'Cake\Event\EventInterface'
+                    $eventInterfaceObjectType
                 ),
                 new AddParamTypeDeclaration(
                     'Cake\Controller\Controller',
                     'beforeRender',
                     0,
-                    'Cake\Event\EventInterface'
+                    $eventInterfaceObjectType
                 ),
                 new AddParamTypeDeclaration(
                     'Cake\Controller\Controller',
                     'beforeRedirect',
                     0,
-                    'Cake\Event\EventInterface'
+                    $eventInterfaceObjectType
                 ),
-                new AddParamTypeDeclaration('Cake\Controller\Component', 'shutdown', 0, 'Cake\Event\EventInterface'),
-                new AddParamTypeDeclaration('Cake\Controller\Component', 'startup', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\Controller\Component', 'shutdown', 0, $eventInterfaceObjectType),
+                new AddParamTypeDeclaration('Cake\Controller\Component', 'startup', 0, $eventInterfaceObjectType),
                 new AddParamTypeDeclaration(
                     'Cake\Controller\Component',
                     'beforeFilter',
                     0,
-                    'Cake\Event\EventInterface'
+                    $eventInterfaceObjectType
                 ),
                 new AddParamTypeDeclaration(
                     'Cake\Controller\Component',
                     'beforeRender',
                     0,
-                    'Cake\Event\EventInterface'
+                    $eventInterfaceObjectType
                 ),
                 new AddParamTypeDeclaration(
                     'Cake\Controller\Component',
                     'beforeRedirect',
                     0,
-                    'Cake\Event\EventInterface'
+                    $eventInterfaceObjectType
                 ),
             ]),
         ]]);

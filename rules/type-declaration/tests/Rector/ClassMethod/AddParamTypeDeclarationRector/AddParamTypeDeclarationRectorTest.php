@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector;
 
 use Iterator;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ClassMetadataFactory;
@@ -35,13 +37,18 @@ final class AddParamTypeDeclarationRectorTest extends AbstractRectorTestCase
         return [
             AddParamTypeDeclarationRector::class => [
                 AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => [
-                    new AddParamTypeDeclaration(ParentInterfaceWithChangeTypeInterface::class, 'process', 0, 'string'),
-                    new AddParamTypeDeclaration(ParserInterface::class, 'parse', 0, 'string'),
+                    new AddParamTypeDeclaration(
+                        ParentInterfaceWithChangeTypeInterface::class,
+                        'process',
+                        0,
+                        new StringType()
+                    ),
+                    new AddParamTypeDeclaration(ParserInterface::class, 'parse', 0, new StringType()),
                     new AddParamTypeDeclaration(
                         ClassMetadataFactory::class,
                         'setEntityManager',
                         0,
-                        'Doctrine\ORM\EntityManagerInterface'
+                        new ObjectType('Doctrine\ORM\EntityManagerInterface')
                     ),
                 ],
             ],

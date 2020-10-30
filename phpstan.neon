@@ -680,3 +680,7 @@ parameters:
                 - packages/better-php-doc-parser/src/PartPhpDocTagPrinter/Behavior/ArrayPartPhpDocTagPrinterTrait.php # 70
                 - packages/better-php-doc-parser/src/PhpDocNode/PrintTagValueNodeTrait.php # 54
 
+        # allow in new <types> config
+        -
+             message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\. You have \d+ nesting#'
+             path: config/set/*

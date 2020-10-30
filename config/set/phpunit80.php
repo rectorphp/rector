@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\VoidType;
 use Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
@@ -11,7 +11,9 @@ use Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
+use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -23,7 +25,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
                 // https://github.com/rectorphp/rector/issues/1024 - no type, $dataName
-                new AddParamTypeDeclaration('PHPUnit\Framework\TestCase', '__construct', 2, ''),
+                new AddParamTypeDeclaration('PHPUnit\Framework\TestCase', '__construct', 2, new MixedType()),
             ]),
         ]]);
 
@@ -43,16 +45,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects(
-                [
-                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'setUpBeforeClass', 'void'),
-                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'setUp', 'void'),
-                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'assertPreConditions', 'void'),
-                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'assertPostConditions', 'void'),
-                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'tearDown', 'void'),
-                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'tearDownAfterClass', 'void'),
-                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'onNotSuccessfulTest', 'void'), ]
-            ),
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+                new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'setUpBeforeClass', new VoidType()),
+                new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'setUp', new VoidType()),
+                new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'assertPreConditions', new VoidType()),
+                new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'assertPostConditions', new VoidType()),
+                new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'tearDown', new VoidType()),
+                new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'tearDownAfterClass', new VoidType()),
+                new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'onNotSuccessfulTest', new VoidType()),
+            ]),
         ]]);
 
     $services->set(ReplaceAssertArraySubsetRector::class);
