@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
+use Rector\SOLID\Rector\Assign\MoveVariableDeclarationNearReferenceRector;
 use Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector;
 use Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
@@ -23,4 +24,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RepeatedLiteralToClassConstantRector::class);
     $services->set(RemoveAlwaysElseRector::class);
     $services->set(UseMessageVariableForSprintfInSymfonyStyleRector::class);
+
+    // this one requires to cover edge cases
+    // $services->set(MoveVariableDeclarationNearReferenceRector::class);
 };
