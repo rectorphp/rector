@@ -95,6 +95,23 @@ CODE_SAMPLE
         return $this->processMarkTruthy($parent, $node, $expr);
     }
 
+    private function processMarkTruthyNegation(BooleanNot $booleanNot): ?Identical
+    {
+        if (! $booleanNot->expr instanceof FuncCall || $this->getName($booleanNot->expr) !== 'count') {
+            return null;
+        }
+
+        /** @var Expr $expr */
+        $expr = $booleanNot->expr->args[0]->value;
+
+        // not pass array type, skip
+        if (! $this->isArray($expr)) {
+            return null;
+        }
+
+        return new Identical($expr, new Array_([]));
+    }
+
     private function isArray(Expr $expr): bool
     {
         /** @var Scope|null $scope */
@@ -158,22 +175,5 @@ CODE_SAMPLE
     private function isConditional(?Node $node): bool
     {
         return $node instanceof If_ || $node instanceof ElseIf_;
-    }
-
-    private function processMarkTruthyNegation(BooleanNot $booleanNot): ?Identical
-    {
-        if (! $booleanNot->expr instanceof FuncCall || $this->getName($booleanNot->expr) !== 'count') {
-            return null;
-        }
-
-        /** @var Expr $expr */
-        $expr = $booleanNot->expr->args[0]->value;
-
-        // not pass array type, skip
-        if (! $this->isArray($expr)) {
-            return null;
-        }
-
-        return new Identical($expr, new Array_([]));
     }
 }
