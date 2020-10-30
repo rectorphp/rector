@@ -1,4 +1,4 @@
-# All 597 Rectors Overview
+# All 598 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -64,7 +64,7 @@
 - [RemovingStatic](#removingstatic) (6)
 - [Renaming](#renaming) (10)
 - [Restoration](#restoration) (9)
-- [SOLID](#solid) (13)
+- [SOLID](#solid) (14)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
 - [Symfony](#symfony) (34)
@@ -14222,6 +14222,23 @@ Classes that have no children nor are used, should have abstract
 -class PossibleAbstractClass
 +abstract class PossibleAbstractClass
  {
+ }
+```
+
+<br><br>
+
+### `MoveVariableDeclarationNearReferenceRector`
+
+- class: [`Rector\SOLID\Rector\Assign\MoveVariableDeclarationNearReferenceRector`](/rules/solid/src/Rector/Assign/MoveVariableDeclarationNearReferenceRector.php)
+- [test fixtures](/rules/solid/tests/Rector/Assign/MoveVariableDeclarationNearReferenceRector/Fixture)
+
+Move variable declaration near its reference
+
+```diff
+-$var = 1;
+ if ($condition === null) {
++    $var = 1;
+     return $var;
  }
 ```
 

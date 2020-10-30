@@ -49,5 +49,6 @@ final class ControlStructure
         Case_::class,
         Match_::class,
         Switch_::class,
+        Foreach_::class,
     ];
 }
