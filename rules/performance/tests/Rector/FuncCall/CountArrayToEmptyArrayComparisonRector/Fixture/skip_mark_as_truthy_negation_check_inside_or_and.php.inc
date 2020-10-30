@@ -8,7 +8,9 @@ class SkipSomeClassMarkTruthyInsideOrAnd
     {
         $data = [];
         true || ! count($data);
+        ! count($data) || true;
         true && ! count($data);
+        ! count($data) && true;
     }
 }
 
