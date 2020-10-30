@@ -17,7 +17,8 @@ use Symplify\PackageBuilder\Console\ShellCode;
 
 final class NodeTypesStatisticsCommand extends AbstractCommand
 {
-    const UNUSED = 'unused';
+    public const UNUSED = 'unused';
+
     /**
      * @var SymfonyStyle
      */

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\Encapsed;
+use PhpParser\Node\Scalar\EncapsedStringPart;
 
-return new Encapsed([new Variable('variableName')]);
+return new EncapsedStringPart('enscapsed');

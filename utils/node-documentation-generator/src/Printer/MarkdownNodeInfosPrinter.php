@@ -16,6 +16,7 @@ final class MarkdownNodeInfosPrinter
     {
         $contentLines = [];
         $contentLines[] = '# Node Overview';
+        $contentLines[] = 'Here you can find overview of commonly used nodes and how to build PHP code from them. For all nodes, [check php-parser code](https://github.com/nikic/PHP-Parser/tree/master/lib/PhpParser/Node).';
 
         foreach ($nodeInfos as $nodeInfo) {
             $contentLines[] = sprintf('## `%s`', $nodeInfo->getClass());
