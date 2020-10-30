@@ -310,10 +310,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[
-            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects([new ArrayToFluentCall('ArticlesTable', [
-                'foreignKey' => 'setForeignKey',
-                'propertyName' => 'setProperty',
-            ])]),
+            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects([
+                new ArrayToFluentCall('ArticlesTable', ['setForeignKey', 'setProperty']), ]
+            ),
         ]]);
 };
 ```
@@ -16237,6 +16236,7 @@ Add param types where needed
 
 declare(strict_types=1);
 
+use PHPStan\Type\StringType;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
@@ -16248,7 +16248,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
-                new AddParamTypeDeclaration('SomeClass', 'process', 0, 'string'),
+                new AddParamTypeDeclaration('SomeClass', 'process', 0, new StringType()),
             ]),
         ]]);
 };
@@ -16280,6 +16280,8 @@ Changes defined return typehint of method and class.
 
 declare(strict_types=1);
 
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
@@ -16291,7 +16293,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
-                new AddReturnTypeDeclaration('SomeClass', 'getData', 'array'),
+                new AddReturnTypeDeclaration('SomeClass', 'getData', new ArrayType(new MixedType(false, null), new MixedType(
+                    false,
+                    null
+                ))),
             ]),
         ]]);
 };
