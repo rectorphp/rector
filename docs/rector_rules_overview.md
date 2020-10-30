@@ -7838,10 +7838,10 @@ Change under_score names to camelCase
 
 ## Nette
 
-### `AddDatePickerToDateControlRector`
+### `AddNextrasDatePickerToDateControlRector`
 
-- class: [`Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector`](/rules/nette/src/Rector/MethodCall/AddDatePickerToDateControlRector.php)
-- [test fixtures](/rules/nette/tests/Rector/MethodCall/AddDatePickerToDateControlRector/Fixture)
+- class: [`Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector`](/rules/nette/src/Rector/MethodCall/AddNextrasDatePickerToDateControlRector.php)
+- [test fixtures](/rules/nette/tests/Rector/MethodCall/AddNextrasDatePickerToDateControlRector/Fixture)
 
 Nextras/Form upgrade of addDatePicker method call to DateControl assign
 

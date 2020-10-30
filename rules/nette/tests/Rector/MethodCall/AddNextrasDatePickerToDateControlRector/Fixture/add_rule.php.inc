@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\MethodCall\AddDatePickerToDateControlRector\Fixture;
+namespace Rector\Nette\Tests\Rector\MethodCall\AddNextrasDatePickerToDateControlRector\Fixture;
 
 use Nette\Application\UI\Form;
 
@@ -18,7 +18,7 @@ class AddRule
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\MethodCall\AddDatePickerToDateControlRector\Fixture;
+namespace Rector\Nette\Tests\Rector\MethodCall\AddNextrasDatePickerToDateControlRector\Fixture;
 
 use Nette\Application\UI\Form;
 

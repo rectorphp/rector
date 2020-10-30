@@ -21,9 +21,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
- * @see \Rector\Nette\Tests\Rector\MethodCall\AddDatePickerToDateControlRector\AddDatePickerToDateControlRectorTest
+ * @see \Rector\Nette\Tests\Rector\MethodCall\AddNextrasDatePickerToDateControlRector\AddNextrasDatePickerToDateControlRectorTest
  */
-final class AddDatePickerToDateControlRector extends AbstractRector
+final class AddNextrasDatePickerToDateControlRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
