@@ -310,10 +310,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[
-            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects([new ArrayToFluentCall('ArticlesTable', [
-                'foreignKey' => 'setForeignKey',
-                'propertyName' => 'setProperty',
-            ])]),
+            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects([
+                new ArrayToFluentCall('ArticlesTable', ['setForeignKey', 'setProperty']), ]
+            ),
         ]]);
 };
 ```
