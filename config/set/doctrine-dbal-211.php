@@ -15,85 +15,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecations-in-the-wrapper-connection-class
-                new MethodCallRename(
-                    'Doctrine\DBAL\Connection',
-                    'executeUpdate',
-                    'executeStatement'
-                ),
-                new MethodCallRename(
-                    'Doctrine\DBAL\Connection',
-                    'exec',
-                    'executeStatement'
-                ),
-                new MethodCallRename(
-                    'Doctrine\DBAL\Connection',
-                    'query',
-                    'executeQuery'
-                ),
+                new MethodCallRename('Doctrine\DBAL\Connection', 'executeUpdate', 'executeStatement'),
+                new MethodCallRename('Doctrine\DBAL\Connection', 'exec', 'executeStatement'),
+                new MethodCallRename('Doctrine\DBAL\Connection', 'query', 'executeQuery'),
                 // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#driverexceptiongeterrorcode-is-deprecated
-                new MethodCallRename(
-                    'Doctrine\DBAL\Driver\DriverException',
-                    'getErrorCode',
-                    'getSQLState'
-                ),
+                new MethodCallRename('Doctrine\DBAL\Driver\DriverException', 'getErrorCode', 'getSQLState'),
                 // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecated-expressionbuilder-methods
-                new MethodCallRename(
-                    'Doctrine\DBAL\Query\Expression\ExpressionBuilder',
-                    'andX',
-                    'and'
-                ),
-                new MethodCallRename(
-                    'Doctrine\DBAL\Query\Expression\ExpressionBuilder',
-                    'orX',
-                    'or'
-                ),
+                new MethodCallRename('Doctrine\DBAL\Query\Expression\ExpressionBuilder', 'andX', 'and'),
+                new MethodCallRename('Doctrine\DBAL\Query\Expression\ExpressionBuilder', 'orX', 'or'),
                 // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecated-compositeexpression-methods
-                new MethodCallRename(
-                    'Doctrine\DBAL\Query\Expression\CompositeExpression',
-                    'add',
-                    'with'
-                ),
-                new MethodCallRename(
-                    'Doctrine\DBAL\Query\Expression\CompositeExpression',
-                    'addMultiple',
-                    'with'
-                ),
+                new MethodCallRename('Doctrine\DBAL\Query\Expression\CompositeExpression', 'add', 'with'),
+                new MethodCallRename('Doctrine\DBAL\Query\Expression\CompositeExpression', 'addMultiple', 'with'),
                 // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecated-fetchmode-and-the-corresponding-methods
-                new MethodCallRename(
-                    'Doctrine\DBAL\Connection',
-                    'fetchAssoc',
-                    'fetchAssociative'
-                ),
-                new MethodCallRename(
-                    'Doctrine\DBAL\Connection',
-                    'fetchArray',
-                    'fetchNumeric'
-                ),
-                new MethodCallRename(
-                    'Doctrine\DBAL\Connection',
-                    'fetchColumn',
-                    'fetchOne'
-                ),
-                new MethodCallRename(
-                    'Doctrine\DBAL\Connection',
-                    'fetchAll',
-                    'fetchAllAssociative'
-                ),
-                new MethodCallRename(
-                    'Doctrine\DBAL\Statement',
-                    'fetchAssoc',
-                    'fetchAssociative'
-                ),
-                new MethodCallRename(
-                    'Doctrine\DBAL\Statement',
-                    'fetchColumn',
-                    'fetchOne'
-                ),
-                new MethodCallRename(
-                    'Doctrine\DBAL\Statement',
-                    'fetchAll',
-                    'fetchAllAssociative'
-                ),
+                new MethodCallRename('Doctrine\DBAL\Connection', 'fetchAssoc', 'fetchAssociative'),
+                new MethodCallRename('Doctrine\DBAL\Connection', 'fetchArray', 'fetchNumeric'),
+                new MethodCallRename('Doctrine\DBAL\Connection', 'fetchColumn', 'fetchOne'),
+                new MethodCallRename('Doctrine\DBAL\Connection', 'fetchAll', 'fetchAllAssociative'),
+                new MethodCallRename('Doctrine\DBAL\Statement', 'fetchAssoc', 'fetchAssociative'),
+                new MethodCallRename('Doctrine\DBAL\Statement', 'fetchColumn', 'fetchOne'),
+                new MethodCallRename('Doctrine\DBAL\Statement', 'fetchAll', 'fetchAllAssociative'),
             ]),
         ]]);
 
