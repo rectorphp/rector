@@ -29,7 +29,7 @@ final class RectorsFinder
      */
     public function findCoreRectorClasses(): array
     {
-        $allRectors = $this->findAndCreateCoreRectors();
+        $allRectors = $this->findInDirectoriesAndCreate(self::RECTOR_PATHS);
 
         $rectorClasses = array_map(function (RectorInterface $rector): string {
             return get_class($rector);
@@ -75,6 +75,18 @@ final class RectorsFinder
         }
 
         return $this->sortRectorObjectsByShortClassName($rectors);
+    }
+
+    /**
+     * @return PhpRectorInterface[]
+     */
+    public function findAndCreatePhpRectors(): array
+    {
+        $coreRectors = $this->findInDirectoriesAndCreate(self::RECTOR_PATHS);
+
+        return array_filter($coreRectors, function (RectorInterface $rector): bool {
+            return $rector instanceof PhpRectorInterface;
+        });
     }
 
     /**
@@ -143,17 +155,5 @@ final class RectorsFinder
         );
 
         return $objects;
-    }
-
-    /**
-     * @return PhpRectorInterface[]
-     */
-    public function findAndCreatePhpRectors(): array
-    {
-        $coreRectors = $this->findInDirectoriesAndCreate(self::RECTOR_PATHS);
-
-        return array_filter($coreRectors, function (RectorInterface $rector): bool {
-            return $rector instanceof PhpRectorInterface;
-        });
     }
 }
