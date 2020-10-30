@@ -6,6 +6,7 @@ use PHPStan\Type\VoidType;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -31,5 +32,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
                 new AddReturnTypeDeclaration('Doctrine\DBAL\Connection', 'ping', new VoidType()),
             ]),
+        ]]);
+
+    # https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecated-abstractionresult
+    $services->set(RenameClassRector::class)
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'Doctrine\DBAL\Abstraction\Result' => 'Doctrine\DBAL\Result',
+            ],
         ]]);
 };
