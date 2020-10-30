@@ -52,16 +52,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class, If_::class, ElseIf_::class];
+        return [FuncCall::class, BooleanNot::class];
     }
 
     /**
-     * @param FuncCall|ElseIf_|If_ $node
+     * @param FuncCall|BooleanNot $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node instanceof FuncCall) {
-            return $this->processMarkTruthyNegationInsideConditional($node);
+        if ($node instanceof BooleanNot) {
+            return $this->processMarkTruthyNegation($node);
         }
 
         if ($this->getName($node) !== 'count') {
@@ -92,27 +92,24 @@ CODE_SAMPLE
             return $processGreaterOrSmaller;
         }
 
-        return $this->processMarkTruthyAndTruthyNegation($parent, $node, $expr);
+        return $this->processMarkTruthy($parent, $node, $expr);
     }
 
-    private function processMarkTruthyNegationInsideConditional(Node $node): ?Node
+    private function processMarkTruthyNegation(BooleanNot $booleanNot): ?Identical
     {
-        if (! $node->cond instanceof BooleanNot || ! $node->cond->expr instanceof FuncCall || $this->getName(
-            $node->cond->expr
-        ) !== 'count') {
+        if (! $booleanNot->expr instanceof FuncCall || $this->getName($booleanNot->expr) !== 'count') {
             return null;
         }
 
         /** @var Expr $expr */
-        $expr = $node->cond->expr->args[0]->value;
+        $expr = $booleanNot->expr->args[0]->value;
 
         // not pass array type, skip
         if (! $this->isArray($expr)) {
             return null;
         }
 
-        $node->cond = new Identical($expr, new Array_([]));
-        return $node;
+        return new Identical($expr, new Array_([]));
     }
 
     private function isArray(Expr $expr): bool
@@ -165,20 +162,11 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processMarkTruthyAndTruthyNegation(Node $node, FuncCall $funcCall, Expr $expr): ?Expr
+    private function processMarkTruthy(Node $node, FuncCall $funcCall, Expr $expr): ?Expr
     {
         if ($this->isConditional($node) && $node->cond === $funcCall) {
             $node->cond = new NotIdentical($expr, new Array_([]));
             return $node->cond;
-        }
-
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($node instanceof BooleanNot && $node->expr === $funcCall && ! $this->isConditional($parent)) {
-            $identical = new Identical($expr, new Array_([]));
-            $this->addNodeBeforeNode($identical, $node);
-            $this->removeNode($node);
-
-            return $identical;
         }
 
         return null;
