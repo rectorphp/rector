@@ -16,6 +16,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
+use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 
 /**
  * @see https://github.com/nette/component-model/commit/1fb769f4602cf82694941530bac1111b3c5cd11b
@@ -25,13 +26,26 @@ use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const COMPONENT_CONTAINER_CLASS = 'Nette\ComponentModel\IContainer';
+
+    /**
      * @var StaticCallAnalyzer
      */
     private $staticCallAnalyzer;
 
-    public function __construct(StaticCallAnalyzer $staticCallAnalyzer)
-    {
+    /**
+     * @var MethodReflectionProvider
+     */
+    private $methodReflectionProvider;
+
+    public function __construct(
+        StaticCallAnalyzer $staticCallAnalyzer,
+        MethodReflectionProvider $methodReflectionProvider
+    ) {
         $this->staticCallAnalyzer = $staticCallAnalyzer;
+        $this->methodReflectionProvider = $methodReflectionProvider;
     }
 
     public function getDefinition(): RectorDefinition
@@ -89,6 +103,10 @@ CODE_SAMPLE
             return $this->refactorStaticCall($node);
         }
 
+        if ($node instanceof New_ && $this->isObjectType($node->class, self::COMPONENT_CONTAINER_CLASS)) {
+            return $this->refactorNew($node);
+        }
+
         return null;
     }
 
@@ -106,7 +124,7 @@ CODE_SAMPLE
         foreach ($classMethod->params as $param) {
             if ($this->isName($param, 'parent') && $param->type !== null && $this->isName(
                 $param->type,
-                'Nette\ComponentModel\IContainer'
+                    self::COMPONENT_CONTAINER_CLASS
             )) {
                 $this->removeNode($param);
                 $hasClassMethodChanged = true;
@@ -118,7 +136,7 @@ CODE_SAMPLE
             }
         }
 
-        if ($hasClassMethodChanged === false) {
+        if (! $hasClassMethodChanged) {
             return null;
         }
 
@@ -149,7 +167,7 @@ CODE_SAMPLE
             $hasStaticCallChanged = true;
         }
 
-        if ($hasStaticCallChanged === false) {
+        if (! $hasStaticCallChanged) {
             return null;
         }
 
@@ -172,5 +190,32 @@ CODE_SAMPLE
         }
 
         return true;
+    }
+
+    private function refactorNew(New_ $new): ?New_
+    {
+        $parameterNames = $this->methodReflectionProvider->provideParameterNamesByNew($new);
+
+        $hasNewChanged = false;
+        foreach ($new->args as $position => $arg) {
+            // is on position of $parent or $name?
+            if (! isset($parameterNames[$position])) {
+                continue;
+            }
+
+            $parameterName = $parameterNames[$position];
+            if (! in_array($parameterName, ['parent', 'name'], true)) {
+                continue;
+            }
+
+            $hasNewChanged = true;
+            $this->removeNode($arg);
+        }
+
+        if ($hasNewChanged === false) {
+            return null;
+        }
+
+        return $new;
     }
 }

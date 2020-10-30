@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\NodeCollector\Reflection;
 
+use PhpParser\Node;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
@@ -15,9 +17,11 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use ReflectionMethod;
 
 final class MethodReflectionProvider
 {
@@ -89,6 +93,14 @@ final class MethodReflectionProvider
         return $this->provideParameterTypesFromMethodReflection($methodReflection);
     }
 
+    public function provideByNew(New_ $new): ?MethodReflection
+    {
+        $objectType = $this->nodeTypeResolver->resolve($new->class);
+        $classes = TypeUtils::getDirectClassNames($objectType);
+
+        return $this->provideByClassNamesAndMethodName($classes, MethodName::CONSTRUCT, $new);
+    }
+
     public function provideByStaticCall(StaticCall $staticCall): ?MethodReflection
     {
         $objectType = $this->nodeTypeResolver->resolve($staticCall->class);
@@ -99,20 +111,7 @@ final class MethodReflectionProvider
             return null;
         }
 
-        /** @var Scope|null $scope */
-        $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            throw new ShouldNotHappenException();
-        }
-
-        foreach ($classes as $class) {
-            $methodReflection = $this->provideByClassAndMethodName($class, $methodName, $scope);
-            if ($methodReflection instanceof MethodReflection) {
-                return $methodReflection;
-            }
-        }
-
-        return null;
+        return $this->provideByClassNamesAndMethodName($classes, $methodName, $staticCall);
     }
 
     /**
@@ -154,6 +153,52 @@ final class MethodReflectionProvider
     public function getParameterReflectionsFromMethodReflection(MethodReflection $methodReflection): array
     {
         $methodReflectionVariant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+
         return $methodReflectionVariant->getParameters();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideParameterNamesByNew(New_ $new): array
+    {
+        $objectType = $this->nodeTypeResolver->resolve($new->class);
+        $classes = TypeUtils::getDirectClassNames($objectType);
+
+        $parameterNames = [];
+
+        foreach ($classes as $class) {
+            if (! method_exists($class, MethodName::CONSTRUCT)) {
+                continue;
+            }
+
+            $methodReflection = new ReflectionMethod($class, MethodName::CONSTRUCT);
+            foreach ($methodReflection->getParameters() as $reflectionParameter) {
+                $parameterNames[] = $reflectionParameter->name;
+            }
+        }
+
+        return $parameterNames;
+    }
+
+    /**
+     * @param string[] $classes
+     */
+    private function provideByClassNamesAndMethodName(array $classes, string $methodName, Node $node): ?MethodReflection
+    {
+        /** @var Scope|null $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            throw new ShouldNotHappenException();
+        }
+
+        foreach ($classes as $class) {
+            $methodReflection = $this->provideByClassAndMethodName($class, $methodName, $scope);
+            if ($methodReflection instanceof MethodReflection) {
+                return $methodReflection;
+            }
+        }
+
+        return null;
     }
 }
