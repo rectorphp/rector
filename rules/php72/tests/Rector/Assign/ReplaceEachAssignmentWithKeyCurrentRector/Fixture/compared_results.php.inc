@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 final class ComparedResults implements RunnableInterface
 {
@@ -23,7 +23,7 @@ final class ComparedResults implements RunnableInterface
 
 namespace Rector\Php72\Tests\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 final class ComparedResults implements RunnableInterface
 {

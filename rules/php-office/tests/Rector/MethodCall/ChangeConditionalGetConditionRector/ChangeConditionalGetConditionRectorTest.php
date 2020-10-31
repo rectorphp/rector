@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\ChangeConditionalGetConditionRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeConditionalGetConditionRectorTest extends AbstractRectorTestCase

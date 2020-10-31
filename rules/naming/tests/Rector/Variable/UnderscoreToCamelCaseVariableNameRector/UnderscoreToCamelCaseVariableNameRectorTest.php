@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Naming\Rector\Variable\UnderscoreToCamelCaseVariableNameRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UnderscoreToCamelCaseVariableNameRectorTest extends AbstractRectorTestCase

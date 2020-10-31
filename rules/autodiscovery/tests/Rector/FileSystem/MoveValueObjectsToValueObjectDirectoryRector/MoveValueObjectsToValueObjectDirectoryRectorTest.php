@@ -7,7 +7,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveValueObjectsToValueOb
 use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector;
 use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector\Source\ObviousValueObjectInterface;
-use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractFileSystemRectorTestCase

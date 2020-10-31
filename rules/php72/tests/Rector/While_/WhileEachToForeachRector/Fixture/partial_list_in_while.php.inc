@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 final class PartialListInWhile implements RunnableInterface
 {
@@ -25,7 +25,7 @@ final class PartialListInWhile implements RunnableInterface
 
 namespace Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 final class PartialListInWhile implements RunnableInterface
 {

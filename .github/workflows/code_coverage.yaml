@@ -10,16 +10,20 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
-            -   uses: shivammathur/setup-php@v1
+
+            -
+                uses: shivammathur/setup-php@v1
                 with:
                     php-version: 7.3
                     coverage: pcov
-                    tools: composer:v1
+                    tools: composer:v2
 
-            -   run: composer install --no-progress --ansi
+            -
+                run: composer install --no-progress --ansi
 
             # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
-            -   run: |
+            -
+                run: |
                     vendor/bin/phpunit --coverage-clover build/logs/clover.xml
                     # Coveralls.io
                     composer require --dev php-coveralls/php-coveralls:^2.4

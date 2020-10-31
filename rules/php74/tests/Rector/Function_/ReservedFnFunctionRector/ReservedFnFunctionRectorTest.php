@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php74\Tests\Rector\Function_\ReservedFnFunctionRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\Function_\ReservedFnFunctionRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReservedFnFunctionRectorTest extends AbstractRectorTestCase

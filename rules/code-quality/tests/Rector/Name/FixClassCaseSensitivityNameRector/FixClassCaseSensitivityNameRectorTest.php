@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector
 
 use Iterator;
 use Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FixClassCaseSensitivityNameRectorTest extends AbstractRectorTestCase

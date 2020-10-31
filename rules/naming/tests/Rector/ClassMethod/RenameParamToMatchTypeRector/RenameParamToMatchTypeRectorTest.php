@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameParamToMatchTypeRectorTest extends AbstractRectorTestCase

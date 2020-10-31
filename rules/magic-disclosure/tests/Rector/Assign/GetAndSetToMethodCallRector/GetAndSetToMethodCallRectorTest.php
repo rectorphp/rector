@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector;
 use Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka;
 use Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase

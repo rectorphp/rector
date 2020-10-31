@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PrivatizeFinalClassPropertyRectorTest extends AbstractRectorTestCase

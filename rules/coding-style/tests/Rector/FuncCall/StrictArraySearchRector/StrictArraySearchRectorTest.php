@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\FuncCall\StrictArraySearchRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class StrictArraySearchRectorTest extends AbstractRectorTestCase

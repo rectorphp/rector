@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Defluent\Tests\Rector\ClassMethod\ReturnThisRemoveRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Defluent\Rector\ClassMethod\ReturnThisRemoveRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase

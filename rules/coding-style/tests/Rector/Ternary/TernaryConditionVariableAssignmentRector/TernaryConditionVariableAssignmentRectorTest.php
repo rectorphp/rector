@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Ternary\TernaryConditionVariableAssign
 
 use Iterator;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TernaryConditionVariableAssignmentRectorTest extends AbstractRectorTestCase

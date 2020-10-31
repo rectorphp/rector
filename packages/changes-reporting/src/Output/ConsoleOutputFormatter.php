@@ -156,8 +156,13 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
     private function reportRemovedFilesAndNodes(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
-        if ($errorAndDiffCollector->getRemovedAndAddedFilesCount() !== 0) {
-            $message = sprintf('%d files were added/removed', $errorAndDiffCollector->getRemovedAndAddedFilesCount());
+        if ($errorAndDiffCollector->getAddFilesCount() !== 0) {
+            $message = sprintf('%d files were added', $errorAndDiffCollector->getAddFilesCount());
+            $this->symfonyStyle->note($message);
+        }
+
+        if ($errorAndDiffCollector->getRemovedFilesCount() !== 0) {
+            $message = sprintf('%d files were removed', $errorAndDiffCollector->getRemovedFilesCount());
             $this->symfonyStyle->note($message);
         }
 
@@ -175,6 +180,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         if ($errorAndDiffCollector->getRemovedNodeCount() === 0) {
             return;
         }
+
         $message = sprintf('%d nodes were removed', $errorAndDiffCollector->getRemovedNodeCount());
 
         $this->symfonyStyle->warning($message);

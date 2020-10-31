@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToProperty
 
 use Iterator;
 use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class IssetOnPropertyObjectToPropertyExistsRectorTest extends AbstractRectorTestCase

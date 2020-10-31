@@ -7,6 +7,9 @@ namespace Rector\FileSystemRector\Contract;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @deprecated
+ */
 interface FileSystemRectorInterface extends RectorInterface
 {
     public function refactor(SmartFileInfo $smartFileInfo): void;

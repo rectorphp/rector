@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\Testing\PHPUnit\AbstractNodeVisitorTestCase;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
+use Rector\Testing\PHPUnit\AbstractNodeVisitorTestCase;
 
 final class FunctionMethodAndClassNodeVisitorTest extends AbstractNodeVisitorTestCase
 {

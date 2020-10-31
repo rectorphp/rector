@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\RemoveSoleValueSprintfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveSoleValueSprintfRectorTest extends AbstractRectorTestCase

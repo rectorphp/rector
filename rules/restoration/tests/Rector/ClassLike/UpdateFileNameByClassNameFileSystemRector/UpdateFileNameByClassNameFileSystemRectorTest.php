@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Restoration\Tests\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UpdateFileNameByClassNameFileSystemRectorTest extends AbstractRectorTestCase

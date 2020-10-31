@@ -7,10 +7,10 @@ namespace Rector\NetteKdyby\DataProvider;
 use Nette\Application\UI\Control;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class OnPropertyMagicCallProvider
 {

@@ -1,4 +1,4 @@
-# All 599 Rectors Overview
+# All 600 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -17,7 +17,7 @@
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [DowngradePhp71](#downgradephp71) (3)
 - [DowngradePhp72](#downgradephp72) (2)
-- [DowngradePhp73](#downgradephp73) (1)
+- [DowngradePhp73](#downgradephp73) (2)
 - [DowngradePhp74](#downgradephp74) (7)
 - [DowngradePhp80](#downgradephp80) (6)
 - [FileSystemRector](#filesystemrector) (1)
@@ -5030,6 +5030,26 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br><br>
 
 ## DowngradePhp73
+
+### `DowngradeFlexibleHeredocSyntaxRector`
+
+- class: [`Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector`](/rules/downgrade-php73/src/Rector/String_/DowngradeFlexibleHeredocSyntaxRector.php)
+
+Changes heredoc/nowdoc that contains closing word to safe wrapper name
+
+```diff
+ $query = <<<SQL
+-    SELECT *
+-    FROM `table`
+-    WHERE `column` = true;
+-    SQL;
++SELECT *
++FROM `table`
++WHERE `column` = true;
++SQL;
+```
+
+<br><br>
 
 ### `DowngradeListReferenceAssignmentRector`
 
@@ -10432,9 +10452,10 @@ Add response content to response code assert, so it is easier to debug
 
 ### `MultipleClassFileToPsr4ClassesRector`
 
-- class: [`Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector`](/rules/psr4/src/Rector/MultipleClassFileToPsr4ClassesRector.php)
+- class: [`Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector`](/rules/psr4/src/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php)
+- [test fixtures](/rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Fixture)
 
-Turns namespaced classes in one file to standalone PSR-4 classes.
+Change multiple classes in one file to standalone PSR-4 classes.
 
 ```diff
 +// new file: "app/Exceptions/FirstException.php"
@@ -10444,7 +10465,6 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 
  final class FirstException extends Exception
  {
-
  }
 +
 +// new file: "app/Exceptions/SecondException.php"
@@ -10454,7 +10474,6 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 
  final class SecondException extends Exception
  {
-
  }
 ```
 
@@ -10465,7 +10484,7 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 - class: [`Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector`](/rules/psr4/src/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
 - [test fixtures](/rules/psr4/tests/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector/Fixture)
 
-Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with `Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector`
+Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with `Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector`
 
 ```diff
  // src/SomeClass.php

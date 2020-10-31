@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Expression\InlineIfToExplicitIfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InlineIfToExplicitIfRectorTest extends AbstractRectorTestCase

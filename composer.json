@@ -86,6 +86,7 @@
             "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php"
         ],
         "psr-4": {
+            "Rector\\Testing\\": "packages/testing/src",
             "Rector\\Architecture\\": "rules/architecture/src",
             "Rector\\AttributeAwarePhpDoc\\": "packages/attribute-aware-php-doc/src",
             "Rector\\Autodiscovery\\": "rules/autodiscovery/src",
@@ -166,6 +167,7 @@
             "Rector\\SOLID\\": "rules/solid/src",
             "Rector\\Sensio\\": "rules/sensio/src",
             "Rector\\Set\\": "packages/set/src",
+            "Rector\\NewFilePrinter\\": "packages/new-file-printer/src",
             "Rector\\SimplePhpDocParser\\": "packages/simple-php-doc-parser/src",
             "Rector\\StaticTypeMapper\\": "packages/static-type-mapper/src",
             "Rector\\StrictCodeQuality\\": "rules/strict-code-quality/src",
@@ -188,7 +190,7 @@
             "rules/autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
             "rules/cakephp/tests/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector/Source",
             "rules/cakephp/tests/Rector/Namespace_/AppUsesStaticCallToUseStatementRector/Source",
-            "rules/psr4/tests/Rector/MultipleClassFileToPsr4ClassesRector/Source",
+            "rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source",
             "rules/renaming/tests/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source",
             "rules/symfony/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source",
             "tests/Source"

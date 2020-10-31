@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\SetTypeToCastRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SetTypeToCastRectorTest extends AbstractRectorTestCase

@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Encapsed\EncapsedStringsToSprintfRecto
 
 use Iterator;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class EncapsedStringsToSprintfRectorTest extends AbstractRectorTestCase

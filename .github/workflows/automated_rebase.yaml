@@ -1,10 +1,9 @@
 name: Automatic Rebase
 
 on:
-    pull_request: null
     schedule:
-        # every 10 minutes, https://crontab.guru/#0/10_*_*_*_*
-        - cron: 0/10 * * * *
+        # every 5 minutes, https://crontab.guru/#0/10_*_*_*_*
+        - cron: 0/5 * * * *
 
 jobs:
     automated_rebase:

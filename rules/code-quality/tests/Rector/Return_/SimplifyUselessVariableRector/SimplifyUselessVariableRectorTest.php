@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

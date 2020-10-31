@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\For_\ForRepeatedCountToOwnVariableRect
 
 use Iterator;
 use Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ForRepeatedCountToOwnVariableRectorTest extends AbstractRectorTestCase

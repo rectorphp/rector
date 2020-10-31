@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Phalcon\Tests\Rector\MethodCall\AddRequestToHandleMethodCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Phalcon\Rector\MethodCall\AddRequestToHandleMethodCallRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddRequestToHandleMethodCallRectorTest extends AbstractRectorTestCase
