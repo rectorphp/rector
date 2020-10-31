@@ -82,6 +82,8 @@ declare -A packages_by_set
 # Switch to production
 composer install --no-dev
 
+rootPackage=$(composer info -s -N)
+
 numberTargetPHPVersions=${#target_downgrade_php_versions[@]}
 counter=1
 while [ $counter -le $numberTargetPHPVersions ]
@@ -101,7 +103,7 @@ do
             echo "Enqueueing set $set on package $package"
             # Composer also analyzes the root project "rector/rector",
             # but its path is the root folder
-            if [ $package = "rector/rector" ]
+            if [ $package = "$rootPackage" ]
             then
                 path=$(pwd)
             else
@@ -154,15 +156,10 @@ do
     IFS=' ' read -r -a packages_to_downgrade_by_set <<< "${packages_by_set[$set_to_downgrade]}"
 
     dependents_to_downgrade=()
-    # composer why rector/rector also produces rector/rector, but it must be empty
-    if [ $package_to_downgrade = "rector/rector" ]
-    then
-        dependentsAsString=""
-    else
-        # Obtain recursively the list of dependents, keep the first word only,
-        # (which is the package name), and remove duplicates
-        dependentsAsString=$(composer why "$package_to_downgrade" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
-    fi
+    # Obtain recursively the list of dependents, keep the first word only,
+    # (which is the package name), and remove duplicates
+    dependentsAsString=$(composer why "$package_to_downgrade" -r | cut -d' ' -f1 | awk '!a[$0]++' | tr "\n" " ")
+
     IFS=' ' read -r -a dependents <<< "$dependentsAsString"
     for dependent in "${dependents[@]}"; do
         # A package could provide itself in why (as when using "replaces"). Ignore them
@@ -246,7 +243,7 @@ do
         path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
         # exclude=$(echo "$exclude" | sed "s/;/ --exclude-path=/g")
 
-        if [ $package_to_downgrade = "rector/rector" ]
+        if [ $package_to_downgrade = "$rootPackage" ]
         then
             config=rector-downgrade-rector.php
         else
