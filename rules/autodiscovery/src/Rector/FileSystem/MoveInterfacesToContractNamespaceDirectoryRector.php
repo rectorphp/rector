@@ -78,11 +78,11 @@ CODE_SAMPLE
             return;
         }
 
-        $movedFile = $this->movedFileWithNodesFactory->create($smartFileInfo, $nodes, 'Contract');
-        if ($movedFile === null) {
+        $movedFileWithNodes = $this->movedFileWithNodesFactory->create($smartFileInfo, $nodes, 'Contract');
+        if ($movedFileWithNodes === null) {
             return;
         }
 
-        $this->addMovedFile($movedFile);
+        $this->addMovedFile($movedFileWithNodes);
     }
 }

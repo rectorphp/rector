@@ -135,12 +135,12 @@ CODE_SAMPLE
             return;
         }
 
-        $movedFile = $this->movedFileWithNodesFactory->create($smartFileInfo, $nodes, 'ValueObject');
-        if ($movedFile === null) {
+        $movedFileWithNodes = $this->movedFileWithNodesFactory->create($smartFileInfo, $nodes, 'ValueObject');
+        if ($movedFileWithNodes === null) {
             return;
         }
 
-        $this->addMovedFile($movedFile);
+        $this->addMovedFile($movedFileWithNodes);
     }
 
     public function configure(array $configuration): void

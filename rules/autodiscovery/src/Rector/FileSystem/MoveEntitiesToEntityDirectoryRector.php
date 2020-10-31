@@ -75,12 +75,12 @@ CODE_SAMPLE
             return;
         }
 
-        $movedFile = $this->movedFileWithNodesFactory->create($smartFileInfo, $nodes, 'Entity');
-        if ($movedFile === null) {
+        $movedFileWithNodes = $this->movedFileWithNodesFactory->create($smartFileInfo, $nodes, 'Entity');
+        if ($movedFileWithNodes === null) {
             return;
         }
 
-        $this->addMovedFile($movedFile);
+        $this->addMovedFile($movedFileWithNodes);
     }
 
     /**
