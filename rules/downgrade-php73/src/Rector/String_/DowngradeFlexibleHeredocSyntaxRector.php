@@ -17,6 +17,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const HERENOW_DOC_KINDS = [String_::KIND_HEREDOC, String_::KIND_NOWDOC];
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [
@@ -49,16 +54,17 @@ CODE_SAMPLE
     }
 
     /**
-     * @param String_ $node
+     * @param Encapsed|String_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! in_array($node->getAttribute(AttributeKey::KIND), [String_::KIND_HEREDOC, String_::KIND_NOWDOC], true)) {
+        $stringKind = $node->getAttribute(AttributeKey::KIND);
+
+        if (! in_array($stringKind, self::HERENOW_DOC_KINDS, true)) {
             return null;
         }
 
         $node->setAttribute(AttributeKey::DOC_INDENTATION, '');
-
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         return $node;

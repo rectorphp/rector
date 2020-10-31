@@ -78,6 +78,15 @@ final class RemovedAndAddedFilesCollector
         return $this->addedFilePathsWithContents;
     }
 
+    /**
+     * For testing
+     */
+    public function reset(): void
+    {
+        $this->addedFilePathsWithContents = [];
+        $this->removedFiles = [];
+    }
+
     public function getAffectedFilesCount(): int
     {
         return count($this->addedFilePathsWithContents) + count($this->removedFiles);

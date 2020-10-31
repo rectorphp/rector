@@ -6,15 +6,18 @@ namespace Rector\Testing\PHPUnit;
 
 use Nette\Utils\Strings;
 use PHPUnit\Framework\ExpectationFailedException;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\ValueObject\FilePathWithContent;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Testing\Contract\RunnableInterface;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Webmozart\Assert\Assert;
 
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 {
@@ -104,9 +107,37 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     protected function doTestFileIsDeleted(SmartFileInfo $smartFileInfo): void
     {
         $this->doTestFileInfo($smartFileInfo);
-
-        //$temporaryFilePath = $this->getFixtureTempDirectory() . '/SomeFactoryInterface.php';
         $this->assertFileMissing($this->originalTempFileInfo->getPathname());
+    }
+
+    /**
+     * @param FilePathWithContent[] $expectedFilePathsWithContents
+     */
+    protected function assertFilesWereAdded(array $expectedFilePathsWithContents): void
+    {
+        Assert::allIsAOf($expectedFilePathsWithContents, FilePathWithContent::class);
+
+        /** @var RemovedAndAddedFilesCollector $removedAndAddedFilesCollector */
+        $removedAndAddedFilesCollector = self::$container->get(RemovedAndAddedFilesCollector::class);
+
+        $addedFilePathsWithContents = $removedAndAddedFilesCollector->getAddedFilePathsWithContents();
+
+        sort($addedFilePathsWithContents);
+        sort($expectedFilePathsWithContents);
+
+        foreach ($addedFilePathsWithContents as $key => $addedFilePathWithContent) {
+            $expectedFilePathWithContent = $expectedFilePathsWithContents[$key];
+
+            $this->assertSame(
+                $expectedFilePathWithContent->getFilePath(),
+                $addedFilePathWithContent->getFilePath()
+            );
+
+            $this->assertSame(
+                $expectedFilePathWithContent->getFileContent(),
+                $addedFilePathWithContent->getFileContent()
+            );
+        }
     }
 
     private function doTestFileMatchesExpectedContent(

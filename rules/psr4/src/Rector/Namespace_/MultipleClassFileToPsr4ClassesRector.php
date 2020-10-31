@@ -131,6 +131,12 @@ CODE_SAMPLE
         return null;
     }
 
+    private function hasAtLeastTwoClassLikes(Node $node): bool
+    {
+        $classes = $this->betterNodeFinder->findClassLikes($node);
+        return count($classes) > 1;
+    }
+
     private function refactorNamespace(Namespace_ $namespace): ?Namespace_
     {
         /** @var ClassLike[] $classLikes */
@@ -175,12 +181,6 @@ CODE_SAMPLE
         }
 
         return $nodeToReturn;
-    }
-
-    private function hasAtLeastTwoClassLikes(Node $node): bool
-    {
-        $classes = $this->betterNodeFinder->findClassLikes($node);
-        return count($classes) > 1;
     }
 
     /**
