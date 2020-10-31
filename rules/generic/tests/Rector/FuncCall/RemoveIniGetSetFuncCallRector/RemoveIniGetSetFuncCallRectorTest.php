@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\FuncCall\RemoveIniGetSetFuncCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\FuncCall\RemoveIniGetSetFuncCallRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

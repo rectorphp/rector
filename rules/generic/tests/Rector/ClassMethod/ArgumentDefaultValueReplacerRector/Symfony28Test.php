@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Set\ValueObject\SetList;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

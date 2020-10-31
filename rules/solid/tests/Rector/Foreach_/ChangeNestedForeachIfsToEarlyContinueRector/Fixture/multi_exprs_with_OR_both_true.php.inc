@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 class MultiExprsWithOrBothTruthy implements RunnableInterface
 {
@@ -32,7 +32,7 @@ class MultiExprsWithOrBothTruthy implements RunnableInterface
 
 namespace Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 class MultiExprsWithOrBothTruthy implements RunnableInterface
 {

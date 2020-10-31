@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Restoration\Tests\Rector\Class_\RemoveFinalFromEntityRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\Class_\RemoveFinalFromEntityRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveFinalFromEntityRectorTest extends AbstractRectorTestCase

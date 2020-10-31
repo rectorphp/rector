@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\FuncCall\FunctionCallToConstantRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FunctionCallToConstantRectorTest extends AbstractRectorTestCase

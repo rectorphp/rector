@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CompactToVariablesRectorTest extends AbstractRectorTestCase

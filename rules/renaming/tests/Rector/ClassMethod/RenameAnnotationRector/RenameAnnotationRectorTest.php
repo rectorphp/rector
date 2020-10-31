@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Renaming\Tests\Rector\ClassMethod\RenameAnnotationRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
 use Rector\Renaming\ValueObject\RenameAnnotation;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameAnnotationRectorTest extends AbstractRectorTestCase

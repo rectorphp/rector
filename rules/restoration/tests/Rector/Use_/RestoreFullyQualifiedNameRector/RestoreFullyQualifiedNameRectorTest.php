@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Restoration\Tests\Rector\Use_\RestoreFullyQualifiedNameRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\Use_\RestoreFullyQualifiedNameRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RestoreFullyQualifiedNameRectorTest extends AbstractRectorTestCase

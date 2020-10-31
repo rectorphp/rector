@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
 use Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
 use Rector\Generic\ValueObject\MethodCallToReturn;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToReturnRectorTest extends AbstractRectorTestCase

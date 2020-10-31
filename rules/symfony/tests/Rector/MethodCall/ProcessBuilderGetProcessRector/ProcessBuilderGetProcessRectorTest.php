@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\MethodCall\ProcessBuilderGetProcessRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\MethodCall\ProcessBuilderGetProcessRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ProcessBuilderGetProcessRectorTest extends AbstractRectorTestCase

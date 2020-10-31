@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php53\Tests\Rector\Variable\ReplaceHttpServerVarsByServerRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

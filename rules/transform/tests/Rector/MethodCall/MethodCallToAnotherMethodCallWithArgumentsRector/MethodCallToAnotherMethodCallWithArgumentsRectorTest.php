@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 use Rector\Transform\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition;
 use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;

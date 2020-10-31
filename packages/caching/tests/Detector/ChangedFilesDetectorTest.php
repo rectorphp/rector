@@ -6,7 +6,7 @@ namespace Rector\Caching\Tests\Detector;
 
 use Iterator;
 use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangedFilesDetectorTest extends AbstractRectorTestCase

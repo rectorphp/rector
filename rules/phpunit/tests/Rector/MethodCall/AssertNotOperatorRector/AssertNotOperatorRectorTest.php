@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertNotOperatorRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\MethodCall\AssertNotOperatorRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AssertNotOperatorRectorTest extends AbstractRectorTestCase

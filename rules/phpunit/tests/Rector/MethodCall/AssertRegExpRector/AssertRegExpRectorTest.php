@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertRegExpRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\MethodCall\AssertRegExpRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AssertRegExpRectorTest extends AbstractRectorTestCase

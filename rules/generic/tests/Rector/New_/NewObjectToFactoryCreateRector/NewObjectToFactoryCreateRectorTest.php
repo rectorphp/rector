@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\New_\NewObjectToFactoryCreateRector;
 use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClass;
 use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NewObjectToFactoryCreateRectorTest extends AbstractRectorTestCase

@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\NetteKdyby\Naming\EventClassNaming;
 use Rector\NetteKdyby\NodeFactory\DispatchMethodCallFactory;
 use Rector\NetteKdyby\NodeFactory\EventValueObjectClassFactory;
@@ -20,6 +19,7 @@ use Rector\NetteKdyby\ValueObject\EventAndListenerTree;
 use Rector\NetteKdyby\ValueObject\GetterMethodBlueprint;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class EventAndListenerTreeProvider
 {

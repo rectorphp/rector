@@ -10452,9 +10452,10 @@ Add response content to response code assert, so it is easier to debug
 
 ### `MultipleClassFileToPsr4ClassesRector`
 
-- class: [`Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector`](/rules/psr4/src/Rector/MultipleClassFileToPsr4ClassesRector.php)
+- class: [`Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector`](/rules/psr4/src/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php)
+- [test fixtures](/rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Fixture)
 
-Turns namespaced classes in one file to standalone PSR-4 classes.
+Change multiple classes in one file to standalone PSR-4 classes.
 
 ```diff
 +// new file: "app/Exceptions/FirstException.php"
@@ -10464,7 +10465,6 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 
  final class FirstException extends Exception
  {
-
  }
 +
 +// new file: "app/Exceptions/SecondException.php"
@@ -10474,7 +10474,6 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 
  final class SecondException extends Exception
  {
-
  }
 ```
 
@@ -10485,7 +10484,7 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 - class: [`Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector`](/rules/psr4/src/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
 - [test fixtures](/rules/psr4/tests/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector/Fixture)
 
-Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with `Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector`
+Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with `Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector`
 
 ```diff
  // src/SomeClass.php

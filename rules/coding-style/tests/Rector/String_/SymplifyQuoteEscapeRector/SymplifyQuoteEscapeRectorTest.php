@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\String_\SymplifyQuoteEscapeRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SymplifyQuoteEscapeRectorTest extends AbstractRectorTestCase

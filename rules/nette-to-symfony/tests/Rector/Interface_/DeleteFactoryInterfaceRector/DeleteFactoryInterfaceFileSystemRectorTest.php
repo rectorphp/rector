@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Tests\Rector\Interface_\DeleteFactoryInterfaceRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DeleteFactoryInterfaceFileSystemRectorTest extends AbstractRectorTestCase

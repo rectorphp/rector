@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NullableCompareToNullRectorTest extends AbstractRectorTestCase

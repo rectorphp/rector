@@ -7,10 +7,10 @@ namespace Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\Testing\TestingParser\TestingParser;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallRootExtractor;
 use Rector\Defluent\ValueObject\AssignAndRootExpr;
 use Rector\Defluent\ValueObject\FluentCallsKind;
+use Rector\Testing\TestingParser\TestingParser;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class FluentChainMethodCallRootExtractorTest extends AbstractKernelTestCase

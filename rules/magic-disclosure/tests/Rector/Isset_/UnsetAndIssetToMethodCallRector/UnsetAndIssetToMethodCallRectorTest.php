@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 use Rector\MagicDisclosure\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
 use Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase

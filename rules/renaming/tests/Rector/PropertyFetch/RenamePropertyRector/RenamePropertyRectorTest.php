@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Renaming\Tests\Rector\PropertyFetch\RenamePropertyRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\Tests\Rector\PropertyFetch\RenamePropertyRector\Source\ClassWithProperties;
 use Rector\Renaming\ValueObject\RenameProperty;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenamePropertyRectorTest extends AbstractRectorTestCase

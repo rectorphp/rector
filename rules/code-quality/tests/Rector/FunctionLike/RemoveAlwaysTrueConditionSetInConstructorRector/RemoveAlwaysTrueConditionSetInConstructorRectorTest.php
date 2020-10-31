@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FunctionLike\RemoveAlwaysTrueCondition
 
 use Iterator;
 use Rector\CodeQuality\Rector\FunctionLike\RemoveAlwaysTrueConditionSetInConstructorRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveAlwaysTrueConditionSetInConstructorRectorTest extends AbstractRectorTestCase

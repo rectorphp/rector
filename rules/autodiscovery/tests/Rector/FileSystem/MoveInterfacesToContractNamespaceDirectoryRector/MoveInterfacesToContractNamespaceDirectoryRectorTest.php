@@ -7,7 +7,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractN
 use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector;
 use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFile;
-use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends AbstractFileSystemRectorTestCase

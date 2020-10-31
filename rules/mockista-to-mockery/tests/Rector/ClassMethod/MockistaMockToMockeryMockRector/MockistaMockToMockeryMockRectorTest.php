@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\MockistaToMockery\Tests\Rector\ClassMethod\MockistaMockToMockeryMockRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MockistaToMockery\Rector\ClassMethod\MockistaMockToMockeryMockRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MockistaMockToMockeryMockRectorTest extends AbstractRectorTestCase

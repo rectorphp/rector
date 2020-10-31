@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

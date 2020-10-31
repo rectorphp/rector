@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\MethodCall\UseMessageVariableForSprint
 
 use Iterator;
 use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UseMessageVariableForSprintfInSymfonyStyleRectorTest extends AbstractRectorTestCase

@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRe
 
 use Iterator;
 use Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArrayThisCallToThisMethodCallRectorTest extends AbstractRectorTestCase

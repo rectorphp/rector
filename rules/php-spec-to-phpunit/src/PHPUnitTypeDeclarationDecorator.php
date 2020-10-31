@@ -6,7 +6,7 @@ namespace Rector\PhpSpecToPHPUnit;
 
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use ReflectionMethod;
 
 /**

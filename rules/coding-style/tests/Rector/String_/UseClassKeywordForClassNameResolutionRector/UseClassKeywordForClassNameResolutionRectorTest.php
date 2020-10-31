@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameRes
 
 use Iterator;
 use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UseClassKeywordForClassNameResolutionRectorTest extends AbstractRectorTestCase

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\PhpParser\Printer\CommentPreserving;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CommentPreservingTest extends AbstractRectorTestCase

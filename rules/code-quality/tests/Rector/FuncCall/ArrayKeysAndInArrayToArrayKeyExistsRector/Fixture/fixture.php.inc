@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 class SomeClass implements RunnableInterface
 {
@@ -23,7 +23,7 @@ class SomeClass implements RunnableInterface
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 class SomeClass implements RunnableInterface
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector;
 use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;

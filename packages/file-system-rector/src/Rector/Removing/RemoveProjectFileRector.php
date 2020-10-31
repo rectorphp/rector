@@ -16,7 +16,7 @@ final class RemoveProjectFileRector extends AbstractFileSystemRector implements 
      * @api
      * @var string
      */
-    public const FILE_PATHS_TO_REMOVE = '$filePathsToRemove';
+    public const FILE_PATHS_TO_REMOVE = 'file_paths_to_remove';
 
     /**
      * @var string[]

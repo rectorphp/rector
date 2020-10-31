@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Property\ChangePropertyVisibilityRector;
 use Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector\Source\ParentObject;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase

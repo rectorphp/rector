@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Identical\GetClassToInstanceOfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class GetClassToInstanceOfRectorTest extends AbstractRectorTestCase

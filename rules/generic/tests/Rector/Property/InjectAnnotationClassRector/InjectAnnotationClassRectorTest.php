@@ -8,8 +8,8 @@ use DI\Annotation\Inject as PHPDIInject;
 use Iterator;
 use JMS\DiExtraBundle\Annotation\Inject;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Property\InjectAnnotationClassRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase

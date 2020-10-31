@@ -6,7 +6,7 @@ namespace Rector\Core\Php;
 
 use Nette\Utils\Json;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileSystem;
 

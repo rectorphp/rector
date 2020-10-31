@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\Source\DifferentClass;
 use Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\Source\LocalFormEvents;
 use Rector\Renaming\ValueObject\RenameClassConstant;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameClassConstantRectorTest extends AbstractRectorTestCase

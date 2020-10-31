@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Legacy\Tests\Rector\FileWithoutNamespace\FunctionToStaticMethodRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Legacy\Rector\FileWithoutNamespace\FunctionToStaticMethodRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FunctionToStaticMethodRectorTest extends AbstractRectorTestCase

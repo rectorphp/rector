@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\FuncCall\RemoveFuncCallArgRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Generic\ValueObject\RemoveFuncCallArg;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

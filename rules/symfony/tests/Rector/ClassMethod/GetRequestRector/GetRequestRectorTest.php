@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\ClassMethod\GetRequestRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\ClassMethod\GetRequestRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class GetRequestRectorTest extends AbstractRectorTestCase

@@ -6,8 +6,8 @@ namespace Rector\NetteCodeQuality\Tests\Rector\Assign\MakeGetComponentAssignAnno
 
 use Iterator;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteCodeQuality\Rector\Assign\MakeGetComponentAssignAnnotatedRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AutoImportTest extends AbstractRectorTestCase

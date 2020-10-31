@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteCodeQuality\Rector\Class_\MoveInjectToExistingConstructorRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveInjectToExistingConstructorRectorTest extends AbstractRectorTestCase

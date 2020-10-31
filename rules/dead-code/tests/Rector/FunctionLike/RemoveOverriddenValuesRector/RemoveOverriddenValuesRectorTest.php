@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\FunctionLike\RemoveOverriddenValuesRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveOverriddenValuesRectorTest extends AbstractRectorTestCase

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Application\FileSystem;
 
 use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
+use Rector\Core\ValueObject\FilePathWithContent;
 use Rector\Core\ValueObject\MovedClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -16,9 +17,9 @@ final class RemovedAndAddedFilesCollector
     private $removedFiles = [];
 
     /**
-     * @var string[]
+     * @var FilePathWithContent[]
      */
-    private $addedFilesWithContent = [];
+    private $addedFilePathsWithContents = [];
 
     /**
      * @var MovedClass[]
@@ -66,20 +67,39 @@ final class RemovedAndAddedFilesCollector
 
     public function addFileWithContent(string $filePath, string $content): void
     {
-        $this->addedFilesWithContent[$filePath] = $content;
+        $this->addedFilePathsWithContents[] = new FilePathWithContent($filePath, $content);
     }
 
     /**
-     * @return string[]
+     * @return FilePathWithContent[]
      */
-    public function getAddedFilesWithContent(): array
+    public function getAddedFilePathsWithContents(): array
     {
-        return $this->addedFilesWithContent;
+        return $this->addedFilePathsWithContents;
+    }
+
+    /**
+     * For testing
+     */
+    public function reset(): void
+    {
+        $this->addedFilePathsWithContents = [];
+        $this->removedFiles = [];
     }
 
     public function getAffectedFilesCount(): int
     {
-        return count($this->addedFilesWithContent) + count($this->removedFiles);
+        return count($this->addedFilePathsWithContents) + count($this->removedFiles);
+    }
+
+    public function getAddedFileCount(): int
+    {
+        return count($this->addedFilePathsWithContents);
+    }
+
+    public function getRemovedFilesCount(): int
+    {
+        return count($this->removedFiles);
     }
 
     public function addNodesWithFileDestination(NodesWithFileDestination $nodesWithFileDestination): void

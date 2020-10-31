@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\SOLID\Tests\Rector\Assign\MoveVariableDeclarationNearReferenceRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SOLID\Rector\Assign\MoveVariableDeclarationNearReferenceRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveVariableDeclarationNearReferenceRectorTest extends AbstractRectorTestCase

@@ -7,7 +7,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassMethod\YieldClassMethodToArrayCla
 use Iterator;
 use Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector;
 use Rector\CodingStyle\Tests\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector\Source\EventSubscriberInterface;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class YieldClassMethodToArrayClassMethodRectorTest extends AbstractRectorTestCase

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Tests\Rector\String_\ToStringToMethodCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MagicDisclosure\Rector\String_\ToStringToMethodCallRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symfony\Component\Config\ConfigCache;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

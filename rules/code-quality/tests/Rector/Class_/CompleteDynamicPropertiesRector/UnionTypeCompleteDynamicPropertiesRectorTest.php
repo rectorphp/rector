@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector
 
 use Iterator;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UnionTypeCompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase

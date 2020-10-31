@@ -86,6 +86,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $staticTypeMapper;
 
     /**
+     * @var SmartFileInfo
+     */
+    private $currentFileInfo;
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -197,7 +202,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
+        $this->currentFileInfo = $node->getAttribute(SmartFileInfo::class);
+
         $this->currentRectorProvider->changeCurrentRector($this);
+
         // mostly for PHP doc and change notifications
         $this->currentNodeProvider->setNode($node);
 
@@ -372,6 +380,15 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return $newArgs;
+    }
+
+    protected function getFileInfo(): SmartFileInfo
+    {
+        if ($this->currentFileInfo === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $this->currentFileInfo;
     }
 
     private function isMatchingNodeType(string $nodeClass): bool

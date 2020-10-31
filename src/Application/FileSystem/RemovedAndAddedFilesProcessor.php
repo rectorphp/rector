@@ -6,8 +6,8 @@ namespace Rector\Core\Application\FileSystem;
 
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
-use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Core\ValueObject\MovedClass;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -64,17 +64,20 @@ final class RemovedAndAddedFilesProcessor
 
     private function processAddedFiles(): void
     {
-        foreach ($this->removedAndAddedFilesCollector->getAddedFilesWithContent() as $filePath => $fileContent) {
+        foreach ($this->removedAndAddedFilesCollector->getAddedFilePathsWithContents() as $filePathWithContent) {
             if ($this->configuration->isDryRun()) {
-                $message = sprintf('File "%s" will be added:', $filePath);
+                $message = sprintf('File "%s" will be added:', $filePathWithContent->getFilePath());
                 $this->symfonyStyle->note($message);
             } else {
-                $this->smartFileSystem->dumpFile($filePath, $fileContent);
-                $message = sprintf('File "%s" was added:', $filePath);
+                $this->smartFileSystem->dumpFile(
+                    $filePathWithContent->getFilePath(),
+                    $filePathWithContent->getFileContent()
+                );
+                $message = sprintf('File "%s" was added:', $filePathWithContent->getFilePath());
                 $this->symfonyStyle->note($message);
             }
 
-            $this->symfonyStyle->writeln($fileContent);
+            $this->symfonyStyle->writeln($filePathWithContent->getFileContent());
         }
 
         foreach ($this->removedAndAddedFilesCollector->getNodesWithFileDestination() as $nodesWithFileDestination) {

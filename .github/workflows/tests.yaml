@@ -2,14 +2,12 @@ name: Tests
 
 on:
     pull_request: null
-    push:
-        branches:
-            - master
 
 jobs:
     tests:
         runs-on: ubuntu-latest
         strategy:
+            fail-fast: false
             matrix:
                 php: ['7.3', '7.4']
                 dependencies: ['locked']

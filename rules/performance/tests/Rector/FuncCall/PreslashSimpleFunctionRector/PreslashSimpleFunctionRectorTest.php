@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PreslashSimpleFunctionRectorTest extends AbstractRectorTestCase
