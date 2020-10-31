@@ -2,9 +2,6 @@ name: Tests
 
 on:
     pull_request: null
-    push:
-        branches:
-            - master
 
 jobs:
     tests:

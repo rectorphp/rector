@@ -18,7 +18,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var int[]
      */
     private const HERENOW_DOC_KINDS = [String_::KIND_HEREDOC, String_::KIND_NOWDOC];
 

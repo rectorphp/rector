@@ -2,9 +2,6 @@ name: Code Analysis
 
 on:
     pull_request: null
-    push:
-        branches:
-            - master
 
 jobs:
     matrix:
@@ -50,8 +47,10 @@ jobs:
 
         steps:
             -   uses: actions/checkout@v2
+
             # see https://github.com/shivammathur/setup-php
-            -   uses: shivammathur/setup-php@v1
+            -
+                uses: shivammathur/setup-php@v1
                 with:
                     php-version: 7.4
                     coverage: none

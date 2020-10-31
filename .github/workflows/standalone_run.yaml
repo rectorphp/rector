@@ -1,9 +1,7 @@
 name: Standalone Run
 
 on:
-    push:
-        branches:
-            - master
+    pull_request: null
 
 jobs:
     standalone_run:

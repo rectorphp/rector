@@ -10453,6 +10453,7 @@ Add response content to response code assert, so it is easier to debug
 ### `MultipleClassFileToPsr4ClassesRector`
 
 - class: [`Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector`](/rules/psr4/src/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php)
+- [test fixtures](/rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Fixture)
 
 Change multiple classes in one file to standalone PSR-4 classes.
 
