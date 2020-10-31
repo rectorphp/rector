@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # All 600 Rectors Overview
+=======
+# All 598 Rectors Overview
+>>>>>>> [Decouple] Remove set, rather PHPStorm job
 
 - [Projects](#projects)
 ---
@@ -11,7 +15,6 @@
 - [CodeQuality](#codequality) (61)
 - [CodingStyle](#codingstyle) (33)
 - [DeadCode](#deadcode) (41)
-- [Decouple](#decouple) (1)
 - [Defluent](#defluent) (8)
 - [Doctrine](#doctrine) (17)
 - [DoctrineCodeQuality](#doctrinecodequality) (9)
@@ -3475,76 +3478,6 @@ Change ternary of bool : false to && bool
          return (bool) 5;
      }
  }
-```
-
-<br><br>
-
-## Decouple
-
-### `DecoupleClassMethodToOwnClassRector`
-
-- class: [`Rector\Decouple\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector`](/rules/decouple/src/Rector/ClassMethod/DecoupleClassMethodToOwnClassRector.php)
-- [test fixtures](/rules/decouple/tests/Rector/ClassMethod/DecoupleClassMethodToOwnClassRector/Fixture)
-
-Move class method with its all dependencies to own class by method name
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Decouple\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DecoupleClassMethodToOwnClassRector::class)
-        ->call('configure', [[
-            DecoupleClassMethodToOwnClassRector::METHOD_NAMES_BY_CLASS => [
-                'SomeClass' => [
-                    'someMethod' => [
-                        'class' => 'NewDecoupledClass',
-                        'method' => 'someRenamedMethod',
-                        'parent_class' => 'AddedParentClass',
-                    ],
-],
-],
-                        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
--    public function someMethod()
--    {
--        $this->alsoCallThis();
--    }
--
--    private function alsoCallThis()
--    {
--    }
- }
-```
-
-**New file**
-```php
-<?php declare(strict_types=1);
-
-class NewDecoupledClass extends AddedParentClass
-{
-    public function someRenamedMethod(): void
-    {
-        $this->alsoCallThis();
-    }
-
-    private function alsoCallThis(): void
-    {
-    }
-}
 ```
 
 <br><br>
