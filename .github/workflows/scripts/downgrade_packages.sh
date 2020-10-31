@@ -259,7 +259,7 @@ do
         # Print command in output for testing
         # set -x
         # bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi
-        # bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --ansi --dry-run
+        bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --ansi
         # set +x
 
         # If Rector fails, already exit
@@ -290,10 +290,11 @@ do
                 downgraded_packages+=($key)
                 ((numberDowngradedPackages++))
             done
+
             paths_to_downgrade=$(join_by " " ${circular_paths_to_downgrade[@]})
             echo "Running set ${set_to_downgrade} for packages ${circular_packages_to_downgrade[@]}"
             config=rector-downgrade-dependency.php
-            # bin/rector process $paths_to_downgrade --set=$set_to_downgrade --config=$config --ansi --dry-run
+            bin/rector process $paths_to_downgrade --set=$set_to_downgrade --config=$config --ansi
 
             # If Rector fails, already exit
             if [ "$?" -gt 0 ]; then
