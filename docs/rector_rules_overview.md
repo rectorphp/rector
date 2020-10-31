@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# All 600 Rectors Overview
-=======
-# All 598 Rectors Overview
->>>>>>> [Decouple] Remove set, rather PHPStorm job
+# All 599 Rectors Overview
 
 - [Projects](#projects)
 ---
