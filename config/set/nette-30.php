@@ -6,6 +6,7 @@ use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
 use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
+use Rector\Nette\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector;
 use Rector\Nette\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector;
 use Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
@@ -36,7 +37,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FormerNullableArgumentToScalarTypedRector::class);
     $services->set(StaticCallToMethodCallRector::class)->call('configure', [[
         StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_value_objects([
-
             new StaticCallToMethodCall('Nette\Security\Passwords', 'hash', 'Nette\Security\Passwords', 'hash'),
             new StaticCallToMethodCall('Nette\Security\Passwords', 'verify', 'Nette\Security\Passwords', 'verify'),
             new StaticCallToMethodCall(
@@ -45,17 +45,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Nette\Security\Passwords',
                 'needsRehash'
             ),
-
         ]),
     ]]);
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
     $services->set(RenameClassConstantRector::class)->call('configure', [[
         RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
-
             new RenameClassConstant('Contributte\Events\Extra\Event\Security\LoggedInEvent', 'NAME', 'class'),
             new RenameClassConstant('Contributte\Events\Extra\Event\Security\LoggedOutEvent', 'NAME', 'class'),
             new RenameClassConstant('Contributte\Events\Extra\Event\Application\ShutdownEvent', 'NAME', 'class'),
-
         ]),
     ]]);
     $services->set(RenameClassRector::class)->call('configure', [[
@@ -70,13 +67,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentDefaultValueReplacerRector::class)->call('configure', [[
         ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects([
             // json 2nd argument is now `int` typed
-            new ArgumentDefaultValueReplacer(
-                'Nette\Utils\Json',
-                'decode',
-                1,
-                true,
-                'Nette\Utils\Json::FORCE_ARRAY'
-            ),
+            new ArgumentDefaultValueReplacer('Nette\Utils\Json', 'decode', 1, true, 'Nette\Utils\Json::FORCE_ARRAY'),
             // @see https://github.com/nette/forms/commit/574b97f9d5e7a902a224e57d7d584e7afc9fefec
             new ArgumentDefaultValueReplacer('Nette\Forms\Form', 'decode', 0, true, 'array'),
         ]),
@@ -100,4 +91,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MagicHtmlCallToAppendAttributeRector::class);
     $services->set(RequestGetCookieDefaultArgumentToCoalesceRector::class);
     $services->set(RemoveParentAndNameFromComponentConstructorRector::class);
+    $services->set(MoveFinalGetUserToCheckRequirementsClassMethodRector::class);
 };
