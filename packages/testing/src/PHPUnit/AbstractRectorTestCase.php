@@ -10,17 +10,18 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\ValueObject\FilePathWithContent;
-use Rector\Core\ValueObject\MovedFile;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
+use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\Testing\Contract\RunnableInterface;
+use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Webmozart\Assert\Assert;
 
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 {
+    use MovingFilesTrait;
+
     /**
      * @var SmartFileInfo
      */
@@ -111,36 +112,9 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->assertFileMissing($this->originalTempFileInfo->getPathname());
     }
 
-    protected function matchMovedFile(): MovedFile
+    protected function matchMovedFile(): MovedFileInterface
     {
-        return $this->removedAndAddedFilesCollector->getMovedFile($this->originalTempFileInfo);
-    }
-
-    /**
-     * @param FilePathWithContent[] $expectedFilePathsWithContents
-     */
-    protected function assertFilesWereAdded(array $expectedFilePathsWithContents): void
-    {
-        Assert::allIsAOf($expectedFilePathsWithContents, FilePathWithContent::class);
-
-        $addedFilePathsWithContents = $this->removedAndAddedFilesCollector->getAddedFilePathsWithContents();
-
-        sort($addedFilePathsWithContents);
-        sort($expectedFilePathsWithContents);
-
-        foreach ($addedFilePathsWithContents as $key => $addedFilePathWithContent) {
-            $expectedFilePathWithContent = $expectedFilePathsWithContents[$key];
-
-            $this->assertSame(
-                $expectedFilePathWithContent->getFilePath(),
-                $addedFilePathWithContent->getFilePath()
-            );
-
-            $this->assertSame(
-                $expectedFilePathWithContent->getFileContent(),
-                $addedFilePathWithContent->getFileContent()
-            );
-        }
+        return $this->removedAndAddedFilesCollector->getMovedFileByFileInfo($this->originalTempFileInfo);
     }
 
     private function doTestFileMatchesExpectedContent(

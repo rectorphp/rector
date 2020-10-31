@@ -103,6 +103,7 @@ final class RectorsFinder
         $robotLoader->acceptFiles = [$name];
         $robotLoader->excludeDirectory(__DIR__ . '/../../../../packages/rector-generator/tests');
 
+        $robotLoader->refresh();
         $robotLoader->rebuild();
 
         $classNames = [];

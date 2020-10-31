@@ -6,7 +6,7 @@ namespace Rector\Core\PhpParser\Printer;
 
 use Nette\Utils\Strings;
 use PhpParser\Lexer;
-use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
+use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
 use Rector\PostRector\Application\PostFileProcessor;
 
 final class NodesWithFileDestinationPrinter
@@ -36,7 +36,7 @@ final class NodesWithFileDestinationPrinter
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
-    public function printNodesWithFileDestination(NodesWithFileDestination $nodesWithFileDestination): string
+    public function printNodesWithFileDestination(MovedFileWithNodes $nodesWithFileDestination): string
     {
         $nodes = $this->postFileProcessor->traverse($nodesWithFileDestination->getNodes());
 
