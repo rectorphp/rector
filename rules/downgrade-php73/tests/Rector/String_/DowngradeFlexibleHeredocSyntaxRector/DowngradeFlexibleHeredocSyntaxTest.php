@@ -9,6 +9,9 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @requires PHP >= 7.3
+ */
 final class DowngradeFlexibleHeredocSyntaxTest extends AbstractRectorTestCase
 {
     /**
