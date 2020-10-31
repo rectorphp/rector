@@ -75,8 +75,8 @@ target_downgrade_php_whynots=($(echo ${downgrade_php_whynots[$target_php_version
 target_downgrade_php_sets=($(echo ${downgrade_php_sets[$target_php_version]} | tr " " "\n"))
 
 packages_to_downgrade=()
-paths_to_downgrade=()
 sets_to_downgrade=()
+declare -A package_paths
 declare -A packages_by_set
 
 # Switch to production
@@ -110,8 +110,8 @@ do
                 path=$(composer info $package --path | cut -d' ' -f2-)
             fi
             packages_to_downgrade+=($package)
-            paths_to_downgrade+=($path)
             sets_to_downgrade+=($set)
+            package_paths[$package]=$path
             packages_by_set[$set]=$(echo "${packages_by_set[$set]} ${package}")
         done
     else
@@ -126,11 +126,11 @@ composer install
 # Make sure that the number of packages, paths and sets is the same
 # otherwise something went wrong
 numberPackages=${#packages_to_downgrade[@]}
-numberPaths=${#paths_to_downgrade[@]}
+# numberPaths=${#package_paths[@]}
+# if [ ! $numberPaths -eq $numberPackages ]; then
+#     fail "Number of paths ($numberPaths) and number of packages ($numberPackages) should not be different"
+# fi
 numberSets=${#sets_to_downgrade[@]}
-if [ ! $numberPaths -eq $numberPackages ]; then
-    fail "Number of paths ($numberPaths) and number of packages ($numberPackages) should not be different"
-fi
 if [ ! $numberSets -eq $numberPackages ]; then
     fail "Number of sets ($numberSets) and number of packages ($numberPackages) should not be different"
 fi
@@ -190,6 +190,7 @@ done
 # and package2 requires package1), the process will fail
 hasNonDowngradedDependents=()
 previousNonDowngradedDependentsString=""
+declare -A circular_reference_packages_by_set
 
 echo Executing Rector to downgrade $numberDowngradedPackages packages
 downgraded_packages=()
@@ -221,6 +222,7 @@ do
             if [[ ! " ${downgraded_packages[@]} " =~ " ${dependentKey} " ]]; then
                 hasNonDowngradedDependent="true"
                 hasNonDowngradedDependents+=("${dependent}=>${package_to_downgrade}")
+                circular_reference_packages_by_set[${set_to_downgrade}]=$(echo "${circular_reference_packages_by_set[$set_to_downgrade]} ${dependent}")
                 # echo "${package_to_downgrade} has non-downgraded dependent: ${dependentKey}"
             fi
         done
@@ -232,7 +234,7 @@ do
         downgraded_packages+=($key)
         ((numberDowngradedPackages++))
 
-        path_to_downgrade=${paths_to_downgrade[$pos]}
+        path_to_downgrade=${package_paths[$package_to_downgrade]}
         # exclude=${package_excludes[$package_to_downgrade]}
 
         # # If there's no explicit path to exclude, set to exclude the "tests" folders
@@ -258,7 +260,7 @@ do
         # Print command in output for testing
         # set -x
         # bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi
-        bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --ansi
+        # bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --ansi --dry-run
         # set +x
 
         # If Rector fails, already exit
@@ -272,10 +274,17 @@ do
         hasNonDowngradedDependentsString=$(join_by ", " ${hasNonDowngradedDependents[@]})
         if [ "$hasNonDowngradedDependentsString" == "$previousNonDowngradedDependentsString" ]
         then
+            echo Circular references
+            for set in "${!circular_reference_packages_by_set[@]}";
+            do
+                unique_packages=($(echo "${circular_reference_packages_by_set[$set]}" | tr ' ' '\n' | sort -u))
+                echo "Bundle of circular reference packages for set $set: ${unique_packages[@]}"
+            done
             fail "There are circular dependencies, so the process can't decide in which order to execute them: $hasNonDowngradedDependentsString"
         fi
     fi
     hasNonDowngradedDependents=()
+    circular_reference_packages_by_set=()
     previousNumberDowngradedPackages=$numberDowngradedPackages
     previousNonDowngradedDependentsString=$hasNonDowngradedDependentsString
 done
