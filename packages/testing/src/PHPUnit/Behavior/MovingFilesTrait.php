@@ -19,20 +19,25 @@ trait MovingFilesTrait
         $this->assertNull($movedFile);
     }
 
-    /**
-     * @param AddedFileWithContent[] $expectedFilePathsWithContents
-     */
-    protected function assertFilesWereAdded(array $expectedFilePathsWithContents): void
+    protected function assertFileWithContentWasAdded(AddedFileWithContent $addedFileWithContent): void
     {
-        Assert::allIsAOf($expectedFilePathsWithContents, AddedFileWithContent::class);
+        $this->assertFilesWereAdded([$addedFileWithContent]);
+    }
+
+    /**
+     * @param AddedFileWithContent[] $expectedAddedFileWithContents
+     */
+    protected function assertFilesWereAdded(array $expectedAddedFileWithContents): void
+    {
+        Assert::allIsAOf($expectedAddedFileWithContents, AddedFileWithContent::class);
 
         $addedFilePathsWithContents = $this->removedAndAddedFilesCollector->getAddedFiles();
 
         sort($addedFilePathsWithContents);
-        sort($expectedFilePathsWithContents);
+        sort($expectedAddedFileWithContents);
 
         foreach ($addedFilePathsWithContents as $key => $addedFilePathWithContent) {
-            $expectedFilePathWithContent = $expectedFilePathsWithContents[$key];
+            $expectedFilePathWithContent = $expectedAddedFileWithContents[$key];
 
             $this->assertSame(
                 $expectedFilePathWithContent->getFilePath(),

@@ -46,7 +46,7 @@ final class MovedFileWithNodesFactory
     /**
      * @param Node[] $nodes
      */
-    public function create(
+    public function createWithDesiredGroup(
         SmartFileInfo $oldFileInfo,
         array $nodes,
         string $desiredGroupName
@@ -87,8 +87,14 @@ final class MovedFileWithNodesFactory
         );
 
         // 3. update fully qualifed name of the class like - will be used further
-        /** @var ClassLike $classLike */
+        /** @var ClassLike|null $classLike */
         $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, ClassLike::class);
+        if ($classLike === null) {
+            return null;
+        }
+
+        // clone to prevent deep override
+        $classLike = clone $classLike;
         $classLike->namespacedName = new FullyQualified($newClassName);
 
         return new MovedFileWithNodes($nodes, $newFileDestination, $oldFileInfo, $oldClassName, $newClassName);
@@ -117,6 +123,9 @@ final class MovedFileWithNodesFactory
             if (! $node instanceof Namespace_) {
                 continue;
             }
+
+            // prevent namespace override
+            $node = clone $node;
 
             $node->name = new Name($newNamespaceName);
             break;

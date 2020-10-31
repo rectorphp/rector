@@ -23,10 +23,8 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractRectorTest
         if ($expectedAddedFileWithContent === null) {
             // no change - file should have the original location
             $this->assertFileWasNotChanged($this->originalTempFileInfo);
-        }
-
-        if ($expectedAddedFileWithContent !== null) {
-            $this->assertFilesWereAdded([$expectedAddedFileWithContent]);
+        } else {
+            $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
         }
     }
 

@@ -133,7 +133,7 @@ Turns `$this->getRepository()` in Symfony Controller to constructor injection an
 
 ### `MoveEntitiesToEntityDirectoryRector`
 
-- class: [`Rector\Autodiscovery\Rector\FileSystem\MoveEntitiesToEntityDirectoryRector`](/rules/autodiscovery/src/Rector/FileSystem/MoveEntitiesToEntityDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\FileNode\MoveEntitiesToEntityDirectoryRector`](/rules/autodiscovery/src/Rector/FileNode/MoveEntitiesToEntityDirectoryRector.php)
 
 Move entities to Entity namespace
 
@@ -158,7 +158,7 @@ Move entities to Entity namespace
 
 ### `MoveInterfacesToContractNamespaceDirectoryRector`
 
-- class: [`Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector`](/rules/autodiscovery/src/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector`](/rules/autodiscovery/src/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector.php)
 
 Move interface to "Contract" namespace
 
@@ -218,7 +218,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### `MoveValueObjectsToValueObjectDirectoryRector`
 
-- class: [`Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector`](/rules/autodiscovery/src/Rector/FileSystem/MoveValueObjectsToValueObjectDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\FileNode\MoveValueObjectsToValueObjectDirectoryRector`](/rules/autodiscovery/src/Rector/FileNode/MoveValueObjectsToValueObjectDirectoryRector.php)
 
 Move value object to ValueObject namespace/directory
 
@@ -227,7 +227,7 @@ Move value object to ValueObject namespace/directory
 
 declare(strict_types=1);
 
-use Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector;
+use Rector\Autodiscovery\Rector\FileNode\MoveValueObjectsToValueObjectDirectoryRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

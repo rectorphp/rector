@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\DocumentationGenerator\Tests\Printer\CodeSamplePrinter;
 
 use Iterator;
-use Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector;
+use Rector\Autodiscovery\Rector\FileNode\MoveValueObjectsToValueObjectDirectoryRector;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\DocumentationGenerator\Printer\CodeSamplePrinter;
