@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp73\Rector\String_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -19,7 +17,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
 {
-    const DOC_INDENTATION = 'docIndentation';
+    public const DOC_INDENTATION = 'docIndentation';
 
     public function getDefinition(): RectorDefinition
     {
