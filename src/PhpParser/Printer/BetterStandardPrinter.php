@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
+use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -152,10 +153,6 @@ final class BetterStandardPrinter extends Standard
             $node = [];
         }
 
-        if ($node instanceof EncapsedStringPart) {
-            return 'UNABLE_TO_PRINT_ENCAPSED_STRING';
-        }
-
         if (! is_array($node)) {
             $node = [$node];
         }
@@ -190,6 +187,11 @@ final class BetterStandardPrinter extends Standard
         $content = self::pStmts((array) $fileWithoutNamespace->stmts, false);
 
         return ltrim($content);
+    }
+
+    public function pFile(FileNode $fileNode): string
+    {
+        return self::pStmts((array) $fileNode->stmts);
     }
 
     /**
@@ -448,6 +450,12 @@ final class BetterStandardPrinter extends Standard
         }
 
         return parent::pStmt_Use($use);
+    }
+
+    protected function pScalar_EncapsedStringPart(EncapsedStringPart $encapsedStringPart): string
+    {
+        // parent throws exception, but we need to compare string
+        return '`' . $encapsedStringPart->value . '`';
     }
 
     /**

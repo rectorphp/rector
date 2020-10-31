@@ -6,12 +6,12 @@ namespace Rector\Testing\PHPUnit;
 
 use Nette\Utils\Strings;
 use PHPUnit\Framework\ExpectationFailedException;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\FilePathWithContent;
+use Rector\Core\ValueObject\MovedFile;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Testing\Contract\RunnableInterface;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
@@ -56,6 +56,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
+
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
 
         $this->originalTempFileInfo = $inputFileInfo;
@@ -110,6 +111,11 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->assertFileMissing($this->originalTempFileInfo->getPathname());
     }
 
+    protected function matchMovedFile(): MovedFile
+    {
+        return $this->removedAndAddedFilesCollector->getMovedFile($this->originalTempFileInfo);
+    }
+
     /**
      * @param FilePathWithContent[] $expectedFilePathsWithContents
      */
@@ -117,10 +123,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     {
         Assert::allIsAOf($expectedFilePathsWithContents, FilePathWithContent::class);
 
-        /** @var RemovedAndAddedFilesCollector $removedAndAddedFilesCollector */
-        $removedAndAddedFilesCollector = self::$container->get(RemovedAndAddedFilesCollector::class);
-
-        $addedFilePathsWithContents = $removedAndAddedFilesCollector->getAddedFilePathsWithContents();
+        $addedFilePathsWithContents = $this->removedAndAddedFilesCollector->getAddedFilePathsWithContents();
 
         sort($addedFilePathsWithContents);
         sort($expectedFilePathsWithContents);

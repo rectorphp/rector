@@ -688,3 +688,4 @@ parameters:
         - '#Static property Rector\\Testing\\PHPUnit\\AbstractGenericRectorTestCase\:\:\$allRectorContainer \(Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container\|null\) does not accept Psr\\Container\\ContainerInterface#'
 
         - '#Class with base "Application" name is already used in "(.*?)\\Symfony\\Component\\Console\\Application", "Symfony\\Component\\Console\\Application", "Rector\\Core\\Console\\Application"\. Use unique name to make classes easy to recognize#'
+        - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
