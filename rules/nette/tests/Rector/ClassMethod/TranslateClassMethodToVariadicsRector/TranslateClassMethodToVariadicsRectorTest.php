@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\ClassMethod\TranslateClassMethodToVariadicsRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\ClassMethod\TranslateClassMethodToVariadicsRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TranslateClassMethodToVariadicsRectorTest extends AbstractRectorTestCase

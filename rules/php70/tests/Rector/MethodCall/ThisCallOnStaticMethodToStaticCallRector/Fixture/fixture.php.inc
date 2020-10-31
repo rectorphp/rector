@@ -2,7 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 class SomeParent
 {
@@ -39,7 +39,7 @@ class SomeRunnable implements RunnableInterface
 
 namespace Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 class SomeParent
 {

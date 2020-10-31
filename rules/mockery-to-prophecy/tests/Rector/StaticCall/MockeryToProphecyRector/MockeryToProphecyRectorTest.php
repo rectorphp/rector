@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\MockeryToProphecy\Tests\Rector\StaticCall\MockeryToProphecyRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MockeryToProphecy\Rector\StaticCall\MockeryCloseRemoveRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MockeryToProphecyRectorTest extends AbstractRectorTestCase

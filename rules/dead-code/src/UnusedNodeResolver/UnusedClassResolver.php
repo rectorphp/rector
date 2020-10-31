@@ -10,9 +10,9 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Exception\NotImplementedException;
-use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class UnusedClassResolver
 {

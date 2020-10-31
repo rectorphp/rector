@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassMethod\MakeInheritedMethodVisibil
 
 use Iterator;
 use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SkipParentConstructOverrideInPHP72Test extends AbstractRectorTestCase

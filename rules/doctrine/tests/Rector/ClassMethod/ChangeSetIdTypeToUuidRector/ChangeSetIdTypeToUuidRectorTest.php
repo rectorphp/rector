@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeSetIdTypeToUuidRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\ClassMethod\ChangeSetIdTypeToUuidRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeSetIdTypeToUuidRectorTest extends AbstractRectorTestCase

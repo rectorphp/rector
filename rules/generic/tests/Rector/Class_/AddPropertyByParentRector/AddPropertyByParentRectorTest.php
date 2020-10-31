@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\Class_\AddPropertyByParentRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\Tests\Rector\Class_\AddPropertyByParentRector\Source\SomeParentClassToAddDependencyBy;
 use Rector\Generic\ValueObject\AddPropertyByParent;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddPropertyByParentRectorTest extends AbstractRectorTestCase

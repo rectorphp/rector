@@ -7,7 +7,7 @@ namespace Rector\Utils\NodeDocumentationGenerator\Command;
 use Nette\Loaders\RobotLoader;
 use Rector\Core\Console\Command\AbstractCommand;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
-use Rector\Core\Testing\Finder\RectorsFinder;
+use Rector\Testing\Finder\RectorsFinder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;

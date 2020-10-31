@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\Class_\RemoveParentRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Class_\RemoveParentRector;
 use Rector\Generic\Tests\Rector\Class_\RemoveParentRector\Source\ParentTypeToBeRemoved;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveParentRectorTest extends AbstractRectorTestCase

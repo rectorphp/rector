@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector;
 use Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
 use Rector\Transform\ValueObject\PropertyAssignToMethodCall;

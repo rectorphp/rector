@@ -15,10 +15,10 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\Testing\Application\EnabledRectorsProvider;
-use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Testing\Application\EnabledRectorsProvider;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
@@ -84,6 +84,9 @@ final class RectorNodeTraverser extends NodeTraverser
                 AttributeKey::FILE_INFO,
                 $this->currentFileInfoProvider->getSmartFileInfo()
             );
+
+            $fileWithoutNamespace->setAttributes($nodes[0]->getAttributes());
+
             return parent::traverse([$fileWithoutNamespace]);
         }
 

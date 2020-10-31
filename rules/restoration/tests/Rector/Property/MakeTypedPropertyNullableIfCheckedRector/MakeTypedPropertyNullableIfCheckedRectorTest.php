@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCheckedRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MakeTypedPropertyNullableIfCheckedRectorTest extends AbstractRectorTestCase

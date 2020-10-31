@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\ClassMethod\WrapReturnRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
 use Rector\Generic\ValueObject\WrapReturn;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class WrapReturnRectorTest extends AbstractRectorTestCase

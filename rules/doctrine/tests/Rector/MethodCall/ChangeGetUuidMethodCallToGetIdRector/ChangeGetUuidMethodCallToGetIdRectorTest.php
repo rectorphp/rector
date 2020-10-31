@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeGetUuidMethodCallToGetIdRectorTest extends AbstractRectorTestCase

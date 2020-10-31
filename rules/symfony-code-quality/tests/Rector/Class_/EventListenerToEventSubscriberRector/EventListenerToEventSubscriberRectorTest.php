@@ -6,8 +6,8 @@ namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubs
 
 use Iterator;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class EventListenerToEventSubscriberRectorTest extends AbstractRectorTestCase

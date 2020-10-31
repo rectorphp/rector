@@ -7,7 +7,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclaratio
 use Iterator;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ClassMetadataFactory;
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ParserInterface;

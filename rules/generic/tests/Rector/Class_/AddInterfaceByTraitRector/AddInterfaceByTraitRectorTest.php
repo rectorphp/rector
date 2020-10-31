@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\Class_\AddInterfaceByTraitRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Class_\AddInterfaceByTraitRector;
 use Rector\Generic\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface;
 use Rector\Generic\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddInterfaceByTraitRectorTest extends AbstractRectorTestCase

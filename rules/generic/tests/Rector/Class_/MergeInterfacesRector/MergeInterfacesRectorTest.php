@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\Class_\MergeInterfacesRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Class_\MergeInterfacesRector;
 use Rector\Generic\Tests\Rector\Class_\MergeInterfacesRector\Source\SomeInterface;
 use Rector\Generic\Tests\Rector\Class_\MergeInterfacesRector\Source\SomeOldInterface;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MergeInterfacesRectorTest extends AbstractRectorTestCase

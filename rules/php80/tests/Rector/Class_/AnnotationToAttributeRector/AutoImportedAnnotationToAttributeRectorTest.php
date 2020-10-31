@@ -6,8 +6,8 @@ namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector;
 
 use Iterator;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AutoImportedAnnotationToAttributeRectorTest extends AbstractRectorTestCase

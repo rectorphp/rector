@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Foreach_\SimplifyForeachToCoalescingRe
 
 use Iterator;
 use Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SimplifyForeachToCoalescingRectorTest extends AbstractRectorTestCase

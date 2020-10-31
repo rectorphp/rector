@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\RemovingStatic\Rector\Class_\SingleStaticServiceToDynamicRector;
 use Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Source\ClassWithStaticProperties;
 use Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Source\FirstStaticClass;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SingleStaticServiceToDynamicRectorTest extends AbstractRectorTestCase

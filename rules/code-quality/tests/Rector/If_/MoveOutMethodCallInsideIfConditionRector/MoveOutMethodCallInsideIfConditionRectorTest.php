@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfCondition
 
 use Iterator;
 use Rector\CodeQuality\Rector\If_\MoveOutMethodCallInsideIfConditionRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveOutMethodCallInsideIfConditionRectorTest extends AbstractRectorTestCase

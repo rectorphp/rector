@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

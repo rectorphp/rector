@@ -80,6 +80,16 @@ final class ErrorAndDiffCollector
         return $this->removedAndAddedFilesCollector->getAffectedFilesCount();
     }
 
+    public function getAddFilesCount(): int
+    {
+        return $this->removedAndAddedFilesCollector->getAddedFileCount();
+    }
+
+    public function getRemovedFilesCount(): int
+    {
+        return $this->removedAndAddedFilesCollector->getRemovedFilesCount();
+    }
+
     public function getRemovedNodeCount(): int
     {
         return $this->nodesToRemoveCollector->getCount();

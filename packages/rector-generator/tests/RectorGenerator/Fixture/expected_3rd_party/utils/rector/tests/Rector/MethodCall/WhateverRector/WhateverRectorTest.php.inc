@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Utils\Rector\Tests\Rector\MethodCall\WhateverRector;
 
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class WhateverRectorTest extends AbstractRectorTestCase
 {

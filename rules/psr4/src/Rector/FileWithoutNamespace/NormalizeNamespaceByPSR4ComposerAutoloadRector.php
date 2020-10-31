@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
-use Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector;
+use Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o

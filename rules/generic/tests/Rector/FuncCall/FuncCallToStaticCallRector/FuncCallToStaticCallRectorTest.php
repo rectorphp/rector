@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToStaticCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

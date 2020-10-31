@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangeChartRendererRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPOffice\Rector\StaticCall\ChangeChartRendererRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeChartRendererRectorTest extends AbstractRectorTestCase

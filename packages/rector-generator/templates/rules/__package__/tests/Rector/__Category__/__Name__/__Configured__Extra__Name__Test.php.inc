@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\__Package__\Tests\Rector\__Category__\__Name__;
 
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class __Name__Test extends AbstractRectorTestCase
 {

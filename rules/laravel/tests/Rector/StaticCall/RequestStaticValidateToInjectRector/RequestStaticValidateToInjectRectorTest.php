@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Laravel\Tests\Rector\StaticCall\RequestStaticValidateToInjectRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RequestStaticValidateToInjectRectorTest extends AbstractRectorTestCase

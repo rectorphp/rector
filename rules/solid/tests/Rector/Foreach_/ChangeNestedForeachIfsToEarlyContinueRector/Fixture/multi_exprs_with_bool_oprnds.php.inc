@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 class MultiExprsWithBoolOprnds implements RunnableInterface
 {
@@ -32,7 +32,7 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
 
 namespace Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
-use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Testing\Contract\RunnableInterface;
 
 class MultiExprsWithBoolOprnds implements RunnableInterface
 {

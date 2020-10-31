@@ -511,8 +511,8 @@ parameters:
                 - rules/naming/src/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php # 21
                 - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php # 36
                 - rules/downgrade-php71/src/Rector/FunctionLike/AbstractMaybeAddDocBlockRector.php # 20
-                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 68
-                - src/Testing/PHPUnit/AbstractRectorTestCase.php # 24
+                - packages/testing/src/PHPUnit/AbstractGenericRectorTestCase.php # 68
+                - packages/testing/src/PHPUnit/AbstractRectorTestCase.php # 24
 
         - '#Method call in if or elseif is not allowed#'
         - '#Method or Static call in foreach is not allowed#'
@@ -523,7 +523,7 @@ parameters:
                 # 3rd party code
                 - packages/doctrine-annotation-generated/src/DataCollector/ResolvedConstantStaticCollector.php
                 # on purpose
-                - src/Testing/PHPUnit/AbstractGenericRectorTestCase.php # 251
+                - packages/testing/src/PHPUnit/AbstractGenericRectorTestCase.php # 251
 
         -
             message: '#Do not use factory/method call in constructor, put factory in config and get service with dependency injection#'
@@ -592,7 +592,7 @@ parameters:
                 - src/Configuration/Configuration.php # 228
                 - src/Configuration/CurrentNodeProvider.php # 16
                 - src/HttpKernel/RectorKernel.php # 71
-                - src/Testing/NodeVisitor/AttributeCollectingNodeVisitor.php # 24
+                - packages/testing/src/NodeVisitor/AttributeCollectingNodeVisitor.php # 24
 
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector\:\:refactor\(\) expects PhpParser\\Node\\Expr\\AssignOp\\Div\|PhpParser\\Node\\Expr\\AssignOp\\Minus\|PhpParser\\Node\\Expr\\AssignOp\\Mul\|PhpParser\\Node\\Expr\\AssignOp\\Plus\|PhpParser\\Node\\Expr\\BinaryOp\\Div\|PhpParser\\Node\\Expr\\BinaryOp\\Minus\|PhpParser\\Node\\Expr\\BinaryOp\\Mul\|PhpParser\\Node\\Expr\\BinaryOp\\Plus, PhpParser\\Node\\Expr\\AssignOp\|PhpParser\\Node\\Expr\\BinaryOp given#'
 
@@ -661,8 +661,8 @@ parameters:
                 - src/RectorDefinition/ConfiguredCodeSample.php # 41
                 - src/RectorDefinition/ConfiguredCodeSample.php # 43
                 - src/RectorDefinition/RectorDefinition.php # 31
-                - src/Testing/PHPUnit/Runnable/NodeVisitor/PrefixingClassLikeNamesNodeVisitor.php # 35
-                - src/Testing/PHPUnit/Runnable/NodeVisitor/PrefixingClassLikeNamesNodeVisitor.php # 36
+                - packages/testing/src/PHPUnit/Runnable/NodeVisitor/PrefixingClassLikeNamesNodeVisitor.php # 35
+                - packages/testing/src/PHPUnit/Runnable/NodeVisitor/PrefixingClassLikeNamesNodeVisitor.php # 36
 
         -
             message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
@@ -683,3 +683,8 @@ parameters:
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         # finder type
         - '#Method Rector\\SOLID\\Rector\\Assign\\MoveVariableDeclarationNearReferenceRector\:\:findFirstVariableUsageInScope\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'
+
+        - '#Class with base "NodeNameResolver" name is already used in "Symplify\\CodingStandard\\PhpParser\\NodeNameResolver", "Rector\\NodeNameResolver\\NodeNameResolver"\. Use unique name to make classes easy to recognize#'
+        - '#Static property Rector\\Testing\\PHPUnit\\AbstractGenericRectorTestCase\:\:\$allRectorContainer \(Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container\|null\) does not accept Psr\\Container\\ContainerInterface#'
+
+        - '#Class with base "Application" name is already used in "(.*?)\\Symfony\\Component\\Console\\Application", "Symfony\\Component\\Console\\Application", "Rector\\Core\\Console\\Application"\. Use unique name to make classes easy to recognize#'

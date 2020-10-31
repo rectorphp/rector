@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\Namespace_\RenameNamespaceRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameNamespaceRectorTest extends AbstractRectorTestCase

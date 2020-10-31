@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Order\Rector\Class_\OrderFirstLevelClassStatementsRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class OrderFirstLevelClassStatementsRectorTest extends AbstractRectorTestCase

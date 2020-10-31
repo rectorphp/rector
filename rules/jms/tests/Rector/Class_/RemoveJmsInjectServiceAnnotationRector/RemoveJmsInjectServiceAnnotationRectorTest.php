@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\JMS\Tests\Rector\Class_\RemoveJmsInjectServiceAnnotationRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\JMS\Rector\Class_\RemoveJmsInjectServiceAnnotationRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveJmsInjectServiceAnnotationRectorTest extends AbstractRectorTestCase

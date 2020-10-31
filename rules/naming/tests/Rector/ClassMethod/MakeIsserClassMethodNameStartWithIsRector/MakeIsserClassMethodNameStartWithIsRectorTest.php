@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Naming\Tests\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Naming\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MakeIsserClassMethodNameStartWithIsRectorTest extends AbstractRectorTestCase

@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Assign\CombinedAssignRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

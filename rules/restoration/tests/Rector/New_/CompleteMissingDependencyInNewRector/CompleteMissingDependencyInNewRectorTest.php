@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Restoration\Tests\Rector\New_\CompleteMissingDependencyInNewRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\New_\CompleteMissingDependencyInNewRector;
 use Rector\Restoration\Tests\Rector\New_\CompleteMissingDependencyInNewRector\Source\RandomDependency;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CompleteMissingDependencyInNewRectorTest extends AbstractRectorTestCase

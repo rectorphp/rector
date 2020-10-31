@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\ClassLike\RemoveAnnotationRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveAnnotationRectorTest extends AbstractRectorTestCase

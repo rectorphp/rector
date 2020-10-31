@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\RectorCombination\RenameAndFluent;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameAndFluentTest extends AbstractRectorTestCase

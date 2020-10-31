@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\NetteTesterToPHPUnit\Tests\Rector\RenameTesterTestToPHPUnitToTestFileRector;
 
-use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Rector\NetteTesterToPHPUnit\Rector\RenameTesterTestToPHPUnitToTestFileRector;
+use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameTesterTestToPHPUnitToTestFileRectorTest extends AbstractFileSystemRectorTestCase

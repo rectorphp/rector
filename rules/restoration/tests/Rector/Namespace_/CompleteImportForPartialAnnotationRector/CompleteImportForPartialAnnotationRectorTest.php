@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
 use Rector\Restoration\ValueObject\UseWithAlias;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CompleteImportForPartialAnnotationRectorTest extends AbstractRectorTestCase

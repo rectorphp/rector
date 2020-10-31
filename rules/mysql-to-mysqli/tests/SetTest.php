@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\MysqlToMysqli\Tests;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Set\ValueObject\SetList;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SetTest extends AbstractRectorTestCase

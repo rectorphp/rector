@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\String_\SplitStringClassConstantToClas
 
 use Iterator;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SplitStringClassConstantToClassConstFetchRectorTest extends AbstractRectorTestCase

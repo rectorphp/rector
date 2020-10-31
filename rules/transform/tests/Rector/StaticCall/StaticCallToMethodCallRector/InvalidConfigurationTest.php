@@ -6,7 +6,7 @@ namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector;
 
 use InvalidArgumentException;
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

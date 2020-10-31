@@ -6,8 +6,8 @@ namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector
 
 use Iterator;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ImportClassNameRectorTest extends AbstractRectorTestCase
