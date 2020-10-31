@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/vendor/symfony/cache/DoctrineProvider.php',
         __DIR__ . '/vendor/symfony/dependency-injection/Compiler/AbstractRecursivePass.php',
         __DIR__ . '/vendor/symfony/dependency-injection/Compiler/CheckTypeDeclarationsPass.php',
-        __DIR__ . '/vendor/symfony/dependency-injection/ContainerBuilder.php',
+        // __DIR__ . '/vendor/symfony/dependency-injection/ContainerBuilder.php',
         __DIR__ . '/vendor/symfony/dependency-injection/Dumper/PhpDumper.php',
         __DIR__ . '/vendor/symfony/dependency-injection/ExpressionLanguage.php',
         __DIR__ . '/vendor/symfony/dependency-injection/ExpressionLanguageProvider.php',
