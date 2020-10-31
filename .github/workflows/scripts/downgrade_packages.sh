@@ -188,8 +188,7 @@ done
 
 # In case of circular dependencies (eg: package1 requires package2
 # and package2 requires package1), the process will fail
-hasNonDowngradedDependents=()
-previousNonDowngradedDependentsString=""
+# hasNonDowngradedDependents=()
 declare -A circular_reference_packages_by_set
 
 echo Executing Rector to downgrade $numberDowngradedPackages packages
@@ -221,7 +220,7 @@ do
             dependentKey="${dependent}_${set_to_downgrade}"
             if [[ ! " ${downgraded_packages[@]} " =~ " ${dependentKey} " ]]; then
                 hasNonDowngradedDependent="true"
-                hasNonDowngradedDependents+=("${dependent}=>${package_to_downgrade}")
+                # hasNonDowngradedDependents+=("${dependent}=>${package_to_downgrade}")
                 circular_reference_packages_by_set[${set_to_downgrade}]=$(echo "${circular_reference_packages_by_set[$set_to_downgrade]} ${dependent}")
                 # echo "${package_to_downgrade} has non-downgraded dependent: ${dependentKey}"
             fi
@@ -268,23 +267,41 @@ do
             fail "Rector downgrade failed on set ${set_to_downgrade} for package ${package_to_downgrade}"
         fi
     done
-    # In case of circular dependencies, make the process fail
+    # If no new package was downgraded, it must be because of circular dependencies
     if [ $numberDowngradedPackages -eq $previousNumberDowngradedPackages ]
     then
-        hasNonDowngradedDependentsString=$(join_by ", " ${hasNonDowngradedDependents[@]})
-        if [ "$hasNonDowngradedDependentsString" == "$previousNonDowngradedDependentsString" ]
-        then
-            echo Circular references
-            for set in "${!circular_reference_packages_by_set[@]}";
-            do
-                unique_packages=($(echo "${circular_reference_packages_by_set[$set]}" | tr ' ' '\n' | sort -u))
-                echo "Bundle of circular reference packages for set $set: ${unique_packages[@]}"
-            done
-            fail "There are circular dependencies, so the process can't decide in which order to execute them: $hasNonDowngradedDependentsString"
+        if [ ${#circular_reference_packages_by_set[@]} -eq 0 ]; then
+            fail "For some unknown reason, not all packages have been downgraded"
         fi
+
+        # Resolve all involved packages all together
+        echo "Resolving circular reference packages all together"
+        for set_to_downgrade in "${!circular_reference_packages_by_set[@]}";
+        do
+            circular_packages_to_downgrade=($(echo "${circular_reference_packages_by_set[$set_to_downgrade]}" | tr ' ' '\n' | sort -u))
+            circular_paths_to_downgrade=()
+            for package_to_downgrade in "${circular_packages_to_downgrade[@]}";
+            do
+                # Obtain the path
+                circular_paths_to_downgrade+=(${package_paths[$package_to_downgrade]})
+
+                # Mark this package as downgraded
+                key="${package_to_downgrade}_${set_to_downgrade}"
+                downgraded_packages+=($key)
+                ((numberDowngradedPackages++))
+            done
+            paths_to_downgrade=$(join_by " " ${circular_paths_to_downgrade[@]})
+            echo "Running set ${set_to_downgrade} for packages ${circular_packages_to_downgrade[@]}"
+            config=rector-downgrade-dependency.php
+            # bin/rector process $paths_to_downgrade --set=$set_to_downgrade --config=$config --ansi --dry-run
+
+            # If Rector fails, already exit
+            if [ "$?" -gt 0 ]; then
+                fail "Rector downgrade failed on set ${set_to_downgrade} for package ${package_to_downgrade}"
+            fi
+        done
     fi
-    hasNonDowngradedDependents=()
+    # hasNonDowngradedDependents=()
     circular_reference_packages_by_set=()
     previousNumberDowngradedPackages=$numberDowngradedPackages
-    previousNonDowngradedDependentsString=$hasNonDowngradedDependentsString
 done
