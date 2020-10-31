@@ -120,8 +120,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $this->lexer->getTokens()
         );
 
-        $addedFile = new AddedFileWithContent($fileDestination, $fileContent);
-        $this->addFile($addedFile);
+        $addedFileWithContent = new AddedFileWithContent($fileDestination, $fileContent);
+        $this->addFile($addedFileWithContent);
     }
 
     /**
@@ -134,8 +134,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $fileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
         $fileContent = $this->resolveLastEmptyLine($fileContent);
 
-        $addedFile = new AddedFileWithContent($fileDestination, $fileContent);
-        $this->addFile($addedFile);
+        $addedFileWithContent = new AddedFileWithContent($fileDestination, $fileContent);
+        $this->addFile($addedFileWithContent);
     }
 
     /**
