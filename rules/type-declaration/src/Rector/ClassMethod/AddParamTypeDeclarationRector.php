@@ -11,11 +11,14 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\StringType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Webmozart\Assert\Assert;
 
@@ -33,6 +36,16 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
      * @var AddParamTypeDeclaration[]
      */
     private $parameterTypehints = [];
+
+    /**
+     * @var TypeComparator
+     */
+    private $typeComparator;
+
+    public function __construct(TypeComparator $typeComparator)
+    {
+        $this->typeComparator = $typeComparator;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -56,7 +69,7 @@ class SomeClass
 }
 CODE_SAMPLE
             , [
-                self::PARAMETER_TYPEHINTS => [new AddParamTypeDeclaration('SomeClass', 'process', 0, 'string')],
+                self::PARAMETER_TYPEHINTS => [new AddParamTypeDeclaration('SomeClass', 'process', 0, new StringType())],
             ]),
         ]);
     }
@@ -96,6 +109,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration): void
     {
         $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? [];
@@ -106,7 +122,7 @@ CODE_SAMPLE
     private function shouldSkip(ClassMethod $classMethod): bool
     {
         // skip class methods without args
-        if (count((array) $classMethod->params) === 0) {
+        if ((array) $classMethod->params === []) {
             return true;
         }
 
@@ -154,17 +170,23 @@ CODE_SAMPLE
     private function refactorParameter(Param $param, AddParamTypeDeclaration $addParamTypeDeclaration): void
     {
         // already set → no change
-        if ($param->type && $this->isName($param->type, $addParamTypeDeclaration->getTypehint())) {
-            return;
+        if ($param->type !== null) {
+            $currentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+            if ($this->typeComparator->areTypesEquals($currentParamType, $addParamTypeDeclaration->getParamType())) {
+                return;
+            }
         }
 
         // remove it
-        if ($addParamTypeDeclaration->getTypehint() === '') {
+        if ($addParamTypeDeclaration->getParamType() instanceof MixedType) {
             $param->type = null;
             return;
         }
 
-        $returnTypeNode = $this->staticTypeMapper->mapStringToPhpParserNode($addParamTypeDeclaration->getTypehint());
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+            $addParamTypeDeclaration->getParamType()
+        );
+
         $param->type = $returnTypeNode;
     }
 }

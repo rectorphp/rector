@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\StaticTypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
@@ -19,7 +18,6 @@ use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
-use Rector\StaticTypeMapper\Mapper\StringTypeToPhpParserNodeMapper;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 use Rector\StaticTypeMapper\PHPStan\NameScopeFactory;
 
@@ -45,11 +43,6 @@ final class StaticTypeMapper
     private $phpDocTypeMapper;
 
     /**
-     * @var StringTypeToPhpParserNodeMapper
-     */
-    private $stringTypeToPhpParserNodeMapper;
-
-    /**
      * @var NameScopeFactory
      */
     private $nameScopeFactory;
@@ -58,13 +51,11 @@ final class StaticTypeMapper
         NameScopeFactory $nameScopeFactory,
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
         PhpDocTypeMapper $phpDocTypeMapper,
-        PhpParserNodeMapper $phpParserNodeMapper,
-        StringTypeToPhpParserNodeMapper $stringTypeToPhpParserNodeMapper
+        PhpParserNodeMapper $phpParserNodeMapper
     ) {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->phpParserNodeMapper = $phpParserNodeMapper;
         $this->phpDocTypeMapper = $phpDocTypeMapper;
-        $this->stringTypeToPhpParserNodeMapper = $stringTypeToPhpParserNodeMapper;
         $this->nameScopeFactory = $nameScopeFactory;
     }
 
@@ -102,14 +93,6 @@ final class StaticTypeMapper
         }
 
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpDocTagValueNode));
-    }
-
-    /**
-     * @return Identifier|Name|NullableType
-     */
-    public function mapStringToPhpParserNode(string $type): Node
-    {
-        return $this->stringTypeToPhpParserNodeMapper->map($type);
     }
 
     public function mapPHPStanPhpDocTypeNodeToPhpDocString(TypeNode $typeNode, Node $node): string

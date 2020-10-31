@@ -14,11 +14,13 @@ final class ArrayItemStaticHelper
 {
     /**
      * @var string
+     * @see https://regex101.com/r/Yn4EqP/1
      */
     private const NON_EMPTY_SILENT_KEY_REGEX = '#()|\(\)#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/wcrm9D/1
      */
     private const ITEM_EQUALS_REGEX = '#(?<item>\w+)(\s+)?=(\s+)?#m';
 

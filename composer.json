@@ -31,7 +31,7 @@
         "doctrine/annotations": "^1.11",
         "doctrine/inflector": "^1.4|^2.0",
         "jean85/pretty-package-versions": "^1.5.1",
-        "migrify/php-config-printer": "^0.3.45",
+        "migrify/php-config-printer": "^0.3.52",
         "nette/robot-loader": "^3.2",
         "nette/utils": "^3.1",
         "nikic/php-parser": "4.10.2",
@@ -58,7 +58,9 @@
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
+        "cweagans/composer-patches": "^1.7",
         "friendsofphp/php-cs-fixer": "^2.16",
+        "migrify/vendor-patches": "^0.3.52",
         "nette/application": "^3.0",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
@@ -97,7 +99,6 @@
             "Rector\\ConsoleDiffer\\": "packages/console-differ/src",
             "Rector\\Core\\": "src",
             "Rector\\DeadCode\\": "rules/dead-code/src",
-            "Rector\\Decouple\\": "rules/decouple/src",
             "Rector\\DoctrineAnnotationGenerated\\": "packages/doctrine-annotation-generated/src",
             "Rector\\DoctrineCodeQuality\\": "rules/doctrine-code-quality/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "rules/doctrine-gedmo-to-knplabs/src",
@@ -109,7 +110,6 @@
             "Rector\\ReadWrite\\": "packages/read-write/src",
             "Rector\\DowngradePhp74\\": "rules/downgrade-php74/src",
             "Rector\\DowngradePhp80\\": "rules/downgrade-php80/src",
-            "Rector\\DynamicTypeAnalysis\\": "packages/dynamic-type-analysis/src",
             "Rector\\FamilyTree\\": "packages/family-tree/src",
             "Rector\\FileSystemRector\\": "packages/file-system-rector/src",
             "Rector\\Generic\\": "rules/generic/src",
@@ -227,7 +227,6 @@
             "Rector\\Compiler\\Tests\\": "compiler/tests",
             "Rector\\Core\\Tests\\": "tests",
             "Rector\\DeadCode\\Tests\\": "rules/dead-code/tests",
-            "Rector\\Decouple\\Tests\\": "rules/decouple/tests",
             "Rector\\DoctrineCodeQuality\\Tests\\": "rules/doctrine-code-quality/tests",
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "rules/doctrine-gedmo-to-knplabs/tests",
             "Rector\\Doctrine\\Tests\\": "rules/doctrine/tests",
@@ -237,7 +236,6 @@
             "Rector\\DowngradePhp73\\Tests\\": "rules/downgrade-php73/tests",
             "Rector\\DowngradePhp74\\Tests\\": "rules/downgrade-php74/tests",
             "Rector\\DowngradePhp80\\Tests\\": "rules/downgrade-php80/tests",
-            "Rector\\DynamicTypeAnalysis\\Tests\\": "packages/dynamic-type-analysis/tests",
             "Rector\\Generic\\Tests\\": "rules/generic/tests",
             "Rector\\JMS\\Tests\\": "rules/jms/tests",
             "Rector\\Laravel\\Tests\\": "rules/laravel/tests",
@@ -346,5 +344,13 @@
     "config": {
         "sort-packages": true,
         "process-timeout": 0
+    },
+    "prefer-stable": true,
+    "extra": {
+        "patches": {
+            "nette/application": [
+                "patches/nette-application-src-application-ui-presenter-php.patch"
+            ]
+        }
     }
 }

@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -48,41 +49,34 @@ final class MethodCallToVariableNameResolver
     public function resolveVariableName(MethodCall $methodCall): ?string
     {
         $methodCallVarName = $this->nodeNameResolver->getName($methodCall->var);
-        if ($methodCallVarName === null) {
-            return null;
-        }
-
         $methodCallName = $this->nodeNameResolver->getName($methodCall->name);
-        if ($methodCallName === null) {
+        if ($methodCallVarName === null || $methodCallName === null) {
             return null;
         }
 
+        return $this->getVariableName($methodCall, $methodCallVarName, $methodCallName);
+    }
+
+    private function getVariableName(MethodCall $methodCall, string $methodCallVarName, string $methodCallName): string
+    {
         $variableName = $this->expectedNameResolver->resolveForCall($methodCall);
         if ($methodCall->args === [] && $variableName !== null && $variableName !== $methodCallVarName) {
             return $variableName;
         }
 
+        $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);
         $argValue = $methodCall->args[0]->value;
         if ($argValue instanceof ClassConstFetch && $argValue->name instanceof Identifier) {
-            return Strings::replace(
-                strtolower($argValue->name->toString()),
-                self::CONSTANT_REGEX,
-                function ($matches): string {
-                    return strtoupper($matches[2]);
-                }
-            );
+            return $this->getClassConstFetchVarName($argValue, $methodCallName);
         }
 
-        $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);
         if ($argValue instanceof String_) {
             return $this->getStringVarName($argValue, $methodCallVarName, $fallbackVarName);
         }
 
-        if ($argValue instanceof Variable) {
-            $argumentName = $this->nodeNameResolver->getName($argValue);
-            if ($argumentName !== null && $variableName !== null) {
-                return $argumentName . ucfirst($variableName);
-            }
+        $argumentName = $this->nodeNameResolver->getName($argValue);
+        if ($argValue instanceof Variable && $argumentName !== null && $variableName !== null) {
+            return $argumentName . ucfirst($variableName);
         }
 
         return $fallbackVarName;
@@ -93,16 +87,47 @@ final class MethodCallToVariableNameResolver
         return $methodCallVarName . ucfirst($methodCallName);
     }
 
+    private function getClassConstFetchVarName(ClassConstFetch $classConstFetch, string $methodCallName): string
+    {
+        /** @var Identifier $name */
+        $name = $classConstFetch->name;
+        $argValueName = strtolower($name->toString());
+
+        if ($argValueName !== 'class') {
+            return Strings::replace(
+                $argValueName,
+                self::CONSTANT_REGEX,
+                function ($matches): string {
+                    return strtoupper($matches[2]);
+                }
+            );
+        }
+
+        if ($classConstFetch->class instanceof Name) {
+            return $this->normalizeStringVariableName($methodCallName) . $classConstFetch->class->getLast();
+        }
+
+        return $this->normalizeStringVariableName($methodCallName);
+    }
+
     private function getStringVarName(String_ $string, string $methodCallVarName, string $fallbackVarName): string
     {
-        $get = str_ireplace('get', '', $string->value . ucfirst($fallbackVarName));
-        $by = str_ireplace('by', '', $get);
-        $by = str_replace('-', '', $by);
-
-        if (Strings::match($by, self::START_ALPHA_REGEX) && $by !== $methodCallVarName) {
-            return $by;
+        $normalizeStringVariableName = $this->normalizeStringVariableName($string->value . ucfirst($fallbackVarName));
+        if (Strings::match(
+            $normalizeStringVariableName,
+            self::START_ALPHA_REGEX
+        ) && $normalizeStringVariableName !== $methodCallVarName) {
+            return $normalizeStringVariableName;
         }
 
         return $fallbackVarName;
+    }
+
+    private function normalizeStringVariableName(string $string): string
+    {
+        $get = str_ireplace('get', '', $string);
+        $by = str_ireplace('by', '', $get);
+
+        return str_replace('-', '', $by);
     }
 }

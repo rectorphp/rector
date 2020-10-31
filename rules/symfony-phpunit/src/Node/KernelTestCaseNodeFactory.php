@@ -60,7 +60,7 @@ final class KernelTestCaseNodeFactory
     public function createSetUpClassMethodWithGetTypes(Class_ $class, array $serviceTypes): ?ClassMethod
     {
         $assigns = $this->createSelfContainerGetWithTypeAssigns($class, $serviceTypes);
-        if (count($assigns) === 0) {
+        if ($assigns === []) {
             return null;
         }
 

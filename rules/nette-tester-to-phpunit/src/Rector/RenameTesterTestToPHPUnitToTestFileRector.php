@@ -17,11 +17,13 @@ final class RenameTesterTestToPHPUnitToTestFileRector extends AbstractFileSystem
 {
     /**
      * @var string
+     * @see https://regex101.com/r/ioamnE/1
      */
     private const PHP_SUFFIX_REGEX = '#\.php$#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/cOMZIj/1
      */
     private const PHPT_SUFFIX_REGEX = '#\.phpt$#';
 

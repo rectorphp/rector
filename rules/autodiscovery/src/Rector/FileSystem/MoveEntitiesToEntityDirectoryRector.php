@@ -7,7 +7,7 @@ namespace Rector\Autodiscovery\Rector\FileSystem;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
@@ -24,6 +24,7 @@ final class MoveEntitiesToEntityDirectoryRector extends AbstractFileMovingFileSy
 {
     /**
      * @var string
+     * @see https://regex101.com/r/auSMk3/1
      */
     private const ENTITY_PATH_REGEX = '#\bEntity\b#';
 

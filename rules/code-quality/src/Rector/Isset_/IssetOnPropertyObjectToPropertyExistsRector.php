@@ -130,7 +130,7 @@ CODE_SAMPLE
      */
     private function createReturnNodes(array $newNodes): ?Expr
     {
-        if (count($newNodes) === 0) {
+        if ($newNodes === []) {
             return null;
         }
 

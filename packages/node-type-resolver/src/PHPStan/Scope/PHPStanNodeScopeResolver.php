@@ -35,6 +35,7 @@ final class PHPStanNodeScopeResolver
 {
     /**
      * @var string
+     * @see https://regex101.com/r/aXsCkK/1
      */
     private const ANONYMOUS_CLASS_START_REGEX = '#^AnonymousClass(\w+)#';
 

@@ -42,6 +42,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
     {
+        $this->fixtureGuard->ensureFileInfoHasDifferentBeforeAndAfterContent($fixtureFileInfo);
+
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $fixtureFileInfo,
             $this->autoloadTestFixture

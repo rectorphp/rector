@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\SymfonyPhpConfig;
 
-use Rector\SymfonyPhpConfig\Exception\ValueObjectException;
 use Rector\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory;
 use ReflectionClass;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline;
@@ -15,7 +14,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigura
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 
-function inline_single_object(object $object, ServicesConfigurator $servicesConfigurator): ReferenceConfigurator
+function inline_argument_object(object $object, ServicesConfigurator $servicesConfigurator): ReferenceConfigurator
 {
     $reflectionClass = new ReflectionClass($object);
 
@@ -41,15 +40,19 @@ function inline_value_object(object $object): InlineServiceConfigurator
     $className = $reflectionClass->getName();
     $argumentValues = resolve_argument_values($reflectionClass, $object);
 
-    // Symfony 5.1+
     if (function_exists('Symfony\Component\DependencyInjection\Loader\Configurator\inline_service')) {
-        return inline_service($className)
-            ->args($argumentValues);
+        // Symfony 5.1+
+        $inlineServiceConfigurator = inline_service($className);
+    } else {
+        // Symfony 5.0-
+        $inlineServiceConfigurator = inline($className);
     }
 
-    // Symfony 5.0-
-    return inline($className)
-        ->args($argumentValues);
+    if ($argumentValues !== []) {
+        $inlineServiceConfigurator->args($argumentValues);
+    }
+
+    return $inlineServiceConfigurator;
 }
 
 /**
@@ -75,11 +78,8 @@ function resolve_argument_values(ReflectionClass $reflectionClass, object $objec
 
     $constructorMethodReflection = $reflectionClass->getConstructor();
     if ($constructorMethodReflection === null) {
-        $message = sprintf(
-            'Constructor for "%s" was not found. Be sure to use only value objects',
-            $reflectionClass->getName()
-        );
-        throw new ValueObjectException($message);
+        // value object without constructor
+        return [];
     }
 
     foreach ($constructorMethodReflection->getParameters() as $reflectionParameter) {
@@ -87,7 +87,17 @@ function resolve_argument_values(ReflectionClass $reflectionClass, object $objec
         $propertyReflection = $reflectionClass->getProperty($parameterName);
         $propertyReflection->setAccessible(true);
 
-        $argumentValues[] = $propertyReflection->getValue($object);
+        $resolvedValue = $propertyReflection->getValue($object);
+
+        if (is_array($resolvedValue)) {
+            foreach ($resolvedValue as $key => $value) {
+                if (is_object($value)) {
+                    $resolvedValue[$key] = inline_value_object($value);
+                }
+            }
+        }
+
+        $argumentValues[] = is_object($resolvedValue) ? inline_value_object($resolvedValue) : $resolvedValue;
     }
 
     return $argumentValues;

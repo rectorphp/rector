@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\ObjectType;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\ValueObject\ArgumentRemover;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
@@ -19,13 +20,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Doctrine\ORM\Mapping\ClassMetadataFactory',
                     'setEntityManager',
                     0,
-                    'Doctrine\ORM\EntityManagerInterface'
+                    new ObjectType('Doctrine\ORM\EntityManagerInterface')
                 ),
                 new AddParamTypeDeclaration(
                     'Doctrine\ORM\Tools\DebugUnitOfWorkListener',
                     'dumpIdentityMap',
                     0,
-                    'Doctrine\ORM\EntityManagerInterface'
+                    new ObjectType('Doctrine\ORM\EntityManagerInterface')
                 ),
             ]),
         ]]);

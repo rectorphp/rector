@@ -16,6 +16,7 @@ final class AttributeAwareTemplateTagValueNode extends TemplateTagValueNode impl
 
     /**
      * @var string
+     * @see https://regex101.com/r/4WtsUS/1
      */
     private const AS_OF_PREPOSITOIN_REGEX = '#\s+(?<preposition>as|of)\s+#';
 

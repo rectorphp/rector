@@ -12,6 +12,7 @@ final class OriginalSpacingRestorer
 {
     /**
      * @var string
+     * @see https://regex101.com/r/TMk388/1
      */
     public const WHITESPACE_SPLIT_REGEX = '#\s+(\*)?#';
 

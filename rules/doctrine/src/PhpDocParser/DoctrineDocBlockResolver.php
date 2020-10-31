@@ -10,10 +10,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EmbeddableTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddableTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
@@ -24,6 +24,7 @@ final class DoctrineDocBlockResolver
 {
     /**
      * @var string
+     * @see https://regex101.com/r/doLRPw/1
      */
     private const ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX = '#@ORM\\\\(Entity|Embeddable)#';
 
@@ -98,8 +99,9 @@ final class DoctrineDocBlockResolver
         if ($phpDocInfo === null) {
             return false;
         }
+        $hasTypeColumnTagValueNode = $phpDocInfo->hasByType(ColumnTagValueNode::class);
 
-        if ($phpDocInfo->hasByType(ColumnTagValueNode::class)) {
+        if ($hasTypeColumnTagValueNode) {
             return true;
         }
 
@@ -123,8 +125,9 @@ final class DoctrineDocBlockResolver
         if ($phpDocInfo === null) {
             return false;
         }
+        $hasTypeEntityTagValueNode = $phpDocInfo->hasByType(EntityTagValueNode::class);
 
-        if ($phpDocInfo->hasByType(EntityTagValueNode::class)) {
+        if ($hasTypeEntityTagValueNode) {
             return true;
         }
 

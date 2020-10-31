@@ -27,6 +27,6 @@ final class NodeInfosFactoryTest extends AbstractKernelTestCase
         $nodeInfos = $this->nodeInfosFactory->create();
 
         $nodeInfoCount = count($nodeInfos);
-        $this->assertGreaterThan(130, $nodeInfoCount);
+        $this->assertGreaterThan(50, $nodeInfoCount);
     }
 }

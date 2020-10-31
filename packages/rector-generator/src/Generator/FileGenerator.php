@@ -15,6 +15,7 @@ final class FileGenerator
 {
     /**
      * @var string
+     * @see https://regex101.com/r/RVbPEX/1
      */
     public const RECTOR_UTILS_REGEX = '#Rector\\\\Utils#';
 

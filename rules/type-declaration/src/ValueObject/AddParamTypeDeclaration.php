@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\ValueObject;
 
+use PHPStan\Type\Type;
+
 final class AddParamTypeDeclaration
 {
     /**
@@ -22,16 +24,16 @@ final class AddParamTypeDeclaration
     private $position;
 
     /**
-     * @var string
+     * @var Type
      */
-    private $typehint;
+    private $paramType;
 
-    public function __construct(string $className, string $methodName, int $position, string $typehint)
+    public function __construct(string $className, string $methodName, int $position, Type $paramType)
     {
         $this->className = $className;
         $this->methodName = $methodName;
         $this->position = $position;
-        $this->typehint = $typehint;
+        $this->paramType = $paramType;
     }
 
     public function getClassName(): string
@@ -49,8 +51,8 @@ final class AddParamTypeDeclaration
         return $this->position;
     }
 
-    public function getTypehint(): string
+    public function getParamType(): Type
     {
-        return $this->typehint;
+        return $this->paramType;
     }
 }

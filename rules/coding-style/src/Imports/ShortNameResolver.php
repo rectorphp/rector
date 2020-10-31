@@ -28,6 +28,7 @@ final class ShortNameResolver
 {
     /**
      * @var string
+     * @see https://regex101.com/r/KphLd2/1
      */
     private const BIG_LETTER_START_REGEX = '#^[A-Z]#';
 
@@ -114,9 +115,9 @@ final class ShortNameResolver
             return $fileInfo->getRealPath();
         }
 
-        $currentFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($currentFileInfo !== null) {
-            return $currentFileInfo->getRealPath();
+        $smartFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        if ($smartFileInfo !== null) {
+            return $smartFileInfo->getRealPath();
         }
 
         return null;

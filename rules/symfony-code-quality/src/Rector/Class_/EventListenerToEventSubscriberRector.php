@@ -51,11 +51,13 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
 
     /**
      * @var string
+     * @see https://regex101.com/r/qiHZ4T/1
      */
     private const LISTENER_MATCH_REGEX = '#^(.*?)(Listener)?$#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/j6SAga/1
      */
     private const SYMFONY_FAMILY_REGEX = '#^(Symfony|Sensio|Doctrine)\b#';
 

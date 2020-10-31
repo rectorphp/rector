@@ -18,6 +18,7 @@ final class MultilineSpaceFormatPreserver
 {
     /**
      * @var string
+     * @see https://regex101.com/r/R2zdQt/1
      */
     public const NEWLINE_WITH_SPACE_REGEX = '#\n {1,}$#s';
 
@@ -54,7 +55,8 @@ final class MultilineSpaceFormatPreserver
     public function fixMultilineDescriptions(
         AttributeAwareNodeInterface $attributeAwareNode
     ): AttributeAwareNodeInterface {
-        if (! $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT)) {
+        $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
+        if (! $originalContent) {
             return $attributeAwareNode;
         }
 

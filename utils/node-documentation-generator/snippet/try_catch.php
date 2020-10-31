@@ -2,18 +2,20 @@
 
 declare(strict_types=1);
 
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Catch_;
-use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Echo_;
+use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\TryCatch;
 
-$variable = new Variable('exceptionVariableName');
-$catch = new Catch_([new FullyQualified('CatchedType')], $variable);
+$echo = new Echo_([new String_('one')]);
+$tryStmts = [$echo];
 
-$funcCall = new FuncCall(new Name('funcCallName'));
-$stmts = [new Expression($funcCall)];
+$echo2 = new Echo_([new String_('two')]);
+$catch = new Catch_([new FullyQualified('CatchedType')], null, [$echo2]);
 
-return new TryCatch($stmts, [$catch]);
+$echo3 = new Echo_([new String_('three')]);
+$finally = new Finally_([$echo3]);
+
+return new TryCatch($tryStmts, [$catch]);

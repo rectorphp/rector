@@ -11,14 +11,15 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 
 final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
 {
     /**
      * @var string
+     * @see https://regex101.com/r/HKjBVt/1
      */
     private const SPACE_BEFORE_CLOSING_BRACKET_REGEX = '#,(\s+)?}$#m';
 

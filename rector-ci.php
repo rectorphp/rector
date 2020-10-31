@@ -31,6 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SETS, [
         SetList::CODING_STYLE,
         SetList::CODE_QUALITY,
+        SetList::CODE_QUALITY_STRICT,
         SetList::DEAD_CODE,
         SetList::NETTE_UTILS_CODE_QUALITY,
         SetList::SOLID,

@@ -17,6 +17,7 @@ final class DocAliasResolver
 {
     /**
      * @var string
+     * @see https://regex101.com/r/cWpliJ/1
      */
     private const DOC_ALIAS_REGEX = '#\@(?<possible_alias>\w+)(\\\\)?#s';
 

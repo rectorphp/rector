@@ -22,7 +22,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -175,7 +175,7 @@ CODE_SAMPLE
             $this->refactorReturn($return, $classMethod, $sensioTemplateTagValueNode, $hasThisRenderOrReturnsResponse);
         }
 
-        if (count($returns) === 0) {
+        if ($returns === []) {
             $thisRenderMethodCall = $this->thisRenderFactory->create(
                 $classMethod,
                 null,

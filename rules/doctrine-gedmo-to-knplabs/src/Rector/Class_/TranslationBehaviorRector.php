@@ -9,9 +9,9 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\LocaleTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TranslatableTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\LocaleTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TranslatableTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
@@ -190,13 +190,15 @@ CODE_SAMPLE
             if ($propertyPhpDocInfo === null) {
                 continue;
             }
+            $hasTypeLocaleTagValueNode = $propertyPhpDocInfo->hasByType(LocaleTagValueNode::class);
 
-            if ($propertyPhpDocInfo->hasByType(LocaleTagValueNode::class)) {
+            if ($hasTypeLocaleTagValueNode) {
                 $this->removeNode($property);
                 continue;
             }
+            $hasTypeTranslatableTagValueNode = $propertyPhpDocInfo->hasByType(TranslatableTagValueNode::class);
 
-            if (! $propertyPhpDocInfo->hasByType(TranslatableTagValueNode::class)) {
+            if (! $hasTypeTranslatableTagValueNode) {
                 continue;
             }
 

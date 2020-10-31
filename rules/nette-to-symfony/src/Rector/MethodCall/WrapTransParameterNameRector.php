@@ -23,6 +23,7 @@ final class WrapTransParameterNameRector extends AbstractRector
 {
     /**
      * @var string
+     * @see https://regex101.com/r/b8boED/1
      */
     private const BETWEEN_PERCENT_CHARS_REGEX = '#%(.*?)%#';
 

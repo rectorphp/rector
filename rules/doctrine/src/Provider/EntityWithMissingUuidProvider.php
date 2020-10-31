@@ -8,8 +8,8 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -19,6 +19,7 @@ final class EntityWithMissingUuidProvider
 {
     /**
      * @var string
+     * @see https://regex101.com/r/3OnLHU/1
      */
     private const UUID_PREFIX_REGEX = '#^uuid(_binary)?$#';
 

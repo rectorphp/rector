@@ -7,7 +7,7 @@ namespace Rector\DoctrineGedmoToKnplabs\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\SoftDeleteableTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\SoftDeleteableTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -94,8 +94,9 @@ CODE_SAMPLE
         if ($classPhpDocInfo === null) {
             return null;
         }
+        $hasTypeSoftDeleteableTagValueNode = $classPhpDocInfo->hasByType(SoftDeleteableTagValueNode::class);
 
-        if (! $classPhpDocInfo->hasByType(SoftDeleteableTagValueNode::class)) {
+        if (! $hasTypeSoftDeleteableTagValueNode) {
             return null;
         }
 

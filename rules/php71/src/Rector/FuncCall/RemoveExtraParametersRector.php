@@ -86,7 +86,7 @@ final class RemoveExtraParametersRector extends AbstractRector
      */
     private function shouldSkip(Node $node): bool
     {
-        if (count($node->args) === 0) {
+        if ($node->args === []) {
             return true;
         }
 

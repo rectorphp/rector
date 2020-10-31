@@ -114,7 +114,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkipClassMethod($node)) {
             return null;
         }
 
@@ -142,7 +142,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkip(ClassMethod $classMethod): bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         /** @var string|null $parentClassName */
         $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
@@ -181,7 +181,7 @@ CODE_SAMPLE
 
     private function addRepositoryProperty(Class_ $class, Expr $entityReferenceExpr): void
     {
-        $repositoryPropertyType = $this->repositoryTypeFactory->createRepositoryPropertyType($entityReferenceExpr);
-        $this->addPropertyToClass($class, $repositoryPropertyType, 'repository');
+        $genericObjectType = $this->repositoryTypeFactory->createRepositoryPropertyType($entityReferenceExpr);
+        $this->addPropertyToClass($class, $genericObjectType, 'repository');
     }
 }

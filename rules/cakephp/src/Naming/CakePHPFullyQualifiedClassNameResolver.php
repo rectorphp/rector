@@ -14,16 +14,19 @@ final class CakePHPFullyQualifiedClassNameResolver
 {
     /**
      * @var string
+     * @see https://regex101.com/r/mbvKJp/1
      */
     public const LIB_NAMESPACE_PART_REGEX = '#\\\\Lib\\\\#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/XvoZIP/1
      */
     private const SLASH_REGEX = '#(/|\.)#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/lq0lQ9/1
      */
     private const PLUGIN_OR_LIB_REGEX = '#(Plugin|Lib)#';
 

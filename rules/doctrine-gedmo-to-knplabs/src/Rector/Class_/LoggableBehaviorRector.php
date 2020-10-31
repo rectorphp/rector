@@ -7,8 +7,8 @@ namespace Rector\DoctrineGedmoToKnplabs\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\LoggableTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\VersionedTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\LoggableTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\VersionedTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -95,8 +95,9 @@ CODE_SAMPLE
         if ($classPhpDocInfo === null) {
             return null;
         }
+        $hasTypeLoggableTagValueNode = $classPhpDocInfo->hasByType(LoggableTagValueNode::class);
 
-        if (! $classPhpDocInfo->hasByType(LoggableTagValueNode::class)) {
+        if (! $hasTypeLoggableTagValueNode) {
             return null;
         }
 
@@ -119,8 +120,9 @@ CODE_SAMPLE
             if ($propertyPhpDocInfo === null) {
                 continue;
             }
+            $hasTypeVersionedTagValueNode = $propertyPhpDocInfo->hasByType(VersionedTagValueNode::class);
 
-            if (! $propertyPhpDocInfo->hasByType(VersionedTagValueNode::class)) {
+            if (! $hasTypeVersionedTagValueNode) {
                 continue;
             }
 

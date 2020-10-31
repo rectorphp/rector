@@ -8,9 +8,9 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioRouteTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioRouteTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
 
 /**
@@ -20,21 +20,25 @@ final class TagValueNodeConfigurationFactory
 {
     /**
      * @var string
+     * @see https://regex101.com/r/y3U6s4/1
      */
     public const NEWLINE_AFTER_OPENING_REGEX = '#^(\(\s+|\n)#m';
 
     /**
      * @var string
+     * @see https://regex101.com/r/bopnKI/1
      */
     public const NEWLINE_BEFORE_CLOSING_REGEX = '#(\s+\)|\n(\s+)?)$#m';
 
     /**
      * @var string
+     * @see https://regex101.com/r/IMT6GF/1
      */
     public const OPENING_BRACKET_REGEX = '#^\(#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/nsFq7m/1
      */
     public const CLOSING_BRACKET_REGEX = '#\)$#';
 

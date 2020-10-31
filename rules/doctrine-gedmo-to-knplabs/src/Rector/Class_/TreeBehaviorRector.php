@@ -8,12 +8,12 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeLeftTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeLevelTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeParentTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeRightTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeRootTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TreeLeftTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TreeLevelTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TreeParentTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TreeRightTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TreeRootTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TreeTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -141,8 +141,9 @@ CODE_SAMPLE
         if ($classPhpDocInfo === null) {
             return null;
         }
+        $hasTypeTreeTagValueNode = $classPhpDocInfo->hasByType(TreeTagValueNode::class);
 
-        if (! $classPhpDocInfo->hasByType(TreeTagValueNode::class)) {
+        if (! $hasTypeTreeTagValueNode) {
             return null;
         }
 

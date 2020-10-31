@@ -113,6 +113,10 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
             $this->methodName = (string) $this->methodName;
         }
 
+        if ($node instanceof Closure) {
+            $this->closure = null;
+        }
+
         return null;
     }
 

@@ -15,8 +15,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocNode\JMS\JMSInjectTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\NotImplementedException;
@@ -50,6 +50,7 @@ final class InjectAnnotationClassRector extends AbstractRector implements Config
 
     /**
      * @var string
+     * @see https://regex101.com/r/pjusUN/1
      */
     private const BETWEEN_PERCENT_CHARS_REGEX = '#%(.*?)%#';
 

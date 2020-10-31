@@ -16,8 +16,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Ramsey\Uuid\Uuid;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -26,11 +26,13 @@ final class EntityUuidNodeFactory
 {
     /**
      * @var string
+     * @see https://regex101.com/r/vQ8f2v/1
      */
     private const SERIALIZER_SHORT_ANNOTATION_REGEX = '#(\@Serializer\\\\Type\(")(int)("\))#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/AkLsy1/1
      */
     private const ORM_VAR_DOC_LINE_REGEX = '#^(\s+)\*(\s+)\@(var|ORM)(.*?)$#ms';
 

@@ -50,6 +50,7 @@ final class VersionCompareFuncCallToConstantRector extends AbstractRector
 
     /**
      * @var string
+     * @see https://regex101.com/r/yl9g25/1
      */
     private const SEMANTIC_VERSION_REGEX = '#^\d+\.\d+\.\d+$#';
 

@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\ObjectType;
 use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
 
-use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
 use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector;
 use Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector;
@@ -17,6 +16,8 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstant;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -38,7 +39,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AddReturnTypeDeclaration(
                     'Nette\Application\IPresenter',
                     'run',
-                    'Symfony\Component\HttpFoundation\Response'
+                    new ObjectType('Symfony\Component\HttpFoundation\Response')
                 ),
             ]),
         ]]);

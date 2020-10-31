@@ -15,6 +15,7 @@ final class JetbrainsStubsRenamer
 {
     /**
      * @var string
+     * @see https://regex101.com/r/K7XJBF/1
      */
     private const PHP_SUFFIX_COMMA_REGEX = '#\.php\',#m';
 

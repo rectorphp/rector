@@ -25,6 +25,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
     /**
      * @var string
+     * @see https://regex101.com/r/q8I66g/1
      */
     private const ON_LINE_REGEX = '# on line #';
 
