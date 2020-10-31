@@ -8,29 +8,23 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteToSymfony\Collector\OnFormVariableMethodCallsCollector;
+use Rector\NetteToSymfony\NodeFactory\SymfonyControllerFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -45,9 +39,17 @@ final class FormControlToControllerAndFormTypeRector extends AbstractRector
      */
     private $onFormVariableMethodCallsCollector;
 
-    public function __construct(OnFormVariableMethodCallsCollector $onFormVariableMethodCallsCollector)
-    {
+    /**
+     * @var SymfonyControllerFactory
+     */
+    private $symfonyControllerFactory;
+
+    public function __construct(
+        OnFormVariableMethodCallsCollector $onFormVariableMethodCallsCollector,
+        SymfonyControllerFactory $symfonyControllerFactory
+    ) {
         $this->onFormVariableMethodCallsCollector = $onFormVariableMethodCallsCollector;
+        $this->symfonyControllerFactory = $symfonyControllerFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -141,7 +143,13 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->dumpFormController($node, $formTypeClass);
+            $symfonyControllerNamespace = $this->symfonyControllerFactory->createNamespace($node, $formTypeClass);
+
+            /** @var SmartFileInfo $smartFileInfo */
+            $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+            $filePath = dirname($smartFileInfo->getRealPath()) . DIRECTORY_SEPARATOR . 'SomeFormController.php';
+
+            $this->printToFile([$symfonyControllerNamespace], $filePath);
 
             return $formTypeClass;
         }
@@ -185,33 +193,6 @@ CODE_SAMPLE
         return $this->createFormTypeClassFromBuildFormClassMethod($buildFormClassMethod);
     }
 
-    private function dumpFormController(Class_ $node, Class_ $formTypeClass): void
-    {
-        /** @var SmartFileInfo|null $fileInfo */
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
-            return;
-        }
-
-        /** @var string $namespaceName */
-        $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
-
-        $formControllerClass = new Class_('SomeFormController');
-        $formControllerClass->extends = new FullyQualified(
-            'Symfony\Bundle\FrameworkBundle\Controller\AbstractController'
-        );
-
-        $formTypeClass = $namespaceName . '\\' . $this->getName($formTypeClass);
-        $formControllerClass->stmts[] = $this->createActionWithFormProcess($formTypeClass);
-
-        $namespace = new Namespace_(new Name($namespaceName));
-        $namespace->stmts[] = $formControllerClass;
-
-        $filePath = dirname($fileInfo->getRealPath()) . DIRECTORY_SEPARATOR . 'SomeFormController.php';
-
-        $this->printToFile([$namespace], $filePath);
-    }
-
     private function createBuildFormClassMethod(Variable $formBuilderVariable): ClassMethod
     {
         $buildFormClassMethod = $this->nodeFactory->createPublicMethod('buildForm');
@@ -252,34 +233,5 @@ CODE_SAMPLE
         $formTypeClass->stmts[] = $buildFormClassMethod;
 
         return $formTypeClass;
-    }
-
-    private function createActionWithFormProcess(string $formTypeClass): ClassMethod
-    {
-        $classMethod = $this->nodeFactory->createPublicMethod('actionSomeForm');
-
-        $requestVariable = new Variable('request');
-        $classMethod->params[] = new Param($requestVariable, null, new FullyQualified(Request::class));
-        $classMethod->returnType = new FullyQualified(Response::class);
-
-        $formVariable = new Variable('form');
-
-        $args = [new Arg($this->createClassConstantReference($formTypeClass))];
-        $assign = new Assign($formVariable, new MethodCall(new Variable('this'), 'createForm', $args));
-
-        $classMethod->stmts[] = new Expression($assign);
-
-        $handleRequestMethodCall = new MethodCall($formVariable, 'handleRequest', [new Arg($requestVariable)]);
-        $classMethod->stmts[] = new Expression($handleRequestMethodCall);
-
-        $booleanAnd = new BooleanAnd(new MethodCall($formVariable, 'isSuccess'), new MethodCall(
-            $formVariable,
-            'isValid'
-        ));
-        $if = new If_($booleanAnd);
-
-        $classMethod->stmts[] = $if;
-
-        return $classMethod;
     }
 }
