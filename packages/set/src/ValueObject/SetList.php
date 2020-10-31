@@ -134,6 +134,11 @@ final class SetList
     /**
      * @var string
      */
+    public const DOCTRINE_DBAL_211 = __DIR__ . '/../../../../config/set/doctrine-dbal-211.php';
+
+    /**
+     * @var string
+     */
     public const DOCTRINE_DBAL_30 = __DIR__ . '/../../../../config/set/doctrine-dbal-30.php';
 
     /**
