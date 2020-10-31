@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Rector\Testing\PHPUnit\Behavior;
 
-use PHPStan\Testing\TestCase;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
