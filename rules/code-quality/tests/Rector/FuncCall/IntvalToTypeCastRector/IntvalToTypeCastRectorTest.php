@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\IntvalToTypeCastRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class IntvalToTypeCastRectorTest extends AbstractRectorTestCase

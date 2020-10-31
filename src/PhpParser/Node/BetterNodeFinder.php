@@ -13,10 +13,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
@@ -54,14 +54,10 @@ final class BetterNodeFinder
     public function findFirstParentInstanceOf(Node $node, $type): ?Node
     {
         $types = ! is_array($type) ? [$type] : $type;
-
-        foreach ($types as $singleType) {
-            $this->ensureIsNodeClass($singleType, __METHOD__, 1);
-        }
+        Assert::allIsAOf($types, Node::class);
 
         /** @var Node|null $parentNode */
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
         if ($parentNode === null) {
             return null;
         }
@@ -118,7 +114,7 @@ final class BetterNodeFinder
      */
     public function findInstanceOf($nodes, string $type): array
     {
-        $this->ensureIsNodeClass($type, __METHOD__, 1);
+        Assert::isAOf($type, Node::class);
 
         return $this->nodeFinder->findInstanceOf($nodes, $type);
     }
@@ -128,7 +124,7 @@ final class BetterNodeFinder
      */
     public function findFirstInstanceOf($nodes, string $type): ?Node
     {
-        $this->ensureIsNodeClass($type, __METHOD__, 1);
+        Assert::isAOf($type, Node::class);
 
         return $this->nodeFinder->findFirstInstanceOf($nodes, $type);
     }
@@ -138,7 +134,7 @@ final class BetterNodeFinder
      */
     public function hasInstanceOfName($nodes, string $type, string $name): bool
     {
-        $this->ensureIsNodeClass($type, __METHOD__, 1);
+        Assert::isAOf($type, Node::class);
 
         return (bool) $this->findInstanceOfName($nodes, $type, $name);
     }
@@ -165,8 +161,9 @@ final class BetterNodeFinder
      */
     public function hasInstancesOf($nodes, array $types): bool
     {
+        Assert::allIsAOf($types, Node::class);
+
         foreach ($types as $type) {
-            $this->ensureIsNodeClass($type, __METHOD__, 1);
             $nodeFinderFindFirstInstanceOf = $this->nodeFinder->findFirstInstanceOf($nodes, $type);
 
             if ($nodeFinderFindFirstInstanceOf === null) {
@@ -184,7 +181,7 @@ final class BetterNodeFinder
      */
     public function findLastInstanceOf($nodes, string $type): ?Node
     {
-        $this->ensureIsNodeClass($type, __METHOD__, 1);
+        Assert::isAOf($type, Node::class);
 
         $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
         if ($foundInstances === []) {
@@ -206,10 +203,10 @@ final class BetterNodeFinder
     /**
      * Excludes anonymous classes!
      *
-     * @param Node[] $nodes
+     * @param Node[]|Node $nodes
      * @return ClassLike[]
      */
-    public function findClassLikes(array $nodes): array
+    public function findClassLikes($nodes): array
     {
         return $this->find($nodes, function (Node $node): bool {
             if (! $node instanceof ClassLike) {
@@ -294,31 +291,14 @@ final class BetterNodeFinder
         });
     }
 
-    private function ensureIsNodeClass(string $type, string $location, int $argumentPosition): void
-    {
-        if (is_a($type, Node::class, true)) {
-            return;
-        }
-
-        $errorMessage = sprintf(
-            'Type given to "%s()" method on %d position must be child of "%s". "%s" given.',
-            $argumentPosition,
-            $location,
-            Node::class,
-            $type
-        );
-
-        throw new ShouldNotHappenException($errorMessage);
-    }
-
     /**
      * @param class-string[] $types
      */
     private function isTypes(Node $node, array $types): bool
     {
-        foreach ($types as $type) {
-            $this->ensureIsNodeClass($type, __METHOD__, 1);
+        Assert::allIsAOf($types, Node::class);
 
+        foreach ($types as $type) {
             if (is_a($node, $type, true)) {
                 return true;
             }
@@ -333,7 +313,7 @@ final class BetterNodeFinder
      */
     private function findInstanceOfName($nodes, string $type, string $name): ?Node
     {
-        $this->ensureIsNodeClass($type, __METHOD__, 1);
+        Assert::isAOf($type, Node::class);
 
         $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
 

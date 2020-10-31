@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\FuncCall\VersionCompareFuncCallToConst
 
 use Iterator;
 use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class VersionCompareFuncCallToConstantRectorTest extends AbstractRectorTestCase

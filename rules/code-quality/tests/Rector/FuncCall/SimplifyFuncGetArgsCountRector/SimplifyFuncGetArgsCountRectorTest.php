@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyFuncGetArgsCountRecto
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyFuncGetArgsCountRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SimplifyFuncGetArgsCountRectorTest extends AbstractRectorTestCase

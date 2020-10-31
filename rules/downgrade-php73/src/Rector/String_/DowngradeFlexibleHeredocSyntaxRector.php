@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp73\Rector\String_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -19,7 +17,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
 {
-    const DOC_INDENTATION = 'docIndentation';
+    /**
+     * @var int[]
+     */
+    private const HERENOW_DOC_KINDS = [String_::KIND_HEREDOC, String_::KIND_NOWDOC];
 
     public function getDefinition(): RectorDefinition
     {
@@ -53,16 +54,17 @@ CODE_SAMPLE
     }
 
     /**
-     * @param String_ $node
+     * @param Encapsed|String_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! in_array($node->getAttribute(AttributeKey::KIND), [String_::KIND_HEREDOC, String_::KIND_NOWDOC], true)) {
+        $stringKind = $node->getAttribute(AttributeKey::KIND);
+
+        if (! in_array($stringKind, self::HERENOW_DOC_KINDS, true)) {
             return null;
         }
 
-        $node->setAttribute(self::DOC_INDENTATION, '');
-
+        $node->setAttribute(AttributeKey::DOC_INDENTATION, '');
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         return $node;

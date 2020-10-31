@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\Exclusion\Check;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ExcludeByDocBlockExclusionCheckTest extends AbstractRectorTestCase

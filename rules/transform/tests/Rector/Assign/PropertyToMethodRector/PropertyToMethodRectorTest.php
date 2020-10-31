@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 use Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Source\Translator;
 use Rector\Transform\ValueObject\PropertyToMethod;

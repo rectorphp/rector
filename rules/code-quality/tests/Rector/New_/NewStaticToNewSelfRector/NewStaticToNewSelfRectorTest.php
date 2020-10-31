@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\New_\NewStaticToNewSelfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NewStaticToNewSelfRectorTest extends AbstractRectorTestCase

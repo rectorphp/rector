@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\ClassMethod\AddMethodParentCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
 use Rector\Generic\Tests\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddMethodParentCallRectorTest extends AbstractRectorTestCase

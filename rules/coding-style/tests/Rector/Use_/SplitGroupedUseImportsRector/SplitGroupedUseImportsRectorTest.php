@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SplitGroupedUseImportsRectorTest extends AbstractRectorTestCase

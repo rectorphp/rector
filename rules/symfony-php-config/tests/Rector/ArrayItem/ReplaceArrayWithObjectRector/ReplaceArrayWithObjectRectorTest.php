@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\SymfonyPhpConfig\Tests\Rector\ArrayItem\ReplaceArrayWithObjectRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

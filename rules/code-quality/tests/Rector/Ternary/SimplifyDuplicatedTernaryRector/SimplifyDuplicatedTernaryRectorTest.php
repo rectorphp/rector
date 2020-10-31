@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Ternary\SimplifyDuplicatedTernaryRecto
 
 use Iterator;
 use Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SimplifyDuplicatedTernaryRectorTest extends AbstractRectorTestCase

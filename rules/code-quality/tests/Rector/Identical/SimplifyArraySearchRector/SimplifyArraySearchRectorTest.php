@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyArraySearchRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SimplifyArraySearchRectorTest extends AbstractRectorTestCase

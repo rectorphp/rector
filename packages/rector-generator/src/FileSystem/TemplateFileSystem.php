@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\FileSystem;
 
 use Nette\Utils\Strings;
-use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TemplateFileSystem

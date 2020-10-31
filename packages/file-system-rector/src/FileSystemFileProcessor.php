@@ -6,10 +6,10 @@ namespace Rector\FileSystemRector;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Logging\CurrentRectorProvider;
-use Rector\Core\Testing\Application\EnabledRectorsProvider;
-use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
+use Rector\Testing\Application\EnabledRectorsProvider;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileSystemFileProcessor

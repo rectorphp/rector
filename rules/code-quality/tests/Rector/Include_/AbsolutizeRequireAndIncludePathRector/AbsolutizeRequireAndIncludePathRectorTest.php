@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Include_\AbsolutizeRequireAndIncludePa
 
 use Iterator;
 use Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AbsolutizeRequireAndIncludePathRectorTest extends AbstractRectorTestCase

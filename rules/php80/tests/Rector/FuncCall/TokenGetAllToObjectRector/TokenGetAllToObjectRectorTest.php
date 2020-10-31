@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php80\Tests\Rector\FuncCall\TokenGetAllToObjectRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TokenGetAllToObjectRectorTest extends AbstractRectorTestCase

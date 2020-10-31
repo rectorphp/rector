@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\LogicalAnd\LogicalToBooleanRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class LogicalToBooleanRectorTest extends AbstractRectorTestCase

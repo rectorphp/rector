@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\FuncCall\SwapFuncCallArgumentsRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
 use Rector\Generic\ValueObject\SwapFuncCallArguments;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SwapFuncCallArgumentsRectorTest extends AbstractRectorTestCase

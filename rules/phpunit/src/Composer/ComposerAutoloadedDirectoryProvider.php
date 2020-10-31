@@ -6,7 +6,7 @@ namespace Rector\PHPUnit\Composer;
 
 use Nette\Utils\Arrays;
 use Nette\Utils\Json;
-use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ComposerAutoloadedDirectoryProvider

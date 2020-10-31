@@ -2,9 +2,6 @@ name: Code Analysis [no dev]
 
 on:
     pull_request: null
-    push:
-        branches:
-            - master
 
 jobs:
     matrix:
@@ -28,7 +25,7 @@ jobs:
                 with:
                     php-version: 7.4
                     coverage: none
-                    tools: composer:v1
+                    tools: composer:v2
 
             -   run: composer install --no-progress --ansi
 

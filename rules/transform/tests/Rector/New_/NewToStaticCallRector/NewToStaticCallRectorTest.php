@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\New_\NewToStaticCallRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\New_\NewToStaticCallRector;
 use Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
 use Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Source\IntoStaticClass;

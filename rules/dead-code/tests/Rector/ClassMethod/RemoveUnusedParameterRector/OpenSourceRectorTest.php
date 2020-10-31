@@ -6,9 +6,9 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector;
 
 use Iterator;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\ValueObject\ProjectType;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class OpenSourceRectorTest extends AbstractRectorTestCase

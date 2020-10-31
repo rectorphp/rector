@@ -18,6 +18,11 @@ final class AttributeKey
     /**
      * @var string
      */
+    public const DECLARES = 'declares';
+
+    /**
+     * @var string
+     */
     public const VIRTUAL_NODE = 'virtual_node';
 
     /**
@@ -155,6 +160,14 @@ final class AttributeKey
      * @var string
      */
     public const NAMESPACED_NAME = 'namespacedName';
+
+    /**
+     * Internal php-parser name.
+     * Do not change this even if you want!
+     *
+     * @var string
+     */
+    public const DOC_INDENTATION = 'docIndentation';
 
     /**
      * Internal php-parser name.

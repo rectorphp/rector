@@ -10,7 +10,7 @@ use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\Config
 use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\FactoryClass;
 use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Rector\CakePHP\ValueObject\FactoryMethod;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArrayToFluentCallRectorTest extends AbstractRectorTestCase

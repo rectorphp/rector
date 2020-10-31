@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassMethod\NewlineBeforeNewAssignSetR
 
 use Iterator;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NewlineBeforeNewAssignSetRectorTest extends AbstractRectorTestCase
