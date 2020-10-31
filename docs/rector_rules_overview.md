@@ -1,4 +1,4 @@
-# All 599 Rectors Overview
+# All 600 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -17,7 +17,7 @@
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [DowngradePhp71](#downgradephp71) (3)
 - [DowngradePhp72](#downgradephp72) (2)
-- [DowngradePhp73](#downgradephp73) (1)
+- [DowngradePhp73](#downgradephp73) (2)
 - [DowngradePhp74](#downgradephp74) (7)
 - [DowngradePhp80](#downgradephp80) (6)
 - [FileSystemRector](#filesystemrector) (1)
@@ -5030,6 +5030,26 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br><br>
 
 ## DowngradePhp73
+
+### `DowngradeFlexibleHeredocSyntaxRector`
+
+- class: [`Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector`](/rules/downgrade-php73/src/Rector/String_/DowngradeFlexibleHeredocSyntaxRector.php)
+
+Changes heredoc/nowdoc that contains closing word to safe wrapper name
+
+```diff
+ $query = <<<SQL
+-    SELECT *
+-    FROM `table`
+-    WHERE `column` = true;
+-    SQL;
++SELECT *
++FROM `table`
++WHERE `column` = true;
++SQL;
+```
+
+<br><br>
 
 ### `DowngradeListReferenceAssignmentRector`
 
