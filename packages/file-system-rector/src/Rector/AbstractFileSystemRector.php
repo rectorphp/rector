@@ -7,7 +7,6 @@ namespace Rector\FileSystemRector\Rector;
 use Nette\Utils\Strings;
 use PhpParser\Lexer;
 use PhpParser\Node;
-use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\TokensByFilePathStorage;
 use Rector\Core\Configuration\Configuration;
@@ -15,8 +14,8 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\PostRector\Application\PostFileProcessor;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -59,11 +58,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     private $postFileProcessor;
 
     /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-
-    /**
      * @var TokensByFilePathStorage
      */
     private $tokensByFilePathStorage;
@@ -83,7 +77,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         BetterStandardPrinter $betterStandardPrinter,
         ParameterProvider $parameterProvider,
         PostFileProcessor $postFileProcessor,
-        RenamedClassesCollector $renamedClassesCollector,
         TokensByFilePathStorage $tokensByFilePathStorage,
         FileProcessor $fileProcessor
     ): void {
@@ -93,14 +86,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parameterProvider = $parameterProvider;
         $this->postFileProcessor = $postFileProcessor;
-        $this->renamedClassesCollector = $renamedClassesCollector;
         $this->tokensByFilePathStorage = $tokensByFilePathStorage;
         $this->fileProcessor = $fileProcessor;
-    }
-
-    protected function addClassRename(string $oldClass, string $newClass): void
-    {
-        $this->renamedClassesCollector->addClassRename($oldClass, $newClass);
     }
 
     /**
@@ -133,7 +120,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $this->lexer->getTokens()
         );
 
-        $this->addFile($fileDestination, $fileContent);
+        $addedFileWithContent = new AddedFileWithContent($fileDestination, $fileContent);
+        $this->addFile($addedFileWithContent);
     }
 
     /**
@@ -146,12 +134,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $fileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
         $fileContent = $this->resolveLastEmptyLine($fileContent);
 
-        $this->addFile($fileDestination, $fileContent);
-    }
-
-    protected function printNodesWithFileDestination(NodesWithFileDestination $nodesWithFileDestination): void
-    {
-        $this->addNodesWithFileDestination($nodesWithFileDestination);
+        $addedFileWithContent = new AddedFileWithContent($fileDestination, $fileContent);
+        $this->addFile($addedFileWithContent);
     }
 
     /**

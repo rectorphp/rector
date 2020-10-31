@@ -10,7 +10,7 @@ use Rector\Autodiscovery\Analyzer\ClassAnalyzer;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
+use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -22,7 +22,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector\MoveValueObjectsToValueObjectDirectoryRectorTest
  */
-final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMovingFileSystemRector implements ConfigurableRectorInterface
+final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileSystemRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -135,17 +135,12 @@ CODE_SAMPLE
             return;
         }
 
-        $nodesWithFileDestination = $this->fileMover->createMovedNodesAndFilePath(
-            $smartFileInfo,
-            $nodes,
-            'ValueObject'
-        );
-
-        if ($nodesWithFileDestination === null) {
+        $movedFileWithNodes = $this->movedFileWithNodesFactory->create($smartFileInfo, $nodes, 'ValueObject');
+        if ($movedFileWithNodes === null) {
             return;
         }
 
-        $this->processNodesWithFileDestination($nodesWithFileDestination);
+        $this->addMovedFile($movedFileWithNodes);
     }
 
     public function configure(array $configuration): void

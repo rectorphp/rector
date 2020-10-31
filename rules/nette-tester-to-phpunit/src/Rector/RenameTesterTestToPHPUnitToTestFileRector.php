@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
+use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -54,7 +55,7 @@ CODE_SAMPLE
             return;
         }
 
-        $this->moveFile($smartFileInfo, $newRealPath);
+        $this->addMovedFile(new MovedFileWithContent($smartFileInfo, $newRealPath));
     }
 
     private function createNewRealPath(string $oldRealPath): string

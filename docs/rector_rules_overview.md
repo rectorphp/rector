@@ -178,7 +178,7 @@ Move interface to "Contract" namespace
 
 ### `MoveServicesBySuffixToDirectoryRector`
 
-- class: [`Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector`](/rules/autodiscovery/src/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector`](/rules/autodiscovery/src/Rector/FileNode/MoveServicesBySuffixToDirectoryRector.php)
 
 Move classes by their suffix to their own group/directory
 
@@ -187,7 +187,7 @@ Move classes by their suffix to their own group/directory
 
 declare(strict_types=1);
 
-use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
+use Rector\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

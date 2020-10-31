@@ -601,6 +601,7 @@ parameters:
         -
             message: '#Do not use trait#'
             paths:
+                - packages/**/src/Behavior/**
                 - packages/better-php-doc-parser/src/Attributes/Attribute/AttributeTrait.php # 7
                 - packages/better-php-doc-parser/src/PartPhpDocTagPrinter/Behavior/ArrayPartPhpDocTagPrinterTrait.php # 14
                 - packages/better-php-doc-parser/src/PhpDocNode/PrintTagValueNodeTrait.php # 13

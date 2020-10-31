@@ -10,6 +10,7 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -85,7 +86,7 @@ CODE_SAMPLE
 
         // no match → rename file
         $newFileLocation = $smartFileInfo->getPath() . DIRECTORY_SEPARATOR . $classShortName . '.php';
-        $this->moveFile($smartFileInfo, $newFileLocation);
+        $this->addMovedFile(new MovedFileWithContent($smartFileInfo, $newFileLocation));
 
         return null;
     }
