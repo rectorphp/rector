@@ -494,7 +494,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AddReturnTypeDeclaration(
                     'Nette\Application\UI\Form',
                     'getPresenter',
-                    new UnionType([new ObjectType('Nette\Application\UI\Presenter'), new NullType()]),
+                    new UnionType([new ObjectType('Nette\Application\UI\Presenter'), new NullType()])
                 ),
                 new AddReturnTypeDeclaration('Nette\Application\UI\Form', 'signalReceived', new VoidType()),
                 new AddReturnTypeDeclaration('Nette\Application\UI\IRenderable', 'redrawControl', new VoidType()),
@@ -523,7 +523,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AddReturnTypeDeclaration(
                     'Nette\Application\Routers\SimpleRouter',
                     'match',
-                    new UnionType([new ObjectType('Nette\Application\Request'), new NullType()]),
+                    new UnionType([new ObjectType('Nette\Application\Request'), new NullType()])
                 ),
                 new AddReturnTypeDeclaration('Nette\Application\Routers\SimpleRouter', 'getDefaults', $arrayType),
                 new AddReturnTypeDeclaration('Nette\Application\Routers\SimpleRouter', 'getFlags', new IntegerType()),

@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
+use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\NetteToSymfony\Analyzer\NetteControlFactoryInterfaceAnalyzer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -19,7 +19,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\MoveInterfacesToContractNamespaceDirectoryRectorTest
  */
-final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractFileMovingFileSystemRector
+final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractFileSystemRector
 {
     /**
      * @var NetteControlFactoryInterfaceAnalyzer
@@ -78,11 +78,11 @@ CODE_SAMPLE
             return;
         }
 
-        $nodesWithFileDestination = $this->fileMover->createMovedNodesAndFilePath($smartFileInfo, $nodes, 'Contract');
-        if ($nodesWithFileDestination === null) {
+        $movedFileWithNodes = $this->movedFileWithNodesFactory->create($smartFileInfo, $nodes, 'Contract');
+        if ($movedFileWithNodes === null) {
             return;
         }
 
-        $this->processNodesWithFileDestination($nodesWithFileDestination);
+        $this->addMovedFile($movedFileWithNodes);
     }
 }

@@ -9,6 +9,7 @@ use PhpParser\Lexer;
 use PhpParser\Node;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\PostRector\Application\PostFileProcessor;
 
 final class NodesToDestinationPrinter
@@ -59,7 +60,7 @@ final class NodesToDestinationPrinter
         $fileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
         $fileContent = $this->resolveLastEmptyLine($fileContent);
 
-        $this->removedAndAddedFilesCollector->addFileWithContent($fileDestination, $fileContent);
+        $this->removedAndAddedFilesCollector->addAddedFile(new AddedFileWithContent($fileDestination, $fileContent));
     }
 
     /**

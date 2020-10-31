@@ -1,0 +1,2 @@
+services:
+    Rector\Autodiscovery\Tests\Rector\FileNode\MoveServicesBySuffixToDirectoryRector\Source\Mapper\Nested\AbstractBaseMapper: null

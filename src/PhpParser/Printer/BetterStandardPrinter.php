@@ -189,7 +189,7 @@ final class BetterStandardPrinter extends Standard
         return ltrim($content);
     }
 
-    public function pFile(FileNode $fileNode): string
+    public function pFileNode(FileNode $fileNode): string
     {
         return self::pStmts((array) $fileNode->stmts);
     }

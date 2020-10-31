@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
+use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -20,7 +20,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveEntitiesToEntityDirectoryRector\MoveEntitiesToEntityDirectoryRectorTest
  */
-final class MoveEntitiesToEntityDirectoryRector extends AbstractFileMovingFileSystemRector
+final class MoveEntitiesToEntityDirectoryRector extends AbstractFileSystemRector
 {
     /**
      * @var string
@@ -75,12 +75,12 @@ CODE_SAMPLE
             return;
         }
 
-        $nodesWithFileDestination = $this->fileMover->createMovedNodesAndFilePath($smartFileInfo, $nodes, 'Entity');
-        if ($nodesWithFileDestination === null) {
+        $movedFileWithNodes = $this->movedFileWithNodesFactory->create($smartFileInfo, $nodes, 'Entity');
+        if ($movedFileWithNodes === null) {
             return;
         }
 
-        $this->processNodesWithFileDestination($nodesWithFileDestination);
+        $this->addMovedFile($movedFileWithNodes);
     }
 
     /**

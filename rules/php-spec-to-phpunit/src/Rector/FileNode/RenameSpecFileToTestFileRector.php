@@ -10,6 +10,7 @@ use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
 
 /**
  * @see https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
@@ -67,7 +68,7 @@ CODE_SAMPLE
         }
 
         $newPathName = $this->createPathName($oldPathname);
-        $this->moveFile($fileInfo, $newPathName);
+        $this->addMovedFile(new MovedFileWithContent($fileInfo, $newPathName));
 
         return null;
     }

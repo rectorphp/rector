@@ -186,7 +186,7 @@
     "autoload-dev": {
         "classmap": [
             "rules/autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
-            "rules/autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
+            "rules/autodiscovery/tests/Rector/FileNode/MoveServicesBySuffixToDirectoryRector/Expected",
             "rules/cakephp/tests/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector/Source",
             "rules/cakephp/tests/Rector/Namespace_/AppUsesStaticCallToUseStatementRector/Source",
             "rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source",
