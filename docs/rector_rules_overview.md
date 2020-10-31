@@ -12694,7 +12694,8 @@ Migrate PhpSpec behavior to PHPUnit test
 
 ### `RenameSpecFileToTestFileRector`
 
-- class: [`Rector\PhpSpecToPHPUnit\Rector\FileSystem\RenameSpecFileToTestFileRector`](/rules/php-spec-to-phpunit/src/Rector/FileSystem/RenameSpecFileToTestFileRector.php)
+- class: [`Rector\PhpSpecToPHPUnit\Rector\FileNode\RenameSpecFileToTestFileRector`](/rules/php-spec-to-phpunit/src/Rector/FileNode/RenameSpecFileToTestFileRector.php)
+- [test fixtures](/rules/php-spec-to-phpunit/tests/Rector/FileNode/RenameSpecFileToTestFileRector/Fixture)
 
 Rename "*Spec.php" file to "*Test.php" file
 
