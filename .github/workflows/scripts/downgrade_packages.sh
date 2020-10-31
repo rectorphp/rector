@@ -42,9 +42,6 @@ declare -A downgrade_php_sets=( \
     ["7.3"]="downgrade-php80 downgrade-php74" \
     ["7.4"]="downgrade-php80" \
 )
-# declare -A package_excludes=( \
-#     ["rector/rector"]="$(pwd)/.docker/*;$(pwd)/.github/*;$(pwd)/bin/*;$(pwd)/ci/*;$(pwd)/docs/*;$(pwd)/tests/*;$(pwd)/**/tests/*;$(pwd)/packages/rector-generator/templates/*" \
-# )
 
 ########################################################################
 # Helper functions
@@ -101,8 +98,7 @@ do
         for package in $PACKAGES
         do
             echo "Enqueueing set $set on package $package"
-            # Composer also analyzes the root project "rector/rector",
-            # but its path is the root folder
+            # Composer also analyzes the root project but its path is directly the root folder
             if [ $package = "$rootPackage" ]
             then
                 path=$(pwd)
