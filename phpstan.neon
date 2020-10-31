@@ -2,7 +2,6 @@ includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
     - vendor/symplify/phpstan-extensions/config/config.neon
-    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
 
     # see https://github.com/symplify/coding-standard
     - vendor/symplify/coding-standard/config/symplify-rules.neon
