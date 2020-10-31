@@ -1,0 +1,11 @@
+--- /dev/null
++++ ../src/Application/UI/Presenter.php
+@@ -1328,7 +1328,7 @@
+ 	}
+ 
+ 
+-	final public function getUser(): Nette\Security\User
++	public function getUser(): Nette\Security\User
+ 	{
+ 		if (!$this->user) {
+ 			throw new Nette\InvalidStateException('Service User has not been set.');

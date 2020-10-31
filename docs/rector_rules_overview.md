@@ -1,4 +1,4 @@
-# All 599 Rectors Overview
+# All 600 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -31,7 +31,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (11)
-- [Nette](#nette) (18)
+- [Nette](#nette) (19)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -8039,6 +8039,33 @@ Change magic `addClass()` etc. calls on Html to explicit methods
          $html = Html::el();
 -        $html->setClass('first');
 +        $html->appendAttribute('class', 'first');
+     }
+ }
+```
+
+<br><br>
+
+### `MoveFinalGetUserToCheckRequirementsClassMethodRector`
+
+- class: [`Rector\Nette\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector`](/rules/nette/src/Rector/Class_/MoveFinalGetUserToCheckRequirementsClassMethodRector.php)
+- [test fixtures](/rules/nette/tests/Rector/Class_/MoveFinalGetUserToCheckRequirementsClassMethodRector/Fixture)
+
+Presenter method `getUser()` is now final, move logic to `checkRequirements()`
+
+```diff
+ use Nette\Application\UI\Presenter;
+
+ class SomeControl extends Presenter
+ {
+-    public function getUser()
++    public function checkRequirements()
+     {
+-        $user = parent::getUser();
++        $user = $this->getUser();
+         $user->getStorage()->setNamespace('admin_session');
+-        return $user;
++
++        parent::checkRequirements();
      }
  }
 ```
