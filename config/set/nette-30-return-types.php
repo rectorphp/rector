@@ -523,7 +523,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AddReturnTypeDeclaration(
                     'Nette\Application\Routers\SimpleRouter',
                     'match',
-                    new UnionType([new ObjectType('Nette\Application\Request'), new NullType()]),
+                    new UnionType([new ObjectType('Nette\Application\Request'), new NullType()])
                 ),
                 new AddReturnTypeDeclaration('Nette\Application\Routers\SimpleRouter', 'getDefaults', $arrayType),
                 new AddReturnTypeDeclaration('Nette\Application\Routers\SimpleRouter', 'getFlags', new IntegerType()),
