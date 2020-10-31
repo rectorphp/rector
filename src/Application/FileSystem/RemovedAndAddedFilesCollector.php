@@ -97,7 +97,7 @@ final class RemovedAndAddedFilesCollector
      */
     public function getAddedFilesWithContent(): array
     {
-        return array_filter($this->addedFiles, function (AddedFileInterface $addedFile) {
+        return array_filter($this->addedFiles, function (AddedFileInterface $addedFile): bool {
             return $addedFile instanceof AddedFileWithContent;
         });
     }
@@ -107,7 +107,7 @@ final class RemovedAndAddedFilesCollector
      */
     public function getMovedFileWithNodes(): array
     {
-        return array_filter($this->movedFiles, function (MovedFileInterface $movedFile) {
+        return array_filter($this->movedFiles, function (MovedFileInterface $movedFile): bool {
             return $movedFile instanceof MovedFileWithNodes;
         });
     }

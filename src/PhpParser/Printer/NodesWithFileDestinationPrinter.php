@@ -36,9 +36,9 @@ final class NodesWithFileDestinationPrinter
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
-    public function printNodesWithFileDestination(MovedFileWithNodes $nodesWithFileDestination): string
+    public function printNodesWithFileDestination(MovedFileWithNodes $movedFileWithNodes): string
     {
-        $nodes = $this->postFileProcessor->traverse($nodesWithFileDestination->getNodes());
+        $nodes = $this->postFileProcessor->traverse($movedFileWithNodes->getNodes());
 
         $prettyPrintContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
         return $this->resolveLastEmptyLine($prettyPrintContent);
