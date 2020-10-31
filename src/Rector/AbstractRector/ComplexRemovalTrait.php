@@ -107,7 +107,7 @@ trait ComplexRemovalTrait
             return;
         }
 
-        // remove __contruct param
+        // remove __construct param
 
         /** @var Property $property */
         $this->removeNode($property);

@@ -42,9 +42,9 @@ trait RemovedAndAddedFilesTrait
         $this->removedAndAddedFilesCollector->addFileWithContent($fileLocation, $fileContent);
     }
 
-    protected function moveFile(SmartFileInfo $oldFileInfo, string $newFileLocation, ?string $fileContent = null): void
+    protected function moveFile(SmartFileInfo $oldFileInfo, string $newFileLocation): void
     {
-        $this->removedAndAddedFilesCollector->addMovedFile($oldFileInfo, $newFileLocation, $fileContent);
+        $this->removedAndAddedFilesCollector->addMovedFile($oldFileInfo, $newFileLocation);
     }
 
     protected function removeFile(SmartFileInfo $smartFileInfo): void

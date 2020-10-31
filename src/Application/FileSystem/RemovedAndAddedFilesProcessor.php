@@ -6,7 +6,7 @@ namespace Rector\Core\Application\FileSystem;
 
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
-use Rector\Core\ValueObject\MovedClass;
+use Rector\Core\ValueObject\MovedFile;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -118,30 +118,28 @@ final class RemovedAndAddedFilesProcessor
 
     private function processMovedFiles(): void
     {
-        foreach ($this->removedAndAddedFilesCollector->getMovedFiles() as $movedClassValueObject) {
+        foreach ($this->removedAndAddedFilesCollector->getMovedFiles() as $movedFile) {
             if ($this->configuration->isDryRun() && ! StaticPHPUnitEnvironment::isPHPUnitRun()) {
-                $this->printFileMoveWarning($movedClassValueObject, 'will be');
+                $this->printFileMoveWarning($movedFile, 'will be');
             } else {
-                $this->printFileMoveWarning($movedClassValueObject, 'was');
+                $this->printFileMoveWarning($movedFile, 'was');
 
-                $this->smartFileSystem->remove($movedClassValueObject->getOldPath());
+                $this->smartFileSystem->remove($movedFile->getOldPathName());
 
-                $this->smartFileSystem->dumpFile(
-                    $movedClassValueObject->getNewPath(),
-                    $movedClassValueObject->getFileContent()
-                );
+                $this->smartFileSystem->dumpFile($movedFile->getNewPath(), $movedFile->getFileContent());
             }
         }
     }
 
-    private function printFileMoveWarning(MovedClass $movedClass, string $verb): void
+    private function printFileMoveWarning(MovedFile $movedFile, string $verb): void
     {
         $message = sprintf(
             'File "%s" %s moved to "%s"',
-            $movedClass->getOldPath(),
+            $movedFile->getOldFileInfo(),
             $verb,
-            $movedClass->getNewPath()
+            $movedFile->getNewPath()
         );
+
         $this->symfonyStyle->warning($message);
     }
 }

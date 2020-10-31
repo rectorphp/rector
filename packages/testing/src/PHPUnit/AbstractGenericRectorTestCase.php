@@ -7,6 +7,7 @@ namespace Rector\Testing\PHPUnit;
 use Iterator;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\FileProcessor;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
@@ -69,6 +70,11 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
     protected $fixtureGuard;
 
     /**
+     * @var RemovedAndAddedFilesCollector
+     */
+    protected $removedAndAddedFilesCollector;
+
+    /**
      * @var Container|ContainerInterface|null
      */
     protected static $allRectorContainer;
@@ -122,6 +128,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
         $this->fileProcessor = static::$container->get(FileProcessor::class);
         $this->nonPhpFileProcessor = static::$container->get(NonPhpFileProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
+        $this->removedAndAddedFilesCollector = self::$container->get(RemovedAndAddedFilesCollector::class);
 
         // needed for PHPStan, because the analyzed file is just create in /temp
         $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
