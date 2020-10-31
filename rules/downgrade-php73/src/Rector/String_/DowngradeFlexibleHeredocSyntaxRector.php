@@ -17,6 +17,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
     public const DOC_INDENTATION = 'docIndentation';
 
     public function getDefinition(): RectorDefinition
@@ -51,11 +54,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param String_ $node
+     * @param Encapsed|String_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! in_array($node->getAttribute(AttributeKey::KIND), [String_::KIND_HEREDOC, String_::KIND_NOWDOC], true)) {
+        $kind = $node->getAttribute(AttributeKey::KIND);
+        if (! in_array($kind, [String_::KIND_HEREDOC, String_::KIND_NOWDOC], true)) {
             return null;
         }
 
