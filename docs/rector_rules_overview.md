@@ -13,7 +13,7 @@
 - [DeadCode](#deadcode) (41)
 - [Defluent](#defluent) (8)
 - [Doctrine](#doctrine) (17)
-- [DoctrineCodeQuality](#doctrinecodequality) (10)
+- [DoctrineCodeQuality](#doctrinecodequality) (11)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [DowngradePhp71](#downgradephp71) (3)
 - [DowngradePhp72](#downgradephp72) (2)
@@ -4449,15 +4449,15 @@ Turns parent EntityRepository class to constructor dependency
 
 <br><br>
 
-### `RemoveRedundantDefaultAnnotationValuesRector`
+### `RemoveRedundantDefaultPropertyAnnotationValuesRector`
 
-- class: [`Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultAnnotationValuesRector`](/rules/doctrine-code-quality/src/Rector/Property/RemoveRedundantDefaultAnnotationValuesRector.php)
-- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Property/RemoveRedundantDefaultAnnotationValuesRector/Fixture)
+- class: [`Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector`](/rules/doctrine-code-quality/src/Rector/Property/RemoveRedundantDefaultPropertyAnnotationValuesRector.php)
+- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Property/RemoveRedundantDefaultPropertyAnnotationValuesRector/Fixture)
 
-Removes redundant default values from Doctrine ORM annotations.
+Removes redundant default values from Doctrine ORM annotations on class property level
 
 ```diff
-use Doctrine\ORM\Mapping as ORM;
+ use Doctrine\ORM\Mapping as ORM;
 
  /**
   * @ORM\Entity
@@ -4470,6 +4470,27 @@ use Doctrine\ORM\Mapping as ORM;
 +     * @ORM\JoinColumn(name="training")
       */
      private $training;
+ }
+```
+
+<br><br>
+
+### `RemoveRedundantDefaultPropertyAnnotationValuesRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector`](/rules/doctrine-code-quality/src/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector.php)
+- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector/Fixture)
+
+Removes redundant default values from Doctrine ORM annotations on class level
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+- * @ORM\Entity(readOnly=false)
++ * @ORM\Entity()
+  */
+ class SomeClass
+ {
  }
 ```
 
