@@ -34,7 +34,7 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
 
         $expectedAddedFilesWithContent = [];
         foreach ($extraFiles as $extraFile) {
-            $expectedAddedFilesWithContent[] = $extraFile->getExpectedAddedFileWithContent();
+            $expectedAddedFilesWithContent[] = $extraFile->getAddedFile();
         }
 
         $this->assertFilesWereAdded($expectedAddedFilesWithContent);
