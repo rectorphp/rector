@@ -6,7 +6,6 @@ namespace Rector\Testing\PHPUnit;
 
 use Nette\Utils\Strings;
 use PHPUnit\Framework\ExpectationFailedException;
-use Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFile;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
@@ -15,6 +14,7 @@ use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\Testing\Contract\RunnableInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
+use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\SmartFileSystem\SmartFileInfo;

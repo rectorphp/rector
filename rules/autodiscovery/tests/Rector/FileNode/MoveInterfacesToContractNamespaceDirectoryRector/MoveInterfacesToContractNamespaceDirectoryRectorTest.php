@@ -6,9 +6,9 @@ namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNam
 
 use Iterator;
 use Rector\Autodiscovery\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector;
-use Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFile;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 

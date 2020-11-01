@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject;
+namespace Rector\Testing\ValueObject;
 
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
