@@ -34,11 +34,12 @@ final class RemoveRedundantDefaultAnnotationValuesRector extends AbstractRector
      */
     private $hasModifiedAnnotation = false;
 
-    public function __construct(DoctrinePropertyAnalyzer $doctrinePropertyAnalyzer, DoctrineClassAnalyzer $doctrineClassAnalyzer)
-    {
+    public function __construct(
+        DoctrinePropertyAnalyzer $doctrinePropertyAnalyzer,
+        DoctrineClassAnalyzer $doctrineClassAnalyzer
+    ) {
         $this->doctrinePropertyAnalyzer = $doctrinePropertyAnalyzer;
         $this->doctrineClassAnalyzer = $doctrineClassAnalyzer;
-
     }
 
     public function getDefinition(): RectorDefinition
@@ -104,7 +105,7 @@ CODE_SAMPLE
             $this->refactorClassAnnotations($node);
         }
 
-        if (!$this->hasModifiedAnnotation) {
+        if (! $this->hasModifiedAnnotation) {
             return null;
         }
 
@@ -248,9 +249,12 @@ CODE_SAMPLE
     /**
      * @param bool|string|int $defaultValue
      */
-    private function removeItemWithDefaultValue(AbstractDoctrineTagValueNode $doctrineTagValueNode, string $item, $defaultValue): void
-    {
-        if (!isset($doctrineTagValueNode->getAttributableItems()[$item])) {
+    private function removeItemWithDefaultValue(
+        AbstractDoctrineTagValueNode $doctrineTagValueNode,
+        string $item,
+        $defaultValue
+    ): void {
+        if (! isset($doctrineTagValueNode->getAttributableItems()[$item])) {
             return;
         }
 
