@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\FileSystemRector\Rector\Removing;
 
+use PhpParser\Node;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\CustomNode\FileNode;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use Webmozart\Assert\Assert;
 
-final class RemoveProjectFileRector extends AbstractFileSystemRector implements ConfigurableRectorInterface
+final class RemoveProjectFileRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api
@@ -22,25 +24,6 @@ final class RemoveProjectFileRector extends AbstractFileSystemRector implements 
      * @var string[]
      */
     private $filePathsToRemove = [];
-
-    public function refactor(SmartFileInfo $smartFileInfo): void
-    {
-        if ($this->filePathsToRemove === []) {
-            return;
-        }
-
-        $projectDirectory = getcwd();
-
-        $relativePathInProject = $smartFileInfo->getRelativeFilePathFromDirectory($projectDirectory);
-
-        foreach ($this->filePathsToRemove as $filePathsToRemove) {
-            if ($relativePathInProject !== $filePathsToRemove) {
-                continue;
-            }
-
-            $this->removeFile($smartFileInfo);
-        }
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -60,8 +43,44 @@ CODE_SAMPLE
         ]);
     }
 
+    public function getNodeTypes(): array
+    {
+        return [FileNode::class];
+    }
+
+    /**
+     * @param FileNode $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($this->filePathsToRemove === []) {
+            return null;
+        }
+
+        $projectDirectory = getcwd();
+
+        $smartFileInfo = $node->getFileInfo();
+        $relativePathInProject = $smartFileInfo->getRelativeFilePathFromDirectory($projectDirectory);
+
+        foreach ($this->filePathsToRemove as $filePathsToRemove) {
+            if ($relativePathInProject !== $filePathsToRemove) {
+                continue;
+            }
+
+            $this->removeFile($smartFileInfo);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration): void
     {
-        $this->filePathsToRemove = $configuration[self::FILE_PATHS_TO_REMOVE] ?? [];
+        $filePathsToRemove = $configuration[self::FILE_PATHS_TO_REMOVE] ?? [];
+        Assert::allString($filePathsToRemove);
+
+        $this->filePathsToRemove = $filePathsToRemove;
     }
 }

@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteTesterToPHPUnit\Rector;
+namespace Rector\NetteTesterToPHPUnit\Rector\FileNode;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
+use Rector\Core\PhpParser\Node\CustomNode\FileNode;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\NetteTesterToPHPUnit\Tests\Rector\RenameTesterTestToPHPUnitToTestFileRector\RenameTesterTestToPHPUnitToTestFileRectorTest
  */
-final class RenameTesterTestToPHPUnitToTestFileRector extends AbstractFileSystemRector
+final class RenameTesterTestToPHPUnitToTestFileRector extends AbstractRector
 {
     /**
      * @var string
@@ -43,19 +44,34 @@ CODE_SAMPLE
         ]);
     }
 
-    public function refactor(SmartFileInfo $smartFileInfo): void
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
+        return [FileNode::class];
+    }
+
+    /**
+     * @param FileNode $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $smartFileInfo = $node->getFileInfo();
         $oldRealPath = $smartFileInfo->getRealPath();
         if (! Strings::endsWith($oldRealPath, '.phpt')) {
-            return;
+            return null;
         }
 
         $newRealPath = $this->createNewRealPath($oldRealPath);
         if ($newRealPath === $oldRealPath) {
-            return;
+            return null;
         }
 
-        $this->addMovedFile(new MovedFileWithContent($smartFileInfo, $newRealPath));
+        $movedFileWithContent = new MovedFileWithContent($smartFileInfo, $newRealPath);
+        $this->addMovedFile($movedFileWithContent);
+
+        return null;
     }
 
     private function createNewRealPath(string $oldRealPath): string

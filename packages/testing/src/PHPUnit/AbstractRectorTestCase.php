@@ -132,7 +132,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     ): void {
         $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
-        if ($originalFileInfo->getSuffix() === 'php') {
+        if (in_array($originalFileInfo->getSuffix(), ['php', 'phpt'], true)) {
             if ($extraFiles === []) {
                 $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
                 $this->fileProcessor->refactor($originalFileInfo);
