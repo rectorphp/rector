@@ -14,14 +14,6 @@ final class IdTagValueNode extends AbstractDoctrineTagValueNode implements PhpAt
         return '@ORM\Id';
     }
 
-    /**
-     * @return mixed[]
-     */
-    public function getAttributableItems(): array
-    {
-        return $this->filterOutMissingItems($this->items);
-    }
-
     public function getAttributeClassName(): string
     {
         return 'TBA';

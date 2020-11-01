@@ -52,14 +52,6 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
         $this->shortName = $shortName;
     }
 
-    /**
-     * @return mixed[]
-     */
-    public function getAttributableItems(): array
-    {
-        return $this->filterOutMissingItems($this->items);
-    }
-
     public function getAttributeClassName(): string
     {
         return 'TBA';

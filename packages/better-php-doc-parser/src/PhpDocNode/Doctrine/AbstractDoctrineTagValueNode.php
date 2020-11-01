@@ -10,4 +10,11 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 abstract class AbstractDoctrineTagValueNode extends AbstractTagValueNode implements DoctrineTagNodeInterface, ShortNameAwareTagInterface
 {
+    /**
+     * @return mixed[]
+     */
+    public function getAttributableItems(): array
+    {
+        return $this->filterOutMissingItems($this->items);
+    }
 }

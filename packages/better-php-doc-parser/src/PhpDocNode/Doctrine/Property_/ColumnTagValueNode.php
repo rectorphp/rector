@@ -37,14 +37,6 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements P
         return $this->items['options'] ?? [];
     }
 
-    /**
-     * @return mixed[]
-     */
-    public function getAttributableItems(): array
-    {
-        return $this->filterOutMissingItems($this->items);
-    }
-
     public function getAttributeClassName(): string
     {
         return 'TBA';
