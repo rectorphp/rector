@@ -144,6 +144,9 @@ CODE_SAMPLE
             }
 
             $symfonyControllerNamespace = $this->symfonyControllerFactory->createNamespace($node, $formTypeClass);
+            if ($symfonyControllerNamespace === null) {
+                continue;
+            }
 
             /** @var SmartFileInfo $smartFileInfo */
             $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
