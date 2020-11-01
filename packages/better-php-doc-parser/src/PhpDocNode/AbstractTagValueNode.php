@@ -64,6 +64,11 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $this->items[$key] = $value;
     }
 
+    public function removeItem(string $key): void
+    {
+        unset($this->items[$key]);
+    }
+
     /**
      * @param mixed[] $contentItems
      * @return mixed[]
