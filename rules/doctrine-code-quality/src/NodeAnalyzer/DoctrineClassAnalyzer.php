@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\DoctrineCodeQuality\NodeAnalyzer;
+
+use PhpParser\Node\Stmt\Class_;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+
+final class DoctrineClassAnalyzer
+{
+    public function matchDoctrineEntityTagValueNode(Class_ $property): ?EntityTagValueNode
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
+
+        return $phpDocInfo->getByType(EntityTagValueNode::class);
+    }
+}
