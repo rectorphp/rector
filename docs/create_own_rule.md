@@ -1,5 +1,3 @@
-
-
 # 3 Steps to Create Your Own Rector
 
 First, make sure it's not covered by [any existing Rectors](/docs/rector_rules_overview.md).
@@ -138,10 +136,10 @@ The `rector.php` configuration is loaded by default, so we can skip it.
 
 ```bash
 # see the diff first
-vendor/bin/rector process src --dry-run
+vendor/bin/rector process {{src}} --dry-run
 
 # if it's ok, apply
-vendor/bin/rector process src
+vendor/bin/rector process {{src}}
 ```
 
 That's it!
