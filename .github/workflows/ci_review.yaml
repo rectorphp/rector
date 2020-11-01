@@ -73,7 +73,7 @@ jobs:
                 name: Inject slug/short variables
                 uses: rlespinasse/github-slug-action@v3.x
 
-            -   run: git branch --set-upstream-to=origin/${{ env.GITHUB_REF_SLUG }} ${{ env.GITHUB_REF_SLUG }}
+            -   run: git branch --set-upstream-to=origin/${{ env.GITHUB_HEAD_REF_SLUG }} ${{ env.GITHUB_REF_SLUG }}
             -   run: git pull --ff-only
 
             # see https://github.com/EndBug/add-and-commit
