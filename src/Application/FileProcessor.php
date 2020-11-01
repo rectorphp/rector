@@ -136,8 +136,9 @@ final class FileProcessor
 
         $this->currentFileInfoProvider->setCurrentStmts($parsedStmtsAndTokens->getNewStmts());
 
+        // run file node only if
         $fileNode = new FileNode($smartFileInfo, $parsedStmtsAndTokens->getNewStmts());
-        $this->rectorNodeTraverser->traverseFileNode($fileNode);
+        $result = $this->rectorNodeTraverser->traverseFileNode($fileNode);
 
         $newStmts = $this->rectorNodeTraverser->traverse($parsedStmtsAndTokens->getNewStmts());
 
