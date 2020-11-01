@@ -223,13 +223,27 @@ CODE_SAMPLE
         string $item,
         $defaultValue
     ): void {
-        if (! isset($doctrineTagValueNode->getAttributableItems()[$item])) {
+        if (! $this->hasItemWithDefaultValue($doctrineTagValueNode, $item, $defaultValue)) {
             return;
         }
 
-        if ($doctrineTagValueNode->getAttributableItems()[$item] === $defaultValue) {
-            $this->hasModifiedAnnotation = true;
-            $doctrineTagValueNode->removeItem($item);
+        $this->hasModifiedAnnotation = true;
+        $doctrineTagValueNode->removeItem($item);
+    }
+
+    /**
+     * @param bool|string|int $defaultValue
+     */
+    private function hasItemWithDefaultValue(
+        AbstractDoctrineTagValueNode $doctrineTagValueNode,
+        string $item,
+        $defaultValue
+    ): bool {
+        $attributableItems = $doctrineTagValueNode->getAttributableItems();
+        if (! isset($attributableItems[$item])) {
+            return false;
         }
+
+        return $attributableItems[$item] === $defaultValue;
     }
 }
