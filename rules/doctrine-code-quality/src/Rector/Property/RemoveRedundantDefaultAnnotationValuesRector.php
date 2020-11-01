@@ -94,9 +94,6 @@ CODE_SAMPLE
         return [Class_::class, Property::class];
     }
 
-    /**
-     * @param Class_|Property $node
-     */
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Property) {
@@ -114,10 +111,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param Property $node
-     */
-    private function refactorPropertyAnnotations(Node $node): void
+    private function refactorPropertyAnnotations(Property $node): void
     {
         $this->refactorColumnAnnotation($node);
         $this->refactorGeneratedValueAnnotation($node);
@@ -128,31 +122,7 @@ CODE_SAMPLE
         $this->refactorOneToOneAnnotation($node);
     }
 
-    /**
-     * @param Class_ $node
-     */
-    private function refactorClassAnnotations(Node $node): void
-    {
-        $this->refactorEntityAnnotation($node);
-    }
-
-    /**
-     * @param Class_ $node
-     */
-    private function refactorEntityAnnotation(Node $node): void
-    {
-        $entityTagValueNode = $this->doctrineClassAnalyzer->matchDoctrineEntityTagValueNode($node);
-        if ($entityTagValueNode === null) {
-            return;
-        }
-
-        $this->removeItemWithDefaultValue($entityTagValueNode, 'readOnly', false);
-    }
-
-    /**
-     * @param Property $node
-     */
-    private function refactorColumnAnnotation(Node $node): void
+    private function refactorColumnAnnotation(Property $node): void
     {
         $columnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
         if ($columnTagValueNode === null) {
@@ -165,10 +135,7 @@ CODE_SAMPLE
         $this->removeItemWithDefaultValue($columnTagValueNode, 'scale', 0);
     }
 
-    /**
-     * @param Property $node
-     */
-    private function refactorJoinColumnAnnotation(Node $node): void
+    private function refactorJoinColumnAnnotation(Property $node): void
     {
         $joinColumnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineJoinColumnTagValueNode($node);
         if ($joinColumnTagValueNode === null) {
@@ -180,10 +147,7 @@ CODE_SAMPLE
         $this->removeItemWithDefaultValue($joinColumnTagValueNode, 'unique', false);
     }
 
-    /**
-     * @param Property $node
-     */
-    private function refactorGeneratedValueAnnotation(Node $node): void
+    private function refactorGeneratedValueAnnotation(Property $node): void
     {
         $generatedValue = $this->doctrinePropertyAnalyzer->matchDoctrineGeneratedValueTagValueNode($node);
         if ($generatedValue === null) {
@@ -193,10 +157,7 @@ CODE_SAMPLE
         $this->removeItemWithDefaultValue($generatedValue, 'strategy', 'AUTO');
     }
 
-    /**
-     * @param Property $node
-     */
-    private function refactorManyToManyAnnotation(Node $node): void
+    private function refactorManyToManyAnnotation(Property $node): void
     {
         $manyToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineManyToManyTagValueNode($node);
         if ($manyToManyTagValueNode === null) {
@@ -207,10 +168,7 @@ CODE_SAMPLE
         $this->removeItemWithDefaultValue($manyToManyTagValueNode, 'fetch', 'LAZY');
     }
 
-    /**
-     * @param Property $node
-     */
-    private function refactorManyToOneAnnotation(Node $node): void
+    private function refactorManyToOneAnnotation(Property $node): void
     {
         $manyToOneTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineManyToOneTagValueNode($node);
         if ($manyToOneTagValueNode === null) {
@@ -220,10 +178,7 @@ CODE_SAMPLE
         $this->removeItemWithDefaultValue($manyToOneTagValueNode, 'fetch', 'LAZY');
     }
 
-    /**
-     * @param Property $node
-     */
-    private function refactorOneToManyAnnotation(Node $node): void
+    private function refactorOneToManyAnnotation(Property $node): void
     {
         $oneToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineOneToManyTagValueNode($node);
         if ($oneToManyTagValueNode === null) {
@@ -234,10 +189,7 @@ CODE_SAMPLE
         $this->removeItemWithDefaultValue($oneToManyTagValueNode, 'fetch', 'LAZY');
     }
 
-    /**
-     * @param Property $node
-     */
-    private function refactorOneToOneAnnotation(Node $node): void
+    private function refactorOneToOneAnnotation(Property $node): void
     {
         $oneToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineOneToOneTagValueNode($node);
         if ($oneToManyTagValueNode === null) {
@@ -246,6 +198,21 @@ CODE_SAMPLE
 
         $this->removeItemWithDefaultValue($oneToManyTagValueNode, 'orphanRemoval', false);
         $this->removeItemWithDefaultValue($oneToManyTagValueNode, 'fetch', 'LAZY');
+    }
+
+    private function refactorClassAnnotations(Class_ $node): void
+    {
+        $this->refactorEntityAnnotation($node);
+    }
+
+    private function refactorEntityAnnotation(Class_ $node): void
+    {
+        $entityTagValueNode = $this->doctrineClassAnalyzer->matchDoctrineEntityTagValueNode($node);
+        if ($entityTagValueNode === null) {
+            return;
+        }
+
+        $this->removeItemWithDefaultValue($entityTagValueNode, 'readOnly', false);
     }
 
     /**
