@@ -129,6 +129,7 @@ parameters:
         - packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
         - packages/file-system-rector/src/Rector/AbstractFileSystemRector.php
         - packages/testing/src/PHPUnit/*.php
+        - packages/node-type-resolver/tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
 
         # phsptan bug
         - utils/phpstan-extensions/src/Rule/PreventParentMethodVisibilityOverrideRule.php
