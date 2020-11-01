@@ -6,6 +6,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTa
 
 final class DoctrineItemDefaultValueManipulator
 {
+    /** @var bool */
     private $hasModifiedAnnotation = false;
 
     /**
