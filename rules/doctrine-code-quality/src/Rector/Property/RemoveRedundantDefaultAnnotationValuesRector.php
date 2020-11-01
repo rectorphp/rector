@@ -96,6 +96,7 @@ CODE_SAMPLE
 
     public function refactor(Node $node): ?Node
     {
+        $this->hasModifiedAnnotation = false;
         if ($node instanceof Property) {
             $this->refactorPropertyAnnotations($node);
         }
