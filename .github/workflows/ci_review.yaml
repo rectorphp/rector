@@ -65,6 +65,9 @@ jobs:
 
             -   run: ${{ matrix.actions.write_run }}
 
+            # see https://github.com/rectorphp/rector/pull/4531/checks?check_run_id=1338642220#step:7:401 + https://stackoverflow.com/questions/62653114/how-to-deal-with-this-git-warning-pulling-without-specifying-how-to-reconcile#:~:text=warning%3A%20Pulling%20without%20specifying%20how,default%20strategy)%20git%20config%20pull.
+            -   run: git pull --ff-only
+
             # see https://github.com/EndBug/add-and-commit
             -
                 uses: EndBug/add-and-commit@v5.1.0
