@@ -92,13 +92,13 @@ CODE_SAMPLE
         $this->filePathsToRemove = $filePathsToRemove;
     }
 
-    private function isFilePathToRemove(string $relativePathInProject, string $filePathsToRemove): bool
+    private function isFilePathToRemove(string $relativePathInProject, string $filePathToRemove): bool
     {
-        if (StaticPHPUnitEnvironment::isPHPUnitRun() && Strings::endsWith($relativePathInProject, $filePathsToRemove)) {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun() && Strings::endsWith($relativePathInProject, $filePathToRemove)) {
             // only for tests
             return true;
         }
 
-        return $relativePathInProject === $filePathsToRemove;
+        return $relativePathInProject === $filePathToRemove;
     }
 }

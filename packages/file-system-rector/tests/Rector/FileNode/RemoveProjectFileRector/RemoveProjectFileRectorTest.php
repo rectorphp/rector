@@ -32,7 +32,7 @@ final class RemoveProjectFileRectorTest extends AbstractRectorTestCase
     {
         return [
             RemoveProjectFileRector::class => [
-                RemoveProjectFileRector::FILE_PATHS_TO_REMOVE => ['file_to_be_removed.php.inc'],
+                RemoveProjectFileRector::FILE_PATHS_TO_REMOVE => ['file_to_be_removed.php'],
             ],
         ];
     }

@@ -129,6 +129,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         $this->nonPhpFileProcessor = static::$container->get(NonPhpFileProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
         $this->removedAndAddedFilesCollector = self::$container->get(RemovedAndAddedFilesCollector::class);
+        $this->removedAndAddedFilesCollector->reset();
 
         // needed for PHPStan, because the analyzed file is just create in /temp
         $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
