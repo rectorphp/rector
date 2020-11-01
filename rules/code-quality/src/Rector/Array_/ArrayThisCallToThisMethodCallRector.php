@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -88,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isAssignedToNetteMagicOnProperty($node)) {
+        if ($this->isAssignedToNetteMagicOnProperty($node) || $this->isInsideProperty($node)) {
             return null;
         }
 
@@ -136,5 +137,19 @@ CODE_SAMPLE
         /** @var PropertyFetch $propertyFetch */
         $propertyFetch = $parent->var->var;
         return $this->isName($propertyFetch->name, 'on*');
+    }
+
+    private function isInsideProperty(Array_ $array): bool
+    {
+        $parent = $array->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parent) {
+            if ($parent instanceof Property) {
+                return true;
+            }
+
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
     }
 }
