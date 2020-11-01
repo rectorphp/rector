@@ -8,12 +8,11 @@ use Nette\Utils\Strings;
 use PHPUnit\Framework\ExpectationFailedException;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
-use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\Testing\Contract\RunnableInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
+use Rector\Testing\PHPUnit\Behavior\RunnableTestTrait;
 use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
@@ -22,6 +21,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 {
     use MovingFilesTrait;
+    use RunnableTestTrait;
 
     /**
      * @var SmartFileInfo
@@ -32,11 +32,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      * @var bool
      */
     private $autoloadTestFixture = true;
-
-    public function getRectorInterface(): string
-    {
-        return PhpRectorInterface::class;
-    }
 
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {
@@ -63,7 +58,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
 
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo, $extraFiles);
-
         $this->originalTempFileInfo = $inputFileInfo;
 
         // runnable?
@@ -76,19 +70,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         }
 
         $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
-    }
-
-    protected function assertOriginalAndFixedFileResultEquals(
-        SmartFileInfo $originalFileInfo,
-        SmartFileInfo $expectedFileInfo
-    ): void {
-        $runnable = $this->runnableRectorFactory->createRunnableClass($originalFileInfo);
-        $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
-
-        $actualResult = $runnable->run();
-        $expectedResult = $expectedInstance->run();
-
-        $this->assertSame($expectedResult, $actualResult);
     }
 
     protected function getTempPath(): string
@@ -110,17 +91,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
     }
 
-    protected function doTestFileIsDeleted(SmartFileInfo $smartFileInfo): void
-    {
-        $this->doTestFileInfo($smartFileInfo);
-        $this->assertFileMissing($this->originalTempFileInfo->getPathname());
-    }
-
-    protected function matchMovedFile(): MovedFileInterface
-    {
-        return $this->removedAndAddedFilesCollector->getMovedFileByFileInfo($this->originalTempFileInfo);
-    }
-
     /**
      * @param InputFilePathWithExpectedFile[] $extraFiles
      */
@@ -132,7 +102,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     ): void {
         $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
-        if ($originalFileInfo->getSuffix() === 'php') {
+        if (in_array($originalFileInfo->getSuffix(), ['php', 'phpt'], true)) {
             if ($extraFiles === []) {
                 $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
                 $this->fileProcessor->refactor($originalFileInfo);

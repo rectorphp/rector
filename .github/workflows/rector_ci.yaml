@@ -56,6 +56,7 @@ jobs:
             -   run: bin/rector rectify ${{ matrix.directories }} --config rector-ci.php --ansi --no-progress-bar
             -   run: vendor/bin/ecs check --match-git-diff --fix --ansi
 
+            # see https://github.com/EndBug/add-and-commit
             -
                 uses: EndBug/add-and-commit@v5.1.0
                 with:

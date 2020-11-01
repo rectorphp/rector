@@ -60,21 +60,6 @@ final class EnabledRectorsProvider
         return $this->enabledRectorsWithConfiguration;
     }
 
-    public function isRectorActive(RectorInterface $rector): bool
-    {
-        if (! $this->isConfigured()) {
-            return true;
-        }
-
-        foreach (array_keys($this->enabledRectorsWithConfiguration) as $rectorClass) {
-            if (is_a($rector, $rectorClass, true)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @return mixed[]
      */

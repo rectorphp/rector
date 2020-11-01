@@ -12,7 +12,7 @@ use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NewFilePrinter\Printer\NodesToDestinationPrinter;
+use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
 use Rector\PSR4\NodeManipulator\NamespaceManipulator;
@@ -29,22 +29,15 @@ final class MultipleClassFileToPsr4ClassesRector extends AbstractRector
     private $namespaceManipulator;
 
     /**
-     * @var NodesToDestinationPrinter
-     */
-    private $nodesToDestinationPrinter;
-
-    /**
      * @var FileInfoDeletionAnalyzer
      */
     private $fileInfoDeletionAnalyzer;
 
     public function __construct(
         NamespaceManipulator $namespaceManipulator,
-        NodesToDestinationPrinter $nodesToDestinationPrinter,
         FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
     ) {
         $this->namespaceManipulator = $namespaceManipulator;
-        $this->nodesToDestinationPrinter = $nodesToDestinationPrinter;
         $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
     }
 
@@ -200,7 +193,9 @@ CODE_SAMPLE
         }
 
         $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
-        $this->nodesToDestinationPrinter->printNewNodesToFilePath($nodesToPrint, $fileDestination);
+
+        $movedFileWithNodes = new MovedFileWithNodes($nodesToPrint, $fileDestination, $smartFileInfo);
+        $this->addMovedFile($movedFileWithNodes);
     }
 
     private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string
