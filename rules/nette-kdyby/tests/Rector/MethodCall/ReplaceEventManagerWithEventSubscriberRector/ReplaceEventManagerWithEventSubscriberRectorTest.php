@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector;
 
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -24,5 +25,10 @@ final class ReplaceEventManagerWithEventSubscriberRectorTest extends AbstractRec
     protected function getRectorClass(): string
     {
         return ReplaceEventManagerWithEventSubscriberRector::class;
+    }
+
+    protected function getPhpVersion(): string
+    {
+        return PhpVersionFeature::BEFORE_TYPED_PROPERTIES;
     }
 }

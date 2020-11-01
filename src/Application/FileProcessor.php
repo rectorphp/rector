@@ -121,6 +121,7 @@ final class FileProcessor
         $this->makeSureFileIsParsed($smartFileInfo);
 
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
+
         return $this->formatPerservingPrinter->printParsedStmstAndTokensToString($parsedStmtsAndTokens);
     }
 
@@ -132,10 +133,12 @@ final class FileProcessor
         $this->makeSureFileIsParsed($smartFileInfo);
 
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
+
         $this->currentFileInfoProvider->setCurrentStmts($parsedStmtsAndTokens->getNewStmts());
 
+        // run file node only if
         $fileNode = new FileNode($smartFileInfo, $parsedStmtsAndTokens->getNewStmts());
-        $this->rectorNodeTraverser->traverseFileNode($fileNode);
+        $result = $this->rectorNodeTraverser->traverseFileNode($fileNode);
 
         $newStmts = $this->rectorNodeTraverser->traverse($parsedStmtsAndTokens->getNewStmts());
 
@@ -186,7 +189,7 @@ final class FileProcessor
         }
 
         throw new ShouldNotHappenException(sprintf(
-            'File %s was not preparsed, so it cannot be printed.%sCheck "%s" method.',
+            'File "%s" was not preparsed, so it cannot be printed.%sCheck "%s" method.',
             $smartFileInfo->getRealPath(),
             PHP_EOL,
             self::class . '::parseFileInfoToLocalCache()'

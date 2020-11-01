@@ -154,7 +154,11 @@ CODE_SAMPLE
 
     private function moveFileToGroupName(SmartFileInfo $fileInfo, FileNode $fileNode, string $desiredGroupName): void
     {
-        $movedFileWithNodes = $this->movedFileWithNodesFactory->create($fileInfo, [$fileNode], $desiredGroupName);
+        $movedFileWithNodes = $this->movedFileWithNodesFactory->createWithDesiredGroup(
+            $fileInfo,
+            $fileNode->stmts,
+            $desiredGroupName
+        );
         if ($movedFileWithNodes === null) {
             return;
         }

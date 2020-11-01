@@ -57,7 +57,7 @@ jobs:
             -   run: vendor/bin/ecs check --match-git-diff --fix --ansi
 
             -
-                uses: EndBug/add-and-commit@v5
+                uses: EndBug/add-and-commit@v5.1.0
                 with:
                     # The arguments for the `git add` command (see the paragraph below for more info)
                     add: .

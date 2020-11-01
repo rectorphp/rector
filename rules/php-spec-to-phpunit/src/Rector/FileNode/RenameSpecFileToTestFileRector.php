@@ -68,7 +68,8 @@ CODE_SAMPLE
         }
 
         $newPathName = $this->createPathName($oldPathname);
-        $this->addMovedFile(new MovedFileWithContent($fileInfo, $newPathName));
+        $movedFileWithContent = new MovedFileWithContent($fileInfo, $newPathName);
+        $this->addMovedFile($movedFileWithContent);
 
         return null;
     }

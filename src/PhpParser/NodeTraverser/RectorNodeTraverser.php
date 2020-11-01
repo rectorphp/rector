@@ -77,9 +77,13 @@ final class RectorNodeTraverser extends NodeTraverser
             $this->configureEnabledRectorsOnly();
         }
 
+        if (! $this->hasFileNodeRectorsEnabled()) {
+            return [];
+        }
+
         // here we only traverse file node without children, to prevent duplicatd traversion
-        foreach ($this->allPhpRectors as $allPhpRector) {
-            $allPhpRector->enterNode($fileNode);
+        foreach ($this->visitors as $rector) {
+            $rector->enterNode($fileNode);
         }
 
         return [];
@@ -154,6 +158,23 @@ final class RectorNodeTraverser extends NodeTraverser
                 continue 2;
             }
         }
+    }
+
+    private function hasFileNodeRectorsEnabled(): bool
+    {
+        foreach ($this->visitors as $visitor) {
+            if (! $visitor instanceof PhpRectorInterface) {
+                continue;
+            }
+
+            if (! in_array(FileNode::class, $visitor->getNodeTypes(), true)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

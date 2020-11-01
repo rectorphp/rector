@@ -10,6 +10,7 @@ use PhpParser\Node;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\TokensByFilePathStorage;
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
@@ -22,6 +23,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @deprecated Use
  * @see \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace node instead
+ * @see FileNode node instead
  */
 abstract class AbstractFileSystemRector implements FileSystemRectorInterface
 {
