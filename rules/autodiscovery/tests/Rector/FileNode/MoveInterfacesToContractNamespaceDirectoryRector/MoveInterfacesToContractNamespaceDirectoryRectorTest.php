@@ -6,6 +6,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNam
 
 use Iterator;
 use Rector\Autodiscovery\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
@@ -34,7 +35,7 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
 
         $expectedAddedFilesWithContent = [];
         foreach ($extraFiles as $extraFile) {
-            $expectedAddedFilesWithContent[] = $extraFile->getAddedFile();
+            $expectedAddedFilesWithContent[] = $extraFile->getAddedFileWithContent();
         }
 
         $this->assertFilesWereAdded($expectedAddedFilesWithContent);
@@ -107,5 +108,10 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
     protected function getRectorClass(): string
     {
         return MoveInterfacesToContractNamespaceDirectoryRector::class;
+    }
+
+    protected function getPhpVersion(): string
+    {
+        return PhpVersionFeature::BEFORE_TYPED_PROPERTIES;
     }
 }

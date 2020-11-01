@@ -8,7 +8,10 @@ use Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespace
 
 class RandomInterfaceUseCase
 {
-    public RandomInterface $random;
+    /**
+     * @var RandomInterface
+     */
+    public $random;
 
     public function create(): RandomInterface
     {

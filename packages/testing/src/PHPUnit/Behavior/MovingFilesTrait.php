@@ -31,7 +31,7 @@ trait MovingFilesTrait
     {
         Assert::allIsAOf($addedFileWithContents, AddedFileWithContent::class);
 
-        $addedFilePathsWithContents = $this->removedAndAddedFilesCollector->getAddedFiles();
+        $addedFilePathsWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
 
         sort($addedFilePathsWithContents);
         sort($addedFileWithContents);

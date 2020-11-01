@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Testing\ValueObject;
 
-use Rector\FileSystemRector\Contract\AddedFileInterface;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InputFilePathWithExpectedFile
@@ -15,14 +15,14 @@ final class InputFilePathWithExpectedFile
     private $inputFilePath;
 
     /**
-     * @var AddedFileInterface
+     * @var AddedFileWithContent
      */
-    private $addedFile;
+    private $addedFileWithContent;
 
-    public function __construct(string $inputFilePath, AddedFileInterface $addedFile)
+    public function __construct(string $inputFilePath, AddedFileWithContent $addedFileWithContent)
     {
         $this->inputFilePath = $inputFilePath;
-        $this->addedFile = $addedFile;
+        $this->addedFileWithContent = $addedFileWithContent;
     }
 
     public function getInputFileInfo(): SmartFileInfo
@@ -30,8 +30,8 @@ final class InputFilePathWithExpectedFile
         return new SmartFileInfo($this->inputFilePath);
     }
 
-    public function getAddedFile(): AddedFileInterface
+    public function getAddedFileWithContent(): AddedFileWithContent
     {
-        return $this->addedFile;
+        return $this->addedFileWithContent;
     }
 }

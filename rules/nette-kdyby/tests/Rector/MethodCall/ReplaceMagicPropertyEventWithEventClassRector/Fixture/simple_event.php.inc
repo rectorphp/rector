@@ -24,7 +24,10 @@ use Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEvent
 
 final class FileManager
 {
-    private \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher;
+    /**
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+     */
+    private $eventDispatcher;
     public function __construct(\Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;

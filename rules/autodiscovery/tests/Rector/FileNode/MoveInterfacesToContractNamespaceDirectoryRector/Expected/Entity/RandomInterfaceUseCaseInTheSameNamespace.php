@@ -6,7 +6,10 @@ namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNam
 
 class RandomInterfaceUseCaseInTheSameNamespace
 {
-    public \Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector\Source\Contract\RandomInterface $random;
+    /**
+     * @var \Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector\Source\Contract\RandomInterface
+     */
+    public $random;
 
     public function create(): \Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector\Source\Contract\RandomInterface
     {
