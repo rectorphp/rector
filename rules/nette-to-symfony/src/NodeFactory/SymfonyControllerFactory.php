@@ -55,9 +55,5 @@ final class SymfonyControllerFactory
         $namespace->stmts[] = $formControllerClass;
 
         return $namespace;
-
-        $filePath = dirname($fileInfo->getRealPath()) . DIRECTORY_SEPARATOR . 'SomeFormController.php';
-
-        $this->printToFile([$namespace], $filePath);
     }
 }

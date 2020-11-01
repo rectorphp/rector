@@ -54,8 +54,8 @@ final class ActionWithFormProcessClassMethodFactory
 
     private function createFormInstanceAssign(string $formTypeClass, Variable $formVariable): Assign
     {
-        $formClassConstReference = $this->nodeFactory->createClassConstReference($formTypeClass);
-        $args = [new Arg($formClassConstReference)];
+        $classConstFetch = $this->nodeFactory->createClassConstReference($formTypeClass);
+        $args = [new Arg($classConstFetch)];
         $createFormMethodCall = new MethodCall(new Variable('this'), 'createForm', $args);
 
         return new Assign($formVariable, $createFormMethodCall);
