@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrineClassAnalyzer;
 use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
 use Rector\DoctrineCodeQuality\NodeManipulator\DoctrineItemDefaultValueManipulator;
 
 /**
- * @see \Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector\RemoveRedundantDefaultAnnotationValuesRectorTest
+ * @see \Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector\RemoveRedundantDefaultPropertyAnnotationValuesRectorTest
  */
 final class RemoveRedundantDefaultPropertyAnnotationValuesRector extends AbstractRector
 {
@@ -91,7 +88,7 @@ CODE_SAMPLE
 
     public function refactor(Node $node): ?Node
     {
-        $this->doctrineItemDefaultValueManipulator->setHasModifiedAnnotation(false);
+        $this->doctrineItemDefaultValueManipulator->resetHasModifiedAnnotation();
         if ($node instanceof Property) {
             $this->refactorPropertyAnnotations($node);
         }
