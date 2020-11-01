@@ -21,7 +21,7 @@ final class RenameSpecFileToTestFileRectorTest extends AbstractRectorTestCase
         $this->doTestFileInfo($fileInfo);
 
         // test file is moved
-        $movedFile = $this->matchMovedFile();
+        $movedFile = $this->matchMovedFile($this->originalTempFileInfo);
         $this->assertInstanceOf(MovedFileInterface::class, $movedFile);
 
         $this->assertTrue(Strings::endsWith($movedFile->getNewPathname(), 'Test.php'));

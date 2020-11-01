@@ -16,7 +16,8 @@ final class DeleteFactoryInterfaceFileSystemRectorTest extends AbstractRectorTes
      */
     public function test(SmartFileInfo $smartFileInfo): void
     {
-        $this->doTestFileIsDeleted($smartFileInfo);
+        $this->doTestFileInfo($smartFileInfo);
+        $this->assertFileWasRemoved($this->originalTempFileInfo);
     }
 
     public function provideData(): Iterator

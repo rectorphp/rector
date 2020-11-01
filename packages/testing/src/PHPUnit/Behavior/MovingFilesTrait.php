@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Rector\Testing\PHPUnit\Behavior;
 
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Webmozart\Assert\Assert;
@@ -13,6 +14,11 @@ use Webmozart\Assert\Assert;
  */
 trait MovingFilesTrait
 {
+    protected function matchMovedFile(SmartFileInfo $smartFileInfo): MovedFileInterface
+    {
+        return $this->removedAndAddedFilesCollector->getMovedFileByFileInfo($smartFileInfo);
+    }
+
     protected function assertFileWasNotChanged(SmartFileInfo $smartFileInfo): void
     {
         $movedFile = $this->removedAndAddedFilesCollector->getMovedFileByFileInfo($smartFileInfo);
