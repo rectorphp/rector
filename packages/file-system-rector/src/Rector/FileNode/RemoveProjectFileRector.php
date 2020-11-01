@@ -94,11 +94,9 @@ CODE_SAMPLE
 
     private function isFilePathToRemove(string $relativePathInProject, string $filePathsToRemove): bool
     {
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun() && Strings::endsWith($relativePathInProject, $filePathsToRemove)) {
             // only for tests
-            if (Strings::endsWith($relativePathInProject, $filePathsToRemove)) {
-                return true;
-            }
+            return true;
         }
 
         return $relativePathInProject === $filePathsToRemove;

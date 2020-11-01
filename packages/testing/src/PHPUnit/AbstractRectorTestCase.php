@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PHPUnit\Framework\ExpectationFailedException;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\FileSystemRector\Contract\MovedFileInterface;
@@ -32,11 +31,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      * @var bool
      */
     private $autoloadTestFixture = true;
-
-    public function getRectorInterface(): string
-    {
-        return PhpRectorInterface::class;
-    }
 
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {

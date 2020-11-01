@@ -82,7 +82,7 @@ jobs:
                 uses: EndBug/add-and-commit@v5.1.0
                 with:
                     # The arguments for the `git add` command (see the paragraph below for more info)
-                    add: .
+                    add: . --force
                     message: '[ci-review] ${{ matrix.actions.commit_message }}'
                     author_name: rector-bot
                     author_email: tomas@getrector.org
