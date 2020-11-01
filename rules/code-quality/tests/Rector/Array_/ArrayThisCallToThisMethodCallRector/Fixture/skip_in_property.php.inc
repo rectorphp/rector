@@ -4,7 +4,7 @@ namespace Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector\Fixture
 
 class SkipInProperty
 {
-    private static array $listen = [
+    private static $listen = [
         'run' => [self::class, 'run'],
     ];
 
