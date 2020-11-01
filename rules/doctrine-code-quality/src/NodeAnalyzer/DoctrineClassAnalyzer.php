@@ -11,10 +11,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class DoctrineClassAnalyzer
 {
-    public function matchDoctrineEntityTagValueNode(Class_ $property): ?EntityTagValueNode
+    public function matchDoctrineEntityTagValueNode(Class_ $class_): ?EntityTagValueNode
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $class_->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return null;
         }
