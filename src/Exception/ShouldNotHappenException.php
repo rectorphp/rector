@@ -9,6 +9,10 @@ use Throwable;
 
 final class ShouldNotHappenException extends Exception
 {
+    /**
+     * @param string $message
+     * @param int $code
+     */
     public function __construct($message = '', $code = 0, ?Throwable $throwable = null)
     {
         if ($message === '') {
