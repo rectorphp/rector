@@ -6,7 +6,7 @@ namespace Rector\PhpSpecToPHPUnit\Tests\Rector\FileNode\RenameSpecFileToTestFile
 
 use Iterator;
 use Nette\Utils\Strings;
-use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
+use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\PhpSpecToPHPUnit\Rector\FileNode\RenameSpecFileToTestFileRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -22,7 +22,7 @@ final class RenameSpecFileToTestFileRectorTest extends AbstractRectorTestCase
 
         // test file is moved
         $movedFile = $this->matchMovedFile();
-        $this->assertInstanceOf(MovedFileWithContent::class, $movedFile);
+        $this->assertInstanceOf(MovedFileInterface::class, $movedFile);
 
         $this->assertTrue(Strings::endsWith($movedFile->getNewPathname(), 'Test.php'));
     }

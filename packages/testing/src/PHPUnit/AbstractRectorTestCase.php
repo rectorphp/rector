@@ -14,6 +14,7 @@ use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\Testing\Contract\RunnableInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
+use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -44,7 +45,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->autoloadTestFixture = true;
     }
 
-    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
+    /**
+     * @param InputFilePathWithExpectedFile[] $extraFiles
+     */
+    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo, array $extraFiles = []): void
     {
         $this->fixtureGuard->ensureFileInfoHasDifferentBeforeAndAfterContent($fixtureFileInfo);
 
@@ -58,7 +62,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
 
-        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
+        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo, $extraFiles);
 
         $this->originalTempFileInfo = $inputFileInfo;
 
@@ -117,19 +121,42 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         return $this->removedAndAddedFilesCollector->getMovedFileByFileInfo($this->originalTempFileInfo);
     }
 
+    /**
+     * @param InputFilePathWithExpectedFile[] $extraFiles
+     */
     private function doTestFileMatchesExpectedContent(
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo,
-        SmartFileInfo $fixtureFileInfo
+        SmartFileInfo $fixtureFileInfo,
+        array $extraFiles = []
     ): void {
         $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
         if ($originalFileInfo->getSuffix() === 'php') {
-            // life-cycle trio :)
-            $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
-            $this->fileProcessor->refactor($originalFileInfo);
+            if ($extraFiles === []) {
+                $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
+                $this->fileProcessor->refactor($originalFileInfo);
+                $this->fileProcessor->postFileRefactor($originalFileInfo);
+            } else {
+                $fileInfosToProcess = [$originalFileInfo];
 
-            $this->fileProcessor->postFileRefactor($originalFileInfo);
+                foreach ($extraFiles as $extraFile) {
+                    $fileInfosToProcess[] = $extraFile->getInputFileInfo();
+                }
+
+                // life-cycle trio :)
+                foreach ($fileInfosToProcess as $fileInfoToProcess) {
+                    $this->fileProcessor->parseFileInfoToLocalCache($fileInfoToProcess);
+                }
+
+                foreach ($fileInfosToProcess as $fileInfoToProcess) {
+                    $this->fileProcessor->refactor($fileInfoToProcess);
+                }
+
+                foreach ($fileInfosToProcess as $fileInfoToProcess) {
+                    $this->fileProcessor->postFileRefactor($fileInfoToProcess);
+                }
+            }
 
             // mimic post-rectors
             $changedContent = $this->fileProcessor->printToString($originalFileInfo);

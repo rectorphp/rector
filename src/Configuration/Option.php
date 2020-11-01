@@ -149,10 +149,5 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_SET = 'set';
-
-    /**
-     * @var string
-     */
     public const OPTION_CONFIG = 'config';
 }

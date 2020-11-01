@@ -7,7 +7,6 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\FileSystemRector\Contract\AddedFileInterface;
 use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
@@ -70,8 +69,8 @@ trait RemovedAndAddedFilesTrait
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
     }
 
-    private function addFile(AddedFileInterface $addedFile): void
+    private function addFile(AddedFileWithContent $addedFileWithContent): void
     {
-        $this->removedAndAddedFilesCollector->addAddedFile($addedFile);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
     }
 }
