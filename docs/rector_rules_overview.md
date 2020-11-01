@@ -5542,7 +5542,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### `RemoveProjectFileRector`
 
-- class: [`Rector\FileSystemRector\Rector\Removing\RemoveProjectFileRector`](/packages/file-system-rector/src/Rector/Removing/RemoveProjectFileRector.php)
+- class: [`Rector\FileSystemRector\Rector\FileNode\RemoveProjectFileRector`](/packages/file-system-rector/src/Rector/FileNode/RemoveProjectFileRector.php)
+- [test fixtures](/packages/file-system-rector/tests/Rector/FileNode/RemoveProjectFileRector/Fixture)
 
 Remove file relative to project directory
 
@@ -8605,7 +8606,7 @@ Migrate Nette Tester test case to PHPUnit
 
 ### `RenameTesterTestToPHPUnitToTestFileRector`
 
-- class: [`Rector\NetteTesterToPHPUnit\Rector\RenameTesterTestToPHPUnitToTestFileRector`](/rules/nette-tester-to-phpunit/src/Rector/RenameTesterTestToPHPUnitToTestFileRector.php)
+- class: [`Rector\NetteTesterToPHPUnit\Rector\FileNode\RenameTesterTestToPHPUnitToTestFileRector`](/rules/nette-tester-to-phpunit/src/Rector/FileNode/RenameTesterTestToPHPUnitToTestFileRector.php)
 
 Rename "*.phpt" file to "*Test.php" file
 

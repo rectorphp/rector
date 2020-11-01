@@ -31,6 +31,18 @@ use Throwable;
 final class RectorApplication
 {
     /**
+     * Why 4? One for each cycle, so user sees some activity all the time:
+     *
+     * 1) parsing files
+     * 2) main rectoring
+     * 3) post-rectoring (removing files, importing names)
+     * 4) printing
+     *
+     * @var int
+     */
+    private const PROGRESS_BAR_STEP_MULTIPLIER = 4;
+
+    /**
      * @var SmartFileInfo[]
      */
     private $notParsedFiles = [];
@@ -164,12 +176,8 @@ final class RectorApplication
             return;
         }
 
-        // why 4? one for each cycle, so user sees some activity all the time
-        $stepMultiplier = 4;
-
-        $this->symfonyStyle->progressStart($fileCount * 4);
-
-        $this->configureStepCount($this->symfonyStyle);
+        $this->symfonyStyle->progressStart($fileCount * self::PROGRESS_BAR_STEP_MULTIPLIER);
+        $this->configureStepCount();
     }
 
     /**
@@ -251,12 +259,12 @@ final class RectorApplication
     /**
      * This prevent CI report flood with 1 file = 1 line in progress bar
      */
-    private function configureStepCount(SymfonyStyle $symfonyStyle): void
+    private function configureStepCount(): void
     {
         $privatesAccessor = new PrivatesAccessor();
 
         /** @var ProgressBar $progressBar */
-        $progressBar = $privatesAccessor->getPrivateProperty($symfonyStyle, 'progressBar');
+        $progressBar = $privatesAccessor->getPrivateProperty($this->symfonyStyle, 'progressBar');
         if ($progressBar->getMaxSteps() < 40) {
             return;
         }

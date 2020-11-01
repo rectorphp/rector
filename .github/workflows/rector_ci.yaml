@@ -56,15 +56,12 @@ jobs:
             -   run: bin/rector rectify ${{ matrix.directories }} --config rector-ci.php --ansi --no-progress-bar
             -   run: vendor/bin/ecs check --match-git-diff --fix --ansi
 
-            # solves https://github.com/rectorphp/rector/runs/1335693491#step:7:394
-            -   run: git config pull.ff only
-
             # see https://github.com/EndBug/add-and-commit
             -
                 uses: EndBug/add-and-commit@v5.1.0
                 with:
                     # The arguments for the `git add` command (see the paragraph below for more info)
-                    add: . --force
+                    add: .
                     message: "[ci-review] Rector Rectify"
                     author_name: rector-bot
                     author_email: tomas@getrector.org
