@@ -68,6 +68,9 @@ jobs:
 
             -   run: ${{ matrix.actions.write_run }}
 
+            # solves https://github.com/rectorphp/rector/runs/1335693491#step:7:394
+            -   run: git config pull.ff only
+
             # see https://github.com/EndBug/add-and-commit
             -
                 uses: EndBug/add-and-commit@v5.1.0
@@ -77,8 +80,6 @@ jobs:
                     message: '[ci-review] ${{ matrix.actions.commit_message }}'
                     author_name: rector-bot
                     author_email: tomas@getrector.org
-                    # solves https://github.com/rectorphp/rector/runs/1335693491#step:7:394
-                    pull_strategy: '--ff-only'
                 env:
                     # to get push access
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
