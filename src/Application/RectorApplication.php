@@ -11,6 +11,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\EventDispatcher\Event\AfterProcessEvent;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -92,6 +93,11 @@ final class RectorApplication
      */
     private $eventDispatcher;
 
+    /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
     public function __construct(
         Configuration $configuration,
         EnabledRectorsProvider $enabledRectorsProvider,
@@ -101,7 +107,8 @@ final class RectorApplication
         NodeScopeResolver $nodeScopeResolver,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        PrivatesAccessor $privatesAccessor
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -112,6 +119,7 @@ final class RectorApplication
         $this->enabledRectorsProvider = $enabledRectorsProvider;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->eventDispatcher = $eventDispatcher;
+        $this->privatesAccessor = $privatesAccessor;
     }
 
     /**
@@ -176,8 +184,7 @@ final class RectorApplication
             return;
         }
 
-        $this->symfonyStyle->progressStart($fileCount * self::PROGRESS_BAR_STEP_MULTIPLIER);
-        $this->configureStepCount();
+        $this->configureStepCount($fileCount);
     }
 
     /**
@@ -259,12 +266,15 @@ final class RectorApplication
     /**
      * This prevent CI report flood with 1 file = 1 line in progress bar
      */
-    private function configureStepCount(): void
+    private function configureStepCount(int $fileCount): void
     {
-        $privatesAccessor = new PrivatesAccessor();
+        $this->symfonyStyle->progressStart($fileCount * self::PROGRESS_BAR_STEP_MULTIPLIER);
 
-        /** @var ProgressBar $progressBar */
-        $progressBar = $privatesAccessor->getPrivateProperty($this->symfonyStyle, 'progressBar');
+        $progressBar = $this->privatesAccessor->getPrivateProperty($this->symfonyStyle, 'progressBar');
+        if ($progressBar instanceof ProgressBar) {
+            throw new ShouldNotHappenException();
+        }
+
         if ($progressBar->getMaxSteps() < 40) {
             return;
         }
