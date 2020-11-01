@@ -36,11 +36,16 @@ jobs:
                 with:
                     # Must be used to trigger workflow after push
                     token: ${{ secrets.ACCESS_TOKEN }}
+                    # see https://github.com/stefanzweifel/git-auto-commit-action#checkout-the-correct-branch
+                    ref: ${{ github.head_ref }}
 
             # in forks, the token is not available - so we cannot us eit
             -
                 if: github.event.pull_request.head.repo.full_name != github.repository
                 uses: actions/checkout@v2
+                with:
+                    # see https://github.com/stefanzweifel/git-auto-commit-action#checkout-the-correct-branch
+                    ref: ${{ github.head_ref }}
 
             -
                 uses: shivammathur/setup-php@v1
