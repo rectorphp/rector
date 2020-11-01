@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
 
 /**
- * @see \Rector\NetteTesterToPHPUnit\Tests\Rector\RenameTesterTestToPHPUnitToTestFileRector\RenameTesterTestToPHPUnitToTestFileRectorTest
+ * @see \Rector\NetteTesterToPHPUnit\Tests\Rector\FileNode\RenameTesterTestToPHPUnitToTestFileRector\RenameTesterTestToPHPUnitToTestFileRectorTest
  */
 final class RenameTesterTestToPHPUnitToTestFileRector extends AbstractRector
 {

@@ -30,7 +30,7 @@ final class RenameTesterTestToPHPUnitToTestFileRectorTest extends AbstractRector
             new SmartFileInfo(__DIR__ . '/Source/SomeCase.phpt'),
             new AddedFileWithContent(
                 $this->getFixtureTempDirectory() . '/Source/SomeCaseTest.php',
-                $smartFileSystem->readFile(__DIR__ . '/Expected/ExpectedSomeCaseTest.php')
+                $smartFileSystem->readFile(__DIR__ . '/Source/SomeCase.phpt')
             ),
         ];
     }

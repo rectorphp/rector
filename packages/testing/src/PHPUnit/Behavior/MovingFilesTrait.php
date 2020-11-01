@@ -24,6 +24,12 @@ trait MovingFilesTrait
         $this->assertFilesWereAdded([$addedFileWithContent]);
     }
 
+    protected function assertFileWasRemoved(SmartFileInfo $smartFileInfo): void
+    {
+        $isFileRemoved = $this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo);
+        $this->assertTrue($isFileRemoved);
+    }
+
     /**
      * @param AddedFileWithContent[] $addedFileWithContents
      */

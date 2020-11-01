@@ -11,7 +11,6 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\EventDispatcher\Event\AfterProcessEvent;
-use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -40,11 +39,6 @@ final class RectorApplication
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-
-    /**
-     * @var FileSystemFileProcessor
-     */
-    private $fileSystemFileProcessor;
 
     /**
      * @var ErrorAndDiffCollector
@@ -92,14 +86,12 @@ final class RectorApplication
         ErrorAndDiffCollector $errorAndDiffCollector,
         EventDispatcherInterface $eventDispatcher,
         FileProcessor $fileProcessor,
-        FileSystemFileProcessor $fileSystemFileProcessor,
         NodeScopeResolver $nodeScopeResolver,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle
     ) {
         $this->symfonyStyle = $symfonyStyle;
-        $this->fileSystemFileProcessor = $fileSystemFileProcessor;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
         $this->fileProcessor = $fileProcessor;
@@ -135,25 +127,16 @@ final class RectorApplication
         $this->parseFileInfosToNodes($phpFileInfos);
 
         // 2. change nodes with Rectors
-        $this->refactoryNodesWithRectors($phpFileInfos);
+        $this->refactorNodesWithRectors($phpFileInfos);
 
-        // 3. process file system rectors
-        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
-            foreach ($phpFileInfos as $phpFileInfo) {
-                $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                    $this->processFileSystemRectors($smartFileInfo);
-                }, 'refactoring with file system');
-            }
-        }
-
-        // 4. apply post rectors
+        // 3. apply post rectors
         foreach ($phpFileInfos as $phpFileInfo) {
             $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->postFileRefactor($smartFileInfo);
             }, 'post rectors');
         }
 
-        // 5. print to file or string
+        // 4. print to file or string
         foreach ($phpFileInfos as $phpFileInfo) {
             $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->printFileInfo($smartFileInfo);
@@ -181,13 +164,10 @@ final class RectorApplication
             return;
         }
 
-        // why 5? one for each cycle, so user sees some activity all the time
+        // why 4? one for each cycle, so user sees some activity all the time
         $stepMultiplier = 4;
-        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
-            ++$stepMultiplier;
-        }
 
-        $this->symfonyStyle->progressStart($fileCount * $stepMultiplier);
+        $this->symfonyStyle->progressStart($fileCount * 4);
 
         $this->configureStepCount($this->symfonyStyle);
     }
@@ -220,7 +200,7 @@ final class RectorApplication
     /**
      * @param SmartFileInfo[] $phpFileInfos
      */
-    private function refactoryNodesWithRectors(array $phpFileInfos): void
+    private function refactorNodesWithRectors(array $phpFileInfos): void
     {
         foreach ($phpFileInfos as $phpFileInfo) {
             $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
@@ -251,16 +231,6 @@ final class RectorApplication
 
             $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $smartFileInfo);
         }
-    }
-
-    private function processFileSystemRectors(SmartFileInfo $smartFileInfo): void
-    {
-        if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
-            // skip, because this file exists no more
-            return;
-        }
-
-        $this->fileSystemFileProcessor->processFileInfo($smartFileInfo);
     }
 
     private function printFileInfo(SmartFileInfo $fileInfo): void

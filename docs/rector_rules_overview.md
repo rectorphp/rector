@@ -5551,7 +5551,7 @@ Remove file relative to project directory
 
 declare(strict_types=1);
 
-use Rector\FileSystemRector\Rector\Removing\RemoveProjectFileRector;
+use Rector\FileSystemRector\Rector\FileNode\RemoveProjectFileRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

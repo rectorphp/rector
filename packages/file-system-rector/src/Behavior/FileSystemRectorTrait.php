@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\FileSystemRector\Rector\Behavior;
+namespace Rector\FileSystemRector\Behavior;
 
 use Rector\FileSystemRector\ValueObjectFactory\MovedFileWithNodesFactory;
 
