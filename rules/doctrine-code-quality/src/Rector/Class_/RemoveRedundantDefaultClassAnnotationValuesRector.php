@@ -78,7 +78,7 @@ CODE_SAMPLE
 
     public function refactor(Node $node): ?Node
     {
-        $this->doctrineItemDefaultValueManipulator->setHasModifiedAnnotation(false);
+        $this->doctrineItemDefaultValueManipulator->resetHasModifiedAnnotation();
         if ($node instanceof Class_) {
             $this->refactorClassAnnotations($node);
         }
