@@ -10,6 +10,7 @@ use Rector\DoctrineCodeQuality\Rector\ClassMethod\MakeEntitySetterNullabilityInS
 use Rector\DoctrineCodeQuality\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector;
 use Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector;
 use Rector\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector;
+use Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultAnnotationValuesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -22,4 +23,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CorrectDefaultTypesOnEntityPropertyRector::class);
     $services->set(ChangeBigIntEntityPropertyToIntTypeRector::class);
     $services->set(ImproveDoctrineCollectionDocTypeInEntityRector::class);
+    $services->set(RemoveRedundantDefaultAnnotationValuesRector::class);
 };
