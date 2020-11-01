@@ -8,6 +8,9 @@ final class DoctrineItemDefaultValueManipulator
 {
     private $hasModifiedAnnotation = false;
 
+    /**
+     * @param string|bool|int $defaultValue
+     */
     public function remove(
         AbstractDoctrineTagValueNode $doctrineTagValueNode,
         string $item,
@@ -21,6 +24,9 @@ final class DoctrineItemDefaultValueManipulator
         $doctrineTagValueNode->removeItem($item);
     }
 
+    /**
+     * @param string|bool|int $defaultValue
+     */
     private function hasItemWithDefaultValue(
         AbstractDoctrineTagValueNode $doctrineTagValueNode,
         string $item,
@@ -34,9 +40,9 @@ final class DoctrineItemDefaultValueManipulator
         return $attributableItems[$item] === $defaultValue;
     }
 
-    public function setHasModifiedAnnotation(bool $hasModifiedAnnotation): void
+    public function resetHasModifiedAnnotation(): void
     {
-        $this->hasModifiedAnnotation = $hasModifiedAnnotation;
+        $this->hasModifiedAnnotation = false;
     }
 
     public function hasModifiedAnnotation(): bool
