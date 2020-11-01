@@ -16,6 +16,7 @@ use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
 
 /**
  * @see \Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultAnnotationValuesRector\RemoveRedundantDefaultAnnotationValuesRectorTest
+ * @see \Rector\DoctrineCodeQuality\Tests\Rector\Class_\RemoveRedundantDefaultAnnotationValuesRector\RemoveRedundantDefaultAnnotationValuesRectorTest
  */
 final class RemoveRedundantDefaultAnnotationValuesRector extends AbstractRector
 {
