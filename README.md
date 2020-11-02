@@ -232,9 +232,9 @@ You can use `--debug` option, that will print nested exceptions output:
 vendor/bin/rector process src/Controller --dry-run --debug
 ```
 
-Or with XDebug:
+Or with Xdebug:
 
-1. Make sure XDebug is installed and configured
+1. Make sure [Xdebug](https://xdebug.org/) is installed and configured
 2. Add `--xdebug` option when running Rector
 
 ```bash
