@@ -271,7 +271,7 @@ final class RectorApplication
         $this->symfonyStyle->progressStart($fileCount * self::PROGRESS_BAR_STEP_MULTIPLIER);
 
         $progressBar = $this->privatesAccessor->getPrivateProperty($this->symfonyStyle, 'progressBar');
-        if ($progressBar instanceof ProgressBar) {
+        if (! $progressBar instanceof ProgressBar) {
             throw new ShouldNotHappenException();
         }
 
