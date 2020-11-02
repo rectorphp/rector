@@ -8,13 +8,13 @@
 
 Rector helps you with 2 areas - major code changes and in daily work.
 
--   Do you have a legacy code base? Do you want to have that latest version of PHP or your favorite framework?
-    → **Rector gets you there with instant upgrade**.
+- Do you have a legacy code base? Do you want to have that latest version of PHP or your favorite framework?
+ → **Rector gets you there with instant upgrade**.
 
  <br>
 
--   Do you have code quality you need, but struggle to keep it with new developers in your team? Do you wish to have code-reviews for each member of your team, but don't have time for it?
-    → **Add Rector to you CI and let it fix your code for you. Get [instant feedback](https://tomasvotruba.com/blog/2020/01/13/why-is-first-instant-feedback-crucial-to-developers/) after each commit.**
+- Do you have code quality you need, but struggle to keep it with new developers in your team? Do you wish to have  code-reviews for each member of your team, but don't have time for it?
+→ **Add Rector to you CI and let it fix your code for you. Get [instant feedback](https://tomasvotruba.com/blog/2020/01/13/why-is-first-instant-feedback-crucial-to-developers/) after each commit.**
 
 <br>
 
@@ -24,7 +24,7 @@ It's a tool that [we develop](https://getrector.org/) and share for free, so you
 
 <br>
 
--   **[Try Rector Online](https://getrector.org/demo)**
+- **[Try Rector Online](https://getrector.org/demo)**
 
 ## Show Case: Complete 2700 `@var` annotations in 2 mins
 
@@ -53,34 +53,34 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 
 ### What Can Rector Do for You?
 
--   [Upgrade 30 000 unit tests from PHPUnit 6 to 9 in 2 weeks](https://twitter.com/LBajsarowicz/status/1272947900016967683)
--   [Complete PHP 7.4 property type declarations](https://tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
--   [Migrate your project from Nette to Symfony](https://tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
--   [Refactor Laravel Facades to Dependency Injection](https://tomasvotruba.com/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
--   And much more...
+- [Upgrade 30 000 unit tests from PHPUnit 6 to 9 in 2 weeks](https://twitter.com/LBajsarowicz/status/1272947900016967683)
+- [Complete PHP 7.4 property type declarations](https://tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
+- [Migrate your project from Nette to Symfony](https://tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
+- [Refactor Laravel Facades to Dependency Injection](https://tomasvotruba.com/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
+- And much more...
 
 <br>
 
 ## Documentation
 
--   [Explore 600+ Rector Rules](/docs/rector_rules_overview.md)
--   [How Does Rector Work?](/docs/how_it_works.md)
--   [PHP Parser Nodes Overview](/docs/nodes_overview.md)
+- [Explore 600+ Rector Rules](/docs/rector_rules_overview.md)
+- [How Does Rector Work?](/docs/how_it_works.md)
+- [PHP Parser Nodes Overview](/docs/nodes_overview.md)
 
 ### Advanced
 
--   [How To Run Rector on Changed Files Only](/docs/how_to_run_rector_on_changed_files_only.md)
--   [How Run One Rule From Command Line](/docs/how_to_run_one_rule_from_command_line.md)
--   [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
--   [How to Configure Rule](/docs/how_to_configure_rules.md)
--   [How run Rector in Docker](/docs/how_to_run_rector_in_docker.md)
--   [Add Checkstyle with your CI](/docs/checkstyle.md)
+- [How To Run Rector on Changed Files Only](/docs/how_to_run_rector_on_changed_files_only.md)
+- [How Run One Rule From Command Line](/docs/how_to_run_one_rule_from_command_line.md)
+- [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
+- [How to Configure Rule](/docs/how_to_configure_rules.md)
+- [How run Rector in Docker](/docs/how_to_run_rector_in_docker.md)
+- [Add Checkstyle with your CI](/docs/checkstyle.md)
 
 ### Contributing
 
--   [How to Add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
--   [How to Create New Rector Rule](/docs/create_own_rule.md)
--   [How to Generate New Rector Rule with Recipe](/docs/rector_recipe.md)
+- [How to Add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
+- [How to Create New Rector Rule](/docs/create_own_rule.md)
+- [How to Generate New Rector Rule with Recipe](/docs/rector_recipe.md)
 
 ## Install
 
@@ -88,8 +88,8 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 composer require rector/rector --dev
 ```
 
--   Having conflicts during `composer require`? → Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed)
--   Using a different PHP version than Rector supports? → Use the [Docker image](/docs/how_to_run_rector_in_docker.md)
+- Having conflicts during `composer require`? → Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed)
+- Using a different PHP version than Rector supports? → Use the [Docker image](/docs/how_to_run_rector_in_docker.md)
 
 <br>
 
@@ -97,10 +97,10 @@ composer require rector/rector --dev
 
 There a 2 main ways to use Rector:
 
--   a _single rule_, to have the change under control - you can choose [from over 600 rules](/docs/rector_rules_overview.md)
--   or group of rules called _sets_ - pick from [sets](/config/set)
+- a *single rule*, to have the change under control - you can choose [from over 600 rules](/docs/rector_rules_overview.md)
+- or group of rules called *sets* - pick from [sets](/config/set)
 
-To use them, create a `rector.php` in the root directory of your project:
+To use them, create a `rector.php` in your root directory:
 
 ```bash
 vendor/bin/rector init
@@ -139,13 +139,13 @@ Then dry run Rector, replacing "{{src}}" with the directory you wish to process:
 vendor/bin/rector process {{src}} --dry-run
 ```
 
-Rector will show you diff of files that it _would_ change. To _make_ the changes, drop `--dry-run`:
+Rector will show you diff of files that it *would* change. To *make* the changes, drop `--dry-run`:
 
 ```bash
 vendor/bin/rector process {{src}}
 ```
 
-_Note: `rector.php` is loaded by default. For different location, use `--config` option._
+*Note: `rector.php` is loaded by default. For different location, use `--config` option.*
 
 <br>
 
@@ -250,13 +250,13 @@ vendor/bin/rector process {{src}}/Controller --dry-run --xdebug
 
 Do you use Rector to upgrade your code? Add it here:
 
--   [palantirnet/drupal-rector](https://github.com/palantirnet/drupal-rector) by [Palantir.net](https://github.com/palantirnet) for [Drupal](https://www.drupal.org/)
--   [sabbelasichon/typo3-rector](https://github.com/sabbelasichon/typo3-rector) for [TYPO3](https://typo3.org/)
+- [palantirnet/drupal-rector](https://github.com/palantirnet/drupal-rector) by [Palantir.net](https://github.com/palantirnet) for [Drupal](https://www.drupal.org/)
+- [sabbelasichon/typo3-rector](https://github.com/sabbelasichon/typo3-rector) for [TYPO3](https://typo3.org/)
 
 ## Known Drawbacks
 
 ### How to Apply Coding Standards?
 
-Rector uses [nikic/php-parser](https://github.com/nikic/PHP-Parser/), that build on technology called _abstract syntax tree_ (AST). AST doesn't care about spaces and produces mall-formatted code in both PHP and docblock annotations. **That's why your project needs to have coding standard tool** and set of rules, so it can make refactored nice and shiny again.
+Rector uses [nikic/php-parser](https://github.com/nikic/PHP-Parser/), that build on technology called *abstract syntax tree* (AST). AST doesn't care about spaces and produces mall-formatted code in both PHP and docblock annotations. **That's why your project needs to have coding standard tool** and set of rules, so it can make refactored nice and shiny again.
 
 Don't have any coding standard tool? Add [ECS](https://github.com/Symplify/EasyCodingStandard) and use prepared [`ecs-after-rector.php`](/ecs-after-rector.php) set.

@@ -3,7 +3,7 @@
 You can run Rector on your project using Docker.
 To make sure you are running latest version, use `docker pull rector/rector`.
 
-_Note that Rector inside Docker expects your application in `/project` directory - it is mounted via volume from the current directory (`$pwd`)._
+*Note that Rector inside Docker expects your application in `/project` directory - it is mounted via volume from the current directory (`$pwd`).*
 
 ```bash
 docker run --rm -v $(pwd):/project rector/rector:latest process {{src}} --set symfony40 --dry-run
