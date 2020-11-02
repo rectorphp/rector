@@ -104,6 +104,19 @@ CODE_SAMPLE
         return null;
     }
 
+    private function shouldSkipNode(Stmt $stmt): bool
+    {
+        if ($stmt instanceof Nop) {
+            return true;
+        }
+
+        if ($stmt instanceof ClassLike) {
+            return true;
+        }
+
+        return $stmt instanceof FunctionLike;
+    }
+
     private function isUnreachable(Node $node): bool
     {
         $isUnreachable = $node->getAttribute(AttributeKey::IS_UNREACHABLE);
@@ -166,18 +179,5 @@ CODE_SAMPLE
         }
 
         return $node instanceof Else_;
-    }
-
-    private function shouldSkipNode(Stmt $node): bool
-    {
-        if ($node instanceof Nop) {
-            return true;
-        }
-
-        if ($node instanceof ClassLike) {
-            return true;
-        }
-
-        return $node instanceof FunctionLike;
     }
 }
