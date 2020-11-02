@@ -7,6 +7,7 @@ namespace Rector\DeadCode\Rector\Stmt;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -69,7 +70,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Nop) {
+        if ($this->shouldSkipNode($node)) {
             return null;
         }
 
@@ -101,6 +102,19 @@ CODE_SAMPLE
         $this->removeNode($node);
 
         return null;
+    }
+
+    private function shouldSkipNode(Stmt $stmt): bool
+    {
+        if ($stmt instanceof Nop) {
+            return true;
+        }
+
+        if ($stmt instanceof ClassLike) {
+            return true;
+        }
+
+        return $stmt instanceof FunctionLike;
     }
 
     private function isUnreachable(Node $node): bool
