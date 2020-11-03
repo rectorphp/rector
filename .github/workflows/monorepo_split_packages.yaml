@@ -1,0 +1,34 @@
+name: Monorepo Split Packages
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    monorepo_split_packages:
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                package_name:
+                    - simple-php-doc-parser
+                    - symfony-php-config
+
+        name: Monorepo Split of ${{ matrix.package_name }}
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            # https://github.com/cpina/github-action-push-to-another-repository
+            -
+                uses: cpina/github-action-push-to-another-repository@master
+                env:
+                    API_TOKEN_GITHUB: ${{ secrets.ACCESS_TOKEN }}
+                with:
+                    source-directory: 'packages/${{ matrix.package_name }}'
+                    destination-github-username: 'rector'
+                    destination-repository-name: '${{ matrix.package_name }}'
+                    user-email: tomas@getrector.org
+                    target-branch: master
