@@ -21,7 +21,6 @@ use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
-use Rector\Set\RectorSetProvider;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Rector\Testing\Contract\RunnableInterface;
 use Rector\Testing\Finder\RectorsFinder;
@@ -188,25 +187,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        if ($this->provideSet() !== '') {
-            $rectorSetProvider = new RectorSetProvider();
-            $set = $rectorSetProvider->provideByName($this->provideSet());
-            if ($set === null) {
-                $message = sprintf('Invalid set name provided "%s"', $this->provideSet());
-                throw new ShouldNotHappenException($message);
-            }
-
-            return $set->getSetFileInfo();
-        }
-
         // can be implemented
         return null;
-    }
-
-    protected function provideSet(): string
-    {
-        // can be implemented
-        return '';
     }
 
     /**
@@ -274,26 +256,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         }
 
         return $this->bootKernelWithConfigs($class, $configFiles);
-    }
-
-    protected function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
-    {
-        foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
-            $enabledRectorsProvider->addEnabledRector($rectorClass, (array) $configuration);
-        }
-    }
-
-    protected function createRectorRepositoryContainer(): void
-    {
-        if (self::$allRectorContainer === null) {
-            $this->createContainerWithAllRectors();
-
-            self::$allRectorContainer = self::$container;
-            return;
-        }
-
-        // load from cache
-        self::$container = self::$allRectorContainer;
     }
 
     protected function getPhpVersion(): string
@@ -369,6 +331,26 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function getFixtureTempDirectory(): string
     {
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
+    }
+
+    private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
+    {
+        foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
+            $enabledRectorsProvider->addEnabledRector($rectorClass, (array) $configuration);
+        }
+    }
+
+    private function createRectorRepositoryContainer(): void
+    {
+        if (self::$allRectorContainer === null) {
+            $this->createContainerWithAllRectors();
+
+            self::$allRectorContainer = self::$container;
+            return;
+        }
+
+        // load from cache
+        self::$container = self::$allRectorContainer;
     }
 
     /**

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 
 use Iterator;
-use Rector\Set\ValueObject\SetList;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class Symfony28Test extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureSymfony28');
     }
 
-    protected function provideSet(): string
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return SetList::SYMFONY_28;
+        return new SmartFileInfo(__DIR__ . '/../../../../../../config/set/symfony28.php');
     }
 }
