@@ -71,10 +71,15 @@ jobs:
 
             -   run: composer install --no-progress --ansi
 
-            -   run: ${{ matrix.actions.write_run }}
+            -
+                # Check if the event is not triggered by a fork
+                if: github.event.pull_request.head.repo.full_name == github.repository
+                run: ${{ matrix.actions.write_run }}
 
             # see https://github.com/EndBug/add-and-commit
             -
+                # Check if the event is not triggered by a fork
+                if: github.event.pull_request.head.repo.full_name == github.repository
                 uses: EndBug/add-and-commit@v5.1.0
                 with:
                     # The arguments for the `git add` command (see the paragraph below for more info)
