@@ -20,8 +20,10 @@ jobs:
                     coverage: none
 
             -   run: ./.github/workflows/scripts/downgrade_packages.sh 7.1
-            # composer.json requires PHP 7.2, but we'll run 7.1 below, so set to ignore platform-check or it will fail
+            # Avoid Composer v2 platform checks (composer.json requires PHP 7.2, but we run 7.1 below)
             -   run: composer config platform-check false
+            # Regenerating the autoload files will remove vendor/composer/platform_check.php, otherwise executing bin/rector on 7.1 fails
+            -   run: composer dumpautoload
 
             # see https://github.com/shivammathur/setup-php
             -   uses: shivammathur/setup-php@v1
