@@ -230,8 +230,8 @@ final class ProcessCommand extends AbstractCommand
         $this->rectorApplication->runOnFileInfos($phpFileInfos);
 
         // must run after PHP rectors, because they might change class names, and these class names must be changed in configs
-        $neonYamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, ['neon', 'yaml', 'xml']);
-        $this->nonPhpFileProcessor->runOnFileInfos($neonYamlFileInfos);
+        $nonPhpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, ['neon', 'yaml', 'xml', 'latte', 'twig']);
+        $this->nonPhpFileProcessor->runOnFileInfos($nonPhpFileInfos);
 
         $this->reportZeroCacheRectorsCondition();
 
