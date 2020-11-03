@@ -9,11 +9,13 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\ChangesReporting\Rector\AbstractRector\NotifyingRemovingNodeTrait;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
+use Rector\FileSystemRector\Behavior\FileSystemRectorTrait;
 use Rector\PostRector\Rector\AbstractRector\NodeCommandersTrait;
 use Rector\Reporting\Rector\AbstractRector\NodeReportCollectorTrait;
 
 trait AbstractRectorTrait
 {
+    use FileSystemRectorTrait;
     use PhpDocTrait;
     use RemovedAndAddedFilesTrait;
     use DoctrineTrait;

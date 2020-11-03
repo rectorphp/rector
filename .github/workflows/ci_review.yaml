@@ -2,6 +2,9 @@ name: CI Review
 
 on:
     pull_request: null
+    push:
+        branches:
+            - master
 
 jobs:
     ci_review:
@@ -47,11 +50,16 @@ jobs:
                 with:
                     # Must be used to trigger workflow after push
                     token: ${{ secrets.ACCESS_TOKEN }}
+                    # see https://github.com/stefanzweifel/git-auto-commit-action#checkout-the-correct-branch
+                    ref: ${{ github.head_ref }}
 
             # in forks, the token is not available - so we cannot us eit
             -
                 if: github.event.pull_request.head.repo.full_name != github.repository
                 uses: actions/checkout@v2
+                with:
+                    # see https://github.com/stefanzweifel/git-auto-commit-action#checkout-the-correct-branch
+                    ref: ${{ github.head_ref }}
 
             # see https://github.com/shivammathur/setup-php
             -
@@ -63,19 +71,22 @@ jobs:
 
             -   run: composer install --no-progress --ansi
 
-            -   run: ${{ matrix.actions.write_run }}
+            -
+                # Check if the event is not triggered by a fork
+                if: github.event.pull_request.head.repo.full_name == github.repository
+                run: ${{ matrix.actions.write_run }}
 
             # see https://github.com/EndBug/add-and-commit
             -
-                uses: EndBug/add-and-commit@v5
+                # Check if the event is not triggered by a fork
+                if: github.event.pull_request.head.repo.full_name == github.repository
+                uses: EndBug/add-and-commit@v5.1.0
                 with:
                     # The arguments for the `git add` command (see the paragraph below for more info)
                     add: .
                     message: '[ci-review] ${{ matrix.actions.commit_message }}'
                     author_name: rector-bot
                     author_email: tomas@getrector.org
-                    # solves https://github.com/rectorphp/rector/runs/1335693491#step:7:394
-                    pull_strategy: '--rebase'
                 env:
                     # to get push access
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}

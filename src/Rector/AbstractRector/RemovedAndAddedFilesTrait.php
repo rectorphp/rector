@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
-use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\FileSystemRector\Contract\MovedFileInterface;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
+use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -24,12 +27,19 @@ trait RemovedAndAddedFilesTrait
     private $removedAndAddedFilesCollector;
 
     /**
+     * @var RenamedClassesCollector
+     */
+    private $renamedClassesCollector;
+
+    /**
      * @required
      */
     public function autowireRemovedAndAddedFilesTrait(
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        RenamedClassesCollector $renamedClassesCollector
     ): void {
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+        $this->renamedClassesCollector = $renamedClassesCollector;
     }
 
     /**
@@ -39,12 +49,19 @@ trait RemovedAndAddedFilesTrait
     {
         $fileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
 
-        $this->removedAndAddedFilesCollector->addFileWithContent($fileLocation, $fileContent);
+        $this->removedAndAddedFilesCollector->addAddedFile(new AddedFileWithContent($fileLocation, $fileContent));
     }
 
-    protected function moveFile(SmartFileInfo $oldFileInfo, string $newFileLocation, ?string $fileContent = null): void
+    protected function addMovedFile(MovedFileInterface $movedFile): void
     {
-        $this->removedAndAddedFilesCollector->addMovedFile($oldFileInfo, $newFileLocation, $fileContent);
+        if ($movedFile instanceof MovedFileWithNodes && $movedFile->hasClassRename()) {
+            $this->renamedClassesCollector->addClassRename(
+                $movedFile->getOldClassName(),
+                $movedFile->getNewClassName()
+            );
+        }
+
+        $this->removedAndAddedFilesCollector->addMovedFile($movedFile);
     }
 
     protected function removeFile(SmartFileInfo $smartFileInfo): void
@@ -52,13 +69,8 @@ trait RemovedAndAddedFilesTrait
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
     }
 
-    private function addFile(string $filePath, string $content): void
+    private function addFile(AddedFileWithContent $addedFileWithContent): void
     {
-        $this->removedAndAddedFilesCollector->addFileWithContent($filePath, $content);
-    }
-
-    private function addNodesWithFileDestination(NodesWithFileDestination $nodesWithFileDestination): void
-    {
-        $this->removedAndAddedFilesCollector->addNodesWithFileDestination($nodesWithFileDestination);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
     }
 }

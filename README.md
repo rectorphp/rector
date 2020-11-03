@@ -66,8 +66,6 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 - [Explore 600+ Rector Rules](/docs/rector_rules_overview.md)
 - [How Does Rector Work?](/docs/how_it_works.md)
 - [PHP Parser Nodes Overview](/docs/nodes_overview.md)
-- [How Does Rector Work?](/docs/how_it_works.md)
-- [How to Add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
 
 ### Advanced
 
@@ -77,6 +75,12 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
 - [How run Rector in Docker](/docs/how_to_run_rector_in_docker.md)
 - [Add Checkstyle with your CI](/docs/checkstyle.md)
+
+### Contributing
+
+- [How to Add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
+- [How to Create New Rector Rule](/docs/create_own_rule.md)
+- [How to Generate New Rector Rule with Recipe](/docs/rector_recipe.md)
 
 ## Install
 
@@ -228,9 +232,9 @@ You can use `--debug` option, that will print nested exceptions output:
 vendor/bin/rector process src/Controller --dry-run --debug
 ```
 
-Or with XDebug:
+Or with Xdebug:
 
-1. Make sure XDebug is installed and configured
+1. Make sure [Xdebug](https://xdebug.org/) is installed and configured
 2. Add `--xdebug` option when running Rector
 
 ```bash

@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Rector\Core\Application\FileSystem;
 
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
-use Rector\Core\ValueObject\MovedClass;
+use Rector\FileSystemRector\Contract\MovedFileInterface;
+use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
+use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -41,18 +45,25 @@ final class RemovedAndAddedFilesProcessor
      */
     private $smartFileSystem;
 
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
     public function __construct(
         Configuration $configuration,
         SmartFileSystem $smartFileSystem,
         NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->configuration = $configuration;
         $this->symfonyStyle = $symfonyStyle;
         $this->nodesWithFileDestinationPrinter = $nodesWithFileDestinationPrinter;
         $this->smartFileSystem = $smartFileSystem;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function run(): void
@@ -64,40 +75,8 @@ final class RemovedAndAddedFilesProcessor
 
     private function processAddedFiles(): void
     {
-        foreach ($this->removedAndAddedFilesCollector->getAddedFilePathsWithContents() as $filePathWithContent) {
-            if ($this->configuration->isDryRun()) {
-                $message = sprintf('File "%s" will be added:', $filePathWithContent->getFilePath());
-                $this->symfonyStyle->note($message);
-            } else {
-                $this->smartFileSystem->dumpFile(
-                    $filePathWithContent->getFilePath(),
-                    $filePathWithContent->getFileContent()
-                );
-                $message = sprintf('File "%s" was added:', $filePathWithContent->getFilePath());
-                $this->symfonyStyle->note($message);
-            }
-
-            $this->symfonyStyle->writeln($filePathWithContent->getFileContent());
-        }
-
-        foreach ($this->removedAndAddedFilesCollector->getNodesWithFileDestination() as $nodesWithFileDestination) {
-            $fileContent = $this->nodesWithFileDestinationPrinter->printNodesWithFileDestination(
-                $nodesWithFileDestination
-            );
-
-            if ($this->configuration->isDryRun()) {
-                $message = sprintf('File "%s" will be added:', $nodesWithFileDestination->getFileDestination());
-                $this->symfonyStyle->note($message);
-            } else {
-                $this->smartFileSystem->dumpFile($nodesWithFileDestination->getFileDestination(), $fileContent);
-                $message = sprintf('File "%s" was added:', $nodesWithFileDestination->getFileDestination());
-                $this->symfonyStyle->note($message);
-            }
-
-            $this->symfonyStyle->writeln('----------------------------------------');
-            $this->symfonyStyle->writeln($fileContent);
-            $this->symfonyStyle->writeln('----------------------------------------');
-        }
+        $this->processAddedFilesWithContent();
+        $this->processAddedFilesWithNodes();
     }
 
     private function processDeletedFiles(): void
@@ -111,37 +90,90 @@ final class RemovedAndAddedFilesProcessor
             } else {
                 $message = sprintf('File "%s" was removed', $relativePath);
                 $this->symfonyStyle->warning($message);
-                $this->smartFileSystem->remove($removedFile->getRealPath());
+                $this->smartFileSystem->remove($removedFile->getPathname());
             }
         }
     }
 
     private function processMovedFiles(): void
     {
-        foreach ($this->removedAndAddedFilesCollector->getMovedFiles() as $movedClassValueObject) {
+        foreach ($this->removedAndAddedFilesCollector->getMovedFiles() as $movedFile) {
             if ($this->configuration->isDryRun() && ! StaticPHPUnitEnvironment::isPHPUnitRun()) {
-                $this->printFileMoveWarning($movedClassValueObject, 'will be');
+                $this->printFileMoveWarning($movedFile, 'will be');
             } else {
-                $this->printFileMoveWarning($movedClassValueObject, 'was');
+                $this->printFileMoveWarning($movedFile, 'was');
 
-                $this->smartFileSystem->remove($movedClassValueObject->getOldPath());
+                $this->smartFileSystem->remove($movedFile->getOldPathname());
 
-                $this->smartFileSystem->dumpFile(
-                    $movedClassValueObject->getNewPath(),
-                    $movedClassValueObject->getFileContent()
-                );
+                $fileContent = $this->resolveFileContentFromMovedFile($movedFile);
+                $this->smartFileSystem->dumpFile($movedFile->getNewPathname(), $fileContent);
             }
         }
     }
 
-    private function printFileMoveWarning(MovedClass $movedClass, string $verb): void
+    private function processAddedFilesWithContent(): void
+    {
+        foreach ($this->removedAndAddedFilesCollector->getAddedFilesWithContent() as $addedFileWithContent) {
+            if ($this->configuration->isDryRun()) {
+                $message = sprintf('File "%s" will be added:', $addedFileWithContent->getFilePath());
+                $this->symfonyStyle->note($message);
+            } else {
+                $this->smartFileSystem->dumpFile(
+                    $addedFileWithContent->getFilePath(),
+                    $addedFileWithContent->getFileContent()
+                );
+                $message = sprintf('File "%s" was added:', $addedFileWithContent->getFilePath());
+                $this->symfonyStyle->note($message);
+            }
+
+            $this->symfonyStyle->writeln($addedFileWithContent->getFileContent());
+        }
+    }
+
+    private function processAddedFilesWithNodes(): void
+    {
+        foreach ($this->removedAndAddedFilesCollector->getMovedFileWithNodes() as $addedFileWithNodes) {
+            $fileContent = $this->nodesWithFileDestinationPrinter->printNodesWithFileDestination(
+                $addedFileWithNodes
+            );
+
+            if ($this->configuration->isDryRun()) {
+                $message = sprintf('File "%s" will be added:', $addedFileWithNodes->getOldPathname());
+                $this->symfonyStyle->note($message);
+            } else {
+                $this->smartFileSystem->dumpFile($addedFileWithNodes->getNewPathname(), $fileContent);
+                $message = sprintf('File "%s" was added:', $addedFileWithNodes->getNewPathname());
+                $this->symfonyStyle->note($message);
+            }
+
+            $this->symfonyStyle->writeln('----------------------------------------');
+            $this->symfonyStyle->writeln($fileContent);
+            $this->symfonyStyle->writeln('----------------------------------------');
+        }
+    }
+
+    private function printFileMoveWarning(MovedFileInterface $movedFile, string $verb): void
     {
         $message = sprintf(
             'File "%s" %s moved to "%s"',
-            $movedClass->getOldPath(),
+            $movedFile->getOldPathname(),
             $verb,
-            $movedClass->getNewPath()
+            $movedFile->getNewPathname()
         );
+
         $this->symfonyStyle->warning($message);
+    }
+
+    private function resolveFileContentFromMovedFile(MovedFileInterface $movedFile): string
+    {
+        if ($movedFile instanceof MovedFileWithContent) {
+            return $movedFile->getFileContent();
+        }
+
+        if ($movedFile instanceof MovedFileWithNodes) {
+            return $this->betterStandardPrinter->prettyPrintFile($movedFile->getNodes());
+        }
+
+        throw new NotImplementedYetException(get_class($movedFile));
     }
 }

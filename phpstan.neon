@@ -2,7 +2,6 @@ includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
     - vendor/symplify/phpstan-extensions/config/config.neon
-    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
 
     # see https://github.com/symplify/coding-standard
     - vendor/symplify/coding-standard/config/symplify-rules.neon
@@ -130,6 +129,7 @@ parameters:
         - packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
         - packages/file-system-rector/src/Rector/AbstractFileSystemRector.php
         - packages/testing/src/PHPUnit/*.php
+        - packages/node-type-resolver/tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
 
         # phsptan bug
         - utils/phpstan-extensions/src/Rule/PreventParentMethodVisibilityOverrideRule.php
@@ -602,6 +602,7 @@ parameters:
         -
             message: '#Do not use trait#'
             paths:
+                - packages/**/src/Behavior/**
                 - packages/better-php-doc-parser/src/Attributes/Attribute/AttributeTrait.php # 7
                 - packages/better-php-doc-parser/src/PartPhpDocTagPrinter/Behavior/ArrayPartPhpDocTagPrinterTrait.php # 14
                 - packages/better-php-doc-parser/src/PhpDocNode/PrintTagValueNodeTrait.php # 13
@@ -689,3 +690,4 @@ parameters:
         - '#Static property Rector\\Testing\\PHPUnit\\AbstractGenericRectorTestCase\:\:\$allRectorContainer \(Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container\|null\) does not accept Psr\\Container\\ContainerInterface#'
 
         - '#Class with base "Application" name is already used in "(.*?)\\Symfony\\Component\\Console\\Application", "Symfony\\Component\\Console\\Application", "Rector\\Core\\Console\\Application"\. Use unique name to make classes easy to recognize#'
+        - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'

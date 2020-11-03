@@ -40,7 +40,7 @@ jobs:
 
                     -
                         name: 'PHP Linter'
-                        run: vendor/bin/parallel-lint src tests packages --exclude packages/rector-generator/templates
+                        run: vendor/bin/parallel-lint src bin/rector config compiler tests packages rules --exclude packages/rector-generator/templates --colors --exclude rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source --exclude rules/autodiscovery/tests/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
@@ -52,7 +52,7 @@ jobs:
             -
                 uses: shivammathur/setup-php@v1
                 with:
-                    php-version: 7.4
+                    php-version: 7.2
                     coverage: none
                     tools: composer:v2
 

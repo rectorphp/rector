@@ -133,7 +133,7 @@ Turns `$this->getRepository()` in Symfony Controller to constructor injection an
 
 ### `MoveEntitiesToEntityDirectoryRector`
 
-- class: [`Rector\Autodiscovery\Rector\FileSystem\MoveEntitiesToEntityDirectoryRector`](/rules/autodiscovery/src/Rector/FileSystem/MoveEntitiesToEntityDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\FileNode\MoveEntitiesToEntityDirectoryRector`](/rules/autodiscovery/src/Rector/FileNode/MoveEntitiesToEntityDirectoryRector.php)
 
 Move entities to Entity namespace
 
@@ -158,7 +158,7 @@ Move entities to Entity namespace
 
 ### `MoveInterfacesToContractNamespaceDirectoryRector`
 
-- class: [`Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector`](/rules/autodiscovery/src/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector`](/rules/autodiscovery/src/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector.php)
 
 Move interface to "Contract" namespace
 
@@ -178,7 +178,7 @@ Move interface to "Contract" namespace
 
 ### `MoveServicesBySuffixToDirectoryRector`
 
-- class: [`Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector`](/rules/autodiscovery/src/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector`](/rules/autodiscovery/src/Rector/FileNode/MoveServicesBySuffixToDirectoryRector.php)
 
 Move classes by their suffix to their own group/directory
 
@@ -187,7 +187,7 @@ Move classes by their suffix to their own group/directory
 
 declare(strict_types=1);
 
-use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
+use Rector\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -218,7 +218,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### `MoveValueObjectsToValueObjectDirectoryRector`
 
-- class: [`Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector`](/rules/autodiscovery/src/Rector/FileSystem/MoveValueObjectsToValueObjectDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\FileNode\MoveValueObjectsToValueObjectDirectoryRector`](/rules/autodiscovery/src/Rector/FileNode/MoveValueObjectsToValueObjectDirectoryRector.php)
 
 Move value object to ValueObject namespace/directory
 
@@ -227,7 +227,7 @@ Move value object to ValueObject namespace/directory
 
 declare(strict_types=1);
 
-use Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector;
+use Rector\Autodiscovery\Rector\FileNode\MoveValueObjectsToValueObjectDirectoryRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -5542,7 +5542,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### `RemoveProjectFileRector`
 
-- class: [`Rector\FileSystemRector\Rector\Removing\RemoveProjectFileRector`](/packages/file-system-rector/src/Rector/Removing/RemoveProjectFileRector.php)
+- class: [`Rector\FileSystemRector\Rector\FileNode\RemoveProjectFileRector`](/packages/file-system-rector/src/Rector/FileNode/RemoveProjectFileRector.php)
+- [test fixtures](/packages/file-system-rector/tests/Rector/FileNode/RemoveProjectFileRector/Fixture)
 
 Remove file relative to project directory
 
@@ -5551,7 +5552,7 @@ Remove file relative to project directory
 
 declare(strict_types=1);
 
-use Rector\FileSystemRector\Rector\Removing\RemoveProjectFileRector;
+use Rector\FileSystemRector\Rector\FileNode\RemoveProjectFileRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -8605,7 +8606,7 @@ Migrate Nette Tester test case to PHPUnit
 
 ### `RenameTesterTestToPHPUnitToTestFileRector`
 
-- class: [`Rector\NetteTesterToPHPUnit\Rector\RenameTesterTestToPHPUnitToTestFileRector`](/rules/nette-tester-to-phpunit/src/Rector/RenameTesterTestToPHPUnitToTestFileRector.php)
+- class: [`Rector\NetteTesterToPHPUnit\Rector\FileNode\RenameTesterTestToPHPUnitToTestFileRector`](/rules/nette-tester-to-phpunit/src/Rector/FileNode/RenameTesterTestToPHPUnitToTestFileRector.php)
 
 Rename "*.phpt" file to "*Test.php" file
 
@@ -12694,7 +12695,8 @@ Migrate PhpSpec behavior to PHPUnit test
 
 ### `RenameSpecFileToTestFileRector`
 
-- class: [`Rector\PhpSpecToPHPUnit\Rector\FileSystem\RenameSpecFileToTestFileRector`](/rules/php-spec-to-phpunit/src/Rector/FileSystem/RenameSpecFileToTestFileRector.php)
+- class: [`Rector\PhpSpecToPHPUnit\Rector\FileNode\RenameSpecFileToTestFileRector`](/rules/php-spec-to-phpunit/src/Rector/FileNode/RenameSpecFileToTestFileRector.php)
+- [test fixtures](/rules/php-spec-to-phpunit/tests/Rector/FileNode/RenameSpecFileToTestFileRector/Fixture)
 
 Rename "*Spec.php" file to "*Test.php" file
 

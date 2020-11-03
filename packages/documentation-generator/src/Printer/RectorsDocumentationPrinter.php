@@ -100,7 +100,7 @@ final class RectorsDocumentationPrinter
 
     /**
      * @param RectorInterface[] $rectors
-     * @return array<string, (RectorInterface[]&mixed[])>
+     * @return array<string, RectorInterface[]>
      */
     private function groupRectorsByPackage(array $rectors): array
     {

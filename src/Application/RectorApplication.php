@@ -11,7 +11,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\EventDispatcher\Event\AfterProcessEvent;
-use Rector\FileSystemRector\FileSystemFileProcessor;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -32,6 +32,18 @@ use Throwable;
 final class RectorApplication
 {
     /**
+     * Why 4? One for each cycle, so user sees some activity all the time:
+     *
+     * 1) parsing files
+     * 2) main rectoring
+     * 3) post-rectoring (removing files, importing names)
+     * 4) printing
+     *
+     * @var int
+     */
+    private const PROGRESS_BAR_STEP_MULTIPLIER = 4;
+
+    /**
      * @var SmartFileInfo[]
      */
     private $notParsedFiles = [];
@@ -40,11 +52,6 @@ final class RectorApplication
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-
-    /**
-     * @var FileSystemFileProcessor
-     */
-    private $fileSystemFileProcessor;
 
     /**
      * @var ErrorAndDiffCollector
@@ -86,20 +93,24 @@ final class RectorApplication
      */
     private $eventDispatcher;
 
+    /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
     public function __construct(
         Configuration $configuration,
         EnabledRectorsProvider $enabledRectorsProvider,
         ErrorAndDiffCollector $errorAndDiffCollector,
         EventDispatcherInterface $eventDispatcher,
         FileProcessor $fileProcessor,
-        FileSystemFileProcessor $fileSystemFileProcessor,
         NodeScopeResolver $nodeScopeResolver,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        PrivatesAccessor $privatesAccessor
     ) {
         $this->symfonyStyle = $symfonyStyle;
-        $this->fileSystemFileProcessor = $fileSystemFileProcessor;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
         $this->fileProcessor = $fileProcessor;
@@ -108,6 +119,7 @@ final class RectorApplication
         $this->enabledRectorsProvider = $enabledRectorsProvider;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->eventDispatcher = $eventDispatcher;
+        $this->privatesAccessor = $privatesAccessor;
     }
 
     /**
@@ -135,25 +147,16 @@ final class RectorApplication
         $this->parseFileInfosToNodes($phpFileInfos);
 
         // 2. change nodes with Rectors
-        $this->refactoryNodesWithRectors($phpFileInfos);
+        $this->refactorNodesWithRectors($phpFileInfos);
 
-        // 3. process file system rectors
-        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
-            foreach ($phpFileInfos as $phpFileInfo) {
-                $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                    $this->processFileSystemRectors($smartFileInfo);
-                }, 'refactoring with file system');
-            }
-        }
-
-        // 4. apply post rectors
+        // 3. apply post rectors
         foreach ($phpFileInfos as $phpFileInfo) {
             $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->postFileRefactor($smartFileInfo);
             }, 'post rectors');
         }
 
-        // 5. print to file or string
+        // 4. print to file or string
         foreach ($phpFileInfos as $phpFileInfo) {
             $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->printFileInfo($smartFileInfo);
@@ -181,15 +184,7 @@ final class RectorApplication
             return;
         }
 
-        // why 5? one for each cycle, so user sees some activity all the time
-        $stepMultiplier = 4;
-        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
-            ++$stepMultiplier;
-        }
-
-        $this->symfonyStyle->progressStart($fileCount * $stepMultiplier);
-
-        $this->configureStepCount($this->symfonyStyle);
+        $this->configureStepCount($fileCount);
     }
 
     /**
@@ -220,7 +215,7 @@ final class RectorApplication
     /**
      * @param SmartFileInfo[] $phpFileInfos
      */
-    private function refactoryNodesWithRectors(array $phpFileInfos): void
+    private function refactorNodesWithRectors(array $phpFileInfos): void
     {
         foreach ($phpFileInfos as $phpFileInfo) {
             $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
@@ -253,16 +248,6 @@ final class RectorApplication
         }
     }
 
-    private function processFileSystemRectors(SmartFileInfo $smartFileInfo): void
-    {
-        if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
-            // skip, because this file exists no more
-            return;
-        }
-
-        $this->fileSystemFileProcessor->processFileInfo($smartFileInfo);
-    }
-
     private function printFileInfo(SmartFileInfo $fileInfo): void
     {
         if ($this->removedAndAddedFilesCollector->isFileRemoved($fileInfo)) {
@@ -281,12 +266,15 @@ final class RectorApplication
     /**
      * This prevent CI report flood with 1 file = 1 line in progress bar
      */
-    private function configureStepCount(SymfonyStyle $symfonyStyle): void
+    private function configureStepCount(int $fileCount): void
     {
-        $privatesAccessor = new PrivatesAccessor();
+        $this->symfonyStyle->progressStart($fileCount * self::PROGRESS_BAR_STEP_MULTIPLIER);
 
-        /** @var ProgressBar $progressBar */
-        $progressBar = $privatesAccessor->getPrivateProperty($symfonyStyle, 'progressBar');
+        $progressBar = $this->privatesAccessor->getPrivateProperty($this->symfonyStyle, 'progressBar');
+        if (! $progressBar instanceof ProgressBar) {
+            throw new ShouldNotHappenException();
+        }
+
         if ($progressBar->getMaxSteps() < 40) {
             return;
         }

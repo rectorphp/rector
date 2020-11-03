@@ -14,6 +14,7 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -65,6 +66,27 @@ final class RectorNodeTraverser extends NodeTraverser
 
         $this->nodeFinder = $nodeFinder;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
+    }
+
+    /**
+     * @return Node[]
+     */
+    public function traverseFileNode(FileNode $fileNode): array
+    {
+        if ($this->enabledRectorsProvider->isConfigured()) {
+            $this->configureEnabledRectorsOnly();
+        }
+
+        if (! $this->hasFileNodeRectorsEnabled()) {
+            return [];
+        }
+
+        // here we only traverse file node without children, to prevent duplicatd traversion
+        foreach ($this->visitors as $rector) {
+            $rector->enterNode($fileNode);
+        }
+
+        return [];
     }
 
     /**
@@ -136,6 +158,23 @@ final class RectorNodeTraverser extends NodeTraverser
                 continue 2;
             }
         }
+    }
+
+    private function hasFileNodeRectorsEnabled(): bool
+    {
+        foreach ($this->visitors as $visitor) {
+            if (! $visitor instanceof PhpRectorInterface) {
+                continue;
+            }
+
+            if (! in_array(FileNode::class, $visitor->getNodeTypes(), true)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

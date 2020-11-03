@@ -73,7 +73,6 @@
         "symplify/easy-testing": "^8.3.48",
         "symplify/monorepo-builder": "^8.3.48",
         "symplify/phpstan-extensions": "^8.3.48",
-        "thecodingmachine/phpstan-strict-rules": "^0.12",
         "tracy/tracy": "^2.7"
     },
     "replace": {
@@ -168,7 +167,6 @@
             "Rector\\SOLID\\": "rules/solid/src",
             "Rector\\Sensio\\": "rules/sensio/src",
             "Rector\\Set\\": "packages/set/src",
-            "Rector\\NewFilePrinter\\": "packages/new-file-printer/src",
             "Rector\\SimplePhpDocParser\\": "packages/simple-php-doc-parser/src",
             "Rector\\StaticTypeMapper\\": "packages/static-type-mapper/src",
             "Rector\\StrictCodeQuality\\": "rules/strict-code-quality/src",
@@ -187,8 +185,8 @@
     },
     "autoload-dev": {
         "classmap": [
-            "rules/autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
-            "rules/autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
+            "rules/autodiscovery/tests/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
+            "rules/autodiscovery/tests/Rector/FileNode/MoveServicesBySuffixToDirectoryRector/Expected",
             "rules/cakephp/tests/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector/Source",
             "rules/cakephp/tests/Rector/Namespace_/AppUsesStaticCallToUseStatementRector/Source",
             "rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source",
@@ -238,6 +236,7 @@
             "Rector\\DowngradePhp73\\Tests\\": "rules/downgrade-php73/tests",
             "Rector\\DowngradePhp74\\Tests\\": "rules/downgrade-php74/tests",
             "Rector\\DowngradePhp80\\Tests\\": "rules/downgrade-php80/tests",
+            "Rector\\FileSystemRector\\Tests\\": "packages/file-system-rector/tests",
             "Rector\\Generic\\Tests\\": "rules/generic/tests",
             "Rector\\JMS\\Tests\\": "rules/jms/tests",
             "Rector\\Laravel\\Tests\\": "rules/laravel/tests",

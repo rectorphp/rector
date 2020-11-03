@@ -6,21 +6,23 @@ namespace Rector\Testing\PHPUnit;
 
 use Nette\Utils\Strings;
 use PHPUnit\Framework\ExpectationFailedException;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\ValueObject\FilePathWithContent;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Testing\Contract\RunnableInterface;
+use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
+use Rector\Testing\PHPUnit\Behavior\RunnableTestTrait;
+use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Webmozart\Assert\Assert;
 
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 {
+    use MovingFilesTrait;
+    use RunnableTestTrait;
+
     /**
      * @var SmartFileInfo
      */
@@ -31,11 +33,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      */
     private $autoloadTestFixture = true;
 
-    public function getRectorInterface(): string
-    {
-        return PhpRectorInterface::class;
-    }
-
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {
         $this->autoloadTestFixture = false;
@@ -43,7 +40,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->autoloadTestFixture = true;
     }
 
-    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
+    /**
+     * @param InputFilePathWithExpectedFile[] $extraFiles
+     */
+    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo, array $extraFiles = []): void
     {
         $this->fixtureGuard->ensureFileInfoHasDifferentBeforeAndAfterContent($fixtureFileInfo);
 
@@ -56,8 +56,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
-        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
 
+        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo, $extraFiles);
         $this->originalTempFileInfo = $inputFileInfo;
 
         // runnable?
@@ -70,19 +70,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         }
 
         $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
-    }
-
-    protected function assertOriginalAndFixedFileResultEquals(
-        SmartFileInfo $originalFileInfo,
-        SmartFileInfo $expectedFileInfo
-    ): void {
-        $runnable = $this->runnableRectorFactory->createRunnableClass($originalFileInfo);
-        $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
-
-        $actualResult = $runnable->run();
-        $expectedResult = $expectedInstance->run();
-
-        $this->assertSame($expectedResult, $actualResult);
     }
 
     protected function getTempPath(): string
@@ -104,55 +91,42 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
     }
 
-    protected function doTestFileIsDeleted(SmartFileInfo $smartFileInfo): void
-    {
-        $this->doTestFileInfo($smartFileInfo);
-        $this->assertFileMissing($this->originalTempFileInfo->getPathname());
-    }
-
     /**
-     * @param FilePathWithContent[] $expectedFilePathsWithContents
+     * @param InputFilePathWithExpectedFile[] $extraFiles
      */
-    protected function assertFilesWereAdded(array $expectedFilePathsWithContents): void
-    {
-        Assert::allIsAOf($expectedFilePathsWithContents, FilePathWithContent::class);
-
-        /** @var RemovedAndAddedFilesCollector $removedAndAddedFilesCollector */
-        $removedAndAddedFilesCollector = self::$container->get(RemovedAndAddedFilesCollector::class);
-
-        $addedFilePathsWithContents = $removedAndAddedFilesCollector->getAddedFilePathsWithContents();
-
-        sort($addedFilePathsWithContents);
-        sort($expectedFilePathsWithContents);
-
-        foreach ($addedFilePathsWithContents as $key => $addedFilePathWithContent) {
-            $expectedFilePathWithContent = $expectedFilePathsWithContents[$key];
-
-            $this->assertSame(
-                $expectedFilePathWithContent->getFilePath(),
-                $addedFilePathWithContent->getFilePath()
-            );
-
-            $this->assertSame(
-                $expectedFilePathWithContent->getFileContent(),
-                $addedFilePathWithContent->getFileContent()
-            );
-        }
-    }
-
     private function doTestFileMatchesExpectedContent(
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo,
-        SmartFileInfo $fixtureFileInfo
+        SmartFileInfo $fixtureFileInfo,
+        array $extraFiles = []
     ): void {
         $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
-        if ($originalFileInfo->getSuffix() === 'php') {
-            // life-cycle trio :)
-            $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
-            $this->fileProcessor->refactor($originalFileInfo);
+        if (in_array($originalFileInfo->getSuffix(), ['php', 'phpt'], true)) {
+            if ($extraFiles === []) {
+                $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
+                $this->fileProcessor->refactor($originalFileInfo);
+                $this->fileProcessor->postFileRefactor($originalFileInfo);
+            } else {
+                $fileInfosToProcess = [$originalFileInfo];
 
-            $this->fileProcessor->postFileRefactor($originalFileInfo);
+                foreach ($extraFiles as $extraFile) {
+                    $fileInfosToProcess[] = $extraFile->getInputFileInfo();
+                }
+
+                // life-cycle trio :)
+                foreach ($fileInfosToProcess as $fileInfoToProcess) {
+                    $this->fileProcessor->parseFileInfoToLocalCache($fileInfoToProcess);
+                }
+
+                foreach ($fileInfosToProcess as $fileInfoToProcess) {
+                    $this->fileProcessor->refactor($fileInfoToProcess);
+                }
+
+                foreach ($fileInfosToProcess as $fileInfoToProcess) {
+                    $this->fileProcessor->postFileRefactor($fileInfoToProcess);
+                }
+            }
 
             // mimic post-rectors
             $changedContent = $this->fileProcessor->printToString($originalFileInfo);

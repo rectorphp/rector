@@ -7,9 +7,11 @@ namespace Rector\Testing\PHPUnit;
 use Iterator;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\FileProcessor;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
@@ -17,7 +19,6 @@ use Rector\Core\Stubs\StubLoader;
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
 use Rector\Set\RectorSetProvider;
 use Rector\Testing\Application\EnabledRectorsProvider;
-use Rector\Testing\Contract\RectorInterfaceAwareInterface;
 use Rector\Testing\Finder\RectorsFinder;
 use Rector\Testing\Guard\FixtureGuard;
 use Rector\Testing\PhpConfigPrinter\PhpConfigPrinterFactory;
@@ -31,7 +32,7 @@ use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase implements RectorInterfaceAwareInterface
+abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
 {
     /**
      * @var FileProcessor
@@ -67,6 +68,11 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
      * @var FixtureGuard
      */
     protected $fixtureGuard;
+
+    /**
+     * @var RemovedAndAddedFilesCollector
+     */
+    protected $removedAndAddedFilesCollector;
 
     /**
      * @var Container|ContainerInterface|null
@@ -122,6 +128,8 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
         $this->fileProcessor = static::$container->get(FileProcessor::class);
         $this->nonPhpFileProcessor = static::$container->get(NonPhpFileProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
+        $this->removedAndAddedFilesCollector = self::$container->get(RemovedAndAddedFilesCollector::class);
+        $this->removedAndAddedFilesCollector->reset();
 
         // needed for PHPStan, because the analyzed file is just create in /temp
         $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
@@ -328,7 +336,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
 
     private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
     {
-        if (is_a($rectorClass, $this->getRectorInterface(), true)) {
+        if (is_a($rectorClass, PhpRectorInterface::class, true)) {
             return;
         }
 
@@ -336,7 +344,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase impl
             'Class "%s" in "%s()" method must be type of "%s"',
             $rectorClass,
             $methodName,
-            $this->getRectorInterface()
+            PhpRectorInterface::class
         ));
     }
 
