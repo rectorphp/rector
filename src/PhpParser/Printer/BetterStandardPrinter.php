@@ -22,6 +22,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
@@ -118,12 +119,52 @@ final class BetterStandardPrinter extends Standard
      */
     public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens): string
     {
-        $newStmts = $this->resolveNewStmts($stmts);
+//        $newStmts = $this->resolveNewStmts($stmts);
+        $newStmts = $stmts;
+
+        // OK
+        dump($newStmts);
 
         // detect per print
-        $this->detectTabOrSpaceIndentCharacter($newStmts);
+        //$this->detectTabOrSpaceIndentCharacter($newStmts);
+
+        // new
+        $newStmts[1]->stmts[0]->setAttribute(AttributeKey::SCOPE, null);
+        dump($newStmts[1]->stmts[0]->getAttributes());
+
+//        startLine => 7
+//   startTokenPos => 15
+//   endLine => 9
+//   endTokenPos => 29
+
+
+        // old
+        $origStmts[1]->stmts[0]->setAttribute(AttributeKey::SCOPE, null);
+        dump($origStmts[1]->stmts[0]->getAttributes());
+
+//        startLine => 7
+//   startTokenPos => 15
+//   endLine => 9
+//   endTokenPos => 29
+
+
+        // php-parser only
+        $parserFactory = new ParserFactory();
+        $parser = $parserFactory->create(ParserFactory::PREFER_PHP7);
+
+        $oldStmts = $parser->parse('....');
+
+        // ..., originsTokens
+
+        $standardPrinter = new Standard();
+        $newContent = $standardPrinter->printFormatPreserving($newStmts, $origStmts, $origTokens);
+        die;
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
+
+        // NOT OK
+        var_dump($content);
+        die;
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
