@@ -100,7 +100,7 @@ final class RectorNodeTraverser extends NodeTraverser
         }
 
         $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
-        if (! $hasNamespace) {
+        if (! $hasNamespace && $nodes !== []) {
             $fileWithoutNamespace = new FileWithoutNamespace($nodes);
             $fileWithoutNamespace->setAttribute(
                 AttributeKey::FILE_INFO,
