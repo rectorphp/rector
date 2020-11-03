@@ -155,6 +155,7 @@ final class BetterStandardPrinter extends Standard
         $oldStmts = $parser->parse('....');
 
         // ..., originsTokens
+        // see https://tomasvotruba.com/blog/2017/11/06/how-to-change-php-code-with-abstract-syntax-tree/#4-save-to-file
 
         $standardPrinter = new Standard();
         $newContent = $standardPrinter->printFormatPreserving($newStmts, $origStmts, $origTokens);
