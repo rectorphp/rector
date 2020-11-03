@@ -88,24 +88,24 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected $removedAndAddedFilesCollector;
 
     /**
-     * @var Container|ContainerInterface|null
-     */
-    protected static $allRectorContainer;
-
-    /**
      * @var SmartFileInfo
      */
     protected $originalTempFileInfo;
 
     /**
-     * @var mixed[]
+     * @var Container|ContainerInterface|null
      */
-    private $oldParameterValues = [];
+    protected static $allRectorContainer;
 
     /**
      * @var bool
      */
     private $autoloadTestFixture = true;
+
+    /**
+     * @var mixed[]
+     */
+    private $oldParameterValues = [];
 
     protected function setUp(): void
     {
@@ -450,18 +450,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     }
 
     /**
-     * @param array<string, mixed[]|null> $rectorClassesWithConfiguration
-     */
-    private function createPhpConfigFileAndDumpToPath(array $rectorClassesWithConfiguration, string $filePath): void
-    {
-        $phpConfigPrinterFactory = new PhpConfigPrinterFactory();
-        $smartPhpConfigPrinter = $phpConfigPrinterFactory->create();
-
-        $fileContent = $smartPhpConfigPrinter->printConfiguredServices($rectorClassesWithConfiguration);
-        $this->smartFileSystem->dumpFile($filePath, $fileContent);
-    }
-
-    /**
      * @param InputFilePathWithExpectedFile[] $extraFiles
      */
     private function doTestFileMatchesExpectedContent(
@@ -522,5 +510,17 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);
         }
+    }
+
+    /**
+     * @param array<string, mixed[]|null> $rectorClassesWithConfiguration
+     */
+    private function createPhpConfigFileAndDumpToPath(array $rectorClassesWithConfiguration, string $filePath): void
+    {
+        $phpConfigPrinterFactory = new PhpConfigPrinterFactory();
+        $smartPhpConfigPrinter = $phpConfigPrinterFactory->create();
+
+        $fileContent = $smartPhpConfigPrinter->printConfiguredServices($rectorClassesWithConfiguration);
+        $this->smartFileSystem->dumpFile($filePath, $fileContent);
     }
 }
