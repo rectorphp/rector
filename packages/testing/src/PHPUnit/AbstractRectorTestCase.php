@@ -333,11 +333,17 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
     }
 
-    private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
+    /**
+     * @return SmartFileInfo[]
+     */
+    private function resolveConfigs(SmartFileInfo $configFileInfo): array
     {
-        foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
-            $enabledRectorsProvider->addEnabledRector($rectorClass, (array) $configuration);
-        }
+        $configFileInfos = [$configFileInfo];
+
+        $rectorConfigsResolver = new RectorConfigsResolver();
+        $setFileInfos = $rectorConfigsResolver->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
+
+        return array_merge($configFileInfos, $setFileInfos);
     }
 
     private function createRectorRepositoryContainer(): void
@@ -353,19 +359,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         self::$container = self::$allRectorContainer;
     }
 
-    /**
-     * @return SmartFileInfo[]
-     */
-    private function resolveConfigs(SmartFileInfo $configFileInfo): array
-    {
-        $configFileInfos = [$configFileInfo];
-
-        $rectorConfigsResolver = new RectorConfigsResolver();
-        $setFileInfos = $rectorConfigsResolver->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
-
-        return array_merge($configFileInfos, $setFileInfos);
-    }
-
     private function getConfigFor3rdPartyTest(): string
     {
         $rectorClassesWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
@@ -374,6 +367,13 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->createPhpConfigFileAndDumpToPath($rectorClassesWithConfiguration, $filePath);
 
         return $filePath;
+    }
+
+    private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
+    {
+        foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
+            $enabledRectorsProvider->addEnabledRector($rectorClass, (array) $configuration);
+        }
     }
 
     private function configurePhpVersionFeatures(): void
@@ -410,26 +410,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             $methodName,
             PhpRectorInterface::class
         ));
-    }
-
-    private function createContainerWithAllRectors(): void
-    {
-        $rectorsFinder = new RectorsFinder();
-        $coreRectorClasses = $rectorsFinder->findCoreRectorClasses();
-
-        $listForConfig = [];
-        foreach ($coreRectorClasses as $rectorClass) {
-            $listForConfig[$rectorClass] = null;
-        }
-
-        foreach (array_keys($this->getCurrentTestRectorClassesWithConfiguration()) as $rectorClass) {
-            $listForConfig[$rectorClass] = null;
-        }
-
-        $filePath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.php');
-        $this->createPhpConfigFileAndDumpToPath($listForConfig, $filePath);
-
-        $this->bootKernelWithConfigs(RectorKernel::class, [$filePath]);
     }
 
     /**
@@ -493,6 +473,26 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);
         }
+    }
+
+    private function createContainerWithAllRectors(): void
+    {
+        $rectorsFinder = new RectorsFinder();
+        $coreRectorClasses = $rectorsFinder->findCoreRectorClasses();
+
+        $listForConfig = [];
+        foreach ($coreRectorClasses as $rectorClass) {
+            $listForConfig[$rectorClass] = null;
+        }
+
+        foreach (array_keys($this->getCurrentTestRectorClassesWithConfiguration()) as $rectorClass) {
+            $listForConfig[$rectorClass] = null;
+        }
+
+        $filePath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.php');
+        $this->createPhpConfigFileAndDumpToPath($listForConfig, $filePath);
+
+        $this->bootKernelWithConfigs(RectorKernel::class, [$filePath]);
     }
 
     /**
