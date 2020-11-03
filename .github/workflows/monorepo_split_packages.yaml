@@ -28,7 +28,7 @@ jobs:
                     API_TOKEN_GITHUB: ${{ secrets.ACCESS_TOKEN }}
                 with:
                     source-directory: 'packages/${{ matrix.package_name }}'
-                    destination-github-username: 'rector'
+                    destination-github-username: 'rectorphp'
                     destination-repository-name: '${{ matrix.package_name }}'
                     user-email: tomas@getrector.org
                     target-branch: master
