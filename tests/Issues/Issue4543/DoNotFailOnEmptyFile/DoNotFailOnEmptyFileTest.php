@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\Issues\Issue4543\DoNotFailOnEmptyFile;
 
-
-use Rector\Set\ValueObject\SetList;
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -18,7 +17,7 @@ final class DoNotFailOnEmptyFileTest extends AbstractRectorTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideData(): \Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
@@ -29,5 +28,4 @@ final class DoNotFailOnEmptyFileTest extends AbstractRectorTestCase
     {
         return new SmartFileInfo(__DIR__ . '/config/some_config.php');
     }
-
 }
