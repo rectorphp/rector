@@ -263,6 +263,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     }
 
     /**
+     * @deprecated Will be supported in Symplify 9
      * @param SmartFileInfo[] $configFileInfos
      */
     protected function bootKernelWithConfigInfos(string $class, array $configFileInfos): KernelInterface
