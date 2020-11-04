@@ -78,16 +78,16 @@ final class BetterStandardPrinter extends Standard
     private const CODE_MAY_DUPLICATE_REGEX = '#(if\s{0,}\(%s\(.*\{\s{0,}.*\s{0,}\}){2}#';
 
     /**
-     * @see https://regex101.com/r/Ef83BV/1
-     * @var string
-     */
-    private const SPACE_REGEX = '#\s#';
-
-    /**
      * @see https://regex101.com/r/k48bUj/1
      * @var string
      */
     private const CODE_MAY_DUPLICATE_NO_BRACKET_REGEX = '#(if\s{0,}\(%s\(.*\s{1,}.*\s{0,}){2}#';
+
+    /**
+     * @see https://regex101.com/r/Ef83BV/1
+     * @var string
+     */
+    private const SPACE_REGEX = '#\s#';
 
     /**
      * @var string[]
