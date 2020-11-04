@@ -260,9 +260,6 @@ final class RectorApplication
         $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString($fileInfo)
             : $this->fileProcessor->printToFile($fileInfo);
 
-        var_dump($newContent);
-        die;
-
         $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContents);
     }
 

@@ -60,9 +60,6 @@ final class FormatPerservingPrinter
     {
         $newStmts = $this->resolveNewStmts($parsedStmtsAndTokens);
 
-        // OK
-        dump($newStmts);
-
         return $this->betterStandardPrinter->printFormatPreserving(
             $newStmts,
             $parsedStmtsAndTokens->getOldStmts(),
