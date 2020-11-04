@@ -529,6 +529,9 @@ final class BetterStandardPrinter extends Standard
         }
     }
 
+    /**
+     * @see https://github.com/rectorphp/rector/issues/4499
+     */
     private function cleanUpDuplicateContent(string $content): string
     {
         foreach (self::MAY_DUPLICATE_FUNC_CALLS as $mayDuplicateFuncCall) {
