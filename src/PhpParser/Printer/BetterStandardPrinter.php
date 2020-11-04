@@ -78,6 +78,18 @@ final class BetterStandardPrinter extends Standard
     private const CODE_MAY_DUPLICATE_REGEX = '#(if\s{0,}\(%s\(.*\{\s{0,}.*\s{0,}\}){2}#';
 
     /**
+     * @see https://regex101.com/r/Ef83BV/1
+     * @var string
+     */
+    private const SPACE_REGEX = '#\s#';
+
+    /**
+     * @see https://regex101.com/r/k48bUj/1
+     * @var string
+     */
+    private const CODE_MAY_DUPLICATE_NO_BRACKET_REGEX = '#(if\s{0,}\(%s\(.*\s{1,}.*\s{0,}){2}#';
+
+    /**
      * @var string[]
      */
     private const MAY_DUPLICATE_FUNC_CALLS = ['interface_exists', 'trait_exists'];
@@ -523,10 +535,17 @@ final class BetterStandardPrinter extends Standard
             $matches = Strings::match($content, sprintf(self::CODE_MAY_DUPLICATE_REGEX, $mayDuplicateFuncCall));
 
             if ($matches === null) {
+                $matches = Strings::match($content, sprintf(self::CODE_MAY_DUPLICATE_NO_BRACKET_REGEX, $mayDuplicateFuncCall));
+            }
+
+            if ($matches === null) {
                 continue;
             }
 
-            if ($matches[0] === str_repeat($matches[1], 2)) {
+            $firstMatch = preg_replace(self::SPACE_REGEX, '', $matches[0]);
+            $secondMatch = preg_replace(self::SPACE_REGEX, '', $matches[1]);
+
+            if ($firstMatch === str_repeat($secondMatch, 2)) {
                 $content = str_replace($matches[0], $matches[1], $content);
             }
         }
