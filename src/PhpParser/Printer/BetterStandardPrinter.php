@@ -72,6 +72,29 @@ final class BetterStandardPrinter extends Standard
     private const REPLACE_COLON_WITH_SPACE_REGEX = '#(function .*?\(.*?\)) : #';
 
     /**
+     * @see https://regex101.com/r/4mBd0y/2
+     * @var string
+     */
+    private const CODE_MAY_DUPLICATE_REGEX = '#(if\s{0,}\(%s\(.*\{\s{0,}.*\s{0,}\}){2}#';
+
+    /**
+     * @see https://regex101.com/r/k48bUj/1
+     * @var string
+     */
+    private const CODE_MAY_DUPLICATE_NO_BRACKET_REGEX = '#(if\s{0,}\(%s\(.*\s{1,}.*\s{0,}){2}#';
+
+    /**
+     * @see https://regex101.com/r/Ef83BV/1
+     * @var string
+     */
+    private const SPACE_REGEX = '#\s#';
+
+    /**
+     * @var string[]
+     */
+    private const MAY_DUPLICATE_FUNC_CALLS = ['interface_exists', 'trait_exists'];
+
+    /**
      * Use space by default
      * @var string
      */
@@ -124,6 +147,7 @@ final class BetterStandardPrinter extends Standard
         $this->detectTabOrSpaceIndentCharacter($newStmts);
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
+        $content = $this->cleanUpDuplicateContent($content);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
@@ -503,6 +527,36 @@ final class BetterStandardPrinter extends Standard
             // tab vs space
             $this->tabOrSpaceIndentCharacter = ($whitespaces <=> $tabs) >= 0 ? ' ' : "\t";
         }
+    }
+
+    /**
+     * @see https://github.com/rectorphp/rector/issues/4499
+     */
+    private function cleanUpDuplicateContent(string $content): string
+    {
+        foreach (self::MAY_DUPLICATE_FUNC_CALLS as $mayDuplicateFuncCall) {
+            $matches = Strings::match($content, sprintf(self::CODE_MAY_DUPLICATE_REGEX, $mayDuplicateFuncCall));
+
+            if ($matches === null) {
+                $matches = Strings::match(
+                    $content,
+                    sprintf(self::CODE_MAY_DUPLICATE_NO_BRACKET_REGEX, $mayDuplicateFuncCall)
+                );
+            }
+
+            if ($matches === null) {
+                continue;
+            }
+
+            $firstMatch = Strings::replace($matches[0], self::SPACE_REGEX, '');
+            $secondMatch = Strings::replace($matches[1], self::SPACE_REGEX, '');
+
+            if ($firstMatch === str_repeat($secondMatch, 2)) {
+                $content = str_replace($matches[0], $matches[1], $content);
+            }
+        }
+
+        return $content;
     }
 
     /**
