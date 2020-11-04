@@ -78,6 +78,11 @@ final class BetterStandardPrinter extends Standard
     private const CODE_MAY_DUPLICATE_REGEX = '#(if\s{0,}\(%s\(.*\{\s{0,}.*\s{0,}\}){2}#';
 
     /**
+     * @var string[]
+     */
+    private const MAY_DUPLICATE_FUNC_CALLS = ['interface_exists', 'trait_exists'];
+
+    /**
      * Use space by default
      * @var string
      */
@@ -135,24 +140,6 @@ final class BetterStandardPrinter extends Standard
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
-        }
-
-        return $content;
-    }
-
-    private function cleanUpDuplicateContent(string $content): string
-    {
-        $mayDuplicateFuncCalls = ['interface_exists', 'trait_exists'];
-        foreach ($mayDuplicateFuncCalls as $mayDuplicateFuncCall) {
-            $matches = Strings::match($content, sprintf(self::CODE_MAY_DUPLICATE_REGEX, $mayDuplicateFuncCall));
-
-            if ($matches === null) {
-                continue;
-            }
-
-            if ($matches[0] === str_repeat($matches[1], 2)) {
-                $content = str_replace($matches[0], $matches[1], $content);
-            }
         }
 
         return $content;
@@ -528,6 +515,23 @@ final class BetterStandardPrinter extends Standard
             // tab vs space
             $this->tabOrSpaceIndentCharacter = ($whitespaces <=> $tabs) >= 0 ? ' ' : "\t";
         }
+    }
+
+    private function cleanUpDuplicateContent(string $content): string
+    {
+        foreach (self::MAY_DUPLICATE_FUNC_CALLS as $mayDuplicateFuncCall) {
+            $matches = Strings::match($content, sprintf(self::CODE_MAY_DUPLICATE_REGEX, $mayDuplicateFuncCall));
+
+            if ($matches === null) {
+                continue;
+            }
+
+            if ($matches[0] === str_repeat($matches[1], 2)) {
+                $content = str_replace($matches[0], $matches[1], $content);
+            }
+        }
+
+        return $content;
     }
 
     /**
