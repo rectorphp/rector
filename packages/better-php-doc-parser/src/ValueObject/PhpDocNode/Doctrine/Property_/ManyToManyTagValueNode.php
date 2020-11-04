@@ -72,14 +72,6 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
         return '@ORM\ManyToMany';
     }
 
-    /**
-     * @return mixed[]
-     */
-    public function getAttributableItems(): array
-    {
-        return $this->filterOutMissingItems($this->items);
-    }
-
     public function getAttributeClassName(): string
     {
         return 'TBA';
