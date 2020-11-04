@@ -9,6 +9,7 @@ use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\Nette\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector;
 use Rector\Nette\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector;
 use Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;
+use Rector\Nette\Rector\MethodCall\ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
 use Rector\Nette\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector;
 use Rector\Nette\Rector\MethodCall\RequestGetCookieDefaultArgumentToCoalesceRector;
@@ -92,4 +93,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RequestGetCookieDefaultArgumentToCoalesceRector::class);
     $services->set(RemoveParentAndNameFromComponentConstructorRector::class);
     $services->set(MoveFinalGetUserToCheckRequirementsClassMethodRector::class);
+    $services->set(ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector::class);
 };
