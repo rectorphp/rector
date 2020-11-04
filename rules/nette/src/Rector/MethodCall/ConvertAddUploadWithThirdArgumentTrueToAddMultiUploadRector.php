@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
@@ -62,12 +61,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $thirdArgumentValue = $node->args[2]->value;
-        if (
-            $thirdArgumentValue instanceof ConstFetch
-            && count($thirdArgumentValue->name->parts) === 1
-            && $thirdArgumentValue->name->parts[0] === 'true'
-        ) {
+        if ($this->isTrue($node->args[2]->value)) {
             $node->name = new Identifier('addMultiUpload');
             unset($node->args[2]);
             return $node;
