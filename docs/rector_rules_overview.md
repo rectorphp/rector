@@ -1,4 +1,4 @@
-# All 600 Rectors Overview
+# All 601 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -30,7 +30,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (11)
-- [Nette](#nette) (19)
+- [Nette](#nette) (20)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -7864,6 +7864,21 @@ Move dependency get via `$context->getByType()` to constructor injection
 +        $someTypeToInject = $this->someTypeToInject;
      }
  }
+```
+
+<br><br>
+
+### `ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector`
+
+- class: [`Rector\Nette\Rector\MethodCall\ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector`](/rules/nette/src/Rector/MethodCall/ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector.php)
+- [test fixtures](/rules/nette/tests/Rector/MethodCall/ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector/Fixture)
+
+convert `addUpload()` with 3rd argument true to `addMultiUpload()`
+
+```diff
+ $form = new Nette\Forms\Form();
+-$form->addUpload('...', '...', true);
++$form->addMultiUpload('...', '...');
 ```
 
 <br><br>
