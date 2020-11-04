@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use PhpParser\Node\Expr\ConstFetch;
 
 /**
  * @see \Rector\Nette\Tests\Rector\MethodCall\ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector\ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRectorTest
