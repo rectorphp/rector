@@ -103,6 +103,9 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
 
         // skip already in correct location
         yield [new SmartFileInfo(__DIR__ . '/Source/Contract/KeepThisSomeInterface.php'), null];
+
+        // skip already in correct location
+        yield [new SmartFileInfo(__DIR__ . '/Source/Contract/Foo/KeepThisSomeInterface.php'), null];
     }
 
     protected function getRectorClass(): string
