@@ -72,6 +72,12 @@ final class BetterStandardPrinter extends Standard
     private const REPLACE_COLON_WITH_SPACE_REGEX = '#(function .*?\(.*?\)) : #';
 
     /**
+     * @see https://regex101.com/r/4mBd0y/2
+     * @var string
+     */
+    private const CODE_MAY_DUPLICATE_REGEX = '#(if\s{0,}\(%s\(.*\{\s{0,}.*\s{0,}\}){2}#';
+
+    /**
      * Use space by default
      * @var string
      */
@@ -124,20 +130,29 @@ final class BetterStandardPrinter extends Standard
         $this->detectTabOrSpaceIndentCharacter($newStmts);
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
-
-        $matches = Strings::match($content, '#(if\s{0,}\(interface_exists\(.*\{\s{0,}.*\s{0,}\}){2}#');
-        if (count($matches) === 2 && $matches[0] === str_repeat($matches[1], 2)) {
-            $content = str_replace($matches[0], $matches[1], $content);
-        }
-
-        $matches = Strings::match($content, '#(if\s{0,}\(trait_exists\(.*\{\s{0,}.*\s{0,}\}){2}#');
-        if (count($matches) === 2 && $matches[0] === str_repeat($matches[1], 2)) {
-            $content = str_replace($matches[0], $matches[1], $content);
-        }
+        $content = $this->cleanUpDuplicateContent($content);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
+        }
+
+        return $content;
+    }
+
+    private function cleanUpDuplicateContent(string $content): string
+    {
+        $mayDuplicateFuncCalls = ['interface_exists', 'trait_exists'];
+        foreach ($mayDuplicateFuncCalls as $mayDuplicateFuncCall) {
+            $matches = Strings::match($content, sprintf(self::CODE_MAY_DUPLICATE_REGEX, $mayDuplicateFuncCall));
+
+            if ($matches === null) {
+                continue;
+            }
+
+            if ($matches[0] === str_repeat($matches[1], 2)) {
+                $content = str_replace($matches[0], $matches[1], $content);
+            }
         }
 
         return $content;
