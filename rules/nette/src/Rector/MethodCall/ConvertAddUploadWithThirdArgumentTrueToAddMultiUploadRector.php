@@ -63,7 +63,11 @@ CODE_SAMPLE
         }
 
         $thirdArgumentValue = $node->args[2]->value;
-        if ($thirdArgumentValue instanceof ConstFetch && $thirdArgumentValue->name->parts[0] === 'true') {
+        if (
+            $thirdArgumentValue instanceof ConstFetch
+            && count($thirdArgumentValue->name->parts) === 1
+            && $thirdArgumentValue->name->parts[0] === 'true'
+        ) {
             $node->name = new Identifier('addMultiUpload');
             unset($node->args[2]);
             return $node;
