@@ -125,11 +125,13 @@ final class BetterStandardPrinter extends Standard
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
 
-        if ($matches = Strings::match($content, '#(if\s{0,}\(interface_exists\(.*\{\s{0,}.*\s{0,}\}){2}#')) {
+        $matches = Strings::match($content, '#(if\s{0,}\(interface_exists\(.*\{\s{0,}.*\s{0,}\}){2}#');
+        if ($matches[0] === str_repeat($matches[1], 2)) {
             $content = str_replace($matches[0], $matches[1], $content);
         }
 
-        if ($matches = Strings::match($content, '#(if\s{0,}\(trait_exists\(.*\{\s{0,}.*\s{0,}\}){2}#')) {
+        $matches = Strings::match($content, '#(if\s{0,}\(trait_exists\(.*\{\s{0,}.*\s{0,}\}){2}#');
+        if ($matches[0] === str_repeat($matches[1], 2)) {
             $content = str_replace($matches[0], $matches[1], $content);
         }
 
