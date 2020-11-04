@@ -535,15 +535,18 @@ final class BetterStandardPrinter extends Standard
             $matches = Strings::match($content, sprintf(self::CODE_MAY_DUPLICATE_REGEX, $mayDuplicateFuncCall));
 
             if ($matches === null) {
-                $matches = Strings::match($content, sprintf(self::CODE_MAY_DUPLICATE_NO_BRACKET_REGEX, $mayDuplicateFuncCall));
+                $matches = Strings::match(
+                    $content,
+                    sprintf(self::CODE_MAY_DUPLICATE_NO_BRACKET_REGEX, $mayDuplicateFuncCall)
+                );
             }
 
             if ($matches === null) {
                 continue;
             }
 
-            $firstMatch = preg_replace(self::SPACE_REGEX, '', $matches[0]);
-            $secondMatch = preg_replace(self::SPACE_REGEX, '', $matches[1]);
+            $firstMatch = Strings::replace($matches[0], self::SPACE_REGEX, '');
+            $secondMatch = Strings::replace($matches[1], self::SPACE_REGEX, '');
 
             if ($firstMatch === str_repeat($secondMatch, 2)) {
                 $content = str_replace($matches[0], $matches[1], $content);
