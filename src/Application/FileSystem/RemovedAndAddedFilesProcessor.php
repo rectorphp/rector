@@ -125,8 +125,6 @@ final class RemovedAndAddedFilesProcessor
                 $message = sprintf('File "%s" was added:', $addedFileWithContent->getFilePath());
                 $this->symfonyStyle->note($message);
             }
-
-            $this->symfonyStyle->writeln($addedFileWithContent->getFileContent());
         }
     }
 
