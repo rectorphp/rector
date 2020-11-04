@@ -7,6 +7,7 @@ namespace Rector\Nette\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -63,7 +64,7 @@ CODE_SAMPLE
 
         $thirdArgumentValue = $node->args[2]->value;
         if ($thirdArgumentValue instanceof ConstFetch && $thirdArgumentValue->name->parts[0] === 'true') {
-            $node->name = 'addMultiUpload';
+            $node->name = new Identifier('addMultiUpload');
             unset($node->args[2]);
             return $node;
         }
