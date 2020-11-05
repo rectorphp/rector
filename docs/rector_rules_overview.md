@@ -12354,8 +12354,9 @@ Change ternary type resolve to `get_debug_type()`
 ### `NullsafeOperatorRector`
 
 - class: [`Rector\Php80\Rector\If_\NullsafeOperatorRector`](/rules/php80/src/Rector/If_/NullsafeOperatorRector.php)
+- [test fixtures](/rules/php80/tests/Rector/If_/NullsafeOperatorRector/Fixture)
 
-Change nullsafe operator ?-> with full short circuiting
+Change if null check with nullsafe operator ?-> with full short circuiting
 
 ```diff
 -$country =  null;
