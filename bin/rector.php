@@ -27,9 +27,12 @@ define('__RECTOR_RUNNING__', true);
 
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder();
-$autoloadIncluder->includeCwdVendorAutoloadIfExists();
-$autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
+
+$autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
+$autoloadIncluder->loadIfExistsAndNotLoadedYet(getcwd() . '/vendor/autoload.php');
+
+$autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
 
 $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
@@ -81,11 +84,6 @@ final class AutoloadIncluder
      */
     private $alreadyLoadedAutoloadFiles = [];
 
-    public function includeCwdVendorAutoloadIfExists(): void
-    {
-        $this->loadIfExistsAndNotLoadedYet(getcwd() . '/vendor/autoload.php');
-    }
-
     public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
     {
         // Rector's vendor is already loaded
@@ -124,7 +122,11 @@ final class AutoloadIncluder
         $this->loadIfExistsAndNotLoadedYet($fileToAutoload);
     }
 
+<<<<<<< HEAD
     private function loadIfExistsAndNotLoadedYet(string $filePath): void
+=======
+    public function loadIfExistsAndNotLoadedYet(string $filePath): void
+>>>>>>> 4dbb8d1be... [CI] enable scoped rector builder
     {
         if (! file_exists($filePath)) {
             return;

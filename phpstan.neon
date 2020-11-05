@@ -442,6 +442,9 @@ parameters:
 
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocInfo\\PhpDocInfo\\PhpDocInfoTest\:\:createPhpDocInfoFromFile\(\) should return Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo but returns Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\|null#'
 
+        # skip for final method, that cannot be overriden without static reflection
+        - '#Class "Rector\\Nette\\Rector\\Class_\\MoveFinalGetUserToCheckRequirementsClassMethodRector" is missing @see annotation with test case class reference#'
+
         # Symfony spl file info false positive
         - '#Parameter \#1 \$callback of function set_error_handler expects \(callable\(int, string, string, int, array\)\: bool\)\|null, \(array&callable\(\)\: mixed\)\|\(callable\(\)\: mixed&object\)\|\(callable\(\)\: mixed&string\) given#'
 
@@ -674,7 +677,6 @@ parameters:
             paths:
                 - packages/better-php-doc-parser/src/PhpDocNodeFactory/ParamPhpDocNodeFactory.php
 
-
         -
             message: '#Class cognitive complexity is 42, keep it under 40#'
             paths:
@@ -710,3 +712,18 @@ parameters:
                 - src/PhpParser/Printer/BetterStandardPrinter.php #244
 
         - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'
+        # bug in simplify
+        - '#Parameter 1 should use PhpParser\\Node\\Expr\\MethodCall type as already checked#'
+
+        -
+             message: '#Class cognitive complexity is \d+, keep it under 40#'
+             paths:
+                  - src/Rector/AbstractRector.php
+                  - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
+                  - rules/code-quality/src/Rector/For_/ForToForeachRector.php
+                  - rules/coding-style/src/Rector/Use_/RemoveUnusedAliasRector.php
+
+        -
+            message: '#Use explicit names over dynamic ones#'
+            paths:
+                - utils/compiler/tests/PatchersCallbackTest.php
