@@ -32,6 +32,8 @@ class SomeClass
 {
     public function run()
     {
+        $country =  null;
+
         $country = $session?->user?->getAddress()?->country;
     }
 }

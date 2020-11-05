@@ -37,6 +37,8 @@ if ($session !== null) {
 CODE_SAMPLE
 ,
                 <<<'CODE_SAMPLE'
+$country =  null;
+
 $country = $session?->user?->getAddress()?->country;
 CODE_SAMPLE
             ),
