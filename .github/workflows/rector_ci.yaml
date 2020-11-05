@@ -13,7 +13,8 @@
 name: Rector CI
 
 on:
-    pull_request: null
+    # tempoarry disable for this PR
+#    pull_request: null
 
 jobs:
     rector-ci:
