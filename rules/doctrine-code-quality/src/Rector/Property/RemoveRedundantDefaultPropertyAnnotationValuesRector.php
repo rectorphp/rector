@@ -33,7 +33,6 @@ final class RemoveRedundantDefaultPropertyAnnotationValuesRector extends Abstrac
     ) {
         $this->doctrinePropertyAnalyzer = $doctrinePropertyAnalyzer;
         $this->doctrineItemDefaultValueManipulator = $doctrineItemDefaultValueManipulator;
-
     }
 
     public function getDefinition(): RectorDefinition

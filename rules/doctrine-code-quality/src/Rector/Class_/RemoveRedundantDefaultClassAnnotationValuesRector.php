@@ -33,7 +33,6 @@ final class RemoveRedundantDefaultClassAnnotationValuesRector extends AbstractRe
     ) {
         $this->doctrineClassAnalyzer = $doctrineClassAnalyzer;
         $this->doctrineItemDefaultValueManipulator = $doctrineItemDefaultValueManipulator;
-
     }
 
     public function getDefinition(): RectorDefinition

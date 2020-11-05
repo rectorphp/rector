@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Rector\DoctrineCodeQuality\NodeManipulator;
 
@@ -6,23 +6,32 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTa
 
 final class DoctrineItemDefaultValueManipulator
 {
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $hasModifiedAnnotation = false;
 
     /**
      * @param string|bool|int $defaultValue
      */
-    public function remove(
-        AbstractDoctrineTagValueNode $doctrineTagValueNode,
-        string $item,
-        $defaultValue
-    ): void {
+    public function remove(AbstractDoctrineTagValueNode $doctrineTagValueNode, string $item, $defaultValue): void
+    {
         if (! $this->hasItemWithDefaultValue($doctrineTagValueNode, $item, $defaultValue)) {
             return;
         }
 
         $this->hasModifiedAnnotation = true;
         $doctrineTagValueNode->removeItem($item);
+    }
+
+    public function resetHasModifiedAnnotation(): void
+    {
+        $this->hasModifiedAnnotation = false;
+    }
+
+    public function hasModifiedAnnotation(): bool
+    {
+        return $this->hasModifiedAnnotation;
     }
 
     /**
@@ -39,15 +48,5 @@ final class DoctrineItemDefaultValueManipulator
         }
 
         return $attributableItems[$item] === $defaultValue;
-    }
-
-    public function resetHasModifiedAnnotation(): void
-    {
-        $this->hasModifiedAnnotation = false;
-    }
-
-    public function hasModifiedAnnotation(): bool
-    {
-        return $this->hasModifiedAnnotation;
     }
 }
