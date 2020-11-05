@@ -12359,8 +12359,8 @@ Change ternary type resolve to `get_debug_type()`
 Change if null check with nullsafe operator ?-> with full short circuiting
 
 ```diff
--$country =  null;
--
+ $country =  null;
+
 -if ($session !== null) {
 -    $user = $session->user;
 -
