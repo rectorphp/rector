@@ -1,4 +1,4 @@
-# All 601 Rectors Overview
+# All 604 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -54,7 +54,7 @@
 - [Php72](#php72) (11)
 - [Php73](#php73) (10)
 - [Php74](#php74) (15)
-- [Php80](#php80) (12)
+- [Php80](#php80) (13)
 - [PhpDeglobalize](#phpdeglobalize) (1)
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
@@ -4449,6 +4449,27 @@ Turns parent EntityRepository class to constructor dependency
 
 <br><br>
 
+### `RemoveRedundantDefaultClassAnnotationValuesRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector`](/rules/doctrine-code-quality/src/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector.php)
+- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector/Fixture)
+
+Removes redundant default values from Doctrine ORM annotations on class level
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+- * @ORM\Entity(readOnly=false)
++ * @ORM\Entity()
+  */
+ class SomeClass
+ {
+ }
+```
+
+<br><br>
+
 ### `RemoveRedundantDefaultPropertyAnnotationValuesRector`
 
 - class: [`Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector`](/rules/doctrine-code-quality/src/Rector/Property/RemoveRedundantDefaultPropertyAnnotationValuesRector.php)
@@ -4470,27 +4491,6 @@ Removes redundant default values from Doctrine ORM annotations on class property
 +     * @ORM\JoinColumn(name="training")
       */
      private $training;
- }
-```
-
-<br><br>
-
-### `RemoveRedundantDefaultPropertyAnnotationValuesRector`
-
-- class: [`Rector\DoctrineCodeQuality\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector`](/rules/doctrine-code-quality/src/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector.php)
-- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector/Fixture)
-
-Removes redundant default values from Doctrine ORM annotations on class level
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-- * @ORM\Entity(readOnly=false)
-+ * @ORM\Entity()
-  */
- class SomeClass
- {
  }
 ```
 
@@ -12347,6 +12347,31 @@ Change ternary type resolve to `get_debug_type()`
 +        return get_debug_type($value);
      }
  }
+```
+
+<br><br>
+
+### `NullsafeOperatorRector`
+
+- class: [`Rector\Php80\Rector\If_\NullsafeOperatorRector`](/rules/php80/src/Rector/If_/NullsafeOperatorRector.php)
+
+Change nullsafe operator ?-> with full short circuiting
+
+```diff
+-$country =  null;
+-
+-if ($session !== null) {
+-    $user = $session->user;
+-
+-    if ($user !== null) {
+-        $address = $user->getAddress();
+-
+-        if ($address !== null) {
+-            $country = $address->country;
+-        }
+-    }
+-}
++$country = $session?->user?->getAddress()?->country;
 ```
 
 <br><br>
