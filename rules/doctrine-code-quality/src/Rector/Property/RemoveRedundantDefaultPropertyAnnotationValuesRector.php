@@ -18,6 +18,21 @@ use Rector\DoctrineCodeQuality\NodeManipulator\DoctrineItemDefaultValueManipulat
 final class RemoveRedundantDefaultPropertyAnnotationValuesRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const ORPHAN_REMOVAL = 'orphanRemoval';
+
+    /**
+     * @var string
+     */
+    private const FETCH = 'fetch';
+
+    /**
+     * @var string
+     */
+    private const LAZY = 'LAZY';
+
+    /**
      * @var DoctrinePropertyAnalyzer
      */
     private $doctrinePropertyAnalyzer;
@@ -85,6 +100,9 @@ CODE_SAMPLE
         return [Property::class];
     }
 
+    /**
+     * @param Property $node
+     */
     public function refactor(Node $node): ?Node
     {
         $this->doctrineItemDefaultValueManipulator->resetHasModifiedAnnotation();
@@ -99,20 +117,20 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function refactorPropertyAnnotations(Property $node): void
+    private function refactorPropertyAnnotations(Property $property): void
     {
-        $this->refactorColumnAnnotation($node);
-        $this->refactorGeneratedValueAnnotation($node);
-        $this->refactorJoinColumnAnnotation($node);
-        $this->refactorManyToManyAnnotation($node);
-        $this->refactorManyToOneAnnotation($node);
-        $this->refactorOneToManyAnnotation($node);
-        $this->refactorOneToOneAnnotation($node);
+        $this->refactorColumnAnnotation($property);
+        $this->refactorGeneratedValueAnnotation($property);
+        $this->refactorJoinColumnAnnotation($property);
+        $this->refactorManyToManyAnnotation($property);
+        $this->refactorManyToOneAnnotation($property);
+        $this->refactorOneToManyAnnotation($property);
+        $this->refactorOneToOneAnnotation($property);
     }
 
-    private function refactorColumnAnnotation(Property $node): void
+    private function refactorColumnAnnotation(Property $property): void
     {
-        $columnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
+        $columnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineColumnTagValueNode($property);
         if ($columnTagValueNode === null) {
             return;
         }
@@ -123,9 +141,21 @@ CODE_SAMPLE
         $this->doctrineItemDefaultValueManipulator->remove($columnTagValueNode, 'scale', 0);
     }
 
-    private function refactorJoinColumnAnnotation(Property $node): void
+    private function refactorGeneratedValueAnnotation(Property $property): void
     {
-        $joinColumnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineJoinColumnTagValueNode($node);
+        $generatedValueTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineGeneratedValueTagValueNode(
+            $property
+        );
+        if ($generatedValueTagValueNode === null) {
+            return;
+        }
+
+        $this->doctrineItemDefaultValueManipulator->remove($generatedValueTagValueNode, 'strategy', 'AUTO');
+    }
+
+    private function refactorJoinColumnAnnotation(Property $property): void
+    {
+        $joinColumnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineJoinColumnTagValueNode($property);
         if ($joinColumnTagValueNode === null) {
             return;
         }
@@ -135,56 +165,46 @@ CODE_SAMPLE
         $this->doctrineItemDefaultValueManipulator->remove($joinColumnTagValueNode, 'unique', false);
     }
 
-    private function refactorGeneratedValueAnnotation(Property $node): void
+    private function refactorManyToManyAnnotation(Property $property): void
     {
-        $generatedValue = $this->doctrinePropertyAnalyzer->matchDoctrineGeneratedValueTagValueNode($node);
-        if ($generatedValue === null) {
-            return;
-        }
-
-        $this->doctrineItemDefaultValueManipulator->remove($generatedValue, 'strategy', 'AUTO');
-    }
-
-    private function refactorManyToManyAnnotation(Property $node): void
-    {
-        $manyToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineManyToManyTagValueNode($node);
+        $manyToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineManyToManyTagValueNode($property);
         if ($manyToManyTagValueNode === null) {
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($manyToManyTagValueNode, 'orphanRemoval', false);
-        $this->doctrineItemDefaultValueManipulator->remove($manyToManyTagValueNode, 'fetch', 'LAZY');
+        $this->doctrineItemDefaultValueManipulator->remove($manyToManyTagValueNode, self::ORPHAN_REMOVAL, false);
+        $this->doctrineItemDefaultValueManipulator->remove($manyToManyTagValueNode, self::FETCH, self::LAZY);
     }
 
-    private function refactorManyToOneAnnotation(Property $node): void
+    private function refactorManyToOneAnnotation(Property $property): void
     {
-        $manyToOneTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineManyToOneTagValueNode($node);
+        $manyToOneTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineManyToOneTagValueNode($property);
         if ($manyToOneTagValueNode === null) {
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($manyToOneTagValueNode, 'fetch', 'LAZY');
+        $this->doctrineItemDefaultValueManipulator->remove($manyToOneTagValueNode, self::FETCH, self::LAZY);
     }
 
-    private function refactorOneToManyAnnotation(Property $node): void
+    private function refactorOneToManyAnnotation(Property $property): void
     {
-        $oneToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineOneToManyTagValueNode($node);
+        $oneToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineOneToManyTagValueNode($property);
         if ($oneToManyTagValueNode === null) {
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($oneToManyTagValueNode, 'orphanRemoval', false);
-        $this->doctrineItemDefaultValueManipulator->remove($oneToManyTagValueNode, 'fetch', 'LAZY');
+        $this->doctrineItemDefaultValueManipulator->remove($oneToManyTagValueNode, self::ORPHAN_REMOVAL, false);
+        $this->doctrineItemDefaultValueManipulator->remove($oneToManyTagValueNode, self::FETCH, self::LAZY);
     }
 
-    private function refactorOneToOneAnnotation(Property $node): void
+    private function refactorOneToOneAnnotation(Property $property): void
     {
-        $oneToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineOneToOneTagValueNode($node);
-        if ($oneToManyTagValueNode === null) {
+        $oneToOneTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineOneToOneTagValueNode($property);
+        if ($oneToOneTagValueNode === null) {
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($oneToManyTagValueNode, 'orphanRemoval', false);
-        $this->doctrineItemDefaultValueManipulator->remove($oneToManyTagValueNode, 'fetch', 'LAZY');
+        $this->doctrineItemDefaultValueManipulator->remove($oneToOneTagValueNode, self::ORPHAN_REMOVAL, false);
+        $this->doctrineItemDefaultValueManipulator->remove($oneToOneTagValueNode, self::FETCH, self::LAZY);
     }
 }

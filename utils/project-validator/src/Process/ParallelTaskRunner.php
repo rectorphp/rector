@@ -84,8 +84,8 @@ final class ParallelTaskRunner
             $this->startProcess($maxProcesses, $total);
             $this->evaluateRunningProcesses($total);
 
-            $someProcessesAreStillRunning = count($this->runningProcesses) > 0;
-            $notAllProcessesAreStartedYet = count($this->remainingTasks) > 0;
+            $someProcessesAreStillRunning = $this->runningProcesses !== [];
+            $notAllProcessesAreStartedYet = $this->remainingTasks !== [];
         } while ($someProcessesAreStillRunning || $notAllProcessesAreStartedYet);
 
         return $this->isSuccessful;
@@ -117,7 +117,7 @@ final class ParallelTaskRunner
      */
     private function sleepIfNecessary(int $maxProcesses, int $secondsToSleep): void
     {
-        $noMoreProcessesAreLeft = count($this->remainingTasks) === 0;
+        $noMoreProcessesAreLeft = $this->remainingTasks === [];
         $maxNumberOfProcessesAreRunning = count($this->runningProcesses) >= $maxProcesses;
 
         if ($noMoreProcessesAreLeft || $maxNumberOfProcessesAreRunning) {
@@ -167,7 +167,7 @@ final class ParallelTaskRunner
 
     private function canStartAnotherProcess(int $max): bool
     {
-        $hasOpenTasks = count($this->remainingTasks) > 0;
+        $hasOpenTasks = $this->remainingTasks !== [];
         if (! $hasOpenTasks) {
             return false;
         }

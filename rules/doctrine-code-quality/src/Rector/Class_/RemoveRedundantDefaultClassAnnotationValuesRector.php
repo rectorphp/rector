@@ -75,6 +75,9 @@ CODE_SAMPLE
         return [Class_::class];
     }
 
+    /**
+     * @param Class_ $node
+     */
     public function refactor(Node $node): ?Node
     {
         $this->doctrineItemDefaultValueManipulator->resetHasModifiedAnnotation();
@@ -89,14 +92,14 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function refactorClassAnnotations(Class_ $node): void
+    private function refactorClassAnnotations(Class_ $class): void
     {
-        $this->refactorEntityAnnotation($node);
+        $this->refactorEntityAnnotation($class);
     }
 
-    private function refactorEntityAnnotation(Class_ $node): void
+    private function refactorEntityAnnotation(Class_ $class): void
     {
-        $entityTagValueNode = $this->doctrineClassAnalyzer->matchDoctrineEntityTagValueNode($node);
+        $entityTagValueNode = $this->doctrineClassAnalyzer->matchDoctrineEntityTagValueNode($class);
         if ($entityTagValueNode === null) {
             return;
         }
