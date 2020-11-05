@@ -18,7 +18,7 @@ final class NullsafeOperatorRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change nullsafe operator ?-> with full short circuiting', [
+        return new RectorDefinition('Change if null check with nullsafe operator ?-> with full short circuiting', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 $country =  null;
