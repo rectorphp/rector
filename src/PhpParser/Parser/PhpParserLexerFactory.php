@@ -17,6 +17,7 @@ final class PhpParserLexerFactory
     {
         return new Emulative([
             'usedAttributes' => ['comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos'],
+            'phpVersion' => PHP_VERSION,
         ]);
     }
 }
