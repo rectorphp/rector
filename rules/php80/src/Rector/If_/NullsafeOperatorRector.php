@@ -119,10 +119,7 @@ CODE_SAMPLE
         if ($assign instanceof Assign && property_exists(
             $assign->expr,
             'name'
-        ) && $nextNode->expr instanceof Expr && property_exists(
-            $nextNode->expr,
-            'name'
-        )) {
+        ) && $nextNode->expr instanceof Expr && property_exists($nextNode->expr, 'name')) {
             $this->removeNode($prevNode);
 
             if ($nextNode instanceof Return_) {
