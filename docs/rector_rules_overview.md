@@ -12359,20 +12359,19 @@ Change ternary type resolve to `get_debug_type()`
 Change if null check with nullsafe operator ?-> with full short circuiting
 
 ```diff
- $country =  null;
-
--if ($session !== null) {
--    $user = $session->user;
--
--    if ($user !== null) {
--        $address = $user->getAddress();
--
--        if ($address !== null) {
--            $country = $address->country;
+ class SomeClass
+ {
+     public function f($o)
+     {
+-        $o2 = $o->mayFail1();
+-        if ($o2 === null) {
+-            return null;
 -        }
--    }
--}
-+$country = $session?->user?->getAddress()?->country;
+-
+-        return $o2->mayFail2();
++        return $o?->mayFail1()?->mayFail2();
+     }
+ }
 ```
 
 <br><br>
