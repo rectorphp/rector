@@ -98,15 +98,6 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isUsingVariableInIfCond(If_ $if, ?Node $node): bool
-    {
-        if (! $node instanceof Assign) {
-            return false;
-        }
-
-        return $if->cond instanceof Identical && $this->getName($if->cond->left) === $this->getName($node->var);
-    }
-
     private function processNullSafeOperator(If_ $if, ?Node $prevNode, ?Node $nextNode): ?Node
     {
         if ($prevNode === null || $nextNode === null) {
@@ -128,6 +119,15 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function isUsingVariableInIfCond(If_ $if, ?Node $node): bool
+    {
+        if (! $node instanceof Assign) {
+            return false;
+        }
+
+        return $if->cond instanceof Identical && $this->getName($if->cond->left) === $this->getName($node->var);
     }
 
     private function processAssign(?Assign $assign, Node $prevNode, Node $nextNode): ?Node
