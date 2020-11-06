@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -77,27 +79,64 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
+
         if ($comparedNode !== null) {
-            $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-            while ($prevNode) {
-                $assign = $this->betterNodeFinder->findFirst($prevNode, function (Node $n) use ($node): bool {
-                    return $n instanceof Assign && $n->var->name === $node->cond->left->name;
-                });
+            return $this->processNullSafeOperator($node);
+        }
 
-                if ($assign !== null) {
-                    $this->removeNode($prevNode);
+        return null;
+    }
 
-                    $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-                    if ($nextNode instanceof Return_) {
-                        $this->removeNode($nextNode);
-                        return new Return_(new NullsafeMethodCall(new NullsafeMethodCall(
-                            $assign->expr->var,
+    private function processNullSafeOperator(If_ $if): ?Node
+    {
+        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+        if ($nextNode === null) {
+            return null;
+        }
+
+        $prevNode = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
+        while ($prevNode) {
+            /** @var Assign|null $assign */
+            $assign = $this->betterNodeFinder->findFirst($prevNode, function (Node $node) use ($if): bool {
+                return $node instanceof Assign && $if->cond instanceof Identical && $this->getName(
+                    $if->cond->left
+                ) === $this->getName($node->var);
+            });
+
+            $processAssign = $this->processAssign($assign, $prevNode, $nextNode, $if);
+            if ($processAssign instanceof Node) {
+                return $processAssign;
+            }
+
+            $prevNode = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        }
+
+        return null;
+    }
+
+    private function processAssign(?Assign $assign, Node $prevNode, Node $nextNode, If_ $if): ?Node
+    {
+        if ($assign instanceof Assign && property_exists(
+            $assign->expr,
+            'name'
+        ) && $nextNode->expr instanceof Expr && property_exists(
+            $nextNode->expr,
+            'name'
+        )) {
+            $this->removeNode($prevNode);
+
+            if ($nextNode instanceof Return_) {
+                $this->removeNode($nextNode);
+
+                return new Return_(
+                    new NullsafeMethodCall(
+                        new NullsafeMethodCall(
+                            property_exists($assign->expr, 'var') ? $assign->expr->var : $assign->expr,
                             $assign->expr->name
-                        ), $nextNode->expr->name));
-                    }
-                }
-
-                $prevNode = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+                        ),
+                        $nextNode->expr->name
+                    )
+                );
             }
         }
 
