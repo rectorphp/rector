@@ -89,20 +89,21 @@ CODE_SAMPLE
         $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
 
         if ($comparedNode !== null) {
-            return $this->processNullSafeOperator($node);
+            $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+            $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+
+            return $this->processNullSafeOperator($node, $prevNode, $nextNode);
         }
 
         return null;
     }
 
-    private function processNullSafeOperator(If_ $if): ?Node
+    private function processNullSafeOperator(If_ $if, ?Node $prevNode, ?Node $nextNode): ?Node
     {
-        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextNode === null) {
+        if ($prevNode === null || $nextNode === null) {
             return null;
         }
 
-        $prevNode = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
         while ($prevNode) {
             /** @var Assign|null $assign */
             $assign = $this->betterNodeFinder->findFirst($prevNode, function (Node $node) use ($if): bool {
@@ -111,7 +112,7 @@ CODE_SAMPLE
                 ) === $this->getName($node->var);
             });
 
-            $processAssign = $this->processAssign($assign, $prevNode, $nextNode, $if);
+            $processAssign = $this->processAssign($assign, $prevNode, $nextNode);
             if ($processAssign instanceof Node) {
                 return $processAssign;
             }
@@ -122,7 +123,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processAssign(?Assign $assign, Node $prevNode, Node $nextNode, If_ $if): ?Node
+    private function processAssign(?Assign $assign, Node $prevNode, Node $nextNode): ?Node
     {
         if ($assign instanceof Assign && property_exists(
             $assign->expr,
