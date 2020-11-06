@@ -121,20 +121,21 @@ CODE_SAMPLE
             'name'
         ) && $nextNode->expr instanceof Expr && property_exists($nextNode->expr, 'name')) {
             $this->removeNode($prevNode);
+            $this->removeNode($nextNode);
+
+            $nullSafeMethodCall = new NullsafeMethodCall(
+                new NullsafeMethodCall(
+                    property_exists($assign->expr, 'var') ? $assign->expr->var : $assign->expr,
+                    $assign->expr->name
+                ),
+                $nextNode->expr->name
+            );
 
             if ($nextNode instanceof Return_) {
-                $this->removeNode($nextNode);
-
-                return new Return_(
-                    new NullsafeMethodCall(
-                        new NullsafeMethodCall(
-                            property_exists($assign->expr, 'var') ? $assign->expr->var : $assign->expr,
-                            $assign->expr->name
-                        ),
-                        $nextNode->expr->name
-                    )
-                );
+                return new Return_($nullSafeMethodCall);
             }
+
+            return $nullSafeMethodCall;
         }
 
         return null;
