@@ -27,6 +27,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NullsafeOperatorRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const NAME = 'name';
+
+    /**
      * @var IfManipulator
      */
     private $ifManipulator;
@@ -121,8 +126,8 @@ CODE_SAMPLE
     {
         if ($assign instanceof Assign && property_exists(
             $assign->expr,
-            'name'
-        ) && $nextNode->expr instanceof Expr && property_exists($nextNode->expr, 'name')) {
+            self::NAME
+        ) && $nextNode->expr instanceof Expr && property_exists($nextNode->expr, self::NAME)) {
             $assignNullSafe = $this->processNullSafeExpr($assign->expr);
             $nullSafe = $this->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
 
@@ -145,7 +150,7 @@ CODE_SAMPLE
             return new NullsafeMethodCall($expr->var, $expr->name);
         }
 
-        if (property_exists($expr, 'var') && property_exists($expr, 'name')) {
+        if (property_exists($expr, 'var') && property_exists($expr, self::NAME)) {
             return new NullsafePropertyFetch($expr->var, $expr->name);
         }
 
