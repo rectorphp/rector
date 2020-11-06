@@ -90,7 +90,10 @@ CODE_SAMPLE
                     $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
                     if ($nextNode instanceof Return_) {
                         $this->removeNode($nextNode);
-                        return new Return_(new NullsafeMethodCall(new NullsafeMethodCall($assign->expr->var, $assign->expr->name), $nextNode->expr->name));
+                        return new Return_(new NullsafeMethodCall(new NullsafeMethodCall(
+                            $assign->expr->var,
+                            $assign->expr->name
+                        ), $nextNode->expr->name));
                     }
                 }
 
