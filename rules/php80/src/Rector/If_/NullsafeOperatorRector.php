@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -85,7 +86,12 @@ CODE_SAMPLE
 
                 if ($assign) {
                     $this->removeNode($prevNode);
-                    return new NullsafeMethodCall($assign->expr->var, $assign->expr->name);
+
+                    $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+                    if ($nextNode instanceof Return_) {
+                        $this->removeNode($nextNode);
+                        return new Return_(new NullsafeMethodCall(new NullsafeMethodCall($assign->expr->var, $assign->expr->name), $nextNode->expr->name));
+                    }
                 }
 
                 $prevNode = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
