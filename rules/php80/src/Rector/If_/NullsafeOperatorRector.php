@@ -107,7 +107,7 @@ CODE_SAMPLE
         while ($prevNode) {
             /** @var Assign|null $assign */
             $assign = $this->betterNodeFinder->findFirst($prevNode, function (Node $node) use ($if): bool {
-                return $this->isUsingVariableInIfCond($if, $node);
+                return $this->isIfCondUsingAssignVariable($if, $node);
             });
 
             $processAssign = $this->processAssign($assign, $prevNode, $nextNode);
@@ -121,7 +121,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isUsingVariableInIfCond(If_ $if, ?Node $node): bool
+    private function isIfCondUsingAssignVariable(If_ $if, ?Node $node): bool
     {
         if (! $node instanceof Assign) {
             return false;
