@@ -84,7 +84,7 @@ CODE_SAMPLE
                     return $n instanceof Assign && $n->var->name === $node->cond->left->name;
                 });
 
-                if ($assign) {
+                if ($assign !== null) {
                     $this->removeNode($prevNode);
 
                     $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
