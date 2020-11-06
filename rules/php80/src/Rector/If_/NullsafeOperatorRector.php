@@ -8,7 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\NullsafePropertyFetch;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
@@ -120,22 +123,34 @@ CODE_SAMPLE
             $assign->expr,
             'name'
         ) && $nextNode->expr instanceof Expr && property_exists($nextNode->expr, 'name')) {
+            $nullSafe = null;
+            $assignNullSafe = null;
+            $nextNodeNullSafe = null;
+
+            if ($assign->expr instanceof MethodCall) {
+                $assignNullSafe = new NullsafeMethodCall($assign->expr->var, $assign->expr->name);
+            }
+
+            if ($nextNode->expr instanceof MethodCall) {
+                $nullSafe = new NullsafeMethodCall($assignNullSafe, $nextNode->expr->name);
+            }
+
+            if ($assign->expr instanceof PropertyFetch) {
+                $assignNullSafe = new NullsafePropertyFetch($assign->expr->var, $assign->expr->name);
+            }
+
+            if ($nextNode->expr instanceof PropertyFetch) {
+                $nullSafe = new NullsafePropertyFetch($assignNullSafe, $nextNode->expr->name);
+            }
+
             $this->removeNode($prevNode);
             $this->removeNode($nextNode);
 
-            $nullSafeMethodCall = new NullsafeMethodCall(
-                new NullsafeMethodCall(
-                    property_exists($assign->expr, 'var') ? $assign->expr->var : $assign->expr,
-                    $assign->expr->name
-                ),
-                $nextNode->expr->name
-            );
-
             if ($nextNode instanceof Return_) {
-                return new Return_($nullSafeMethodCall);
+                return new Return_($nullSafe);
             }
 
-            return $nullSafeMethodCall;
+            return $nullSafe;
         }
 
         return null;
