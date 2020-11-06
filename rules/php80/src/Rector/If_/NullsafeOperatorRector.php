@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
-use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
@@ -123,25 +123,8 @@ CODE_SAMPLE
             $assign->expr,
             'name'
         ) && $nextNode->expr instanceof Expr && property_exists($nextNode->expr, 'name')) {
-            $nullSafe = null;
-            $assignNullSafe = null;
-            $nextNodeNullSafe = null;
-
-            if ($assign->expr instanceof MethodCall) {
-                $assignNullSafe = new NullsafeMethodCall($assign->expr->var, $assign->expr->name);
-            }
-
-            if ($nextNode->expr instanceof MethodCall) {
-                $nullSafe = new NullsafeMethodCall($assignNullSafe, $nextNode->expr->name);
-            }
-
-            if ($assign->expr instanceof PropertyFetch) {
-                $assignNullSafe = new NullsafePropertyFetch($assign->expr->var, $assign->expr->name);
-            }
-
-            if ($nextNode->expr instanceof PropertyFetch) {
-                $nullSafe = new NullsafePropertyFetch($assignNullSafe, $nextNode->expr->name);
-            }
+            $assignNullSafe = $this->processNullSafeExpr($assign->expr);
+            $nullSafe = $this->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
 
             $this->removeNode($prevNode);
             $this->removeNode($nextNode);
@@ -154,5 +137,31 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function processNullSafeExpr(Expr $expr): ?Expr
+    {
+        if ($expr instanceof MethodCall) {
+            return new NullsafeMethodCall($expr->var, $expr->name);
+        }
+
+        if (property_exists($expr, 'var') && property_exists($expr, 'name')) {
+            return new NullsafePropertyFetch($expr->var, $expr->name);
+        }
+
+        return null;
+    }
+
+    private function processNullSafeExprResult(?Expr $expr, Identifier $nextExprIdentifier): ?Expr
+    {
+        if ($expr === null) {
+            return null;
+        }
+
+        if ($expr instanceof NullsafeMethodCall) {
+            return new NullsafeMethodCall($expr, $nextExprIdentifier);
+        }
+
+        return new NullsafePropertyFetch($expr, $nextExprIdentifier);
     }
 }
