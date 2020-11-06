@@ -4,21 +4,14 @@ namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
 class SomeClass
 {
-    public function run()
+    public function f($o)
     {
-        $country =  null;
-
-        if ($session !== null) {
-            $user = $session->user;
-
-            if ($user !== null) {
-                $address = $user->getAddress();
-
-                if ($address !== null) {
-                    $country = $address->country;
-                }
-            }
+        $o2 = $o->mayFail1();
+        if ($o2 === null) {
+            return null;
         }
+
+        return $o2->mayFail2();
     }
 }
 
@@ -30,11 +23,9 @@ namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
 class SomeClass
 {
-    public function run()
+    public function f($o)
     {
-        $country =  null;
-
-        $country = $session?->user?->getAddress()?->country;
+        return $o?->mayFail1()?->mayFail2();
     }
 }
 
