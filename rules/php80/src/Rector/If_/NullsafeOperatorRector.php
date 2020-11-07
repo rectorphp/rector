@@ -150,12 +150,14 @@ CODE_SAMPLE
                 $start = $prevIf;
                 while ($prevIf instanceof Expression) {
                     $nullSafe = $this->processNullSafeExpr($prevIf->expr->expr);
-                    $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE)->getAttribute(AttributeKey::PREVIOUS_NODE);
+                    $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE)->getAttribute(
+                        AttributeKey::PREVIOUS_NODE
+                    );
                     if (! $prevIf instanceof Expression) {
                         $start = $prevIf->getAttribute(AttributeKey::NEXT_NODE)
-                                        ->getAttribute(AttributeKey::NEXT_NODE)
-                                        ->getAttribute(AttributeKey::NEXT_NODE)
-                                        ->getAttribute(AttributeKey::NEXT_NODE);
+                            ->getAttribute(AttributeKey::NEXT_NODE)
+                            ->getAttribute(AttributeKey::NEXT_NODE)
+                            ->getAttribute(AttributeKey::NEXT_NODE);
                         break;
                     }
                 }
