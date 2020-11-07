@@ -154,10 +154,10 @@ CODE_SAMPLE
                         AttributeKey::PREVIOUS_NODE
                     );
                     if (! $prevIf instanceof Expression) {
-                        $start = $prevIf->getAttribute(AttributeKey::NEXT_NODE)
-                            ->getAttribute(AttributeKey::NEXT_NODE)
-                            ->getAttribute(AttributeKey::NEXT_NODE)
-                            ->getAttribute(AttributeKey::NEXT_NODE);
+                        $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+                        $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+                        $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+                        $prevIf->getAttribute(AttributeKey::NEXT_NODE);
                         break;
                     }
                 }
