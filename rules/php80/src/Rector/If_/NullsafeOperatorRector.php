@@ -105,18 +105,14 @@ CODE_SAMPLE
             return null;
         }
 
-        while ($prevNode) {
-            /** @var Assign|null $assign */
-            $assign = $this->betterNodeFinder->findFirst($prevNode, function (Node $node) use ($if): bool {
-                return $this->isIfCondUsingAssignVariable($if, $node);
-            });
+        /** @var Assign|null $assign */
+        $assign = $this->betterNodeFinder->findFirst($prevNode, function (Node $node) use ($if): bool {
+            return $this->isIfCondUsingAssignVariable($if, $node);
+        });
 
-            $processAssign = $this->processAssign($assign, $prevNode, $nextNode);
-            if ($processAssign instanceof Node) {
-                return $processAssign;
-            }
-
-            $prevNode = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $processAssign = $this->processAssign($assign, $prevNode, $nextNode);
+        if ($processAssign instanceof Node) {
+            return $processAssign;
         }
 
         return null;
