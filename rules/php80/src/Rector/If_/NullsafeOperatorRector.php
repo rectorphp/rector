@@ -125,13 +125,15 @@ CODE_SAMPLE
 
     private function processAssign(Assign $assign, Node $prevNode, Node $nextNode): ?Node
     {
-        $this->removeNode($prevNode);
-        $this->removeNode($nextNode);
+        if (property_exists($nextNode, 'expr')) {
+            $this->removeNode($prevNode);
+            $this->removeNode($nextNode);
+        }
 
         if ($assign instanceof Assign && property_exists(
             $assign->expr,
             self::NAME
-        ) && $nextNode->expr instanceof Expr && property_exists($nextNode->expr, self::NAME)) {
+        ) && property_exists($nextNode, 'expr') && property_exists($nextNode->expr, self::NAME)) {
             return $this->processAssignInCurrentNode($assign, $prevNode, $nextNode);
         }
 
@@ -158,7 +160,7 @@ CODE_SAMPLE
 
     private function processAssignMayInNextNode(Node $nextNode): ?Node
     {
-        if (! $nextNode->expr instanceof Assign) {
+        if (! $nextNode instanceof Expression || ! $nextNode->expr instanceof Assign) {
             return null;
         }
 
