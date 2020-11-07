@@ -200,20 +200,26 @@ CODE_SAMPLE
         return new NullsafePropertyFetch($expr, $nextExprIdentifier);
     }
 
-    private function getNullSafeOnPrevAssignIsIf(If_ $if, Node $nextNode, Expr $expr): ?Node
+    private function getNullSafeOnPrevAssignIsIf(If_ $if, Node $nextNode, ?Expr $expr): ?Expr
     {
         $prevIf = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
         if ($prevIf instanceof Expression && $this->isIfCondUsingAssignVariable($if, $prevIf->expr)) {
             $start = $prevIf;
             while ($prevIf instanceof Expression) {
                 $expr = $this->processNullSafeExpr($prevIf->expr->expr);
-                $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE)->getAttribute(
-                    AttributeKey::PREVIOUS_NODE
-                );
+                /** @var If_ $prevIf */
+                $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
+                /** @var Expression|Identifier $prevIf */
+                $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
+
                 if (! $prevIf instanceof Expression) {
+                    /** @var If_ $prevIf */
                     $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+                    /** @var Expression $prevIf */
                     $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+                    /** @var If_ $prevIf */
                     $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+                    /** @var Expression $prevIf */
                     $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
 
                     $start = $prevIf;
@@ -221,20 +227,26 @@ CODE_SAMPLE
                 }
             }
 
+            $expr = $this->getNullSafeAfterStartUntilBeforeEnd($start, $expr);
+            $expr = $this->processNullSafeExprResult($expr, $nextNode->expr->name);
+        }
+
+        return $expr;
+    }
+
+    private function getNullSafeAfterStartUntilBeforeEnd(Expression $start, ?Expr $expr): ?Expr
+    {
+        while ($start) {
+            $expr = $this->processNullSafeExprResult($expr, $start->expr->expr->name);
+
+            $start = $start->getAttribute(AttributeKey::NEXT_NODE);
             while ($start) {
-                $expr = $this->processNullSafeExprResult($expr, $start->expr->expr->name);
+                if ($start instanceof Expression) {
+                    break;
+                }
 
                 $start = $start->getAttribute(AttributeKey::NEXT_NODE);
-                while ($start) {
-                    if ($start instanceof Expression) {
-                        break;
-                    }
-
-                    $start = $start->getAttribute(AttributeKey::NEXT_NODE);
-                }
             }
-
-            $expr = $this->processNullSafeExprResult($expr, $nextNode->expr->name);
         }
 
         return $expr;
