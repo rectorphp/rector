@@ -105,17 +105,13 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Assign|null $assign */
-        $assign = $this->betterNodeFinder->findFirst($prevNode, function (Node $node) use ($if): bool {
-            return $this->isIfCondUsingAssignVariable($if, $node);
-        });
-
-        $processAssign = $this->processAssign($assign, $prevNode, $nextNode);
-        if ($processAssign instanceof Node) {
-            return $processAssign;
+        if (! $prevNode instanceof Expression || ! $this->isIfCondUsingAssignVariable($if, $prevNode->expr)) {
+            return null;
         }
 
-        return null;
+        /** @var Assign $assign */
+        $assign = $prevNode->expr;
+        return $this->processAssign($assign, $prevNode, $nextNode);
     }
 
     private function isIfCondUsingAssignVariable(If_ $if, Node $node): bool
@@ -127,7 +123,7 @@ CODE_SAMPLE
         return $if->cond instanceof Identical && $this->getName($if->cond->left) === $this->getName($node->var);
     }
 
-    private function processAssign(?Assign $assign, Node $prevNode, Node $nextNode): ?Node
+    private function processAssign(Assign $assign, Node $prevNode, Node $nextNode): ?Node
     {
         $this->removeNode($prevNode);
         $this->removeNode($nextNode);
