@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
@@ -121,7 +122,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isIfCondUsingAssignVariable(If_ $if, ?Node $node): bool
+    private function isIfCondUsingAssignVariable(If_ $if, Node $node): bool
     {
         if (! $node instanceof Assign) {
             return false;
@@ -139,28 +140,37 @@ CODE_SAMPLE
             $assign->expr,
             self::NAME
         ) && $nextNode->expr instanceof Expr && property_exists($nextNode->expr, self::NAME)) {
-            $assignNullSafe = $this->processNullSafeExpr($assign->expr);
-            $nullSafe = $this->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
-
-            $prevAssign = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
-            if ($prevAssign instanceof If_) {
-                $prevIf = $prevAssign->getAttribute(AttributeKey::PREVIOUS_NODE);
-                if ($this->isIfCondUsingAssignVariable($prevAssign, $prevIf->expr)) {
-                    $nullSafe = $this->processNullSafeExpr($prevIf->expr->expr);
-                    $nullSafe = $this->processNullSafeExprResult($nullSafe, $prevNode->expr->expr->name);
-                    $nullSafe = $this->processNullSafeExprResult($nullSafe, $nextNode->expr->name);
-                }
-            }
-
-            if ($nextNode instanceof Return_) {
-                $nextNode->expr = $nullSafe;
-
-                return $nextNode;
-            }
-
-            return $nullSafe;
+            return $this->processAssignInCurrentNode($assign, $prevNode, $nextNode);
         }
 
+        return $this->processAssignMayInNextNode($nextNode);
+    }
+
+    private function processAssignInCurrentNode(Assign $assign, Node $prevNode, Node $nextNode): ?Node
+    {
+        $assignNullSafe = $this->processNullSafeExpr($assign->expr);
+        $nullSafe = $this->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
+
+        $prevAssign = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($prevAssign instanceof If_) {
+            $prevIf = $prevAssign->getAttribute(AttributeKey::PREVIOUS_NODE);
+            if ($prevIf instanceof Expression && $this->isIfCondUsingAssignVariable($prevAssign, $prevIf->expr)) {
+                $nullSafe = $this->processNullSafeExpr($prevIf->expr->expr);
+                $nullSafe = $this->processNullSafeExprResult($nullSafe, $prevNode->expr->expr->name);
+                $nullSafe = $this->processNullSafeExprResult($nullSafe, $nextNode->expr->name);
+            }
+        }
+
+        if ($nextNode instanceof Return_) {
+            $nextNode->expr = $nullSafe;
+            return $nextNode;
+        }
+
+        return $nullSafe;
+    }
+
+    private function processAssignMayInNextNode(Node $nextNode): ?Node
+    {
         if (! $nextNode->expr instanceof Assign) {
             return null;
         }
