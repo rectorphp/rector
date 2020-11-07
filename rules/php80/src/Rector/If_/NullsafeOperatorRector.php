@@ -241,7 +241,9 @@ CODE_SAMPLE
 
             $start = $start->getAttribute(AttributeKey::NEXT_NODE);
             while ($start) {
-                if ($start instanceof Expression) {
+                /** @var If_ $if */
+                $if = $start->getAttribute(AttributeKey::NEXT_NODE);
+                if ($start instanceof Expression && $this->isIfCondUsingAssignVariable($if, $start->expr)) {
                     break;
                 }
 
