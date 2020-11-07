@@ -234,20 +234,20 @@ CODE_SAMPLE
         return $expr;
     }
 
-    private function getNullSafeAfterStartUntilBeforeEnd(Expression $start, ?Expr $expr): ?Expr
+    private function getNullSafeAfterStartUntilBeforeEnd(Expression $expression, ?Expr $expr): ?Expr
     {
-        while ($start) {
-            $expr = $this->processNullSafeExprResult($expr, $start->expr->expr->name);
+        while ($expression) {
+            $expr = $this->processNullSafeExprResult($expr, $expression->expr->expr->name);
 
-            $start = $start->getAttribute(AttributeKey::NEXT_NODE);
-            while ($start) {
+            $expression = $expression->getAttribute(AttributeKey::NEXT_NODE);
+            while ($expression) {
                 /** @var If_ $if */
-                $if = $start->getAttribute(AttributeKey::NEXT_NODE);
-                if ($start instanceof Expression && $this->isIfCondUsingAssignVariable($if, $start->expr)) {
+                $if = $expression->getAttribute(AttributeKey::NEXT_NODE);
+                if ($expression instanceof Expression && $this->isIfCondUsingAssignVariable($if, $expression->expr)) {
                     break;
                 }
 
-                $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+                $expression = $expression->getAttribute(AttributeKey::NEXT_NODE);
             }
         }
 
