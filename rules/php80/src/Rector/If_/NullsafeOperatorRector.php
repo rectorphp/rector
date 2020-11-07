@@ -147,8 +147,32 @@ CODE_SAMPLE
         if ($prevAssign instanceof If_) {
             $prevIf = $prevAssign->getAttribute(AttributeKey::PREVIOUS_NODE);
             if ($prevIf instanceof Expression && $this->isIfCondUsingAssignVariable($prevAssign, $prevIf->expr)) {
-                $nullSafe = $this->processNullSafeExpr($prevIf->expr->expr);
-                $nullSafe = $this->processNullSafeExprResult($nullSafe, $prevNode->expr->expr->name);
+                $start = $prevIf;
+                while ($prevIf instanceof Expression) {
+                    $nullSafe = $this->processNullSafeExpr($prevIf->expr->expr);
+                    $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE)->getAttribute(AttributeKey::PREVIOUS_NODE);
+                    if (! $prevIf instanceof Expression) {
+                        $start = $prevIf->getAttribute(AttributeKey::NEXT_NODE)
+                                        ->getAttribute(AttributeKey::NEXT_NODE)
+                                        ->getAttribute(AttributeKey::NEXT_NODE)
+                                        ->getAttribute(AttributeKey::NEXT_NODE);
+                        break;
+                    }
+                }
+
+                while ($start) {
+                    $nullSafe = $this->processNullSafeExprResult($nullSafe, $start->expr->expr->name);
+
+                    $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+                    while ($start) {
+                        if ($start instanceof Expression) {
+                            break;
+                        }
+
+                        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+                    }
+                }
+
                 $nullSafe = $this->processNullSafeExprResult($nullSafe, $nextNode->expr->name);
             }
         }
@@ -173,10 +197,7 @@ CODE_SAMPLE
         }
 
         if ($this->isIfCondUsingAssignVariable($mayNextIf, $nextNode->expr)) {
-            $comparedNode = $this->ifManipulator->matchIfValueReturnValue($mayNextIf);
-            if ($comparedNode !== null) {
-                return $this->refactor($mayNextIf);
-            }
+            return $this->refactor($mayNextIf);
         }
 
         return null;

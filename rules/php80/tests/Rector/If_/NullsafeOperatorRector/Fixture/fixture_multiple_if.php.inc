@@ -16,7 +16,17 @@ class SomeClassMultipleIf
             return null;
         }
 
-        return $mayFail2->mayFail3();
+        $mayFail3 = $mayFail2->mayFail3();
+        if ($mayFail3 === null) {
+            return null;
+        }
+
+        $mayFail4 = $mayFail3->mayFail4();
+        if ($mayFail4 === null) {
+            return null;
+        }
+
+        return $mayFail4->mayFail5();
     }
 }
 
@@ -30,7 +40,7 @@ class SomeClassMultipleIf
 {
     public function f($o)
     {
-        return $o?->mayFail1()?->mayFail2()?->mayFail3();
+        return $o?->mayFail1()?->mayFail2()?->mayFail3()?->mayFail4()?->mayFail5();
     }
 }
 
