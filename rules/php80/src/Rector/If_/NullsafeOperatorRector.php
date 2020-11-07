@@ -132,6 +132,9 @@ CODE_SAMPLE
 
     private function processAssign(?Assign $assign, Node $prevNode, Node $nextNode): ?Node
     {
+        $this->removeNode($prevNode);
+        $this->removeNode($nextNode);
+
         if ($assign instanceof Assign && property_exists(
             $assign->expr,
             self::NAME
@@ -139,14 +142,39 @@ CODE_SAMPLE
             $assignNullSafe = $this->processNullSafeExpr($assign->expr);
             $nullSafe = $this->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
 
-            $this->removeNode($prevNode);
-            $this->removeNode($nextNode);
+            $prevAssign = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+            if ($prevAssign instanceof If_) {
+                $prevIf = $prevAssign->getAttribute(AttributeKey::PREVIOUS_NODE);
+                if ($this->isIfCondUsingAssignVariable($prevAssign, $prevIf->expr)) {
+                    $nullSafe = $this->processNullSafeExpr($prevIf->expr->expr);
+                    $nullSafe = $this->processNullSafeExprResult($nullSafe, $prevNode->expr->expr->name);
+                    $nullSafe = $this->processNullSafeExprResult($nullSafe, $nextNode->expr->name);
+                }
+            }
 
             if ($nextNode instanceof Return_) {
-                return new Return_($nullSafe);
+                $nextNode->expr = $nullSafe;
+
+                return $nextNode;
             }
 
             return $nullSafe;
+        }
+
+        if (! $nextNode->expr instanceof Assign) {
+            return null;
+        }
+
+        $mayNextIf = $nextNode->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $mayNextIf instanceof If_) {
+            return null;
+        }
+
+        if ($this->isIfCondUsingAssignVariable($mayNextIf, $nextNode->expr)) {
+            $comparedNode = $this->ifManipulator->matchIfValueReturnValue($mayNextIf);
+            if ($comparedNode !== null) {
+                return $this->refactor($mayNextIf);
+            }
         }
 
         return null;
