@@ -156,46 +156,6 @@ CODE_SAMPLE
         return $nullSafe;
     }
 
-    private function getNullSafeOnPrevAssignIsIf(If_ $prevAssign, Node $nextNode, Expr $nullSafe): ?Node
-    {
-        $prevIf = $prevAssign->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($prevIf instanceof Expression && $this->isIfCondUsingAssignVariable($prevAssign, $prevIf->expr)) {
-            $start = $prevIf;
-            while ($prevIf instanceof Expression) {
-                $nullSafe = $this->processNullSafeExpr($prevIf->expr->expr);
-                $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE)->getAttribute(
-                    AttributeKey::PREVIOUS_NODE
-                );
-                if (! $prevIf instanceof Expression) {
-                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
-                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
-                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
-                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
-
-                    $start = $prevIf;
-                    break;
-                }
-            }
-
-            while ($start) {
-                $nullSafe = $this->processNullSafeExprResult($nullSafe, $start->expr->expr->name);
-
-                $start = $start->getAttribute(AttributeKey::NEXT_NODE);
-                while ($start) {
-                    if ($start instanceof Expression) {
-                        break;
-                    }
-
-                    $start = $start->getAttribute(AttributeKey::NEXT_NODE);
-                }
-            }
-
-            $nullSafe = $this->processNullSafeExprResult($nullSafe, $nextNode->expr->name);
-        }
-
-        return $nullSafe;
-    }
-
     private function processAssignMayInNextNode(Node $nextNode): ?Node
     {
         if (! $nextNode->expr instanceof Assign) {
@@ -238,5 +198,45 @@ CODE_SAMPLE
         }
 
         return new NullsafePropertyFetch($expr, $nextExprIdentifier);
+    }
+
+    private function getNullSafeOnPrevAssignIsIf(If_ $if, Node $nextNode, Expr $expr): ?Node
+    {
+        $prevIf = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($prevIf instanceof Expression && $this->isIfCondUsingAssignVariable($if, $prevIf->expr)) {
+            $start = $prevIf;
+            while ($prevIf instanceof Expression) {
+                $expr = $this->processNullSafeExpr($prevIf->expr->expr);
+                $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE)->getAttribute(
+                    AttributeKey::PREVIOUS_NODE
+                );
+                if (! $prevIf instanceof Expression) {
+                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+
+                    $start = $prevIf;
+                    break;
+                }
+            }
+
+            while ($start) {
+                $expr = $this->processNullSafeExprResult($expr, $start->expr->expr->name);
+
+                $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+                while ($start) {
+                    if ($start instanceof Expression) {
+                        break;
+                    }
+
+                    $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+                }
+            }
+
+            $expr = $this->processNullSafeExprResult($expr, $nextNode->expr->name);
+        }
+
+        return $expr;
     }
 }
