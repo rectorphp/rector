@@ -88,7 +88,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $this->processNullSafeOperator($node);
+        $processNullSafeOperator = $this->processNullSafeOperator($node);
+        if ($processNullSafeOperator) {
+            /** @var Expression $prevNode */
+            $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+            $this->removeNode($prevNode);
+        }
+
+        return $processNullSafeOperator;
     }
 
     private function processNullSafeOperator(If_ $if): ?Node
