@@ -226,6 +226,13 @@ trait ComplexRemovalTrait
         }
     }
 
+    private function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
+    {
+        foreach ($this->livingCodeManipulator->keepLivingCodeFromExpr($expr) as $expr) {
+            $this->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
+        }
+    }
+
     private function isExpressionVariableNotAssign(?Node $node): bool
     {
         if ($node !== null) {
@@ -237,12 +244,5 @@ trait ComplexRemovalTrait
         }
 
         return false;
-    }
-
-    private function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
-    {
-        foreach ($this->livingCodeManipulator->keepLivingCodeFromExpr($expr) as $expr) {
-            $this->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
-        }
     }
 }
