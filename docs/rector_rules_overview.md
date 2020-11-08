@@ -1,4 +1,4 @@
-# All 601 Rectors Overview
+# All 603 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -4449,6 +4449,27 @@ Turns parent EntityRepository class to constructor dependency
 
 <br><br>
 
+### `RemoveRedundantDefaultClassAnnotationValuesRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector`](/rules/doctrine-code-quality/src/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector.php)
+- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector/Fixture)
+
+Removes redundant default values from Doctrine ORM annotations on class level
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+- * @ORM\Entity(readOnly=false)
++ * @ORM\Entity()
+  */
+ class SomeClass
+ {
+ }
+```
+
+<br><br>
+
 ### `RemoveRedundantDefaultPropertyAnnotationValuesRector`
 
 - class: [`Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector`](/rules/doctrine-code-quality/src/Rector/Property/RemoveRedundantDefaultPropertyAnnotationValuesRector.php)
@@ -4470,27 +4491,6 @@ Removes redundant default values from Doctrine ORM annotations on class property
 +     * @ORM\JoinColumn(name="training")
       */
      private $training;
- }
-```
-
-<br><br>
-
-### `RemoveRedundantDefaultPropertyAnnotationValuesRector`
-
-- class: [`Rector\DoctrineCodeQuality\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector`](/rules/doctrine-code-quality/src/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector.php)
-- [test fixtures](/rules/doctrine-code-quality/tests/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector/Fixture)
-
-Removes redundant default values from Doctrine ORM annotations on class level
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-- * @ORM\Entity(readOnly=false)
-+ * @ORM\Entity()
-  */
- class SomeClass
- {
  }
 ```
 

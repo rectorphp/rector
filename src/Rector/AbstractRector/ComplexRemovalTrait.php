@@ -206,7 +206,18 @@ trait ComplexRemovalTrait
             return;
         }
 
+        $constructClassMethodStmts = $constructClassMethod->stmts;
         foreach ($constructClassMethod->getParams() as $param) {
+            $variable = $this->betterNodeFinder->findFirst($constructClassMethodStmts, function (Node $node) use (
+                $param
+            ): bool {
+                return $this->betterStandardPrinter->areNodesEqual($param->var, $node);
+            });
+
+            if ($this->isExpressionVariableNotAssign($variable)) {
+                continue;
+            }
+
             if (! $this->betterStandardPrinter->areNodesEqual($param->var, $assign->expr)) {
                 continue;
             }
@@ -220,5 +231,18 @@ trait ComplexRemovalTrait
         foreach ($this->livingCodeManipulator->keepLivingCodeFromExpr($expr) as $expr) {
             $this->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
         }
+    }
+
+    private function isExpressionVariableNotAssign(?Node $node): bool
+    {
+        if ($node !== null) {
+            $expressionVariable = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+            if (! $expressionVariable instanceof Assign) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
