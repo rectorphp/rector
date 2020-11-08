@@ -226,10 +226,10 @@ CODE_SAMPLE
         return $expr;
     }
 
-    private function getStartNode(Node $prevIf): ?Node
+    private function getStartNode(Node $node): ?Node
     {
         /** @var If_ $start */
-        $start = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+        $start = $node->getAttribute(AttributeKey::NEXT_NODE);
         /** @var Expression $start */
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);
         /** @var If_ $start */
