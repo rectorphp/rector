@@ -120,7 +120,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $if->cond instanceof Identical && $this->getName($if->cond->left) === $this->getName($node->var);
+        return $if->cond instanceof Identical && $this->areNodesEqual($if->cond->left, $node->var);
     }
 
     private function processAssign(Assign $assign, Node $prevNode, Node $nextNode): ?Node
