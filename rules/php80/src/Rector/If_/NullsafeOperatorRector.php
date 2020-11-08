@@ -113,13 +113,13 @@ CODE_SAMPLE
         return $this->processAssign($assign, $prevNode, $nextNode);
     }
 
-    private function isIfCondUsingAssignVariable(If_ $if, Node $node): bool
+    private function isIfCondUsingAssignVariable(Node $if, Node $assign): bool
     {
-        if (! $node instanceof Assign) {
+        if (! ($if instanceof If_ && $assign instanceof Assign)) {
             return false;
         }
 
-        return $if->cond instanceof Identical && $this->areNodesEqual($if->cond->left, $node->var);
+        return $if->cond instanceof Identical && $this->areNodesEqual($if->cond->left, $assign->var);
     }
 
     private function processAssign(Assign $assign, Node $prevNode, Node $nextNode): ?Node
@@ -214,16 +214,7 @@ CODE_SAMPLE
                 $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
 
                 if (! $prevIf instanceof Expression) {
-                    /** @var If_ $prevIf */
-                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
-                    /** @var Expression $prevIf */
-                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
-                    /** @var If_ $prevIf */
-                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
-                    /** @var Expression $prevIf */
-                    $prevIf = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
-
-                    $start = $prevIf;
+                    $start = $this->getStartNode($prevIf);
                     break;
                 }
             }
@@ -235,20 +226,33 @@ CODE_SAMPLE
         return $expr;
     }
 
-    private function getNullSafeAfterStartUntilBeforeEnd(Expression $expression, ?Expr $expr): ?Expr
+    private function getStartNode(Node $prevIf): ?Node
     {
-        while ($expression) {
-            $expr = $this->processNullSafeExprResult($expr, $expression->expr->expr->name);
+        /** @var If_ $start */
+        $start = $prevIf->getAttribute(AttributeKey::NEXT_NODE);
+        /** @var Expression $start */
+        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+        /** @var If_ $start */
+        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
 
-            $expression = $expression->getAttribute(AttributeKey::NEXT_NODE);
-            while ($expression) {
+        /** @var Expression $start */
+        return $start->getAttribute(AttributeKey::NEXT_NODE);
+    }
+
+    private function getNullSafeAfterStartUntilBeforeEnd(?Node $node, ?Expr $expr): ?Expr
+    {
+        while ($node) {
+            $expr = $this->processNullSafeExprResult($expr, $node->expr->expr->name);
+
+            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
+            while ($node) {
                 /** @var If_ $if */
-                $if = $expression->getAttribute(AttributeKey::NEXT_NODE);
-                if ($expression instanceof Expression && $this->isIfCondUsingAssignVariable($if, $expression->expr)) {
+                $if = $node->getAttribute(AttributeKey::NEXT_NODE);
+                if ($node instanceof Expression && $this->isIfCondUsingAssignVariable($if, $node->expr)) {
                     break;
                 }
 
-                $expression = $expression->getAttribute(AttributeKey::NEXT_NODE);
+                $node = $node->getAttribute(AttributeKey::NEXT_NODE);
             }
         }
 
