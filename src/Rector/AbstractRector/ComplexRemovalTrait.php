@@ -208,7 +208,9 @@ trait ComplexRemovalTrait
 
         $constructClassMethodStmts = $constructClassMethod->stmts;
         foreach ($constructClassMethod->getParams() as $param) {
-            $variable = $this->betterNodeFinder->findFirst($constructClassMethodStmts, function (Node $node) use ($param): bool {
+            $variable = $this->betterNodeFinder->findFirst($constructClassMethodStmts, function (Node $node) use (
+                $param
+            ): bool {
                 return $this->betterStandardPrinter->areNodesEqual($param->var, $node);
             });
             $expressionVariable = $variable->getAttribute(AttributeKey::PARENT_NODE);
