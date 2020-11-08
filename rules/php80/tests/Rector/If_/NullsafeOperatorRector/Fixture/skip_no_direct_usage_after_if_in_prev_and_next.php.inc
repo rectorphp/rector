@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class SkipNoDirectUsageAfterIfInPrevOrNext
+class SkipNoDirectUsageAfterIfInPrevAndNext
 {
     public function f($o)
     {
