@@ -87,20 +87,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
-
-        if ($comparedNode !== null) {
-            $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-            $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-
-            return $this->processNullSafeOperator($node, $prevNode, $nextNode);
-        }
-
-        return null;
+        return $this->processNullSafeOperator($node);
     }
 
-    private function processNullSafeOperator(If_ $if, ?Node $prevNode, ?Node $nextNode): ?Node
+    private function processNullSafeOperator(If_ $if): ?Node
     {
+        $comparedNode = $this->ifManipulator->matchIfValueReturnValue($if);
+        if ($comparedNode === null) {
+            return null;
+        }
+
+        $prevNode = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+
         if ($prevNode === null || $nextNode === null) {
             return null;
         }
@@ -170,7 +169,7 @@ CODE_SAMPLE
         }
 
         if ($this->isIfCondUsingAssignVariable($mayNextIf, $nextNode->expr)) {
-            return $this->refactor($mayNextIf);
+            return $this->processNullSafeOperator($mayNextIf);
         }
 
         return null;

@@ -11,25 +11,29 @@ class SkipNoDirectUsageAfterIf
             return null;
         }
 
-        echo 'statement';
+        echo 'STATEMENT HERE';
+
         $mayFail2 = $o2->mayFail2();
         if ($mayFail2 === null) {
             return null;
         }
 
-        echo 'statement';
+        echo 'STATEMENT HERE';
+
         $mayFail3 = $mayFail2->mayFail3();
         if ($mayFail3 === null) {
             return null;
         }
 
-        echo 'statement';
+        echo 'STATEMENT HERE';
+
         $mayFail4 = $mayFail3->mayFail4();
         if ($mayFail4 === null) {
             return null;
         }
 
-        echo 'statement';
+        echo 'STATEMENT HERE';
+
         return $mayFail4->mayFail5();
     }
 }
