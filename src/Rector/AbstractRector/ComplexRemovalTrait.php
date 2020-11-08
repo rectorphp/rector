@@ -213,10 +213,13 @@ trait ComplexRemovalTrait
             ): bool {
                 return $this->betterStandardPrinter->areNodesEqual($param->var, $node);
             });
-            $expressionVariable = $variable->getAttribute(AttributeKey::PARENT_NODE);
 
-            if (! $expressionVariable instanceof Assign) {
-                continue;
+            if ($variable !== null) {
+                $expressionVariable = $variable->getAttribute(AttributeKey::PARENT_NODE);
+
+                if (! $expressionVariable instanceof Assign) {
+                    continue;
+                }
             }
 
             if (! $this->betterStandardPrinter->areNodesEqual($param->var, $assign->expr)) {
