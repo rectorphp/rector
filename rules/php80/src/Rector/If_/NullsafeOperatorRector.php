@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -125,8 +126,11 @@ CODE_SAMPLE
     private function processAssign(Assign $assign, Node $prevNode, Node $nextNode): ?Node
     {
         if (property_exists($nextNode, 'expr')) {
-            $this->removeNode($prevNode);
-            $this->removeNode($nextNode);
+            $prevOfPrevNode = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+            if (! $prevOfPrevNode instanceof Stmt || $prevOfPrevNode instanceof If_) {
+                $this->removeNode($prevNode);
+                $this->removeNode($nextNode);
+            }
         }
 
         if ($assign instanceof Assign && property_exists(
