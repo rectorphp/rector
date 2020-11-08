@@ -214,12 +214,8 @@ trait ComplexRemovalTrait
                 return $this->betterStandardPrinter->areNodesEqual($param->var, $node);
             });
 
-            if ($variable !== null) {
-                $expressionVariable = $variable->getAttribute(AttributeKey::PARENT_NODE);
-
-                if (! $expressionVariable instanceof Assign) {
-                    continue;
-                }
+            if ($this->isExpressionVariableNotAssign($variable)) {
+                continue;
             }
 
             if (! $this->betterStandardPrinter->areNodesEqual($param->var, $assign->expr)) {
@@ -228,6 +224,19 @@ trait ComplexRemovalTrait
 
             $this->removeNode($param);
         }
+    }
+
+    private function isExpressionVariableNotAssign(?Node $node): bool
+    {
+        if ($node !== null) {
+            $expressionVariable = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+            if (! $expressionVariable instanceof Assign) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
