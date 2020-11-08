@@ -1,4 +1,4 @@
-# All 603 Rectors Overview
+# All 604 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -54,7 +54,7 @@
 - [Php72](#php72) (11)
 - [Php73](#php73) (10)
 - [Php74](#php74) (15)
-- [Php80](#php80) (12)
+- [Php80](#php80) (13)
 - [PhpDeglobalize](#phpdeglobalize) (1)
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
@@ -12345,6 +12345,31 @@ Change ternary type resolve to `get_debug_type()`
      {
 -        return is_object($value) ? get_class($value) : gettype($value);
 +        return get_debug_type($value);
+     }
+ }
+```
+
+<br><br>
+
+### `NullsafeOperatorRector`
+
+- class: [`Rector\Php80\Rector\If_\NullsafeOperatorRector`](/rules/php80/src/Rector/If_/NullsafeOperatorRector.php)
+- [test fixtures](/rules/php80/tests/Rector/If_/NullsafeOperatorRector/Fixture)
+
+Change if null check with nullsafe operator ?-> with full short circuiting
+
+```diff
+ class SomeClass
+ {
+     public function f($o)
+     {
+-        $o2 = $o->mayFail1();
+-        if ($o2 === null) {
+-            return null;
+-        }
+-
+-        return $o2->mayFail2();
++        return $o?->mayFail1()?->mayFail2();
      }
  }
 ```
