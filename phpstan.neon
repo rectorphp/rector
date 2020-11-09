@@ -3,6 +3,10 @@ includes:
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
     - vendor/symplify/phpstan-extensions/config/config.neon
 
+    # see https://github.com/symplify/coding-standard
+    - vendor/symplify/coding-standard/config/symplify-rules.neon
+    - vendor/symplify/coding-standard/packages/cognitive-complexity/config/cognitive-complexity-services.neon
+
 services:
     -
         class: Symplify\CodingStandard\CognitiveComplexity\Rules\FunctionLikeCognitiveComplexityRule

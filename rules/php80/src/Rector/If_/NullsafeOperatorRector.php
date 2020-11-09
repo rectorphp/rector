@@ -132,14 +132,6 @@ CODE_SAMPLE
 
     private function processAssign(Assign $assign, Node $prevNode, Node $nextNode): ?Node
     {
-        if (property_exists($nextNode, 'expr')) {
-            $prevOfPrevNode = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
-            if (! $prevOfPrevNode instanceof Stmt || $prevOfPrevNode instanceof If_) {
-                $this->removeNode($prevNode);
-                $this->removeNode($nextNode);
-            }
-        }
-
         if ($assign instanceof Assign && property_exists(
             $assign->expr,
             self::NAME
@@ -159,6 +151,8 @@ CODE_SAMPLE
         if ($prevAssign instanceof If_) {
             $nullSafe = $this->getNullSafeOnPrevAssignIsIf($prevAssign, $nextNode, $nullSafe);
         }
+
+        $this->removeNode($nextNode);
 
         if ($nextNode instanceof Return_) {
             $nextNode->expr = $nullSafe;
