@@ -9,9 +9,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -97,8 +97,7 @@ CODE_SAMPLE
             return $processNullSafeOperator;
         }
 
-        $processNullSafeOperator = $this->processNullSafeOperatorNotIdentical($node);
-        return $processNullSafeOperator;
+        return $this->processNullSafeOperatorNotIdentical($node);
     }
 
     private function processNullSafeOperatorNotIdentical(If_ $if, ?Expr $expr = null): ?Node
