@@ -314,15 +314,15 @@ final class IfManipulator
         );
     }
 
-    public function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $expr): bool
+    public function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $node): bool
     {
-        if (! $expr instanceof MethodCall && ! $expr instanceof PropertyFetch) {
+        if (! $node instanceof MethodCall && ! $node instanceof PropertyFetch) {
             return false;
         }
 
         return $if->cond instanceof NotIdentical && ! $this->betterStandardPrinter->areNodesEqual(
             $this->getIfVar($if),
-            $expr->var
+            $node->var
         );
     }
 
