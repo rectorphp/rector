@@ -88,7 +88,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $processNullSafeOperator = $this->processNullSafeOperator($node, true);
+        $processNullSafeOperator = $this->processNullSafeOperator($node);
         if ($processNullSafeOperator !== null) {
             /** @var Expression $prevNode */
             $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
@@ -98,7 +98,7 @@ CODE_SAMPLE
         return $processNullSafeOperator;
     }
 
-    private function processNullSafeOperator(If_ $if, bool $isStartIf = false): ?Node
+    private function processNullSafeOperator(If_ $if, bool $isStartIf = true): ?Node
     {
         $comparedNode = $this->ifManipulator->matchIfValueReturnValue($if);
         if ($comparedNode === null) {
@@ -130,7 +130,7 @@ CODE_SAMPLE
         return $if->cond instanceof Identical && $this->areNodesEqual($if->cond->left, $assign->var);
     }
 
-    private function processAssign(Assign $assign, Node $prevNode, Node $nextNode, bool $isStartIf = false): ?Node
+    private function processAssign(Assign $assign, Node $prevNode, Node $nextNode, bool $isStartIf): ?Node
     {
         if ($assign instanceof Assign && property_exists(
             $assign->expr,
@@ -146,7 +146,7 @@ CODE_SAMPLE
         Assign $assign,
         Node $prevNode,
         Node $nextNode,
-        bool $isStartIf = false
+        bool $isStartIf
     ): ?Node {
         $assignNullSafe = ! $isStartIf
             ? $this->processNullSafeExpr($assign->expr)
@@ -180,7 +180,7 @@ CODE_SAMPLE
         }
 
         if ($this->isIfCondUsingAssignVariable($mayNextIf, $nextNode->expr)) {
-            return $this->processNullSafeOperator($mayNextIf);
+            return $this->processNullSafeOperator($mayNextIf, false);
         }
 
         return null;
