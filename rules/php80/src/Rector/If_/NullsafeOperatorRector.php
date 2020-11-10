@@ -163,32 +163,6 @@ CODE_SAMPLE
         return $this->processNullSafeOperatorNotIdentical($nextNode, $nullSafe);
     }
 
-    private function processIfMayInNextNode(?Node $nextNode = null): ?Node
-    {
-        if ($nextNode === null) {
-            return null;
-        }
-
-        $nextOfNextNode = $nextNode->getAttribute(AttributeKey::NEXT_NODE);
-        while ($nextOfNextNode) {
-            if ($nextOfNextNode instanceof If_) {
-                /** @var If_ $beforeIf */
-                $beforeIf = $nextOfNextNode->getAttribute(AttributeKey::PARENT_NODE);
-                $nullSafe = $this->processNullSafeOperatorNotIdentical($nextOfNextNode);
-                if (! $nullSafe instanceof NullsafeMethodCall && ! $nullSafe instanceof PropertyFetch) {
-                    return $beforeIf;
-                }
-
-                $beforeIf->stmts[count($beforeIf->stmts) - 1] = new Expression($nullSafe);
-                return $beforeIf;
-            }
-
-            $nextOfNextNode = $nextOfNextNode->getAttribute(AttributeKey::NEXT_NODE);
-        }
-
-        return null;
-    }
-
     private function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
     {
         if (! $assign instanceof Assign) {
@@ -196,15 +170,6 @@ CODE_SAMPLE
         }
 
         return $if->cond instanceof Identical && $this->areNodesEqual($if->cond->left, $assign->var);
-    }
-
-    private function isIfCondUsingAssignNotIdenticalVariable(Node $if, Node $expr): bool
-    {
-        if (! $expr instanceof MethodCall && ! $expr instanceof PropertyFetch) {
-            return false;
-        }
-
-        return $if->cond instanceof NotIdentical && ! $this->areNodesEqual($if->cond->left, $expr->var);
     }
 
     private function processAssign(Assign $assign, Node $prevNode, Node $nextNode, bool $isStartIf): ?Node
@@ -217,6 +182,15 @@ CODE_SAMPLE
         }
 
         return $this->processAssignMayInNextNode($nextNode);
+    }
+
+    private function isIfCondUsingAssignNotIdenticalVariable(Node $if, Node $expr): bool
+    {
+        if (! $expr instanceof MethodCall && ! $expr instanceof PropertyFetch) {
+            return false;
+        }
+
+        return $if->cond instanceof NotIdentical && ! $this->areNodesEqual($if->cond->left, $expr->var);
     }
 
     private function processNullSafeExpr(Expr $expr): ?Expr
@@ -244,6 +218,32 @@ CODE_SAMPLE
         }
 
         return new NullsafePropertyFetch($expr, $nextExprIdentifier);
+    }
+
+    private function processIfMayInNextNode(?Node $nextNode = null): ?Node
+    {
+        if ($nextNode === null) {
+            return null;
+        }
+
+        $nextOfNextNode = $nextNode->getAttribute(AttributeKey::NEXT_NODE);
+        while ($nextOfNextNode) {
+            if ($nextOfNextNode instanceof If_) {
+                /** @var If_ $beforeIf */
+                $beforeIf = $nextOfNextNode->getAttribute(AttributeKey::PARENT_NODE);
+                $nullSafe = $this->processNullSafeOperatorNotIdentical($nextOfNextNode);
+                if (! $nullSafe instanceof NullsafeMethodCall && ! $nullSafe instanceof PropertyFetch) {
+                    return $beforeIf;
+                }
+
+                $beforeIf->stmts[count($beforeIf->stmts) - 1] = new Expression($nullSafe);
+                return $beforeIf;
+            }
+
+            $nextOfNextNode = $nextOfNextNode->getAttribute(AttributeKey::NEXT_NODE);
+        }
+
+        return null;
     }
 
     private function processAssignInCurrentNode(
