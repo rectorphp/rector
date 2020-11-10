@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
@@ -135,7 +136,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->areNodesEqual($if->cond->left, $assignExpr->var)) {
+        if ($if->cond instanceof NotIdentical && ! $this->areNodesEqual($if->cond->left, $assignExpr->var)) {
             return null;
         }
 
@@ -145,10 +146,13 @@ CODE_SAMPLE
         /** @var Node|null $nextNode */
         $nextNode = $expression->getAttribute(AttributeKey::NEXT_NODE);
 
-        /** @var Expr $nullSafe */
+        /** @var NullsafeMethodCall|NullsafePropertyFetch $nullSafe */
         $nullSafe = $this->processNullSafeExpr($assignExpr);
         if ($expr !== null) {
-            $nullSafe = $this->processNullSafeExprResult($expr, $nullSafe->name);
+            /** @var Identifier $nullSafeIdentifier */
+            $nullSafeIdentifier = $nullSafe->name;
+            /** @var NullsafeMethodCall|NullsafePropertyFetch $nullSafe */
+            $nullSafe = $this->processNullSafeExprResult($expr, $nullSafeIdentifier);
         }
 
         if (! $nextNode instanceof If_) {
