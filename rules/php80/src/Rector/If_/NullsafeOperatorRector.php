@@ -9,9 +9,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -67,7 +67,7 @@ class SomeClass
 {
     public function f($o)
     {
-        return $o?->mayFail1()?->mayFail2();
+        return $o->mayFail1()?->mayFail2();
     }
 }
 CODE_SAMPLE
@@ -230,9 +230,12 @@ CODE_SAMPLE
                 }
             }
 
-            /** @var MethodCall|PropertyFetch */
-            $var = $expr->var;
-            $expr = $var->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $expr instanceof NullsafeMethodCall && ! $expr instanceof NullsafePropertyFetch) {
+                return $expr;
+            }
+
+            /** @var MethodCall|PropertyFetch $expr */
+            $expr = $expr->var->getAttribute(AttributeKey::PARENT_NODE);
             $expr = $this->getNullSafeAfterStartUntilBeforeEnd($start, $expr);
             $expr = $this->processNullSafeExprResult($expr, $nextNode->expr->name);
         }
