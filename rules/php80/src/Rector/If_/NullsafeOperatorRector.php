@@ -87,7 +87,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $processNullSafeOperator = $this->processNullSafeOperator($node, $node);
+        $processNullSafeOperator = $this->processNullSafeOperator($node, true);
         if ($processNullSafeOperator !== null) {
             /** @var Expression $prevNode */
             $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
@@ -97,7 +97,7 @@ CODE_SAMPLE
         return $processNullSafeOperator;
     }
 
-    private function processNullSafeOperator(If_ $if, ?If_ $startIf = null): ?Node
+    private function processNullSafeOperator(If_ $if, bool $isStartIf = false): ?Node
     {
         $comparedNode = $this->ifManipulator->matchIfValueReturnValue($if);
         if ($comparedNode === null) {
@@ -117,7 +117,7 @@ CODE_SAMPLE
 
         /** @var Assign $assign */
         $assign = $prevNode->expr;
-        return $this->processAssign($assign, $prevNode, $nextNode, $startIf);
+        return $this->processAssign($assign, $prevNode, $nextNode, $isStartIf);
     }
 
     private function isIfCondUsingAssignVariable(Node $if, Node $assign): bool
@@ -129,13 +129,13 @@ CODE_SAMPLE
         return $if->cond instanceof Identical && $this->areNodesEqual($if->cond->left, $assign->var);
     }
 
-    private function processAssign(Assign $assign, Node $prevNode, Node $nextNode, ?If_ $startIf = null): ?Node
+    private function processAssign(Assign $assign, Node $prevNode, Node $nextNode, bool $isStartIf = false): ?Node
     {
         if ($assign instanceof Assign && property_exists(
             $assign->expr,
             self::NAME
         ) && property_exists($nextNode, 'expr') && property_exists($nextNode->expr, self::NAME)) {
-            return $this->processAssignInCurrentNode($assign, $prevNode, $nextNode, $startIf);
+            return $this->processAssignInCurrentNode($assign, $prevNode, $nextNode, $isStartIf);
         }
 
         return $this->processAssignMayInNextNode($nextNode);
@@ -145,9 +145,9 @@ CODE_SAMPLE
         Assign $assign,
         Node $prevNode,
         Node $nextNode,
-        ?If_ $startIf = null
+        bool $isStartIf = false
     ): ?Node {
-        $assignNullSafe = $startIf === null
+        $assignNullSafe = ! $isStartIf
             ? $this->processNullSafeExpr($assign->expr)
             : $assign->expr;
         $nullSafe = $this->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
