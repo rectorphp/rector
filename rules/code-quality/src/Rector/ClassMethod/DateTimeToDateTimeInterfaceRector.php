@@ -33,7 +33,7 @@ final class DateTimeToDateTimeInterfaceRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change DateTime type-hint to DateTimeInterface', [
+        return new RectorDefinition('Changes DateTime type-hint to DateTimeInterface', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass {

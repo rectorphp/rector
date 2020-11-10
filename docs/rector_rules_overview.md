@@ -8,7 +8,7 @@
 - [Architecture](#architecture) (2)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
-- [CodeQuality](#codequality) (61)
+- [CodeQuality](#codequality) (62)
 - [CodingStyle](#codingstyle) (33)
 - [DeadCode](#deadcode) (41)
 - [Defluent](#defluent) (8)
@@ -1724,6 +1724,28 @@ Use ===/!== over ==/!=, it values have the same type
 -         $isDiffernt = $firstValue != $secondValue;
 +         $isSame = $firstValue === $secondValue;
 +         $isDiffernt = $firstValue !== $secondValue;
+     }
+ }
+```
+
+<br><br>
+
+### `DateTimeToDateTimeInterfaceRector`
+
+- class: [`Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector`](/rules/code-quality/src/Rector/ClassMethod/DateTimeToDateTimeInterfaceRector.php)
+- [test fixtures](/rules/code-quality/tests/Rector/ClassMethod/DateTimeToDateTimeInterfaceRector/Fixture)
+
+Changes DateTime type-hint to DateTimeInterface
+
+```diff
+ class SomeClass {
++   /**
++    * @param \DateTime|\DateTimeImmutable $dateTime
++    */
+-    public function methodWithDateTime(\DateTime $dateTime)
++    public function methodWithDateTime(\DateTimeInterface $dateTime)
+     {
+         return true;
      }
  }
 ```
