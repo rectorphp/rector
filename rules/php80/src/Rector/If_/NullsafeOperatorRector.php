@@ -169,7 +169,11 @@ CODE_SAMPLE
             return false;
         }
 
-        return $if->cond instanceof Identical && $this->areNodesEqual($if->cond->left, $assign->var);
+        $ifVar = $this->isNull($if->cond->left)
+            ? $if->cond->right
+            : $if->cond->left;
+
+        return $if->cond instanceof Identical && $this->areNodesEqual($ifVar, $assign->var);
     }
 
     private function processAssign(Assign $assign, Node $prevNode, Node $nextNode, bool $isStartIf): ?Node
@@ -190,7 +194,11 @@ CODE_SAMPLE
             return false;
         }
 
-        return $if->cond instanceof NotIdentical && ! $this->areNodesEqual($if->cond->left, $expr->var);
+        $ifVar = $this->isNull($if->cond->left)
+            ? $if->cond->right
+            : $if->cond->left;
+
+        return $if->cond instanceof NotIdentical && ! $this->areNodesEqual($ifVar, $expr->var);
     }
 
     private function processNullSafeExpr(Expr $expr): ?Expr
