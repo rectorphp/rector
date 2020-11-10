@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -85,6 +86,27 @@ final class IfManipulator
         }
 
         return $this->matchComparedAndReturnedNode($if->cond, $returnNode);
+    }
+
+    /**
+     * Matches:
+     *
+     * if (<$value> !== null) {
+     *     $anotherValue = $value;
+     * }
+     */
+    public function matchIfNotNullNextAssignment(If_ $if): ?Assign
+    {
+        if ($if->stmts === []) {
+            return null;
+        }
+
+        $insideIfNode = $if->stmts[0];
+        if (! $insideIfNode instanceof Expression || ! $insideIfNode->expr instanceof Assign) {
+            return null;
+        }
+
+        return $insideIfNode->expr;
     }
 
     /**
