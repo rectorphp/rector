@@ -7,8 +7,6 @@ namespace Rector\Php80\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
@@ -115,7 +113,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $prevNode instanceof Expression || ! $this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $prevNode->expr)) {
+        if (! $prevNode instanceof Expression || ! $this->ifManipulator->isIfCondUsingAssignIdenticalVariable(
+            $if,
+            $prevNode->expr
+        )) {
             return null;
         }
 
@@ -275,7 +276,10 @@ CODE_SAMPLE
     private function getNullSafeOnPrevAssignIsIf(If_ $if, Node $nextNode, ?Expr $expr): ?Expr
     {
         $prevIf = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($prevIf instanceof Expression && $this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $prevIf->expr)) {
+        if ($prevIf instanceof Expression && $this->ifManipulator->isIfCondUsingAssignIdenticalVariable(
+            $if,
+            $prevIf->expr
+        )) {
             $start = $prevIf;
             while ($prevIf instanceof Expression) {
                 $expr = $this->processNullSafeExpr($prevIf->expr->expr);
@@ -325,7 +329,10 @@ CODE_SAMPLE
             while ($node) {
                 /** @var If_ $if */
                 $if = $node->getAttribute(AttributeKey::NEXT_NODE);
-                if ($node instanceof Expression && $this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $node->expr)) {
+                if ($node instanceof Expression && $this->ifManipulator->isIfCondUsingAssignIdenticalVariable(
+                    $if,
+                    $node->expr
+                )) {
                     break;
                 }
 
