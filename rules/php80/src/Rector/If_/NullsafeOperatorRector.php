@@ -155,13 +155,18 @@ CODE_SAMPLE
             $nullSafe = $this->processNullSafeExprResult($expr, $nullSafeIdentifier);
         }
 
-        $nextOfNextNode = null;
         if ($nextNode !== null) {
             $nextOfNextNode = $nextNode->getAttribute(AttributeKey::NEXT_NODE);
             while ($nextOfNextNode) {
                 if ($nextOfNextNode instanceof If_) {
-                    $if->stmts[2] = $this->processNullSafeOperatorNotIdentical($nextOfNextNode);
-                    return $if;
+                    $beforeIf = $nextOfNextNode->getAttribute(AttributeKey::PARENT_NODE);
+                    $nullSafe = $this->processNullSafeOperatorNotIdentical($nextOfNextNode);
+                    if (! $nullSafe instanceof NullsafeMethodCall && ! $nullSafe instanceof PropertyFetch) {
+                        return $beforeIf;
+                    }
+
+                    $beforeIf->stmts[count($beforeIf->stmts) - 1] = new Expression($nullSafe);
+                    return $beforeIf;
                 }
 
                 $nextOfNextNode = $nextOfNextNode->getAttribute(AttributeKey::NEXT_NODE);
