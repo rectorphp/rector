@@ -155,6 +155,19 @@ CODE_SAMPLE
             $nullSafe = $this->processNullSafeExprResult($expr, $nullSafeIdentifier);
         }
 
+        $nextOfNextNode = null;
+        if ($nextNode !== null) {
+            $nextOfNextNode = $nextNode->getAttribute(AttributeKey::NEXT_NODE);
+            while ($nextOfNextNode) {
+                if ($nextOfNextNode instanceof If_) {
+                    $if->stmts[2] = $this->processNullSafeOperatorNotIdentical($nextOfNextNode);
+                    return $if;
+                }
+
+                $nextOfNextNode = $nextOfNextNode->getAttribute(AttributeKey::NEXT_NODE);
+            }
+        }
+
         if (! $nextNode instanceof If_) {
             return new Assign($assign->var, $nullSafe);
         }
