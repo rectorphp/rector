@@ -25,7 +25,7 @@ class SomeClassNoReturnLast
 {
     public function f($o)
     {
-        $o?->mayFail1()?->mayFail2();
+        $o->mayFail1()?->mayFail2();
     }
 }
 

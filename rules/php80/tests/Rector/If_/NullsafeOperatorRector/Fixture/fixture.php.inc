@@ -25,7 +25,7 @@ class SomeClass
 {
     public function f($o)
     {
-        return $o?->mayFail1()?->mayFail2();
+        return $o->mayFail1()?->mayFail2();
     }
 }
 
