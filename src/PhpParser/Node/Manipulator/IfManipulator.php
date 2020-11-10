@@ -325,7 +325,9 @@ final class IfManipulator
             return false;
         }
 
-        return $this->constFetchManipulator->isNull($notIdentical->right) || $this->constFetchManipulator->isNull($notIdentical->left);
+        return $this->constFetchManipulator->isNull($notIdentical->right) || $this->constFetchManipulator->isNull(
+            $notIdentical->left
+        );
     }
 
     private function isIfWithOnlyStmtIf(If_ $if): bool

@@ -176,7 +176,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return  $if->cond instanceof Identical && $this->areNodesEqual($this->getIfVar($if), $assign->var);
+        return $if->cond instanceof Identical && $this->areNodesEqual($this->getIfVar($if), $assign->var);
     }
 
     private function processAssign(Assign $assign, Node $prevNode, Node $nextNode, bool $isStartIf): ?Node
