@@ -365,4 +365,29 @@ final class IfManipulator
 
         return ! (bool) $if->elseifs;
     }
+
+    private function getIfVar(If_ $if): Node
+    {
+        /** @var Identical|NotIdentical $ifCond */
+        $ifCond = $if->cond;
+        return $this->constFetchManipulator->isNull($ifCond->left) ? $ifCond->right : $ifCond->left;
+    }
+
+    public function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
+    {
+        if (! ($if instanceof If_ && $assign instanceof Assign)) {
+            return false;
+        }
+
+        return $if->cond instanceof Identical && $this->betterStandardPrinter->areNodesEqual($this->getIfVar($if), $assign->var);
+    }
+
+    public function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $expr): bool
+    {
+        if (! $expr instanceof MethodCall && ! $expr instanceof PropertyFetch) {
+            return false;
+        }
+
+        return $if->cond instanceof NotIdentical && ! $this->betterStandardPrinter->areNodesEqual($this->getIfVar($if), $expr->var);
+    }
 }

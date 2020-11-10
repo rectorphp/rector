@@ -115,7 +115,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $prevNode instanceof Expression || ! $this->isIfCondUsingAssignIdenticalVariable($if, $prevNode->expr)) {
+        if (! $prevNode instanceof Expression || ! $this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $prevNode->expr)) {
             return null;
         }
 
@@ -132,7 +132,7 @@ CODE_SAMPLE
         }
 
         $assignExpr = $assign->expr;
-        if ($this->isIfCondUsingAssignNotIdenticalVariable($if, $assignExpr)) {
+        if ($this->ifManipulator->isIfCondUsingAssignNotIdenticalVariable($if, $assignExpr)) {
             return null;
         }
 
@@ -163,22 +163,6 @@ CODE_SAMPLE
         return $this->processNullSafeOperatorNotIdentical($nextNode, $nullSafe);
     }
 
-    private function getIfVar(If_ $if): Node
-    {
-        /** @var Identical|NotIdentical $ifCond */
-        $ifCond = $if->cond;
-        return $this->isNull($ifCond->left) ? $ifCond->right : $ifCond->left;
-    }
-
-    private function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
-    {
-        if (! ($if instanceof If_ && $assign instanceof Assign)) {
-            return false;
-        }
-
-        return $if->cond instanceof Identical && $this->areNodesEqual($this->getIfVar($if), $assign->var);
-    }
-
     private function processAssign(Assign $assign, Node $prevNode, Node $nextNode, bool $isStartIf): ?Node
     {
         if ($assign instanceof Assign && property_exists(
@@ -189,15 +173,6 @@ CODE_SAMPLE
         }
 
         return $this->processAssignMayInNextNode($nextNode);
-    }
-
-    private function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $expr): bool
-    {
-        if (! $expr instanceof MethodCall && ! $expr instanceof PropertyFetch) {
-            return false;
-        }
-
-        return $if->cond instanceof NotIdentical && ! $this->areNodesEqual($this->getIfVar($if), $expr->var);
     }
 
     private function processNullSafeExpr(Expr $expr): ?Expr
@@ -290,7 +265,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isIfCondUsingAssignIdenticalVariable($mayNextIf, $nextNode->expr)) {
+        if ($this->ifManipulator->isIfCondUsingAssignIdenticalVariable($mayNextIf, $nextNode->expr)) {
             return $this->processNullSafeOperatorIdentical($mayNextIf, false);
         }
 
@@ -300,7 +275,7 @@ CODE_SAMPLE
     private function getNullSafeOnPrevAssignIsIf(If_ $if, Node $nextNode, ?Expr $expr): ?Expr
     {
         $prevIf = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($prevIf instanceof Expression && $this->isIfCondUsingAssignIdenticalVariable($if, $prevIf->expr)) {
+        if ($prevIf instanceof Expression && $this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $prevIf->expr)) {
             $start = $prevIf;
             while ($prevIf instanceof Expression) {
                 $expr = $this->processNullSafeExpr($prevIf->expr->expr);
@@ -350,7 +325,7 @@ CODE_SAMPLE
             while ($node) {
                 /** @var If_ $if */
                 $if = $node->getAttribute(AttributeKey::NEXT_NODE);
-                if ($node instanceof Expression && $this->isIfCondUsingAssignIdenticalVariable($if, $node->expr)) {
+                if ($node instanceof Expression && $this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $node->expr)) {
                     break;
                 }
 
