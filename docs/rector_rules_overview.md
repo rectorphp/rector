@@ -12369,7 +12369,7 @@ Change if null check with nullsafe operator ?-> with full short circuiting
 -        }
 -
 -        return $o2->mayFail2();
-+        return $o?->mayFail1()?->mayFail2();
++        return $o->mayFail1()?->mayFail2();
      }
  }
 ```
