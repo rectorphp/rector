@@ -163,17 +163,20 @@ CODE_SAMPLE
         return $this->processNullSafeOperatorNotIdentical($nextNode, $nullSafe);
     }
 
+    private function getIfVar(If_ $if): Node
+    {
+        /** @var Identical|NotIdentical $ifCond */
+        $ifCond = $if->cond;
+        return $this->isNull($ifCond->left) ? $ifCond->right : $ifCond->left;
+    }
+
     private function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
     {
-        if (! $assign instanceof Assign) {
+        if (! ($if instanceof If_ && $assign instanceof Assign)) {
             return false;
         }
 
-        $ifVar = $this->isNull($if->cond->left)
-            ? $if->cond->right
-            : $if->cond->left;
-
-        return $if->cond instanceof Identical && $this->areNodesEqual($ifVar, $assign->var);
+        return  $if->cond instanceof Identical && $this->areNodesEqual($this->getIfVar($if), $assign->var);
     }
 
     private function processAssign(Assign $assign, Node $prevNode, Node $nextNode, bool $isStartIf): ?Node
@@ -188,17 +191,13 @@ CODE_SAMPLE
         return $this->processAssignMayInNextNode($nextNode);
     }
 
-    private function isIfCondUsingAssignNotIdenticalVariable(Node $if, Node $expr): bool
+    private function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $expr): bool
     {
         if (! $expr instanceof MethodCall && ! $expr instanceof PropertyFetch) {
             return false;
         }
 
-        $ifVar = $this->isNull($if->cond->left)
-            ? $if->cond->right
-            : $if->cond->left;
-
-        return $if->cond instanceof NotIdentical && ! $this->areNodesEqual($ifVar, $expr->var);
+        return $if->cond instanceof NotIdentical && ! $this->areNodesEqual($this->getIfVar($if), $expr->var);
     }
 
     private function processNullSafeExpr(Expr $expr): ?Expr

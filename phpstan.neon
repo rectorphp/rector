@@ -692,7 +692,7 @@ parameters:
         - '#Class with base "Application" name is already used in "(.*?)\\Symfony\\Component\\Console\\Application", "Symfony\\Component\\Console\\Application", "Rector\\Core\\Console\\Application"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
         - '#Class cognitive complexity for "BetterStandardPrinter" is 52, keep it under 50#'
-        - '#Class cognitive complexity for "NullsafeOperatorRector" is 53, keep it under 50#'
+        - '#Class cognitive complexity for "NullsafeOperatorRector" is \d+, keep it under 50#'
 
         -
             message: '#Node "errorsuppress" is fobidden to use#'
