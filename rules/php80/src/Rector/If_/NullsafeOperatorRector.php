@@ -87,7 +87,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $processNullSafeOperator = $this->processNullSafeOperator($node);
+        $processNullSafeOperator = $this->processNullSafeOperator($node, $node);
         if ($processNullSafeOperator !== null) {
             /** @var Expression $prevNode */
             $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
@@ -97,7 +97,7 @@ CODE_SAMPLE
         return $processNullSafeOperator;
     }
 
-    private function processNullSafeOperator(If_ $if): ?Node
+    private function processNullSafeOperator(If_ $if, ?If_ $startIf = null): ?Node
     {
         $comparedNode = $this->ifManipulator->matchIfValueReturnValue($if);
         if ($comparedNode === null) {
@@ -117,7 +117,7 @@ CODE_SAMPLE
 
         /** @var Assign $assign */
         $assign = $prevNode->expr;
-        return $this->processAssign($assign, $prevNode, $nextNode);
+        return $this->processAssign($assign, $prevNode, $nextNode, $startIf);
     }
 
     private function isIfCondUsingAssignVariable(Node $if, Node $assign): bool
@@ -129,21 +129,27 @@ CODE_SAMPLE
         return $if->cond instanceof Identical && $this->areNodesEqual($if->cond->left, $assign->var);
     }
 
-    private function processAssign(Assign $assign, Node $prevNode, Node $nextNode): ?Node
+    private function processAssign(Assign $assign, Node $prevNode, Node $nextNode, ?If_ $startIf = null): ?Node
     {
         if ($assign instanceof Assign && property_exists(
             $assign->expr,
             self::NAME
         ) && property_exists($nextNode, 'expr') && property_exists($nextNode->expr, self::NAME)) {
-            return $this->processAssignInCurrentNode($assign, $prevNode, $nextNode);
+            return $this->processAssignInCurrentNode($assign, $prevNode, $nextNode, $startIf);
         }
 
         return $this->processAssignMayInNextNode($nextNode);
     }
 
-    private function processAssignInCurrentNode(Assign $assign, Node $prevNode, Node $nextNode): ?Node
-    {
-        $assignNullSafe = $this->processNullSafeExpr($assign->expr);
+    private function processAssignInCurrentNode(
+        Assign $assign,
+        Node $prevNode,
+        Node $nextNode,
+        ?If_ $startIf = null
+    ): ?Node {
+        $assignNullSafe = $startIf === null
+            ? $this->processNullSafeExpr($assign->expr)
+            : $assign->expr;
         $nullSafe = $this->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
 
         $prevAssign = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
@@ -198,7 +204,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($expr instanceof NullsafeMethodCall) {
+        if ($expr instanceof MethodCall || $expr instanceof NullsafeMethodCall) {
             return new NullsafeMethodCall($expr, $nextExprIdentifier);
         }
 
@@ -223,6 +229,7 @@ CODE_SAMPLE
                 }
             }
 
+            $expr = $expr->var->getAttribute(AttributeKey::PARENT_NODE);
             $expr = $this->getNullSafeAfterStartUntilBeforeEnd($start, $expr);
             $expr = $this->processNullSafeExprResult($expr, $nextNode->expr->name);
         }

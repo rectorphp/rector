@@ -40,7 +40,7 @@ class SomeClassMultipleIf
 {
     public function f($o)
     {
-        return $o?->mayFail1()?->mayFail2()?->mayFail3()?->mayFail4()?->mayFail5();
+        return $o->mayFail1()?->mayFail2()?->mayFail3()?->mayFail4()?->mayFail5();
     }
 }
 

@@ -25,7 +25,7 @@ class SomeClassNextProperty
 {
     public function f($o)
     {
-        return $o?->property1?->property2;
+        return $o->property1?->property2;
     }
 }
 

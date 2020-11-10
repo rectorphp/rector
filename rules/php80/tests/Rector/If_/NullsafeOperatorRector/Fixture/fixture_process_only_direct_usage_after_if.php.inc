@@ -44,7 +44,7 @@ class SomeClassProcessOnlyDirectUsageAfterIf
 
         echo 'STATEMENT HERE';
 
-        return $o2?->mayFail2()?->mayFail3()?->mayFail4();
+        return $o2->mayFail2()?->mayFail3()?->mayFail4();
     }
 }
 
