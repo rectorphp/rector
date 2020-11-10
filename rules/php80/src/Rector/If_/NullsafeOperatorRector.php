@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -234,7 +233,7 @@ CODE_SAMPLE
                 return $expr;
             }
 
-            /** @var MethodCall|PropertyFetch $expr */
+            /** @var Expr $expr */
             $expr = $expr->var->getAttribute(AttributeKey::PARENT_NODE);
             $expr = $this->getNullSafeAfterStartUntilBeforeEnd($start, $expr);
             $expr = $this->processNullSafeExprResult($expr, $nextNode->expr->name);
