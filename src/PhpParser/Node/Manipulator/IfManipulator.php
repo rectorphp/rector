@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
@@ -300,6 +302,30 @@ final class IfManipulator
         return count($if->stmts) === 1;
     }
 
+    public function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
+    {
+        if (! ($if instanceof If_ && $assign instanceof Assign)) {
+            return false;
+        }
+
+        return $if->cond instanceof Identical && $this->betterStandardPrinter->areNodesEqual(
+            $this->getIfVar($if),
+            $assign->var
+        );
+    }
+
+    public function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $expr): bool
+    {
+        if (! $expr instanceof MethodCall && ! $expr instanceof PropertyFetch) {
+            return false;
+        }
+
+        return $if->cond instanceof NotIdentical && ! $this->betterStandardPrinter->areNodesEqual(
+            $this->getIfVar($if),
+            $expr->var
+        );
+    }
+
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr
     {
         if ($this->betterStandardPrinter->areNodesEqual(
@@ -371,23 +397,5 @@ final class IfManipulator
         /** @var Identical|NotIdentical $ifCond */
         $ifCond = $if->cond;
         return $this->constFetchManipulator->isNull($ifCond->left) ? $ifCond->right : $ifCond->left;
-    }
-
-    public function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
-    {
-        if (! ($if instanceof If_ && $assign instanceof Assign)) {
-            return false;
-        }
-
-        return $if->cond instanceof Identical && $this->betterStandardPrinter->areNodesEqual($this->getIfVar($if), $assign->var);
-    }
-
-    public function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $expr): bool
-    {
-        if (! $expr instanceof MethodCall && ! $expr instanceof PropertyFetch) {
-            return false;
-        }
-
-        return $if->cond instanceof NotIdentical && ! $this->betterStandardPrinter->areNodesEqual($this->getIfVar($if), $expr->var);
     }
 }
