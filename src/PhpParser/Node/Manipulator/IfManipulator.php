@@ -101,6 +101,10 @@ final class IfManipulator
             return null;
         }
 
+        if (! $if->cond instanceof NotIdentical || ! $this->matchComparedNode($if->cond)) {
+            return null;
+        }
+
         $insideIfNode = $if->stmts[0];
         if (! $insideIfNode instanceof Expression || ! $insideIfNode->expr instanceof Assign) {
             return null;
@@ -308,6 +312,19 @@ final class IfManipulator
         if (! $this->betterStandardPrinter->areNodesEqual($notIdentical->right, $return->expr)) {
             return null;
         }
+        if ($this->constFetchManipulator->isNull($notIdentical->left)) {
+            return $notIdentical->right;
+        }
+
+        return null;
+    }
+
+    private function matchComparedNode(NotIdentical $notIdentical): ?Expr
+    {
+        if ($this->constFetchManipulator->isNull($notIdentical->right)) {
+            return $notIdentical->left;
+        }
+
         if ($this->constFetchManipulator->isNull($notIdentical->left)) {
             return $notIdentical->right;
         }
