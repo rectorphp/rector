@@ -9,29 +9,6 @@ use Nette\Utils\Strings;
 final class ContentPatcher
 {
     /**
-     * @see https://regex101.com/r/4mBd0y/2
-     * @var string
-     */
-    private const CODE_MAY_DUPLICATE_REGEX = '#(if\s{0,}\(%s\(.*\{\s{0,}.*\s{0,}\}){2}#';
-
-    /**
-     * @see https://regex101.com/r/k48bUj/1
-     * @var string
-     */
-    private const CODE_MAY_DUPLICATE_NO_BRACKET_REGEX = '#(if\s{0,}\(%s\(.*\s{1,}.*\s{0,}){2}#';
-
-    /**
-     * @see https://regex101.com/r/Ef83BV/1
-     * @var string
-     */
-    private const SPACE_REGEX = '#\s#';
-
-    /**
-     * @var string[]
-     */
-    private const MAY_DUPLICATE_FUNC_CALLS = ['interface_exists', 'trait_exists'];
-
-    /**
      * @see https://regex101.com/r/cLgjQf/3
      * @var string
      */
@@ -54,6 +31,29 @@ final class ContentPatcher
      * @var string
      */
     public const INVALID_ANNOTATION_ROUTE_REGEX = '#\*\s+@.*=\s?".{1,}"}\)#';
+
+    /**
+     * @see https://regex101.com/r/4mBd0y/2
+     * @var string
+     */
+    private const CODE_MAY_DUPLICATE_REGEX = '#(if\s{0,}\(%s\(.*\{\s{0,}.*\s{0,}\}){2}#';
+
+    /**
+     * @see https://regex101.com/r/k48bUj/1
+     * @var string
+     */
+    private const CODE_MAY_DUPLICATE_NO_BRACKET_REGEX = '#(if\s{0,}\(%s\(.*\s{1,}.*\s{0,}){2}#';
+
+    /**
+     * @see https://regex101.com/r/Ef83BV/1
+     * @var string
+     */
+    private const SPACE_REGEX = '#\s#';
+
+    /**
+     * @var string[]
+     */
+    private const MAY_DUPLICATE_FUNC_CALLS = ['interface_exists', 'trait_exists'];
 
     /**
      * @see https://github.com/rectorphp/rector/issues/4499
