@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace Rector\Core\Tests\Issues\Issue4274\DoNotChangeAnnotationCallback\Fixture;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

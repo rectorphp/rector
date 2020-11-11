@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues\Issue4499\DoNotChangeAnnotationCallback;
+namespace Rector\Core\Tests\Issues\Issue4274\DoNotChangeAnnotationCallback;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
