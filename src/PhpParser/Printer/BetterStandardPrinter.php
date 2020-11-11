@@ -93,13 +93,25 @@ final class BetterStandardPrinter extends Standard
      * @see https://regex101.com/r/cLgjQf/3
      * @var string
      */
-    private const VALID_ANNOTATION_REGEX = '#\*\s+@.*".{1,}"}\)#';
+    private const VALID_ANNOTATION_STRING_REGEX = '#\*\s+@.*".{1,}"}\)#';
 
     /**
      * @see https://regex101.com/r/BhxeM8/3
      * @var string
      */
-    private const INVALID_ANNOTATION_REGEX = '#\*\s+@.*.{1,}[^"]}\)#';
+    private const INVALID_ANNOTATION_STRING_REGEX = '#\*\s+@.*.{1,}[^"]}\)#';
+
+    /**
+     * @see https://regex101.com/r/wpVS09/1
+     * @var string
+     */
+    private const VALID_ANNOTATION_ROUTE_REGEX = '#\*\s+@.*:\s?".{1,}"}\)#';
+
+    /**
+     * @see https://regex101.com/r/cIgWGi/1
+     * @var string
+     */
+    private const INVALID_ANNOTATION_ROUTE_REGEX = '#\*\s+@.*=\s?".{1,}"}\)#';
 
     /**
      * @var string[]
@@ -160,7 +172,11 @@ final class BetterStandardPrinter extends Standard
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
         $content = $this->cleanUpDuplicateContent($content);
-        $content = $this->rollbackValidAnnotation($this->print($origStmts), $content);
+
+        $contentOriginal = $this->print($origStmts);
+
+        $content = $this->rollbackValidStringAnnotation($contentOriginal, $content);
+        $content = $this->rollbackValidRouteAnnotation($contentOriginal, $content);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
@@ -574,16 +590,37 @@ final class BetterStandardPrinter extends Standard
 
     /**
      * @see https://github.com/rectorphp/rector/issues/4274
-     * @see https://github.com/rectorphp/rector/issues/4573
      */
-    private function rollbackValidAnnotation(string $originalContent, string $content): string
+    private function rollbackValidStringAnnotation(string $originalContent, string $content): string
     {
-        $matchesValidAnnotation = Strings::matchAll($originalContent, self::VALID_ANNOTATION_REGEX);
+        $matchesValidAnnotation = Strings::matchAll($originalContent, self::VALID_ANNOTATION_STRING_REGEX);
         if ($matchesValidAnnotation === []) {
             return $content;
         }
 
-        $matchesInValidAnnotation = Strings::matchAll($content, self::INVALID_ANNOTATION_REGEX);
+        $matchesInValidAnnotation = Strings::matchAll($content, self::INVALID_ANNOTATION_STRING_REGEX);
+        if ($matchesInValidAnnotation === []) {
+            return $content;
+        }
+
+        foreach ($matchesValidAnnotation as $key => $match) {
+            $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
+        }
+
+        return $content;
+    }
+
+    /**
+     * @see https://github.com/rectorphp/rector/issues/4573
+     */
+    private function rollbackValidRouteAnnotation(string $originalContent, string $content): string
+    {
+        $matchesValidAnnotation = Strings::matchAll($originalContent, self::VALID_ANNOTATION_ROUTE_REGEX);
+        if ($matchesValidAnnotation === []) {
+            return $content;
+        }
+
+        $matchesInValidAnnotation = Strings::matchAll($content, self::INVALID_ANNOTATION_ROUTE_REGEX);
         if ($matchesInValidAnnotation === []) {
             return $content;
         }
