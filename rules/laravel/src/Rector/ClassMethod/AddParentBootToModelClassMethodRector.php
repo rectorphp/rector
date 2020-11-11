@@ -20,6 +20,11 @@ use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 final class AddParentBootToModelClassMethodRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const BOOT = 'boot';
+
+    /**
      * @var StaticCallAnalyzer
      */
     private $staticCallAnalyzer;
@@ -81,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isName($node->name, 'boot')) {
+        if (! $this->isName($node->name, self::BOOT)) {
             return null;
         }
 
@@ -92,7 +97,7 @@ CODE_SAMPLE
 
             // is in the 1st position? → only correct place
             // @see https://laracasts.com/discuss/channels/laravel/laravel-57-upgrade-observer-problem?page=0#reply=454409
-            if (! $this->staticCallAnalyzer->isParentCallNamed($classMethodStmt, 'boot')) {
+            if (! $this->staticCallAnalyzer->isParentCallNamed($classMethodStmt, self::BOOT)) {
                 continue;
             }
 
@@ -105,7 +110,7 @@ CODE_SAMPLE
         }
 
         // missing, we need to add one
-        $staticCall = $this->nodeFactory->createStaticCall('parent', 'boot');
+        $staticCall = $this->nodeFactory->createStaticCall('parent', self::BOOT);
         $parentStaticCallExpression = new Expression($staticCall);
 
         $node->stmts = array_merge([$parentStaticCallExpression], (array) $node->stmts);
