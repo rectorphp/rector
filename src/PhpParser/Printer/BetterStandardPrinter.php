@@ -171,28 +171,6 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * @see https://github.com/rectorphp/rector/issues/4274
-     */
-    private function rollbackValidAnnotation(string $originalContent, string $content): string
-    {
-        $matchesValidAnnotation = Strings::matchAll($originalContent, self::VALID_ANNOTATION_REGEX);
-        if (! $matchesValidAnnotation) {
-            return $content;
-        }
-
-        $matchesInValidAnnotation = Strings::matchAll($content, self::INVALID_ANNOTATION_REGEX);
-        if (! $matchesInValidAnnotation) {
-            return $content;
-        }
-
-        foreach ($matchesValidAnnotation as $key => $match) {
-            $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
-        }
-
-        return $content;
-    }
-
-    /**
      * @param Node|Node[]|null $node
      */
     public function printWithoutComments($node): string
@@ -515,6 +493,28 @@ final class BetterStandardPrinter extends Standard
     {
         // parent throws exception, but we need to compare string
         return '`' . $encapsedStringPart->value . '`';
+    }
+
+    /**
+     * @see https://github.com/rectorphp/rector/issues/4274
+     */
+    private function rollbackValidAnnotation(string $originalContent, string $content): string
+    {
+        $matchesValidAnnotation = Strings::matchAll($originalContent, self::VALID_ANNOTATION_REGEX);
+        if (! $matchesValidAnnotation) {
+            return $content;
+        }
+
+        $matchesInValidAnnotation = Strings::matchAll($content, self::INVALID_ANNOTATION_REGEX);
+        if (! $matchesInValidAnnotation) {
+            return $content;
+        }
+
+        foreach ($matchesValidAnnotation as $key => $match) {
+            $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
+        }
+
+        return $content;
     }
 
     /**
