@@ -496,28 +496,6 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * @see https://github.com/rectorphp/rector/issues/4274
-     */
-    private function rollbackValidAnnotation(string $originalContent, string $content): string
-    {
-        $matchesValidAnnotation = Strings::matchAll($originalContent, self::VALID_ANNOTATION_REGEX);
-        if (! $matchesValidAnnotation) {
-            return $content;
-        }
-
-        $matchesInValidAnnotation = Strings::matchAll($content, self::INVALID_ANNOTATION_REGEX);
-        if (! $matchesInValidAnnotation) {
-            return $content;
-        }
-
-        foreach ($matchesValidAnnotation as $key => $match) {
-            $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
-        }
-
-        return $content;
-    }
-
-    /**
      * @param Node[] $stmts
      * @return Node[]|mixed[]
      */
@@ -589,6 +567,28 @@ final class BetterStandardPrinter extends Standard
             if ($firstMatch === str_repeat($secondMatch, 2)) {
                 $content = str_replace($matches[0], $matches[1], $content);
             }
+        }
+
+        return $content;
+    }
+
+    /**
+     * @see https://github.com/rectorphp/rector/issues/4274
+     */
+    private function rollbackValidAnnotation(string $originalContent, string $content): string
+    {
+        $matchesValidAnnotation = Strings::matchAll($originalContent, self::VALID_ANNOTATION_REGEX);
+        if ($matchesValidAnnotation === []) {
+            return $content;
+        }
+
+        $matchesInValidAnnotation = Strings::matchAll($content, self::INVALID_ANNOTATION_REGEX);
+        if ($matchesInValidAnnotation === []) {
+            return $content;
+        }
+
+        foreach ($matchesValidAnnotation as $key => $match) {
+            $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
         }
 
         return $content;
