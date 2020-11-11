@@ -425,6 +425,11 @@ final class NodeFactory
         return $uses;
     }
 
+    public function createStaticCall(string $class, string $method): StaticCall
+    {
+        return new StaticCall(new Name($class), $method);
+    }
+
     /**
      * @param mixed $item
      * @param string|int|null $key
