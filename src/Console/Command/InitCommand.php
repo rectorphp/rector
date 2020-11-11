@@ -45,10 +45,10 @@ final class InitCommand extends AbstractCommand
         $rectorConfigFiles = $this->smartFileSystem->exists(getcwd() . '/rector.php');
 
         if (! $rectorConfigFiles) {
-            $this->smartFileSystem->copy(__DIR__ . '/../../../rector.php.dist', getcwd() . '/rector.php');
-            $this->symfonyStyle->success('rector.php config file has been generated successfully');
+            $this->smartFileSystem->copy(__DIR__ . '/../../../templates/rector.php.dist', getcwd() . '/rector.php');
+            $this->symfonyStyle->success('"rector.php" config file has been generated successfully!');
         } else {
-            $this->symfonyStyle->error('Config file not generated. A rector.php configuration file already exists');
+            $this->symfonyStyle->error('Config file not generated. A "rector.php" configuration file already exists');
         }
 
         return ShellCode::SUCCESS;
