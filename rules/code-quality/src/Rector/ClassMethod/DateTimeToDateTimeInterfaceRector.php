@@ -6,13 +6,15 @@ namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use PhpParser\Node;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\UnionType as PHPStanUnionType;
-use PHPStan\Type\ObjectType as PHPStanObjectType;
 use PHPStan\Type\NullType as PHPStanNullType;
+use PHPStan\Type\ObjectType as PHPStanObjectType;
+use PHPStan\Type\UnionType as PHPStanUnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -91,9 +93,9 @@ CODE_SAMPLE
 
     private function refactorTypeHint(Param $param): void
     {
-        $dateTimeInterfaceType = new Name\FullyQualified(\DateTimeInterface::class);
-        if ($param->type instanceof Node\NullableType) {
-            $param->type = new Node\NullableType($dateTimeInterfaceType);
+        $dateTimeInterfaceType = new FullyQualified(DateTimeInterface::class);
+        if ($param->type instanceof NullableType) {
+            $param->type = new NullableType($dateTimeInterfaceType);
             return;
         }
 
@@ -108,11 +110,8 @@ CODE_SAMPLE
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
         }
 
-        $types = [
-            new PHPStanObjectType(DateTime::class),
-            new PHPStanObjectType(DateTimeImmutable::class),
-        ];
-        if ($param->type instanceof Node\NullableType) {
+        $types = [new PHPStanObjectType(DateTime::class), new PHPStanObjectType(DateTimeImmutable::class)];
+        if ($param->type instanceof NullableType) {
             $types[] = new PHPStanNullType();
         }
 
