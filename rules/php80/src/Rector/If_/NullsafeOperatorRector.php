@@ -20,6 +20,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\PhpParser\Node\Manipulator\NullsafeManipulator;
 
 /**
  * @see https://wiki.php.net/rfc/nullsafe_operator
@@ -37,9 +38,15 @@ final class NullsafeOperatorRector extends AbstractRector
      */
     private $ifManipulator;
 
-    public function __construct(IfManipulator $ifManipulator)
+    /**
+     * @var NullsafeManipulator
+     */
+    private $nullsafeManipulator;
+
+    public function __construct(IfManipulator $ifManipulator, NullsafeManipulator $nullsafeManipulator)
     {
         $this->ifManipulator = $ifManipulator;
+        $this->nullSafeManipulator = $nullsafeManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -144,12 +151,12 @@ CODE_SAMPLE
         $nextNode = $expression->getAttribute(AttributeKey::NEXT_NODE);
 
         /** @var NullsafeMethodCall|NullsafePropertyFetch $nullSafe */
-        $nullSafe = $this->processNullSafeExpr($assignExpr);
+        $nullSafe = $this->nullSafeManipulator->processNullSafeExpr($assignExpr);
         if ($expr !== null) {
             /** @var Identifier $nullSafeIdentifier */
             $nullSafeIdentifier = $nullSafe->name;
             /** @var NullsafeMethodCall|NullsafePropertyFetch $nullSafe */
-            $nullSafe = $this->processNullSafeExprResult($expr, $nullSafeIdentifier);
+            $nullSafe = $this->nullSafeManipulator->processNullSafeExprResult($expr, $nullSafeIdentifier);
         }
 
         $nextOfNextNode = $this->processIfMayInNextNode($nextNode);
@@ -174,33 +181,6 @@ CODE_SAMPLE
         }
 
         return $this->processAssignMayInNextNode($nextNode);
-    }
-
-    private function processNullSafeExpr(Expr $expr): ?Expr
-    {
-        if ($expr instanceof MethodCall) {
-            return new NullsafeMethodCall($expr->var, $expr->name);
-        }
-
-        if (property_exists($expr, 'var') && property_exists($expr, self::NAME)) {
-            return new NullsafePropertyFetch($expr->var, $expr->name);
-        }
-
-        return null;
-    }
-
-    private function processNullSafeExprResult(?Expr $expr, Identifier $nextExprIdentifier): ?Expr
-    {
-        if ($expr === null) {
-            return null;
-        }
-
-        $parentIdentifier = $nextExprIdentifier->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentIdentifier instanceof MethodCall || $parentIdentifier instanceof NullsafeMethodCall) {
-            return new NullsafeMethodCall($expr, $nextExprIdentifier);
-        }
-
-        return new NullsafePropertyFetch($expr, $nextExprIdentifier);
     }
 
     private function processIfMayInNextNode(?Node $nextNode = null): ?Node
@@ -236,9 +216,9 @@ CODE_SAMPLE
         bool $isStartIf
     ): ?Node {
         $assignNullSafe = ! $isStartIf
-            ? $this->processNullSafeExpr($assign->expr)
+            ? $this->nullSafeManipulator->processNullSafeExpr($assign->expr)
             : $assign->expr;
-        $nullSafe = $this->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
+        $nullSafe = $this->nullSafeManipulator->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
 
         $prevAssign = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
         if ($prevAssign instanceof If_) {
@@ -282,7 +262,7 @@ CODE_SAMPLE
         )) {
             $start = $prevIf;
             while ($prevIf instanceof Expression) {
-                $expr = $this->processNullSafeExpr($prevIf->expr->expr);
+                $expr = $this->nullSafeManipulator->processNullSafeExpr($prevIf->expr->expr);
                 /** @var If_ $prevIf */
                 $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
                 /** @var Expression|Identifier $prevIf */
@@ -301,7 +281,7 @@ CODE_SAMPLE
             /** @var Expr $expr */
             $expr = $expr->var->getAttribute(AttributeKey::PARENT_NODE);
             $expr = $this->getNullSafeAfterStartUntilBeforeEnd($start, $expr);
-            $expr = $this->processNullSafeExprResult($expr, $nextNode->expr->name);
+            $expr = $this->nullSafeManipulator->processNullSafeExprResult($expr, $nextNode->expr->name);
         }
 
         return $expr;
@@ -323,7 +303,7 @@ CODE_SAMPLE
     private function getNullSafeAfterStartUntilBeforeEnd(?Node $node, ?Expr $expr): ?Expr
     {
         while ($node) {
-            $expr = $this->processNullSafeExprResult($expr, $node->expr->expr->name);
+            $expr = $this->nullSafeManipulator->processNullSafeExprResult($expr, $node->expr->expr->name);
 
             $node = $node->getAttribute(AttributeKey::NEXT_NODE);
             while ($node) {
