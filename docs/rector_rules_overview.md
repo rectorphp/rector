@@ -1,4 +1,4 @@
-# All 604 Rectors Overview
+# All 605 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -23,7 +23,7 @@
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (34)
 - [JMS](#jms) (2)
-- [Laravel](#laravel) (3)
+- [Laravel](#laravel) (4)
 - [Legacy](#legacy) (4)
 - [MagicDisclosure](#magicdisclosure) (3)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
@@ -7060,6 +7060,27 @@ Removes JMS\DiExtraBundle\Annotation\Services annotation
 <br><br>
 
 ## Laravel
+
+### `AddParentBootToModelClassMethodRector`
+
+- class: [`Rector\Laravel\Rector\ClassMethod\AddParentBootToModelClassMethodRector`](/rules/laravel/src/Rector/ClassMethod/AddParentBootToModelClassMethodRector.php)
+- [test fixtures](/rules/laravel/tests/Rector/ClassMethod/AddParentBootToModelClassMethodRector/Fixture)
+
+Add parent::boot(); call to `boot()` class method in child of `Illuminate\Database\Eloquent\Model`
+
+```diff
+ use Illuminate\Database\Eloquent\Model;
+
+ class Product extends Model
+ {
+     public function boot()
+     {
++        parent::boot();
+     }
+ }
+```
+
+<br><br>
 
 ### `MinutesToSecondsInCacheRector`
 
