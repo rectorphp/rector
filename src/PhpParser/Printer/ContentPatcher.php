@@ -33,6 +33,18 @@ final class ContentPatcher
     public const INVALID_ANNOTATION_ROUTE_REGEX = '#\*\s+@.*=\s?".{1,}"}\)#';
 
     /**
+     * @see https://regex101.com/r/nCPUz9/2
+     * @var string
+     */
+    public const VALID_ANNOTATION_COMMENT_REGEX = '#\*\s+@.*="[^"]*"}\)#';
+
+    /**
+     * @see https://regex101.com/r/xPg2yo/1
+     * @var string
+     */
+    public const INVALID_ANNOTATION_COMMENT_REGEX = '#\*\s+@.*=".*"}\)#';
+
+    /**
      * @see https://regex101.com/r/4mBd0y/2
      * @var string
      */
@@ -102,6 +114,10 @@ final class ContentPatcher
 
         $matchesInValidAnnotation = Strings::matchAll($content, $invalidAnnotationRegex);
         if ($matchesInValidAnnotation === []) {
+            return $content;
+        }
+
+        if (count($matchesValidAnnotation) !== count($matchesInValidAnnotation)) {
             return $content;
         }
 
