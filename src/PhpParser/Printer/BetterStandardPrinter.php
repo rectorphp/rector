@@ -175,8 +175,8 @@ final class BetterStandardPrinter extends Standard
 
         $contentOriginal = $this->print($origStmts);
 
-        $content = $this->rollbackValidStringAnnotation($contentOriginal, $content);
-        $content = $this->rollbackValidRouteAnnotation($contentOriginal, $content);
+        $content = $this->rollbackValidAnnotation($contentOriginal, $content, self::VALID_ANNOTATION_STRING_REGEX, self::INVALID_ANNOTATION_STRING_REGEX);
+        $content = $this->rollbackValidAnnotation($contentOriginal, $content, self::VALID_ANNOTATION_ROUTE_REGEX, self::INVALID_ANNOTATION_ROUTE_REGEX);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
@@ -590,37 +590,16 @@ final class BetterStandardPrinter extends Standard
 
     /**
      * @see https://github.com/rectorphp/rector/issues/4274
-     */
-    private function rollbackValidStringAnnotation(string $originalContent, string $content): string
-    {
-        $matchesValidAnnotation = Strings::matchAll($originalContent, self::VALID_ANNOTATION_STRING_REGEX);
-        if ($matchesValidAnnotation === []) {
-            return $content;
-        }
-
-        $matchesInValidAnnotation = Strings::matchAll($content, self::INVALID_ANNOTATION_STRING_REGEX);
-        if ($matchesInValidAnnotation === []) {
-            return $content;
-        }
-
-        foreach ($matchesValidAnnotation as $key => $match) {
-            $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
-        }
-
-        return $content;
-    }
-
-    /**
      * @see https://github.com/rectorphp/rector/issues/4573
      */
-    private function rollbackValidRouteAnnotation(string $originalContent, string $content): string
+    private function rollbackValidAnnotation(string $originalContent, string $content, string $validAnnotationRegex, string $invalidAnnotationRegex): string
     {
-        $matchesValidAnnotation = Strings::matchAll($originalContent, self::VALID_ANNOTATION_ROUTE_REGEX);
+        $matchesValidAnnotation = Strings::matchAll($originalContent, $validAnnotationRegex);
         if ($matchesValidAnnotation === []) {
             return $content;
         }
 
-        $matchesInValidAnnotation = Strings::matchAll($content, self::INVALID_ANNOTATION_ROUTE_REGEX);
+        $matchesInValidAnnotation = Strings::matchAll($content, $invalidAnnotationRegex);
         if ($matchesInValidAnnotation === []) {
             return $content;
         }
