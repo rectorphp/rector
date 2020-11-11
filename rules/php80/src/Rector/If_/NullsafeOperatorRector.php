@@ -46,7 +46,7 @@ final class NullsafeOperatorRector extends AbstractRector
     public function __construct(IfManipulator $ifManipulator, NullsafeManipulator $nullsafeManipulator)
     {
         $this->ifManipulator = $ifManipulator;
-        $this->nullSafeManipulator = $nullsafeManipulator;
+        $this->nullsafeManipulator = $nullsafeManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -151,12 +151,12 @@ CODE_SAMPLE
         $nextNode = $expression->getAttribute(AttributeKey::NEXT_NODE);
 
         /** @var NullsafeMethodCall|NullsafePropertyFetch $nullSafe */
-        $nullSafe = $this->nullSafeManipulator->processNullSafeExpr($assignExpr);
+        $nullSafe = $this->nullsafeManipulator->processNullSafeExpr($assignExpr);
         if ($expr !== null) {
             /** @var Identifier $nullSafeIdentifier */
             $nullSafeIdentifier = $nullSafe->name;
             /** @var NullsafeMethodCall|NullsafePropertyFetch $nullSafe */
-            $nullSafe = $this->nullSafeManipulator->processNullSafeExprResult($expr, $nullSafeIdentifier);
+            $nullSafe = $this->nullsafeManipulator->processNullSafeExprResult($expr, $nullSafeIdentifier);
         }
 
         $nextOfNextNode = $this->processIfMayInNextNode($nextNode);
@@ -216,9 +216,9 @@ CODE_SAMPLE
         bool $isStartIf
     ): ?Node {
         $assignNullSafe = ! $isStartIf
-            ? $this->nullSafeManipulator->processNullSafeExpr($assign->expr)
+            ? $this->nullsafeManipulator->processNullSafeExpr($assign->expr)
             : $assign->expr;
-        $nullSafe = $this->nullSafeManipulator->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
+        $nullSafe = $this->nullsafeManipulator->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
 
         $prevAssign = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
         if ($prevAssign instanceof If_) {
@@ -262,7 +262,7 @@ CODE_SAMPLE
         )) {
             $start = $prevIf;
             while ($prevIf instanceof Expression) {
-                $expr = $this->nullSafeManipulator->processNullSafeExpr($prevIf->expr->expr);
+                $expr = $this->nullsafeManipulator->processNullSafeExpr($prevIf->expr->expr);
                 /** @var If_ $prevIf */
                 $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
                 /** @var Expression|Identifier $prevIf */
@@ -281,7 +281,7 @@ CODE_SAMPLE
             /** @var Expr $expr */
             $expr = $expr->var->getAttribute(AttributeKey::PARENT_NODE);
             $expr = $this->getNullSafeAfterStartUntilBeforeEnd($start, $expr);
-            $expr = $this->nullSafeManipulator->processNullSafeExprResult($expr, $nextNode->expr->name);
+            $expr = $this->nullsafeManipulator->processNullSafeExprResult($expr, $nextNode->expr->name);
         }
 
         return $expr;
@@ -303,7 +303,7 @@ CODE_SAMPLE
     private function getNullSafeAfterStartUntilBeforeEnd(?Node $node, ?Expr $expr): ?Expr
     {
         while ($node) {
-            $expr = $this->nullSafeManipulator->processNullSafeExprResult($expr, $node->expr->expr->name);
+            $expr = $this->nullsafeManipulator->processNullSafeExprResult($expr, $node->expr->expr->name);
 
             $node = $node->getAttribute(AttributeKey::NEXT_NODE);
             while ($node) {
