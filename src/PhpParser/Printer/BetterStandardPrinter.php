@@ -90,10 +90,10 @@ final class BetterStandardPrinter extends Standard
     private const SPACE_REGEX = '#\s#';
 
     /**
-     * @see https://regex101.com/r/cLgjQf/5
+     * @see https://regex101.com/r/cLgjQf/6
      * @var string
      */
-    private const VALID_ANNOTATION_REGEX = '#\*\s+@.*:?\s?".{1,}"}\)#';
+    private const VALID_ANNOTATION_REGEX = '#\*\s+@.*(\s?".{1,}"}\)|:\s?".{1,}"}\))#';
 
     /**
      * @see https://regex101.com/r/BhxeM8/4
