@@ -26,8 +26,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DifferAndFormatter::class)
         ->arg('$differ', ref('differ'));
 
-    $services->set(MarkdownDifferAndFormatter::class)
-        ->arg('$markdownDiffer', ref('markdownDiffer'));
 
     $services->set('diffOutputBuilder', StrictUnifiedDiffOutputBuilder::class)
         ->arg('$options', [
@@ -38,11 +36,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set('differ', Differ::class)
         ->arg('$outputBuilder', ref('diffOutputBuilder'));
 
+    // markdown
     $services->set('markdownDiffOutputBuilder', UnifiedDiffOutputBuilder::class)
         ->factory([ref(CompleteUnifiedDiffOutputBuilderFactory::class), 'create']);
 
     $services->set('markdownDiffer', Differ::class)
         ->arg('$outputBuilder', ref('markdownDiffOutputBuilder'));
+
+    $services->set(MarkdownDifferAndFormatter::class)
+        ->arg('$markdownDiffer', ref('markdownDiffer'));
 
     $services->set(ColorConsoleDiffFormatter::class);
 
