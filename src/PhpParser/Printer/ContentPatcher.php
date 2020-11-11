@@ -117,6 +117,10 @@ final class ContentPatcher
             return $content;
         }
 
+        if (count($matchesValidAnnotation) !== count($matchesInValidAnnotation)) {
+            return $content;
+        }
+
         foreach ($matchesValidAnnotation as $key => $match) {
             $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
         }
