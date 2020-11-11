@@ -90,6 +90,18 @@ final class BetterStandardPrinter extends Standard
     private const SPACE_REGEX = '#\s#';
 
     /**
+     * @see https://regex101.com/r/cLgjQf/2
+     * @var string
+     */
+    private const VALID_ANNOTATION_REGEX = '#\s+\*\s+@([a-zA-Z]+\\\\?){0,}\([a-zA-Z]+={.*}\)#';
+
+    /**
+     * @see https://regex101.com/r/BhxeM8/2
+     * @var string
+     */
+    private const INVALID_ANNOTATION_REGEX = '#\s+\*\s+@([a-zA-Z]+\\\\?){0,}\([a-zA-Z]+={.*[^"]}\)#';
+
+    /**
      * @var string[]
      */
     private const MAY_DUPLICATE_FUNC_CALLS = ['interface_exists', 'trait_exists'];
@@ -148,10 +160,33 @@ final class BetterStandardPrinter extends Standard
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
         $content = $this->cleanUpDuplicateContent($content);
+        $content = $this->rollbackValidAnnotation($this->print($origStmts), $content);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
+        }
+
+        return $content;
+    }
+
+    /**
+     * @see https://github.com/rectorphp/rector/issues/4274
+     */
+    private function rollbackValidAnnotation(string $originalContent, string $content): string
+    {
+        $matchesValidAnnotation = Strings::matchAll($originalContent, self::VALID_ANNOTATION_REGEX);
+        if (! $matchesValidAnnotation) {
+            return $content;
+        }
+
+        $matchesInValidAnnotation = Strings::matchAll($content, self::INVALID_ANNOTATION_REGEX);
+        if (! $matchesInValidAnnotation) {
+            return $content;
+        }
+
+        foreach ($matchesValidAnnotation as $key => $match) {
+            $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
         }
 
         return $content;
