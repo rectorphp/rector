@@ -93,13 +93,13 @@ final class BetterStandardPrinter extends Standard
      * @see https://regex101.com/r/cLgjQf/2
      * @var string
      */
-    private const VALID_ANNOTATION_REGEX = '#\s+\*\s+@([a-zA-Z]+\\\\?){0,}\([a-zA-Z]+={.*}\)#';
+    private const VALID_ANNOTATION_REGEX = '#\*\s+@.*".{1,}"}\)#';
 
     /**
      * @see https://regex101.com/r/BhxeM8/2
      * @var string
      */
-    private const INVALID_ANNOTATION_REGEX = '#\s+\*\s+@([a-zA-Z]+\\\\?){0,}\([a-zA-Z]+={.*[^"]}\)#';
+    private const INVALID_ANNOTATION_REGEX = '#\*\s+@.*.{1,}[^"]}\)#';
 
     /**
      * @var string[]
