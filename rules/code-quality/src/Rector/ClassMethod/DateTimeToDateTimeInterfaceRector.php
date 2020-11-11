@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\ClassMethod;
 
+use DateTime;
+use DateTimeImmutable;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type as PHPStanType;
+use PHPStan\Type\UnionType as PHPStanUnionType;
+use PHPStan\Type\ObjectType as PHPStanObjectType;
+use PHPStan\Type\NullType as PHPStanNullType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -104,18 +109,22 @@ CODE_SAMPLE
         }
 
         $types = [
-            new PHPStanType\ObjectType(\DateTime::class),
-            new PHPStanType\ObjectType(\DateTimeImmutable::class),
+            new PHPStanObjectType(DateTime::class),
+            new PHPStanObjectType(DateTimeImmutable::class),
         ];
         if ($param->type instanceof Node\NullableType) {
-            $types[] = new PHPStanType\NullType();
+            $types[] = new PHPStanNullType();
         }
 
-        $phpDocInfo->changeParamType(new PHPStanType\UnionType($types), $param, $this->getName($param->var));
+        $paramName = $this->getName($param->var);
+        if ($paramName === null) {
+            throw new ShouldNotHappenException();
+        }
+        $phpDocInfo->changeParamType(new PHPStanUnionType($types), $param, $paramName);
     }
 
     private function isDateTimeParam(Param $param): bool
     {
-        return $this->nodeTypeResolver->isObjectTypeOrNullableObjectType($param, \DateTime::class);
+        return $this->nodeTypeResolver->isObjectTypeOrNullableObjectType($param, DateTime::class);
     }
 }
