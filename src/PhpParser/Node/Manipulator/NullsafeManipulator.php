@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -19,7 +20,7 @@ final class NullsafeManipulator
             return new NullsafeMethodCall($expr->var, $expr->name);
         }
 
-        if (property_exists($expr, 'var') && property_exists($expr, 'name')) {
+        if ($expr instanceof PropertyFetch) {
             return new NullsafePropertyFetch($expr->var, $expr->name);
         }
 
