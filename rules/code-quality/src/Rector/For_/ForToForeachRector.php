@@ -138,6 +138,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $init = $node->init;
+        if (count($init) > 2) {
+            return null;
+        }
+
         $iteratedVariableSingle = $this->inflector->singularize($iteratedVariable);
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
