@@ -11,12 +11,12 @@ final class SkipAnnotationCallback
     /**
      * @Assert\Choice(callback={Invoice::class, "typeChoices"})
      */
-    private ?string $type;
+    private $type;
 
     /**
      * @Assert\Choice(callback={Invoice::class, "typeChoices2"})
      */
-    private ?string $type2;
+    private $type2;
 }
 
 ?>
