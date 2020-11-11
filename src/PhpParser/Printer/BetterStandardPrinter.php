@@ -175,8 +175,18 @@ final class BetterStandardPrinter extends Standard
 
         $contentOriginal = $this->print($origStmts);
 
-        $content = $this->rollbackValidAnnotation($contentOriginal, $content, self::VALID_ANNOTATION_STRING_REGEX, self::INVALID_ANNOTATION_STRING_REGEX);
-        $content = $this->rollbackValidAnnotation($contentOriginal, $content, self::VALID_ANNOTATION_ROUTE_REGEX, self::INVALID_ANNOTATION_ROUTE_REGEX);
+        $content = $this->rollbackValidAnnotation(
+            $contentOriginal,
+            $content,
+            self::VALID_ANNOTATION_STRING_REGEX,
+            self::INVALID_ANNOTATION_STRING_REGEX
+        );
+        $content = $this->rollbackValidAnnotation(
+            $contentOriginal,
+            $content,
+            self::VALID_ANNOTATION_ROUTE_REGEX,
+            self::INVALID_ANNOTATION_ROUTE_REGEX
+        );
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
@@ -592,8 +602,12 @@ final class BetterStandardPrinter extends Standard
      * @see https://github.com/rectorphp/rector/issues/4274
      * @see https://github.com/rectorphp/rector/issues/4573
      */
-    private function rollbackValidAnnotation(string $originalContent, string $content, string $validAnnotationRegex, string $invalidAnnotationRegex): string
-    {
+    private function rollbackValidAnnotation(
+        string $originalContent,
+        string $content,
+        string $validAnnotationRegex,
+        string $invalidAnnotationRegex
+    ): string {
         $matchesValidAnnotation = Strings::matchAll($originalContent, $validAnnotationRegex);
         if ($matchesValidAnnotation === []) {
             return $content;
