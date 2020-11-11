@@ -90,16 +90,16 @@ final class BetterStandardPrinter extends Standard
     private const SPACE_REGEX = '#\s#';
 
     /**
-     * @see https://regex101.com/r/cLgjQf/3
+     * @see https://regex101.com/r/cLgjQf/5
      * @var string
      */
-    private const VALID_ANNOTATION_REGEX = '#\*\s+@.*".{1,}"}\)#';
+    private const VALID_ANNOTATION_REGEX = '#\*\s+@.*:?\s?".{1,}"}\)#';
 
     /**
-     * @see https://regex101.com/r/BhxeM8/3
+     * @see https://regex101.com/r/BhxeM8/4
      * @var string
      */
-    private const INVALID_ANNOTATION_REGEX = '#\*\s+@.*.{1,}[^"]}\)#';
+    private const INVALID_ANNOTATION_REGEX = '#\*\s+@.*(.{1,}[^"]}|=?{".{1,}"})\)#';
 
     /**
      * @var string[]
@@ -574,6 +574,7 @@ final class BetterStandardPrinter extends Standard
 
     /**
      * @see https://github.com/rectorphp/rector/issues/4274
+     * @see https://github.com/rectorphp/rector/issues/4573
      */
     private function rollbackValidAnnotation(string $originalContent, string $content): string
     {
