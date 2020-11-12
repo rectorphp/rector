@@ -11,6 +11,7 @@ use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\Laravel\Rector\Class_\AddMockConsoleOutputFalseToConsoleTestsRector;
 use Rector\Laravel\Rector\ClassMethod\AddParentBootToModelClassMethodRector;
 use Rector\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector;
+use Rector\Laravel\Rector\New_\AddGuardToLoginEventRector;
 use Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -56,4 +57,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddParentBootToModelClassMethodRector::class);
     $services->set(ChangeQueryWhereDateValueWithCarbonRector::class);
     $services->set(AddMockConsoleOutputFalseToConsoleTestsRector::class);
+    $services->set(AddGuardToLoginEventRector::class);
 };

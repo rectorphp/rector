@@ -114,9 +114,7 @@ trait NodeFactoryTrait
      */
     protected function createFuncCall(string $name, array $arguments = []): FuncCall
     {
-        $arguments = $this->createArgs($arguments);
-
-        return new FuncCall(new Name($name), $arguments);
+        return $this->nodeFactory->createFuncCall($name, $arguments);
     }
 
     protected function createClassConstantReference(string $class): ClassConstFetch
