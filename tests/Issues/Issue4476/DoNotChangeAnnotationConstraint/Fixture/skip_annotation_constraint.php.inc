@@ -10,7 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="UserPasswordReset", uniqueConstraints={
  *      @ORM\UniqueConstraint(
  *          name="unique_reset", columns={
- *              "token"
+ *              "token",
+ *              "bar"
  *          }
  *      )
  * })
