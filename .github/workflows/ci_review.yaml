@@ -19,18 +19,6 @@ jobs:
                         check_run: "composer validate-monorepo --ansi"
 
                     -
-                        name: "Sync Doctrine Annotation Parser"
-                        write_run: "bin/rector sync-annotation-parser --ansi"
-                        commit_message: "sync doctrine/annotations parser"
-                        check_run: "bin/rector sync-annotation-parser --dry-run --ansi"
-
-                    -
-                        name: "Sync Rector & Nodes Docs"
-                        write_run: "composer docs"
-                        commit_message: "Generate Rector & Nodes documentation"
-                        check_run: "composer docs"
-
-                    -
                         name: 'Apply Coding Standard'
                         write_run: "composer fix-cs"
                         commit_message: "Apply coding standards"
