@@ -139,7 +139,7 @@ final class ContentPatcher
             $validAnnotation = $match[0];
             $invalidAnnotation = $matchesInValidAnnotation[$key][0];
 
-            if (! $this->isPatchable($validAnnotationRegex, $validAnnotation, $invalidAnnotation)) {
+            if ($this->isSkipped($validAnnotationRegex, $validAnnotation, $invalidAnnotation)) {
                 continue;
             }
 
@@ -149,15 +149,15 @@ final class ContentPatcher
         return $content;
     }
 
-    private function isPatchable(string $validAnnotationRegex, string $validAnnotation, string $invalidAnnotation): bool
+    private function isSkipped(string $validAnnotationRegex, string $validAnnotation, string $invalidAnnotation): bool
     {
         if ($validAnnotationRegex !== self::VALID_ANNOTATION_ROUTE_REGEX) {
-            return str_replace('"', '', $validAnnotation) === str_replace('"', '', $invalidAnnotation);
+            return str_replace('"', '', $validAnnotation) !== str_replace('"', '', $invalidAnnotation);
         }
 
         $validAnnotation = Strings::replace($validAnnotation, self::ROUTE_VALID_REGEX, '');
         $invalidAnnotation = Strings::replace($invalidAnnotation, self::ROUTE_INVALID_REGEX, '');
 
-        return $validAnnotation === $invalidAnnotation;
+        return $validAnnotation !== $invalidAnnotation;
     }
 }
