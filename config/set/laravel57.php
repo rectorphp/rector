@@ -44,6 +44,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 null,
                 'Illuminate\Http\Illuminate\Http'
             ),
+            new ArgumentAdder(
+                'Illuminate\Database\ConnectionInterface',
+                'select',
+                2,
+                'useReadPdo',
+                true
+            ),
+            new ArgumentAdder(
+                'Illuminate\Database\ConnectionInterface',
+                'selectOne',
+                2,
+                'useReadPdo',
+                true
+            ),
         ]),
     ]]);
     $services->set(Redirect301ToPermanentRedirectRector::class);
