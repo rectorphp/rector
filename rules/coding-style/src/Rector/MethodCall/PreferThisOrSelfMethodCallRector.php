@@ -102,6 +102,11 @@ CODE_SAMPLE
         return null;
     }
 
+    public function configure(array $configuration): void
+    {
+        $this->typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? [];
+    }
+
     private function processThisOrSelf(Node $node, string $preference): ?Node
     {
         $this->ensurePreferenceIsValid($preference);
@@ -111,11 +116,6 @@ CODE_SAMPLE
         }
 
         return $this->processToThis($node);
-    }
-
-    public function configure(array $configuration): void
-    {
-        $this->typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? [];
     }
 
     private function ensurePreferenceIsValid(string $preference): void
