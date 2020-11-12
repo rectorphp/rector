@@ -1,7 +1,6 @@
 name: Daily Pull Requests
 
 on:
-    # to try it out
     schedule:
         # https://crontab.guru/once-a-day
         -   cron: "0 0 * * *"
@@ -53,6 +52,6 @@ jobs:
                     token: ${{ secrets.GITHUB_TOKEN }}
                     commit-message: "[automated] ${{ matrix.actions.name }}"
                     base: 'master'
-                    branch: ${{ matrix.actions.name }}
+                    branch: ${{ matrix.actions.branch }}
                     title: '[automated] ${{ matrix.actions.name }}'
                     delete-branch: true
