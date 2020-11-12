@@ -44,8 +44,8 @@ final class TestingClassMethodFactory
         $classMethodBuilder = new MethodBuilder(MethodName::SET_UP);
         $classMethodBuilder->makeProtected();
 
-        $parentSetupStaticCall = $this->createParentSetUpStaticCall();
-        $classMethodBuilder->addStmt($parentSetupStaticCall);
+        $expression = $this->createParentSetUpStaticCall();
+        $classMethodBuilder->addStmt($expression);
         $classMethodBuilder->addStmt($assignExpressionNode);
 
         $classMethod = $classMethodBuilder->getNode();

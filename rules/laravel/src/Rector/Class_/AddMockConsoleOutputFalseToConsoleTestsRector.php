@@ -104,7 +104,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isTestingConsoleOutput($node) === false) {
+        if (! $this->isTestingConsoleOutput($node)) {
             return null;
         }
 
@@ -126,9 +126,16 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function isTestingConsoleOutput(Class_ $class): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst((array) $class->stmts, function (Node $node): bool {
+            return $this->isStaticCallNamed($node, 'Illuminate\Support\Facades\Artisan', 'output');
+        });
+    }
+
     private function hasMockConsoleOutputFalse(Class_ $class): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node) {
+        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node): bool {
             if ($node instanceof Assign) {
                 if (! $this->propertyFetchAnalyzer->isLocalPropertyFetchName($node->var, 'mockConsoleOutput')) {
                     return false;
@@ -145,16 +152,5 @@ CODE_SAMPLE
     {
         $propertyFetch = new PropertyFetch(new Variable('this'), 'mockConsoleOutput');
         return new Assign($propertyFetch, $this->createFalse());
-    }
-
-    private function isTestingConsoleOutput(Class_ $class): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst((array) $class->stmts, function (Node $node) {
-            if ($this->isStaticCallNamed($node, 'Illuminate\Support\Facades\Artisan', 'output')) {
-                return true;
-            }
-
-            return false;
-        });
     }
 }
