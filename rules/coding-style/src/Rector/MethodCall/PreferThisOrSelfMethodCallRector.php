@@ -45,28 +45,28 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
         return new RectorDefinition('Changes $this->... to self:: or vise versa for specific types', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
-class SomeClass extends PHPUnit\TestCase
+class SomeClass extends \PHPUnit\Framework\TestCase
 {
     public function run()
     {
-        $this->assertThis();
+        $this->assertEquals('a', 'a');
     }
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-class SomeClass extends PHPUnit\TestCase
+class SomeClass extends \PHPUnit\Framework\TestCase
 {
     public function run()
     {
-        self::assertThis();
+        self::assertEquals('a', 'a');
     }
 }
 CODE_SAMPLE
                 ,
                 [
                     self::TYPE_TO_PREFERENCE => [
-                        'PHPUnit\TestCase' => self::PREFER_SELF,
+                        \PHPUnit\Framework\TestCase::class => self::PREFER_SELF,
                     ],
                 ]
             ),
