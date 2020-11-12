@@ -128,33 +128,6 @@ CODE_SAMPLE
         return null;
     }
 
-    private function createCompareSignExpr(Expr $expr): Expr
-    {
-        if (! $expr instanceof String_) {
-            return $expr;
-        }
-
-        if ($expr->value === '<') {
-            return new String_('<=');
-        }
-
-        if ($expr->value === '>') {
-            return new String_('>=');
-        }
-
-        return $expr;
-    }
-
-    private function createWhereTimeMethodCall(
-        MethodCall $methodCall,
-        Expr $compareSignExpr,
-        Variable $dateTimeVariable
-    ): MethodCall {
-        $whereTimeArgs = [$methodCall->args[0], new Arg($compareSignExpr), new Arg($dateTimeVariable)];
-
-        return new MethodCall($methodCall->var, 'whereTime', $whereTimeArgs);
-    }
-
     private function matchWhereDateThirdArgValue(MethodCall $methodCall): ?Expr
     {
         if (! $this->isOnClassMethodCall($methodCall, 'Illuminate\Database\Query\Builder', 'whereDate')) {
@@ -180,5 +153,32 @@ CODE_SAMPLE
         }
 
         return $argValue;
+    }
+
+    private function createCompareSignExpr(Expr $expr): Expr
+    {
+        if (! $expr instanceof String_) {
+            return $expr;
+        }
+
+        if ($expr->value === '<') {
+            return new String_('<=');
+        }
+
+        if ($expr->value === '>') {
+            return new String_('>=');
+        }
+
+        return $expr;
+    }
+
+    private function createWhereTimeMethodCall(
+        MethodCall $methodCall,
+        Expr $compareSignExpr,
+        Variable $dateTimeVariable
+    ): MethodCall {
+        $whereTimeArgs = [$methodCall->args[0], new Arg($compareSignExpr), new Arg($dateTimeVariable)];
+
+        return new MethodCall($methodCall->var, 'whereTime', $whereTimeArgs);
     }
 }
