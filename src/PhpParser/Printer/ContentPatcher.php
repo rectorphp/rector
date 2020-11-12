@@ -98,8 +98,10 @@ final class ContentPatcher
     }
 
     /**
+     * @see https://github.com/rectorphp/rector/issues/3673
      * @see https://github.com/rectorphp/rector/issues/4274
      * @see https://github.com/rectorphp/rector/issues/4573
+     * @see https://github.com/rectorphp/rector/issues/4581
      */
     public function rollbackValidAnnotation(
         string $originalContent,
