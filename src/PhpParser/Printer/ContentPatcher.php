@@ -130,7 +130,7 @@ final class ContentPatcher
                 continue;
             }
 
-            $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
+            $content = str_replace($invalidAnnotation, $validAnnotation, $content);
         }
 
         return $content;
