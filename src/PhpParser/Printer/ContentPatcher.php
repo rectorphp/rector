@@ -63,6 +63,18 @@ final class ContentPatcher
     private const SPACE_REGEX = '#\s#';
 
     /**
+     * @see https://regex101.com/r/j7agVx/1
+     * @var string
+     */
+    private const ROUTE_VALID_REGEX = '#"\s?:\s?#';
+
+    /**
+     * @see https://regex101.com/r/qgp6Tr/1
+     * @var string
+     */
+    private const ROUTE_INVALID_REGEX = '#"\s?=\s?#';
+
+    /**
      * @var string[]
      */
     private const MAY_DUPLICATE_FUNC_CALLS = ['interface_exists', 'trait_exists'];
@@ -127,11 +139,7 @@ final class ContentPatcher
             $validAnnotation = $match[0];
             $invalidAnnotation = $matchesInValidAnnotation[$key][0];
 
-            if ($validAnnotationRegex !== self::VALID_ANNOTATION_ROUTE_REGEX && str_replace(
-                '"',
-                '',
-                $validAnnotation
-            ) !== str_replace('"', '', $invalidAnnotation)) {
+            if (! $this->isPatchable($validAnnotationRegex, $validAnnotation, $invalidAnnotation)) {
                 continue;
             }
 
@@ -139,5 +147,17 @@ final class ContentPatcher
         }
 
         return $content;
+    }
+
+    private function isPatchable(string $validAnnotationRegex, string $validAnnotation, string $invalidAnnotation): bool
+    {
+        if ($validAnnotationRegex !== self::VALID_ANNOTATION_ROUTE_REGEX) {
+            return str_replace('"', '', $validAnnotation) === str_replace('"', '', $invalidAnnotation);
+        }
+
+        $validAnnotation = Strings::replace($validAnnotation, self::ROUTE_VALID_REGEX, '');
+        $invalidAnnotation = Strings::replace($invalidAnnotation, self::ROUTE_INVALID_REGEX, '');
+
+        return $validAnnotation === $invalidAnnotation;
     }
 }
