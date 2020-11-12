@@ -86,24 +86,21 @@ CODE_SAMPLE
         }
 
         // is just made with static call?
-        if ($argValue instanceof StaticCall) {
-            /** @var StaticCall $argValue */
-            if ($this->isStaticCallNamed($argValue, 'Carbon\Carbon', 'now')) {
-                // now!
-                // 1. extract assign
-                $dateTimeVariable = new Variable('dateTime');
-                $assign = new Assign($dateTimeVariable, $argValue);
-                $this->addNodeBeforeNode($assign, $node);
+        if ($argValue instanceof StaticCall || $argValue instanceof MethodCall) {
+            // now!
+            // 1. extract assign
+            $dateTimeVariable = new Variable('dateTime');
+            $assign = new Assign($dateTimeVariable, $argValue);
+            $this->addNodeBeforeNode($assign, $node);
 
-                $node->args[2]->value = $dateTimeVariable;
+            $node->args[2]->value = $dateTimeVariable;
 
-                // update assign ">" → ">="
-                $this->changeCompareSignExpr($node->args[1]);
+            // update assign ">" → ">="
+            $this->changeCompareSignExpr($node->args[1]);
 
-                // 2. add "whereTime()" time call
-                $whereTimeMethodCall = $this->createWhereTimeMethodCall($node, $dateTimeVariable);
-                $this->addNodeAfterNode($whereTimeMethodCall, $node);
-            }
+            // 2. add "whereTime()" time call
+            $whereTimeMethodCall = $this->createWhereTimeMethodCall($node, $dateTimeVariable);
+            $this->addNodeAfterNode($whereTimeMethodCall, $node);
 
             return $node;
         }
@@ -165,10 +162,8 @@ CODE_SAMPLE
         }
     }
 
-    private function createWhereTimeMethodCall(
-        MethodCall $methodCall,
-        Variable $dateTimeVariable
-    ): MethodCall {
+    private function createWhereTimeMethodCall(MethodCall $methodCall, Variable $dateTimeVariable): MethodCall
+    {
         $whereTimeArgs = [$methodCall->args[0], $methodCall->args[1], new Arg($dateTimeVariable)];
 
         return new MethodCall($methodCall->var, 'whereTime', $whereTimeArgs);
