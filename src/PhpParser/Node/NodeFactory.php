@@ -431,6 +431,15 @@ final class NodeFactory
     }
 
     /**
+     * @param mixed[] $arguments
+     */
+    public function createFuncCall(string $name, array $arguments): FuncCall
+    {
+        $arguments = $this->createArgs($arguments);
+        return new FuncCall(new Name($name), $arguments);
+    }
+
+    /**
      * @param mixed $item
      * @param string|int|null $key
      */
