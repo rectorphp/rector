@@ -92,6 +92,10 @@ CODE_SAMPLE
                 return $this->processThisOrSelf($node, $preference);
             }
 
+            if ($node instanceof StaticCall && is_a($node->getAttribute('className'), $type, true)) {
+                return $this->processThisOrSelf($node, $preference);
+            }
+
             if (! $this->isObjectType($node, $type)) {
                 continue;
             }
