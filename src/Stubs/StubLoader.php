@@ -35,6 +35,7 @@ final class StubLoader
         $robotLoader->addDirectory($stubDirectory);
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_stubs');
         $robotLoader->register();
+        $robotLoader->rebuild();
 
         $this->areStubsLoaded = true;
     }

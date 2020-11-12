@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -143,7 +144,12 @@ trait NameResolverTrait
             return false;
         }
 
-        if (! $this->isName($node->class, $className)) {
+        // handles (new Some())->...
+        if ($node->class instanceof Expr) {
+            if (! $this->isObjectType($node->class, $className)) {
+                return false;
+            }
+        } elseif (! $this->isName($node->class, $className)) {
             return false;
         }
 

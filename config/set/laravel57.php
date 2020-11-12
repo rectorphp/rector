@@ -8,6 +8,7 @@ use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ArgumentRemover;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
+use Rector\Laravel\Rector\Class_\AddMockConsoleOutputFalseToConsoleTestsRector;
 use Rector\Laravel\Rector\ClassMethod\AddParentBootToModelClassMethodRector;
 use Rector\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector;
 use Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector;
@@ -54,4 +55,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]]);
     $services->set(AddParentBootToModelClassMethodRector::class);
     $services->set(ChangeQueryWhereDateValueWithCarbonRector::class);
+    $services->set(AddMockConsoleOutputFalseToConsoleTestsRector::class);
 };

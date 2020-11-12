@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\SymfonyPHPUnit\Naming\ServiceNaming;
@@ -64,9 +65,9 @@ final class KernelTestCaseNodeFactory
             return null;
         }
 
-        $stmts = array_merge([new StaticCall(new Name('parent'), 'setUp')], $assigns);
+        $stmts = array_merge([new StaticCall(new Name('parent'), MethodName::SET_UP)], $assigns);
 
-        $classMethodBuilder = new MethodBuilder('setUp');
+        $classMethodBuilder = new MethodBuilder(MethodName::SET_UP);
         $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmts($stmts);
 

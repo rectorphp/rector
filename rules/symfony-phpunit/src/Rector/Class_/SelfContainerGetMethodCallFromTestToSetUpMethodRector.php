@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\PHPUnit\Manipulator\OnContainerGetCallManipulator;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeFactory;
 use Rector\SymfonyPHPUnit\SelfContainerMethodCallCollector;
@@ -123,7 +124,7 @@ CODE_SAMPLE
         }
 
         // 2. put them to setUp() method
-        $setUpClassMethod = $node->getMethod('setUp');
+        $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
         if ($setUpClassMethod === null) {
             $setUpClassMethod = $this->kernelTestCaseNodeFactory->createSetUpClassMethodWithGetTypes(
                 $node,
