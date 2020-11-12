@@ -75,6 +75,12 @@ final class ContentPatcher
     private const SPACE_REGEX = '#\s#';
 
     /**
+     * @see https://regex101.com/r/lC0i21/1
+     * @var string
+     */
+    private const STAR_QUOTE_REGEX = '#[\*"]#';
+
+    /**
      * @see https://regex101.com/r/j7agVx/1
      * @var string
      */
@@ -167,11 +173,8 @@ final class ContentPatcher
         $invalidAnnotation = Strings::replace($invalidAnnotation, self::SPACE_REGEX, '');
 
         if ($validAnnotationRegex !== self::VALID_ANNOTATION_ROUTE_REGEX) {
-            $validAnnotation = str_replace('*', '', $validAnnotation);
-            $validAnnotation = str_replace('"', '', $validAnnotation);
-
-            $invalidAnnotation = str_replace('*', '', $invalidAnnotation);
-            $invalidAnnotation = str_replace('"', '', $invalidAnnotation);
+            $validAnnotation = Strings::replace($validAnnotation, self::STAR_QUOTE_REGEX, '');
+            $invalidAnnotation = Strings::replace($invalidAnnotation, self::STAR_QUOTE_REGEX, '');
 
             return $validAnnotation !== $invalidAnnotation;
         }
