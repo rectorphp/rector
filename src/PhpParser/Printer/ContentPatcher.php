@@ -122,6 +122,14 @@ final class ContentPatcher
         }
 
         foreach ($matchesValidAnnotation as $key => $match) {
+
+            $validAnnotation = $match[0];
+            $invalidAnnotation = $matchesInValidAnnotation[$key][0];
+
+            if ($validAnnotationRegex !== self::VALID_ANNOTATION_ROUTE_REGEX && str_replace('"', '', $validAnnotation) !== str_replace('"', "", $invalidAnnotation)) {
+                continue;
+            }
+
             $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
         }
 
