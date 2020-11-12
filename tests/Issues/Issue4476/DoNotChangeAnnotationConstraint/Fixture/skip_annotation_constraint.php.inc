@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues\Issue4476\DoNotChangeAnnotationConstaint\Fixture;
+namespace Rector\Core\Tests\Issues\Issue4476\DoNotChangeAnnotationConstraint\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

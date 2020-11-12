@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues\Issue4476\DoNotChangeAnnotationConstaint;
+namespace Rector\Core\Tests\Issues\Issue4476\DoNotChangeAnnotationConstraint;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DoNotChangeAnnotationConstaintTest extends AbstractRectorTestCase
+final class DoNotChangeAnnotationConstraintTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
