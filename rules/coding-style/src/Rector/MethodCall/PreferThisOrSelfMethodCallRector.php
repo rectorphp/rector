@@ -14,6 +14,7 @@ use Rector\Core\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\PreferThisOrSelfMethodCallRectorTest
@@ -87,12 +88,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        /** @var string $className */
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         foreach ($this->typeToPreference as $type => $preference) {
             if ($node instanceof MethodCall && $this->isObjectType($node->var, $type)) {
                 return $this->processThisOrSelf($node, $preference);
             }
 
-            if ($node instanceof StaticCall && is_a($node->getAttribute('className'), $type, true)) {
+            if ($node instanceof StaticCall && is_a($className, $type, true)) {
                 return $this->processThisOrSelf($node, $preference);
             }
 
@@ -111,6 +114,9 @@ CODE_SAMPLE
         $this->typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? [];
     }
 
+    /**
+     * @param MethodCall|StaticCall $node
+     */
     private function processThisOrSelf(Node $node, string $preference): ?Node
     {
         $this->ensurePreferenceIsValid($preference);
