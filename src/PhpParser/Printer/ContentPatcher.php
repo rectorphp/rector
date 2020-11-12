@@ -45,6 +45,18 @@ final class ContentPatcher
     public const INVALID_ANNOTATION_COMMENT_REGEX = '#\*\s+@.*=".*"}\)#';
 
     /**
+     * @see https://regex101.com/r/5HT5AW/7
+     * @var string
+     */
+    public const VALID_ANNOTATION_CONSTRAINT_REGEX = '#\*\s+@.*\(?[\s\*]{0,}.*\s{0,}={(\s{0,}\*?\s{0,}".*",?){1,}[\s*]+}[\s\*]{1,}\)[\s\*}\)]{0,}#';
+
+    /**
+     * @see https://regex101.com/r/U8KzfW/7
+     * @var string
+     */
+    public const INVALID_ANNOTATION_CONSTRAINT_REGEX = '#\*\s+@.*\(?[\s\*]{0,}.*\s{0,}={[^"].*(,[\s+\*]+.*)?}[\s\*]{1,}\)[\s\*}\)]{0,}#';
+
+    /**
      * @see https://regex101.com/r/4mBd0y/2
      * @var string
      */
@@ -61,6 +73,12 @@ final class ContentPatcher
      * @var string
      */
     private const SPACE_REGEX = '#\s#';
+
+    /**
+     * @see https://regex101.com/r/lC0i21/1
+     * @var string
+     */
+    private const STAR_QUOTE_REGEX = '#[\*"]#';
 
     /**
      * @see https://regex101.com/r/j7agVx/1
@@ -114,6 +132,7 @@ final class ContentPatcher
      * @see https://github.com/rectorphp/rector/issues/4274
      * @see https://github.com/rectorphp/rector/issues/4573
      * @see https://github.com/rectorphp/rector/issues/4581
+     * @see https://github.com/rectorphp/rector/issues/4476
      */
     public function rollbackValidAnnotation(
         string $originalContent,
@@ -151,8 +170,14 @@ final class ContentPatcher
 
     private function isSkipped(string $validAnnotationRegex, string $validAnnotation, string $invalidAnnotation): bool
     {
+        $validAnnotation = Strings::replace($validAnnotation, self::SPACE_REGEX, '');
+        $invalidAnnotation = Strings::replace($invalidAnnotation, self::SPACE_REGEX, '');
+
         if ($validAnnotationRegex !== self::VALID_ANNOTATION_ROUTE_REGEX) {
-            return str_replace('"', '', $validAnnotation) !== str_replace('"', '', $invalidAnnotation);
+            $validAnnotation = Strings::replace($validAnnotation, self::STAR_QUOTE_REGEX, '');
+            $invalidAnnotation = Strings::replace($invalidAnnotation, self::STAR_QUOTE_REGEX, '');
+
+            return $validAnnotation !== $invalidAnnotation;
         }
 
         $validAnnotation = Strings::replace($validAnnotation, self::ROUTE_VALID_REGEX, '');
