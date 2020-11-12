@@ -1,4 +1,4 @@
-# All 605 Rectors Overview
+# All 606 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -23,7 +23,7 @@
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (34)
 - [JMS](#jms) (2)
-- [Laravel](#laravel) (4)
+- [Laravel](#laravel) (5)
 - [Legacy](#legacy) (4)
 - [MagicDisclosure](#magicdisclosure) (3)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
@@ -7076,6 +7076,32 @@ Add parent::boot(); call to `boot()` class method in child of `Illuminate\Databa
      public function boot()
      {
 +        parent::boot();
+     }
+ }
+```
+
+<br><br>
+
+### `ChangeQueryWhereDateValueWithCarbonRector`
+
+- class: [`Rector\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector`](/rules/laravel/src/Rector/MethodCall/ChangeQueryWhereDateValueWithCarbonRector.php)
+- [test fixtures](/rules/laravel/tests/Rector/MethodCall/ChangeQueryWhereDateValueWithCarbonRector/Fixture)
+
+Add parent::boot(); call to `boot()` class method in child of `Illuminate\Database\Eloquent\Model`
+
+```diff
+ use Illuminate\Database\Query\Builder;
+
+ final class SomeClass
+ {
+     public function run(Builder $query)
+     {
+         $query->whereDate(
+             'created_at',
+-            '<',
++            '<=',
+             Carbon::now()
+         );
      }
  }
 ```
