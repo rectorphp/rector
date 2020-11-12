@@ -129,11 +129,7 @@ final class ContentPatcher
                 '"',
                 '',
                 $validAnnotation
-            ) !== str_replace(
-                '"',
-                '',
-                $invalidAnnotation
-            )) {
+            ) !== str_replace('"', '', $invalidAnnotation)) {
                 continue;
             }
 
