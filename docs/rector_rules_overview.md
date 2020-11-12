@@ -2157,6 +2157,7 @@ Changes `$this->...` to self:: or vise versa for specific types
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -2166,7 +2167,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PreferThisOrSelfMethodCallRector::class)
         ->call('configure', [[
             PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
-                'PHPUnit\TestCase' => 'self',
+                TestCase::class => 'self',
             ],
         ]]);
 };
@@ -2175,12 +2176,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ↓
 
 ```diff
- class SomeClass extends PHPUnit\TestCase
+ class SomeClass extends \PHPUnit\Framework\TestCase
  {
      public function run()
      {
--        $this->assertThis();
-+        self::assertThis();
+-        $this->assertEquals('a', 'a');
++        self::assertEquals('a', 'a');
      }
  }
 ```
