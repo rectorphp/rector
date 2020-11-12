@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
 use Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector;
 use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
-use Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector;
+use Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector;
 use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\Rector\Class_\RemoveParentRector;
@@ -34,7 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // covers "extends ServiceEntityRepository"
     // @see https://github.com/doctrine/DoctrineBundle/pull/727/files
-    $services->set(ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector::class);
+    $services->set(ServiceEntityRepositoryParentCallToDIRector::class);
 
     $services->set(RemoveAnnotationRector::class)
         ->call('configure', [[

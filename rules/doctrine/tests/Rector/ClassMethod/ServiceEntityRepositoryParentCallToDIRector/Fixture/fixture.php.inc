@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector\Fixture;
+namespace Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\Fixture;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector\Source\Project;
+use Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\Source\Project;
 
 final class ProjectRepository extends ServiceEntityRepository
 {
@@ -18,17 +18,17 @@ final class ProjectRepository extends ServiceEntityRepository
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector\Fixture;
+namespace Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\Fixture;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector\Source\Project;
+use Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\Source\Project;
 
 final class ProjectRepository extends ServiceEntityRepository
 {
     private \Doctrine\ORM\EntityManagerInterface $entityManager;
     /**
-     * @var \Doctrine\ORM\EntityRepository<\Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector\Source\Project>
+     * @var \Doctrine\ORM\EntityRepository<\Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\Source\Project>
      */
     private \Doctrine\ORM\EntityRepository $repository;
     public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
