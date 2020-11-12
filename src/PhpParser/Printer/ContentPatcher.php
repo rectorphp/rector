@@ -63,6 +63,18 @@ final class ContentPatcher
     private const SPACE_REGEX = '#\s#';
 
     /**
+     * @see https://regex101.com/r/j7agVx/1
+     * @var string
+     */
+    private const ROUTE_VALID_REGEX = '#"\s?:\s?#';
+
+    /**
+     * @see https://regex101.com/r/qgp6Tr/1
+     * @var string
+     */
+    private const ROUTE_INVALID_REGEX = '#"\s?=\s?#';
+
+    /**
      * @var string[]
      */
     private const MAY_DUPLICATE_FUNC_CALLS = ['interface_exists', 'trait_exists'];
@@ -98,8 +110,10 @@ final class ContentPatcher
     }
 
     /**
+     * @see https://github.com/rectorphp/rector/issues/3673
      * @see https://github.com/rectorphp/rector/issues/4274
      * @see https://github.com/rectorphp/rector/issues/4573
+     * @see https://github.com/rectorphp/rector/issues/4581
      */
     public function rollbackValidAnnotation(
         string $originalContent,
@@ -122,9 +136,28 @@ final class ContentPatcher
         }
 
         foreach ($matchesValidAnnotation as $key => $match) {
-            $content = str_replace($matchesInValidAnnotation[$key][0], $match[0], $content);
+            $validAnnotation = $match[0];
+            $invalidAnnotation = $matchesInValidAnnotation[$key][0];
+
+            if ($this->isSkipped($validAnnotationRegex, $validAnnotation, $invalidAnnotation)) {
+                continue;
+            }
+
+            $content = str_replace($invalidAnnotation, $validAnnotation, $content);
         }
 
         return $content;
+    }
+
+    private function isSkipped(string $validAnnotationRegex, string $validAnnotation, string $invalidAnnotation): bool
+    {
+        if ($validAnnotationRegex !== self::VALID_ANNOTATION_ROUTE_REGEX) {
+            return str_replace('"', '', $validAnnotation) !== str_replace('"', '', $invalidAnnotation);
+        }
+
+        $validAnnotation = Strings::replace($validAnnotation, self::ROUTE_VALID_REGEX, '');
+        $invalidAnnotation = Strings::replace($invalidAnnotation, self::ROUTE_INVALID_REGEX, '');
+
+        return $validAnnotation !== $invalidAnnotation;
     }
 }
