@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PHPUnit\Framework\TestCase;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Core\Rector\AbstractRector;
@@ -66,7 +67,7 @@ CODE_SAMPLE
                 ,
                 [
                     self::TYPE_TO_PREFERENCE => [
-                        \PHPUnit\Framework\TestCase::class => self::PREFER_SELF,
+                        TestCase::class => self::PREFER_SELF,
                     ],
                 ]
             ),
