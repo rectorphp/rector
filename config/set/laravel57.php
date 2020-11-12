@@ -9,6 +9,7 @@ use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ArgumentRemover;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\Laravel\Rector\ClassMethod\AddParentBootToModelClassMethodRector;
+use Rector\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector;
 use Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -48,8 +49,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects([
             new ArgumentRemover('Illuminate\Foundation\Application', 'register', 1, [
                 'name' => 'options',
-            ]),
-        ]),
+            ]), ]
+        ),
     ]]);
     $services->set(AddParentBootToModelClassMethodRector::class);
+    $services->set(ChangeQueryWhereDateValueWithCarbonRector::class);
 };
