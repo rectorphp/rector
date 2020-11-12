@@ -1,4 +1,4 @@
-# All 606 Rectors Overview
+# All 607 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -23,7 +23,7 @@
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (34)
 - [JMS](#jms) (2)
-- [Laravel](#laravel) (5)
+- [Laravel](#laravel) (6)
 - [Legacy](#legacy) (4)
 - [MagicDisclosure](#magicdisclosure) (3)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
@@ -4149,10 +4149,10 @@ Remove temporary *Uuid relation properties
 
 <br><br>
 
-### `ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector`
+### `ServiceEntityRepositoryParentCallToDIRector`
 
-- class: [`Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector`](/rules/doctrine/src/Rector/ClassMethod/ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector.php)
-- [test fixtures](/rules/doctrine/tests/Rector/ClassMethod/ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector/Fixture)
+- class: [`Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector`](/rules/doctrine/src/Rector/ClassMethod/ServiceEntityRepositoryParentCallToDIRector.php)
+- [test fixtures](/rules/doctrine/tests/Rector/ClassMethod/ServiceEntityRepositoryParentCallToDIRector/Fixture)
 
 Change ServiceEntityRepository to dependency injection, with repository property
 
@@ -7060,6 +7060,35 @@ Removes JMS\DiExtraBundle\Annotation\Services annotation
 <br><br>
 
 ## Laravel
+
+### `AddMockConsoleOutputFalseToConsoleTestsRector`
+
+- class: [`Rector\Laravel\Rector\Class_\AddMockConsoleOutputFalseToConsoleTestsRector`](/rules/laravel/src/Rector/Class_/AddMockConsoleOutputFalseToConsoleTestsRector.php)
+- [test fixtures](/rules/laravel/tests/Rector/Class_/AddMockConsoleOutputFalseToConsoleTestsRector/Fixture)
+
+Add "$this->mockConsoleOutput = false"; to console tests that work with output content
+
+```diff
+ use Illuminate\Support\Facades\Artisan;
+ use Illuminate\Foundation\Testing\TestCase;
+
+ final class SomeTest extends TestCase
+ {
++    public function setUp(): void
++    {
++        parent::setUp();
++
++        $this->mockConsoleOutput = false;
++    }
++
+     public function test(): void
+     {
+         $this->assertEquals('content', \trim((new Artisan())::output()));
+     }
+ }
+```
+
+<br><br>
 
 ### `AddParentBootToModelClassMethodRector`
 
