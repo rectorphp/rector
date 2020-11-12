@@ -98,15 +98,10 @@ CODE_SAMPLE
                 $node->args[2]->value = $dateTimeVariable;
 
                 // update assign ">" → ">="
-                $originalCompareSignExpr = $node->args[1]->value;
-                $node->args[1]->value = $this->createCompareSignExpr($originalCompareSignExpr);
+                $this->changeCompareSignExpr($node->args[1]);
 
                 // 2. add "whereTime()" time call
-                $whereTimeMethodCall = $this->createWhereTimeMethodCall(
-                    $node,
-                    $originalCompareSignExpr,
-                    $dateTimeVariable
-                );
+                $whereTimeMethodCall = $this->createWhereTimeMethodCall($node, $dateTimeVariable);
                 $this->addNodeAfterNode($whereTimeMethodCall, $node);
             }
 
@@ -116,12 +111,10 @@ CODE_SAMPLE
         if ($argValue instanceof Variable) {
             $dateTimeVariable = $argValue;
 
-            $originalCompareSignExpr = clone $node->args[1]->value;
-            $compareSignExpr = $node->args[1]->value;
-            $node->args[1]->value = $this->createCompareSignExpr($compareSignExpr);
+            $this->changeCompareSignExpr($node->args[1]);
 
             // 2. add "whereTime()" time call
-            $whereTimeMethodCall = $this->createWhereTimeMethodCall($node, $originalCompareSignExpr, $dateTimeVariable);
+            $whereTimeMethodCall = $this->createWhereTimeMethodCall($node, $dateTimeVariable);
             $this->addNodeAfterNode($whereTimeMethodCall, $node);
         }
 
@@ -155,29 +148,28 @@ CODE_SAMPLE
         return $argValue;
     }
 
-    private function createCompareSignExpr(Expr $expr): Expr
+    private function changeCompareSignExpr(Arg $arg): void
     {
-        if (! $expr instanceof String_) {
-            return $expr;
+        if (! $arg->value instanceof String_) {
+            return;
         }
 
-        if ($expr->value === '<') {
-            return new String_('<=');
+        $string = $arg->value;
+
+        if ($string->value === '<') {
+            $string->value = '<=';
         }
 
-        if ($expr->value === '>') {
-            return new String_('>=');
+        if ($string->value === '>') {
+            $string->value = '>=';
         }
-
-        return $expr;
     }
 
     private function createWhereTimeMethodCall(
         MethodCall $methodCall,
-        Expr $compareSignExpr,
         Variable $dateTimeVariable
     ): MethodCall {
-        $whereTimeArgs = [$methodCall->args[0], new Arg($compareSignExpr), new Arg($dateTimeVariable)];
+        $whereTimeArgs = [$methodCall->args[0], $methodCall->args[1], new Arg($dateTimeVariable)];
 
         return new MethodCall($methodCall->var, 'whereTime', $whereTimeArgs);
     }

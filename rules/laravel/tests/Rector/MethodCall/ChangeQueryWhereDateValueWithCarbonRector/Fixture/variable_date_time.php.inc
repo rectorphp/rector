@@ -29,7 +29,7 @@ class VariableDateTime
     {
         $dateTime = Carbon::now();
         $query->whereDate('created_at', '<=', $dateTime);
-        $query->whereTime('created_at', '<', $dateTime);
+        $query->whereTime('created_at', '<=', $dateTime);
     }
 }
 
