@@ -88,22 +88,29 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typeToPreference as $type => $preference) {
+            if ($node instanceof MethodCall && $this->isObjectType($node->var, $type)) {
+                return $this->processThisOrSelf($node, $preference);
+            }
+
             if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 
-            $this->ensurePreferenceIsValid($preference);
-
-            if ($preference === self::PREFER_SELF) {
-                return $this->processToSelf($node);
-            }
-
-            if ($preference === self::PREFER_THIS) {
-                return $this->processToThis($node);
-            }
+            return $this->processThisOrSelf($node, $preference);
         }
 
-        return $node;
+        return null;
+    }
+
+    private function processThisOrSelf(Node $node, string $preference): ?Node
+    {
+        $this->ensurePreferenceIsValid($preference);
+
+        if ($preference === self::PREFER_SELF) {
+            return $this->processToSelf($node);
+        }
+
+        return $this->processToThis($node);
     }
 
     public function configure(array $configuration): void
