@@ -696,3 +696,6 @@ parameters:
             message: '#Node "errorsuppress" is fobidden to use#'
             paths:
                 - tests/Issues/Issue4499/DoNotDuplicateCode/DoNotDuplicateCodeTest.php # 17
+
+        # trait in trait call
+        - '#Call to an undefined method Rector\\PostRector\\Rector\\AbstractPostRector\:\:isObjectType\(\)#'

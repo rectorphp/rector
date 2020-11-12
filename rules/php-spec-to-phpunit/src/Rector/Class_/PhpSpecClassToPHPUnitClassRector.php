@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
+use Rector\Core\ValueObject\MethodName;
 use Rector\PhpSpecToPHPUnit\LetManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
@@ -120,7 +121,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
 
         $new = new New_($testedObjectType);
 
-        $letClassMethod = new ClassMethod(new Identifier('setUp'));
+        $letClassMethod = new ClassMethod(new Identifier(MethodName::SET_UP));
         $this->makeProtected($letClassMethod);
         $letClassMethod->stmts[] = new Expression(new Assign($propertyFetch, $new));
 

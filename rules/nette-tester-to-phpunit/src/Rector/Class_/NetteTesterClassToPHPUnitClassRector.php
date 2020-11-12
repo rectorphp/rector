@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -120,7 +121,7 @@ CODE_SAMPLE
     private function processMethods(Class_ $class): void
     {
         foreach ($class->getMethods() as $classMethod) {
-            if ($this->isNames($classMethod, ['setUp', 'tearDown'])) {
+            if ($this->isNames($classMethod, [MethodName::SET_UP, MethodName::TEAR_DOWN])) {
                 $this->makeProtected($classMethod);
             }
         }

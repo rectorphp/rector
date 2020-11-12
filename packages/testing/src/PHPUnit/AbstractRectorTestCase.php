@@ -143,6 +143,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             $this->configureEnabledRectors($enabledRectorsProvider);
         }
 
+        // load stubs
+        $stubLoader = static::$container->get(StubLoader::class);
+        $stubLoader->loadStubs();
+
         // disable any output
         $symfonyStyle = static::$container->get(SymfonyStyle::class);
         $symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
@@ -155,10 +159,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         // needed for PHPStan, because the analyzed file is just create in /temp
         $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
-
-        // load stubs
-        $stubLoader = static::$container->get(StubLoader::class);
-        $stubLoader->loadStubs();
 
         $this->configurePhpVersionFeatures();
 

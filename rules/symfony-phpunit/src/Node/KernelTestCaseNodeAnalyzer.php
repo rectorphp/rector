@@ -6,6 +6,7 @@ namespace Rector\SymfonyPHPUnit\Node;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -40,7 +41,7 @@ final class KernelTestCaseNodeAnalyzer
     {
         $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
 
-        return $methodName === 'setUp' || $methodName === null;
+        return $methodName === MethodName::SET_UP || $methodName === null;
     }
 
     /**

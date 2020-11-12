@@ -6,6 +6,7 @@ namespace Rector\PhpSpecToPHPUnit;
 
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use ReflectionMethod;
 
@@ -25,7 +26,7 @@ final class PHPUnitTypeDeclarationDecorator
             return;
         }
 
-        $reflectionMethod = new ReflectionMethod('PHPUnit\Framework\TestCase', 'setUp');
+        $reflectionMethod = new ReflectionMethod('PHPUnit\Framework\TestCase', MethodName::SET_UP);
         if (! $reflectionMethod->hasReturnType()) {
             return;
         }
