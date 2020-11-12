@@ -23,9 +23,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  * @see https://tomasvotruba.com/blog/2017/10/16/how-to-use-repository-with-doctrine-as-service-in-symfony/
  *
- * @see \Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRectorTest
+ * @see \Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\ServiceEntityRepositoryParentCallToDIRectorTest
  */
-final class ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector extends AbstractRector
+final class ServiceEntityRepositoryParentCallToDIRector extends AbstractRector
 {
     /**
      * @var string
