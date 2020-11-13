@@ -26,15 +26,15 @@ final class RemoveParamReturnDocblockRector extends AbstractRector
 {
     /**
      * @var string
-     * @see https://regex101.com/r/Ue6Szm/6
+     * @see https://regex101.com/r/Ue6Szm/7
      */
-    private const PARAM_REGEX = '#^\s{0,}\*\s+@param\s+%s\s+\$%s$#msU';
+    private const PARAM_REGEX = '#^\s{0,}\*\s+@param\s\\\\?+%s\s+\$%s$#msU';
 
     /**
      * @var string
-     * @see https://regex101.com/r/Bw42yI/1
+     * @see https://regex101.com/r/Bw42yI/2
      */
-    private const RETURN_REGEX = '#^\s{0,}\*\s+@return\s+%s$$#msU';
+    private const RETURN_REGEX = '#^\s{0,}\*\s+@return\s+\\\\?%s$$#msU';
 
     public function getDefinition(): RectorDefinition
     {
