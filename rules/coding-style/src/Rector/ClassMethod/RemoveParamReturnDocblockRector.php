@@ -33,10 +33,6 @@ final class RemoveParamReturnDocblockRector extends AbstractRector
      */
     private const RETURN_REGEX = '#^\s{0,}\*\s+@return\s+%s$$#msU';
 
-    public function __construct()
-    {
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
