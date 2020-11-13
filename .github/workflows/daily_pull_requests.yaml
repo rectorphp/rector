@@ -21,6 +21,11 @@ jobs:
                         run: "composer docs"
                         branch: 'automated-regenerated-nodes-rectors-documentation'
 
+                    -
+                        name: "Re-Generate CHANGELOG.md"
+                        run: "composer changelog"
+                        branch: 'automated-regenerated-changelog'
+
         name: ${{ matrix.actions.name }}
 
         runs-on: ubuntu-latest
