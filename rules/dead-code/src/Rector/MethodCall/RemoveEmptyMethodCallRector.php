@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -81,6 +82,10 @@ CODE_SAMPLE
         }
 
         $type = $scope->getType($node->var);
+        if ($type instanceof ThisType) {
+            $type = $type->getStaticObjectType();
+        }
+
         if (! $type instanceof ObjectType) {
             return null;
         }
