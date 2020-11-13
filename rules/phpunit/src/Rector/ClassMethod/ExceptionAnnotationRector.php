@@ -36,11 +36,11 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
     /**
      * @var ExpectExceptionMethodCallFactory
      */
-    private $exceptionMethodCallFactory;
+    private $expectExceptionMethodCallFactory;
 
-    public function __construct(ExpectExceptionMethodCallFactory $exceptionMethodCallFactory)
+    public function __construct(ExpectExceptionMethodCallFactory $expectExceptionMethodCallFactory)
     {
-        $this->exceptionMethodCallFactory = $exceptionMethodCallFactory;
+        $this->expectExceptionMethodCallFactory = $expectExceptionMethodCallFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -101,7 +101,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $methodCallExpressions = $this->exceptionMethodCallFactory->createFromTagValueNodes(
+            $methodCallExpressions = $this->expectExceptionMethodCallFactory->createFromTagValueNodes(
                 $phpDocInfo->getTagsByName($annotationName),
                 $methodName
             );

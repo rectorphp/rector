@@ -35,7 +35,7 @@ final class ExpectExceptionMethodCallFactory
      * @param PhpDocTagNode[] $phpDocTagNodes
      * @return Expression[]
      */
-    public function createFromTagValueNodes(array $phpDocTagNodes, string $methodName)
+    public function createFromTagValueNodes(array $phpDocTagNodes, string $methodName): array
     {
         $methodCallExpressions = [];
         foreach ($phpDocTagNodes as $genericTagValueNode) {
