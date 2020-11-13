@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
@@ -96,27 +97,7 @@ CODE_SAMPLE
         }
 
         $text = $docComment->getText();
-        $docCommentText = $text;
-
-        // process params
-        /** @var Param[] $params */
-        $params = $node->getParams();
-        foreach ($params as $param) {
-            if (! $param->type instanceof Identifier) {
-                continue;
-            }
-
-            /** @var string $paramTypeName */
-            $paramTypeName = $param->type->toString();
-
-            /** @var string $paramTypeVarName */
-            $paramTypeVarName = $param->var->name;
-
-            $paramRegex = sprintf(self::PARAM_REGEX, $paramTypeName, $paramTypeVarName);
-            if (Strings::match($docCommentText, $paramRegex)) {
-                $docCommentText = Strings::replace($docCommentText, $paramRegex, '');
-            }
-        }
+        $docCommentText = $this->getDocCommentRemovalParam($node, $text);
 
         $returnType = $node->returnType;
         if ($returnType instanceof NullableType || $returnType instanceof UnionType) {
@@ -133,6 +114,41 @@ CODE_SAMPLE
         }
 
         return $this->processUpdateDocblock($node, $text, $docCommentText);
+    }
+
+    private function getDocCommentRemovalParam(ClassMethod $classMethod, string $docCommentText): string
+    {
+        /** @var Param[] $params */
+        $params = $classMethod->getParams();
+        foreach ($params as $param) {
+            $paramTypeName = '';
+            $paramTypeVarName = '';
+
+            if ($param->type instanceof FullyQualified) {
+                $paramTypeName = $param->type->toString();
+                /** @var Variable|null $nextParamTypeName */
+                $nextParamTypeName = $param->type->getAttribute(AttributeKey::NEXT_NODE);
+                if ($nextParamTypeName instanceof Variable) {
+                    $paramTypeVarName = $this->getName($nextParamTypeName);
+                }
+            }
+
+            if ($param->type instanceof Identifier) {
+                $paramTypeName = $param->type->toString();
+                $paramTypeVarName = $this->getName($param->var);
+            }
+
+            if ($paramTypeName === '' || $paramTypeVarName === '') {
+                continue;
+            }
+
+            $paramRegex = sprintf(self::PARAM_REGEX, addslashes($paramTypeName), $paramTypeVarName);
+            if (Strings::match($docCommentText, $paramRegex)) {
+                $docCommentText = Strings::replace($docCommentText, $paramRegex, '');
+            }
+        }
+
+        return $docCommentText;
     }
 
     private function processUpdateDocblock(ClassMethod $classMethod, string $text, string $docCommentText): ?ClassMethod
