@@ -9,13 +9,11 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\ValueObject\MethodName;
-use Rector\RemovingStatic\NodeFactory\TestingClassMethodFactory;
+use Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator;
 
 /**
  * @see https://github.com/laravel/framework/issues/26450#issuecomment-449401202
@@ -31,16 +29,16 @@ final class AddMockConsoleOutputFalseToConsoleTestsRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
-     * @var TestingClassMethodFactory
+     * @var SetUpClassMethodNodeManipulator
      */
-    private $testingClassMethodFactory;
+    private $setUpClassMethodNodeManipulator;
 
     public function __construct(
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        TestingClassMethodFactory $testingClassMethodFactory
+        SetUpClassMethodNodeManipulator $setUpClassMethodNodeManipulator
     ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->testingClassMethodFactory = $testingClassMethodFactory;
+        $this->setUpClassMethodNodeManipulator = $setUpClassMethodNodeManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -115,13 +113,7 @@ CODE_SAMPLE
 
         $assign = $this->createAssign();
 
-        $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
-        if ($setUpClassMethod === null) {
-            $setUpClassMethod = $this->testingClassMethodFactory->createSetUpMethod($assign);
-            $node->stmts = array_merge([$setUpClassMethod], (array) $node->stmts);
-        } else {
-            $setUpClassMethod->stmts = array_merge((array) $setUpClassMethod->stmts, [new Expression($assign)]);
-        }
+        $this->setUpClassMethodNodeManipulator->decorateOrCreate($node, [$assign]);
 
         return $node;
     }

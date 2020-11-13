@@ -29,7 +29,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\RemovingStatic\NodeFactory\TestingClassMethodFactory;
+use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
 use Rector\RemovingStatic\ValueObject\PHPUnitClass;
 
 /**
@@ -64,14 +64,14 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
     private $classInsertManipulator;
 
     /**
-     * @var TestingClassMethodFactory
+     * @var SetUpClassMethodFactory
      */
     private $testingClassMethodFactory;
 
     public function __construct(
         PropertyNaming $propertyNaming,
         ClassInsertManipulator $classInsertManipulator,
-    TestingClassMethodFactory $testingClassMethodFactory
+        SetUpClassMethodFactory $testingClassMethodFactory
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classInsertManipulator = $classInsertManipulator;

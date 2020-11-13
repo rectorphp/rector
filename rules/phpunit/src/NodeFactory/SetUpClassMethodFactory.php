@@ -1,10 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\NodeFactory;
+namespace Rector\PHPUnit\NodeFactory;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
@@ -12,7 +11,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 
-final class TestingClassMethodFactory
+final class SetUpClassMethodFactory
 {
     /**
      * @var PHPUnitTypeDeclarationDecorator
@@ -33,23 +32,17 @@ final class TestingClassMethodFactory
     }
 
     /**
-     * @param Assign|Expression $assignExpressionNode
+     * @param Stmt[] $stmts
      */
-    public function createSetUpMethod(Node $assignExpressionNode): ClassMethod
+    public function createSetUpMethod(array $stmts): ClassMethod
     {
-        if ($assignExpressionNode instanceof Assign) {
-            $assignExpressionNode = new Expression($assignExpressionNode);
-        }
-
         $classMethodBuilder = new MethodBuilder(MethodName::SET_UP);
         $classMethodBuilder->makeProtected();
 
-        $expression = $this->createParentSetUpStaticCall();
-        $classMethodBuilder->addStmt($expression);
-        $classMethodBuilder->addStmt($assignExpressionNode);
+        $classMethodBuilder->addStmt($this->createParentSetUpStaticCall());
+        $classMethodBuilder->addStmts($stmts);
 
         $classMethod = $classMethodBuilder->getNode();
-
         $this->phpUnitTypeDeclarationDecorator->decorate($classMethod);
 
         return $classMethod;
