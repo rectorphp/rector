@@ -15,6 +15,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\UnionType;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\ClassMethod\RemoveParamReturnDocblockRector\RemoveParamReturnDocblockRectorTest
@@ -40,16 +42,16 @@ final class RemoveParamReturnDocblockRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-use Type;
+use stdClass;
 
 class SomeClass
 {
     /**
      * @param string $a
      * @param string $b description
-     * @return Type
+     * @return stdClass
      */
-    function foo(string $a, string $b): Type
+    function foo(string $a, string $b): stdClass
     {
 
     }
@@ -57,14 +59,14 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-use Type;
+use stdClass;
 
 class SomeClass
 {
     /**
      * @param string $b description
      */
-    function foo(string $a, string $b): Type
+    function foo(string $a, string $b): stdClass
     {
 
     }
@@ -97,17 +99,17 @@ CODE_SAMPLE
         $docCommentText = $text;
 
         // process params
-        /** @var */
+        /** @var Param[] $params */
         $params = $node->getParams();
         foreach ($params as $param) {
             if (! $param->type instanceof Identifier) {
                 continue;
             }
 
-            // string
+            /** @var string $paramTypeName */
             $paramTypeName = $param->type->toString();
 
-            // $a
+            /** @var string $paramTypeVarName */
             $paramTypeVarName = $param->var->name;
 
             $paramRegex = sprintf(self::PARAM_REGEX, $paramTypeName, $paramTypeVarName);
@@ -117,6 +119,10 @@ CODE_SAMPLE
         }
 
         $returnType = $node->returnType;
+        if ($returnType instanceof NullableType || $returnType instanceof UnionType) {
+            return $this->processUpdateDocblock($node, $text, $docCommentText);
+        }
+
         if ($returnType instanceof FullyQualified) {
             $returnType = addslashes($returnType->toString());
         }
@@ -126,14 +132,19 @@ CODE_SAMPLE
             $docCommentText = Strings::replace($docCommentText, $returnRegex, '');
         }
 
+        return $this->processUpdateDocblock($node, $text, $docCommentText);
+    }
+
+    private function processUpdateDocblock(ClassMethod $classMethod, string $text, string $docCommentText): ?ClassMethod
+    {
         if ($docCommentText === $text) {
             return null;
         }
 
-        $node->setDocComment(new Doc($docCommentText));
-        $expressionPhpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        $node->setAttribute(AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
+        $classMethod->setDocComment(new Doc($docCommentText));
+        $expressionPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        $classMethod->setAttribute(AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
 
-        return $node;
+        return $classMethod;
     }
 }
