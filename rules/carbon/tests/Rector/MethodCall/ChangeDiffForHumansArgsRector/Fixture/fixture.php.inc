@@ -8,9 +8,9 @@ final class SomeClass
 {
     public function run(Carbon $carbon): void
     {
-        $carbon->diffForHumans->diffForHumans(null, true);
+        $carbon->diffForHumans(null, true);
 
-        $carbon->diffForHumans->diffForHumans(null, false);
+        $carbon->diffForHumans(null, false);
     }
 }
 
@@ -26,9 +26,9 @@ final class SomeClass
 {
     public function run(Carbon $carbon): void
     {
-        $carbon->diffForHumans->diffForHumans(null, \Carbon\CarbonInterface::DIFF_ABSOLUTE);
+        $carbon->diffForHumans(null, \Carbon\CarbonInterface::DIFF_ABSOLUTE);
 
-        $carbon->diffForHumans->diffForHumans(null, \Carbon\CarbonInterface::DIFF_RELATIVE_AUTO);
+        $carbon->diffForHumans(null, \Carbon\CarbonInterface::DIFF_RELATIVE_AUTO);
     }
 }
 
