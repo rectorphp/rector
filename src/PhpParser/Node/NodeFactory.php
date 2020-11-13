@@ -108,8 +108,8 @@ final class NodeFactory
      */
     public function createShortClassConstFetch(string $shortClassName, string $constantName): ClassConstFetch
     {
-        $classNameNode = new Name($shortClassName);
-        return $this->createClassConstFetchFromName($classNameNode, $constantName);
+        $name = new Name($shortClassName);
+        return $this->createClassConstFetchFromName($name, $constantName);
     }
 
     /**
