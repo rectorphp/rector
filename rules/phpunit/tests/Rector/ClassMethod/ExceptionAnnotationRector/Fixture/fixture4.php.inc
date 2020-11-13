@@ -49,13 +49,13 @@ class ExceptionMessageTest extends TestCase
 {
     public function testLiteralMessage(): void
     {
-        $this->expectException('Exception');
+        $this->expectException(\Exception::class);
         throw new \Exception('A literal exception message');
     }
 
     public function testPartialMessageBegin(): void
     {
-        $this->expectException('Exception');
+        $this->expectException(\Exception::class);
         throw new \Exception('A partial exception message');
     }
 }
