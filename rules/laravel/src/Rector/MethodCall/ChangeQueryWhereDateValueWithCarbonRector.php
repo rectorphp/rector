@@ -37,11 +37,7 @@ final class SomeClass
 {
     public function run(Builder $query)
     {
-        $query->whereDate(
-            'created_at',
-            '<',
-            Carbon::now()
-        );
+        $query->whereDate('created_at', '<', Carbon::now());
     }
 }
 CODE_SAMPLE
@@ -53,11 +49,9 @@ final class SomeClass
 {
     public function run(Builder $query)
     {
-        $query->whereDate(
-            'created_at',
-            '<=',
-            Carbon::now()
-        );
+        $dateTime = Carbon::now();
+        $query->whereDate('created_at', '<=', $dateTime);
+        $query->whereTime('created_at', '<=', $dateTime);
     }
 }
 CODE_SAMPLE
