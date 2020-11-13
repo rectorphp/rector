@@ -30,12 +30,12 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
     /**
      * @var string
      */
-    private const PREFER_SELF = 'self';
+    public const PREFER_SELF = 'self';
 
     /**
      * @var string
      */
-    private const PREFER_THIS = 'this';
+    public const PREFER_THIS = 'this';
 
     /**
      * @var string[]
