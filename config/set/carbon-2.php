@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Carbon\Rector\MethodCall\ChangeCarbonSingularMethodCallToPluralRector;
 use Rector\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -9,4 +10,5 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(ChangeDiffForHumansArgsRector::class);
+    $services->set(ChangeCarbonSingularMethodCallToPluralRector::class);
 };
