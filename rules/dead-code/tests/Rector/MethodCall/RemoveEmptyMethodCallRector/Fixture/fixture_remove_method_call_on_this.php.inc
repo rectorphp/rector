@@ -9,7 +9,7 @@ abstract class Validator
 	}
 }
 
-final class GeneratorStub
+final class GeneratorStub extends Validator
 {
 	public function __construct()
 	{
@@ -30,7 +30,7 @@ abstract class Validator
 	}
 }
 
-final class GeneratorStub
+final class GeneratorStub extends Validator
 {
 	public function __construct()
 	{
