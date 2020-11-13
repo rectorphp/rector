@@ -1,29 +1,14 @@
 {
     "name": "rector/rector",
     "description": "Instant upgrade and refactoring of your PHP code",
-    "keywords": [
-        "instant upgrades",
-        "instant refactoring",
-        "ast",
-        "automated refactoring"
-    ],
+    "keywords": ["instant upgrades", "instant refactoring", "ast", "automated refactoring"],
     "homepage": "https://getrector.org",
     "license": "MIT",
     "authors": [
-        {
-            "name": "Tomas Votruba",
-            "email": "tomas.vot@gmail.com",
-            "homepage": "https://tomasvotruba.com"
-        },
-        {
-            "name": "Jan Mikes",
-            "email": "j.mikes@me.com",
-            "homepage": "https://janmikes.cz"
-        }
+        { "name": "Tomas Votruba", "email": "tomas.vot@gmail.com", "homepage": "https://tomasvotruba.com" },
+        { "name": "Jan Mikes", "email": "j.mikes@me.com", "homepage": "https://janmikes.cz" }
     ],
-    "bin": [
-        "bin/rector"
-    ],
+    "bin": ["bin/rector"],
     "require": {
         "php": "^7.2.4|^8.0",
         "ext-json": "*",
@@ -179,7 +164,8 @@
             "Rector\\Transform\\": "rules/transform/src",
             "Rector\\Twig\\": "rules/twig/src",
             "Rector\\TypeDeclaration\\": "rules/type-declaration/src",
-            "Rector\\VendorLocker\\": "packages/vendor-locker/src"
+            "Rector\\VendorLocker\\": "packages/vendor-locker/src",
+            "Rector\\Carbon\\": "rules/carbon/src"
         }
     },
     "autoload-dev": {
@@ -303,7 +289,8 @@
             "Rector\\Utils\\NodeDocumentationGenerator\\Tests\\": "utils/node-documentation-generator/tests",
             "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/phpstan-attribute-type-syncer/src",
             "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/phpstan-static-type-mapper-checker/src",
-            "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src"
+            "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
+            "Rector\\Carbon\\Tests\\": "rules/carbon/tests"
         }
     },
     "scripts": {
