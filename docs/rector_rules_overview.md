@@ -1,4 +1,4 @@
-# All 607 Rectors Overview
+# All 608 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -23,7 +23,7 @@
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (34)
 - [JMS](#jms) (2)
-- [Laravel](#laravel) (6)
+- [Laravel](#laravel) (7)
 - [Legacy](#legacy) (4)
 - [MagicDisclosure](#magicdisclosure) (3)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
@@ -7061,6 +7061,29 @@ Removes JMS\DiExtraBundle\Annotation\Services annotation
 <br><br>
 
 ## Laravel
+
+### `AddGuardToLoginEventRector`
+
+- class: [`Rector\Laravel\Rector\New_\AddGuardToLoginEventRector`](/rules/laravel/src/Rector/New_/AddGuardToLoginEventRector.php)
+- [test fixtures](/rules/laravel/tests/Rector/New_/AddGuardToLoginEventRector/Fixture)
+
+Add new `$guard` argument to Illuminate\Auth\Events\Login
+
+```diff
+ use Illuminate\Auth\Events\Login;
+
+ final class SomeClass
+ {
+     public function run(): void
+     {
+-        $loginEvent = new Login('user', false);
++        $guard = config('auth.defaults.guard');
++        $loginEvent = new Login($guard, 'user', false);
+     }
+ }
+```
+
+<br><br>
 
 ### `AddMockConsoleOutputFalseToConsoleTestsRector`
 
