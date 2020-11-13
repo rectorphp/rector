@@ -7,17 +7,13 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use PhpParser\Node\Name\FullyQualified;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -37,22 +33,17 @@ final class RemoveParamReturnDocblockRector extends AbstractRector
      */
     private const RETURN_REGEX = '#^\s{0,}\*\s+@return\s+%s$$#msU';
 
-
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docblockManipulator;
-
-    public function __construct(DocBlockManipulator $docblockManipulator)
+    public function __construct()
     {
-        $this->docblockManipulator = $docblockManipulator;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Remove @param and @return docblock with same type and no description on typed argument and return', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Remove @param and @return docblock with same type and no description on typed argument and return',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Type;
 
 class SomeClass
@@ -68,8 +59,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Type;
 
 class SomeClass
@@ -83,8 +74,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+                
+            ]);
     }
 
     /**
@@ -105,11 +97,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $docCommentTextOriginal = $docComment->getText();
-        $docCommentText = $docCommentTextOriginal;
+        $text = $docComment->getText();
+        $docCommentText = $text;
 
         // process params
-        /** @var  */
+        /** @var */
         $params = $node->getParams();
         foreach ($params as $param) {
             if (! $param->type instanceof Identifier) {
@@ -138,7 +130,7 @@ CODE_SAMPLE
             $docCommentText = Strings::replace($docCommentText, $returnRegex, '');
         }
 
-        if ($docCommentText === $docCommentTextOriginal) {
+        if ($docCommentText === $text) {
             return null;
         }
 
