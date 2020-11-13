@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPUnit\NodeFactory\ExpectExceptionMethodCallFactory;
 
 /**
  * @see https://thephp.cc/news/2016/02/questioning-phpunit-best-practices
@@ -36,10 +33,20 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
         'expectedException' => 'expectException',
     ];
 
+    /**
+     * @var ExpectExceptionMethodCallFactory
+     */
+    private $expectExceptionMethodCallFactory;
+
+    public function __construct(ExpectExceptionMethodCallFactory $expectExceptionMethodCallFactory)
+    {
+        $this->expectExceptionMethodCallFactory = $expectExceptionMethodCallFactory;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Changes `@expectedException annotations to expectException*() methods',
+            'Changes `@expectedException annotations to `expectException*()` methods',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -89,33 +96,20 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach (self::ANNOTATION_TO_METHOD as $annotation => $method) {
-            if (! $phpDocInfo->hasByName($annotation)) {
+        foreach (self::ANNOTATION_TO_METHOD as $annotationName => $methodName) {
+            if (! $phpDocInfo->hasByName($annotationName)) {
                 continue;
             }
 
-            /** @var GenericTagValueNode[] $tags */
-            $tags = $phpDocInfo->getTagsByName($annotation);
-
-            $methodCallExpressions = array_map(function (PhpDocTagNode $phpDocTagNode) use ($method): Expression {
-                $methodCall = $this->createMethodCallExpressionFromTag($phpDocTagNode, $method);
-                return new Expression($methodCall);
-            }, $tags);
-
+            $methodCallExpressions = $this->expectExceptionMethodCallFactory->createFromTagValueNodes(
+                $phpDocInfo->getTagsByName($annotationName),
+                $methodName
+            );
             $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
 
-            $phpDocInfo->removeByName($annotation);
+            $phpDocInfo->removeByName($annotationName);
         }
 
         return $node;
-    }
-
-    private function createMethodCallExpressionFromTag(PhpDocTagNode $phpDocTagNode, string $method): MethodCall
-    {
-        $annotationContent = (string) $phpDocTagNode->value;
-        // this is needed due to BuilderHelpers
-        $annotationContent = ltrim($annotationContent, '\\');
-
-        return $this->createMethodCall('this', $method, [$annotationContent]);
     }
 }
