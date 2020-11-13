@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -18,11 +17,10 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
-use Rector\Core\ValueObject\MethodName;
 use Rector\PhpSpecToPHPUnit\LetManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
-use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
+use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
 
 /**
  * @see \Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
@@ -40,11 +38,6 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
     private $phpSpecRenaming;
 
     /**
-     * @var PHPUnitTypeDeclarationDecorator
-     */
-    private $phpUnitTypeDeclarationDecorator;
-
-    /**
      * @var LetManipulator
      */
     private $letManipulator;
@@ -54,16 +47,21 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
      */
     private $classInsertManipulator;
 
+    /**
+     * @var SetUpClassMethodFactory
+     */
+    private $setUpClassMethodFactory;
+
     public function __construct(
         ClassInsertManipulator $classInsertManipulator,
         LetManipulator $letManipulator,
-        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
-        PhpSpecRenaming $phpSpecRenaming
+        PhpSpecRenaming $phpSpecRenaming,
+        SetUpClassMethodFactory $setUpClassMethodFactory
     ) {
         $this->phpSpecRenaming = $phpSpecRenaming;
-        $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
         $this->letManipulator = $letManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->setUpClassMethodFactory = $setUpClassMethodFactory;
     }
 
     /**
@@ -121,13 +119,9 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
 
         $new = new New_($testedObjectType);
 
-        $letClassMethod = new ClassMethod(new Identifier(MethodName::SET_UP));
-        $this->makeProtected($letClassMethod);
-        $letClassMethod->stmts[] = new Expression(new Assign($propertyFetch, $new));
+        $assign = new Assign($propertyFetch, $new);
 
-        $this->phpUnitTypeDeclarationDecorator->decorate($letClassMethod);
-
-        return $letClassMethod;
+        return $this->setUpClassMethodFactory->createSetUpMethod([$assign]);
     }
 
     /**

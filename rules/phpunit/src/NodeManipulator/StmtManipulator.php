@@ -16,14 +16,17 @@ final class StmtManipulator
      */
     public function normalizeStmts(array $stmts): array
     {
-        foreach ($stmts as $key => $stmt) {
+        $normalizedStmts = [];
+
+        foreach ($stmts as $stmt) {
             if ($stmt instanceof Expression) {
+                $normalizedStmts[] = $stmt;
                 continue;
             }
 
-            $stmts[$key] = new Expression($stmt);
+            $normalizedStmts[] = new Expression($stmt);
         }
 
-        return $stmts;
+        return $normalizedStmts;
     }
 }
