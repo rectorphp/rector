@@ -77,7 +77,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (count((array) $node->args) === 0) {
+        if ((array) $node->args === []) {
             return null;
         }
 
