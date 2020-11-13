@@ -725,4 +725,9 @@ final class SetList
      * @var string
      */
     public const EARLY_RETURN = __DIR__ . '/../../../../config/set/early-return.php';
+
+    /**
+     * @var string
+     */
+    public const CARBON_2 = __DIR__ . '/../../../../config/set/carbon-2.php';
 }
