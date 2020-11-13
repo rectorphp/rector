@@ -28,7 +28,7 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        self::bootKernel(RectorKernel::class);
+        $this->bootKernel(RectorKernel::class);
 
         $this->attributeAwareNodeFactory = static::$container->get(AttributeAwareNodeFactory::class);
     }
