@@ -2,15 +2,18 @@
 
 namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
 
+abstract class Validator
+{
+	protected function validateLineLengths(): void
+	{
+	}
+}
+
 final class GeneratorStub
 {
 	public function __construct()
 	{
 		$this->validateLineLengths();
-	}
-
-	protected function validateLineLengths(): void
-	{
 	}
 }
 
@@ -20,13 +23,16 @@ final class GeneratorStub
 
 namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
 
+abstract class Validator
+{
+	protected function validateLineLengths(): void
+	{
+	}
+}
+
 final class GeneratorStub
 {
 	public function __construct()
-	{
-	}
-
-	protected function validateLineLengths(): void
 	{
 	}
 }
