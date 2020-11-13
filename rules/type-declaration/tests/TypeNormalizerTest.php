@@ -29,7 +29,7 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        self::bootKernel(RectorKernel::class);
+        $this->bootKernel(RectorKernel::class);
 
         $this->typeNormalizer = self::$container->get(TypeNormalizer::class);
         $this->staticTypeMapper = self::$container->get(StaticTypeMapper::class);

@@ -15,7 +15,7 @@ final class ConfigFactoryTest extends AbstractKernelTestCase
 {
     protected function setUp(): void
     {
-        self::bootKernelWithConfigs(RectorKernel::class, [
+        $this->bootKernelWithConfigs(RectorKernel::class, [
             __DIR__ . '/config/config_with_nested_value_objects.php',
         ]);
     }

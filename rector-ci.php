@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\TestCase;
+use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
@@ -22,6 +24,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => inline_value_objects([
                 new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
             ]),
+        ]]);
+
+    $services->set(PreferThisOrSelfMethodCallRector::class)
+        ->call('configure', [[
+            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
+                TestCase::class => PreferThisOrSelfMethodCallRector::PREFER_THIS,
+            ],
         ]]);
 
     $services->set(AutoInPhpSymfonyConfigRector::class);
