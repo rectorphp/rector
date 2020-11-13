@@ -15,6 +15,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Reflection\ClassReflectionToAstResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use PHPStan\Type\ThisType;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\RemoveEmptyMethodCallRectorTest
@@ -81,6 +82,10 @@ CODE_SAMPLE
         }
 
         $type = $scope->getType($node->var);
+        if ($type instanceof ThisType) {
+            $type = $type->getStaticObjectType();
+        }
+
         if (! $type instanceof ObjectType) {
             return null;
         }
