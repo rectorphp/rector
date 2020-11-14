@@ -23,12 +23,19 @@ final class ChangeCarbonSingularMethodCallToPluralRector extends AbstractRector
      */
     private const SINGULAR_TO_PLURAL_NAMES = [
         'addSecond' => 'addSeconds',
+        'subSecond' => 'subSeconds',
         'addMinute' => 'addMinutes',
+        'subMinute' => 'subMinutes',
         'addDay' => 'addDays',
+        'subDay' => 'subDays',
         'addHour' => 'addHours',
+        'subHour' => 'subHours',
         'addWeek' => 'addWeeks',
+        'subWeek' => 'subWeeks',
         'addMonth' => 'addMonths',
+        'subMonth' => 'subMonths',
         'addYear' => 'addYears',
+        'subYear' => 'subYears',
     ];
 
     public function getDefinition(): RectorDefinition
