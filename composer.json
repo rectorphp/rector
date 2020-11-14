@@ -16,7 +16,7 @@
         "doctrine/annotations": "^1.11",
         "doctrine/inflector": "^1.4|^2.0",
         "jean85/pretty-package-versions": "^1.5.1",
-        "migrify/php-config-printer": "^0.3.52",
+        "migrify/php-config-printer": "^0.4",
         "nette/robot-loader": "^3.2",
         "nette/utils": "^3.1",
         "nikic/php-parser": "4.10.2",
@@ -44,7 +44,7 @@
     "require-dev": {
         "cweagans/composer-patches": "^1.7",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "migrify/vendor-patches": "^0.3.52",
+        "migrify/vendor-patches": "^0.4",
         "nette/application": "^3.0",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
