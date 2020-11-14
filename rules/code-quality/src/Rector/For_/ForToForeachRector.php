@@ -143,12 +143,26 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isCountValueNameUsedInsideForStatement($node)) {
+            return null;
+        }
+
         $iteratedVariableSingle = $this->inflector->singularize($iteratedVariable);
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
         $this->useForeachVariableInStmts($foreach->expr, $foreach->valueVar, $foreach->stmts);
 
         return $foreach;
+    }
+
+    private function isCountValueNameUsedInsideForStatement(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node) : bool {
+                return $node instanceof Variable && $node->name === $this->countValueName;
+            }
+        );
     }
 
     private function reset(): void
