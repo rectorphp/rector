@@ -160,16 +160,6 @@ CODE_SAMPLE
         return $foreach;
     }
 
-    private function isCountValueVariableUsedInsideForStatements(For_ $for): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $for->stmts,
-            function (Node $node): bool {
-                return $this->areNodesEqual($this->countValueVariable, $node);
-            }
-        );
-    }
-
     private function reset(): void
     {
         $this->keyValueName = null;
@@ -247,6 +237,16 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function isCountValueVariableUsedInsideForStatements(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node): bool {
+                return $this->areNodesEqual($this->countValueVariable, $node);
+            }
+        );
     }
 
     private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
