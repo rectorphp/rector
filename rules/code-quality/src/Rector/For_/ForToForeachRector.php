@@ -51,7 +51,7 @@ final class ForToForeachRector extends AbstractRector
     private $countValueName;
 
     /**
-     * @var Variable|null
+     * @var Expr|null
      */
     private $countValueVariable;
 
