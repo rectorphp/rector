@@ -51,6 +51,11 @@ final class ForToForeachRector extends AbstractRector
     private $countValueName;
 
     /**
+     * @var Variable|null
+     */
+    private $countValueVariable;
+
+    /**
      * @var Expr|null
      */
     private $iteratedExpr;
@@ -160,7 +165,7 @@ CODE_SAMPLE
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
             function (Node $node): bool {
-                return $node instanceof Variable && $node->name === $this->countValueName;
+                return $this->areNodesEqual($this->countValueVariable, $node);
             }
         );
     }
@@ -168,6 +173,7 @@ CODE_SAMPLE
     private function reset(): void
     {
         $this->keyValueName = null;
+        $this->countValueVariable = null;
         $this->countValueName = null;
         $this->iteratedExpr = null;
     }
@@ -187,6 +193,7 @@ CODE_SAMPLE
             }
 
             if ($this->isFuncCallName($initExpr->expr, 'count')) {
+                $this->countValueVariable = $initExpr->var;
                 $this->countValueName = $this->getName($initExpr->var);
                 $this->iteratedExpr = $initExpr->expr->args[0]->value;
             }
