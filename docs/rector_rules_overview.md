@@ -1,4 +1,4 @@
-# All 608 Rectors Overview
+# All 612 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -8,8 +8,9 @@
 - [Architecture](#architecture) (2)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
+- [Carbon](#carbon) (2)
 - [CodeQuality](#codequality) (61)
-- [CodingStyle](#codingstyle) (33)
+- [CodingStyle](#codingstyle) (34)
 - [DeadCode](#deadcode) (41)
 - [Defluent](#defluent) (8)
 - [Doctrine](#doctrine) (17)
@@ -39,7 +40,7 @@
 - [Order](#order) (9)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
-- [PHPUnit](#phpunit) (38)
+- [PHPUnit](#phpunit) (39)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
 - [PSR4](#psr4) (2)
 - [Performance](#performance) (2)
@@ -463,6 +464,55 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -$object = $object->withParam('paging', ['a value']);
 +$config = $object->getAttribute('paging');
 +$object = $object->withAttribute('paging', ['a value']);
+```
+
+<br><br>
+
+## Carbon
+
+### `ChangeCarbonSingularMethodCallToPluralRector`
+
+- class: [`Rector\Carbon\Rector\MethodCall\ChangeCarbonSingularMethodCallToPluralRector`](/rules/carbon/src/Rector/MethodCall/ChangeCarbonSingularMethodCallToPluralRector.php)
+- [test fixtures](/rules/carbon/tests/Rector/MethodCall/ChangeCarbonSingularMethodCallToPluralRector/Fixture)
+
+Change setter methods with args to their plural names on `Carbon\Carbon`
+
+```diff
+ use Carbon\Carbon;
+
+ final class SomeClass
+ {
+     public function run(Carbon $carbon, $value): void
+     {
+-        $carbon->addMinute($value);
++        $carbon->addMinutes($value);
+     }
+ }
+```
+
+<br><br>
+
+### `ChangeDiffForHumansArgsRector`
+
+- class: [`Rector\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector`](/rules/carbon/src/Rector/MethodCall/ChangeDiffForHumansArgsRector.php)
+- [test fixtures](/rules/carbon/tests/Rector/MethodCall/ChangeDiffForHumansArgsRector/Fixture)
+
+Change methods arguments of `diffForHumans()` on `Carbon\Carbon`
+
+```diff
+ use Carbon\Carbon;
+
+ final class SomeClass
+ {
+     public function run(Carbon $carbon): void
+     {
+-        $carbon->diffForHumans(null, true);
++        $carbon->diffForHumans(null, \Carbon\CarbonInterface::DIFF_ABSOLUTE);
+
+-        $carbon->diffForHumans(null, false);
++        $carbon->diffForHumans(null, \Carbon\CarbonInterface::DIFF_RELATIVE_AUTO);
+     }
+ }
 ```
 
 <br><br>
@@ -2203,6 +2253,32 @@ Non-magic PHP object methods cannot start with "__"
      {
 -        $anotherObject->__getSurname();
 +        $anotherObject->getSurname();
+     }
+ }
+```
+
+<br><br>
+
+### `RemoveParamReturnDocblockRector`
+
+- class: [`Rector\CodingStyle\Rector\ClassMethod\RemoveParamReturnDocblockRector`](/rules/coding-style/src/Rector/ClassMethod/RemoveParamReturnDocblockRector.php)
+- [test fixtures](/rules/coding-style/tests/Rector/ClassMethod/RemoveParamReturnDocblockRector/Fixture)
+
+Remove @param and @return docblock with same type and no description on typed argument and return
+
+```diff
+ use stdClass;
+
+ class SomeClass
+ {
+     /**
+-     * @param string $a
+      * @param string $b description
+-     * @return stdClass
+      */
+     function foo(string $a, string $b): stdClass
+     {
+
      }
  }
 ```
@@ -7149,12 +7225,10 @@ Add parent::boot(); call to `boot()` class method in child of `Illuminate\Databa
  {
      public function run(Builder $query)
      {
-         $query->whereDate(
-             'created_at',
--            '<',
-+            '<=',
-             Carbon::now()
-         );
+-        $query->whereDate('created_at', '<', Carbon::now());
++        $dateTime = Carbon::now();
++        $query->whereDate('created_at', '<=', $dateTime);
++        $query->whereTime('created_at', '<=', $dateTime);
      }
  }
 ```
@@ -10060,6 +10134,33 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 
 <br><br>
 
+### `ConstructClassMethodToSetUpTestCaseRector`
+
+- class: [`Rector\PHPUnit\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector`](/rules/phpunit/src/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php)
+- [test fixtures](/rules/phpunit/tests/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector/Fixture)
+
+Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to setUp(), to prevent dangerous override
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+     private $someValue;
+
+-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
++    protected function setUp()
+     {
++        parent::setUp();
++
+         $this->someValue = 1000;
+-        parent::__construct($name, $data, $dataName);
+     }
+ }
+```
+
+<br><br>
+
 ### `CreateMockToCreateStubRector`
 
 - class: [`Rector\PHPUnit\Rector\MethodCall\CreateMockToCreateStubRector`](/rules/phpunit/src/Rector/MethodCall/CreateMockToCreateStubRector.php)
@@ -10113,7 +10214,7 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 - class: [`Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector`](/rules/phpunit/src/Rector/ClassMethod/ExceptionAnnotationRector.php)
 - [test fixtures](/rules/phpunit/tests/Rector/ClassMethod/ExceptionAnnotationRector/Fixture)
 
-Changes `@expectedException annotations to expectException*() methods
+Changes `@expectedException annotations to `expectException*()` methods
 
 ```diff
 -/**
