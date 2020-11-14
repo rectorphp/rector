@@ -148,7 +148,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isCountValueNameUsedInsideForStatement($node)) {
+        if ($this->isCountValueVariableUsedInsideForStatements($node)) {
             return null;
         }
 
@@ -160,7 +160,7 @@ CODE_SAMPLE
         return $foreach;
     }
 
-    private function isCountValueNameUsedInsideForStatement(For_ $for): bool
+    private function isCountValueVariableUsedInsideForStatements(For_ $for): bool
     {
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
