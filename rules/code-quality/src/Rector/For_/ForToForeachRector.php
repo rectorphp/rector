@@ -53,6 +53,11 @@ final class ForToForeachRector extends AbstractRector
     /**
      * @var Expr|null
      */
+    private $countValueVariable;
+
+    /**
+     * @var Expr|null
+     */
     private $iteratedExpr;
 
     public function __construct(AssignManipulator $assignManipulator, Inflector $inflector)
@@ -143,6 +148,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isCountValueVariableUsedInsideForStatements($node)) {
+            return null;
+        }
+
         $iteratedVariableSingle = $this->inflector->singularize($iteratedVariable);
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
@@ -154,6 +163,7 @@ CODE_SAMPLE
     private function reset(): void
     {
         $this->keyValueName = null;
+        $this->countValueVariable = null;
         $this->countValueName = null;
         $this->iteratedExpr = null;
     }
@@ -173,6 +183,7 @@ CODE_SAMPLE
             }
 
             if ($this->isFuncCallName($initExpr->expr, 'count')) {
+                $this->countValueVariable = $initExpr->var;
                 $this->countValueName = $this->getName($initExpr->var);
                 $this->iteratedExpr = $initExpr->expr->args[0]->value;
             }
@@ -226,6 +237,16 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function isCountValueVariableUsedInsideForStatements(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node): bool {
+                return $this->areNodesEqual($this->countValueVariable, $node);
+            }
+        );
     }
 
     private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
