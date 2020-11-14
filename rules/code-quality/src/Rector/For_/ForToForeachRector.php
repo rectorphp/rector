@@ -159,7 +159,7 @@ CODE_SAMPLE
     {
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
-            function (Node $node) : bool {
+            function (Node $node): bool {
                 return $node instanceof Variable && $node->name === $this->countValueName;
             }
         );
