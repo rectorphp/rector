@@ -26,6 +26,16 @@ jobs:
                         run: "composer changelog"
                         branch: 'automated-regenerated-changelog'
 
+                    -
+                        name: "Re-Propagate Monorepo Dependencies"
+                        run: "composer propagate --ansi"
+                        branch: 'automated-propagate-monorepo-dependencies'
+
+                    -
+                        name: 'Apply Coding Standard'
+                        run: "composer fix-cs"
+                        branch: 'automated-apply-coding-standards'
+
         name: ${{ matrix.actions.name }}
 
         runs-on: ubuntu-latest
