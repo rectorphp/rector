@@ -7,7 +7,7 @@ namespace Rector\Core\Tests\Configuration;
 use Iterator;
 use Nette\Utils\Json;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class ComposerJsonParserTest extends AbstractKernelTestCase
 {

@@ -12,7 +12,7 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class ValueResolverTest extends AbstractKernelTestCase
 {

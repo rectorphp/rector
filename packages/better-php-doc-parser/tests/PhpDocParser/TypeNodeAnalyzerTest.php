@@ -13,7 +13,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocParser\TypeNodeAnalyzer;
 use Rector\Core\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
 {

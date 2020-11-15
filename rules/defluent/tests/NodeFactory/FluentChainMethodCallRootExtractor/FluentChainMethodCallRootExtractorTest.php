@@ -11,7 +11,7 @@ use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallRootExtractor;
 use Rector\Defluent\ValueObject\AssignAndRootExpr;
 use Rector\Defluent\ValueObject\FluentCallsKind;
 use Rector\Testing\TestingParser\TestingParser;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class FluentChainMethodCallRootExtractorTest extends AbstractKernelTestCase
 {

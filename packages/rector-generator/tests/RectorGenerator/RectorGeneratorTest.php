@@ -11,7 +11,7 @@ use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\Tests\RectorGenerator\Source\StaticRectorRecipeFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symplify\EasyTesting\PHPUnit\Behavior\DirectoryAssertableTrait;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class RectorGeneratorTest extends AbstractKernelTestCase

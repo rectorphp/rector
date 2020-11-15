@@ -13,7 +13,7 @@ use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\TypedPropertyRectorTe
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
 use Rector\PHPUnit\Tests\TestClassResolver\Source\SeeSomeClass;
 use Rector\PHPUnit\Tests\TestClassResolver\Source\SeeSomeClassTest;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class TestClassResolverTest extends AbstractKernelTestCase
 {

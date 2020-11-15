@@ -81,31 +81,31 @@ services:
             parentClasses:
                 - Rector
 
-    -
-        class: Symplify\PHPStanRules\Rules\PreferredClassRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            oldToPrefferedClasses:
-                # prevent PHPStorm autocomplete mess
-                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
-                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
-                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
-                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
-                'Closure': 'PhpParser\Node\Expr\Closure'
-                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
-                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
-                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
-                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
-                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-                # builder typo nodes
-                PhpParser\Builder\Use_: Rector\Core\PhpParser\Builder\UseBuilder
-                PhpParser\Builder\Class_: Rector\Core\PhpParser\Builder\ClassBuilder
-                PhpParser\Builder\Method: Rector\Core\PhpParser\Builder\MethodBuilder
-                PhpParser\Builder\Namespace_: Rector\Core\PhpParser\Builder\NamespaceBuilder
-                PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
-                PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
-                PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
+#    -
+#        class: Symplify\PHPStanRules\Rules\PreferredClassRule
+#        tags: [phpstan.rules.rule]
+#        arguments:
+#            oldToPrefferedClasses:
+#                # prevent PHPStorm autocomplete mess
+#                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
+#                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
+#                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
+#                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
+#                'Closure': 'PhpParser\Node\Expr\Closure'
+#                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
+#                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
+#                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
+#                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
+#                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+#                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+#                # builder typo nodes
+#                PhpParser\Builder\Use_: Rector\Core\PhpParser\Builder\UseBuilder
+#                PhpParser\Builder\Class_: Rector\Core\PhpParser\Builder\ClassBuilder
+#                PhpParser\Builder\Method: Rector\Core\PhpParser\Builder\MethodBuilder
+#                PhpParser\Builder\Namespace_: Rector\Core\PhpParser\Builder\NamespaceBuilder
+#                PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
+#                PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
+#                PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
 
 parameters:
     level: max
@@ -710,3 +710,8 @@ parameters:
         # trait in trait call
         - '#Call to an undefined method Rector\\PostRector\\Rector\\AbstractPostRector\:\:isObjectType\(\)#'
         - '#Parameter \#1 \$expr of class PhpParser\\Node\\Stmt\\Expression constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt given#'
+
+        -
+            message: '#Class cognitive complexity is \d+, keep it under 50#'
+            paths:
+                - rules/php70/src/EregToPcreTransformer.php

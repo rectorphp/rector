@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Order\StmtOrder;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class StmtOrderTest extends AbstractKernelTestCase
 {

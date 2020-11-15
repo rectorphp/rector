@@ -12,7 +12,7 @@ use Rector\DocumentationGenerator\Printer\RectorsDocumentationPrinter;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use ReflectionClass;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorsDocumentationPrinterTest extends AbstractKernelTestCase

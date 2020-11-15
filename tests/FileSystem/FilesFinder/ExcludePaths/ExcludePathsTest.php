@@ -6,7 +6,7 @@ namespace Rector\Core\Tests\FileSystem\FilesFinder\ExcludePaths;
 
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class ExcludePathsTest extends AbstractKernelTestCase
 {

@@ -120,7 +120,6 @@ final class Application extends SymfonyApplication
             return;
         }
 
-        
         parent::renderThrowable($throwable, $output);
     }
 

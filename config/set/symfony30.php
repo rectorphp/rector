@@ -70,7 +70,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
             RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
-                // class loader
+
                 new MethodCallRename(
                     'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
                     'registerNamespaces',

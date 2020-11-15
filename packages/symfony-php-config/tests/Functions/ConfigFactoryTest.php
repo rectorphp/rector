@@ -9,7 +9,7 @@ use PHPStan\Type\StringType;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\SymfonyPhpConfig\Tests\Functions\Source\ServiceWithValueObject;
 use Rector\SymfonyPhpConfig\Tests\Functions\Source\WithType;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class ConfigFactoryTest extends AbstractKernelTestCase
 {

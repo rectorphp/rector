@@ -15,7 +15,7 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class BetterStandardPrinterTest extends AbstractKernelTestCase
 {

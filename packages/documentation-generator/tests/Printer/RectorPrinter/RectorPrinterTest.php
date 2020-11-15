@@ -10,7 +10,7 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\DocumentationGenerator\Printer\RectorPrinter;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use ReflectionClass;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class RectorPrinterTest extends AbstractKernelTestCase
 {

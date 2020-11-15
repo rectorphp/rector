@@ -11,7 +11,7 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\DocumentationGenerator\Printer\CodeSamplePrinter;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use ReflectionClass;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CodeSamplePrinterTest extends AbstractKernelTestCase
