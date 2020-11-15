@@ -177,6 +177,26 @@ $variableName = 'some value'
 
 <br>
 
+```php
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
+
+$propertyFetch = new PropertyFetch(new Variable('someObject'), 'someProperty');
+$value = new String_('some value');
+
+return new Assign($propertyFetch, $value);
+```
+
+↓
+
+```php
+$someObject->someProperty = 'some value'
+```
+
+<br>
+
 ### Public Properties
 
  * `$var` - `/** @var Expr Variable */`
@@ -997,6 +1017,25 @@ $someObject->methodName()
 <br>
 
 ```php
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+
+$thisVariable = new Variable('this');
+$propertyFetch = new PropertyFetch($thisVariable, 'someProperty');
+
+return new MethodCall($propertyFetch, 'methodName');
+```
+
+↓
+
+```php
+$this->someProperty->methodName()
+```
+
+<br>
+
+```php
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -1620,6 +1659,37 @@ private function methodName($paramName): string
 
 <br>
 
+```php
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+
+$classMethod = new ClassMethod('methodName');
+$classMethod->flags = Class_::MODIFIER_PUBLIC;
+
+$variable = new Variable('some');
+$number = new LNumber(10000);
+$assign = new Assign($variable, $number);
+
+$classMethod->stmts[] = new Expression($assign);
+
+return $classMethod;
+```
+
+↓
+
+```php
+public function methodName()
+{
+    $some = 10000;
+}
+```
+
+<br>
+
 ### Public Properties
 
  * `$flags` - `/** @var int Flags */`
@@ -1647,6 +1717,25 @@ return new Class_('ClassName');
 
 ```php
 class ClassName
+{
+}
+```
+
+<br>
+
+```php
+use PhpParser\Node\Stmt\Class_;
+
+$class = new Class_('ClassName');
+$class->flags |= Class_::MODIFIER_FINAL;
+
+return $class;
+```
+
+↓
+
+```php
+final class ClassName
 {
 }
 ```
@@ -2073,6 +2162,40 @@ public static $firstProperty, $secondProperty;
  * `$props` - `/** @var PropertyProperty[] Properties */`
  * `$type` - `/** @var null|Identifier|Name|NullableType|UnionType Type declaration */`
  * `$attrGroups` - `/** @var Node\AttributeGroup[] PHP attribute groups */`
+
+<br>
+
+## `PhpParser\Node\Stmt\PropertyProperty`
+
+### Example PHP Code
+
+```php
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
+
+$class = new Class_('ClassName');
+
+$propertyProperty = new PropertyProperty('someProperty');
+$property = new Property(Class_::MODIFIER_PRIVATE, [$propertyProperty]);
+
+$class->stmts[] = $property;
+
+return $propertyProperty;
+```
+
+↓
+
+```php
+$someProperty
+```
+
+<br>
+
+### Public Properties
+
+ * `$name` - `/** @var Node\VarLikeIdentifier Name */`
+ * `$default` - `/** @var null|Node\Expr Default */`
 
 <br>
 

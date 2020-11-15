@@ -107,7 +107,8 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
         $nodeTypesWithCount = array_count_values($nodeTypes);
         arsort($nodeTypesWithCount);
 
-        return $nodeTypesWithCount;
+        // get only top 30
+        return array_slice($nodeTypesWithCount, 0, 20);
     }
 
     /**
