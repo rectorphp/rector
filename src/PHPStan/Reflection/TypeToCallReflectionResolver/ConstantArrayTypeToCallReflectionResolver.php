@@ -52,7 +52,10 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
 
         $constantArrayType = $constantArrayTypeAndMethod->getType();
 
-        $methodReflection = $constantArrayType->getMethod($constantArrayTypeAndMethod->getMethod(), $classMemberAccessAnswerer);
+        $methodReflection = $constantArrayType->getMethod(
+            $constantArrayTypeAndMethod->getMethod(),
+            $classMemberAccessAnswerer
+        );
         if (! $classMemberAccessAnswerer->canCallMethod($methodReflection)) {
             return null;
         }

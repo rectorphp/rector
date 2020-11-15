@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Matcher;
+namespace Rector\Naming\Contract\Matcher;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;

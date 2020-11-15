@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Guard;
+namespace Rector\Naming\Contract\Guard;
 
-use Rector\Naming\ValueObject\RenameValueObjectInterface;
+use Rector\Naming\Contract\RenameValueObjectInterface;
 
 interface GuardInterface
 {

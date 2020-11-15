@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\ExpectedNameResolver;
+namespace Rector\Naming\Contract\ExpectedNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;

@@ -185,7 +185,7 @@ CODE_SAMPLE
 
         $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($throw);
 
-        return $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+        return $this->diffThrowsTypes($foundThrownThrowables, $alreadyAnnotatedThrowables);
     }
 
     private function analyzeStmtFuncCall(FuncCall $funcCall): int
@@ -197,16 +197,19 @@ CODE_SAMPLE
         }
 
         $reflectionFunction = new ReflectionFunction($functionFqn);
-        $foundThrownThrowables = $this->functionAnnotationResolver->extractFunctionAnnotatedThrows($reflectionFunction);
-        $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($funcCall);
-        return $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+
+        $throwsTypes = $this->functionAnnotationResolver->extractFunctionAnnotatedThrows($reflectionFunction);
+        $alreadyAnnotatedThrowsTypes = $this->extractAlreadyAnnotatedThrowables($funcCall);
+
+        return $this->diffThrowsTypes($throwsTypes, $alreadyAnnotatedThrowsTypes);
     }
 
     private function analyzeStmtMethodCall(MethodCall $methodCall): int
     {
-        $foundThrownThrowables = $this->identifyThrownThrowablesInMethodCall($methodCall);
-        $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($methodCall);
-        return $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+        $foundThrowsTypes = $this->identifyThrownThrowablesInMethodCall($methodCall);
+        $alreadyAnnotatedThrowsTypes = $this->extractAlreadyAnnotatedThrowables($methodCall);
+
+        return $this->diffThrowsTypes($foundThrowsTypes, $alreadyAnnotatedThrowsTypes);
     }
 
     private function identifyCaller(Node $node): ?Node
@@ -277,7 +280,7 @@ CODE_SAMPLE
      * @param string[] $foundThrownThrowables
      * @param string[] $alreadyAnnotatedThrowables
      */
-    private function diffThrowables(array $foundThrownThrowables, array $alreadyAnnotatedThrowables): int
+    private function diffThrowsTypes(array $foundThrownThrowables, array $alreadyAnnotatedThrowables): int
     {
         $normalizeNamespace = static function (string $class): string {
             $class = ltrim($class, '\\');
@@ -311,7 +314,7 @@ CODE_SAMPLE
             return [];
         }
 
-        return $this->classMethodReflectionHelper->extractTagsFromMethodDockblock($class, $method, '@return');
+        return $this->classMethodReflectionHelper->extractTagsFromMethodDocBlock($class, $method, '@return');
     }
 
     /**
@@ -326,6 +329,6 @@ CODE_SAMPLE
             return [];
         }
 
-        return $this->classMethodReflectionHelper->extractTagsFromMethodDockblock($class, $method, '@throws');
+        return $this->classMethodReflectionHelper->extractTagsFromMethodDocBlock($class, $method, '@throws');
     }
 }

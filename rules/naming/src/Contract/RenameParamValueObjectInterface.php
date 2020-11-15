@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\ValueObject;
+namespace Rector\Naming\Contract;
 
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;

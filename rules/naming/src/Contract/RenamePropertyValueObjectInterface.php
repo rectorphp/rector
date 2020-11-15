@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\ValueObject;
+namespace Rector\Naming\Contract;
 
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;

@@ -31,8 +31,7 @@ final class PhpDocTagsFinderTest extends AbstractKernelTestCase
     public function test(): void
     {
         $docContent = $this->smartFileSystem->readFile(__DIR__ . '/Source/doc_block_throws.txt');
-
-        $throwsTags = $this->phpDocTagsFinder->extractTagsFromStringedDocblock($docContent, 'throws');
+        $throwsTags = $this->phpDocTagsFinder->extractTrowsTypesFromDocBlock($docContent);
 
         $this->assertCount(3, $throwsTags);
         $this->assertSame(['A', 'B', 'C'], $throwsTags);

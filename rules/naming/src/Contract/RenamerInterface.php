@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming;
+namespace Rector\Naming\Contract;
 
 use PhpParser\Node;
-use Rector\Naming\ValueObject\RenameValueObjectInterface;
 
 interface RenamerInterface
 {
