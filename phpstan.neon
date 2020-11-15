@@ -4,8 +4,20 @@ includes:
     - vendor/symplify/phpstan-extensions/config/config.neon
 
     # see https://github.com/symplify/coding-standard
-    - vendor/symplify/phpstan-rules/config/symplify-rules.neon
+    # - vendor/symplify/phpstan-rules/config/configurable-rules.neon
+    - vendor/symplify/phpstan-rules/config/static-rules.neon
     - vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-services.neon
+
+    - vendor/symplify/phpstan-rules/config/symplify-rules/array-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/code-complexity-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/static-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/doctrine-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/naming-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/regex-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/symfony-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/test-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/services-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/string-to-constant-rules.neon
 
 services:
     -
@@ -69,31 +81,31 @@ services:
             parentClasses:
                 - Rector
 
-#    -
-#        class: Symplify\PHPStanRules\Rules\PreferredClassRule
-#        tags: [phpstan.rules.rule]
-#        arguments:
-#            oldToPrefferedClasses:
-#                # prevent PHPStorm autocomplete mess
-#                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
-#                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
-#                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
-#                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
-#                'Closure': 'PhpParser\Node\Expr\Closure'
-#                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
-#                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
-#                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
-#                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
-#                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-#                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-#                # builder typo nodes
-#                PhpParser\Builder\Use_: Rector\Core\PhpParser\Builder\UseBuilder
-#                PhpParser\Builder\Class_: Rector\Core\PhpParser\Builder\ClassBuilder
-#                PhpParser\Builder\Method: Rector\Core\PhpParser\Builder\MethodBuilder
-#                PhpParser\Builder\Namespace_: Rector\Core\PhpParser\Builder\NamespaceBuilder
-#                PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
-#                PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
-#                PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
+    -
+        class: Symplify\PHPStanRules\Rules\PreferredClassRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            oldToPrefferedClasses:
+                # prevent PHPStorm autocomplete mess
+                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
+                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
+                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
+                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
+                'Closure': 'PhpParser\Node\Expr\Closure'
+                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
+                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
+                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
+                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
+                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+                # builder typo nodes
+                PhpParser\Builder\Use_: Rector\Core\PhpParser\Builder\UseBuilder
+                PhpParser\Builder\Class_: Rector\Core\PhpParser\Builder\ClassBuilder
+                PhpParser\Builder\Method: Rector\Core\PhpParser\Builder\MethodBuilder
+                PhpParser\Builder\Namespace_: Rector\Core\PhpParser\Builder\NamespaceBuilder
+                PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
+                PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
+                PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
 
 parameters:
     level: max
