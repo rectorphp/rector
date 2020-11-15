@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Type\StringType;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -96,12 +97,14 @@ CODE_SAMPLE
     private function isPossiblyStringType(Expr $expr): bool
     {
         $exprType = $this->getStaticType($expr);
-
-        $trinaryLogic = $exprType->isSuperTypeOf(new StringType());
-        if ($trinaryLogic->maybe()) {
-            return true;
+        if ($exprType instanceof UnionType) {
+            foreach ($exprType->getTypes() as $unionedType) {
+                if ($unionedType instanceof StringType) {
+                    return true;
+                }
+            }
         }
 
-        return $trinaryLogic->yes();
+        return $exprType instanceof StringType;
     }
 }
