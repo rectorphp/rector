@@ -4,25 +4,25 @@ includes:
     - vendor/symplify/phpstan-extensions/config/config.neon
 
     # see https://github.com/symplify/coding-standard
-    - vendor/symplify/coding-standard/config/symplify-rules.neon
-    - vendor/symplify/coding-standard/packages/cognitive-complexity/config/cognitive-complexity-services.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules.neon
+    - vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-services.neon
 
 services:
     -
-        class: Symplify\CodingStandard\CognitiveComplexity\Rules\FunctionLikeCognitiveComplexityRule
+        class: Symplify\PHPStanRules\CognitiveComplexity\Rules\FunctionLikeCognitiveComplexityRule
         tags: [phpstan.rules.rule]
         arguments:
             maxMethodCognitiveComplexity: 9
 
     -
-        class: Symplify\CodingStandard\CognitiveComplexity\Rules\ClassLikeCognitiveComplexityRule
+        class: Symplify\PHPStanRules\CognitiveComplexity\Rules\ClassLikeCognitiveComplexityRule
         tags: [phpstan.rules.rule]
         arguments:
             maxClassCognitiveComplexity: 50
 
     # require constant in argument position
     -
-        class: Symplify\CodingStandard\Rules\RequireMethodCallArgumentConstantRule
+        class: Symplify\PHPStanRules\Rules\RequireMethodCallArgumentConstantRule
         tags: [phpstan.rules.rule]
         arguments:
             constantArgByMethodByType:
@@ -37,7 +37,7 @@ services:
                     setAttribute: [0]
 
     -
-        class: Symplify\CodingStandard\Rules\SeeAnnotationToTestRule
+        class: Symplify\PHPStanRules\Rules\SeeAnnotationToTestRule
         tags: [phpstan.rules.rule]
         arguments:
             requiredSeeTypes:
@@ -46,7 +46,7 @@ services:
                 - Rector\FileSystemRector\Rector\AbstractFileSystemRector
 
     -
-        class: Symplify\CodingStandard\Rules\NoStaticCallRule
+        class: Symplify\PHPStanRules\Rules\NoStaticCallRule
         tags: [phpstan.rules.rule]
         arguments:
             allowedStaticCallClasses:
@@ -55,7 +55,7 @@ services:
 
     # this rule prevents bug in phar like these: https://github.com/rectorphp/rector/pull/3692/files
     -
-        class: Symplify\CodingStandard\Rules\RequireStringArgumentInMethodCallRule
+        class: Symplify\PHPStanRules\Rules\RequireStringArgumentInMethodCallRule
         tags: [phpstan.rules.rule]
         arguments:
             stringArgByMethodByType:
@@ -63,38 +63,37 @@ services:
                     isObjectType: [1]
 
     -
-        class: Symplify\CodingStandard\Rules\ClassNameRespectsParentSuffixRule
+        class: Symplify\PHPStanRules\Rules\ClassNameRespectsParentSuffixRule
         tags: [phpstan.rules.rule]
         arguments:
             parentClasses:
                 - Rector
 
-    -
-        class: Symplify\CodingStandard\Rules\PreferredClassRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            oldToPrefferedClasses:
-                # prevent PHPStorm autocomplete mess
-                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
-                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
-                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
-                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
-                'Closure': 'PhpParser\Node\Expr\Closure'
-                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
-                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
-                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
-                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
-                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-                # builder typo nodes
-                PhpParser\Builder\Use_: Rector\Core\PhpParser\Builder\UseBuilder
-                PhpParser\Builder\Class_: Rector\Core\PhpParser\Builder\ClassBuilder
-                PhpParser\Builder\Method: Rector\Core\PhpParser\Builder\MethodBuilder
-                PhpParser\Builder\Namespace_: Rector\Core\PhpParser\Builder\NamespaceBuilder
-                PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
-                PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
-                PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
-
+#    -
+#        class: Symplify\PHPStanRules\Rules\PreferredClassRule
+#        tags: [phpstan.rules.rule]
+#        arguments:
+#            oldToPrefferedClasses:
+#                # prevent PHPStorm autocomplete mess
+#                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
+#                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
+#                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
+#                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
+#                'Closure': 'PhpParser\Node\Expr\Closure'
+#                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
+#                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
+#                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
+#                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
+#                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+#                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+#                # builder typo nodes
+#                PhpParser\Builder\Use_: Rector\Core\PhpParser\Builder\UseBuilder
+#                PhpParser\Builder\Class_: Rector\Core\PhpParser\Builder\ClassBuilder
+#                PhpParser\Builder\Method: Rector\Core\PhpParser\Builder\MethodBuilder
+#                PhpParser\Builder\Namespace_: Rector\Core\PhpParser\Builder\NamespaceBuilder
+#                PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
+#                PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
+#                PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
 
 parameters:
     level: max
@@ -132,7 +131,6 @@ parameters:
         - packages/node-type-resolver/tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
 
         # phsptan bug
-        - utils/phpstan-extensions/src/Rule/PreventParentMethodVisibilityOverrideRule.php
         - utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
         - packages/rector-generator/templates/*
         # this invalidates whole cache everytime
@@ -686,7 +684,7 @@ parameters:
         # finder type
         - '#Method Rector\\SOLID\\Rector\\Assign\\MoveVariableDeclarationNearReferenceRector\:\:findFirstVariableUsageInScope\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'
 
-        - '#Class with base "NodeNameResolver" name is already used in "Symplify\\CodingStandard\\PhpParser\\NodeNameResolver", "Rector\\NodeNameResolver\\NodeNameResolver"\. Use unique name to make classes easy to recognize#'
+        - '#Class with base "NodeNameResolver" name is already used in "Symplify\\PHPStanRules\\PhpParser\\NodeNameResolver", "Rector\\NodeNameResolver\\NodeNameResolver"\. Use unique name to make classes easy to recognize#'
         - '#Static property Rector\\Testing\\PHPUnit\\AbstractGenericRectorTestCase\:\:\$allRectorContainer \(Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container\|null\) does not accept Psr\\Container\\ContainerInterface#'
 
         - '#Class with base "Application" name is already used in "(.*?)\\Symfony\\Component\\Console\\Application", "Symfony\\Component\\Console\\Application", "Rector\\Core\\Console\\Application"\. Use unique name to make classes easy to recognize#'

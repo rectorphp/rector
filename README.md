@@ -109,11 +109,8 @@ vendor/bin/rector init
 And modify it:
 
 ```php
-<?php
-
 // rector.php
 
-declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
@@ -152,11 +149,8 @@ vendor/bin/rector process src
 ## Full Config Configuration
 
 ```php
-<?php
-
 // rector.php
 
-declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -197,11 +191,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 To work with some Symfony rules, you now need to link your container XML file
 
 ```php
-<?php
-
 // rector.php
 
-declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
