@@ -24,6 +24,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node\Arg;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\ForToForeachRectorTest
@@ -152,6 +153,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isAssignmentWithArrayDimFetchAsVariableInsideForStatements($node)) {
+            return null;
+        }
+
         $iteratedVariableSingle = $this->inflector->singularize($iteratedVariable);
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
@@ -249,6 +254,16 @@ CODE_SAMPLE
         );
     }
 
+    private function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node): bool {
+                return $node instanceof Assign && $node->var instanceof ArrayDimFetch && $this->isVariableName($node->var->dim, $this->keyValueName);
+            }
+        );
+    }
+
     private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
     {
         if ($this->iteratedExpr === null) {
@@ -288,6 +303,13 @@ CODE_SAMPLE
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($this->assignManipulator->isNodePartOfAssign($parentNode)) {
                 return null;
+            }
+
+            if ($parentNode instanceof Arg) {
+                $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+                if ($this->isFuncCallName($parentNode, 'count')) {
+                    return null;
+                }
             }
 
             // is dim same as key value name, ...[$i]
