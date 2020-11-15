@@ -19,6 +19,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -157,6 +158,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isArrayWithKeyValueNameUnsetted($node)) {
+            return null;
+        }
+
         $iteratedVariableSingle = $this->inflector->singularize($iteratedVariable);
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
@@ -263,6 +268,18 @@ CODE_SAMPLE
                     $node->var->dim,
                     $this->keyValueName
                 );
+            }
+        );
+    }
+
+    private function isArrayWithKeyValueNameUnsetted(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node): bool {
+                /** @var Node|null $parent */
+                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+                return $parent instanceof Unset_ && $node instanceof ArrayDimFetch;
             }
         );
     }
