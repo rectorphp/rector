@@ -308,11 +308,8 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($parentNode instanceof Arg) {
-                $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-                if ($this->isFuncCallName($parentNode, 'count')) {
-                    return null;
-                }
+            if ($this->isArgParentCount($parentNode)) {
+                return null;
             }
 
             // is dim same as key value name, ...[$i]
@@ -322,6 +319,19 @@ CODE_SAMPLE
 
             return $singleValue;
         });
+    }
+
+    private function isArgParentCount(?Node $node): bool
+    {
+        if ($node instanceof Arg) {
+            /** @var Node $parentNode */
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($this->isFuncCallName($parentNode, 'count')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
