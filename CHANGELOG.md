@@ -15,6 +15,20 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 ### Added
 
 - [#4596] [Carbon] Add ChangeCarbonSingularMethodCallToPluralRector
+
+### Changed
+
+- [#4607] [CodeQuality] Skip ForToForeachRector on assign count is used inside for statements, Thanks to [@samsonasik]
+- [#4605] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+- [#4604] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
+
+
+
+## Unreleased
+
+### Added
+
+- [#4596] [Carbon] Add ChangeCarbonSingularMethodCallToPluralRector
 - [#4459] [CodeQuality] Add nested foreach foreach that is required for assign
 - [#4457] [CodeQuality] Add MoveOutMethodCallInsideIfConditionRector, Thanks to [@samsonasik]
 - [#4466] [CodeQuality] Decouple complete dynamic properties rector, add skip of Closure::bind()
@@ -5534,3 +5548,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@chapeupreto]: https://github.com/chapeupreto
 [@Orm]: https://github.com/Orm
 [@ComiR]: https://github.com/ComiR
+[#4607]: https://github.com/rectorphp/rector/pull/4607
+[#4605]: https://github.com/rectorphp/rector/pull/4605
+[#4604]: https://github.com/rectorphp/rector/pull/4604
