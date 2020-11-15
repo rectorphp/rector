@@ -8,6 +8,10 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
@@ -28,6 +32,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
  */
 final class DateTimeToDateTimeInterfaceRector extends AbstractRector
 {
+    private const METHODS_MAP = [
+        'add', 'modify', '__set_state', 'setDate', 'setISODate', 'setTime', 'setTimestamp', 'setTimezone', 'sub',
+    ];
+
     /**
      * @var NodeTypeResolver
      */
@@ -79,19 +87,26 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $isModifiedNode = false;
         foreach ($node->getParams() as $param) {
             if (! $this->isDateTimeParam($param)) {
                 continue;
             }
 
-            $this->refactorTypeHint($param);
-            $this->refactorDocBlock($param, $node);
+            $this->refactorParamTypeHint($param);
+            $this->refactorParamDocBlock($param, $node);
+            $this->refactorMethodCalls($param, $node);
+            $isModifiedNode = true;
+        }
+
+        if (! $isModifiedNode) {
+            return null;
         }
 
         return $node;
     }
 
-    private function refactorTypeHint(Param $param): void
+    private function refactorParamTypeHint(Param $param): void
     {
         $dateTimeInterfaceType = new FullyQualified(DateTimeInterface::class);
         if ($param->type instanceof NullableType) {
@@ -102,7 +117,7 @@ CODE_SAMPLE
         $param->type = $dateTimeInterfaceType;
     }
 
-    private function refactorDocBlock(Param $param, ClassMethod $classMethod): void
+    private function refactorParamDocBlock(Param $param, ClassMethod $classMethod): void
     {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -120,6 +135,53 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
         $phpDocInfo->changeParamType(new PHPStanUnionType($types), $param, $paramName);
+    }
+
+    private function refactorMethodCalls(Param $param, ClassMethod $classMethod): void
+    {
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use ($param) {
+            if (!($node instanceof MethodCall)){
+                return;
+            }
+
+            $this->refactorMethodCall($param, $node);
+        });
+    }
+
+    private function refactorMethodCall(Param $param, MethodCall $methodCall): void
+    {
+        $paramName = $this->getName($param->var);
+        if ($this->shouldSkipMethodCallRefactor($paramName, $methodCall)) {
+            return;
+        }
+
+        $newAssignNode = new Assign(new Variable($paramName), $methodCall);
+
+        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Arg) {
+            $parentNode->value = $newAssignNode;
+            return;
+        }
+
+        $parentNode->expr = $newAssignNode;
+    }
+
+    private function shouldSkipMethodCallRefactor(string $paramName, MethodCall $methodCall): bool
+    {
+        if (! $this->isName($methodCall->var, $paramName)) {
+            return true;
+        }
+
+        if (! in_array($this->getName($methodCall->name), self::METHODS_MAP)) {
+            return true;
+        }
+
+        if ($methodCall->getAttribute(AttributeKey::PARENT_NODE) === null) {
+            return true;
+        }
+
+        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        return $parentNode instanceof Assign;
     }
 
     private function isDateTimeParam(Param $param): bool

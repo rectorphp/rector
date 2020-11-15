@@ -2,13 +2,15 @@
 
 namespace Rector\CodeQuality\Tests\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector\Fixture;
 
-class FixtureDocblock {
+class FixtureVariableUsageAssign {
     /**
      * @param mixed $mixed
      */
     public function methodWithDateTime($mixed, \DateTime $dateTime)
     {
-        return true;
+        $dateTime = $dateTime->modify('+1 day');
+
+        return $dateTime;
     }
 }
 
@@ -18,14 +20,16 @@ class FixtureDocblock {
 
 namespace Rector\CodeQuality\Tests\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector\Fixture;
 
-class FixtureDocblock {
+class FixtureVariableUsageAssign {
     /**
      * @param mixed $mixed
      * @param \DateTime|\DateTimeImmutable $dateTime
      */
     public function methodWithDateTime($mixed, \DateTimeInterface $dateTime)
     {
-        return true;
+        $dateTime = $dateTime->modify('+1 day');
+
+        return $dateTime;
     }
 }
 
