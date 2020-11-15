@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\For_;
 
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -18,6 +19,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -30,6 +32,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ForToForeachRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const COUNT = 'count';
+
     /**
      * @var AssignManipulator
      */
@@ -152,6 +159,14 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isAssignmentWithArrayDimFetchAsVariableInsideForStatements($node)) {
+            return null;
+        }
+
+        if ($this->isArrayWithKeyValueNameUnsetted($node)) {
+            return null;
+        }
+
         $iteratedVariableSingle = $this->inflector->singularize($iteratedVariable);
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
@@ -182,7 +197,7 @@ CODE_SAMPLE
                 $this->keyValueName = $this->getName($initExpr->var);
             }
 
-            if ($this->isFuncCallName($initExpr->expr, 'count')) {
+            if ($this->isFuncCallName($initExpr->expr, self::COUNT)) {
                 $this->countValueVariable = $initExpr->var;
                 $this->countValueName = $this->getName($initExpr->var);
                 $this->iteratedExpr = $initExpr->expr->args[0]->value;
@@ -208,7 +223,7 @@ CODE_SAMPLE
         }
 
         // count($values)
-        if ($this->isFuncCallName($condExprs[0]->right, 'count')) {
+        if ($this->isFuncCallName($condExprs[0]->right, self::COUNT)) {
             /** @var FuncCall $countFuncCall */
             $countFuncCall = $condExprs[0]->right;
             $this->iteratedExpr = $countFuncCall->args[0]->value;
@@ -245,6 +260,31 @@ CODE_SAMPLE
             $for->stmts,
             function (Node $node): bool {
                 return $this->areNodesEqual($this->countValueVariable, $node);
+            }
+        );
+    }
+
+    private function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node): bool {
+                return $node instanceof Assign && $node->var instanceof ArrayDimFetch && $this->isVariableName(
+                    $node->var->dim,
+                    $this->keyValueName
+                );
+            }
+        );
+    }
+
+    private function isArrayWithKeyValueNameUnsetted(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node): bool {
+                /** @var Node $parent */
+                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+                return $parent instanceof Unset_ && $node instanceof ArrayDimFetch;
             }
         );
     }
@@ -290,6 +330,10 @@ CODE_SAMPLE
                 return null;
             }
 
+            if ($this->isArgParentCount($parentNode)) {
+                return null;
+            }
+
             // is dim same as key value name, ...[$i]
             if (! $this->isVariableName($node->dim, $this->keyValueName)) {
                 return null;
@@ -320,6 +364,19 @@ CODE_SAMPLE
             }
 
             return $this->isName($condExprs[0]->right, $keyValueName);
+        }
+
+        return false;
+    }
+
+    private function isArgParentCount(?Node $node): bool
+    {
+        if ($node instanceof Arg) {
+            /** @var Node $parentNode */
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($this->isFuncCallName($parentNode, self::COUNT)) {
+                return true;
+            }
         }
 
         return false;
