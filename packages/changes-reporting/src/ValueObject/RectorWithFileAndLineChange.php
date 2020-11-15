@@ -32,8 +32,8 @@ final class RectorWithFileAndLineChange
 
     public function getRectorDefinitionsDescription(): string
     {
-        return $this->rector->getDefinition()
-            ->getDescription();
+        $rectorDefinition = $this->rector->getDefinition();
+        return $rectorDefinition->getDescription();
     }
 
     public function getRectorClass(): string

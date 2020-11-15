@@ -48,22 +48,26 @@ final class CheckGetNodeTypesReturnPhpParserNodeRule implements Rule
             return [];
         }
 
-        return [sprintf(
+        $classReflection = $scope->getClassReflection();
+
+        $errorMessage = sprintf(
             self::ERROR,
-            $scope->getClassReflection()
-                ->getName(),
+            $classReflection->getName(),
             Node::class,
             implode(",\n", $incorrectClassNames)
-        )];
+        );
+
+        return [$errorMessage];
     }
 
     private function shouldSkip(ClassMethod $classMethod, Scope $scope): bool
     {
-        if ($scope->getClassReflection() === null) {
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection === null) {
             return true;
         }
 
-        if ($scope->getClassReflection()->isInterface()) {
+        if ($classReflection->isInterface()) {
             return true;
         }
 

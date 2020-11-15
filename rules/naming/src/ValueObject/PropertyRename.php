@@ -61,6 +61,11 @@ final class PropertyRename implements RenamePropertyValueObjectInterface
         return $this->property;
     }
 
+    public function isPrivateProperty(): bool
+    {
+        return $this->property->isPrivate();
+    }
+
     public function getExpectedName(): string
     {
         return $this->expectedName;

@@ -116,7 +116,9 @@ final class TypeProvidingExprFromClassResolver
         Scope $scope,
         string $type
     ): ?PropertyFetch {
-        foreach ($classReflection->getNativeReflection()->getProperties() as $reflectionProperty) {
+        $nativeReflection = $classReflection->getNativeReflection();
+
+        foreach ($nativeReflection->getProperties() as $reflectionProperty) {
             /** @var PhpPropertyReflection $phpPropertyReflection */
             $phpPropertyReflection = $classReflection->getProperty($reflectionProperty->getName(), $scope);
 

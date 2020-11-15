@@ -87,7 +87,8 @@ final class ClassMethodExternalCallNodeAnalyzer
             $methodName = $this->nodeNameResolver->getName($classMethod);
             $reflectionMethod = new ReflectionMethod($nodeClassName, $methodName);
             // parent class name, must be at least protected
-            if ($reflectionMethod->getDeclaringClass()->getName() !== $nodeClassName) {
+            $reflectionClass = $reflectionMethod->getDeclaringClass();
+            if ($reflectionClass->getName() !== $nodeClassName) {
                 return true;
             }
         }

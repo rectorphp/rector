@@ -50,15 +50,14 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
             return null;
         }
 
-        $method = $constantArrayTypeAndMethod
-            ->getType()
-            ->getMethod($constantArrayTypeAndMethod->getMethod(), $classMemberAccessAnswerer);
+        $constantArrayType = $constantArrayTypeAndMethod->getType();
 
-        if (! $classMemberAccessAnswerer->canCallMethod($method)) {
+        $methodReflection = $constantArrayType->getMethod($constantArrayTypeAndMethod->getMethod(), $classMemberAccessAnswerer);
+        if (! $classMemberAccessAnswerer->canCallMethod($methodReflection)) {
             return null;
         }
 
-        return $method;
+        return $methodReflection;
     }
 
     /**
@@ -82,11 +81,13 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
         }
 
         if ($classOrObjectType instanceof ConstantStringType) {
-            if (! $this->reflectionProvider->hasClass($classOrObjectType->getValue())) {
+            $className = $classOrObjectType->getValue();
+            if (! $this->reflectionProvider->hasClass($className)) {
                 return ConstantArrayTypeAndMethod::createUnknown();
             }
 
-            $type = new ObjectType($this->reflectionProvider->getClass($classOrObjectType->getValue())->getName());
+            $classReflectoin = $this->reflectionProvider->getClass($className);
+            $type = new ObjectType($classReflectoin->getName());
         } elseif ((new ObjectWithoutClassType())->isSuperTypeOf($classOrObjectType)->yes()) {
             $type = $classOrObjectType;
         } else {
