@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\For_;
 
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -24,7 +25,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use PhpParser\Node\Arg;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\ForToForeachRectorTest
@@ -259,7 +259,10 @@ CODE_SAMPLE
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
             function (Node $node): bool {
-                return $node instanceof Assign && $node->var instanceof ArrayDimFetch && $this->isVariableName($node->var->dim, $this->keyValueName);
+                return $node instanceof Assign && $node->var instanceof ArrayDimFetch && $this->isVariableName(
+                    $node->var->dim,
+                    $this->keyValueName
+                );
             }
         );
     }
