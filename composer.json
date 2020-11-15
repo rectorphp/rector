@@ -32,13 +32,12 @@
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
         "symfony/process": "^4.4.8|^5.1",
-        "symplify/autowire-array-parameter": "^8.3.48",
-        "symplify/composer-json-manipulator": "^8.3.48",
-        "symplify/console-color-diff": "^8.3.48",
-        "symplify/easy-testing": "^8.3.48",
-        "symplify/package-builder": "^8.3.48",
-        "symplify/set-config-resolver": "^8.3.48",
-        "symplify/smart-file-system": "^8.3.48",
+        "symplify/autowire-array-parameter": "9.0-BETA1",
+        "symplify/composer-json-manipulator": "9.0-BETA1",
+        "symplify/console-color-diff": "9.0-BETA1",
+        "symplify/package-builder": "9.0-BETA1",
+        "symplify/set-config-resolver": "9.0-BETA1",
+        "symplify/smart-file-system": "9.0-BETA1",
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
@@ -52,11 +51,14 @@
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpunit/phpunit": "^8.5|^9.2",
         "psr/event-dispatcher": "^1.0",
-        "symplify/changelog-linker": "^8.3.48",
-        "symplify/easy-coding-standard": "^8.3.48",
-        "symplify/easy-testing": "^8.3.48",
-        "symplify/monorepo-builder": "^8.3.48",
-        "symplify/phpstan-extensions": "^8.3.48",
+        "symplify/changelog-linker": "9.0-BETA1",
+        "symplify/easy-coding-standard": "9.0-BETA1",
+        "symplify/coding-standard": "9.0-BETA1",
+        "symplify/easy-testing": "9.0-BETA1",
+        "symplify/monorepo-builder": "9.0-BETA1",
+        "symplify/phpstan-extensions": "9.0-BETA1",
+        "symplify/rule-doc-generator": "9.0-BETA1",
+        "symplify/markdown-diff": "9.0-BETA1",
         "tracy/tracy": "^2.7"
     },
     "replace": {
@@ -338,5 +340,7 @@
                 "patches/nette-application-src-application-ui-presenter-php.patch"
             ]
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
