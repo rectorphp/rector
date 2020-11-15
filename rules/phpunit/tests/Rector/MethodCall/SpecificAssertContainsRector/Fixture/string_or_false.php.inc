@@ -11,6 +11,9 @@ final class StringOrFalse extends TestCase
         $this->assertContains('foo', $this->getStringOrFalse());
     }
 
+    /**
+     * @return false|string
+     */
     public function getStringOrFalse()
     {
         if (mt_rand(0, 1)) {
@@ -36,6 +39,9 @@ final class StringOrFalse extends TestCase
         $this->assertStringContainsString('foo', $this->getStringOrFalse());
     }
 
+    /**
+     * @return false|string
+     */
     public function getStringOrFalse()
     {
         if (mt_rand(0, 1)) {
