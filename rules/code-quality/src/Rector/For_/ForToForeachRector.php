@@ -33,6 +33,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ForToForeachRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const COUNT = 'count';
+
+    /**
      * @var AssignManipulator
      */
     private $assignManipulator;
@@ -192,7 +197,7 @@ CODE_SAMPLE
                 $this->keyValueName = $this->getName($initExpr->var);
             }
 
-            if ($this->isFuncCallName($initExpr->expr, 'count')) {
+            if ($this->isFuncCallName($initExpr->expr, self::COUNT)) {
                 $this->countValueVariable = $initExpr->var;
                 $this->countValueName = $this->getName($initExpr->var);
                 $this->iteratedExpr = $initExpr->expr->args[0]->value;
@@ -218,7 +223,7 @@ CODE_SAMPLE
         }
 
         // count($values)
-        if ($this->isFuncCallName($condExprs[0]->right, 'count')) {
+        if ($this->isFuncCallName($condExprs[0]->right, self::COUNT)) {
             /** @var FuncCall $countFuncCall */
             $countFuncCall = $condExprs[0]->right;
             $this->iteratedExpr = $countFuncCall->args[0]->value;
@@ -338,19 +343,6 @@ CODE_SAMPLE
         });
     }
 
-    private function isArgParentCount(?Node $node): bool
-    {
-        if ($node instanceof Arg) {
-            /** @var Node $parentNode */
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($this->isFuncCallName($parentNode, 'count')) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @param Expr[] $condExprs
      */
@@ -372,6 +364,19 @@ CODE_SAMPLE
             }
 
             return $this->isName($condExprs[0]->right, $keyValueName);
+        }
+
+        return false;
+    }
+
+    private function isArgParentCount(?Node $node): bool
+    {
+        if ($node instanceof Arg) {
+            /** @var Node $parentNode */
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($this->isFuncCallName($parentNode, self::COUNT)) {
+                return true;
+            }
         }
 
         return false;
