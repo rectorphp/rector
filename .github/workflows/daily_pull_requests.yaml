@@ -1,0 +1,72 @@
+name: Daily Pull Requests
+
+on:
+    schedule:
+        # https://crontab.guru/once-a-day
+        -   cron: "0 0 * * *"
+
+jobs:
+    daily_pull_requests:
+        strategy:
+            fail-fast: false
+            matrix:
+                actions:
+                    -
+                        name: "Re-Generate Doctrine Annotation Parser"
+                        run: "bin/rector sync-annotation-parser --dry-run --ansi"
+                        branch: 'automated-regenerate-doctrine-parser'
+
+                    -
+                        name: "Re-Generate Nodes/Rectors Documentation"
+                        run: "composer docs"
+                        branch: 'automated-regenerated-nodes-rectors-documentation'
+
+                    -
+                        name: "Re-Generate CHANGELOG.md"
+                        run: "composer changelog"
+                        branch: 'automated-regenerated-changelog'
+
+                    -
+                        name: "Re-Propagate Monorepo Dependencies"
+                        run: "composer propagate --ansi"
+                        branch: 'automated-propagate-monorepo-dependencies'
+
+                    -
+                        name: 'Apply Coding Standard'
+                        run: "composer fix-cs"
+                        branch: 'automated-apply-coding-standards'
+
+        name: ${{ matrix.actions.name }}
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -
+                uses: actions/checkout@v2
+                with:
+                    token: ${{ secrets.ACCESS_TOKEN }}
+
+            # see https://github.com/shivammathur/setup-php
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.4
+                    coverage: none
+                    tools: composer:v2
+
+            -   run: composer install --no-progress --ansi
+
+            -
+                run: ${{ matrix.actions.run }}
+
+            # see https://github.com/peter-evans/create-pull-request
+            -
+                name: Create pull-request
+                uses: peter-evans/create-pull-request@v3
+                with:
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    commit-message: "[automated] ${{ matrix.actions.name }}"
+                    base: 'master'
+                    branch: ${{ matrix.actions.branch }}
+                    title: '[automated] ${{ matrix.actions.name }}'
+                    delete-branch: true

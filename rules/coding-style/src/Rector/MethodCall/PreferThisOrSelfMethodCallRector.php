@@ -8,11 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PHPUnit\Framework\TestCase;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\PreferThisOrSelfMethodCallRectorTest
@@ -28,12 +30,12 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
     /**
      * @var string
      */
-    private const PREFER_SELF = 'self';
+    public const PREFER_SELF = 'self';
 
     /**
      * @var string
      */
-    private const PREFER_THIS = 'this';
+    public const PREFER_THIS = 'this';
 
     /**
      * @var string[]
@@ -45,28 +47,28 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
         return new RectorDefinition('Changes $this->... to self:: or vise versa for specific types', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
-class SomeClass extends PHPUnit\TestCase
+class SomeClass extends \PHPUnit\Framework\TestCase
 {
     public function run()
     {
-        $this->assertThis();
+        $this->assertEquals('a', 'a');
     }
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-class SomeClass extends PHPUnit\TestCase
+class SomeClass extends \PHPUnit\Framework\TestCase
 {
     public function run()
     {
-        self::assertThis();
+        self::assertEquals('a', 'a');
     }
 }
 CODE_SAMPLE
                 ,
                 [
                     self::TYPE_TO_PREFERENCE => [
-                        'PHPUnit\TestCase' => self::PREFER_SELF,
+                        TestCase::class => self::PREFER_SELF,
                     ],
                 ]
             ),
@@ -86,28 +88,44 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        /** @var string $className */
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         foreach ($this->typeToPreference as $type => $preference) {
+            if ($node instanceof MethodCall && $this->isObjectType($node->var, $type)) {
+                return $this->processThisOrSelf($node, $preference);
+            }
+
+            if ($node instanceof StaticCall && is_a($className, $type, true)) {
+                return $this->processThisOrSelf($node, $preference);
+            }
+
             if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 
-            $this->ensurePreferenceIsValid($preference);
-
-            if ($preference === self::PREFER_SELF) {
-                return $this->processToSelf($node);
-            }
-
-            if ($preference === self::PREFER_THIS) {
-                return $this->processToThis($node);
-            }
+            return $this->processThisOrSelf($node, $preference);
         }
 
-        return $node;
+        return null;
     }
 
     public function configure(array $configuration): void
     {
         $this->typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? [];
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function processThisOrSelf(Node $node, string $preference): ?Node
+    {
+        $this->ensurePreferenceIsValid($preference);
+
+        if ($preference === self::PREFER_SELF) {
+            return $this->processToSelf($node);
+        }
+
+        return $this->processToThis($node);
     }
 
     private function ensurePreferenceIsValid(string $preference): void

@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\ValueObject\MethodName;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
@@ -53,11 +54,11 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
         }
 
         if ($this->isName($node, 'letGo')) {
-            $node->name = new Identifier('tearDown');
+            $node->name = new Identifier(MethodName::TEAR_DOWN);
             $this->makeProtected($node);
             $this->phpUnitTypeDeclarationDecorator->decorate($node);
         } elseif ($this->isName($node, 'let')) {
-            $node->name = new Identifier('setUp');
+            $node->name = new Identifier(MethodName::SET_UP);
             $this->makeProtected($node);
             $this->phpUnitTypeDeclarationDecorator->decorate($node);
         } else {

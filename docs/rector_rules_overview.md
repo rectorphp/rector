@@ -1,4 +1,4 @@
-# All 604 Rectors Overview
+# All 612 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -8,8 +8,9 @@
 - [Architecture](#architecture) (2)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
+- [Carbon](#carbon) (2)
 - [CodeQuality](#codequality) (62)
-- [CodingStyle](#codingstyle) (33)
+- [CodingStyle](#codingstyle) (34)
 - [DeadCode](#deadcode) (41)
 - [Defluent](#defluent) (8)
 - [Doctrine](#doctrine) (17)
@@ -23,7 +24,7 @@
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (34)
 - [JMS](#jms) (2)
-- [Laravel](#laravel) (3)
+- [Laravel](#laravel) (7)
 - [Legacy](#legacy) (4)
 - [MagicDisclosure](#magicdisclosure) (3)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
@@ -39,7 +40,7 @@
 - [Order](#order) (9)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
-- [PHPUnit](#phpunit) (38)
+- [PHPUnit](#phpunit) (39)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
 - [PSR4](#psr4) (2)
 - [Performance](#performance) (2)
@@ -463,6 +464,55 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -$object = $object->withParam('paging', ['a value']);
 +$config = $object->getAttribute('paging');
 +$object = $object->withAttribute('paging', ['a value']);
+```
+
+<br><br>
+
+## Carbon
+
+### `ChangeCarbonSingularMethodCallToPluralRector`
+
+- class: [`Rector\Carbon\Rector\MethodCall\ChangeCarbonSingularMethodCallToPluralRector`](/rules/carbon/src/Rector/MethodCall/ChangeCarbonSingularMethodCallToPluralRector.php)
+- [test fixtures](/rules/carbon/tests/Rector/MethodCall/ChangeCarbonSingularMethodCallToPluralRector/Fixture)
+
+Change setter methods with args to their plural names on `Carbon\Carbon`
+
+```diff
+ use Carbon\Carbon;
+
+ final class SomeClass
+ {
+     public function run(Carbon $carbon, $value): void
+     {
+-        $carbon->addMinute($value);
++        $carbon->addMinutes($value);
+     }
+ }
+```
+
+<br><br>
+
+### `ChangeDiffForHumansArgsRector`
+
+- class: [`Rector\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector`](/rules/carbon/src/Rector/MethodCall/ChangeDiffForHumansArgsRector.php)
+- [test fixtures](/rules/carbon/tests/Rector/MethodCall/ChangeDiffForHumansArgsRector/Fixture)
+
+Change methods arguments of `diffForHumans()` on `Carbon\Carbon`
+
+```diff
+ use Carbon\Carbon;
+
+ final class SomeClass
+ {
+     public function run(Carbon $carbon): void
+     {
+-        $carbon->diffForHumans(null, true);
++        $carbon->diffForHumans(null, \Carbon\CarbonInterface::DIFF_ABSOLUTE);
+
+-        $carbon->diffForHumans(null, false);
++        $carbon->diffForHumans(null, \Carbon\CarbonInterface::DIFF_RELATIVE_AUTO);
+     }
+ }
 ```
 
 <br><br>
@@ -2179,6 +2229,7 @@ Changes `$this->...` to self:: or vise versa for specific types
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -2188,7 +2239,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PreferThisOrSelfMethodCallRector::class)
         ->call('configure', [[
             PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
-                'PHPUnit\TestCase' => 'self',
+                TestCase::class => 'self',
             ],
         ]]);
 };
@@ -2197,12 +2248,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ↓
 
 ```diff
- class SomeClass extends PHPUnit\TestCase
+ class SomeClass extends \PHPUnit\Framework\TestCase
  {
      public function run()
      {
--        $this->assertThis();
-+        self::assertThis();
+-        $this->assertEquals('a', 'a');
++        self::assertEquals('a', 'a');
      }
  }
 ```
@@ -2224,6 +2275,32 @@ Non-magic PHP object methods cannot start with "__"
      {
 -        $anotherObject->__getSurname();
 +        $anotherObject->getSurname();
+     }
+ }
+```
+
+<br><br>
+
+### `RemoveParamReturnDocblockRector`
+
+- class: [`Rector\CodingStyle\Rector\ClassMethod\RemoveParamReturnDocblockRector`](/rules/coding-style/src/Rector/ClassMethod/RemoveParamReturnDocblockRector.php)
+- [test fixtures](/rules/coding-style/tests/Rector/ClassMethod/RemoveParamReturnDocblockRector/Fixture)
+
+Remove @param and @return docblock with same type and no description on typed argument and return
+
+```diff
+ use stdClass;
+
+ class SomeClass
+ {
+     /**
+-     * @param string $a
+      * @param string $b description
+-     * @return stdClass
+      */
+     function foo(string $a, string $b): stdClass
+     {
+
      }
  }
 ```
@@ -4171,10 +4248,10 @@ Remove temporary *Uuid relation properties
 
 <br><br>
 
-### `ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector`
+### `ServiceEntityRepositoryParentCallToDIRector`
 
-- class: [`Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector`](/rules/doctrine/src/Rector/ClassMethod/ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector.php)
-- [test fixtures](/rules/doctrine/tests/Rector/ClassMethod/ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector/Fixture)
+- class: [`Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector`](/rules/doctrine/src/Rector/ClassMethod/ServiceEntityRepositoryParentCallToDIRector.php)
+- [test fixtures](/rules/doctrine/tests/Rector/ClassMethod/ServiceEntityRepositoryParentCallToDIRector/Fixture)
 
 Change ServiceEntityRepository to dependency injection, with repository property
 
@@ -7083,6 +7160,103 @@ Removes JMS\DiExtraBundle\Annotation\Services annotation
 
 ## Laravel
 
+### `AddGuardToLoginEventRector`
+
+- class: [`Rector\Laravel\Rector\New_\AddGuardToLoginEventRector`](/rules/laravel/src/Rector/New_/AddGuardToLoginEventRector.php)
+- [test fixtures](/rules/laravel/tests/Rector/New_/AddGuardToLoginEventRector/Fixture)
+
+Add new `$guard` argument to Illuminate\Auth\Events\Login
+
+```diff
+ use Illuminate\Auth\Events\Login;
+
+ final class SomeClass
+ {
+     public function run(): void
+     {
+-        $loginEvent = new Login('user', false);
++        $guard = config('auth.defaults.guard');
++        $loginEvent = new Login($guard, 'user', false);
+     }
+ }
+```
+
+<br><br>
+
+### `AddMockConsoleOutputFalseToConsoleTestsRector`
+
+- class: [`Rector\Laravel\Rector\Class_\AddMockConsoleOutputFalseToConsoleTestsRector`](/rules/laravel/src/Rector/Class_/AddMockConsoleOutputFalseToConsoleTestsRector.php)
+- [test fixtures](/rules/laravel/tests/Rector/Class_/AddMockConsoleOutputFalseToConsoleTestsRector/Fixture)
+
+Add "$this->mockConsoleOutput = false"; to console tests that work with output content
+
+```diff
+ use Illuminate\Support\Facades\Artisan;
+ use Illuminate\Foundation\Testing\TestCase;
+
+ final class SomeTest extends TestCase
+ {
++    public function setUp(): void
++    {
++        parent::setUp();
++
++        $this->mockConsoleOutput = false;
++    }
++
+     public function test(): void
+     {
+         $this->assertEquals('content', \trim((new Artisan())::output()));
+     }
+ }
+```
+
+<br><br>
+
+### `AddParentBootToModelClassMethodRector`
+
+- class: [`Rector\Laravel\Rector\ClassMethod\AddParentBootToModelClassMethodRector`](/rules/laravel/src/Rector/ClassMethod/AddParentBootToModelClassMethodRector.php)
+- [test fixtures](/rules/laravel/tests/Rector/ClassMethod/AddParentBootToModelClassMethodRector/Fixture)
+
+Add parent::boot(); call to `boot()` class method in child of `Illuminate\Database\Eloquent\Model`
+
+```diff
+ use Illuminate\Database\Eloquent\Model;
+
+ class Product extends Model
+ {
+     public function boot()
+     {
++        parent::boot();
+     }
+ }
+```
+
+<br><br>
+
+### `ChangeQueryWhereDateValueWithCarbonRector`
+
+- class: [`Rector\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector`](/rules/laravel/src/Rector/MethodCall/ChangeQueryWhereDateValueWithCarbonRector.php)
+- [test fixtures](/rules/laravel/tests/Rector/MethodCall/ChangeQueryWhereDateValueWithCarbonRector/Fixture)
+
+Add parent::boot(); call to `boot()` class method in child of `Illuminate\Database\Eloquent\Model`
+
+```diff
+ use Illuminate\Database\Query\Builder;
+
+ final class SomeClass
+ {
+     public function run(Builder $query)
+     {
+-        $query->whereDate('created_at', '<', Carbon::now());
++        $dateTime = Carbon::now();
++        $query->whereDate('created_at', '<=', $dateTime);
++        $query->whereTime('created_at', '<=', $dateTime);
+     }
+ }
+```
+
+<br><br>
+
 ### `MinutesToSecondsInCacheRector`
 
 - class: [`Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector`](/rules/laravel/src/Rector/StaticCall/MinutesToSecondsInCacheRector.php)
@@ -9982,6 +10156,33 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 
 <br><br>
 
+### `ConstructClassMethodToSetUpTestCaseRector`
+
+- class: [`Rector\PHPUnit\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector`](/rules/phpunit/src/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php)
+- [test fixtures](/rules/phpunit/tests/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector/Fixture)
+
+Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to setUp(), to prevent dangerous override
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+     private $someValue;
+
+-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
++    protected function setUp()
+     {
++        parent::setUp();
++
+         $this->someValue = 1000;
+-        parent::__construct($name, $data, $dataName);
+     }
+ }
+```
+
+<br><br>
+
 ### `CreateMockToCreateStubRector`
 
 - class: [`Rector\PHPUnit\Rector\MethodCall\CreateMockToCreateStubRector`](/rules/phpunit/src/Rector/MethodCall/CreateMockToCreateStubRector.php)
@@ -10035,7 +10236,7 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 - class: [`Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector`](/rules/phpunit/src/Rector/ClassMethod/ExceptionAnnotationRector.php)
 - [test fixtures](/rules/phpunit/tests/Rector/ClassMethod/ExceptionAnnotationRector/Fixture)
 
-Changes `@expectedException annotations to expectException*() methods
+Changes `@expectedException annotations to `expectException*()` methods
 
 ```diff
 -/**

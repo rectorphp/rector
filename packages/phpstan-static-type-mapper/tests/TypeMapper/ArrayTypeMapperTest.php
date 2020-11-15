@@ -23,7 +23,7 @@ final class ArrayTypeMapperTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        self::bootKernel(RectorKernel::class);
+        $this->bootKernel(RectorKernel::class);
 
         $this->arrayTypeMapper = self::$container->get(ArrayTypeMapper::class);
     }

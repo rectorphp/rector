@@ -14,6 +14,7 @@ use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\MockistaToMockery\MockistaDetector;
 
 /**
@@ -83,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $tearDownClassMethod = $node->getMethod('tearDown');
+        $tearDownClassMethod = $node->getMethod(MethodName::TEAR_DOWN);
         if ($tearDownClassMethod === null) {
             $node->stmts[] = $this->createTearDownMethodWithMockeryClose();
         } elseif (! $this->containsMockeryClose($tearDownClassMethod)) {
@@ -95,7 +96,7 @@ CODE_SAMPLE
 
     private function createTearDownMethodWithMockeryClose(): ClassMethod
     {
-        $methodBuilder = new MethodBuilder('tearDown');
+        $methodBuilder = new MethodBuilder(MethodName::TEAR_DOWN);
         $methodBuilder->setReturnType('void');
         $methodBuilder->makeProtected();
 

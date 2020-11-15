@@ -41,8 +41,8 @@ final class OrderMethodsByVisibilityRector extends AbstractConstantPropertyMetho
         '__clone',
         'setUpBeforeClass',
         'tearDownAfterClass',
-        'setUp',
-        'tearDown',
+        MethodName::SET_UP,
+        MethodName::TEAR_DOWN,
     ];
 
     public function getDefinition(): RectorDefinition

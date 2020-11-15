@@ -5,7 +5,7 @@ declare(strict_types=1);
 use PHPStan\Type\MixedType;
 use PHPStan\Type\VoidType;
 use Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
-use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector;
+use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -56,5 +56,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    $services->set(ReplaceAssertArraySubsetRector::class);
+    $services->set(ReplaceAssertArraySubsetWithDmsPolyfillRector::class);
 };

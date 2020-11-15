@@ -33,4 +33,14 @@ final class PropertyFetchAnalyzer
 
         return false;
     }
+
+    public function isLocalPropertyFetchName(Node $node, string $desiredPropertyName): bool
+    {
+        if (! $this->isLocalPropertyFetch($node)) {
+            return false;
+        }
+
+        /** @var PropertyFetch|StaticPropertyFetch $node */
+        return $this->nodeNameResolver->isName($node->name, $desiredPropertyName);
+    }
 }

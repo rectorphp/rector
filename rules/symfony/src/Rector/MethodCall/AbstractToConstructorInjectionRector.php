@@ -63,7 +63,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
     /**
      * @param MethodCall $methodCallNode
      */
-    private function getServiceTypeFromMethodCallArgument(Node $methodCallNode): Type
+    private function getServiceTypeFromMethodCallArgument(Node $methodCallNode): ?Type
     {
         if (! isset($methodCallNode->args[0])) {
             return new MixedType();

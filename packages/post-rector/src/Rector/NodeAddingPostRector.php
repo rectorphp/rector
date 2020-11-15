@@ -41,19 +41,25 @@ final class NodeAddingPostRector extends AbstractPostRector
      */
     public function leaveNode(Node $node)
     {
+        $newNodes = [$node];
+
         $nodesToAddAfter = $this->nodesToAddCollector->getNodesToAddAfterNode($node);
         if ($nodesToAddAfter !== []) {
             $this->nodesToAddCollector->clearNodesToAddAfter($node);
-            return array_merge([$node], $nodesToAddAfter);
+            $newNodes = array_merge($newNodes, $nodesToAddAfter);
         }
 
         $nodesToAddBefore = $this->nodesToAddCollector->getNodesToAddBeforeNode($node);
         if ($nodesToAddBefore !== []) {
             $this->nodesToAddCollector->clearNodesToAddBefore($node);
-            return array_merge($nodesToAddBefore, [$node]);
+            $newNodes = array_merge($nodesToAddBefore, $newNodes);
         }
 
-        return $node;
+        if ($newNodes === [$node]) {
+            return $node;
+        }
+
+        return $newNodes;
     }
 
     public function getDefinition(): RectorDefinition
