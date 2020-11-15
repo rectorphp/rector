@@ -715,3 +715,28 @@ parameters:
             message: '#Class cognitive complexity is \d+, keep it under 50#'
             paths:
                 - rules/php70/src/EregToPcreTransformer.php
+                - packages/node-collector/src/NodeCollector/NodeRepository.php
+                - packages/node-type-resolver/src/NodeTypeResolver.php
+
+        # symplify 9
+        - '#Do not use chained method calls\. Put each on separated lines#'
+        - '#Use decoupled factory service to create "(.*?)" object#'
+        - '#Use "\$class\-\>namespaceName" instead of "\$class\-\>name" that only returns short class name#'
+        - '#Method call on new expression is not allowed#'
+        - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
+        - '#Method nor static call in if \(\) or elseif \(\) is not allowed\. Extract expression to a new variable assign on line before#'
+        - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
+        - '#SymfonyStyle usage is unneeded for only newline, write, and/or writeln, use PHP_EOL and concatenation instead#'
+        - '#Method nor static call in foreach is not allowed\. Extract expression to a new variable assign on line before#'
+        - '#Do not call parent method if parent method is empty#'
+        - '#Trait method "(.*?)" should not contain any logic, but only delegate to other class call#'
+        - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
+        - '#Relocate Interface to a "Contract" namespace#'
+        - '#Spread operator is not allowed#'
+        - '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+
+        -
+            message: '#Use explicit names over dynamic ones#'
+            paths:
+                - packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php # 61
+                - packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php # 122
