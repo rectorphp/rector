@@ -13,9 +13,8 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/3494#issuecomment-480283612
- */
-
-/**
+ * @see https://github.com/sebastianbergmann/phpunit/issues/3495
+ *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector\ReplaceAssertArraySubsetWithDmsPolyfillRectorTest
  */
 final class ReplaceAssertArraySubsetWithDmsPolyfillRector extends AbstractPHPUnitRector
