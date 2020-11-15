@@ -277,7 +277,7 @@ CODE_SAMPLE
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
             function (Node $node): bool {
-                /** @var Node|null $parent */
+                /** @var Node $parent */
                 $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
                 return $parent instanceof Unset_ && $node instanceof ArrayDimFetch;
             }
