@@ -107,6 +107,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (is_numeric($camelCaseName[0])) {
+            return null;
+        }
+
         $node->name = $camelCaseName;
 
         return $node;

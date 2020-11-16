@@ -119,6 +119,10 @@ CODE_SAMPLE
             return $this->renameParam($parentNode);
         }
 
+        if (is_numeric($camelCaseName[0])) {
+            return null;
+        }
+
         $node->name = $camelCaseName;
 
         return $node;
