@@ -112,6 +112,7 @@ final class ConfigurableRectorRule implements Rule
 
             return null;
         });
+
         return $nodes !== [];
     }
 }

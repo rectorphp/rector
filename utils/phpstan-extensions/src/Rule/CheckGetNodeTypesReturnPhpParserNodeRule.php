@@ -15,6 +15,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 
 /**
+ * @todo make configurable and part of Symplify
  * @see \Rector\PHPStanExtensions\Tests\Rule\CheckGetNodeTypesReturnPhpParserNodeRule\CheckGetNodeTypesReturnPhpParserNodeRuleTest
  */
 final class CheckGetNodeTypesReturnPhpParserNodeRule implements Rule
@@ -22,7 +23,7 @@ final class CheckGetNodeTypesReturnPhpParserNodeRule implements Rule
     /**
      * @var string
      */
-    public const ERROR = "%s::getNodeTypes() returns class names that are not instances of %s:\n%s";
+    public const ERROR_MESSAGE = "%s::getNodeTypes() returns class names that are not instances of %s:\n%s";
 
     public function getNodeType(): string
     {
@@ -51,7 +52,7 @@ final class CheckGetNodeTypesReturnPhpParserNodeRule implements Rule
         $classReflection = $scope->getClassReflection();
 
         $errorMessage = sprintf(
-            self::ERROR,
+            self::ERROR_MESSAGE,
             $classReflection->getName(),
             Node::class,
             implode(",\n", $incorrectClassNames)

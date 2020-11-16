@@ -16,6 +16,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
+use Symplify\PHPStanRules\Naming\SimpleNameResolver;
 
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\RectorRuleAndValueObjectHaveSameStartsRule\RectorRuleAndValueObjectHaveSameStartsRuleTest
@@ -25,7 +26,21 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
     /**
      * @var string
      */
-    public const ERROR = 'Value Object class name "%s" is incorrect. The correct class name is "%s".';
+    public const ERROR_MESSAGE = 'Change "%s" name to "%s", so it respects the Rector rule name';
+    /**
+     * @var SimpleNameResolver
+     */
+    private $simpleNameResolver;
+    /**
+     * @var NodeFinder
+     */
+    private $nodeFinder;
+
+    public function __construct(SimpleNameResolver $simpleNameResolver, NodeFinder $nodeFinder)
+    {
+        $this->simpleNameResolver = $simpleNameResolver;
+        $this->nodeFinder = $nodeFinder;
+    }
 
     /**
      * @var string
@@ -63,7 +78,7 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
         }
 
         return [sprintf(
-            self::ERROR,
+            self::ERROR_MESSAGE,
             $valueObjectClassName,
             // @see https://regex101.com/r/F8z9PY/1
             Strings::replace($rectorRuleClassName, self::RECTOR_SUFFIX_REGEX, '')
@@ -77,18 +92,22 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
         if ($name->toString() !== 'call') {
             return true;
         }
+
         /** @var String_ $expr */
         $expr = $methodCall->args[0]->value;
+
         return $expr->value !== 'configure';
     }
 
     private function getValueObjectClassName(MethodCall $methodCall): ?string
     {
-        $nodeFinder = new NodeFinder();
-        $inlineValueObjectsNode = $nodeFinder->findFirst($methodCall->args[1], function (Node $node): ?FuncCall {
+        $secondArgumentValue = $methodCall->args[1]->value;
+
+        $inlineValueObjectsNode = $this->nodeFinder->findFirst($secondArgumentValue, function (Node $node): ?FuncCall {
             if (! $node instanceof FuncCall) {
                 return null;
             }
+
             $className = $this->getClassNameFromNode($node);
             if ($className === null) {
                 return null;
@@ -129,6 +148,7 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
     private function getClassNameFromNode(Node $node): ?string
     {
         $parts = [];
+
         if ($node instanceof New_ || $node instanceof ClassConstFetch) {
             /** @var FullyQualified $classNode */
             $classNode = $node->class;

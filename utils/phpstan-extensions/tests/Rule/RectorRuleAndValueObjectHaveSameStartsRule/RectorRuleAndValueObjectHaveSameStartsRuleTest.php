@@ -29,7 +29,7 @@ final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends AbstractServi
         yield [__DIR__ . '/Fixture/SkipConfigureValueObjectImplementsInterface.php', []];
 
         $errorMessage = sprintf(
-            RectorRuleAndValueObjectHaveSameStartsRule::ERROR,
+            RectorRuleAndValueObjectHaveSameStartsRule::ERROR_MESSAGE,
             'ConfigureValueObject',
             'ChangeMethodVisibility'
         );

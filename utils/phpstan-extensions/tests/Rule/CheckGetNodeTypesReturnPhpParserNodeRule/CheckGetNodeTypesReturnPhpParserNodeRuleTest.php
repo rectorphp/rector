@@ -30,7 +30,7 @@ final class CheckGetNodeTypesReturnPhpParserNodeRuleTest extends AbstractService
         yield [__DIR__ . '/Fixture/SkipInterface.php', []];
 
         $errorMessage = sprintf(
-            CheckGetNodeTypesReturnPhpParserNodeRule::ERROR,
+            CheckGetNodeTypesReturnPhpParserNodeRule::ERROR_MESSAGE,
             IncorrectReturnRector::class,
             Node::class,
             ClassNotOfPhpParserNode::class

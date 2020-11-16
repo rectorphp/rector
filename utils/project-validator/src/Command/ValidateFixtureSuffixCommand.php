@@ -12,6 +12,7 @@ use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use Symplify\SmartFileSystem\Finder\SmartFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ValidateFixtureSuffixCommand extends Command
@@ -67,8 +68,8 @@ final class ValidateFixtureSuffixCommand extends Command
      */
     private function getInvalidFixtureFileInfos(): array
     {
-        $finder = (new Finder())
-            ->files()
+        $finder = new Finder();
+        $finder = $finder->files()
             ->name('#\.inc$#')
             ->name('#\.php#')
             ->notName('#\.php\.inc$#')
