@@ -38,6 +38,7 @@
         "symplify/package-builder": "dev-master",
         "symplify/set-config-resolver": "dev-master",
         "symplify/smart-file-system": "dev-master",
+        "symplify/rule-doc-generator": "dev-master",
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
@@ -57,7 +58,6 @@
         "symplify/easy-testing": "dev-master",
         "symplify/monorepo-builder": "dev-master",
         "symplify/phpstan-extensions": "dev-master",
-        "symplify/rule-doc-generator": "dev-master",
         "symplify/markdown-diff": "dev-master",
         "symplify/phpstan-rules": "dev-master",
         "tracy/tracy": "^2.7"

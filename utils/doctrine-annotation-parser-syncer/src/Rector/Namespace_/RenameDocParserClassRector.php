@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class RenameDocParserClassRector extends AbstractRector implements ClassSyncerRectorInterface
@@ -39,7 +40,6 @@ final class RenameDocParserClassRector extends AbstractRector implements ClassSy
         }
 
         $firstClass->name = new Identifier('ConstantPreservingDocParser');
-
         $node->name = new Name('Rector\DoctrineAnnotationGenerated');
 
         return $node;
@@ -47,6 +47,24 @@ final class RenameDocParserClassRector extends AbstractRector implements ClassSy
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Rename DocParser to own constant preserving format');
+        return new RuleDefinition('Rename DocParser to own constant preserving format', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+namespace Doctrine\Common\Annotations;
+
+class DocParser
+{
+}
+CODE_SAMPLE
+,
+                <<<'CODE_SAMPLE'
+namespace Rector\DoctrineAnnotationGenerated;
+
+class ConstantPreservingDocParser
+{
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 }

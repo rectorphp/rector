@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class RenameAnnotationReaderClassRector extends AbstractRector implements ClassSyncerRectorInterface
@@ -39,7 +40,6 @@ final class RenameAnnotationReaderClassRector extends AbstractRector implements 
         }
 
         $firstClass->name = new Identifier('ConstantPreservingAnnotationReader');
-
         $node->name = new Name('Rector\DoctrineAnnotationGenerated');
 
         return $node;
@@ -47,6 +47,24 @@ final class RenameAnnotationReaderClassRector extends AbstractRector implements 
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Rename AnnotationReader to own constant preserving format');
+        return new RuleDefinition('Rename AnnotationReader to own constant preserving format', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+namespace Doctrine\Common\Annotations;
+
+class AnnotationReader
+{
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+namespace Rector\DoctrineAnnotationGenerated;
+
+class ConstantPreservingAnnotationReader
+{
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 }

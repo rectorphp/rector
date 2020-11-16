@@ -7,10 +7,6 @@ Here you can find overview of commonly used nodes and how to build PHP code from
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Const_;
 use PhpParser\Node\Scalar\String_;
 
@@ -37,10 +33,6 @@ CONSTANT_NAME = 'default'
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
@@ -71,10 +63,6 @@ $variableName[0]
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
@@ -107,10 +95,6 @@ return new ArrayItem($value, $key);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Variable;
@@ -143,10 +127,6 @@ return new Array_([$arrayItem]);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -179,10 +159,6 @@ fn() => 1
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
@@ -213,10 +189,6 @@ $variableName = 'some value'
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\AssignOp\Coalesce;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -246,10 +218,6 @@ return new Coalesce($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\AssignOp\Concat;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -279,10 +247,6 @@ return new Concat($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -312,10 +276,6 @@ return new BooleanAnd($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -345,10 +305,6 @@ return new Coalesce($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -378,10 +334,6 @@ return new Concat($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -411,10 +363,6 @@ return new Equal($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -444,10 +392,6 @@ return new Identical($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -477,10 +421,6 @@ return new Minus($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -510,10 +450,6 @@ return new NotEqual($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -543,10 +479,6 @@ return new NotIdentical($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Scalar\LNumber;
 
@@ -576,10 +508,6 @@ return new Spaceship($left, $right);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Variable;
 
@@ -607,10 +535,6 @@ return new BooleanNot($variable);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\Variable;
 
@@ -638,10 +562,6 @@ return new Array_($expr);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Variable;
 
@@ -669,10 +589,6 @@ return new Bool_($expr);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Variable;
 
@@ -700,10 +616,6 @@ return new Int_($expr);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\Variable;
 
@@ -731,10 +643,6 @@ return new String_($expr);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 
@@ -763,10 +671,6 @@ return new ClassConstFetch($class, 'SOME_CONSTANT');
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
 
@@ -795,10 +699,6 @@ $variableName
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
 
@@ -826,10 +726,6 @@ true
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Variable;
 
@@ -857,10 +753,6 @@ empty($variableName)
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Eval_;
 use PhpParser\Node\Scalar\String_;
 
@@ -888,10 +780,6 @@ eval('Some php code')
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
@@ -922,10 +810,6 @@ func_call($someVariable)
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
 
@@ -943,10 +827,6 @@ include $variableName
 <br>
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
 
@@ -975,10 +855,6 @@ require_once $variableName
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
@@ -1009,10 +885,6 @@ $variableName instanceof \SomeClassName
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Variable;
 
@@ -1040,10 +912,6 @@ isset($variableName)
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
@@ -1075,10 +943,6 @@ list($variableName, $anoterVariableName)
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\MatchArm;
@@ -1116,10 +980,6 @@ match ($variableName) {
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 
@@ -1137,10 +997,6 @@ $someObject->methodName()
 <br>
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -1176,10 +1032,6 @@ $someObject->methodName('yes', 'maybe')
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 // anonymous class
 
 use PhpParser\Node\Expr\New_;
@@ -1201,10 +1053,6 @@ new class
 <br>
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 
@@ -1233,10 +1081,6 @@ new SomeClass()
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\Variable;
 
@@ -1266,10 +1110,6 @@ $variableName?->methodName()
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\Variable;
 
@@ -1298,10 +1138,6 @@ $variableName?->someProperty
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 
@@ -1330,10 +1166,6 @@ $variableName->propertyName
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 
@@ -1363,10 +1195,6 @@ return new StaticCall($fullyQualified, 'methodName');
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name\FullyQualified;
 
@@ -1395,10 +1223,6 @@ return new StaticPropertyFetch($class, 'someProperty');
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
@@ -1433,10 +1257,6 @@ $variableName ? true : false
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Scalar\String_;
 
@@ -1464,10 +1284,6 @@ throw 'some string'
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 
 return new Variable('variableName');
@@ -1492,10 +1308,6 @@ $variableName
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\MatchArm;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
@@ -1526,10 +1338,6 @@ return new MatchArm($conds, $body);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Name;
 
 return new Name('shortName');
@@ -1555,10 +1363,6 @@ shortName
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Name\FullyQualified;
 
 return new FullyQualified('SomeNamespace\ShortName');
@@ -1583,10 +1387,6 @@ return new FullyQualified('SomeNamespace\ShortName');
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\NullableType;
 
 return new NullableType('SomeType');
@@ -1611,10 +1411,6 @@ return new NullableType('SomeType');
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 
@@ -1648,10 +1444,6 @@ $variableName
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Scalar\DNumber;
 
 return new DNumber(10.5);
@@ -1676,10 +1468,6 @@ return new DNumber(10.5);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
 
@@ -1705,10 +1493,6 @@ return new Encapsed([new Variable('variableName')]);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Scalar\LNumber;
 
 return new LNumber(1000);
@@ -1733,10 +1517,6 @@ return new LNumber(1000);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Scalar\String_;
 
 return new String_('some string');
@@ -1762,10 +1542,6 @@ return new String_('some string');
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Const_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -1798,10 +1574,6 @@ public const SOME_CLASS_CONSTANT = 'default value';
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 
@@ -1822,10 +1594,6 @@ public function methodName()
 <br>
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
@@ -1870,10 +1638,6 @@ private function methodName($paramName): string
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Stmt\Class_;
 
 return new Class_('ClassName');
@@ -1890,10 +1654,6 @@ class ClassName
 <br>
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 
@@ -1908,7 +1668,7 @@ return $class;
 ↓
 
 ```php
-final class ClassName extends \ParentClass
+final class ClassName extends ParentClass
 {
 }
 ```
@@ -1931,10 +1691,6 @@ final class ClassName extends \ParentClass
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Const_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Const_ as ConstStmt;
@@ -1963,10 +1719,6 @@ const CONSTANT_IN_CLASS = 'default value';
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\DeclareDeclare;
@@ -1979,7 +1731,6 @@ return new Declare_([$declareDeclare]);
 ↓
 
 ```php
-declare(strict_types=1);
 ```
 
 <br>
@@ -1996,10 +1747,6 @@ declare(strict_types=1);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Do_;
 
@@ -2029,10 +1776,6 @@ do {
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Echo_;
 
@@ -2060,10 +1803,6 @@ echo 'hello';
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -2098,10 +1837,6 @@ elseif (true) {
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 
@@ -2135,10 +1870,6 @@ foreach ($foreachedVariableName as $asVariable) {
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Stmt\Function_;
 
 return new Function_('some_function');
@@ -2147,7 +1878,7 @@ return new Function_('some_function');
 ↓
 
 ```php
-function some_function()
+function some_function(): void
 {
 }
 ```
@@ -2170,10 +1901,6 @@ function some_function()
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\If_;
@@ -2206,10 +1933,6 @@ if (true) {
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Stmt\InlineHTML;
 
 return new InlineHTML('<strong>feel</strong>');
@@ -2235,10 +1958,6 @@ return new InlineHTML('<strong>feel</strong>');
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Interface_;
 
@@ -2269,10 +1988,6 @@ interface InterfaceName
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Stmt\Label;
 
 return new Label('labelName');
@@ -2297,10 +2012,6 @@ labelName:
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
@@ -2320,10 +2031,6 @@ public string $propertyName;
 <br>
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
@@ -2343,10 +2050,6 @@ public $propertyName;
 <br>
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
@@ -2378,10 +2081,6 @@ public static $firstProperty, $secondProperty;
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\StaticVar;
 
@@ -2410,10 +2109,6 @@ $variableName
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\StaticVar;
@@ -2442,10 +2137,6 @@ static $static;
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Case_;
@@ -2479,10 +2170,6 @@ switch ($variableName) {
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Throw_;
 
@@ -2510,10 +2197,6 @@ throw 'some string';
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\TraitUse;
 
@@ -2523,7 +2206,6 @@ return new TraitUse([new FullyQualified('TraitName')]);
 ↓
 
 ```php
-use \TraitName;
 ```
 
 <br>
@@ -2540,10 +2222,6 @@ use \TraitName;
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUseAdaptation\Alias;
@@ -2575,10 +2253,6 @@ return new Alias($traitFullyQualified, 'method', Class_::MODIFIER_PUBLIC, 'alias
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Stmt\Trait_;
 
 return new Trait_('TraitName');
@@ -2607,10 +2281,6 @@ trait TraitName
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Catch_;
@@ -2655,10 +2325,6 @@ try {
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Unset_;
 
@@ -2686,10 +2352,6 @@ unset($variableName);
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -2702,7 +2364,6 @@ return new Use_([$useUse]);
 ↓
 
 ```php
-use UsedNamespace;
 ```
 
 <br>
@@ -2719,10 +2380,6 @@ use UsedNamespace;
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\While_;
 
@@ -2750,10 +2407,6 @@ while ($variableName) {
 ### Example PHP Code
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use PhpParser\Node\Identifier;
 use PhpParser\Node\UnionType;
 

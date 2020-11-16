@@ -32,10 +32,8 @@ final class ThrowAnalyzer
     public function resolveThrownTypes(Throw_ $throw): array
     {
         $thrownType = $this->nodeTypeResolver->getStaticType($throw->expr);
-
-        $class = $this->resolveClassFromType($thrownType);
-        if ($class !== null) {
-            return [$class];
+        if ($thrownType instanceof MixedType) {
+            return [];
         }
 
         if ($thrownType instanceof UnionType) {
@@ -47,8 +45,9 @@ final class ThrowAnalyzer
             return $types;
         }
 
-        if ($thrownType instanceof MixedType) {
-            return [];
+        $class = $this->resolveClassFromType($thrownType);
+        if ($class !== null) {
+            return [$class];
         }
 
         throw new NotImplementedYetException(get_class($thrownType));
@@ -63,6 +62,8 @@ final class ThrowAnalyzer
         if ($thrownType instanceof TypeWithClassName) {
             return $thrownType->getClassName();
         }
+
+        dump($thrownType);
 
         throw new ShouldNotHappenException();
     }

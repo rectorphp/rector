@@ -12,6 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class ChangeOriginalTypeToCustomRector extends AbstractRector implements ClassSyncerRectorInterface
@@ -45,6 +46,30 @@ final class ChangeOriginalTypeToCustomRector extends AbstractRector implements C
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change DocParser type to custom one');
+        return new RuleDefinition('Change DocParser type to custom one', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+namespace Doctrine\Common\Annotations;
+
+class AnnotationReader
+{
+    public function __construct(... $parser)
+    {
+    }
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+namespace Doctrine\Common\Annotations;
+
+class AnnotationReader
+{
+    public function __construct(\Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser $parser)
+    {
+    }
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 }
