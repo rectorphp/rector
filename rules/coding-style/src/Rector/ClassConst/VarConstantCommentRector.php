@@ -11,9 +11,9 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\VarConstantCommentRectorTest
@@ -25,18 +25,20 @@ final class VarConstantCommentRector extends AbstractRector
      */
     private const ARRAY_LIMIT_TYPES = 3;
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Constant should have a @var comment with type', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Constant should have a @var comment with type',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     const HI = 'hi';
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -45,8 +47,9 @@ class SomeClass
     const HI = 'hi';
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

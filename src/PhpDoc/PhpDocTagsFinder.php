@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpDoc;
 
-use Nette\Utils\Strings;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Rector\SimplePhpDocParser\SimplePhpDocParser;
 
 /**
  * @see \Rector\Core\Tests\PhpDoc\PhpDocTagsFinderTest
@@ -12,35 +16,67 @@ use Nette\Utils\Strings;
 final class PhpDocTagsFinder
 {
     /**
-     * Inspired by
-     * https://github.com/nette/di/blob/d1c0598fdecef6d3b01e2ace5f2c30214b3108e6/src/DI/Autowiring.php#L215
-     *
-     * @var string
-     * @see https://regex101.com/r/oEiq3y/3
+     * @var SimplePhpDocParser
      */
-    private const TAG_REGEX = '#%s[ a-zA-Z0-9_\|\\\t]+#';
+    private $simplePhpDocParser;
+
+    public function __construct(SimplePhpDocParser $simplePhpDocParser)
+    {
+        $this->simplePhpDocParser = $simplePhpDocParser;
+    }
 
     /**
-     * @return mixed[]
+     * @return string[]
      */
-    public function extractTagsFromStringedDocblock(string $dockblock, string $tagName): array
+    public function extractTrowsTypesFromDocBlock(string $docBlock): array
     {
-        $tagName = '@' . ltrim($tagName, '@');
-        $regEx = sprintf(self::TAG_REGEX, $tagName);
-        $result = Strings::matchAll($dockblock, $regEx);
-        if ($result === []) {
-            return [];
+        $simplePhpDocNode = $this->simplePhpDocParser->parseDocBlock($docBlock);
+        return $this->resolveTypes($simplePhpDocNode->getThrowsTagValues());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function extractReturnTypesFromDocBlock(string $docBlock): array
+    {
+        $simplePhpDocNode = $this->simplePhpDocParser->parseDocBlock($docBlock);
+        return $this->resolveTypes($simplePhpDocNode->getReturnTagValues());
+    }
+
+    /**
+     * @param ThrowsTagValueNode[]|ReturnTagValueNode[] $tagValueNodes
+     * @return string[]
+     */
+    private function resolveTypes(array $tagValueNodes): array
+    {
+        $types = [];
+
+        foreach ($tagValueNodes as $tagValueNode) {
+            $typeNode = $tagValueNode->type;
+            if ($typeNode instanceof IdentifierTypeNode) {
+                $types[] = $typeNode->name;
+            }
+
+            if ($typeNode instanceof UnionTypeNode) {
+                $types = array_merge($types, $this->resolveUnionType($typeNode));
+            }
         }
 
-        $matchingTags = array_merge(...$result);
+        return $types;
+    }
 
-        $explode = static function (string $matchingTag) use ($tagName): array {
-            // This is required as @return, for example, can be written as "@return ClassOne|ClassTwo|ClassThree"
-            return explode('|', str_replace($tagName . ' ', '', $matchingTag));
-        };
+    /**
+     * @return string[]
+     */
+    private function resolveUnionType(UnionTypeNode $unionTypeNode): array
+    {
+        $types = [];
 
-        $matchingTags = array_map($explode, $matchingTags);
-
-        return array_merge(...$matchingTags);
+        foreach ($unionTypeNode->types as $unionedType) {
+            if ($unionedType instanceof IdentifierTypeNode) {
+                $types[] = $unionedType->name;
+            }
+        }
+        return $types;
     }
 }

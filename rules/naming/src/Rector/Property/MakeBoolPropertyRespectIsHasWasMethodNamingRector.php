@@ -7,11 +7,11 @@ namespace Rector\Naming\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\ExpectedNameResolver\BoolPropertyExpectedNameResolver;
 use Rector\Naming\PropertyRenamer\BoolPropertyRenamer;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector\MakeBoolPropertyRespectIsHasWasMethodNamingRectorTest
@@ -44,11 +44,13 @@ final class MakeBoolPropertyRespectIsHasWasMethodNamingRector extends AbstractRe
         $this->boolPropertyExpectedNameResolver = $boolPropertyExpectedNameResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Renames property to respect is/has/was method naming', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Renames property to respect is/has/was method naming',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $full = false;
@@ -60,8 +62,8 @@ class SomeClass
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $isFull = false;
@@ -74,8 +76,9 @@ class SomeClass
 }
 CODE_SAMPLE
 
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

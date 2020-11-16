@@ -14,11 +14,11 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VendorLocker\VendorLockResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -43,11 +43,13 @@ final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
         $this->vendorLockResolver = $vendorLockResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Removes method that set values that are never used', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Removes method that set values that are never used',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $name;
@@ -67,8 +69,8 @@ class ActiveOnlySetter
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
 }
@@ -81,8 +83,9 @@ class ActiveOnlySetter
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

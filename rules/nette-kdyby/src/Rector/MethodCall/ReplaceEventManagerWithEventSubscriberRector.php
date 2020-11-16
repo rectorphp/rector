@@ -13,11 +13,11 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteKdyby\Naming\EventClassNaming;
 use Rector\NetteKdyby\NodeFactory\EventValueObjectClassFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -45,11 +45,13 @@ final class ReplaceEventManagerWithEventSubscriberRector extends AbstractRector
         $this->eventValueObjectClassFactory = $eventValueObjectClassFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change Kdyby EventManager to EventDispatcher', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change Kdyby EventManager to EventDispatcher',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Kdyby\Events\EventManager;
 
 final class SomeClass
@@ -72,7 +74,7 @@ final class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use Kdyby\Events\EventManager;
 
 final class SomeClass
@@ -94,8 +96,9 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

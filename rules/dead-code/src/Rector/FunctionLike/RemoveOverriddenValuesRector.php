@@ -10,12 +10,12 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use Rector\Core\Context\ContextAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\FlowControl\VariableUseFinder;
 use Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector;
 use Rector\DeadCode\ValueObject\VariableNodeUse;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\RemoveOverriddenValuesRectorTest
@@ -47,11 +47,13 @@ final class RemoveOverriddenValuesRector extends AbstractRector
         $this->variableUseFinder = $variableUseFinder;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove initial assigns of overridden values', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Remove initial assigns of overridden values',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run()
@@ -62,8 +64,8 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run()
@@ -73,8 +75,9 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

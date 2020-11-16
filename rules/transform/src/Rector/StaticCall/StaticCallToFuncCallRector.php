@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -38,9 +38,9 @@ final class StaticCallToFuncCallRector extends AbstractRector implements Configu
         $this->staticCallsToFunctions = $staticCallToFunctions;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns static call to function call.', [
+        return new RuleDefinition('Turns static call to function call.', [
             new ConfiguredCodeSample(
                 'OldClass::oldMethod("args");',
                 'new_function("args");',

@@ -9,9 +9,9 @@ use PhpParser\Node;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -30,9 +30,9 @@ final class RemoveProjectFileRector extends AbstractRector implements Configurab
      */
     private $filePathsToRemove = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove file relative to project directory', [
+        return new RuleDefinition('Remove file relative to project directory', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 // someFile/ToBeRemoved.txt

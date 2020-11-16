@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanExtensions\Tests\Rule\CheckCodeSampleBeforeAfterAlwaysDifferentRule\Fixture;
 
-use Rector\Core\RectorDefinition\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 
-new CodeSample('A', 'A');
+new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('A', 'A');

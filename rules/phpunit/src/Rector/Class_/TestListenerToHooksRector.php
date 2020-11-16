@@ -10,8 +10,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/3388
@@ -40,11 +40,13 @@ final class TestListenerToHooksRector extends AbstractRector
         'endTestSuite' => ['PHPUnit\Runner\AfterLastTestHook', 'executeAfterLastTest'],
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Refactor "*TestListener.php" to particular "*Hook.php" files', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Refactor "*TestListener.php" to particular "*Hook.php" files',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 namespace App\Tests;
 
 use PHPUnit\Framework\TestListener;
@@ -94,7 +96,7 @@ final class BeforeListHook implements TestListener
     }
 }
 CODE_SAMPLE
-                ,
+                    ,
 <<<'CODE_SAMPLE'
 namespace App\Tests;
 
@@ -111,8 +113,9 @@ final class BeforeListHook implements \PHPUnit\Runner\BeforeTestHook, \PHPUnit\R
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

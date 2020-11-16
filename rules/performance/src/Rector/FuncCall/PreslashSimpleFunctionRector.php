@@ -9,8 +9,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://stackoverflow.com/questions/55419673/php7-adding-a-slash-to-all-standard-php-functions-php-cs-fixer-rule
@@ -19,11 +19,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class PreslashSimpleFunctionRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add pre-slash to short named functions to improve performance', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Add pre-slash to short named functions to improve performance',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function shorten($value)
@@ -33,7 +35,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function shorten($value)
@@ -42,8 +44,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

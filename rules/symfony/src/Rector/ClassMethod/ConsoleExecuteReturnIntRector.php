@@ -17,9 +17,9 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\IntegerType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/pull/33775/files
@@ -27,9 +27,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ConsoleExecuteReturnIntRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Returns int from Command::execute command', [
+        return new RuleDefinition('Returns int from Command::execute command', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeCommand extends Command

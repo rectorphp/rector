@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector\RenameConstantRectorTest
@@ -27,9 +27,9 @@ final class RenameConstantRector extends AbstractRector implements ConfigurableR
      */
     private $oldToNewConstants = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replace constant by new ones', [
+        return new RuleDefinition('Replace constant by new ones', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

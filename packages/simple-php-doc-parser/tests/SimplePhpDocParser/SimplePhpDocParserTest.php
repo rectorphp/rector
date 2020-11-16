@@ -7,7 +7,7 @@ namespace Rector\SimplePhpDocParser\Tests\SimplePhpDocParser;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\SimplePhpDocParser\SimplePhpDocParser;
 use Rector\SimplePhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SimplePhpDocParserTest extends AbstractKernelTestCase

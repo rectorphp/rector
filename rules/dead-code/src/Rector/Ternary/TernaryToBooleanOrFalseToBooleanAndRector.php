@@ -9,17 +9,17 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Ternary;
 use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector\TernaryToBooleanOrFalseToBooleanAndRectorTest
  */
 final class TernaryToBooleanOrFalseToBooleanAndRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change ternary of bool : false to && bool', [
+        return new RuleDefinition('Change ternary of bool : false to && bool', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

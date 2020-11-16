@@ -16,10 +16,10 @@ use Rector\Core\Exception\Bridge\RectorProviderException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
@@ -51,9 +51,9 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         $this->classInsertManipulator = $classInsertManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns parent EntityRepository class to constructor dependency',
             [
                 new CodeSample(

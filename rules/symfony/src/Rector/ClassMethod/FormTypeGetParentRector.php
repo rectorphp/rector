@@ -9,9 +9,9 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\FormTypeGetParentRector\FormTypeGetParentRectorTest
@@ -28,9 +28,9 @@ final class FormTypeGetParentRector extends AbstractRector
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony',
             [
                 new CodeSample(

@@ -7,8 +7,8 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/pull/30813/files#r270879504
@@ -16,11 +16,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class RemoveExpectAnyFromMockRector extends AbstractPHPUnitRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove `expect($this->any())` from mocks as it has no added value', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Remove `expect($this->any())` from mocks as it has no added value',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -34,8 +36,8 @@ class SomeClass extends TestCase
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -48,8 +50,9 @@ class SomeClass extends TestCase
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

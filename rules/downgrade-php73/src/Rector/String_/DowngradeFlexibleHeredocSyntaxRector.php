@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DowngradePhp73\Tests\Rector\String_\DowngradeFlexibleHeredocSyntaxRector\DowngradeFlexibleHeredocSyntaxTest
@@ -22,27 +22,30 @@ final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
      */
     private const HERENOW_DOC_KINDS = [String_::KIND_HEREDOC, String_::KIND_NOWDOC];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Changes heredoc/nowdoc that contains closing word to safe wrapper name',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 $query = <<<SQL
     SELECT *
     FROM `table`
     WHERE `column` = true;
     SQL;
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 $query = <<<SQL
 SELECT *
 FROM `table`
 WHERE `column` = true;
 SQL;
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

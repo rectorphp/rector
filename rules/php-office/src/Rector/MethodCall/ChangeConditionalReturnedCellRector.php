@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PHPOffice\ValueObject\ConditionalSetValue;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#dropped-conditionally-returned-cell
@@ -26,21 +26,33 @@ final class ChangeConditionalReturnedCellRector extends AbstractRector
 
     public function __construct()
     {
-        $items = [
-            ['setCellValue', 'getCell', 'setValue', 2, false],
-            ['setCellValueByColumnAndRow', 'getCellByColumnAndRow', 'setValue', 3, true],
-            ['setCellValueExplicit', 'getCell', 'setValueExplicit', 3, false],
-            ['setCellValueExplicitByColumnAndRow', 'getCellByColumnAndRow', 'setValueExplicit', 4, true],
-        ];
-
-        foreach ($items as $item) {
-            $this->conditionalSetValues[] = new ConditionalSetValue(...$item);
-        }
+        $this->conditionalSetValues[] = new ConditionalSetValue('setCellValue', 'getCell', 'setValue', 2, false);
+        $this->conditionalSetValues[] = new ConditionalSetValue(
+            'setCellValueByColumnAndRow',
+            'getCellByColumnAndRow',
+            'setValue',
+            3,
+            true
+        );
+        $this->conditionalSetValues[] = new ConditionalSetValue(
+            'setCellValueExplicit',
+            'getCell',
+            'setValueExplicit',
+            3,
+            false
+        );
+        $this->conditionalSetValues[] = new ConditionalSetValue(
+            'setCellValueExplicitByColumnAndRow',
+            'getCellByColumnAndRow',
+            'setValueExplicit',
+            4,
+            true
+        );
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change conditional call to getCell()', [
+        return new RuleDefinition('Change conditional call to getCell()', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

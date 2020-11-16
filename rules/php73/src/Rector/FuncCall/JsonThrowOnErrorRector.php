@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see http://wiki.php.net/rfc/json_throw_on_error
@@ -22,9 +22,9 @@ use Rector\Core\ValueObject\PhpVersionFeature;
  */
 final class JsonThrowOnErrorRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error',
             [
                 new CodeSample(

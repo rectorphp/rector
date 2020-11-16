@@ -24,8 +24,8 @@ use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRec
 
 final class ParentClassWithInConstructCall extends ThisClassCallsMethodInConstructor
 {
-    private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface $someTranslator;
-    public function __construct(\Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface $someTranslator)
+    private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator;
+    public function __construct(\Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
     {
         $this->someTranslator = $someTranslator;
         parent::__construct();

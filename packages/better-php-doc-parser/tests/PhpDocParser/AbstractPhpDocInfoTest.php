@@ -15,7 +15,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase

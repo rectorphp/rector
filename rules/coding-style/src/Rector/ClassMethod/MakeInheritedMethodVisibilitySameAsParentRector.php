@@ -11,11 +11,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/RFYmn
@@ -24,9 +24,9 @@ use ReflectionMethod;
  */
 final class MakeInheritedMethodVisibilitySameAsParentRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Make method visibility same as parent one', [
+        return new RuleDefinition('Make method visibility same as parent one', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class ChildClass extends ParentClass

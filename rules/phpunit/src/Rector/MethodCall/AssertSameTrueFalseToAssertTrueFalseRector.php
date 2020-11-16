@@ -8,19 +8,21 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector\AssertSameTrueFalseToAssertTrueFalseRectorTest
  */
 final class AssertSameTrueFalseToAssertTrueFalseRector extends AbstractPHPUnitRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change $this->assertSame(true, ...) to assertTrue()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change $this->assertSame(true, ...) to assertTrue()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
@@ -33,8 +35,8 @@ final class SomeTest extends TestCase
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
@@ -47,8 +49,9 @@ final class SomeTest extends TestCase
 }
 CODE_SAMPLE
 
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

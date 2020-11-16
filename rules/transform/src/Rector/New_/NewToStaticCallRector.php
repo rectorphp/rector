@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Transform\ValueObject\NewToStaticCall;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -28,9 +28,9 @@ final class NewToStaticCallRector extends AbstractRector implements Configurable
      */
     private $typeToStaticCalls = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change new Object to static call', [
+        return new RuleDefinition('Change new Object to static call', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

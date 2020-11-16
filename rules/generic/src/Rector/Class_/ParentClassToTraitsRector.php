@@ -9,8 +9,8 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Can handle cases like:
@@ -41,9 +41,9 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
         $this->classInsertManipulator = $classInsertManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replaces parent class to specific traits', [
+        return new RuleDefinition('Replaces parent class to specific traits', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass extends Nette\Object

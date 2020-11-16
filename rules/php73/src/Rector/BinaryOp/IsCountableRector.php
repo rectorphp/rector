@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\Php73\Rector\BinaryOp;
 
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Generic\Rector\AbstractIsAbleFunCallRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector\IsCountableRectorTest
  */
 final class IsCountableRector extends AbstractIsAbleFunCallRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Changes is_array + Countable check to is_countable',
             [
                 new CodeSample(

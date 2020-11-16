@@ -9,11 +9,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
 use Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\RenamePropertyToMatchTypeRectorTest
@@ -50,11 +50,13 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
         $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Rename property and method param to match its type', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Rename property and method param to match its type',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -69,7 +71,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -83,8 +85,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

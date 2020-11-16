@@ -12,10 +12,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\MockistaToMockery\MockistaDetector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\MockistaToMockery\Tests\Rector\Class_\MockeryTearDownRector\MockeryTearDownRectorTest
@@ -32,11 +32,13 @@ final class MockeryTearDownRector extends AbstractRector
         $this->mockistaDetector = $mockistaDetector;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add Mockery::close() in tearDown() method if not yet', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Add Mockery::close() in tearDown() method if not yet',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeTest extends TestCase
@@ -48,7 +50,7 @@ class SomeTest extends TestCase
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeTest extends TestCase
@@ -63,8 +65,9 @@ class SomeTest extends TestCase
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

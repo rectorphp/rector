@@ -18,9 +18,9 @@ use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Privatization\Tests\Rector\Class_\ChangeLocalPropertyToVariableRector\ChangeLocalPropertyToVariableRectorTest
@@ -48,11 +48,13 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
         $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change local property used in single method to local variable', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change local property used in single method to local variable',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $count;
@@ -64,7 +66,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -74,8 +76,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

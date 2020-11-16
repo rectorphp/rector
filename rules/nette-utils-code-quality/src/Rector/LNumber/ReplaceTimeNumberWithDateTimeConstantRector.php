@@ -8,8 +8,8 @@ use Nette\Utils\DateTime;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -30,11 +30,13 @@ final class ReplaceTimeNumberWithDateTimeConstantRector extends AbstractRector
         DateTime::YEAR => 'YEAR',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replace time numbers with Nette\Utils\DateTime constants', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Replace time numbers with Nette\Utils\DateTime constants',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -44,7 +46,7 @@ final class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -53,8 +55,9 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

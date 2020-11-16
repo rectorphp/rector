@@ -11,8 +11,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
@@ -20,11 +20,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class MakeDispatchFirstArgumentEventRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Make event object a first argument of dispatch() method, event name as second', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Make event object a first argument of dispatch() method, event name as second',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
@@ -35,8 +37,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
@@ -47,8 +49,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

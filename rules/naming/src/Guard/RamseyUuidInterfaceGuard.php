@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Rector\Naming\Guard;
 
 use Ramsey\Uuid\UuidInterface;
+use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
-use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class RamseyUuidInterfaceGuard implements GuardInterface

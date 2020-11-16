@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/3120
@@ -33,11 +33,13 @@ final class CreateMockToCreateStubRector extends AbstractPHPUnitRector
         $this->methodCallManipulator = $methodCallManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replaces createMock() with createStub() when relevant', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Replaces createMock() with createStub() when relevant',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase
 
 class MyTest extends TestCase
@@ -58,8 +60,8 @@ class MyTest extends TestCase
     }
 }
 CODE_SAMPLE
-                 ,
-                <<<'CODE_SAMPLE'
+                     ,
+                    <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase
 
 class MyTest extends TestCase
@@ -80,8 +82,9 @@ class MyTest extends TestCase
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

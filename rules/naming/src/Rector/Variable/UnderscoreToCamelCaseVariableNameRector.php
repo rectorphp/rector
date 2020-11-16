@@ -10,13 +10,13 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\Naming\ExpectedNameResolver\UnderscoreCamelCaseExpectedNameResolver;
 use Rector\Naming\ParamRenamer\UnderscoreCamelCaseParamRenamer;
 use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\UnderscoreToCamelCaseVariableNameRectorTest
@@ -55,9 +55,9 @@ final class UnderscoreToCamelCaseVariableNameRector extends AbstractRector
         $this->underscoreCamelCaseParamRenamer = $underscoreCamelCaseParamRenamer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change under_score names to camelCase', [
+        return new RuleDefinition('Change under_score names to camelCase', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

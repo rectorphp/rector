@@ -7,17 +7,17 @@ namespace Rector\DeadCode\Rector\Foreach_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Foreach_\RemoveUnusedForeachKeyRector\RemoveUnusedForeachKeyRectorTest
  */
 final class RemoveUnusedForeachKeyRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove unused key in foreach', [
+        return new RuleDefinition('Remove unused key in foreach', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 $items = [];

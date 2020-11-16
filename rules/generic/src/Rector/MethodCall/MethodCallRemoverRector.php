@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\MethodCallRemoverRector\MethodCallRemoverRectorTest
@@ -27,9 +27,9 @@ final class MethodCallRemoverRector extends AbstractRector implements Configurab
      */
     private $methodCallRemoverArgument = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns "$this->something()->anything()" to "$this->anything()"', [
+        return new RuleDefinition('Turns "$this->something()->anything()" to "$this->anything()"', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $someObject = new Car;

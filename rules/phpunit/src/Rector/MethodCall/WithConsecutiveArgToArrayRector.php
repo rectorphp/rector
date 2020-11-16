@@ -13,10 +13,10 @@ use PHPStan\Type\ArrayType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use ReflectionMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://stackoverflow.com/questions/10954107/phpunit-how-do-i-mock-multiple-method-calls-with-multiple-arguments/28045531#28045531
@@ -36,9 +36,9 @@ final class WithConsecutiveArgToArrayRector extends AbstractRector
         $this->methodCallManipulator = $methodCallManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Split withConsecutive() arg to array', [
+        return new RuleDefinition('Split withConsecutive() arg to array', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

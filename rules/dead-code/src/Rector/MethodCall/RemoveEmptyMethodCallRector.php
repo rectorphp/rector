@@ -12,10 +12,10 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Reflection\ClassReflectionToAstResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\RemoveEmptyMethodCallRectorTest
@@ -32,9 +32,9 @@ final class RemoveEmptyMethodCallRector extends AbstractRector
         $this->classReflectionToAstResolver = $classReflectionToAstResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove empty method call', [
+        return new RuleDefinition('Remove empty method call', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

@@ -9,7 +9,7 @@ use Rector\Core\Configuration\OnlyRuleResolver;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Tests\Configuration\Source\CustomLocalRector;
 use Rector\Php72\Rector\Assign\ListEachRector;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class OnlyRuleResolverTest extends AbstractKernelTestCase
 {

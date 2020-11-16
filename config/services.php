@@ -44,7 +44,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->load('Rector\Core\\', __DIR__ . '/../src')
         ->exclude([
             __DIR__ . '/../src/Rector',
-            __DIR__ . '/../src/RectorDefinition',
             __DIR__ . '/../src/Exception',
             __DIR__ . '/../src/DependencyInjection/CompilerPass',
             __DIR__ . '/../src/DependencyInjection/Loader',

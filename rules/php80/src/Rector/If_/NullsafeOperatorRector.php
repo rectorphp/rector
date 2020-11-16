@@ -17,9 +17,9 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\NullsafeManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/nullsafe_operator
@@ -48,11 +48,13 @@ final class NullsafeOperatorRector extends AbstractRector
         $this->nullsafeManipulator = $nullsafeManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change if null check with nullsafe operator ?-> with full short circuiting', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change if null check with nullsafe operator ?-> with full short circuiting',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function f($o)
@@ -67,7 +69,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function f($o)
@@ -76,8 +78,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

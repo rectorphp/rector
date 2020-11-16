@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/nette/di/pull/146/files
@@ -18,11 +18,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class SetClassWithArgumentToSetFactoryRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change setClass with class and arguments to separated methods', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change setClass with class and arguments to separated methods',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\DI\ContainerBuilder;
 
 class SomeClass
@@ -35,7 +37,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use Nette\DI\ContainerBuilder;
 
 class SomeClass
@@ -47,8 +49,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

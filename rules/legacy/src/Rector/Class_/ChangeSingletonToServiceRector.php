@@ -7,11 +7,11 @@ namespace Rector\Legacy\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Legacy\NodeAnalyzer\SingletonClassMethodAnalyzer;
 use Rector\Legacy\ValueObject\PropertyAndClassMethodName;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/lifbH
@@ -31,11 +31,13 @@ final class ChangeSingletonToServiceRector extends AbstractRector
         $this->singletonClassMethodAnalyzer = $singletonClassMethodAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change singleton class to normal class that can be registered as a service', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change singleton class to normal class that can be registered as a service',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     private static $instance;
@@ -54,8 +56,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct()
@@ -63,8 +65,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

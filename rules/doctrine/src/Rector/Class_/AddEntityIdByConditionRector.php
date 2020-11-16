@@ -10,9 +10,9 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\NodeFactory\EntityIdNodeFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Doctrine\Tests\Rector\Class_\AddEntityIdByConditionRector\AddEntityIdByConditionRectorTest
@@ -54,18 +54,20 @@ final class AddEntityIdByConditionRector extends AbstractRector implements Confi
         $this->classInsertManipulator = $classInsertManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add entity id with annotations when meets condition', [
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Add entity id with annotations when meets condition',
+            [
+                new ConfiguredCodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     use SomeTrait;
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     use SomeTrait;
@@ -84,7 +86,8 @@ class SomeClass
 }
 CODE_SAMPLE
 , []),
-        ]);
+
+            ]);
     }
 
     /**

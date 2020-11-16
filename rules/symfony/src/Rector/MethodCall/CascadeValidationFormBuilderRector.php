@@ -14,9 +14,9 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Node\Manipulator\ArrayManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://gist.github.com/mickaelandrieu/5d27a2ffafcbdd64912f549aaf2a6df9#stuck-with-forms
@@ -34,11 +34,13 @@ final class CascadeValidationFormBuilderRector extends AbstractRector
         $this->arrayManipulator = $arrayManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change "cascade_validation" option to specific node attribute', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change "cascade_validation" option to specific node attribute',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeController
 {
     public function someMethod()
@@ -54,8 +56,8 @@ class SomeController
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeController
 {
     public function someMethod()
@@ -73,8 +75,9 @@ class SomeController
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

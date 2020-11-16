@@ -12,9 +12,9 @@ use PHPUnit\Framework\TestCase;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\PreferThisOrSelfMethodCallRectorTest
@@ -42,9 +42,9 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
      */
     private $typeToPreference = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes $this->... to self:: or vise versa for specific types', [
+        return new RuleDefinition('Changes $this->... to self:: or vise versa for specific types', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass extends \PHPUnit\Framework\TestCase

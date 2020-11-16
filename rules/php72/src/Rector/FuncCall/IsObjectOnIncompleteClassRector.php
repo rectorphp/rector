@@ -9,9 +9,9 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see http://php.net/manual/en/migration72.incompatible.php#migration72.incompatible.is_object-on-incomplete_class
@@ -21,21 +21,24 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class IsObjectOnIncompleteClassRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Incomplete class returns inverted bool on is_object()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Incomplete class returns inverted bool on is_object()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = is_object($incompleteObject);
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = ! is_object($incompleteObject);
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

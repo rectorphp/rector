@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\NormalToFluent;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -36,9 +36,9 @@ final class NormalToFluentRector extends AbstractRector implements ConfigurableR
      */
     private $collectedMethodCalls = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns fluent interface calls to classic ones.', [
+        return new RuleDefinition('Turns fluent interface calls to classic ones.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $someObject = new SomeClass();

@@ -14,9 +14,9 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Exception\InvalidConfigurationException;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector\ChangeFileLoaderInExtensionAndKernelRectorTest
@@ -54,9 +54,9 @@ final class ChangeFileLoaderInExtensionAndKernelRector extends AbstractRector im
      */
     private $to;
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change XML loader to YAML in Bundle Extension', [
+        return new RuleDefinition('Change XML loader to YAML in Bundle Extension', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 use Symfony\Component\Config\FileLocator;

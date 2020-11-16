@@ -24,14 +24,14 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 use Rector\PHPUnit\ValueObject\ParamAndArg;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -75,9 +75,9 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
         $this->typeFactory = $typeFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Move array argument from tests into data provider [configurable]', [
+        return new RuleDefinition('Move array argument from tests into data provider [configurable]', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;

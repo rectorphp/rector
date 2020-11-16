@@ -7,19 +7,21 @@ namespace Rector\SOLID\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector\MakeUnusedClassesWithChildrenAbstractRectorTest
  */
 final class MakeUnusedClassesWithChildrenAbstractRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Classes that have no children nor are used, should have abstract', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Classes that have no children nor are used, should have abstract',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass extends PossibleAbstractClass
 {
 }
@@ -28,8 +30,8 @@ class PossibleAbstractClass
 {
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass extends PossibleAbstractClass
 {
 }
@@ -38,8 +40,9 @@ abstract class PossibleAbstractClass
 {
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

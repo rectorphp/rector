@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\MagicDisclosure\Tests\Rector\String_\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
@@ -29,9 +29,9 @@ final class ToStringToMethodCallRector extends AbstractRector implements Configu
      */
     private $methodNamesByType = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns defined code uses of "__toString()" method  to specific method calls.', [
+        return new RuleDefinition('Turns defined code uses of "__toString()" method  to specific method calls.', [
             new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 $someValue = new SomeObject;

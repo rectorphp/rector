@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\RemoveUnusedPrivatePropertyRectorTest
@@ -30,9 +30,9 @@ final class RemoveUnusedPrivatePropertyRector extends AbstractRector
         $this->propertyManipulator = $propertyManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove unused private properties', [
+        return new RuleDefinition('Remove unused private properties', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

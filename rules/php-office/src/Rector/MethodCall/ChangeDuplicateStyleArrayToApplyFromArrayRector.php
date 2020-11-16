@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#removed-deprecated-things
@@ -18,11 +18,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class ChangeDuplicateStyleArrayToApplyFromArrayRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change method call duplicateStyleArray() to getStyle() + applyFromArray()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change method call duplicateStyleArray() to getStyle() + applyFromArray()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -33,7 +35,7 @@ final class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -43,8 +45,9 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

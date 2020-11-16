@@ -28,7 +28,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 final class MyFirstRector extends AbstractRector
@@ -67,11 +67,11 @@ final class MyFirstRector extends AbstractRector
     /**
      * From this method documentation is generated.
      */
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Change method calls from set* to change*.', [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     // code before
                     '$user->setPassword("123456");',
                     // code after

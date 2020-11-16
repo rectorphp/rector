@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\StmtsManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://engineering.helpscout.com/reducing-complexity-with-guard-clauses-in-php-and-javascript-74600fd865c7
@@ -38,9 +38,9 @@ final class ChangeIfElseValueAssignToEarlyReturnRector extends AbstractRector
         $this->stmtsManipulator = $stmtsManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change if/else value to early return', [
+        return new RuleDefinition('Change if/else value to early return', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

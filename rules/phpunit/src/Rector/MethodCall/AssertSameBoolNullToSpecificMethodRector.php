@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PHPUnit\ValueObject\ConstantWithAssertMethods;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector\AssertSameBoolNullToSpecificMethodRectorTest
@@ -40,9 +40,9 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
         ];
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns same bool and null comparisons to their method name alternatives in PHPUnit TestCase',
             [
                 new CodeSample('$this->assertSame(null, $anything);', '$this->assertNull($anything);'),

@@ -7,8 +7,8 @@ namespace Rector\Php73\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/case_insensitive_constant_deprecation
@@ -16,15 +16,15 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class SensitiveDefineRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Changes case insensitive constants to sensitive ones.',
             [new CodeSample(<<<'CODE_SAMPLE'
-define('FOO', 42, true); 
+define('FOO', 42, true);
 CODE_SAMPLE
                 , <<<'CODE_SAMPLE'
-define('FOO', 42); 
+define('FOO', 42);
 CODE_SAMPLE
             )]
         );

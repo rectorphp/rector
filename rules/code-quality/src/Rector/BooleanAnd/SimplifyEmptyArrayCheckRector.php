@@ -11,8 +11,8 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Empty_;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/EZ2P4
@@ -31,9 +31,9 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Simplify `is_array` and `empty` functions combination into a simple identical check for an empty array',
             [new CodeSample('is_array($values) && empty($values)', '$values === []')]
         );

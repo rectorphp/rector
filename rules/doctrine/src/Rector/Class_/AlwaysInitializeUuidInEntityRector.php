@@ -12,11 +12,11 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -43,10 +43,12 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
         $this->classDependencyManipulator = $classDependencyManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add uuid initializion to all entities that misses it', [
-            new CodeSample(
+        return new RuleDefinition(
+            'Add uuid initializion to all entities that misses it',
+            [
+                new CodeSample(
 <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
@@ -62,7 +64,7 @@ class AddUuidInit
     private $superUuid;
 }
 CODE_SAMPLE
-                ,
+                    ,
 <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
@@ -82,8 +84,9 @@ class AddUuidInit
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

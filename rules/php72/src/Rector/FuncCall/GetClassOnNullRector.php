@@ -16,9 +16,9 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\NullType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see http://php.net/manual/en/migration72.incompatible.php#migration72.incompatible.no-null-to-get_class
@@ -27,9 +27,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class GetClassOnNullRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Null is no more allowed in get_class()', [
+        return new RuleDefinition('Null is no more allowed in get_class()', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

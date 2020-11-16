@@ -8,18 +8,18 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Order\Tests\Rector\Class_\OrderPropertiesByVisibilityRector\OrderPropertiesByVisibilityRectorTest
  */
 final class OrderPropertiesByVisibilityRector extends AbstractConstantPropertyMethodOrderRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Orders properties by visibility', [
+        return new RuleDefinition('Orders properties by visibility', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Php\Regex\RegexPatternArgumentManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see http://php.net/manual/en/function.preg-match.php#105924
@@ -42,9 +42,9 @@ final class SimplifyRegexPatternRector extends AbstractRector
         $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Simplify regex pattern to known ranges', [
+        return new RuleDefinition('Simplify regex pattern to known ranges', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

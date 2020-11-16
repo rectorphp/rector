@@ -10,13 +10,13 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/class_name_scalars
@@ -51,9 +51,9 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
      */
     private $sensitiveNonExistingClasses = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replace string class names by <class>::class constant', [
+        return new RuleDefinition('Replace string class names by <class>::class constant', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class AnotherClass

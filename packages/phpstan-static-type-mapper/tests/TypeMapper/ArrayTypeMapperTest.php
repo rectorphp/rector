@@ -12,7 +12,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class ArrayTypeMapperTest extends AbstractKernelTestCase
 {

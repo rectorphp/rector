@@ -11,11 +11,11 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Defluent\Tests\Rector\ClassMethod\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
@@ -32,30 +32,32 @@ final class ReturnThisRemoveRector extends AbstractRector
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Removes "return $this;" from *fluent interfaces* for specified classes.', [
-            new CodeSample(
+        return new RuleDefinition(
+            'Removes "return $this;" from *fluent interfaces* for specified classes.',
+            [
+                new CodeSample(
+                        <<<'CODE_SAMPLE'
+class SomeExampleClass
+{
+    public function someFunction()
+    {
+        return $this;
+    }
+
+    public function otherFunction()
+    {
+        return $this;
+    }
+}
+CODE_SAMPLE
+                    ,
                     <<<'CODE_SAMPLE'
 class SomeExampleClass
 {
     public function someFunction()
     {
-        return $this;
-    }
-
-    public function otherFunction()
-    {
-        return $this;
-    }
-}
-CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
-class SomeExampleClass
-{
-    public function someFunction()
-    {
     }
 
     public function otherFunction()
@@ -63,8 +65,9 @@ class SomeExampleClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

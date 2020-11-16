@@ -14,12 +14,12 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Restoration\Type\ConstantReturnToParamTypeConverter;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -57,9 +57,9 @@ final class InferParamFromClassMethodReturnRector extends AbstractRector impleme
         $this->constantReturnToParamTypeConverter = $constantReturnToParamTypeConverter;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change @param doc based on another method return type', [
+        return new RuleDefinition('Change @param doc based on another method return type', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

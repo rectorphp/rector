@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class PropertyNamingTest extends AbstractKernelTestCase
 {

@@ -9,9 +9,9 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\LogicalAnd;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/ji8bX
@@ -19,9 +19,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class AndAssignsToSeparateLinesRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Split 2 assigns ands to separate line', [
+        return new RuleDefinition('Split 2 assigns ands to separate line', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

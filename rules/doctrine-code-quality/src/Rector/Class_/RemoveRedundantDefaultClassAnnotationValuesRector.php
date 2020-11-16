@@ -7,10 +7,10 @@ namespace Rector\DoctrineCodeQuality\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrineClassAnalyzer;
 use Rector\DoctrineCodeQuality\NodeManipulator\DoctrineItemDefaultValueManipulator;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DoctrineCodeQuality\Tests\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector\RemoveRedundantDefaultClassAnnotationValuesRectorTest
@@ -35,9 +35,9 @@ final class RemoveRedundantDefaultClassAnnotationValuesRector extends AbstractRe
         $this->doctrineItemDefaultValueManipulator = $doctrineItemDefaultValueManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Removes redundant default values from Doctrine ORM annotations on class level',
             [
                 new CodeSample(

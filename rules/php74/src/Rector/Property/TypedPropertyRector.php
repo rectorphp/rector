@@ -20,8 +20,6 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -29,6 +27,8 @@ use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @source https://wiki.php.net/rfc/typed_properties_v2#proposal
@@ -77,9 +77,9 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Changes property `@var` annotations from annotation to type.',
             [
                 new ConfiguredCodeSample(

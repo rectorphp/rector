@@ -7,17 +7,17 @@ namespace Rector\Php54\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Php54\Tests\Rector\FuncCall\RemoveReferenceFromCallRector\RemoveReferenceFromCallRectorTest
  */
 final class RemoveReferenceFromCallRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove & from function and method calls', [
+        return new RuleDefinition('Remove & from function and method calls', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

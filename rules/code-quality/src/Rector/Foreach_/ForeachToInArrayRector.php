@@ -19,10 +19,10 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\PhpDoc\CommentCombiner;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php71\ValueObject\TwoNodeMatch;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\ForeachToInArrayRectorTest
@@ -45,9 +45,9 @@ final class ForeachToInArrayRector extends AbstractRector
         $this->commentCombiner = $commentCombiner;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Simplify `foreach` loops into `in_array` when possible',
             [
                 new CodeSample(

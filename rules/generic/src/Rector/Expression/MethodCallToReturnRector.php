@@ -10,10 +10,10 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\MethodCallToReturn;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -31,9 +31,9 @@ final class MethodCallToReturnRector extends AbstractRector implements Configura
      */
     private $methodCallWraps = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Wrap method call to return', [
+        return new RuleDefinition('Wrap method call to return', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

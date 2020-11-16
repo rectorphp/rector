@@ -4,25 +4,37 @@ includes:
     - vendor/symplify/phpstan-extensions/config/config.neon
 
     # see https://github.com/symplify/coding-standard
-    - vendor/symplify/coding-standard/config/symplify-rules.neon
-    - vendor/symplify/coding-standard/packages/cognitive-complexity/config/cognitive-complexity-services.neon
+    # - vendor/symplify/phpstan-rules/config/configurable-rules.neon
+    - vendor/symplify/phpstan-rules/config/static-rules.neon
+    - vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-services.neon
+
+    - vendor/symplify/phpstan-rules/config/symplify-rules/array-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/code-complexity-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/static-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/doctrine-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/naming-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/regex-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/symfony-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/test-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/services-rules.neon
+    - vendor/symplify/phpstan-rules/config/symplify-rules/string-to-constant-rules.neon
 
 services:
     -
-        class: Symplify\CodingStandard\CognitiveComplexity\Rules\FunctionLikeCognitiveComplexityRule
+        class: Symplify\PHPStanRules\CognitiveComplexity\Rules\FunctionLikeCognitiveComplexityRule
         tags: [phpstan.rules.rule]
         arguments:
             maxMethodCognitiveComplexity: 9
 
     -
-        class: Symplify\CodingStandard\CognitiveComplexity\Rules\ClassLikeCognitiveComplexityRule
+        class: Symplify\PHPStanRules\CognitiveComplexity\Rules\ClassLikeCognitiveComplexityRule
         tags: [phpstan.rules.rule]
         arguments:
             maxClassCognitiveComplexity: 50
 
     # require constant in argument position
     -
-        class: Symplify\CodingStandard\Rules\RequireMethodCallArgumentConstantRule
+        class: Symplify\PHPStanRules\Rules\RequireMethodCallArgumentConstantRule
         tags: [phpstan.rules.rule]
         arguments:
             constantArgByMethodByType:
@@ -37,7 +49,7 @@ services:
                     setAttribute: [0]
 
     -
-        class: Symplify\CodingStandard\Rules\SeeAnnotationToTestRule
+        class: Symplify\PHPStanRules\Rules\SeeAnnotationToTestRule
         tags: [phpstan.rules.rule]
         arguments:
             requiredSeeTypes:
@@ -46,7 +58,7 @@ services:
                 - Rector\FileSystemRector\Rector\AbstractFileSystemRector
 
     -
-        class: Symplify\CodingStandard\Rules\NoStaticCallRule
+        class: Symplify\PHPStanRules\Rules\NoStaticCallRule
         tags: [phpstan.rules.rule]
         arguments:
             allowedStaticCallClasses:
@@ -55,7 +67,7 @@ services:
 
     # this rule prevents bug in phar like these: https://github.com/rectorphp/rector/pull/3692/files
     -
-        class: Symplify\CodingStandard\Rules\RequireStringArgumentInMethodCallRule
+        class: Symplify\PHPStanRules\Rules\RequireStringArgumentInMethodCallRule
         tags: [phpstan.rules.rule]
         arguments:
             stringArgByMethodByType:
@@ -63,38 +75,37 @@ services:
                     isObjectType: [1]
 
     -
-        class: Symplify\CodingStandard\Rules\ClassNameRespectsParentSuffixRule
+        class: Symplify\PHPStanRules\Rules\ClassNameRespectsParentSuffixRule
         tags: [phpstan.rules.rule]
         arguments:
             parentClasses:
                 - Rector
 
-    -
-        class: Symplify\CodingStandard\Rules\PreferredClassRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            oldToPrefferedClasses:
-                # prevent PHPStorm autocomplete mess
-                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
-                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
-                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
-                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
-                'Closure': 'PhpParser\Node\Expr\Closure'
-                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
-                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
-                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
-                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
-                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-                # builder typo nodes
-                PhpParser\Builder\Use_: Rector\Core\PhpParser\Builder\UseBuilder
-                PhpParser\Builder\Class_: Rector\Core\PhpParser\Builder\ClassBuilder
-                PhpParser\Builder\Method: Rector\Core\PhpParser\Builder\MethodBuilder
-                PhpParser\Builder\Namespace_: Rector\Core\PhpParser\Builder\NamespaceBuilder
-                PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
-                PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
-                PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
-
+#    -
+#        class: Symplify\PHPStanRules\Rules\PreferredClassRule
+#        tags: [phpstan.rules.rule]
+#        arguments:
+#            oldToPrefferedClasses:
+#                # prevent PHPStorm autocomplete mess
+#                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
+#                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
+#                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
+#                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
+#                'Closure': 'PhpParser\Node\Expr\Closure'
+#                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
+#                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
+#                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
+#                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
+#                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+#                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+#                # builder typo nodes
+#                PhpParser\Builder\Use_: Rector\Core\PhpParser\Builder\UseBuilder
+#                PhpParser\Builder\Class_: Rector\Core\PhpParser\Builder\ClassBuilder
+#                PhpParser\Builder\Method: Rector\Core\PhpParser\Builder\MethodBuilder
+#                PhpParser\Builder\Namespace_: Rector\Core\PhpParser\Builder\NamespaceBuilder
+#                PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
+#                PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
+#                PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
 
 parameters:
     level: max
@@ -132,7 +143,6 @@ parameters:
         - packages/node-type-resolver/tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
 
         # phsptan bug
-        - utils/phpstan-extensions/src/Rule/PreventParentMethodVisibilityOverrideRule.php
         - utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
         - packages/rector-generator/templates/*
         # this invalidates whole cache everytime
@@ -686,7 +696,7 @@ parameters:
         # finder type
         - '#Method Rector\\SOLID\\Rector\\Assign\\MoveVariableDeclarationNearReferenceRector\:\:findFirstVariableUsageInScope\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'
 
-        - '#Class with base "NodeNameResolver" name is already used in "Symplify\\CodingStandard\\PhpParser\\NodeNameResolver", "Rector\\NodeNameResolver\\NodeNameResolver"\. Use unique name to make classes easy to recognize#'
+        - '#Class with base "NodeNameResolver" name is already used in "Symplify\\PHPStanRules\\PhpParser\\NodeNameResolver", "Rector\\NodeNameResolver\\NodeNameResolver"\. Use unique name to make classes easy to recognize#'
         - '#Static property Rector\\Testing\\PHPUnit\\AbstractGenericRectorTestCase\:\:\$allRectorContainer \(Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container\|null\) does not accept Psr\\Container\\ContainerInterface#'
 
         - '#Class with base "Application" name is already used in "(.*?)\\Symfony\\Component\\Console\\Application", "Symfony\\Component\\Console\\Application", "Rector\\Core\\Console\\Application"\. Use unique name to make classes easy to recognize#'
@@ -700,3 +710,29 @@ parameters:
         # trait in trait call
         - '#Call to an undefined method Rector\\PostRector\\Rector\\AbstractPostRector\:\:isObjectType\(\)#'
         - '#Parameter \#1 \$expr of class PhpParser\\Node\\Stmt\\Expression constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt given#'
+
+        -
+            message: '#Class cognitive complexity is \d+, keep it under 50#'
+            paths:
+                - rules/php70/src/EregToPcreTransformer.php
+                - packages/node-collector/src/NodeCollector/NodeRepository.php
+                - packages/node-type-resolver/src/NodeTypeResolver.php
+
+        # symplify 9
+        - '#Use decoupled factory service to create "(.*?)" object#'
+        - '#Use "\$class\-\>namespaceName" instead of "\$class\-\>name" that only returns short class name#'
+        - '#Method call on new expression is not allowed#'
+        - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
+        - '#Method nor static call in if \(\) or elseif \(\) is not allowed\. Extract expression to a new variable assign on line before#'
+        - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
+        - '#SymfonyStyle usage is unneeded for only newline, write, and/or writeln, use PHP_EOL and concatenation instead#'
+        - '#Method nor static call in foreach is not allowed\. Extract expression to a new variable assign on line before#'
+        - '#Trait method "(.*?)" should not contain any logic, but only delegate to other class call#'
+        - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
+        - '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+
+        -
+            message: '#Use explicit names over dynamic ones#'
+            paths:
+                - packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php # 61
+                - packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php # 122

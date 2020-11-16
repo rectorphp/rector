@@ -6,7 +6,7 @@ namespace Rector\Naming\ValueObjectFactory;
 
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Naming\ExpectedNameResolver\ExpectedNameResolverInterface;
+use Rector\Naming\Contract\ExpectedNameResolver\ExpectedNameResolverInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;

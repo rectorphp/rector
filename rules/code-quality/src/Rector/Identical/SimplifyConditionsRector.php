@@ -13,8 +13,8 @@ use PhpParser\Node\Expr\BooleanNot;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Identical\SimplifyConditionsRector\SimplifyConditionsRectorTest
@@ -37,9 +37,9 @@ final class SimplifyConditionsRector extends AbstractRector
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Simplify conditions',
             [new CodeSample("if (! (\$foo !== 'bar')) {...", "if (\$foo === 'bar') {...")]
         );

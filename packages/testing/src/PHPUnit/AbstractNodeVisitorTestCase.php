@@ -9,7 +9,7 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Parser\Parser;
 use Rector\Testing\Contract\NodeTraversableInterface;
 use Rector\Testing\Node\NodeAttributeExtractor;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

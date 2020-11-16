@@ -19,9 +19,9 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -40,11 +40,13 @@ final class MakeGetComponentAssignAnnotatedRector extends AbstractRector
         $this->varAnnotationManipulator = $varAnnotationManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add doc type for magic $control->getComponent(...) assign', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Add doc type for magic $control->getComponent(...) assign',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 
 final class SomeClass
@@ -69,7 +71,7 @@ final class AnotherControl extends Control
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 
 final class SomeClass
@@ -94,8 +96,9 @@ final class AnotherControl extends Control
 {
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

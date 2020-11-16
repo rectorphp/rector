@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Transform\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector\MethodCallToPropertyFetchRectorTest
@@ -28,9 +28,9 @@ final class MethodCallToPropertyFetchRector extends AbstractRector implements Co
      */
     private $methodCallToPropertyFetchCollection = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns method call "$this->something()" to property fetch "$this->something"', [
+        return new RuleDefinition('Turns method call "$this->something()" to property fetch "$this->something"', [
             new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 class SomeClass

@@ -10,14 +10,14 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\Collector\FormerVariablesByMethodCollector;
 use Rector\PHPUnit\Manipulator\OnContainerGetCallManipulator;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeFactory;
 use Rector\SymfonyPHPUnit\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector;
 use Rector\SymfonyPHPUnit\SelfContainerMethodCallCollector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Inspiration
@@ -69,9 +69,9 @@ final class SelfContainerGetMethodCallFromTestToInjectPropertyRector extends Abs
         $this->formerVariablesByMethodCollector = $formerVariablesByMethodCollector;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change $container->get() calls in PHPUnit to @inject properties autowired by jakzal/phpunit-injector',
             [
                 new CodeSample(

@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/3426
@@ -29,9 +29,9 @@ final class SpecificAssertContainsWithoutIdentityRector extends AbstractPHPUnitR
         ],
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change assertContains()/assertNotContains() with non-strict comparison to new specific alternatives',
             [
                 new CodeSample(

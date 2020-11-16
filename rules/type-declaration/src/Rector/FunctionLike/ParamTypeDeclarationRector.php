@@ -12,8 +12,6 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -21,6 +19,8 @@ use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Rector\TypeDeclaration\ValueObject\NewType;
 use ReflectionClass;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
@@ -43,11 +43,13 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
         $this->childParamPopulator = $childParamPopulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change @param types to type declarations if not a BC-break', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change @param types to type declarations if not a BC-break',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 <?php
 
 class ParentClass
@@ -77,8 +79,8 @@ final class ChildClass extends ParentClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 <?php
 
 class ParentClass
@@ -108,8 +110,9 @@ final class ChildClass extends ParentClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

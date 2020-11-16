@@ -9,13 +9,13 @@ use PhpParser\Node\Stmt\ClassConst;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeFinder\ParentClassConstantNodeFinder;
 use Rector\SOLID\Reflection\ParentConstantReflectionResolver;
 use Rector\SOLID\ValueObject\ConstantVisibility;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\PrivatizeLocalClassConstantRectorTest
@@ -45,11 +45,13 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector implements 
         $this->parentClassConstantNodeFinder = $parentClassConstantNodeFinder;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Finalize every class constant that is used only locally', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Finalize every class constant that is used only locally',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class ClassWithConstantUsedOnlyHere
 {
     const LOCAL_ONLY = true;
@@ -60,8 +62,8 @@ class ClassWithConstantUsedOnlyHere
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class ClassWithConstantUsedOnlyHere
 {
     private const LOCAL_ONLY = true;
@@ -72,8 +74,9 @@ class ClassWithConstantUsedOnlyHere
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

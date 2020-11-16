@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/SG0Wu
@@ -17,9 +17,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class RemoveDuplicatedArrayKeyRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove duplicated key in defined arrays.', [
+        return new RuleDefinition('Remove duplicated key in defined arrays.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 $item = [

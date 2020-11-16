@@ -8,7 +8,7 @@ use PHPStan\Type\UnionType;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\SymfonyPhpConfig\Tests\Functions\Source\ServiceWithValueObject;
 use Rector\SymfonyPhpConfig\Tests\Functions\Source\WithType;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class ConfigFactoryNestedTest extends AbstractKernelTestCase
 {

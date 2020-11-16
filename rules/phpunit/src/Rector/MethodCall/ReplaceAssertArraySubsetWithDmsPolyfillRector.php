@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/3494#issuecomment-480283612
@@ -19,9 +19,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class ReplaceAssertArraySubsetWithDmsPolyfillRector extends AbstractPHPUnitRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change assertArraySubset() to static call of DMS\PHPUnitExtensions\ArraySubset\Assert',
             [
                 new CodeSample(

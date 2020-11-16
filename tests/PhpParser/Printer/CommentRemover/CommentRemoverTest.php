@@ -9,7 +9,7 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Printer\CommentRemover;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\StaticFixtureSplitter;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CommentRemoverTest extends AbstractKernelTestCase

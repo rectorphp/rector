@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\PhpParser\Node\Manipulator\ClassConstManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedPrivateConstantRector\RemoveUnusedPrivateConstantRectorTest
@@ -26,9 +26,9 @@ final class RemoveUnusedPrivateConstantRector extends AbstractRector
         $this->classConstManipulator = $classConstManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove unused private constant', [
+        return new RuleDefinition('Remove unused private constant', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeController

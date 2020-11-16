@@ -20,10 +20,10 @@ final class __Name__ extends AbstractRector implements ConfigurableRectorInterfa
 
     __ConfigurationProperties__
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('__Description__', [
-            new ConfiguredCodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('__Description__', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                 __CodeBeforeExample__,
                 __CodeAfterExample__,
                 __RuleConfiguration__

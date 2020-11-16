@@ -12,8 +12,8 @@ use PhpParser\Node\Identifier;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/blob/master/ChangeLog-8.0.md
@@ -30,9 +30,9 @@ final class SpecificAssertContainsRector extends AbstractPHPUnitRector
         'assertNotContains' => 'assertStringNotContainsString',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change assertContains()/assertNotContains() method to new string and iterable alternatives',
             [
                 new CodeSample(

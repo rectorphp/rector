@@ -17,10 +17,10 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\NullType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/Bndc9
@@ -34,9 +34,9 @@ final class CountOnNullRector extends AbstractRector
      */
     private const ALREADY_CHANGED_ON_COUNT = 'already_changed_on_count';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Changes count() on null to safe ternary check',
             [new CodeSample(
 <<<'CODE_SAMPLE'

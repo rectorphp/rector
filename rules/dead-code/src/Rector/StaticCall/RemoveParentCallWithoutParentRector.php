@@ -10,9 +10,9 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector\RemoveParentCallWithoutParentRectorTest
@@ -29,11 +29,13 @@ final class RemoveParentCallWithoutParentRector extends AbstractRector
         $this->classMethodManipulator = $classMethodManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove unused parent call with no parent class', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Remove unused parent call with no parent class',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class OrphanClass
 {
     public function __construct()
@@ -42,8 +44,8 @@ class OrphanClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class OrphanClass
 {
     public function __construct()
@@ -51,8 +53,9 @@ class OrphanClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

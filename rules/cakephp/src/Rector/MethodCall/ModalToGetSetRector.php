@@ -11,8 +11,8 @@ use PhpParser\Node\Identifier;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -33,9 +33,9 @@ final class ModalToGetSetRector extends AbstractRector implements ConfigurableRe
      */
     private $unprefixedMethodsToGetSet = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.',
             [
                 new ConfiguredCodeSample(

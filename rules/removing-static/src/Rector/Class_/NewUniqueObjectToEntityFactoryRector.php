@@ -14,11 +14,11 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\RemovingStatic\StaticTypesInClassResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Depends on @see PassFactoryToUniqueObjectRector
@@ -69,9 +69,9 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implemen
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Convert new X to new factories', [
+        return new RuleDefinition('Convert new X to new factories', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 <?php

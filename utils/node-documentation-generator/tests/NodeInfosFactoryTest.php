@@ -6,7 +6,7 @@ namespace Rector\Utils\NodeDocumentationGenerator\Tests;
 
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Utils\NodeDocumentationGenerator\NodeInfosFactory;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class NodeInfosFactoryTest extends AbstractKernelTestCase
 {

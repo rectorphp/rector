@@ -21,9 +21,9 @@ use Rector\CodingStyle\Node\UseManipulator;
 use Rector\CodingStyle\Node\UseNameAliasToNameResolver;
 use Rector\CodingStyle\ValueObject\NameAndParent;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\RemoveUnusedAliasRectorTest
@@ -70,9 +70,9 @@ final class RemoveUnusedAliasRector extends AbstractRector
         $this->useManipulator = $useManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Removes unused use aliases. Keep annotation aliases like "Doctrine\ORM\Mapping as ORM" to keep convention format',
             [
                 new CodeSample(

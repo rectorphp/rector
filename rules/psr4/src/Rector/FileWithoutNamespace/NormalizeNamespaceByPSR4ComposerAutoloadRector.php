@@ -10,10 +10,10 @@ use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ComposerJsonAwareCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -32,14 +32,14 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
         $this->psr4AutoloadNamespaceMatcher = $psr4AutoloadNamespaceMatcher;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         $description = sprintf(
             'Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with %s',
             MultipleClassFileToPsr4ClassesRector::class
         );
 
-        return new RectorDefinition($description, [
+        return new RuleDefinition($description, [
             new ComposerJsonAwareCodeSample(
                 <<<'CODE_SAMPLE'
 // src/SomeClass.php

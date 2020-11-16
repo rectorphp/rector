@@ -20,10 +20,10 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\StaticTypeToSetterInjectionRectorTest
@@ -51,10 +51,10 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector implements 
         $this->propertyNaming = $propertyNaming;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         // custom made only for Elasticr
-        return new RectorDefinition('Changes types to setter injection', [
+        return new RuleDefinition('Changes types to setter injection', [
             new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 <?php

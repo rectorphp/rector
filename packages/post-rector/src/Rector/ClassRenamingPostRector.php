@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class ClassRenamingPostRector extends AbstractPostRector
 {
@@ -43,8 +44,18 @@ final class ClassRenamingPostRector extends AbstractPostRector
         return $this->classRenamer->renameNode($node, $oldToNewClasses);
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Post Rector that renames classes');
+        return new RuleDefinition('Post Rector that renames classes', [
+            new CodeSample(
+            <<<'CODE_SAMPLE'
+$someClass = new SomeClass();
+CODE_SAMPLE
+,
+            <<<'CODE_SAMPLE'
+$someClass = new AnotherClass();
+CODE_SAMPLE
+            ),
+        ]);
     }
 }

@@ -22,9 +22,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertComparisonToSpecificMethodRector\AssertComparisonToSpecificMethodRectorTest
@@ -65,9 +65,9 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         ];
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns comparison operations to their method name alternatives in PHPUnit TestCase',
             [
                 new CodeSample(

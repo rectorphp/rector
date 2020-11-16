@@ -7,8 +7,8 @@ namespace Rector\Phalcon\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/rectorphp/rector/issues/2571
@@ -17,11 +17,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class DecoupleSaveMethodCallWithArgumentToAssignRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Decouple Phalcon\Mvc\Model::save() with argument to assign()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Decouple Phalcon\Mvc\Model::save() with argument to assign()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(\Phalcon\Mvc\Model $model, $data)
@@ -31,7 +33,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(\Phalcon\Mvc\Model $model, $data)
@@ -41,8 +43,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

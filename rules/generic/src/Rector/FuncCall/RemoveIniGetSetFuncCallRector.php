@@ -10,10 +10,10 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Comments\CommentableNodeResolver;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
@@ -51,9 +51,9 @@ final class RemoveIniGetSetFuncCallRector extends AbstractRector implements Conf
         $this->commentableNodeResolver = $commentableNodeResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove ini_get by configuration', [
+        return new RuleDefinition('Remove ini_get by configuration', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 ini_get('y2k_compliance');

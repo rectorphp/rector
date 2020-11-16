@@ -14,10 +14,10 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\StmtsManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeTransformer\ConditionInverter;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\ChangeAndIfToEarlyReturnRectorTest
@@ -49,9 +49,9 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
         $this->stmtsManipulator = $stmtsManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes if && to early return', [
+        return new RuleDefinition('Changes if && to early return', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

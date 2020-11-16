@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Assign\CombinedAssignRector\CombinedAssignRectorTest
@@ -27,9 +27,9 @@ final class CombinedAssignRector extends AbstractRector
         $this->assignAndBinaryMap = $assignAndBinaryMap;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Simplify $value = $value + 5; assignments to shorter ones',
             [new CodeSample('$value = $value + 5;', '$value += 5;')]
         );

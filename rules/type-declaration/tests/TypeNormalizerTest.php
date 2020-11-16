@@ -13,7 +13,7 @@ use PHPStan\Type\UnionType;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeNormalizer;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class TypeNormalizerTest extends AbstractKernelTestCase
 {

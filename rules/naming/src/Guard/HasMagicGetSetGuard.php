@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Guard;
 
+use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
-use Rector\Naming\ValueObject\RenameValueObjectInterface;
 
 final class HasMagicGetSetGuard implements GuardInterface
 {

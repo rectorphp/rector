@@ -12,8 +12,8 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/add_str_starts_with_and_ends_with_functions
@@ -22,9 +22,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class StrEndsWithRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change helper functions to str_ends_with()', [
+        return new RuleDefinition('Change helper functions to str_ends_with()', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

@@ -12,8 +12,8 @@ use PhpParser\Node\Stmt\Use_;
 use Rector\CakePHP\Naming\CakePHPFullyQualifiedClassNameResolver;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/cakephp/upgrade/blob/756410c8b7d5aff9daec3fa1fe750a3858d422ac/src/Shell/Task/AppUsesTask.php
@@ -33,9 +33,9 @@ final class AppUsesStaticCallToUseStatementRector extends AbstractRector
         $this->cakePHPFullyQualifiedClassNameResolver = $cakePHPFullyQualifiedClassNameResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change App::uses() to use imports', [
+        return new RuleDefinition('Change App::uses() to use imports', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 App::uses('NotificationListener', 'Event');

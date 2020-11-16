@@ -9,10 +9,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector\OrderMethodsByVisibilityRectorTest
@@ -45,9 +45,9 @@ final class OrderMethodsByVisibilityRector extends AbstractConstantPropertyMetho
         MethodName::TEAR_DOWN,
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Orders method by visibility', [
+        return new RuleDefinition('Orders method by visibility', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

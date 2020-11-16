@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class BetterNodeFinderTest extends AbstractKernelTestCase
 {

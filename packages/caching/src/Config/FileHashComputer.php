@@ -29,8 +29,8 @@ final class FileHashComputer
 
         $fileLoader->load($fileInfo->getRealPath());
 
-        return $this->arrayToHash($containerBuilder->getDefinitions()) .
-            $this->arrayToHash($containerBuilder->getParameterBag()->all());
+        $parameterBag = $containerBuilder->getParameterBag();
+        return $this->arrayToHash($containerBuilder->getDefinitions()) . $this->arrayToHash($parameterBag->all());
     }
 
     private function ensureIsYamlOrPhp(SmartFileInfo $fileInfo): void

@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractKernelTestCase
 {

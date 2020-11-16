@@ -10,11 +10,11 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\VariableRenamer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\RenameVariableToMatchNewTypeRectorTest
@@ -46,9 +46,9 @@ final class RenameVariableToMatchNewTypeRector extends AbstractRector
         $this->variableRenamer = $variableRenamer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Rename variable to match new ClassType', [
+        return new RuleDefinition('Rename variable to match new ClassType', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

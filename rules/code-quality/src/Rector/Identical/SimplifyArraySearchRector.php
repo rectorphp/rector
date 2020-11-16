@@ -11,8 +11,8 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Identical\SimplifyArraySearchRector\SimplifyArraySearchRectorTest
@@ -29,9 +29,9 @@ final class SimplifyArraySearchRector extends AbstractRector
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Simplify array_search to in_array',
             [
                 new CodeSample('array_search("searching", $array) !== false;', 'in_array("searching", $array);'),

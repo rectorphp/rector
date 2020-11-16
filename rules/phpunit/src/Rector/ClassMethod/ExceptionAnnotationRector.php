@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionMethodCallFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://thephp.cc/news/2016/02/questioning-phpunit-best-practices
@@ -43,9 +43,9 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
         $this->expectExceptionMethodCallFactory = $expectExceptionMethodCallFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Changes `@expectedException annotations to `expectException*()` methods',
             [
                 new CodeSample(

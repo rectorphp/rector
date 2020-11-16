@@ -13,8 +13,8 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/laravel/framework/pull/25315
@@ -24,9 +24,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class ChangeQueryWhereDateValueWithCarbonRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Add parent::boot(); call to boot() class method in child of Illuminate\Database\Eloquent\Model',
             [
                 new CodeSample(

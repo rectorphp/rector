@@ -9,7 +9,7 @@ use Rector\Core\Configuration\MinimalVersionChecker;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonReader;
 use Rector\Core\Exception\Application\PhpVersionException;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class MinimalVersionCheckerTest extends AbstractKernelTestCase
 {

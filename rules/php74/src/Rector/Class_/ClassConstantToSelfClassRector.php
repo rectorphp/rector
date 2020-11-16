@@ -9,9 +9,9 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\MagicConst\Class_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
@@ -20,9 +20,9 @@ use Rector\Core\ValueObject\PhpVersionFeature;
  */
 final class ClassConstantToSelfClassRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change `__CLASS__` to self::class', [
+        return new RuleDefinition('Change `__CLASS__` to self::class', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

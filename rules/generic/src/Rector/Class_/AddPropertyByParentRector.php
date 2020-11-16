@@ -9,12 +9,12 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\AddPropertyByParent;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -51,9 +51,9 @@ final class AddPropertyByParentRector extends AbstractRector implements Configur
         return [Class_::class];
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add dependency via constructor by parent class type', [
+        return new RuleDefinition('Add dependency via constructor by parent class type', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass extends SomeParentClass

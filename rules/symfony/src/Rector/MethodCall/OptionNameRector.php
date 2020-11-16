@@ -7,8 +7,8 @@ namespace Rector\Symfony\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\MethodCall\OptionNameRector\OptionNameRectorTest
@@ -23,21 +23,24 @@ final class OptionNameRector extends AbstractFormAddRector
         'virtual' => 'inherit_data',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns old option names to new ones in FormTypes in Form in Symfony', [
-            new CodeSample(
+        return new RuleDefinition(
+            'Turns old option names to new ones in FormTypes in Form in Symfony',
+            [
+                new CodeSample(
 <<<'CODE_SAMPLE'
 $builder = new FormBuilder;
 $builder->add("...", ["precision" => "...", "virtual" => "..."];
 CODE_SAMPLE
-                ,
+                    ,
 <<<'CODE_SAMPLE'
 $builder = new FormBuilder;
 $builder->add("...", ["scale" => "...", "inherit_data" => "..."];
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

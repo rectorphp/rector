@@ -16,11 +16,11 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\Bridge\RectorProviderException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
@@ -45,9 +45,9 @@ final class ServiceLocatorToDIRector extends AbstractRector
         $this->propertyNaming = $propertyNaming;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns $this->getRepository() in Symfony Controller to constructor injection and private property access.',
             [
                 new CodeSample(

@@ -7,8 +7,8 @@ namespace Rector\Php53\Rector\Variable;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
@@ -31,11 +31,11 @@ final class ReplaceHttpServerVarsByServerRector extends AbstractRector
         'HTTP_COOKIE_VARS' => '_COOKIE',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Rename old $HTTP_* variable names to new replacements', [
-            new CodeSample('$serverVars = $HTTP_SERVER_VARS;', '$serverVars = $_SERVER;'),
-        ]);
+        return new RuleDefinition(
+            'Rename old $HTTP_* variable names to new replacements',
+            [new CodeSample('$serverVars = $HTTP_SERVER_VARS;', '$serverVars = $_SERVER;')]);
     }
 
     /**

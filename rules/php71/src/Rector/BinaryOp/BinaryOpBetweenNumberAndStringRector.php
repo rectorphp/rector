@@ -14,8 +14,8 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Constant\ConstantStringType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/XPEEl
@@ -24,9 +24,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class BinaryOpBetweenNumberAndStringRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change binary operation between some number + string to PHP 7.1 compatible version',
             [
                 new CodeSample(

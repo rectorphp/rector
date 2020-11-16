@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Type\IntegerType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
@@ -20,11 +20,11 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class MbStrrposEncodingArgumentPositionRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change mb_strrpos() encoding argument position', [
-            new CodeSample('mb_strrpos($text, "abc", "UTF-8");', 'mb_strrpos($text, "abc", 0, "UTF-8");'),
-        ]);
+        return new RuleDefinition(
+            'Change mb_strrpos() encoding argument position',
+            [new CodeSample('mb_strrpos($text, "abc", "UTF-8");', 'mb_strrpos($text, "abc", 0, "UTF-8");')]);
     }
 
     /**

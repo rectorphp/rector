@@ -4,7 +4,7 @@ services:
         tags: [phpstan.rules.rule]
 
     -
-        class: Symplify\CodingStandard\Rules\PreventParentMethodVisibilityOverrideRule
+        class: Symplify\PHPStanRules\Rules\PreventParentMethodVisibilityOverrideRule
         tags: [phpstan.rules.rule]
 
     -

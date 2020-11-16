@@ -7,9 +7,9 @@ namespace Rector\Naming\ParamRenamer;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
-use Rector\Naming\RenamerInterface;
+use Rector\Naming\Contract\RenamerInterface;
+use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\ParamRename;
-use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\Naming\VariableRenamer;
 
 abstract class AbstractParamRenamer implements RenamerInterface

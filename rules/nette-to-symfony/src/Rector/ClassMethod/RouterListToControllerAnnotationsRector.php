@@ -15,8 +15,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\Routing\ExplicitRouteAnnotationDecorator;
@@ -24,6 +22,8 @@ use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use ReflectionMethod;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://doc.nette.org/en/2.4/routing
@@ -64,9 +64,9 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change new Route() from RouteFactory to @Route annotation above controller method',
             [
                 new CodeSample(

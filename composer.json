@@ -32,13 +32,13 @@
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
         "symfony/process": "^4.4.8|^5.1",
-        "symplify/autowire-array-parameter": "^8.3.48",
-        "symplify/composer-json-manipulator": "^8.3.48",
-        "symplify/console-color-diff": "^8.3.48",
-        "symplify/easy-testing": "^8.3.48",
-        "symplify/package-builder": "^8.3.48",
-        "symplify/set-config-resolver": "^8.3.48",
-        "symplify/smart-file-system": "^8.3.48",
+        "symplify/autowire-array-parameter": "dev-master",
+        "symplify/composer-json-manipulator": "dev-master",
+        "symplify/console-color-diff": "dev-master",
+        "symplify/package-builder": "dev-master",
+        "symplify/set-config-resolver": "dev-master",
+        "symplify/smart-file-system": "dev-master",
+        "symplify/rule-doc-generator": "dev-master",
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
@@ -52,11 +52,14 @@
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpunit/phpunit": "^8.5|^9.2",
         "psr/event-dispatcher": "^1.0",
-        "symplify/changelog-linker": "^8.3.48",
-        "symplify/easy-coding-standard": "^8.3.48",
-        "symplify/easy-testing": "^8.3.48",
-        "symplify/monorepo-builder": "^8.3.48",
-        "symplify/phpstan-extensions": "^8.3.48",
+        "symplify/changelog-linker": "dev-master",
+        "symplify/easy-coding-standard": "dev-master",
+        "symplify/coding-standard": "dev-master",
+        "symplify/easy-testing": "dev-master",
+        "symplify/monorepo-builder": "dev-master",
+        "symplify/phpstan-extensions": "dev-master",
+        "symplify/markdown-diff": "dev-master",
+        "symplify/phpstan-rules": "dev-master",
         "tracy/tracy": "^2.7"
     },
     "replace": {
@@ -87,7 +90,6 @@
             "Rector\\DoctrineCodeQuality\\": "rules/doctrine-code-quality/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "rules/doctrine-gedmo-to-knplabs/src",
             "Rector\\Doctrine\\": "rules/doctrine/src",
-            "Rector\\DocumentationGenerator\\": "packages/documentation-generator/src",
             "Rector\\DowngradePhp71\\": "rules/downgrade-php71/src",
             "Rector\\DowngradePhp72\\": "rules/downgrade-php72/src",
             "Rector\\DowngradePhp73\\": "rules/downgrade-php73/src",
@@ -215,7 +217,6 @@
             "Rector\\DoctrineCodeQuality\\Tests\\": "rules/doctrine-code-quality/tests",
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "rules/doctrine-gedmo-to-knplabs/tests",
             "Rector\\Doctrine\\Tests\\": "rules/doctrine/tests",
-            "Rector\\DocumentationGenerator\\Tests\\": "packages/documentation-generator/tests",
             "Rector\\DowngradePhp71\\Tests\\": "rules/downgrade-php71/tests",
             "Rector\\DowngradePhp72\\Tests\\": "rules/downgrade-php72/tests",
             "Rector\\DowngradePhp73\\Tests\\": "rules/downgrade-php73/tests",
@@ -284,7 +285,6 @@
             "Rector\\Twig\\Tests\\": "rules/twig/tests",
             "Rector\\TypeDeclaration\\Tests\\": "rules/type-declaration/tests",
             "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src",
-            "Rector\\Utils\\DocumentationGenerator\\": "utils/node-documentation-generator/src",
             "Rector\\Utils\\NodeDocumentationGenerator\\": "utils/node-documentation-generator/src",
             "Rector\\Utils\\NodeDocumentationGenerator\\Tests\\": "utils/node-documentation-generator/tests",
             "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/phpstan-attribute-type-syncer/src",
@@ -316,9 +316,9 @@
             "vendor/bin/changelog-linker cleanup --ansi"
         ],
         "docs": [
-            "bin/rector dump-rectors --output-file docs/rector_rules_overview.md --ansi",
-            "vendor/bin/ecs check-markdown docs/rector_rules_overview.md --ansi --fix",
-            "bin/rector dump-nodes --output-file docs/nodes_overview.md --ansi"
+            "vendor/bin/rule-doc-generator generate packages rules --output-file docs/rector_rules_overview.md --ansi",
+            "bin/rector dump-nodes --output-file docs/nodes_overview.md --ansi",
+            "vendor/bin/ecs check-markdown docs/rector_rules_overview.md docs/nodes_overview.md --ansi --fix"
         ],
         "rector-ci": "bin/rector process --config rector-ci.php --dry-run --ansi",
         "rector": "bin/rector process --config rector-ci.php --ansi",
@@ -338,5 +338,7 @@
                 "patches/nette-application-src-application-ui-presenter-php.patch"
             ]
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

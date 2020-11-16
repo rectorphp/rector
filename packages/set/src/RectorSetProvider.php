@@ -55,7 +55,8 @@ final class RectorSetProvider extends AbstractSetProvider
             }
 
             $desiredSetFileInfo = new SmartFileInfo($desiredSetName);
-            if ($set->getSetFileInfo()->getRealPath() !== $desiredSetFileInfo->getRealPath()) {
+            $setFileInfo = $set->getSetFileInfo();
+            if ($setFileInfo->getRealPath() !== $desiredSetFileInfo->getRealPath()) {
                 continue;
             }
 

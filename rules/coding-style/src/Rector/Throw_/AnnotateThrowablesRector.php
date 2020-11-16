@@ -7,26 +7,22 @@ namespace Rector\CodingStyle\Rector\Throw_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Throw_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\CodingStyle\DocBlock\ThrowsFactory;
+use Rector\CodingStyle\NodeAnalyzer\ThrowAnalyzer;
 use Rector\Core\PhpParser\Node\Value\ClassResolver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Reflection\ClassMethodReflectionHelper;
 use Rector\Core\Reflection\FunctionAnnotationResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionFunction;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\AnnotateThrowablesRectorTest
@@ -53,14 +49,28 @@ final class AnnotateThrowablesRector extends AbstractRector
      */
     private $classResolver;
 
+    /**
+     * @var ThrowAnalyzer
+     */
+    private $throwAnalyzer;
+
+    /**
+     * @var ThrowsFactory
+     */
+    private $throwsFactory;
+
     public function __construct(
         ClassMethodReflectionHelper $classMethodReflectionHelper,
         ClassResolver $classResolver,
-        FunctionAnnotationResolver $functionAnnotationResolver
+        FunctionAnnotationResolver $functionAnnotationResolver,
+        ThrowAnalyzer $throwAnalyzer,
+        ThrowsFactory $throwsFactory
     ) {
         $this->functionAnnotationResolver = $functionAnnotationResolver;
         $this->classMethodReflectionHelper = $classMethodReflectionHelper;
         $this->classResolver = $classResolver;
+        $this->throwAnalyzer = $throwAnalyzer;
+        $this->throwsFactory = $throwsFactory;
     }
 
     /**
@@ -74,9 +84,9 @@ final class AnnotateThrowablesRector extends AbstractRector
     /**
      * From this method documentation is generated.
      */
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Adds @throws DocBlock comments to methods that thrwo \Throwables.', [
                 new CodeSample(
                 // code before
@@ -122,6 +132,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $this->throwablesToAnnotate = [];
+
         if ($this->hasThrowablesToAnnotate($node)) {
             $this->annotateThrowables($node);
             return $node;
@@ -130,6 +141,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param Throw_|MethodCall|FuncCall $node
+     */
     private function hasThrowablesToAnnotate(Node $node): bool
     {
         $foundThrowables = 0;
@@ -148,44 +162,29 @@ CODE_SAMPLE
         return $foundThrowables > 0;
     }
 
+    /**
+     * @param Throw_|MethodCall|FuncCall $node
+     */
     private function annotateThrowables(Node $node): void
     {
         $callee = $this->identifyCaller($node);
-
         if ($callee === null) {
             return;
         }
 
         $phpDocInfo = $callee->getAttribute(AttributeKey::PHP_DOC_INFO);
         foreach ($this->throwablesToAnnotate as $throwableToAnnotate) {
-            $docComment = $this->buildThrowsDocComment($throwableToAnnotate);
+            $docComment = $this->throwsFactory->crateDocTagNodeFromClass($throwableToAnnotate);
             $phpDocInfo->addPhpDocTagNode($docComment);
         }
     }
 
     private function analyzeStmtThrow(Throw_ $throw): int
     {
-        $foundThrownThrowables = [];
-
-        // throw new \Throwable
-        if ($throw->expr instanceof New_) {
-            $class = $this->getName($throw->expr->class);
-            if ($class !== null) {
-                $foundThrownThrowables[] = $class;
-            }
-        }
-
-        if ($throw->expr instanceof StaticCall) {
-            $foundThrownThrowables = $this->identifyThrownThrowablesInStaticCall($throw->expr);
-        }
-
-        if ($throw->expr instanceof MethodCall) {
-            $foundThrownThrowables = $this->identifyThrownThrowablesInMethodCall($throw->expr);
-        }
-
+        $foundThrownThrowables = $this->throwAnalyzer->resolveThrownTypes($throw);
         $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($throw);
 
-        return $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+        return $this->diffThrowsTypes($foundThrownThrowables, $alreadyAnnotatedThrowables);
     }
 
     private function analyzeStmtFuncCall(FuncCall $funcCall): int
@@ -197,64 +196,31 @@ CODE_SAMPLE
         }
 
         $reflectionFunction = new ReflectionFunction($functionFqn);
-        $foundThrownThrowables = $this->functionAnnotationResolver->extractFunctionAnnotatedThrows($reflectionFunction);
-        $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($funcCall);
-        return $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+
+        $throwsTypes = $this->functionAnnotationResolver->extractFunctionAnnotatedThrows($reflectionFunction);
+        $alreadyAnnotatedThrowsTypes = $this->extractAlreadyAnnotatedThrowables($funcCall);
+
+        return $this->diffThrowsTypes($throwsTypes, $alreadyAnnotatedThrowsTypes);
     }
 
     private function analyzeStmtMethodCall(MethodCall $methodCall): int
     {
-        $foundThrownThrowables = $this->identifyThrownThrowablesInMethodCall($methodCall);
-        $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($methodCall);
-        return $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+        $foundThrowsTypes = $this->identifyThrownThrowablesInMethodCall($methodCall);
+        $alreadyAnnotatedThrowsTypes = $this->extractAlreadyAnnotatedThrowables($methodCall);
+
+        return $this->diffThrowsTypes($foundThrowsTypes, $alreadyAnnotatedThrowsTypes);
     }
 
+    /**
+     * @param Throw_|MethodCall|FuncCall $node
+     */
     private function identifyCaller(Node $node): ?Node
     {
         return $this->betterNodeFinder->findFirstAncestorInstancesOf($node, [ClassMethod::class, Function_::class]);
     }
 
-    private function buildThrowsDocComment(string $throwableClass): AttributeAwarePhpDocTagNode
-    {
-        $throwsTagValueNode = new ThrowsTagValueNode(new IdentifierTypeNode($throwableClass), '');
-
-        return new AttributeAwarePhpDocTagNode('@throws', $throwsTagValueNode);
-    }
-
     /**
-     * @return array<class-string>
-     */
-    private function identifyThrownThrowablesInStaticCall(StaticCall $staticCall): array
-    {
-        $thrownClass = $staticCall->class;
-        $methodName = $thrownClass->getAttribute(AttributeKey::NEXT_NODE);
-
-        if (! $thrownClass instanceof FullyQualified || ! $methodName instanceof Identifier) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $this->extractMethodReturns($thrownClass, $methodName);
-    }
-
-    /**
-     * @return class-string[]
-     */
-    private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
-    {
-        $fullyQualified = $this->classResolver->getClassFromMethodCall($methodCall);
-        $methodName = $methodCall->name;
-
-        if (! $fullyQualified instanceof FullyQualified || ! $methodName instanceof Identifier) {
-            return [];
-        }
-
-        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
-
-        return $parent instanceof Throw_ ? $this->extractMethodReturns($fullyQualified, $methodName)
-            : $this->extractMethodThrows($fullyQualified, $methodName);
-    }
-
-    /**
+     * @param Throw_|MethodCall|FuncCall $node
      * @return class-string[]
      */
     private function extractAlreadyAnnotatedThrowables(Node $node): array
@@ -277,7 +243,7 @@ CODE_SAMPLE
      * @param string[] $foundThrownThrowables
      * @param string[] $alreadyAnnotatedThrowables
      */
-    private function diffThrowables(array $foundThrownThrowables, array $alreadyAnnotatedThrowables): int
+    private function diffThrowsTypes(array $foundThrownThrowables, array $alreadyAnnotatedThrowables): int
     {
         $normalizeNamespace = static function (string $class): string {
             $class = ltrim($class, '\\');
@@ -302,16 +268,16 @@ CODE_SAMPLE
     /**
      * @return class-string[]
      */
-    private function extractMethodReturns(FullyQualified $fullyQualified, Identifier $identifier): array
+    private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
     {
-        $method = $identifier->name;
-        $class = $this->getName($fullyQualified);
+        $fullyQualified = $this->classResolver->getClassFromMethodCall($methodCall);
+        $methodName = $methodCall->name;
 
-        if ($class === null) {
+        if (! $fullyQualified instanceof FullyQualified || ! $methodName instanceof Identifier) {
             return [];
         }
 
-        return $this->classMethodReflectionHelper->extractTagsFromMethodDockblock($class, $method, '@return');
+        return $this->extractMethodThrows($fullyQualified, $methodName);
     }
 
     /**
@@ -326,6 +292,6 @@ CODE_SAMPLE
             return [];
         }
 
-        return $this->classMethodReflectionHelper->extractTagsFromMethodDockblock($class, $method, '@throws');
+        return $this->classMethodReflectionHelper->extractTagsFromMethodDocBlock($class, $method);
     }
 }

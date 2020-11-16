@@ -12,11 +12,11 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\NodeFactory\RepositoryNodeFactory;
 use Rector\Doctrine\Type\RepositoryTypeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://www.luzanky.cz/ for sponsoring this rule
@@ -50,9 +50,9 @@ final class ServiceEntityRepositoryParentCallToDIRector extends AbstractRector
         $this->repositoryTypeFactory = $repositoryTypeFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change ServiceEntityRepository to dependency injection, with repository property',
             [
                 new CodeSample(

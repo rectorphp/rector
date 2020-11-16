@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27476
@@ -20,27 +20,30 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RootNodeTreeBuilderRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes  Process string argument to an array', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Changes  Process string argument to an array',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 $treeBuilder = new TreeBuilder();
 $rootNode = $treeBuilder->root('acme_root');
 $rootNode->someCall();
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 $treeBuilder = new TreeBuilder('acme_root');
 $rootNode = $treeBuilder->getRootNode();
 $rootNode->someCall();
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

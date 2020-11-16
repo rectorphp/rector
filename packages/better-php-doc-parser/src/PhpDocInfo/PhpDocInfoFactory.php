@@ -81,7 +81,8 @@ final class PhpDocInfoFactory
         /** needed for @see PhpDocNodeFactoryInterface */
         $this->currentNodeProvider->setNode($node);
 
-        if ($node->getDocComment() === null) {
+        $docComment = $node->getDocComment();
+        if ($docComment === null) {
             if ($node->getComments() !== []) {
                 return null;
             }
@@ -91,8 +92,7 @@ final class PhpDocInfoFactory
             $tokens = [];
             $phpDocNode = new AttributeAwarePhpDocNode([]);
         } else {
-            $content = $node->getDocComment()
-                ->getText();
+            $content = $docComment->getText();
             $tokens = $this->lexer->tokenize($content);
             $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
             $this->setPositionOfLastToken($phpDocNode);

@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/combined-comparison-operator
@@ -21,23 +21,26 @@ use Rector\Core\ValueObject\PhpVersionFeature;
  */
 final class TernaryToSpaceshipRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Use <=> spaceship instead of ternary with same effect', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Use <=> spaceship instead of ternary with same effect',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 function order_func($a, $b) {
     return ($a < $b) ? -1 : (($a > $b) ? 1 : 0);
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 function order_func($a, $b) {
     return $a <=> $b;
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

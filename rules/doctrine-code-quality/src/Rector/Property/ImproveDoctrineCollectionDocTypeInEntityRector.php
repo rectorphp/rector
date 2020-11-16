@@ -14,12 +14,12 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeFactory;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeResolver;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionVarTagValueNodeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DoctrineCodeQuality\Tests\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector\ImproveDoctrineCollectionDocTypeInEntityRectorTest
@@ -58,9 +58,9 @@ final class ImproveDoctrineCollectionDocTypeInEntityRector extends AbstractRecto
         $this->collectionVarTagValueNodeResolver = $collectionVarTagValueNodeResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Improve @var, @param and @return types for Doctrine collections to make them useful both for PHPStan and PHPStorm',
             [
                 new CodeSample(

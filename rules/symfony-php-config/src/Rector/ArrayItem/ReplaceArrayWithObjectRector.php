@@ -17,9 +17,9 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\SymfonyPhpConfig\Tests\Rector\ArrayItem\ReplaceArrayWithObjectRector\ReplaceArrayWithObjectRectorTest
@@ -52,9 +52,9 @@ final class ReplaceArrayWithObjectRector extends AbstractRector implements Confi
      */
     private $nestedArguments = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replace complex array configuration in configs with value object', [
+        return new RuleDefinition('Replace complex array configuration in configs with value object', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

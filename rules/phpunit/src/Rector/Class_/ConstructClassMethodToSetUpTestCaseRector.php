@@ -10,11 +10,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/3975#issuecomment-562584609
@@ -41,9 +41,9 @@ final class ConstructClassMethodToSetUpTestCaseRector extends AbstractPHPUnitRec
         $this->staticCallAnalyzer = $staticCallAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change __construct() method in tests of `PHPUnit\Framework\TestCase` to setUp(), to prevent dangerous override',
             [
                 new CodeSample(

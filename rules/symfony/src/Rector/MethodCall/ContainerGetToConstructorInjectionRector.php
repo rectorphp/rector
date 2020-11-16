@@ -7,9 +7,9 @@ namespace Rector\Symfony\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
@@ -31,9 +31,9 @@ final class ContainerGetToConstructorInjectionRector extends AbstractToConstruct
         'Symfony\Bundle\FrameworkBundle\Controller\Controller',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony',
             [
                 new ConfiguredCodeSample(

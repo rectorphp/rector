@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Naming\ExpectedNameResolver\ExpectedNameResolverInterface;
+use Rector\Naming\Contract\ExpectedNameResolver\ExpectedNameResolverInterface;
 use Rector\Naming\ValueObject\ParamRename;
 use Rector\NodeNameResolver\NodeNameResolver;
 

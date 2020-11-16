@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Nette\NodeFactory\CheckRequirementsClassMethodFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/nette/application/commit/a70c7256b645a2bee0b0c2c735020d7043a14558#diff-549e1fc650c1fc7e138900598027656a50d12b031605f8a63a38bd69a3985fafR1324
@@ -38,11 +38,13 @@ final class MoveFinalGetUserToCheckRequirementsClassMethodRector extends Abstrac
         $this->classInsertManipulator = $classInsertManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Presenter method getUser() is now final, move logic to checkRequirements()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Presenter method getUser() is now final, move logic to checkRequirements()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 
 class SomeControl extends Presenter
@@ -56,8 +58,8 @@ class SomeControl extends Presenter
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 
 class SomeControl extends Presenter
@@ -72,8 +74,9 @@ class SomeControl extends Presenter
 }
 CODE_SAMPLE
 
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

@@ -7,19 +7,19 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyInArrayValuesRector\SimplifyInArrayValuesRectorTest
  */
 final class SimplifyInArrayValuesRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Removes unneeded array_values() in in_array() call', [
-            new CodeSample('in_array("key", array_values($array), true);', 'in_array("key", $array, true);'),
-        ]);
+        return new RuleDefinition(
+            'Removes unneeded array_values() in in_array() call',
+            [new CodeSample('in_array("key", array_values($array), true);', 'in_array("key", $array, true);')]);
     }
 
     /**

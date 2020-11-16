@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://www.luzanky.cz/ for sponsoring this rule
@@ -33,11 +33,13 @@ final class CorrectDefaultTypesOnEntityPropertyRector extends AbstractRector
         $this->doctrinePropertyAnalyzer = $doctrinePropertyAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change default value types to match Doctrine annotation type', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change default value types to match Doctrine annotation type',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,8 +54,8 @@ class User
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -67,8 +69,9 @@ class User
     private $isOld = false;
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

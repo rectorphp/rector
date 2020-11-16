@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector\RenameClassConstantsUseToStringsRectorTest
@@ -27,9 +27,9 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector implem
      */
     private $oldConstantsToNewValuesByType = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replaces constant by value', [
+        return new RuleDefinition('Replaces constant by value', [
             new ConfiguredCodeSample(
                 '$value === Nette\Configurator::DEVELOPMENT',
                 '$value === "development"',

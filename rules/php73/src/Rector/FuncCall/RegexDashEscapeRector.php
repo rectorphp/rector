@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Php\Regex\RegexPatternArgumentManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/dRG8U
@@ -43,9 +43,9 @@ final class RegexDashEscapeRector extends AbstractRector
         $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Escape - in some cases', [
+        return new RuleDefinition('Escape - in some cases', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 preg_match("#[\w-()]#", 'some text');

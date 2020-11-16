@@ -13,7 +13,7 @@ use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase

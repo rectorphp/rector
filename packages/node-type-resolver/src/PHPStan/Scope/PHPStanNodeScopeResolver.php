@@ -134,8 +134,8 @@ final class PHPStanNodeScopeResolver
 
             // traversing trait inside class that is using it scope (from referenced) - the trait traversed by Rector is different (directly from parsed file)
             if ($scope->isInTrait()) {
-                $traitName = $scope->getTraitReflection()
-                    ->getName();
+                $classReflection = $scope->getTraitReflection();
+                $traitName = $classReflection->getName();
                 $this->traitNodeScopeCollector->addForTraitAndNode($traitName, $node, $scope);
 
                 return;

@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertCompareToSpecificMethodRector\AssertCompareToSpecificMethodRectorTest
@@ -46,18 +46,21 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
         ];
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns vague php-only method in PHPUnit TestCase to more specific', [
-            new CodeSample(
-                '$this->assertSame(10, count($anything), "message");',
-                '$this->assertCount(10, $anything, "message");'
-            ),
-            new CodeSample(
-                '$this->assertNotEquals(get_class($value), stdClass::class);',
-                '$this->assertNotInstanceOf(stdClass::class, $value);'
-            ),
-        ]);
+        return new RuleDefinition(
+            'Turns vague php-only method in PHPUnit TestCase to more specific',
+            [
+                new CodeSample(
+                    '$this->assertSame(10, count($anything), "message");',
+                    '$this->assertCount(10, $anything, "message");'
+                ),
+                new CodeSample(
+                    '$this->assertNotEquals(get_class($value), stdClass::class);',
+                    '$this->assertNotInstanceOf(stdClass::class, $value);'
+                ),
+
+            ]);
     }
 
     /**
