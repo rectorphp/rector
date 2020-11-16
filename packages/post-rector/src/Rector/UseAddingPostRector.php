@@ -129,7 +129,7 @@ use App\SomeClass;
 
 $someClass = new SomeClass();
 CODE_SAMPLE
-            )
+            ),
         ]);
     }
 

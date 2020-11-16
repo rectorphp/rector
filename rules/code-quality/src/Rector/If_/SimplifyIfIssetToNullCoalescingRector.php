@@ -26,7 +26,7 @@ final class SimplifyIfIssetToNullCoalescingRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify binary if to null coalesce', [
+        return new RuleDefinition('Simplify binary if to null coalesce', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeController

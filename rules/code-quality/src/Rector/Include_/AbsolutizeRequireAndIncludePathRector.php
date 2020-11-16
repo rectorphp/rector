@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symplify/CodingStandard#includerequire-should-be-followed-by-absolute-path
@@ -19,12 +21,12 @@ use Rector\Core\Rector\AbstractRector;
  */
 final class AbsolutizeRequireAndIncludePathRector extends AbstractRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
