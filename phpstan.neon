@@ -726,6 +726,7 @@ parameters:
         - '#Trait method "(.*?)" should not contain any logic, but only delegate to other class call#'
         - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
         - '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+        - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
 
         -
             message: '#Use explicit names over dynamic ones#'

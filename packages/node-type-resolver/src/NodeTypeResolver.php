@@ -242,21 +242,23 @@ final class NodeTypeResolver
             return false;
         }
 
-        if ($nodeType->isSuperTypeOf(new NullType())->no()) {
-            return false;
-        }
-
         if (count($nodeType->getTypes()) !== 2) {
             return false;
         }
 
         foreach ($nodeType->getTypes() as $type) {
-            if ($type instanceof ObjectType) {
-                return true;
+            if ($type instanceof TypeWithClassName) {
+                continue;
             }
+
+            if ($type instanceof NullType) {
+                continue;
+            }
+
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     public function isPropertyBoolean(Property $property): bool

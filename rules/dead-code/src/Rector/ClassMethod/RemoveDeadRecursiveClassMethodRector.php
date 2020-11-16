@@ -141,9 +141,9 @@ CODE_SAMPLE
         }
 
         // differnt class, probably inheritance
-        if ($methodCall->getAttribute(AttributeKey::CLASS_NAME) !== $classMethod->getAttribute(
-            AttributeKey::CLASS_NAME
-        )) {
+        $methodCallClassName = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
+        $classMethodClassName = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if ($methodCallClassName !== $classMethodClassName) {
             return true;
         }
 
