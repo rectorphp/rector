@@ -1,0 +1,12 @@
+services:
+    -
+         class: Rector\PHPStanExtensions\Rule\RequireClassTypeInClassMethodByTypeRule
+         tags: [phpstan.rules.rule]
+         arguments:
+            requiredTypeInMethodByClass:
+                Rector\Core\Contract\Rector\PhpRectorInterface:
+                    getNodeTypes: 'PhpParser\Node'
+
+    - PhpParser\NodeFinder
+    - Symplify\PHPStanRules\Naming\SimpleNameResolver
+    - Rector\PHPStanExtensions\TypeAnalyzer\ConstantTypeAnalyzer

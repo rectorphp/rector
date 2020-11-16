@@ -8,13 +8,17 @@ services:
         tags: [phpstan.rules.rule]
 
     -
-         class: Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule
-         tags: [phpstan.rules.rule]
+        class: Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule
+        tags: [phpstan.rules.rule]
 
     -
-         class: Rector\PHPStanExtensions\Rule\ConfigurableRectorRule
-         tags: [phpstan.rules.rule]
+        class: Rector\PHPStanExtensions\Rule\ConfigurableRectorRule
+        tags: [phpstan.rules.rule]
 
     -
-         class: Rector\PHPStanExtensions\Rule\CheckGetNodeTypesReturnPhpParserNodeRule
-         tags: [phpstan.rules.rule]
+        class: Rector\PHPStanExtensions\Rule\RequireClassTypeInClassMethodByTypeRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            requiredTypeInMethodByClass:
+                Rector\Core\Contract\Rector\PhpRectorInterface:
+                    getNodeTypes: 'PhpParser\Node'
