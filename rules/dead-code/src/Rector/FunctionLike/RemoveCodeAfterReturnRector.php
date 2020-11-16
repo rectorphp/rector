@@ -11,16 +11,18 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\FunctionLike\RemoveCodeAfterReturnRector\RemoveCodeAfterReturnRectorTest
  */
 final class RemoveCodeAfterReturnRector extends AbstractRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove dead code after return statement', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+        return new RuleDefinition('Remove dead code after return statement', [
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {

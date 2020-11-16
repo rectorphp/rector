@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Php70\Tests\Rector\FuncCall\CallUserMethodRector\CallUserMethodRectorTest
@@ -22,12 +24,12 @@ final class CallUserMethodRector extends AbstractRector
         'call_user_method_array' => 'call_user_func_array',
     ];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Changes call_user_method()/call_user_method_array() to call_user_func()/call_user_func_array()',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     'call_user_method($method, $obj, "arg1", "arg2");',
                     'call_user_func(array(&$obj, "method"), "arg1", "arg2");'
                 ),

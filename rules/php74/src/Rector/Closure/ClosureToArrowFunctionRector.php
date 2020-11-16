@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/arrow_functions_v2
@@ -20,10 +22,10 @@ use Rector\Core\ValueObject\PhpVersionFeature;
  */
 final class ClosureToArrowFunctionRector extends AbstractRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change closure to arrow function', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+        return new RuleDefinition('Change closure to arrow function', [
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {

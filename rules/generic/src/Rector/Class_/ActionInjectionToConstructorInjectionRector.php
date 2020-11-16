@@ -13,6 +13,8 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Configuration\Collector\VariablesToPropertyFetchCollection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\ServiceMapProvider;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\ActionInjectionToConstructorInjectionRectorTest
@@ -37,12 +39,12 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
         $this->applicationServiceMapProvider = $applicationServiceMapProvider;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Turns action injection in Controllers to constructor injection',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 final class SomeController
 {

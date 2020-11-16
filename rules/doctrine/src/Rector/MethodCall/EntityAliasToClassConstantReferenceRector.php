@@ -15,6 +15,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\EntityAliasToClassConstantReferenceRectorTest
@@ -43,10 +45,10 @@ final class EntityAliasToClassConstantReferenceRector extends AbstractRector imp
      */
     private $aliasesToNamespaces = [];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces doctrine alias with class.', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Replaces doctrine alias with class.', [
+            new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 $entityManager = new Doctrine\ORM\EntityManager();
 $entityManager->getRepository("AppBundle:Post");

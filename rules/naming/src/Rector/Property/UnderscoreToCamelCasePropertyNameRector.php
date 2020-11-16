@@ -11,6 +11,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\UnderscoreCamelCaseExpectedNameResolver;
 use Rector\Naming\PropertyRenamer\UnderscoreCamelCasePropertyRenamer;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Property\UnderscoreToCamelCasePropertyNameRector\UnderscoreToCamelCasePropertyNameRectorTest
@@ -42,10 +44,10 @@ final class UnderscoreToCamelCasePropertyNameRector extends AbstractRector
         $this->underscoreCamelCaseExpectedNameResolver = $underscoreCamelCaseExpectedNameResolver;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change under_score names to camelCase', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+        return new RuleDefinition('Change under_score names to camelCase', [
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {

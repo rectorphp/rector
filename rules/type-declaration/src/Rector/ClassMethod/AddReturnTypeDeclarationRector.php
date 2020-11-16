@@ -13,6 +13,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -40,10 +42,10 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
         $this->typeComparator = $typeComparator;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes defined return typehint of method and class.', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Changes defined return typehint of method and class.', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {

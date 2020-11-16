@@ -19,6 +19,8 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony\NodeFactory\BuilderFormNodeFactory;
 use Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory;
 use ReflectionClass;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Best resource with clear example:
@@ -58,12 +60,12 @@ final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
         $this->configureOptionsNodeFactory = $configureOptionsNodeFactory;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Changes createForm(new FormType), add(new FormType) to ones with "FormType::class"',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeController
 {

@@ -19,6 +19,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -57,10 +59,10 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
         $this->phpDocTypeRenamer = $phpDocTypeRenamer;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
+            new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 /** @var Some_Chicken $someService */
 $someService = new Some_Chicken;

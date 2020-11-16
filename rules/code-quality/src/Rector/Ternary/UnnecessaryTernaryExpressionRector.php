@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\Ternary;
 use PHPStan\Type\BooleanType;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\UnnecessaryTernaryExpressionRectorTest
@@ -29,16 +31,11 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         $this->assignAndBinaryMap = $assignAndBinaryMap;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Remove unnecessary ternary expressions.',
-            [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
-                    '$foo === $bar ? true : false;',
-                    '$foo === $bar;'
-                ),
-            ]
+            [new CodeSample('$foo === $bar ? true : false;', '$foo === $bar;')]
         );
     }
 

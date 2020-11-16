@@ -18,6 +18,8 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeFactory\InjectMethodFactory;
 use Rector\SOLID\NodeRemover\ClassMethodNodeRemover;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -81,12 +83,12 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector impl
         $this->classInsertManipulator = $classInsertManipulator;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Move dependency passed to all children to parent as @inject/@required dependency',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 abstract class AbstractParentClass
 {

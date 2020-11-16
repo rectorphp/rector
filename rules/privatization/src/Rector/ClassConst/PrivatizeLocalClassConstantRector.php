@@ -14,6 +14,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeFinder\ParentClassConstantNodeFinder;
 use Rector\SOLID\Reflection\ParentConstantReflectionResolver;
 use Rector\SOLID\ValueObject\ConstantVisibility;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\PrivatizeLocalClassConstantRectorTest
@@ -43,12 +45,12 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector implements 
         $this->parentClassConstantNodeFinder = $parentClassConstantNodeFinder;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Finalize every class constant that is used only locally',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class ClassWithConstantUsedOnlyHere
 {

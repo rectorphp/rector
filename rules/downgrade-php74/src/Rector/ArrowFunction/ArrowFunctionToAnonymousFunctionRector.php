@@ -13,6 +13,8 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
 use Rector\Php72\Rector\FuncCall\AbstractConvertToAnonymousFunctionRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://www.php.net/manual/en/functions.arrow.php
@@ -21,12 +23,12 @@ use Rector\Php72\Rector\FuncCall\AbstractConvertToAnonymousFunctionRector;
  */
 final class ArrowFunctionToAnonymousFunctionRector extends AbstractConvertToAnonymousFunctionRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Replace arrow functions with anonymous functions',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {

@@ -12,6 +12,8 @@ use PhpParser\Node\Stmt\Trait_;
 use Rector\Order\PropertyRanker;
 use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
 use Rector\Order\ValueObject\PropertyNameRankAndPosition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\OrderPropertyByComplexityRectorTest
@@ -28,12 +30,12 @@ final class OrderPropertyByComplexityRector extends AbstractConstantPropertyMeth
         $this->propertyRanker = $propertyRanker;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Order properties by complexity, from the simplest like scalars to the most complex, like union or collections',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {

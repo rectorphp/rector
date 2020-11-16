@@ -17,6 +17,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\RemovingStatic\StaticTypesInClassResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Depends on @see PassFactoryToUniqueObjectRector
@@ -67,10 +69,10 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implemen
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert new X to new factories', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Convert new X to new factories', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 <?php
 

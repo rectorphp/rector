@@ -12,6 +12,7 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class AssignNewDocParserRector extends AbstractRector implements ClassSyncerRectorInterface
 {
@@ -41,10 +42,8 @@ final class AssignNewDocParserRector extends AbstractRector implements ClassSync
         return $node;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
-            'Change $this->preParser assign to new doc parser'
-        );
+        return new RuleDefinition('Change $this->preParser assign to new doc parser');
     }
 }

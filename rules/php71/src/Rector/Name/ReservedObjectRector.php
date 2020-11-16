@@ -11,6 +11,8 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/object-typehint
@@ -29,12 +31,12 @@ final class ReservedObjectRector extends AbstractRector implements ConfigurableR
      */
     private $reservedKeywordsToReplacements = [];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+                new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class Object
 {
 }

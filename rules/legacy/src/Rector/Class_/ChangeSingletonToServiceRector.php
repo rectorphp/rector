@@ -10,6 +10,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Legacy\NodeAnalyzer\SingletonClassMethodAnalyzer;
 use Rector\Legacy\ValueObject\PropertyAndClassMethodName;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/lifbH
@@ -29,12 +31,12 @@ final class ChangeSingletonToServiceRector extends AbstractRector
         $this->singletonClassMethodAnalyzer = $singletonClassMethodAnalyzer;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Change singleton class to normal class that can be registered as a service',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {

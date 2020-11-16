@@ -21,6 +21,8 @@ use Rector\Core\Reflection\ClassMethodReflectionHelper;
 use Rector\Core\Reflection\FunctionAnnotationResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionFunction;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\AnnotateThrowablesRectorTest
@@ -82,11 +84,11 @@ final class AnnotateThrowablesRector extends AbstractRector
     /**
      * From this method documentation is generated.
      */
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Adds @throws DocBlock comments to methods that thrwo \Throwables.', [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                 // code before
                     <<<'CODE_SAMPLE'
 class RootExceptionInMethodWithDocblock
@@ -218,21 +220,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @return class-string[]
-     */
-    private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
-    {
-        $fullyQualified = $this->classResolver->getClassFromMethodCall($methodCall);
-        $methodName = $methodCall->name;
-
-        if (! $fullyQualified instanceof FullyQualified || ! $methodName instanceof Identifier) {
-            return [];
-        }
-
-        return $this->extractMethodThrows($fullyQualified, $methodName);
-    }
-
-    /**
      * @param Throw_|MethodCall|FuncCall $node
      * @return class-string[]
      */
@@ -276,6 +263,21 @@ CODE_SAMPLE
         $this->throwablesToAnnotate = array_diff($foundThrownThrowables, $alreadyAnnotatedThrowables);
 
         return count($this->throwablesToAnnotate);
+    }
+
+    /**
+     * @return class-string[]
+     */
+    private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
+    {
+        $fullyQualified = $this->classResolver->getClassFromMethodCall($methodCall);
+        $methodName = $methodCall->name;
+
+        if (! $fullyQualified instanceof FullyQualified || ! $methodName instanceof Identifier) {
+            return [];
+        }
+
+        return $this->extractMethodThrows($fullyQualified, $methodName);
     }
 
     /**

@@ -17,6 +17,8 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeManipulator\MagicMethodDetector;
 use Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://www.php.net/manual/en/function.compact.php
@@ -58,12 +60,12 @@ final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCa
         $this->variadicFunctionLikeDetector = $variadicFunctionLikeDetector;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Remove unused parameter, if not required by interface or parent class',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {

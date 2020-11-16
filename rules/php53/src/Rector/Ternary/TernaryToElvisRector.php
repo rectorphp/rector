@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see http://php.net/manual/en/language.operators.comparison.php#language.operators.comparison.ternary
@@ -17,10 +19,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class TernaryToElvisRector extends AbstractRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use ?: instead of ?, where useful', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+        return new RuleDefinition('Use ?: instead of ?, where useful', [
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 function elvis()
 {

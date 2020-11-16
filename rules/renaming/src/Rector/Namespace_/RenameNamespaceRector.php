@@ -16,6 +16,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\RenamedNamespace;
 use Rector\Naming\NamespaceMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
@@ -42,10 +44,10 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
         $this->namespaceMatcher = $namespaceMatcher;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces old namespace by new one.', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Replaces old namespace by new one.', [
+            new ConfiguredCodeSample(
                 '$someObject = new SomeOldNamespace\SomeClass;',
                 '$someObject = new SomeNewNamespace\SomeClass;',
                 [

@@ -27,6 +27,8 @@ use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\ValueObject\VariableAssignPair;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://www.php.net/manual/en/migration70.incompatible.php
@@ -60,11 +62,11 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         $this->parentScopeFinder = $parentScopeFinder;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Transform non variable like arguments to variable where a function or method expects an argument passed by reference',
-            [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('reset(a());', '$a = a(); reset($a);')]
+            [new CodeSample('reset(a());', '$a = a(); reset($a);')]
         );
     }
 

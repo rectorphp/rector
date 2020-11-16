@@ -22,6 +22,8 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -61,10 +63,10 @@ final class SingleStaticServiceToDynamicRector extends AbstractRector implements
         $this->staticCallPresenceAnalyzer = $staticCallPresenceAnalyzer;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change full static service, to dynamic one', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Change full static service, to dynamic one', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class AnotherClass
 {

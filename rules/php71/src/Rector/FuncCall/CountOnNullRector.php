@@ -19,6 +19,8 @@ use PHPStan\Type\NullType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/Bndc9
@@ -32,11 +34,11 @@ final class CountOnNullRector extends AbstractRector
      */
     private const ALREADY_CHANGED_ON_COUNT = 'already_changed_on_count';
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Changes count() on null to safe ternary check',
-            [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+            [new CodeSample(
 <<<'CODE_SAMPLE'
 $values = null;
 $count = count($values);

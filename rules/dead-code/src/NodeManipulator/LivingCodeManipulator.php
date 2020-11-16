@@ -162,9 +162,5 @@ final class LivingCodeManipulator
         }
 
         return $livingExprs;
-
-        return array_merge(...array_map(function (Expr $expr): array {
-            return $this->keepLivingCodeFromExpr($expr);
-        }, $isset->vars));
     }
 }

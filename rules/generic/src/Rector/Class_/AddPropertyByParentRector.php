@@ -13,6 +13,8 @@ use Rector\Generic\ValueObject\AddPropertyByParent;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -49,10 +51,10 @@ final class AddPropertyByParentRector extends AbstractRector implements Configur
         return [Class_::class];
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add dependency via constructor by parent class type', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Add dependency via constructor by parent class type', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass extends SomeParentClass
 {

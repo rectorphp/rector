@@ -9,6 +9,8 @@ use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Context\ContextAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/Qtelt
@@ -29,12 +31,12 @@ final class BreakNotInLoopOrSwitchToReturnRector extends AbstractRector
         $this->contextAnalyzer = $contextAnalyzer;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Convert break outside for/foreach/switch context to return',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {

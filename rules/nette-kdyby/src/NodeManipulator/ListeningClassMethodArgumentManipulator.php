@@ -84,7 +84,8 @@ final class ListeningClassMethodArgumentManipulator
         foreach ($classMethodsByEventClass as $eventClassAndClassMethod) {
             // are attributes already replaced
             $classMethod = $eventClassAndClassMethod->getClassMethod();
-            if ($classMethod->getAttribute(self::EVENT_PARAMETER_REPLACED)) {
+            $eventParameterReplaced = $classMethod->getAttribute(self::EVENT_PARAMETER_REPLACED);
+            if ($eventParameterReplaced) {
                 continue;
             }
 

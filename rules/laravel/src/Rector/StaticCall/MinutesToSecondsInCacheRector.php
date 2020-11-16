@@ -14,6 +14,8 @@ use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/laravel/framework/pull/27276
@@ -37,12 +39,12 @@ final class MinutesToSecondsInCacheRector extends AbstractRector
         ];
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Change minutes argument to seconds in Illuminate\Contracts\Cache\Store and Illuminate\Support\Facades\Cache',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {

@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_3#string_search_functions_with_integer_needle
@@ -32,10 +34,10 @@ final class StringifyStrNeedlesRector extends AbstractRector
         'stristr',
     ];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Makes needles explicit strings', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+        return new RuleDefinition('Makes needles explicit strings', [
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 $needle = 5;
 $fivePosition = strpos('725', $needle);

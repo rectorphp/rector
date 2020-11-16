@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
@@ -29,12 +31,12 @@ final class ContainerGetToConstructorInjectionRector extends AbstractToConstruct
         'Symfony\Bundle\FrameworkBundle\Controller\Controller',
     ];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+                new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 final class SomeCommand extends ContainerAwareCommand
 {

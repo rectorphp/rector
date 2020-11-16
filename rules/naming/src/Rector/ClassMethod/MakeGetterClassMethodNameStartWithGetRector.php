@@ -14,6 +14,8 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\MethodNameResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Naming\Tests\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector\MakeGetterClassMethodNameStartWithGetRectorTest
@@ -35,12 +37,12 @@ final class MakeGetterClassMethodNameStartWithGetRector extends AbstractRector
         $this->methodNameResolver = $methodNameResolver;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Change getter method names to start with get/provide',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {

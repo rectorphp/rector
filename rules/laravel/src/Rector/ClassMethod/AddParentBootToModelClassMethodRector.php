@@ -9,6 +9,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://laracasts.com/discuss/channels/laravel/laravel-57-upgrade-observer-problem
@@ -32,12 +34,12 @@ final class AddParentBootToModelClassMethodRector extends AbstractRector
         $this->staticCallAnalyzer = $staticCallAnalyzer;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Add parent::boot(); call to boot() class method in child of Illuminate\Database\Eloquent\Model',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 use Illuminate\Database\Eloquent\Model;
 

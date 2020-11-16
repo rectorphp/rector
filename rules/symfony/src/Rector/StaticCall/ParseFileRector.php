@@ -12,6 +12,8 @@ use PHPStan\Type\Constant\ConstantStringType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\StaticCall\ParseFileRector\ParseFileRectorTest
@@ -36,17 +38,11 @@ final class ParseFileRector extends AbstractRector
      */
     private const YAML_SUFFIX_REGEX = '#\.(yml|yaml)$#';
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'session > use_strict_mode is true by default and can be removed',
-            [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
-                    'session > use_strict_mode: true',
-                    'session:'
-                ),
-
-            ]);
+            [new CodeSample('session > use_strict_mode: true', 'session:')]);
     }
 
     /**

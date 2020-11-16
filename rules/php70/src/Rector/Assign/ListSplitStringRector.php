@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @source http://php.net/manual/en/migration70.incompatible.php#migration70.incompatible.variable-handling.list
@@ -18,16 +20,11 @@ use Rector\Core\Rector\AbstractRector;
  */
 final class ListSplitStringRector extends AbstractRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'list() cannot split string directly anymore, use str_split()',
-            [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
-                    'list($foo) = "string";',
-                    'list($foo) = str_split("string");'
-                ),
-            ]
+            [new CodeSample('list($foo) = "string";', 'list($foo) = str_split("string");')]
         );
     }
 

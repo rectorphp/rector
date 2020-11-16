@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertPropertyExistsRector\AssertPropertyExistsRectorTest
@@ -45,16 +47,16 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
         $this->identifierManipulator = $identifierManipulator;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Turns `property_exists` comparisons to their method name alternatives in PHPUnit TestCase',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     '$this->assertTrue(property_exists(new Class, "property"), "message");',
                     '$this->assertClassHasAttribute("property", "Class", "message");'
                 ),
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     '$this->assertFalse(property_exists(new Class, "property"), "message");',
                     '$this->assertClassNotHasAttribute("property", "Class", "message");'
                 ),

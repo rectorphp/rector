@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp\Coalesce as AssignCoalesce;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/null_coalesce_equal_operator
@@ -16,10 +18,10 @@ use Rector\Core\Rector\AbstractRector;
  */
 final class DowngradeNullCoalescingOperatorRector extends AbstractRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove null coalescing operator ??=', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+        return new RuleDefinition('Remove null coalescing operator ??=', [
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 $array = [];
 $array['user_id'] ??= 'value';

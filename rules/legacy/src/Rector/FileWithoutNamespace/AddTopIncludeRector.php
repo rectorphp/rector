@@ -16,6 +16,8 @@ use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -47,10 +49,10 @@ final class AddTopIncludeRector extends AbstractRector implements ConfigurableRe
      */
     private $patterns = [];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Adds an include file at the top of matching files, except class definitions', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Adds an include file at the top of matching files, except class definitions', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 if (isset($_POST['csrf'])) {
     processPost($_POST);

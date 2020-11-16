@@ -14,6 +14,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Generic\Rector\AbstractToMethodCallRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -32,10 +34,10 @@ final class StaticCallToMethodCallRector extends AbstractToMethodCallRector
      */
     private $staticCallsToMethodCalls = [];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change static call to service method via constructor injection', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Change static call to service method via constructor injection', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 use Nette\Utils\FileSystem;
 

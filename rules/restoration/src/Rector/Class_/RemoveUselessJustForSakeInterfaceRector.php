@@ -14,6 +14,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use ReflectionClass;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -94,12 +96,12 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
         return null;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Remove interface, that are added just for its sake, but nowhere useful',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
 <<<'CODE_SAMPLE'
 class SomeClass implements OnlyHereUsedInterface
 {

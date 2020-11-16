@@ -13,6 +13,8 @@ use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/3975#issuecomment-562584609
@@ -39,12 +41,12 @@ final class ConstructClassMethodToSetUpTestCaseRector extends AbstractPHPUnitRec
         $this->staticCallAnalyzer = $staticCallAnalyzer;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Change __construct() method in tests of `PHPUnit\Framework\TestCase` to setUp(), to prevent dangerous override',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 

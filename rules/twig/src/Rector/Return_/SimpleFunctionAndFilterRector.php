@@ -16,6 +16,8 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function
@@ -32,12 +34,12 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
         'Twig_Filter_Method' => 'Twig_SimpleFilter',
     ];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeExtension extends Twig_Extension
 {

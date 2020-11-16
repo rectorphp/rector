@@ -12,6 +12,8 @@ use Rector\Defluent\NodeFactory\ReturnFluentMethodCallFactory;
 use Rector\Defluent\NodeFactory\SeparateReturnMethodCallFactory;
 use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
 use Rector\Defluent\ValueObjectFactory\FluentMethodCallsFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/
@@ -46,12 +48,12 @@ final class ReturnFluentChainMethodCallToNormalMethodCallRector extends Abstract
         $this->separateReturnMethodCallFactory = $separateReturnMethodCallFactory;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Turns fluent interface calls to classic ones.',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 return $someClass->someFunction()

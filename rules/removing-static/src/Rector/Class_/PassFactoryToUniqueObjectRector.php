@@ -18,6 +18,8 @@ use Rector\RemovingStatic\Printer\FactoryClassPrinter;
 use Rector\RemovingStatic\StaticTypesInClassResolver;
 use Rector\RemovingStatic\UniqueObjectFactoryFactory;
 use Rector\RemovingStatic\UniqueObjectOrServiceDetector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\PassFactoryToEntityRectorTest
@@ -74,10 +76,10 @@ final class PassFactoryToUniqueObjectRector extends AbstractRector implements Co
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert new X/Static::call() to factories in entities, pass them via constructor to each other', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Convert new X/Static::call() to factories in entities, pass them via constructor to each other', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 <?php
 

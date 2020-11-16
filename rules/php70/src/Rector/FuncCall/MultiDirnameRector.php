@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Php70\Tests\Rector\FuncCall\MultiDirnameRector\MultiDirnameRectorTest
@@ -26,16 +28,11 @@ final class MultiDirnameRector extends AbstractRector
      */
     private $nestingLevel = 0;
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Changes multiple dirname() calls to one with nesting level',
-            [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
-                    'dirname(dirname($path));',
-                    'dirname($path, 2);'
-                ),
-            ]
+            [new CodeSample('dirname(dirname($path));', 'dirname($path, 2);')]
         );
     }
 

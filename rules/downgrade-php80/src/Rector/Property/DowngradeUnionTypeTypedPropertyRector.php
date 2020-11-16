@@ -7,16 +7,18 @@ namespace Rector\DowngradePhp80\Rector\Property;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
 use Rector\DowngradePhp74\Rector\Property\AbstractDowngradeTypedPropertyRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DowngradePhp80\Tests\Rector\Property\DowngradeUnionTypeTypedPropertyRector\DowngradeUnionTypeTypedPropertyRectorTest
  */
 final class DowngradeUnionTypeTypedPropertyRector extends AbstractDowngradeTypedPropertyRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes union type property type definition, adding `@var` annotations instead.', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Removes union type property type definition, adding `@var` annotations instead.', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {

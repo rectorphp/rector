@@ -17,6 +17,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Naming\ArrayDimFetchRenamer;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -43,12 +45,12 @@ final class ChangeControlArrayAccessToAnnotatedControlVariableRector extends Abs
         $this->arrayDimFetchRenamer = $arrayDimFetchRenamer;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Change magic $this["some_component"] to variable assign with @var annotation',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;

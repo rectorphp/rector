@@ -22,6 +22,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/ABDNv
@@ -35,11 +37,11 @@ final class AssignArrayToStringRector extends AbstractRector
      */
     private $emptyStringPropertyNodes = [];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'String cannot be turned into array by assignment anymore',
-            [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+            [new CodeSample(<<<'CODE_SAMPLE'
 $string = '';
 $string[] = 1;
 CODE_SAMPLE

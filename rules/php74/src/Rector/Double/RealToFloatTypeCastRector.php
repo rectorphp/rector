@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\Double;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4
@@ -15,10 +17,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RealToFloatTypeCastRector extends AbstractRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change deprecated (real) to (float)', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+        return new RuleDefinition('Change deprecated (real) to (float)', [
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {

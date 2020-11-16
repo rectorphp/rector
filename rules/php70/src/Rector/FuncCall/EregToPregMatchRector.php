@@ -19,6 +19,8 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\EregToPcreTransformer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see http://php.net/reference.pcre.pattern.posix
@@ -51,11 +53,11 @@ final class EregToPregMatchRector extends AbstractRector
         $this->eregToPcreTransformer = $eregToPcreTransformer;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Changes ereg*() to preg*() calls',
-            [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('ereg("hi")', 'preg_match("#hi#");')]
+            [new CodeSample('ereg("hi")', 'preg_match("#hi#");')]
         );
     }
 

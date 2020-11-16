@@ -10,7 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use Rector\Core\RectorDefinition\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\CheckCodeSampleBeforeAfterAlwaysDifferentRule\CheckCodeSampleBeforeAfterAlwaysDifferentRuleTest

@@ -11,6 +11,8 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\StaticCall\RenameStaticMethodRector\RenameStaticMethodRectorTest
@@ -32,10 +34,10 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
      */
     private $staticMethodRenames = [];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns method names to new ones.', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Turns method names to new ones.', [
+            new ConfiguredCodeSample(
                 'SomeClass::oldStaticMethod();',
                 'AnotherExampleClass::newStaticMethod();',
                 [
@@ -44,7 +46,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
                     ],
                 ]
             ),
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+            new ConfiguredCodeSample(
                 'SomeClass::oldStaticMethod();',
                 'SomeClass::newStaticMethod();',
                 [

@@ -27,6 +27,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Sensio\NodeFactory\ThisRenderFactory;
 use Rector\Sensio\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer;
 use Rector\Sensio\TypeDeclaration\ReturnTypeDeclarationUpdater;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
@@ -67,12 +69,12 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
         $this->arrayUnionResponseTypeAnalyzer = $arrayUnionResponseTypeAnalyzer;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Turns `@Template` annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 /**
  * @Template()

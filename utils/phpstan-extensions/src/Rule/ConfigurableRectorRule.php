@@ -13,7 +13,7 @@ use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\ConfigurableRectorRule\ConfigurableRectorRuleTest
@@ -86,7 +86,7 @@ final class ConfigurableRectorRule implements Rule
 
     private function hasConfiguredCodeSample(Class_ $class): bool
     {
-        $classMethod = $class->getMethod('getDefinition');
+        $classMethod = $class->getMethod('getRuleDefinition');
         if ($classMethod === null) {
             return false;
         }

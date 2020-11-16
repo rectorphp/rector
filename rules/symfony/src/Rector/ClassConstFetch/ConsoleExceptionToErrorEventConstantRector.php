@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Covers:
@@ -23,16 +25,13 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
      */
     private const CONSOLE_EVENTS_CLASS = 'Symfony\Component\Console\ConsoleEvents';
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Turns old event name with EXCEPTION to ERROR constant in Console in Symfony',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
-                    '"console.exception"',
-                    'Symfony\Component\Console\ConsoleEvents::ERROR'
-                ),
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample('"console.exception"', 'Symfony\Component\Console\ConsoleEvents::ERROR'),
+                new CodeSample(
                     'Symfony\Component\Console\ConsoleEvents::EXCEPTION',
                     'Symfony\Component\Console\ConsoleEvents::ERROR'
                 ),

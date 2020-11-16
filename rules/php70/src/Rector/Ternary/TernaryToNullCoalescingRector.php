@@ -12,25 +12,21 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Php70\Tests\Rector\Ternary\TernaryToNullCoalescingRector\TernaryToNullCoalescingRectorTest
  */
 final class TernaryToNullCoalescingRector extends AbstractRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Changes unneeded null check to ?? operator',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
-                    '$value === null ? 10 : $value;',
-                    '$value ?? 10;'
-                ),
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
-                    'isset($value) ? $value : 10;',
-                    '$value ?? 10;'
-                ),
+                new CodeSample('$value === null ? 10 : $value;', '$value ?? 10;'),
+                new CodeSample('isset($value) ? $value : 10;', '$value ?? 10;'),
             ]
         );
     }

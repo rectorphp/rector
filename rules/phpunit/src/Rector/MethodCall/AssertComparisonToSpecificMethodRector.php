@@ -23,6 +23,8 @@ use PhpParser\Node\Scalar;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertComparisonToSpecificMethodRector\AssertComparisonToSpecificMethodRectorTest
@@ -63,16 +65,16 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         ];
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Turns comparison operations to their method name alternatives in PHPUnit TestCase',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                         '$this->assertTrue($foo === $bar, "message");',
                         '$this->assertSame($bar, $foo, "message");'
                     ),
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     '$this->assertFalse($foo >= $bar, "message");',
                     '$this->assertLessThanOrEqual($bar, $foo, "message");'
                 ),

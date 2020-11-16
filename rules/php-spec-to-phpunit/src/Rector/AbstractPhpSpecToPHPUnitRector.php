@@ -7,6 +7,8 @@ namespace Rector\PhpSpecToPHPUnit\Rector;
 use PhpParser\Node;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
@@ -14,10 +16,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 abstract class AbstractPhpSpecToPHPUnitRector extends AbstractRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate PhpSpec behavior to PHPUnit test', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+        return new RuleDefinition('Migrate PhpSpec behavior to PHPUnit test', [
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 
 namespace spec\SomeNamespaceForThisTest;

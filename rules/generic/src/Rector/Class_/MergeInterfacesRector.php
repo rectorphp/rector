@@ -9,6 +9,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Covers cases like
@@ -30,10 +32,10 @@ final class MergeInterfacesRector extends AbstractRector implements Configurable
      */
     private $oldToNewInterfaces = [];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Merges old interface to a new one, that already has its methods', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('Merges old interface to a new one, that already has its methods', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass implements SomeInterface, SomeOldInterface
 {

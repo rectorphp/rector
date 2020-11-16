@@ -21,6 +21,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -53,7 +55,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      */
     private $addedArguments = [];
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         $exampleConfiguration = [
             self::ADDED_ARGUMENTS => [
@@ -61,10 +63,10 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
             ],
         ];
 
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'This Rector adds new default arguments in calls of defined methods and class types.',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 $someObject = new SomeExampleClass;
 $someObject->someMethod();
@@ -77,7 +79,7 @@ CODE_SAMPLE
                     ,
                     $exampleConfiguration
                 ),
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 class MyCustomClass extends SomeExampleClass
 {

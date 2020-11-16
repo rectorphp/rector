@@ -23,6 +23,8 @@ use Rector\NetteToSymfony\Collector\OnFormVariableMethodCallsCollector;
 use Rector\NetteToSymfony\NodeFactory\SymfonyControllerFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ExtraFileCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -50,13 +52,11 @@ final class FormControlToControllerAndFormTypeRector extends AbstractRector
         $this->symfonyControllerFactory = $symfonyControllerFactory;
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
-            'Change Form that extends Control to Controller and decoupled FormType',
-            [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Change Form that extends Control to Controller and decoupled FormType', [
+            new ExtraFileCodeSample(
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Control;
 
@@ -77,7 +77,7 @@ class SomeForm extends Control
 }
 CODE_SAMPLE
 ,
-                    <<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
     /**
@@ -94,8 +94,8 @@ class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\Abst
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+                ,
+                <<<'CODE_SAMPLE'
 <?php
 
 use Symfony\Component\Form\AbstractType;
@@ -112,9 +112,9 @@ class SomeFormType extends AbstractType
     }
 }
 CODE_SAMPLE
-                ),
+            ),
 
-            ]);
+        ]);
     }
 
     /**

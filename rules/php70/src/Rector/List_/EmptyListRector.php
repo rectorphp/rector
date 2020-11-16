@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @source http://php.net/manual/en/migration70.incompatible.php#migration70.incompatible.variable-handling.list
@@ -16,11 +18,11 @@ use Rector\Core\Rector\AbstractRector;
  */
 final class EmptyListRector extends AbstractRector
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'list() cannot be empty',
-            [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+            [new CodeSample(
                 <<<'CODE_SAMPLE'
 'list() = $values;'
 CODE_SAMPLE
