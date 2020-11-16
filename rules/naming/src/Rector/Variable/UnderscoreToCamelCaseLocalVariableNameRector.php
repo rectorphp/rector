@@ -89,7 +89,7 @@ CODE_SAMPLE
         }
 
         $camelCaseName = StaticRectorStrings::underscoreToCamelCase($nodeName);
-        if ($camelCaseName === 'this') {
+        if ($camelCaseName === 'this' || is_numeric($camelCaseName[0])) {
             return null;
         }
 
@@ -104,10 +104,6 @@ CODE_SAMPLE
         }
 
         if ($this->isFoundInPreviousNode($node)) {
-            return null;
-        }
-
-        if (is_numeric($camelCaseName[0])) {
             return null;
         }
 

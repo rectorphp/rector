@@ -109,7 +109,7 @@ CODE_SAMPLE
         }
 
         $camelCaseName = StaticRectorStrings::underscoreToCamelCase($nodeName);
-        if ($camelCaseName === 'this') {
+        if ($camelCaseName === 'this' || is_numeric($camelCaseName[0])) {
             return null;
         }
 
@@ -117,10 +117,6 @@ CODE_SAMPLE
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Param) {
             return $this->renameParam($parentNode);
-        }
-
-        if (is_numeric($camelCaseName[0])) {
-            return null;
         }
 
         $node->name = $camelCaseName;
