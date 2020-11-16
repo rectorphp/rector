@@ -11,8 +11,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\Constant\ConstantStringType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -38,11 +36,17 @@ final class ParseFileRector extends AbstractRector
      */
     private const YAML_SUFFIX_REGEX = '#\.(yml|yaml)$#';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('session > use_strict_mode is true by default and can be removed', [
-            new CodeSample('session > use_strict_mode: true', 'session:'),
-        ]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'session > use_strict_mode is true by default and can be removed',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    'session > use_strict_mode: true',
+                    'session:'
+                ),
+
+            ]);
     }
 
     /**

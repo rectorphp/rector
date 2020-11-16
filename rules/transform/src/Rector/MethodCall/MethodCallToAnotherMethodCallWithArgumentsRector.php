@@ -9,8 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
 use Webmozart\Assert\Assert;
@@ -30,10 +28,10 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
      */
     private $methodCallRenamesWithAddedArguments = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Turns old method call with specific types to new one with arguments', [
-            new ConfiguredCodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns old method call with specific types to new one with arguments', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $serviceDefinition = new Nette\DI\ServiceDefinition;
 $serviceDefinition->setInject();

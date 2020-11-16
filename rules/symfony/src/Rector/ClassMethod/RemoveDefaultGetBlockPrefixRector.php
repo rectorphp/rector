@@ -10,8 +10,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -22,12 +20,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RemoveDefaultGetBlockPrefixRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form',
             [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     <<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 

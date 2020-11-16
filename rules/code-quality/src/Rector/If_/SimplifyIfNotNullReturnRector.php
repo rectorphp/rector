@@ -9,8 +9,6 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -28,11 +26,13 @@ final class SimplifyIfNotNullReturnRector extends AbstractRector
         $this->ifManipulator = $ifManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Changes redundant null check to instant return', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Changes redundant null check to instant return',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    <<<'CODE_SAMPLE'
 $newNode = 'something ;
 if ($newNode !== null) {
     return $newNode;
@@ -40,13 +40,14 @@ if ($newNode !== null) {
 
 return null;
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 $newNode = 'something ;
 return $newNode;
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

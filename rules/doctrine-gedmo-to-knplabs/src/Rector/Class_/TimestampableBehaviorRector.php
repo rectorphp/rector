@@ -9,8 +9,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/Atlantic18/DoctrineExtensions/blob/v2.4.x/doc/timestampable.md
@@ -30,12 +28,12 @@ final class TimestampableBehaviorRector extends AbstractRector
         $this->classManipulator = $classManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Change Timestampable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors',
             [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     <<<'CODE_SAMPLE'
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 

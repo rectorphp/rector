@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -30,10 +28,10 @@ final class UpdateFileNameByClassNameFileSystemRector extends AbstractRector
         $this->classNaming = $classNaming;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Rename file to respect class name', [
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename file to respect class name', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 <<<'CODE_SAMPLE'
 // app/SomeClass.php
 class AnotherClass

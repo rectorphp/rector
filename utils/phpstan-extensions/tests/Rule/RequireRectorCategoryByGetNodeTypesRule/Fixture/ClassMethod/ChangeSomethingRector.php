@@ -20,7 +20,7 @@ final class ChangeSomethingRector extends AbstractRector
     {
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
     }
 }

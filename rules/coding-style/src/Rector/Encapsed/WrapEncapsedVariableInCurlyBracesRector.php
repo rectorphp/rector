@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -17,10 +15,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class WrapEncapsedVariableInCurlyBracesRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Wrap encapsed variables in curly braces', [
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Wrap encapsed variables in curly braces', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 <<<'CODE_SAMPLE'
 function run($world)
 {

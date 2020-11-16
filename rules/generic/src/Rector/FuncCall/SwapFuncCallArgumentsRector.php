@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\SwapFuncCallArguments;
 use Webmozart\Assert\Assert;
 
@@ -28,10 +26,10 @@ final class SwapFuncCallArgumentsRector extends AbstractRector implements Config
      */
     private $functionArgumentSwaps = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Swap arguments in function calls', [
-            new ConfiguredCodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Swap arguments in function calls', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {

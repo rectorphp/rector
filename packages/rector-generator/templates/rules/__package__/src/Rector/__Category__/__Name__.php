@@ -15,10 +15,10 @@ __Resources__
  */
 final class __Name__ extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('__Description__', [
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('__Description__', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 __CodeBeforeExample__
                 ,
                 __CodeAfterExample__

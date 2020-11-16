@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -23,14 +21,17 @@ final class ConstraintUrlOptionRector extends AbstractRector
      */
     private const URL_CONSTRAINT_CLASS = 'Symfony\Component\Validator\Constraints\Url';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.', [
-            new CodeSample(
-                '$constraint = new Url(["checkDNS" => true]);',
-                '$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);'
-            ),
-        ]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    '$constraint = new Url(["checkDNS" => true]);',
+                    '$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);'
+                ),
+
+            ]);
     }
 
     /**

@@ -11,8 +11,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/rectorphp/rector/issues/2408
@@ -23,10 +21,10 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class AddRequestToHandleMethodCallRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Add $_SERVER REQUEST_URI to method call', [
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add $_SERVER REQUEST_URI to method call', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {

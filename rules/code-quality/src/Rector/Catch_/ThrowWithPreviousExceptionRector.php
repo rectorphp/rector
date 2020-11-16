@@ -15,12 +15,12 @@ use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Throwable;
 
 /**
@@ -34,9 +34,9 @@ final class ThrowWithPreviousExceptionRector extends AbstractRector
      */
     private const DEFAULT_EXCEPTION_ARGUMENT_POSITION = 2;
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'When throwing into a catch block, checks that the previous exception is passed to the new throw clause',
             [
                 new CodeSample(

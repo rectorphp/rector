@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
 use Webmozart\Assert\Assert;
 
@@ -28,12 +26,12 @@ final class ChangeConstantVisibilityRector extends AbstractRector implements Con
      */
     private $classConstantVisibilityChanges = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Change visibility of constant from parent class.',
             [
-                new ConfiguredCodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                                 <<<'CODE_SAMPLE'
 class FrameworkClass
 {

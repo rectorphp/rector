@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\CodeQuality\CompactConverter;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://stackoverflow.com/a/16319909/1348344
@@ -28,9 +28,9 @@ final class CompactToVariablesRector extends AbstractRector
         $this->compactConverter = $compactConverter;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change compact() call to own array', [
+        return new RuleDefinition('Change compact() call to own array', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

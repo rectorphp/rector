@@ -12,8 +12,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -23,12 +21,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class Php4ConstructorRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Changes PHP 4 style constructor to __construct.',
             [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {

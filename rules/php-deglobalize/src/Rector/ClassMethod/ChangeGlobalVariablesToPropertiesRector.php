@@ -11,8 +11,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Global_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -28,11 +26,13 @@ final class ChangeGlobalVariablesToPropertiesRector extends AbstractRector
      */
     private $globalVariableNames = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Change global $variables to private properties', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Change global $variables to private properties',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go()
@@ -49,7 +49,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $variable;
@@ -64,8 +64,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

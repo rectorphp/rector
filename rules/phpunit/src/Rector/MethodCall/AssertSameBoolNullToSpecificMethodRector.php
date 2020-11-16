@@ -10,8 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PHPUnit\ValueObject\ConstantWithAssertMethods;
 
 /**
@@ -40,13 +38,19 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
         ];
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Turns same bool and null comparisons to their method name alternatives in PHPUnit TestCase',
             [
-                new CodeSample('$this->assertSame(null, $anything);', '$this->assertNull($anything);'),
-                new CodeSample('$this->assertNotSame(false, $anything);', '$this->assertNotFalse($anything);'),
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    '$this->assertSame(null, $anything);',
+                    '$this->assertNull($anything);'
+                ),
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    '$this->assertNotSame(false, $anything);',
+                    '$this->assertNotFalse($anything);'
+                ),
             ]
         );
     }

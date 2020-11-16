@@ -8,18 +8,16 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Function_\RemoveUnusedFunctionRector\RemoveUnusedFunctionRectorTest
  */
 final class RemoveUnusedFunctionRector extends AbstractRector implements ZeroCacheRectorInterface
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Remove unused function', [
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unused function', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 <<<'CODE_SAMPLE'
 function removeMe()
 {

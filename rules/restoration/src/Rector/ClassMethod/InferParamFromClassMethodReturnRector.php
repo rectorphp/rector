@@ -14,8 +14,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Restoration\Type\ConstantReturnToParamTypeConverter;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
@@ -57,10 +55,10 @@ final class InferParamFromClassMethodReturnRector extends AbstractRector impleme
         $this->constantReturnToParamTypeConverter = $constantReturnToParamTypeConverter;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Change @param doc based on another method return type', [
-            new ConfiguredCodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change @param doc based on another method return type', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {

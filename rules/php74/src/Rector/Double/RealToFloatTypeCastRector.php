@@ -7,8 +7,6 @@ namespace Rector\Php74\Rector\Double;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\Double;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -17,10 +15,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RealToFloatTypeCastRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Change deprecated (real) to (float)', [
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change deprecated (real) to (float)', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {

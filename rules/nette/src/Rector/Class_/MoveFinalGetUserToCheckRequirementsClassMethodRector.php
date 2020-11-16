@@ -9,8 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Nette\NodeFactory\CheckRequirementsClassMethodFactory;
 
 /**
@@ -38,11 +36,13 @@ final class MoveFinalGetUserToCheckRequirementsClassMethodRector extends Abstrac
         $this->classInsertManipulator = $classInsertManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Presenter method getUser() is now final, move logic to checkRequirements()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Presenter method getUser() is now final, move logic to checkRequirements()',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 
 class SomeControl extends Presenter
@@ -56,8 +56,8 @@ class SomeControl extends Presenter
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 
 class SomeControl extends Presenter
@@ -72,8 +72,9 @@ class SomeControl extends Presenter
 }
 CODE_SAMPLE
 
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

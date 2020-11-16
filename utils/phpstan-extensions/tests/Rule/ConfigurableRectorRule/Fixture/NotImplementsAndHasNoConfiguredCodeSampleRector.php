@@ -12,10 +12,10 @@ use Rector\Transform\ValueObject\StaticCallToFuncCall;
 
 final class NotImplementsAndHasNoConfiguredCodeSampleRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Turns static call to function call.', [
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns static call to function call.', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 'OldClass::oldMethod("args");',
                 'new_function("args");'
             ),

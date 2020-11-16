@@ -10,8 +10,6 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall;
 use Webmozart\Assert\Assert;
 
@@ -30,12 +28,12 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector implements Co
      */
     private $issetUnsetToMethodCalls = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         $issetUnsetToMethodCall = new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService');
 
-        return new RectorDefinition('Turns defined `__isset`/`__unset` calls to specific method calls.', [
-            new ConfiguredCodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns defined `__isset`/`__unset` calls to specific method calls.', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 $container = new SomeContainer;
 isset($container["someKey"]);
@@ -50,7 +48,7 @@ CODE_SAMPLE
                     self::ISSET_UNSET_TO_METHOD_CALL => [$issetUnsetToMethodCall],
                 ]
             ),
-            new ConfiguredCodeSample(
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $container = new SomeContainer;
 unset($container["someKey"]);

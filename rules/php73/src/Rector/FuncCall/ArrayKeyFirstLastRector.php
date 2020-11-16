@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 
 /**
@@ -39,12 +37,12 @@ final class ArrayKeyFirstLastRector extends AbstractRector
         'end' => self::ARRAY_KEY_LAST,
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Make use of array_key_first() and array_key_last()',
             [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     <<<'CODE_SAMPLE'
 reset($items);
 $firstKey = key($items);
@@ -54,7 +52,7 @@ CODE_SAMPLE
 $firstKey = array_key_first($items);
 CODE_SAMPLE
                 ),
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
 <<<'CODE_SAMPLE'
 end($items);
 $lastKey = key($items);

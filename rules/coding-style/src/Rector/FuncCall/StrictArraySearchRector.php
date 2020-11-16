@@ -7,19 +7,23 @@ namespace Rector\CodingStyle\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\FuncCall\StrictArraySearchRector\StrictArraySearchRectorTest
  */
 final class StrictArraySearchRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Makes array_search search for identical elements', [
-            new CodeSample('array_search($value, $items);', 'array_search($value, $items, true);'),
-        ]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Makes array_search search for identical elements',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    'array_search($value, $items);',
+                    'array_search($value, $items, true);'
+                ),
+
+            ]);
     }
 
     /**

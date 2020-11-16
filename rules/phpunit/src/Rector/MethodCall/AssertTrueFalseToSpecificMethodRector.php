@@ -12,8 +12,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods;
 
 /**
@@ -44,12 +42,12 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         ];
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible',
             [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     '$this->assertTrue(is_readable($readmeFile), "message");',
                     '$this->assertIsReadable($readmeFile, "message");'
                 ),

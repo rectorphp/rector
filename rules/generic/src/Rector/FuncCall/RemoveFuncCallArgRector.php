@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\RemoveFuncCallArg;
 use Webmozart\Assert\Assert;
 
@@ -30,10 +28,10 @@ final class RemoveFuncCallArgRector extends AbstractRector implements Configurab
      */
     private $removedFunctionArguments = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Remove argument by position by function name', [
-            new ConfiguredCodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove argument by position by function name', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 remove_last_arg(1, 2);
 CODE_SAMPLE

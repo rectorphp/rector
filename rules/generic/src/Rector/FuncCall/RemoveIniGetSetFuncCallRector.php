@@ -10,8 +10,6 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Comments\CommentableNodeResolver;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -51,10 +49,10 @@ final class RemoveIniGetSetFuncCallRector extends AbstractRector implements Conf
         $this->commentableNodeResolver = $commentableNodeResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Remove ini_get by configuration', [
-            new ConfiguredCodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove ini_get by configuration', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 ini_get('y2k_compliance');
 ini_set('y2k_compliance', 1);

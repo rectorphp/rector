@@ -13,8 +13,6 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @source https://wiki.php.net/rfc/deprecations_php_7_2#each
@@ -33,12 +31,12 @@ final class WhileEachToForeachRector extends AbstractRector
         $this->assignManipulator = $assignManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'each() function is deprecated, use foreach() instead.',
             [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     <<<'CODE_SAMPLE'
 while (list($key, $callback) = each($callbacks)) {
     // ...
@@ -51,7 +49,7 @@ foreach ($callbacks as $key => $callback) {
 }
 CODE_SAMPLE
                 ),
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     <<<'CODE_SAMPLE'
 while (list($key) = each($callbacks)) {
     // ...

@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 
 /**
@@ -34,12 +32,12 @@ final class AddParentBootToModelClassMethodRector extends AbstractRector
         $this->staticCallAnalyzer = $staticCallAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Add parent::boot(); call to boot() class method in child of Illuminate\Database\Eloquent\Model',
             [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     <<<'CODE_SAMPLE'
 use Illuminate\Database\Eloquent\Model;
 

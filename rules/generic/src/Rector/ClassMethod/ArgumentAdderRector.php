@@ -19,8 +19,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Webmozart\Assert\Assert;
@@ -55,7 +53,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      */
     private $addedArguments = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         $exampleConfiguration = [
             self::ADDED_ARGUMENTS => [
@@ -63,10 +61,10 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
             ],
         ];
 
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'This Rector adds new default arguments in calls of defined methods and class types.',
             [
-                new ConfiguredCodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 $someObject = new SomeExampleClass;
 $someObject->someMethod();
@@ -79,7 +77,7 @@ CODE_SAMPLE
                     ,
                     $exampleConfiguration
                 ),
-                new ConfiguredCodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 class MyCustomClass extends SomeExampleClass
 {

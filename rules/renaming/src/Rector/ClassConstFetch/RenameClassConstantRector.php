@@ -11,8 +11,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Renaming\ValueObject\RenameClassConstant;
 use Webmozart\Assert\Assert;
 
@@ -31,7 +29,7 @@ final class RenameClassConstantRector extends AbstractRector implements Configur
      */
     private $classConstantRenames = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         $configuration = [
             self::CLASS_CONSTANT_RENAME => [
@@ -40,21 +38,24 @@ final class RenameClassConstantRector extends AbstractRector implements Configur
             ],
         ];
 
-        return new RectorDefinition('Replaces defined class constants in their calls.', [
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Replaces defined class constants in their calls.',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+                    <<<'CODE_SAMPLE'
 $value = SomeClass::OLD_CONSTANT;
 $value = SomeClass::OTHER_OLD_CONSTANT;
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 $value = SomeClass::NEW_CONSTANT;
 $value = DifferentClass::NEW_CONSTANT;
 CODE_SAMPLE
-                ,
-                $configuration
-            ),
-        ]);
+                    ,
+                    $configuration
+                ),
+
+            ]);
     }
 
     /**

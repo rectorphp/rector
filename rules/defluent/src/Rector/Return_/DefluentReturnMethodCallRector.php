@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
 
 /**
@@ -19,20 +17,23 @@ use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
  */
 final class DefluentReturnMethodCallRector extends AbstractFluentChainMethodCallRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Turns return of fluent, to standalone call line and return of value', [
-            new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Turns return of fluent, to standalone call line and return of value',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 return $someClass->someFunction();
 CODE_SAMPLE
-            , <<<'CODE_SAMPLE'
+                , <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 $someClass->someFunction();
 return $someClass;
 CODE_SAMPLE
         ),
-        ]);
+
+            ]);
     }
 
     /**

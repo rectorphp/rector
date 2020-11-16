@@ -6,8 +6,6 @@ namespace Rector\DowngradePhp80\Rector\FunctionLike;
 
 use PhpParser\Node\Param;
 use PhpParser\Node\UnionType;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 
 /**
@@ -15,12 +13,12 @@ use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationR
  */
 final class DowngradeUnionTypeParamDeclarationRector extends AbstractDowngradeParamDeclarationRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Remove the union type params, add @param tags instead',
             [
-                new ConfiguredCodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 <?php
 

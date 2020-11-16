@@ -10,15 +10,25 @@ use Doctrine\Common\Annotations\DocParser;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 
 final class RemoveAnnotationRegistryRegisterFileRector extends AbstractRector implements ClassSyncerRectorInterface
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
-            'Remove AnnotationRegistry::registerFile() that is now covered by composer autoload'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Remove AnnotationRegistry::registerFile() that is now covered by composer autoload',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
+AnnotationRegistry::registerFile()
+CODE_SAMPLE
+,
+                    <<<'CODE_SAMPLE'
+CODE_SAMPLE
+                ),
+            ]
         );
     }
 

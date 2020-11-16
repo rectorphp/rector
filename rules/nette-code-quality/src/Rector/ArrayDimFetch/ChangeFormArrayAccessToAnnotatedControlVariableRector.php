@@ -11,8 +11,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteCodeQuality\NodeResolver\FormVariableInputNameTypeResolver;
 
 /**
@@ -32,11 +30,13 @@ final class ChangeFormArrayAccessToAnnotatedControlVariableRector extends Abstra
         $this->formVariableInputNameTypeResolver = $formVariableInputNameTypeResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Change array access magic on $form to explicit standalone typed variable', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Change array access magic on $form to explicit standalone typed variable',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI\Form;
 
 class SomePresenter
@@ -51,7 +51,7 @@ class SomePresenter
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI\Form;
 
 class SomePresenter
@@ -67,8 +67,9 @@ class SomePresenter
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

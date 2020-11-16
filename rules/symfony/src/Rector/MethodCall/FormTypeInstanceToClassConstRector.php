@@ -15,8 +15,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony\NodeFactory\BuilderFormNodeFactory;
 use Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory;
@@ -60,12 +58,12 @@ final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
         $this->configureOptionsNodeFactory = $configureOptionsNodeFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Changes createForm(new FormType), add(new FormType) to ones with "FormType::class"',
             [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeController
 {

@@ -6,20 +6,18 @@ namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector\DowngradeNullableTypeParamDeclarationRectorTest
  */
 final class DowngradeNullableTypeParamDeclarationRector extends AbstractDowngradeParamDeclarationRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Remove the nullable type params, add @param tags instead',
             [
-                new ConfiguredCodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 <?php
 

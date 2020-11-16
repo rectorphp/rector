@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 
@@ -79,9 +78,9 @@ final class LogIdentifierAndResolverValueInConstantClassMethodRector extends Abs
         return $node;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Log original and changed constant value');
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Log original and changed constant value');
     }
 
     private function createAssignOriginalIdentifierExpression(): Expression

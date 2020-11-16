@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -19,11 +17,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RemoveIncludeRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Remove includes (include, include_once, require, require_once) from source', [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                                         <<<'CODE_SAMPLE'
 // Comment before require
 include 'somefile.php';

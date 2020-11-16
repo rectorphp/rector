@@ -7,8 +7,6 @@ namespace Rector\Nette\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector;
 
@@ -19,12 +17,12 @@ use Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector;
  */
 final class ContextGetByTypeToConstructorInjectionRector extends AbstractToConstructorInjectionRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Move dependency get via $context->getByType() to constructor injection',
             [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {

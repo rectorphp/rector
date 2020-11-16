@@ -6,4 +6,4 @@ namespace Rector\PHPStanExtensions\Tests\Rule\CheckCodeSampleBeforeAfterAlwaysDi
 
 use Rector\Core\RectorDefinition\CodeSample;
 
-new CodeSample('A', 'B');
+new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('A', 'B');

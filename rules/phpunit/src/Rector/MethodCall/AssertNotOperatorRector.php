@@ -11,8 +11,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertNotOperatorRector\AssertNotOperatorRectorTest
@@ -37,13 +35,19 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
         $this->identifierManipulator = $identifierManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Turns not-operator comparisons to their method name alternatives in PHPUnit TestCase',
             [
-                new CodeSample('$this->assertTrue(!$foo, "message");', '$this->assertFalse($foo, "message");'),
-                new CodeSample('$this->assertFalse(!$foo, "message");', '$this->assertTrue($foo, "message");'),
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    '$this->assertTrue(!$foo, "message");',
+                    '$this->assertFalse($foo, "message");'
+                ),
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    '$this->assertFalse(!$foo, "message");',
+                    '$this->assertTrue($foo, "message");'
+                ),
             ]
         );
     }

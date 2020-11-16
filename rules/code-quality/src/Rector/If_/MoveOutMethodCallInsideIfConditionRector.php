@@ -16,9 +16,9 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\ThisType;
 use Rector\CodeQuality\Naming\MethodCallToVariableNameResolver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\MoveOutMethodCallInsideIfConditionRectorTest
@@ -35,9 +35,9 @@ final class MoveOutMethodCallInsideIfConditionRector extends AbstractRector
         $this->methodCallToVariableNameResolver = $methodCallToVariableNameResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Move out method call inside If condition', [
+        return new RuleDefinition('Move out method call inside If condition', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 if ($obj->run($arg) === 1) {

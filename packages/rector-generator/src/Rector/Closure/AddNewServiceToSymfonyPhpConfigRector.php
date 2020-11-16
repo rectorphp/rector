@@ -14,10 +14,10 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\RectorGenerator\Contract\InternalRectorInterface;
 use Rector\SymfonyPhpConfig\NodeAnalyzer\SymfonyPhpConfigClosureAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector implements InternalRectorInterface
 {
@@ -68,9 +68,9 @@ final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector impleme
         return $node;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Adds a new $services->set(...) call to PHP Config', [
+        return new RuleDefinition('Adds a new $services->set(...) call to PHP Config', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

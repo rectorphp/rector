@@ -9,7 +9,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 
 final class CustomLocalRector implements RectorInterface
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         // TODO: Implement getDefinition() method.
     }

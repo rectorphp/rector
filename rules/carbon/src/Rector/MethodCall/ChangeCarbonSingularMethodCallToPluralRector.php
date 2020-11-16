@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://carbon.nesbot.com/docs/#api-carbon-2
@@ -38,11 +38,13 @@ final class ChangeCarbonSingularMethodCallToPluralRector extends AbstractRector
         'subYear' => 'subYears',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change setter methods with args to their plural names on Carbon\Carbon', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change setter methods with args to their plural names on Carbon\Carbon',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Carbon\Carbon;
 
 final class SomeClass
@@ -54,8 +56,8 @@ final class SomeClass
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Carbon\Carbon;
 
 final class SomeClass
@@ -67,8 +69,9 @@ final class SomeClass
 }
 CODE_SAMPLE
 
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

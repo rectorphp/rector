@@ -23,8 +23,8 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://www.reddit.com/r/PHP/comments/aqk01p/is_there_a_situation_in_which_if_countarray_0/
@@ -33,9 +33,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class ExplicitBoolCompareRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Make if conditions more explicit', [
+        return new RuleDefinition('Make if conditions more explicit', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeController

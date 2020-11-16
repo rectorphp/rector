@@ -10,7 +10,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 
 final class RenameAnnotationReaderClassRector extends AbstractRector implements ClassSyncerRectorInterface
@@ -45,8 +44,10 @@ final class RenameAnnotationReaderClassRector extends AbstractRector implements 
         return $node;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Rename AnnotationReader to own constant preserving format');
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Rename AnnotationReader to own constant preserving format'
+        );
     }
 }

@@ -12,8 +12,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -43,10 +41,12 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
         $this->classDependencyManipulator = $classDependencyManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Add uuid initializion to all entities that misses it', [
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Add uuid initializion to all entities that misses it',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
 <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
@@ -62,7 +62,7 @@ class AddUuidInit
     private $superUuid;
 }
 CODE_SAMPLE
-                ,
+                    ,
 <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
@@ -82,8 +82,9 @@ class AddUuidInit
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

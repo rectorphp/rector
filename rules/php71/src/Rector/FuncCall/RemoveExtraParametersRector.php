@@ -14,8 +14,6 @@ use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://www.reddit.com/r/PHP/comments/a1ie7g/is_there_a_linter_for_argumentcounterror_for_php/
@@ -35,10 +33,10 @@ final class RemoveExtraParametersRector extends AbstractRector
         $this->callReflectionResolver = $callReflectionResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Remove extra parameters', [
-            new CodeSample('strlen("asdf", 1);', 'strlen("asdf");'),
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove extra parameters', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('strlen("asdf", 1);', 'strlen("asdf");'),
         ]);
     }
 

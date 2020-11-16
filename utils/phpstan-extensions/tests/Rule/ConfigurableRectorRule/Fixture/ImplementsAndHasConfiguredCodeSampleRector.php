@@ -21,10 +21,10 @@ final class ImplementsAndHasConfiguredCodeSampleRector implements ConfigurableRe
         // TODO: Implement configure() method.
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Turns static call to function call.', [
-            new ConfiguredCodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns static call to function call.', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                 'OldClass::oldMethod("args");',
                 'new_function("args");',
                 [

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeReturnTypeDeclarationRector;
 
 /**
@@ -13,12 +11,12 @@ use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeReturnTypeDeclara
  */
 final class DowngradeVoidTypeReturnDeclarationRector extends AbstractDowngradeReturnTypeDeclarationRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             $this->getRectorDefinitionDescription(),
             [
-                new ConfiguredCodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 <?php
 

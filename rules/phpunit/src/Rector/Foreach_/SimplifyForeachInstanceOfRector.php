@@ -12,8 +12,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\PhpParser\Node\Manipulator\ForeachManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\Foreach_\SimplifyForeachInstanceOfRector\SimplifyForeachInstanceOfRectorTest
@@ -30,19 +28,22 @@ final class SimplifyForeachInstanceOfRector extends AbstractRector
         $this->foreachManipulator = $foreachManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Simplify unnecessary foreach check of instances', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Simplify unnecessary foreach check of instances',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    <<<'CODE_SAMPLE'
 foreach ($foos as $foo) {
     $this->assertInstanceOf(SplFileInfo::class, $foo);
 }
 CODE_SAMPLE
-                ,
-                '$this->assertContainsOnlyInstancesOf(\SplFileInfo::class, $foos);'
-            ),
-        ]);
+                    ,
+                    '$this->assertContainsOnlyInstancesOf(\SplFileInfo::class, $foos);'
+                ),
+
+            ]);
     }
 
     /**

@@ -19,8 +19,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\Comment\MergedNodeCommentPreserver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -55,21 +53,24 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Shortens if return false/true to direct return', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Shortens if return false/true to direct return',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    <<<'CODE_SAMPLE'
 if (strpos($docToken->getContent(), "\n") === false) {
     return true;
 }
 
 return false;
 CODE_SAMPLE
-                ,
-                'return strpos($docToken->getContent(), "\n") === false;'
-            ),
-        ]);
+                    ,
+                    'return strpos($docToken->getContent(), "\n") === false;'
+                ),
+
+            ]);
     }
 
     /**

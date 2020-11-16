@@ -14,8 +14,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertIssetToSpecificMethodRector\AssertIssetToSpecificMethodRectorTest
@@ -42,18 +40,21 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         $this->identifierManipulator = $identifierManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Turns isset comparisons to their method name alternatives in PHPUnit TestCase', [
-            new CodeSample(
-                '$this->assertTrue(isset($anything->foo));',
-                '$this->assertObjectHasAttribute("foo", $anything);'
-            ),
-            new CodeSample(
-                '$this->assertFalse(isset($anything["foo"]), "message");',
-                '$this->assertArrayNotHasKey("foo", $anything, "message");'
-            ),
-        ]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Turns isset comparisons to their method name alternatives in PHPUnit TestCase',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    '$this->assertTrue(isset($anything->foo));',
+                    '$this->assertObjectHasAttribute("foo", $anything);'
+                ),
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    '$this->assertFalse(isset($anything["foo"]), "message");',
+                    '$this->assertArrayNotHasKey("foo", $anything, "message");'
+                ),
+
+            ]);
     }
 
     /**

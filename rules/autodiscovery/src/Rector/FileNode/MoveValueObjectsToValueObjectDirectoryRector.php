@@ -11,9 +11,9 @@ use Rector\Autodiscovery\Analyzer\ClassAnalyzer;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Inspiration @see https://github.com/rectorphp/rector/pull/1865/files#diff-0d18e660cdb626958662641b491623f8
@@ -73,9 +73,9 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
         $this->classAnalyzer = $classAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Move value object to ValueObject namespace/directory', [
+        return new RuleDefinition('Move value object to ValueObject namespace/directory', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 // app/Exception/Name.php

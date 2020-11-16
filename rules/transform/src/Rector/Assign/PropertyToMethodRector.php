@@ -11,8 +11,6 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Transform\ValueObject\PropertyToMethod;
 use Webmozart\Assert\Assert;
 
@@ -31,10 +29,10 @@ final class PropertyToMethodRector extends AbstractRector implements Configurabl
      */
     private $propertiesToMethodCalls = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Replaces properties assign calls be defined methods.', [
-            new ConfiguredCodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces properties assign calls be defined methods.', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $result = $object->property;
 $object->property = $value;
@@ -51,7 +49,7 @@ CODE_SAMPLE
                     ],
                 ]
             ),
-            new ConfiguredCodeSample(
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $result = $object->property;
 CODE_SAMPLE

@@ -22,8 +22,6 @@ use Rector\CodingStyle\Node\ConcatManipulator;
 use Rector\CodingStyle\ValueObject\ConcatExpressionJoinData;
 use Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -61,10 +59,10 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
         $this->concatManipulator = $concatManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Add extra space before new assign set', [
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add extra space before new assign set', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\RectorDefinition;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use stdClass;
 use TypeError;
@@ -15,7 +14,7 @@ final class RectorDefinitionTest extends TestCase
     public function test(): void
     {
         $rectorDefinition = new RectorDefinition('Some description', [
-            new CodeSample('Code before', 'Code after'),
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('Code before', 'Code after'),
         ]);
 
         $this->assertSame('Some description', $rectorDefinition->getDescription());

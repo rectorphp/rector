@@ -7,8 +7,8 @@ namespace Rector\Carbon\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://carbon.nesbot.com/docs/#api-carbon-2
@@ -17,11 +17,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class ChangeDiffForHumansArgsRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change methods arguments of diffForHumans() on Carbon\Carbon', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change methods arguments of diffForHumans() on Carbon\Carbon',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Carbon\Carbon;
 
 final class SomeClass
@@ -35,8 +37,8 @@ final class SomeClass
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Carbon\Carbon;
 
 final class SomeClass
@@ -50,8 +52,9 @@ final class SomeClass
 }
 CODE_SAMPLE
 
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

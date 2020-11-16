@@ -8,8 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
 
 /**
@@ -29,10 +27,10 @@ final class RenameTesterTestToPHPUnitToTestFileRector extends AbstractRector
      */
     private const PHPT_SUFFIX_REGEX = '#\.phpt$#';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Rename "*.phpt" file to "*Test.php" file', [
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename "*.phpt" file to "*Test.php" file', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 <<<'CODE_SAMPLE'
 // tests/SomeTestCase.phpt
 CODE_SAMPLE

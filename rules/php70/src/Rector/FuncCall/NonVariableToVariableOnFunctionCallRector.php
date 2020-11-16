@@ -23,8 +23,6 @@ use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\MixedType;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -62,11 +60,11 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         $this->parentScopeFinder = $parentScopeFinder;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Transform non variable like arguments to variable where a function or method expects an argument passed by reference',
-            [new CodeSample('reset(a());', '$a = a(); reset($a);')]
+            [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('reset(a());', '$a = a(); reset($a);')]
         );
     }
 

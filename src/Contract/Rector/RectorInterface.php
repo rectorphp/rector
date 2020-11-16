@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\Contract\Rector;
 
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 
-interface RectorInterface
+interface RectorInterface extends DocumentedRuleInterface
 {
-    public function getDefinition(): RectorDefinition;
 }

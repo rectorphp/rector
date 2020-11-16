@@ -7,8 +7,6 @@ namespace Rector\Polyfill\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Polyfill\ConditionEvaluator;
 use Rector\Polyfill\ConditionResolver;
 
@@ -35,11 +33,13 @@ final class UnwrapFutureCompatibleIfPhpVersionRector extends AbstractRector
         $this->conditionResolver = $conditionResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Remove php version checks if they are passed', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Remove php version checks if they are passed',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    <<<'CODE_SAMPLE'
 // current PHP: 7.2
 if (version_compare(PHP_VERSION, '7.2', '<')) {
     return 'is PHP 7.1-';
@@ -48,12 +48,13 @@ if (version_compare(PHP_VERSION, '7.2', '<')) {
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 // current PHP: 7.2
 return 'is PHP 7.2+';
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

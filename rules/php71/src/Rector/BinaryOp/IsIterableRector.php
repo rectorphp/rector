@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php71\Rector\BinaryOp;
 
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Generic\Rector\AbstractIsAbleFunCallRector;
 
@@ -14,11 +12,17 @@ use Rector\Generic\Rector\AbstractIsAbleFunCallRector;
  */
 final class IsIterableRector extends AbstractIsAbleFunCallRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Changes is_array + Traversable check to is_iterable', [
-            new CodeSample('is_array($foo) || $foo instanceof Traversable;', 'is_iterable($foo);'),
-        ]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+            'Changes is_array + Traversable check to is_iterable',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    'is_array($foo) || $foo instanceof Traversable;',
+                    'is_iterable($foo);'
+                ),
+
+            ]);
     }
 
     public function getFuncName(): string

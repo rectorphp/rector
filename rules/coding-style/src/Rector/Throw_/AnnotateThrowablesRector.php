@@ -17,8 +17,6 @@ use Rector\CodingStyle\DocBlock\ThrowsFactory;
 use Rector\CodingStyle\NodeAnalyzer\ThrowAnalyzer;
 use Rector\Core\PhpParser\Node\Value\ClassResolver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Reflection\ClassMethodReflectionHelper;
 use Rector\Core\Reflection\FunctionAnnotationResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -84,11 +82,11 @@ final class AnnotateThrowablesRector extends AbstractRector
     /**
      * From this method documentation is generated.
      */
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Adds @throws DocBlock comments to methods that thrwo \Throwables.', [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 // code before
                     <<<'CODE_SAMPLE'
 class RootExceptionInMethodWithDocblock

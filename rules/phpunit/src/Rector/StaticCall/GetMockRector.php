@@ -9,8 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/blob/5.7.0/src/Framework/TestCase.php#L1623
@@ -20,11 +18,14 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class GetMockRector extends AbstractPHPUnitRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition('Turns getMock*() methods to createMock()', [
-            new CodeSample('$this->getMock("Class");', '$this->createMock("Class");'),
-            new CodeSample(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns getMock*() methods to createMock()', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                '$this->getMock("Class");',
+                '$this->createMock("Class");'
+            ),
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                 '$this->getMockWithoutInvokingTheOriginalConstructor("Class");',
                 '$this->createMock("Class");'
             ),

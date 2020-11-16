@@ -11,8 +11,6 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 
 /**
@@ -20,13 +18,19 @@ use Rector\Core\ValueObject\PhpVersionFeature;
  */
 final class TernaryToNullCoalescingRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Changes unneeded null check to ?? operator',
             [
-                new CodeSample('$value === null ? 10 : $value;', '$value ?? 10;'),
-                new CodeSample('isset($value) ? $value : 10;', '$value ?? 10;'),
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    '$value === null ? 10 : $value;',
+                    '$value ?? 10;'
+                ),
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    'isset($value) ? $value : 10;',
+                    '$value ?? 10;'
+                ),
             ]
         );
     }

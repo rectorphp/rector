@@ -9,8 +9,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
@@ -18,12 +16,12 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 final class ProcessBuilderInstanceRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RectorDefinition(
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
             'Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.',
             [
-                new CodeSample(
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
                     '$processBuilder = Symfony\Component\Process\ProcessBuilder::instance($args);',
                     '$processBuilder = new Symfony\Component\Process\ProcessBuilder($args);'
                 ),
