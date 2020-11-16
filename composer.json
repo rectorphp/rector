@@ -319,7 +319,7 @@
             "vendor/bin/changelog-linker cleanup --ansi"
         ],
         "docs": [
-            "bin/rector dump-rectors --output-file docs/rector_rules_overview.md --ansi",
+            "vendor/bin/rule-doc-generator generate packages rules --output docs/rector_rules_overview.md",
             "vendor/bin/ecs check-markdown docs/rector_rules_overview.md --ansi --fix",
             "bin/rector dump-nodes --output-file docs/nodes_overview.md --ansi"
         ],

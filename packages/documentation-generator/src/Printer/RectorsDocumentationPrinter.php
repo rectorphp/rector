@@ -61,21 +61,10 @@ final class RectorsDocumentationPrinter
     public function printRectors(array $rectors, bool $isRectorProject): string
     {
         $groupedRectors = $this->groupRectorsByPackage($rectors);
-
-        $content = '';
         if ($isRectorProject) {
             $content .= $this->printGroupsMenu($groupedRectors);
         }
-
         foreach ($groupedRectors as $group => $rectors) {
-            if ($isRectorProject) {
-                $content .= '## ' . $group . PHP_EOL . PHP_EOL;
-            }
-
-            foreach ($rectors as $rector) {
-                $rectorContent = $this->rectorPrinter->printRector($rector, $isRectorProject);
-                $content .= $rectorContent . PHP_EOL;
-            }
         }
 
         return $content;

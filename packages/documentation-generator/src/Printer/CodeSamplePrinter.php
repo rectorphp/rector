@@ -81,12 +81,6 @@ final class CodeSamplePrinter
         return $content . $this->printComposerJsonAwareCodeSample($codeSample);
     }
 
-    private function printCodeWrapped(string $content, string $format): string
-    {
-        $message = sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL);
-        return $message . PHP_EOL;
-    }
-
     private function printComposerJsonAwareCodeSample(CodeSampleInterface $codeSample): string
     {
         if (! $codeSample instanceof ComposerJsonAwareCodeSample) {

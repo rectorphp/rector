@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\Core\RectorDefinition;
 
-use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
+use Symplify\RuleDocGenerator\Contract\CodeSampleInterface;
 
 final class ComposerJsonAwareCodeSample implements CodeSampleInterface
 {
     /**
      * @var string
      */
-    private $codeBefore;
+    private $badCode;
 
     /**
      * @var string
      */
-    private $codeAfter;
+    private $goodCode;
 
     /**
      * @var string
@@ -29,25 +29,25 @@ final class ComposerJsonAwareCodeSample implements CodeSampleInterface
     private $extraFileContent;
 
     public function __construct(
-        string $codeBefore,
-        string $codeAfter,
+        string $badCode,
+        string $goodCode,
         string $composerJsonContent,
         ?string $extraFileContent = null
     ) {
-        $this->codeBefore = $codeBefore;
-        $this->codeAfter = $codeAfter;
+        $this->badCode = $badCode;
+        $this->goodCode = $goodCode;
         $this->composerJsonContent = $composerJsonContent;
         $this->extraFileContent = $extraFileContent;
     }
 
-    public function getCodeBefore(): string
+    public function getBadCode(): string
     {
-        return $this->codeBefore;
+        return $this->badCode;
     }
 
-    public function getCodeAfter(): string
+    public function getGoodCode(): string
     {
-        return $this->codeAfter;
+        return $this->goodCode;
     }
 
     public function getComposerJsonContent(): string
