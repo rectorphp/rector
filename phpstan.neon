@@ -93,7 +93,6 @@ services:
 #                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
 #                'Closure': 'PhpParser\Node\Expr\Closure'
 #                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
-#                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
 #                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
 #                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
 #                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
@@ -721,15 +720,12 @@ parameters:
         # symplify 9
         - '#Use decoupled factory service to create "(.*?)" object#'
         - '#Use "\$class\-\>namespaceName" instead of "\$class\-\>name" that only returns short class name#'
-        - '#Method call on new expression is not allowed#'
-        - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
-        - '#Method nor static call in if \(\) or elseif \(\) is not allowed\. Extract expression to a new variable assign on line before#'
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
         - '#SymfonyStyle usage is unneeded for only newline, write, and/or writeln, use PHP_EOL and concatenation instead#'
-        - '#Method nor static call in foreach is not allowed\. Extract expression to a new variable assign on line before#'
         - '#Trait method "(.*?)" should not contain any logic, but only delegate to other class call#'
         - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
         - '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+        - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
 
         -
             message: '#Use explicit names over dynamic ones#'

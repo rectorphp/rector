@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
@@ -201,13 +200,6 @@ trait ComplexRemovalTrait
             }
 
             $this->removeNode($param);
-        }
-    }
-
-    private function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
-    {
-        foreach ($this->livingCodeManipulator->keepLivingCodeFromExpr($expr) as $expr) {
-            $this->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
         }
     }
 

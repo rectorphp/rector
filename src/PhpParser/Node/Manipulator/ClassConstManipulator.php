@@ -67,7 +67,9 @@ final class ClassConstManipulator
         }
 
         $searchInNodes = [$classLike];
-        foreach ($this->classManipulator->getUsedTraits($classLike) as $name) {
+
+        $usedTraitNames = $this->classManipulator->getUsedTraits($classLike);
+        foreach ($usedTraitNames as $name) {
             $name = $this->parsedNodeCollector->findTrait((string) $name);
             if ($name === null) {
                 continue;

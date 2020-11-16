@@ -1,0 +1,6 @@
+services:
+    -
+         class: Rector\PHPStanExtensions\Rule\CheckGetNodeTypesReturnPhpParserNodeRule
+         tags: [phpstan.rules.rule]
+
+    - Symplify\PHPStanRules\Naming\SimpleNameResolver

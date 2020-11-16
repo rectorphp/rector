@@ -83,6 +83,8 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
             return ConstantArrayTypeAndMethod::createUnknown();
         }
 
+        $objectWithoutClassType = new ObjectWithoutClassType();
+
         if ($classOrObjectType instanceof ConstantStringType) {
             $value = $classOrObjectType->getValue();
             if (! $this->reflectionProvider->hasClass($value)) {
@@ -91,7 +93,7 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
 
             $classReflection = $this->reflectionProvider->getClass($value);
             $type = new ObjectType($classReflection->getName());
-        } elseif ((new ObjectWithoutClassType())->isSuperTypeOf($classOrObjectType)->yes()) {
+        } elseif ($objectWithoutClassType->isSuperTypeOf($classOrObjectType)->yes()) {
             $type = $classOrObjectType;
         } else {
             return ConstantArrayTypeAndMethod::createUnknown();

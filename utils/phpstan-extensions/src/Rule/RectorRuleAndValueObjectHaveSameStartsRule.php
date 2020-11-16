@@ -7,15 +7,12 @@ namespace Rector\PHPStanExtensions\Rule;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
+use Rector\PHPStanExtensions\NodeAnalyzer\SymfonyConfigRectorValueObjectResolver;
+use Rector\PHPStanExtensions\NodeAnalyzer\TypeAndNameAnalyzer;
+use Symplify\PHPStanRules\Naming\SimpleNameResolver;
 
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\RectorRuleAndValueObjectHaveSameStartsRule\RectorRuleAndValueObjectHaveSameStartsRuleTest
@@ -25,13 +22,38 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
     /**
      * @var string
      */
-    public const ERROR = 'Value Object class name "%s" is incorrect. The correct class name is "%s".';
+    public const ERROR_MESSAGE = 'Change "%s" name to "%s", so it respects the Rector rule name';
 
     /**
      * @var string
      * @see https://regex101.com/r/Fk6iou/1
      */
     private const RECTOR_SUFFIX_REGEX = '#Rector$#';
+
+    /**
+     * @var SimpleNameResolver
+     */
+    private $simpleNameResolver;
+
+    /**
+     * @var TypeAndNameAnalyzer
+     */
+    private $typeAndNameAnalyzer;
+
+    /**
+     * @var SymfonyConfigRectorValueObjectResolver
+     */
+    private $symfonyConfigRectorValueObjectResolver;
+
+    public function __construct(
+        SimpleNameResolver $simpleNameResolver,
+        TypeAndNameAnalyzer $typeAndNameAnalyzer,
+        SymfonyConfigRectorValueObjectResolver $symfonyConfigRectorValueObjectResolver
+    ) {
+        $this->simpleNameResolver = $simpleNameResolver;
+        $this->typeAndNameAnalyzer = $typeAndNameAnalyzer;
+        $this->symfonyConfigRectorValueObjectResolver = $symfonyConfigRectorValueObjectResolver;
+    }
 
     public function getNodeType(): string
     {
@@ -44,108 +66,71 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkip($node, $scope)) {
             return [];
         }
 
-        $valueObjectClassName = $this->getValueObjectClassName($node);
-        if ($valueObjectClassName === null) {
+        $rectorShortClass = $this->resolveRectorShortClass($node);
+        if ($rectorShortClass === null) {
             return [];
         }
 
-        $rectorRuleClassName = $this->getRectorRuleClassName($node);
-        if ($rectorRuleClassName === null) {
+        $valueObjectShortClass = $this->resolveValueObjectShortClass($node);
+        if ($valueObjectShortClass === null) {
             return [];
         }
 
-        if ($rectorRuleClassName === $valueObjectClassName . 'Rector') {
+        $expectedValueObjectShortClass = Strings::replace($rectorShortClass, self::RECTOR_SUFFIX_REGEX, '');
+
+        if ($expectedValueObjectShortClass === $valueObjectShortClass) {
             return [];
         }
 
-        return [sprintf(
-            self::ERROR,
-            $valueObjectClassName,
-            // @see https://regex101.com/r/F8z9PY/1
-            Strings::replace($rectorRuleClassName, self::RECTOR_SUFFIX_REGEX, '')
-        )];
+        $errorMessage = sprintf(self::ERROR_MESSAGE, $valueObjectShortClass, $expectedValueObjectShortClass);
+        return [$errorMessage];
     }
 
-    private function shouldSkip(MethodCall $methodCall): bool
+    private function shouldSkip(MethodCall $methodCall, Scope $scope): bool
     {
-        /** @var Identifier $name */
-        $name = $methodCall->name;
-        if ($name->toString() !== 'call') {
-            return true;
-        }
-        /** @var String_ $expr */
-        $expr = $methodCall->args[0]->value;
-        return $expr->value !== 'configure';
+        return ! $this->typeAndNameAnalyzer->isMethodCallTypeAndName(
+            $methodCall,
+            $scope,
+            'Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator', 'set'
+        );
     }
 
-    private function getValueObjectClassName(MethodCall $methodCall): ?string
+    private function resolveShortClass(string $class): string
     {
-        $nodeFinder = new NodeFinder();
-        $inlineValueObjectsNode = $nodeFinder->findFirst($methodCall->args[1], function (Node $node): ?FuncCall {
-            if (! $node instanceof FuncCall) {
-                return null;
-            }
-            $className = $this->getClassNameFromNode($node);
-            if ($className === null) {
-                return null;
-            }
+        return (string) Strings::after($class, '\\', -1);
+    }
 
-            if ($className !== 'inline_value_objects') {
-                return null;
-            }
-
-            return $node;
-        });
-
-        if ($inlineValueObjectsNode === null) {
+    private function resolveRectorShortClass(MethodCall $methodCall): ?string
+    {
+        $setFirstArgValue = $methodCall->args[0]->value;
+        if (! $setFirstArgValue instanceof ClassConstFetch) {
             return null;
         }
 
-        $valueObjectNode = $nodeFinder->findFirstInstanceOf($inlineValueObjectsNode, New_::class);
-        if ($valueObjectNode === null) {
+        $rectorClass = $this->simpleNameResolver->getName($setFirstArgValue->class);
+        if ($rectorClass === null) {
             return null;
         }
 
-        /** @var FullyQualified $classNode */
-        $classNode = $valueObjectNode->class;
-        if (class_implements($classNode->toCodeString()) !== []) {
-            return null;
-        }
-
-        return $this->getClassNameFromNode($valueObjectNode);
+        return $this->resolveShortClass($rectorClass);
     }
 
-    private function getRectorRuleClassName(Node $node): ?string
+    private function resolveValueObjectShortClass(MethodCall $methodCall): ?string
     {
-        /** @var ClassConstFetch $classConstFetch */
-        $classConstFetch = $node->var->args[0]->value;
-        return $this->getClassNameFromNode($classConstFetch);
-    }
-
-    private function getClassNameFromNode(Node $node): ?string
-    {
-        $parts = [];
-        if ($node instanceof New_ || $node instanceof ClassConstFetch) {
-            /** @var FullyQualified $classNode */
-            $classNode = $node->class;
-            $parts = $classNode->parts;
-        }
-
-        if ($node instanceof FuncCall) {
-            /** @var FullyQualified $nameNode */
-            $nameNode = $node->name;
-            $parts = $nameNode->parts;
-        }
-
-        $className = end($parts);
-        if ($className === false) {
+        $valueObjectClass = $this->symfonyConfigRectorValueObjectResolver->resolveFromSetMethodCall($methodCall);
+        if ($valueObjectClass === null) {
             return null;
         }
 
-        return $className;
+        // is it implements interface, it can have many forms
+        if (class_implements($valueObjectClass) !== []) {
+            return null;
+        }
+
+        return $this->resolveShortClass($valueObjectClass);
     }
 }

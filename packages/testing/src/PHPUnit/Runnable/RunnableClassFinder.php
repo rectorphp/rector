@@ -26,10 +26,10 @@ final class RunnableClassFinder
      */
     private $nodeFinder;
 
-    public function __construct()
+    public function __construct(NodeFinder $nodeFinder)
     {
         $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $this->nodeFinder = new NodeFinder();
+        $this->nodeFinder = $nodeFinder;
     }
 
     public function find(string $content): string

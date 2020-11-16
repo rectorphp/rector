@@ -454,12 +454,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
         $fileInfo = $originalNode->getAttribute(AttributeKey::FILE_INFO);
 
+        $originalParent = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
+
         if ($fileInfo !== null) {
             $node->setAttribute(AttributeKey::FILE_INFO, $originalNode->getAttribute(AttributeKey::FILE_INFO));
-        } elseif ($originalNode->getAttribute(AttributeKey::PARENT_NODE) !== null) {
-            /** @var Node $parentOriginalNode */
-            $parentOriginalNode = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
-            $node->setAttribute(AttributeKey::FILE_INFO, $parentOriginalNode->getAttribute(AttributeKey::FILE_INFO));
+        } elseif ($originalParent instanceof Node) {
+            $node->setAttribute(AttributeKey::FILE_INFO, $originalParent->getAttribute(AttributeKey::FILE_INFO));
         }
     }
 

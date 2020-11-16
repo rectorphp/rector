@@ -76,7 +76,8 @@ CODE_SAMPLE
             $this->processSingleQuoted($node, $doubleQuoteCount, $singleQuoteCount);
         }
 
-        if ($node->getAttribute(AttributeKey::KIND) === String_::KIND_DOUBLE_QUOTED) {
+        $quoteKind = $node->getAttribute(AttributeKey::KIND);
+        if ($quoteKind === String_::KIND_DOUBLE_QUOTED) {
             $this->processDoubleQuoted($node, $singleQuoteCount, $doubleQuoteCount);
         }
 

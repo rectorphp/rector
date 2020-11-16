@@ -117,7 +117,8 @@ CODE_SAMPLE
             }
 
             // is there return without nesting?
-            if ($this->areNodesEqual($node->getAttribute(AttributeKey::PARENT_NODE), $classMethod)) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($this->areNodesEqual($parentNode, $classMethod)) {
                 $hasReturn = true;
             }
 

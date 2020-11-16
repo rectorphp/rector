@@ -1,32 +1,7 @@
+includes:
+    - rector-rules.neon
+
 services:
-    -
-        class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
-        tags: [phpstan.rules.rule]
-
-    -
-        class: Symplify\PHPStanRules\Rules\PreventParentMethodVisibilityOverrideRule
-        tags: [phpstan.rules.rule]
-
-    -
-         class: Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule
-         tags: [phpstan.rules.rule]
-
-    -
-         class: Rector\PHPStanExtensions\Rule\ConfigurableRectorRule
-         tags: [phpstan.rules.rule]
-
-    -
-         class: Rector\PHPStanExtensions\Rule\CheckGetNodeTypesReturnPhpParserNodeRule
-         tags: [phpstan.rules.rule]
-
-    -
-         class: Rector\PHPStanExtensions\Rule\RectorRuleAndValueObjectHaveSameStartsRule
-         tags: [phpstan.rules.rule]
-
-    -
-         class: Rector\PHPStanExtensions\Rule\CheckCodeSampleBeforeAfterAlwaysDifferentRule
-         tags: [phpstan.rules.rule]
-
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 
     # $node->getAttribute($1) => Type|null by $1

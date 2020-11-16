@@ -49,8 +49,10 @@ final class DependencyResolver
             $analysedFileAbsolutesPaths[] = $analysedFile->getRealPath();
         }
 
-        $dependencies = [];
-        foreach ($this->phpStanDependencyResolver->resolveDependencies($node, $scope) as $nodeDependency) {
+        $dependencyFiles = [];
+
+        $nodeDependencies = $this->phpStanDependencyResolver->resolveDependencies($node, $scope);
+        foreach ($nodeDependencies as $nodeDependency) {
             $dependencyFile = $nodeDependency->getFileName();
             if (! $dependencyFile) {
                 continue;
@@ -65,11 +67,11 @@ final class DependencyResolver
                 continue;
             }
 
-            $dependencies[] = $dependencyFile;
+            $dependencyFiles[] = $dependencyFile;
         }
 
-        $dependencies = array_unique($dependencies, SORT_STRING);
+        $dependencyFiles = array_unique($dependencyFiles, SORT_STRING);
 
-        return array_values($dependencies);
+        return array_values($dependencyFiles);
     }
 }

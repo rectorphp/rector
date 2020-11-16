@@ -30,7 +30,7 @@ final class CheckGetNodeTypesReturnPhpParserNodeRuleTest extends AbstractService
         yield [__DIR__ . '/Fixture/SkipInterface.php', []];
 
         $errorMessage = sprintf(
-            CheckGetNodeTypesReturnPhpParserNodeRule::ERROR,
+            CheckGetNodeTypesReturnPhpParserNodeRule::ERROR_MESSAGE,
             IncorrectReturnRector::class,
             Node::class,
             ClassNotOfPhpParserNode::class
@@ -42,7 +42,7 @@ final class CheckGetNodeTypesReturnPhpParserNodeRuleTest extends AbstractService
     {
         return $this->getRuleFromConfig(
             CheckGetNodeTypesReturnPhpParserNodeRule::class,
-            __DIR__ . '/../../../config/phpstan-extensions.neon'
+            __DIR__ . '/config/configured_rule.neon'
         );
     }
 }

@@ -67,8 +67,8 @@ final class ValidateFixtureSuffixCommand extends Command
      */
     private function getInvalidFixtureFileInfos(): array
     {
-        $finder = (new Finder())
-            ->files()
+        $finder = new Finder();
+        $finder = $finder->files()
             ->name('#\.inc$#')
             ->name('#\.php#')
             ->notName('#\.php\.inc$#')
