@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 class InvoiceAdminController
 {
     /**
-     * @Route("/admin/invoice/show/{id}", options={ "expose" = true }, name="invoice_admin_show")
+     * @Route("/admin/invoice/show/{id}", options={ "expose" = true, "another_option" = false }, name="invoice_admin_show")
      *
      * @param mixed $id
      */
