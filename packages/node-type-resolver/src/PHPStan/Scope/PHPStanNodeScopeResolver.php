@@ -198,7 +198,8 @@ final class PHPStanNodeScopeResolver
         }
 
         try {
-            foreach ($this->dependencyResolver->resolveDependencies($node, $scope) as $dependentFile) {
+            $dependentFiles = $this->dependencyResolver->resolveDependencies($node, $scope);
+            foreach ($dependentFiles as $dependentFile) {
                 $this->dependentFiles[] = $dependentFile;
             }
         } catch (AnalysedCodeException $analysedCodeException) {

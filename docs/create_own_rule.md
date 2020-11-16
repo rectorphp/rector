@@ -17,10 +17,6 @@ Let's say we want to **change method calls from `set*` to `change*`**.
 Create a class that extends [`Rector\Core\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It will inherit useful methods e.g. to check node type and name. See the source (or type `$this->` in an IDE) for a list of available methods.
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 namespace Utils\Rector;
 
 use Nette\Utils\Strings;
@@ -29,7 +25,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class MyFirstRector extends AbstractRector
 {
@@ -67,11 +63,11 @@ final class MyFirstRector extends AbstractRector
     /**
      * From this method documentation is generated.
      */
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition(
+        return new RuleDefinition(
             'Change method calls from set* to change*.', [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     // code before
                     '$user->setPassword("123456");',
                     // code after

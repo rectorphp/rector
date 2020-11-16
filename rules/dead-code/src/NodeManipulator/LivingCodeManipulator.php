@@ -46,14 +46,15 @@ final class LivingCodeManipulator
 
     public function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
     {
-        foreach ($this->keepLivingCodeFromExpr($expr) as $expr) {
+        $livinExprs = $this->keepLivingCodeFromExpr($expr);
+        foreach ($livinExprs as $expr) {
             $this->nodesToAddCollector->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
         }
     }
 
     /**
      * @param Node|int|string|null $expr
-     * @return Expr[]|mixed[]
+     * @return Expr[]
      */
     public function keepLivingCodeFromExpr($expr): array
     {

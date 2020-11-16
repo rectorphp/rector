@@ -726,7 +726,6 @@ parameters:
         - '#Method nor static call in if \(\) or elseif \(\) is not allowed\. Extract expression to a new variable assign on line before#'
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
         - '#SymfonyStyle usage is unneeded for only newline, write, and/or writeln, use PHP_EOL and concatenation instead#'
-        - '#Method nor static call in foreach is not allowed\. Extract expression to a new variable assign on line before#'
         - '#Trait method "(.*?)" should not contain any logic, but only delegate to other class call#'
         - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
         - '#Property with protected modifier is not allowed\. Use interface contract method instead#'

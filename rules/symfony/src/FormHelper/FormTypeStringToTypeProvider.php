@@ -93,7 +93,9 @@ final class FormTypeStringToTypeProvider
         }
 
         $serviceMap = $this->serviceMapProvider->provide();
-        foreach ($serviceMap->getServicesByTag('form.type') as $formTypeServiceDefinition) {
+
+        $formTypeServiceDefinitions = $serviceMap->getServicesByTag('form.type');
+        foreach ($formTypeServiceDefinitions as $formTypeServiceDefinition) {
             $formTypeTag = $formTypeServiceDefinition->getTag('form.type');
             if ($formTypeTag === null) {
                 continue;
