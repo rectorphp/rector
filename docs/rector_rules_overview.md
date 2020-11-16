@@ -10102,6 +10102,29 @@ Turns same bool and null comparisons to their method name alternatives in PHPUni
 
 <br><br>
 
+### `AssertSameTrueFalseToAssertTrueFalseRector`
+
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector`](/rules/phpunit/src/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php)
+- [test fixtures](/rules/phpunit/tests/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector/Fixture)
+
+Change `$this->assertSame(true,` ...) to `assertTrue()`
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+     public function test()
+     {
+         $value = (bool) mt_rand(0, 1);
+-        $this->assertSame(true, $value);
++        $this->assertTrue($value);
+     }
+ }
+```
+
+<br><br>
+
 ### `AssertTrueFalseInternalTypeToSpecificMethodRector`
 
 - class: [`Rector\PHPUnit\Rector\MethodCall\AssertTrueFalseInternalTypeToSpecificMethodRector`](/rules/phpunit/src/Rector/MethodCall/AssertTrueFalseInternalTypeToSpecificMethodRector.php)
@@ -10368,33 +10391,6 @@ Remove `expect($this->any())` from mocks as it has no added value
 -            ->method('trans')
 +        $translator->method('trans')
              ->willReturn('translated max {{ max }}!');
-     }
- }
-```
-
-<br><br>
-
-### `ReplaceAssertArraySubsetRector`
-
-- class: [`Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector`](/rules/phpunit/src/Rector/MethodCall/ReplaceAssertArraySubsetRector.php)
-- [test fixtures](/rules/phpunit/tests/Rector/MethodCall/ReplaceAssertArraySubsetRector/Fixture)
-
-Replace deprecated "assertArraySubset()" method with alternative methods
-
-```diff
- use PHPUnit\Framework\TestCase;
-
- final class SomeTest extends TestCase
- {
-     public function test()
-     {
-         $checkedArray = [];
-
--        $this->assertArraySubset([
--           'cache_directory' => 'new_value',
--        ], $checkedArray, true);
-+        $this->assertArrayHasKey('cache_directory', $checkedArray);
-+        $this->assertSame('new_value', $checkedArray['cache_directory']);
      }
  }
 ```
