@@ -7,11 +7,11 @@
         "symfony/dependency-injection": "^4.4.8|^5.1",
         "symfony/config": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
-        "symplify/package-builder": "^8.3.48"
+        "symplify/package-builder": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5|^9.2",
-        "symplify/easy-testing": "^8.3.48"
+        "symplify/easy-testing": "dev-master"
     },
     "autoload": {
         "psr-4": {

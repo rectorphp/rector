@@ -6,7 +6,7 @@
         "php": "^7.2.4|^8.0",
         "symfony/dependency-injection": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
-        "symplify/package-builder": "^8.3.48"
+        "symplify/package-builder": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5|^9.2"

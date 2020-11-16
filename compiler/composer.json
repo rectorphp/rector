@@ -12,12 +12,12 @@
         "symfony/process": "^4.4|^5.0",
         "symfony/filesystem": "^4.4|^5.0",
         "symfony/finder": "^4.4|^5.0",
-        "symplify/composer-json-manipulator": "^8.2.11",
-        "symplify/console-color-diff": "^8.2.11",
-        "symplify/auto-bind-parameter": "^8.2.11",
-        "symplify/smart-file-system": "^8.2.11",
-        "symplify/easy-testing": "^8.2.11",
-        "symplify/package-builder": "^8.2.11"
+        "symplify/composer-json-manipulator": "dev-master",
+        "symplify/console-color-diff": "dev-master",
+        "symplify/auto-bind-parameter": "dev-master",
+        "symplify/smart-file-system": "dev-master",
+        "symplify/easy-testing": "dev-master",
+        "symplify/package-builder": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5|^9.0"
