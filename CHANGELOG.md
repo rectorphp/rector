@@ -14,6 +14,21 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ### Added
 
+- [#4614] [PHPUnit] Add AssertSameTrueFalseToAssertTrueFalseRector
+
+### Changed
+
+- [#4613] [CodeQuality] ForToForeachRector improvement on ArrayDimFetch handling, Thanks to [@samsonasik]
+- [#4611] [PHPUnit 8.0] Replace confusing ReplaceAssertArraySubsetRector with doms plug and play approach
+- [#4610] improve SpecificAssertContainsRector for union type
+- [#4609] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+
+
+
+## Unreleased
+
+### Added
+
 - [#4596] [Carbon] Add ChangeCarbonSingularMethodCallToPluralRector
 
 ### Changed
@@ -5551,3 +5566,8 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#4607]: https://github.com/rectorphp/rector/pull/4607
 [#4605]: https://github.com/rectorphp/rector/pull/4605
 [#4604]: https://github.com/rectorphp/rector/pull/4604
+[#4614]: https://github.com/rectorphp/rector/pull/4614
+[#4613]: https://github.com/rectorphp/rector/pull/4613
+[#4611]: https://github.com/rectorphp/rector/pull/4611
+[#4610]: https://github.com/rectorphp/rector/pull/4610
+[#4609]: https://github.com/rectorphp/rector/pull/4609
