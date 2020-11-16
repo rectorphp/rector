@@ -26,16 +26,28 @@ final class ChangeConditionalReturnedCellRector extends AbstractRector
 
     public function __construct()
     {
-        $items = [
-            ['setCellValue', 'getCell', 'setValue', 2, false],
-            ['setCellValueByColumnAndRow', 'getCellByColumnAndRow', 'setValue', 3, true],
-            ['setCellValueExplicit', 'getCell', 'setValueExplicit', 3, false],
-            ['setCellValueExplicitByColumnAndRow', 'getCellByColumnAndRow', 'setValueExplicit', 4, true],
-        ];
-
-        foreach ($items as $item) {
-            $this->conditionalSetValues[] = new ConditionalSetValue(...$item);
-        }
+        $this->conditionalSetValues[] = new ConditionalSetValue('setCellValue', 'getCell', 'setValue', 2, false);
+        $this->conditionalSetValues[] = new ConditionalSetValue(
+            'setCellValueByColumnAndRow',
+            'getCellByColumnAndRow',
+            'setValue',
+            3,
+            true
+        );
+        $this->conditionalSetValues[] = new ConditionalSetValue(
+            'setCellValueExplicit',
+            'getCell',
+            'setValueExplicit',
+            3,
+            false
+        );
+        $this->conditionalSetValues[] = new ConditionalSetValue(
+            'setCellValueExplicitByColumnAndRow',
+            'getCellByColumnAndRow',
+            'setValueExplicit',
+            4,
+            true
+        );
     }
 
     public function getDefinition(): RectorDefinition

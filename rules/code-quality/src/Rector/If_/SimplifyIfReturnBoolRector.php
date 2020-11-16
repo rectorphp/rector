@@ -110,7 +110,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->mergedNodeCommentPreserver->keepComments($newReturnNode, $node, $ifInnerNode, $nextNode, $newReturnNode);
+        $this->mergedNodeCommentPreserver->keepComments(
+            $newReturnNode,
+            [$node, $ifInnerNode, $nextNode, $newReturnNode]
+        );
         $this->removeNode($nextNode);
 
         return $newReturnNode;

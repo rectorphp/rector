@@ -81,7 +81,6 @@ final class FluentMethodCallSkipper
     {
         $calleeUniqueTypes = $this->fluentCallStaticTypeResolver->resolveCalleeUniqueTypes(
             $firstAssignFluentCall->getFluentMethodCalls()
-                ->getFluentMethodCalls()
         );
 
         if (! $this->sameClassMethodCallAnalyzer->isCorrectTypeCount($calleeUniqueTypes, $firstAssignFluentCall)) {

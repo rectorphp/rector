@@ -55,16 +55,28 @@ final class PhpDocTagsFinder
             $typeNode = $tagValueNode->type;
             if ($typeNode instanceof IdentifierTypeNode) {
                 $types[] = $typeNode->name;
-                continue;
             }
 
             if ($typeNode instanceof UnionTypeNode) {
-                foreach ($typeNode->types as $unionedType) {
-                    $types[] = $unionedType->name;
-                }
+                $types = array_merge($types, $this->resolveUnionType($typeNode));
             }
         }
 
+        return $types;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveUnionType(UnionTypeNode $unionTypeNode): array
+    {
+        $types = [];
+
+        foreach ($unionTypeNode->types as $unionedType) {
+            if ($unionedType instanceof IdentifierTypeNode) {
+                $types[] = $unionedType->name;
+            }
+        }
         return $types;
     }
 }

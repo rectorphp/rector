@@ -275,7 +275,6 @@ final class NodeRepository
     {
         $methodName = $methodReflection->getName();
 
-        /** @var string $className */
         $classReflection = $methodReflection->getDeclaringClass();
         $className = $classReflection->getName();
 

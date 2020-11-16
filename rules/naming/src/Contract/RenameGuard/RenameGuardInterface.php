@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\RenameGuard;
+namespace Rector\Naming\Contract\RenameGuard;
 
 use Rector\Naming\Contract\Guard\GuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;

@@ -156,6 +156,13 @@ final class LivingCodeManipulator
      */
     private function processIsset(Isset_ $isset): array
     {
+        $livingExprs = [];
+        foreach ($isset->vars as $expr) {
+            $livingExprs = array_merge($livingExprs, $this->keepLivingCodeFromExpr($expr));
+        }
+
+        return $livingExprs;
+
         return array_merge(...array_map(function (Expr $expr): array {
             return $this->keepLivingCodeFromExpr($expr);
         }, $isset->vars));
