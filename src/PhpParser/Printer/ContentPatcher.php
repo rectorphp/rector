@@ -57,6 +57,18 @@ final class ContentPatcher
     public const INVALID_ANNOTATION_CONSTRAINT_REGEX = '#\*\s+@.*\(?[\s\*]{0,}.*\s{0,}={[^"].*(,[\s+\*]+.*)?}[\s\*]{1,}\)[\s\*}\)]{0,}#';
 
     /**
+     * @see https://regex101.com/r/rbCG9a/3
+     * @var string
+     */
+    public const VALID_ANNOTATION_ROUTE_OPTION_REGEX = '#\*\s+@.*={(\s{0,}".*"\s{0,}=\s{0,}[^",]*\s{0,},?){1,}}.*\)#';
+
+    /**
+     * @see https://regex101.com/r/Kl3Ot1/3
+     * @var string
+     */
+    public const INVALID_ANNOTATION_ROUTE_OPTION_REGEX = '#\*\s+@.*={([^"]*=[^"]*,?){1,}[^,]}.*\)#';
+
+    /**
      * @see https://regex101.com/r/4mBd0y/2
      * @var string
      */
