@@ -89,7 +89,7 @@ CODE_SAMPLE
         }
 
         $camelCaseName = StaticRectorStrings::underscoreToCamelCase($nodeName);
-        if ($camelCaseName === 'this') {
+        if ($camelCaseName === 'this' || $camelCaseName === '' || is_numeric($camelCaseName[0])) {
             return null;
         }
 
