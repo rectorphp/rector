@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class SkipSubtypeRector extends AbstractRector
 {
@@ -21,7 +21,7 @@ final class SkipSubtypeRector extends AbstractRector
     {
     }
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
     }
 }

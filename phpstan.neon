@@ -93,7 +93,6 @@ services:
 #                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
 #                'Closure': 'PhpParser\Node\Expr\Closure'
 #                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
-#                'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
 #                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
 #                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
 #                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'

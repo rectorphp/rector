@@ -262,7 +262,7 @@ final class IfManipulator
 
         /** @var Exit_[] $exits */
         $exits = $this->betterNodeFinder->findInstanceOf($currentIf->stmts, Exit_::class);
-        if ($exits === []) {
+        if ($exits !== []) {
             return [];
         }
 

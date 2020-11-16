@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\Configuration\Source;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class CustomLocalRector implements RectorInterface
 {
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         // TODO: Implement getDefinition() method.
     }

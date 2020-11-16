@@ -7,8 +7,8 @@ namespace Rector\__Package__\Rector\__Category__;
 use PhpParser\Node;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
 __Resources__
@@ -20,10 +20,10 @@ final class __Name__ extends AbstractRector implements ConfigurableRectorInterfa
 
     __ConfigurationProperties__
 
-    public function getRuleDefinition(): \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('__Description__', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(
+        return new RuleDefinition('__Description__', [
+            new ConfiguredCodeSample(
                 __CodeBeforeExample__,
                 __CodeAfterExample__,
                 __RuleConfiguration__
