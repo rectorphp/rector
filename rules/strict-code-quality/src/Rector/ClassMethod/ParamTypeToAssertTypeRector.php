@@ -20,7 +20,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -151,13 +151,20 @@ CODE_SAMPLE
             }
         }
 
+        return $this->addStatements($node, $assertStatements);
+    }
+
+    /**
+     * @param array<int, Expression> $assertStatements
+     */
+    private function addStatements(ClassMethod $node, array $assertStatements): ClassMethod
+    {
         if (! isset($node->stmts[0])) {
             foreach ($assertStatements as $assertStatement) {
                 $node->stmts[] = $assertStatement;
             }
         } else {
-            $reversedAssertStatements = array_reverse($assertStatements);
-            foreach ($reversedAssertStatements as $assertStatement) {
+            foreach ($assertStatements as $assertStatement) {
                 $this->addNodeBeforeNode($assertStatement, $node->stmts[0]);
             }
         }
