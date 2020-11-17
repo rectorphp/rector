@@ -84,6 +84,33 @@ final class VisibilityManipulator
     }
 
     /**
+     * This way "abstract", "static", "final" are kept
+     *
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function removeOriginalVisibilityFromFlags(Node $node): void
+    {
+        $this->ensureIsClassMethodOrProperty($node, __METHOD__);
+
+        // no modifier
+        if ($node->flags === 0) {
+            return;
+        }
+
+        if ($node->isPublic()) {
+            $node->flags -= Class_::MODIFIER_PUBLIC;
+        }
+
+        if ($node->isProtected()) {
+            $node->flags -= Class_::MODIFIER_PROTECTED;
+        }
+
+        if ($node->isPrivate()) {
+            $node->flags -= Class_::MODIFIER_PRIVATE;
+        }
+    }
+
+    /**
      * @param Class_|ClassMethod|Property|ClassConst $node
      */
     private function addVisibilityFlag(Node $node, string $visibility): void
@@ -112,33 +139,6 @@ final class VisibilityManipulator
 
         if ($visibility === self::FINAL) {
             $node->flags |= Class_::MODIFIER_FINAL;
-        }
-    }
-
-    /**
-     * This way "abstract", "static", "final" are kept
-     *
-     * @param ClassMethod|Property|ClassConst $node
-     */
-    private function removeOriginalVisibilityFromFlags(Node $node): void
-    {
-        $this->ensureIsClassMethodOrProperty($node, __METHOD__);
-
-        // no modifier
-        if ($node->flags === 0) {
-            return;
-        }
-
-        if ($node->isPublic()) {
-            $node->flags -= Class_::MODIFIER_PUBLIC;
-        }
-
-        if ($node->isProtected()) {
-            $node->flags -= Class_::MODIFIER_PROTECTED;
-        }
-
-        if ($node->isPrivate()) {
-            $node->flags -= Class_::MODIFIER_PRIVATE;
         }
     }
 

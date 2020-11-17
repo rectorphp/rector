@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector;
@@ -12,4 +13,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeNullableTypeParamDeclarationRector::class);
     $services->set(DowngradeNullableTypeReturnDeclarationRector::class);
     $services->set(DowngradeVoidTypeReturnDeclarationRector::class);
+    $services->set(DowngradeClassConstantVisibilityRector::class);
 };
