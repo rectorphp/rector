@@ -16,13 +16,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -111,24 +109,23 @@ CODE_SAMPLE
         }
 
         $node = $this->processRemoveDocblock($node, $docCommentText);
-        $node = $this->processAddTypeAssert($node, $anyOfTypes);
 
-        return $node;
+        return $this->processAddTypeAssert($node, $anyOfTypes);
     }
 
-    private function processRemoveDocblock(ClassMethod $node, string $docCommentText): ClassMethod
+    private function processRemoveDocblock(ClassMethod $classMethod, string $docCommentText): ClassMethod
     {
-        $node->setDocComment(new Doc($docCommentText));
-        $expressionPhpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        $node->setAttribute(AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
+        $classMethod->setDocComment(new Doc($docCommentText));
+        $expressionPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        $classMethod->setAttribute(AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
 
-        return $node;
+        return $classMethod;
     }
 
     /**
      * @param array<string, array<int, string>> $anyOfTypes
      */
-    private function processAddTypeAssert(ClassMethod $node, array $anyOfTypes): ClassMethod
+    private function processAddTypeAssert(ClassMethod $classMethod, array $anyOfTypes): ClassMethod
     {
         $assertStatements = [];
         foreach ($anyOfTypes as $keyAnyOfType => $anyOfType) {
@@ -146,29 +143,29 @@ CODE_SAMPLE
             } else {
                 $assertStatements[] = new Expression(new StaticCall(new Name('\Webmozart\Assert\Assert'), 'isAOf', [
                     new Arg(new Variable($keyAnyOfType)),
-                    new Arg(new ConstFetch(new Name($anyOfType[0])))
+                    new Arg(new ConstFetch(new Name($anyOfType[0]))),
                 ]));
             }
         }
 
-        return $this->addStatements($node, $assertStatements);
+        return $this->addStatements($classMethod, $assertStatements);
     }
 
     /**
      * @param array<int, Expression> $assertStatements
      */
-    private function addStatements(ClassMethod $node, array $assertStatements): ClassMethod
+    private function addStatements(ClassMethod $classMethod, array $assertStatements): ClassMethod
     {
-        if (! isset($node->stmts[0])) {
+        if (! isset($classMethod->stmts[0])) {
             foreach ($assertStatements as $assertStatement) {
-                $node->stmts[] = $assertStatement;
+                $classMethod->stmts[] = $assertStatement;
             }
         } else {
             foreach ($assertStatements as $assertStatement) {
-                $this->addNodeBeforeNode($assertStatement, $node->stmts[0]);
+                $this->addNodeBeforeNode($assertStatement, $classMethod->stmts[0]);
             }
         }
 
-        return $node;
+        return $classMethod;
     }
 }
