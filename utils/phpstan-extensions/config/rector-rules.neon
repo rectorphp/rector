@@ -16,7 +16,7 @@ services:
         tags: [phpstan.rules.rule]
 
     -
-        class: Rector\PHPStanExtensions\Rule\RequireClassTypeInClassMethodByTypeRule
+        class: Symplify\PHPStanRules\Rules\RequireClassTypeInClassMethodByTypeRule
         tags: [phpstan.rules.rule]
         arguments:
             requiredTypeInMethodByClass:

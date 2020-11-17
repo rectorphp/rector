@@ -40,7 +40,7 @@ final class RequireRectorCategoryByGetNodeTypesRuleTest extends AbstractServiceA
     {
         return $this->getRuleFromConfig(
             RequireRectorCategoryByGetNodeTypesRule::class,
-            __DIR__ . '/../../../config/phpstan-extensions.neon'
+            __DIR__ . '/config/configured_rule.neon'
         );
     }
 }

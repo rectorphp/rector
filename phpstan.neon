@@ -6,6 +6,7 @@ includes:
     # see https://github.com/symplify/coding-standard
     # - vendor/symplify/phpstan-rules/config/configurable-rules.neon
     - vendor/symplify/phpstan-rules/config/static-rules.neon
+    - vendor/symplify/phpstan-rules/config/services/services.neon
     - vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-services.neon
 
     - vendor/symplify/phpstan-rules/config/symplify-rules/array-rules.neon
