@@ -1,6 +1,4 @@
 services:
-    - PhpParser\NodeFinder
-    - Symplify\PHPStanRules\Naming\SimpleNameResolver
     -
         class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
         tags: [phpstan.rules.rule]
