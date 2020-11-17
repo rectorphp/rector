@@ -3,6 +3,7 @@ includes:
 
 services:
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
+    - Rector\PHPStanExtensions\TypeAnalyzer\ConstantTypeAnalyzer
 
     # $node->getAttribute($1) => Type|null by $1
     -
