@@ -14,6 +14,27 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ### Added
 
+- [#4615] [docs] add 10 more relevant node construction examples
+
+### Changed
+
+- [#4613] [CodeQuality] ForToForeachRector improvement on ArrayDimFetch handling, Thanks to [@samsonasik]
+- [#4625] [Symplify 9] Follow up + phpstan rules tidying
+- [#4616] [Symplify 9] First update + switch to RuleDocGenerator
+- [#4618] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
+- [#4617] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+
+### Fixed
+
+- [#4622] [BetterStandardPrinter] Fixes [#4620] Do not change valid Annotation Route Option, Thanks to [@samsonasik]
+- [#4623] [Naming] Fixes [#4621] : Skip rename when after rename has numeric in first char, Thanks to [@samsonasik]
+
+
+
+## Unreleased
+
+### Added
+
 - [#4614] [PHPUnit] Add AssertSameTrueFalseToAssertTrueFalseRector
 
 ### Changed
@@ -5571,3 +5592,12 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#4611]: https://github.com/rectorphp/rector/pull/4611
 [#4610]: https://github.com/rectorphp/rector/pull/4610
 [#4609]: https://github.com/rectorphp/rector/pull/4609
+[#4625]: https://github.com/rectorphp/rector/pull/4625
+[#4623]: https://github.com/rectorphp/rector/pull/4623
+[#4622]: https://github.com/rectorphp/rector/pull/4622
+[#4621]: https://github.com/rectorphp/rector/pull/4621
+[#4620]: https://github.com/rectorphp/rector/pull/4620
+[#4618]: https://github.com/rectorphp/rector/pull/4618
+[#4617]: https://github.com/rectorphp/rector/pull/4617
+[#4616]: https://github.com/rectorphp/rector/pull/4616
+[#4615]: https://github.com/rectorphp/rector/pull/4615
