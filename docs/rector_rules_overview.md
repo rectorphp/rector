@@ -4401,6 +4401,29 @@ Replace array spread with `array_merge` function
 
 <br>
 
+## DowngradeClassConstantVisibilityRector
+
+Downgrade class constant visibility
+
+- class: `Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector`
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+    const PUBLIC_CONST_A = 1;
+-   public const PUBLIC_CONST_B = 2;
++   const PUBLIC_CONST_B = 2;
+-   protected const PROTECTED_CONST = 3;
++   const PROTECTED_CONST = 3;
+-   private const PRIVATE_CONST = 4;
++   const PRIVATE_CONST = 4;
+ }
+```
+
+<br>
+
 ## DowngradeFlexibleHeredocSyntaxRector
 
 Changes heredoc/nowdoc that contains closing word to safe wrapper name

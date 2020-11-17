@@ -55,6 +55,14 @@ trait VisibilityTrait
     }
 
     /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function removeVisibility(Node $node): void
+    {
+        $this->visibilityManipulator->removeOriginalVisibilityFromFlags($node);
+    }
+
+    /**
      * @param ClassMethod|Class_ $node
      */
     public function makeAbstract(Node $node): void

@@ -74,6 +74,11 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const BEFORE_CONSTANT_VISIBILITY = '7.0';
+
+    /**
+     * @var string
+     */
     public const CONSTANT_VISIBILITY = '7.1';
 
     /**
