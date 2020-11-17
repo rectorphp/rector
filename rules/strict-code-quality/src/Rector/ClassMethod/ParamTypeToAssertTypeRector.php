@@ -16,12 +16,14 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\StrictCodeQuality\Tests\Rector\ClassMethod\ParamTypeToAssertTypeRector\ParamTypeToAssertTypeRectorTest
@@ -34,9 +36,9 @@ final class ParamTypeToAssertTypeRector extends AbstractRector
      */
     private const PARAM_REGEX = '#^\s{0,}\*\s+@param\s+(.*)\s+\$%s$$#msU';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turn @param type to assert type', [
+        return new RuleDefinition('Turn @param type to assert type', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
@@ -131,15 +133,22 @@ CODE_SAMPLE
         $assertStatements = [];
         foreach ($anyOfTypes as $keyAnyOfType => $anyOfType) {
             $types = [];
-            foreach ($anyOfType as $type) {
-                $type = sprintf('%s::class', $type);
-                $types[] = new ArrayItem(new ConstFetch(new Name($type)));
+            foreach ($anyOfType as $keyType => $type) {
+                $anyOfType[$keyType] = sprintf('%s::class', $type);
+                $types[] = new ArrayItem(new ConstFetch(new Name($anyOfType[$keyType])));
             }
 
-            $assertStatements[] = new Expression(new StaticCall(new Name('\Webmozart\Assert\Assert'), 'isAnyOf', [
-                new Arg(new Variable($keyAnyOfType)),
-                new Arg(new Array_($types)),
-            ]));
+            if (count($types) > 1) {
+                $assertStatements[] = new Expression(new StaticCall(new Name('\Webmozart\Assert\Assert'), 'isAnyOf', [
+                    new Arg(new Variable($keyAnyOfType)),
+                    new Arg(new Array_($types)),
+                ]));
+            } else {
+                $assertStatements[] = new Expression(new StaticCall(new Name('\Webmozart\Assert\Assert'), 'isAOf', [
+                    new Arg(new Variable($keyAnyOfType)),
+                    new Arg(new ConstFetch(new Name($anyOfType[0])))
+                ]));
+            }
         }
 
         if (! isset($node->stmts[0])) {
