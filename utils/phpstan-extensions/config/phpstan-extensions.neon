@@ -2,6 +2,8 @@ includes:
     - rector-rules.neon
 
 services:
+    - PhpParser\NodeFinder
+    - Symplify\PHPStanRules\Naming\SimpleNameResolver
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 
     # $node->getAttribute($1) => Type|null by $1
