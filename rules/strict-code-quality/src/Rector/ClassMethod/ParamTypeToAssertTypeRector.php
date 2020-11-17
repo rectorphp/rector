@@ -9,10 +9,12 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -20,7 +22,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use PhpParser\Node\Name\FullyQualified;
 
 /**
  * @see \Rector\StrictCodeQuality\Tests\Rector\ClassMethod\ParamTypeToAssertTypeRector\ParamTypeToAssertTypeRectorTest
@@ -107,28 +108,48 @@ CODE_SAMPLE
             return null;
         }
 
+        $node = $this->processRemoveDocblock($node, $docCommentText);
+        $node = $this->processAddTypeAssert($node, $anyOfTypes);
+
+        return $node;
+    }
+
+    private function processRemoveDocblock(ClassMethod $node, string $docCommentText): ClassMethod
+    {
         $node->setDocComment(new Doc($docCommentText));
         $expressionPhpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
 
-        foreach ($anyOfTypes as $key => $anyOfType) {
-            foreach ($anyOfType as $key2 => $type) {
-                $anyOfType[$key2] = new ConstFetch(new Name($type . '::class'));
+        return $node;
+    }
+
+    /**
+     * @param array<string, array<int, string>> $anyOfTypes
+     */
+    private function processAddTypeAssert(ClassMethod $node, array $anyOfTypes): ClassMethod
+    {
+        $assertStatements = [];
+        foreach ($anyOfTypes as $keyAnyOfType => $anyOfType) {
+            $types = [];
+            foreach ($anyOfType as $type) {
+                $type = sprintf('%s::class', $type);
+                $types[] = new ArrayItem(new ConstFetch(new Name($type)));
             }
 
-            if (! isset($node->stmts[0])) {
-                $node->stmts[] = new Expression(new StaticCall(new Name('\Webmozart\Assert\Assert'), 'isAnyOf', [
-                    new Arg(new Variable($key)),
-                    new Arg(new Array_($anyOfType)),
-                ]));
-            } else {
-                $this->addNodeBeforeNode(
-                    new Expression(new StaticCall(new Name('\Webmozart\Assert\Assert'), 'isAnyOf', [
-                        new Arg(new Variable($key)),
-                        new Arg(new Array_($anyOfType)),
-                    ])),
-                    $node->stmts[0]
-                );
+            $assertStatements[] = new Expression(new StaticCall(new Name('\Webmozart\Assert\Assert'), 'isAnyOf', [
+                new Arg(new Variable($keyAnyOfType)),
+                new Arg(new Array_($types)),
+            ]));
+        }
+
+        if (! isset($node->stmts[0])) {
+            foreach ($assertStatements as $assertStatement) {
+                $node->stmts[] = $assertStatement;
+            }
+        } else {
+            $reversedAssertStatements = array_reverse($assertStatements);
+            foreach ($reversedAssertStatements as $assertStatement) {
+                $this->addNodeBeforeNode($assertStatement, $node->stmts[0]);
             }
         }
 
