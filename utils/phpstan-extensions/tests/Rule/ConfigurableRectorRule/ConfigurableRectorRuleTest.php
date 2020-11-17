@@ -47,9 +47,6 @@ final class ConfigurableRectorRuleTest extends AbstractServiceAwareRuleTestCase
 
     protected function getRule(): Rule
     {
-        return $this->getRuleFromConfig(
-            ConfigurableRectorRule::class,
-            __DIR__ . '/../../../config/phpstan-extensions.neon'
-        );
+        return $this->getRuleFromConfig(ConfigurableRectorRule::class, __DIR__ . '/config/configured_rule.neon');
     }
 }

@@ -32,7 +32,7 @@ final class KeepRectorNamespaceForRectorRuleTest extends AbstractServiceAwareRul
     {
         return $this->getRuleFromConfig(
             KeepRectorNamespaceForRectorRule::class,
-            __DIR__ . '/../../../config/phpstan-extensions.neon'
+            __DIR__ . '/config/configured_rule.neon'
         );
     }
 }

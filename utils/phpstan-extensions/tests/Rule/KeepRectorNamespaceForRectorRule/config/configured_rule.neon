@@ -1,0 +1,4 @@
+services:
+    -
+        class: Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule
+        tags: [phpstan.rules.rule]
