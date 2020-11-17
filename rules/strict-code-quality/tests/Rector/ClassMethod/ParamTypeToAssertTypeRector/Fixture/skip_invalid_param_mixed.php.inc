@@ -5,12 +5,12 @@ namespace Rector\StrictCodeQuality\Tests\Rector\ClassMethod\ParamTypeToAssertTyp
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 
-class SkipSomeClassInvalidType
+class SkipSomeClassInvalidParamMixed
 {
     /**
-     * @param \stdClass $node
+     * @param PropertyFetch|string $node
      */
-    public function run(Node $node)
+    public function run($node)
     {
 
     }
