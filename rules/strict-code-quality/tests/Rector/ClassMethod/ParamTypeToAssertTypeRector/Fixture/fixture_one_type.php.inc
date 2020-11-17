@@ -27,9 +27,12 @@ use PhpParser\Node\Expr\PropertyFetch;
 
 class SomeClassOneType
 {
+    /**
+     * @param PropertyFetch $node
+     */
     public function run(Node $node)
     {
-        \Webmozart\Assert\Assert::isAOf($node, PropertyFetch::class);
+        \Webmozart\Assert\Assert::isAOf($node, \PhpParser\Node\Expr\PropertyFetch::class);
     }
 }
 

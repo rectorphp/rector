@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\StrictCodeQuality\Rector\ClassMethod;
 
-use Nette\Utils\Strings;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -18,8 +16,13 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PHPStan\Type\ShortenedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -28,18 +31,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ParamTypeToAssertTypeRector extends AbstractRector
 {
-    /**
-     * @var string
-     * @see https://regex101.com/r/IQCUYC/1
-     */
-    private const PARAM_REGEX = '#^\s{0,}\*\s+@param\s+(.*)\s+\$%s$$#msU';
-
-    /**
-     * @var string
-     * @see https://regex101.com/r/Ue6Szm/7
-     */
-    private const PARAM_SAME_REGEX = '#^\s{0,}\*\s+@param\s\\\\?+%s\s+\$%s$#msU';
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn @param type to assert type', [
@@ -60,6 +51,9 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
+    /**
+     * @param \A|\B $arg
+     */
     public function run($arg)
     {
         \Webmozart\Assert\Assert::isAnyOf($arg, [\A::class, \B::class]);
@@ -83,60 +77,60 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $docComment = $node->getDocComment();
-        if (! $docComment instanceof Doc) {
-            return null;
-        }
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        $text = $docComment->getText();
-        $docCommentText = $text;
+        /** @var Type[] $paramTypes */
+        $paramTypes = $phpDocInfo->getParamTypesByName();
 
         /** @var Param[] $params */
         $params = $node->getParams();
 
-        $anyOfTypes = [];
-        foreach ($params as $param) {
-            if (! $param->type instanceof FullyQualified) {
-                continue;
-            }
-
-            $paramTypeVarName = $this->getName($param->var);
-            $paramRegex = sprintf(self::PARAM_REGEX, $paramTypeVarName);
-
-            $matches = Strings::match($docCommentText, $paramRegex);
-            if (! $matches) {
-                continue;
-            }
-
-            $paramTypeName = strpos($matches[1], '\\') === 0
-                ? $param->type->toString()
-                : $param->type->getLast();
-
-            $paramSameRegex = sprintf(self::PARAM_SAME_REGEX, addslashes($paramTypeName), $paramTypeVarName);
-            if (Strings::match($docCommentText, $paramSameRegex)) {
-                continue;
-            }
-
-            $anyOfTypes[$paramTypeVarName] = explode('|', $matches[1]);
-            $docCommentText = Strings::replace($docCommentText, $paramRegex, '');
-        }
-
-        if ($docCommentText === $text) {
+        if ($paramTypes === [] || $params === []) {
             return null;
         }
 
-        $node = $this->processRemoveDocblock($node, $docCommentText);
+        $processedTypes = [];
+        foreach ($paramTypes as $key => $paramType) {
+            if (! $paramType instanceof FullyQualifiedObjectType && ! $paramType instanceof UnionType && ! $paramType instanceof ShortenedObjectType) {
+                continue;
+            }
 
-        return $this->processAddTypeAssert($node, $anyOfTypes);
-    }
+            $types = ! $paramType instanceof UnionType
+                ? [$paramType]
+                : $paramType->getTypes();
 
-    private function processRemoveDocblock(ClassMethod $classMethod, string $docCommentText): ClassMethod
-    {
-        $classMethod->setDocComment(new Doc($docCommentText));
-        $expressionPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
-        $classMethod->setAttribute(AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
+            foreach ($types as $type) {
+                if (! $type instanceof FullyQualifiedObjectType && ! $type instanceof ShortenedObjectType) {
+                    continue 2;
+                }
+            }
 
-        return $classMethod;
+            foreach ($params as $param) {
+                if (! $param->type instanceof FullyQualified) {
+                    continue;
+                }
+
+                $paramVarName = $this->getName($param->var);
+                if ($key !== '$' . $paramVarName) {
+                    continue;
+                }
+
+                foreach ($types as $type) {
+                    $className = $type instanceof ShortenedObjectType
+                        ? $type->getFullyQualifiedName()
+                        : $type->getClassName();
+
+                    if (! is_a($className, $param->type->toString(), true) || $className === $param->type->toString()) {
+                        continue 2;
+                    }
+
+                    $processedTypes[$paramVarName][] = '\\' . $className;
+                }
+            }
+        }
+
+        return $this->processAddTypeAssert($node, $processedTypes);
     }
 
     /**
