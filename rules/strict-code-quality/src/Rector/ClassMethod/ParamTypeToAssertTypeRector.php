@@ -34,6 +34,12 @@ final class ParamTypeToAssertTypeRector extends AbstractRector
      */
     private const PARAM_REGEX = '#^\s{0,}\*\s+@param\s+(.*)\s+\$%s$$#msU';
 
+    /**
+     * @var string
+     * @see https://regex101.com/r/Ue6Szm/7
+     */
+    private const PARAM_SAME_REGEX = '#^\s{0,}\*\s+@param\s\\\\?+%s\s+\$%s$#msU';
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn @param type to assert type', [
@@ -98,10 +104,18 @@ CODE_SAMPLE
             $paramRegex = sprintf(self::PARAM_REGEX, $paramTypeVarName);
 
             $matches = Strings::match($docCommentText, $paramRegex);
-            if ($matches) {
-                $anyOfTypes[$paramTypeVarName] = explode('|', $matches[1]);
-                $docCommentText = Strings::replace($docCommentText, $paramRegex, '');
+            if (! $matches) {
+                continue;
             }
+
+            $paramTypeName = $param->type->toString();
+            $paramSameRegex = sprintf(self::PARAM_SAME_REGEX, addslashes($paramTypeName), $paramTypeVarName);
+            if (Strings::match($docCommentText, $paramSameRegex)) {
+                continue;
+            }
+
+            $anyOfTypes[$paramTypeVarName] = explode('|', $matches[1]);
+            $docCommentText = Strings::replace($docCommentText, $paramRegex, '');
         }
 
         if ($docCommentText === $text) {
