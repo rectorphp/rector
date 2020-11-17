@@ -108,7 +108,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            $paramTypeName = $param->type->toString();
+            $paramTypeName = strpos($matches[1], '\\') === 0
+                ? $param->type->toString()
+                : $param->type->getLast();
+
             $paramSameRegex = sprintf(self::PARAM_SAME_REGEX, addslashes($paramTypeName), $paramTypeVarName);
             if (Strings::match($docCommentText, $paramSameRegex)) {
                 continue;
