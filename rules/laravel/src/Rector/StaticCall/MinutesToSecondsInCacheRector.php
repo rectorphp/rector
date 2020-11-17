@@ -121,16 +121,7 @@ CODE_SAMPLE
     private function processArgumentOnPosition(Node $node, Expr $argExpr, int $argumentPosition): ?Expr
     {
         if ($argExpr instanceof ClassConstFetch) {
-            $classConst = $this->nodeRepository->findClassConstByClassConstFetch($argExpr);
-            $onlyConst = $classConst->consts[0];
-
-            if ($onlyConst->getAttribute(self::ATTRIBUTE_KEY_ALREADY_MULTIPLIED)) {
-                return null;
-            }
-
-            $onlyConst->value = $this->mulByNumber($onlyConst->value, 60);
-            $onlyConst->setAttribute(self::ATTRIBUTE_KEY_ALREADY_MULTIPLIED, true);
-
+            $this->refactorClassConstFetch($argExpr);
             return null;
         }
 
@@ -151,5 +142,23 @@ CODE_SAMPLE
         }
 
         return new Mul($argExpr, new LNumber($value));
+    }
+
+    private function refactorClassConstFetch(ClassConstFetch $classConstFetch): void
+    {
+        $classConst = $this->nodeRepository->findClassConstByClassConstFetch($classConstFetch);
+        if ($classConst === null) {
+            return;
+        }
+
+        $onlyConst = $classConst->consts[0];
+
+        $alreadyMultiplied = (bool) $onlyConst->getAttribute(self::ATTRIBUTE_KEY_ALREADY_MULTIPLIED);
+        if ($alreadyMultiplied) {
+            return;
+        }
+
+        $onlyConst->value = $this->mulByNumber($onlyConst->value, 60);
+        $onlyConst->setAttribute(self::ATTRIBUTE_KEY_ALREADY_MULTIPLIED, true);
     }
 }

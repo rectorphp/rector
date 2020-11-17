@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PHPStan\Type\BooleanType;
+use Rector\Laravel\Rector\Class_\PropertyDeferToDeferrableProviderToRector;
 use Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\ValueObject\RenameProperty;
@@ -28,14 +29,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'forever', new BooleanType()),
                 new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'put', new BooleanType()),
                 new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'putMany', new BooleanType()),
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'forever', new BooleanType()), ]
-            ),
-        ]]);
-
-    $services->set(RenamePropertyRector::class)
-        ->call('configure', [[
-            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
-                new RenameProperty('Illuminate\Routing\UrlGenerator', 'cachedSchema', 'cachedScheme'),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'forever', new BooleanType()),
             ]),
         ]]);
+
+    $services->set(RenamePropertyRector::class)->call('configure', [[
+        RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
+            new RenameProperty('Illuminate\Routing\UrlGenerator', 'cachedSchema', 'cachedScheme'),
+        ]),
+    ]]);
+
+    $services->set(PropertyDeferToDeferrableProviderToRector::class);
 };
