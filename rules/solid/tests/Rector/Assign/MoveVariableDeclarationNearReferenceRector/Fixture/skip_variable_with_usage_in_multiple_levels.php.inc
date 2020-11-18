@@ -5,7 +5,9 @@ function skipVariableWithUsageInMultipleLevels()
     $varused = 1;
 
     if (mktime() === false) {
-        return $varused;
+        if (true) {
+            return $varused;
+        }
     }
 
     echo $varused;
