@@ -12,6 +12,21 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ## Unreleased
 
+### Changed
+
+- [#4632] rename to RequireClassTypeInClassMethodByTypeRule
+- [#4633] [Downgrade PHP 7.1] Class constant visibility, Thanks to [@norberttech]
+- [#4631] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]
+- [#4630] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+
+### Removed
+
+- [#4634] remove RequireClassTypeInClassMethodByTypeRule
+
+
+
+## Unreleased
+
 ### Added
 
 - [#4615] [docs] add 10 more relevant node construction examples
@@ -5601,3 +5616,8 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#4617]: https://github.com/rectorphp/rector/pull/4617
 [#4616]: https://github.com/rectorphp/rector/pull/4616
 [#4615]: https://github.com/rectorphp/rector/pull/4615
+[#4634]: https://github.com/rectorphp/rector/pull/4634
+[#4633]: https://github.com/rectorphp/rector/pull/4633
+[#4632]: https://github.com/rectorphp/rector/pull/4632
+[#4631]: https://github.com/rectorphp/rector/pull/4631
+[#4630]: https://github.com/rectorphp/rector/pull/4630
