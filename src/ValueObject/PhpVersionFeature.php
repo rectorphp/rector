@@ -64,6 +64,11 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const BEFORE_ITERABLE_TYPE = '7.0';
+
+    /**
+     * @var string
+     */
     public const ITERABLE_TYPE = '7.1';
 
     /**

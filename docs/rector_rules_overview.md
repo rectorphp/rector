@@ -4531,6 +4531,48 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+## DowngradeIterablePseudoTypeParamDeclarationRector
+
+Remove the iterable pseudo type params, add `@param` tags instead
+
+:wrench: **configure it!**
+
+- class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector`
+
+```php
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DowngradeIterablePseudoTypeParamDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeIterablePseudoTypeParamDeclarationRector::ADD_DOC_BLOCK => true,
+        ]]);
+};
+```
+
+↓
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function run(iterable $iterator)
++    /**
++     * @param mixed[]|\Traversable $iterator
++     */
++    public function run($iterator)
+     {
+         // do something
+     }
+ }
+```
+
+<br>
+
 ## DowngradeNullableTypeReturnDeclarationRector
 
 Remove returning nullable types, add a `@return` tag instead
@@ -4566,10 +4608,49 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +     */
 +    public function getResponseOrNothing(bool $flag)
      {
-         if ($flag) {
-             return 'Hello world';
-         }
-         return null;
+        // do something
+     }
+ }
+```
+
+<br>
+
+## DowngradeNullableTypeReturnDeclarationRector
+
+Remove returning iterable pseudo type, add a `@return` tag instead
+
+:wrench: **configure it!**
+
+- class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector`
+
+```php
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DowngradeIterablePseudoTypeReturnDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeIterablePseudoTypeReturnDeclarationRector::ADD_DOC_BLOCK => true,
+        ]]);
+};
+```
+
+↓
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function run(): iterable
++    /**
++     * @return mixed[]|\Traversable
++     */
++    public function run($iterator)
+     {
+        // do something
      }
  }
 ```
