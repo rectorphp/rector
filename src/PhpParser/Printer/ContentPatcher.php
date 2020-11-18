@@ -120,7 +120,7 @@ final class ContentPatcher
      * @var string
      * @see https://regex101.com/r/5DdLjE/1
      */
-    private const ROUTE_LOCALIZATION_REPLACE = '#[:=]#';
+    private const ROUTE_LOCALIZATION_REPLACE_REGEX = '#[:=]#';
 
     /**
      * @var string[]
@@ -210,8 +210,8 @@ final class ContentPatcher
             $invalidAnnotation = Strings::replace($invalidAnnotation, self::STAR_QUOTE_REGEX, '');
 
             if ($validAnnotationRegex === self::VALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX) {
-                $validAnnotation = Strings::replace($validAnnotation, self::ROUTE_LOCALIZATION_REPLACE, '');
-                $invalidAnnotation = Strings::replace($invalidAnnotation, self::ROUTE_LOCALIZATION_REPLACE, '');
+                $validAnnotation = Strings::replace($validAnnotation, self::ROUTE_LOCALIZATION_REPLACE_REGEX, '');
+                $invalidAnnotation = Strings::replace($invalidAnnotation, self::ROUTE_LOCALIZATION_REPLACE_REGEX, '');
             }
 
             return $validAnnotation !== $invalidAnnotation;
