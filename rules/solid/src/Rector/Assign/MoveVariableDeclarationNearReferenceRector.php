@@ -177,23 +177,6 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isFoundNext(Node $next, Variable $variable): bool
-    {
-        while ($next) {
-            $isFoundNext = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node) use ($variable): bool {
-                return $this->areNodesEqual($node, $variable);
-            });
-
-            if ($isFoundNext) {
-                return true;
-            }
-
-            $next = $next->getAttribute(AttributeKey::NEXT_NODE);
-        }
-
-        return false;
-    }
-
     private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
@@ -216,6 +199,25 @@ CODE_SAMPLE
         }
 
         return $next;
+    }
+
+    private function isFoundNext(Node $node, Variable $variable): bool
+    {
+        while ($node) {
+            $isFoundNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) use (
+                $variable
+            ): bool {
+                return $this->areNodesEqual($node, $variable);
+            });
+
+            if ($isFoundNext) {
+                return true;
+            }
+
+            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
+        }
+
+        return false;
     }
 
     private function foundInPreviousExpression(Node $node, Variable $variable): ?Node
