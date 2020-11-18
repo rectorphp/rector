@@ -606,7 +606,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ## AddParentBootToModelClassMethodRector
 
-Add parent::boot(); call to `boot()` class method in child of Illuminate\Database\Eloquent\Model
+Add `parent::boot();` call to `boot()` class method in child of Illuminate\Database\Eloquent\Model
 
 - class: `Rector\Laravel\Rector\ClassMethod\AddParentBootToModelClassMethodRector`
 
@@ -1912,7 +1912,7 @@ String cannot be turned into array by assignment anymore
 
 ## AutoInPhpSymfonyConfigRector
 
-Make sure there is public(), autowire(), `autoconfigure()` calls on `defaults()` in Symfony configs
+Make sure there is `public(),` `autowire(),` `autoconfigure()` calls on `defaults()` in Symfony configs
 
 - class: `Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector`
 
@@ -2859,7 +2859,7 @@ Change global `$variables` to private properties
 
 ## ChangeIOFactoryArgumentRector
 
-Change argument of PHPExcel_IOFactory::createReader(), `PHPExcel_IOFactory::createWriter()` and `PHPExcel_IOFactory::identify()`
+Change argument of `PHPExcel_IOFactory::createReader(),` `PHPExcel_IOFactory::createWriter()` and `PHPExcel_IOFactory::identify()`
 
 - class: `Rector\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector`
 
@@ -3190,7 +3190,7 @@ Change array to ArrayCollection in setParameters method of query builder
 
 ## ChangeQueryWhereDateValueWithCarbonRector
 
-Add parent::boot(); call to `boot()` class method in child of Illuminate\Database\Eloquent\Model
+Add `parent::boot();` call to `boot()` class method in child of Illuminate\Database\Eloquent\Model
 
 - class: `Rector\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector`
 
@@ -4001,7 +4001,7 @@ Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 
 ## ConstructClassMethodToSetUpTestCaseRector
 
-Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to setUp(), to prevent dangerous override
+Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to `setUp(),` to prevent dangerous override
 
 - class: `Rector\PHPUnit\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector`
 
@@ -4405,19 +4405,33 @@ Replace array spread with `array_merge` function
 
 Downgrade class constant visibility
 
+:wrench: **configure it!**
+
 - class: `Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector`
+
+```php
+use Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DowngradeClassConstantVisibilityRector::class);
+};
+```
+
+↓
 
 ```diff
  <?php
 
  class SomeClass
  {
-    const PUBLIC_CONST_A = 1;
 -   public const PUBLIC_CONST_B = 2;
-+   const PUBLIC_CONST_B = 2;
 -   protected const PROTECTED_CONST = 3;
-+   const PROTECTED_CONST = 3;
 -   private const PRIVATE_CONST = 4;
++   const PUBLIC_CONST_B = 2;
++   const PROTECTED_CONST = 3;
 +   const PRIVATE_CONST = 4;
  }
 ```
@@ -5676,7 +5690,7 @@ Changes `getHeader()` to `$request->headers->get()`
 
 ## FromRequestGetParameterToAttributesGetRector
 
-Changes "getParameter()" to "attributes->get()" from Nette to Symfony
+Changes `"getParameter()"` to `"attributes->get()"` from Nette to Symfony
 
 - class: `Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector`
 
@@ -7250,7 +7264,7 @@ Change method call on setter to standalone assign before the setter
 
 ## MethodCallRemoverRector
 
-Turns "$this->something()->anything()" to "$this->anything()"
+Turns `"$this->something()->anything()"` to `"$this->anything()"`
 
 :wrench: **configure it!**
 
@@ -7322,7 +7336,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ## MethodCallToPropertyFetchRector
 
-Turns method call "$this->something()" to property fetch "$this->something"
+Turns method call `"$this->something()"` to property fetch "$this->something"
 
 :wrench: **configure it!**
 
@@ -13633,7 +13647,7 @@ Simplify regex pattern to known ranges
 
 ## SimplifyStrposLowerRector
 
-Simplify strpos(strtolower(), "...") calls
+Simplify `strpos(strtolower(),` "...") calls
 
 - class: `Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector`
 
@@ -14916,7 +14930,7 @@ Change Timestampable from gedmo/doctrine-extensions to knplabs/doctrine-behavior
 
 ## ToStringToMethodCallRector
 
-Turns defined code uses of "__toString()" method  to specific method calls.
+Turns defined code uses of `"__toString()"` method  to specific method calls.
 
 :wrench: **configure it!**
 
@@ -15593,7 +15607,7 @@ Decouple `$message` property from `sprintf()` calls in `$this->smyfonyStyle->met
 
 ## UseSpecificWillMethodRector
 
-Changes ->will($this->xxx()) to one specific method
+Changes `->will($this->xxx())` to one specific method
 
 - class: `Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector`
 
