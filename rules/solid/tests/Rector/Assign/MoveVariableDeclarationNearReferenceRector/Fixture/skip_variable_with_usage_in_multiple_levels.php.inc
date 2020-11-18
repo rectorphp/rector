@@ -1,10 +1,12 @@
 <?php
 
-function variableWithUsageInMultipleLevels()
+function skipVariableWithUsageInMultipleLevels()
 {
-    $var = 1;
+    $varused = 1;
+
     if (mktime() === false) {
-        return $var;
+        return $varused;
     }
-    echo $var;
+
+    echo $varused;
 }
