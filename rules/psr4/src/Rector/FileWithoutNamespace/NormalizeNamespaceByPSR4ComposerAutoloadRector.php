@@ -7,6 +7,7 @@ namespace Rector\PSR4\Rector\FileWithoutNamespace;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Configuration\Option;
@@ -127,12 +128,15 @@ CODE_SAMPLE
         $namespace = new Namespace_(new Name($expectedNamespace), (array) $nodes);
         $nodesWithStrictTypesThenNamespace[] = $namespace;
 
-        $this->makeNamesFullyQualified($nodes);
+        $this->makeNamesFullyQualified((array) $nodes);
 
         // @todo update to a new class node, like FileWithNamespace
         return new FileWithoutNamespace($nodesWithStrictTypesThenNamespace);
     }
 
+    /**
+     * @param Stmt[] $nodes
+     */
     private function makeNamesFullyQualified(array $nodes): void
     {
         // no need to
