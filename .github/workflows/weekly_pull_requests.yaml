@@ -4,6 +4,7 @@ on:
     schedule:
         # https://crontab.guru/once-a-week
         -   cron: "0 0 * * 0"
+        # todo make a bit human-like random: https://stackoverflow.com/a/9051029/1348344
 
 jobs:
     weekly_pull_requests:
@@ -55,3 +56,4 @@ jobs:
                     branch: ${{ matrix.actions.branch }}
                     title: '[automated] ${{ matrix.actions.name }}'
                     delete-branch: true
+                    # todo add human email/name/photo
