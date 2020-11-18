@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Type\TypeWithClassName;
@@ -138,20 +139,98 @@ CODE_SAMPLE
 
     private function shouldSkipUsedVariable(Variable $variable): bool
     {
+        /** @var Node $parent */
         $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof ArrayDimFetch) {
             return true;
         }
 
-        $variableType = $this->getStaticType($variable);
-
         // possibly service of value object, that changes inner state
-        return $variableType instanceof TypeWithClassName;
+        $variableType = $this->getStaticType($variable);
+        if ($variableType instanceof TypeWithClassName) {
+            return true;
+        }
+
+        /** @var Node $parentExpression */
+        $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parentExpression) {
+            if (! $parentExpression instanceof Node) {
+                break;
+            }
+
+            $next = $this->getNextParentNode($parentExpression);
+            if (! $next instanceof Node) {
+                break;
+            }
+
+            if ($this->isFoundNext($next, $variable)) {
+                return true;
+            }
+
+            $parentExpression = $this->foundInPreviousExpression($parentExpression, $variable);
+
+            if ($parentExpression instanceof Node) {
+                $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
+            }
+        }
+
+        return false;
     }
 
     private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         return $parentNode === $assign;
+    }
+
+    private function getNextParentNode(Node $node): ?Node
+    {
+        /** @var Node|null $next */
+        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
+
+        while (! $next) {
+            /** @var Node|null $next */
+            $node = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $node instanceof Node) {
+                return null;
+            }
+
+            $next = $this->getNextParentNode($node);
+        }
+
+        return $next;
+    }
+
+    private function isFoundNext(Node $node, Variable $variable): bool
+    {
+        while ($node) {
+            $isFoundNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) use (
+                $variable
+            ): bool {
+                return $this->areNodesEqual($node, $variable);
+            });
+
+            if ($isFoundNext) {
+                return true;
+            }
+
+            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
+        }
+
+        return false;
+    }
+
+    private function foundInPreviousExpression(Node $node, Variable $variable): ?Node
+    {
+        /** @var Node $previous */
+        $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($previous instanceof Expression && $previous->expr instanceof Assign && $this->areNodesEqual(
+            $previous->expr->var,
+            $variable
+        )) {
+            return null;
+        }
+
+        return $node;
     }
 }
