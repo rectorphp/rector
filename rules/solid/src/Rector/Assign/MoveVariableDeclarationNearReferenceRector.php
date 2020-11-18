@@ -163,11 +163,11 @@ CODE_SAMPLE
                 break;
             }
 
-            $isFoundNext = $this->betterNodeFinder->findFirst($next, function (Node $node) use ($variable): bool {
+            $isFoundNext = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node) use ($variable): bool {
                 return $this->areNodesEqual($node, $variable);
             });
 
-            if ($isFoundNext !== null) {
+            if ($isFoundNext) {
                 return true;
             }
 
