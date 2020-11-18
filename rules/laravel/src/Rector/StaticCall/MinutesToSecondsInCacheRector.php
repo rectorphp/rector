@@ -42,11 +42,18 @@ final class MinutesToSecondsInCacheRector extends AbstractRector
 
         $this->typeToTimeMethodsAndPositions = [
             new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', 'put', 2),
-            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', 'add', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Repository', 'put', 2),
             new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', 'put', 2),
+
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Repository', 'add', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', 'add', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', 'add', 2),
+
             new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Repository', 'remember', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', 'remember', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', 'remember', 2),
+
             new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', 'putMany', 1),
-            new TypeToTimeMethodAndPosition('Illuminate\Cache\DynamoDbStore', 'add', 2),
         ];
     }
 
