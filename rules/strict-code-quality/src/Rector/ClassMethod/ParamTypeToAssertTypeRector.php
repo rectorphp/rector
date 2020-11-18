@@ -108,6 +108,30 @@ CODE_SAMPLE
     }
 
     /**
+     * @return Type[]
+     */
+    private function getTypes(Type $type): array
+    {
+        return ! $type instanceof UnionType
+            ? [$type]
+            : $type->getTypes();
+    }
+
+    /**
+     * @param Type[] $types
+     */
+    private function isNotClassTypes(array $types): bool
+    {
+        foreach ($types as $type) {
+            if (! $type instanceof FullyQualifiedObjectType && ! $type instanceof ShortenedObjectType) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param Param[] $params
      * @param Type[] $types
      * @param array<string, array<int, string>> $toBeProcessedTypes
@@ -135,30 +159,6 @@ CODE_SAMPLE
         }
 
         return $toBeProcessedTypes;
-    }
-
-    /**
-     * @param Type[] $types
-     */
-    private function isNotClassTypes(array $types): bool
-    {
-        foreach ($types as $type) {
-            if (! $type instanceof FullyQualifiedObjectType && ! $type instanceof ShortenedObjectType) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return Type[]
-     */
-    private function getTypes(Type $type): array
-    {
-        return ! $type instanceof UnionType
-            ? [$type]
-            : $type->getTypes();
     }
 
     /**
