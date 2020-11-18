@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use PHPStan\Type\BooleanType;
+use Rector\Laravel\Rector\Class_\PropertyDeferToDeferrableProviderToRector;
+use Rector\Laravel\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector;
 use Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\ValueObject\RenameProperty;
@@ -16,26 +18,22 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 # see: https://laravel.com/docs/5.8/upgrade
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/laravel-array-str-functions-to-static-call.php');
-
     $services = $containerConfigurator->services();
-
     $services->set(MinutesToSecondsInCacheRector::class);
-
-    $services->set(AddReturnTypeDeclarationRector::class)
-        ->call('configure', [[
-            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'put', new BooleanType()),
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'forever', new BooleanType()),
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'put', new BooleanType()),
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'putMany', new BooleanType()),
-                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'forever', new BooleanType()), ]
-            ),
-        ]]);
-
-    $services->set(RenamePropertyRector::class)
-        ->call('configure', [[
-            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
-                new RenameProperty('Illuminate\Routing\UrlGenerator', 'cachedSchema', 'cachedScheme'),
-            ]),
-        ]]);
+    $services->set(AddReturnTypeDeclarationRector::class)->call('configure', [[
+        AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+            new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'put', new BooleanType()),
+            new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'forever', new BooleanType()),
+            new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'put', new BooleanType()),
+            new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'putMany', new BooleanType()),
+            new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'forever', new BooleanType()),
+        ]),
+    ]]);
+    $services->set(RenamePropertyRector::class)->call('configure', [[
+        RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
+            new RenameProperty('Illuminate\Routing\UrlGenerator', 'cachedSchema', 'cachedScheme'),
+        ]),
+    ]]);
+    $services->set(PropertyDeferToDeferrableProviderToRector::class);
+    $services->set(MakeTaggedPassedToParameterIterableTypeRector::class);
 };

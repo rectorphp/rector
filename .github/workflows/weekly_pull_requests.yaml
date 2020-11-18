@@ -1,38 +1,22 @@
-name: Daily Pull Requests
+name: Weekly Pull Requests
 
 on:
     schedule:
-        # https://crontab.guru/once-a-day
-        -   cron: "0 0 * * *"
+        # https://crontab.guru/once-a-week
+        -   cron: "0 0 * * 0"
 
 jobs:
-    daily_pull_requests:
+    weekly_pull_requests:
         strategy:
             fail-fast: false
             matrix:
                 actions:
                     -
-                        name: "Re-Generate Doctrine Annotation Parser"
-                        run: "bin/rector sync-annotation-parser --dry-run --ansi"
-                        branch: 'automated-regenerate-doctrine-parser'
-
-                    -
-                        name: "Re-Generate Nodes/Rectors Documentation"
-                        run: "composer docs"
-                        branch: 'automated-regenerated-nodes-rectors-documentation'
-
-                    -
-                        name: "Re-Propagate Monorepo Dependencies"
-                        run: "composer propagate --ansi"
-                        branch: 'automated-propagate-monorepo-dependencies'
-
-                    -
-                        name: 'Apply Coding Standard'
-                        run: "composer fix-cs"
-                        branch: 'automated-apply-coding-standards'
+                        name: "Re-Generate CHANGELOG.md"
+                        run: "composer changelog"
+                        branch: 'automated-regenerated-changelog'
 
         name: ${{ matrix.actions.name }}
-
         runs-on: ubuntu-latest
 
         steps:

@@ -114,7 +114,7 @@ CODE_SAMPLE
         // B. is the value constant reference?
         $argumentValue = $node->args[0]->value;
         if ($argumentValue instanceof ClassConstFetch) {
-            $classConst = $this->parsedNodeCollector->findClassConstantByClassConstFetch($argumentValue);
+            $classConst = $this->nodeRepository->findClassConstByClassConstFetch($argumentValue);
             if ($classConst === null) {
                 return null;
             }

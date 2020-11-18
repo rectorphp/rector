@@ -220,7 +220,7 @@ final class ParsedNodeCollector
         return $newsByClass;
     }
 
-    public function findClassConstantByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
+    public function findClassConstByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
     {
         $className = $this->nodeNameResolver->getName($classConstFetch->class);
         if ($className === null) {
