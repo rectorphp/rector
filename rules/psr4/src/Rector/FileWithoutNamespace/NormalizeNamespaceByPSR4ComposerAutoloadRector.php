@@ -124,6 +124,9 @@ CODE_SAMPLE
         $namespace = new Namespace_(new Name($expectedNamespace), (array) $nodes);
         $nodesWithStrictTypesThenNamespace[] = $namespace;
 
+        // FQNize all class names
+
+
         // @todo update to a new class node, like FileWithNamespace
         return new FileWithoutNamespace($nodesWithStrictTypesThenNamespace);
     }
