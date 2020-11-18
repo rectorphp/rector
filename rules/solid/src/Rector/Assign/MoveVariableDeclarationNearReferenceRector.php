@@ -163,16 +163,8 @@ CODE_SAMPLE
                 break;
             }
 
-            while ($next) {
-                $isFoundNext = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node) use ($variable): bool {
-                    return $this->areNodesEqual($node, $variable);
-                });
-
-                if ($isFoundNext) {
-                    return true;
-                }
-
-                $next = $next->getAttribute(AttributeKey::NEXT_NODE);
+            if ($this->isFoundNext($next, $variable)) {
+                return true;
             }
 
             $parentExpression = $this->foundInPreviousExpression($parentExpression, $variable);
@@ -180,6 +172,23 @@ CODE_SAMPLE
             if ($parentExpression instanceof Node) {
                 $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
             }
+        }
+
+        return false;
+    }
+
+    private function isFoundNext(Node $next, Variable $variable): bool
+    {
+        while ($next) {
+            $isFoundNext = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node) use ($variable): bool {
+                return $this->areNodesEqual($node, $variable);
+            });
+
+            if ($isFoundNext) {
+                return true;
+            }
+
+            $next = $next->getAttribute(AttributeKey::NEXT_NODE);
         }
 
         return false;
