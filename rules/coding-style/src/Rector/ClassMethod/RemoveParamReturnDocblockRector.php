@@ -18,6 +18,10 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PHPStan\Type\ShortenedObjectType;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\ClassMethod\RemoveParamReturnDocblockRector\RemoveParamReturnDocblockRectorTest
@@ -104,8 +108,14 @@ CODE_SAMPLE
             return $this->processUpdateDocblock($node, $text, $docCommentText);
         }
 
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
         if ($returnType instanceof FullyQualified) {
-            $returnType = addslashes($returnType->toString());
+            $returnType = $phpDocInfo->getReturnType();
+            if ($returnType instanceof ShortenedObjectType || $returnType instanceof FullyQualifiedObjectType) {
+                $returnType = addslashes($returnType->getClassName());
+            }
         }
 
         $returnRegex = sprintf(self::RETURN_REGEX, $returnType);
@@ -118,33 +128,39 @@ CODE_SAMPLE
 
     private function getDocCommentRemovalParam(ClassMethod $classMethod, string $docCommentText): string
     {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        /** @var Type[] $paramTypes */
+        $paramTypes = $phpDocInfo->getParamTypesByName();
+
         /** @var Param[] $params */
         $params = $classMethod->getParams();
-        foreach ($params as $param) {
-            $paramTypeName = '';
-            $paramTypeVarName = '';
+        foreach ($paramTypes as $key => $type) {
 
-            if ($param->type instanceof FullyQualified) {
-                $paramTypeName = $param->type->toString();
-                /** @var Variable|null $nextParamTypeName */
-                $nextParamTypeName = $param->type->getAttribute(AttributeKey::NEXT_NODE);
-                if ($nextParamTypeName instanceof Variable) {
-                    $paramTypeVarName = $this->getName($nextParamTypeName);
+            foreach ($params as $param) {
+                $paramName = '';
+                $paramVarName = $this->getName($param->var);
+
+                if ($key === '$' . $paramVarName) {
+
+                    if ($param->type instanceof FullyQualified && ($type instanceof ShortenedObjectType || $type instanceof FullyQualifiedObjectType)) {
+                        $paramName = addslashes($type->getClassName());
+                    }
+
+                    if ($param->type instanceof Identifier) {
+                        $paramName = $param->type->toString();
+                    }
+
+                    if ($paramName === '') {
+                        continue 2;
+                    }
+
+                    $paramRegex = sprintf(self::PARAM_REGEX, $paramName, $paramVarName);
+                    if (Strings::match($docCommentText, $paramRegex)) {
+                        $docCommentText = Strings::replace($docCommentText, $paramRegex, '');
+                    }
                 }
-            }
-
-            if ($param->type instanceof Identifier) {
-                $paramTypeName = $param->type->toString();
-                $paramTypeVarName = $this->getName($param->var);
-            }
-
-            if ($paramTypeName === '' || $paramTypeVarName === '') {
-                continue;
-            }
-
-            $paramRegex = sprintf(self::PARAM_REGEX, addslashes($paramTypeName), $paramTypeVarName);
-            if (Strings::match($docCommentText, $paramRegex)) {
-                $docCommentText = Strings::replace($docCommentText, $paramRegex, '');
             }
         }
 
