@@ -4396,7 +4396,66 @@ Turns parent EntityRepository class to constructor dependency
 
 <br>
 
+<<<<<<< HEAD
 ### RemoveRedundantDefaultClassAnnotationValuesRector
+=======
+## DowngradeIterablePseudoTypeParamDeclarationRector
+
+Remove the iterable pseudo type params, add `@param` tags instead
+
+:wrench: **configure it!**
+
+- class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector`
+
+```php
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DowngradeIterablePseudoTypeParamDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeIterablePseudoTypeParamDeclarationRector::ADD_DOC_BLOCK => true,
+        ]]);
+};
+```
+
+↓
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function run(iterable $iterator)
++    /**
++     * @param mixed[]|\Traversable $iterator
++     */
++    public function run($iterator)
+     {
+         // do something
+     }
+ }
+```
+
+<br>
+
+## DowngradeNullableTypeReturnDeclarationRector
+
+Remove returning nullable types, add a `@return` tag instead
+
+:wrench: **configure it!**
+
+- class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector`
+
+```php
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+>>>>>>> cc7b21f70... [Downgrade PHP 7.1] iterable pseudo-type
 
 Removes redundant default values from Doctrine ORM annotations on class level
 
@@ -4411,6 +4470,59 @@ Removes redundant default values from Doctrine ORM annotations on class level
   */
  class SomeClass
  {
+<<<<<<< HEAD
+=======
+-    public function getResponseOrNothing(bool $flag): ?string
++    /**
++     * @return string|null
++     */
++    public function getResponseOrNothing(bool $flag)
+     {
+        // do something
+     }
+ }
+```
+
+<br>
+
+## DowngradeNullableTypeReturnDeclarationRector
+
+Remove returning iterable pseudo type, add a `@return` tag instead
+
+:wrench: **configure it!**
+
+- class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector`
+
+```php
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DowngradeIterablePseudoTypeReturnDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeIterablePseudoTypeReturnDeclarationRector::ADD_DOC_BLOCK => true,
+        ]]);
+};
+```
+
+↓
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function run(): iterable
++    /**
++     * @return mixed[]|\Traversable
++     */
++    public function run($iterator)
+     {
+        // do something
+     }
+>>>>>>> cc7b21f70... [Downgrade PHP 7.1] iterable pseudo-type
  }
 ```
 
