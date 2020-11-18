@@ -1,3 +1,11 @@
+
+/ci/repos
+/ci/downloaded_repo_list
+
+/temp
+!/temp/.gitkeep
+/example
+
 /vendor
 composer.lock
 
