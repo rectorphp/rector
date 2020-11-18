@@ -1,0 +1,73 @@
+name: Packagist Testing
+
+on:
+    pull_request: null
+
+jobs:
+    provide_packagist_packages_json:
+        runs-on: ubuntu-latest
+
+        name: Get Top Downloaded Packages Json
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            # see https://github.com/shivammathur/setup-php
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.4
+                    coverage: none
+                    tools: composer:v2
+
+            # get top 10 packages
+            -
+                id: set-matrix
+                run: echo "::set-output name=matrix::$(php ci/github_packages_json.php)"
+
+        outputs:
+            matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    # just to be sure about the output of previous action
+    debug:
+        name: Debug
+        needs: provide_packagist_packages_json
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -   run: echo ${{ needs.provide_packagist_packages_json.outputs.matrix }}
+
+    top_packages_testing:
+        name: Top Packagest Testing
+        needs: provide_packagist_packages_json
+
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix: ${{fromJson(needs.provide_packagist_packages_json.outputs.matrix)}}
+
+        steps:
+            # 1. install local Rector
+            -
+                uses: actions/checkout@v2
+
+            # see https://github.com/shivammathur/setup-php
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.4
+                    coverage: none
+                    tools: composer:v2
+
+            -   run: composer install --no-progress --ansi
+
+            # 2. git clone package in the last version
+            -   run: git clone $(php ci/get_packagist_url.php ${{ matrix.package_name }}) --depth 1 repository/${{ matrix.package_name }}
+
+            # 3. install its dependencies
+            -   run: composer install --no-progress --ansi --working-dir repository/${{ matrix.package_name }} --ansi
+
+            # 4. run Rector on it
+            -   run: bin/rector process repository/${{ matrix.package_name }} --autoload-file repository/${{ matrix.package_name }}/vendor/autoload.php --config ci/rector/rector-php7-upgrade.php --ansi

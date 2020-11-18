@@ -8,6 +8,9 @@ on:
 
 jobs:
     daily_pull_requests:
+        # dont run jobs on forks, because gh-tokens are not available
+        if: github.event.pull_request.head.repo.full_name == github.repository
+
         strategy:
             fail-fast: false
             matrix:
@@ -72,4 +75,5 @@ jobs:
                     branch: ${{ matrix.actions.branch }}
                     title: '[automated] ${{ matrix.actions.name }}'
                     delete-branch: true
-                    # todo add human email/name/photo
+                    author: "kaizen-ci <info@kaizen-ci.org>"
+                    committer: "kaizen-ci <info@kaizen-ci.org>"
