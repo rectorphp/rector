@@ -151,10 +151,15 @@ CODE_SAMPLE
             }
 
             $next = $parent->getAttribute(AttributeKey::NEXT_NODE);
+            if (! $next instanceof Node) {
+                break;
+            }
+
             $isFoundNext = $this->betterNodeFinder->findFirst($next, function (Node $node) use ($variable) {
                 return $this->areNodesEqual($node, $variable);
             });
 
+            /** @var Node $previous */
             $previous = $parent->getAttribute(AttributeKey::PREVIOUS_NODE);
             if ($previous instanceof Expression && $previous->expr instanceof Assign && $this->areNodesEqual(
                 $previous->expr->var,
