@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Type\TypeWithClassName;
@@ -153,6 +154,14 @@ CODE_SAMPLE
             $isFoundNext = $this->betterNodeFinder->findFirst($next, function (Node $node) use ($variable) {
                 return $this->areNodesEqual($node, $variable);
             });
+
+            $previous = $parent->getAttribute(AttributeKey::PREVIOUS_NODE);
+            if ($previous instanceof Expression && $previous->expr instanceof Assign && $this->areNodesEqual(
+                $previous->expr->var,
+                $variable
+            )) {
+                $parent = null;
+            }
 
             if ($isFoundNext) {
                 return true;
