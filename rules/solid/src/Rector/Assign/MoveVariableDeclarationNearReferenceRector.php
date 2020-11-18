@@ -143,6 +143,22 @@ CODE_SAMPLE
             return true;
         }
 
+        while ($parent) {
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parent instanceof Node) {
+                break;
+            }
+
+            $next = $parent->getAttribute(AttributeKey::NEXT_NODE);
+            $isFoundNext = $this->betterNodeFinder->findFirst($next, function (Node $node) use ($variable) {
+                return $this->areNodesEqual($node, $variable);
+            });
+
+            if ($isFoundNext) {
+                return true;
+            }
+        }
+
         $variableType = $this->getStaticType($variable);
 
         // possibly service of value object, that changes inner state
