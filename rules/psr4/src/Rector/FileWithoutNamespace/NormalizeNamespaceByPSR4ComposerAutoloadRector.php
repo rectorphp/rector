@@ -145,7 +145,7 @@ CODE_SAMPLE
         }
 
         // FQNize all class names
-        $this->traverseNodesWithCallable($nodes, function (Node $node) {
+        $this->traverseNodesWithCallable($nodes, function (Node $node): ?FullyQualified {
             if (! $node instanceof Name) {
                 return null;
             }
