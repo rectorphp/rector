@@ -85,6 +85,11 @@ CODE_SAMPLE
         }
 
         $newName = Strings::substring($methodName, 2);
+
+        if (is_numeric($newName[0])) {
+            return null;
+        }
+
         $node->name = new Identifier($newName);
 
         return $node;
