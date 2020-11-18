@@ -245,6 +245,6 @@ Do you use Rector to upgrade your code? Add it here:
 
 ### How to Apply Coding Standards?
 
-Rector uses [nikic/php-parser](https://github.com/nikic/PHP-Parser/), built on technology called an *abstract syntax tree* (AST). An AST doesn't know about spaces and when written to a file it produces poorly formatted code in both PHP and docblock annotations. **That's why your project needs to have a coding standard tool** and a set of formatting rules, so it can make rector's refactored output code nice and shiny again.
+Rector uses [nikic/php-parser](https://github.com/nikic/PHP-Parser/), built on technology called an *abstract syntax tree* (AST). An AST doesn't know about spaces and when written to a file it produces poorly formatted code in both PHP and docblock annotations. **That's why your project needs to have a coding standard tool** and a set of formatting rules, so it can make Rector's output code nice and shiny again.
 
 Don't have a coding standard tool? Add [ECS](https://github.com/Symplify/EasyCodingStandard) and use prepared [`ecs-after-rector.php`](/ecs-after-rector.php) set.
