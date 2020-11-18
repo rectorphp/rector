@@ -13,32 +13,53 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * @see https://wiki.php.net/rfc/numeric_literal_separator
  * @see https://github.com/nikic/PHP-Parser/pull/615
  * @see \Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector\AddLiteralSeparatorToNumberRectorTest
+ * @see https://twitter.com/seldaek/status/1329064983120982022
  *
  * Taking the most generic use case to the account: https://wiki.php.net/rfc/numeric_literal_separator#should_it_be_the_role_of_an_ide_to_group_digits
  * The final check should be done manually
  */
-final class AddLiteralSeparatorToNumberRector extends AbstractRector
+final class AddLiteralSeparatorToNumberRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var int
      */
     private const GROUP_SIZE = 3;
 
+    /**
+     * @var int
+     */
+    private $limitValue = 1000000;
+
+    public function __construct(int $limitValue = 1000000)
+    {
+        $this->limitValue = $limitValue;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $limitValue = $configuration['limitValue'] ?? 1000000;
+        Assert::integer($limitValue);
+
+        $this->limitValue = $limitValue;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add "_" as thousands separator in numbers', [
+        return new RuleDefinition('Add "_" as thousands separator in numbers for higher or equals to limitValue config', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
     {
-        $int = 1000;
+        $int = 1000000;
         $float = 1000500.001;
     }
 }
@@ -49,7 +70,7 @@ class SomeClass
 {
     public function run()
     {
-        $int = 1_000;
+        $int = 1_000_000;
         $float = 1_000_500.001;
     }
 }
@@ -105,6 +126,10 @@ CODE_SAMPLE
      */
     private function shouldSkip(Node $node, string $numericValueAsString): bool
     {
+        if ($numericValueAsString < $this->limitValue) {
+            return true;
+        }
+
         // already separated
         if (Strings::contains($numericValueAsString, '_')) {
             return true;

@@ -24,8 +24,15 @@ final class AddLiteralSeparatorToNumberRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    /**
+     * @return array<string, mixed[]>
+     */
+    protected function getRectorsWithConfiguration(): array
     {
-        return AddLiteralSeparatorToNumberRector::class;
+        return [
+            AddLiteralSeparatorToNumberRector::class => [
+                'limitValue' => 1000000,
+            ],
+        ];
     }
 }
