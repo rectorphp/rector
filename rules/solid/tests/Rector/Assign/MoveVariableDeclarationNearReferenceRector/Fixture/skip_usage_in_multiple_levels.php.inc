@@ -1,16 +1,21 @@
 <?php
 
-function skipVariableWithUsageInMultipleLevels()
-{
-    $varused = 1;
+namespace Rector\SOLID\Tests\Rector\Assign\MoveVariableDeclarationNearReferenceRector\Fixture;
 
-    if (mktime() === false) {
-        if (true) {
-            if (false) {
-                return $varused;
+class SkipUsageInMultipleLevels
+{
+    function myMethod()
+    {
+        $varused = 1;
+
+        if (mktime() === false) {
+            if (true) {
+                if (false) {
+                    return $varused;
+                }
             }
         }
-    }
 
-    echo $varused;
+        echo $varused;
+    }
 }
