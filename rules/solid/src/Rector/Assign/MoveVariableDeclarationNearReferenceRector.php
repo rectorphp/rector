@@ -164,6 +164,15 @@ CODE_SAMPLE
                 return $this->areNodesEqual($node, $variable);
             });
 
+            /** @var Node $previous */
+            $previous = $parentExpression->getAttribute(AttributeKey::PREVIOUS_NODE);
+            if ($previous instanceof Expression && $previous->expr instanceof Assign && $this->areNodesEqual(
+                $previous->expr->var,
+                $variable
+            )) {
+                $parentExpression = null;
+            }
+
             if ($isFoundNext) {
                 return true;
             }
