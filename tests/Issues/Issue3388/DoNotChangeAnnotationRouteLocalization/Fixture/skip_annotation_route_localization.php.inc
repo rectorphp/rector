@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues\Issue3380\DoNotChangeAnnotationRouteLocalization\Fixture;
+namespace Rector\Core\Tests\Issues\Issue3388\DoNotChangeAnnotationRouteLocalization\Fixture;
 
 use Symfony\Component\Routing\Annotation\Route;
 

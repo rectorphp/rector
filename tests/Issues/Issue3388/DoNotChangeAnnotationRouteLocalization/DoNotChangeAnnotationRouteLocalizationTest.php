@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues\Issue3380\DoNotChangeAnnotationRouteLocalization;
+namespace Rector\Core\Tests\Issues\Issue3388\DoNotChangeAnnotationRouteLocalization;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
