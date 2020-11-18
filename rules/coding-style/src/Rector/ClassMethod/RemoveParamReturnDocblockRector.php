@@ -142,6 +142,19 @@ CODE_SAMPLE
         return $docCommentText;
     }
 
+    private function processUpdateDocblock(ClassMethod $classMethod, string $text, string $docCommentText): ?ClassMethod
+    {
+        if ($docCommentText === $text) {
+            return null;
+        }
+
+        $classMethod->setDocComment(new Doc($docCommentText));
+        $expressionPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        $classMethod->setAttribute(AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
+
+        return $classMethod;
+    }
+
     /**
      * @param array<int, Param> $params
      */
@@ -174,18 +187,5 @@ CODE_SAMPLE
         }
 
         return $docCommentText;
-    }
-
-    private function processUpdateDocblock(ClassMethod $classMethod, string $text, string $docCommentText): ?ClassMethod
-    {
-        if ($docCommentText === $text) {
-            return null;
-        }
-
-        $classMethod->setDocComment(new Doc($docCommentText));
-        $expressionPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
-        $classMethod->setAttribute(AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
-
-        return $classMethod;
     }
 }
