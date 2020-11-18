@@ -162,11 +162,11 @@ CODE_SAMPLE
                 break;
             }
 
-            $isFoundNext = $this->betterNodeFinder->findFirst($next, function (Node $node) use ($variable) {
+            $isFoundNext = $this->betterNodeFinder->findFirst($next, function (Node $node) use ($variable): bool {
                 return $this->areNodesEqual($node, $variable);
             });
 
-            if ($isFoundNext) {
+            if ($isFoundNext !== null) {
                 return true;
             }
 
@@ -180,18 +180,10 @@ CODE_SAMPLE
         return false;
     }
 
-    private function foundInPreviousExpression(Node $parentExpression, Variable $variable): ?Node
+    private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
     {
-        /** @var Node $previous */
-        $previous = $parentExpression->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previous instanceof Expression && $previous->expr instanceof Assign && $this->areNodesEqual(
-            $previous->expr->var,
-            $variable
-        )) {
-            return null;
-        }
-
-        return $parentExpression;
+        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        return $parentNode === $assign;
     }
 
     private function getNextNode(Node $node): ?Node
@@ -212,9 +204,17 @@ CODE_SAMPLE
         return $next;
     }
 
-    private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
+    private function foundInPreviousExpression(Node $node, Variable $variable): ?Node
     {
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentNode === $assign;
+        /** @var Node $previous */
+        $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($previous instanceof Expression && $previous->expr instanceof Assign && $this->areNodesEqual(
+            $previous->expr->var,
+            $variable
+        )) {
+            return null;
+        }
+
+        return $node;
     }
 }
