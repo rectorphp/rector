@@ -144,13 +144,18 @@ CODE_SAMPLE
             return true;
         }
 
-        while ($parent) {
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $parent instanceof Node) {
+        $variableType = $this->getStaticType($variable);
+        if ($variableType instanceof TypeWithClassName) {
+            return true;
+        }
+
+        $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parentExpression) {
+            if (! $parentExpression instanceof Node) {
                 break;
             }
 
-            $next = $parent->getAttribute(AttributeKey::NEXT_NODE);
+            $next = $this->getNextNode($parentExpression);
             if (! $next instanceof Node) {
                 break;
             }
@@ -159,24 +164,37 @@ CODE_SAMPLE
                 return $this->areNodesEqual($node, $variable);
             });
 
-            /** @var Node $previous */
-            $previous = $parent->getAttribute(AttributeKey::PREVIOUS_NODE);
-            if ($previous instanceof Expression && $previous->expr instanceof Assign && $this->areNodesEqual(
-                $previous->expr->var,
-                $variable
-            )) {
-                $parent = null;
-            }
-
             if ($isFoundNext) {
                 return true;
             }
+
+            if ($parentExpression instanceof Node) {
+                $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
+            }
         }
 
-        $variableType = $this->getStaticType($variable);
+        return false;
+    }
 
-        // possibly service of value object, that changes inner state
-        return $variableType instanceof TypeWithClassName;
+    private function getNextNode(Node $node): ?Node
+    {
+        /** @var Node|null $next */
+        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
+
+        while (! $next && $node) {
+            /** @var Node|null $next */
+            $node = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $node instanceof Node) {
+                break;
+            }
+
+            $next = $this->getNextNode($node);
+            if ($next instanceof Node) {
+                break;
+            }
+        }
+
+        return $next;
     }
 
     private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
