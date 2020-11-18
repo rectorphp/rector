@@ -6,6 +6,7 @@ namespace Rector\PSR4\Composer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -33,6 +34,9 @@ final class PSR4NamespaceMatcher implements PSR4AutoloadNamespaceMatcherInterfac
     public function getExpectedNamespace(Node $node): ?string
     {
         $smartFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        if ($smartFileInfo === null) {
+            throw new ShouldNotHappenException();
+        }
 
         $psr4Autoloads = $this->psr4AutoloadPathsProvider->provide();
 

@@ -31,7 +31,7 @@ final class AddLiteralSeparatorToNumberRectorTest extends AbstractRectorTestCase
     {
         return [
             AddLiteralSeparatorToNumberRector::class => [
-                'limitValue' => 1000000,
+                AddLiteralSeparatorToNumberRector::LIMIT_VALUE => 1000000,
             ],
         ];
     }

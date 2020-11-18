@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 class NamespaceLessClass
 {
+    public function someMethod()
+    {
+        $someClass = new Rector\PSR4\Tests\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Source\SomeClass();
+    }
 }
 
 ?>
@@ -16,6 +20,10 @@ namespace Rector\PSR4\Tests\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4
 
 class NamespaceLessClass
 {
+    public function someMethod()
+    {
+        $someClass = new \Rector\PSR4\Tests\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Source\SomeClass();
+    }
 }
 
 ?>

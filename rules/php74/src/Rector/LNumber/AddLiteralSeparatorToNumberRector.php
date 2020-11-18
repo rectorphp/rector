@@ -8,12 +8,12 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -28,6 +28,12 @@ use Webmozart\Assert\Assert;
 final class AddLiteralSeparatorToNumberRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @api
+     * @var string
+     */
+    public const LIMIT_VALUE = 'limit_value';
+
+    /**
      * @var int
      */
     private const GROUP_SIZE = 3;
@@ -37,14 +43,12 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
      */
     private $limitValue = 1000000;
 
-    public function __construct(int $limitValue = 1000000)
-    {
-        $this->limitValue = $limitValue;
-    }
-
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration): void
     {
-        $limitValue = $configuration['limitValue'] ?? 1000000;
+        $limitValue = $configuration[self::LIMIT_VALUE] ?? 1000000;
         Assert::integer($limitValue);
 
         $this->limitValue = $limitValue;
@@ -52,31 +56,37 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add "_" as thousands separator in numbers for higher or equals to limitValue config', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Add "_" as thousands separator in numbers for higher or equals to limitValue config',
+            [
+                new ConfiguredCodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
     {
-        $int = 1000000;
+        $int = 500000;
         $float = 1000500.001;
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
     {
-        $int = 1_000_000;
+        $int = 500_000;
         $float = 1_000_500.001;
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                    , [
+                        self::LIMIT_VALUE => 1000000,
+                    ]
+                ),
+
+            ]);
     }
 
     /**
