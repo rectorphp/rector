@@ -145,6 +145,7 @@ CODE_SAMPLE
             return true;
         }
 
+        // possibly service of value object, that changes inner state
         $variableType = $this->getStaticType($variable);
         if ($variableType instanceof TypeWithClassName) {
             return true;
