@@ -8,12 +8,12 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -52,9 +52,11 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add "_" as thousands separator in numbers for higher or equals to limitValue config', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Add "_" as thousands separator in numbers for higher or equals to limitValue config',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -64,8 +66,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -75,8 +77,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+                
+            ]);
     }
 
     /**
