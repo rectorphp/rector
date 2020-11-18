@@ -32,6 +32,21 @@ final class MinutesToSecondsInCacheRector extends AbstractRector
     private const ATTRIBUTE_KEY_ALREADY_MULTIPLIED = 'already_multiplied';
 
     /**
+     * @var string
+     */
+    private const PUT = 'put';
+
+    /**
+     * @var string
+     */
+    private const ADD = 'add';
+
+    /**
+     * @var string
+     */
+    private const REMEMBER = 'remember';
+
+    /**
      * @var TypeToTimeMethodAndPosition[]
      */
     private $typeToTimeMethodsAndPositions = [];
@@ -41,17 +56,17 @@ final class MinutesToSecondsInCacheRector extends AbstractRector
         $this->parsedNodeCollector = $parsedNodeCollector;
 
         $this->typeToTimeMethodsAndPositions = [
-            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', 'put', 2),
-            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Repository', 'put', 2),
-            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', 'put', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', self::PUT, 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Repository', self::PUT, 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', self::PUT, 2),
 
-            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Repository', 'add', 2),
-            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', 'add', 2),
-            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', 'add', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Repository', self::ADD, 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', self::ADD, 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', self::ADD, 2),
 
-            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Repository', 'remember', 2),
-            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', 'remember', 2),
-            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', 'remember', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Repository', self::REMEMBER, 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', self::REMEMBER, 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', self::REMEMBER, 2),
 
             new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', 'putMany', 1),
         ];
@@ -142,15 +157,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function mulByNumber(Expr $argExpr, int $value): Expr
-    {
-        if ($this->isValue($argExpr, 1)) {
-            return new LNumber($value);
-        }
-
-        return new Mul($argExpr, new LNumber($value));
-    }
-
     private function refactorClassConstFetch(ClassConstFetch $classConstFetch): void
     {
         $classConst = $this->nodeRepository->findClassConstByClassConstFetch($classConstFetch);
@@ -167,5 +173,14 @@ CODE_SAMPLE
 
         $onlyConst->value = $this->mulByNumber($onlyConst->value, 60);
         $onlyConst->setAttribute(self::ATTRIBUTE_KEY_ALREADY_MULTIPLIED, true);
+    }
+
+    private function mulByNumber(Expr $argExpr, int $value): Expr
+    {
+        if ($this->isValue($argExpr, 1)) {
+            return new LNumber($value);
+        }
+
+        return new Mul($argExpr, new LNumber($value));
     }
 }
