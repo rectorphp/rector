@@ -139,6 +139,7 @@ CODE_SAMPLE
 
     private function shouldSkipUsedVariable(Variable $variable): bool
     {
+        /** @var Node $parent */
         $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof ArrayDimFetch) {
             return true;
@@ -149,6 +150,7 @@ CODE_SAMPLE
             return true;
         }
 
+        /** @var Node $parentExpression */
         $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
         while ($parentExpression) {
             if (! $parentExpression instanceof Node) {
@@ -164,18 +166,11 @@ CODE_SAMPLE
                 return $this->areNodesEqual($node, $variable);
             });
 
-            /** @var Node $previous */
-            $previous = $parentExpression->getAttribute(AttributeKey::PREVIOUS_NODE);
-            if ($previous instanceof Expression && $previous->expr instanceof Assign && $this->areNodesEqual(
-                $previous->expr->var,
-                $variable
-            )) {
-                $parentExpression = null;
-            }
-
             if ($isFoundNext) {
                 return true;
             }
+
+            $parentExpression = $this->foundInPreviousExpression($parentExpression, $variable);
 
             if ($parentExpression instanceof Node) {
                 $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
@@ -185,22 +180,33 @@ CODE_SAMPLE
         return false;
     }
 
+    private function foundInPreviousExpression(Node $parentExpression, Variable $variable): ?Node
+    {
+        /** @var Node $previous */
+        $previous = $parentExpression->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($previous instanceof Expression && $previous->expr instanceof Assign && $this->areNodesEqual(
+            $previous->expr->var,
+            $variable
+        )) {
+            return null;
+        }
+
+        return $parentExpression;
+    }
+
     private function getNextNode(Node $node): ?Node
     {
         /** @var Node|null $next */
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
 
-        while (! $next && $node) {
+        while (! $next) {
             /** @var Node|null $next */
             $node = $node->getAttribute(AttributeKey::PARENT_NODE);
             if (! $node instanceof Node) {
-                break;
+                return null;
             }
 
             $next = $this->getNextNode($node);
-            if ($next instanceof Node) {
-                break;
-            }
         }
 
         return $next;
