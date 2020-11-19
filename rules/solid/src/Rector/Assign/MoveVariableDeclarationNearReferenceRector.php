@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Type\TypeWithClassName;
@@ -159,14 +158,16 @@ CODE_SAMPLE
                 return false;
             }
 
-            if ($this->isFoundNext($next, $variable)) {
-                return true;
-            }
-
             $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
             if ($this->isOutOfVariableScope($parentExpression)) {
                 return false;
             }
+
+            if (! $this->isFoundNext($next, $variable)) {
+                return false;
+            }
+
+            return true;
         }
 
         return false;
@@ -182,10 +183,6 @@ CODE_SAMPLE
     {
         /** @var Node|null $next */
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-
-        if ($next instanceof Expression) {
-            return null;
-        }
 
         if ($next instanceof Node) {
             return $next;
@@ -208,17 +205,16 @@ CODE_SAMPLE
     private function isFoundNext(Node $node, Variable $variable): bool
     {
         while ($node) {
-            $isFoundNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use (
-                $variable
-            ): bool {
+            $isFoundNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
                 return $this->areNodesEqual($n, $variable);
             });
 
-            if ($isFoundNext) {
-                return true;
+            if (! $isFoundNext) {
+                $node = $node->getAttribute(AttributeKey::NEXT_NODE);
+                continue;
             }
 
-            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
+            return true;
         }
 
         return false;
