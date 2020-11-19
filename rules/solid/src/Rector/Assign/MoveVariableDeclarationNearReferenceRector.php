@@ -183,7 +183,7 @@ CODE_SAMPLE
         /** @var Node|null $next */
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
 
-        if ($next instanceof Expression && $next->expr instanceof Assign) {
+        if ($next instanceof Expression) {
             return null;
         }
 
