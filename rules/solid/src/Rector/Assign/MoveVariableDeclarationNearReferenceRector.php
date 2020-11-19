@@ -163,10 +163,6 @@ CODE_SAMPLE
                 return true;
             }
 
-            if ($this->isFoundInPreviousExpression($parentExpression, $assign)) {
-                return false;
-            }
-
             $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
         }
 
@@ -213,12 +209,5 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    private function isFoundInPreviousExpression(Node $node, Assign $assign): bool
-    {
-        /** @var Node $previous */
-        $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        return $previous instanceof Expression && $this->areNodesEqual($previous->expr, $assign);
     }
 }
