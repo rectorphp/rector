@@ -159,10 +159,6 @@ CODE_SAMPLE
                 return false;
             }
 
-            if ($next instanceof Expression && $next->expr instanceof Assign) {
-                return false;
-            }
-
             if ($this->isFoundNext($next, $variable)) {
                 return true;
             }
@@ -186,6 +182,11 @@ CODE_SAMPLE
     {
         /** @var Node|null $next */
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
+
+        if ($next instanceof Expression && $next->expr instanceof Assign) {
+            return null;
+        }
+
         if ($next instanceof Node) {
             return $next;
         }
