@@ -152,40 +152,32 @@ CODE_SAMPLE
 
         /** @var Node $parentExpression */
         $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        if ($this->isOutOfVariableScope($parentExpression)) {
-            return false;
+
+        while ($parentExpression && ! $this->isOutOfVariableScope($parentExpression)) {
+            $next = $parentExpression->getAttribute(AttributeKey::NEXT_NODE);
+            if (! $next instanceof Node) {
+                $parentExpression = $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
+
+                continue;
+            }
+
+            $isFoundInNext = $this->isFoundInNext($next, $variable);
+            if (! $isFoundInNext) {
+                $parentExpression = $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
+
+                continue;
+            }
+
+            return true;
         }
 
-        $next = $this->getNextParentNode($parentExpression);
-        if (! $next instanceof Node) {
-            return false;
-        }
-
-        return $this->isFoundInNext($next, $variable);
+        return false;
     }
 
     private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         return $parentNode === $assign;
-    }
-
-    private function getNextParentNode(Node $node): ?Node
-    {
-        /** @var Node|null $next */
-        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-
-        if ($next instanceof Node) {
-            return $next;
-        }
-
-        /** @var Node|null $next */
-        $node = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $node instanceof Node || $this->isOutOfVariableScope($node)) {
-            return null;
-        }
-
-        return $this->getNextParentNode($node);
     }
 
     private function isOutOfVariableScope(Node $node): bool
