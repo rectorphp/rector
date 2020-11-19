@@ -91,7 +91,7 @@ final class NetteInjectDetector
             }
         }
 
-        // has constructor
+        
         $classReflection = new ReflectionClass($parentClass);
 
         return $classReflection->hasMethod('__construct');
