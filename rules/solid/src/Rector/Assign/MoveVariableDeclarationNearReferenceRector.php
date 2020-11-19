@@ -11,8 +11,12 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Do_;
+use PhpParser\Node\Stmt\For_;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\While_;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeNestingScope\ParentScopeFinder;
@@ -154,6 +158,10 @@ CODE_SAMPLE
         $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
 
         while ($parentExpression && ! $this->isOutOfVariableScope($parentExpression)) {
+            if ($this->isInsideLoopStmts($parentExpression)) {
+                return true;
+            }
+
             $next = $parentExpression->getAttribute(AttributeKey::NEXT_NODE);
             if (! $next instanceof Node) {
                 $parentExpression = $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
@@ -172,6 +180,11 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function isInsideLoopStmts(Node $node): bool
+    {
+        return $node instanceof For_ || $node instanceof While_ || $node instanceof Foreach_ || $node instanceof Do_;
     }
 
     private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
