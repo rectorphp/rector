@@ -233,7 +233,6 @@ CODE_SAMPLE
         $resolvedTypes = [];
 
         $this->traverseNodesWithCallable($stmts, function (Node $node) use ($propertyName, &$resolvedTypes): ?int {
-            
             if ($node instanceof ClassMethod && $this->isName($node, MethodName::CONSTRUCT)) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
