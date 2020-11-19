@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Type\TypeWithClassName;
@@ -155,6 +156,10 @@ CODE_SAMPLE
         while ($parentExpression) {
             $next = $this->getNextParentNode($parentExpression);
             if (! $next instanceof Node) {
+                return false;
+            }
+
+            if ($next instanceof Expression && $next->expr instanceof Assign) {
                 return false;
             }
 
