@@ -7,7 +7,6 @@ namespace Rector\CodingStyle\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PHPUnit\Framework\TestCase;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\Rector\InvalidRectorConfigurationException;
@@ -31,7 +30,7 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
      * @api
      * @var string
      */
-    public const PREFER_SELF = 'self';
+    public const PREFER_SELF = self::SELF;
 
     /**
      * @api
@@ -43,6 +42,11 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
      * @var string[]
      */
     private const ALLOWED_OPTIONS = [self::PREFER_THIS, self::PREFER_SELF];
+
+    /**
+     * @var string
+     */
+    private const SELF = 'self';
 
     /**
      * @var array<string, string>
@@ -118,11 +122,53 @@ CODE_SAMPLE
         $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? [];
         Assert::allString($typeToPreference);
 
-        foreach ($typeToPreference as $type => $preference) {
+        foreach ($typeToPreference as $preference) {
             $this->ensurePreferenceIsValid($preference);
         }
 
         $this->typeToPreference = $typeToPreference;
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function processToSelf(Node $node): ?StaticCall
+    {
+        if ($node instanceof StaticCall && ! $this->isNames($node->class, [self::SELF, 'static'])) {
+            return null;
+        }
+
+        if ($node instanceof MethodCall && ! $this->isName($node->var, 'this')) {
+            return null;
+        }
+
+        $name = $this->getName($node->name);
+        if ($name === null) {
+            return null;
+        }
+
+        return $this->createStaticCall(self::SELF, $name, $node->args);
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function processToThis(Node $node): ?MethodCall
+    {
+        if ($node instanceof MethodCall) {
+            return null;
+        }
+
+        if (! $this->isNames($node->class, [self::SELF, 'static'])) {
+            return null;
+        }
+
+        $name = $this->getName($node->name);
+        if ($name === null) {
+            return null;
+        }
+
+        return $this->createMethodCall('this', $name, $node->args);
     }
 
     private function ensurePreferenceIsValid(string $preference): void
@@ -137,47 +183,5 @@ CODE_SAMPLE
             self::class,
             implode('", "', self::ALLOWED_OPTIONS)
         ));
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function processToSelf(Node $node): ?StaticCall
-    {
-        if ($node instanceof StaticCall && ! $this->isNames($node->class, ['self', 'static'])) {
-            return null;
-        }
-
-        if ($node instanceof MethodCall && ! $this->isName($node->var, 'this')) {
-            return null;
-        }
-
-        $name = $this->getName($node->name);
-        if ($name === null) {
-            return null;
-        }
-
-        return $this->createStaticCall('self', $name, $node->args);
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function processToThis(Node $node): ?MethodCall
-    {
-        if ($node instanceof MethodCall) {
-            return null;
-        }
-
-        if (! $this->isNames($node->class, ['self', 'static'])) {
-            return null;
-        }
-
-        $name = $this->getName($node->name);
-        if ($name === null) {
-            return null;
-        }
-
-        return $this->createMethodCall('this', $name, $node->args);
     }
 }
