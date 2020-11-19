@@ -152,25 +152,16 @@ CODE_SAMPLE
 
         /** @var Node $parentExpression */
         $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parentExpression) {
-            $next = $this->getNextParentNode($parentExpression);
-            if (! $next instanceof Node) {
-                return false;
-            }
-
-            $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
-            if ($this->isOutOfVariableScope($parentExpression)) {
-                return false;
-            }
-
-            if (! $this->isFoundNext($next, $variable)) {
-                return false;
-            }
-
-            return true;
+        if ($this->isOutOfVariableScope($parentExpression)) {
+            return false;
         }
 
-        return false;
+        $next = $this->getNextParentNode($parentExpression);
+        if (! $next instanceof Node) {
+            return false;
+        }
+
+        return $this->isFoundInNext($next, $variable);
     }
 
     private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
@@ -202,19 +193,18 @@ CODE_SAMPLE
         return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure;
     }
 
-    private function isFoundNext(Node $node, Variable $variable): bool
+    private function isFoundInNext(Node $node, Variable $variable): bool
     {
         while ($node) {
-            $isFoundNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
+            $isFoundInNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
                 return $this->areNodesEqual($n, $variable);
             });
 
-            if (! $isFoundNext) {
-                $node = $node->getAttribute(AttributeKey::NEXT_NODE);
-                continue;
+            if ($isFoundInNext) {
+                return true;
             }
 
-            return true;
+            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
         }
 
         return false;
