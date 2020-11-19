@@ -164,6 +164,9 @@ CODE_SAMPLE
             }
 
             $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
+            if ($this->isOutOfVariableScope($parentExpression)) {
+                return false;
+            }
         }
 
         return false;
@@ -185,11 +188,16 @@ CODE_SAMPLE
 
         /** @var Node|null $next */
         $node = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $node instanceof Node) {
+        if (! $node instanceof Node || $this->isOutOfVariableScope($node)) {
             return null;
         }
 
         return $this->getNextParentNode($node);
+    }
+
+    private function isOutOfVariableScope(Node $node): bool
+    {
+        return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure_;
     }
 
     private function isFoundNext(Node $node, Variable $variable): bool
