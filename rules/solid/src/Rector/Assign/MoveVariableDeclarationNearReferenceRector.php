@@ -196,7 +196,7 @@ CODE_SAMPLE
 
     private function isOutOfVariableScope(Node $node): bool
     {
-        return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure_;
+        return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure;
     }
 
     private function isFoundNext(Node $node, Variable $variable): bool
