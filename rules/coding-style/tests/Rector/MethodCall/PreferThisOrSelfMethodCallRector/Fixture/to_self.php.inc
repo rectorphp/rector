@@ -10,6 +10,7 @@ class ToSelf extends AbstractTestCase
     {
         $this->assertThis();
         self::assertThis();
+        static::assertThis();
         parent::assertThis();
     }
 }
@@ -26,6 +27,7 @@ class ToSelf extends AbstractTestCase
 {
     public function run()
     {
+        self::assertThis();
         self::assertThis();
         self::assertThis();
         parent::assertThis();

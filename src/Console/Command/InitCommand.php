@@ -23,7 +23,6 @@ final class InitCommand extends AbstractCommand
      */
     private $symfonyStyle;
 
-    
     public function __construct(SmartFileSystem $smartFileSystem, SymfonyStyle $symfonyStyle)
     {
         parent::__construct();
