@@ -6,7 +6,7 @@ namespace Rector\Core\Skip;
 
 use Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -34,7 +34,7 @@ final class Skipper
         $this->parameterProvider = $parameterProvider;
     }
 
-    public function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo, AbstractRector $rector): bool
+    public function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo, RectorInterface $rector): bool
     {
         $skip = $this->parameterProvider->provideArrayParameter(Option::SKIP);
         if ($skip === []) {

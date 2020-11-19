@@ -162,7 +162,7 @@ final class FileProcessor
         $this->currentFileInfoProvider->setCurrentStmts($parsedStmtsAndTokens->getNewStmts());
         $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
 
-        $newStmts = $this->postFileProcessor->traverse($parsedStmtsAndTokens->getNewStmts());
+        $newStmts = $this->postFileProcessor->traverse($parsedStmtsAndTokens->getNewStmts(), $smartFileInfo);
 
         // this is needed for new tokens added in "afterTraverse()"
         $parsedStmtsAndTokens->updateNewStmts($newStmts);

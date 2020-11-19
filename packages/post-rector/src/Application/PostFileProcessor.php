@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PostFileProcessor
 {
@@ -28,9 +29,11 @@ final class PostFileProcessor
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function traverse(array $nodes): array
+    public function traverse(array $nodes, ?SmartFileInfo $smartFileInfo = null): array
     {
         foreach ($this->postRectors as $postRector) {
+            $postRector->addCurrentSmartFileInfo($smartFileInfo);
+
             $nodeTraverser = new NodeTraverser();
             $nodeTraverser->addVisitor($postRector);
             $nodes = $nodeTraverser->traverse($nodes);

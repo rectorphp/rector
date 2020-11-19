@@ -49,6 +49,10 @@ final class NameImportingPostRector extends AbstractPostRector
             return null;
         }
 
+        if ($this->shouldSkip($this)) {
+            return null;
+        }
+
         if ($node instanceof Name) {
             return $this->nameImporter->importName($node);
         }
