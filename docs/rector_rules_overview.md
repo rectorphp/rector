@@ -349,18 +349,36 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ## AddLiteralSeparatorToNumberRector
 
-Add "_" as thousands separator in numbers
+Add "_" as thousands separator in numbers for higher or equals to limitValue config
+
+:wrench: **configure it!**
 
 - class: `Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector`
+
+```php
+use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddLiteralSeparatorToNumberRector::class)
+        ->call('configure', [[
+            AddLiteralSeparatorToNumberRector::LIMIT_VALUE => 1000000,
+        ]]);
+};
+```
+
+↓
 
 ```diff
  class SomeClass
  {
      public function run()
      {
--        $int = 1000;
+-        $int = 500000;
 -        $float = 1000500.001;
-+        $int = 1_000;
++        $int = 500_000;
 +        $float = 1_000_500.001;
      }
  }
@@ -2124,6 +2142,32 @@ Change `containerBuilder->expand()` to static call with parameters
      {
 -        $value = $this->getContainerBuilder()->expand('%value');
 +        $value = \Nette\DI\Helpers::expand('%value', $this->getContainerBuilder()->parameters);
+     }
+ }
+```
+
+<br>
+
+## CallOnAppArrayAccessToStandaloneAssignRector
+
+Replace magical call on `$this->app["something"]` to standalone type assign variable
+
+- class: `Rector\Laravel\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector`
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var \Illuminate\Contracts\Foundation\Application
+      */
+     private $app;
+
+     public function run()
+     {
+-        $validator = $this->app['validator']->make('...');
++        /** @var \Illuminate\Validation\Factory $validationFactory */
++        $validationFactory = $this->app['validator'];
++        $validator = $validationFactory->make('...');
      }
  }
 ```
@@ -7060,6 +7104,38 @@ Change is method names to start with is/has/was
 
 <br>
 
+## MakeTaggedPassedToParameterIterableTypeRector
+
+Change param type to iterable, if passed one
+
+- class: `Rector\Laravel\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector`
+
+```diff
+ class AnotherClass
+ {
+     /**
+      * @var \Illuminate\Contracts\Foundation\Application
+      */
+     private $app;
+
+     public function create()
+     {
+         $tagged = $this->app->tagged('some_tagged');
+         return new SomeClass($tagged);
+     }
+ }
+
+ class SomeClass
+ {
+-    public function __construct(array $items)
++    public function __construct(iterable $items)
+     {
+     }
+ }
+```
+
+<br>
+
 ## MakeTypedPropertyNullableIfCheckedRector
 
 Make typed property nullable if checked
@@ -9029,6 +9105,28 @@ Change `@param` types to type declarations if not a BC-break
 
 <br>
 
+## ParamTypeToAssertTypeRector
+
+Turn `@param` type to `assert` type
+
+- class: `Rector\StrictCodeQuality\Rector\ClassMethod\ParamTypeToAssertTypeRector`
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @param \A|\B $arg
+      */
+     public function run($arg)
+     {
+-
++        \Webmozart\Assert\Assert::isAnyOf($arg, [\A::class, \B::class]);
+     }
+ }
+```
+
+<br>
+
 ## ParentClassToTraitsRector
 
 Replaces parent class to specific traits
@@ -9668,6 +9766,28 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  $someObject = new SomeClass;
 -$someObject->oldProperty = false;
 +$someObject->newMethodCall(false);
+```
+
+<br>
+
+## PropertyDeferToDeferrableProviderToRector
+
+Change deprecated `$defer` = true; to Illuminate\Contracts\Support\DeferrableProvider interface
+
+- class: `Rector\Laravel\Rector\Class_\PropertyDeferToDeferrableProviderToRector`
+
+```diff
+ use Illuminate\Support\ServiceProvider;
++use Illuminate\Contracts\Support\DeferrableProvider;
+
+-final class SomeServiceProvider extends ServiceProvider
++final class SomeServiceProvider extends ServiceProvider implements DeferrableProvider
+ {
+-    /**
+-     * @var bool
+-     */
+-    protected $defer = true;
+ }
 ```
 
 <br>
