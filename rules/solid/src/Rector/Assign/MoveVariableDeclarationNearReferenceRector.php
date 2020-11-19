@@ -91,7 +91,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->shouldSkipUsedVariable($firstUsedVariable)) {
+        if ($this->shouldSkipUsedVariable($firstUsedVariable, $assign)) {
             return null;
         }
 
@@ -137,7 +137,7 @@ CODE_SAMPLE
         return $foundVariable;
     }
 
-    private function shouldSkipUsedVariable(Variable $variable): bool
+    private function shouldSkipUsedVariable(Variable $variable, Assign $assign): bool
     {
         /** @var Node $parent */
         $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
@@ -154,24 +154,20 @@ CODE_SAMPLE
         /** @var Node $parentExpression */
         $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
         while ($parentExpression) {
-            if (! $parentExpression instanceof Node) {
-                break;
-            }
-
             $next = $this->getNextParentNode($parentExpression);
             if (! $next instanceof Node) {
-                break;
+                return false;
             }
 
             if ($this->isFoundNext($next, $variable)) {
                 return true;
             }
 
-            $parentExpression = $this->foundInPreviousExpression($parentExpression, $variable);
-
-            if ($parentExpression instanceof Node) {
-                $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
+            if ($this->isFoundInPreviousExpression($parentExpression, $assign)) {
+                return false;
             }
+
+            $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
         }
 
         return false;
@@ -187,27 +183,26 @@ CODE_SAMPLE
     {
         /** @var Node|null $next */
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-
-        while (! $next) {
-            /** @var Node|null $next */
-            $node = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $node instanceof Node) {
-                return null;
-            }
-
-            $next = $this->getNextParentNode($node);
+        if ($next instanceof Node) {
+            return $next;
         }
 
-        return $next;
+        /** @var Node|null $next */
+        $node = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $node instanceof Node) {
+            return null;
+        }
+
+        return $this->getNextParentNode($node);
     }
 
     private function isFoundNext(Node $node, Variable $variable): bool
     {
         while ($node) {
-            $isFoundNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) use (
+            $isFoundNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use (
                 $variable
             ): bool {
-                return $this->areNodesEqual($node, $variable);
+                return $this->areNodesEqual($n, $variable);
             });
 
             if ($isFoundNext) {
@@ -220,17 +215,10 @@ CODE_SAMPLE
         return false;
     }
 
-    private function foundInPreviousExpression(Node $node, Variable $variable): ?Node
+    private function isFoundInPreviousExpression(Node $node, Assign $assign): bool
     {
         /** @var Node $previous */
         $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previous instanceof Expression && $previous->expr instanceof Assign && $this->areNodesEqual(
-            $previous->expr->var,
-            $variable
-        )) {
-            return null;
-        }
-
-        return $node;
+        return $previous instanceof Expression && $this->areNodesEqual($previous->expr, $assign);
     }
 }
