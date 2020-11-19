@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
@@ -156,8 +157,15 @@ CODE_SAMPLE
 
         /** @var Node $parentExpression */
         $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        $countMayBeFoundInPrev = 0;
 
         while ($parentExpression && ! $this->isOutOfVariableScope($parentExpression)) {
+            $countMayBeFoundInPrev = $this->countMayBeFoundInPrev($parentExpression, $variable, $countMayBeFoundInPrev);
+
+            if ($countMayBeFoundInPrev === 3) {
+                return true;
+            }
+
             if ($this->isInsideLoopStmts($parentExpression)) {
                 return true;
             }
@@ -213,5 +221,18 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function countMayBeFoundInPrev(Node $node, Variable $variable, int $countMayBeFoundInPrev): int
+    {
+        while ($node) {
+            if ($node instanceof Expression && $node->expr instanceof Assign) {
+                $countMayBeFoundInPrev += 1;
+            }
+
+            $node = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        }
+
+        return $countMayBeFoundInPrev;
     }
 }
