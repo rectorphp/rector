@@ -91,7 +91,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->shouldSkipUsedVariable($firstUsedVariable, $assign)) {
+        if ($this->shouldSkipUsedVariable($firstUsedVariable)) {
             return null;
         }
 
@@ -137,7 +137,7 @@ CODE_SAMPLE
         return $foundVariable;
     }
 
-    private function shouldSkipUsedVariable(Variable $variable, Assign $assign): bool
+    private function shouldSkipUsedVariable(Variable $variable): bool
     {
         /** @var Node $parent */
         $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
