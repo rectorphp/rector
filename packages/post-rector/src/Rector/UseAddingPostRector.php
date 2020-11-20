@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Application\UseImportsAdder;
 use Rector\CodingStyle\Application\UseImportsRemover;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -99,6 +100,11 @@ final class UseAddingPostRector extends AbstractPostRector
             $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $functionUseImportTypes);
 
             return $nodes;
+        }
+
+        $firstNode = $nodes[0];
+        if ($firstNode instanceof FileWithoutNamespace) {
+            $nodes = $firstNode->stmts;
         }
 
         // B. no namespace? add in the top

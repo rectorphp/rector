@@ -6283,6 +6283,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+## HelperFuncCallToFacadeClassRector
+
+Change `app()` func calls to facade calls
+
+- class: `Rector\Laravel\Rector\FuncCall\HelperFuncCallToFacadeClassRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return app('translator')->trans('value');
++        return \Illuminate\Support\Facades\App::get('translator')->trans('value');
+     }
+ }
+```
+
+<br>
+
 ## IfToSpaceshipRector
 
 Changes if/else to spaceship <=> where useful
@@ -9440,7 +9459,7 @@ Changes pow(val, val2) to ** `(exp)` parameter
 
 ## PreferThisOrSelfMethodCallRector
 
-Changes `$this->...` to self:: or vise versa for specific types
+Changes `$this->...` and static:: to self:: or vise versa for given types
 
 :wrench: **configure it!**
 
