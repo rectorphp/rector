@@ -94,7 +94,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isOutOfScopeExpr($assign->expr) || $this->shouldSkipUsedVariable($firstUsedVariable, $assign->expr)) {
+        if ($this->isOutOfScopeExpr($assign->expr) || $this->shouldSkipUsedVariable(
+            $firstUsedVariable,
+            $assign->expr
+        )) {
             return null;
         }
 
@@ -204,7 +207,7 @@ CODE_SAMPLE
 
     private function isOutOfScopeExpr(Expr $expr): bool
     {
-        return $expr instanceof ClassMethod || $expr instanceof Function_ || $expr instanceof Closure;
+        return $expr instanceof Closure;
     }
 
     private function isFoundInNext(Node $node, Expr $variable): bool
