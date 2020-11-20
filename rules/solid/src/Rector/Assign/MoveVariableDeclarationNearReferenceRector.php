@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Rector\SOLID\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignOp;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -28,8 +31,6 @@ use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PhpParser\Node\Expr\AssignOp;
-use PhpParser\Node\Expr\BinaryOp;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Assign\MoveVariableDeclarationNearReferenceRector\MoveVariableDeclarationNearReferenceRectorTest
@@ -171,13 +172,13 @@ CODE_SAMPLE
         $countMayBeFoundInPrev = 0;
 
         while ($parentExpression) {
-            $countMayBeFoundInPrev = $this->countMayBeFoundInPrev($parentExpression, $variable, $countMayBeFoundInPrev);
-
-            if ($countMayBeFoundInPrev === 3) {
+            if ($this->isInsideLoopStmts($parentExpression) || $parentExpression instanceof Arg) {
                 return true;
             }
 
-            if ($this->isInsideLoopStmts($parentExpression)) {
+            $countMayBeFoundInPrev = $this->countMayBeFoundInPrev($parentExpression, $variable, $countMayBeFoundInPrev);
+
+            if ($countMayBeFoundInPrev === 3) {
                 return true;
             }
 
