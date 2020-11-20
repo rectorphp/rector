@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\Type\ObjectType;
-use Rector\CodingStyle\Imports\UsedImportsResolver;
+use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 

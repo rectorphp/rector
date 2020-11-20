@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Imports;
+namespace Rector\CodingStyle\ClassNameImport;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;

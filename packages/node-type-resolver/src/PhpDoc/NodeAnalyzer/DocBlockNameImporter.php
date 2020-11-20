@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\CodingStyle\Imports\ImportSkipper;
+use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -56,9 +56,9 @@ final class DocBlockNameImporter
     private $betterStandardPrinter;
 
     /**
-     * @var ImportSkipper
+     * @var ClassNameImportSkipper
      */
-    private $importSkipper;
+    private $classNameImportSkipper;
 
     /**
      * @var ParameterProvider
@@ -72,7 +72,7 @@ final class DocBlockNameImporter
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
-        ImportSkipper $importSkipper,
+        ClassNameImportSkipper $importSkipper,
         NodeNameResolver $nodeNameResolver,
         ParameterProvider $parameterProvider,
         PhpDocNodeTraverser $phpDocNodeTraverser,
@@ -83,7 +83,7 @@ final class DocBlockNameImporter
         $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->importSkipper = $importSkipper;
+        $this->classNameImportSkipper = $importSkipper;
         $this->parameterProvider = $parameterProvider;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
@@ -129,7 +129,10 @@ final class DocBlockNameImporter
             return $identifierTypeNode;
         }
 
-        if ($this->importSkipper->shouldSkipNameForFullyQualifiedObjectType($node, $fullyQualifiedObjectType)) {
+        if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType(
+            $node,
+            $fullyQualifiedObjectType
+        )) {
             return $identifierTypeNode;
         }
 
