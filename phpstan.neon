@@ -735,3 +735,4 @@ parameters:
                 - packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php # 122
 
         - '#Instanceof between PhpParser\\Node\\Stmt and Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace will always evaluate to false#'
+        - '#Class with base "Regex" name is already used in "MongoDB\\BSON\\Regex", "Symplify\\PHPStanRules\\ValueObject\\Regex"\. Use unique name to make classes easy to recognize#'
