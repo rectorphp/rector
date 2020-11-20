@@ -6,6 +6,8 @@ namespace Rector\SOLID\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
@@ -207,7 +209,7 @@ CODE_SAMPLE
 
     private function isOutOfScopeExpr(Expr $expr): bool
     {
-        return $expr instanceof Closure;
+        return $expr instanceof Methodcall || $expr instanceof StaticCall || $expr instanceof Closure;
     }
 
     private function isFoundInNext(Node $node, Expr $variable): bool
