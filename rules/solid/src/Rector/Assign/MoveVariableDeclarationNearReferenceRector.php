@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\SOLID\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
@@ -100,7 +101,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->shouldSkipUsedVariable($firstUsedVariable)) {
+        if ($this->shouldSkipUsedVariable($firstUsedVariable, $assign->expr)) {
             return null;
         }
 
@@ -146,7 +147,7 @@ CODE_SAMPLE
         return $foundVariable;
     }
 
-    private function shouldSkipUsedVariable(Variable $variable): bool
+    private function shouldSkipUsedVariable(Variable $variable, Expr $expr): bool
     {
         /** @var Node $parent */
         $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
@@ -182,14 +183,11 @@ CODE_SAMPLE
                 continue;
             }
 
-            $isFoundInNext = $this->isFoundInNext($next, $variable);
-            if (! $isFoundInNext) {
-                $parentExpression = $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
-
-                continue;
+            if ($this->isFoundInNext($next, $variable) || $this->isFoundInNext($next, $expr)) {
+                return true;
             }
 
-            return true;
+            $parentExpression = $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
         }
 
         return false;
@@ -211,7 +209,7 @@ CODE_SAMPLE
         return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure;
     }
 
-    private function isFoundInNext(Node $node, Variable $variable): bool
+    private function isFoundInNext(Node $node, Expr $variable): bool
     {
         while ($node) {
             $isFoundInNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
