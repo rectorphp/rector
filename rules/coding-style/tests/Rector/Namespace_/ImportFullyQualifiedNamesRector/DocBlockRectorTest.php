@@ -13,7 +13,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\PostRector\Rector\NameImportingPostRector
  */
-final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCase
+final class DocBlockRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -21,22 +21,19 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
     public function test(SmartFileInfo $fileInfo): void
     {
         $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
-        $this->setParameter(Option::IMPORT_SHORT_CLASSES, false);
+        $this->setParameter(Option::IMPORT_DOC_BLOCKS, true);
 
         $this->doTestFileInfo($fileInfo);
     }
 
-    /**
-     * @return Iterator
-     */
-    public function provideData(): iterable
+    public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRoot');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureDocBlock');
     }
 
     protected function getRectorClass(): string
     {
-        // the must be any rector class to run
+        // here can be any Rector rule, as we're testing \Rector\PostRector\Rector\NameImportingPostRector in the full Retcor life cycle
         return RenameClassRector::class;
     }
 }

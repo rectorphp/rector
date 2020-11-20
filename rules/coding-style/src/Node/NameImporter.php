@@ -10,8 +10,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
-use Rector\CodingStyle\Imports\AliasUsesResolver;
-use Rector\CodingStyle\Imports\ImportSkipper;
+use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
+use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
@@ -40,9 +40,9 @@ final class NameImporter
     private $aliasUsesResolver;
 
     /**
-     * @var ImportSkipper
+     * @var ClassNameImportSkipper
      */
-    private $importSkipper;
+    private $classNameImportSkipper;
 
     /**
      * @var NodeNameResolver
@@ -66,7 +66,7 @@ final class NameImporter
 
     public function __construct(
         AliasUsesResolver $aliasUsesResolver,
-        ImportSkipper $importSkipper,
+        ClassNameImportSkipper $classNameImportSkipper,
         NodeNameResolver $nodeNameResolver,
         ParameterProvider $parameterProvider,
         RenamedClassesCollector $renamedClassesCollector,
@@ -75,7 +75,7 @@ final class NameImporter
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
-        $this->importSkipper = $importSkipper;
+        $this->classNameImportSkipper = $classNameImportSkipper;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parameterProvider = $parameterProvider;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
@@ -141,7 +141,10 @@ final class NameImporter
         FullyQualifiedObjectType $fullyQualifiedObjectType
     ): ?Name {
         // the same end is already imported → skip
-        if ($this->importSkipper->shouldSkipNameForFullyQualifiedObjectType($name, $fullyQualifiedObjectType)) {
+        if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType(
+            $name,
+            $fullyQualifiedObjectType
+        )) {
             return null;
         }
 
