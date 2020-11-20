@@ -144,12 +144,11 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
         $variable = $this->getName($param->var);
         $method = $param->getAttribute(AttributeKey::METHOD_NAME);
 
-        $methodsWithWThisMock = $classMocks[$variable];
-
         // single use: "$mock = $this->createMock()"
         if (! $this->phpSpecMockCollector->isVariableMockInProperty($param->var)) {
             return $this->createNewMockVariableAssign($param, $name);
         }
+        $methodsWithWThisMock = $classMocks[$variable];
 
         $reversedMethodsWithThisMock = array_flip($methodsWithWThisMock);
 
@@ -230,12 +229,12 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
     private function createMockVarDoc(Param $param, Name $name): string
     {
-        $paramType = (string) ($name->getAttribute(AttributeKey::ORIGINAL_NAME) ?: $name);
         $variableName = $this->getName($param->var);
 
         if ($variableName === null) {
             throw new ShouldNotHappenException();
         }
+        $paramType = (string) ($name->getAttribute(AttributeKey::ORIGINAL_NAME) ?: $name);
 
         return sprintf(
             '/** @var %s|\%s $%s */',

@@ -149,6 +149,11 @@ CODE_SAMPLE
         return $foundVariable;
     }
 
+    private function isOutOfScopeExpr(Expr $expr): bool
+    {
+        return $expr instanceof Methodcall || $expr instanceof StaticCall || $expr instanceof Closure || $expr instanceof Array_ || $expr instanceof AssignOp || $expr instanceof BinaryOp;
+    }
+
     private function shouldSkipUsedVariable(Variable $variable, Expr $expr): bool
     {
         /** @var Node $parent */
@@ -199,44 +204,17 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isInsideLoopStmts(Node $node): bool
-    {
-        return $node instanceof For_ || $node instanceof While_ || $node instanceof Foreach_ || $node instanceof Do_;
-    }
-
     private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         return $parentNode === $assign;
     }
 
-    private function isOutOfScopeExpr(Expr $expr): bool
-    {
-        return $expr instanceof Methodcall || $expr instanceof StaticCall || $expr instanceof Closure || $expr instanceof Array_ || $expr instanceof AssignOp || $expr instanceof BinaryOp;
-    }
-
-    private function isFoundInNext(Node $node, Expr $variable): bool
+    private function isFoundInPrev(Node $node, Expr $expr): bool
     {
         while ($node) {
-            $isFoundInNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
-                return $this->areNodesEqual($n, $variable);
-            });
-
-            if ($isFoundInNext) {
-                return true;
-            }
-
-            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
-        }
-
-        return false;
-    }
-
-    private function isFoundInPrev(Node $node, Expr $variable): bool
-    {
-        while ($node) {
-            $isFoundInPrev = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
-                return $this->areNodesEqual($n, $variable);
+            $isFoundInPrev = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use ($expr): bool {
+                return $this->areNodesEqual($n, $expr);
             });
 
             if ($isFoundInPrev) {
@@ -247,6 +225,11 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function isInsideLoopStmts(Node $node): bool
+    {
+        return $node instanceof For_ || $node instanceof While_ || $node instanceof Foreach_ || $node instanceof Do_;
     }
 
     private function countMayBeFoundInPrev(Node $node, Variable $variable, int $countMayBeFoundInPrev): int
@@ -260,5 +243,22 @@ CODE_SAMPLE
         }
 
         return $countMayBeFoundInPrev;
+    }
+
+    private function isFoundInNext(Node $node, Expr $expr): bool
+    {
+        while ($node) {
+            $isFoundInNext = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use ($expr): bool {
+                return $this->areNodesEqual($n, $expr);
+            });
+
+            if ($isFoundInNext) {
+                return true;
+            }
+
+            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
+        }
+
+        return false;
     }
 }

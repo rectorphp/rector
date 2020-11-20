@@ -285,12 +285,12 @@ CODE_SAMPLE
      */
     private function extractMethodThrows(FullyQualified $fullyQualified, Identifier $identifier): array
     {
-        $method = $identifier->name;
         $class = $this->getName($fullyQualified);
 
         if ($class === null) {
             return [];
         }
+        $method = $identifier->name;
 
         return $this->classMethodReflectionHelper->extractTagsFromMethodDocBlock($class, $method);
     }
