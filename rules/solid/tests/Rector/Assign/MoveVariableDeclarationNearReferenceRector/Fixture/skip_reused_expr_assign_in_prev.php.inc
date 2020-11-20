@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Assign\MoveVariableDeclarationNearReferenceRector\Fixture;
 
-class SkipReusedExprAssignInNext
+class SkipReusedExprAssignInPrev
 {
     function myMethod($x)
     {

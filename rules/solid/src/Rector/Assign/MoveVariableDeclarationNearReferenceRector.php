@@ -6,11 +6,11 @@ namespace Rector\SOLID\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -159,11 +159,15 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->isFoundInPrev($parent, $expr)) {
+            return true;
+        }
+
         /** @var Node $parentExpression */
         $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
         $countMayBeFoundInPrev = 0;
 
-        while ($parentExpression && ! $this->isOutOfScopeVariable($parentExpression)) {
+        while ($parentExpression) {
             $countMayBeFoundInPrev = $this->countMayBeFoundInPrev($parentExpression, $variable, $countMayBeFoundInPrev);
 
             if ($countMayBeFoundInPrev === 3) {
@@ -181,7 +185,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->isFoundInNext($next, $variable) || $this->isFoundInNext($next, $expr)) {
+            if ($this->isFoundInNext($next, $variable)) {
                 return true;
             }
 
@@ -202,11 +206,6 @@ CODE_SAMPLE
         return $parentNode === $assign;
     }
 
-    private function isOutOfScopeVariable(Node $node): bool
-    {
-        return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure;
-    }
-
     private function isOutOfScopeExpr(Expr $expr): bool
     {
         return $expr instanceof Methodcall || $expr instanceof StaticCall || $expr instanceof Closure;
@@ -224,6 +223,23 @@ CODE_SAMPLE
             }
 
             $node = $node->getAttribute(AttributeKey::NEXT_NODE);
+        }
+
+        return false;
+    }
+
+    private function isFoundInPrev(Node $node, Expr $variable): bool
+    {
+        while ($node) {
+            $isFoundInPrev = (bool) $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
+                return $this->areNodesEqual($n, $variable);
+            });
+
+            if ($isFoundInPrev) {
+                return true;
+            }
+
+            $node = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         }
 
         return false;
