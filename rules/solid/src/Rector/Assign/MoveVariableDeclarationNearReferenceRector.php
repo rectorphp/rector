@@ -85,7 +85,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isOutOfScope($assign->expr)) {
+        if ($this->isOutOfScopeExpr($assign->expr)) {
             return null;
         }
 
@@ -165,7 +165,7 @@ CODE_SAMPLE
         $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
         $countMayBeFoundInPrev = 0;
 
-        while ($parentExpression && ! $this->isOutOfScope($parentExpression)) {
+        while ($parentExpression && ! $this->isOutOfScopeVariable($parentExpression)) {
             $countMayBeFoundInPrev = $this->countMayBeFoundInPrev($parentExpression, $variable, $countMayBeFoundInPrev);
 
             if ($countMayBeFoundInPrev === 3) {
@@ -207,9 +207,14 @@ CODE_SAMPLE
         return $parentNode === $assign;
     }
 
-    private function isOutOfScope(Node $node): bool
+    private function isOutOfScopeVariable(Node $node): bool
     {
-        return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure || $node instanceof MethodCall || $node instanceof StaticCall;
+        return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure;
+    }
+
+    private function isOutOfScopeExpr(Node $node): bool
+    {
+        return $this->isOutOfScopeVariable($node) || $node instanceof MethodCall || $node instanceof StaticCall;
     }
 
     private function isFoundInNext(Node $node, Variable $variable): bool
