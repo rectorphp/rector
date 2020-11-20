@@ -46,14 +46,13 @@ final class OriginalSpacingRestorer
 
         // replace system whitespace by old ones, include \n*
         $nodeOutputParts = Strings::split($nodeOutput, self::WHITESPACE_SPLIT_REGEX);
-
-        $oldWhitespaceCount = count($oldWhitespaces);
         $nodeOutputPartCount = count($nodeOutputParts);
 
         // new nodes were probably added, skip them
         if ($nodeOutputPartCount === 1) {
             return $nodeOutput;
         }
+        $oldWhitespaceCount = count($oldWhitespaces);
 
         if ($oldWhitespaceCount < $nodeOutputPartCount - 1) {
             return $nodeOutput;

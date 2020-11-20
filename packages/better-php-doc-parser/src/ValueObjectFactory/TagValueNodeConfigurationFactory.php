@@ -52,13 +52,6 @@ final class TagValueNodeConfigurationFactory
 
         $silentKey = $this->resolveSilentKey($phpDocTagValueNode);
         $orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent, $silentKey);
-
-        $hasNewlineAfterOpening = (bool) Strings::match($originalContent, self::NEWLINE_AFTER_OPENING_REGEX);
-        $hasNewlineBeforeClosing = (bool) Strings::match($originalContent, self::NEWLINE_BEFORE_CLOSING_REGEX);
-
-        $hasOpeningBracket = (bool) Strings::match($originalContent, self::OPENING_BRACKET_REGEX);
-        $hasClosingBracket = (bool) Strings::match($originalContent, self::CLOSING_BRACKET_REGEX);
-
         $keysByQuotedStatus = [];
         foreach ($orderedVisibleItems as $orderedVisibleItem) {
             $keysByQuotedStatus[$orderedVisibleItem] = $this->isKeyQuoted(
@@ -67,10 +60,15 @@ final class TagValueNodeConfigurationFactory
                 $silentKey
             );
         }
+        $arrayEqualSign = $this->resolveArrayEqualSignByPhpNodeClass($phpDocTagValueNode);
+
+        $hasNewlineAfterOpening = (bool) Strings::match($originalContent, self::NEWLINE_AFTER_OPENING_REGEX);
+        $hasNewlineBeforeClosing = (bool) Strings::match($originalContent, self::NEWLINE_BEFORE_CLOSING_REGEX);
+
+        $hasOpeningBracket = (bool) Strings::match($originalContent, self::OPENING_BRACKET_REGEX);
+        $hasClosingBracket = (bool) Strings::match($originalContent, self::CLOSING_BRACKET_REGEX);
 
         $isSilentKeyExplicit = (bool) Strings::contains($originalContent, sprintf('%s=', $silentKey));
-
-        $arrayEqualSign = $this->resolveArrayEqualSignByPhpNodeClass($phpDocTagValueNode);
 
         return new TagValueNodeConfiguration(
             $originalContent,

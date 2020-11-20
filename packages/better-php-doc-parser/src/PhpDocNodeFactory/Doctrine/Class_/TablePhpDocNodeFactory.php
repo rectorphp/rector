@@ -73,8 +73,6 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
         );
 
         $indexesOpeningAndClosingSpace = $this->matchCurlyBracketOpeningAndClosingSpace($indexesContent);
-
-        $haveIndexesFinalComma = (bool) Strings::match($indexesContent, self::SPACE_BEFORE_CLOSING_BRACKET_REGEX);
         $uniqueConstraintsContent = $this->annotationContentResolver->resolveNestedKey(
             $annotationContent,
             'uniqueConstraints'
@@ -88,6 +86,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             $table->uniqueConstraints,
             $uniqueConstraintsContent
         );
+        $haveIndexesFinalComma = (bool) Strings::match($indexesContent, self::SPACE_BEFORE_CLOSING_BRACKET_REGEX);
 
         $haveUniqueConstraintsFinalComma = (bool) Strings::match(
             $uniqueConstraintsContent,
