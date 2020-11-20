@@ -170,6 +170,12 @@ final class BetterStandardPrinter extends Standard
             ContentPatcher::VALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX,
             ContentPatcher::INVALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX
         );
+        $content = $this->contentPatcher->rollbackValidAnnotation(
+            $contentOriginal,
+            $content,
+            ContentPatcher::VALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX,
+            ContentPatcher::INVALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX
+        );
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
