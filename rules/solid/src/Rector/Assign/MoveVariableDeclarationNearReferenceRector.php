@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
@@ -84,12 +83,6 @@ CODE_SAMPLE
         if (! $variable instanceof Variable) {
             return null;
         }
-
-        if (! $assign->expr instanceof Variable && ! $assign->expr instanceof Scalar) {
-            return null;
-        }
-
-        $variableType = $this->getStaticType($variable);
 
         $parentScope = $this->parentScopeFinder->find($assign);
         if ($parentScope === null) {
