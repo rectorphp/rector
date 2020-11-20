@@ -59,7 +59,7 @@
         "symplify/monorepo-builder": "dev-master",
         "symplify/phpstan-extensions": "dev-master",
         "symplify/markdown-diff": "dev-master",
-        "symplify/phpstan-rules": "dev-master#dd99959572b906d0fbaa456520b940ecb5426ce5",
+        "symplify/phpstan-rules": "dev-master",
         "tracy/tracy": "^2.7"
     },
     "replace": {
