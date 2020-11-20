@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Imports\UsedImportsResolver;
@@ -30,7 +31,7 @@ final class UseImportsAdder
      * @param Stmt[] $stmts
      * @param FullyQualifiedObjectType[] $useImportTypes
      * @param FullyQualifiedObjectType[] $functionUseImportTypes
-     * @return Stmt[] <int|string, \PhpParser\Node\Stmt>
+     * @return Stmt[]
      */
     public function addImportsToStmts(array $stmts, array $useImportTypes, array $functionUseImportTypes): array
     {
@@ -48,7 +49,8 @@ final class UseImportsAdder
         // place after declare strict_types
         foreach ($stmts as $key => $stmt) {
             if ($stmt instanceof Declare_) {
-                array_splice($stmts, $key + 1, 0, $newUses);
+                $nodesToAdd = array_merge([new Nop()], $newUses);
+                array_splice($stmts, $key + 1, 0, $nodesToAdd);
 
                 return $stmts;
             }

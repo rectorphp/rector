@@ -1089,25 +1089,6 @@ Change annotation to attribute
 
 <br>
 
-## AppFuncCallToFacadeClassRector
-
-Change `app()` func calls to facade calls
-
-- class: `Rector\Laravel\Rector\FuncCall\AppFuncCallToFacadeClassRector`
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        return app('translator')->trans('value');
-+        return \Illuminate\Support\Facades\App::get('translator')->trans('value');
-     }
- }
-```
-
-<br>
-
 ## AppUsesStaticCallToUseStatementRector
 
 Change `App::uses()` to use imports
@@ -6296,6 +6277,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -        // ...
 -        $this->get('some_service');
 +        $this->someService;
+     }
+ }
+```
+
+<br>
+
+## HelperFuncCallToFacadeClassRector
+
+Change `app()` func calls to facade calls
+
+- class: `Rector\Laravel\Rector\FuncCall\HelperFuncCallToFacadeClassRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return app('translator')->trans('value');
++        return \Illuminate\Support\Facades\App::get('translator')->trans('value');
      }
  }
 ```
@@ -13405,25 +13405,6 @@ Changes `settype()` to (type) where possible
 
 -        return settype($foo, 'integer');
 +        return (int) $foo;
-     }
- }
-```
-
-<br>
-
-## ShortAppClassToFullyQualifiedFacadeClassRector
-
-Change `App` to fully qualified \Illuminate\Support\Facades\App
-
-- class: `Rector\Laravel\Rector\StaticCall\ShortAppClassToFullyQualifiedFacadeClassRector`
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        return \App::get('translator')->trans('value');
-+        return \Illuminate\Support\Facades\App::get('translator')->trans('value');
      }
  }
 ```
