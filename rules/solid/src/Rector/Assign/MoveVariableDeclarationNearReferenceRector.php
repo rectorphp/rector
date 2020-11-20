@@ -28,6 +28,8 @@ use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node\Expr\AssignOp;
+use PhpParser\Node\Expr\BinaryOp;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Assign\MoveVariableDeclarationNearReferenceRector\MoveVariableDeclarationNearReferenceRectorTest
@@ -209,7 +211,7 @@ CODE_SAMPLE
 
     private function isOutOfScopeExpr(Expr $expr): bool
     {
-        return $expr instanceof Methodcall || $expr instanceof StaticCall || $expr instanceof Closure || $expr instanceof Array_;
+        return $expr instanceof Methodcall || $expr instanceof StaticCall || $expr instanceof Closure || $expr instanceof Array_ || $expr instanceof AssignOp || $expr instanceof BinaryOp;
     }
 
     private function isFoundInNext(Node $node, Expr $variable): bool
