@@ -8,9 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
@@ -85,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isOutOfScopeExpr($assign->expr)) {
+        if (! $assign->expr instanceof Variable && ! $assign->expr instanceof Scalar) {
             return null;
         }
 
@@ -210,11 +209,6 @@ CODE_SAMPLE
     private function isOutOfScopeVariable(Node $node): bool
     {
         return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure;
-    }
-
-    private function isOutOfScopeExpr(Node $node): bool
-    {
-        return $this->isOutOfScopeVariable($node) || $node instanceof MethodCall || $node instanceof StaticCall;
     }
 
     private function isFoundInNext(Node $node, Variable $variable): bool
