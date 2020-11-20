@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -80,6 +82,10 @@ CODE_SAMPLE
         $assign = $node;
         $variable = $node->var;
         if (! $variable instanceof Variable) {
+            return null;
+        }
+
+        if ($this->isOutOfScope($assign->expr)) {
             return null;
         }
 
@@ -159,7 +165,7 @@ CODE_SAMPLE
         $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
         $countMayBeFoundInPrev = 0;
 
-        while ($parentExpression && ! $this->isOutOfVariableScope($parentExpression)) {
+        while ($parentExpression && ! $this->isOutOfScope($parentExpression)) {
             $countMayBeFoundInPrev = $this->countMayBeFoundInPrev($parentExpression, $variable, $countMayBeFoundInPrev);
 
             if ($countMayBeFoundInPrev === 3) {
@@ -201,9 +207,9 @@ CODE_SAMPLE
         return $parentNode === $assign;
     }
 
-    private function isOutOfVariableScope(Node $node): bool
+    private function isOutOfScope(Node $node): bool
     {
-        return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure;
+        return $node instanceof ClassMethod || $node instanceof Function_ || $node instanceof Closure || $node instanceof MethodCall || $node instanceof StaticCall;
     }
 
     private function isFoundInNext(Node $node, Variable $variable): bool
@@ -227,7 +233,7 @@ CODE_SAMPLE
     {
         while ($node) {
             if ($node instanceof Expression && $node->expr instanceof Assign) {
-                $countMayBeFoundInPrev += 1;
+                ++$countMayBeFoundInPrev;
             }
 
             $node = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
