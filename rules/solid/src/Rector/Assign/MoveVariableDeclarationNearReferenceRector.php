@@ -127,7 +127,7 @@ CODE_SAMPLE
         Variable $variable,
         Assign $assign,
         Node $parentScopeNode
-    ): ?Variable {
+    ): ?Node {
         return $this->betterNodeFinder->findFirst((array) $parentScopeNode->stmts, function (Node $node) use (
             $variable,
             $assign
@@ -198,7 +198,8 @@ CODE_SAMPLE
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         //$currentStatement = $variable->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
-        return $parentNode === $assign;// || $this->isFoundInPrev($currentStatement, $assign);
+        // || $this->isFoundInPrev($currentStatement, $assign);
+        return $parentNode === $assign;
     }
 
     private function isFoundInPrev(Node $node, Expr $expr): bool
