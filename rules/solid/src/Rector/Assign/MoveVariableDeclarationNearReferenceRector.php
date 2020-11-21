@@ -130,6 +130,10 @@ CODE_SAMPLE
     ): ?Variable {
         $desiredVariableName = $this->getName($desiredVariable);
 
+        if ($desiredVariableName === null) {
+            return null;
+        }
+
         /** @var Variable|null $foundVariable */
         $foundVariable = $this->betterNodeFinder->findFirst(
             (array) $parentScopeNode->stmts,
