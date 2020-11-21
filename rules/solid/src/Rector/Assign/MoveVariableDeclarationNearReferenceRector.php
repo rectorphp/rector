@@ -132,7 +132,9 @@ CODE_SAMPLE
             $variable,
             $assign
         ): bool {
-            return $this->areNodesEqual($node, $variable) && ! $this->isVariableInOriginalAssign($node, $assign);
+            return $node instanceof Variable
+                && $this->areNodesEqual($node, $variable)
+                && ! $this->isVariableInOriginalAssign($node, $assign);
         });
     }
 
