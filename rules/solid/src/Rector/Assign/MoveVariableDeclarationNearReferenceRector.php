@@ -196,9 +196,9 @@ CODE_SAMPLE
     private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        $currentStatement = $variable->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        //$currentStatement = $variable->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
-        return $parentNode === $assign || $this->isFoundInPrev($currentStatement, $assign);
+        return $parentNode === $assign;// || $this->isFoundInPrev($currentStatement, $assign);
     }
 
     private function isFoundInPrev(Node $node, Expr $expr): bool
