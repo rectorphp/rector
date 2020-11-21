@@ -90,26 +90,26 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentScope = $this->parentScopeFinder->find($assign);
+        $parentScope = $this->parentScopeFinder->find($node);
         if ($parentScope === null) {
             return null;
         }
 
-        $firstUsedVariable = $this->findFirstVariableUsageInScope($variable, $assign, $parentScope);
+        $firstUsedVariable = $this->findFirstVariableUsageInScope($variable, $node, $parentScope);
         if ($firstUsedVariable === null) {
             return null;
         }
 
-        if ($this->isOutOfScopeExpr($assign->expr) || $this->shouldSkipUsedVariable(
+        if ($this->isOutOfScopeExpr($node->expr) || $this->shouldSkipUsedVariable(
             $firstUsedVariable,
-            $assign->expr
+            $node->expr
         )) {
             return null;
         }
 
         $firstVariableUsageStatement = $firstUsedVariable->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
-        $assignStatement = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $assignStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         $this->addNodeBeforeNode($assignStatement, $firstVariableUsageStatement);
 
         $this->removeNode($assignStatement);
@@ -124,33 +124,16 @@ CODE_SAMPLE
      * @param ClassMethod|Function_|Class_|Namespace_|Closure $parentScopeNode
      */
     private function findFirstVariableUsageInScope(
-        Variable $desiredVariable,
+        Variable $variable,
         Assign $assign,
         Node $parentScopeNode
     ): ?Variable {
-        $desiredVariableName = $this->getName($desiredVariable);
-
-        if ($desiredVariableName === null) {
-            return null;
-        }
-
-        /** @var Variable|null $foundVariable */
-        $foundVariable = $this->betterNodeFinder->findFirst(
-            (array) $parentScopeNode->stmts,
-            function (Node $node) use ($desiredVariableName, $assign): bool {
-                if (! $node instanceof Variable) {
-                    return false;
-                }
-
-                if ($this->isVariableInOriginalAssign($node, $assign)) {
-                    return false;
-                }
-
-                return $this->isName($node, $desiredVariableName);
-            }
-        );
-
-        return $foundVariable;
+        return $this->betterNodeFinder->findFirst((array) $parentScopeNode->stmts, function (Node $node) use (
+            $variable,
+            $assign
+        ): bool {
+            return $this->areNodesEqual($node, $variable) && ! $this->isVariableInOriginalAssign($node, $assign);
+        });
     }
 
     private function isOutOfScopeExpr(Expr $expr): bool
@@ -211,7 +194,9 @@ CODE_SAMPLE
     private function isVariableInOriginalAssign(Variable $variable, Assign $assign): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentNode === $assign;
+        $currentStatement = $variable->getAttribute(AttributeKey::CURRENT_STATEMENT);
+
+        return $parentNode === $assign || $this->isFoundInPrev($currentStatement, $assign);
     }
 
     private function isFoundInPrev(Node $node, Expr $expr): bool
