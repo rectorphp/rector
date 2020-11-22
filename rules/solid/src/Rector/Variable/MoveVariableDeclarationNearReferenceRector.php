@@ -18,10 +18,10 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Isset_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -31,16 +31,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MoveVariableDeclarationNearReferenceRector extends AbstractRector
 {
-    /**
-     * @var ParentScopeFinder
-     */
-    private $parentScopeFinder;
-
-    public function __construct(ParentScopeFinder $parentScopeFinder)
-    {
-        $this->parentScopeFinder = $parentScopeFinder;
-    }
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -109,11 +99,6 @@ CODE_SAMPLE
         /** @var Node $usageStmt */
         $usageStmt = $variable->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if ($this->isInsideLoopStmts($usageStmt)) {
-            return null;
-        }
-
-        $parentScope = $this->parentScopeFinder->find($usageStmt);
-        if ($parentScope === null) {
             return null;
         }
 
@@ -196,7 +181,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
         $variable = $this->getSameVarName([$next], $node);
 
         if ($variable instanceof Variable) {
@@ -209,10 +193,7 @@ CODE_SAMPLE
     private function getSameVarNameInNexts(Node $node, Variable $variable): ?Variable
     {
         while ($node) {
-            $found = $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
-                $n = $this->mayBeArrayDimFetch($n);
-                return $n instanceof Variable && $this->isName($n, (string) $this->getName($variable));
-            });
+            $found = $this->getSameVarName([$node], $variable);
 
             if ($found instanceof Variable) {
                 return $found;
