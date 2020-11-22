@@ -78,11 +78,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $parentScope = $this->parentScopeFinder->find($node);
-        if ($parentScope === null) {
-            return null;
-        }
-
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! ($parent instanceof Assign && $parent->var === $node)) {
             return null;
@@ -114,6 +109,11 @@ CODE_SAMPLE
         /** @var Node $usageStmt */
         $usageStmt = $variable->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if ($this->isInsideLoopStmts($usageStmt)) {
+            return null;
+        }
+
+        $parentScope = $this->parentScopeFinder->find($usageStmt);
+        if ($parentScope === null) {
             return null;
         }
 
