@@ -62,8 +62,11 @@ CODE_SAMPLE
 
         /** @var Expression */
         $expression = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        $usages = $this->getUsageInNextStmts($expression, $node);
+        if (! $expression instanceof Expression) {
+            return null;
+        }
 
+        $usages = $this->getUsageInNextStmts($expression, $node);
         if ($usages === []) {
             return null;
         }
