@@ -7,7 +7,11 @@ namespace Rector\SOLID\Rector\Variable;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\For_;
+use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -85,6 +89,10 @@ CODE_SAMPLE
 
             /** @var Node $usageStmt */
             $usageStmt = $usages[0]->getAttribute(AttributeKey::CURRENT_STATEMENT);
+            if ($this->isInsideLoopStmts($usageStmt, $node)) {
+                return null;
+            }
+
             $this->addNodeBeforeNode($expression, $usageStmt);
             $this->removeNode($expression);
 
@@ -92,6 +100,21 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function isInsideLoopStmts(Node $node): bool
+    {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        while ($parent) {
+            if ($parent instanceof For_ || $parent instanceof While_ || $parent instanceof Foreach_ || $parent instanceof Do_) {
+                return true;
+            }
+
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
     }
 
     private function isUsedInParentPrev(Expression $expression, Variable $variable)
@@ -105,9 +128,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $foundInPrev = $this->betterNodeFinder->find($previous, function (Node $node) use (
-                $variable
-            ): bool {
+            $foundInPrev = $this->betterNodeFinder->find($previous, function (Node $node) use ($variable): bool {
                 return $this->areNodesEqual($node, $variable);
             });
 
