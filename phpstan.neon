@@ -734,5 +734,12 @@ parameters:
                 - packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php # 61
                 - packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php # 122
 
+        -
+            message: '#SymfonyStyle service is not needed for only newline and text echo\. Use PHP_EOL and concatenation instead#'
+            paths:
+                - packages/changes-reporting/src/Output/CheckstyleOutputFormatter.php # 15
+                - packages/changes-reporting/src/Output/JsonOutputFormatter.php # 14
+                - src/Console/Output/RectorConfigurationFormatter.php # 13
+
         - '#Instanceof between PhpParser\\Node\\Stmt and Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace will always evaluate to false#'
         - '#Class with base "Regex" name is already used in "MongoDB\\BSON\\Regex", "Symplify\\PHPStanRules\\ValueObject\\Regex"\. Use unique name to make classes easy to recognize#'
