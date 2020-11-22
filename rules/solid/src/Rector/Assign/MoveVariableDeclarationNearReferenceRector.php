@@ -127,7 +127,7 @@ CODE_SAMPLE
         Variable $variable,
         Assign $assign,
         Node $parentScopeNode
-    ): ?Variable {
+    ): ?Node {
         return $this->betterNodeFinder->findFirst((array) $parentScopeNode->stmts, function (Node $node) use (
             $variable,
             $assign
