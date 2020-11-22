@@ -24,5 +24,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RepeatedLiteralToClassConstantRector::class);
     $services->set(RemoveAlwaysElseRector::class);
     $services->set(UseMessageVariableForSprintfInSymfonyStyleRector::class);
-    $services->set(MoveVariableDeclarationNearReferenceRector::class);
+
+    // this one requires to cover edge cases
+    // $services->set(MoveVariableDeclarationNearReferenceRector::class);
 };
