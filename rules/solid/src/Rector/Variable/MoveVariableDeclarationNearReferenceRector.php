@@ -87,31 +87,27 @@ CODE_SAMPLE
         }
 
         $usagesVar = $this->getUsageInNextStmts($expression, $node);
-        if ($usagesVar === []) {
+        if ($usagesVar === [] || count($usagesVar) > 1) {
             return null;
         }
 
-        if (count($usagesVar) === 1) {
-            /** @var Node $parentUsage */
-            $parentUsage = $usagesVar[0]->getAttribute(AttributeKey::PARENT_NODE);
-            // skip re-assign
-            if ($parentUsage instanceof Assign) {
-                return null;
-            }
-
-            /** @var Node $usageStmt */
-            $usageStmt = $usagesVar[0]->getAttribute(AttributeKey::CURRENT_STATEMENT);
-            if ($this->isInsideLoopStmts($usageStmt, $node)) {
-                return null;
-            }
-
-            $this->addNodeBeforeNode($expression, $usageStmt);
-            $this->removeNode($expression);
-
-            return $node;
+        /** @var Node $parentUsage */
+        $parentUsage = $usagesVar[0]->getAttribute(AttributeKey::PARENT_NODE);
+        // skip re-assign
+        if ($parentUsage instanceof Assign) {
+            return null;
         }
 
-        return null;
+        /** @var Node $usageStmt */
+        $usageStmt = $usagesVar[0]->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if ($this->isInsideLoopStmts($usageStmt)) {
+            return null;
+        }
+
+        $this->addNodeBeforeNode($expression, $usageStmt);
+        $this->removeNode($expression);
+
+        return $node;
     }
 
     private function hasObjectPropertyInExpr(Expr $expr): bool
