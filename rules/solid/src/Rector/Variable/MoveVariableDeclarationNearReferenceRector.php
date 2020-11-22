@@ -23,6 +23,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node\Expr\ArrayDimFetch;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\MoveVariableDeclarationNearReferenceRectorTest
@@ -130,7 +131,8 @@ CODE_SAMPLE
                     $value
                 ): bool {
                     $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-                    return $parent instanceof Assign && $this->areNodesEqual($node, $value) && $parent->var === $node;
+                    $node = $this->mayBeArrayDimFetch($node);
+                    return $parent instanceof Assign && (string) $this->getName($node) === (string) $this->getName($parent->var);
                 });
 
                 if (! $isReAssign) {
@@ -161,7 +163,8 @@ CODE_SAMPLE
         $countFound = 0;
         while ($next) {
             $isFound = (bool) $this->betterNodeFinder->findFirst($next, function (Node $n) use ($node): bool {
-                return $n instanceof Variable && $this->areNodesEqual($n, $node);
+                $n = $this->mayBeArrayDimFetch($n);
+                return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
             });
 
             if ($isFound) {
@@ -172,13 +175,15 @@ CODE_SAMPLE
                 $isFoundElseIf = (bool) $this->betterNodeFinder->findFirst($next->elseifs, function (Node $n) use (
                     $node
                 ): bool {
-                    return $n instanceof Variable && $this->areNodesEqual($n, $node);
+                    $n = $this->mayBeArrayDimFetch($n);
+                    return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
                 });
 
                 $isFoundElse = (bool) $this->betterNodeFinder->findFirst($next->else, function (Node $n) use (
                     $node
                 ): bool {
-                    return $n instanceof Variable && $this->areNodesEqual($n, $node);
+                    $n = $this->mayBeArrayDimFetch($n);
+                    return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
                 });
 
                 if ($isFoundElseIf || $isFoundElse) {
@@ -190,13 +195,15 @@ CODE_SAMPLE
                 $isFoundInCatch = (bool) $this->betterNodeFinder->findFirst($next->catches, function (Node $n) use (
                     $node
                 ): bool {
-                    return $n instanceof Variable && $this->areNodesEqual($n, $node);
+                    $n = $this->mayBeArrayDimFetch($n);
+                    return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
                 });
 
                 $isFoundInFinally = (bool) $this->betterNodeFinder->findFirst($next->finally, function (Node $n) use (
                     $node
                 ): bool {
-                    return $n instanceof Variable && $this->areNodesEqual($n, $node);
+                    $n = $this->mayBeArrayDimFetch($n);
+                    return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
                 });
 
                 if ($isFoundInCatch || $isFoundInFinally) {
@@ -218,8 +225,19 @@ CODE_SAMPLE
 
         $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
         return $this->betterNodeFinder->findFirst($next, function (Node $n) use ($node): bool {
-            return $n instanceof Variable && $this->areNodesEqual($n, $node);
+            $n = $this->mayBeArrayDimFetch($n);
+            return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
         });
+    }
+
+    private function mayBeArrayDimFetch(Node $node): Node
+    {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof ArrayDimFetch) {
+            $node = $parent->var;
+        }
+
+        return $node;
     }
 
     private function isInsideLoopStmts(Node $node): bool
