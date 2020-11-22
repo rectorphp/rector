@@ -318,8 +318,6 @@ final class ClassMethodAssignManipulator
         if (! $methodReflection instanceof ObjectTypeMethodReflection) {
             return false;
         }
-
-        $variableName = $this->nodeNameResolver->getName($variable);
         $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection, $node);
         if ($parametersAcceptor === null) {
             return false;
@@ -327,6 +325,7 @@ final class ClassMethodAssignManipulator
 
         /** @var ParameterReflection $parameterReflection */
         foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
+            $variableName = $this->nodeNameResolver->getName($variable);
             if ($parameterReflection->getName() !== $variableName) {
                 continue;
             }

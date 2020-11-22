@@ -21,10 +21,10 @@ final class FilesystemTweaker
         foreach ($directories as $directory) {
             // is fnmatch for directories
             if (Strings::contains($directory, '*')) {
-                $absoluteDirectories = array_merge($absoluteDirectories, glob($directory, GLOB_ONLYDIR));
             } else {
                 // is classic directory
                 $this->ensureDirectoryExists($directory);
+                $absoluteDirectories = array_merge($absoluteDirectories, glob($directory, GLOB_ONLYDIR));
                 $absoluteDirectories[] = $directory;
             }
         }

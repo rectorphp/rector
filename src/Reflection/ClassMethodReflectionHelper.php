@@ -43,9 +43,8 @@ final class ClassMethodReflectionHelper
             return [];
         }
 
-        $throwsTypes = $this->phpDocTagsFinder->extractTrowsTypesFromDocBlock($docComment);
-
         $classes = [];
+        $throwsTypes = $this->phpDocTagsFinder->extractTrowsTypesFromDocBlock($docComment);
         foreach ($throwsTypes as $returnTag) {
             /** @var class-string $className */
             $className = Reflection::expandClassName($returnTag, $reflectedMethod->getDeclaringClass());

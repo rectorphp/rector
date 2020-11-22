@@ -64,10 +64,9 @@ final class ClassReflectionToAstResolver
         if ($classes === []) {
             return null;
         }
-
-        $reflectionClassName = $classReflection->getName();
         foreach ($classes as $class) {
             $shortClassName = $class->name;
+            $reflectionClassName = $classReflection->getName();
             if ($reflectionClassName === $className) {
                 return $class;
             }

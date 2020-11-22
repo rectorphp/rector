@@ -41,9 +41,8 @@ final class NodeTransformer
         $arrayItems = $sprintfStringAndArgs->getArrayItems();
         $stringValue = $sprintfStringAndArgs->getStringValue();
 
-        $messageParts = $this->splitBySpace($stringValue);
-
         $arrayMessageParts = [];
+        $messageParts = $this->splitBySpace($stringValue);
 
         foreach ($messageParts as $messagePart) {
             if (Strings::match($messagePart, self::PERCENT_TEXT_REGEX)) {

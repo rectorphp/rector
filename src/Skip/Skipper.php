@@ -51,14 +51,13 @@ final class Skipper
         if (in_array($filePathName, $locations, true)) {
             return true;
         }
-
-        $fileName = $smartFileInfo->getFileName();
         foreach ($locations as $location) {
             $ignoredPath = $this->normalizeForFnmatch($location);
 
             if ($smartFileInfo->endsWith($ignoredPath) || $smartFileInfo->doesFnmatch($ignoredPath)) {
                 return true;
             }
+            $fileName = $smartFileInfo->getFileName();
 
             if (rtrim($ignoredPath, '\/') . DIRECTORY_SEPARATOR . $fileName === $filePathName) {
                 return true;

@@ -48,9 +48,8 @@ final class MethodCallManipulator
      */
     public function findMethodCallNamesOnVariable(Variable $variable): array
     {
-        $methodCallsOnVariable = $this->findMethodCallsOnVariable($variable);
-
         $methodCallNamesOnVariable = [];
+        $methodCallsOnVariable = $this->findMethodCallsOnVariable($variable);
         foreach ($methodCallsOnVariable as $methodCallOnVariable) {
             $methodName = $this->nodeNameResolver->getName($methodCallOnVariable->name);
             if ($methodName === null) {
@@ -185,10 +184,10 @@ final class MethodCallManipulator
 
     private function resolvePreviousNodeInSameScope(Node $parentNode): ?Node
     {
-        $previousParentNode = $parentNode;
         $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
 
         if (! $parentNode instanceof FunctionLike) {
+            $previousParentNode = $parentNode;
             // is about to leave → try previous expression
             $previousStatement = $previousParentNode->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
             if ($previousStatement instanceof Expression) {

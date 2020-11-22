@@ -112,9 +112,8 @@ final class StaticRectorStrings
         if ($input === strtolower($input)) {
             return $input;
         }
-
-        $matches = Strings::matchAll($input, self::CAMEL_CASE_SPLIT_REGEX);
         $parts = [];
+        $matches = Strings::matchAll($input, self::CAMEL_CASE_SPLIT_REGEX);
         foreach ($matches as $match) {
             $parts[] = $match[0] === strtoupper($match[0]) ? strtolower($match[0]) : lcfirst($match[0]);
         }

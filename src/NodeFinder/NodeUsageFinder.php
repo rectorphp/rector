@@ -82,9 +82,8 @@ final class NodeUsageFinder
      */
     public function findPropertyFetchUsages(PropertyFetch $desiredPropertyFetch): array
     {
-        $propertyFetches = $this->nodeRepository->findPropertyFetchesByPropertyFetch($desiredPropertyFetch);
-
         $propertyFetchesWithoutPropertyFetch = [];
+        $propertyFetches = $this->nodeRepository->findPropertyFetchesByPropertyFetch($desiredPropertyFetch);
         foreach ($propertyFetches as $propertyFetch) {
             if ($propertyFetch === $desiredPropertyFetch) {
                 continue;

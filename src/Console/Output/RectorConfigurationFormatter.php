@@ -53,9 +53,8 @@ final class RectorConfigurationFormatter
             return [];
         }
 
-        $reflectionClass = new ReflectionClass($rector);
-
         $configuration = [];
+        $reflectionClass = new ReflectionClass($rector);
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
             $reflectionProperty->setAccessible(true);
 

@@ -157,9 +157,8 @@ final class ContentPatcher
             if ($matches === null) {
                 continue;
             }
-
-            $firstMatch = Strings::replace($matches[0], self::SPACE_REGEX, '');
             $secondMatch = Strings::replace($matches[1], self::SPACE_REGEX, '');
+            $firstMatch = Strings::replace($matches[0], self::SPACE_REGEX, '');
 
             if ($firstMatch === str_repeat($secondMatch, 2)) {
                 $content = str_replace($matches[0], $matches[1], $content);

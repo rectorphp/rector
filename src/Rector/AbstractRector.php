@@ -452,9 +452,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         if ($fileInfo instanceof SmartFileInfo) {
             return;
         }
-        $fileInfo = $originalNode->getAttribute(AttributeKey::FILE_INFO);
 
         $originalParent = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
+        $fileInfo = $originalNode->getAttribute(AttributeKey::FILE_INFO);
 
         if ($fileInfo !== null) {
             $node->setAttribute(AttributeKey::FILE_INFO, $originalNode->getAttribute(AttributeKey::FILE_INFO));

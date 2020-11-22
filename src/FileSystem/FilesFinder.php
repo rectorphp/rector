@@ -78,11 +78,10 @@ final class FilesFinder
         if (isset($this->fileInfosBySourceAndSuffixes[$cacheKey])) {
             return $this->fileInfosBySourceAndSuffixes[$cacheKey];
         }
-
-        $files = $this->fileSystemFilter->filterFiles($source);
         $directories = $this->fileSystemFilter->filterDirectories($source);
 
         $smartFileInfos = [];
+        $files = $this->fileSystemFilter->filterFiles($source);
         foreach ($files as $file) {
             $smartFileInfos[] = new SmartFileInfo($file);
         }

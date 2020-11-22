@@ -64,10 +64,9 @@ final class FunctionAnnotationResolver
             return [];
         }
 
-        $uses = $this->getUses($namespace);
-
         $expandedClasses = [];
         foreach ($classNames as $className) {
+            $uses = $this->getUses($namespace);
             $shortClassName = $this->classNaming->getShortName($className);
             $expandedClasses[] = $uses[$shortClassName] ?? $className;
         }
