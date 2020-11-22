@@ -175,46 +175,65 @@ CODE_SAMPLE
             return null;
         }
 
+        $countFound = $this->getCountFound($next, $node);
+        if ($countFound === 0 || $countFound >= 2) {
+            return null;
+        }
+
+        $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
+        return $this->getSameVarName([$next], $node);
+    }
+
+    private function getCountFound(Node $node, Variable $variable): int
+    {
         $countFound = 0;
-        while ($next) {
-            $isFound = (bool) $this->getSameVarName($next, $node);
+        while ($node) {
+            $isFound = (bool) $this->getSameVarName([$node], $variable);
 
             if ($isFound) {
                 ++$countFound;
             }
 
-            if ($next instanceof If_) {
-                $isFoundElseIf = (bool) $this->getSameVarName($next->elseifs, $node);
-                $isFoundElse = (bool) $this->getSameVarName($next->else, $node);
+            $countFound = $this->countWithElseIf($node, $variable, $countFound);
+            $countFound = $this->countWithTryCatch($node, $variable, $countFound);
 
-                if ($isFoundElseIf || $isFoundElse) {
-                    ++$countFound;
-                }
-            }
-
-            if ($next instanceof TryCatch) {
-                $isFoundInCatch = (bool) $this->getSameVarName($next->catches, $node);
-                $isFoundInFinally = (bool) $this->getSameVarName($next, $node);
-
-                if ($isFoundInCatch || $isFoundInFinally) {
-                    ++$countFound;
-                }
-            }
-
-            if ($countFound === 2) {
-                return null;
-            }
-
-            /** @var Node|null $next */
-            $next = $next->getAttribute(AttributeKey::NEXT_NODE);
+            /** @var Node|null $node */
+            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
         }
 
-        if ($countFound === 0) {
-            return null;
+        return $countFound;
+    }
+
+    private function countWithElseIf(Node $node, Variable $variable, int $countFound): int
+    {
+        if (! $node instanceof If_) {
+            return $countFound;
         }
 
-        $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
-        return $this->getSameVarName($next, $node);
+        $isFoundElseIf = (bool) $this->getSameVarName($node->elseifs, $variable);
+        $isFoundElse = (bool) $this->getSameVarName([$node->else], $variable);
+
+        if ($isFoundElseIf || $isFoundElse) {
+            ++$countFound;
+        }
+
+        return $countFound;
+    }
+
+    private function countWithTryCatch(Node $node, Variable $variable, int $countFound): int
+    {
+        if (! $node instanceof TryCatch) {
+            return $countFound;
+        }
+
+        $isFoundInCatch = (bool) $this->getSameVarName($node->catches, $variable);
+        $isFoundInFinally = (bool) $this->getSameVarName([$node->finally], $variable);
+
+        if ($isFoundInCatch || $isFoundInFinally) {
+            ++$countFound;
+        }
+
+        return $countFound;
     }
 
     private function isInsideLoopStmts(Node $node): bool
@@ -243,13 +262,26 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array|Node $node
+     * @param array<int, Node|null> $multiNodes
      */
-    private function getSameVarName($nodes, Node $node): ?Variable
+    private function getSameVarName(array $multiNodes, Node $node): ?Variable
     {
-        return $this->betterNodeFinder->findFirst($nodes, function (Node $n) use ($node): bool {
-            $n = $this->mayBeArrayDimFetch($n);
-            return $n instanceof Variable && $this->isName($n, (string) $this->getName($node));
-        });
+        foreach ($multiNodes as $multiNode) {
+            if ($multiNode === null) {
+                continue;
+            }
+
+            /** @var Variable|null $found */
+            $found = $this->betterNodeFinder->findFirst($multiNode, function (Node $n) use ($node): bool {
+                $n = $this->mayBeArrayDimFetch($n);
+                return $n instanceof Variable && $this->isName($n, (string) $this->getName($node));
+            });
+
+            if ($found) {
+                return $found;
+            }
+        }
+
+        return null;
     }
 }
