@@ -73,6 +73,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->hasPropertyInExpr($expression, $parent->expr)) {
+            return null;
+        }
+
         if ($this->hasReAssign($expression, $parent->var) || $this->hasReAssign($expression, $parent->expr)) {
             return null;
         }
@@ -94,11 +98,18 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function hasPropertyInExpr(Expression $expression, Expr $expr): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($expr, function (Node $node): bool {
+            return $node instanceof PropertyFetch || $node instanceof StaticPropertyFetch;
+        });
+    }
+
     private function hasReAssign(Expression $expression, Expr $expr): bool
     {
         $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
         $exprValues = $this->betterNodeFinder->find($expr, function (Node $node): bool {
-            return $node instanceof Variable || $node instanceof PropertyFetch || $node instanceof StaticPropertyFetch;
+            return $node instanceof Variable;
         });
 
         if ($exprValues === []) {
