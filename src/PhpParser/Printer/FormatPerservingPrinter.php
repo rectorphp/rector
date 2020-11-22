@@ -11,6 +11,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
+ * @see\Rector\Core\Tests\PhpParser\Printer\FormatPerservingPrinterTest\Rector\Core\Tests\PhpParser\Printer\FormatPerservingPrinterTest
  * @see \Rector\Core\Tests\PhpParser\Printer\FormatPerservingPrinterTest
  */
 final class FormatPerservingPrinter

@@ -197,7 +197,7 @@ final class PhpVersionFeature
     public const BEFORE_NULLABLE_TYPE = '7.0';
 
     /**
-     * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
+     * @seehttpshttps://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
      * @var string
      */
     public const COVARIANT_RETURN = '7.4';

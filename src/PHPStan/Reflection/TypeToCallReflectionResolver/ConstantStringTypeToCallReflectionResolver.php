@@ -15,14 +15,14 @@ use PHPStan\Type\Type;
 use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface;
 
 /**
- * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/Constant/ConstantStringType.php#L147
+ * @seehttpshttps://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/Constant/ConstantStringType.php#L147
  */
 final class ConstantStringTypeToCallReflectionResolver implements TypeToCallReflectionResolverInterface
 {
     /**
      * Took from https://github.com/phpstan/phpstan-src/blob/8376548f76e2c845ae047e3010e873015b796818/src/Type/Constant/ConstantStringType.php#L158
      *
-     * @see https://regex101.com/r/IE6lcM/4
+     * @seehttpshttps://regex101.com/r/IE6lcM/4
      *
      * @var string
      */

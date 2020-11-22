@@ -144,13 +144,13 @@ final class MethodCallManipulator
     }
 
     /**
-     * @see https://stackoverflow.com/a/4507991/1348344
+     * @seehttpshttps://stackoverflow.com/a/4507991/1348344
      * @param object[] $objects
      * @return object[]
      *
-     * @template T
-     * @phpstan-param array<T>|T[] $objects
-     * @phpstan-return array<T>|T[]
+     * @templateTT
+     * @phpstan-paramarrayarray<T>|T[] $objects
+     * @phpstan-returnarrayarray<T>|T[]
      */
     private function uniquateObjects(array $objects): array
     {

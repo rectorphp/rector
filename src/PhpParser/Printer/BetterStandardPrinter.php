@@ -30,43 +30,44 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
+ * @see\Rector\Core\Tests\PhpParser\Printer\BetterStandardPrinterTest\Rector\Core\Tests\PhpParser\Printer\BetterStandardPrinterTest
  * @see \Rector\Core\Tests\PhpParser\Printer\BetterStandardPrinterTest
  */
 final class BetterStandardPrinter extends Standard
 {
     /**
      * @var string
-     * @see https://regex101.com/r/jUFizd/1
+     * @seehttpshttps://regex101.com/r/jUFizd/1
      */
     private const NEWLINE_END_REGEX = "#\n$#";
 
     /**
      * @var string
-     * @see https://regex101.com/r/w5E8Rh/1
+     * @seehttpshttps://regex101.com/r/w5E8Rh/1
      */
     private const FOUR_SPACE_START_REGEX = '#^ {4}#m';
 
     /**
      * @var string
-     * @see https://regex101.com/r/F5x783/1
+     * @seehttpshttps://regex101.com/r/F5x783/1
      */
     private const USE_REGEX = '#( use)\(#';
 
     /**
      * @var string
-     * @see https://regex101.com/r/DrsMY4/1
+     * @seehttpshttps://regex101.com/r/DrsMY4/1
      */
     private const QUOTED_SLASH_REGEX = "#'|\\\\(?=[\\\\']|$)#";
 
     /**
      * Remove extra spaces before new Nop_ nodes
-     * @see https://regex101.com/r/iSvroO/1
+     * @seehttpshttps://regex101.com/r/iSvroO/1
      * @var string
      */
     private const EXTRA_SPACE_BEFORE_NOP_REGEX = '#^[ \t]+$#m';
 
     /**
-     * @see https://regex101.com/r/qZiqGo/4
+     * @seehttpshttps://regex101.com/r/qZiqGo/4
      * @var string
      */
     private const REPLACE_COLON_WITH_SPACE_REGEX = '#(function .*?\(.*?\)) : #';
@@ -380,7 +381,7 @@ final class BetterStandardPrinter extends Standard
 
     /**
      * Do not add "()" on Expressions
-     * @see https://github.com/rectorphp/rector/pull/401#discussion_r181487199
+     * @seehttpshttps://github.com/rectorphp/rector/pull/401#discussion_r181487199
      */
     protected function pExpr_Yield(Yield_ $yield): string
     {

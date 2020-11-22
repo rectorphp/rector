@@ -14,7 +14,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 
 /**
- * @copied from https://github.com/phpstan/phpstan-nette/blob/master/src/Type/Nette/ComponentModelDynamicReturnTypeExtension.php
+ * @copiedfromfrom https://github.com/phpstan/phpstan-nette/blob/master/src/Type/Nette/ComponentModelDynamicReturnTypeExtension.php
  */
 final class ComponentModelDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {

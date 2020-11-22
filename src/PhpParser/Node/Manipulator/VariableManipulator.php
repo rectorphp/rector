@@ -142,7 +142,7 @@ final class VariableManipulator
 
     /**
      * Inspiration
-     * @see \Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator::isReadOnlyProperty()
+     * @see\Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator\Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator::isReadOnlyProperty()
      */
     private function isReadOnlyVariable(ClassMethod $classMethod, Variable $variable, Assign $assign): bool
     {

@@ -22,6 +22,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
+ * @see\Rector\Core\Tests\PhpParser\Node\Value\ValueResolverTest\Rector\Core\Tests\PhpParser\Node\Value\ValueResolverTest
  * @see \Rector\Core\Tests\PhpParser\Node\Value\ValueResolverTest
  */
 final class ValueResolver

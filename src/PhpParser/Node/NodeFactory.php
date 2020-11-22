@@ -55,6 +55,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 /**
+ * @see\Rector\Core\Tests\PhpParser\Node\NodeFactoryTest\Rector\Core\Tests\PhpParser\Node\NodeFactoryTest
  * @see \Rector\Core\Tests\PhpParser\Node\NodeFactoryTest
  */
 final class NodeFactory
@@ -382,7 +383,7 @@ final class NodeFactory
     }
 
     /**
-     * @todo decouple to StackNodeFactory
+     * @tododecoupledecouple to StackNodeFactory
      * @param Expr[] $exprs
      */
     public function createConcat(array $exprs): ?Concat

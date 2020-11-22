@@ -94,7 +94,7 @@ final class ClassConstManipulator
     }
 
     /**
-     * @see https://github.com/myclabs/php-enum#declaration
+     * @seehttpshttps://github.com/myclabs/php-enum#declaration
      */
     public function isEnum(ClassConst $classConst): bool
     {

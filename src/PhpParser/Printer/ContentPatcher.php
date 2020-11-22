@@ -9,128 +9,128 @@ use Nette\Utils\Strings;
 final class ContentPatcher
 {
     /**
-     * @see https://regex101.com/r/cLgjQf/3
+     * @seehttpshttps://regex101.com/r/cLgjQf/3
      * @var string
      */
     public const VALID_ANNOTATION_STRING_REGEX = '#\*\s+@.*".{1,}"}\)#';
 
     /**
-     * @see https://regex101.com/r/BhxeM8/3
+     * @seehttpshttps://regex101.com/r/BhxeM8/3
      * @var string
      */
     public const INVALID_ANNOTATION_STRING_REGEX = '#\*\s+@.*.{1,}[^"]}\)#';
 
     /**
-     * @see https://regex101.com/r/wpVS09/1
+     * @seehttpshttps://regex101.com/r/wpVS09/1
      * @var string
      */
     public const VALID_ANNOTATION_ROUTE_REGEX = '#\*\s+@.*:\s?".{1,}"}\)#';
 
     /**
-     * @see https://regex101.com/r/cIgWGi/1
+     * @seehttpshttps://regex101.com/r/cIgWGi/1
      * @var string
      */
     public const INVALID_ANNOTATION_ROUTE_REGEX = '#\*\s+@.*=\s?".{1,}"}\)#';
 
     /**
-     * @see https://regex101.com/r/nCPUz9/2
+     * @seehttpshttps://regex101.com/r/nCPUz9/2
      * @var string
      */
     public const VALID_ANNOTATION_COMMENT_REGEX = '#\*\s+@.*="[^"]*"}\)#';
 
     /**
-     * @see https://regex101.com/r/xPg2yo/1
+     * @seehttpshttps://regex101.com/r/xPg2yo/1
      * @var string
      */
     public const INVALID_ANNOTATION_COMMENT_REGEX = '#\*\s+@.*=".*"}\)#';
 
     /**
-     * @see https://regex101.com/r/5HT5AW/7
+     * @seehttpshttps://regex101.com/r/5HT5AW/7
      * @var string
      */
     public const VALID_ANNOTATION_CONSTRAINT_REGEX = '#\*\s+@.*\(?[\s\*]{0,}.*\s{0,}={(\s{0,}\*?\s{0,}".*",?){1,}[\s*]+}[\s\*]{1,}\)[\s\*}\)]{0,}#';
 
     /**
-     * @see https://regex101.com/r/U8KzfW/7
+     * @seehttpshttps://regex101.com/r/U8KzfW/7
      * @var string
      */
     public const INVALID_ANNOTATION_CONSTRAINT_REGEX = '#\*\s+@.*\(?[\s\*]{0,}.*\s{0,}={[^"].*(,[\s+\*]+.*)?}[\s\*]{1,}\)[\s\*}\)]{0,}#';
 
     /**
-     * @see https://regex101.com/r/rbCG9a/3
+     * @seehttpshttps://regex101.com/r/rbCG9a/3
      * @var string
      */
     public const VALID_ANNOTATION_ROUTE_OPTION_REGEX = '#\*\s+@.*={(\s{0,}".*"\s{0,}=\s{0,}[^",]*\s{0,},?){1,}}.*\)#';
 
     /**
-     * @see https://regex101.com/r/Kl3Ot1/3
+     * @seehttpshttps://regex101.com/r/Kl3Ot1/3
      * @var string
      */
     public const INVALID_ANNOTATION_ROUTE_OPTION_REGEX = '#\*\s+@.*={([^"]*=[^"]*,?){1,}[^,]}.*\)#';
 
     /**
-     * @see https://regex101.com/r/Hm2idk/1
+     * @seehttpshttps://regex101.com/r/Hm2idk/1
      * @var string
      */
     public const VALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX = '#^\s+\/\*\*\s+\s+\*\s+@.*\({(\s+\*\s{0,}".*":\s{0,}".*",?){1,}\s+\*\s{0,}[^,]}.*\)\s+\*\/#msU';
 
     /**
-     * @see https://regex101.com/r/qVOGbC/2
+     * @seehttpshttps://regex101.com/r/qVOGbC/2
      * @var string
      */
     public const INVALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX = '#^\s+\/\*\*\s+\s+\*\s+@.*(\s+\*\s{0,}[^"]*=\s{0,}[^"]*,?){1,}.*\)\s+\*\s+\*\/#msU';
 
     /**
-     * @see https://regex101.com/r/EA1xRY/2
+     * @seehttpshttps://regex101.com/r/EA1xRY/2
      * @var string
      */
     public const VALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX = '#^\s{0,}\* @return\s+(\(.*\)|(".*")(\|".*"){1,})$#msU';
 
     /**
-     * @see https://regex101.com/r/LprF44/3
+     * @seehttpshttps://regex101.com/r/LprF44/3
      * @var string
      */
     public const INVALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX = '#^\s{0,}\* @return([^\s].*|\s[^"\s]*)$#msU';
 
     /**
-     * @see https://regex101.com/r/4mBd0y/2
+     * @seehttpshttps://regex101.com/r/4mBd0y/2
      * @var string
      */
     private const CODE_MAY_DUPLICATE_REGEX = '#(if\s{0,}\(%s\(.*\{\s{0,}.*\s{0,}\}){2}#';
 
     /**
-     * @see https://regex101.com/r/k48bUj/1
+     * @seehttpshttps://regex101.com/r/k48bUj/1
      * @var string
      */
     private const CODE_MAY_DUPLICATE_NO_BRACKET_REGEX = '#(if\s{0,}\(%s\(.*\s{1,}.*\s{0,}){2}#';
 
     /**
-     * @see https://regex101.com/r/Ef83BV/1
+     * @seehttpshttps://regex101.com/r/Ef83BV/1
      * @var string
      */
     private const SPACE_REGEX = '#\s#';
 
     /**
-     * @see https://regex101.com/r/lC0i21/2
+     * @seehttpshttps://regex101.com/r/lC0i21/2
      * @var string
      */
     private const STAR_QUOTE_PARENTHESIS_REGEX = '#[\*"\(\)]#';
 
     /**
-     * @see https://regex101.com/r/j7agVx/1
+     * @seehttpshttps://regex101.com/r/j7agVx/1
      * @var string
      */
     private const ROUTE_VALID_REGEX = '#"\s?:\s?#';
 
     /**
-     * @see https://regex101.com/r/qgp6Tr/1
+     * @seehttpshttps://regex101.com/r/qgp6Tr/1
      * @var string
      */
     private const ROUTE_INVALID_REGEX = '#"\s?=\s?#';
 
     /**
      * @var string
-     * @see https://regex101.com/r/5DdLjE/1
+     * @seehttpshttps://regex101.com/r/5DdLjE/1
      */
     private const ROUTE_LOCALIZATION_REPLACE_REGEX = '#[:=]#';
 
@@ -140,7 +140,7 @@ final class ContentPatcher
     private const MAY_DUPLICATE_FUNC_CALLS = ['interface_exists', 'trait_exists'];
 
     /**
-     * @see https://github.com/rectorphp/rector/issues/4499
+     * @seehttpshttps://github.com/rectorphp/rector/issues/4499
      */
     public function cleanUpDuplicateContent(string $content): string
     {
@@ -169,14 +169,14 @@ final class ContentPatcher
     }
 
     /**
-     * @see https://github.com/rectorphp/rector/issues/3388
-     * @see https://github.com/rectorphp/rector/issues/3673
-     * @see https://github.com/rectorphp/rector/issues/4274
-     * @see https://github.com/rectorphp/rector/issues/4573
-     * @see https://github.com/rectorphp/rector/issues/4581
-     * @see https://github.com/rectorphp/rector/issues/4476
-     * @see https://github.com/rectorphp/rector/issues/4620
-     * @see https://github.com/rectorphp/rector/issues/4652
+     * @seehttpshttps://github.com/rectorphp/rector/issues/3388
+     * @seehttpshttps://github.com/rectorphp/rector/issues/3673
+     * @seehttpshttps://github.com/rectorphp/rector/issues/4274
+     * @seehttpshttps://github.com/rectorphp/rector/issues/4573
+     * @seehttpshttps://github.com/rectorphp/rector/issues/4581
+     * @seehttpshttps://github.com/rectorphp/rector/issues/4476
+     * @seehttpshttps://github.com/rectorphp/rector/issues/4620
+     * @seehttpshttps://github.com/rectorphp/rector/issues/4652
      */
     public function rollbackValidAnnotation(
         string $originalContent,

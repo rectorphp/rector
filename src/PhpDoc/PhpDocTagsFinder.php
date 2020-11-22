@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\SimplePhpDocParser\SimplePhpDocParser;
 
 /**
+ * @see\Rector\Core\Tests\PhpDoc\PhpDocTagsFinderTest\Rector\Core\Tests\PhpDoc\PhpDocTagsFinderTest
  * @see \Rector\Core\Tests\PhpDoc\PhpDocTagsFinderTest
  */
 final class PhpDocTagsFinder

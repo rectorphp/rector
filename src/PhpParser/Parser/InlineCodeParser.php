@@ -22,13 +22,13 @@ final class InlineCodeParser
 {
     /**
      * @var string
-     * @see https://regex101.com/r/dwe4OW/1
+     * @seehttpshttps://regex101.com/r/dwe4OW/1
      */
     private const PRESLASHED_DOLLAR_REGEX = '#\\\\\$#';
 
     /**
      * @var string
-     * @see https://regex101.com/r/tvwhWq/1
+     * @seehttpshttps://regex101.com/r/tvwhWq/1
      */
     private const CURLY_BRACKET_WRAPPER_REGEX = "#'{(\\\$.*?)}'#";
 

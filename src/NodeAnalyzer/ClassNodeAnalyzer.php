@@ -13,7 +13,7 @@ final class ClassNodeAnalyzer
 {
     /**
      * @var string
-     * @see https://regex101.com/r/FQH6RT/1
+     * @seehttpshttps://regex101.com/r/FQH6RT/1
      */
     private const ANONYMOUS_CLASS_REGEX = '#AnonymousClass\w+$#';
 

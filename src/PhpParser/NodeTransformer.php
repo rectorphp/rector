@@ -20,7 +20,7 @@ final class NodeTransformer
 {
     /**
      * @var string
-     * @see https://regex101.com/r/XFc3qA/1
+     * @seehttpshttps://regex101.com/r/XFc3qA/1
      */
     private const PERCENT_TEXT_REGEX = '#^%\w$#';
 

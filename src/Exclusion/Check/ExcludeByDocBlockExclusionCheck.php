@@ -15,13 +15,14 @@ use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
+ * @see\Rector\Core\Tests\Exclusion\Check\ExcludeByDocBlockExclusionCheckTest\Rector\Core\Tests\Exclusion\Check\ExcludeByDocBlockExclusionCheckTest
  * @see \Rector\Core\Tests\Exclusion\Check\ExcludeByDocBlockExclusionCheckTest
  */
 final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
 {
     /**
      * @var string
-     * @see https://regex101.com/r/d1NMi6/1
+     * @seehttpshttps://regex101.com/r/d1NMi6/1
      */
     private const NO_RECTORE_ANNOTATION_WITH_CLASS_REGEX = '#\@noRector(\s)+[^\w\\\\]#i';
 

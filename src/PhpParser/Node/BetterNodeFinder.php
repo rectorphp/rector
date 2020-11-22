@@ -19,6 +19,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Webmozart\Assert\Assert;
 
 /**
+ * @see\Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest\Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
  * @see \Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
  */
 final class BetterNodeFinder

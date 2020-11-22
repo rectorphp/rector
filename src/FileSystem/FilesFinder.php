@@ -14,19 +14,20 @@ use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
+ * @see\Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest\Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
  * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
  */
 final class FilesFinder
 {
     /**
      * @var string
-     * @see https://regex101.com/r/e1jm7v/1
+     * @seehttpshttps://regex101.com/r/e1jm7v/1
      */
     private const STARTS_WITH_ASTERISK_REGEX = '#^\*(.*?)[^*]$#';
 
     /**
      * @var string
-     * @see https://regex101.com/r/EgJQyZ/1
+     * @seehttpshttps://regex101.com/r/EgJQyZ/1
      */
     private const ENDS_WITH_ASTERISK_REGEX = '#^[^*](.*?)\*$#';
 

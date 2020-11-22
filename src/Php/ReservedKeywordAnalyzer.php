@@ -7,7 +7,7 @@ namespace Rector\Core\Php;
 final class ReservedKeywordAnalyzer
 {
     /**
-     * @see https://www.php.net/manual/en/reserved.keywords.php
+     * @seehttpshttps://www.php.net/manual/en/reserved.keywords.php
      * @var string[]
      */
     private const RESERVED_KEYWORDS = [

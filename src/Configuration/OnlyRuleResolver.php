@@ -8,13 +8,14 @@ use Nette\Utils\Strings;
 use Rector\Core\Exception\Configuration\RectorRuleNotFoundException;
 
 /**
+ * @see\Rector\Core\Tests\Configuration\OnlyRuleResolverTest\Rector\Core\Tests\Configuration\OnlyRuleResolverTest
  * @see \Rector\Core\Tests\Configuration\OnlyRuleResolverTest
  */
 final class OnlyRuleResolver
 {
     /**
      * @var string
-     * @see https://regex101.com/r/WOQuBL/1
+     * @seehttpshttps://regex101.com/r/WOQuBL/1
      */
     private const SLASH_REGEX = '#\\\\#';
 
