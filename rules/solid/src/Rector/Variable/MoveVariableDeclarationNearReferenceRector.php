@@ -184,6 +184,31 @@ CODE_SAMPLE
         return $this->getSameVarName([$next], $node);
     }
 
+    private function isInsideLoopStmts(Node $node): bool
+    {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        while ($parent) {
+            if ($parent instanceof For_ || $parent instanceof While_ || $parent instanceof Foreach_ || $parent instanceof Do_) {
+                return true;
+            }
+
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
+    }
+
+    private function mayBeArrayDimFetch(Node $node): Node
+    {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof ArrayDimFetch) {
+            $node = $parent->var;
+        }
+
+        return $node;
+    }
+
     private function getCountFound(Node $node, Variable $variable): int
     {
         $countFound = 0;
@@ -202,6 +227,30 @@ CODE_SAMPLE
         }
 
         return $countFound;
+    }
+
+    /**
+     * @param array<int, Node|null> $multiNodes
+     */
+    private function getSameVarName(array $multiNodes, Node $node): ?Variable
+    {
+        foreach ($multiNodes as $multiNode) {
+            if ($multiNode === null) {
+                continue;
+            }
+
+            /** @var Variable|null $found */
+            $found = $this->betterNodeFinder->findFirst($multiNode, function (Node $n) use ($node): bool {
+                $n = $this->mayBeArrayDimFetch($n);
+                return $n instanceof Variable && $this->isName($n, (string) $this->getName($node));
+            });
+
+            if ($found !== null) {
+                return $found;
+            }
+        }
+
+        return null;
     }
 
     private function countWithElseIf(Node $node, Variable $variable, int $countFound): int
@@ -234,54 +283,5 @@ CODE_SAMPLE
         }
 
         return $countFound;
-    }
-
-    private function isInsideLoopStmts(Node $node): bool
-    {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        while ($parent) {
-            if ($parent instanceof For_ || $parent instanceof While_ || $parent instanceof Foreach_ || $parent instanceof Do_) {
-                return true;
-            }
-
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        return false;
-    }
-
-    private function mayBeArrayDimFetch(Node $node): Node
-    {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof ArrayDimFetch) {
-            $node = $parent->var;
-        }
-
-        return $node;
-    }
-
-    /**
-     * @param array<int, Node|null> $multiNodes
-     */
-    private function getSameVarName(array $multiNodes, Node $node): ?Variable
-    {
-        foreach ($multiNodes as $multiNode) {
-            if ($multiNode === null) {
-                continue;
-            }
-
-            /** @var Variable|null $found */
-            $found = $this->betterNodeFinder->findFirst($multiNode, function (Node $n) use ($node): bool {
-                $n = $this->mayBeArrayDimFetch($n);
-                return $n instanceof Variable && $this->isName($n, (string) $this->getName($node));
-            });
-
-            if ($found) {
-                return $found;
-            }
-        }
-
-        return null;
     }
 }
