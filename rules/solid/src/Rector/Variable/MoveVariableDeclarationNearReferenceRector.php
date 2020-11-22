@@ -6,6 +6,7 @@ namespace Rector\SOLID\Rector\Variable;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -23,7 +24,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PhpParser\Node\Expr\ArrayDimFetch;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\MoveVariableDeclarationNearReferenceRectorTest
@@ -127,12 +127,12 @@ CODE_SAMPLE
 
         while ($next) {
             foreach ($exprValues as $value) {
-                $isReAssign = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node) use (
-                    $value
-                ): bool {
+                $isReAssign = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node): bool {
                     $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
                     $node = $this->mayBeArrayDimFetch($node);
-                    return $parent instanceof Assign && (string) $this->getName($node) === (string) $this->getName($parent->var);
+                    return $parent instanceof Assign && (string) $this->getName($node) === (string) $this->getName(
+                        $parent->var
+                    );
                 });
 
                 if (! $isReAssign) {
@@ -162,29 +162,15 @@ CODE_SAMPLE
 
         $countFound = 0;
         while ($next) {
-            $isFound = (bool) $this->betterNodeFinder->findFirst($next, function (Node $n) use ($node): bool {
-                $n = $this->mayBeArrayDimFetch($n);
-                return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
-            });
+            $isFound = (bool) $this->getSameVarName($next, $node);
 
             if ($isFound) {
                 ++$countFound;
             }
 
             if ($next instanceof If_) {
-                $isFoundElseIf = (bool) $this->betterNodeFinder->findFirst($next->elseifs, function (Node $n) use (
-                    $node
-                ): bool {
-                    $n = $this->mayBeArrayDimFetch($n);
-                    return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
-                });
-
-                $isFoundElse = (bool) $this->betterNodeFinder->findFirst($next->else, function (Node $n) use (
-                    $node
-                ): bool {
-                    $n = $this->mayBeArrayDimFetch($n);
-                    return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
-                });
+                $isFoundElseIf = (bool) $this->getSameVarName($next->elseifs, $node);
+                $isFoundElse = (bool) $this->getSameVarName($next->else, $node);
 
                 if ($isFoundElseIf || $isFoundElse) {
                     ++$countFound;
@@ -192,19 +178,8 @@ CODE_SAMPLE
             }
 
             if ($next instanceof TryCatch) {
-                $isFoundInCatch = (bool) $this->betterNodeFinder->findFirst($next->catches, function (Node $n) use (
-                    $node
-                ): bool {
-                    $n = $this->mayBeArrayDimFetch($n);
-                    return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
-                });
-
-                $isFoundInFinally = (bool) $this->betterNodeFinder->findFirst($next->finally, function (Node $n) use (
-                    $node
-                ): bool {
-                    $n = $this->mayBeArrayDimFetch($n);
-                    return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
-                });
+                $isFoundInCatch = (bool) $this->getSameVarName($next->catches, $node);
+                $isFoundInFinally = (bool) $this->getSameVarName($next, $node);
 
                 if ($isFoundInCatch || $isFoundInFinally) {
                     ++$countFound;
@@ -224,10 +199,7 @@ CODE_SAMPLE
         }
 
         $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
-        return $this->betterNodeFinder->findFirst($next, function (Node $n) use ($node): bool {
-            $n = $this->mayBeArrayDimFetch($n);
-            return $n instanceof Variable && (string) $this->getName($n) === (string) $this->getName($node);
-        });
+        return $this->getSameVarName($next, $node);
     }
 
     private function mayBeArrayDimFetch(Node $node): Node
@@ -238,6 +210,17 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    /**
+     * @param array|Node $node
+     */
+    private function getSameVarName($node, Node $variable): ?Node
+    {
+        return $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
+            $n = $this->mayBeArrayDimFetch($n);
+            return $n instanceof Variable && $this->isName($n, (string) $this->getName($variable));
+        });
     }
 
     private function isInsideLoopStmts(Node $node): bool
