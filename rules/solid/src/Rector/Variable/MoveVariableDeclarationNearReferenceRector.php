@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Rector\SOLID\Rector\Variable;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Expression;
@@ -70,6 +73,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->hasObjectPropertyInExpr($parent->expr)) {
+            return null;
+        }
+
         if ($this->isUsedInParentPrev($expression, $node) || $this->isUsedInParentPrev($expression, $parent->expr)) {
             return null;
         }
@@ -105,6 +112,13 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function hasObjectPropertyInExpr(Expr $expr): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($expr, function (Node $node): bool {
+            return $node instanceof PropertyFetch || $node instanceof StaticPropertyFetch;
+        });
     }
 
     private function isInsideLoopStmts(Node $node): bool
