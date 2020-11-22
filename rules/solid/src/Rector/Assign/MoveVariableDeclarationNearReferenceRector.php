@@ -95,6 +95,7 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var Variable|null $firstUsedVariable */
         $firstUsedVariable = $this->findFirstVariableUsageInScope($variable, $node, $parentScope);
         if ($firstUsedVariable === null) {
             return null;
