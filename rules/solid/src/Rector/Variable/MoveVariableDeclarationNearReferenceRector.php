@@ -87,7 +87,10 @@ CODE_SAMPLE
         return null;
     }
 
-    private function getUsageInNextStmts(Expression $expression, Variable $variable)
+    /**
+     * @return Variable[]
+     */
+    private function getUsageInNextStmts(Expression $expression, Variable $variable): array
     {
         /** @var Node|null $next */
         $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
