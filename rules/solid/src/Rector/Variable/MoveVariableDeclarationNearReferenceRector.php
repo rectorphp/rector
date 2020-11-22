@@ -70,25 +70,30 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isUsedInParentPrev($expression, $node)) {
+        if ($this->isUsedInParentPrev($expression, $node) || $this->isUsedInParentPrev($expression, $parent->expr)) {
             return null;
         }
 
-        $usages = $this->getUsageInNextStmts($expression, $node);
-        if ($usages === []) {
+        $usagesExpr = $this->getUsageInNextStmts($expression, $parent->expr);
+        if ($usagesExpr !== []) {
             return null;
         }
 
-        if (count($usages) === 1) {
+        $usagesVar = $this->getUsageInNextStmts($expression, $node);
+        if ($usagesVar === []) {
+            return null;
+        }
+
+        if (count($usagesVar) === 1) {
             /** @var Node $parentUsage */
-            $parentUsage = $usages[0]->getAttribute(AttributeKey::PARENT_NODE);
+            $parentUsage = $usagesVar[0]->getAttribute(AttributeKey::PARENT_NODE);
             // skip re-assign
             if ($parentUsage instanceof Assign) {
                 return null;
             }
 
             /** @var Node $usageStmt */
-            $usageStmt = $usages[0]->getAttribute(AttributeKey::CURRENT_STATEMENT);
+            $usageStmt = $usagesVar[0]->getAttribute(AttributeKey::CURRENT_STATEMENT);
             if ($this->isInsideLoopStmts($usageStmt, $node)) {
                 return null;
             }
@@ -117,8 +122,12 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isUsedInParentPrev(Expression $expression, Variable $variable)
+    private function isUsedInParentPrev(Expression $expression, Node $variable)
     {
+        if (! $variable instanceof Variable) {
+            return false;
+        }
+
         $parentExpression = $expression->getAttribute(AttributeKey::PARENT_NODE);
         while ($parentExpression) {
             $previous = $parentExpression->getAttribute(AttributeKey::PREVIOUS_NODE);
@@ -145,8 +154,12 @@ CODE_SAMPLE
     /**
      * @return Variable[]
      */
-    private function getUsageInNextStmts(Expression $expression, Variable $variable): array
+    private function getUsageInNextStmts(Expression $expression, Node $variable): array
     {
+        if (! $variable instanceof Variable) {
+            return [];
+        }
+
         /** @var Node|null $next */
         $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
 
