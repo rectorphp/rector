@@ -28,7 +28,7 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractKernelT
     }
 
     /**
-     * @dataProvider provideData()
+     * @dataProviderprovideDataprovideData()
      * @param array<string, string> $expectedConfiguration
      */
     public function testMainConfigValues(

@@ -10,7 +10,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class DoNotChangeAnnotationConstraintTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideData()
+     * @dataProviderprovideDataprovideData()
      */
     public function test(SmartFileInfo $fileInfo): void
     {

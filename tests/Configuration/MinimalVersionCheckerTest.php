@@ -14,7 +14,7 @@ use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 final class MinimalVersionCheckerTest extends AbstractKernelTestCase
 {
     /**
-     * @dataProvider dataProvider
+     * @dataProviderdataProviderdataProvider
      */
     public function test(string $version, bool $shouldThrowException): void
     {

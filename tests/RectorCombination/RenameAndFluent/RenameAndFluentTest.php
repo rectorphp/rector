@@ -11,7 +11,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class RenameAndFluentTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideData()
+     * @dataProviderprovideDataprovideData()
      */
     public function test(SmartFileInfo $fileInfo): void
     {

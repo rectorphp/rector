@@ -25,7 +25,7 @@ final class OnlyRuleResolverTest extends AbstractKernelTestCase
     }
 
     /**
-     * @dataProvider provideData()
+     * @dataProviderprovideDataprovideData()
      */
     public function test(string $rule, string $expectedRectorClass): void
     {

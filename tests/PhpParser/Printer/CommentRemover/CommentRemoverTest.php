@@ -27,7 +27,7 @@ final class CommentRemoverTest extends AbstractKernelTestCase
     }
 
     /**
-     * @dataProvider provideData()
+     * @dataProviderprovideDataprovideData()
      */
     public function test(SmartFileInfo $smartFileInfo): void
     {

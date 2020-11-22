@@ -12,7 +12,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class CommentPreservingTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideData()
+     * @dataProviderprovideDataprovideData()
      */
     public function test(SmartFileInfo $fileInfo): void
     {

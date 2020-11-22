@@ -13,7 +13,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ExcludeByDocBlockExclusionCheckTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideData()
+     * @dataProviderprovideDataprovideData()
      */
     public function test(SmartFileInfo $fileInfo): void
     {

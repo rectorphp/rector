@@ -11,7 +11,7 @@ use Rector\Core\Util\StaticRectorStrings;
 final class StaticRectorStringsTest extends TestCase
 {
     /**
-     * @dataProvider provideDataForCamelCaseToUnderscore()
+     * @dataProviderprovideDataForCamelCaseToUnderscoreprovideDataForCamelCaseToUnderscore()
      */
     public function testCamelCaseToUnderscore(string $content, string $expected): void
     {
@@ -32,7 +32,7 @@ final class StaticRectorStringsTest extends TestCase
     }
 
     /**
-     * @dataProvider provideDataForUnderscoreToCamelCase()
+     * @dataProviderprovideDataForUnderscoreToCamelCaseprovideDataForUnderscoreToCamelCase()
      */
     public function testUnderscoreToCamelCase(string $content, string $expected): void
     {
@@ -45,7 +45,7 @@ final class StaticRectorStringsTest extends TestCase
     }
 
     /**
-     * @dataProvider provideDataForUnderscoreToPascalCase()
+     * @dataProviderprovideDataForUnderscoreToPascalCaseprovideDataForUnderscoreToPascalCase()
      */
     public function testUnderscoreToPascalCase(string $content, string $expected): void
     {

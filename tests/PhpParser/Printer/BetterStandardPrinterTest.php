@@ -60,7 +60,7 @@ final class BetterStandardPrinterTest extends AbstractKernelTestCase
     }
 
     /**
-     * @dataProvider provideDataForDoubleSlashEscaping()
+     * @dataProviderprovideDataForDoubleSlashEscapingprovideDataForDoubleSlashEscaping()
      */
     public function testDoubleSlashEscaping(string $content, string $expectedOutput): void
     {

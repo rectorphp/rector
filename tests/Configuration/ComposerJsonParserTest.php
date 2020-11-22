@@ -12,7 +12,7 @@ use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 final class ComposerJsonParserTest extends AbstractKernelTestCase
 {
     /**
-     * @dataProvider dataProvider
+     * @dataProviderdataProviderdataProvider
      */
     public function test(string $expectedVersion, string $version): void
     {

@@ -31,7 +31,7 @@ final class FilesFinderTest extends AbstractKernelTestCase
     }
 
     /**
-     * @dataProvider provideData()
+     * @dataProviderprovideDataprovideData()
      */
     public function testSingleSuffix(string $suffix, int $count, string $expectedFileName): void
     {
