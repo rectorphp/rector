@@ -66,6 +66,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isUsedInParentPrev($expression, $node)) {
+            return null;
+        }
+
         $usages = $this->getUsageInNextStmts($expression, $node);
         if ($usages === []) {
             return null;
@@ -88,6 +92,33 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function isUsedInParentPrev(Expression $expression, Variable $variable)
+    {
+        $parentExpression = $expression->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parentExpression) {
+            $previous = $parentExpression->getAttribute(AttributeKey::PREVIOUS_NODE);
+            if (! $previous instanceof Node) {
+                $parentExpression = $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
+
+                continue;
+            }
+
+            $foundInPrev = $this->betterNodeFinder->find($previous, function (Node $node) use (
+                $variable
+            ): bool {
+                return $this->areNodesEqual($node, $variable);
+            });
+
+            if ($foundInPrev) {
+                return true;
+            }
+
+            $parentExpression = $parentExpression->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
     }
 
     /**
