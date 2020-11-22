@@ -14,6 +14,9 @@ use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -70,6 +73,10 @@ CODE_SAMPLE
         /** @var Expression */
         $expression = $parent->getAttribute(AttributeKey::PARENT_NODE);
         if (! $expression instanceof Expression) {
+            return null;
+        }
+
+        if ($this->isInsideCondition($expression)) {
             return null;
         }
 
@@ -184,6 +191,21 @@ CODE_SAMPLE
 
         while ($parent) {
             if ($parent instanceof For_ || $parent instanceof While_ || $parent instanceof Foreach_ || $parent instanceof Do_) {
+                return true;
+            }
+
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
+    }
+
+    private function isInsideCondition(Node $node): bool
+    {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        while ($parent) {
+            if ($parent instanceof If_ || $parent instanceof Else_ || $parent instanceof ElseIf_) {
                 return true;
             }
 
