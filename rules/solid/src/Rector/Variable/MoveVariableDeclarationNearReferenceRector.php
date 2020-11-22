@@ -181,7 +181,32 @@ CODE_SAMPLE
         }
 
         $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
-        return $this->getSameVarName([$next], $node);
+        $variable = $this->getSameVarName([$next], $node);
+
+        if ($variable instanceof Variable) {
+            return $variable;
+        }
+
+        return $this->getSameVarNameInNexts($next, $node);
+    }
+
+    private function getSameVarNameInNexts(Node $node, Variable $variable): ?Variable
+    {
+        while ($node) {
+            $found = $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
+                $n = $this->mayBeArrayDimFetch($n);
+                return $n instanceof Variable && $this->isName($n, (string) $this->getName($variable));
+            });
+
+            if ($found instanceof Variable) {
+                return $found;
+            }
+
+            /** @var Node|null $node */
+            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
+        }
+
+        return null;
     }
 
     private function isInsideLoopStmts(Node $node): bool
