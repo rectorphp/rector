@@ -167,6 +167,20 @@ CODE_SAMPLE
                 ++$countFound;
             }
 
+            if ($next instanceof If_) {
+                // check elseif
+                $isFoundElseIf = (bool) $this->betterNodeFinder->findFirst($next->elseifs, function (Node $n) use ($node): bool {
+                    return $n instanceof Variable && $this->areNodesEqual($n, $node);
+                });
+                $isFoundElse = (bool) $this->betterNodeFinder->findFirst($next->else, function (Node $n) use ($node): bool {
+                    return $n instanceof Variable && $this->areNodesEqual($n, $node);
+                });
+
+                if ($isFoundElseIf || $isFoundElse) {
+                    ++$countFound;
+                }
+            }
+
             if ($countFound === 2) {
                 return null;
             }
