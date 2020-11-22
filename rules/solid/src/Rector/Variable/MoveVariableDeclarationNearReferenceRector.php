@@ -163,7 +163,7 @@ CODE_SAMPLE
         return false;
     }
 
-    private function getUsageInNextStmts(Expression $expression, Node $node): ?Node
+    private function getUsageInNextStmts(Expression $expression, Node $node): ?Variable
     {
         if (! $node instanceof Variable) {
             return null;
@@ -245,9 +245,9 @@ CODE_SAMPLE
     /**
      * @param array|Node $node
      */
-    private function getSameVarName($node, Node $node): ?Node
+    private function getSameVarName($nodes, Node $node): ?Variable
     {
-        return $this->betterNodeFinder->findFirst($node, function (Node $n) use ($node): bool {
+        return $this->betterNodeFinder->findFirst($nodes, function (Node $n) use ($node): bool {
             $n = $this->mayBeArrayDimFetch($n);
             return $n instanceof Variable && $this->isName($n, (string) $this->getName($node));
         });
