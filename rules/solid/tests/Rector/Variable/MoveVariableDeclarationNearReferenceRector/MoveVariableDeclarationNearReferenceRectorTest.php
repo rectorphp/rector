@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Tests\Rector\Assign\MoveVariableDeclarationNearReferenceRector;
+namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector;
 
 use Iterator;
-use Rector\SOLID\Rector\Assign\MoveVariableDeclarationNearReferenceRector;
+use Rector\SOLID\Rector\Variable\MoveVariableDeclarationNearReferenceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
