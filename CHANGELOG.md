@@ -12,6 +12,38 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ## Unreleased
 
+### Added
+
+- [#4660] [CodingStyle] Add static support to PreferThisOrSelfMethodCallRector
+- [#4653] [PSR-4] autoprefix on namespace add
+- [#4624] [StrictTypes] Fixes [#4429] Add ParamTypeToAssertTypeRector, Thanks to [@samsonasik]
+- [#4637] [Laravel 5.8] Add CallOnAppArrayAccessToStandaloneAssignRector, PropertyDeferToDeferrableProviderToRector, MakeTaggedPassedToParameterIterableTypeRector
+
+### Changed
+
+- [#4640] [CodingStyle] Skip RemoveDoubleUnderscoreInMethodNameRector when method name only __, Thanks to [@samsonasik]
+- [#4645] [CodingStyle] Skip RemoveDoubleUnderscoreInMethodNameRector on first numeric on new name, Thanks to [@samsonasik]
+- [#4642] [CodingStyle] Improve RemoveParamReturnDocblockRector: handle namespaced [@param] & [@return], Thanks to [@samsonasik]
+- [#4662] [Laravel] Improve static to DI set
+- [#4643] [Solid] Improve MoveVariableDeclarationNearReferenceRector : skip variable with usage in multiple level, Thanks to [@samsonasik]
+- [#4657] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]
+- [#4656] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
+- [#4638] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
+- [#4639] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+
+### Fixed
+
+- [#4666] [BetterStandardPrinter] Fixes [#4652] Skip [@return] explicit format, Thanks to [@samsonasik]
+- [#4646] [BetterStandardPrinter] Fixes [#3388] Skip Localization Annotation route, Thanks to [@samsonasik]
+- [#4665] [CodingStyle] Fix lowercase misses in importing, decouple ImportSkipper to collector with ClassNameImportSkipVoters
+- [#4651] [PSR-4] fix case of missing namespace
+- [#4641] Some small grammatical fixes, Thanks to [@xdhmoore]
+- [#4648] [PHP 7.4] Fixes [#4647] Make limit Value in AddLiteralSeparatorToNumberRector configurable, Thanks to [@samsonasik]
+
+
+
+## Unreleased
+
 ### Changed
 
 - [#4632] rename to RequireClassTypeInClassMethodByTypeRule
@@ -5621,3 +5653,27 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#4632]: https://github.com/rectorphp/rector/pull/4632
 [#4631]: https://github.com/rectorphp/rector/pull/4631
 [#4630]: https://github.com/rectorphp/rector/pull/4630
+[#4666]: https://github.com/rectorphp/rector/pull/4666
+[#4665]: https://github.com/rectorphp/rector/pull/4665
+[#4662]: https://github.com/rectorphp/rector/pull/4662
+[#4660]: https://github.com/rectorphp/rector/pull/4660
+[#4657]: https://github.com/rectorphp/rector/pull/4657
+[#4656]: https://github.com/rectorphp/rector/pull/4656
+[#4653]: https://github.com/rectorphp/rector/pull/4653
+[#4652]: https://github.com/rectorphp/rector/pull/4652
+[#4651]: https://github.com/rectorphp/rector/pull/4651
+[#4648]: https://github.com/rectorphp/rector/pull/4648
+[#4647]: https://github.com/rectorphp/rector/pull/4647
+[#4646]: https://github.com/rectorphp/rector/pull/4646
+[#4645]: https://github.com/rectorphp/rector/pull/4645
+[#4643]: https://github.com/rectorphp/rector/pull/4643
+[#4642]: https://github.com/rectorphp/rector/pull/4642
+[#4641]: https://github.com/rectorphp/rector/pull/4641
+[#4640]: https://github.com/rectorphp/rector/pull/4640
+[#4639]: https://github.com/rectorphp/rector/pull/4639
+[#4638]: https://github.com/rectorphp/rector/pull/4638
+[#4637]: https://github.com/rectorphp/rector/pull/4637
+[#4624]: https://github.com/rectorphp/rector/pull/4624
+[#4429]: https://github.com/rectorphp/rector/pull/4429
+[#3388]: https://github.com/rectorphp/rector/pull/3388
+[@xdhmoore]: https://github.com/xdhmoore
