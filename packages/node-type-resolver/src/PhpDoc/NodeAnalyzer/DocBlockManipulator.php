@@ -76,13 +76,13 @@ final class DocBlockManipulator
 
     public function replaceTagByAnother(PhpDocNode $phpDocNode, string $oldTag, string $newTag): void
     {
-        $oldTag = StaticAnnotationNaming::normalizeName($oldTag);
         $newTag = StaticAnnotationNaming::normalizeName($newTag);
 
         foreach ($phpDocNode->children as $phpDocChildNode) {
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
+            $oldTag = StaticAnnotationNaming::normalizeName($oldTag);
 
             if ($phpDocChildNode->name === $oldTag) {
                 $phpDocChildNode->name = $newTag;

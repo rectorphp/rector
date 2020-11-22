@@ -23,10 +23,9 @@ final class AttributeAwareCallableTypeNode extends CallableTypeNode implements A
 
     private function createExplicitCallable(): string
     {
+        $parameterTypeString = $this->createParameterTypeString();
         /** @var IdentifierTypeNode|GenericTypeNode $returnType */
         $returnType = $this->returnType;
-
-        $parameterTypeString = $this->createParameterTypeString();
 
         $returnTypeAsString = (string) $returnType;
         if (Strings::contains($returnTypeAsString, '|')) {

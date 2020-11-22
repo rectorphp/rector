@@ -115,11 +115,8 @@ final class DocBlockNameImporter
             return $identifierTypeNode;
         }
 
-        $shortenedIdentifierTypeNode = new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
-
         $this->hasPhpDocChanged = true;
         $this->useNodesToAddCollector->addUseImport($node, $fullyQualifiedObjectType);
-
-        return $shortenedIdentifierTypeNode;
+        return new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
     }
 }

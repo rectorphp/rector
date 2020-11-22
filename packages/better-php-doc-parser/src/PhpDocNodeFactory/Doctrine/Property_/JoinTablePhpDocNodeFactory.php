@@ -108,8 +108,6 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
      */
     private function createJoinColumnTagValues(string $annotationContent, JoinTable $joinTable, string $type): array
     {
-        $joinColumnContents = $this->matchJoinColumnContents($annotationContent);
-
         $joinColumnValuesTags = [];
 
         if (! in_array($type, [self::JOIN_COLUMNS, self::INVERSE_JOIN_COLUMNS], true)) {
@@ -119,6 +117,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
         $joinColumns = $type === self::JOIN_COLUMNS ? $joinTable->joinColumns : $joinTable->inverseJoinColumns;
 
         foreach ($joinColumns as $key => $joinColumn) {
+            $joinColumnContents = $this->matchJoinColumnContents($annotationContent);
             $subAnnotation = $joinColumnContents[$key];
 
             $items = $this->annotationItemsResolver->resolve($joinColumn);

@@ -16,9 +16,9 @@ trait RunnableTestTrait
         SmartFileInfo $expectedFileInfo
     ): void {
         $runnable = $this->runnableRectorFactory->createRunnableClass($originalFileInfo);
-        $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
 
         $actualResult = $runnable->run();
+        $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
         $expectedResult = $expectedInstance->run();
 
         $this->assertSame($expectedResult, $actualResult);

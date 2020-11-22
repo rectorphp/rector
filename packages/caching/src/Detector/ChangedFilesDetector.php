@@ -51,10 +51,9 @@ final class ChangedFilesDetector
 
     public function hasFileChanged(SmartFileInfo $smartFileInfo): bool
     {
-        $currentFileHash = $this->hashFile($smartFileInfo);
-
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
         $cacheItem = $this->tagAwareAdapter->getItem($fileInfoCacheKey);
+        $currentFileHash = $this->hashFile($smartFileInfo);
 
         $oldFileHash = $cacheItem->get();
 

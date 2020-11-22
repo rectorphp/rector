@@ -391,9 +391,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             return;
         }
 
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-
         foreach ($this->oldParameterValues as $name => $oldParameterValue) {
+            $parameterProvider = self::$container->get(ParameterProvider::class);
             $parameterProvider->changeParameter($name, $oldParameterValue);
         }
     }
@@ -478,9 +477,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     private function createContainerWithAllRectors(): void
     {
         $rectorsFinder = new RectorsFinder();
-        $coreRectorClasses = $rectorsFinder->findCoreRectorClasses();
 
         $listForConfig = [];
+        $coreRectorClasses = $rectorsFinder->findCoreRectorClasses();
         foreach ($coreRectorClasses as $rectorClass) {
             $listForConfig[$rectorClass] = null;
         }

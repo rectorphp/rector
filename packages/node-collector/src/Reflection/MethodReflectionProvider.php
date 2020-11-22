@@ -163,9 +163,9 @@ final class MethodReflectionProvider
     public function provideParameterNamesByNew(New_ $new): array
     {
         $objectType = $this->nodeTypeResolver->resolve($new->class);
-        $classes = TypeUtils::getDirectClassNames($objectType);
 
         $parameterNames = [];
+        $classes = TypeUtils::getDirectClassNames($objectType);
 
         foreach ($classes as $class) {
             if (! method_exists($class, MethodName::CONSTRUCT)) {

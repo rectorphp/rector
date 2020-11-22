@@ -101,9 +101,8 @@ CODE_SAMPLE
     {
         $properties = $this->propertyToAddCollector->getPropertiesByClass($class);
 
-        $isNetteInjectPreferred = $this->netteInjectDetector->isNetteInjectPreferred($class);
-
         foreach ($properties as $propertyName => $propertyType) {
+            $isNetteInjectPreferred = $this->netteInjectDetector->isNetteInjectPreferred($class);
             if (! $isNetteInjectPreferred) {
                 $this->classDependencyManipulator->addConstructorDependency($class, $propertyName, $propertyType);
             } else {

@@ -45,11 +45,11 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
         }
 
         $tagValueNodeClassesToAnnotationClasses = $this->getTagValueNodeClassesToAnnotationClasses();
-        $tagValueNodeClass = array_search($annotationClass, $tagValueNodeClassesToAnnotationClasses, true);
 
         $content = $this->resolveContentFromTokenIterator($tokenIterator);
         $items = $this->annotationItemsResolver->resolve($annotation);
         $fullyQualifiedTargetEntity = $this->resolveFqnTargetEntity($annotation->targetEntity, $node);
+        $tagValueNodeClass = array_search($annotationClass, $tagValueNodeClassesToAnnotationClasses, true);
 
         return new $tagValueNodeClass($items, $content, $fullyQualifiedTargetEntity);
     }

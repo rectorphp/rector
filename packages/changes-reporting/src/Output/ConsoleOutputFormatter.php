@@ -108,10 +108,9 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         $message = sprintf('%d file%s with changes', count($fileDiffs), count($fileDiffs) === 1 ? '' : 's');
 
         $this->symfonyStyle->title($message);
-
-        $i = 0;
         foreach ($fileDiffs as $fileDiff) {
             $relativeFilePath = $fileDiff->getRelativeFilePath();
+            $i = 0;
             $message = sprintf('<options=bold>%d) %s</>', ++$i, $relativeFilePath);
 
             $this->symfonyStyle->writeln($message);
@@ -185,8 +184,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         $this->symfonyStyle->warning($message);
 
         if ($this->symfonyStyle->isVeryVerbose()) {
-            $i = 0;
             foreach ($errorAndDiffCollector->getRemovedNodes() as $removedNode) {
+                $i = 0;
                 /** @var SmartFileInfo $fileInfo */
                 $fileInfo = $removedNode->getAttribute(AttributeKey::FILE_INFO);
                 $message = sprintf(

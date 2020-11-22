@@ -118,10 +118,9 @@ final class ConfigurationNodeFactory
 
         $classMethod->stmts = $assigns;
 
-        $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
-
         $identifierTypeNode = new IdentifierTypeNode('mixed[]');
         $paramTagValueNode = new ParamTagValueNode($identifierTypeNode, false, '$configuration', '');
+        $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
         $phpDocInfo->addTagValueNode($paramTagValueNode);
 
         return $classMethod;

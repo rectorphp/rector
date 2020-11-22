@@ -77,9 +77,9 @@ final class UnionTypeMapper implements TypeMapperInterface
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         $unionTypesNodes = [];
-        $skipIterable = $this->shouldSkipIterable($type);
 
         foreach ($type->getTypes() as $unionedType) {
+            $skipIterable = $this->shouldSkipIterable($type);
             if ($unionedType instanceof IterableType && $skipIterable) {
                 continue;
             }

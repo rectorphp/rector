@@ -33,10 +33,8 @@ final class PHPUnitDataProviderDocNodeFactory
     {
         try {
             $tokenIterator->pushSavePoint();
-            $attributeAwareDataProviderTagValueNode = $this->parseDataProviderTagValue($tokenIterator);
             $tokenIterator->dropSavePoint();
-
-            return $attributeAwareDataProviderTagValueNode;
+            return $this->parseDataProviderTagValue($tokenIterator);
         } catch (ParserException $parserException) {
             $tokenIterator->rollback();
             $description = $this->privatesCaller->callPrivateMethod(

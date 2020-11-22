@@ -50,9 +50,8 @@ final class ParentClassLikeTypeCorrector
             return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
         }
 
-        $classNames = TypeUtils::getDirectClassNames($type);
-
         $allTypes = [];
+        $classNames = TypeUtils::getDirectClassNames($type);
         foreach ($classNames as $className) {
             if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
                 continue;

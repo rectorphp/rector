@@ -111,8 +111,8 @@ function resolve_property_values(ReflectionClass $reflectionClass, object $objec
     $propertyValues = [];
 
     foreach ($reflectionClass->getProperties() as $reflectionProperty) {
-        $parameterName = $reflectionProperty->getName();
         $reflectionProperty->setAccessible(true);
+        $parameterName = $reflectionProperty->getName();
 
         $propertyValues[$parameterName] = $reflectionProperty->getValue($object);
     }

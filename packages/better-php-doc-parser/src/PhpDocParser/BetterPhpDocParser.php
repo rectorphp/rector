@@ -286,13 +286,12 @@ final class BetterPhpDocParser extends PhpDocParser
         if ($tokenIterator->currentTokenType() !== Lexer::TOKEN_IDENTIFIER) {
             return $tag;
         }
-        $oldTag = $tag;
 
         $tag .= $tokenIterator->currentTokenValue();
 
         $isTagMatchedByFactories = (bool) $this->matchTagToPhpDocNodeFactory($tag);
         if (! $isTagMatchedByFactories) {
-            return $oldTag;
+            return $tag;
         }
 
         $tokenIterator->next();
@@ -345,8 +344,8 @@ final class BetterPhpDocParser extends PhpDocParser
 
     private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
     {
-        $originalTokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
         $originalContent = '';
+        $originalTokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
 
         foreach ($originalTokens as $originalToken) {
             // skip opening

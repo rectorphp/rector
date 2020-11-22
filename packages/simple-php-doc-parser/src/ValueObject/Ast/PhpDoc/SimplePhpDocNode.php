@@ -15,9 +15,8 @@ class SimplePhpDocNode extends PhpDocNode
 {
     public function getParam(string $desiredParamName): ?ParamTagValueNode
     {
-        $desiredParamNameWithDollar = '$' . ltrim($desiredParamName, '$');
-
         foreach ($this->getParamTagValues() as $paramTagValueNode) {
+            $desiredParamNameWithDollar = '$' . ltrim($desiredParamName, '$');
             if ($paramTagValueNode->parameterName !== $desiredParamNameWithDollar) {
                 continue;
             }

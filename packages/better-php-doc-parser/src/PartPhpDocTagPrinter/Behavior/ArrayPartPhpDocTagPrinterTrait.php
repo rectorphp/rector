@@ -37,8 +37,6 @@ trait ArrayPartPhpDocTagPrinterTrait
 
         $content = $this->replaceColonWithEqualInSymfonyAndDoctrine($content, $tagValueNodeConfiguration);
 
-        $keyPart = $this->createKeyPart($key, $tagValueNodeConfiguration);
-
         // should unquote
         if ($this->isValueWithoutQuotes($key, $tagValueNodeConfiguration)) {
             $content = Strings::replace($content, '#"#');
@@ -47,6 +45,7 @@ trait ArrayPartPhpDocTagPrinterTrait
         if ($tagValueNodeConfiguration->getOriginalContent() !== null && $key !== null) {
             $content = $this->quoteKeys($item, $key, $content, $tagValueNodeConfiguration->getOriginalContent());
         }
+        $keyPart = $this->createKeyPart($key, $tagValueNodeConfiguration);
 
         return $keyPart . $content;
     }

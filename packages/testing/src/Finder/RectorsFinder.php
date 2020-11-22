@@ -47,9 +47,8 @@ final class RectorsFinder
      */
     public function findInDirectoriesAndCreate(array $directories): array
     {
-        $foundClasses = $this->findClassesInDirectoriesByName($directories, '*Rector.php');
-
         $rectors = [];
+        $foundClasses = $this->findClassesInDirectoriesByName($directories, '*Rector.php');
         foreach ($foundClasses as $class) {
             if ($this->shouldSkipClass($class)) {
                 continue;

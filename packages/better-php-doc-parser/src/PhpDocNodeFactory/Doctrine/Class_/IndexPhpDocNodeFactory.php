@@ -36,11 +36,10 @@ final class IndexPhpDocNodeFactory
             return [];
         }
 
-        $indexContents = Strings::matchAll($annotationContent, self::INDEX_REGEX);
-
         $indexTagValueNodes = [];
 
         foreach ($indexes as $key => $index) {
+            $indexContents = Strings::matchAll($annotationContent, self::INDEX_REGEX);
             $currentContent = $indexContents[$key];
             $items = $this->annotationItemsResolver->resolve($index);
             $indexTagValueNodes[] = new IndexTagValueNode($items, $currentContent['content'], $currentContent['tag']);

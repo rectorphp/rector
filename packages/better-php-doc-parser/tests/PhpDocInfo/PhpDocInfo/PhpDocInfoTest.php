@@ -86,11 +86,11 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
 
     private function createPhpDocInfoFromFile(string $path): PhpDocInfo
     {
-        $phpDocInfoFactory = self::$container->get(PhpDocInfoFactory::class);
         $phpDocContent = $this->smartFileSystem->readFile($path);
 
         $this->node = new Nop();
         $this->node->setDocComment(new Doc($phpDocContent));
+        $phpDocInfoFactory = self::$container->get(PhpDocInfoFactory::class);
 
         return $phpDocInfoFactory->createFromNode($this->node);
     }
