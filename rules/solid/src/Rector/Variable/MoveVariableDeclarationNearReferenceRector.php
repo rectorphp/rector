@@ -90,13 +90,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $usageVar = $this->getUsageInNextStmts($expression, $node);
-        if (! $usageVar instanceof Variable) {
+        $variable = $this->getUsageInNextStmts($expression, $node);
+        if (! $variable instanceof Variable) {
             return null;
         }
 
         /** @var Node $usageStmt */
-        $usageStmt = $usageVar->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $usageStmt = $variable->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if ($this->isInsideLoopStmts($usageStmt)) {
             return null;
         }
@@ -105,6 +105,21 @@ CODE_SAMPLE
         $this->removeNode($expression);
 
         return $node;
+    }
+
+    private function isInsideCondition(Node $node): bool
+    {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        while ($parent) {
+            if ($parent instanceof If_ || $parent instanceof Else_ || $parent instanceof ElseIf_) {
+                return true;
+            }
+
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
     }
 
     private function hasPropertyInExpr(Expression $expression, Expr $expr): bool
@@ -148,7 +163,7 @@ CODE_SAMPLE
         return false;
     }
 
-    private function getUsageInNextStmts(Expression $expression, Node $node): ?Variable
+    private function getUsageInNextStmts(Expression $expression, Node $node): ?Node
     {
         if (! $node instanceof Variable) {
             return null;
@@ -202,27 +217,6 @@ CODE_SAMPLE
         return $this->getSameVarName($next, $node);
     }
 
-    private function mayBeArrayDimFetch(Node $node): Node
-    {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof ArrayDimFetch) {
-            $node = $parent->var;
-        }
-
-        return $node;
-    }
-
-    /**
-     * @param array|Node $node
-     */
-    private function getSameVarName($node, Node $variable): ?Node
-    {
-        return $this->betterNodeFinder->findFirst($node, function (Node $n) use ($variable): bool {
-            $n = $this->mayBeArrayDimFetch($n);
-            return $n instanceof Variable && $this->isName($n, (string) $this->getName($variable));
-        });
-    }
-
     private function isInsideLoopStmts(Node $node): bool
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -238,18 +232,24 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isInsideCondition(Node $node): bool
+    private function mayBeArrayDimFetch(Node $node): Node
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        while ($parent) {
-            if ($parent instanceof If_ || $parent instanceof Else_ || $parent instanceof ElseIf_) {
-                return true;
-            }
-
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof ArrayDimFetch) {
+            $node = $parent->var;
         }
 
-        return false;
+        return $node;
+    }
+
+    /**
+     * @param array|Node $node
+     */
+    private function getSameVarName($node, Node $node): ?Node
+    {
+        return $this->betterNodeFinder->findFirst($node, function (Node $n) use ($node): bool {
+            $n = $this->mayBeArrayDimFetch($n);
+            return $n instanceof Variable && $this->isName($n, (string) $this->getName($node));
+        });
     }
 }
