@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,6 +31,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MoveVariableDeclarationNearReferenceRector extends AbstractRector
 {
+    /**
+     * @var ParentScopeFinder
+     */
+    private $parentScopeFinder;
+
+    public function __construct(ParentScopeFinder $parentScopeFinder)
+    {
+        $this->parentScopeFinder = $parentScopeFinder;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -67,6 +78,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $parentScope = $this->parentScopeFinder->find($node);
+        if ($parentScope === null) {
+            return null;
+        }
+
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! ($parent instanceof Assign && $parent->var === $node)) {
             return null;
