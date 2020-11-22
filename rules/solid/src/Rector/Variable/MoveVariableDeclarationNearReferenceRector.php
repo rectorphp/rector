@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -181,6 +182,24 @@ CODE_SAMPLE
                 });
 
                 if ($isFoundElseIf || $isFoundElse) {
+                    ++$countFound;
+                }
+            }
+
+            if ($next instanceof TryCatch) {
+                $isFoundInCatch = (bool) $this->betterNodeFinder->findFirst($next->catches, function (Node $n) use (
+                    $node
+                ): bool {
+                    return $n instanceof Variable && $this->areNodesEqual($n, $node);
+                });
+
+                $isFoundInFinally = (bool) $this->betterNodeFinder->findFirst($next->finally, function (Node $n) use (
+                    $node
+                ): bool {
+                    return $n instanceof Variable && $this->areNodesEqual($n, $node);
+                });
+
+                if ($isFoundInCatch || $isFoundInFinally) {
                     ++$countFound;
                 }
             }
