@@ -33,7 +33,7 @@ jobs:
 
             # see https://github.com/TomasVotruba/github-action-monorepo-split
             -
-                uses: TomasVotruba/github-action-monorepo-split@master
+                uses: symplify/github-action-monorepo-split@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
@@ -41,3 +41,5 @@ jobs:
                     split-repository-organization: 'rectorphp'
                     split-repository-name: '${{ matrix.package_name }}'
                     tag: ${{ steps.previous_tag.outputs.tag }}
+                    user-name: "kaizen-ci"
+                    user-email: "info@kaizen-ci.org"
