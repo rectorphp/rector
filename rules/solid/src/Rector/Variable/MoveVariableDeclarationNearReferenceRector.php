@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Isset_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
@@ -122,7 +121,9 @@ CODE_SAMPLE
         $arrayDimFetches = $this->betterNodeFinder->findInstanceOf($node, ArrayDimFetch::class);
 
         foreach ($arrayDimFetches as $arrayDimFetch) {
-            $isFoundInKey = (bool) $this->betterNodeFinder->findFirst($arrayDimFetch->dim, function (Node $node) use ($variable): bool {
+            $isFoundInKey = (bool) $this->betterNodeFinder->findFirst($arrayDimFetch->dim, function (Node $node) use (
+                $variable
+            ): bool {
                 return $this->areNodesEqual($node, $variable);
             });
             if ($isFoundInKey) {
