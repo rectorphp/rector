@@ -76,7 +76,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // template files
         __DIR__ . '/packages/rector-generator/templates/*',
         // tests
-        __DIR__ . '/rules/renaming/tests/Rector/Name/RenameClassRector/FixtureRenameNonPhp/template/laravel.blade.php',
+        __DIR__ . '/rules/renaming/tests/Rector/Name/RenameClassRector/FixtureRenameNonPhp/template/*',
     ]);
 
     $parameters->set(Option::SKIP, [

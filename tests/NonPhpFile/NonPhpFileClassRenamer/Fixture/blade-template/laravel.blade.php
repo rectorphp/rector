@@ -1,9 +1,7 @@
 <div>
     <?php
-
     if (Session::has('key')) {
     }
-
     ?>
 </div>
 -----

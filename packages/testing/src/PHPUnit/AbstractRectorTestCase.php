@@ -423,7 +423,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     ): void {
         $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
-        if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array($originalFileInfo->getSuffix(), ['php', 'phpt'], true)) {
+        if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
+            $originalFileInfo->getSuffix(),
+            ['php', 'phpt'],
+            true
+        )) {
             if ($extraFiles === []) {
                 $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
                 $this->fileProcessor->refactor($originalFileInfo);
