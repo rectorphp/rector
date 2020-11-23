@@ -25,6 +25,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -91,7 +92,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RectorClassesProvider::class)
         ->arg('$container', ref('service_container'));
 
-    $services->set(\Symplify\PackageBuilder\Console\Command\CommandNaming::class);
+    $services->set(CommandNaming::class);
 
     $services->set(SmartFileSystem::class);
 

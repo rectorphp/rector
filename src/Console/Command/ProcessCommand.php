@@ -19,13 +19,13 @@ use Rector\Core\Guard\RectorGuard;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\Stubs\StubLoader;
+use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 
 final class ProcessCommand extends AbstractCommand
@@ -230,7 +230,7 @@ final class ProcessCommand extends AbstractCommand
         // must run after PHP rectors, because they might change class names, and these class names must be changed in configs
         $nonPhpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
             $paths,
-            ['neon', 'yaml', 'xml', 'latte', 'twig']
+            StaticNonPhpFileSuffixes::SUFFIXES
         );
         $this->nonPhpFileProcessor->runOnFileInfos($nonPhpFileInfos);
 
