@@ -121,7 +121,13 @@ CODE_SAMPLE
         $arrayDimFetches = $this->betterNodeFinder->findInstanceOf($node, ArrayDimFetch::class);
 
         foreach ($arrayDimFetches as $arrayDimFetch) {
-            $isFoundInKey = (bool) $this->betterNodeFinder->findFirst($arrayDimFetch->dim, function (Node $node) use (
+            /** @var Node|null $dim */
+            $dim = $arrayDimFetch->dim;
+            if (! $dim instanceof Node) {
+                continue;
+            }
+
+            $isFoundInKey = (bool) $this->betterNodeFinder->findFirst($dim, function (Node $node) use (
                 $variable
             ): bool {
                 return $this->areNodesEqual($node, $variable);
