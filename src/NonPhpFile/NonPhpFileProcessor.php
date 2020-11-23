@@ -68,6 +68,8 @@ final class NonPhpFileProcessor
 
     public function processFileInfo(SmartFileInfo $smartFileInfo): string
     {
+        dump($smartFileInfo->getFilename());
+
         $oldContents = $smartFileInfo->getContents();
         $newContents = $this->renameClasses($oldContents);
 
