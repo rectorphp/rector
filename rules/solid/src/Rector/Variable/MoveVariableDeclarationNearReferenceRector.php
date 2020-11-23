@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
@@ -259,6 +260,7 @@ CODE_SAMPLE
 
             $countFound = $this->countWithElseIf($node, $variable, $countFound);
             $countFound = $this->countWithTryCatch($node, $variable, $countFound);
+            $countFound = $this->countWithSwitchCase($node, $variable, $countFound);
 
             /** @var Node|null $node */
             $node = $node->getAttribute(AttributeKey::NEXT_NODE);
@@ -333,6 +335,21 @@ CODE_SAMPLE
         $isFoundInFinally = (bool) $this->getSameVarName([$node->finally], $variable);
 
         if ($isFoundInCatch || $isFoundInFinally) {
+            ++$countFound;
+        }
+
+        return $countFound;
+    }
+
+    private function countWithSwitchCase(Node $node, Variable $variable, int $countFound): int
+    {
+        if (! $node instanceof Switch_) {
+            return $countFound;
+        }
+
+        $isFoundInCases = (bool) $this->getSameVarName($node->cases, $variable);
+
+        if ($isFoundInCases) {
             ++$countFound;
         }
 
