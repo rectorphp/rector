@@ -20,11 +20,11 @@ function inline_argument_object(object $object, ServicesConfigurator $servicesCo
 
     $className = $reflectionClass->getName();
     $propertyValues = resolve_property_values($reflectionClass, $object);
-    $argumentValues = resolve_argument_values($reflectionClass, $object);
 
     // create fake factory with private accessor, as properties are different
     // @see https://symfony.com/doc/current/service_container/factories.html#passing-arguments-to-the-factory-method
     $servicesConfigurator->set(ArgumentAndParameterFactory::class);
+    $argumentValues = resolve_argument_values($reflectionClass, $object);
 
     $servicesConfigurator->set($className)
         ->factory([ref(ArgumentAndParameterFactory::class), 'create'])

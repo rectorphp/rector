@@ -466,9 +466,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         try {
             $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $relativeFilePathFromCwd);
         } catch (ExpectationFailedException $expectationFailedException) {
-            $contents = $expectedFileInfo->getContents();
-
             StaticFixtureUpdater::updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
+            $contents = $expectedFileInfo->getContents();
 
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);
