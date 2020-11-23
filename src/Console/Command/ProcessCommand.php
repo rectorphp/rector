@@ -256,6 +256,26 @@ final class ProcessCommand extends AbstractCommand
         return ShellCode::SUCCESS;
     }
 
+    /**
+     * @param string[] $paths
+     * @return SmartFileInfo[]
+     */
+    private function findPhpFileInfos(array $paths): array
+    {
+        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
+            $paths,
+            $this->configuration->getFileExtensions(),
+            $this->configuration->mustMatchGitDiff()
+        );
+
+        // filter out non-PHP php files, e.g. blade templates in Laravel
+        $phpFileInfos = array_filter($phpFileInfos, function (SmartFileInfo $smartFileInfo) {
+            return ! Strings::endsWith($smartFileInfo->getPathname(), '.blade.php');
+        });
+
+        return $this->cachedFileInfoFilterAndReporter->filterFileInfos($phpFileInfos);
+    }
+
     private function reportZeroCacheRectorsCondition(): void
     {
         if (! $this->configuration->isCacheEnabled()) {
@@ -287,25 +307,5 @@ final class ProcessCommand extends AbstractCommand
         foreach ($this->errorAndDiffCollector->getAffectedFileInfos() as $affectedFileInfo) {
             $this->changedFilesDetector->invalidateFile($affectedFileInfo);
         }
-    }
-
-    /**
-     * @param string[] $paths
-     * @return SmartFileInfo[]
-     */
-    private function findPhpFileInfos(array $paths): array
-    {
-        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
-            $paths,
-            $this->configuration->getFileExtensions(),
-            $this->configuration->mustMatchGitDiff()
-        );
-
-        // filter out non-PHP php files, e.g. blade templates in Laravel
-        $phpFileInfos = array_filter($phpFileInfos, function (SmartFileInfo $smartFileInfo) {
-            return ! Strings::endsWith($smartFileInfo->getPathname(), '.blade.php');
-        });
-
-        return $this->cachedFileInfoFilterAndReporter->filterFileInfos($phpFileInfos);
     }
 }

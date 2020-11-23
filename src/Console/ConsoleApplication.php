@@ -14,7 +14,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Exception\NoRectorsLoadedException;
 use Rector\Utils\NodeDocumentationGenerator\Command\DumpNodesCommand;
-use Symfony\Component\Console\Application as SymfonyApplication;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +24,7 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
-final class ConsoleApplication extends SymfonyApplication
+final class ConsoleApplication extends Application
 {
     /**
      * @var string
