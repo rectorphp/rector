@@ -13,6 +13,7 @@ use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
 use Rector\Core\Configuration\MinimalVersionChecker;
+use Rector\Core\Configuration\RectorClassesProvider;
 use Rector\Core\Console\Application;
 use Rector\Core\EventDispatcher\AutowiredEventDispatcher;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
@@ -83,6 +84,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FinderSanitizer::class);
     $services->set(FileSystemFilter::class);
     $services->set(ParameterProvider::class);
+    $services->set(ParameterProvider::class)
+        ->arg('$container', ref('service_container'));
+
+    $services->set(RectorClassesProvider::class)
+        ->arg('$container', ref('service_container'));
+
     $services->set(SmartFileSystem::class);
 
     $services->set(StringFormatConverter::class);
