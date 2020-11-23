@@ -16,13 +16,13 @@ final class NonPhpFileClassRenamer
      * for "?<!" @see https://stackoverflow.com/a/3735908/1348344
      * @var string
      */
-    private const STANDALONE_CLASS_PREFIX_REGEX = '#\b(?<!(\\\\|"|\>| ))';
+    private const STANDALONE_CLASS_PREFIX_REGEX = '#\b(?<!(\\\\|"|\>| |\.|\'))';
 
     /**
      * @see https://regex101.com/r/HKUFJD/4
      * @var string
      */
-    private const STANDALONE_CLASS_SUFFIX_REGEX = '(?!(\\\\|"|\<| ))\b#';
+    private const STANDALONE_CLASS_SUFFIX_REGEX = '(?!(\\\\|"|\<| |\.|\'))\b#';
 
     /**
      * @param array<string, string> $classRenames
