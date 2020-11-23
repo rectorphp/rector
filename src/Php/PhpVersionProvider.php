@@ -33,19 +33,19 @@ final class PhpVersionProvider
         /** @var string|null $phpVersionFeatures */
         $phpVersionFeatures = $this->parameterProvider->provideParameter(Option::PHP_VERSION_FEATURES);
         if ($phpVersionFeatures !== null) {
-            return $phpVersionFeatures;
+            return preg_replace('#(\d).(\d)#', '${1}0${2}00', $phpVersionFeatures);
         }
 
         // for tests
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             // so we don't have to up
-            return '10.0';
+            return '10000';
         }
 
         // see https://getcomposer.org/doc/06-config.md#platform
         $platformPhp = $this->provideProjectComposerJsonConfigPlatformPhp();
         if ($platformPhp) {
-            return $platformPhp;
+            return preg_replace('#(\d).(\d)#', '${1}0${2}00', $platformPhp);
         }
 
         return PHP_VERSION;
@@ -53,7 +53,7 @@ final class PhpVersionProvider
 
     public function isAtLeastPhpVersion(int $phpVersion): bool
     {
-        return $phpVersion <= PHP_VERSION_ID;
+        return $phpVersion <= (int) $this->provide();
     }
 
     private function provideProjectComposerJsonConfigPlatformPhp(): ?string
