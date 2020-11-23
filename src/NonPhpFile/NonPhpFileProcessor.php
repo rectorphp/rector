@@ -12,6 +12,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
+/**
+ * @see \Rector\Renaming\Tests\Rector\Name\RenameClassRector\RenameNonPhpTest
+ */
 final class NonPhpFileProcessor
 {
     /**
@@ -54,18 +57,18 @@ final class NonPhpFileProcessor
     }
 
     /**
-     * @param SmartFileInfo[] $neonYamlFileInfos
+     * @param SmartFileInfo[] $nonPhpFileInfos
      */
-    public function runOnFileInfos(array $neonYamlFileInfos): void
+    public function runOnFileInfos(array $nonPhpFileInfos): void
     {
-        foreach ($neonYamlFileInfos as $neonYamlFileInfo) {
-            $this->processFileInfo($neonYamlFileInfo);
+        foreach ($nonPhpFileInfos as $nonPhpFileInfo) {
+            $this->processFileInfo($nonPhpFileInfo);
         }
     }
 
-    public function processFileInfo(SmartFileInfo $neonYamlFileInfo): string
+    public function processFileInfo(SmartFileInfo $smartFileInfo): string
     {
-        $oldContents = $neonYamlFileInfo->getContents();
+        $oldContents = $smartFileInfo->getContents();
         $newContents = $this->renameClasses($oldContents);
 
         // nothing has changed
@@ -73,7 +76,7 @@ final class NonPhpFileProcessor
             return $oldContents;
         }
 
-        $this->reportFileContentChange($neonYamlFileInfo, $newContents);
+        $this->reportFileContentChange($smartFileInfo, $newContents);
 
         return $newContents;
     }
@@ -101,9 +104,9 @@ final class NonPhpFileProcessor
         return $newContent;
     }
 
-    private function reportFileContentChange(SmartFileInfo $neonYamlFileInfo, string $newContent): void
+    private function reportFileContentChange(SmartFileInfo $smartFileInfo, string $newContent): void
     {
-        $relativeFilePathFromCwd = $neonYamlFileInfo->getRelativeFilePathFromCwd();
+        $relativeFilePathFromCwd = $smartFileInfo->getRelativeFilePathFromCwd();
 
         if ($this->configuration->isDryRun()) {
             $message = sprintf('File "%s" would be changed ("dry-run" is on now)', $relativeFilePathFromCwd);
@@ -112,8 +115,8 @@ final class NonPhpFileProcessor
             $message = sprintf('File "%s" was changed', $relativeFilePathFromCwd);
             $this->symfonyStyle->note($message);
 
-            $this->smartFileSystem->dumpFile($neonYamlFileInfo->getRealPath(), $newContent);
-            $this->smartFileSystem->chmod($neonYamlFileInfo->getRealPath(), $neonYamlFileInfo->getPerms());
+            $this->smartFileSystem->dumpFile($smartFileInfo->getRealPath(), $newContent);
+            $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
         }
     }
 
