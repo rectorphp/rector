@@ -54,7 +54,6 @@ final class ShowCommand extends AbstractCommand
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Show loaded Rectors with their configuration');
     }
 

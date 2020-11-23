@@ -36,7 +36,6 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[DOCS] Show statistics of used and unused node types in PHP Rector');
 
         $this->addOption(self::UNUSED, null, InputOption::VALUE_NONE, 'Show unused nodes');

@@ -47,7 +47,6 @@ final class SyncAnnotationParserCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[DEV] Generate value-preserving DocParser from doctrine/annotation');
 
         $this->addOption(

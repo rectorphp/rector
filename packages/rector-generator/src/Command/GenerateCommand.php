@@ -87,7 +87,6 @@ final class GenerateCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setAliases(['c', 'create', 'g']);
         $this->setDescription('[DEV] Create a new Rector, in a proper location, with new tests');
     }

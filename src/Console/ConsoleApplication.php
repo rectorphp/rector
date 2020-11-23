@@ -24,7 +24,7 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
-final class Application extends SymfonyApplication
+final class ConsoleApplication extends SymfonyApplication
 {
     /**
      * @var string
@@ -47,6 +47,7 @@ final class Application extends SymfonyApplication
     public function __construct(
         Configuration $configuration,
         NoRectorsLoadedReporter $noRectorsLoadedReporter,
+        CommandNaming $commandNaming,
         array $commands = []
     ) {
         try {
@@ -56,6 +57,11 @@ final class Application extends SymfonyApplication
         }
 
         parent::__construct(self::NAME, $version);
+
+        foreach ($commands as $command) {
+            $commandName = $commandNaming->resolveFromCommand($command);
+            $command->setName($commandName);
+        }
 
         $this->addCommands($commands);
         $this->configuration = $configuration;

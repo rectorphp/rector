@@ -36,7 +36,6 @@ final class ValidateFixtureSuffixCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[CI] Validate tests fixtures suffix');
     }
 

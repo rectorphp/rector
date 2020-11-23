@@ -124,15 +124,13 @@ final class ProcessCommand extends AbstractCommand
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
         $this->eventDispatcher = $eventDispatcher;
+        $this->cachedFileInfoFilterAndReporter = $cachedFileInfoFilterAndReporter;
 
         parent::__construct();
-
-        $this->cachedFileInfoFilterAndReporter = $cachedFileInfoFilterAndReporter;
     }
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setAliases(['rectify']);
 
         $this->setDescription('Upgrade or refactor source code with provided rectors');

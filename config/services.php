@@ -14,7 +14,7 @@ use PhpParser\ParserFactory;
 use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
 use Rector\Core\Configuration\MinimalVersionChecker;
 use Rector\Core\Configuration\RectorClassesProvider;
-use Rector\Core\Console\Application;
+use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\EventDispatcher\AutowiredEventDispatcher;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
@@ -61,7 +61,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MinimalVersionChecker::class)
         ->autowire(false);
 
-    $services->alias(SymfonyApplication::class, Application::class);
+    $services->alias(SymfonyApplication::class, ConsoleApplication::class);
 
     $services->set(NoRectorsLoadedReporter::class);
 
@@ -78,6 +78,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(Lexer::class)
         ->factory([ref(PhpParserLexerFactory::class), 'create']);
 
+    // symplify/package-builder
     $services->set(Filesystem::class);
     $services->set(PrivatesAccessor::class);
     $services->set(PrivatesCaller::class);
@@ -89,6 +90,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RectorClassesProvider::class)
         ->arg('$container', ref('service_container'));
+
+    $services->set(\Symplify\PackageBuilder\Console\Command\CommandNaming::class);
 
     $services->set(SmartFileSystem::class);
 

@@ -33,7 +33,6 @@ final class InitCommand extends AbstractCommand
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Generate rector.php configuration file');
     }
 
