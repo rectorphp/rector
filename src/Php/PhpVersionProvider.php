@@ -53,7 +53,7 @@ final class PhpVersionProvider
 
     public function isAtLeastPhpVersion(int $phpVersion): bool
     {
-        return version_compare($this->provide(), $phpVersion) >= 0;
+        return $phpVersion <= PHP_VERSION_ID;
     }
 
     private function provideProjectComposerJsonConfigPlatformPhp(): ?string
