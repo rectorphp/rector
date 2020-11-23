@@ -269,7 +269,7 @@ final class ProcessCommand extends AbstractCommand
         );
 
         // filter out non-PHP php files, e.g. blade templates in Laravel
-        $phpFileInfos = array_filter($phpFileInfos, function (SmartFileInfo $smartFileInfo) {
+        $phpFileInfos = array_filter($phpFileInfos, function (SmartFileInfo $smartFileInfo): bool {
             return ! Strings::endsWith($smartFileInfo->getPathname(), '.blade.php');
         });
 
