@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Assign\MoveVariableDeclarationNearReferenceRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
 
 class SkipUsageInMultipleLevels
 {
@@ -19,3 +19,4 @@ class SkipUsageInMultipleLevels
         echo $varused;
     }
 }
+?>

@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
+
 function variableInClosureWithReturn()
 {
     return function () {
@@ -13,6 +15,8 @@ function variableInClosureWithReturn()
 ?>
 -----
 <?php
+
+namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
 
 function variableInClosureWithReturn()
 {

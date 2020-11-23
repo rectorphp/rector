@@ -80,12 +80,11 @@ final class IfManipulator
         if (! $insideIfNode instanceof Return_) {
             return null;
         }
-
-        /** @var Return_ $returnNode */
-        $returnNode = $insideIfNode;
         if (! $if->cond instanceof NotIdentical) {
             return null;
         }
+        /** @var Return_ $returnNode */
+        $returnNode = $insideIfNode;
 
         return $this->matchComparedAndReturnedNode($if->cond, $returnNode);
     }

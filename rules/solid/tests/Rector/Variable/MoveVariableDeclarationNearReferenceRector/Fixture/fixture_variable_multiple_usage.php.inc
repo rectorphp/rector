@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
+
 function variableWithMultipleUsages()
 {
     $var = 1;
@@ -12,6 +14,8 @@ function variableWithMultipleUsages()
 ?>
 -----
 <?php
+
+namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
 
 function variableWithMultipleUsages()
 {
