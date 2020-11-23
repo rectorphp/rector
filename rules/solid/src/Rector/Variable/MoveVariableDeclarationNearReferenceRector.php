@@ -216,22 +216,6 @@ CODE_SAMPLE
         return $this->getSameVarNameInNexts($next, $node);
     }
 
-    private function getSameVarNameInNexts(Node $node, Variable $variable): ?Variable
-    {
-        while ($node) {
-            $found = $this->getSameVarName([$node], $variable);
-
-            if ($found instanceof Variable) {
-                return $found;
-            }
-
-            /** @var Node|null $node */
-            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
-        }
-
-        return null;
-    }
-
     private function isInsideLoopStmts(Node $node): bool
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -296,6 +280,22 @@ CODE_SAMPLE
             if ($found !== null) {
                 return $found;
             }
+        }
+
+        return null;
+    }
+
+    private function getSameVarNameInNexts(Node $node, Variable $variable): ?Variable
+    {
+        while ($node) {
+            $found = $this->getSameVarName([$node], $variable);
+
+            if ($found instanceof Variable) {
+                return $found;
+            }
+
+            /** @var Node|null $node */
+            $node = $node->getAttribute(AttributeKey::NEXT_NODE);
         }
 
         return null;
