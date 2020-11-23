@@ -12,17 +12,18 @@ use Nette\Utils\Strings;
 final class NonPhpFileClassRenamer
 {
     /**
-     * @see https://regex101.com/r/HKUFJD/4
+     * @see https://regex101.com/r/HKUFJD/5
      * for "?<!" @see https://stackoverflow.com/a/3735908/1348344
      * @var string
      */
-    private const STANDALONE_CLASS_PREFIX_REGEX = '#\b(?<!(\\\\|"|\>| |\.|\'))';
+    private const STANDALONE_CLASS_PREFIX_REGEX = '#\b(?<!(\\\\|"|\>|\.|\'))';
 
     /**
-     * @see https://regex101.com/r/HKUFJD/4
+     * @see https://regex101.com/r/HKUFJD/5
+     * @see https://stackoverflow.com/a/3926546/1348344
      * @var string
      */
-    private const STANDALONE_CLASS_SUFFIX_REGEX = '(?!(\\\\|"|\<| |\.|\'))\b#';
+    private const STANDALONE_CLASS_SUFFIX_REGEX = '(?=::)#';
 
     /**
      * @param array<string, string> $classRenames
