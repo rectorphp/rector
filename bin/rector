@@ -11,7 +11,7 @@ use Rector\Core\Configuration\MinimalVersionChecker;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonReader;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
-use Rector\Core\Console\Application;
+use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\Exception\NoRectorsLoadedException;
@@ -79,8 +79,8 @@ try {
     exit(ShellCode::ERROR);
 }
 
-/** @var Application $application */
-$application = $container->get(Application::class);
+/** @var ConsoleApplication $application */
+$application = $container->get(ConsoleApplication::class);
 exit($application->run());
 
 final class AutoloadIncluder

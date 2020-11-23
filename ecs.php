@@ -75,8 +75,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php',
         // template files
         __DIR__ . '/packages/rector-generator/templates/*',
-        // tests
-        __DIR__ . '/rules/renaming/tests/Rector/Name/RenameClassRector/FixtureRenameNonPhp/template/laravel.blade.php',
     ]);
 
     $parameters->set(Option::SKIP, [

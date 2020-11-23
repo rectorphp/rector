@@ -423,7 +423,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     ): void {
         $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
-        if (in_array($originalFileInfo->getSuffix(), ['php', 'phpt'], true)) {
+        if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
+            $originalFileInfo->getSuffix(),
+            ['php', 'phpt'],
+            true
+        )) {
             if ($extraFiles === []) {
                 $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
                 $this->fileProcessor->refactor($originalFileInfo);
@@ -454,7 +458,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
             $removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
             $removedAndAddedFilesProcessor->run();
-        } elseif (in_array($originalFileInfo->getSuffix(), StaticNonPhpFileSuffixes::SUFFIXES, true)) {
+        } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
             $changedContent = $this->nonPhpFileProcessor->processFileInfo($originalFileInfo);
         } else {
             $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());

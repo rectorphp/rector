@@ -135,7 +135,6 @@ parameters:
         - */config.php
         - packages/*/config/*
         - tests/debug_functions.php
-        - rules/renaming/tests/Rector/Name/RenameClassRector/FixtureRenameNonPhp/template/laravel.blade.php
 
         # broken in PHPStan https://github.com/rectorphp/rector/runs/1305002460#step:5:56
         - packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
