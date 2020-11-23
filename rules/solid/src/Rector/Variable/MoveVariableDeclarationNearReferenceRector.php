@@ -79,6 +79,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $parentExpression = $expression->getAttribute(AttributeKey::PARENT_NODE);
+        if ($this->isUsedAsArrayKey($parentExpression, $node)) {
+            return null;
+        }
+
         if ($this->isInsideCondition($expression)) {
             return null;
         }
@@ -106,6 +111,26 @@ CODE_SAMPLE
         $this->removeNode($expression);
 
         return $node;
+    }
+
+    private function isUsedAsArrayKey(?Node $node, Variable $variable): bool
+    {
+        if (! $node instanceof Node) {
+            return false;
+        }
+
+        $arrayDimFetches = $this->betterNodeFinder->findInstanceOf($node, ArrayDimFetch::class);
+
+        foreach ($arrayDimFetches as $arrayDimFetch) {
+            $isFoundInKey = (bool) $this->betterNodeFinder->findFirst($arrayDimFetch->dim, function (Node $node) use ($variable): bool {
+                return $this->areNodesEqual($node, $variable);
+            });
+            if ($isFoundInKey) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function isInsideCondition(Node $node): bool
