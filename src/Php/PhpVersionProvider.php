@@ -51,7 +51,7 @@ final class PhpVersionProvider
         return PHP_VERSION;
     }
 
-    public function isAtLeastPhpVersion(string $phpVersion): bool
+    public function isAtLeastPhpVersion(int $phpVersion): bool
     {
         return version_compare($this->provide(), $phpVersion) >= 0;
     }
