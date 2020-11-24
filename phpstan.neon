@@ -635,7 +635,7 @@ parameters:
                 - src/Rector/AbstractRector/VisibilityTrait.php # 19
 
         -
-            message: '#Do not use scalar or array as constructor parameter\. Use ParameterProvider service instead#'
+            message: '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
             paths:
                 - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareDataProviderTagValueNode.php # 22
                 - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 33
@@ -740,32 +740,6 @@ parameters:
                 - packages/changes-reporting/src/Output/CheckstyleOutputFormatter.php # 15
                 - packages/changes-reporting/src/Output/JsonOutputFormatter.php # 14
                 - src/Console/Output/RectorConfigurationFormatter.php # 13
-
-        -
-            message: '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
-            paths:
-                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareDataProviderTagValueNode.php # 22
-                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 33
-                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 35
-                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareTemplateTagValueNode.php # 30
-                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareTemplateTagValueNode.php # 32
-                - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareArrayShapeItemNode.php # 30
-                - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareArrayShapeItemNode.php # 33
-                - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareArrayShapeItemNode.php # 34
-                - packages/attribute-aware-php-doc/src/Ast/Type/AttributeAwareUnionTypeNode.php # 35
-                - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php # 108
-                - rules/coding-style/src/Rector/ClassMethod/YieldClassMethodToArrayClassMethodRector.php # 47
-                - rules/php70/src/EregToPcreTransformer.php # 66
-                - rules/phpstan/src/Type/AliasedObjectType.php # 22
-                - rules/phpstan/src/Type/AliasedObjectType.php # 24
-                - rules/phpstan/src/Type/ShortenedObjectType.php # 18
-                - rules/phpstan/src/Type/ShortenedObjectType.php # 20
-                - rules/restoration/src/Rector/Class_/RemoveUselessJustForSakeInterfaceRector.php # 42
-                - rules/type-declaration/src/Rector/FunctionLike/ReturnTypeDeclarationRector.php # 82
-                - src/Configuration/MinimalVersionChecker.php # 29
-                - src/Configuration/MinimalVersionChecker/ComposerJsonParser.php # 22
-                - src/Configuration/MinimalVersionChecker/ComposerJsonReader.php # 23
-                - src/PhpParser/Builder/UseBuilder.php # 17
 
         - '#Instanceof between PhpParser\\Node\\Stmt and Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace will always evaluate to false#'
         - '#Class with base "Regex" name is already used in "MongoDB\\BSON\\Regex", "Symplify\\PHPStanRules\\ValueObject\\Regex"\. Use unique name to make classes easy to recognize#'
