@@ -7,6 +7,7 @@ namespace Rector\Core\Php;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Util\PhpVersion;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -54,8 +55,7 @@ final class PhpVersionProvider
 
     public function isAtLeastPhpVersion(int $phpVersion): bool
     {
-        $provide = Strings::replace((string) $this->provide(), '#^(\d).(\d)$#', '${1}0${2}00');
-        return $phpVersion <= (int) $provide;
+        return $phpVersion <= PhpVersion::getIntVersion($this->provide());
     }
 
     private function provideProjectComposerJsonConfigPlatformPhp(): ?string
