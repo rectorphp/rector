@@ -10,6 +10,11 @@ final class PhpVersion
 {
     public static function getIntVersion(string $version): int
     {
+        $explodeDash = explode('-', $version);
+        if (count($explodeDash) > 1) {
+            $version = $explodeDash[0];
+        }
+
         $explodeVersion = explode('.', $version);
         $countExplodedVersion = count($explodeVersion);
 
