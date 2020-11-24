@@ -114,6 +114,11 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const LIST_REFERENCE_ASSIGNMENT = 70300;
+
+    /**
+     * @var int
+     */
     public const ARROW_FUNCTION = 70400;
 
     /**
@@ -166,4 +171,14 @@ final class PhpVersionFeature
      * @var int
      */
     public const IS_ITERABLE = 70100;
+
+    /**
+     * @var int
+     */
+    public const NULLABLE_TYPE = 70100;
+
+    /**
+     * @var int
+     */
+    public const VOID_RETURN_TYPE = 70100;
 }
