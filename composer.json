@@ -35,7 +35,7 @@
         "symplify/composer-json-manipulator": "dev-master",
         "symplify/console-color-diff": "dev-master",
         "symplify/package-builder": "dev-master",
-        "symplify/php-config-printer": "^0.4.2",
+        "symplify/php-config-printer": "dev-master",
         "symplify/set-config-resolver": "dev-master",
         "symplify/smart-file-system": "dev-master",
         "symplify/rule-doc-generator": "dev-master",
