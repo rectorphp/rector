@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Testing\PhpConfigPrinter;
 
-use Migrify\PhpConfigPrinter\HttpKernel\PhpConfigPrinterKernel;
-use Migrify\PhpConfigPrinter\Printer\SmartPhpConfigPrinter;
+use Symplify\PhpConfigPrinter\HttpKernel\PhpConfigPrinterKernel;
+use Symplify\PhpConfigPrinter\Printer\SmartPhpConfigPrinter;
 
 final class PhpConfigPrinterFactory
 {

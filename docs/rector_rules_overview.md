@@ -590,7 +590,7 @@ Add param types where needed
 - class: `Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use PHPStan\Type\StringType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
@@ -770,7 +770,7 @@ Changes defined return typehint of method and class.
 - class: `Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
@@ -1113,7 +1113,7 @@ This Rector adds new default arguments in calls of defined methods and class typ
 - class: `Rector\Generic\Rector\ClassMethod\ArgumentAdderRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -1141,7 +1141,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -1181,7 +1181,7 @@ Replaces defined map of arguments in defined methods and their calls.
 - class: `Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -1217,7 +1217,7 @@ Move help facade-like function calls to constructor injection
 - class: `Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector;
 use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -1270,7 +1270,7 @@ Removes defined arguments in defined methods and their calls.
 - class: `Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\ValueObject\ArgumentRemover;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -1350,7 +1350,7 @@ Move array argument from tests into data provider [configurable]
 - class: `Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -1556,7 +1556,7 @@ Moves array options to fluent setter method calls.
 - class: `Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
 use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -2566,7 +2566,7 @@ Change visibility of constant from parent class.
 - class: `Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -2998,7 +2998,7 @@ Change visibility of method from parent class.
 - class: `Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -3799,7 +3799,7 @@ In case you have accidentally removed use imports but code still contains partia
 - class: `Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
 use Rector\Restoration\ValueObject\UseWithAlias;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -5762,7 +5762,7 @@ Turns defined function calls to local method calls.
 - class: `Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
 use Rector\Transform\ValueObject\FuncNameToMethodCallName;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -5852,7 +5852,7 @@ Turns defined function call to static method call.
 - class: `Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -6438,7 +6438,7 @@ Change `@param` doc based on another method return type
 - class: `Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -7402,7 +7402,7 @@ Turns old method call with specific types to new one with arguments
 - class: `Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -7521,7 +7521,7 @@ Change method call to desired static call
 - class: `Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector;
 use Rector\Transform\ValueObject\MethodCallToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -7720,7 +7720,7 @@ Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.
 - class: `Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -8473,7 +8473,7 @@ Change new Object to static call
 - class: `Rector\Transform\Rector\New_\NewToStaticCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\New_\NewToStaticCallRector;
 use Rector\Transform\ValueObject\NewToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -8639,7 +8639,7 @@ Turns fluent interface calls to classic ones.
 - class: `Rector\Generic\Rector\ClassMethod\NormalToFluentRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\ValueObject\NormalToFluent;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -9762,7 +9762,7 @@ Turns property assign of specific type and property name to method call
 - class: `Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector;
 use Rector\Transform\ValueObject\PropertyAssignToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -9820,7 +9820,7 @@ Replaces properties assign calls be defined methods.
 - class: `Rector\Transform\Rector\Assign\PropertyToMethodRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 use Rector\Transform\ValueObject\PropertyToMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -9849,7 +9849,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 use Rector\Transform\ValueObject\PropertyToMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -9907,7 +9907,7 @@ Replaces defined Pseudo_Namespaces by Namespace\Ones.
 - class: `Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
 use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -10768,7 +10768,7 @@ Remove argument by position by function name
 - class: `Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Generic\ValueObject\RemoveFuncCallArg;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -11770,7 +11770,7 @@ Turns defined annotations above properties and methods to their new values.
 - class: `Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
 use Rector\Renaming\ValueObject\RenameAnnotation;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -11813,7 +11813,7 @@ Replaces defined class constants in their calls.
 - class: `Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\ValueObject\RenameClassConstant;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -12049,7 +12049,7 @@ Changes method calls based on matching the first parameter value.
 - class: `Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 use Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -12089,7 +12089,7 @@ Turns method names to new ones.
 - class: `Rector\Renaming\Rector\MethodCall\RenameMethodRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -12198,7 +12198,7 @@ Replaces defined old properties by new ones.
 - class: `Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -12272,7 +12272,7 @@ Turns method names to new ones.
 - class: `Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -12299,7 +12299,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -12615,7 +12615,7 @@ Changes method calls in child of specific types to defined property method call
 - class: `Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
 use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -12930,7 +12930,7 @@ Turns array return to yield return in specific type and method
 - class: `Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -13251,7 +13251,7 @@ Get service call to constructor injection
 - class: `Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -14256,7 +14256,7 @@ Turns static call to function call.
 - class: `Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -14291,7 +14291,7 @@ Change static call to service method via constructor injection
 - class: `Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -14541,7 +14541,7 @@ Changes strings to specific constants
 - class: `Rector\Generic\Rector\String_\StringToClassConstantRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\String_\StringToClassConstantRector;
 use Rector\Generic\ValueObject\StringToClassConstant;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -14712,7 +14712,7 @@ Reorder class method arguments, including their calls
 - class: `Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector;
 use Rector\Generic\ValueObject\SwapClassMethodArguments;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -14754,7 +14754,7 @@ Swap arguments in function calls
 - class: `Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
 use Rector\Generic\ValueObject\SwapFuncCallArguments;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -15478,7 +15478,7 @@ Turns defined `__isset`/`__unset` calls to specific method calls.
 - class: `Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 use Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -15506,7 +15506,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 use Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -15940,7 +15940,7 @@ Wrap return value of specific method
 - class: `Rector\Generic\Rector\ClassMethod\WrapReturnRector`
 
 ```php
-use Migrify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\inline_value_objects;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\ValueObject\WrapReturn;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
