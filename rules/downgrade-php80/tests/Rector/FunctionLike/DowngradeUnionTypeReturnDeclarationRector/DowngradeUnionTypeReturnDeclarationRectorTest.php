@@ -33,8 +33,8 @@ final class DowngradeUnionTypeReturnDeclarationRectorTest extends AbstractRector
         return DowngradeUnionTypeReturnDeclarationRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_UNION_TYPES;
+        return PhpVersionFeature::UNION_TYPES - 1;
     }
 }

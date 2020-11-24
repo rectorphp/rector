@@ -278,7 +278,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return true;
     }
 
-    protected function isAtLeastPhpVersion(string $version): bool
+    protected function isAtLeastPhpVersion(int $version): bool
     {
         return $this->phpVersionProvider->isAtLeastPhpVersion($version);
     }

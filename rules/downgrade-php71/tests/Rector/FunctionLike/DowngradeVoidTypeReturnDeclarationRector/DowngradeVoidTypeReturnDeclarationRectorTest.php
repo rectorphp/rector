@@ -42,8 +42,8 @@ final class DowngradeVoidTypeReturnDeclarationRectorTest extends AbstractRectorT
         return DowngradeVoidTypeReturnDeclarationRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_VOID_RETURN_TYPE;
+        return PhpVersionFeature::VOID_RETURN_TYPE - 1;
     }
 }

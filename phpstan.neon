@@ -635,7 +635,7 @@ parameters:
                 - src/Rector/AbstractRector/VisibilityTrait.php # 19
 
         -
-            message: '#Do not use scalar or array as constructor parameter\. Use ParameterProvider service instead#'
+            message: '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
             paths:
                 - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareDataProviderTagValueNode.php # 22
                 - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 33

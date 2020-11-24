@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 
 use Iterator;
+use Rector\Core\Util\StaticPhpVersion;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService;
@@ -27,9 +28,9 @@ final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
-        return '7.2';
+        return StaticPhpVersion::getIntVersion('7.2');
     }
 
     /**

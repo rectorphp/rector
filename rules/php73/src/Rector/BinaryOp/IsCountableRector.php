@@ -42,7 +42,7 @@ CODE_SAMPLE
         return 'is_countable';
     }
 
-    public function getPhpVersion(): string
+    public function getPhpVersion(): int
     {
         return PhpVersionFeature::IS_COUNTABLE;
     }

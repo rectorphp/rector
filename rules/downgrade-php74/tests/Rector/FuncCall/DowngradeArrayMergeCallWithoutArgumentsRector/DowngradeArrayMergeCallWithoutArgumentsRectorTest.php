@@ -31,8 +31,8 @@ final class DowngradeArrayMergeCallWithoutArgumentsRectorTest extends AbstractRe
         return DowngradeArrayMergeCallWithoutArgumentsRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_STRIP_TAGS_WITH_ARRAY;
+        return PhpVersionFeature::STRIP_TAGS_WITH_ARRAY - 1;
     }
 }

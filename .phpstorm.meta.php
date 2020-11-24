@@ -116,7 +116,6 @@ expectedArguments(
     \Rector\Core\ValueObject\PhpVersionFeature::LITERAL_SEPARATOR,
     \Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE_ASSIGN,
     \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES,
-    \Rector\Core\ValueObject\PhpVersionFeature::BEFORE_UNION_TYPES,
     \Rector\Core\ValueObject\PhpVersionFeature::COVARIANT_RETURN,
     \Rector\Core\ValueObject\PhpVersionFeature::ARRAY_SPREAD,
     \Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES,
