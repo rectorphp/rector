@@ -34,7 +34,7 @@ final class MinimalVersionChecker
         $installedPhpVersion = explode('.', $this->installedPhpVersion);
 
         if (count($installedPhpVersion) > 1) {
-            $installedPhpVersion = $version[0] * 10000 + (int) $version[1] * 100 + (int) $version[2];
+            $installedPhpVersion = $installedPhpVersion[0] * 10000 + (int) $installedPhpVersion[1] * 100 + (int) $installedPhpVersion[2];
         } else {
             $installedPhpVersion = $this->installedPhpVersion;
         }
