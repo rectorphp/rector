@@ -106,6 +106,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     private $oldParameterValues = [];
 
+    /**
+     * @var int
+     */
+    private const PHP_VERSION_UNDEFINED = 0;
+
     protected function setUp(): void
     {
         $this->runnableRectorFactory = new RunnableRectorFactory();
@@ -174,7 +179,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->restoreOldParameterValues();
 
         // restore PHP version if changed
-        if ($this->getPhpVersion() !== 0) {
+        if ($this->getPhpVersion() !== self::PHP_VERSION_UNDEFINED) {
             $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
         }
     }
@@ -378,7 +383,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     private function configurePhpVersionFeatures(): void
     {
-        if ($this->getPhpVersion() === 0) {
+        if ($this->getPhpVersion() === self::PHP_VERSION_UNDEFINED) {
             return;
         }
 
