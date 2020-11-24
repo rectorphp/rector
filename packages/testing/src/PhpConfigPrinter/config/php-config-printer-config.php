@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Symplify\PhpConfigPrinter\Contract\SymfonyVersionFeatureGuardInterface;
-use Symplify\PhpConfigPrinter\Contract\YamlFileContentProviderInterface;
 use Rector\Testing\PhpConfigPrinter\SymfonyVersionFeatureGuard;
 use Rector\Testing\PhpConfigPrinter\YamlFileContentProvider;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\PhpConfigPrinter\Contract\SymfonyVersionFeatureGuardInterface;
+use Symplify\PhpConfigPrinter\Contract\YamlFileContentProviderInterface;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();

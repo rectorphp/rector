@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\Php;
 
 use Nette\Utils\Json;
-use Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Util\StaticPhpVersion;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;

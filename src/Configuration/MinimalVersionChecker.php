@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Configuration;
 
-use Nette\Utils\Strings;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
 use Rector\Core\Exception\Application\PhpVersionException;
 use Rector\Core\Util\StaticPhpVersion;

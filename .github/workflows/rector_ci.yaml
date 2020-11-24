@@ -58,6 +58,8 @@ jobs:
 
             # see https://github.com/EndBug/add-and-commit
             -
+                # commit only to core contributors who have repository access
+                if: github.event.pull_request.head.repo.full_name == github.repository
                 uses: EndBug/add-and-commit@v5.1.0
                 with:
                     # The arguments for the `git add` command (see the paragraph below for more info)

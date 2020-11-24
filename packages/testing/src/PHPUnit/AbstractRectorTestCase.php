@@ -47,6 +47,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     use RunnableTestTrait;
 
     /**
+     * @var int
+     */
+    private const PHP_VERSION_UNDEFINED = 0;
+
+    /**
      * @var FileProcessor
      */
     protected $fileProcessor;
@@ -105,11 +110,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      * @var mixed[]
      */
     private $oldParameterValues = [];
-
-    /**
-     * @var int
-     */
-    private const PHP_VERSION_UNDEFINED = 0;
 
     protected function setUp(): void
     {

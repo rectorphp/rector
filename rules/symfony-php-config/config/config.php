@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Symplify\PhpConfigPrinter\Printer\PhpParserPhpConfigPrinter;
-use Symplify\PhpConfigPrinter\YamlToPhpConverter;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Yaml\Parser;
+use Symplify\PhpConfigPrinter\Printer\PhpParserPhpConfigPrinter;
+use Symplify\PhpConfigPrinter\YamlToPhpConverter;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();

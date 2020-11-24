@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Util;
 
-use Nette\Utils\Strings;
-
 final class StaticPhpVersion
 {
     public static function getIntVersion(string $version): int
