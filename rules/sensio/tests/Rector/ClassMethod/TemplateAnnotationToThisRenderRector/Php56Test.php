@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 
 use Iterator;
-use Rector\Core\Util\PhpVersion;
+use Rector\Core\Util\StaticPhpVersion;
 use Rector\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -32,6 +32,6 @@ final class Php56Test extends AbstractRectorTestCase
 
     protected function getPhpVersion(): int
     {
-        return PhpVersion::getIntVersion('5.6');
+        return StaticPhpVersion::getIntVersion('5.6');
     }
 }

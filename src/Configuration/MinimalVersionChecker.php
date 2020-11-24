@@ -7,7 +7,7 @@ namespace Rector\Core\Configuration;
 use Nette\Utils\Strings;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
 use Rector\Core\Exception\Application\PhpVersionException;
-use Rector\Core\Util\PhpVersion;
+use Rector\Core\Util\StaticPhpVersion;
 
 /**
  * @see \Rector\Core\Tests\Configuration\MinimalVersionCheckerTest
@@ -34,8 +34,11 @@ final class MinimalVersionChecker
     {
         $minimumPhpVersion = $this->composerJsonParser->getPhpVersion();
 
+        $intInstalledPhpVersion = StaticPhpVersion::getIntVersion($this->installedPhpVersion);
+        $intMinimumPhpVersion = StaticPhpVersion::getIntVersion($minimumPhpVersion);
+
         // Check minimum required PHP version
-        if (PhpVersion::getIntVersion($this->installedPhpVersion) < PhpVersion::getIntVersion($minimumPhpVersion)) {
+        if ($intInstalledPhpVersion < $intMinimumPhpVersion) {
             throw new PhpVersionException(sprintf(
                 'PHP version %s or higher is required, but you currently have %s installed.',
                 $minimumPhpVersion,

@@ -6,7 +6,7 @@ namespace Rector\Core\Util;
 
 use Nette\Utils\Strings;
 
-final class PhpVersion
+final class StaticPhpVersion
 {
     public static function getIntVersion(string $version): int
     {

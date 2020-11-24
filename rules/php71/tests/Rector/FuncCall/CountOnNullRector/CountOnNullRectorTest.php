@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector;
 
 use Iterator;
-use Rector\Core\Util\PhpVersion;
+use Rector\Core\Util\StaticPhpVersion;
 use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -32,6 +32,6 @@ final class CountOnNullRectorTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): int
     {
-        return PhpVersion::getIntVersion('7.1');
+        return StaticPhpVersion::getIntVersion('7.1');
     }
 }
