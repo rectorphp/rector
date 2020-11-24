@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Migrify\PhpConfigPrinter\Contract\SymfonyVersionFeatureGuardInterface;
-use Migrify\PhpConfigPrinter\Contract\YamlFileContentProviderInterface;
+use Symplify\PhpConfigPrinter\Contract\SymfonyVersionFeatureGuardInterface;
+use Symplify\PhpConfigPrinter\Contract\YamlFileContentProviderInterface;
 use Rector\Testing\PhpConfigPrinter\SymfonyVersionFeatureGuard;
 use Rector\Testing\PhpConfigPrinter\YamlFileContentProvider;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

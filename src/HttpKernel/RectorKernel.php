@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\HttpKernel;
 
-use Migrify\PhpConfigPrinter\Bundle\PhpConfigPrinterBundle;
+use Symplify\PhpConfigPrinter\Bundle\PhpConfigPrinterBundle;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;

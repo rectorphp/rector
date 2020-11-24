@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Migrify\PhpConfigPrinter\Printer\PhpParserPhpConfigPrinter;
-use Migrify\PhpConfigPrinter\YamlToPhpConverter;
+use Symplify\PhpConfigPrinter\Printer\PhpParserPhpConfigPrinter;
+use Symplify\PhpConfigPrinter\YamlToPhpConverter;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Yaml\Parser;
 
