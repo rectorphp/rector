@@ -7,6 +7,7 @@ namespace Rector\PostRector\Rector;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Core\Rector\AbstractRector\NameResolverTrait;
 use Rector\Core\Skip\Skipper;
+use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -15,32 +16,28 @@ abstract class AbstractPostRector extends NodeVisitorAbstract implements PostRec
     use NameResolverTrait;
 
     /**
-     * @var SmartFileInfo|null
-     */
-    protected $smartFileInfo;
-
-    /**
      * @var Skipper
      */
     private $skipper;
 
     /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
+
+    /**
      * @required
      */
-    public function autowireAbstractPostRector(Skipper $skipper): void
+    public function autowireAbstractPostRector(Skipper $skipper, CurrentFileInfoProvider $currentFileInfoProvider): void
     {
         $this->skipper = $skipper;
-    }
-
-    public function addCurrentSmartFileInfo(?SmartFileInfo $smartFileInfo = null): void
-    {
-        $this->smartFileInfo = $smartFileInfo;
+        $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
     protected function shouldSkip(PostRectorInterface $postRector): bool
     {
-        return $this->smartFileInfo instanceof SmartFileInfo && $this->skipper->shouldSkipFileInfoAndRule(
-            $this->smartFileInfo,
+        return $this->currentFileInfoProvider->getSmartFileInfo() instanceof SmartFileInfo && $this->skipper->shouldSkipFileInfoAndRule(
+            $this->currentFileInfoProvider->getSmartFileInfo(),
             $postRector
         );
     }
