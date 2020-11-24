@@ -74,11 +74,6 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const BEFORE_CONSTANT_VISIBILITY = 70000;
-
-    /**
-     * @var int
-     */
     public const CONSTANT_VISIBILITY = 70100;
 
     /**
@@ -137,66 +132,6 @@ final class PhpVersionFeature
     public const TYPED_PROPERTIES = 70400;
 
     /**
-     * @var int
-     */
-    public const BEFORE_UNION_TYPES = 70400;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_MIXED_TYPE = 70400;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_TYPED_PROPERTIES = 70300;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_ARROW_FUNCTION = 70300;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_STRIP_TAGS_WITH_ARRAY = 70300;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_NULL_COALESCE_ASSIGN = 70300;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_LITERAL_SEPARATOR = 70300;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_ARRAY_SPREAD = 70300;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_LIST_REFERENCE_ASSIGNMENT = 70200;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_OBJECT_TYPE = 70100;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_VOID_RETURN_TYPE = 70000;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_NULLABLE_TYPE = 70000;
-
-    /**
      * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
      * @var int
      */
@@ -231,9 +166,4 @@ final class PhpVersionFeature
      * @var int
      */
     public const IS_ITERABLE = 70100;
-
-    /**
-     * @var int
-     */
-    public const BEFORE_ARRAY_MERGE_WITHOUT_ARGUMENTS = 70300;
 }

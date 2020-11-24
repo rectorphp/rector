@@ -32,6 +32,6 @@ final class DowngradeClassConstantVisibilityRectorTest extends AbstractRectorTes
 
     protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_CONSTANT_VISIBILITY;
+        return PhpVersionFeature::CONSTANT_VISIBILITY - 1;
     }
 }

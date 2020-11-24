@@ -33,6 +33,6 @@ final class DowngradeNumericLiteralSeparatorRectorTest extends AbstractRectorTes
 
     protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_LITERAL_SEPARATOR;
+        return PhpVersionFeature::LITERAL_SEPARATOR - 1;
     }
 }

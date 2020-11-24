@@ -134,7 +134,7 @@ final class ConfigurationNodeFactory
     {
         $this->parameterProvider->changeParameter(
             Option::PHP_VERSION_FEATURES,
-            PhpVersionFeature::BEFORE_TYPED_PROPERTIES
+            PhpVersionFeature::TYPED_PROPERTIES - 1
         );
     }
 

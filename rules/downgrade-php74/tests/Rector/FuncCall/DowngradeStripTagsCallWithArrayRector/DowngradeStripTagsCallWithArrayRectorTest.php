@@ -33,6 +33,6 @@ final class DowngradeStripTagsCallWithArrayRectorTest extends AbstractRectorTest
 
     protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_STRIP_TAGS_WITH_ARRAY;
+        return PhpVersionFeature::STRIP_TAGS_WITH_ARRAY - 1;
     }
 }

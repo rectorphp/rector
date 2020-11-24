@@ -32,6 +32,6 @@ final class ParamTypeDeclarationRectorTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_UNION_TYPES;
+        return PhpVersionFeature::UNION_TYPES - 1;
     }
 }
