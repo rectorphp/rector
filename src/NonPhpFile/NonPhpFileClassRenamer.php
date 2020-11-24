@@ -43,7 +43,9 @@ final class NonPhpFileClassRenamer
                 $oldClassRegex = '#' . preg_quote($oldClass, '#') . '#';
             }
 
-            $newContent = Strings::replace($newContent, $oldClassRegex, function (array $match) use ($newClass) {
+            $newContent = Strings::replace($newContent, $oldClassRegex, function (array $match) use (
+                $newClass
+            ): string {
                 return ($match['extra_space'] ?? '') . $newClass;
             });
         }
