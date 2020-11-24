@@ -34,7 +34,7 @@ final class PhpVersionProvider
         /** @var string|null $phpVersionFeatures */
         $phpVersionFeatures = $this->parameterProvider->provideParameter(Option::PHP_VERSION_FEATURES);
         if ($phpVersionFeatures !== null) {
-            return Strings::replace($phpVersionFeatures, '#(\d).(\d)#', '${1}0${2}00');
+            return Strings::replace((string) $phpVersionFeatures, '#(\d).(\d)#', '${1}0${2}00');
         }
 
         // for tests
@@ -46,7 +46,7 @@ final class PhpVersionProvider
         // see https://getcomposer.org/doc/06-config.md#platform
         $platformPhp = $this->provideProjectComposerJsonConfigPlatformPhp();
         if ($platformPhp) {
-            return Strings::replace($platformPhp, '#(\d).(\d)#', '${1}0${2}00');
+            return Strings::replace((string) $platformPhp, '#(\d).(\d)#', '${1}0${2}00');
         }
 
         return PHP_VERSION;
