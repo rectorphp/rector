@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 
 use Iterator;
+use Rector\Core\Util\PhpVersion;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService;
@@ -29,7 +30,7 @@ final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRector
 
     protected function getPhpVersion(): int
     {
-        return '7.2';
+        return PhpVersion::getIntVersion('7.2');
     }
 
     /**
