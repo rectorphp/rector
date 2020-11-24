@@ -12,17 +12,18 @@ use Nette\Utils\Strings;
 final class NonPhpFileClassRenamer
 {
     /**
-     * @see https://regex101.com/r/HKUFJD/4
+     * @see https://regex101.com/r/HKUFJD/7
      * for "?<!" @see https://stackoverflow.com/a/3735908/1348344
      * @var string
      */
-    private const STANDALONE_CLASS_PREFIX_REGEX = '#\b(?<!(\\\\|"))';
+    private const STANDALONE_CLASS_PREFIX_REGEX = '#((?<!(\\\\|"|\>|\.|\'))|(?<extra_space>\s+\\\\))';
 
     /**
-     * @see https://regex101.com/r/HKUFJD/4
+     * @see https://regex101.com/r/HKUFJD/5
+     * @see https://stackoverflow.com/a/3926546/1348344
      * @var string
      */
-    private const STANDALONE_CLASS_SUFFIX_REGEX = '(?!(\\\\|"))\b#';
+    private const STANDALONE_CLASS_SUFFIX_REGEX = '(?=::)#';
 
     /**
      * @param array<string, string> $classRenames
@@ -34,8 +35,6 @@ final class NonPhpFileClassRenamer
         foreach ($classRenames as $oldClass => $newClass) {
             // the old class is without slashes, it can make mess as similar to a word in the text, so we have to be more strict about it
             if (! Strings::contains($oldClass, '\\')) {
-                // @see https://regex101.com/r/HKUFJD/4
-                // for "?<!" see https://stackoverflow.com/a/3735908/1348344
                 $oldClassRegex = self::STANDALONE_CLASS_PREFIX_REGEX . preg_quote(
                     $oldClass,
                     '#'
@@ -44,7 +43,11 @@ final class NonPhpFileClassRenamer
                 $oldClassRegex = '#' . preg_quote($oldClass, '#') . '#';
             }
 
-            $newContent = Strings::replace($newContent, $oldClassRegex, $newClass);
+            $newContent = Strings::replace($newContent, $oldClassRegex, function (array $match) use (
+                $newClass
+            ): string {
+                return ($match['extra_space'] ?? '') . $newClass;
+            });
         }
 
         return $newContent;
@@ -65,7 +68,7 @@ final class NonPhpFileClassRenamer
             }
 
             $doubleSlashOldClass = str_replace('\\', '\\\\', $oldClass);
-            $doubleSlashNewClass = str_replace('\\', '\\\\\\', $newClass);
+            $doubleSlashNewClass = str_replace('\\', '\\\\', $newClass);
 
             $classRenames[$doubleSlashOldClass] = $doubleSlashNewClass;
         }
