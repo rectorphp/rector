@@ -41,7 +41,7 @@ final class MinimalVersionChecker
         }
 
         // Check minimum required PHP version
-        if ($installedPhpVersion <= Strings::replace((string) $minimumPhpVersion, '#(\d).(\d)#', '${1}0${2}00')) {
+        if ($installedPhpVersion < (int) Strings::replace((string) $minimumPhpVersion, '#(\d).(\d)#', '${1}0${2}00')) {
             throw new PhpVersionException(sprintf(
                 'PHP version %s or higher is required, but you currently have %s installed.',
                 $minimumPhpVersion,
