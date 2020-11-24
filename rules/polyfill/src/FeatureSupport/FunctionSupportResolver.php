@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Polyfill\FeatureSupport;
 
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\Util\PhpVersion;
 
 final class FunctionSupportResolver
 {
@@ -38,7 +39,7 @@ final class FunctionSupportResolver
                     continue;
                 }
 
-                if (! $this->phpVersionProvider->isAtLeastPhpVersion($version)) {
+                if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::getIntVersion($version))) {
                     continue;
                 }
 
