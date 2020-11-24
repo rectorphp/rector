@@ -24,7 +24,7 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithPolyfill');
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return '7.2';
     }

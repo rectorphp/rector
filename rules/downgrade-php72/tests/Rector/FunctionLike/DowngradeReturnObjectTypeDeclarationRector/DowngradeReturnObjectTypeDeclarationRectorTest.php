@@ -43,7 +43,7 @@ final class DowngradeReturnObjectTypeDeclarationRectorTest extends AbstractRecto
         return DowngradeReturnObjectTypeDeclarationRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::BEFORE_OBJECT_TYPE;
     }

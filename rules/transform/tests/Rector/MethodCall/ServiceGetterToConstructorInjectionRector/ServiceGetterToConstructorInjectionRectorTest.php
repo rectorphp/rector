@@ -27,7 +27,7 @@ final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return '7.2';
     }

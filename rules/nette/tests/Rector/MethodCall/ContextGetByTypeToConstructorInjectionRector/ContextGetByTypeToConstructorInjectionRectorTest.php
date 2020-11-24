@@ -24,7 +24,7 @@ final class ContextGetByTypeToConstructorInjectionRectorTest extends AbstractRec
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return '7.2';
     }

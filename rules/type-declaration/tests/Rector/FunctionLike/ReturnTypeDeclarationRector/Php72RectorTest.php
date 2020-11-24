@@ -24,7 +24,7 @@ final class Php72RectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp72');
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return '7.2';
     }

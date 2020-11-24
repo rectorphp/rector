@@ -30,7 +30,7 @@ final class MinimalVersionChecker
 
     public function check(): void
     {
-        $minimumPhpVersion = $this->composerJsonParser->getPhpVersion();
+        $minimumPhpVersion = preg_replace('#(\d).(\d)#', '${1}0${2}00', $this->composerJsonParser->getPhpVersion());
 
         // Check minimum required PHP version
         if (version_compare($this->installedPhpVersion, $minimumPhpVersion, '<')) {

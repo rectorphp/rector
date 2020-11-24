@@ -29,7 +29,7 @@ final class Php56Test extends AbstractRectorTestCase
         return TemplateAnnotationToThisRenderRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return '5.6';
     }

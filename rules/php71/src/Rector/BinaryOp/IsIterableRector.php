@@ -26,7 +26,7 @@ final class IsIterableRector extends AbstractIsAbleFunCallRector
         return 'is_iterable';
     }
 
-    public function getPhpVersion(): string
+    public function getPhpVersion(): int
     {
         return PhpVersionFeature::IS_ITERABLE;
     }

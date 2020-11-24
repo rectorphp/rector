@@ -174,8 +174,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->restoreOldParameterValues();
 
         // restore PHP version if changed
-        if ($this->getPhpVersion() !== '') {
-            $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
+        if ($this->getPhpVersion() !== 0) {
+            $this->setParameter(Option::PHP_VERSION_FEATURES, 10000);
         }
     }
 
@@ -258,10 +258,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return $this->bootKernelWithConfigs($class, $configFiles);
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         // to be implemented
-        return '';
+        return 0;
     }
 
     protected function assertFileMissing(string $temporaryFilePath): void
@@ -378,7 +378,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     private function configurePhpVersionFeatures(): void
     {
-        if ($this->getPhpVersion() === '') {
+        if ($this->getPhpVersion() === 0) {
             return;
         }
 

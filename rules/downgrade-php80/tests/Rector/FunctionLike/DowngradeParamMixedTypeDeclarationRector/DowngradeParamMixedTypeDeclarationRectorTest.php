@@ -43,7 +43,7 @@ final class DowngradeParamMixedTypeDeclarationRectorTest extends AbstractRectorT
         return DowngradeParamMixedTypeDeclarationRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::BEFORE_MIXED_TYPE;
     }

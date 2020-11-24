@@ -31,7 +31,7 @@ final class DowngradeListReferenceAssignmentRectorTest extends AbstractRectorTes
         return DowngradeListReferenceAssignmentRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::BEFORE_LIST_REFERENCE_ASSIGNMENT;
     }

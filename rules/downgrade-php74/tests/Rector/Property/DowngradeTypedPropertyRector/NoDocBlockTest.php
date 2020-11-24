@@ -43,7 +43,7 @@ final class NoDocBlockTest extends AbstractRectorTestCase
         return DowngradeTypedPropertyRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::BEFORE_TYPED_PROPERTIES;
     }

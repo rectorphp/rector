@@ -31,7 +31,7 @@ final class DowngradeNullCoalescingOperatorRectorTest extends AbstractRectorTest
         return DowngradeNullCoalescingOperatorRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::BEFORE_NULL_COALESCE_ASSIGN;
     }

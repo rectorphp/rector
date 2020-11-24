@@ -30,7 +30,7 @@ final class TypedPropertyCompleteDynamicPropertiesRectorTest extends AbstractRec
         return CompleteDynamicPropertiesRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }

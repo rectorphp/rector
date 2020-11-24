@@ -32,7 +32,7 @@ final class SkipParentConstructOverrideInPHP72Test extends AbstractRectorTestCas
         return MakeInheritedMethodVisibilitySameAsParentRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return '7.2';
     }

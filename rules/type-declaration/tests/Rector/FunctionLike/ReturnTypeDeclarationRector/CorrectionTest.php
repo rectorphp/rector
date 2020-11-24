@@ -30,7 +30,7 @@ final class CorrectionTest extends AbstractRectorTestCase
         return ReturnTypeDeclarationRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::BEFORE_UNION_TYPES;
     }

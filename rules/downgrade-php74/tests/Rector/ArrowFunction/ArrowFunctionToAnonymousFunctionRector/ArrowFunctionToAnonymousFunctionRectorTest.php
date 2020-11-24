@@ -31,7 +31,7 @@ final class ArrowFunctionToAnonymousFunctionRectorTest extends AbstractRectorTes
         return ArrowFunctionToAnonymousFunctionRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::BEFORE_ARROW_FUNCTION;
     }

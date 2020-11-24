@@ -43,7 +43,7 @@ final class DowngradeReturnStaticTypeDeclarationRectorTest extends AbstractRecto
         return DowngradeReturnStaticTypeDeclarationRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::BEFORE_MIXED_TYPE;
     }

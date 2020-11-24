@@ -37,7 +37,7 @@ final class DoctrineTypedPropertyRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::BEFORE_UNION_TYPES;
     }
