@@ -8027,7 +8027,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Move variable declaration near its reference
 
-- class: `Rector\SOLID\Rector\Assign\MoveVariableDeclarationNearReferenceRector`
+- class: `Rector\SOLID\Rector\Variable\MoveVariableDeclarationNearReferenceRector`
 
 ```diff
 -$var = 1;
