@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Configuration;
 
+use Nette\Utils\Strings;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
 use Rector\Core\Exception\Application\PhpVersionException;
 
@@ -40,7 +41,7 @@ final class MinimalVersionChecker
         }
 
         // Check minimum required PHP version
-        if ($installedPhpVersion <= preg_replace('#(\d).(\d)#', '${1}0${2}00', $minimumPhpVersion)) {
+        if ($installedPhpVersion <= Strings::replace($minimumPhpVersion, '#(\d).(\d)#', '${1}0${2}00')) {
             throw new PhpVersionException(sprintf(
                 'PHP version %s or higher is required, but you currently have %s installed.',
                 $minimumPhpVersion,

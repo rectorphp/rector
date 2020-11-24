@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Php;
 
 use Nette\Utils\Json;
+use Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -33,7 +34,7 @@ final class PhpVersionProvider
         /** @var string|null $phpVersionFeatures */
         $phpVersionFeatures = $this->parameterProvider->provideParameter(Option::PHP_VERSION_FEATURES);
         if ($phpVersionFeatures !== null) {
-            return preg_replace('#(\d).(\d)#', '${1}0${2}00', $phpVersionFeatures);
+            return Strings::replace($phpVersionFeatures, '#(\d).(\d)#', '${1}0${2}00');
         }
 
         // for tests
@@ -45,7 +46,7 @@ final class PhpVersionProvider
         // see https://getcomposer.org/doc/06-config.md#platform
         $platformPhp = $this->provideProjectComposerJsonConfigPlatformPhp();
         if ($platformPhp) {
-            return preg_replace('#(\d).(\d)#', '${1}0${2}00', $platformPhp);
+            return Strings::replace($platformPhp, '#(\d).(\d)#', '${1}0${2}00');
         }
 
         return PHP_VERSION;
