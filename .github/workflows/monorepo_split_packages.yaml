@@ -1,4 +1,4 @@
-name: Monorepo Split Packages
+name: Split Monorepo
 
 on:
     push:
@@ -6,7 +6,7 @@ on:
             - master
 
 jobs:
-    monorepo_split_packages:
+    split_monorepo:
         runs-on: ubuntu-latest
 
         strategy:
