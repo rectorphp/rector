@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // name, basically short class name; use PascalCase
         'RenameMethodCallRector',
 
-        // particular node types to change
+        // 1+ node types to change, pick from classes here https://github.com/nikic/PHP-Parser/tree/master/lib/PhpParser/Node
         // the best practise is to have just 1 type here if possible, and make separated rule for other node types
         [MethodCall::class],
 

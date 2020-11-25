@@ -243,6 +243,7 @@
             "Rector\\Order\\Tests\\": "rules/order/tests",
             "Rector\\PHPOffice\\Tests\\": "rules/php-office/tests",
             "Rector\\PHPStanExtensions\\": "utils/phpstan-extensions/src",
+            "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src",
             "Rector\\PHPStanExtensions\\Tests\\": "utils/phpstan-extensions/tests",
             "Rector\\PHPStanStaticTypeMapper\\Tests\\": "packages/phpstan-static-type-mapper/tests",
             "Rector\\PHPStan\\Tests\\": "rules/phpstan/tests",
@@ -316,7 +317,7 @@
             "vendor/bin/changelog-linker cleanup --ansi"
         ],
         "docs": [
-            "vendor/bin/rule-doc-generator generate packages rules --output-file docs/rector_rules_overview.md --ansi",
+            "vendor/bin/rule-doc-generator generate packages rules --output-file docs/rector_rules_overview.md --ansi --categorize",
             "bin/rector dump-nodes --output-file docs/nodes_overview.md --ansi",
             "vendor/bin/ecs check-markdown docs/rector_rules_overview.md docs/nodes_overview.md --ansi --fix"
         ],
