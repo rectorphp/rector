@@ -6,6 +6,7 @@ namespace Rector\NetteCodeQuality\Rector\FuncCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
@@ -31,10 +32,12 @@ final class SubstrMinusToStringEndsWithRector extends AbstractRector
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 substr($var, -4) !== 'Test';
+substr($var, -4) === 'Test';
 CODE_SAMPLE
 ,
                     <<<'CODE_SAMPLE'
 ! \Nette\Utils\Strings::endsWith($var, 'Test');
+\Nette\Utils\Strings::endsWith($var, 'Test');
 CODE_SAMPLE
                 ),
 
@@ -64,7 +67,7 @@ CODE_SAMPLE
 
         /** @var Node $parent */
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof NotIdentical) {
+        if (! ($parent instanceof NotIdentical || $parent instanceof Identical)) {
             return null;
         }
 
@@ -76,12 +79,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->addNodeBeforeNode(
-            new BooleanNot(
-                new StaticCall(new FullyQualified(Strings::class), 'endsWith', [$node->args[0]->value, $string])
-            ),
-            $parent
-        );
+        $replace = new StaticCall(new FullyQualified(Strings::class), 'endsWith', [$node->args[0]->value, $string]);
+        if ($parent instanceof NotIdentical) {
+            $replace = new BooleanNot($replace);
+        }
+
+        $this->addNodeBeforeNode($replace, $parent);
         $this->removeNode($parent);
 
         return $node;
