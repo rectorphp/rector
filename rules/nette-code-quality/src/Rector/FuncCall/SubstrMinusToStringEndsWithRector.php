@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\NetteCodeQuality\Rector\FuncCall;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -77,7 +78,7 @@ CODE_SAMPLE
 
         $this->addNodeBeforeNode(
             new BooleanNot(
-                new StaticCall(new Name('\Nette\Utils\Strings'), 'endsWith', [$node->args[0]->value, $string])
+                new StaticCall(new FullyQualified(Strings::class), 'endsWith', [$node->args[0]->value, $string])
             ),
             $parent
         );
