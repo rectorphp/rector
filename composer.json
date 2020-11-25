@@ -44,7 +44,7 @@
     "require-dev": {
         "cweagans/composer-patches": "^1.7",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "migrify/vendor-patches": "^0.4",
+        "vendor/vendor-patches": "^9.0",
         "nette/application": "^3.0",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
