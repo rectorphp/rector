@@ -18,6 +18,10 @@ jobs:
                         run: composer phpstan-config
 
                     -
+                        name: 'Validate Monorepo'
+                        run: composer validate-monorepo
+
+                    -
                         name: 'Show command'
                         run: bin/rector show --config rector-ci.php --ansi
 
