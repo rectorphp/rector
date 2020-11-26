@@ -21,11 +21,6 @@ final class ActiveRectorsProvider
     private $rectors = [];
 
     /**
-     * @var Skipper
-     */
-    private $skipper;
-
-    /**
      * @param RectorInterface[] $rectors
      */
     public function __construct(array $rectors, Skipper $skipper)
@@ -33,13 +28,12 @@ final class ActiveRectorsProvider
         foreach ($rectors as $key => $rector) {
             // @todo add should skip element to avoid faking a file info?
             $dummyFileInfo = new SmartFileInfo(__DIR__ . '/../../config/config.php');
-            if ($this->skipper->shouldSkipElementAndFileInfo($rector, $dummyFileInfo)) {
+            if ($skipper->shouldSkipElementAndFileInfo($rector, $dummyFileInfo)) {
                 unset($rectors[$key]);
             }
         }
 
         $this->rectors = $rectors;
-        $this->skipper = $skipper;
     }
 
     /**

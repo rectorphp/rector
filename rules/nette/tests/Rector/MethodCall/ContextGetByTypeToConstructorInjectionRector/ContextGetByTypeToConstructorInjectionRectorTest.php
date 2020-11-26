@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector;
 
 use Iterator;
-use Rector\Core\Util\StaticPhpVersion;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -27,7 +27,7 @@ final class ContextGetByTypeToConstructorInjectionRectorTest extends AbstractRec
 
     protected function getPhpVersion(): int
     {
-        return StaticPhpVersion::getIntVersion('7.2');
+        return PhpVersionFeature::TYPED_PROPERTIES - 1;
     }
 
     protected function getRectorClass(): string

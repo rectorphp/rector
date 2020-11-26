@@ -6,7 +6,7 @@ namespace Rector\Core\Php;
 
 use Nette\Utils\Json;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Util\StaticPhpVersion;
+use Rector\Core\Util\PhpVersionFactory;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -23,41 +23,50 @@ final class PhpVersionProvider
      */
     private $smartFileSystem;
 
-    public function __construct(ParameterProvider $parameterProvider, SmartFileSystem $smartFileSystem)
-    {
+    /**
+     * @var PhpVersionFactory
+     */
+    private $phpVersionFactory;
+
+    public function __construct(
+        ParameterProvider $parameterProvider,
+        SmartFileSystem $smartFileSystem,
+        PhpVersionFactory $phpVersionFactory
+    ) {
         $this->parameterProvider = $parameterProvider;
         $this->smartFileSystem = $smartFileSystem;
+        $this->phpVersionFactory = $phpVersionFactory;
     }
 
-    public function provide(): string
+    public function provide(): int
     {
-        /** @var string|null $phpVersionFeatures */
+        /** @var int|null $phpVersionFeatures */
         $phpVersionFeatures = $this->parameterProvider->provideParameter(Option::PHP_VERSION_FEATURES);
         if ($phpVersionFeatures !== null) {
-            return (string) $phpVersionFeatures;
+            return (int) $phpVersionFeatures;
         }
 
         // for tests
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             // so we don't have to up
-            return '10.0';
+            return 100000;
         }
 
         // see https://getcomposer.org/doc/06-config.md#platform
         $platformPhp = $this->provideProjectComposerJsonConfigPlatformPhp();
-        if ($platformPhp) {
+        if ($platformPhp !== null) {
             return $platformPhp;
         }
 
-        return PHP_VERSION;
+        return PHP_VERSION_ID;
     }
 
     public function isAtLeastPhpVersion(int $phpVersion): bool
     {
-        return $phpVersion <= StaticPhpVersion::getIntVersion($this->provide());
+        return $phpVersion <= $this->provide();
     }
 
-    private function provideProjectComposerJsonConfigPlatformPhp(): ?string
+    private function provideProjectComposerJsonConfigPlatformPhp(): ?int
     {
         $projectComposerJson = getcwd() . '/composer.json';
         if (! file_exists($projectComposerJson)) {
@@ -72,6 +81,11 @@ final class PhpVersionProvider
             return null;
         }
 
-        return $projectComposerJson['config']['platform']['php'] ?? null;
+        $platformPhp = $projectComposerJson['config']['platform']['php'] ?? null;
+        if ($platformPhp !== null) {
+            return $this->phpVersionFactory->createIntVersion($platformPhp);
+        }
+
+        return null;
     }
 }

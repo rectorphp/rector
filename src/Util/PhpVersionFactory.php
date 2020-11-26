@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Core\Util;
 
-final class StaticPhpVersion
+final class PhpVersionFactory
 {
-    public static function getIntVersion(string $version): int
+    public function createIntVersion(string $version): int
     {
         $explodeDash = explode('-', $version);
         if (count($explodeDash) > 1) {
