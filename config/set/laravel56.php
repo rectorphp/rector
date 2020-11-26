@@ -6,8 +6,8 @@ use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # see: https://laravel.com/docs/5.6/upgrade
 
@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename(
                     'Illuminate\Validation\ValidatesWhenResolvedTrait',
                     'validate',
@@ -32,7 +32,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => ValueObjectInliner::inline([
                 new ChangeMethodVisibility('Illuminate\Routing\Router', 'addRoute', 'public'),
                 new ChangeMethodVisibility('Illuminate\Contracts\Auth\Access\Gate', 'raw', 'public'),
                 new ChangeMethodVisibility('Illuminate\Database\Grammar', 'getDateFormat', 'public'),

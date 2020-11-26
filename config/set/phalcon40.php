@@ -11,8 +11,8 @@ use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # https://docs.phalcon.io/4.0/en/upgrade#general-notes
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # see https://github.com/rectorphp/rector/issues/2408#issue-534441142
     $services->set(SwapClassMethodArgumentsRector::class)
         ->call('configure', [[
-            SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => inline_value_objects([
+            SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => ValueObjectInliner::inline([
                 new SwapClassMethodArguments('Phalcon\Model', 'assign', [0, 2, 1]),
             ]),
         ]]);
@@ -107,7 +107,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Phalcon\Acl\AdapterInterface', 'isResource', 'isComponent'),
                 new MethodCallRename('Phalcon\Acl\AdapterInterface', 'addResource', 'addComponent'),
                 new MethodCallRename('Phalcon\Acl\AdapterInterface', 'addResourceAccess', 'addComponentAccess'),

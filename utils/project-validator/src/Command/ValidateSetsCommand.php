@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Rector\Utils\ProjectValidator\Command;
 
+use Rector\Core\Application\ActiveRectorsProvider;
+use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Set\RectorSetProvider;
-use Rector\Utils\ProjectValidator\CpuCoreCountResolver;
-use Rector\Utils\ProjectValidator\Process\ParallelTaskRunner;
-use Rector\Utils\ProjectValidator\ValueObject\SetTask;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\SetConfigResolver\ValueObject\Set;
+use Throwable;
 
 /**
  * We'll only check one file for now.
@@ -28,74 +31,84 @@ final class ValidateSetsCommand extends Command
     ];
 
     /**
-     * @var int
-     */
-    private const SLEEP_IN_SECONDS = 1;
-
-    /**
-     * @var string
-     */
-    private const TESTED_FILE = __DIR__ . '/../../../../src/Rector/AbstractRector.php';
-
-    /**
-     * @var CpuCoreCountResolver
-     */
-    private $cpuCoreCountResolver;
-
-    /**
-     * @var ParallelTaskRunner
-     */
-    private $parallelTaskRunner;
-
-    /**
      * @var RectorSetProvider
      */
     private $rectorSetProvider;
 
-    public function __construct(
-        CpuCoreCountResolver $cpuCoreCountResolver,
-        ParallelTaskRunner $parallelTaskRunner,
-        RectorSetProvider $rectorSetProvider
-    ) {
-        $this->cpuCoreCountResolver = $cpuCoreCountResolver;
-        $this->parallelTaskRunner = $parallelTaskRunner;
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
+
+    public function __construct(RectorSetProvider $rectorSetProvider, SymfonyStyle $symfonyStyle)
+    {
         $this->rectorSetProvider = $rectorSetProvider;
+        $this->symfonyStyle = $symfonyStyle;
 
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setDescription('[CI] Validate each sets by running it on simple file');
+        $this->setDescription('[CI] Validate each sets has correct configuration by loading the configs');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $setTasks = $this->createSetTasks();
-        $cpuCoreCount = $this->cpuCoreCountResolver->resolve();
+        $hasErrors = false;
 
-        $noErrors = $this->parallelTaskRunner->run($setTasks, $cpuCoreCount, self::SLEEP_IN_SECONDS);
-        if (! $noErrors) {
-            return ShellCode::ERROR;
-        }
+        $message = sprintf('Testing %d sets', count($this->rectorSetProvider->provide()));
+        $this->symfonyStyle->title($message);
 
-        return ShellCode::SUCCESS;
-    }
-
-    /**
-     * @return SetTask[]
-     */
-    private function createSetTasks(): array
-    {
-        $setTasks = [];
-        foreach ($this->rectorSetProvider->provideSetNames() as $setName) {
-            if (in_array($setName, self::EXCLUDED_SETS, true)) {
+        foreach ($this->rectorSetProvider->provide() as $set) {
+            if (in_array($set->getName(), self::EXCLUDED_SETS, true)) {
                 continue;
             }
 
-            $setTasks[$setName] = new SetTask(self::TESTED_FILE, $setName);
+            $setFileInfo = $set->getSetFileInfo();
+
+            try {
+                $rectorKernel = $this->bootRectorKernelWithSet($set);
+            } catch (Throwable $throwable) {
+                $message = sprintf(
+                    'Failed to load "%s" set from "%s" path',
+                    $set->getName(),
+                    $setFileInfo->getRelativeFilePathFromCwd()
+                );
+                $this->symfonyStyle->error($message);
+                $this->symfonyStyle->writeln($throwable->getMessage());
+
+                $hasErrors = true;
+                sleep(3);
+
+                continue;
+            }
+
+            $container = $rectorKernel->getContainer();
+            $activeRectorsProvider = $container->get(ActiveRectorsProvider::class);
+
+            $activeRectors = $activeRectorsProvider->provide();
+
+            $setFileInfo = $set->getSetFileInfo();
+            $message = sprintf(
+                'Set "%s" loaded correctly from "%s" path with %d rules',
+                $set->getName(),
+                $setFileInfo->getRelativeFilePathFromCwd(),
+                count($activeRectors)
+            );
+
+            $this->symfonyStyle->success($message);
         }
 
-        return $setTasks;
+        return $hasErrors ? ShellCode::ERROR : ShellCode::SUCCESS;
+    }
+
+    private function bootRectorKernelWithSet(Set $set): KernelInterface
+    {
+        $rectorKernel = new RectorKernel('prod' . sha1($set->getName()), true);
+        $rectorKernel->setConfigs([$set->getSetPathname()]);
+        $rectorKernel->boot();
+
+        return $rectorKernel;
     }
 }

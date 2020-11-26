@@ -5,15 +5,15 @@ declare(strict_types=1);
 use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
 use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Rector\CakePHP\ValueObject\FactoryMethod;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[
-            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects([
+            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => ValueObjectInliner::inline([
                 new ArrayToFluentCall('Cake\ORM\Association', [
                     'bindingKey' => 'setBindingKey',
                     'cascadeCallbacks' => 'setCascadeCallbacks',
@@ -79,7 +79,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'page' => 'page',
                 ]),
             ]),
-            ArrayToFluentCallRector::FACTORY_METHODS => inline_value_objects([
+            ArrayToFluentCallRector::FACTORY_METHODS => ValueObjectInliner::inline([
                 new FactoryMethod('Cake\ORM\Table', 'belongsTo', 'Cake\ORM\Association', 2),
                 new FactoryMethod('Cake\ORM\Table', 'belongsToMany', 'Cake\ORM\Association', 2),
                 new FactoryMethod('Cake\ORM\Table', 'hasMany', 'Cake\ORM\Association', 2),

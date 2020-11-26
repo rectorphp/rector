@@ -22,12 +22,12 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstant;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # source: https://book.cakephp.org/4/en/appendices/4-0-migration-guide.html
 
@@ -44,7 +44,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
                 new RenameClassConstant('Cake\View\View', 'NAME_ELEMENT', 'TYPE_ELEMENT'),
                 new RenameClassConstant('Cake\View\View', 'NAME_LAYOUT', 'TYPE_LAYOUT'),
                 new RenameClassConstant('Cake\Mailer\Email', 'MESSAGE_HTML', 'Cake\Mailer\Message::MESSAGE_HTML'),
@@ -56,7 +56,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Cake\Form\Form', 'errors', 'getErrors'),
                 new MethodCallRename('Cake\Mailer\Email', 'set', 'setViewVars'),
                 new MethodCallRename('Cake\ORM\EntityInterface', 'unsetProperty', 'unset'),
@@ -69,7 +69,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_value_objects([
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => ValueObjectInliner::inline([
                 new RenameStaticMethod('Router', 'pushRequest', 'Router', 'setRequest'),
                 new RenameStaticMethod('Router', 'setRequestInfo', 'Router', 'setRequest'),
                 new RenameStaticMethod('Router', 'setRequestContext', 'Router', 'setRequest'),
@@ -78,14 +78,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
+            RenamePropertyRector::RENAMED_PROPERTIES => ValueObjectInliner::inline([
                 new RenameProperty('Cake\ORM\Entity', '_properties', '_fields'),
             ]),
         ]]);
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => ValueObjectInliner::inline([
                 new AddReturnTypeDeclaration('Cake\Http\BaseApplication', 'bootstrap', new VoidType()),
                 new AddReturnTypeDeclaration('Cake\Http\BaseApplication', 'bootstrapCli', new VoidType()),
                 new AddReturnTypeDeclaration('Cake\Http\BaseApplication', 'middleware', new ObjectType(
@@ -114,7 +114,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
                 new AddParamTypeDeclaration(
                     'Cake\Form\Form',
                     'getData',
@@ -188,7 +188,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->call('configure', [[
-            RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => inline_value_objects([
+            RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => ValueObjectInliner::inline([
                 new RenameMethodCallBasedOnParameter('Cake\Http\ServerRequest', 'getParam', 'paging', 'getAttribute'),
                 new RenameMethodCallBasedOnParameter('Cake\Http\ServerRequest', 'withParam', 'paging', 'withAttribute'),
             ]),
@@ -196,7 +196,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => ValueObjectInliner::inline([
                 new ModalToGetSet('Cake\Console\ConsoleIo', 'styles', 'setStyle', 'getStyle'),
                 new ModalToGetSet('Cake\Console\ConsoleOutput', 'styles', 'setStyle', 'getStyle'),
                 new ModalToGetSet('Cake\ORM\EntityInterface', 'isNew', 'setNew', 'isNew'),

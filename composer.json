@@ -57,6 +57,7 @@
         "symplify/coding-standard": "dev-master",
         "symplify/easy-testing": "dev-master",
         "symplify/monorepo-builder": "dev-master",
+        "symplify/symfony-php-config": "dev-master",
         "symplify/phpstan-extensions": "dev-master",
         "symplify/markdown-diff": "dev-master",
         "symplify/phpstan-rules": "dev-master",
@@ -69,7 +70,6 @@
     },
     "autoload": {
         "files": [
-            "packages/symfony-php-config/functions/functions.php",
             "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php"
         ],
         "psr-4": {
@@ -158,10 +158,7 @@
             "Rector\\StrictCodeQuality\\": "rules/strict-code-quality/src",
             "Rector\\SymfonyCodeQuality\\": "rules/symfony-code-quality/src",
             "Rector\\SymfonyPHPUnit\\": "rules/symfony-phpunit/src",
-            "Rector\\SymfonyPhpConfig\\": [
-                "packages/symfony-php-config/src",
-                "rules/symfony-php-config/src"
-            ],
+            "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src",
             "Rector\\Symfony\\": "rules/symfony/src",
             "Rector\\Transform\\": "rules/transform/src",
             "Rector\\Twig\\": "rules/twig/src",
@@ -277,10 +274,7 @@
             "Rector\\StrictCodeQuality\\Tests\\": "rules/strict-code-quality/tests",
             "Rector\\SymfonyCodeQuality\\Tests\\": "rules/symfony-code-quality/tests",
             "Rector\\SymfonyPHPUnit\\Tests\\": "rules/symfony-phpunit/tests",
-            "Rector\\SymfonyPhpConfig\\Tests\\": [
-                "packages/symfony-php-config/tests",
-                "rules/symfony-php-config/tests"
-            ],
+            "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests",
             "Rector\\Symfony\\Tests\\": "rules/symfony/tests",
             "Rector\\Transform\\Tests\\": "rules/transform/tests",
             "Rector\\Twig\\Tests\\": "rules/twig/tests",
