@@ -23,7 +23,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => ValueObjectInliner::inline([
                 
+
                 new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
+
                 
             ]),
         ]]);
