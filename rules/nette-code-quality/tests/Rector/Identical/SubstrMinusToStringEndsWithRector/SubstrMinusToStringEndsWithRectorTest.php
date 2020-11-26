@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteCodeQuality\Tests\Rector\FuncCall\SubstrMinusToStringEndsWithRector;
+namespace Rector\NetteCodeQuality\Tests\Rector\Identical\SubstrMinusToStringEndsWithRector;
 
 use Iterator;
-use Rector\NetteCodeQuality\Rector\FuncCall\SubstrMinusToStringEndsWithRector;
+use Rector\NetteCodeQuality\Rector\Identical\SubstrMinusToStringEndsWithRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

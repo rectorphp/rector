@@ -2,25 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteCodeQuality\Rector\FuncCall;
+namespace Rector\NetteCodeQuality\Rector\Identical;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\NetteCodeQuality\Tests\Rector\FuncCall\SubstrMinusToStringEndsWithRector\SubstrMinusToStringEndsWithRectorTest
+ * @see \Rector\NetteCodeQuality\Tests\Rector\Identical\SubstrMinusToStringEndsWithRector\SubstrMinusToStringEndsWithRectorTest
  */
 final class SubstrMinusToStringEndsWithRector extends AbstractRector
 {
@@ -49,44 +47,40 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [Identical::class, NotIdentical::class];
     }
 
     /**
-     * @param FuncCall $node
+     * @param Identical|NotIdentical $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'substr')) {
+        if (! ($this->isFuncCallName($node->left, 'substr') || $this->isFuncCallName($node->right, 'substr'))) {
             return null;
         }
 
-        if (! $node->args[1]->value instanceof UnaryMinus) {
+        $substr = $this->isFuncCallName($node->left, 'substr')
+            ? $node->left
+            : $node->right;
+
+        if (! $substr->args[1]->value instanceof UnaryMinus) {
             return null;
         }
+
+        /** @var UnaryMinus $unaryMinus */
+        $unaryMinus = $substr->args[1]->value;
 
         /** @var Node $parent */
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! ($parent instanceof NotIdentical || $parent instanceof Identical)) {
-            return null;
-        }
-
-        $string = $parent->left === $node
+        $parent = $substr->getAttribute(AttributeKey::PARENT_NODE);
+        $string = $parent->left === $substr
             ? $parent->right
             : $parent->left;
 
-        if (! $string instanceof String_) {
-            return null;
-        }
-
-        $replace = new StaticCall(new FullyQualified(Strings::class), 'endsWith', [$node->args[0]->value, $string]);
+        $replace = new StaticCall(new FullyQualified(Strings::class), 'endsWith', [$substr->args[0]->value, $string]);
         if ($parent instanceof NotIdentical) {
             $replace = new BooleanNot($replace);
         }
 
-        $this->addNodeBeforeNode($replace, $parent);
-        $this->removeNode($parent);
-
-        return $node;
+        return $replace;
     }
 }
