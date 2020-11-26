@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -69,18 +68,15 @@ CODE_SAMPLE
 
         /** @var UnaryMinus $unaryMinus */
         $unaryMinus = $substr->args[1]->value;
-
-        /** @var Node $parent */
-        $parent = $substr->getAttribute(AttributeKey::PARENT_NODE);
-        $string = $parent->left === $substr
-            ? $parent->right
-            : $parent->left;
+        $string = $this->isFuncCallName($node->left, 'substr')
+            ? $node->right
+            : $node->left;
 
         $replace = new StaticCall(new FullyQualified(Strings::class), 'endsWith', [$substr->args[0]->value, $string]);
-        if ($parent instanceof NotIdentical) {
-            $replace = new BooleanNot($replace);
+        if ($node instanceof Identical) {
+            return $replace;
         }
 
-        return $replace;
+        return new BooleanNot($replace);
     }
 }
