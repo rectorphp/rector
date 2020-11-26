@@ -32,6 +32,7 @@
         "symfony/http-kernel": "^4.4.8|^5.1",
         "symfony/process": "^4.4.8|^5.1",
         "symplify/autowire-array-parameter": "dev-master",
+        "symplify/skipper": "dev-master",
         "symplify/composer-json-manipulator": "dev-master",
         "symplify/console-color-diff": "dev-master",
         "symplify/package-builder": "dev-master",
