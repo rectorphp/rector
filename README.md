@@ -70,7 +70,6 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 ### Advanced
 
 - [How To Run Rector on Changed Files Only](/docs/how_to_run_rector_on_changed_files_only.md)
-- [How Run One Rule From Command Line](/docs/how_to_run_one_rule_from_command_line.md)
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
 - [How run Rector in Docker](/docs/how_to_run_rector_in_docker.md)

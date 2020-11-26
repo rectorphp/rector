@@ -13,7 +13,6 @@ jobs:
             fail-fast: false
             matrix:
                 package_name:
-                    - simple-php-doc-parser
                     - symfony-php-config
 
         name: Monorepo Split of ${{ matrix.package_name }}
