@@ -17,22 +17,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     // is there a file you need to skip?
-    $parameters->set(Option::EXCLUDE_PATHS, [
+    $parameters->set(Option::SKIP, [
         // single file
         __DIR__ . '/src/ComplicatedFile.php',
         // or directory
         __DIR__ . '/src',
         // or fnmatch
         __DIR__ . '/src/*/Tests/*',
-    ]);
 
-    // is there single rule you don't like from a set you use?
-    $parameters->set(Option::SKIP, [
-        SimplifyIfReturnBoolRector::class
-    ]);
+        // is there single rule you don't like from a set you use?
+        SimplifyIfReturnBoolRector::class,
 
-    // skip directory/file by rule
-    $parameters->set(Option::SKIP, [
+        // or just skip rule in specific directory
         SimplifyIfReturnBoolRector::class => [
             // single file
             __DIR__ . '/src/ComplicatedFile.php',

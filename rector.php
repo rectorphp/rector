@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/bin/rector',
     ]);
 
-    $parameters->set(Option::EXCLUDE_PATHS, [
+    $parameters->set(Option::SKIP, [
         '/Source/',
         '/*Source/',
         '/Fixture/',

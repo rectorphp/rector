@@ -75,20 +75,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SplitStringClassConstantToClassConstFetchRector::class,
         // false positives on constants used in rector-ci.php
         RemoveUnusedClassConstantRector::class,
-    ]);
 
-    $parameters->set(Option::EXCLUDE_PATHS, [
+        // test paths
         '/Fixture/',
         '/Source/',
         '/Expected/',
-        __DIR__ . '/packages/doctrine-annotation-generated/src/*',
+        __DIR__ . '/packages/doctrine-annotation-generated/src',
         // tempalte files
-        __DIR__ . '/packages/rector-generator/templates/*',
+        __DIR__ . '/packages/rector-generator/templates',
         // public api
         __DIR__ . '/packages/rector-generator/src/ValueObject/RectorRecipe.php',
     ]);
 
     # so Rector code is still PHP 7.2 compatible
-    $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
+    $parameters->set(Option::PHP_VERSION_FEATURES, 70200);
     $parameters->set(Option::ENABLE_CACHE, true);
 };

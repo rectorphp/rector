@@ -43,7 +43,6 @@ final class AdditionalAutoloader
     ) {
         $this->fileGuard = $fileGuard;
         $this->autoloadPaths = (array) $parameterProvider->provideParameter(Option::AUTOLOAD_PATHS);
-        $this->excludePaths = (array) $parameterProvider->provideParameter(Option::EXCLUDE_PATHS);
         $this->fileSystemFilter = $fileSystemFilter;
     }
 

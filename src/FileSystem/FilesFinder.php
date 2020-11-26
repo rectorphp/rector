@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\FileSystem;
 
 use Nette\Utils\Strings;
-use Rector\Core\Configuration\Option;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\FileSystemFilter;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -58,10 +56,8 @@ final class FilesFinder
     public function __construct(
         FilesystemTweaker $filesystemTweaker,
         FinderSanitizer $finderSanitizer,
-        FileSystemFilter $fileSystemFilter,
-        ParameterProvider $parameterProvider
+        FileSystemFilter $fileSystemFilter
     ) {
-        $this->excludePaths = (array) $parameterProvider->provideParameter(Option::EXCLUDE_PATHS);
         $this->filesystemTweaker = $filesystemTweaker;
         $this->finderSanitizer = $finderSanitizer;
         $this->fileSystemFilter = $fileSystemFilter;

@@ -99,11 +99,6 @@ final class Option
     /**
      * @var string
      */
-    public const EXCLUDE_PATHS = 'exclude_paths';
-
-    /**
-     * @var string
-     */
     public const SETS = 'sets';
 
     /**
