@@ -38,6 +38,7 @@
         "symplify/package-builder": "dev-master",
         "symplify/php-config-printer": "dev-master",
         "symplify/set-config-resolver": "dev-master",
+        "symplify/simple-php-doc-parser": "dev-master",
         "symplify/smart-file-system": "dev-master",
         "symplify/rule-doc-generator": "dev-master",
         "webmozart/assert": "^1.9"
@@ -65,9 +66,7 @@
         "tracy/tracy": "^2.7"
     },
     "replace": {
-        "rector/rector-prefixed": "self.version",
-        "rector/simple-php-doc-parser": "self.version",
-        "rector/symfony-php-config": "self.version"
+        "rector/rector-prefixed": "self.version"
     },
     "autoload": {
         "files": [
@@ -154,7 +153,6 @@
             "Rector\\SOLID\\": "rules/solid/src",
             "Rector\\Sensio\\": "rules/sensio/src",
             "Rector\\Set\\": "packages/set/src",
-            "Rector\\SimplePhpDocParser\\": "packages/simple-php-doc-parser/src",
             "Rector\\StaticTypeMapper\\": "packages/static-type-mapper/src",
             "Rector\\StrictCodeQuality\\": "rules/strict-code-quality/src",
             "Rector\\SymfonyCodeQuality\\": "rules/symfony-code-quality/src",
@@ -271,7 +269,6 @@
             "Rector\\Restoration\\Tests\\": "rules/restoration/tests",
             "Rector\\SOLID\\Tests\\": "rules/solid/tests",
             "Rector\\Sensio\\Tests\\": "rules/sensio/tests",
-            "Rector\\SimplePhpDocParser\\Tests\\": "packages/simple-php-doc-parser/tests",
             "Rector\\StrictCodeQuality\\Tests\\": "rules/strict-code-quality/tests",
             "Rector\\SymfonyCodeQuality\\Tests\\": "rules/symfony-code-quality/tests",
             "Rector\\SymfonyPHPUnit\\Tests\\": "rules/symfony-phpunit/tests",
