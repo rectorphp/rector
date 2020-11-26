@@ -6,8 +6,8 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symplify\SymfonyPhpConfig\inline_value_objects;
 
 # https://github.com/symfony/symfony/blob/master/UPGRADE-4.1.md
 return static function (ContainerConfigurator $containerConfigurator): void {

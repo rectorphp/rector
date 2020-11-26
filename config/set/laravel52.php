@@ -5,8 +5,8 @@ declare(strict_types=1);
 use Rector\Generic\Rector\String_\StringToClassConstantRector;
 use Rector\Generic\ValueObject\StringToClassConstant;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symplify\SymfonyPhpConfig\inline_value_objects;
 
 # see: https://laravel.com/docs/5.2/upgrade
 return static function (ContainerConfigurator $containerConfigurator): void {

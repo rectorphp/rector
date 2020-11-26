@@ -83,7 +83,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => \Rector\SymfonyPhpConfig\inline_value_objects([
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => \Symplify\SymfonyPhpConfig\inline_value_objects([
                 new \Rector\Renaming\ValueObject\MethodCallRename('Illuminate\Auth\Access\Gate', 'access', 'inspect'),
             ])
         ]]);
@@ -141,7 +141,7 @@ CODE_SAMPLE
 
             // wrap with inline objects
             $args = [new Arg($configurationValueArray)];
-            $node->value = new FuncCall(new FullyQualified('Rector\SymfonyPhpConfig\inline_value_objects'), $args);
+            $node->value = new FuncCall(new FullyQualified('Symplify\SymfonyPhpConfig\inline_value_objects'), $args);
 
             return $node;
         }

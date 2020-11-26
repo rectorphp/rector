@@ -7,7 +7,7 @@ namespace Rector\PHPStanExtensions\Tests\Rule\RectorRuleAndValueObjectHaveSameSt
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\PHPStanExtensions\Tests\Rule\RectorRuleAndValueObjectHaveSameStartsRule\Source\ConfigureValueObject;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
+use function Symplify\SymfonyPhpConfig\inline_value_objects;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();

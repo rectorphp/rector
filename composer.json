@@ -57,6 +57,7 @@
         "symplify/coding-standard": "dev-master",
         "symplify/easy-testing": "dev-master",
         "symplify/monorepo-builder": "dev-master",
+        "symplify/symfony-php-config": "dev-master",
         "symplify/phpstan-extensions": "dev-master",
         "symplify/markdown-diff": "dev-master",
         "symplify/phpstan-rules": "dev-master",
@@ -69,7 +70,6 @@
     },
     "autoload": {
         "files": [
-            "packages/symfony-php-config/functions/functions.php",
             "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php"
         ],
         "psr-4": {

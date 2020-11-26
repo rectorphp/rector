@@ -15417,7 +15417,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -                ]
 -            ]]
 -        ]);
-+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => \Rector\SymfonyPhpConfig\inline_value_objects([
++            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => \Symplify\SymfonyPhpConfig\inline_value_objects([
 +                new \Rector\Renaming\ValueObject\MethodCallRename('Illuminate\Auth\Access\Gate', 'access', 'inspect'),
 +            ])
 +        ]]);

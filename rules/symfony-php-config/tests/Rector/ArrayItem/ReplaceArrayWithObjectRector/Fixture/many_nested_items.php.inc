@@ -41,7 +41,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => \Rector\SymfonyPhpConfig\inline_value_objects([
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => \Symplify\SymfonyPhpConfig\inline_value_objects([
                 new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('PHPUnit\Framework\TestCase', '__construct', 2, ''),
                 new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('AnotherClass', 'yetMethod', 0, 'Sylius\Component\Core\Storage\CartStorageInterface'),
             ]),
