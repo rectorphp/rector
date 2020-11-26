@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Rector\Utils\ProjectValidator\HttpKernel;
@@ -23,7 +24,6 @@ final class SingleConfigKernel extends AbstractSymplifyKernel
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__ . '/../../../../config/config.php');
-
         $loader->load($this->configFile);
     }
 }
