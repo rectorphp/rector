@@ -77,11 +77,6 @@ final class Configuration
     private $ciDetector;
 
     /**
-     * @var OnlyRuleResolver
-     */
-    private $onlyRuleResolver;
-
-    /**
      * @var ParameterProvider
      */
     private $parameterProvider;
@@ -96,21 +91,12 @@ final class Configuration
      */
     private $configFileInfo;
 
-    /**
-     * @var string|null
-     */
-    private $onlyRector;
-
-    public function __construct(
-        CiDetector $ciDetector,
-        OnlyRuleResolver $onlyRuleResolver,
-        ParameterProvider $parameterProvider
-    ) {
+    public function __construct(CiDetector $ciDetector, ParameterProvider $parameterProvider)
+    {
         $this->ciDetector = $ciDetector;
         $this->isCacheEnabled = (bool) $parameterProvider->provideParameter(Option::ENABLE_CACHE);
         $this->fileExtensions = (array) $parameterProvider->provideParameter(Option::FILE_EXTENSIONS);
         $this->paths = (array) $parameterProvider->provideParameter(Option::PATHS);
-        $this->onlyRuleResolver = $onlyRuleResolver;
         $this->parameterProvider = $parameterProvider;
     }
 
@@ -130,12 +116,6 @@ final class Configuration
         $this->outputFile = $this->sanitizeOutputFileValue($outputFileOption);
 
         $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
-
-        /** @var string|null $onlyRector */
-        $onlyRector = $input->getOption(Option::OPTION_ONLY);
-        if ($onlyRector !== null) {
-            $this->setOnlyRector($onlyRector);
-        }
 
         $commandLinePaths = (array) $input->getArgument(Option::SOURCE);
         // manual command line value has priority
@@ -210,11 +190,6 @@ final class Configuration
     public function mustMatchGitDiff(): bool
     {
         return $this->mustMatchGitDiff;
-    }
-
-    public function getOnlyRector(): ?string
-    {
-        return $this->onlyRector;
     }
 
     public function getOutputFile(): ?string
@@ -316,10 +291,5 @@ final class Configuration
         }
 
         return $outputFileOption;
-    }
-
-    private function setOnlyRector(string $rector): void
-    {
-        $this->onlyRector = $this->onlyRuleResolver->resolve($rector);
     }
 }
