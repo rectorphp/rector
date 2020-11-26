@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -64,9 +66,20 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var UnaryMinus $unaryMinus */
+        $unaryMinus = $substr->args[1]->value;
+        if (! $unaryMinus->expr instanceof LNumber) {
+            return null;
+        }
+
         $string = $this->isFuncCallName($node->left, 'substr')
             ? $node->right
             : $node->left;
+
+        $wordLength = $unaryMinus->expr->value;
+        if ($string instanceof String_ && strlen($string->value) !== $wordLength) {
+            return null;
+        }
 
         $replace = $this->createStaticCall(Strings::class, 'endsWith', [$substr->args[0]->value, $string]);
 
