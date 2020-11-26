@@ -25,13 +25,13 @@ use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
-use Rector\Core\Skip\Skipper;
 use Rector\Core\ValueObject\ProjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\Skipper\Skipper\Skipper;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
@@ -219,7 +219,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo instanceof SmartFileInfo && $this->skipper->shouldSkipFileInfoAndRule($fileInfo, $this)) {
+        if ($fileInfo instanceof SmartFileInfo && $this->skipper->shouldSkipElementAndFileInfo($this, $fileInfo)) {
             return null;
         }
 
