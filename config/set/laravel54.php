@@ -8,7 +8,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symplify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # see: https://laravel.com/docs/5.4/upgrade
 
@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StringToClassConstantRector::class)
         ->call('configure', [[
-            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => inline_value_objects([
+            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => ValueObjectInliner::inline([
                 new StringToClassConstant(
                     'kernel.handled',
                     'Illuminate\Foundation\Http\Events\RequestHandled',
@@ -41,7 +41,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Illuminate\Support\Collection', 'every', 'nth'),
                 new MethodCallRename(
                     'Illuminate\Database\Eloquent\Relations\BelongsToMany',

@@ -17,7 +17,7 @@ final class SymfonyConfigRectorValueObjectResolver
     /**
      * @var string
      */
-    private const INLINE_FUNCTION_NAME = 'Symplify\SymfonyPhpConfig\inline_value_objects';
+    private const INLINE_FUNCTION_NAME = 'Symplify\SymfonyPhpConfig\use Symplify\SymfonyPhpConfig\ValueObjectInliner;bjects';
 
     /**
      * @var NodeFinder

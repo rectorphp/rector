@@ -6,7 +6,7 @@ use Rector\Generic\Rector\String_\StringToClassConstantRector;
 use Rector\Generic\ValueObject\StringToClassConstant;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symplify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # see: https://laravel.com/docs/5.2/upgrade
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StringToClassConstantRector::class)
         ->call('configure', [[
-            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => inline_value_objects([
+            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => ValueObjectInliner::inline([
                 new StringToClassConstant('artisan.start', 'Illuminate\Console\Events\ArtisanStarting', 'class'),
                 new StringToClassConstant('auth.attempting', 'Illuminate\Auth\Events\Attempting', 'class'),
                 new StringToClassConstant('auth.login', 'Illuminate\Auth\Events\Login', 'class'),

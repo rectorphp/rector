@@ -6,7 +6,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symplify\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # https://www.php.net/manual/en/book.gmagick.php → https://www.php.net/manual/en/book.imagick.php
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Gmagick', 'addimage', 'addImage'),
                 new MethodCallRename('Gmagick', 'addnoiseimage', 'addNoiseImage'),
                 new MethodCallRename('Gmagick', 'annotateimage', 'annotateImage'),
