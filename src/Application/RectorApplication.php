@@ -12,7 +12,6 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\EventDispatcher\Event\AfterProcessEvent;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Testing\Application\EnabledRectorsProvider;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -79,11 +78,6 @@ final class RectorApplication
     private $removedAndAddedFilesProcessor;
 
     /**
-     * @var EnabledRectorsProvider
-     */
-    private $enabledRectorsProvider;
-
-    /**
      * @var NodeScopeResolver
      */
     private $nodeScopeResolver;
@@ -100,7 +94,6 @@ final class RectorApplication
 
     public function __construct(
         Configuration $configuration,
-        EnabledRectorsProvider $enabledRectorsProvider,
         ErrorAndDiffCollector $errorAndDiffCollector,
         EventDispatcherInterface $eventDispatcher,
         FileProcessor $fileProcessor,
@@ -116,7 +109,6 @@ final class RectorApplication
         $this->fileProcessor = $fileProcessor;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
-        $this->enabledRectorsProvider = $enabledRectorsProvider;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->eventDispatcher = $eventDispatcher;
         $this->privatesAccessor = $privatesAccessor;
@@ -136,12 +128,6 @@ final class RectorApplication
 
         // PHPStan has to know about all files!
         $this->configurePHPStanNodeScopeResolver($phpFileInfos);
-
-        // active only one rule
-        if ($this->configuration->getOnlyRector() !== null) {
-            $onlyRector = $this->configuration->getOnlyRector();
-            $this->enabledRectorsProvider->addEnabledRector($onlyRector);
-        }
 
         // 1. parse files to nodes
         $this->parseFileInfosToNodes($phpFileInfos);
