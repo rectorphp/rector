@@ -21,6 +21,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SubstrMinusToStringEndsWithRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const SUBSTR = 'substr';
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -54,11 +59,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! ($this->isFuncCallName($node->left, 'substr') || $this->isFuncCallName($node->right, 'substr'))) {
+        if (! $this->isFuncCallName($node->left, self::SUBSTR) && ! $this->isFuncCallName($node->right, self::SUBSTR)) {
             return null;
         }
 
-        $substr = $this->isFuncCallName($node->left, 'substr')
+        $substr = $this->isFuncCallName($node->left, self::SUBSTR)
             ? $node->left
             : $node->right;
 
@@ -72,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $string = $this->isFuncCallName($node->left, 'substr')
+        $string = $this->isFuncCallName($node->left, self::SUBSTR)
             ? $node->right
             : $node->left;
 
@@ -81,12 +86,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $replace = $this->createStaticCall(Strings::class, 'endsWith', [$substr->args[0]->value, $string]);
+        $staticCall = $this->createStaticCall(Strings::class, 'endsWith', [$substr->args[0]->value, $string]);
 
         if ($node instanceof Identical) {
-            return $replace;
+            return $staticCall;
         }
 
-        return new BooleanNot($replace);
+        return new BooleanNot($staticCall);
     }
 }
