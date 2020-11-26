@@ -58,7 +58,6 @@
         "symplify/easy-coding-standard": "^9.0",
         "symplify/coding-standard": "^9.0",
         "symplify/easy-testing": "^9.0",
-        "symplify/monorepo-builder": "^9.0",
         "symplify/symfony-php-config": "^9.0",
         "symplify/phpstan-extensions": "^9.0",
         "symplify/markdown-diff": "^9.0",
@@ -314,12 +313,7 @@
             "vendor/bin/ecs check-markdown docs/rector_rules_overview.md docs/nodes_overview.md --ansi --fix"
         ],
         "rector-ci": "bin/rector process --config rector-ci.php --dry-run --ansi",
-        "rector": "bin/rector process --config rector-ci.php --ansi",
-        "release": "vendor/bin/monorepo-builder release patch --ansi",
-        "split": "vendor/bin/monorepo-builder split --ansi",
-        "merge": "vendor/bin/monorepo-builder merge --ansi",
-        "propagate": "vendor/bin/monorepo-builder propagate --ansi",
-        "validate-monorepo": "vendor/bin/monorepo-builder validate --ansi"
+        "rector": "bin/rector process --config rector-ci.php --ansi"
     },
     "config": {
         "sort-packages": true,
