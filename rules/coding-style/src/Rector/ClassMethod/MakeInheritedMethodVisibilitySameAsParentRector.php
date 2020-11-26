@@ -11,8 +11,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticPhpVersion;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -134,8 +134,7 @@ CODE_SAMPLE
      */
     private function isConstructorWithStaticFactory(ClassMethod $classMethod, string $methodName): bool
     {
-        $intPhpVersion = StaticPhpVersion::getIntVersion('7.2');
-        if (! $this->isAtLeastPhpVersion($intPhpVersion)) {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::PARENT_VISIBILITY_OVERRIDE)) {
             return false;
         }
 

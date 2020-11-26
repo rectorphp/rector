@@ -24,6 +24,7 @@ use Symplify\ConsoleColorDiff\ConsoleColorDiffBundle;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Symplify\PhpConfigPrinter\Bundle\PhpConfigPrinterBundle;
+use Symplify\Skipper\Bundle\SkipperBundle;
 
 final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterface
 {
@@ -78,7 +79,12 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
      */
     public function registerBundles(): array
     {
-        return [new ConsoleColorDiffBundle(), new PhpConfigPrinterBundle(), new ComposerJsonManipulatorBundle()];
+        return [
+            new ConsoleColorDiffBundle(),
+            new PhpConfigPrinterBundle(),
+            new ComposerJsonManipulatorBundle(),
+            new SkipperBundle(),
+        ];
     }
 
     protected function build(ContainerBuilder $containerBuilder): void

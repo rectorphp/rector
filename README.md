@@ -149,9 +149,8 @@ vendor/bin/rector process src
 
 ```php
 // rector.php
-
-
 use Rector\Core\Configuration\Option;
+use Rector\Core\ValueObject\PhpVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -168,8 +167,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/vendor/project-without-composer',
     ]);
 
-    // is your PHP version different from the one your refactor to? [default: your PHP version]
-    $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
+    // is your PHP version different from the one your refactor to? [default: your PHP version], uses PHP_VERSION_ID format
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_7_2);
 
     // auto import fully qualified class names? [default: false]
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);

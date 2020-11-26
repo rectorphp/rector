@@ -6,7 +6,7 @@ namespace Rector\Core\Configuration;
 
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
 use Rector\Core\Exception\Application\PhpVersionException;
-use Rector\Core\Util\StaticPhpVersion;
+use Rector\Core\Util\PhpVersionFactory;
 
 /**
  * @see \Rector\Core\Tests\Configuration\MinimalVersionCheckerTest
@@ -23,18 +23,24 @@ final class MinimalVersionChecker
      */
     private $composerJsonParser;
 
+    /**
+     * @var PhpVersionFactory
+     */
+    private $phpVersionFactory;
+
     public function __construct(string $installedPhpVersion, ComposerJsonParser $composerJsonParser)
     {
         $this->installedPhpVersion = $installedPhpVersion;
         $this->composerJsonParser = $composerJsonParser;
+        $this->phpVersionFactory = new PhpVersionFactory();
     }
 
     public function check(): void
     {
         $minimumPhpVersion = $this->composerJsonParser->getPhpVersion();
 
-        $intInstalledPhpVersion = StaticPhpVersion::getIntVersion($this->installedPhpVersion);
-        $intMinimumPhpVersion = StaticPhpVersion::getIntVersion($minimumPhpVersion);
+        $intInstalledPhpVersion = $this->phpVersionFactory->createIntVersion($this->installedPhpVersion);
+        $intMinimumPhpVersion = $this->phpVersionFactory->createIntVersion($minimumPhpVersion);
 
         // Check minimum required PHP version
         if ($intInstalledPhpVersion < $intMinimumPhpVersion) {

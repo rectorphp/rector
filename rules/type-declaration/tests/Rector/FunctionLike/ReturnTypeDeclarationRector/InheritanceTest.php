@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
 use Iterator;
-use Rector\Core\Util\StaticPhpVersion;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -27,7 +27,7 @@ final class InheritanceTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): int
     {
-        return StaticPhpVersion::getIntVersion('7.0');
+        return PhpVersionFeature::SCALAR_TYPES;
     }
 
     protected function getRectorClass(): string

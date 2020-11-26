@@ -17,8 +17,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PATHS, []);
 
     $parameters->set(Option::FILE_EXTENSIONS, ['php']);
-    $parameters->set(Option::EXCLUDE_PATHS, []);
-    $parameters->set(Option::EXCLUDE_RECTORS, []);
 
     $parameters->set(Option::AUTOLOAD_PATHS, []);
 

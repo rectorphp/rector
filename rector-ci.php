@@ -7,6 +7,7 @@ use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersion;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
@@ -19,15 +20,12 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
+    $configuration = ValueObjectInliner::inline([
+        new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
+    ]);
     $services->set(InferParamFromClassMethodReturnRector::class)
         ->call('configure', [[
-            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => ValueObjectInliner::inline([
-                
-
-                new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
-
-                
-            ]),
+            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
         ]]);
 
     $services->set(PreferThisOrSelfMethodCallRector::class)
@@ -73,25 +71,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::AUTOLOAD_PATHS, [__DIR__ . '/compiler/src']);
 
-    $parameters->set(Option::EXCLUDE_PATHS, [
-        '/Fixture/',
-        '/Source/',
-        '/Expected/',
-        __DIR__ . '/packages/doctrine-annotation-generated/src/*',
-        // tempalte files
-        __DIR__ . '/packages/rector-generator/templates/*',
-        // public api
-        __DIR__ . '/packages/rector-generator/src/ValueObject/RectorRecipe.php',
-    ]);
-
-    $parameters->set(Option::EXCLUDE_RECTORS, [
+    $parameters->set(Option::SKIP, [
         StringClassNameToClassConstantRector::class,
         SplitStringClassConstantToClassConstFetchRector::class,
         // false positives on constants used in rector-ci.php
         RemoveUnusedClassConstantRector::class,
+
+        // test paths
+        '*/Fixture/*',
+        '*/Source/*',
+        '*/Expected/*',
+        __DIR__ . '/packages/doctrine-annotation-generated/src',
+        // template files
+        __DIR__ . '/packages/rector-generator/templates',
+        // public api
+        __DIR__ . '/packages/rector-generator/src/ValueObject/RectorRecipe.php',
     ]);
 
     # so Rector code is still PHP 7.2 compatible
-    $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_7_2);
     $parameters->set(Option::ENABLE_CACHE, true);
 };

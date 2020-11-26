@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector;
 
 use Iterator;
-use Rector\Core\Util\StaticPhpVersion;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php73\Rector\BinaryOp\IsCountableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -27,7 +27,7 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): int
     {
-        return StaticPhpVersion::getIntVersion('7.2');
+        return PhpVersionFeature::IS_COUNTABLE - 1;
     }
 
     protected function getRectorClass(): string

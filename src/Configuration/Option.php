@@ -49,11 +49,6 @@ final class Option
     /**
      * @var string
      */
-    public const EXCLUDE_RECTORS = 'exclude_rectors';
-
-    /**
-     * @var string
-     */
     public const IMPORT_DOC_BLOCKS = 'import_doc_blocks';
 
     /**
@@ -100,11 +95,6 @@ final class Option
      * @var string
      */
     public const AUTOLOAD_PATHS = 'autoload_paths';
-
-    /**
-     * @var string
-     */
-    public const EXCLUDE_PATHS = 'exclude_paths';
 
     /**
      * @var string

@@ -186,4 +186,14 @@ final class PhpVersionFeature
      * @var int
      */
     public const STRIP_TAGS_WITH_ARRAY = 70400;
+
+    /**
+     * @var int
+     */
+    public const PARENT_VISIBILITY_OVERRIDE = 70200;
+
+    /**
+     * @var int
+     */
+    public const COUNT_ON_NULL = 70100;
 }
