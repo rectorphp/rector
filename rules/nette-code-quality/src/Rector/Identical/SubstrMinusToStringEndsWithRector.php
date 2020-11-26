@@ -66,8 +66,6 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var UnaryMinus $unaryMinus */
-        $unaryMinus = $substr->args[1]->value;
         $string = $this->isFuncCallName($node->left, 'substr')
             ? $node->right
             : $node->left;
