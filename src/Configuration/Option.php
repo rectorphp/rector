@@ -49,11 +49,6 @@ final class Option
     /**
      * @var string
      */
-    public const EXCLUDE_RECTORS = 'exclude_rectors';
-
-    /**
-     * @var string
-     */
     public const IMPORT_DOC_BLOCKS = 'import_doc_blocks';
 
     /**

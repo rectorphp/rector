@@ -27,11 +27,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     // is there single rule you don't like from a set you use?
-    $parameters->set(Option::EXCLUDE_RECTORS, [SimplifyIfReturnBoolRector::class]);
+    $parameters->set(Option::SKIP, [
+        SimplifyIfReturnBoolRector::class
+    ]);
 
     // skip directory/file by rule
     $parameters->set(Option::SKIP, [
-        Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector::class => [
+        SimplifyIfReturnBoolRector::class => [
             // single file
             __DIR__ . '/src/ComplicatedFile.php',
             // or directory
