@@ -9,9 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -70,7 +68,8 @@ CODE_SAMPLE
             ? $node->right
             : $node->left;
 
-        $replace = new StaticCall(new FullyQualified(Strings::class), 'endsWith', [$substr->args[0]->value, $string]);
+        $replace = $this->createStaticCall(Strings::class, 'endsWith', [$substr->args[0]->value, $string]);
+
         if ($node instanceof Identical) {
             return $replace;
         }
