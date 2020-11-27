@@ -49,7 +49,7 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param class-string|class-string[] $type
+     * @param string|string[] $type
      */
     public function findFirstParentInstanceOf(Node $node, $type): ?Node
     {

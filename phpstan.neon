@@ -658,9 +658,6 @@ parameters:
                 - rules/phpstan/src/Type/ShortenedObjectType.php # 20
                 - rules/restoration/src/Rector/Class_/RemoveUselessJustForSakeInterfaceRector.php # 42
                 - rules/type-declaration/src/Rector/FunctionLike/ReturnTypeDeclarationRector.php # 82
-                - src/Configuration/MinimalVersionChecker.php # 27
-                - src/Configuration/MinimalVersionChecker/ComposerJsonParser.php # 22
-                - src/Configuration/MinimalVersionChecker/ComposerJsonReader.php # 23
                 - src/PhpParser/Builder/UseBuilder.php # 17
                 - src/RectorDefinition/CodeSample.php # 28
                 - src/RectorDefinition/CodeSample.php # 29

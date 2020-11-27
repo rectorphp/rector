@@ -9,8 +9,12 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\For_;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\StmtsManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -123,7 +127,7 @@ CODE_SAMPLE
         $this->addNodeAfterNode($ifReturn, $node);
 
         $ifNextReturn = $this->getIfNextReturn($node);
-        if ($ifNextReturn !== null && !$this->isIfInLoop($node)) {
+        if ($ifNextReturn !== null && ! $this->isIfInLoop($node)) {
             $this->removeNode($ifNextReturn);
         }
 
@@ -207,7 +211,7 @@ CODE_SAMPLE
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
             if ($isIfInLoop && $this->getIfNextReturn($node) === null) {
-                $if->stmts = [new Stmt\Continue_()];
+                $if->stmts = [new Continue_()];
             } else {
                 $if->stmts = [new Return_()];
             }
@@ -235,6 +239,16 @@ CODE_SAMPLE
         }
 
         return $nextNode;
+    }
+
+    private function isIfInLoop(If_ $if): bool
+    {
+        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $if,
+            [Foreach_::class, For_::class, While_::class]
+        );
+
+        return $parentLoop !== null;
     }
 
     private function isIfReturnsVoid(If_ $if): bool
@@ -284,12 +298,5 @@ CODE_SAMPLE
             return true;
         }
         return $nextNode instanceof Return_;
-    }
-
-    private function isIfInLoop(If_ $if): bool
-    {
-        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf($if, [Stmt\Foreach_::class, Stmt\For_::class, Stmt\While_::class]);
-
-        return $parentLoop !== null;
     }
 }

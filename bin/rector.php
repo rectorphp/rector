@@ -6,12 +6,10 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Bootstrap\ConfigShifter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Configuration\MinimalVersionChecker;
-use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
-use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonReader;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
+use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\SetConfigResolver\Bootstrap\InvalidSetReporter;
@@ -38,10 +36,6 @@ $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
 $symfonyStyle = $symfonyStyleFactory->create();
 
 try {
-    $composerJsonReader = new ComposerJsonReader(__DIR__ . '/../composer.json');
-    $versionChecker = new MinimalVersionChecker(PHP_VERSION, new ComposerJsonParser($composerJsonReader->read()));
-    $versionChecker->check();
-
     $rectorConfigsResolver = new RectorConfigsResolver();
     $configFileInfos = $rectorConfigsResolver->provide();
 
@@ -100,7 +94,7 @@ final class AutoloadIncluder
     public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
     {
         // Rector's vendor is already loaded
-        if (class_exists('Rector\HttpKernel\RectorKernel')) {
+        if (class_exists(RectorKernel::class)) {
             return;
         }
 
