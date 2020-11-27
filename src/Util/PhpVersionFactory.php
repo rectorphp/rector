@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\Util;
 
+use PHPStan\Php\PhpVersion;
+
 final class PhpVersionFactory
 {
     public function createIntVersion(string $version): int
@@ -25,5 +27,11 @@ final class PhpVersionFactory
         }
 
         return (int) $version;
+    }
+
+    public function createStringVersion(int $version): string
+    {
+        $phpVersion = new PhpVersion($version);
+        return $phpVersion->getVersionString();
     }
 }
