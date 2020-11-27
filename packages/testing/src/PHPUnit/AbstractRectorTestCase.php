@@ -479,9 +479,16 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             StaticFixtureUpdater::updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
             $contents = $expectedFileInfo->getContents();
 
+            // make sure we don't get a diff in which every line is different (because of differences in EOL)
+            $contents = $this->normalizeNewlines($contents);
+
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);
         }
+    }
+
+    private function normalizeNewlines(string $string):string {
+        return preg_replace('/\r\n|\r|\n/', "\n", $string);
     }
 
     private function createContainerWithAllRectors(): void
