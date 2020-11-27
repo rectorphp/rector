@@ -22,6 +22,14 @@ includes:
 
 services:
     -
+        class: Symplify\PHPStanRules\Rules\RequireClassTypeInClassMethodByTypeRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            requiredTypeInMethodByClass:
+                Rector\Core\Contract\Rector\PhpRectorInterface:
+                    getNodeTypes: 'PhpParser\Node'
+
+    -
         class: Symplify\PHPStanRules\CognitiveComplexity\Rules\FunctionLikeCognitiveComplexityRule
         tags: [phpstan.rules.rule]
         arguments:
@@ -32,6 +40,10 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             maxClassCognitiveComplexity: 50
+            limitsByTypes:
+                Rector\Core\Rector\AbstractRector: 40
+                Symfony\Component\Console\Command\Command: 40
+                PHPStan\Rule\Rule: 30
 
     # require constant in argument position
     -
@@ -707,11 +719,16 @@ parameters:
         - '#Parameter \#1 \$expr of class PhpParser\\Node\\Stmt\\Expression constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt given#'
 
         -
-            message: '#Class cognitive complexity is \d+, keep it under 50#'
+            message: '#Class cognitive complexity is \d+, keep it under \d+#'
             paths:
                 - rules/php70/src/EregToPcreTransformer.php
                 - packages/node-collector/src/NodeCollector/NodeRepository.php
                 - packages/node-type-resolver/src/NodeTypeResolver.php
+                - rules/solid/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
+                - src/Rector/AbstractRector.php
+                - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
+                - rules/code-quality/src/Rector/For_/ForToForeachRector.php
+                - rules/coding-style/src/Rector/Use_/RemoveUnusedAliasRector.php
 
         # symplify 9
         - '#Use decoupled factory service to create "(.*?)" object#'

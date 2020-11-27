@@ -115,7 +115,7 @@ CODE_SAMPLE
         $lastElseStmtKey = array_key_last($node->else->stmts);
 
         $elseStmts = $node->else->stmts;
-        
+
         $return = new Return_($assign->expr);
         $this->copyCommentIfExists($assign, $return);
         $elseStmts[$lastElseStmtKey] = $return;

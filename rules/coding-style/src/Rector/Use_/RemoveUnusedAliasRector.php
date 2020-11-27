@@ -5,17 +5,11 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\Use_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\CodingStyle\Naming\NameRenamer;
 use Rector\CodingStyle\Node\DocAliasResolver;
 use Rector\CodingStyle\Node\UseManipulator;
 use Rector\CodingStyle\Node\UseNameAliasToNameResolver;
@@ -60,14 +54,21 @@ final class RemoveUnusedAliasRector extends AbstractRector
      */
     private $useManipulator;
 
+    /**
+     * @var NameRenamer
+     */
+    private $nameRenamer;
+
     public function __construct(
         DocAliasResolver $docAliasResolver,
         UseManipulator $useManipulator,
-        UseNameAliasToNameResolver $useNameAliasToNameResolver
+        UseNameAliasToNameResolver $useNameAliasToNameResolver,
+        NameRenamer $nameRenamer
     ) {
         $this->docAliasResolver = $docAliasResolver;
         $this->useNameAliasToNameResolver = $useNameAliasToNameResolver;
         $this->useManipulator = $useManipulator;
+        $this->nameRenamer = $nameRenamer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -217,7 +218,7 @@ CODE_SAMPLE
             return;
         }
 
-        $this->renameNameNode($this->resolvedNodeNames[$lowerAliasName], $lastName);
+        $this->nameRenamer->renameNameNode($this->resolvedNodeNames[$lowerAliasName], $lastName);
         $useUse->alias = null;
     }
 
@@ -230,137 +231,5 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    /**
-     * @param NameAndParent[] $usedNameNodes
-     */
-    private function renameNameNode(array $usedNameNodes, string $lastName): void
-    {
-        foreach ($usedNameNodes as $nameAndParent) {
-            $parentNode = $nameAndParent->getParentNode();
-            $usedName = $nameAndParent->getNameNode();
-
-            if ($parentNode instanceof TraitUse) {
-                $this->renameTraitUse($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof Class_) {
-                $this->renameClass($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof Param) {
-                $this->renameParam($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof New_) {
-                $this->renameNew($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof ClassMethod) {
-                $this->renameClassMethod($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof Interface_) {
-                $this->renameInterface($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof StaticCall) {
-                $this->renameStaticCall($lastName, $parentNode);
-            }
-        }
-    }
-
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameTraitUse(string $lastName, TraitUse $traitUse, Node $usedNameNode): void
-    {
-        foreach ($traitUse->traits as $key => $traitName) {
-            if (! $this->areNamesEqual($traitName, $usedNameNode)) {
-                continue;
-            }
-
-            $traitUse->traits[$key] = new Name($lastName);
-        }
-    }
-
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameClass(string $lastName, Class_ $class, Node $usedNameNode): void
-    {
-        if ($class->name !== null && $this->areNamesEqual($class->name, $usedNameNode)) {
-            $class->name = new Identifier($lastName);
-        }
-
-        if ($class->extends !== null && $this->areNamesEqual($class->extends, $usedNameNode)) {
-            $class->extends = new Name($lastName);
-        }
-
-        foreach ($class->implements as $key => $implementNode) {
-            if ($this->areNamesEqual($implementNode, $usedNameNode)) {
-                $class->implements[$key] = new Name($lastName);
-            }
-        }
-    }
-
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameParam(string $lastName, Node $parentNode, Node $usedNameNode): void
-    {
-        if ($parentNode->type === null) {
-            return;
-        }
-        if (! $this->areNamesEqual($parentNode->type, $usedNameNode)) {
-            return;
-        }
-        $parentNode->type = new Name($lastName);
-    }
-
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameNew(string $lastName, Node $parentNode, Node $usedNameNode): void
-    {
-        if ($this->areNamesEqual($parentNode->class, $usedNameNode)) {
-            $parentNode->class = new Name($lastName);
-        }
-    }
-
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameClassMethod(string $lastName, ClassMethod $classMethod, Node $usedNameNode): void
-    {
-        if ($classMethod->returnType === null) {
-            return;
-        }
-
-        if (! $this->areNamesEqual($classMethod->returnType, $usedNameNode)) {
-            return;
-        }
-
-        $classMethod->returnType = new Name($lastName);
-    }
-
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameInterface(string $lastName, Interface_ $interface, Node $usedNameNode): void
-    {
-        foreach ($interface->extends as $key => $extendInterfaceName) {
-            if (! $this->areNamesEqual($extendInterfaceName, $usedNameNode)) {
-                continue;
-            }
-
-            $interface->extends[$key] = new Name($lastName);
-        }
-    }
-
-    private function renameStaticCall(string $lastName, StaticCall $staticCall): void
-    {
-        $staticCall->class = new Name($lastName);
     }
 }
