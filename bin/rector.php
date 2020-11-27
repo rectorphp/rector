@@ -28,7 +28,7 @@ define('__RECTOR_RUNNING__', true);
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeCwdVendorAutoloadIfExists();
-$autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
+$autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 $autoloadIncluder->autoloadFromCommandLine();
 
@@ -83,12 +83,7 @@ final class AutoloadIncluder
 
     public function includeCwdVendorAutoloadIfExists(): void
     {
-        $cwdVendorAutoload = getcwd() . '/vendor/autoload.php';
-        if (! is_file($cwdVendorAutoload)) {
-            return;
-        }
-
-        $this->loadIfNotLoadedYet($cwdVendorAutoload, __METHOD__ . '()" on line ' . __LINE__);
+        $this->loadIfExistsAndNotLoadedYet(getcwd() . '/vendor/autoload.php');
     }
 
     public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
@@ -98,38 +93,17 @@ final class AutoloadIncluder
             return;
         }
 
-        $devOrPharVendorAutoload = __DIR__ . '/../vendor/autoload.php';
-        if (! is_file($devOrPharVendorAutoload)) {
-            return;
-        }
-
-        $this->loadIfNotLoadedYet($devOrPharVendorAutoload, __METHOD__ . '()" on line ' . __LINE__);
+        // in Rector develop repository
+        $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/autoload.php');
     }
 
     /**
-     * Inspired by https://github.com/phpstan/phpstan-src/blob/e2308ecaf49a9960510c47f5a992ce7b27f6dba2/bin/phpstan#L19
+     * In case Rector is installed as vendor dependency,
+     * this autoloads the project vendor/autoload.php, including Rector
      */
-    public function autoloadProjectAutoloaderFile(string $file): void
+    public function autoloadProjectAutoloaderFile(): void
     {
-        $path = dirname(__DIR__) . $file;
-        if (! extension_loaded('phar')) {
-            if (is_file($path)) {
-                $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
-            }
-            return;
-        }
-
-        $pharPath = Phar::running(false);
-        if ($pharPath === '') {
-            if (is_file($path)) {
-                $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
-            }
-        } else {
-            $path = dirname($pharPath) . $file;
-            if (is_file($path)) {
-                $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
-            }
-        }
+        $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../../autoload.php');
     }
 
     public function autoloadFromCommandLine(): void
@@ -147,26 +121,21 @@ final class AutoloadIncluder
             return;
         }
 
-        $this->loadIfNotLoadedYet($fileToAutoload, __METHOD__);
+        $this->loadIfExistsAndNotLoadedYet($fileToAutoload);
     }
 
-    private function loadIfNotLoadedYet(string $file, string $location): void
+    private function loadIfExistsAndNotLoadedYet(string $file): void
     {
-        if (in_array($file, $this->alreadyLoadedAutoloadFiles, true)) {
+        if (! file_exists($file)) {
             return;
         }
 
-        if ($this->isDebugOption()) {
-            echo sprintf(sprintf('File "%s" is about to be loaded in "%s"' . PHP_EOL, $file, $location));
+        if (in_array($file, $this->alreadyLoadedAutoloadFiles, true)) {
+            return;
         }
 
         $this->alreadyLoadedAutoloadFiles[] = realpath($file);
 
         require_once $file;
-    }
-
-    private function isDebugOption(): bool
-    {
-        return in_array('--debug', $_SERVER['argv'], true);
     }
 }
