@@ -289,15 +289,8 @@ CODE_SAMPLE
 
     private function isIfInLoop(If_ $if): bool
     {
-        $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parent) {
-            if ($parent instanceof Stmt\Foreach_ || $parent instanceof Stmt\For_ || $parent instanceof Stmt\While_) {
-                return true;
-            }
+        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf($if, [Stmt\Foreach_::class, Stmt\For_::class, Stmt\While_::class]);
 
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        return false;
+        return $parentLoop !== null;
     }
 }
