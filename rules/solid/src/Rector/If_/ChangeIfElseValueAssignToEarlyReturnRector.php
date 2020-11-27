@@ -105,7 +105,9 @@ CODE_SAMPLE
         /** @var Assign $assign */
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->stmts);
 
-        $node->stmts[$lastIfStmtKey] = new Return_($assign->expr);
+        $return = new Return_($assign->expr);
+        $this->copyCommentIfExists($assign, $return);
+        $node->stmts[$lastIfStmtKey] = $return;
 
         /** @var Assign $assign */
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->else->stmts);
@@ -113,7 +115,10 @@ CODE_SAMPLE
         $lastElseStmtKey = array_key_last($node->else->stmts);
 
         $elseStmts = $node->else->stmts;
-        $elseStmts[$lastElseStmtKey] = new Return_($assign->expr);
+        
+        $return = new Return_($assign->expr);
+        $this->copyCommentIfExists($assign, $return);
+        $elseStmts[$lastElseStmtKey] = $return;
 
         $node->else = null;
         $this->addNodesAfterNode($elseStmts, $node);
@@ -121,5 +126,11 @@ CODE_SAMPLE
         $this->removeNode($nextNode);
 
         return $node;
+    }
+
+    private function copyCommentIfExists(Node $from, Node $to): void
+    {
+        $nodeComments = $from->getAttribute(AttributeKey::COMMENTS);
+        $to->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 }
