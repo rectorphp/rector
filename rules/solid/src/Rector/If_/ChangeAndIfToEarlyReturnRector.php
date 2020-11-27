@@ -111,13 +111,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $isIfInLoop = $this->isIfInLoop($node);
-
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
 
         $conditions = $this->getBooleanAndConditions($expr);
-        $ifs = $this->createInvertedIfNodesFromConditions($isIfInLoop, $conditions);
+        $ifs = $this->createInvertedIfNodesFromConditions($node, $conditions);
 
         $this->keepCommentIfExists($node, $ifs);
 
@@ -200,13 +198,15 @@ CODE_SAMPLE
      * @param Expr[] $conditions
      * @return If_[]
      */
-    private function createInvertedIfNodesFromConditions(bool $isIfInLoop, array $conditions): array
+    private function createInvertedIfNodesFromConditions(If_ $node, array $conditions): array
     {
+        $isIfInLoop = $this->isIfInLoop($node);
+
         $ifs = [];
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
-            if ($isIfInLoop) {
+            if ($isIfInLoop && $this->getIfNextReturn($node) === null) {
                 $if->stmts = [new Stmt\Continue_()];
             } else {
                 $if->stmts = [new Return_()];
