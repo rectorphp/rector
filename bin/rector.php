@@ -9,6 +9,7 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
+use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\SetConfigResolver\Bootstrap\InvalidSetReporter;
@@ -93,7 +94,7 @@ final class AutoloadIncluder
     public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
     {
         // Rector's vendor is already loaded
-        if (class_exists('Rector\HttpKernel\RectorKernel')) {
+        if (class_exists(RectorKernel::class)) {
             return;
         }
 

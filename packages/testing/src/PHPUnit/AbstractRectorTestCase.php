@@ -487,11 +487,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         }
     }
 
-    private function normalizeNewlines(string $string): string
-    {
-        return preg_replace('/\r\n|\r|\n/', "\n", $string);
-    }
-
     private function createContainerWithAllRectors(): void
     {
         $rectorsFinder = new RectorsFinder();
@@ -522,5 +517,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         $fileContent = $smartPhpConfigPrinter->printConfiguredServices($rectorClassesWithConfiguration);
         $this->smartFileSystem->dumpFile($filePath, $fileContent);
+    }
+
+    private function normalizeNewlines(string $string): string
+    {
+        return preg_replace('/\r\n|\r|\n/', "\n", $string);
     }
 }
