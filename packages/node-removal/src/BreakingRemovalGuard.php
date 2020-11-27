@@ -19,12 +19,14 @@ final class BreakingRemovalGuard
         if ($this->isLegalNodeRemoval($node)) {
             return;
         }
+
         // validate the $parentNodenode can be removed
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         throw new ShouldNotHappenException(sprintf(
-            'Node "%s" is child of "%s", so it cannot be removed as it would break PHP code. Change or remove the parent node instead.',
+            'Node "%s" on line %d is child of "%s", so it cannot be removed as it would break PHP code. Change or remove the parent node instead.',
             get_class($node),
+            $node->getLine(),
             /** @var Node $parentNode */
             get_class($parentNode)
         ));

@@ -24,6 +24,7 @@ use Symplify\ConsoleColorDiff\ConsoleColorDiffBundle;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Symplify\PhpConfigPrinter\Bundle\PhpConfigPrinterBundle;
+use Symplify\SimplePhpDocParser\Bundle\SimplePhpDocParserBundle;
 use Symplify\Skipper\Bundle\SkipperBundle;
 
 final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterface
@@ -84,6 +85,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
             new PhpConfigPrinterBundle(),
             new ComposerJsonManipulatorBundle(),
             new SkipperBundle(),
+            new SimplePhpDocParserBundle(),
         ];
     }
 
