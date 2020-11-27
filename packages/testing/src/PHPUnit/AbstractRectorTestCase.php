@@ -521,6 +521,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     private function normalizeNewlines(string $string): string
     {
-        return preg_replace('/\r\n|\r|\n/', "\n", $string);
+        return Strings::replace($string, '#\r\n|\r|\n#', "\n");
     }
 }
