@@ -115,7 +115,10 @@ CODE_SAMPLE
         $lastElseStmtKey = array_key_last($node->else->stmts);
 
         $elseStmts = $node->else->stmts;
-        $elseStmts[$lastElseStmtKey] = new Return_($assign->expr);
+        
+        $return = new Return_($assign->expr);
+        $this->copyCommentIfExists($assign, $return);
+        $elseStmts[$lastElseStmtKey] = $return;
 
         $node->else = null;
         $this->addNodesAfterNode($elseStmts, $node);
