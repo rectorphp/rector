@@ -241,6 +241,16 @@ CODE_SAMPLE
         return $nextNode;
     }
 
+    private function isIfInLoop(If_ $if): bool
+    {
+        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $if,
+            [Foreach_::class, For_::class, While_::class]
+        );
+
+        return $parentLoop !== null;
+    }
+
     private function isIfReturnsVoid(If_ $if): bool
     {
         $lastStmt = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
@@ -288,15 +298,5 @@ CODE_SAMPLE
             return true;
         }
         return $nextNode instanceof Return_;
-    }
-
-    private function isIfInLoop(If_ $if): bool
-    {
-        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf(
-            $if,
-            [Foreach_::class, For_::class, While_::class]
-        );
-
-        return $parentLoop !== null;
     }
 }
