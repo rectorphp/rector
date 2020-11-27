@@ -488,6 +488,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     private function normalizeNewlines(string $string): string
     {
@@ -495,6 +496,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     }
 
 >>>>>>> drop MinimalVersoinChecker, is checked by composer itself
+=======
+>>>>>>> fix Kernel class name
     private function createContainerWithAllRectors(): void
     {
         $rectorsFinder = new RectorsFinder();
@@ -529,6 +532,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     private function normalizeNewlines(string $string): string
     {
+<<<<<<< HEAD
         return Strings::replace($string, '#\r\n|\r|\n#', "\n");
+=======
+        return preg_replace('/\r\n|\r|\n/', "\n", $string);
+>>>>>>> fix Kernel class name
     }
 }
