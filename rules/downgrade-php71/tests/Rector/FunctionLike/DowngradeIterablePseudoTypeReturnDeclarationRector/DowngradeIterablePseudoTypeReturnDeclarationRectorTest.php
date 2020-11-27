@@ -30,8 +30,8 @@ final class DowngradeIterablePseudoTypeReturnDeclarationRectorTest extends Abstr
         return DowngradeIterablePseudoTypeReturnDeclarationRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_ITERABLE_TYPE;
+        return PhpVersionFeature::ITERABLE_TYPE - 1;
     }
 }
