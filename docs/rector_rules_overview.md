@@ -1,4 +1,6 @@
-# 625 Rules Overview
+# 626 Rules Overview
+
+<br>
 
 ## Categories
 
@@ -24,7 +26,7 @@
 
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 
-- [DowngradePhp71](#downgradephp71) (4)
+- [DowngradePhp71](#downgradephp71) (6)
 
 - [DowngradePhp72](#downgradephp72) (2)
 
@@ -56,7 +58,7 @@
 
 - [Nette](#nette) (20)
 
-- [NetteCodeQuality](#nettecodequality) (6)
+- [NetteCodeQuality](#nettecodequality) (7)
 
 - [NetteKdyby](#nettekdyby) (4)
 
@@ -134,13 +136,15 @@
 
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 
-- [SymfonyPhpConfig](#symfonyphpconfig) (3)
+- [SymfonyPhpConfig](#symfonyphpconfig) (1)
 
 - [Transform](#transform) (12)
 
 - [Twig](#twig) (1)
 
 - [TypeDeclaration](#typedeclaration) (10)
+
+<br>
 
 ## Architecture
 
@@ -362,7 +366,7 @@ Moves array options to fluent setter method calls.
 use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
 use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner::inline(s;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -4822,6 +4826,90 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+### DowngradeIterablePseudoTypeParamDeclarationRector
+
+Remove the iterable pseudo type params, add `@param` tags instead
+
+:wrench: **configure it!**
+
+- class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector`
+
+```php
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DowngradeIterablePseudoTypeParamDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeIterablePseudoTypeParamDeclarationRector::ADD_DOC_BLOCK => true,
+        ]]);
+};
+```
+
+↓
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function run(iterable $iterator)
++    /**
++     * @param mixed[]|\Traversable $iterator
++     */
++    public function run($iterator)
+     {
+         // do something
+     }
+ }
+```
+
+<br>
+
+### DowngradeIterablePseudoTypeReturnDeclarationRector
+
+Remove returning iterable pseud type, add a `@return` tag instead
+
+:wrench: **configure it!**
+
+- class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector`
+
+```php
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DowngradeIterablePseudoTypeReturnDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeIterablePseudoTypeReturnDeclarationRector::ADD_DOC_BLOCK => true,
+        ]]);
+};
+```
+
+↓
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function run(): iterable
++    /**
++     * @return mixed[]|\Traversable
++     */
++    public function run()
+     {
+         // do something
+     }
+ }
+```
+
+<br>
+
 ### DowngradeNullableTypeParamDeclarationRector
 
 Remove the nullable type params, add `@param` tags instead
@@ -8437,6 +8525,21 @@ Move `@inject` properties to constructor, if there already is one
 +        $this->someDependency = $someDependency;
      }
  }
+```
+
+<br>
+
+### SubstrMinusToStringEndsWithRector
+
+Change `substr` function with minus to `Strings::endsWith()`
+
+- class: `Rector\NetteCodeQuality\Rector\Identical\SubstrMinusToStringEndsWithRector`
+
+```diff
+-substr($var, -4) !== 'Test';
+-substr($var, -4) === 'Test';
++! \Nette\Utils\Strings::endsWith($var, 'Test');
++\Nette\Utils\Strings::endsWith($var, 'Test');
 ```
 
 <br>
@@ -15332,100 +15435,6 @@ Make sure there is `public(),` `autowire(),` `autoconfigure()` calls on `default
 
 <br>
 
-### ChangeServiceArgumentsToMethodCallRector
-
-Change `$service->arg(...)` to `$service->call(...)`
-
-:wrench: **configure it!**
-
-- class: `Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector`
-
-```php
-use Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ChangeServiceArgumentsToMethodCallRector::class)
-        ->call('configure', [[
-            ChangeServiceArgumentsToMethodCallRector::CLASS_TYPE_TO_METHOD_NAME => [
-                'SomeClass' => 'configure',
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
- return static function (ContainerConfigurator $containerConfigurator): void {
-     $services = $containerConfigurator->services();
-
-     $services->set(SomeClass::class)
--        ->arg('$key', 'value');
-+        ->call('configure', [[
-+            '$key' => 'value
-+        ]]);
- }
-```
-
-<br>
-
-### ReplaceArrayWithObjectRector
-
-Replace complex array configuration in configs with value object
-
-:wrench: **configure it!**
-
-- class: `Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector`
-
-```php
-use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ReplaceArrayWithObjectRector::class)
-        ->call('configure', [[
-            ReplaceArrayWithObjectRector::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
-                RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => MethodCallRename::class,
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
- use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
- return static function (ContainerConfigurator $containerConfigurator): void {
-     $services = $containerConfigurator->services();
-
-     $services->set(RenameMethodRector::class)
-         ->call('configure', [[
--            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
--                'Illuminate\Auth\Access\Gate' => [
--                    'access' => 'inspect',
--                ]
--            ]]
--        ]);
-+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-+                new \Rector\Renaming\ValueObject\MethodCallRename('Illuminate\Auth\Access\Gate', 'access', 'inspect'),
-+            ])
-+        ]]);
- }
-```
-
-<br>
-
 ## Transform
 
 ### ArgumentFuncCallToMethodCallRector
@@ -15674,7 +15683,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NewToStaticCallRector::class)
         ->call('configure', [[
-            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => ValueObjectInliner::inline([new NewToStaticCall('Cookie', 'Cookie', 'create')]),
+            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => ValueObjectInliner::inline([
+                new NewToStaticCall('Cookie', 'Cookie', 'create'),
+            ]),
         ]]);
 };
 ```
