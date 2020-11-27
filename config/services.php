@@ -12,7 +12,6 @@ use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
-use Rector\Core\Configuration\MinimalVersionChecker;
 use Rector\Core\Configuration\RectorClassesProvider;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\EventDispatcher\AutowiredEventDispatcher;
@@ -52,15 +51,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/PhpParser/Builder',
             __DIR__ . '/../src/HttpKernel',
             __DIR__ . '/../src/ValueObject',
-            __DIR__ . '/../src/Configuration/MinimalVersionChecker',
             __DIR__ . '/../src/Bootstrap',
             __DIR__ . '/../src/PhpParser/Node/CustomNode',
             // loaded for PHPStan factory
             __DIR__ . '/../src/PHPStan/Type',
         ]);
-
-    $services->set(MinimalVersionChecker::class)
-        ->autowire(false);
 
     $services->alias(SymfonyApplication::class, ConsoleApplication::class);
 

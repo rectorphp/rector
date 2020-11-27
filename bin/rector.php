@@ -6,9 +6,6 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Bootstrap\ConfigShifter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Configuration\MinimalVersionChecker;
-use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
-use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonReader;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
@@ -38,10 +35,6 @@ $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
 $symfonyStyle = $symfonyStyleFactory->create();
 
 try {
-    $composerJsonReader = new ComposerJsonReader(__DIR__ . '/../composer.json');
-    $versionChecker = new MinimalVersionChecker(PHP_VERSION, new ComposerJsonParser($composerJsonReader->read()));
-    $versionChecker->check();
-
     $rectorConfigsResolver = new RectorConfigsResolver();
     $configFileInfos = $rectorConfigsResolver->provide();
 
