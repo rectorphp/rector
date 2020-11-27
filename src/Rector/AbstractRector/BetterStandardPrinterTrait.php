@@ -78,22 +78,4 @@ trait BetterStandardPrinterTrait
     {
         return $this->betterStandardPrinter->areNodesEqual($firstNode, $secondNode);
     }
-
-    /**
-     * @param Node[] $availableNodes
-     */
-    protected function isNodeEqual(Node $singleNode, array $availableNodes): bool
-    {
-        return $this->betterStandardPrinter->isNodeEqual($singleNode, $availableNodes);
-    }
-
-    /**
-     * @param Node|Node[] $nodes
-     */
-    protected function isNodeUsedIn(Node $seekedNode, $nodes): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($seekedNode): bool {
-            return $this->areNodesEqual($node, $seekedNode);
-        });
-    }
 }

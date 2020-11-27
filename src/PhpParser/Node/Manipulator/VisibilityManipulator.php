@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\InvalidNodeTypeException;
+use Rector\Core\Exception\ShouldNotHappenException;
 
 final class VisibilityManipulator
 {
@@ -32,6 +33,11 @@ final class VisibilityManipulator
      * @var string
      */
     private const ABSTRACT = 'abstract';
+
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_VISIBILITIES = ['public', 'protected', 'private', 'static'];
 
     /**
      * @param ClassMethod|Property|ClassConst $node
@@ -108,6 +114,51 @@ final class VisibilityManipulator
         if ($node->isPrivate()) {
             $node->flags -= Class_::MODIFIER_PRIVATE;
         }
+    }
+
+    /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function changeNodeVisibility(Node $node, string $visibility): void
+    {
+        if ($visibility === 'public') {
+            $this->makePublic($node);
+        } elseif ($visibility === 'protected') {
+            $this->makeProtected($node);
+        } elseif ($visibility === 'private') {
+            $this->makePrivate($node);
+        } elseif ($visibility === 'static') {
+            $this->makeStatic($node);
+        } else {
+            throw new ShouldNotHappenException(sprintf(
+                'Visibility "%s" is not valid. Use one of: ',
+                implode('", "', self::ALLOWED_VISIBILITIES)
+            ));
+        }
+    }
+
+    /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function makePublic(Node $node): void
+    {
+        $this->replaceVisibilityFlag($node, 'public');
+    }
+
+    /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function makeProtected(Node $node): void
+    {
+        $this->replaceVisibilityFlag($node, 'protected');
+    }
+
+    /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function makePrivate(Node $node): void
+    {
+        $this->replaceVisibilityFlag($node, 'private');
     }
 
     /**
