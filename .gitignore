@@ -1,9 +1,7 @@
-/temp
-!/temp/.gitkeep
-/example
 /vendor
-/build
 composer.lock
+
+# PHPStorm meta files
 .idea/
 
 .phpunit.result.cache
