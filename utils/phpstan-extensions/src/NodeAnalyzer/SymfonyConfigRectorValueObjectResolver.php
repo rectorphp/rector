@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Rector\PHPStanExtensions\NodeAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use Symplify\PHPStanRules\Naming\SimpleNameResolver;
@@ -17,7 +17,7 @@ final class SymfonyConfigRectorValueObjectResolver
     /**
      * @var string
      */
-    private const INLINE_FUNCTION_NAME = 'Rector\SymfonyPhpConfig\inline_value_objects';
+    private const INLINE_CLASS_NAME = 'Symplify\SymfonyPhpConfig\ValueObjectInliner';
 
     /**
      * @var NodeFinder
@@ -42,21 +42,21 @@ final class SymfonyConfigRectorValueObjectResolver
             $parent = $parent->getAttribute(PHPStanAttributeKey::PARENT);
         }
 
-        /** @var FuncCall|null $inlineFuncCall */
-        $inlineFuncCall = $this->nodeFinder->findFirst($parent, function (Node $node): bool {
-            if (! $node instanceof FuncCall) {
+        /** @var StaticCall|null $inlineStaticCall */
+        $inlineStaticCall = $this->nodeFinder->findFirst($parent, function (Node $node): bool {
+            if (! $node instanceof StaticCall) {
                 return false;
             }
 
-            return $this->simpleNameResolver->isName($node->name, self::INLINE_FUNCTION_NAME);
+            return $this->simpleNameResolver->isName($node->class, self::INLINE_CLASS_NAME);
         });
 
-        if ($inlineFuncCall === null) {
+        if ($inlineStaticCall === null) {
             return null;
         }
 
         /** @var New_|null $new */
-        $new = $this->nodeFinder->findFirstInstanceOf($inlineFuncCall, New_::class);
+        $new = $this->nodeFinder->findFirstInstanceOf($inlineStaticCall, New_::class);
         if ($new === null) {
             return null;
         }

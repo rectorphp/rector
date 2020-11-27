@@ -6,13 +6,13 @@ use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
 use Rector\Laravel\Rector\FuncCall\HelperFuncCallToFacadeClassRector;
 use Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 /**
  * @see https://www.freecodecamp.org/news/moving-away-from-magic-or-why-i-dont-want-to-use-laravel-anymore-2ce098c979bd/
@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/laravel-array-str-functions-to-static-call.php');
     $services = $containerConfigurator->services();
     $services->set(StaticCallToMethodCallRector::class)->call('configure', [[
-        StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_value_objects([
+        StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => ValueObjectInliner::inline([
             new StaticCallToMethodCall('Illuminate\Support\Facades\App', '*', 'Illuminate\Foundation\Application', '*'),
             new StaticCallToMethodCall(
                 'Illuminate\Support\Facades\Artisan',
@@ -142,7 +142,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // @see https://github.com/laravel/framework/blob/78828bc779e410e03cc6465f002b834eadf160d2/src/Illuminate/Foundation/helpers.php#L959
     // @see https://gist.github.com/barryvdh/bb6ffc5d11e0a75dba67
     $services->set(ArgumentFuncCallToMethodCallRector::class)->call('configure', [[
-        ArgumentFuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => inline_value_objects([
+        ArgumentFuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => ValueObjectInliner::inline([
             new ArgumentFuncCallToMethodCall('auth', 'Illuminate\Contracts\Auth\Guard'),
             new ArgumentFuncCallToMethodCall('policy', 'Illuminate\Contracts\Auth\Access\Gate', 'getPolicyFor'),
             new ArgumentFuncCallToMethodCall('cookie', 'Illuminate\Contracts\Cookie\Factory', 'make'),
@@ -170,7 +170,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new ArgumentFuncCallToMethodCall('logger', 'Illuminate\Log\Writer', 'debug'),
             new ArgumentFuncCallToMethodCall('back', 'Illuminate\Routing\Redirector', 'back', 'back'),
         ]),
-        ArgumentFuncCallToMethodCallRector::ARRAY_FUNCTIONS_TO_METHOD_CALLS => inline_value_objects([
+        ArgumentFuncCallToMethodCallRector::ARRAY_FUNCTIONS_TO_METHOD_CALLS => ValueObjectInliner::inline([
             new ArrayFuncCallToMethodCall('config', 'Illuminate\Contracts\Config\Repository', 'set', 'get'),
             new ArrayFuncCallToMethodCall('session', 'Illuminate\Session\SessionManager', 'put', 'get'),
         ]),

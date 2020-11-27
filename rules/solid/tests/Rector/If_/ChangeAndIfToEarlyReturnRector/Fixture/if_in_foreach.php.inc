@@ -42,7 +42,6 @@ class IfInForeachClass
                 return;
             }
             $this->processNameOrIdentifier($node);
-
             return;
         }
 

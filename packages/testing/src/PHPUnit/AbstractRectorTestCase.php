@@ -19,6 +19,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\Stubs\StubLoader;
+use Rector\Core\ValueObject\PhpVersion;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
 use Rector\Testing\Application\EnabledRectorsProvider;
@@ -180,7 +181,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         // restore PHP version if changed
         if ($this->getPhpVersion() !== self::PHP_VERSION_UNDEFINED) {
-            $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
+            $this->setParameter(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_10_0);
         }
     }
 

@@ -32,11 +32,13 @@
         "symfony/http-kernel": "^4.4.8|^5.1",
         "symfony/process": "^4.4.8|^5.1",
         "symplify/autowire-array-parameter": "dev-master",
+        "symplify/skipper": "dev-master",
         "symplify/composer-json-manipulator": "dev-master",
         "symplify/console-color-diff": "dev-master",
         "symplify/package-builder": "dev-master",
         "symplify/php-config-printer": "dev-master",
         "symplify/set-config-resolver": "dev-master",
+        "symplify/simple-php-doc-parser": "dev-master",
         "symplify/smart-file-system": "dev-master",
         "symplify/rule-doc-generator": "dev-master",
         "webmozart/assert": "^1.9"
@@ -44,7 +46,7 @@
     "require-dev": {
         "cweagans/composer-patches": "^1.7",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "symplify/vendor-patches": "^9.0",
+        "symplify/vendor-patches": "dev-master",
         "nette/application": "^3.0",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
@@ -56,20 +58,17 @@
         "symplify/easy-coding-standard": "dev-master",
         "symplify/coding-standard": "dev-master",
         "symplify/easy-testing": "dev-master",
-        "symplify/monorepo-builder": "dev-master",
+        "symplify/symfony-php-config": "dev-master",
         "symplify/phpstan-extensions": "dev-master",
         "symplify/markdown-diff": "dev-master",
         "symplify/phpstan-rules": "dev-master",
         "tracy/tracy": "^2.7"
     },
     "replace": {
-        "rector/rector-prefixed": "self.version",
-        "rector/simple-php-doc-parser": "self.version",
-        "rector/symfony-php-config": "self.version"
+        "rector/rector-prefixed": "self.version"
     },
     "autoload": {
         "files": [
-            "packages/symfony-php-config/functions/functions.php",
             "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php"
         ],
         "psr-4": {
@@ -153,15 +152,11 @@
             "Rector\\SOLID\\": "rules/solid/src",
             "Rector\\Sensio\\": "rules/sensio/src",
             "Rector\\Set\\": "packages/set/src",
-            "Rector\\SimplePhpDocParser\\": "packages/simple-php-doc-parser/src",
             "Rector\\StaticTypeMapper\\": "packages/static-type-mapper/src",
             "Rector\\StrictCodeQuality\\": "rules/strict-code-quality/src",
             "Rector\\SymfonyCodeQuality\\": "rules/symfony-code-quality/src",
             "Rector\\SymfonyPHPUnit\\": "rules/symfony-phpunit/src",
-            "Rector\\SymfonyPhpConfig\\": [
-                "packages/symfony-php-config/src",
-                "rules/symfony-php-config/src"
-            ],
+            "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src",
             "Rector\\Symfony\\": "rules/symfony/src",
             "Rector\\Transform\\": "rules/transform/src",
             "Rector\\Twig\\": "rules/twig/src",
@@ -273,14 +268,10 @@
             "Rector\\Restoration\\Tests\\": "rules/restoration/tests",
             "Rector\\SOLID\\Tests\\": "rules/solid/tests",
             "Rector\\Sensio\\Tests\\": "rules/sensio/tests",
-            "Rector\\SimplePhpDocParser\\Tests\\": "packages/simple-php-doc-parser/tests",
             "Rector\\StrictCodeQuality\\Tests\\": "rules/strict-code-quality/tests",
             "Rector\\SymfonyCodeQuality\\Tests\\": "rules/symfony-code-quality/tests",
             "Rector\\SymfonyPHPUnit\\Tests\\": "rules/symfony-phpunit/tests",
-            "Rector\\SymfonyPhpConfig\\Tests\\": [
-                "packages/symfony-php-config/tests",
-                "rules/symfony-php-config/tests"
-            ],
+            "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests",
             "Rector\\Symfony\\Tests\\": "rules/symfony/tests",
             "Rector\\Transform\\Tests\\": "rules/transform/tests",
             "Rector\\Twig\\Tests\\": "rules/twig/tests",
@@ -322,12 +313,7 @@
             "vendor/bin/ecs check-markdown docs/rector_rules_overview.md docs/nodes_overview.md --ansi --fix"
         ],
         "rector-ci": "bin/rector process --config rector-ci.php --dry-run --ansi",
-        "rector": "bin/rector process --config rector-ci.php --ansi",
-        "release": "vendor/bin/monorepo-builder release patch --ansi",
-        "split": "vendor/bin/monorepo-builder split --ansi",
-        "merge": "vendor/bin/monorepo-builder merge --ansi",
-        "propagate": "vendor/bin/monorepo-builder propagate --ansi",
-        "validate-monorepo": "vendor/bin/monorepo-builder validate --ansi"
+        "rector": "bin/rector process --config rector-ci.php --ansi"
     },
     "config": {
         "sort-packages": true,

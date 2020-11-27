@@ -21,12 +21,12 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\New_\NewToStaticCallRector;
 use Rector\Transform\ValueObject\NewToStaticCall;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # https://github.com/symfony/symfony/pull/28447
 
@@ -34,7 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(NewToStaticCallRector::class)
         ->call('configure', [[
-            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => inline_value_objects([
+            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => ValueObjectInliner::inline([
                 new NewToStaticCall(
                     'Symfony\Component\HttpFoundation\Cookie',
                     'Symfony\Component\HttpFoundation\Cookie',
@@ -64,7 +64,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
+            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 // https://github.com/symfony/symfony/commit/fa2063efe43109aea093d6fbfc12d675dba82146
                 // https://github.com/symfony/symfony/commit/e3aa90f852f69040be19da3d8729cdf02d238ec7
                 new ArgumentAdder(
@@ -153,7 +153,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Symfony\Component\Cache\CacheItem', 'getPreviousTags', 'getMetadata'),
                 new MethodCallRename(
                     'Symfony\Component\Form\AbstractTypeExtension',
@@ -167,7 +167,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => ValueObjectInliner::inline([
                 new AddReturnTypeDeclaration(
                     'Symfony\Component\Form\AbstractTypeExtension',
                     'getExtendedTypes',
@@ -178,7 +178,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => ValueObjectInliner::inline([
                 new ChangeMethodVisibility(
                     'Symfony\Component\Form\AbstractTypeExtension',
                     'getExtendedTypes',
@@ -189,7 +189,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(WrapReturnRector::class)
         ->call('configure', [[
-            WrapReturnRector::TYPE_METHOD_WRAPS => inline_value_objects([
+            WrapReturnRector::TYPE_METHOD_WRAPS => ValueObjectInliner::inline([
                 new WrapReturn('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', true),
             ]),
         ]]);
@@ -197,7 +197,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
             // https://github.com/symfony/symfony/commit/9493cfd5f2366dab19bbdde0d0291d0575454567
-            ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects([
+            ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentDefaultValueReplacer(
                     'Symfony\Component\HttpFoundation\Cookie',
                     '__construct',
@@ -218,7 +218,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
             # https://github.com/symfony/symfony/commit/f5c355e1ba399a1b3512367647d902148bdaf09f
-            ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects([
+            ArgumentRemoverRector::REMOVED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentRemover(
                     'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector',
                     '__construct',

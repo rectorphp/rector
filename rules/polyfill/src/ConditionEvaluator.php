@@ -39,15 +39,15 @@ final class ConditionEvaluator
         $compareSign = $versionCompareCondition->getCompareSign();
         if ($compareSign !== null) {
             return version_compare(
-                $versionCompareCondition->getFirstVersion(),
-                $versionCompareCondition->getSecondVersion(),
+                (string) $versionCompareCondition->getFirstVersion(),
+                (string) $versionCompareCondition->getSecondVersion(),
                 $compareSign
             );
         }
 
         return version_compare(
-            $versionCompareCondition->getFirstVersion(),
-            $versionCompareCondition->getSecondVersion()
+            (string) $versionCompareCondition->getFirstVersion(),
+            (string) $versionCompareCondition->getSecondVersion()
         );
     }
 

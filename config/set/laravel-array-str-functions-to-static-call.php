@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 // @see https://medium.freecodecamp.org/moving-away-from-magic-or-why-i-dont-want-to-use-laravel-anymore-2ce098c979bd
 // @see https://laravel.com/docs/5.7/facades#facades-vs-dependency-injection
@@ -15,7 +15,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
-            FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => inline_value_objects([
+            FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => ValueObjectInliner::inline([
                 new FuncCallToStaticCall('array_add', 'Illuminate\Support\Arr', 'add'),
                 new FuncCallToStaticCall('array_collapse', 'Illuminate\Support\Arr', 'collapse'),
                 new FuncCallToStaticCall('array_divide', 'Illuminate\Support\Arr', 'divide'),

@@ -4,7 +4,7 @@
 
 ## 1. Finds all files and Load Configured Rectors
 
-- The application finds files in the source code you provide and registered Rectors - from `--set`, `--config` or local `rector.php`
+- The application finds files in the source code you provide and registered Rectors - from  `--config` or local `rector.php`
 - Then it iterates all found files and applies relevant Rectors to them.
 - A *Rector* in this context is 1 single class that modifies 1 thing, e.g. changes the class name
 

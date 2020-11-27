@@ -125,9 +125,9 @@ CODE_SAMPLE
         $this->addNodesAfterNode($ifs, $node);
         $this->addNodeAfterNode($ifReturn, $node);
 
-        $ifParentReturn = $this->getIfParentReturn($node);
-        if ($ifParentReturn !== null) {
-            $this->removeNode($ifParentReturn);
+        $ifNextReturn = $this->getIfNextReturn($node);
+        if ($ifNextReturn !== null && !$this->isIfInLoop($node)) {
+            $this->removeNode($ifNextReturn);
         }
 
         $this->removeNode($node);
@@ -228,7 +228,7 @@ CODE_SAMPLE
         $ifs[0]->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 
-    private function getIfParentReturn(If_ $if): ?Return_
+    private function getIfNextReturn(If_ $if): ?Return_
     {
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
         if (! $nextNode instanceof Return_) {

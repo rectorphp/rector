@@ -6,7 +6,7 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\RectorGenerator\Provider\RectorRecipeProvider;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Rector\SymfonyPhpConfig\inline_argument_object;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 // run "bin/rector generate" to a new Rector basic schema + tests from this config
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -78,5 +78,5 @@ CODE_SAMPLE
     $services = $containerConfigurator->services();
 
     $services->set(RectorRecipeProvider::class)
-        ->arg('$rectorRecipe', inline_argument_object($rectorRecipe, $services));
+        ->arg('$rectorRecipe', ValueObjectInliner::inlineArgumentObject($rectorRecipe, $services));
 };

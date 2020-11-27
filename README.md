@@ -70,7 +70,6 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 ### Advanced
 
 - [How To Run Rector on Changed Files Only](/docs/how_to_run_rector_on_changed_files_only.md)
-- [How Run One Rule From Command Line](/docs/how_to_run_one_rule_from_command_line.md)
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
 - [How run Rector in Docker](/docs/how_to_run_rector_in_docker.md)
@@ -150,9 +149,8 @@ vendor/bin/rector process src
 
 ```php
 // rector.php
-
-
 use Rector\Core\Configuration\Option;
+use Rector\Core\ValueObject\PhpVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -169,8 +167,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/vendor/project-without-composer',
     ]);
 
-    // is your PHP version different from the one your refactor to? [default: your PHP version]
-    $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
+    // is your PHP version different from the one your refactor to? [default: your PHP version], uses PHP_VERSION_ID format
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_7_2);
 
     // auto import fully qualified class names? [default: false]
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);

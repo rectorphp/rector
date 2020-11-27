@@ -144,15 +144,8 @@ CODE_SAMPLE
 
     private function isInsideProperty(Array_ $array): bool
     {
-        $parent = $array->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parent) {
-            if ($parent instanceof Property) {
-                return true;
-            }
+        $parentProperty = $this->betterNodeFinder->findFirstParentInstanceOf($array, [Property::class]);
 
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        return false;
+        return $parentProperty !== null;
     }
 }

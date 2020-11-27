@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassMethod\MakeInheritedMethodVisibil
 
 use Iterator;
 use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
-use Rector\Core\Util\StaticPhpVersion;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -35,6 +35,6 @@ final class SkipParentConstructOverrideInPHP72Test extends AbstractRectorTestCas
 
     protected function getPhpVersion(): int
     {
-        return StaticPhpVersion::getIntVersion('7.2');
+        return PhpVersionFeature::PARENT_VISIBILITY_OVERRIDE;
     }
 }

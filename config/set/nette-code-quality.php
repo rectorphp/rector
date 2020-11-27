@@ -7,6 +7,7 @@ use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnot
 use Rector\NetteCodeQuality\Rector\Assign\ArrayAccessGetControlToGetComponentMethodCallRector;
 use Rector\NetteCodeQuality\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector;
 use Rector\NetteCodeQuality\Rector\Assign\MakeGetComponentAssignAnnotatedRector;
+use Rector\NetteCodeQuality\Rector\Identical\SubstrMinusToStringEndsWithRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -21,4 +22,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArrayAccessSetControlToAddComponentMethodCallRector::class);
 
     $services->set(ArrayAccessGetControlToGetComponentMethodCallRector::class);
+
+    $services->set(SubstrMinusToStringEndsWithRector::class);
 };

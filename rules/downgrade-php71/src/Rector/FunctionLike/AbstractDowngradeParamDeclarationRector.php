@@ -9,9 +9,14 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Type\IntersectionType;
+use PHPStan\Type\IterableType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\DowngradePhp71\Contract\Rector\DowngradeParamDeclarationRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Traversable;
 
 abstract class AbstractDowngradeParamDeclarationRector extends AbstractDowngradeRector implements DowngradeParamDeclarationRectorInterface
 {
@@ -58,6 +63,11 @@ abstract class AbstractDowngradeParamDeclarationRector extends AbstractDowngrade
 
             if ($param->type !== null) {
                 $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+
+                if ($type instanceof IterableType) {
+                    $type = new UnionType([$type, new IntersectionType([new ObjectType(Traversable::class)])]);
+                }
+
                 $paramName = $this->getName($param->var) ?? '';
                 $phpDocInfo->changeParamType($type, $param, $paramName);
             }

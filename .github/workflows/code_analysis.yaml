@@ -18,10 +18,6 @@ jobs:
                         run: composer phpstan-config
 
                     -
-                        name: 'Validate Monorepo'
-                        run: composer validate-monorepo
-
-                    -
                         name: 'Show command'
                         run: bin/rector show --config rector-ci.php --ansi
 
@@ -54,7 +50,7 @@ jobs:
 
             # see https://github.com/shivammathur/setup-php
             -
-                uses: shivammathur/setup-php@v1
+                uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.2
                     coverage: none

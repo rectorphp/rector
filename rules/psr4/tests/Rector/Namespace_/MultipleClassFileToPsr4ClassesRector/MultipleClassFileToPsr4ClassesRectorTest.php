@@ -71,7 +71,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
                 $smartFileSystem->readFile(__DIR__ . '/Expected/MyInterface.php')
             ),
         ];
-        yield [new SmartFileInfo(__DIR__ . '/Source/ClassTraitAndInterface.php'), $filePathsWithContents];
+
+        yield [new SmartFileInfo(__DIR__ . '/Source/ClassTraitAndInterface.php.inc'), $filePathsWithContents];
 
         // keep original class
         yield [

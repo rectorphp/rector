@@ -11,11 +11,11 @@ use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\Rector\Class_\RemoveParentRector;
 use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Generic\ValueObject\AddPropertyByParent;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
 use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 /**
  * @see https://tomasvotruba.com/blog/2017/10/16/how-to-use-repository-with-doctrine-as-service-in-symfony/
@@ -43,7 +43,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddPropertyByParentRector::class)
         ->call('configure', [[
-            AddPropertyByParentRector::PARENT_DEPENDENCIES => inline_value_objects([
+            AddPropertyByParentRector::PARENT_DEPENDENCIES => ValueObjectInliner::inline([
                 new AddPropertyByParent(
                     'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository',
                     'Doctrine\ORM\EntityManagerInterface'
@@ -53,7 +53,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ReplaceParentCallByPropertyCallRector::class)
         ->call('configure', [[
-            ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => inline_value_objects([
+            ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => ValueObjectInliner::inline([
                 new ReplaceParentCallByPropertyCall(
                     'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository',
                     'createQueryBuilder',

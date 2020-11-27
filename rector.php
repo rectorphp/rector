@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
+use Rector\Core\ValueObject\PhpVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -17,7 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/bin/rector',
     ]);
 
-    $parameters->set(Option::EXCLUDE_PATHS, [
+    $parameters->set(Option::SKIP, [
         '/Source/',
         '/*Source/',
         '/Fixture/',
@@ -30,5 +31,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
     # so Rector code is still PHP 7.2 compatible
-    $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_7_2);
 };
