@@ -57,14 +57,14 @@ final class NullsafeOperatorRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function f($o)
+    public function run($someObject)
     {
-        $o2 = $o->mayFail1();
-        if ($o2 === null) {
+        $someObject2 = $someObject->mayFail1();
+        if ($someObject2 === null) {
             return null;
         }
 
-        return $o2->mayFail2();
+        return $someObject2->mayFail2();
     }
 }
 CODE_SAMPLE
@@ -72,9 +72,9 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function f($o)
+    public function run($someObject)
     {
-        return $o->mayFail1()?->mayFail2();
+        return $someObject->mayFail1()?->mayFail2();
     }
 }
 CODE_SAMPLE
