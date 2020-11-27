@@ -76,6 +76,10 @@ final class BetterNodeFinder
         return null;
     }
 
+    /**
+     * @template T of Node
+     * @param class-string<T> $type
+     */
     public function findFirstAncestorInstanceOf(Node $node, string $type): ?Node
     {
         $currentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
