@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\StmtsManipulator;
@@ -111,11 +112,13 @@ CODE_SAMPLE
             return null;
         }
 
+        $isIfInLoop = $this->isIfInLoop($node);
+
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
 
         $conditions = $this->getBooleanAndConditions($expr);
-        $ifs = $this->createInvertedIfNodesFromConditions($conditions);
+        $ifs = $this->createInvertedIfNodesFromConditions($isIfInLoop, $conditions);
 
         $this->keepCommentIfExists($node, $ifs);
 
@@ -198,13 +201,17 @@ CODE_SAMPLE
      * @param Expr[] $conditions
      * @return If_[]
      */
-    private function createInvertedIfNodesFromConditions(array $conditions): array
+    private function createInvertedIfNodesFromConditions(bool $isIfInLoop, array $conditions): array
     {
         $ifs = [];
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
-            $if->stmts = [new Return_()];
+            if ($isIfInLoop) {
+                $if->stmts = [new Stmt\Continue_()];
+            } else {
+                $if->stmts = [new Return_()];
+            }
 
             $ifs[] = $if;
         }
@@ -278,5 +285,19 @@ CODE_SAMPLE
             return true;
         }
         return $nextNode instanceof Return_;
+    }
+
+    private function isIfInLoop(If_ $if): bool
+    {
+        $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parent) {
+            if ($parent instanceof Stmt\Foreach_ || $parent instanceof Stmt\For_ || $parent instanceof Stmt\While_) {
+                return true;
+            }
+
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
     }
 }
