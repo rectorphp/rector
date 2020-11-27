@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
 use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
 use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 use Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
@@ -20,4 +21,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeStripTagsCallWithArrayRector::class);
     $services->set(DowngradeArraySpreadRector::class);
     $services->set(DowngradeArrayMergeCallWithoutArgumentsRector::class);
+    $services->set(ChangePhpVersionInPlatformCheckRector::class)
+        ->call('configure', [[
+            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70400,
+        ]]);
 };
