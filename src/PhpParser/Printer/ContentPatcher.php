@@ -69,6 +69,30 @@ final class ContentPatcher
     public const INVALID_ANNOTATION_ROUTE_OPTION_REGEX = '#\*\s+@.*={([^"]*=[^"]*,?){1,}[^,]}.*\)#';
 
     /**
+     * @see https://regex101.com/r/Hm2idk/1
+     * @var string
+     */
+    public const VALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX = '#^\s+\/\*\*\s+\s+\*\s+@.*\({(\s+\*\s{0,}".*":\s{0,}".*",?){1,}\s+\*\s{0,}[^,]}.*\)\s+\*\/#msU';
+
+    /**
+     * @see https://regex101.com/r/qVOGbC/2
+     * @var string
+     */
+    public const INVALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX = '#^\s+\/\*\*\s+\s+\*\s+@.*(\s+\*\s{0,}[^"]*=\s{0,}[^"]*,?){1,}.*\)\s+\*\s+\*\/#msU';
+
+    /**
+     * @see https://regex101.com/r/EA1xRY/2
+     * @var string
+     */
+    public const VALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX = '#^\s{0,}\* @return\s+(\(.*\)|(".*")(\|".*"){1,})$#msU';
+
+    /**
+     * @see https://regex101.com/r/LprF44/3
+     * @var string
+     */
+    public const INVALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX = '#^\s{0,}\* @return([^\s].*|\s[^"\s]*)$#msU';
+
+    /**
      * @see https://regex101.com/r/4mBd0y/2
      * @var string
      */
@@ -87,10 +111,10 @@ final class ContentPatcher
     private const SPACE_REGEX = '#\s#';
 
     /**
-     * @see https://regex101.com/r/lC0i21/1
+     * @see https://regex101.com/r/lC0i21/2
      * @var string
      */
-    private const STAR_QUOTE_REGEX = '#[\*"]#';
+    private const STAR_QUOTE_PARENTHESIS_REGEX = '#[\*"\(\)]#';
 
     /**
      * @see https://regex101.com/r/j7agVx/1
@@ -103,6 +127,12 @@ final class ContentPatcher
      * @var string
      */
     private const ROUTE_INVALID_REGEX = '#"\s?=\s?#';
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/5DdLjE/1
+     */
+    private const ROUTE_LOCALIZATION_REPLACE_REGEX = '#[:=]#';
 
     /**
      * @var string[]
@@ -140,11 +170,14 @@ final class ContentPatcher
     }
 
     /**
+     * @see https://github.com/rectorphp/rector/issues/3388
      * @see https://github.com/rectorphp/rector/issues/3673
      * @see https://github.com/rectorphp/rector/issues/4274
      * @see https://github.com/rectorphp/rector/issues/4573
      * @see https://github.com/rectorphp/rector/issues/4581
      * @see https://github.com/rectorphp/rector/issues/4476
+     * @see https://github.com/rectorphp/rector/issues/4620
+     * @see https://github.com/rectorphp/rector/issues/4652
      */
     public function rollbackValidAnnotation(
         string $originalContent,
@@ -186,8 +219,13 @@ final class ContentPatcher
         $invalidAnnotation = Strings::replace($invalidAnnotation, self::SPACE_REGEX, '');
 
         if ($validAnnotationRegex !== self::VALID_ANNOTATION_ROUTE_REGEX) {
-            $validAnnotation = Strings::replace($validAnnotation, self::STAR_QUOTE_REGEX, '');
-            $invalidAnnotation = Strings::replace($invalidAnnotation, self::STAR_QUOTE_REGEX, '');
+            $validAnnotation = Strings::replace($validAnnotation, self::STAR_QUOTE_PARENTHESIS_REGEX, '');
+            $invalidAnnotation = Strings::replace($invalidAnnotation, self::STAR_QUOTE_PARENTHESIS_REGEX, '');
+
+            if ($validAnnotationRegex === self::VALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX) {
+                $validAnnotation = Strings::replace($validAnnotation, self::ROUTE_LOCALIZATION_REPLACE_REGEX, '');
+                $invalidAnnotation = Strings::replace($invalidAnnotation, self::ROUTE_LOCALIZATION_REPLACE_REGEX, '');
+            }
 
             return $validAnnotation !== $invalidAnnotation;
         }

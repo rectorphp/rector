@@ -18,11 +18,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NameImportingPostRector extends AbstractPostRector
 {
     /**
-     * @var bool
-     */
-    private $importDocBlocks = false;
-
-    /**
      * @var ParameterProvider
      */
     private $parameterProvider;
@@ -44,7 +39,6 @@ final class NameImportingPostRector extends AbstractPostRector
     ) {
         $this->parameterProvider = $parameterProvider;
         $this->nameImporter = $nameImporter;
-        $this->importDocBlocks = (bool) $parameterProvider->provideParameter(Option::IMPORT_DOC_BLOCKS);
         $this->docBlockNameImporter = $docBlockNameImporter;
     }
 
@@ -59,7 +53,8 @@ final class NameImportingPostRector extends AbstractPostRector
             return $this->nameImporter->importName($node);
         }
 
-        if (! $this->importDocBlocks) {
+        $importDocBlocks = (bool) $this->parameterProvider->provideParameter(Option::IMPORT_DOC_BLOCKS);
+        if (! $importDocBlocks) {
             return null;
         }
 

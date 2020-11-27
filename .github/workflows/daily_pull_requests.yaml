@@ -22,11 +22,6 @@ jobs:
                         branch: 'automated-regenerated-nodes-rectors-documentation'
 
                     -
-                        name: "Re-Generate CHANGELOG.md"
-                        run: "composer changelog"
-                        branch: 'automated-regenerated-changelog'
-
-                    -
                         name: "Re-Propagate Monorepo Dependencies"
                         run: "composer propagate --ansi"
                         branch: 'automated-propagate-monorepo-dependencies'

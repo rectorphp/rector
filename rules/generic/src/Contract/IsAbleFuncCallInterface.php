@@ -8,7 +8,7 @@ interface IsAbleFuncCallInterface
 {
     public function getFuncName(): string;
 
-    public function getPhpVersion(): string;
+    public function getPhpVersion(): int;
 
     public function getType(): string;
 }

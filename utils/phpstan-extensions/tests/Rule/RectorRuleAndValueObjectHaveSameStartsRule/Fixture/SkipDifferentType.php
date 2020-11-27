@@ -6,12 +6,12 @@ namespace Rector\PHPStanExtensions\Tests\Rule\RectorRuleAndValueObjectHaveSameSt
 
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\PHPStanExtensions\Tests\Rule\RectorRuleAndValueObjectHaveSameStartsRule\Source\ConfigureValueObject;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (object $random): void {
     $random->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => ValueObjectInliner::inline([
                 new ConfigureValueObject(),
                 new ConfigureValueObject(),
             ]),

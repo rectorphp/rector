@@ -304,6 +304,16 @@ final class SetList
     /**
      * @var string
      */
+    public const LARAVEL_CODE_QUALITY = __DIR__ . '/../../../../config/set/laravel-code-quality.php';
+
+    /**
+     * @var string
+     */
+    public const LARAVEL_ARRAY_STR_FUNCTION_TO_STATIC_CALL = __DIR__ . '/../../../../config/set/laravel-array-str-functions-to-static-call.php';
+
+    /**
+     * @var string
+     */
     public const MOCKISTA_TO_MOCKERY = __DIR__ . '/../../../../config/set/mockista-to-mockery.php';
 
     /**

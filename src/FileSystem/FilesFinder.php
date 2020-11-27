@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\FileSystem;
 
 use Nette\Utils\Strings;
-use Rector\Core\Configuration\Option;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use Symplify\SmartFileSystem\FileSystemFilter;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -36,11 +35,6 @@ final class FilesFinder
     private $fileInfosBySourceAndSuffixes = [];
 
     /**
-     * @var string[]
-     */
-    private $excludePaths = [];
-
-    /**
      * @var FilesystemTweaker
      */
     private $filesystemTweaker;
@@ -55,16 +49,21 @@ final class FilesFinder
      */
     private $fileSystemFilter;
 
+    /**
+     * @var SkippedPathsResolver
+     */
+    private $skippedPathsResolver;
+
     public function __construct(
         FilesystemTweaker $filesystemTweaker,
         FinderSanitizer $finderSanitizer,
         FileSystemFilter $fileSystemFilter,
-        ParameterProvider $parameterProvider
+        SkippedPathsResolver $skippedPathsResolver
     ) {
-        $this->excludePaths = (array) $parameterProvider->provideParameter(Option::EXCLUDE_PATHS);
         $this->filesystemTweaker = $filesystemTweaker;
         $this->finderSanitizer = $finderSanitizer;
         $this->fileSystemFilter = $fileSystemFilter;
+        $this->skippedPathsResolver = $skippedPathsResolver;
     }
 
     /**
@@ -157,11 +156,12 @@ final class FilesFinder
 
     private function addFilterWithExcludedPaths(Finder $finder): void
     {
-        if ($this->excludePaths === []) {
+        $excludePaths = $this->skippedPathsResolver->resolve();
+        if ($excludePaths === []) {
             return;
         }
 
-        $finder->filter(function (SplFileInfo $splFileInfo): bool {
+        $finder->filter(function (SplFileInfo $splFileInfo) use ($excludePaths): bool {
             /** @var string|false $realPath */
             $realPath = $splFileInfo->getRealPath();
             if (! $realPath) {
@@ -173,7 +173,7 @@ final class FilesFinder
             $realPath = str_replace('\\', '/', $realPath);
 
             // return false to remove file
-            foreach ($this->excludePaths as $excludePath) {
+            foreach ($excludePaths as $excludePath) {
                 // make the path work accross different OSes
                 $excludePath = str_replace('\\', '/', $excludePath);
 

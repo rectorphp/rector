@@ -31,8 +31,8 @@ final class DowngradeArraySpreadRectorTest extends AbstractRectorTestCase
         return DowngradeArraySpreadRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_ARRAY_SPREAD;
+        return PhpVersionFeature::ARRAY_SPREAD - 1;
     }
 }

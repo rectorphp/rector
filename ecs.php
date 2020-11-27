@@ -66,7 +66,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::CLEAN_CODE,
     ]);
 
-    $parameters->set(Option::EXCLUDE_PATHS, [
+    $parameters->set(Option::SKIP, [
         '*/Source/*',
         '*/Fixture/*',
         '*/Expected/*',
@@ -74,14 +74,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php',
         __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php',
         // template files
-        __DIR__ . '/packages/rector-generator/templates/*',
-    ]);
+        __DIR__ . '/packages/rector-generator/templates',
 
-    $parameters->set(Option::SKIP, [
         // broken
-        UnusedVariableSniff::class => null,
-        GlobalNamespaceImportFixer::class => null,
-        MethodDeclarationSniff::class . '.Underscore' => null,
+        UnusedVariableSniff::class,
+        GlobalNamespaceImportFixer::class,
+        MethodDeclarationSniff::class . '.Underscore',
+
         PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
         CommentedOutCodeSniff::class . '.Found' => [
             __DIR__ . '/rules/php72/src/Rector/Assign/ListEachRector.php',
@@ -93,12 +92,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
             '*TypeResolverTest.php',
         ],
-        UnaryOperatorSpacesFixer::class => null,
+        UnaryOperatorSpacesFixer::class,
         // breaks on-purpose annotated variables
-        ReturnAssignmentFixer::class => null,
+        ReturnAssignmentFixer::class,
         // buggy with specific markdown snippet file in docs/rules_overview.md
-        ArrayListItemNewlineFixer::class => null,
-        BlankLineAfterOpeningTagFixer::class => null,
+        ArrayListItemNewlineFixer::class,
+        BlankLineAfterOpeningTagFixer::class,
+
         StrictComparisonFixer::class => [__DIR__ . '/rules/polyfill/src/ConditionEvaluator.php'],
 
         // bugged for some reason

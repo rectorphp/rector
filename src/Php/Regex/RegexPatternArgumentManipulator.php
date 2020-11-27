@@ -204,7 +204,7 @@ final class RegexPatternArgumentManipulator
      */
     private function resolveClassConstFetchValue(ClassConstFetch $classConstFetch): array
     {
-        $classConstNode = $this->parsedNodeCollector->findClassConstantByClassConstFetch($classConstFetch);
+        $classConstNode = $this->parsedNodeCollector->findClassConstByClassConstFetch($classConstFetch);
         if ($classConstNode === null) {
             return [];
         }

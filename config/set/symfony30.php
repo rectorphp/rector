@@ -18,9 +18,8 @@ use Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector;
 use Rector\Symfony\Rector\MethodCall\OptionNameRector;
 use Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 use Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
-use Rector\SymfonyPhpConfig\inline_value_objects;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -45,7 +44,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
                 new RenameClassConstant('Symfony\Component\Form\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'),
                 new RenameClassConstant('Symfony\Component\Form\FormEvents', 'BIND', 'SUBMIT'),
                 new RenameClassConstant('Symfony\Component\Form\FormEvents', 'POST_BIND', 'POST_SUBMIT'),
@@ -69,7 +68,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
 
                 new MethodCallRename(
                     'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',

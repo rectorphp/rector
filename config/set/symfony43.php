@@ -11,8 +11,8 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Symfony\Component\BrowserKit\Response', 'getStatus', 'getStatusCode'),
                 new MethodCallRename('Symfony\Component\Security\Http\Firewall', 'handleRequest', 'callListeners'),
             ]),
@@ -82,7 +82,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#workflow
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
+            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentAdder(
                     'Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface',
                     'setMarking',

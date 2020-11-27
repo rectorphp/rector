@@ -19,16 +19,16 @@ final class MinimalVersionCheckerTest extends AbstractKernelTestCase
     public function test(string $version, bool $shouldThrowException): void
     {
         $composerJsonReader = new ComposerJsonReader(__DIR__ . '/MinimalVersionChecker/composer-7.2.0.json');
-        $minimalVersionChecker = new MinimalVersionChecker(
-            $version,
-            new ComposerJsonParser($composerJsonReader->read())
-        );
 
         if ($shouldThrowException) {
             $this->expectException(PhpVersionException::class);
         } else {
             $this->expectNotToPerformAssertions();
         }
+        $minimalVersionChecker = new MinimalVersionChecker(
+            $version,
+            new ComposerJsonParser($composerJsonReader->read())
+        );
 
         $minimalVersionChecker->check();
     }

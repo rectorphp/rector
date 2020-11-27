@@ -5,10 +5,10 @@ declare(strict_types=1);
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 use Rector\Transform\ValueObject\PropertyToMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # source: https://book.cakephp.org/3.0/en/appendices/3-6-migration-guide.html
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Cake\ORM\Table', 'association', 'getAssociation'),
                 new MethodCallRename('Cake\Validation\ValidationSet', 'isPresenceRequired', 'requirePresence'),
                 new MethodCallRename('Cake\Validation\ValidationSet', 'isEmptyAllowed', 'allowEmpty'),
@@ -25,7 +25,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
                 new PropertyToMethod('Cake\Controller\Controller', 'name', 'getName', 'setName'),
                 new PropertyToMethod('Cake\Controller\Controller', 'plugin', 'getPlugin', 'setPlugin'),
                 new PropertyToMethod('Cake\Form\Form', 'validator', 'getValidator', 'setValidator'),

@@ -9,6 +9,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\FileSystem\FileGuard;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use Symplify\SmartFileSystem\FileSystemFilter;
 
 /**
@@ -22,11 +23,6 @@ final class AdditionalAutoloader
     private $autoloadPaths = [];
 
     /**
-     * @var string[]
-     */
-    private $excludePaths = [];
-
-    /**
      * @var FileGuard
      */
     private $fileGuard;
@@ -36,15 +32,21 @@ final class AdditionalAutoloader
      */
     private $fileSystemFilter;
 
+    /**
+     * @var SkippedPathsResolver
+     */
+    private $skippedPathsResolver;
+
     public function __construct(
         FileGuard $fileGuard,
         FileSystemFilter $fileSystemFilter,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        SkippedPathsResolver $skippedPathsResolver
     ) {
         $this->fileGuard = $fileGuard;
         $this->autoloadPaths = (array) $parameterProvider->provideParameter(Option::AUTOLOAD_PATHS);
-        $this->excludePaths = (array) $parameterProvider->provideParameter(Option::EXCLUDE_PATHS);
         $this->fileSystemFilter = $fileSystemFilter;
+        $this->skippedPathsResolver = $skippedPathsResolver;
     }
 
     /**
@@ -95,7 +97,9 @@ final class AdditionalAutoloader
 
         $robotLoader = new RobotLoader();
         $robotLoader->ignoreDirs[] = '*Fixtures';
-        foreach ($this->excludePaths as $excludePath) {
+
+        $excludePaths = $this->skippedPathsResolver->resolve();
+        foreach ($excludePaths as $excludePath) {
             $robotLoader->ignoreDirs[] = $excludePath;
         }
         // last argument is workaround: https://github.com/nette/robot-loader/issues/12

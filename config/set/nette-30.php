@@ -19,10 +19,10 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstant;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/nette-30-dependency-injection.php');
@@ -38,7 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // https://github.com/nette/utils/commit/d0041ba59f5d8bf1f5b3795fd76d43fb13ea2e15
     $services->set(FormerNullableArgumentToScalarTypedRector::class);
     $services->set(StaticCallToMethodCallRector::class)->call('configure', [[
-        StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_value_objects([
+        StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => ValueObjectInliner::inline([
             new StaticCallToMethodCall('Nette\Security\Passwords', 'hash', 'Nette\Security\Passwords', 'hash'),
             new StaticCallToMethodCall('Nette\Security\Passwords', 'verify', 'Nette\Security\Passwords', 'verify'),
             new StaticCallToMethodCall(
@@ -51,7 +51,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]]);
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
     $services->set(RenameClassConstantRector::class)->call('configure', [[
-        RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
+        RenameClassConstantRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
             new RenameClassConstant('Contributte\Events\Extra\Event\Security\LoggedInEvent', 'NAME', 'class'),
             new RenameClassConstant('Contributte\Events\Extra\Event\Security\LoggedOutEvent', 'NAME', 'class'),
             new RenameClassConstant('Contributte\Events\Extra\Event\Application\ShutdownEvent', 'NAME', 'class'),
@@ -67,7 +67,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
     ]]);
     $services->set(ArgumentDefaultValueReplacerRector::class)->call('configure', [[
-        ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects([
+        ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
             // json 2nd argument is now `int` typed
             new ArgumentDefaultValueReplacer('Nette\Utils\Json', 'decode', 1, true, 'Nette\Utils\Json::FORCE_ARRAY'),
             // @see https://github.com/nette/forms/commit/574b97f9d5e7a902a224e57d7d584e7afc9fefec
@@ -75,7 +75,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]),
     ]]);
     $services->set(RenameMethodRector::class)->call('configure', [[
-        RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+        RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
             new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setAttribute', 'setHtmlAttribute'),
             // see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
             new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setType', 'setHtmlType'),

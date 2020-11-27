@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Node;
 
 use PhpParser\Node\Stmt\Use_;
-use Rector\CodingStyle\Imports\ShortNameResolver;
+use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\CodingStyle\Naming\ClassNaming;
 
 final class UseNameAliasToNameResolver

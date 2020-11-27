@@ -62,4 +62,14 @@ final class FullyQualifiedObjectType extends ObjectType
 
         return new Use_([$useUse]);
     }
+
+    public function getShortNameLowered(): string
+    {
+        return strtolower($this->getShortName());
+    }
+
+    public function getClassNameLowered(): string
+    {
+        return strtolower($this->getClassName());
+    }
 }

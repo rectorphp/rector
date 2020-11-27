@@ -30,7 +30,7 @@ final class UnionTypedPropertyRectorTest extends AbstractRectorTestCase
         return TypedPropertyRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::UNION_TYPES;
     }

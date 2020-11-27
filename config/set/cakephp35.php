@@ -7,8 +7,8 @@ use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # source: https://book.cakephp.org/3.0/en/appendices/3-5-migration-guide.html
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -24,7 +24,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Cake\Database\Schema\TableSchema', 'column', 'getColumn'),
                 new MethodCallRename('Cake\Database\Schema\TableSchema', 'constraint', 'getConstraint'),
                 new MethodCallRename('Cake\Database\Schema\TableSchema', 'index', 'getIndex'),
@@ -33,7 +33,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => ValueObjectInliner::inline([
                 new ModalToGetSet('Cake\Cache\Cache', 'config'),
                 new ModalToGetSet('Cake\Cache\Cache', 'registry'),
                 new ModalToGetSet('Cake\Console\Shell', 'io'),

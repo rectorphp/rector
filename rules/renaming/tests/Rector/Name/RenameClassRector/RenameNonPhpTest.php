@@ -39,6 +39,10 @@ final class RenameNonPhpTest extends AbstractRectorTestCase
             RenameClassRector::class => [
                 RenameClassRector::OLD_TO_NEW_CLASSES => [
                     OldClass::class => NewClass::class,
+                    // Laravel
+                    'Session' => 'Illuminate\Support\Facades\Session',
+                    'Form' => 'Collective\Html\FormFacade',
+                    'Html' => 'Collective\Html\HtmlFacade',
                 ],
             ],
         ];

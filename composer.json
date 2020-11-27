@@ -16,7 +16,6 @@
         "doctrine/annotations": "^1.11",
         "doctrine/inflector": "^1.4|^2.0",
         "jean85/pretty-package-versions": "^1.5.1",
-        "migrify/php-config-printer": "^0.4",
         "nette/robot-loader": "^3.2",
         "nette/utils": "^3.1",
         "nikic/php-parser": "4.10.2",
@@ -33,9 +32,11 @@
         "symfony/http-kernel": "^4.4.8|^5.1",
         "symfony/process": "^4.4.8|^5.1",
         "symplify/autowire-array-parameter": "dev-master",
+        "symplify/skipper": "dev-master",
         "symplify/composer-json-manipulator": "dev-master",
         "symplify/console-color-diff": "dev-master",
         "symplify/package-builder": "dev-master",
+        "symplify/php-config-printer": "dev-master",
         "symplify/set-config-resolver": "dev-master",
         "symplify/smart-file-system": "dev-master",
         "symplify/rule-doc-generator": "dev-master",
@@ -44,7 +45,7 @@
     "require-dev": {
         "cweagans/composer-patches": "^1.7",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "migrify/vendor-patches": "^0.4",
+        "symplify/vendor-patches": "^9.0",
         "nette/application": "^3.0",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
@@ -57,6 +58,7 @@
         "symplify/coding-standard": "dev-master",
         "symplify/easy-testing": "dev-master",
         "symplify/monorepo-builder": "dev-master",
+        "symplify/symfony-php-config": "dev-master",
         "symplify/phpstan-extensions": "dev-master",
         "symplify/markdown-diff": "dev-master",
         "symplify/phpstan-rules": "dev-master",
@@ -69,7 +71,6 @@
     },
     "autoload": {
         "files": [
-            "packages/symfony-php-config/functions/functions.php",
             "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php"
         ],
         "psr-4": {
@@ -158,10 +159,7 @@
             "Rector\\StrictCodeQuality\\": "rules/strict-code-quality/src",
             "Rector\\SymfonyCodeQuality\\": "rules/symfony-code-quality/src",
             "Rector\\SymfonyPHPUnit\\": "rules/symfony-phpunit/src",
-            "Rector\\SymfonyPhpConfig\\": [
-                "packages/symfony-php-config/src",
-                "rules/symfony-php-config/src"
-            ],
+            "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src",
             "Rector\\Symfony\\": "rules/symfony/src",
             "Rector\\Transform\\": "rules/transform/src",
             "Rector\\Twig\\": "rules/twig/src",
@@ -243,6 +241,7 @@
             "Rector\\Order\\Tests\\": "rules/order/tests",
             "Rector\\PHPOffice\\Tests\\": "rules/php-office/tests",
             "Rector\\PHPStanExtensions\\": "utils/phpstan-extensions/src",
+            "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src",
             "Rector\\PHPStanExtensions\\Tests\\": "utils/phpstan-extensions/tests",
             "Rector\\PHPStanStaticTypeMapper\\Tests\\": "packages/phpstan-static-type-mapper/tests",
             "Rector\\PHPStan\\Tests\\": "rules/phpstan/tests",
@@ -276,10 +275,7 @@
             "Rector\\StrictCodeQuality\\Tests\\": "rules/strict-code-quality/tests",
             "Rector\\SymfonyCodeQuality\\Tests\\": "rules/symfony-code-quality/tests",
             "Rector\\SymfonyPHPUnit\\Tests\\": "rules/symfony-phpunit/tests",
-            "Rector\\SymfonyPhpConfig\\Tests\\": [
-                "packages/symfony-php-config/tests",
-                "rules/symfony-php-config/tests"
-            ],
+            "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests",
             "Rector\\Symfony\\Tests\\": "rules/symfony/tests",
             "Rector\\Transform\\Tests\\": "rules/transform/tests",
             "Rector\\Twig\\Tests\\": "rules/twig/tests",
@@ -316,7 +312,7 @@
             "vendor/bin/changelog-linker cleanup --ansi"
         ],
         "docs": [
-            "vendor/bin/rule-doc-generator generate packages rules --output-file docs/rector_rules_overview.md --ansi",
+            "vendor/bin/rule-doc-generator generate packages rules --output-file docs/rector_rules_overview.md --ansi --categorize",
             "bin/rector dump-nodes --output-file docs/nodes_overview.md --ansi",
             "vendor/bin/ecs check-markdown docs/rector_rules_overview.md docs/nodes_overview.md --ansi --fix"
         ],

@@ -28,7 +28,7 @@ final class Php74Test extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp74');
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::ARROW_FUNCTION;
     }

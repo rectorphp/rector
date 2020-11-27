@@ -12,9 +12,9 @@ use Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector;
 use Rector\NetteUtilsCodeQuality\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # @see https://www.tomasvotruba.cz/blog/2018/07/30/hidden-gems-of-php-packages-nette-utils
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
-            FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => inline_value_objects([
+            FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => ValueObjectInliner::inline([
                 new FuncCallToStaticCall('file_get_contents', 'Nette\Utils\FileSystem', 'read'),
                 new FuncCallToStaticCall('unlink', 'Nette\Utils\FileSystem', 'delete'),
                 new FuncCallToStaticCall('rmdir', 'Nette\Utils\FileSystem', 'delete'),

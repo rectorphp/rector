@@ -12,7 +12,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 
 final class NodeTypesStatisticsCommand extends AbstractCommand
@@ -36,7 +35,6 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[DOCS] Show statistics of used and unused node types in PHP Rector');
 
         $this->addOption(self::UNUSED, null, InputOption::VALUE_NONE, 'Show unused nodes');

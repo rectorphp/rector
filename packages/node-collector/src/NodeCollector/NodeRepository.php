@@ -8,12 +8,14 @@ use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -487,6 +489,11 @@ final class NodeRepository
         }
 
         return $this->findClassMethod($className, $methodName);
+    }
+
+    public function findClassConstByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
+    {
+        return $this->parsedNodeCollector->findClassConstByClassConstFetch($classConstFetch);
     }
 
     private function addMethod(ClassMethod $classMethod): void

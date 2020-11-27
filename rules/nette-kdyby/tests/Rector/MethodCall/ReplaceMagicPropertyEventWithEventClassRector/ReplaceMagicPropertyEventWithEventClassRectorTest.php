@@ -49,9 +49,9 @@ final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRe
         ];
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_TYPED_PROPERTIES;
+        return PhpVersionFeature::TYPED_PROPERTIES - 1;
     }
 
     protected function getRectorClass(): string

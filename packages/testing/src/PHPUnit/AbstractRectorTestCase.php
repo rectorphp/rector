@@ -19,6 +19,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\Stubs\StubLoader;
+use Rector\Core\ValueObject\PhpVersion;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
 use Rector\Testing\Application\EnabledRectorsProvider;
@@ -45,6 +46,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 {
     use MovingFilesTrait;
     use RunnableTestTrait;
+
+    /**
+     * @var int
+     */
+    private const PHP_VERSION_UNDEFINED = 0;
 
     /**
      * @var FileProcessor
@@ -174,8 +180,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->restoreOldParameterValues();
 
         // restore PHP version if changed
-        if ($this->getPhpVersion() !== '') {
-            $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
+        if ($this->getPhpVersion() !== self::PHP_VERSION_UNDEFINED) {
+            $this->setParameter(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_10_0);
         }
     }
 
@@ -258,10 +264,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return $this->bootKernelWithConfigs($class, $configFiles);
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         // to be implemented
-        return '';
+        return 0;
     }
 
     protected function assertFileMissing(string $temporaryFilePath): void
@@ -378,7 +384,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     private function configurePhpVersionFeatures(): void
     {
-        if ($this->getPhpVersion() === '') {
+        if ($this->getPhpVersion() === self::PHP_VERSION_UNDEFINED) {
             return;
         }
 
@@ -423,7 +429,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     ): void {
         $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
-        if (in_array($originalFileInfo->getSuffix(), ['php', 'phpt'], true)) {
+        if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
+            $originalFileInfo->getSuffix(),
+            ['php', 'phpt'],
+            true
+        )) {
             if ($extraFiles === []) {
                 $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
                 $this->fileProcessor->refactor($originalFileInfo);
@@ -454,7 +464,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
             $removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
             $removedAndAddedFilesProcessor->run();
-        } elseif (in_array($originalFileInfo->getSuffix(), StaticNonPhpFileSuffixes::SUFFIXES, true)) {
+        } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
             $changedContent = $this->nonPhpFileProcessor->processFileInfo($originalFileInfo);
         } else {
             $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());
@@ -466,9 +476,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         try {
             $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $relativeFilePathFromCwd);
         } catch (ExpectationFailedException $expectationFailedException) {
-            $contents = $expectedFileInfo->getContents();
-
             StaticFixtureUpdater::updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
+            $contents = $expectedFileInfo->getContents();
 
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);

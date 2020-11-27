@@ -9,8 +9,8 @@ use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/phpunit-exception.php');
@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('PHPUnit\Framework\TestCase', 'createMockBuilder', 'getMockBuilder'),
             ]),
         ]]);
@@ -39,7 +39,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
             // ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
-            PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => inline_value_objects(
+            PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => ValueObjectInliner::inline(
                 [
                     new PseudoNamespaceToNamespace('PHPUnit_', [
                         'PHPUnit_Framework_MockObject_MockObject',

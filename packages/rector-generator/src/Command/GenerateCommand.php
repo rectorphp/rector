@@ -17,7 +17,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -87,7 +86,6 @@ final class GenerateCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setAliases(['c', 'create', 'g']);
         $this->setDescription('[DEV] Create a new Rector, in a proper location, with new tests');
     }
@@ -124,9 +122,8 @@ final class GenerateCommand extends Command
             $targetDirectory
         );
 
-        $testCaseDirectoryPath = $this->resolveTestCaseDirectoryPath($generatedFilePaths);
-
         $this->configFilesystem->appendRectorServiceToSet($rectorRecipe, $templateVariables);
+        $testCaseDirectoryPath = $this->resolveTestCaseDirectoryPath($generatedFilePaths);
 
         $this->printSuccess($rectorRecipe->getName(), $generatedFilePaths, $testCaseDirectoryPath);
 
