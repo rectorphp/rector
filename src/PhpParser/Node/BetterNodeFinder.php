@@ -292,7 +292,7 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param class-string[] $types
+     * @param string[] $types
      */
     private function isTypes(Node $node, array $types): bool
     {

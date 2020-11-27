@@ -159,7 +159,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new ArgumentFuncCallToMethodCall('bcrypt', 'Illuminate\Hashing\BcryptHasher', 'make'),
             new ArgumentFuncCallToMethodCall('redirect', 'Illuminate\Routing\Redirector', 'back'),
             new ArgumentFuncCallToMethodCall('broadcast', 'Illuminate\Contracts\Broadcasting\Factory', 'event'),
-            new ArgumentFuncCallToMethodCall('event', 'Illuminate\Events\Dispatcher', 'fire'),
+            new ArgumentFuncCallToMethodCall('event', 'Illuminate\Events\Dispatcher', 'dispatch'),
             new ArgumentFuncCallToMethodCall('dispatch', 'Illuminate\Events\Dispatcher', 'dispatch'),
             new ArgumentFuncCallToMethodCall('route', 'Illuminate\Routing\UrlGenerator', 'route'),
             new ArgumentFuncCallToMethodCall('asset', 'Illuminate\Routing\UrlGenerator', 'asset'),

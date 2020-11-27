@@ -11,14 +11,6 @@ composer.lock
 # often customized locally - example on Github is just fine
 rector-recipe.php
 
-# tests - travis
-/laravel-dir
-
-# compiler
-/compiler/composer.lock
-/compiler/vendor
-/tmp
-
 # testing
 abz
 /rector-temp-phpstan*.neon

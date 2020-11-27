@@ -5,7 +5,7 @@
 Run Rector only on 1 directory, or better 1 file.
 
 ```bash
-vendor/bin/rector process compiler/src/PhpScoper/StaticEasyPrefixer.php
+vendor/bin/rector process /some-file.php
 ```
 
 See "Applied rules" under the diff:
