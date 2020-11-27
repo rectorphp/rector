@@ -36,10 +36,10 @@ class IfInForeachClass
     {
         foreach ($nodes as $node) {
             if (!$node instanceof Name) {
-                return;
+                continue;
             }
             if (!$node instanceof Identifier) {
-                return;
+                continue;
             }
             $this->processNameOrIdentifier($node);
         }
