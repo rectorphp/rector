@@ -76,6 +76,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Fixture/*',
         '*/Source/*',
         '*/Expected/*',
+
         __DIR__ . '/packages/doctrine-annotation-generated/src',
         // template files
         __DIR__ . '/packages/rector-generator/templates',
