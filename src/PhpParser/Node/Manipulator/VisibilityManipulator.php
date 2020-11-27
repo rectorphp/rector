@@ -35,6 +35,11 @@ final class VisibilityManipulator
     private const ABSTRACT = 'abstract';
 
     /**
+     * @var string[]
+     */
+    private const ALLOWED_VISIBILITIES = ['public', 'protected', 'private', 'static'];
+
+    /**
      * @param ClassMethod|Property|ClassConst $node
      */
     public function makeStatic(Node $node): void
@@ -125,11 +130,9 @@ final class VisibilityManipulator
         } elseif ($visibility === 'static') {
             $this->makeStatic($node);
         } else {
-            $allowedVisibilities = ['public', 'protected', 'private', 'static'];
-
             throw new ShouldNotHappenException(sprintf(
                 'Visibility "%s" is not valid. Use one of: ',
-                implode('", "', $allowedVisibilities)
+                implode('", "', self::ALLOWED_VISIBILITIES)
             ));
         }
     }
