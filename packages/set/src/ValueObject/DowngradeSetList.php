@@ -30,5 +30,4 @@ final class DowngradeSetList
      * @var string
      */
     public const DOWNGRADE_PHP80 = __DIR__ . '/../../../../config/set/downgrade-php80.php';
-
 }
