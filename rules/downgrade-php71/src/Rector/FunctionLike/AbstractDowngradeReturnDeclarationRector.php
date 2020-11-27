@@ -36,25 +36,31 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractDowngrad
         }
 
         if ($this->addDocBlock) {
-            /** @var PhpDocInfo|null $phpDocInfo */
-            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($phpDocInfo === null) {
-                $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
-            }
-
-            if ($node->returnType !== null) {
-                $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
-
-                if ($type instanceof IterableType) {
-                    $type = new UnionType([$type, new IntersectionType([new ObjectType(Traversable::class)])]);
-                }
-
-                $phpDocInfo->changeReturnType($type);
-            }
+            $this->addDocBlockReturn($node);
         }
 
         $node->returnType = null;
 
         return $node;
+    }
+
+    private function addDocBlockReturn(ClassMethod $classMethod): void
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
+        }
+
+        if ($classMethod->returnType === null) {
+            return;
+        }
+
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
+        if ($type instanceof IterableType) {
+            $type = new UnionType([$type, new IntersectionType([new ObjectType(Traversable::class)])]);
+        }
+
+        $phpDocInfo->changeReturnType($type);
     }
 }

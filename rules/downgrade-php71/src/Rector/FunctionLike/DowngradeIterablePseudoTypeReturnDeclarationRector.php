@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -62,10 +61,12 @@ CODE_SAMPLE
      */
     public function shouldRemoveReturnDeclaration(FunctionLike $functionLike): bool
     {
-        if ($functionLike->returnType === null) {
+        $functionLikeReturnType = $functionLike->returnType;
+
+        if ($functionLikeReturnType === null) {
             return false;
         }
 
-        return $functionLike->returnType instanceof Identifier && $functionLike->returnType->toString() === 'iterable';
+        return $this->isName($functionLikeReturnType, 'iterable');
     }
 }
