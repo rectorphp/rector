@@ -13,7 +13,7 @@ class LostCommentBeforeElseIf
             }
 
             return $res;
-        }      
+        }
         // because ASCII is a subset of all charset
         elseif (is_string($data) && !empty($data) && !is_numeric($data) && 'ASCII' !== mb_detect_encoding($data)) {
             $data = $this->convertString($data);
@@ -38,9 +38,8 @@ class LostCommentBeforeElseIf
             foreach ($data as $key => $value) {
                 $res[$this->convert($key)] = $this->convert($value);
             }
-
             return $res;
-        }      
+        }
         // because ASCII is a subset of all charset
         if (is_string($data) && !empty($data) && !is_numeric($data) && 'ASCII' !== mb_detect_encoding($data)) {
             $data = $this->convertString($data);
