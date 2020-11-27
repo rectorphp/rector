@@ -123,7 +123,7 @@ CODE_SAMPLE
         $this->addNodeAfterNode($ifReturn, $node);
 
         $ifNextReturn = $this->getIfNextReturn($node);
-        if ($ifNextReturn !== null) {
+        if ($ifNextReturn !== null && !$this->isIfInLoop($node)) {
             $this->removeNode($ifNextReturn);
         }
 
@@ -278,5 +278,12 @@ CODE_SAMPLE
             return true;
         }
         return $nextNode instanceof Return_;
+    }
+
+    private function isIfInLoop(If_ $if): bool
+    {
+        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf($if, [Stmt\Foreach_::class, Stmt\For_::class, Stmt\While_::class]);
+
+        return $parentLoop !== null;
     }
 }
