@@ -122,9 +122,9 @@ CODE_SAMPLE
         $this->addNodesAfterNode($ifs, $node);
         $this->addNodeAfterNode($ifReturn, $node);
 
-        $ifParentReturn = $this->getIfNextReturn($node);
-        if ($ifParentReturn !== null) {
-            $this->removeNode($ifParentReturn);
+        $ifNextReturn = $this->getIfNextReturn($node);
+        if ($ifNextReturn !== null) {
+            $this->removeNode($ifNextReturn);
         }
 
         $this->removeNode($node);
