@@ -206,7 +206,6 @@
             "Rector\\CakePHP\\Tests\\": "rules/cakephp/tests",
             "Rector\\CodeQuality\\Tests\\": "rules/code-quality/tests",
             "Rector\\CodingStyle\\Tests\\": "rules/coding-style/tests",
-            "Rector\\Compiler\\Tests\\": "compiler/tests",
             "Rector\\Core\\Tests\\": "tests",
             "Rector\\DeadCode\\Tests\\": "rules/dead-code/tests",
             "Rector\\DoctrineCodeQuality\\Tests\\": "rules/doctrine-code-quality/tests",

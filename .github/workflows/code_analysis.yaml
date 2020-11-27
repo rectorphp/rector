@@ -40,7 +40,7 @@ jobs:
 
                     -
                         name: 'PHP Linter'
-                        run: vendor/bin/parallel-lint src bin/rector config compiler tests packages rules --exclude packages/rector-generator/templates --colors --exclude rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source --exclude rules/autodiscovery/tests/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected
+                        run: vendor/bin/parallel-lint src bin/rector config tests packages rules --exclude packages/rector-generator/templates --colors --exclude rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source --exclude rules/autodiscovery/tests/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest

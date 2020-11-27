@@ -419,8 +419,6 @@ parameters:
                 - packages/rector-generator/src/TemplateVariablesFactory.php
                 # output format to json
                 - rules/doctrine/src/Collector/UuidMigrationDataCollector.php
-                # should be replaced by symplify/composer-json-manipulator in the future
-                - compiler/src/Composer/ComposerJsonManipulator.php
 
         -
             message: '#Use explicit return value over magic &reference#'

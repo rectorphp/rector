@@ -61,15 +61,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages',
         __DIR__ . '/tests',
         __DIR__ . '/utils',
-        __DIR__ . '/compiler/src',
-        __DIR__ . '/compiler/bin/compile',
-        __DIR__ . '/compiler/build/scoper.inc.php',
         __DIR__ . '/config/set',
     ]);
 
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-
-    $parameters->set(Option::AUTOLOAD_PATHS, [__DIR__ . '/compiler/src']);
 
     $parameters->set(Option::SKIP, [
         StringClassNameToClassConstantRector::class,
