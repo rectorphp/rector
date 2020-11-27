@@ -299,4 +299,17 @@ CODE_SAMPLE
         }
         return $nextNode instanceof Return_;
     }
+<<<<<<< HEAD
+=======
+
+    private function isIfInLoop(If_ $if): bool
+    {
+        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $if,
+            [Foreach_::class, For_::class, While_::class]
+        );
+
+        return $parentLoop !== null;
+    }
+>>>>>>> drop MinimalVersoinChecker, is checked by composer itself
 }

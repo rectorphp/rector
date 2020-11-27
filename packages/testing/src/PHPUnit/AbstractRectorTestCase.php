@@ -487,6 +487,14 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         }
     }
 
+<<<<<<< HEAD
+=======
+    private function normalizeNewlines(string $string): string
+    {
+        return preg_replace('/\r\n|\r|\n/', "\n", $string);
+    }
+
+>>>>>>> drop MinimalVersoinChecker, is checked by composer itself
     private function createContainerWithAllRectors(): void
     {
         $rectorsFinder = new RectorsFinder();
