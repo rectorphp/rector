@@ -20,7 +20,7 @@ use PhpParser\Node\Stmt\While_;
 final class ControlStructure
 {
     /**
-     * @var class-string[]
+     * @var class-string<Node>[]
      */
     public const BREAKING_SCOPE_NODE_TYPES = [
         For_::class,
@@ -37,7 +37,7 @@ final class ControlStructure
 
     /**
      * These situations happens only if condition is met
-     * @var class-string[]
+     * @var class-string<Node>[]
      */
     public const CONDITIONAL_NODE_SCOPE_TYPES = [
         If_::class,
