@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\IntersectionType;
@@ -44,19 +45,22 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractDowngrad
         return $node;
     }
 
-    private function addDocBlockReturn(ClassMethod $classMethod): void
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     */
+    private function addDocBlockReturn(FunctionLike $functionLike): void
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($functionLike);
         }
 
-        if ($classMethod->returnType === null) {
+        if ($functionLike->returnType === null) {
             return;
         }
 
-        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
         if ($type instanceof IterableType) {
             $type = new UnionType([$type, new IntersectionType([new ObjectType(Traversable::class)])]);
         }
