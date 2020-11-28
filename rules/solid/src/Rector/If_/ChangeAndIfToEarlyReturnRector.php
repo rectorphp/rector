@@ -28,6 +28,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeAndIfToEarlyReturnRector extends AbstractRector
 {
+    const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
+
     /**
      * @var IfManipulator
      */
@@ -249,7 +251,7 @@ CODE_SAMPLE
     {
         $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf(
             $if,
-            [Foreach_::class, For_::class, While_::class]
+            self::LOOP_TYPES
         );
 
         return $parentLoop !== null;
@@ -306,8 +308,6 @@ CODE_SAMPLE
 
     private function isNestedIfInLoop(If_ $if): bool
     {
-        $loopTypes = [Foreach_::class, For_::class, While_::class];
-
         $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
         $isNestedIf = false;
 
@@ -316,7 +316,7 @@ CODE_SAMPLE
                 $isNestedIf = true;
             }
 
-            if ($this->isTypes($parentNode, $loopTypes)) {
+            if ($this->isTypes($parentNode, self::LOOP_TYPES)) {
                 return $isNestedIf;
             }
 
