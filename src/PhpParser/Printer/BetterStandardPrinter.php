@@ -173,8 +173,8 @@ final class BetterStandardPrinter extends Standard
         $content = $this->contentPatcher->rollbackValidAnnotation(
             $contentOriginal,
             $content,
-            ContentPatcher::VALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX
+            ContentPatcher::VALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX,
+            ContentPatcher::INVALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX
         );
 
         // add new line in case of added stmts
