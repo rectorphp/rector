@@ -308,9 +308,9 @@ CODE_SAMPLE
 
     private function isNestedIfInLoop(If_ $if): bool
     {
-        $parent = $this->betterNodeFinder->findFirstParentInstanceOf($if, self::LOOP_TYPES + [If_::class]);
+        $parent = $this->betterNodeFinder->findFirstParentInstanceOf($if, self::LOOP_TYPES + [If_::class, Else_::class, ElseIf_::class]);
 
-        if ($parent instanceof If_) {
+        if ($parent instanceof If_ || $parent instanceof Else_ || $parent instanceof ElseIf_) {
 
             $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf($parent, self::LOOP_TYPES);
 
