@@ -16,3 +16,10 @@ docker run --rm -v $(pwd):/project rector/rector:latest process src \
     --config rector.php \
     --dry-run
 ```
+
+## Permissions issues
+
+If you run into issues with `permission denied` or running Rector in docker keeps changing owner of your project files, running container as current user `--user $(id -u):$(id -g)` should solve it for you:
+```
+docker run --rm --user $(id -u):$(id -g) -v $(pwd):/project rector/rector process src --config rector.php --dry-run
+```

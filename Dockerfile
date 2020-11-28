@@ -37,6 +37,8 @@ COPY . .
 # To warmup opcache a little
 RUN bin/rector list
 
+RUN chmod 777 -R /tmp
+
 ENTRYPOINT [ "rector" ]
 
 ENV PATH /rector/bin:$PATH
