@@ -166,6 +166,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->isNestedIfInLoop($if)) {
+            return true;
+        }
+
         return ! $this->isLastIfOrBeforeLastReturn($if);
     }
 
@@ -298,5 +302,27 @@ CODE_SAMPLE
             return true;
         }
         return $nextNode instanceof Return_;
+    }
+
+    private function isNestedIfInLoop(If_ $if): bool
+    {
+        $loopTypes = [Foreach_::class, For_::class, While_::class];
+
+        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
+        $isNestedIf = false;
+
+        while($parentNode) {
+            if ($parentNode instanceof If_) {
+                $isNestedIf = true;
+            }
+
+            if ($this->isTypes($parentNode, $loopTypes)) {
+                return $isNestedIf;
+            }
+
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
     }
 }
