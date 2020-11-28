@@ -1,4 +1,4 @@
-# 626 Rules Overview
+# 627 Rules Overview
 
 <br>
 
@@ -25,6 +25,8 @@
 - [DoctrineCodeQuality](#doctrinecodequality) (11)
 
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
+
+- [Downgrade](#downgrade) (1)
 
 - [DowngradePhp71](#downgradephp71) (6)
 
@@ -4782,6 +4784,44 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 -        return $this->parent;
 -    }
 +    use TreeNodeTrait;
+ }
+```
+
+<br>
+
+## Downgrade
+
+### ChangePhpVersionInPlatformCheckRector
+
+Change `vendor/composer/platform_check.php` to desired minimal PHP version
+
+:wrench: **configure it!**
+
+- class: `Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector`
+
+```php
+use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ChangePhpVersionInPlatformCheckRector::class)
+        ->call('configure', [[
+            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70100,
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $issues = [];
+
+-if (!(PHP_VERSION_ID >= 70300)) {
+-    $issues[] = 'Your Composer dependencies require a PHP version ">= 7.3.0". You are running ' . PHP_VERSION  .  '.';
++if (!(PHP_VERSION_ID >= 70100)) {
++    $issues[] = 'Your Composer dependencies require a PHP version ">= 7.1.0". You are running ' . PHP_VERSION  .  '.';
  }
 ```
 
@@ -12332,15 +12372,15 @@ Change if null check with nullsafe operator ?-> with full short circuiting
 ```diff
  class SomeClass
  {
-     public function f($o)
+     public function run($someObject)
      {
--        $o2 = $o->mayFail1();
--        if ($o2 === null) {
+-        $someObject2 = $someObject->mayFail1();
+-        if ($someObject2 === null) {
 -            return null;
 -        }
 -
--        return $o2->mayFail2();
-+        return $o->mayFail1()?->mayFail2();
+-        return $someObject2->mayFail2();
++        return $someObject->mayFail1()?->mayFail2();
      }
  }
 ```
