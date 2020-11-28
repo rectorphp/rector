@@ -308,21 +308,13 @@ CODE_SAMPLE
 
     private function isNestedIfInLoop(If_ $if): bool
     {
-        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
-        $isNestedIf = false;
+        $parent = $this->betterNodeFinder->findFirstParentInstanceOf($if, self::LOOP_TYPES + [If_::class]);
 
-        while($parentNode) {
-            if ($parentNode instanceof If_) {
-                $isNestedIf = true;
-            }
+        if ($parent instanceof If_) {
 
-            foreach(self::LOOP_TYPES as $loopType) {
-                if (is_a($parentNode, $loopType, true)) {
-                    return $isNestedIf;
-                }
-            }
+            $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf($parent, self::LOOP_TYPES);
 
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            return $parentLoop !== null;
         }
 
         return false;
