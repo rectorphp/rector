@@ -30,6 +30,7 @@ $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeCwdVendorAutoloadIfExists();
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
+$autoloadIncluder->autoloadComposerGlobalAutoloaerIfExists();
 $autoloadIncluder->autoloadFromCommandLine();
 
 $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
@@ -102,6 +103,14 @@ final class AutoloadIncluder
      * this autoloads the project vendor/autoload.php, including Rector
      */
     public function autoloadProjectAutoloaderFile(): void
+    {
+        $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../../autoload.php');
+    }
+
+    /**
+     * Experimental: In case Rector is installed as global composer dependency
+     */
+    public function autoloadComposerGlobalAutoloaerIfExists(): void
     {
         $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../../../autoload.php');
     }
