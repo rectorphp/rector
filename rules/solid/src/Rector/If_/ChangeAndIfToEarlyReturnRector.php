@@ -316,8 +316,10 @@ CODE_SAMPLE
                 $isNestedIf = true;
             }
 
-            if ($this->isTypes($parentNode, self::LOOP_TYPES)) {
-                return $isNestedIf;
+            foreach(self::LOOP_TYPES as $loopType) {
+                if (is_a($parentNode, $loopType, true)) {
+                    return $isNestedIf;
+                }
             }
 
             $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
