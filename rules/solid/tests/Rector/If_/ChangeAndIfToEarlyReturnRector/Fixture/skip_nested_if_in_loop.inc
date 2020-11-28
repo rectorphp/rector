@@ -5,7 +5,7 @@ namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 
-class SkipWithVarsUsedAfterIf
+class SkipNestedIfInLoop
 {
     private function refactorStmts(array $nodes): void
     {
