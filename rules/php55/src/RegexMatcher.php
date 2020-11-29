@@ -73,9 +73,9 @@ final class RegexMatcher
         return Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
     }
 
-    private function matchConcat(Expr $expr): ?Expr
+    private function matchConcat(Concat $concat): ?Expr
     {
-        $lastItem = $expr->right;
+        $lastItem = $concat->right;
         if (! $lastItem instanceof String_) {
             return null;
         }
@@ -92,6 +92,6 @@ final class RegexMatcher
         // replace last "e" in the code
         $lastItem->value = Strings::replace($lastItem->value, self::LAST_E_REGEX, '$1$2');
 
-        return $expr;
+        return $concat;
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\Configuration;
 
 use Jean85\PrettyVersions;
-use OndraM\CiDetector\CiDetector;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
@@ -72,11 +71,6 @@ final class Configuration
     private $paths = [];
 
     /**
-     * @var CiDetector
-     */
-    private $ciDetector;
-
-    /**
      * @var ParameterProvider
      */
     private $parameterProvider;
@@ -91,9 +85,8 @@ final class Configuration
      */
     private $configFileInfo;
 
-    public function __construct(CiDetector $ciDetector, ParameterProvider $parameterProvider)
+    public function __construct(ParameterProvider $parameterProvider)
     {
-        $this->ciDetector = $ciDetector;
         $this->isCacheEnabled = (bool) $parameterProvider->provideParameter(Option::ENABLE_CACHE);
         $this->fileExtensions = (array) $parameterProvider->provideParameter(Option::FILE_EXTENSIONS);
         $this->paths = (array) $parameterProvider->provideParameter(Option::PATHS);
@@ -162,10 +155,6 @@ final class Configuration
 
     public function showProgressBar(): bool
     {
-        if ($this->ciDetector->isCiDetected()) {
-            return false;
-        }
-
         if ($this->isCacheDebug) {
             return false;
         }
