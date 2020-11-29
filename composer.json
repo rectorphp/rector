@@ -299,7 +299,7 @@
             "vendor/bin/ecs check --fix --ansi",
             "vendor/bin/ecs check-markdown README.md --fix --ansi"
         ],
-        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
+        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify --debug",
         "phpstan-config": "vendor/bin/phpstan analyse config --ansi --error-format symplify",
         "changelog": [
             "vendor/bin/changelog-linker dump-merges --in-categories --ansi",
