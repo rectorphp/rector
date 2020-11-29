@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
-use Symfony\Component\Process\ProcessBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -48,7 +47,7 @@ final class ProcessBuilderInstanceRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isName($node->class, ProcessBuilder::class)) {
+        if (! $this->isName($node->class, 'Symfony\Component\Process\ProcessBuilder')) {
             return null;
         }
 

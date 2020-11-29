@@ -29,7 +29,6 @@
         "symfony/dependency-injection": "^4.4.8|^5.1",
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
-        "symfony/process": "^4.4.8|^5.1",
         "symplify/autowire-array-parameter": "dev-master",
         "symplify/skipper": "dev-master",
         "symplify/composer-json-manipulator": "dev-master",
