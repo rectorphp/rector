@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
-use OndraM\CiDetector\CiDetector;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
 use PhpParser\NodeFinder;
@@ -92,8 +91,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SmartFileSystem::class);
 
     $services->set(StringFormatConverter::class);
-
-    $services->set(CiDetector::class);
 
     $services->alias(EventDispatcherInterface::class, AutowiredEventDispatcher::class);
 

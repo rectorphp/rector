@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
@@ -101,11 +100,10 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 
     /**
      * @param MethodCall|StaticCall $node
-     * @param PropertyFetch $expr
      */
-    private function refactorPropertyFetchNode(Node $node, Expr $expr): void
+    private function refactorPropertyFetchNode(Node $node, PropertyFetch $propertyFetch): void
     {
-        $name = $this->getName($expr);
+        $name = $this->getName($propertyFetch);
         if ($name === null) {
             return;
         }
@@ -118,7 +116,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         $oldArgs = $node->args;
         unset($oldArgs[0]);
 
-        $newArgs = $this->createArgs([new String_($name), $expr->var]);
+        $newArgs = $this->createArgs([new String_($name), $propertyFetch->var]);
         $node->args = $this->appendArgs($newArgs, $oldArgs);
     }
 

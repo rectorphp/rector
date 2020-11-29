@@ -105,24 +105,24 @@ final class NameRenamer
     /**
      * @param Name|Identifier $usedNameNode
      */
-    private function renameParam(string $lastName, Node $parentNode, Node $usedNameNode): void
+    private function renameParam(string $lastName, Param $param, Node $usedNameNode): void
     {
-        if ($parentNode->type === null) {
+        if ($param->type === null) {
             return;
         }
-        if (! $this->nodeNameResolver->areNamesEqual($parentNode->type, $usedNameNode)) {
+        if (! $this->nodeNameResolver->areNamesEqual($param->type, $usedNameNode)) {
             return;
         }
-        $parentNode->type = new Name($lastName);
+        $param->type = new Name($lastName);
     }
 
     /**
      * @param Name|Identifier $usedNameNode
      */
-    private function renameNew(string $lastName, Node $parentNode, Node $usedNameNode): void
+    private function renameNew(string $lastName, New_ $new, Node $usedNameNode): void
     {
-        if ($this->nodeNameResolver->areNamesEqual($parentNode->class, $usedNameNode)) {
-            $parentNode->class = new Name($lastName);
+        if ($this->nodeNameResolver->areNamesEqual($new->class, $usedNameNode)) {
+            $new->class = new Name($lastName);
         }
     }
 
