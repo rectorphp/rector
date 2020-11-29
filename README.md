@@ -97,7 +97,7 @@ composer require rector/rector --dev
 There a 2 main ways to use Rector:
 
 - a *single rule*, to have the change under control - you can choose [from over 600 rules](/docs/rector_rules_overview.md)
-- or group of rules called *sets* - pick from [sets](/config/set)
+- or group of rules called *sets* - [pick from sets](/config/set)
 
 To use them, create a `rector.php` in your root directory:
 
