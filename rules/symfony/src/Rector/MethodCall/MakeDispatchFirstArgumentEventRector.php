@@ -109,6 +109,7 @@ CODE_SAMPLE
         return $methodCall;
     }
 
+<<<<<<< HEAD
     private function refactorGetCallFuncCall(
         MethodCall $methodCall,
         FuncCall $funcCall,
@@ -118,6 +119,14 @@ CODE_SAMPLE
             $getClassArgumentValue = $funcCall->args[0]->value;
 
             if ($this->areNodesEqual($firstArgumentValue, $getClassArgumentValue)) {
+=======
+    private function refactorGetCallFuncCall(MethodCall $methodCall, FuncCall $funcCall, Expr $expr): ?MethodCall
+    {
+        if ($this->isName($funcCall, 'get_class')) {
+            $getClassArgumentValue = $funcCall->args[0]->value;
+
+            if ($this->areNodesEqual($expr, $getClassArgumentValue)) {
+>>>>>>> 355986946... [ci-review] Rector Rectify
                 unset($methodCall->args[1]);
 
                 return $methodCall;
