@@ -109,15 +109,12 @@ CODE_SAMPLE
         return $methodCall;
     }
 
-    private function refactorGetCallFuncCall(
-        MethodCall $methodCall,
-        FuncCall $funcCall,
-        Expr $firstArgumentValue
-    ): ?MethodCall {
+    private function refactorGetCallFuncCall(MethodCall $methodCall, FuncCall $funcCall, Expr $expr): ?MethodCall
+    {
         if ($this->isName($funcCall, 'get_class')) {
             $getClassArgumentValue = $funcCall->args[0]->value;
 
-            if ($this->areNodesEqual($firstArgumentValue, $getClassArgumentValue)) {
+            if ($this->areNodesEqual($expr, $getClassArgumentValue)) {
                 unset($methodCall->args[1]);
 
                 return $methodCall;
