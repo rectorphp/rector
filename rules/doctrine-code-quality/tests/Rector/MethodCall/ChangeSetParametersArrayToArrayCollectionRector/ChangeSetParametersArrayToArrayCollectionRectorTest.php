@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\MethodCall\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\MethodCall\ChangeSetParametersArrayToArrayCollectionRector;
 
 use Iterator;
-use Rector\DoctrineCodeQuality\Rector\MethodCall\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector;
+use Rector\DoctrineCodeQuality\Rector\MethodCall\ChangeSetParametersArrayToArrayCollectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRectorTest extends AbstractRectorTestCase
+final class ChangeSetParametersArrayToArrayCollectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRec
 
     protected function getRectorClass(): string
     {
-        return ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector::class;
+        return ChangeSetParametersArrayToArrayCollectionRector::class;
     }
 }
