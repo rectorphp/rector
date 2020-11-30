@@ -1,0 +1,10 @@
+services:
+    -
+         class: Rector\PHPStanExtensions\Rule\RectorRuleAndValueObjectHaveSameStartsRule
+         tags: [phpstan.rules.rule]
+
+    - Symplify\PHPStanRules\Naming\SimpleNameResolver
+    - PhpParser\NodeFinder
+    - PhpParser\ConstExprEvaluator
+    - Rector\PHPStanExtensions\NodeAnalyzer\TypeAndNameAnalyzer
+    - Rector\PHPStanExtensions\NodeAnalyzer\SymfonyConfigRectorValueObjectResolver

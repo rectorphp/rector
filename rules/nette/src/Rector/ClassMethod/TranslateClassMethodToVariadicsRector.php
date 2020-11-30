@@ -14,9 +14,9 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/nette/utils/pull/178
@@ -32,11 +32,13 @@ final class TranslateClassMethodToVariadicsRector extends AbstractRector
      */
     private const PARAMETERS = 'parameters';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change translate() method call 2nd arg to variadic', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change translate() method call 2nd arg to variadic',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\Localization\ITranslator;
 
 final class SomeClass implements ITranslator
@@ -48,7 +50,7 @@ final class SomeClass implements ITranslator
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use Nette\Localization\ITranslator;
 
 final class SomeClass implements ITranslator
@@ -60,8 +62,9 @@ final class SomeClass implements ITranslator
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

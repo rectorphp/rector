@@ -10,6 +10,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Naming\Contract\RenameParamValueObjectInterface;
 
 final class ParamRename implements RenameParamValueObjectInterface
 {

@@ -1,5 +1,6 @@
 ---
 name: Bug Report
+labels: bug
 about: Report errors and problems
 ---
 

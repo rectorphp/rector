@@ -14,10 +14,10 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Assign\RemoveDoubleAssignRector\RemoveDoubleAssignRectorTest
@@ -34,9 +34,9 @@ final class RemoveDoubleAssignRector extends AbstractRector
         $this->scopeNestingComparator = $scopeNestingComparator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Simplify useless double assigns', [
+        return new RuleDefinition('Simplify useless double assigns', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 $value = 1;

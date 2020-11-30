@@ -7,9 +7,9 @@ namespace Rector\NetteTesterToPHPUnit\Rector\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteTesterToPHPUnit\AssertManipulator;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\NetteTesterPHPUnitRectorTest
@@ -26,9 +26,9 @@ final class NetteAssertToPHPUnitAssertRector extends AbstractRector
         $this->assertManipulator = $assertManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Migrate Nette/Assert calls to PHPUnit', [
+        return new RuleDefinition('Migrate Nette/Assert calls to PHPUnit', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use Tester\Assert;

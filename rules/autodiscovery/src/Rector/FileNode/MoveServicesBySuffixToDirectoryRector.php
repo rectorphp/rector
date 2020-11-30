@@ -10,8 +10,8 @@ use Rector\Autodiscovery\FileLocation\ExpectedFileLocationResolver;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Webmozart\Assert\Assert;
 
@@ -45,9 +45,9 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractRector impleme
         $this->expectedFileLocationResolver = $expectedFileLocationResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Move classes by their suffix to their own group/directory', [
+        return new RuleDefinition('Move classes by their suffix to their own group/directory', [
             new ConfiguredCodeSample(
                         <<<'CODE_SAMPLE'
 // file: app/Entity/ProductRepository.php

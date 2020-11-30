@@ -12,8 +12,8 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentPregDelimiterRector\ConsistentPregDelimiterRectorTest
@@ -66,9 +66,9 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Conf
      */
     private $delimiter = '#';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replace PREG delimiter with configured one', [
+        return new RuleDefinition('Replace PREG delimiter with configured one', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

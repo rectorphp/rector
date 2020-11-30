@@ -30,8 +30,8 @@ final class DowngradeNullableTypeReturnDeclarationRectorTest extends AbstractRec
         return DowngradeNullableTypeReturnDeclarationRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::BEFORE_NULLABLE_TYPE;
+        return PhpVersionFeature::NULLABLE_TYPE - 1;
     }
 }

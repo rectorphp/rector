@@ -8,17 +8,17 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\If_\RemoveAlwaysTrueIfConditionRector\RemoveAlwaysTrueIfConditionRectorTest
  */
 final class RemoveAlwaysTrueIfConditionRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove if condition that is always true', [
+        return new RuleDefinition('Remove if condition that is always true', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
@@ -28,7 +28,7 @@ final class SomeClass
         if (1 === 1) {
             return 'yes';
         }
-        
+
         return 'no';
     }
 }
@@ -40,7 +40,7 @@ final class SomeClass
     public function go()
     {
         return 'yes';
-        
+
         return 'no';
     }
 }

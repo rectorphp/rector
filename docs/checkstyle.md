@@ -23,7 +23,7 @@ jobs:
         steps:
             -   uses: actions/checkout@v2
 
-            -   uses: shivammathur/setup-php@v1
+            -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.2
                     coverage: none

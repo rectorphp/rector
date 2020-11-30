@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PostRector\Collector\NodesToAddCollector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * This class collects all to-be-added expresssions (= 1 line in code)
@@ -41,23 +42,41 @@ final class NodeAddingPostRector extends AbstractPostRector
      */
     public function leaveNode(Node $node)
     {
+        $newNodes = [$node];
+
         $nodesToAddAfter = $this->nodesToAddCollector->getNodesToAddAfterNode($node);
         if ($nodesToAddAfter !== []) {
             $this->nodesToAddCollector->clearNodesToAddAfter($node);
-            return array_merge([$node], $nodesToAddAfter);
+            $newNodes = array_merge($newNodes, $nodesToAddAfter);
         }
 
         $nodesToAddBefore = $this->nodesToAddCollector->getNodesToAddBeforeNode($node);
         if ($nodesToAddBefore !== []) {
             $this->nodesToAddCollector->clearNodesToAddBefore($node);
-            return array_merge($nodesToAddBefore, [$node]);
+            $newNodes = array_merge($nodesToAddBefore, $newNodes);
         }
 
-        return $node;
+        if ($newNodes === [$node]) {
+            return $node;
+        }
+
+        return $newNodes;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Post Rector that adds nodes');
+        return new RuleDefinition('Post Rector that adds nodes',
+        [
+            new CodeSample(
+            <<<'CODE_SAMPLE'
+$value = 1000;
+CODE_SAMPLE
+            ,
+            <<<'CODE_SAMPLE'
+$string = new String_(...);
+$value = 1000;
+CODE_SAMPLE
+            ),
+        ]);
     }
 }

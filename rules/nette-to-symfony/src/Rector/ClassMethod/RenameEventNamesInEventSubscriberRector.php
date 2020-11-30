@@ -14,11 +14,11 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteToSymfony\Event\EventInfosFactory;
 use Rector\NetteToSymfony\ValueObject\EventInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/contributte/event-dispatcher-extra/blob/master/.docs/README.md#bridge-wrench
@@ -39,11 +39,13 @@ final class RenameEventNamesInEventSubscriberRector extends AbstractRector
         $this->symfonyClassConstWithAliases = $eventInfosFactory->create();
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes event names from Nette ones to Symfony ones', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Changes event names from Nette ones to Symfony ones',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class SomeClass implements EventSubscriberInterface
@@ -54,8 +56,8 @@ final class SomeClass implements EventSubscriberInterface
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class SomeClass implements EventSubscriberInterface
@@ -66,8 +68,9 @@ final class SomeClass implements EventSubscriberInterface
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

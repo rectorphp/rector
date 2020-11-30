@@ -104,6 +104,15 @@ final class NodeFactory
     }
 
     /**
+     * Creates "SomeClass::CONSTANT"
+     */
+    public function createShortClassConstFetch(string $shortClassName, string $constantName): ClassConstFetch
+    {
+        $name = new Name($shortClassName);
+        return $this->createClassConstFetchFromName($name, $constantName);
+    }
+
+    /**
      * Creates "\SomeClass::CONSTANT"
      */
     public function createClassConstFetch(string $className, string $constantName): ClassConstFetch
@@ -112,10 +121,7 @@ final class NodeFactory
             $className
         ) : new FullyQualified($className);
 
-        $classConstFetchNode = $this->builderFactory->classConstFetch($classNameNode, $constantName);
-        $classConstFetchNode->class->setAttribute(AttributeKey::RESOLVED_NAME, $classNameNode);
-
-        return $classConstFetchNode;
+        return $this->createClassConstFetchFromName($classNameNode, $constantName);
     }
 
     /**
@@ -423,6 +429,28 @@ final class NodeFactory
         }
 
         return $uses;
+    }
+
+    public function createStaticCall(string $class, string $method): StaticCall
+    {
+        return new StaticCall(new Name($class), $method);
+    }
+
+    /**
+     * @param mixed[] $arguments
+     */
+    public function createFuncCall(string $name, array $arguments): FuncCall
+    {
+        $arguments = $this->createArgs($arguments);
+        return new FuncCall(new Name($name), $arguments);
+    }
+
+    private function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
+    {
+        $classConstFetchNode = $this->builderFactory->classConstFetch($className, $constantName);
+        $classConstFetchNode->class->setAttribute(AttributeKey::RESOLVED_NAME, (string) $className);
+
+        return $classConstFetchNode;
     }
 
     /**

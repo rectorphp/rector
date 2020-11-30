@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector\ActionSuffixRemoverRectorTest
@@ -35,11 +35,13 @@ final class ActionSuffixRemoverRector extends AbstractRector
         $this->identifierManipulator = $identifierManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Removes Action suffixes from methods in Symfony Controllers', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Removes Action suffixes from methods in Symfony Controllers',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeController
 {
     public function indexAction()
@@ -47,8 +49,8 @@ class SomeController
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeController
 {
     public function index()
@@ -56,8 +58,9 @@ class SomeController
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

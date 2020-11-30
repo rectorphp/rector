@@ -7,8 +7,9 @@ namespace Rector\Naming\Guard;
 use DateTimeInterface;
 use Nette\Utils\Strings;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
-use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 

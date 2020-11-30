@@ -13,8 +13,8 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertRegExpRector\AssertRegExpRectorTest
@@ -41,9 +41,9 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
      */
     private const ASSERT_NOT_EQUALS = 'assertNotEquals';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase',
             [
                 new CodeSample(

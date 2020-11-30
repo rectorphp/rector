@@ -47,7 +47,8 @@ final class OverrideGuard
                 continue;
             }
 
-            return ! $this->symfonyStyle->confirm('Files for this rule already exist. Should we override them?');
+            $message = sprintf('Files for "%s" rule already exist. Should we override them?', $rectorRecipe->getName());
+            return ! $this->symfonyStyle->confirm($message);
         }
 
         return false;

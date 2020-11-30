@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/4160
@@ -31,11 +31,13 @@ final class UseSpecificWillMethodRector extends AbstractPHPUnitRector
         'throwException' => 'willThrowException',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes ->will($this->xxx()) to one specific method', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Changes ->will($this->xxx()) to one specific method',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     public function test()
@@ -48,8 +50,8 @@ class SomeClass extends PHPUnit\Framework\TestCase
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     public function test()
@@ -62,8 +64,9 @@ class SomeClass extends PHPUnit\Framework\TestCase
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

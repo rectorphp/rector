@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -19,20 +19,23 @@ use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
  */
 final class DefluentReturnMethodCallRector extends AbstractFluentChainMethodCallRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns return of fluent, to standalone call line and return of value', [
-            new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Turns return of fluent, to standalone call line and return of value',
+            [
+                new CodeSample(<<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 return $someClass->someFunction();
 CODE_SAMPLE
-            , <<<'CODE_SAMPLE'
+                , <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 $someClass->someFunction();
 return $someClass;
 CODE_SAMPLE
         ),
-        ]);
+
+            ]);
     }
 
     /**

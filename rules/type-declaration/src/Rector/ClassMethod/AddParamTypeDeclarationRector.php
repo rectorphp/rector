@@ -15,11 +15,11 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -47,9 +47,9 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
         $this->typeComparator = $typeComparator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add param types where needed', [
+        return new RuleDefinition('Add param types where needed', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

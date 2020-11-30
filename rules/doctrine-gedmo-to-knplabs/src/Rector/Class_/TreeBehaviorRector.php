@@ -16,9 +16,9 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TreeRootTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TreeTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/Atlantic18/DoctrineExtensions/blob/v2.4.x/doc/tree.md
@@ -38,11 +38,13 @@ final class TreeBehaviorRector extends AbstractRector
         $this->classInsertManipulator = $classInsertManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -111,7 +113,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface;
 use Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait;
 
@@ -120,8 +122,9 @@ class SomeClass implements TreeNodeInterface
     use TreeNodeTrait;
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

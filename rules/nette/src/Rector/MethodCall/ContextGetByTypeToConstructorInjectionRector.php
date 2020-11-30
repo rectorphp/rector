@@ -7,10 +7,10 @@ namespace Rector\Nette\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -19,9 +19,9 @@ use Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector;
  */
 final class ContextGetByTypeToConstructorInjectionRector extends AbstractToConstructorInjectionRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Move dependency get via $context->getByType() to constructor injection',
             [
                 new CodeSample(

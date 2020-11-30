@@ -10,11 +10,11 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -34,9 +34,9 @@ final class CompleteMissingDependencyInNewRector extends AbstractRector implemen
      */
     private $classToInstantiateByType = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Complete missing constructor dependency instance by type', [
+        return new RuleDefinition('Complete missing constructor dependency instance by type', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

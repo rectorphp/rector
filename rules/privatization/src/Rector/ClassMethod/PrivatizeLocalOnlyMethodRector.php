@@ -11,11 +11,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodVisibilityVendorLockResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\PrivatizeLocalOnlyMethodRectorTest
@@ -52,9 +52,9 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements Zer
         $this->classMethodExternalCallNodeAnalyzer = $classMethodExternalCallNodeAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Privatize local-only use methods', [
+        return new RuleDefinition('Privatize local-only use methods', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

@@ -22,9 +22,9 @@ use Rector\CodingStyle\Node\ConcatManipulator;
 use Rector\CodingStyle\ValueObject\ConcatExpressionJoinData;
 use Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -61,9 +61,9 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
         $this->concatManipulator = $concatManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add extra space before new assign set', [
+        return new RuleDefinition('Add extra space before new assign set', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

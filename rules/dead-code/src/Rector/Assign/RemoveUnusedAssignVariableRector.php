@@ -9,13 +9,13 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\NodeFinder\NextVariableUsageNodeFinder;
 use Rector\DeadCode\NodeFinder\PreviousVariableAssignNodeFinder;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedAssignVariableRector\RemoveUnusedAssignVariableRectorTest
@@ -62,9 +62,9 @@ final class RemoveUnusedAssignVariableRector extends AbstractRector
         return [Assign::class];
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove assigned unused variable', [
+        return new RuleDefinition('Remove assigned unused variable', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

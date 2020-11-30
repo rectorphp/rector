@@ -21,7 +21,6 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
     public function test(SmartFileInfo $fileInfo): void
     {
         $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
-
         $this->setParameter(Option::IMPORT_SHORT_CLASSES, false);
 
         $this->doTestFileInfo($fileInfo);

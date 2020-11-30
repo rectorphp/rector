@@ -12,9 +12,9 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
@@ -33,9 +33,9 @@ final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
      */
     private $getStatusCodeMethodCall;
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Simplify use of assertions in WebTestCase', [
+        return new RuleDefinition('Simplify use of assertions in WebTestCase', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;

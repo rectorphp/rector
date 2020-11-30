@@ -15,9 +15,9 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsToSameRector\AssertEqualsToSameRectorTest
@@ -50,9 +50,9 @@ final class AssertEqualsToSameRector extends AbstractPHPUnitRector
         $this->identifierManipulator = $identifierManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns `assertEquals()` into stricter `assertSame()` for scalar values in PHPUnit TestCase',
             [
                 new CodeSample(

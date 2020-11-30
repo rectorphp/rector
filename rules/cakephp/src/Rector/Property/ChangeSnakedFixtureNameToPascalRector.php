@@ -9,10 +9,10 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToPascal\ChangeSnakedFixtureNameToPascalTest
@@ -21,9 +21,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ChangeSnakedFixtureNameToPascalRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes $fixtues style from snake_case to PascalCase.', [
+        return new RuleDefinition('Changes $fixtues style from snake_case to PascalCase.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeTest

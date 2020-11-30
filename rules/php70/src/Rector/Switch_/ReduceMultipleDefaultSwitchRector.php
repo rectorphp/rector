@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/iGDVW
@@ -21,11 +21,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ReduceMultipleDefaultSwitchRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove first default switch, that is ignored', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Remove first default switch, that is ignored',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 switch ($expr) {
     default:
          echo "Hello World";
@@ -35,16 +37,17 @@ switch ($expr) {
          break;
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 switch ($expr) {
     default:
          echo "Goodbye Moon!";
          break;
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

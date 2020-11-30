@@ -49,7 +49,7 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param class-string|class-string[] $type
+     * @param string|string[] $type
      */
     public function findFirstParentInstanceOf(Node $node, $type): ?Node
     {
@@ -292,7 +292,7 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param class-string[] $types
+     * @param string[] $types
      */
     private function isTypes(Node $node, array $types): bool
     {

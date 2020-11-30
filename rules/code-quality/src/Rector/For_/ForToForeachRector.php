@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\For_;
 
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -18,18 +19,24 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\ForToForeachRectorTest
  */
 final class ForToForeachRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const COUNT = 'count';
+
     /**
      * @var AssignManipulator
      */
@@ -53,6 +60,11 @@ final class ForToForeachRector extends AbstractRector
     /**
      * @var Expr|null
      */
+    private $countValueVariable;
+
+    /**
+     * @var Expr|null
+     */
     private $iteratedExpr;
 
     public function __construct(AssignManipulator $assignManipulator, Inflector $inflector)
@@ -61,9 +73,9 @@ final class ForToForeachRector extends AbstractRector
         $this->inflector = $inflector;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change for() to foreach() where useful', [
+        return new RuleDefinition('Change for() to foreach() where useful', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
@@ -138,6 +150,23 @@ CODE_SAMPLE
             return null;
         }
 
+        $init = $node->init;
+        if (count($init) > 2) {
+            return null;
+        }
+
+        if ($this->isCountValueVariableUsedInsideForStatements($node)) {
+            return null;
+        }
+
+        if ($this->isAssignmentWithArrayDimFetchAsVariableInsideForStatements($node)) {
+            return null;
+        }
+
+        if ($this->isArrayWithKeyValueNameUnsetted($node)) {
+            return null;
+        }
+
         $iteratedVariableSingle = $this->inflector->singularize($iteratedVariable);
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
@@ -149,6 +178,7 @@ CODE_SAMPLE
     private function reset(): void
     {
         $this->keyValueName = null;
+        $this->countValueVariable = null;
         $this->countValueName = null;
         $this->iteratedExpr = null;
     }
@@ -167,7 +197,8 @@ CODE_SAMPLE
                 $this->keyValueName = $this->getName($initExpr->var);
             }
 
-            if ($this->isFuncCallName($initExpr->expr, 'count')) {
+            if ($this->isFuncCallName($initExpr->expr, self::COUNT)) {
+                $this->countValueVariable = $initExpr->var;
                 $this->countValueName = $this->getName($initExpr->var);
                 $this->iteratedExpr = $initExpr->expr->args[0]->value;
             }
@@ -192,7 +223,7 @@ CODE_SAMPLE
         }
 
         // count($values)
-        if ($this->isFuncCallName($condExprs[0]->right, 'count')) {
+        if ($this->isFuncCallName($condExprs[0]->right, self::COUNT)) {
             /** @var FuncCall $countFuncCall */
             $countFuncCall = $condExprs[0]->right;
             $this->iteratedExpr = $countFuncCall->args[0]->value;
@@ -221,6 +252,41 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function isCountValueVariableUsedInsideForStatements(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node): bool {
+                return $this->areNodesEqual($this->countValueVariable, $node);
+            }
+        );
+    }
+
+    private function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node): bool {
+                return $node instanceof Assign && $node->var instanceof ArrayDimFetch && $this->isVariableName(
+                    $node->var->dim,
+                    $this->keyValueName
+                );
+            }
+        );
+    }
+
+    private function isArrayWithKeyValueNameUnsetted(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node): bool {
+                /** @var Node $parent */
+                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+                return $parent instanceof Unset_ && $node instanceof ArrayDimFetch;
+            }
+        );
     }
 
     private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
@@ -264,6 +330,10 @@ CODE_SAMPLE
                 return null;
             }
 
+            if ($this->isArgParentCount($parentNode)) {
+                return null;
+            }
+
             // is dim same as key value name, ...[$i]
             if (! $this->isVariableName($node->dim, $this->keyValueName)) {
                 return null;
@@ -294,6 +364,19 @@ CODE_SAMPLE
             }
 
             return $this->isName($condExprs[0]->right, $keyValueName);
+        }
+
+        return false;
+    }
+
+    private function isArgParentCount(?Node $node): bool
+    {
+        if ($node instanceof Arg) {
+            /** @var Node $parentNode */
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($this->isFuncCallName($parentNode, self::COUNT)) {
+                return true;
+            }
         }
 
         return false;

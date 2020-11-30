@@ -14,8 +14,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\ClassMethod\NewlineBeforeNewAssignSetRector\NewlineBeforeNewAssignSetRectorTest
@@ -32,9 +32,9 @@ final class NewlineBeforeNewAssignSetRector extends AbstractRector
      */
     private $previousPreviousStmtVariableName;
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add extra space before new assign set', [
+        return new RuleDefinition('Add extra space before new assign set', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

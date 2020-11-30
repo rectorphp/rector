@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector\RemoveDuplicatedInstanceOfRectorTest
@@ -23,9 +23,9 @@ final class RemoveDuplicatedInstanceOfRector extends AbstractRector
      */
     private $duplicatedInstanceOfs = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove duplicated instanceof in one call', [
+        return new RuleDefinition('Remove duplicated instanceof in one call', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

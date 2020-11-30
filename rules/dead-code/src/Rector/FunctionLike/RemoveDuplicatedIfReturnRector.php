@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\NodeCollector\ModifiedVariableNamesCollector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/rectorphp/rector/issues/2945
@@ -40,11 +40,13 @@ final class RemoveDuplicatedIfReturnRector extends AbstractRector
         $this->modifiedVariableNamesCollector = $modifiedVariableNamesCollector;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove duplicated if stmt with return in function/method body', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Remove duplicated if stmt with return in function/method body',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -62,7 +64,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -75,8 +77,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

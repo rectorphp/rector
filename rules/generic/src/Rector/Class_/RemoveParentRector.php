@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Generic\Tests\Rector\Class_\RemoveParentRector\RemoveParentRectorTest
@@ -28,9 +28,9 @@ final class RemoveParentRector extends AbstractRector implements ConfigurableRec
      */
     private $parentClassesToRemove = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Removes extends class by name', [
+        return new RuleDefinition('Removes extends class by name', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass extends SomeParentClass

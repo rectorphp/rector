@@ -13,7 +13,7 @@ use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PropertyRenameFactoryTest extends AbstractKernelTestCase

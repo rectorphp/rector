@@ -18,12 +18,12 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -63,9 +63,9 @@ final class SingleStaticServiceToDynamicRector extends AbstractRector implements
         $this->staticCallPresenceAnalyzer = $staticCallPresenceAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change full static service, to dynamic one', [
+        return new RuleDefinition('Change full static service, to dynamic one', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class AnotherClass

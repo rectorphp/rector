@@ -14,10 +14,10 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\NewObjectToFactoryCreateRectorTest
@@ -34,9 +34,9 @@ final class NewObjectToFactoryCreateRector extends AbstractRector implements Con
      */
     private $objectToFactoryMethod = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replaces creating object instances with "new" keyword with factory method.', [
+        return new RuleDefinition('Replaces creating object instances with "new" keyword with factory method.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

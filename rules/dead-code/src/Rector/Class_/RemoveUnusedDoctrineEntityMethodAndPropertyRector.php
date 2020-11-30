@@ -15,11 +15,11 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagVal
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\DeadCode\UnusedNodeResolver\ClassUnusedPrivateClassMethodResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -57,11 +57,13 @@ final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRe
         $this->doctrineEntityManipulator = $doctrineEntityManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Removes unused methods and properties from Doctrine entity classes', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Removes unused methods and properties from Doctrine entity classes',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -85,8 +87,8 @@ class UserEntity
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -96,8 +98,9 @@ class UserEntity
 {
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

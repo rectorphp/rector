@@ -12,7 +12,6 @@ use Rector\Utils\PHPStanStaticTypeMapperChecker\Finder\PHPStanTypeClassFinder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 
 final class CheckStaticTypeMappersCommand extends AbstractCommand
@@ -49,7 +48,6 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[DEV] check PHPStan types to TypeMappers');
     }
 

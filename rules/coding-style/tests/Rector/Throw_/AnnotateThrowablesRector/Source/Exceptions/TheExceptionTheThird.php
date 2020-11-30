@@ -4,4 +4,4 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions;
 
-class TheExceptionTheThird extends \RuntimeException {}
+class TheExceptionTheThird extends \Exception {}

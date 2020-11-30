@@ -6,7 +6,7 @@ namespace Rector\Core\Tests\PhpParser\Printer;
 
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 

@@ -13,9 +13,9 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/laravel/framework/pull/27276
@@ -38,11 +38,13 @@ final class RequestStaticValidateToInjectRector extends AbstractRector
         $this->classMethodManipulator = $classMethodManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change static validate() method to $request->validate()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change static validate() method to $request->validate()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Illuminate\Http\Request;
 
 class SomeClass
@@ -53,8 +55,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Illuminate\Http\Request;
 
 class SomeClass
@@ -65,8 +67,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

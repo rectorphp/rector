@@ -12,9 +12,9 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Mostly mimics source from
@@ -34,11 +34,13 @@ final class FixClassCaseSensitivityNameRector extends AbstractRector
         $this->reflectionProvider = $reflectionProvider;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change miss-typed case sensitivity name to correct one', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change miss-typed case sensitivity name to correct one',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -52,7 +54,7 @@ final class AnotherClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -65,8 +67,9 @@ final class AnotherClass
 {
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

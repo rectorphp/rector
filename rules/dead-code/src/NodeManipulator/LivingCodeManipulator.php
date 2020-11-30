@@ -29,9 +29,29 @@ use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Stmt\Expression;
+use Rector\PostRector\Collector\NodesToAddCollector;
 
 final class LivingCodeManipulator
 {
+    /**
+     * @var NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+
+    public function __construct(NodesToAddCollector $nodesToAddCollector)
+    {
+        $this->nodesToAddCollector = $nodesToAddCollector;
+    }
+
+    public function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
+    {
+        $livinExprs = $this->keepLivingCodeFromExpr($expr);
+        foreach ($livinExprs as $expr) {
+            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
+        }
+    }
+
     /**
      * @param Node|int|string|null $expr
      * @return Expr[]|mixed[]
@@ -137,8 +157,11 @@ final class LivingCodeManipulator
      */
     private function processIsset(Isset_ $isset): array
     {
-        return array_merge(...array_map(function (Expr $expr): array {
-            return $this->keepLivingCodeFromExpr($expr);
-        }, $isset->vars));
+        $livingExprs = [];
+        foreach ($isset->vars as $expr) {
+            $livingExprs = array_merge($livingExprs, $this->keepLivingCodeFromExpr($expr));
+        }
+
+        return $livingExprs;
     }
 }

@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\FuncCall\FunctionCallToConstantRector\FunctionCallToConstantRectorTest
@@ -28,9 +28,9 @@ final class FunctionCallToConstantRector extends AbstractRector implements Confi
      */
     private $functionsToConstants = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes use of function calls to use constants', [
+        return new RuleDefinition('Changes use of function calls to use constants', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

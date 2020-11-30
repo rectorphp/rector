@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\Configuration;
 
 use Jean85\PrettyVersions;
-use OndraM\CiDetector\CiDetector;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
@@ -72,16 +71,6 @@ final class Configuration
     private $paths = [];
 
     /**
-     * @var CiDetector
-     */
-    private $ciDetector;
-
-    /**
-     * @var OnlyRuleResolver
-     */
-    private $onlyRuleResolver;
-
-    /**
      * @var ParameterProvider
      */
     private $parameterProvider;
@@ -96,21 +85,11 @@ final class Configuration
      */
     private $configFileInfo;
 
-    /**
-     * @var string|null
-     */
-    private $onlyRector;
-
-    public function __construct(
-        CiDetector $ciDetector,
-        OnlyRuleResolver $onlyRuleResolver,
-        ParameterProvider $parameterProvider
-    ) {
-        $this->ciDetector = $ciDetector;
+    public function __construct(ParameterProvider $parameterProvider)
+    {
         $this->isCacheEnabled = (bool) $parameterProvider->provideParameter(Option::ENABLE_CACHE);
         $this->fileExtensions = (array) $parameterProvider->provideParameter(Option::FILE_EXTENSIONS);
         $this->paths = (array) $parameterProvider->provideParameter(Option::PATHS);
-        $this->onlyRuleResolver = $onlyRuleResolver;
         $this->parameterProvider = $parameterProvider;
     }
 
@@ -130,12 +109,6 @@ final class Configuration
         $this->outputFile = $this->sanitizeOutputFileValue($outputFileOption);
 
         $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
-
-        /** @var string|null $onlyRector */
-        $onlyRector = $input->getOption(Option::OPTION_ONLY);
-        if ($onlyRector !== null) {
-            $this->setOnlyRector($onlyRector);
-        }
 
         $commandLinePaths = (array) $input->getArgument(Option::SOURCE);
         // manual command line value has priority
@@ -182,10 +155,6 @@ final class Configuration
 
     public function showProgressBar(): bool
     {
-        if ($this->ciDetector->isCiDetected()) {
-            return false;
-        }
-
         if ($this->isCacheDebug) {
             return false;
         }
@@ -210,11 +179,6 @@ final class Configuration
     public function mustMatchGitDiff(): bool
     {
         return $this->mustMatchGitDiff;
-    }
-
-    public function getOnlyRector(): ?string
-    {
-        return $this->onlyRector;
     }
 
     public function getOutputFile(): ?string
@@ -316,10 +280,5 @@ final class Configuration
         }
 
         return $outputFileOption;
-    }
-
-    private function setOnlyRector(string $rector): void
-    {
-        $this->onlyRector = $this->onlyRuleResolver->resolve($rector);
     }
 }

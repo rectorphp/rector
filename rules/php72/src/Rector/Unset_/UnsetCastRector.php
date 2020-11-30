@@ -9,18 +9,18 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\Unset_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Php72\Tests\Rector\Unset_\UnsetCastRector\UnsetCastRectorTest
  */
 final class UnsetCastRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Removes (unset) cast', [
+        return new RuleDefinition('Removes (unset) cast', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 $different = (unset) $value;

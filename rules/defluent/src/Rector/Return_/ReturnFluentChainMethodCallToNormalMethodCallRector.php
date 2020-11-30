@@ -8,12 +8,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Defluent\NodeFactory\ReturnFluentMethodCallFactory;
 use Rector\Defluent\NodeFactory\SeparateReturnMethodCallFactory;
 use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
 use Rector\Defluent\ValueObjectFactory\FluentMethodCallsFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/
@@ -48,24 +48,27 @@ final class ReturnFluentChainMethodCallToNormalMethodCallRector extends Abstract
         $this->separateReturnMethodCallFactory = $separateReturnMethodCallFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns fluent interface calls to classic ones.', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Turns fluent interface calls to classic ones.',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 return $someClass->someFunction()
             ->otherFunction();
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 $someClass->someFunction();
 $someClass->otherFunction();
 return $someClass;
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

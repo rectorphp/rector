@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Symfony\Component\HttpFoundation\Request;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://doc.nette.org/en/2.4/http-request-response
@@ -32,11 +32,13 @@ final class FromHttpRequestGetHeaderToHeadersGetRector extends AbstractRector
         $this->classMethodManipulator = $classMethodManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes getHeader() to $request->headers->get()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Changes getHeader() to $request->headers->get()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\Request;
 
 final class SomeController
@@ -47,8 +49,8 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Nette\Request;
 
 final class SomeController
@@ -59,8 +61,9 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

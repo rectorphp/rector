@@ -9,11 +9,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Can cover these cases:
@@ -47,9 +47,9 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
         $this->classChildAnalyzer = $classChildAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns non-private properties with `@annotation` to private properties and constructor injection',
             [
                 new CodeSample(

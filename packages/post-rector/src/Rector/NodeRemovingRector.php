@@ -9,9 +9,10 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class NodeRemovingRector extends AbstractPostRector
 {
@@ -31,9 +32,20 @@ final class NodeRemovingRector extends AbstractPostRector
         $this->nodeFactory = $nodeFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('PostRector that removes nodes');
+        return new RuleDefinition('PostRector that removes nodes', [
+            new CodeSample(
+                    <<<'CODE_SAMPLE'
+$value = 1000;
+$string = new String_(...);
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+$value = 1000;
+CODE_SAMPLE
+                ),
+        ]);
     }
 
     public function getPriority(): int

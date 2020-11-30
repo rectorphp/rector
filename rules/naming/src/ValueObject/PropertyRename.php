@@ -7,6 +7,7 @@ namespace Rector\Naming\ValueObject;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
+use Rector\Naming\Contract\RenamePropertyValueObjectInterface;
 
 final class PropertyRename implements RenamePropertyValueObjectInterface
 {
@@ -59,6 +60,11 @@ final class PropertyRename implements RenamePropertyValueObjectInterface
     public function getProperty(): Property
     {
         return $this->property;
+    }
+
+    public function isPrivateProperty(): bool
+    {
+        return $this->property->isPrivate();
     }
 
     public function getExpectedName(): string

@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -19,11 +19,13 @@ use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
  */
 final class OrderClassConstantsByIntegerValueRector extends AbstractConstantPropertyMethodOrderRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Order class constant order by their integer value', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Order class constant order by their integer value',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     const MODE_ON = 0;
@@ -34,7 +36,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     const MODE_ON = 0;
@@ -44,8 +46,9 @@ class SomeClass
     const MODE_OFF = 2;
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

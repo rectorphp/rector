@@ -11,8 +11,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/dmHCC
@@ -21,9 +21,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class InlineIfToExplicitIfRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change inline if to explicit if', [
+        return new RuleDefinition('Change inline if to explicit if', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

@@ -86,9 +86,12 @@ final class FirstAssignFluentCall implements RootExprAwareInterface, FirstCallFa
         return $firstAssign->var;
     }
 
-    public function getFluentMethodCalls(): FluentMethodCalls
+    /**
+     * @return MethodCall[]
+     */
+    public function getFluentMethodCalls(): array
     {
-        return $this->fluentMethodCalls;
+        return $this->fluentMethodCalls->getFluentMethodCalls();
     }
 
     private function getFirstAssign(): ?Assign

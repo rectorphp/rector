@@ -19,12 +19,12 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteToSymfony\Collector\OnFormVariableMethodCallsCollector;
 use Rector\NetteToSymfony\NodeFactory\SymfonyControllerFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ExtraFileCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -52,10 +52,10 @@ final class FormControlToControllerAndFormTypeRector extends AbstractRector
         $this->symfonyControllerFactory = $symfonyControllerFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change Form that extends Control to Controller and decoupled FormType', [
-            new CodeSample(
+        return new RuleDefinition('Change Form that extends Control to Controller and decoupled FormType', [
+            new ExtraFileCodeSample(
                 <<<'CODE_SAMPLE'
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Control;
@@ -113,6 +113,7 @@ class SomeFormType extends AbstractType
 }
 CODE_SAMPLE
             ),
+
         ]);
     }
 

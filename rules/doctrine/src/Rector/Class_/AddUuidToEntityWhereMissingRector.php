@@ -7,11 +7,11 @@ namespace Rector\Doctrine\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
 use Rector\Doctrine\Provider\EntityWithMissingUuidProvider;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -47,9 +47,9 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
         $this->entityWithMissingUuidProvider = $entityWithMissingUuidProvider;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Adds $uuid property to entities, that already have $id with integer type.' .
             'Require for step-by-step migration from int to uuid. ' .
             'In following step it should be renamed to $id and replace it', [

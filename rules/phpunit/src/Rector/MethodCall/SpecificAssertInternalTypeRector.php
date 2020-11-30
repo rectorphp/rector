@@ -11,8 +11,8 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Php\TypeAnalyzer;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/blob/master/ChangeLog-8.0.md
@@ -49,9 +49,9 @@ final class SpecificAssertInternalTypeRector extends AbstractPHPUnitRector
         $this->typeAnalyzer = $typeAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change assertInternalType()/assertNotInternalType() method to new specific alternatives',
             [
                 new CodeSample(

@@ -16,11 +16,11 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -59,9 +59,9 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
         $this->phpDocTypeRenamer = $phpDocTypeRenamer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
+        return new RuleDefinition('Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
             new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 /** @var Some_Chicken $someService */

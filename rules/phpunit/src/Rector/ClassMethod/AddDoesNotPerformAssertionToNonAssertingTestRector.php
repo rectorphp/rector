@@ -11,12 +11,12 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Reflection\ClassMethodReflectionFactory;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -75,11 +75,13 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
         $this->classMethodReflectionFactory = $classMethodReflectionFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Tests without assertion will have @doesNotPerformAssertion', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Tests without assertion will have @doesNotPerformAssertion',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     public function test()
@@ -88,8 +90,8 @@ class SomeClass extends PHPUnit\Framework\TestCase
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     /**
@@ -101,8 +103,9 @@ class SomeClass extends PHPUnit\Framework\TestCase
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

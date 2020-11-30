@@ -12,9 +12,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/shopsys/shopsys/pull/524
@@ -40,21 +40,24 @@ final class PHPStormVarAnnotationRector extends AbstractRector
      */
     private const VARIABLE_NAME_AND_TYPE_MATCH_REGEX = '#(?<variableName>\$\w+)(?<space>\s+)(?<type>[\\\\\w]+)#';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change various @var annotation formats to one PHPStorm understands', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change various @var annotation formats to one PHPStorm understands',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 $config = 5;
 /** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 /** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
 $config = 5;
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**
@@ -127,9 +130,9 @@ CODE_SAMPLE
 
     private function getDocContent(Node $node): string
     {
-        if ($node->getDocComment() !== null) {
-            return $node->getDocComment()
-                ->getText();
+        $docComment = $node->getDocComment();
+        if ($docComment !== null) {
+            return $docComment->getText();
         }
 
         if ($node->getComments() !== []) {

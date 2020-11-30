@@ -45,14 +45,12 @@ final class FunctionAnnotationResolver
     public function extractFunctionAnnotatedThrows(ReflectionFunction $reflectionFunction): array
     {
         $docComment = $reflectionFunction->getDocComment();
-
         if (! is_string($docComment)) {
             return [];
         }
 
-        $annotatedThrownClasses = $this->phpDocTagsFinder->extractTagsFromStringedDocblock($docComment, '@throws');
-
-        return $this->expandAnnotatedClasses($reflectionFunction, $annotatedThrownClasses);
+        $throwsTypes = $this->phpDocTagsFinder->extractTrowsTypesFromDocBlock($docComment);
+        return $this->expandAnnotatedClasses($reflectionFunction, $throwsTypes);
     }
 
     /**

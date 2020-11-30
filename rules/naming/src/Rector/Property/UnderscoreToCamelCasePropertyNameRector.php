@@ -8,11 +8,11 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\ExpectedNameResolver\UnderscoreCamelCaseExpectedNameResolver;
 use Rector\Naming\PropertyRenamer\UnderscoreCamelCasePropertyRenamer;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Property\UnderscoreToCamelCasePropertyNameRector\UnderscoreToCamelCasePropertyNameRectorTest
@@ -44,9 +44,9 @@ final class UnderscoreToCamelCasePropertyNameRector extends AbstractRector
         $this->underscoreCamelCaseExpectedNameResolver = $underscoreCamelCaseExpectedNameResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change under_score names to camelCase', [
+        return new RuleDefinition('Change under_score names to camelCase', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

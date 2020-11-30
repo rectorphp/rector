@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareDataProviderTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://stackoverflow.com/a/46693675/1348344
@@ -27,11 +27,13 @@ final class RemoveDataProviderTestPrefixRector extends AbstractPHPUnitRector
      */
     private $providerMethodNamesToNewNames = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Data provider methods cannot start with "test" prefix', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Data provider methods cannot start with "test" prefix',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     /**
@@ -48,8 +50,8 @@ class SomeClass extends PHPUnit\Framework\TestCase
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     /**
@@ -66,8 +68,9 @@ class SomeClass extends PHPUnit\Framework\TestCase
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

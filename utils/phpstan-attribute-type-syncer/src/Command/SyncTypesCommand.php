@@ -12,7 +12,6 @@ use Rector\Utils\PHPStanAttributeTypeSyncer\Generator\AttributeAwareNodeGenerato
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 
 final class SyncTypesCommand extends AbstractCommand
@@ -60,7 +59,6 @@ final class SyncTypesCommand extends AbstractCommand
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[DEV] Synchronize PHPStan types to attribute aware types in Rectors');
     }
 

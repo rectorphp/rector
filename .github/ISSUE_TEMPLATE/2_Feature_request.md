@@ -1,5 +1,6 @@
 ---
 name: Feature Request
+labels: feature
 about: RFC and ideas for new features and improvements
 ---
 

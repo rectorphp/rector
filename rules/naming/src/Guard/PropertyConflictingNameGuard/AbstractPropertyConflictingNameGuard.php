@@ -6,11 +6,11 @@ namespace Rector\Naming\Guard\PropertyConflictingNameGuard;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
-use Rector\Naming\ExpectedNameResolver\ExpectedNameResolverInterface;
-use Rector\Naming\Guard\GuardInterface;
+use Rector\Naming\Contract\ExpectedNameResolver\ExpectedNameResolverInterface;
+use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\Naming\ValueObject\PropertyRename;
-use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 abstract class AbstractPropertyConflictingNameGuard implements GuardInterface

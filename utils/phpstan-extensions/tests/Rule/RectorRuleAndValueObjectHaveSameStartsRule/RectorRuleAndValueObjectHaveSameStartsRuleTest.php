@@ -23,13 +23,14 @@ final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends AbstractServi
     public function provideData(): Iterator
     {
         yield [__DIR__ . '/Fixture/HaveSameStarts.php', []];
+        yield [__DIR__ . '/Fixture/SkipDifferentType.php', []];
         yield [__DIR__ . '/Fixture/SkipNoCall.php', []];
         yield [__DIR__ . '/Fixture/SkipNoCallConfigure.php', []];
         yield [__DIR__ . '/Fixture/SkipNoInlineValueObjects.php', []];
         yield [__DIR__ . '/Fixture/SkipConfigureValueObjectImplementsInterface.php', []];
 
         $errorMessage = sprintf(
-            RectorRuleAndValueObjectHaveSameStartsRule::ERROR,
+            RectorRuleAndValueObjectHaveSameStartsRule::ERROR_MESSAGE,
             'ConfigureValueObject',
             'ChangeMethodVisibility'
         );
@@ -40,7 +41,7 @@ final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends AbstractServi
     {
         return $this->getRuleFromConfig(
             RectorRuleAndValueObjectHaveSameStartsRule::class,
-            __DIR__ . '/../../../config/phpstan-extensions.neon'
+            __DIR__ . '/config/configured_rule.neon'
         );
     }
 }

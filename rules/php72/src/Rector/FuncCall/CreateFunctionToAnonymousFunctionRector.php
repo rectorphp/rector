@@ -22,8 +22,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://stackoverflow.com/q/48161526/1348344
@@ -43,11 +43,13 @@ final class CreateFunctionToAnonymousFunctionRector extends AbstractConvertToAno
         $this->inlineCodeParser = $inlineCodeParser;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Use anonymous functions instead of deprecated create_function()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Use anonymous functions instead of deprecated create_function()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class ClassWithCreateFunction
 {
     public function run()
@@ -56,8 +58,8 @@ class ClassWithCreateFunction
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class ClassWithCreateFunction
 {
     public function run()
@@ -68,8 +70,9 @@ class ClassWithCreateFunction
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

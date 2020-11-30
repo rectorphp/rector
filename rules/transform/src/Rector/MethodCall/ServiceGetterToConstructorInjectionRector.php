@@ -13,11 +13,11 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -45,9 +45,9 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector imp
         $this->propertyNaming = $propertyNaming;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Get service call to constructor injection', [
+        return new RuleDefinition('Get service call to constructor injection', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

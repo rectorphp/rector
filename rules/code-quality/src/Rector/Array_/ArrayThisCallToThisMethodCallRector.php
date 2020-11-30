@@ -14,10 +14,10 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRector\ArrayThisCallToThisMethodCallRectorTest
@@ -34,11 +34,13 @@ final class ArrayThisCallToThisMethodCallRector extends AbstractRector
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change `[$this, someMethod]` without any args to $this->someMethod()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change `[$this, someMethod]` without any args to $this->someMethod()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -53,7 +55,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -67,8 +69,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**
@@ -141,15 +144,8 @@ CODE_SAMPLE
 
     private function isInsideProperty(Array_ $array): bool
     {
-        $parent = $array->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parent) {
-            if ($parent instanceof Property) {
-                return true;
-            }
+        $parentProperty = $this->betterNodeFinder->findFirstParentInstanceOf($array, [Property::class]);
 
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        return false;
+        return $parentProperty !== null;
     }
 }

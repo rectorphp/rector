@@ -11,10 +11,10 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -42,9 +42,9 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
         $this->typeComparator = $typeComparator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes defined return typehint of method and class.', [
+        return new RuleDefinition('Changes defined return typehint of method and class.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

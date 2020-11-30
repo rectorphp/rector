@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -36,7 +35,6 @@ final class ValidateFixtureSuffixCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[CI] Validate tests fixtures suffix');
     }
 
@@ -48,7 +46,7 @@ final class ValidateFixtureSuffixCommand extends Command
             $invalidFilePaths[] = $invalidFixtureFileInfo->getRelativeFilePathFromCwd();
         }
 
-        if (count($invalidFilePaths) > 0) {
+        if ($invalidFilePaths !== []) {
             $this->symfonyStyle->listing($invalidFilePaths);
             $message = sprintf('Found %d files with invalid suffix. Must be *.php.inc', count($invalidFilePaths));
 
@@ -67,8 +65,8 @@ final class ValidateFixtureSuffixCommand extends Command
      */
     private function getInvalidFixtureFileInfos(): array
     {
-        $finder = (new Finder())
-            ->files()
+        $finder = new Finder();
+        $finder = $finder->files()
             ->name('#\.inc$#')
             ->name('#\.php#')
             ->notName('#\.php\.inc$#')

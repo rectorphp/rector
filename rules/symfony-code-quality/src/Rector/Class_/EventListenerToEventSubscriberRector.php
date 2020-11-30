@@ -20,14 +20,14 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\EventListenerToEventSubscriberRectorTest
@@ -106,9 +106,9 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
         ];
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change Symfony Event listener class to Event Subscriber based on configuration in service.yaml file',
             [
                 new CodeSample(

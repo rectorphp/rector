@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Generic\Tests\Rector\Class_\RemoveTraitRector\RemoveTraitRectorTest
@@ -45,9 +45,9 @@ final class RemoveTraitRector extends AbstractRector implements ConfigurableRect
         $this->classManipulator = $classManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove specific traits from code', [
+        return new RuleDefinition('Remove specific traits from code', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

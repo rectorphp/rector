@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Naming\RenameGuard;
 
-use Rector\Naming\Guard\GuardInterface;
-use Rector\Naming\ValueObject\RenameValueObjectInterface;
+use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\RenameGuard\RenameGuardInterface;
+use Rector\Naming\Contract\RenameValueObjectInterface;
 
 final class PropertyRenameGuard implements RenameGuardInterface
 {

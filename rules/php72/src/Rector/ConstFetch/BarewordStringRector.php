@@ -9,9 +9,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/deprecate-bareword-strings
@@ -31,11 +31,11 @@ final class BarewordStringRector extends AbstractRector
      */
     private $undefinedConstants = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes unquoted non-existing constants to strings', [
-            new CodeSample('var_dump(VAR);', 'var_dump("VAR");'),
-        ]);
+        return new RuleDefinition(
+            'Changes unquoted non-existing constants to strings',
+            [new CodeSample('var_dump(VAR);', 'var_dump("VAR");')]);
     }
 
     /**

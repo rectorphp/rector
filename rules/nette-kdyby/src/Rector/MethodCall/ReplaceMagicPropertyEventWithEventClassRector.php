@@ -13,12 +13,12 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteKdyby\DataProvider\EventAndListenerTreeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -45,11 +45,13 @@ final class ReplaceMagicPropertyEventWithEventClassRector extends AbstractRector
         $this->eventAndListenerTreeProvider = $eventAndListenerTreeProvider;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change $onProperty magic call with event disptacher and class dispatch', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change $onProperty magic call with event disptacher and class dispatch',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 final class FileManager
 {
     public $onUpload;
@@ -61,7 +63,7 @@ final class FileManager
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 final class FileManager
 {
     use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -78,8 +80,9 @@ final class FileManager
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

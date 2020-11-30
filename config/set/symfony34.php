@@ -5,15 +5,15 @@ declare(strict_types=1);
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\ValueObject\ArgumentRemover;
 use Rector\Symfony\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects([
+            ArgumentRemoverRector::REMOVED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentRemover(
                     'Symfony\Component\Yaml\Yaml',
                     'parse',

@@ -8,13 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\ParamRenamer\MatchTypeParamRenamer;
 use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\RenameParamToMatchTypeRectorTest
@@ -65,9 +65,9 @@ final class RenameParamToMatchTypeRector extends AbstractRector
         $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Rename variable to match new ClassType', [
+        return new RuleDefinition('Rename variable to match new ClassType', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

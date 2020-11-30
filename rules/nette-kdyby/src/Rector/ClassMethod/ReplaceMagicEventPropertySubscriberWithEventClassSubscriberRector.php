@@ -9,12 +9,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteKdyby\DataProvider\EventAndListenerTreeProvider;
 use Rector\NetteKdyby\Naming\EventClassNaming;
 use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -48,11 +48,13 @@ final class ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector ex
         $this->eventAndListenerTreeProvider = $eventAndListenerTreeProvider;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change getSubscribedEvents() from on magic property, to Event class', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change getSubscribedEvents() from on magic property, to Event class',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Kdyby\Events\Subscriber;
 
 final class ActionLogEventSubscriber implements Subscriber
@@ -71,7 +73,7 @@ final class ActionLogEventSubscriber implements Subscriber
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use Kdyby\Events\Subscriber;
 
 final class ActionLogEventSubscriber implements Subscriber
@@ -90,8 +92,9 @@ final class ActionLogEventSubscriber implements Subscriber
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

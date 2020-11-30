@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\VisibilityManipulator;
 
 /**
@@ -36,22 +35,20 @@ trait VisibilityTrait
      */
     public function changeNodeVisibility(Node $node, string $visibility): void
     {
-        if ($visibility === 'public') {
-            $this->makePublic($node);
-        } elseif ($visibility === 'protected') {
-            $this->makeProtected($node);
-        } elseif ($visibility === 'private') {
-            $this->makePrivate($node);
-        } elseif ($visibility === 'static') {
-            $this->makeStatic($node);
-        } else {
-            $allowedVisibilities = ['public', 'protected', 'private', 'static'];
+        $this->visibilityManipulator->changeNodeVisibility($node, $visibility);
+    }
 
-            throw new ShouldNotHappenException(sprintf(
-                'Visibility "%s" is not valid. Use one of: ',
-                implode('", "', $allowedVisibilities)
-            ));
-        }
+    public function makeFinal(Class_ $class): void
+    {
+        $this->visibilityManipulator->makeFinal($class);
+    }
+
+    /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function removeVisibility(Node $node): void
+    {
+        $this->visibilityManipulator->removeOriginalVisibilityFromFlags($node);
     }
 
     /**
@@ -67,7 +64,7 @@ trait VisibilityTrait
      */
     public function makePublic(Node $node): void
     {
-        $this->visibilityManipulator->replaceVisibilityFlag($node, 'public');
+        $this->visibilityManipulator->makePublic($node);
     }
 
     /**
@@ -75,7 +72,7 @@ trait VisibilityTrait
      */
     public function makeProtected(Node $node): void
     {
-        $this->visibilityManipulator->replaceVisibilityFlag($node, 'protected');
+        $this->visibilityManipulator->makeProtected($node);
     }
 
     /**
@@ -83,7 +80,7 @@ trait VisibilityTrait
      */
     public function makePrivate(Node $node): void
     {
-        $this->visibilityManipulator->replaceVisibilityFlag($node, 'private');
+        $this->visibilityManipulator->makePrivate($node);
     }
 
     /**
@@ -100,10 +97,5 @@ trait VisibilityTrait
     public function makeNonStatic(Node $node): void
     {
         $this->visibilityManipulator->makeNonStatic($node);
-    }
-
-    public function makeFinal(Class_ $class): void
-    {
-        $this->visibilityManipulator->makeFinal($class);
     }
 }

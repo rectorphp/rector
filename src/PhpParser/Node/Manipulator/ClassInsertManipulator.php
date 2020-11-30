@@ -81,7 +81,11 @@ final class ClassInsertManipulator
     {
         $traitUse = new TraitUse([new FullyQualified($traitName)]);
 
-        $this->addStatementToClassBeforeTypes($class, $traitUse, TraitUse::class, Property::class, ClassMethod::class);
+        $this->addStatementToClassBeforeTypes(
+            $class,
+            $traitUse,
+            [TraitUse::class, Property::class, ClassMethod::class]
+        );
     }
 
     /**
@@ -153,15 +157,16 @@ final class ClassInsertManipulator
     }
 
     /**
-     * @param string[] ...$types
+     * @param string[] $types
      */
-    private function addStatementToClassBeforeTypes(Class_ $class, Stmt $stmt, string ...$types): void
+    private function addStatementToClassBeforeTypes(Class_ $class, Stmt $stmt, array $types): void
     {
         foreach ($types as $type) {
             foreach ($class->stmts as $key => $classStmt) {
                 if (! $classStmt instanceof $type) {
                     continue;
                 }
+
                 $class->stmts = $this->insertBefore($class->stmts, $stmt, $key);
 
                 return;

@@ -11,16 +11,16 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\RenameGuard\RenameGuardInterface;
+use Rector\Naming\Contract\RenamerInterface;
+use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\Guard\DateTimeAtNamingConventionGuard;
-use Rector\Naming\Guard\GuardInterface;
 use Rector\Naming\Guard\HasMagicGetSetGuard;
 use Rector\Naming\Guard\NotPrivatePropertyGuard;
 use Rector\Naming\Guard\RamseyUuidInterfaceGuard;
 use Rector\Naming\RenameGuard\PropertyRenameGuard;
-use Rector\Naming\RenameGuard\RenameGuardInterface;
-use Rector\Naming\RenamerInterface;
 use Rector\Naming\ValueObject\PropertyRename;
-use Rector\Naming\ValueObject\RenameValueObjectInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 abstract class AbstractPropertyRenamer implements RenamerInterface

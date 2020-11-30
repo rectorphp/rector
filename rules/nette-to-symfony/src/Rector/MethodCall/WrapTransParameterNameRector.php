@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://symfony.com/doc/current/components/translation/usage.html#message-placeholders
@@ -27,11 +27,13 @@ final class WrapTransParameterNameRector extends AbstractRector
      */
     private const BETWEEN_PERCENT_CHARS_REGEX = '#%(.*?)%#';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Adds %% to placeholder name of trans() method if missing', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Adds %% to placeholder name of trans() method if missing',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\Translation\Translator;
 
 final class SomeController
@@ -46,8 +48,8 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\Translation\Translator;
 
 final class SomeController
@@ -62,8 +64,9 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

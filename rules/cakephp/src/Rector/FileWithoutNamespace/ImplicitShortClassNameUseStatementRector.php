@@ -10,9 +10,9 @@ use PhpParser\Node\Name;
 use Rector\CakePHP\ImplicitNameResolver;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/cakephp/upgrade/blob/05d85c147bb1302b576b818cabb66a40462aaed0/src/Shell/Task/AppUsesTask.php#L183
@@ -31,9 +31,9 @@ final class ImplicitShortClassNameUseStatementRector extends AbstractRector
         $this->implicitNameResolver = $implicitNameResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Collect implicit class names and add imports', [
+        return new RuleDefinition('Collect implicit class names and add imports', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use App\Foo\Plugin;

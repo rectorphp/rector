@@ -17,7 +17,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareNullableTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\Core\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
 {
@@ -28,7 +28,7 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        self::bootKernel(RectorKernel::class);
+        $this->bootKernel(RectorKernel::class);
 
         $this->attributeAwareNodeFactory = static::$container->get(AttributeAwareNodeFactory::class);
     }

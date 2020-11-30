@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\StringToClassConstant;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -28,9 +28,9 @@ final class StringToClassConstantRector extends AbstractRector implements Config
      */
     private $stringsToClassConstants = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes strings to specific constants', [
+        return new RuleDefinition('Changes strings to specific constants', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeSubscriber

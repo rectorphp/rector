@@ -12,11 +12,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 
 final class NodeTypesStatisticsCommand extends AbstractCommand
 {
+    /**
+     * @var string
+     */
     public const UNUSED = 'unused';
 
     /**
@@ -33,7 +35,6 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[DOCS] Show statistics of used and unused node types in PHP Rector');
 
         $this->addOption(self::UNUSED, null, InputOption::VALUE_NONE, 'Show unused nodes');
@@ -57,8 +58,9 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
         );
 
         $this->symfonyStyle->success($message);
+        $unused = $input->getOption(self::UNUSED);
 
-        if ($input->getOption(self::UNUSED)) {
+        if ($unused) {
             $unusedNodeTypes = array_diff($this->getNodeClasses(), $uniqueUsedNodeTypes);
             sort($unusedNodeTypes);
             $this->symfonyStyle->listing($unusedNodeTypes);
@@ -71,15 +73,12 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
     }
 
     /**
-     * @param string[] $nodeTypes
-     * @return array<string, int>
+     * @return PhpRectorInterface[]
      */
-    private function resolveNodeTypesByCount(array $nodeTypes): array
+    private function resolvePhpRectors(): array
     {
-        $nodeTypesWithCount = array_count_values($nodeTypes);
-        arsort($nodeTypesWithCount);
-
-        return $nodeTypesWithCount;
+        $rectorsFinder = new RectorsFinder();
+        return $rectorsFinder->findAndCreatePhpRectors();
     }
 
     /**
@@ -98,12 +97,16 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
     }
 
     /**
-     * @return PhpRectorInterface[]
+     * @param string[] $nodeTypes
+     * @return array<string, int>
      */
-    private function resolvePhpRectors(): array
+    private function resolveNodeTypesByCount(array $nodeTypes): array
     {
-        $rectorsFinder = new RectorsFinder();
-        return $rectorsFinder->findAndCreatePhpRectors();
+        $nodeTypesWithCount = array_count_values($nodeTypes);
+        arsort($nodeTypesWithCount);
+
+        // get only top 30
+        return array_slice($nodeTypesWithCount, 0, 20);
     }
 
     /**
@@ -114,6 +117,19 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
         $rows = $this->createTableRows($nodeTypesCount);
         $this->symfonyStyle->table(['#', 'Node Type', 'Rector Count'], $rows);
         $this->symfonyStyle->newLine();
+    }
+
+    /**
+     * @return int[]|string[]
+     */
+    private function getNodeClasses(): array
+    {
+        $robotLoader = new RobotLoader();
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/php_parser_nodes');
+        $robotLoader->addDirectory(__DIR__ . '/../../../../vendor/nikic/php-parser/lib/PhpParser/Node');
+        $robotLoader->rebuild();
+
+        return array_keys($robotLoader->getIndexedClasses());
     }
 
     /**
@@ -129,18 +145,5 @@ final class NodeTypesStatisticsCommand extends AbstractCommand
             ++$i;
         }
         return $rows;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getNodeClasses(): array
-    {
-        $robotLoader = new RobotLoader();
-        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/php_parser_nodes');
-        $robotLoader->addDirectory(__DIR__ . '/../../../../vendor/nikic/php-parser/lib/PhpParser/Node');
-        $robotLoader->rebuild();
-
-        return array_keys($robotLoader->getIndexedClasses());
     }
 }

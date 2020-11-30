@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
@@ -18,21 +18,24 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class FilterVarToAddSlashesRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change filter_var() with slash escaping to addslashes()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change filter_var() with slash escaping to addslashes()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 $var= "Satya's here!";
 filter_var($var, FILTER_SANITIZE_MAGIC_QUOTES);
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 $var= "Satya's here!";
 addslashes($var);
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

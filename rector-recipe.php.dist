@@ -6,7 +6,7 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\RectorGenerator\Provider\RectorRecipeProvider;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Rector\SymfonyPhpConfig\inline_argument_object;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 // run "bin/rector generate" to a new Rector basic schema + tests from this config
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // name, basically short class name; use PascalCase
         'RenameMethodCallRector',
 
-        // particular node types to change
+        // 1+ node types to change, pick from classes here https://github.com/nikic/PHP-Parser/tree/master/lib/PhpParser/Node
         // the best practise is to have just 1 type here if possible, and make separated rule for other node types
         [MethodCall::class],
 
@@ -78,5 +78,5 @@ CODE_SAMPLE
     $services = $containerConfigurator->services();
 
     $services->set(RectorRecipeProvider::class)
-        ->arg('$rectorRecipe', inline_argument_object($rectorRecipe, $services));
+        ->arg('$rectorRecipe', ValueObjectInliner::inlineArgumentObject($rectorRecipe, $services));
 };

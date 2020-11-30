@@ -30,7 +30,7 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
         return IsIterableRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::ITERABLE_TYPE;
     }

@@ -40,6 +40,11 @@ final class RectorError
         $this->rectorClass = $rectorClass;
     }
 
+    public function getRelativeFilePath(): string
+    {
+        return $this->fileInfo->getRelativeFilePathFromCwd();
+    }
+
     public function getFileInfo(): SmartFileInfo
     {
         return $this->fileInfo;

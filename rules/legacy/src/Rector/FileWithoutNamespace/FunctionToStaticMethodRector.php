@@ -13,11 +13,11 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Legacy\Naming\FullyQualifiedNameResolver;
 use Rector\Legacy\NodeFactory\StaticMethodClassFactory;
 use Rector\Legacy\ValueObject\FunctionToStaticCall;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -50,19 +50,21 @@ final class FunctionToStaticMethodRector extends AbstractRector
         $this->fullyQualifiedNameResolver = $fullyQualifiedNameResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change functions to static calls, so composer can autoload them', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change functions to static calls, so composer can autoload them',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 function some_function()
 {
 }
 
 some_function('lol');
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeUtilsClass
 {
     public static function someFunction()
@@ -72,8 +74,9 @@ class SomeUtilsClass
 
 SomeUtilsClass::someFunction('lol');
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

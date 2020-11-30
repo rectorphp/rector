@@ -11,8 +11,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/php/php-src/pull/3941/files#diff-7e3a1a5df28a1cbd8c0fb6db68f243da
@@ -31,9 +31,9 @@ final class ReservedFnFunctionRector extends AbstractRector implements Configura
      */
     private $reservedNamesToNewOnes = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change fn() function name, since it will be reserved keyword', [
+        return new RuleDefinition('Change fn() function name, since it will be reserved keyword', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

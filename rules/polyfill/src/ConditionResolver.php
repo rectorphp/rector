@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\Util\PhpVersionFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Polyfill\Contract\ConditionInterface;
 use Rector\Polyfill\ValueObject\BinaryToVersionCompareCondition;
@@ -35,14 +36,21 @@ final class ConditionResolver
      */
     private $phpVersionProvider;
 
+    /**
+     * @var PhpVersionFactory
+     */
+    private $phpVersionFactory;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         PhpVersionProvider $phpVersionProvider,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        PhpVersionFactory $phpVersionFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->phpVersionFactory = $phpVersionFactory;
     }
 
     public function resolveFromExpr(Expr $expr): ?ConditionInterface
@@ -126,12 +134,18 @@ final class ConditionResolver
         return new BinaryToVersionCompareCondition($versionCompareCondition, $binaryClass, $expectedValue);
     }
 
-    private function resolveArgumentValue(FuncCall $funcCall, int $argumentPosition): ?string
+    private function resolveArgumentValue(FuncCall $funcCall, int $argumentPosition): ?int
     {
-        /** @var string|null $version */
-        $version = $this->valueResolver->getValue($funcCall->args[$argumentPosition]->value);
-        if ($version === 'PHP_VERSION') {
+        $firstArgValue = $funcCall->args[$argumentPosition]->value;
+
+        /** @var mixed|null $version */
+        $version = $this->valueResolver->getValue($firstArgValue);
+        if (in_array($version, ['PHP_VERSION', 'PHP_VERSION_ID'], true)) {
             return $this->phpVersionProvider->provide();
+        }
+
+        if (is_string($version)) {
+            return $this->phpVersionFactory->createIntVersion($version);
         }
 
         return $version;

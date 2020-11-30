@@ -9,12 +9,12 @@ use Rector\Polyfill\Contract\ConditionInterface;
 final class VersionCompareCondition implements ConditionInterface
 {
     /**
-     * @var string
+     * @var int
      */
     private $firstVersion;
 
     /**
-     * @var string
+     * @var int
      */
     private $secondVersion;
 
@@ -23,19 +23,19 @@ final class VersionCompareCondition implements ConditionInterface
      */
     private $compareSign;
 
-    public function __construct(string $firstVersion, string $secondVersion, ?string $compareSign)
+    public function __construct(int $firstVersion, int $secondVersion, ?string $compareSign)
     {
         $this->firstVersion = $firstVersion;
         $this->secondVersion = $secondVersion;
         $this->compareSign = $compareSign;
     }
 
-    public function getFirstVersion(): string
+    public function getFirstVersion(): int
     {
         return $this->firstVersion;
     }
 
-    public function getSecondVersion(): string
+    public function getSecondVersion(): int
     {
         return $this->secondVersion;
     }

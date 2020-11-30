@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\ParentInterfaceWithChangeTypeInterface;
+use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Contract\ParentInterfaceWithChangeTypeInterface;
 
 class DetectedByParentInterface implements ParentInterfaceWithChangeTypeInterface
 {
@@ -17,7 +17,7 @@ class DetectedByParentInterface implements ParentInterfaceWithChangeTypeInterfac
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\ParentInterfaceWithChangeTypeInterface;
+use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Contract\ParentInterfaceWithChangeTypeInterface;
 
 class DetectedByParentInterface implements ParentInterfaceWithChangeTypeInterface
 {

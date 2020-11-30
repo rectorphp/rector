@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -18,11 +18,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class SplitGroupedUseImportsRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Split grouped use imports and trait statements to standalone lines', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Split grouped use imports and trait statements to standalone lines',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use A, B;
 
 class SomeClass
@@ -31,7 +33,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use A;
 use B;
 
@@ -41,8 +43,9 @@ class SomeClass
     use AnotherTrait;
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

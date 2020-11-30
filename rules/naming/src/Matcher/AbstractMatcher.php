@@ -14,6 +14,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Naming\Contract\Matcher\MatcherInterface;
 use Rector\Naming\ValueObject\VariableAndCallAssign;
 use Rector\Naming\ValueObject\VariableAndCallForeach;
 use Rector\NodeNameResolver\NodeNameResolver;

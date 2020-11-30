@@ -2,8 +2,8 @@
 
 namespace Rector\PHPStanExtensions\Tests\Rule\ConfigurableRectorRule\Fixture;
 
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Rector\PHPStanExtensions\Tests\Rule\ConfigurableRectorRule\Source\AbstractClassImplementsConfigurableInterface;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 
@@ -19,9 +19,9 @@ class ImplementsThroughAbstractClassRector extends AbstractClassImplementsConfig
         // TODO: Implement configure() method.
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns static call to function call.', [
+        return new RuleDefinition('Turns static call to function call.', [
             new ConfiguredCodeSample(
                 'OldClass::oldMethod("args");',
                 'new_function("args");',

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\HttpKernel;
 
-use Migrify\PhpConfigPrinter\Bundle\PhpConfigPrinterBundle;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
@@ -24,6 +23,9 @@ use Symplify\ComposerJsonManipulator\ComposerJsonManipulatorBundle;
 use Symplify\ConsoleColorDiff\ConsoleColorDiffBundle;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
+use Symplify\PhpConfigPrinter\Bundle\PhpConfigPrinterBundle;
+use Symplify\SimplePhpDocParser\Bundle\SimplePhpDocParserBundle;
+use Symplify\Skipper\Bundle\SkipperBundle;
 
 final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterface
 {
@@ -78,7 +80,13 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
      */
     public function registerBundles(): array
     {
-        return [new ConsoleColorDiffBundle(), new PhpConfigPrinterBundle(), new ComposerJsonManipulatorBundle()];
+        return [
+            new ConsoleColorDiffBundle(),
+            new PhpConfigPrinterBundle(),
+            new ComposerJsonManipulatorBundle(),
+            new SkipperBundle(),
+            new SimplePhpDocParserBundle(),
+        ];
     }
 
     protected function build(ContainerBuilder $containerBuilder): void

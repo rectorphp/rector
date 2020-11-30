@@ -22,15 +22,15 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
+use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
 use Rector\RemovingStatic\ValueObject\PHPUnitClass;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\PHPUnitStaticToKernelTestCaseGetRectorTest
@@ -41,12 +41,7 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
      * @api
      * @var string
      */
-    public const STATIC_CLASS_TYPES = '$staticClassTypes';
-
-    /**
-     * @var string
-     */
-    private const SET_UP = 'setUp';
+    public const STATIC_CLASS_TYPES = 'static_class_types';
 
     /**
      * @var mixed[]
@@ -64,28 +59,28 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
     private $propertyNaming;
 
     /**
-     * @var PHPUnitTypeDeclarationDecorator
-     */
-    private $phpUnitTypeDeclarationDecorator;
-
-    /**
      * @var ClassInsertManipulator
      */
     private $classInsertManipulator;
 
+    /**
+     * @var SetUpClassMethodFactory
+     */
+    private $setUpClassMethodFactory;
+
     public function __construct(
         PropertyNaming $propertyNaming,
         ClassInsertManipulator $classInsertManipulator,
-        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator
+        SetUpClassMethodFactory $setUpClassMethodFactory
     ) {
         $this->propertyNaming = $propertyNaming;
-        $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->setUpClassMethodFactory = $setUpClassMethodFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Convert static calls in PHPUnit test cases, to get() from the container of KernelTestCase', [
+        return new RuleDefinition('Convert static calls in PHPUnit test cases, to get() from the container of KernelTestCase', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 <?php
@@ -170,15 +165,15 @@ CODE_SAMPLE
         }
 
         // add property with the object
-        $newPropertyTypes = $this->collectNewProperties($class);
-        if ($newPropertyTypes === []) {
+        $newPropertyObjectTypes = $this->collectNewPropertyObjectTypes($class);
+        if ($newPropertyObjectTypes === []) {
             return null;
         }
 
         // add via constructor
-        foreach ($newPropertyTypes as $newPropertyType) {
-            $newPropertyName = $this->propertyNaming->fqnToVariableName($newPropertyType);
-            $this->addConstructorDependencyToClass($class, $newPropertyType, $newPropertyName);
+        foreach ($newPropertyObjectTypes as $newPropertyObjectType) {
+            $newPropertyName = $this->propertyNaming->fqnToVariableName($newPropertyObjectType);
+            $this->addConstructorDependencyToClass($class, $newPropertyObjectType, $newPropertyName);
         }
 
         return $class;
@@ -207,26 +202,26 @@ CODE_SAMPLE
     private function processPHPUnitClass(Class_ $class): ?Class_
     {
         // add property with the object
-        $newProperties = $this->collectNewProperties($class);
-        if ($newProperties === []) {
+        $newPropertyTypes = $this->collectNewPropertyObjectTypes($class);
+        if ($newPropertyTypes === []) {
             return null;
         }
 
         // add all properties to class
-        $class = $this->addNewPropertiesToClass($class, $newProperties);
+        $class = $this->addNewPropertiesToClass($class, $newPropertyTypes);
 
         $parentSetUpStaticCallExpression = $this->createParentSetUpStaticCall();
-        foreach ($newProperties as $type) {
+        foreach ($newPropertyTypes as $type) {
             // container fetch assign
             $assign = $this->createContainerGetTypeToPropertyAssign($type);
 
-            $setupClassMethod = $class->getMethod(self::SET_UP);
+            $setupClassMethod = $class->getMethod(MethodName::SET_UP);
 
             // get setup or create a setup add add it there
             if ($setupClassMethod !== null) {
                 $this->updateSetUpMethod($setupClassMethod, $parentSetUpStaticCallExpression, $assign);
             } else {
-                $setUpMethod = $this->createSetUpMethod($parentSetUpStaticCallExpression, $assign);
+                $setUpMethod = $this->setUpClassMethodFactory->createSetUpMethod([$assign]);
                 $this->classInsertManipulator->addAsFirstMethod($class, $setUpMethod);
             }
         }
@@ -242,7 +237,7 @@ CODE_SAMPLE
     /**
      * @return ObjectType[]
      */
-    private function collectNewProperties(Class_ $class): array
+    private function collectNewPropertyObjectTypes(Class_ $class): array
     {
         $this->newProperties = [];
 
@@ -297,7 +292,7 @@ CODE_SAMPLE
 
     private function createParentSetUpStaticCall(): Expression
     {
-        $parentSetupStaticCall = $this->createStaticCall('parent', self::SET_UP);
+        $parentSetupStaticCall = $this->createStaticCall('parent', MethodName::SET_UP);
         return new Expression($parentSetupStaticCall);
     }
 
@@ -325,19 +320,6 @@ CODE_SAMPLE
             assert($setupClassMethod->stmts !== null);
             array_splice($setupClassMethod->stmts, $parentSetUpStaticCallPosition + 1, 0, [$assign]);
         }
-    }
-
-    private function createSetUpMethod(Expression $parentSetupStaticCall, Expression $assign): ClassMethod
-    {
-        $classMethodBuilder = new MethodBuilder(self::SET_UP);
-        $classMethodBuilder->makeProtected();
-        $classMethodBuilder->addStmt($parentSetupStaticCall);
-        $classMethodBuilder->addStmt($assign);
-
-        $classMethod = $classMethodBuilder->getNode();
-
-        $this->phpUnitTypeDeclarationDecorator->decorate($classMethod);
-        return $classMethod;
     }
 
     private function createPropertyFromType(ObjectType $objectType): Property
@@ -369,7 +351,7 @@ CODE_SAMPLE
                 $methodStmt = $methodStmt->expr;
             }
 
-            if (! $this->isStaticCallNamed($methodStmt, 'parent', self::SET_UP)) {
+            if (! $this->isStaticCallNamed($methodStmt, 'parent', MethodName::SET_UP)) {
                 continue;
             }
 

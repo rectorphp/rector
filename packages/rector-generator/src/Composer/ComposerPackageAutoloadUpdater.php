@@ -8,7 +8,6 @@ use Rector\RectorGenerator\FileSystem\JsonFileSystem;
 use Rector\RectorGenerator\ValueObject\Package;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Process\Process;
 
 final class ComposerPackageAutoloadUpdater
 {
@@ -110,7 +109,7 @@ final class ComposerPackageAutoloadUpdater
 
     private function rebuildAutoload(): void
     {
-        $composerDumpProcess = new Process(['composer', 'dump']);
-        $composerDumpProcess->run();
+        // note: do not use shell_exec, this is only effective solution for better DX
+        shell_exec('composer dump');
     }
 }

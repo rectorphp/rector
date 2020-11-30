@@ -45,13 +45,13 @@ abstract class AbstractCommand extends Command
         } catch (RuntimeException $runtimeException) {
             if (Strings::contains($runtimeException->getMessage(), 'Not enough arguments')) {
                 // sometimes there is "command" argument, not really needed on fail of chosen command and missing argument
-                $arguments = $this->getDefinition()
-                    ->getArguments();
+                $inputDefinition = $this->getDefinition();
+                $arguments = $inputDefinition->getArguments();
+
                 if (isset($arguments['command'])) {
                     unset($arguments['command']);
 
-                    $this->getDefinition()
-                        ->setArguments($arguments);
+                    $inputDefinition->setArguments($arguments);
                 }
 
                 $this->textDescriptor->describe($output, $this);
@@ -65,14 +65,15 @@ abstract class AbstractCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
+        $application = $this->getApplication();
+
         $optionDebug = $input->getOption(Option::OPTION_DEBUG);
         if ($optionDebug) {
-            if ($this->getApplication() === null) {
+            if ($application === null) {
                 return;
             }
 
-            $this->getApplication()
-                ->setCatchExceptions(false);
+            $application->setCatchExceptions(false);
 
             // clear cache
             $this->changedFilesDetector->clear();

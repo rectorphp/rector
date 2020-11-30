@@ -13,17 +13,17 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameProperty;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 use Rector\Transform\ValueObject\PropertyToMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
                 // source: https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html
                 new PropertyToMethod('Cake\Network\Request', 'params', 'getAttribute', null, ['params']),
                 new PropertyToMethod('Cake\Network\Request', 'data', 'getData'),
@@ -37,14 +37,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
+            RenamePropertyRector::RENAMED_PROPERTIES => ValueObjectInliner::inline([
                 new RenameProperty('Cake\Network\Request', '_session', 'session'),
             ]),
         ]]);
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => ValueObjectInliner::inline([
                 new ModalToGetSet('Cake\Core\InstanceConfigTrait', 'config', null, null, 2, 'array'),
                 new ModalToGetSet('Cake\Core\StaticConfigTrait', 'config', null, null, 2, 'array'),
                 new ModalToGetSet('Cake\Console\ConsoleOptionParser', 'command'),
@@ -177,7 +177,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Cake\Network\Request', 'param', 'getParam'),
                 new MethodCallRename('Cake\Network\Request', 'data', 'getData'),
                 new MethodCallRename('Cake\Network\Request', 'query', 'getQuery'),
@@ -222,7 +222,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => ValueObjectInliner::inline([
                 new ChangeMethodVisibility('Cake\Mailer\MailerAwareTrait', 'getMailer', 'protected'),
                 new ChangeMethodVisibility('Cake\View\CellTrait', 'cell', 'protected'),
             ]),
@@ -237,7 +237,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
-            NormalToFluentRector::CALLS_TO_FLUENT => inline_value_objects([
+            NormalToFluentRector::CALLS_TO_FLUENT => ValueObjectInliner::inline([
                 new NormalToFluent('Cake\Network\Response', [
                     'withLocation',
                     'withHeader',

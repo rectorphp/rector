@@ -11,8 +11,8 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Parser;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/lB5fR
@@ -31,27 +31,30 @@ final class StringsAssertNakedRector extends AbstractRector
         $this->parser = $parser;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('String asserts must be passed directly to assert()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'String asserts must be passed directly to assert()',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 function nakedAssert()
 {
     assert('true === true');
     assert("true === true");
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 function nakedAssert()
 {
     assert(true === true);
     assert(true === true);
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

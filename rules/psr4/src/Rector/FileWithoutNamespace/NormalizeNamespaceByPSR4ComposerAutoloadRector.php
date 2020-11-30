@@ -6,14 +6,17 @@ namespace Rector\PSR4\Rector\FileWithoutNamespace;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ComposerJsonAwareCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -32,14 +35,14 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
         $this->psr4AutoloadNamespaceMatcher = $psr4AutoloadNamespaceMatcher;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         $description = sprintf(
             'Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with %s',
             MultipleClassFileToPsr4ClassesRector::class
         );
 
-        return new RectorDefinition($description, [
+        return new RuleDefinition($description, [
             new ComposerJsonAwareCodeSample(
                 <<<'CODE_SAMPLE'
 // src/SomeClass.php
@@ -102,6 +105,7 @@ CODE_SAMPLE
 
         if ($node instanceof Namespace_) {
             $node->name = new Name($expectedNamespace);
+            $this->makeNamesFullyQualified((array) $node->stmts);
         }
 
         return $node;
@@ -124,7 +128,29 @@ CODE_SAMPLE
         $namespace = new Namespace_(new Name($expectedNamespace), (array) $nodes);
         $nodesWithStrictTypesThenNamespace[] = $namespace;
 
+        $this->makeNamesFullyQualified((array) $nodes);
+
         // @todo update to a new class node, like FileWithNamespace
         return new FileWithoutNamespace($nodesWithStrictTypesThenNamespace);
+    }
+
+    /**
+     * @param Stmt[] $nodes
+     */
+    private function makeNamesFullyQualified(array $nodes): void
+    {
+        // no need to
+        if ($this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
+            return;
+        }
+
+        // FQNize all class names
+        $this->traverseNodesWithCallable($nodes, function (Node $node): ?FullyQualified {
+            if (! $node instanceof Name) {
+                return null;
+            }
+
+            return new FullyQualified($this->getName($node));
+        });
     }
 }

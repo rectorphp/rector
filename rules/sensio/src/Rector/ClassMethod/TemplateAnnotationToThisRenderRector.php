@@ -24,11 +24,11 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Sensio\NodeFactory\ThisRenderFactory;
 use Rector\Sensio\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer;
 use Rector\Sensio\TypeDeclaration\ReturnTypeDeclarationUpdater;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
@@ -69,9 +69,9 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
         $this->arrayUnionResponseTypeAnalyzer = $arrayUnionResponseTypeAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns `@Template` annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony',
             [
                 new CodeSample(

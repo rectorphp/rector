@@ -66,17 +66,17 @@ final class TypeHasher
         return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
     }
 
-    private function resolveUniqueTypeWithClassNameHash(Type $type): string
+    private function resolveUniqueTypeWithClassNameHash(TypeWithClassName $typeWithClassName): string
     {
-        if ($type instanceof ShortenedObjectType) {
-            return $type->getFullyQualifiedName();
+        if ($typeWithClassName instanceof ShortenedObjectType) {
+            return $typeWithClassName->getFullyQualifiedName();
         }
 
-        if ($type instanceof AliasedObjectType) {
-            return $type->getFullyQualifiedClass();
+        if ($typeWithClassName instanceof AliasedObjectType) {
+            return $typeWithClassName->getFullyQualifiedClass();
         }
 
-        return $type->getClassName();
+        return $typeWithClassName->getClassName();
     }
 
     private function createUnionTypeHash(UnionType $unionType): string

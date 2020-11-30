@@ -5,33 +5,34 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Type\StringType;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/blob/master/ChangeLog-8.0.md
+ *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertContainsRector\SpecificAssertContainsRectorTest
  */
 final class SpecificAssertContainsRector extends AbstractPHPUnitRector
 {
     /**
-     * @var array<string, array<string, string>>
+     * @var array<string, string>
      */
-    private const OLD_METHODS_NAMES_TO_NEW_NAMES = [
-        'string' => [
-            'assertContains' => 'assertStringContainsString',
-            'assertNotContains' => 'assertStringNotContainsString',
-        ],
+    private const OLD_TO_NEW_METHOD_NAMES = [
+        'assertContains' => 'assertStringContainsString',
+        'assertNotContains' => 'assertStringNotContainsString',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Change assertContains()/assertNotContains() method to new string and iterable alternatives',
             [
                 new CodeSample(
@@ -82,14 +83,28 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isStaticType($node->args[1]->value, StringType::class)) {
+        if (! $this->isPossiblyStringType($node->args[1]->value)) {
             return null;
         }
 
         $methodName = $this->getName($node->name);
-
-        $node->name = new Identifier(self::OLD_METHODS_NAMES_TO_NEW_NAMES['string'][$methodName]);
+        $newMethodName = self::OLD_TO_NEW_METHOD_NAMES[$methodName];
+        $node->name = new Identifier($newMethodName);
 
         return $node;
+    }
+
+    private function isPossiblyStringType(Expr $expr): bool
+    {
+        $exprType = $this->getStaticType($expr);
+        if ($exprType instanceof UnionType) {
+            foreach ($exprType->getTypes() as $unionedType) {
+                if ($unionedType instanceof StringType) {
+                    return true;
+                }
+            }
+        }
+
+        return $exprType instanceof StringType;
     }
 }

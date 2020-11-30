@@ -13,9 +13,9 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://doc.nette.org/en/2.4/forms
@@ -53,11 +53,13 @@ final class NetteFormToSymfonyFormRector extends AbstractRector
         'addButton' => 'Symfony\Component\Form\Extension\Core\Type\ButtonType',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Migrate Nette\Forms in Presenter to Symfony', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Migrate Nette\Forms in Presenter to Symfony',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI;
 
 class SomePresenter extends UI\Presenter
@@ -71,8 +73,8 @@ class SomePresenter extends UI\Presenter
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI;
 
 class SomePresenter extends UI\Presenter
@@ -92,8 +94,9 @@ class SomePresenter extends UI\Presenter
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PhpAttribute\AnnotationToAttributeConverter;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/attributes_v2
@@ -35,9 +35,9 @@ final class AnnotationToAttributeRector extends AbstractRector
         $this->annotationToAttributeConverter = $annotationToAttributeConverter;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change annotation to attribute', [
+        return new RuleDefinition('Change annotation to attribute', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use Doctrine\ORM\Attributes as ORM;

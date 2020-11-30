@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\UnusedNodeResolver\UnusedClassResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Class_\RemoveUnusedClassesRector\RemoveUnusedClassesRectorTest
@@ -27,9 +27,9 @@ final class RemoveUnusedClassesRector extends AbstractRector implements ZeroCach
         $this->unusedClassResolver = $unusedClassResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove unused classes without interface', [
+        return new RuleDefinition('Remove unused classes without interface', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 interface SomeInterface

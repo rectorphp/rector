@@ -7,12 +7,12 @@ use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToPascalRector;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
 use Rector\Transform\ValueObject\PropertyToMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 # source: https://book.cakephp.org/3.0/en/appendices/3-7-migration-guide.html
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -20,7 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Cake\Form\Form', 'errors', 'getErrors'),
                 new MethodCallRename('Cake\Validation\Validation', 'cc', 'creditCard'),
                 new MethodCallRename('Cake\Filesystem\Folder', 'normalizePath', 'correctSlashFor'),
@@ -31,7 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
                 new PropertyToMethod('Cake\Http\Client\Response', 'body', 'getStringBody'),
                 new PropertyToMethod('Cake\Http\Client\Response', 'json', 'getJson'),
                 new PropertyToMethod('Cake\Http\Client\Response', 'xml', 'getXml'),
@@ -56,7 +56,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
         ->call('configure', [[
-            MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => inline_value_objects(
+            MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => ValueObjectInliner::inline(
                 [
                     new MethodCallToAnotherMethodCallWithArguments('Cake\Database\Query', 'join', 'clause', ['join']),
                     new MethodCallToAnotherMethodCallWithArguments('Cake\Database\Query', 'from', 'clause', ['from']),
@@ -66,7 +66,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => ValueObjectInliner::inline([
                 new ModalToGetSet(
                     'Cake\Database\Connection',
                     'logQueries',

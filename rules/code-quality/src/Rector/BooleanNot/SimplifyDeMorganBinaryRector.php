@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BooleanNot;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://robots.thoughtbot.com/clearer-conditionals-using-de-morgans-laws
@@ -30,27 +30,30 @@ final class SimplifyDeMorganBinaryRector extends AbstractRector
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Simplify negated conditions with de Morgan theorem', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Simplify negated conditions with de Morgan theorem',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 <?php
 
 $a = 5;
 $b = 10;
 $result = !($a > 20 || $b <= 50);
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 <?php
 
 $a = 5;
 $b = 10;
 $result = $a <= 20 && $b > 50;
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

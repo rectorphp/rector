@@ -41,7 +41,8 @@ final class DocAliasResolver
         $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
             &$possibleDocAliases
         ): void {
-            if ($node->getDocComment() === null) {
+            $docComment = $node->getDocComment();
+            if ($docComment === null) {
                 return;
             }
 
@@ -53,7 +54,7 @@ final class DocAliasResolver
             }
 
             // e.g. "use Dotrine\ORM\Mapping as ORM" etc.
-            $matches = Strings::matchAll($node->getDocComment()->getText(), self::DOC_ALIAS_REGEX);
+            $matches = Strings::matchAll($docComment->getText(), self::DOC_ALIAS_REGEX);
             foreach ($matches as $match) {
                 $possibleDocAliases[] = $match['possible_alias'];
             }

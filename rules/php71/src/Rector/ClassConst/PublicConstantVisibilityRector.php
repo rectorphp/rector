@@ -7,9 +7,9 @@ namespace Rector\Php71\Rector\ClassConst;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/class_const_visibility
@@ -18,9 +18,9 @@ use Rector\Core\ValueObject\PhpVersionFeature;
  */
 final class PublicConstantVisibilityRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Add explicit public constant visibility.',
             [
                 new CodeSample(

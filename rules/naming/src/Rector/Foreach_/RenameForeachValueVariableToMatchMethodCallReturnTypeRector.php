@@ -7,14 +7,14 @@ namespace Rector\Naming\Rector\Foreach_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Matcher\ForeachMatcher;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\NamingConvention\NamingConventionAnalyzer;
 use Rector\Naming\ValueObject\VariableAndCallForeach;
 use Rector\Naming\VariableRenamer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\RenameForeachValueVariableToMatchMethodCallReturnTypeRectorTest
@@ -60,11 +60,13 @@ final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends 
         $this->varValueAndCallForeachMatcher = $foreachMatcher;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Renames value variable name in foreach loop to match method type', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Renames value variable name in foreach loop to match method type',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -77,8 +79,8 @@ class SomeClass
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -91,8 +93,9 @@ class SomeClass
 }
 CODE_SAMPLE
 
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

@@ -15,9 +15,9 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function
@@ -34,9 +34,9 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
         'Twig_Filter_Method' => 'Twig_SimpleFilter',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.',
             [
                 new CodeSample(

@@ -13,11 +13,11 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\MockistaToMockery\Tests\Rector\ClassMethod\MockistaMockToMockeryMockRector\MockistaMockToMockeryMockRectorTest
@@ -34,11 +34,13 @@ final class MockistaMockToMockeryMockRector extends AbstractPHPUnitRector
      */
     private $mockVariableTypesByNames = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change functions to static calls, so composer can autoload them', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change functions to static calls, so composer can autoload them',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeTest
 {
     public function run()
@@ -50,7 +52,7 @@ class SomeTest
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeTest
 {
     public function run()
@@ -60,8 +62,9 @@ class SomeTest
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

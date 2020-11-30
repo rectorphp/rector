@@ -25,7 +25,7 @@ final class Php80RectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp80');
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::STATIC_RETURN_TYPE;
     }

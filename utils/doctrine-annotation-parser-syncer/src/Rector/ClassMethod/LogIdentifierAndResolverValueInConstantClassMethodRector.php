@@ -14,9 +14,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser::Constant()
@@ -79,9 +80,37 @@ final class LogIdentifierAndResolverValueInConstantClassMethodRector extends Abs
         return $node;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Log original and changed constant value');
+        return new RuleDefinition('Log original and changed constant value', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+namespace Doctrine\Common\Annotations;
+
+class AnnotationReader
+{
+    public function Constant()
+    {
+        // ...
+    }
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+namespace Doctrine\Common\Annotations;
+
+class AnnotationReader
+{
+    public function Constant()
+    {
+        $identifier = $this->Identifier();
+        $originalIdentifier = $identifier;
+        // ...
+    }
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     private function createAssignOriginalIdentifierExpression(): Expression

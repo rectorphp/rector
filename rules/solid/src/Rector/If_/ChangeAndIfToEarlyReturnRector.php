@@ -9,15 +9,19 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\For_;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\StmtsManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeTransformer\ConditionInverter;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\ChangeAndIfToEarlyReturnRectorTest
@@ -49,9 +53,9 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
         $this->stmtsManipulator = $stmtsManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes if && to early return', [
+        return new RuleDefinition('Changes if && to early return', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
@@ -115,16 +119,16 @@ CODE_SAMPLE
         $expr = $node->cond;
 
         $conditions = $this->getBooleanAndConditions($expr);
-        $ifs = $this->createInvertedIfNodesFromConditions($conditions);
+        $ifs = $this->createInvertedIfNodesFromConditions($node, $conditions);
 
         $this->keepCommentIfExists($node, $ifs);
 
         $this->addNodesAfterNode($ifs, $node);
         $this->addNodeAfterNode($ifReturn, $node);
 
-        $ifParentReturn = $this->getIfParentReturn($node);
-        if ($ifParentReturn !== null) {
-            $this->removeNode($ifParentReturn);
+        $ifNextReturn = $this->getIfNextReturn($node);
+        if ($ifNextReturn !== null && ! $this->isIfInLoop($node)) {
+            $this->removeNode($ifNextReturn);
         }
 
         $this->removeNode($node);
@@ -198,13 +202,19 @@ CODE_SAMPLE
      * @param Expr[] $conditions
      * @return If_[]
      */
-    private function createInvertedIfNodesFromConditions(array $conditions): array
+    private function createInvertedIfNodesFromConditions(If_ $node, array $conditions): array
     {
+        $isIfInLoop = $this->isIfInLoop($node);
+
         $ifs = [];
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
-            $if->stmts = [new Return_()];
+            if ($isIfInLoop && $this->getIfNextReturn($node) === null) {
+                $if->stmts = [new Continue_()];
+            } else {
+                $if->stmts = [new Return_()];
+            }
 
             $ifs[] = $if;
         }
@@ -221,7 +231,7 @@ CODE_SAMPLE
         $ifs[0]->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 
-    private function getIfParentReturn(If_ $if): ?Return_
+    private function getIfNextReturn(If_ $if): ?Return_
     {
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
         if (! $nextNode instanceof Return_) {
@@ -229,6 +239,16 @@ CODE_SAMPLE
         }
 
         return $nextNode;
+    }
+
+    private function isIfInLoop(If_ $if): bool
+    {
+        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $if,
+            [Foreach_::class, For_::class, While_::class]
+        );
+
+        return $parentLoop !== null;
     }
 
     private function isIfReturnsVoid(If_ $if): bool

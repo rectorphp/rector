@@ -19,11 +19,11 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\Comment\MergedNodeCommentPreserver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\SimplifyIfReturnBoolRectorTest
@@ -55,21 +55,24 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Shortens if return false/true to direct return', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Shortens if return false/true to direct return',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 if (strpos($docToken->getContent(), "\n") === false) {
     return true;
 }
 
 return false;
 CODE_SAMPLE
-                ,
-                'return strpos($docToken->getContent(), "\n") === false;'
-            ),
-        ]);
+                    ,
+                    'return strpos($docToken->getContent(), "\n") === false;'
+                ),
+
+            ]);
     }
 
     /**
@@ -110,7 +113,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->mergedNodeCommentPreserver->keepComments($newReturnNode, $node, $ifInnerNode, $nextNode, $newReturnNode);
+        $this->mergedNodeCommentPreserver->keepComments(
+            $newReturnNode,
+            [$node, $ifInnerNode, $nextNode, $newReturnNode]
+        );
         $this->removeNode($nextNode);
 
         return $newReturnNode;

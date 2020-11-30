@@ -11,8 +11,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector\RenameFunctionRectorTest
@@ -29,9 +29,9 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
      */
     private $oldFunctionToNewFunction = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns defined function call new one.', [
+        return new RuleDefinition('Turns defined function call new one.', [
             new ConfiguredCodeSample(
                 'view("...", []);',
                 'Laravel\Templating\render("...", []);',

@@ -25,13 +25,13 @@ use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
-use Rector\Core\Skip\Skipper;
 use Rector\Core\ValueObject\ProjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\Skipper\Skipper\Skipper;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
@@ -219,7 +219,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo instanceof SmartFileInfo && $this->skipper->shouldSkipFileInfoAndRule($fileInfo, $this)) {
+        if ($fileInfo instanceof SmartFileInfo && $this->skipper->shouldSkipElementAndFileInfo($this, $fileInfo)) {
             return null;
         }
 
@@ -278,7 +278,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return true;
     }
 
-    protected function isAtLeastPhpVersion(string $version): bool
+    protected function isAtLeastPhpVersion(int $version): bool
     {
         return $this->phpVersionProvider->isAtLeastPhpVersion($version);
     }
@@ -454,12 +454,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
         $fileInfo = $originalNode->getAttribute(AttributeKey::FILE_INFO);
 
+        $originalParent = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
+
         if ($fileInfo !== null) {
             $node->setAttribute(AttributeKey::FILE_INFO, $originalNode->getAttribute(AttributeKey::FILE_INFO));
-        } elseif ($originalNode->getAttribute(AttributeKey::PARENT_NODE) !== null) {
-            /** @var Node $parentOriginalNode */
-            $parentOriginalNode = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
-            $node->setAttribute(AttributeKey::FILE_INFO, $parentOriginalNode->getAttribute(AttributeKey::FILE_INFO));
+        } elseif ($originalParent instanceof Node) {
+            $node->setAttribute(AttributeKey::FILE_INFO, $originalParent->getAttribute(AttributeKey::FILE_INFO));
         }
     }
 

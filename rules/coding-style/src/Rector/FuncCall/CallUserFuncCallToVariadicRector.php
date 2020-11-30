@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://www.php.net/manual/en/function.call-user-func-array.php#117655
@@ -18,9 +18,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class CallUserFuncCallToVariadicRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replace call_user_func_call with variadic', [
+        return new RuleDefinition('Replace call_user_func_call with variadic', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

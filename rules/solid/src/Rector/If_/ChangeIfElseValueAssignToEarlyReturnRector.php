@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\StmtsManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://engineering.helpscout.com/reducing-complexity-with-guard-clauses-in-php-and-javascript-74600fd865c7
@@ -38,9 +38,9 @@ final class ChangeIfElseValueAssignToEarlyReturnRector extends AbstractRector
         $this->stmtsManipulator = $stmtsManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change if/else value to early return', [
+        return new RuleDefinition('Change if/else value to early return', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
@@ -105,7 +105,9 @@ CODE_SAMPLE
         /** @var Assign $assign */
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->stmts);
 
-        $node->stmts[$lastIfStmtKey] = new Return_($assign->expr);
+        $return = new Return_($assign->expr);
+        $this->copyCommentIfExists($assign, $return);
+        $node->stmts[$lastIfStmtKey] = $return;
 
         /** @var Assign $assign */
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->else->stmts);
@@ -113,7 +115,10 @@ CODE_SAMPLE
         $lastElseStmtKey = array_key_last($node->else->stmts);
 
         $elseStmts = $node->else->stmts;
-        $elseStmts[$lastElseStmtKey] = new Return_($assign->expr);
+
+        $return = new Return_($assign->expr);
+        $this->copyCommentIfExists($assign, $return);
+        $elseStmts[$lastElseStmtKey] = $return;
 
         $node->else = null;
         $this->addNodesAfterNode($elseStmts, $node);
@@ -121,5 +126,11 @@ CODE_SAMPLE
         $this->removeNode($nextNode);
 
         return $node;
+    }
+
+    private function copyCommentIfExists(Node $from, Node $to): void
+    {
+        $nodeComments = $from->getAttribute(AttributeKey::COMMENTS);
+        $to->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 }

@@ -134,12 +134,11 @@ final class AnnotationContentResolver
             return $annotationContent;
         }
 
-        $previousWhitespaceToken = $tokens[$currentIndex - 1];
-
         // do not prepend whitespace without any content
         if ($annotationContent === '') {
             return $annotationContent;
         }
+        $previousWhitespaceToken = $tokens[$currentIndex - 1];
 
         // get the space
         return $annotationContent . $previousWhitespaceToken[0];

@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\ChangeGetUuidMethodCallToGetIdRectorTest
@@ -27,9 +27,9 @@ final class ChangeGetUuidMethodCallToGetIdRector extends AbstractRector
         $this->doctrineEntityManipulator = $doctrineEntityManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change getUuid() method call to getId()', [
+        return new RuleDefinition('Change getUuid() method call to getId()', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;

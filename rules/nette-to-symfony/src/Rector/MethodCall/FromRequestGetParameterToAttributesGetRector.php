@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://doc.nette.org/en/2.4/http-request-response
@@ -20,11 +20,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class FromRequestGetParameterToAttributesGetRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes "getParameter()" to "attributes->get()" from Nette to Symfony', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Changes "getParameter()" to "attributes->get()" from Nette to Symfony',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\Request;
 
 final class SomeController
@@ -35,8 +37,8 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Nette\Request;
 
 final class SomeController
@@ -47,8 +49,9 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

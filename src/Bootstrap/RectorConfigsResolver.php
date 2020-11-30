@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\Core\Bootstrap;
 
-use Rector\Core\Set\SetResolver;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Set\RectorSetProvider;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputInterface;
 use Symplify\SetConfigResolver\ConfigResolver;
 use Symplify\SetConfigResolver\SetAwareConfigResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorConfigsResolver
 {
-    /**
-     * @var SetResolver
-     */
-    private $setResolver;
-
     /**
      * @var ConfigResolver
      */
@@ -30,7 +26,6 @@ final class RectorConfigsResolver
 
     public function __construct()
     {
-        $this->setResolver = new SetResolver();
         $this->configResolver = new ConfigResolver();
         $rectorSetProvider = new RectorSetProvider();
         $this->setAwareConfigResolver = new SetAwareConfigResolver($rectorSetProvider);
@@ -60,13 +55,8 @@ final class RectorConfigsResolver
     {
         $configFileInfos = [];
 
-        // Detect configuration from --set
         $argvInput = new ArgvInput();
-
-        $set = $this->setResolver->resolveSetFromInput($argvInput);
-        if ($set !== null) {
-            $configFileInfos[] = $set->getSetFileInfo();
-        }
+        $this->guardDeprecatedSetOption($argvInput);
 
         // And from --config or default one
         $inputOrFallbackConfigFileInfo = $this->configResolver->resolveFromInputWithFallback(
@@ -89,5 +79,15 @@ final class RectorConfigsResolver
         }
 
         return array_merge($configFileInfos, $setFileInfos);
+    }
+
+    private function guardDeprecatedSetOption(InputInterface $input): void
+    {
+        $setOption = $input->getParameterOption(['-s', '--set']);
+        if ($setOption === false) {
+            return;
+        }
+        throw new ShouldNotHappenException(
+            '"-s/--set" option was deprecated and removed. Use rector.php config and SetList class with autocomplete instead');
     }
 }

@@ -11,10 +11,10 @@ use PHPStan\Type\ObjectType;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\Php71\ValueObject\TwoNodeMatch;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\ChangeIdenticalUuidToEqualsMethodCallRectorTest
@@ -31,11 +31,13 @@ final class ChangeIdenticalUuidToEqualsMethodCallRector extends AbstractRector
         $this->doctrineEntityManipulator = $doctrineEntityManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change $uuid === 1 to $uuid->equals(\Ramsey\Uuid\Uuid::fromString(1))', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change $uuid === 1 to $uuid->equals(\Ramsey\Uuid\Uuid::fromString(1))',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function match($checkedId): int
@@ -46,8 +48,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function match($checkedId): int
@@ -58,8 +60,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

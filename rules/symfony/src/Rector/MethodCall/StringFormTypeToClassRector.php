@@ -7,8 +7,8 @@ namespace Rector\Symfony\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Covers https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
@@ -22,9 +22,9 @@ final class StringFormTypeToClassRector extends AbstractFormAddRector
      */
     private const DESCRIPTION = 'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(self::DESCRIPTION, [
+        return new RuleDefinition(self::DESCRIPTION, [
             new CodeSample(
 <<<'CODE_SAMPLE'
 $formBuilder = new Symfony\Component\Form\FormBuilder;

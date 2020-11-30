@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Transform\ValueObject\MethodCallToStaticCall;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -28,9 +28,9 @@ final class MethodCallToStaticCallRector extends AbstractRector implements Confi
      */
     private $methodCallsToStaticCalls = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change method call to desired static call', [
+        return new RuleDefinition('Change method call to desired static call', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

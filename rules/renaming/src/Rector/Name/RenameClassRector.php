@@ -15,9 +15,9 @@ use Rector\Core\Configuration\ChangeConfiguration;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\Name\RenameClassRector\RenameClassRectorTest
@@ -50,9 +50,9 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
         $this->changeConfiguration = $changeConfiguration;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replaces defined classes by new ones.', [
+        return new RuleDefinition('Replaces defined classes by new ones.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 namespace App;

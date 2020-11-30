@@ -14,9 +14,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
@@ -30,9 +30,9 @@ final class ReplaceEachAssignmentWithKeyCurrentRector extends AbstractRector
      */
     private const KEY = 'key';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replace each() assign outside loop', [
+        return new RuleDefinition('Replace each() assign outside loop', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 $array = ['b' => 1, 'a' => 2];

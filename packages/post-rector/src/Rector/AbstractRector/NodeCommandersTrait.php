@@ -15,6 +15,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -66,6 +67,11 @@ trait NodeCommandersTrait
     private $propertyNaming;
 
     /**
+     * @var NodeRemover
+     */
+    private $nodeRemover;
+
+    /**
      * @required
      */
     public function autowireNodeCommandersTrait(
@@ -75,7 +81,8 @@ trait NodeCommandersTrait
         NodesToAddCollector $nodesToAddCollector,
         NodesToReplaceCollector $nodesToReplaceCollector,
         RectorChangeCollector $rectorChangeCollector,
-        PropertyNaming $propertyNaming
+        PropertyNaming $propertyNaming,
+        NodeRemover $nodeRemover
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->propertyToAddCollector = $propertyToAddCollector;
@@ -84,6 +91,7 @@ trait NodeCommandersTrait
         $this->nodesToAddCollector = $nodesToAddCollector;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->propertyNaming = $propertyNaming;
+        $this->nodeRemover = $nodeRemover;
     }
 
     /**
@@ -175,15 +183,7 @@ trait NodeCommandersTrait
 
     protected function removeNode(Node $node): void
     {
-        // this make sure to keep just added nodes, e.g. added class constant, that doesn't have analysis of full code in this run
-        // if this is missing, there are false positive e.g. for unused private constant
-        $isJustAddedNode = ! (bool) $node->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if ($isJustAddedNode) {
-            return;
-        }
-
-        $this->nodesToRemoveCollector->addNodeToRemove($node);
-        $this->rectorChangeCollector->notifyNodeFileInfo($node);
+        $this->nodeRemover->removeNode($node);
     }
 
     /**

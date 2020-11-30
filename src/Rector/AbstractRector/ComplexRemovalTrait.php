@@ -7,13 +7,10 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
@@ -21,7 +18,8 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
-use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\NodeRemoval\AssignRemover;
+use Rector\NodeRemoval\ClassMethodRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 
@@ -52,34 +50,37 @@ trait ComplexRemovalTrait
     private $propertyManipulator;
 
     /**
+     * @var ClassMethodRemover
+     */
+    private $classMethodRemover;
+
+    /**
+     * @var AssignRemover
+     */
+    private $assignRemover;
+
+    /**
      * @required
      */
     public function autowireComplexRemovalTrait(
         PropertyManipulator $propertyManipulator,
         ParsedNodeCollector $parsedNodeCollector,
         LivingCodeManipulator $livingCodeManipulator,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        ClassMethodRemover $classMethodRemover,
+        AssignRemover $assignRemover
     ): void {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->propertyManipulator = $propertyManipulator;
         $this->livingCodeManipulator = $livingCodeManipulator;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->classMethodRemover = $classMethodRemover;
+        $this->assignRemover = $assignRemover;
     }
-
-    abstract protected function removeNode(Node $node): void;
 
     protected function removeClassMethodAndUsages(ClassMethod $classMethod): void
     {
-        $this->removeNode($classMethod);
-
-        $calls = $this->nodeRepository->findCallsByClassMethod($classMethod);
-        foreach ($calls as $classMethodCall) {
-            if ($classMethodCall instanceof ArrayCallable) {
-                continue;
-            }
-
-            $this->removeMethodCall($classMethodCall);
-        }
+        $this->classMethodRemover->removeClassMethodAndUsages($classMethod);
     }
 
     /**
@@ -98,7 +99,7 @@ trait ComplexRemovalTrait
 
             // remove assigns
             $assign = $this->resolveAssign($propertyFetch);
-            $this->removeAssignNode($assign);
+            $this->assignRemover->removeAssignNode($assign);
 
             $this->removeConstructorDependency($assign);
         }
@@ -120,18 +121,6 @@ trait ComplexRemovalTrait
         }
 
         $this->removeNode($property);
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function removeMethodCall(Node $node): void
-    {
-        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        foreach ($node->args as $arg) {
-            $this->addLivingCodeBeforeNode($arg->value, $currentStatement);
-        }
-        $this->removeNode($node);
     }
 
     /**
@@ -172,22 +161,6 @@ trait ComplexRemovalTrait
         return $assign;
     }
 
-    private function removeAssignNode(Assign $assign): void
-    {
-        $currentStatement = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $this->addLivingCodeBeforeNode($assign->var, $currentStatement);
-
-        /** @var Assign $assign */
-        $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Expression) {
-            $this->addLivingCodeBeforeNode($assign->expr, $currentStatement);
-            $this->removeNode($assign);
-        } else {
-            $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($assign, $assign->expr);
-            $this->rectorChangeCollector->notifyNodeFileInfo($assign->expr);
-        }
-    }
-
     private function removeConstructorDependency(Assign $assign): void
     {
         $methodName = $assign->getAttribute(AttributeKey::METHOD_NAME);
@@ -206,7 +179,22 @@ trait ComplexRemovalTrait
             return;
         }
 
+        $constructClassMethodStmts = $constructClassMethod->stmts;
         foreach ($constructClassMethod->getParams() as $param) {
+            $variable = $this->betterNodeFinder->findFirst($constructClassMethodStmts, function (Node $node) use (
+                $param
+            ): bool {
+                return $this->betterStandardPrinter->areNodesEqual($param->var, $node);
+            });
+
+            if ($variable === null) {
+                continue;
+            }
+
+            if ($this->isExpressionVariableNotAssign($variable)) {
+                continue;
+            }
+
             if (! $this->betterStandardPrinter->areNodesEqual($param->var, $assign->expr)) {
                 continue;
             }
@@ -215,10 +203,16 @@ trait ComplexRemovalTrait
         }
     }
 
-    private function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
+    private function isExpressionVariableNotAssign(Node $node): bool
     {
-        foreach ($this->livingCodeManipulator->keepLivingCodeFromExpr($expr) as $expr) {
-            $this->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
+        if ($node !== null) {
+            $expressionVariable = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+            if (! $expressionVariable instanceof Assign) {
+                return true;
+            }
         }
+
+        return false;
     }
 }

@@ -15,12 +15,12 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony\NodeFactory\BuilderFormNodeFactory;
 use Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory;
 use ReflectionClass;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Best resource with clear example:
@@ -60,9 +60,9 @@ final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
         $this->configureOptionsNodeFactory = $configureOptionsNodeFactory;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Changes createForm(new FormType), add(new FormType) to ones with "FormType::class"',
             [
                 new CodeSample(

@@ -13,11 +13,11 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeCollector\StaticAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://thephp.cc/news/2017/07/dont-call-instance-methods-statically
@@ -45,11 +45,13 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
         $this->staticAnalyzer = $staticAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes static call to instance call, where not useful', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Changes static call to instance call, where not useful',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class Something
 {
     public function doWork()
@@ -65,8 +67,8 @@ class Another
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class Something
 {
     public function doWork()
@@ -82,8 +84,9 @@ class Another
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

@@ -14,11 +14,11 @@ use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\ArrayDimFetchRenamer;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -45,11 +45,13 @@ final class ChangeControlArrayAccessToAnnotatedControlVariableRector extends Abs
         $this->arrayDimFetchRenamer = $arrayDimFetchRenamer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change magic $this["some_component"] to variable assign with @var annotation', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change magic $this["some_component"] to variable assign with @var annotation',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
 
@@ -68,7 +70,7 @@ final class SomePresenter extends Presenter
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
 
@@ -88,8 +90,9 @@ final class SomePresenter extends Presenter
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

@@ -11,7 +11,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class NodeFactoryTest extends AbstractKernelTestCase
 {

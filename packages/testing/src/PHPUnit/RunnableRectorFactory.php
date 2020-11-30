@@ -6,6 +6,7 @@ namespace Rector\Testing\PHPUnit;
 
 use Nette\Utils\Random;
 use Nette\Utils\Strings;
+use PhpParser\NodeFinder;
 use Rector\Testing\Contract\RunnableInterface;
 use Rector\Testing\PHPUnit\Runnable\ClassLikeNamesSuffixer;
 use Rector\Testing\PHPUnit\Runnable\RunnableClassFinder;
@@ -31,7 +32,7 @@ final class RunnableRectorFactory
 
     public function __construct()
     {
-        $this->runnableClassFinder = new RunnableClassFinder();
+        $this->runnableClassFinder = new RunnableClassFinder(new NodeFinder());
         $this->classLikeNamesSuffixer = new ClassLikeNamesSuffixer();
         $this->smartFileSystem = new SmartFileSystem();
     }

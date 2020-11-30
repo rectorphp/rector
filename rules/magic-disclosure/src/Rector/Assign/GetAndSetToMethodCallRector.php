@@ -14,9 +14,9 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\GetAndSetToMethodCallRectorTest
@@ -43,9 +43,9 @@ final class GetAndSetToMethodCallRector extends AbstractRector implements Config
         $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns defined `__get`/`__set` to specific method calls.', [
+        return new RuleDefinition('Turns defined `__get`/`__set` to specific method calls.', [
             new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 $container = new SomeContainer;

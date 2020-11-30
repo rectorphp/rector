@@ -7,6 +7,7 @@ namespace Rector\Set;
 use Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticRectorStrings;
+use Rector\Set\ValueObject\DowngradeSetList;
 use Rector\Set\ValueObject\SetList;
 use ReflectionClass;
 use Symplify\SetConfigResolver\Exception\SetNotFoundException;
@@ -29,8 +30,11 @@ final class RectorSetProvider extends AbstractSetProvider
 
     public function __construct()
     {
-        $setListReflectionClass = new ReflectionClass(SetList::class);
-        $this->hydrateSetsFromConstants($setListReflectionClass);
+        $setListClasses = [SetList::class, DowngradeSetList::class];
+        foreach ($setListClasses as $setListClass) {
+            $setListReflectionClass = new ReflectionClass($setListClass);
+            $this->hydrateSetsFromConstants($setListReflectionClass);
+        }
     }
 
     /**
@@ -55,7 +59,8 @@ final class RectorSetProvider extends AbstractSetProvider
             }
 
             $desiredSetFileInfo = new SmartFileInfo($desiredSetName);
-            if ($set->getSetFileInfo()->getRealPath() !== $desiredSetFileInfo->getRealPath()) {
+            $setFileInfo = $set->getSetFileInfo();
+            if ($setFileInfo->getRealPath() !== $desiredSetFileInfo->getRealPath()) {
                 continue;
             }
 

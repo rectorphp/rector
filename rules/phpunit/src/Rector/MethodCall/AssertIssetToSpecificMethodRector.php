@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
@@ -14,8 +13,8 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertIssetToSpecificMethodRector\AssertIssetToSpecificMethodRectorTest
@@ -42,18 +41,21 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         $this->identifierManipulator = $identifierManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns isset comparisons to their method name alternatives in PHPUnit TestCase', [
-            new CodeSample(
-                '$this->assertTrue(isset($anything->foo));',
-                '$this->assertObjectHasAttribute("foo", $anything);'
-            ),
-            new CodeSample(
-                '$this->assertFalse(isset($anything["foo"]), "message");',
-                '$this->assertArrayNotHasKey("foo", $anything, "message");'
-            ),
-        ]);
+        return new RuleDefinition(
+            'Turns isset comparisons to their method name alternatives in PHPUnit TestCase',
+            [
+                new CodeSample(
+                    '$this->assertTrue(isset($anything->foo));',
+                    '$this->assertObjectHasAttribute("foo", $anything);'
+                ),
+                new CodeSample(
+                    '$this->assertFalse(isset($anything["foo"]), "message");',
+                    '$this->assertArrayNotHasKey("foo", $anything, "message");'
+                ),
+
+            ]);
     }
 
     /**
@@ -98,11 +100,10 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 
     /**
      * @param MethodCall|StaticCall $node
-     * @param PropertyFetch $expr
      */
-    private function refactorPropertyFetchNode(Node $node, Expr $expr): void
+    private function refactorPropertyFetchNode(Node $node, PropertyFetch $propertyFetch): void
     {
-        $name = $this->getName($expr);
+        $name = $this->getName($propertyFetch);
         if ($name === null) {
             return;
         }
@@ -115,7 +116,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         $oldArgs = $node->args;
         unset($oldArgs[0]);
 
-        $newArgs = $this->createArgs([new String_($name), $expr->var]);
+        $newArgs = $this->createArgs([new String_($name), $propertyFetch->var]);
         $node->args = $this->appendArgs($newArgs, $oldArgs);
     }
 

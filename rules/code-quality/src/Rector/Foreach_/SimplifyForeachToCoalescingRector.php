@@ -15,10 +15,10 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\ForeachManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/bfsdY
@@ -42,11 +42,13 @@ final class SimplifyForeachToCoalescingRector extends AbstractRector
         $this->foreachManipulator = $foreachManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes foreach that returns set value to ??', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Changes foreach that returns set value to ??',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 foreach ($this->oldToNewFunctions as $oldFunction => $newFunction) {
     if ($currentFunction === $oldFunction) {
         return $newFunction;
@@ -55,12 +57,13 @@ foreach ($this->oldToNewFunctions as $oldFunction => $newFunction) {
 
 return null;
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 return $this->oldToNewFunctions[$currentFunction] ?? null;
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

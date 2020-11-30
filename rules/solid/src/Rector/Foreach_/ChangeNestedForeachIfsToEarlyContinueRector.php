@@ -16,10 +16,10 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeTransformer\ConditionInverter;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\ChangeNestedForeachIfsToEarlyContinueRectorTest
@@ -42,9 +42,9 @@ final class ChangeNestedForeachIfsToEarlyContinueRector extends AbstractRector
         $this->conditionInverter = $conditionInverter;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change nested ifs to foreach with continue', [
+        return new RuleDefinition('Change nested ifs to foreach with continue', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

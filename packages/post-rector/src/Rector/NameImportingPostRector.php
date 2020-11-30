@@ -9,18 +9,14 @@ use PhpParser\Node\Name;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Core\Configuration\Option;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class NameImportingPostRector extends AbstractPostRector
 {
-    /**
-     * @var bool
-     */
-    private $importDocBlocks = false;
-
     /**
      * @var ParameterProvider
      */
@@ -43,7 +39,6 @@ final class NameImportingPostRector extends AbstractPostRector
     ) {
         $this->parameterProvider = $parameterProvider;
         $this->nameImporter = $nameImporter;
-        $this->importDocBlocks = (bool) $parameterProvider->provideParameter(Option::IMPORT_DOC_BLOCKS);
         $this->docBlockNameImporter = $docBlockNameImporter;
     }
 
@@ -58,7 +53,8 @@ final class NameImportingPostRector extends AbstractPostRector
             return $this->nameImporter->importName($node);
         }
 
-        if (! $this->importDocBlocks) {
+        $importDocBlocks = (bool) $this->parameterProvider->provideParameter(Option::IMPORT_DOC_BLOCKS);
+        if (! $importDocBlocks) {
             return null;
         }
 
@@ -81,10 +77,23 @@ final class NameImportingPostRector extends AbstractPostRector
         return 600;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
-            'Imports fully qualified class names in parameter types, return types, extended classes, implemented, interfaces and even docblocks'
+        return new RuleDefinition(
+            'Imports fully qualified class names in parameter types, return types, extended classes, implemented, interfaces and even docblocks',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
+$someClass = new \Some\FullyQualified\SomeClass();
+CODE_SAMPLE
+,
+                    <<<'CODE_SAMPLE'
+use Some\FullyQualified\SomeClass;
+
+$someClass = new SomeClass();
+CODE_SAMPLE
+                ),
+            ]
         );
     }
 }

@@ -14,8 +14,8 @@ use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Rector\CakePHP\ValueObject\FactoryMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -43,9 +43,9 @@ final class ArrayToFluentCallRector extends AbstractRector implements Configurab
      */
     private $factoryMethods = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Moves array options to fluent setter method calls.', [
+        return new RuleDefinition('Moves array options to fluent setter method calls.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 use Cake\ORM\Table;

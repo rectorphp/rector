@@ -31,7 +31,7 @@ final class TypedPropertiesRemoveNullPropertyInitializationRectorTest extends Ab
         return RemoveNullPropertyInitializationRector::class;
     }
 
-    protected function getPhpVersion(): string
+    protected function getPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }

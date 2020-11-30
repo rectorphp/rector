@@ -76,6 +76,10 @@ final class MovedFileWithNodesFactory
             return null;
         }
 
+        if (Strings::match($oldClassName, '#\b' . $desiredGroupName . '\b#')) {
+            return null;
+        }
+
         // 1. rename namespace
         $this->renameNamespace($nodes, $newNamespaceName);
 

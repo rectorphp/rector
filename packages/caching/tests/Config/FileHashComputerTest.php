@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Caching\Config\FileHashComputer;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileHashComputerTest extends AbstractKernelTestCase

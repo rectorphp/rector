@@ -88,9 +88,14 @@ final class BetterStandardPrinter extends Standard
     private $commentRemover;
 
     /**
+     * @var ContentPatcher
+     */
+    private $contentPatcher;
+
+    /**
      * @param mixed[] $options
      */
-    public function __construct(CommentRemover $commentRemover, array $options = [])
+    public function __construct(CommentRemover $commentRemover, array $options = [], ContentPatcher $contentPatcher)
     {
         parent::__construct($options);
 
@@ -101,6 +106,7 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Expr_Closure->returnType'] = [')', false, ': ', null];
 
         $this->commentRemover = $commentRemover;
+        $this->contentPatcher = $contentPatcher;
     }
 
     /**
@@ -124,6 +130,52 @@ final class BetterStandardPrinter extends Standard
         $this->detectTabOrSpaceIndentCharacter($newStmts);
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
+        $content = $this->contentPatcher->cleanUpDuplicateContent($content);
+
+        $contentOriginal = $this->print($origStmts);
+
+        $content = $this->contentPatcher->rollbackValidAnnotation(
+            $contentOriginal,
+            $content,
+            ContentPatcher::VALID_ANNOTATION_STRING_REGEX,
+            ContentPatcher::INVALID_ANNOTATION_STRING_REGEX
+        );
+        $content = $this->contentPatcher->rollbackValidAnnotation(
+            $contentOriginal,
+            $content,
+            ContentPatcher::VALID_ANNOTATION_ROUTE_REGEX,
+            ContentPatcher::INVALID_ANNOTATION_ROUTE_REGEX
+        );
+        $content = $this->contentPatcher->rollbackValidAnnotation(
+            $contentOriginal,
+            $content,
+            ContentPatcher::VALID_ANNOTATION_COMMENT_REGEX,
+            ContentPatcher::INVALID_ANNOTATION_COMMENT_REGEX
+        );
+        $content = $this->contentPatcher->rollbackValidAnnotation(
+            $contentOriginal,
+            $content,
+            ContentPatcher::VALID_ANNOTATION_CONSTRAINT_REGEX,
+            ContentPatcher::INVALID_ANNOTATION_CONSTRAINT_REGEX
+        );
+        $content = $this->contentPatcher->rollbackValidAnnotation(
+            $contentOriginal,
+            $content,
+            ContentPatcher::VALID_ANNOTATION_ROUTE_OPTION_REGEX,
+            ContentPatcher::INVALID_ANNOTATION_ROUTE_OPTION_REGEX
+        );
+        $content = $this->contentPatcher->rollbackValidAnnotation(
+            $contentOriginal,
+            $content,
+            ContentPatcher::VALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX,
+            ContentPatcher::INVALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX
+        );
+        $content = $this->contentPatcher->rollbackValidAnnotation(
+            $contentOriginal,
+            $content,
+            ContentPatcher::VALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX,
+            ContentPatcher::INVALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX
+        );
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {

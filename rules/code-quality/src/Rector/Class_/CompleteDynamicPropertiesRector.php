@@ -11,8 +11,8 @@ use Rector\CodeQuality\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\CodeQuality\NodeAnalyzer\LocalPropertyAnalyzer;
 use Rector\CodeQuality\NodeFactory\MissingPropertiesFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/GL6II
@@ -48,9 +48,9 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
         $this->classLikeAnalyzer = $classLikeAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add missing dynamic properties', [
+        return new RuleDefinition('Add missing dynamic properties', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

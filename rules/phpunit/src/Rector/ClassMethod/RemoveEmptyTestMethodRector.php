@@ -7,17 +7,17 @@ namespace Rector\PHPUnit\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\RemoveEmptyTestMethodRector\RemoveEmptyTestMethodRectorTest
  */
 final class RemoveEmptyTestMethodRector extends AbstractPHPUnitRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove empty test methods', [
+        return new RuleDefinition('Remove empty test methods', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeTest extends \PHPUnit\Framework\TestCase

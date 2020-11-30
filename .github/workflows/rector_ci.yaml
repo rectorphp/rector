@@ -36,19 +36,14 @@ jobs:
                 with:
                     # Must be used to trigger workflow after push
                     token: ${{ secrets.ACCESS_TOKEN }}
-                    # see https://github.com/stefanzweifel/git-auto-commit-action#checkout-the-correct-branch
-                    ref: ${{ github.head_ref }}
 
             # in forks, the token is not available - so we cannot us eit
             -
                 if: github.event.pull_request.head.repo.full_name != github.repository
                 uses: actions/checkout@v2
-                with:
-                    # see https://github.com/stefanzweifel/git-auto-commit-action#checkout-the-correct-branch
-                    ref: ${{ github.head_ref }}
 
             -
-                uses: shivammathur/setup-php@v1
+                uses: shivammathur/setup-php@v2
                 with:
                     # PHP 7.2 is required, so Rector's code is PHP 7.2 compatible even after refactoring
                     php-version: 7.2
@@ -63,6 +58,8 @@ jobs:
 
             # see https://github.com/EndBug/add-and-commit
             -
+                # commit only to core contributors who have repository access
+                if: github.event.pull_request.head.repo.full_name == github.repository
                 uses: EndBug/add-and-commit@v5.1.0
                 with:
                     # The arguments for the `git add` command (see the paragraph below for more info)

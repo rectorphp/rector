@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Generic\Tests\Rector\FuncCall\FuncCallToNewRector\FuncCallToNewRectorTest
@@ -28,9 +28,9 @@ final class FuncCallToNewRector extends AbstractRector implements ConfigurableRe
      */
     private $functionToNew = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change configured function calls to new Instance', [
+        return new RuleDefinition('Change configured function calls to new Instance', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

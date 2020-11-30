@@ -9,7 +9,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MergedNodeCommentPreserver
 {
-    public function keepComments(Node $newNode, Node ...$mergedNodes): void
+    /**
+     * @param Node[] $mergedNodes
+     */
+    public function keepComments(Node $newNode, array $mergedNodes): void
     {
         $comments = [];
 

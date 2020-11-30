@@ -65,8 +65,9 @@ final class PregMatchTypeCorrector
             return $originalType;
         }
 
-        foreach ($this->getVariableUsages($node) as $usage) {
-            $possiblyArg = $usage->getAttribute(AttributeKey::PARENT_NODE);
+        $variableUsages = $this->getVariableUsages($node);
+        foreach ($variableUsages as $variableUsage) {
+            $possiblyArg = $variableUsage->getAttribute(AttributeKey::PARENT_NODE);
             if (! $possiblyArg instanceof Arg) {
                 continue;
             }

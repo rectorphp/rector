@@ -9,13 +9,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DoctrineCodeQuality\NodeAnalyzer\ColumnDatetimePropertyAnalyzer;
 use Rector\DoctrineCodeQuality\NodeAnalyzer\ConstructorAssignPropertyAnalyzer;
 use Rector\DoctrineCodeQuality\NodeFactory\ValueAssignFactory;
 use Rector\DoctrineCodeQuality\NodeManipulator\ColumnDatetimePropertyManipulator;
 use Rector\DoctrineCodeQuality\NodeManipulator\ConstructorManipulator;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://www.luzanky.cz/ for sponsoring this rule
@@ -65,11 +65,13 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends Abstra
         $this->constructorAssignPropertyAnalyzer = $constructorAssignPropertyAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Move default value for entity property to constructor, the safest place', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Move default value for entity property to constructor, the safest place',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -86,8 +88,8 @@ class User
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -108,8 +110,9 @@ class User
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

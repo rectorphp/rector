@@ -167,7 +167,9 @@ final class PropertyManipulator
 
     public function isPropertyChangeable(Property $property): bool
     {
-        foreach ($this->getPrivatePropertyFetches($property) as $propertyFetch) {
+        $propertyFetches = $this->getPrivatePropertyFetches($property);
+
+        foreach ($propertyFetches as $propertyFetch) {
             if ($this->isChangeableContext($propertyFetch)) {
                 return true;
             }

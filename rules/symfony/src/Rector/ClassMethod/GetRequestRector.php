@@ -12,10 +12,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\GetRequestRector\GetRequestRectorTest
@@ -42,9 +42,9 @@ final class GetRequestRector extends AbstractRector
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony',
             [
                 new CodeSample(

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
+use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
 use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
 use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 use Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
@@ -30,4 +31,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
+    $services->set(ChangePhpVersionInPlatformCheckRector::class)
+        ->call('configure', [[
+            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70400,
+        ]]);
 };

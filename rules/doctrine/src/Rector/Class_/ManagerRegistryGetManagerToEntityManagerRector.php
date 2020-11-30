@@ -18,10 +18,10 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\ManagerRegistryGetManagerToEntityManagerRectorTest
@@ -38,11 +38,13 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRecto
      */
     private const ENTITY_MANAGER = 'entityManager';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes ManagerRegistry intermediate calls directly to EntityManager calls', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Changes ManagerRegistry intermediate calls directly to EntityManager calls',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 class CustomRepository
@@ -64,8 +66,8 @@ class CustomRepository
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Doctrine\ORM\EntityManagerInterface;
 
 class CustomRepository
@@ -86,8 +88,9 @@ class CustomRepository
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

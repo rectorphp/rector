@@ -8,9 +8,9 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/flexible_heredoc_nowdoc_syntaxes
@@ -28,23 +28,26 @@ final class SensitiveHereNowDocRector extends AbstractRector
      */
     private const ATTRIBUTE_DOC_LABEL = 'docLabel';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Changes heredoc/nowdoc that contains closing word to safe wrapper name',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 $value = <<<A
     A
 A
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 $value = <<<A_WRAP
     A
 A_WRAP
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

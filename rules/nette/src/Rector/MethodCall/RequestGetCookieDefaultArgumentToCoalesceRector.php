@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -18,11 +18,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class RequestGetCookieDefaultArgumentToCoalesceRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add removed Nette\Http\Request::getCookies() default value as coalesce', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Add removed Nette\Http\Request::getCookies() default value as coalesce',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\Http\Request;
 
 class SomeClass
@@ -34,8 +36,8 @@ class SomeClass
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Nette\Http\Request;
 
 class SomeClass
@@ -47,8 +49,9 @@ class SomeClass
 }
 CODE_SAMPLE
 
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\AddPregQuoteDelimiterRectorTest
@@ -26,9 +26,9 @@ final class AddPregQuoteDelimiterRector extends AbstractRector
      */
     private const ALL_MODIFIERS = 'imsxeADSUXJu';
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Add preg_quote delimiter when missing', [
+        return new RuleDefinition('Add preg_quote delimiter when missing', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 '#' . preg_quote('name') . '#';

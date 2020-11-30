@@ -11,8 +11,8 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector\ResponseStatusCodeRectorTest
@@ -93,9 +93,9 @@ final class ResponseStatusCodeRector extends AbstractRector
         511 => 'HTTP_NETWORK_AUTHENTICATION_REQUIRED',
     ];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns status code numbers to constants', [
+        return new RuleDefinition('Turns status code numbers to constants', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeController

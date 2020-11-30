@@ -8,19 +8,21 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Nette\Tests\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRectorTest
  */
 final class GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change $this->getConfig($defaults) to array_merge', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Change $this->getConfig($defaults) to array_merge',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Nette\DI\CompilerExtension;
 
 final class SomeExtension extends CompilerExtension
@@ -36,7 +38,7 @@ final class SomeExtension extends CompilerExtension
 }
 CODE_SAMPLE
 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 use Nette\DI\CompilerExtension;
 
 final class SomeExtension extends CompilerExtension
@@ -51,8 +53,9 @@ final class SomeExtension extends CompilerExtension
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**

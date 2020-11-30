@@ -13,11 +13,11 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\RenamedNamespace;
 use Rector\Naming\NamespaceMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
@@ -44,9 +44,9 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
         $this->namespaceMatcher = $namespaceMatcher;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Replaces old namespace by new one.', [
+        return new RuleDefinition('Replaces old namespace by new one.', [
             new ConfiguredCodeSample(
                 '$someObject = new SomeOldNamespace\SomeClass;',
                 '$someObject = new SomeNewNamespace\SomeClass;',

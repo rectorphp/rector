@@ -18,9 +18,9 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -69,9 +69,9 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
         ];
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns array return to yield return in specific type and method', [
+        return new RuleDefinition('Turns array return to yield return in specific type and method', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeEventSubscriber implements EventSubscriberInterface

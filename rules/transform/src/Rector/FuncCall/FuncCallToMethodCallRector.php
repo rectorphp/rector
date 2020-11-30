@@ -8,11 +8,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\Rector\AbstractToMethodCallRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Transform\ValueObject\FuncNameToMethodCallName;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -30,9 +30,9 @@ final class FuncCallToMethodCallRector extends AbstractToMethodCallRector
      */
     private $funcNameToMethodCallNames = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Turns defined function calls to local method calls.', [
+        return new RuleDefinition('Turns defined function calls to local method calls.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

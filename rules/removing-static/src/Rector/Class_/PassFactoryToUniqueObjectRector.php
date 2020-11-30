@@ -12,14 +12,14 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\RemovingStatic\Printer\FactoryClassPrinter;
 use Rector\RemovingStatic\StaticTypesInClassResolver;
 use Rector\RemovingStatic\UniqueObjectFactoryFactory;
 use Rector\RemovingStatic\UniqueObjectOrServiceDetector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\PassFactoryToEntityRectorTest
@@ -76,9 +76,9 @@ final class PassFactoryToUniqueObjectRector extends AbstractRector implements Co
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Convert new X/Static::call() to factories in entities, pass them via constructor to each other', [
+        return new RuleDefinition('Convert new X/Static::call() to factories in entities, pass them via constructor to each other', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 <?php

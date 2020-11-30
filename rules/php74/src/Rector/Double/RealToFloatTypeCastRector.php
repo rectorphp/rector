@@ -7,9 +7,9 @@ namespace Rector\Php74\Rector\Double;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\Double;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4
@@ -17,9 +17,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RealToFloatTypeCastRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Change deprecated (real) to (float)', [
+        return new RuleDefinition('Change deprecated (real) to (float)', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

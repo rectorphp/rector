@@ -51,15 +51,11 @@ final class StrposMatchAndRefactor extends AbstractMatchAndRefactor implements S
         return null;
     }
 
-    /**
-     * @return FuncCall
-     * @noRector \Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector
-     */
     public function refactorStrStartsWith(StrStartsWith $strStartsWith): ?Node
     {
         $strposFuncCall = $strStartsWith->getFuncCall();
         $strposFuncCall->name = new Name('str_starts_with');
 
-        return $strposFuncCall;
+        return $this->createStrStartsWith($strStartsWith);
     }
 }

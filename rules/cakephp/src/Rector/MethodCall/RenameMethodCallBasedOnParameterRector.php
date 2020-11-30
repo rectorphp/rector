@@ -10,8 +10,8 @@ use PhpParser\Node\Identifier;
 use Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
@@ -32,7 +32,7 @@ final class RenameMethodCallBasedOnParameterRector extends AbstractRector implem
      */
     private $callsWithParamRenames = [];
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
         $configuration = [
             self::CALLS_WITH_PARAM_RENAMES => [
@@ -40,7 +40,7 @@ final class RenameMethodCallBasedOnParameterRector extends AbstractRector implem
                 new RenameMethodCallBasedOnParameter('ServerRequest', 'withParam', 'paging', 'withAttribute'),
             ],
         ];
-        return new RectorDefinition(
+        return new RuleDefinition(
             'Changes method calls based on matching the first parameter value.',
             [
                 new ConfiguredCodeSample(

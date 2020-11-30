@@ -11,11 +11,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use ReflectionClass;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -96,10 +96,12 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
         return null;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition('Remove interface, that are added just for its sake, but nowhere useful', [
-            new CodeSample(
+        return new RuleDefinition(
+            'Remove interface, that are added just for its sake, but nowhere useful',
+            [
+                new CodeSample(
 <<<'CODE_SAMPLE'
 class SomeClass implements OnlyHereUsedInterface
 {
@@ -129,8 +131,9 @@ class SomePresenter
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     private function resolveClassFileLocation(string $implementedInterfaceName): string

@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @source https://wiki.php.net/rfc/deprecations_php_7_2#each
@@ -32,9 +32,9 @@ final class ListEachRector extends AbstractRector
         $this->assignManipulator = $assignManipulator;
     }
 
-    public function getDefinition(): RectorDefinition
+    public function getRuleDefinition(): RuleDefinition
     {
-        return new RectorDefinition(
+        return new RuleDefinition(
             'each() function is deprecated, use key() and current() instead',
             [
                 new CodeSample(

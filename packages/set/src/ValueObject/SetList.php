@@ -184,31 +184,6 @@ final class SetList
     /**
      * @var string
      */
-    public const DOWNGRADE_PHP71 = __DIR__ . '/../../../../config/set/downgrade-php71.php';
-
-    /**
-     * @var string
-     */
-    public const DOWNGRADE_PHP72 = __DIR__ . '/../../../../config/set/downgrade-php72.php';
-
-    /**
-     * @var string
-     */
-    public const DOWNGRADE_PHP73 = __DIR__ . '/../../../../config/set/downgrade-php73.php';
-
-    /**
-     * @var string
-     */
-    public const DOWNGRADE_PHP74 = __DIR__ . '/../../../../config/set/downgrade-php74.php';
-
-    /**
-     * @var string
-     */
-    public const DOWNGRADE_PHP80 = __DIR__ . '/../../../../config/set/downgrade-php80.php';
-
-    /**
-     * @var string
-     */
     public const EASY_ADMIN_BUNDLE_20 = __DIR__ . '/../../../../config/set/easy-admin-bundle20.php';
 
     /**
@@ -300,6 +275,16 @@ final class SetList
      * @var string
      */
     public const LARAVEL_STATIC_TO_INJECTION = __DIR__ . '/../../../../config/set/laravel-static-to-injection.php';
+
+    /**
+     * @var string
+     */
+    public const LARAVEL_CODE_QUALITY = __DIR__ . '/../../../../config/set/laravel-code-quality.php';
+
+    /**
+     * @var string
+     */
+    public const LARAVEL_ARRAY_STR_FUNCTION_TO_STATIC_CALL = __DIR__ . '/../../../../config/set/laravel-array-str-functions-to-static-call.php';
 
     /**
      * @var string
@@ -725,4 +710,9 @@ final class SetList
      * @var string
      */
     public const EARLY_RETURN = __DIR__ . '/../../../../config/set/early-return.php';
+
+    /**
+     * @var string
+     */
+    public const CARBON_2 = __DIR__ . '/../../../../config/set/carbon-2.php';
 }
