@@ -67,7 +67,7 @@ final class ConfigurableRectorRule implements Rule
 
     private function hasRectorInClassName(Class_ $class): bool
     {
-        if ($class->namespacedName === null) {
+        if (! property_exists($class, 'namespacedName') || $class->namespacedName === null) {
             return false;
         }
 
