@@ -110,7 +110,7 @@ final class EntityUuidNodeFactory
             return;
         }
 
-        $clearedDocCommentText = Strings::replace($docComment->getText(), self::ORM_VAR_DOC_LINE_REGEX);
+        $clearedDocCommentText = Strings::replace($docComment->getText(), self::ORM_VAR_DOC_LINE_REGEX, '');
         $node->setDocComment(new Doc($clearedDocCommentText));
     }
 

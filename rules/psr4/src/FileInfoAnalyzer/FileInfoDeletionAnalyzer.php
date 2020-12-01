@@ -51,6 +51,6 @@ final class FileInfoDeletionAnalyzer
 
     public function clearNameFromTestingPrefix(string $name): string
     {
-        return Strings::replace($name, self::TESTING_PREFIX_REGEX);
+        return Strings::replace($name, self::TESTING_PREFIX_REGEX, '');
     }
 }
