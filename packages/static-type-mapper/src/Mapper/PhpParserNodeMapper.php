@@ -42,6 +42,6 @@ final class PhpParserNodeMapper
             return $phpParserNodeMapper->mapToPHPStan($node);
         }
 
-        throw new NotImplementedException();
+        throw new NotImplementedException(get_class($node));
     }
 }
