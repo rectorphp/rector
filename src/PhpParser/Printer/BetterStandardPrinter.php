@@ -95,7 +95,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * @param mixed[] $options
      */
-    public function __construct(CommentRemover $commentRemover, array $options = [], ContentPatcher $contentPatcher)
+    public function __construct(CommentRemover $commentRemover, ContentPatcher $contentPatcher, array $options = [])
     {
         parent::__construct($options);
 

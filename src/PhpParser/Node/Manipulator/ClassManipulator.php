@@ -74,8 +74,9 @@ final class ClassManipulator
             }
         }
 
-        $implementedInterfaces = class_implements($class);
+        $implementedInterfaces = (array) class_implements($class);
         foreach ($implementedInterfaces as $implementedInterface) {
+            /** @var string $implementedInterface */
             if (method_exists($implementedInterface, $method)) {
                 return true;
             }

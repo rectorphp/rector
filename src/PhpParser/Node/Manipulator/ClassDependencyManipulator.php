@@ -188,7 +188,8 @@ final class ClassDependencyManipulator
      */
     private function getParentClassPublicAndProtectedPropertyReflections(string $className): array
     {
-        $parentClassNames = class_parents($className);
+        /** @var string[] $parentClassNames */
+        $parentClassNames = (array) class_parents($className);
 
         $propertyReflections = [];
 
