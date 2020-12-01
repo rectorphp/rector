@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-use Symplify\ComposerJsonManipulator\ComposerJsonManipulatorBundle;
+use Symplify\ComposerJsonManipulator\Bundle\ComposerJsonManipulatorBundle;
 use Symplify\ConsoleColorDiff\ConsoleColorDiffBundle;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
