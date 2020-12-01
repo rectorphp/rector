@@ -60,7 +60,7 @@ final class AnnotationContentResolver
             $annotationContent = $this->appendPreviousWhitespace($tokenIterator, $annotationContent);
 
             if (Strings::contains($tokenIterator->currentTokenValue(), '*')) {
-                $tokenValueWithoutAsterisk = Strings::replace($tokenIterator->currentTokenValue(), '#\*#');
+                $tokenValueWithoutAsterisk = Strings::replace($tokenIterator->currentTokenValue(), '#\*#', '');
                 $annotationContent .= $tokenValueWithoutAsterisk;
             } else {
                 $annotationContent .= $tokenIterator->currentTokenValue();
