@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use Symplify\ComposerJsonManipulator\Bundle\ComposerJsonManipulatorBundle;
-use Symplify\ConsoleColorDiff\ConsoleColorDiffBundle;
+use Symplify\ConsoleColorDiff\Bundle\ConsoleColorDiffBundle;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Symplify\PhpConfigPrinter\Bundle\PhpConfigPrinterBundle;
