@@ -42,9 +42,7 @@
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
-        "cweagans/composer-patches": "^1.7",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "symplify/vendor-patches": "dev-master",
         "nette/application": "^3.0",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
@@ -317,13 +315,6 @@
     "config": {
         "sort-packages": true,
         "process-timeout": 0
-    },
-    "extra": {
-        "patches": {
-            "nette/application": [
-                "patches/nette-application-src-application-ui-presenter-php.patch"
-            ]
-        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

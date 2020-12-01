@@ -25,15 +25,10 @@ final class RemoveIncludeRector extends AbstractRector
             'Remove includes (include, include_once, require, require_once) from source', [
                 new CodeSample(
                                         <<<'CODE_SAMPLE'
-// Comment before require
 include 'somefile.php';
-// Comment after require
 CODE_SAMPLE
                                 ,
                                 <<<'CODE_SAMPLE'
-// Comment before require
-
-// Comment after require
 CODE_SAMPLE
                 ),
             ]
@@ -53,12 +48,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $nop = new Nop();
-        $comments = $node->getAttribute(AttributeKey::COMMENTS);
-        if ($comments) {
-            $nop->setAttribute(AttributeKey::COMMENTS, $comments);
-            $this->addNodeAfterNode($nop, $node);
-        }
         $this->removeNode($node);
 
         return $node;
