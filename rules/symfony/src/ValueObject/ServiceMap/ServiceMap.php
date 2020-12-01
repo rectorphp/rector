@@ -40,7 +40,8 @@ final class ServiceMap
             return null;
         }
 
-        $interfaces = class_implements($class);
+        /** @var string[] $interfaces */
+        $interfaces = (array) class_implements($class);
 
         foreach ($interfaces as $interface) {
             // return first interface

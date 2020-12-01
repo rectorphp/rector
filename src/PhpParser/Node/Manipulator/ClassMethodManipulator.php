@@ -121,8 +121,10 @@ final class ClassMethodManipulator
             return true;
         }
 
-        $implementedInterfaces = class_implements($class);
+        $implementedInterfaces = (array) class_implements($class);
+
         foreach ($implementedInterfaces as $implementedInterface) {
+            /** @var string $implementedInterface */
             if (method_exists($implementedInterface, $methodName)) {
                 return true;
             }
@@ -177,7 +179,8 @@ final class ClassMethodManipulator
 
     private function isMethodInParent(string $class, string $method): bool
     {
-        foreach (class_parents($class) as $parentClass) {
+        foreach ((array) class_parents($class) as $parentClass) {
+            /** @var string $parentClass */
             if (method_exists($parentClass, $method)) {
                 return true;
             }

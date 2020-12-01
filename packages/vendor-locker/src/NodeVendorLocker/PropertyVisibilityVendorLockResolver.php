@@ -40,7 +40,8 @@ final class PropertyVisibilityVendorLockResolver extends AbstractNodeVendorLockR
 
     private function hasParentProperty(string $className, string $propertyName): bool
     {
-        $parentClasses = class_parents($className);
+        /** @var string[] $parentClasses */
+        $parentClasses = (array) class_parents($className);
 
         foreach ($parentClasses as $parentClass) {
             if (! property_exists($parentClass, $propertyName)) {

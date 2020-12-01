@@ -61,7 +61,7 @@ final class TypeAnalyzer
             $singleType = strtolower($singleType);
 
             // remove [] from arrays
-            $singleType = Strings::replace($singleType, self::SQUARE_BRACKET_REGEX);
+            $singleType = Strings::replace($singleType, self::SQUARE_BRACKET_REGEX, '');
 
             if (in_array($singleType, array_merge($this->phpSupportedTypes, self::EXTRA_TYPES), true)) {
                 return true;

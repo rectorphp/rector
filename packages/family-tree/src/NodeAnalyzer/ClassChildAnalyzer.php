@@ -42,7 +42,9 @@ final class ClassChildAnalyzer
             return false;
         }
 
-        $classParents = class_parents($className);
+        /** @var string[] $classParents */
+        $classParents = (array) class_parents($className);
+
         foreach ($classParents as $classParent) {
             $parentReflectionClass = new ReflectionClass($classParent);
             $constructMethodReflection = $parentReflectionClass->getConstructor();

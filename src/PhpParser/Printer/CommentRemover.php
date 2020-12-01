@@ -32,15 +32,15 @@ final class CommentRemover
     public function remove(string $content): string
     {
         // remove /** ... */
-        $content = Strings::replace($content, self::START_COMMENT_REGEX);
+        $content = Strings::replace($content, self::START_COMMENT_REGEX, '');
 
         // remove /* ... */
-        $content = Strings::replace($content, self::START_COMMENT_REGEX);
+        $content = Strings::replace($content, self::START_COMMENT_REGEX, '');
 
         // remove # ...
-        $content = Strings::replace($content, self::START_GRID_COMMENT_REGEX);
+        $content = Strings::replace($content, self::START_GRID_COMMENT_REGEX, '');
 
         // remove // ...
-        return Strings::replace($content, self::START_DOUBLE_SLASH_COMMENT_REGEX);
+        return Strings::replace($content, self::START_DOUBLE_SLASH_COMMENT_REGEX, '');
     }
 }

@@ -89,7 +89,9 @@ CODE_SAMPLE
             if ($this->shouldAddEmptyLine($currentStmtVariableName, $node, $key)) {
                 $hasChanged = true;
                 // insert newline before
-                array_splice($node->stmts, $key, 0, [new Nop()]);
+                $stmts = (array) $node->stmts;
+                array_splice($stmts, $key, 0, [new Nop()]);
+                $node->stmts = $stmts;
             }
 
             $this->previousPreviousStmtVariableName = $this->previousStmtVariableName;

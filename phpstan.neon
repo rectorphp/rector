@@ -762,3 +762,9 @@ parameters:
 
         # skip for final method, that cannot be overriden without static reflection
         - '#Class "Rector\\Nette\\Rector\\Class_\\MoveFinalGetUserToCheckRequirementsClassMethodRector" is missing @see annotation with test case class reference#'
+
+        # Symfony spl file info false positive
+        - '#Parameter \#2 \$mode of method Symfony\\Component\\Filesystem\\Filesystem\:\:chmod\(\) expects int, int\|false given#'
+        - '#Parameter \#1 \$callback of function set_error_handler expects \(callable\(int, string, string, int, array\)\: bool\)\|null, \(array&callable\(\)\: mixed\)\|\(callable\(\)\: mixed&object\)\|\(callable\(\)\: mixed&string\) given#'
+        - '#Method Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard\:\:getParentClasses\(\) should return array<class\-string\> but returns array<int\|string, class\-string\|false\>#'
+        - '#Method Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector\:\:getParentClasses\(\) should return array<class\-string\> but returns array<int\|string, class\-string\|false\>#'

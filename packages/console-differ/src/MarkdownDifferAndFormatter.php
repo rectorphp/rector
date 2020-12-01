@@ -43,7 +43,7 @@ final class MarkdownDifferAndFormatter
         $diff = $this->markdownDiffer->diff($old, $new);
 
         // remove first line, just meta info added by UnifiedDiffOutputBuilder
-        $diff = Strings::replace($diff, self::METADATA_REGEX);
+        $diff = Strings::replace($diff, self::METADATA_REGEX, '');
 
         return $this->removeTrailingWhitespaces($diff);
     }

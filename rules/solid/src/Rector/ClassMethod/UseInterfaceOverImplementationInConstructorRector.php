@@ -112,7 +112,8 @@ CODE_SAMPLE
      */
     private function getClassDirectInterfaces(string $typeName): array
     {
-        $interfaceNames = class_implements($typeName);
+        /** @var string[] $interfaceNames */
+        $interfaceNames = (array) class_implements($typeName);
 
         foreach ($interfaceNames as $possibleDirectInterfaceName) {
             foreach ($interfaceNames as $key => $interfaceName) {
@@ -143,7 +144,7 @@ CODE_SAMPLE
         foreach ($interfaceNames as $key => $interfaceName) {
             $implementations = [];
             foreach ($classes as $class) {
-                $interfacesImplementedByClass = class_implements($class);
+                $interfacesImplementedByClass = (array) class_implements($class);
                 if (! in_array($interfaceName, $interfacesImplementedByClass, true)) {
                     continue;
                 }

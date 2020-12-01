@@ -57,7 +57,8 @@ final class ClassMethodVisibilityVendorLockResolver extends AbstractNodeVendorLo
 
     private function hasParentMethod(string $className, string $methodName): bool
     {
-        $parentClasses = class_parents($className);
+        /** @var string[] $parentClasses */
+        $parentClasses = (array) class_parents($className);
 
         foreach ($parentClasses as $parentClass) {
             if (! method_exists($parentClass, $methodName)) {
@@ -94,7 +95,8 @@ final class ClassMethodVisibilityVendorLockResolver extends AbstractNodeVendorLo
      */
     private function getInterfaceMethodNames(string $className): array
     {
-        $interfaces = class_implements($className);
+        /** @var string[] $interfaces */
+        $interfaces = (array) class_implements($className);
 
         $interfaceMethods = [];
         foreach ($interfaces as $interface) {

@@ -136,15 +136,16 @@ final class ParsedClassConstFetchNodeCollector
     {
         $reflectionClass = new ReflectionClass($className);
 
-        $currentClassConstants = array_keys($reflectionClass->getConstants());
+        $constants = (array) $reflectionClass->getConstants();
+
+        $currentClassConstants = array_keys($constants);
         $parentClassReflection = $reflectionClass->getParentClass();
 
         if (! $parentClassReflection) {
             return $currentClassConstants;
         }
 
-        $parentClassConstants = array_keys($parentClassReflection->getConstants());
-
+        $parentClassConstants = array_keys($constants);
         return array_diff($currentClassConstants, $parentClassConstants);
     }
 }

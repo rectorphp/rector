@@ -42,7 +42,9 @@ final class ClassMethodVendorLockResolver extends AbstractNodeVendorLockResolver
         /** @var string $className */
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
 
-        $classParents = class_parents($className);
+        /** @var string[] $classParents */
+        $classParents = (array) class_parents($className);
+
         foreach ($classParents as $classParent) {
             if (! class_exists($classParent)) {
                 continue;

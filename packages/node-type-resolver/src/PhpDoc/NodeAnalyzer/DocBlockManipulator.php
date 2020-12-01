@@ -220,6 +220,6 @@ final class DocBlockManipulator
 
     private function removeSpacesAndAsterisks(string $content): string
     {
-        return Strings::replace($content, self::SPACE_OR_ASTERISK_REGEX);
+        return Strings::replace($content, self::SPACE_OR_ASTERISK_REGEX, '');
     }
 }

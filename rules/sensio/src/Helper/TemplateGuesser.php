@@ -90,7 +90,7 @@ final class TemplateGuesser
         $bundle = $this->resolveBundle($class, $namespace);
         $controller = $this->resolveController($class);
 
-        $action = Strings::replace($method, self::ACTION_MATCH_REGEX);
+        $action = Strings::replace($method, self::ACTION_MATCH_REGEX, '');
 
         $fullPath = '';
         if ($bundle !== '') {
@@ -112,7 +112,7 @@ final class TemplateGuesser
         }
 
         $bundle = Strings::match($namespace, self::BUNDLE_NAME_MATCHING_REGEX)['bundle'] ?? '';
-        $bundle = Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX);
+        $bundle = Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX, '');
         return $bundle !== '' ? '@' . $bundle : '';
     }
 

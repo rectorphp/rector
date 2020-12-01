@@ -61,7 +61,7 @@ final class PHPStanServicesFactory
                 // Note: We need a unique file per process if rector runs in parallel
                 $pid = getmypid();
                 $temporaryPHPStanNeon = $currentWorkingDirectory . '/rector-temp-phpstan' . $pid . '.neon';
-                $clearedPhpstanNeonContent = Strings::replace($phpstanNeonContent, self::BLEEDING_EDGE_REGEX);
+                $clearedPhpstanNeonContent = Strings::replace($phpstanNeonContent, self::BLEEDING_EDGE_REGEX, '');
                 $smartFileSystem->dumpFile($temporaryPHPStanNeon, $clearedPhpstanNeonContent);
 
                 $additionalConfigFiles[] = $temporaryPHPStanNeon;

@@ -71,7 +71,7 @@ final class ClassNaming
 
         // remove PHPUnit fixture file prefix
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            $basenameWithoutSuffix = Strings::replace($basenameWithoutSuffix, self::INPUT_HASH_NAMING_REGEX);
+            $basenameWithoutSuffix = Strings::replace($basenameWithoutSuffix, self::INPUT_HASH_NAMING_REGEX, '');
         }
 
         return StaticRectorStrings::underscoreToPascalCase($basenameWithoutSuffix);

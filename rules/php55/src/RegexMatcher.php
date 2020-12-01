@@ -68,7 +68,7 @@ final class RegexMatcher
 
     private function createPatternWithoutE(string $pattern, string $delimiter, string $modifiers): string
     {
-        $modifiersWithoutE = Strings::replace($modifiers, '#e#');
+        $modifiersWithoutE = Strings::replace($modifiers, '#e#', '');
 
         return Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
     }

@@ -99,7 +99,8 @@ final class ClassUnusedPrivateClassMethodResolver
         /** @var string $className */
         $className = $this->nodeNameResolver->getName($class);
 
-        $interfaces = class_implements($className);
+        /** @var string[] $interfaces */
+        $interfaces = (array) class_implements($className);
 
         $interfaceMethods = [];
         foreach ($interfaces as $interface) {
@@ -119,7 +120,8 @@ final class ClassUnusedPrivateClassMethodResolver
             return $unusedMethods;
         }
 
-        $parentClasses = class_parents($class);
+        /** @var string[] $parentClasses */
+        $parentClasses = (array) class_parents($class);
 
         $parentAbstractMethods = [];
 
