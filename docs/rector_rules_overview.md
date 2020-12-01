@@ -4172,11 +4172,11 @@ Change database type "bigint" for @var/type declaration to string
 
 <br>
 
-### ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector
+### ChangeSetParametersArrayToArrayCollectionRector
 
 Change array to ArrayCollection in setParameters method of query builder
 
-- class: `Rector\DoctrineCodeQuality\Rector\MethodCall\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`
+- class: `Rector\DoctrineCodeQuality\Rector\MethodCall\ChangeSetParametersArrayToArrayCollectionRector`
 
 ```diff
 +use Doctrine\Common\Collections\ArrayCollection;
