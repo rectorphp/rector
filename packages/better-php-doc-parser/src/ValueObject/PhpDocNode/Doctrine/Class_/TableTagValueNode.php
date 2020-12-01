@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\OpeningAndClosingSpace;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
+use Rector\Core\Exception\ShouldNotHappenException;
 
 final class TableTagValueNode extends AbstractDoctrineTagValueNode implements SilentKeyNodeInterface
 {
@@ -31,12 +32,12 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
     private $uniqueConstraints = [];
 
     /**
-     * @var OpeningAndClosingSpace
+     * @var OpeningAndClosingSpace|null
      */
     private $indexesOpeningAndClosingSpace;
 
     /**
-     * @var OpeningAndClosingSpace
+     * @var OpeningAndClosingSpace|null
      */
     private $uniqueConstraintsOpeningAndClosingSpace;
 
@@ -54,8 +55,8 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         ?string $originalContent = null,
         bool $haveIndexesFinalComma = false,
         bool $haveUniqueConstraintsFinalComma = false,
-        OpeningAndClosingSpace $indexesOpeningAndClosingSpace,
-        OpeningAndClosingSpace $uniqueConstraintsOpeningAndClosingSpace
+        ?OpeningAndClosingSpace $indexesOpeningAndClosingSpace = null,
+        ?OpeningAndClosingSpace $uniqueConstraintsOpeningAndClosingSpace = null
     ) {
         $this->items['name'] = $name;
         $this->items['schema'] = $schema;
@@ -101,6 +102,10 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
     private function addCustomItems(array $items): array
     {
         if ($this->indexes !== []) {
+            if ($this->indexesOpeningAndClosingSpace === null) {
+                throw new ShouldNotHappenException();
+            }
+
             $items['indexes'] = $this->printNestedTag(
                 $this->indexes,
                 $this->haveIndexesFinalComma,
@@ -110,6 +115,10 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         }
 
         if ($this->uniqueConstraints !== []) {
+            if ($this->uniqueConstraintsOpeningAndClosingSpace === null) {
+                throw new ShouldNotHappenException();
+            }
+
             $items['uniqueConstraints'] = $this->printNestedTag(
                 $this->uniqueConstraints,
                 $this->haveUniqueConstraintsFinalComma,
