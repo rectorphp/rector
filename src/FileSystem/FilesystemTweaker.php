@@ -33,15 +33,6 @@ final class FilesystemTweaker
         return $absoluteDirectories;
     }
 
-    private function ensureDirectoryExists(string $directory): void
-    {
-        if (file_exists($directory)) {
-            return;
-        }
-
-        throw new DirectoryNotFoundException(sprintf('Directory "%s" was not found.', $directory));
-    }
-
     /**
      * @return string[]
      */
@@ -58,5 +49,14 @@ final class FilesystemTweaker
         }
 
         return $foundDirectories;
+    }
+
+    private function ensureDirectoryExists(string $directory): void
+    {
+        if (file_exists($directory)) {
+            return;
+        }
+
+        throw new DirectoryNotFoundException(sprintf('Directory "%s" was not found.', $directory));
     }
 }
