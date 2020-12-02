@@ -82,20 +82,20 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var ReflectionMethod */
-        $parentReflectionMethod = $this->getParentMethodWithDifferentReturnType($node);
+        /** @var string */
+        $parentReflectionMethodClassname = $this->getDifferentReturnTypeClassnameFromAncestorClass($node);
 
-        $node->returnType = new Identifier((string) $parentReflectionMethod->getReturnType());
+        $node->returnType = new Identifier($parentReflectionMethodClassname);
 
         return $node;
     }
 
     private function shouldRefactor(ClassMethod $node): bool
     {
-        return $this->getParentMethodWithDifferentReturnType($node) !== null;
+        return $this->getDifferentReturnTypeClassnameFromAncestorClass($node) !== null;
     }
 
-    private function getParentMethodWithDifferentReturnType(ClassMethod $node): ?ReflectionMethod
+    private function getDifferentReturnTypeClassnameFromAncestorClass(ClassMethod $node): ?string
     {
         /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
@@ -131,10 +131,9 @@ CODE_SAMPLE
             if ($parentReflectionMethodReturnType === null || $parentReflectionMethodReturnType->getName() == $nodeReturnTypeName) {
                 continue;
             }
-            // dump($parentReflectionMethod->getReturnType(), (string) $parentReflectionMethod->getReturnType(), $node->returnType, (string) $node->returnType);die;
 
-            // There is a parent class with a different return type
-            return $parentReflectionMethod;
+            // This is an ancestor class with a different return type
+            return $parentReflectionMethodReturnType->getName();
         }
 
         return null;
