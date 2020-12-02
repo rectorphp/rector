@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -136,11 +135,9 @@ CODE_SAMPLE
             }
 
             $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
-            /**
-             * @var ReflectionNamedType
-             */
+            /** @var ReflectionNamedType */
             $parentReflectionMethodReturnType = $parentReflectionMethod->getReturnType();
-            if ($parentReflectionMethodReturnType === null || $parentReflectionMethodReturnType->getName() == $nodeReturnTypeName) {
+            if ($parentReflectionMethodReturnType === null || $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
                 continue;
             }
 
