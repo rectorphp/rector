@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\PhpAttribute;
 
-use Closure;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Printer\PhpAttributteGroupFactory;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class AnnotationToAttributeConverter
 {
@@ -54,26 +55,21 @@ final class AnnotationToAttributeConverter
         }
 
         // 0. has 0 nodes, nothing to change
-        /** @var PhpAttributableTagNodeInterface[]&PhpDocTagValueNode[] $phpAttributableTagNodes */
+        /** @var PhpAttributableTagNodeInterface[] $phpAttributableTagNodes */
         $phpAttributableTagNodes = $phpDocInfo->findAllByType(PhpAttributableTagNodeInterface::class);
         if ($phpAttributableTagNodes === [] && ! $hasNewAttrGroups) {
             return null;
         }
 
-        // 1. keep only those, whos attribute class exists
-        $phpAttributableTagNodes = array_filter(
-            $phpAttributableTagNodes,
-            function (PhpAttributableTagNodeInterface $phpAttributableTagNode): bool {
-                return class_exists($phpAttributableTagNode->getAttributeClassName());
-            }
-        );
-
+        // 1. keep only those, whom's attribute class exists
+        $phpAttributableTagNodes = $this->filterOnlyExistingAttributes($phpAttributableTagNodes);
         if ($phpAttributableTagNodes !== []) {
             $hasNewAttrGroups = true;
         }
 
         // 2. remove tags
         foreach ($phpAttributableTagNodes as $phpAttributableTagNode) {
+            /** @var PhpDocTagValueNode $phpAttributableTagNode */
             $phpDocInfo->removeTagValueNodeFromNode($phpAttributableTagNode);
         }
 
@@ -86,5 +82,23 @@ final class AnnotationToAttributeConverter
         }
 
         return null;
+    }
+
+    /**
+     * @param PhpAttributableTagNodeInterface[] $phpAttributableTagNodes
+     * @return PhpAttributableTagNodeInterface[]
+     */
+    private function filterOnlyExistingAttributes(array $phpAttributableTagNodes): array
+    {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            return $phpAttributableTagNodes;
+        }
+
+        return array_filter(
+            $phpAttributableTagNodes,
+            function (PhpAttributableTagNodeInterface $phpAttributableTagNode): bool {
+                return class_exists($phpAttributableTagNode->getAttributeClassName());
+            }
+        );
     }
 }
