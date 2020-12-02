@@ -7369,10 +7369,7 @@ Remove includes (include, include_once, require, require_once) from source
 - class: `Rector\Legacy\Rector\Include_\RemoveIncludeRector`
 
 ```diff
- // Comment before require
 -include 'somefile.php';
-+
- // Comment after require
 ```
 
 <br>
