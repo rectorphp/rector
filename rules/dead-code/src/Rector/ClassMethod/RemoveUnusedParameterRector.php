@@ -308,6 +308,12 @@ CODE_SAMPLE
         $unusedParameters = [];
 
         foreach ((array) $classMethod->params as $i => $param) {
+            // skip property promotion
+            /** @var Param $param */
+            if ($param->flags !== 0) {
+                continue;
+            }
+
             if ($this->classMethodManipulator->isParameterUsedInClassMethod($param, $classMethod)) {
                 // reset to keep order of removed arguments, if not construtctor - probably autowired
                 if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
