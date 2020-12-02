@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
@@ -85,7 +86,7 @@ CODE_SAMPLE
         /** @var string */
         $parentReflectionMethodClassname = $this->getDifferentReturnTypeClassnameFromAncestorClass($node);
 
-        $node->returnType = new Identifier($parentReflectionMethodClassname);
+        $node->returnType = new FullyQualified($parentReflectionMethodClassname);
 
         return $node;
     }
