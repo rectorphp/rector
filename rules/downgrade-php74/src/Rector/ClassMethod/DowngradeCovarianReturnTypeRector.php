@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -82,6 +78,25 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->shouldRefactor($node)) {
+            return null;
+        }
+
+        /** @var ReflectionMethod */
+        $parentMethod = $this->getParentMethodWithDifferentReturnType($node);
+
+        $node->returnType = new Identifier((string) $parentMethod->getReturnType());
+
+        return $node;
+    }
+
+    private function shouldRefactor(ClassMethod $node): bool
+    {
+        return $this->getParentMethodWithDifferentReturnType($node) !== null;
+    }
+
+    private function getParentMethodWithDifferentReturnType(ClassMethod $node): ?ReflectionMethod
+    {
         /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if ($scope === null) {
@@ -103,123 +118,14 @@ CODE_SAMPLE
             }
 
             $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
-            if ($this->isClassMethodCompatibleWithParentReflectionMethod($node, $parentReflectionMethod)) {
-                return null;
+            if ((string) $parentReflectionMethod->getReturnType() == (string) $node->returnType) {
+                continue;
             }
 
-            if ($this->isConstructorWithStaticFactory($node, $methodName)) {
-                return null;
-            }
-
-            $this->changeClassMethodVisibilityBasedOnReflectionMethod($node, $parentReflectionMethod);
-
-            return $node;
+            // There is a parent class with a different return type
+            return $parentReflectionMethod;
         }
 
         return null;
-    }
-
-    private function isClassMethodCompatibleWithParentReflectionMethod(
-        ClassMethod $classMethod,
-        ReflectionMethod $reflectionMethod
-    ): bool {
-        if ($reflectionMethod->isPublic() && $classMethod->isPublic()) {
-            return true;
-        }
-
-        if ($reflectionMethod->isProtected() && $classMethod->isProtected()) {
-            return true;
-        }
-        return $reflectionMethod->isPrivate() && $classMethod->isPrivate();
-    }
-
-    /**
-     * Parent constructor visibility override is allowed only since PHP 7.2+
-     * @see https://3v4l.org/RFYmn
-     */
-    private function isConstructorWithStaticFactory(ClassMethod $classMethod, string $methodName): bool
-    {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::PARENT_VISIBILITY_OVERRIDE)) {
-            return false;
-        }
-
-        if ($methodName !== MethodName::CONSTRUCT) {
-            return false;
-        }
-
-        /** @var Class_|null $classLike */
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
-            return false;
-        }
-
-        foreach ($classLike->getMethods() as $iteratedClassMethod) {
-            if (! $iteratedClassMethod->isPublic()) {
-                continue;
-            }
-
-            if (! $iteratedClassMethod->isStatic()) {
-                continue;
-            }
-
-            $isStaticSelfFactory = $this->isStaticNamedConstructor($iteratedClassMethod);
-
-            if (! $isStaticSelfFactory) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private function changeClassMethodVisibilityBasedOnReflectionMethod(
-        ClassMethod $classMethod,
-        ReflectionMethod $reflectionMethod
-    ): void {
-        if ($reflectionMethod->isPublic()) {
-            $this->makePublic($classMethod);
-            return;
-        }
-
-        if ($reflectionMethod->isProtected()) {
-            $this->makeProtected($classMethod);
-            return;
-        }
-
-        if ($reflectionMethod->isPrivate()) {
-            $this->makePrivate($classMethod);
-            return;
-        }
-    }
-
-    /**
-     * Looks for:
-     * public static someMethod() { return new self(); }
-     * or
-     * public static someMethod() { return new static(); }
-     */
-    private function isStaticNamedConstructor(ClassMethod $classMethod): bool
-    {
-        if (! $classMethod->isPublic()) {
-            return false;
-        }
-
-        if (! $classMethod->isStatic()) {
-            return false;
-        }
-
-        return (bool) $this->betterNodeFinder->findFirst($classMethod, function (Node $node): bool {
-            if (! $node instanceof Return_) {
-                return false;
-            }
-
-            if (! $node->expr instanceof New_) {
-                return false;
-            }
-
-            return $this->isNames($node->expr->class, ['self', 'static']);
-        });
     }
 }
