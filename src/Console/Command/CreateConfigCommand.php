@@ -31,8 +31,11 @@ final class CreateConfigCommand extends AbstractCommand
      */
     private $symfonyStyle;
 
-    public function __construct(SmartFileSystem $smartFileSystem, YamlToPhpConverter $yamlToPhpConverter, SymfonyStyle $symfonyStyle)
-    {
+    public function __construct(
+        SmartFileSystem $smartFileSystem,
+        YamlToPhpConverter $yamlToPhpConverter,
+        SymfonyStyle $symfonyStyle
+    ) {
         parent::__construct();
 
         $this->smartFileSystem = $smartFileSystem;
@@ -49,7 +52,8 @@ final class CreateConfigCommand extends AbstractCommand
             'The PHP file with the configuration in YAML format.'
         );
         $this->addOption(
-            'output', //Option::OUTPUT,
+            //Option::OUTPUT,
+            'output',
             'o',
             InputOption::VALUE_REQUIRED,
             'The name of the config file to generate. Default: rector.php.',
@@ -77,15 +81,14 @@ final class CreateConfigCommand extends AbstractCommand
                 ],
             ]);
             $this->smartFileSystem->dumpFile($outputFile, $phpFileContent);
-            $this->symfonyStyle->success(sprintf(
-                '"%s" config file has been generated successfully!',
-                $outputFilename
-            ));
+            $message = sprintf('"%s" config file has been generated successfully!', $outputFilename);
+            $this->symfonyStyle->success($message);
         } else {
-            $this->symfonyStyle->error(sprintf(
+            $message = sprintf(
                 'Config file not generated. A "%s" configuration file already exists',
                 $outputFilename
-            ));
+            );
+            $this->symfonyStyle->error($message);
         }
 
         return ShellCode::SUCCESS;
