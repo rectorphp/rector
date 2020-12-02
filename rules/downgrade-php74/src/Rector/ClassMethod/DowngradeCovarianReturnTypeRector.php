@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
-use ReflectionMethod;
-use ReflectionNamedType;
-use PHPStan\Analyser\Scope;
-use PhpParser\Node\UnionType;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Rector\AbstractRector;
-use PhpParser\Node\Name\FullyQualified;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node\UnionType;
+use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use ReflectionMethod;
+use ReflectionNamedType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.type-variance
