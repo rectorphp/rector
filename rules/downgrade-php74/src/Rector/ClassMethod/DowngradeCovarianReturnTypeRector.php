@@ -150,7 +150,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function addDocBlockReturn(classMethod $classMethod): void
+    private function addDocBlockReturn(ClassMethod $classMethod): void
     {
         /** @var PhpDocInfo|null */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
