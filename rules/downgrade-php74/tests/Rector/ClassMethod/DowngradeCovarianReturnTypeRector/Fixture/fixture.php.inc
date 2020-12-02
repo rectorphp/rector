@@ -37,7 +37,7 @@ class B extends A
     /**
      * @return ChildType
      */
-    public function covariantReturnTypes(): ParentType
+    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture\ParentType
     { /* … */ }
 }
 
