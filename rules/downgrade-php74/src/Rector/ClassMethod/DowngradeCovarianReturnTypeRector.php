@@ -83,9 +83,9 @@ CODE_SAMPLE
         }
 
         /** @var ReflectionMethod */
-        $parentMethod = $this->getParentMethodWithDifferentReturnType($node);
+        $parentReflectionMethod = $this->getParentMethodWithDifferentReturnType($node);
 
-        $node->returnType = new Identifier((string) $parentMethod->getReturnType());
+        $node->returnType = new Identifier((string) $parentReflectionMethod->getReturnType());
 
         return $node;
     }
@@ -109,6 +109,12 @@ CODE_SAMPLE
             return null;
         }
 
+        $nodeReturnType = $node->returnType;
+        if ($nodeReturnType === null) {
+            return null;
+        }
+        $nodeReturnTypeName = $this->getName($nodeReturnType);
+
         /** @var string $methodName */
         $methodName = $this->getName($node->name);
 
@@ -118,9 +124,14 @@ CODE_SAMPLE
             }
 
             $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
-            if ((string) $parentReflectionMethod->getReturnType() == (string) $node->returnType) {
+            /**
+             * @var ReflectionNamedType
+             */
+            $parentReflectionMethodReturnType = $parentReflectionMethod->getReturnType();
+            if ($parentReflectionMethodReturnType === null || $parentReflectionMethodReturnType->getName() == $nodeReturnTypeName) {
                 continue;
             }
+            // dump($parentReflectionMethod->getReturnType(), (string) $parentReflectionMethod->getReturnType(), $node->returnType, (string) $node->returnType);die;
 
             // There is a parent class with a different return type
             return $parentReflectionMethod;
