@@ -80,7 +80,6 @@ final class CallTypeAnalyzer
     {
         $classReflection = $this->reflectionProvider->getClass($className);
 
-        /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($node->name);
 
         if (! $methodName) {
