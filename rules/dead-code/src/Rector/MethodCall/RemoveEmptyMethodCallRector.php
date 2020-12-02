@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\If_;
@@ -102,6 +103,10 @@ CODE_SAMPLE
         // if->cond cannot removed, it has to be replaced with false, see https://3v4l.org/U9S9i
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof If_ && $parent->cond === $node) {
+            return $this->createFalse();
+        }
+
+        if ($parent instanceof Assign) {
             return $this->createFalse();
         }
 
