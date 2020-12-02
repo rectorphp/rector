@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp74\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
@@ -85,10 +86,17 @@ CODE_SAMPLE
 
         /** @var string */
         $parentReflectionMethodClassname = $this->getDifferentReturnTypeClassnameFromAncestorClass($node);
+        $newType = new FullyQualified($parentReflectionMethodClassname);
 
+        // Make it nullable?
+        if ($node->returnType instanceof NullableType) {
+            $newType = new NullableType($newType);
+        }
+
+        // Add the docblock before changing the type
         $this->addDocBlockReturn($node);
 
-        $node->returnType = new FullyQualified($parentReflectionMethodClassname);
+        $node->returnType = $newType;
 
         return $node;
     }
