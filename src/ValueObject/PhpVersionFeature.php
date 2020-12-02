@@ -198,6 +198,7 @@ final class PhpVersionFeature
     public const COUNT_ON_NULL = 70100;
 
     /**
+     * @see https://wiki.php.net/rfc/constructor_promotion
      * @var int
      */
     public const PROPERTY_PROMOTION = 80000;
