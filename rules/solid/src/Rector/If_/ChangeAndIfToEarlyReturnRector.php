@@ -10,11 +10,11 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
@@ -30,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeAndIfToEarlyReturnRector extends AbstractRector
 {
-    const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
+    public const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
 
     /**
      * @var IfManipulator
@@ -251,10 +251,7 @@ CODE_SAMPLE
 
     private function isIfInLoop(If_ $if): bool
     {
-        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf(
-            $if,
-            self::LOOP_TYPES
-        );
+        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf($if, self::LOOP_TYPES);
 
         return $parentLoop !== null;
     }
@@ -310,15 +307,10 @@ CODE_SAMPLE
 
     private function isNestedIfInLoop(If_ $if): bool
     {
-        $parent = $this->betterNodeFinder->findFirstParentInstanceOf($if, self::LOOP_TYPES + [If_::class, Else_::class, ElseIf_::class]);
-
-        if ($parent instanceof If_ || $parent instanceof Else_ || $parent instanceof ElseIf_) {
-
-            $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf($parent, self::LOOP_TYPES);
-
-            return $parentLoop !== null;
-        }
-
-        return false;
+        return $this->isIfInLoop($if)
+            && (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
+                $if,
+                [If_::class, Else_::class, ElseIf_::class]
+            );
     }
 }
