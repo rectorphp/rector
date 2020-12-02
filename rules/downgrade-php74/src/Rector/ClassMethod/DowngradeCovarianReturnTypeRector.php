@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -121,7 +122,7 @@ CODE_SAMPLE
         }
 
         $nodeReturnType = $classMethod->returnType;
-        if ($nodeReturnType === null) {
+        if ($nodeReturnType === null || $nodeReturnType instanceof UnionType) {
             return null;
         }
         $nodeReturnTypeName = $this->getName($nodeReturnType);
