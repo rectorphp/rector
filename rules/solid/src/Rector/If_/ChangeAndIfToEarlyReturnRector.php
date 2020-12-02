@@ -30,6 +30,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeAndIfToEarlyReturnRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
     public const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
 
     /**
@@ -296,15 +299,6 @@ CODE_SAMPLE
         return $nonVoidReturns === [];
     }
 
-    private function isLastIfOrBeforeLastReturn(If_ $if): bool
-    {
-        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextNode === null) {
-            return true;
-        }
-        return $nextNode instanceof Return_;
-    }
-
     private function isNestedIfInLoop(If_ $if): bool
     {
         return $this->isIfInLoop($if)
@@ -312,5 +306,14 @@ CODE_SAMPLE
                 $if,
                 [If_::class, Else_::class, ElseIf_::class]
             );
+    }
+
+    private function isLastIfOrBeforeLastReturn(If_ $if): bool
+    {
+        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+        if ($nextNode === null) {
+            return true;
+        }
+        return $nextNode instanceof Return_;
     }
 }
