@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
+use ReflectionMethod;
+use ReflectionNamedType;
+use PHPStan\Analyser\Scope;
+use PhpParser\Node\UnionType;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\UnionType;
-use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionMethod;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 
 /**
  * @see https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.type-variance
@@ -135,7 +137,7 @@ CODE_SAMPLE
             }
 
             $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
-            /** @var ReflectionNamedType */
+            /** @var ReflectionNamedType|null */
             $parentReflectionMethodReturnType = $parentReflectionMethod->getReturnType();
             if ($parentReflectionMethodReturnType === null || $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
                 continue;
@@ -150,13 +152,15 @@ CODE_SAMPLE
 
     private function addDocBlockReturn(classMethod $classMethod): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo|null */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
         }
 
-        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
+        /** @var Node */
+        $returnType = $classMethod->returnType;
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
         $phpDocInfo->changeReturnType($type);
     }
 }
