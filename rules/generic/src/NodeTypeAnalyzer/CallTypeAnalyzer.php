@@ -83,6 +83,10 @@ final class CallTypeAnalyzer
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($node->name);
 
+        if (! $methodName) {
+            return [];
+        }
+
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return [];
