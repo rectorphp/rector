@@ -137,6 +137,17 @@ CODE_SAMPLE
         return $this->promotionCandidates;
     }
 
+    private function decorateParamWithPropertyPhpDocInfo(Property $property, Param $param): void
+    {
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $propertyPhpDocInfo instanceof PhpDocInfo) {
+            return;
+        }
+
+        // make sure the docblock is useful
+        $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
+    }
+
     private function collectPromotionCandidate(Property $property, ClassMethod $constructClassMethod): void
     {
         $onlyProperty = $property->props[0];
@@ -184,16 +195,5 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    private function decorateParamWithPropertyPhpDocInfo(Property $property, Param $param): void
-    {
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $propertyPhpDocInfo instanceof PhpDocInfo) {
-            return;
-        }
-
-        // make sure the docblock is useful
-        $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
     }
 }
