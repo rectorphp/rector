@@ -12,8 +12,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\PromotionCandidate;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -90,11 +92,17 @@ CODE_SAMPLE
         }
 
         foreach ($this->promotionCandidates as $promotionCandidate) {
-            $this->removeNode($promotionCandidate->getProperty());
+            // does property have some useful annotations?
+            $property = $promotionCandidate->getProperty();
+
+            $this->removeNode($property);
+
             $this->removeNode($promotionCandidate->getAssign());
 
             $property = $promotionCandidate->getProperty();
             $param = $promotionCandidate->getParam();
+
+            $this->decorateParamWithPropertyPhpDocInfo($property, $param);
 
             // property name has higher priority
             $param->var->name = $property->props[0]->name;
@@ -127,6 +135,17 @@ CODE_SAMPLE
         }
 
         return $this->promotionCandidates;
+    }
+
+    private function decorateParamWithPropertyPhpDocInfo(Property $property, Param $param): void
+    {
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $propertyPhpDocInfo instanceof PhpDocInfo) {
+            return;
+        }
+
+        // make sure the docblock is useful
+        $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
     }
 
     private function collectPromotionCandidate(Property $property, ClassMethod $constructClassMethod): void

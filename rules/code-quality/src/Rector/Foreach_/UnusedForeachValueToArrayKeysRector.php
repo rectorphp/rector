@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -81,6 +82,10 @@ CODE_SAMPLE
                 return null;
             }
         } else {
+            return null;
+        }
+
+        if (is_a($this->getStaticType($node->expr), ObjectType::class)) {
             return null;
         }
 

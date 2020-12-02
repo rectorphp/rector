@@ -92,15 +92,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->classMethodManipulator->isNamedConstructor($node)) {
-            return null;
-        }
-
-        if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($node)) {
-            return null;
-        }
-
-        if ($this->controllerClassMethodManipulator->isControllerClassMethodWithBehaviorAnnotation($node)) {
+        if ($this->shouldSkipClassMethod($node)) {
             return null;
         }
 
@@ -124,5 +116,22 @@ CODE_SAMPLE
         }
 
         return $classMethod->isPublic();
+    }
+
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
+    {
+        if ($this->classMethodManipulator->isNamedConstructor($classMethod)) {
+            return true;
+        }
+
+        if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($classMethod)) {
+            return true;
+        }
+
+        if ($this->classMethodManipulator->isPropertyPromotion($classMethod)) {
+            return true;
+        }
+
+        return $this->controllerClassMethodManipulator->isControllerClassMethodWithBehaviorAnnotation($classMethod);
     }
 }

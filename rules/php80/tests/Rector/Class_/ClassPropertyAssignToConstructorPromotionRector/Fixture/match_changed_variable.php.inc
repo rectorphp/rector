@@ -23,7 +23,12 @@ namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromo
 
 class MatchChangedVariable
 {
-    public function __construct(public float $x = 0.0)
+    public function __construct(
+        /**
+         * @var float
+         */
+        public float $x = 0.0
+    )
     {
     }
 }

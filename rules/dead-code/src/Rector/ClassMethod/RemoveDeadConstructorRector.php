@@ -69,20 +69,29 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isName($node, MethodName::CONSTRUCT)) {
-            return null;
-        }
-
-        if ($node->stmts === null || $node->stmts !== []) {
-            return null;
-        }
-
-        if ($this->classMethodManipulator->isNamedConstructor($node)) {
+        if ($this->shouldSkipPropertyPromotion($node)) {
             return null;
         }
 
         $this->removeNode($node);
 
         return null;
+    }
+
+    private function shouldSkipPropertyPromotion(ClassMethod $classMethod): bool
+    {
+        if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
+            return true;
+        }
+
+        if ($classMethod->stmts === null || $classMethod->stmts !== []) {
+            return true;
+        }
+
+        if ($this->classMethodManipulator->isPropertyPromotion($classMethod)) {
+            return true;
+        }
+
+        return $this->classMethodManipulator->isNamedConstructor($classMethod);
     }
 }
