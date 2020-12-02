@@ -46,6 +46,6 @@ final class ClassMethodVisibilityGuard
         /** @var string $className */
         $className = $this->nodeNameResolver->getName($class);
 
-        return class_parents($className);
+        return (array) class_parents($className);
     }
 }

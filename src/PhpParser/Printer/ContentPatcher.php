@@ -81,16 +81,16 @@ final class ContentPatcher
     public const INVALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX = '#^\s+\/\*\*\s+\s+\*\s+@.*(\s+\*\s{0,}[^"]*=\s{0,}[^"]*,?){1,}.*\)\s+\*\s+\*\/#msU';
 
     /**
-     * @see https://regex101.com/r/EA1xRY/2
+     * @see https://regex101.com/r/EA1xRY/6
      * @var string
      */
-    public const VALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX = '#^\s{0,}\* @return\s+(\(.*\)|(".*")(\|".*"){1,})$#msU';
+    public const VALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX = '#\*\s+@(var|return)\s+(\(.*\)|(".*")(\|".*")|("?.*"?){1,})$#msU';
 
     /**
-     * @see https://regex101.com/r/LprF44/3
+     * @see https://regex101.com/r/LprF44/8
      * @var string
      */
-    public const INVALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX = '#^\s{0,}\* @return([^\s].*|\s[^"\s]*)$#msU';
+    public const INVALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX = '#\*\s+@(var|return)([^\s].*|\s[^"\s]*|([^"]*[^"]))$#msU';
 
     /**
      * @see https://regex101.com/r/4mBd0y/2
@@ -178,6 +178,7 @@ final class ContentPatcher
      * @see https://github.com/rectorphp/rector/issues/4476
      * @see https://github.com/rectorphp/rector/issues/4620
      * @see https://github.com/rectorphp/rector/issues/4652
+     * @see https://github.com/rectorphp/rector/issues/4691
      */
     public function rollbackValidAnnotation(
         string $originalContent,

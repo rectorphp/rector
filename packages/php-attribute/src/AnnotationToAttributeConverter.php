@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\PhpAttribute;
 
+use Closure;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -60,16 +60,24 @@ final class AnnotationToAttributeConverter
             return null;
         }
 
+        // 1. keep only those, whos attribute class exists
+        $phpAttributableTagNodes = array_filter(
+            $phpAttributableTagNodes,
+            function (PhpAttributableTagNodeInterface $phpAttributableTagNode): bool {
+                return class_exists($phpAttributableTagNode->getAttributeClassName());
+            }
+        );
+
         if ($phpAttributableTagNodes !== []) {
             $hasNewAttrGroups = true;
         }
 
-        // 1. remove tags
+        // 2. remove tags
         foreach ($phpAttributableTagNodes as $phpAttributableTagNode) {
             $phpDocInfo->removeTagValueNodeFromNode($phpAttributableTagNode);
         }
 
-        // 2. convert annotations to attributes
+        // 3. convert annotations to attributes
         $newAttrGroups = $this->phpAttributteGroupFactory->create($phpAttributableTagNodes);
         $node->attrGroups = array_merge($node->attrGroups, $newAttrGroups);
 

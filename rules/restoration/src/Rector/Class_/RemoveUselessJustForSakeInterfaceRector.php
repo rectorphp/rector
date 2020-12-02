@@ -155,7 +155,9 @@ CODE_SAMPLE
         return array_filter(
             get_declared_classes(),
             function (string $className) use ($interfaceName): bool {
-                return in_array($interfaceName, class_implements($className), true);
+                /** @var string[] $classImplements */
+                $classImplements = (array) class_implements($className);
+                return in_array($interfaceName, $classImplements, true);
             }
         );
     }

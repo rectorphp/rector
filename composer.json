@@ -35,6 +35,7 @@
         "symplify/composer-json-manipulator": "dev-master",
         "symplify/console-color-diff": "dev-master",
         "symplify/package-builder": "dev-master",
+        "symplify/symfony-php-config": "dev-master",
         "symplify/php-config-printer": "dev-master",
         "symplify/set-config-resolver": "dev-master",
         "symplify/simple-php-doc-parser": "dev-master",
@@ -43,9 +44,7 @@
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
-        "cweagans/composer-patches": "^1.7",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "symplify/vendor-patches": "dev-master",
         "nette/application": "^3.0",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
@@ -57,7 +56,6 @@
         "symplify/easy-coding-standard": "dev-master",
         "symplify/coding-standard": "dev-master",
         "symplify/easy-testing": "dev-master",
-        "symplify/symfony-php-config": "dev-master",
         "symplify/phpstan-extensions": "dev-master",
         "symplify/markdown-diff": "dev-master",
         "symplify/phpstan-rules": "dev-master",
@@ -318,13 +316,6 @@
     "config": {
         "sort-packages": true,
         "process-timeout": 0
-    },
-    "extra": {
-        "patches": {
-            "nette/application": [
-                "patches/nette-application-src-application-ui-presenter-php.patch"
-            ]
-        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

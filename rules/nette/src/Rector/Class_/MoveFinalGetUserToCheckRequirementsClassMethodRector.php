@@ -15,8 +15,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/nette/application/commit/a70c7256b645a2bee0b0c2c735020d7043a14558#diff-549e1fc650c1fc7e138900598027656a50d12b031605f8a63a38bd69a3985fafR1324
- *
- * @see \Rector\Nette\Tests\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector\MoveFinalGetUserToCheckRequirementsClassMethodRectorTest
  */
 final class MoveFinalGetUserToCheckRequirementsClassMethodRector extends AbstractRector
 {

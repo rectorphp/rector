@@ -95,7 +95,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * @param mixed[] $options
      */
-    public function __construct(CommentRemover $commentRemover, array $options = [], ContentPatcher $contentPatcher)
+    public function __construct(CommentRemover $commentRemover, ContentPatcher $contentPatcher, array $options = [])
     {
         parent::__construct($options);
 
@@ -173,8 +173,8 @@ final class BetterStandardPrinter extends Standard
         $content = $this->contentPatcher->rollbackValidAnnotation(
             $contentOriginal,
             $content,
-            ContentPatcher::VALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_RETURN_EXPLICIT_FORMAT_REGEX
+            ContentPatcher::VALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX,
+            ContentPatcher::INVALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX
         );
 
         // add new line in case of added stmts
@@ -336,7 +336,7 @@ final class BetterStandardPrinter extends Standard
             return $content;
         }
 
-        return Strings::replace($content, self::EXTRA_SPACE_BEFORE_NOP_REGEX);
+        return Strings::replace($content, self::EXTRA_SPACE_BEFORE_NOP_REGEX, '');
     }
 
     /**
@@ -485,7 +485,7 @@ final class BetterStandardPrinter extends Standard
     {
         $declareString = parent::pStmt_Declare($declare);
 
-        return Strings::replace($declareString, '#\s+#');
+        return Strings::replace($declareString, '#\s+#', '');
     }
 
     /**

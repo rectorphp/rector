@@ -67,7 +67,7 @@ final class IdentifierManipulator
         if ($name === null) {
             return;
         }
-        $newName = Strings::replace($name, sprintf('#%s$#', $suffixToRemove));
+        $newName = Strings::replace($name, sprintf('#%s$#', $suffixToRemove), '');
 
         $node->name = new Identifier($newName);
     }

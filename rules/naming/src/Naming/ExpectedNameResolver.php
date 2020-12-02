@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\UnionType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -61,6 +62,10 @@ final class ExpectedNameResolver
 
     public function resolveForParamIfNotYet(Param $param): ?string
     {
+        if ($param->type instanceof UnionType) {
+            return null;
+        }
+
         $expectedName = $this->resolveForParam($param);
         if ($expectedName === null) {
             return null;

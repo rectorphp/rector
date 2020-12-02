@@ -73,7 +73,7 @@ final class RectorSetProvider extends AbstractSetProvider
 
     private function hydrateSetsFromConstants(ReflectionClass $setListReflectionClass): void
     {
-        foreach ($setListReflectionClass->getConstants() as $name => $setPath) {
+        foreach ((array) $setListReflectionClass->getConstants() as $name => $setPath) {
             if (! file_exists($setPath)) {
                 $message = sprintf('Set path "%s" was not found', $name);
                 throw new ShouldNotHappenException($message);

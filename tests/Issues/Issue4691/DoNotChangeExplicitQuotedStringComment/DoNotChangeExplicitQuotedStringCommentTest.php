@@ -1,15 +1,13 @@
 <?php
-
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector;
+namespace Rector\Core\Tests\Issues\Issue4691\DoNotChangeExplicitQuotedStringComment;
 
 use Iterator;
-use Rector\Nette\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class MoveFinalGetUserToCheckRequirementsClassMethodRectorTest extends AbstractRectorTestCase
+final class DoNotChangeExplicitQuotedStringCommentTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -24,8 +22,10 @@ final class MoveFinalGetUserToCheckRequirementsClassMethodRectorTest extends Abs
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    // bin/rector process ... --config config/some_config.php
+
+    protected function provideConfigFileInfo(): SmartFileInfo
     {
-        return MoveFinalGetUserToCheckRequirementsClassMethodRector::class;
+        return new SmartFileInfo(__DIR__ . '/config/some_config.php');
     }
 }

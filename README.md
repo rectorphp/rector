@@ -72,6 +72,7 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 - [How To Run Rector on Changed Files Only](/docs/how_to_run_rector_on_changed_files_only.md)
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
+- [How To Work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md:2)
 - [How run Rector in Docker](/docs/how_to_run_rector_in_docker.md)
 - [Add Checkstyle with your CI](/docs/checkstyle.md)
 
@@ -228,6 +229,19 @@ Or with Xdebug:
 
 ```bash
 vendor/bin/rector process src/Controller --dry-run --xdebug
+```
+
+To assist with echo-style debugging rector provides a `rd()` helper method which is usefull to pretty-print AST-nodes:
+
+```php
+/**
+ * @param Class_ $node
+ */
+public function refactor(Node $node): ?Node
+{
+    rd($node);
+    die;
+}
 ```
 
 <br>

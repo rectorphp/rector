@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_;
 
 use Rector\BetterPhpDocParser\ValueObject\OpeningAndClosingSpace;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpAttribute\Contract\ManyPhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
@@ -37,12 +38,12 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     private $inverseJoinColumns = [];
 
     /**
-     * @var OpeningAndClosingSpace
+     * @var OpeningAndClosingSpace|null
      */
     private $inverseJoinColumnsOpeningAndClosingSpace;
 
     /**
-     * @var OpeningAndClosingSpace
+     * @var OpeningAndClosingSpace|null
      */
     private $joinColumnsOpeningAndClosingSpace;
 
@@ -61,8 +62,8 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         array $joinColumns = [],
         array $inverseJoinColumns = [],
         ?string $originalContent = null,
-        OpeningAndClosingSpace $joinColumnsOpeningAndClosingSpace,
-        OpeningAndClosingSpace $inverseJoinColumnsOpeningAndClosingSpace
+        ?OpeningAndClosingSpace $joinColumnsOpeningAndClosingSpace = null,
+        ?OpeningAndClosingSpace $inverseJoinColumnsOpeningAndClosingSpace = null
     ) {
         $this->name = $name;
         $this->schema = $schema;
@@ -150,6 +151,10 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         $items = [];
 
         if ($this->joinColumns !== []) {
+            if ($this->joinColumnsOpeningAndClosingSpace === null) {
+                throw new ShouldNotHappenException();
+            }
+
             $items[$joinColumnsKey] = $this->printNestedTag(
                 $this->joinColumns,
                 false,
@@ -159,6 +164,10 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         }
 
         if ($this->inverseJoinColumns !== []) {
+            if ($this->inverseJoinColumnsOpeningAndClosingSpace === null) {
+                throw new ShouldNotHappenException();
+            }
+
             $items[$inverseJoinColumnsKey] = $this->printNestedTag(
                 $this->inverseJoinColumns,
                 false,

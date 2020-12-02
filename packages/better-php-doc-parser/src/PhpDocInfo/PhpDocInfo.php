@@ -316,8 +316,7 @@ final class PhpDocInfo
     }
 
     /**
-     * With "name" as key
-     * @return Type[]
+     * @return array<string, Type>
      */
     public function getParamTypesByName(): array
     {

@@ -41,7 +41,7 @@ trait ArrayPartPhpDocTagPrinterTrait
 
         // should unquote
         if ($this->isValueWithoutQuotes($key, $tagValueNodeConfiguration)) {
-            $content = Strings::replace($content, '#"#');
+            $content = Strings::replace($content, '#"#', '');
         }
 
         if ($tagValueNodeConfiguration->getOriginalContent() !== null && $key !== null) {

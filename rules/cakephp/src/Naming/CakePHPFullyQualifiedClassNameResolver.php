@@ -58,7 +58,7 @@ final class CakePHPFullyQualifiedClassNameResolver
         // Chop Lib out as locations moves those files to the top level.
         // But only if Lib is not the last folder.
         if (Strings::match($pseudoNamespace, self::LIB_NAMESPACE_PART_REGEX)) {
-            $pseudoNamespace = Strings::replace($pseudoNamespace, '#\\\\Lib#');
+            $pseudoNamespace = Strings::replace($pseudoNamespace, '#\\\\Lib#', '');
         }
 
         // B. is Cake native class?

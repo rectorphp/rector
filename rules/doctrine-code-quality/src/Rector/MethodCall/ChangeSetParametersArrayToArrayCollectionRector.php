@@ -20,9 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/doctrine/orm/blob/2.7/UPGRADE.md#query-querybuilder-and-nativequery-parameters-bc-break
- * @see \Rector\DoctrineCodeQuality\Tests\Rector\MethodCall\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRectorTest
+ * @see \Rector\DoctrineCodeQuality\Tests\Rector\MethodCall\ChangeSetParametersArrayToArrayCollectionRector\ChangeSetParametersArrayToArrayCollectionRectorTest
  */
-final class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector extends AbstractRector
+final class ChangeSetParametersArrayToArrayCollectionRector extends AbstractRector
 {
     /**
      * @return string[]
