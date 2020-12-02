@@ -9,4 +9,3 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::AUTHORS_TO_IGNORE, ['TomasVotruba']);
 };
-

@@ -45,8 +45,8 @@ jobs:
             -
                 uses: shivammathur/setup-php@v2
                 with:
-                    # PHP 7.2 is required, so Rector's code is PHP 7.2 compatible even after refactoring
-                    php-version: 7.2
+                    # PHP 7.3 is required, so Rector's code is PHP 7.3 compatible even after refactoring
+                    php-version: 7.3
                     coverage: none
                     tools: composer:v2
 
