@@ -86,20 +86,22 @@ CODE_SAMPLE
         /** @var string */
         $parentReflectionMethodClassname = $this->getDifferentReturnTypeClassnameFromAncestorClass($node);
 
+        $this->addDocBlockReturn($node);
+
         $node->returnType = new FullyQualified($parentReflectionMethodClassname);
 
         return $node;
     }
 
-    private function shouldRefactor(ClassMethod $node): bool
+    private function shouldRefactor(ClassMethod $classMethod): bool
     {
-        return $this->getDifferentReturnTypeClassnameFromAncestorClass($node) !== null;
+        return $this->getDifferentReturnTypeClassnameFromAncestorClass($classMethod) !== null;
     }
 
-    private function getDifferentReturnTypeClassnameFromAncestorClass(ClassMethod $node): ?string
+    private function getDifferentReturnTypeClassnameFromAncestorClass(ClassMethod $classMethod): ?string
     {
         /** @var Scope|null $scope */
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if ($scope === null) {
             // possibly trait
             return null;
@@ -110,14 +112,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $nodeReturnType = $node->returnType;
+        $nodeReturnType = $classMethod->returnType;
         if ($nodeReturnType === null) {
             return null;
         }
         $nodeReturnTypeName = $this->getName($nodeReturnType);
 
         /** @var string $methodName */
-        $methodName = $this->getName($node->name);
+        $methodName = $this->getName($classMethod->name);
 
         foreach ($classReflection->getParentClassesNames() as $parentClassName) {
             if (! method_exists($parentClassName, $methodName)) {
@@ -138,5 +140,17 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function addDocBlockReturn(classMethod $classMethod): void
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
+        }
+
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
+        $phpDocInfo->changeReturnType($type);
     }
 }
