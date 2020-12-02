@@ -177,6 +177,18 @@ final class ClassMethodManipulator
         return $paramName;
     }
 
+    public function isPropertyPromotion(ClassMethod $classMethod): bool
+    {
+        foreach ((array) $classMethod->params as $param) {
+            /** @var Param $param */
+            if ($param->flags !== 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function isMethodInParent(string $class, string $method): bool
     {
         foreach ((array) class_parents($class) as $parentClass) {

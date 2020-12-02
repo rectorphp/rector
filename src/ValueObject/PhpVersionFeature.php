@@ -196,4 +196,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const COUNT_ON_NULL = 70100;
+
+    /**
+     * @var int
+     */
+    public const PROPERTY_PROMOTION = 80000;
 }
