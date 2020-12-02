@@ -18,9 +18,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
 {
     /**
-     * @var string
+     * @var int[]
      */
-    public const DOC_INDENTATION = 'docIndentation';
+    private const HERENOW_DOC_KINDS = [String_::KIND_HEREDOC, String_::KIND_NOWDOC];
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -61,13 +61,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $kind = $node->getAttribute(AttributeKey::KIND);
-        if (! in_array($kind, [String_::KIND_HEREDOC, String_::KIND_NOWDOC], true)) {
+        $stringKind = $node->getAttribute(AttributeKey::KIND);
+
+        if (! in_array($stringKind, self::HERENOW_DOC_KINDS, true)) {
             return null;
         }
 
-        $node->setAttribute(self::DOC_INDENTATION, '');
-
+        $node->setAttribute(AttributeKey::DOC_INDENTATION, '');
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         return $node;
