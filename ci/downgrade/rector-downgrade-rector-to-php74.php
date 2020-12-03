@@ -6,7 +6,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-require __DIR__ . '/configuration.php';
+require_once __DIR__ . '/configuration.php';
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
