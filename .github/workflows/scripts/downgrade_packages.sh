@@ -62,7 +62,7 @@ function fail {
 function join_by { local d=$1; shift; local f=$1; shift; printf %s "$f" "${@/#/$d}"; }
 ########################################################################
 # Silent output
-set +x
+# set +x
 
 target_php_version=$1
 if [ -z "$target_php_version" ]; then
@@ -287,7 +287,7 @@ do
         # Execute the downgrade
         # Print command in output for testing
         # set -x
-        bin/rector process $path_to_downgrade --config=$config --ansi --dry-run
+        bin/rector process $path_to_downgrade --config=$config --ansi
         # set +x
 
         # If Rector fails, already exit
