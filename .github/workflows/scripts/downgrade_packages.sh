@@ -307,26 +307,49 @@ do
         for rector_config in "${!circular_reference_packages_by_rector_config[@]}";
         do
             circular_packages_to_downgrade=($(echo "${circular_reference_packages_by_rector_config[$rector_config]}" | tr ' ' '\n' | sort -u))
-            circular_paths_to_downgrade=()
+            circular_packages_to_downgrade_for_rectorconfig=()
+            circular_paths_to_downgrade_for_rectorconfig=()
             for package_to_downgrade in "${circular_packages_to_downgrade[@]}";
             do
-                # Obtain the path
-                circular_paths_to_downgrade+=(${package_paths[$package_to_downgrade]})
-
                 # Mark this package as downgraded
                 key="${package_to_downgrade}_${rector_config}"
                 downgraded_packages+=($key)
                 ((numberDowngradedPackages++))
+
+                # If the downgrades are grouped in the same Rector config, then we must only
+                # execute the last config (eg: to-php71) and not the previous ones (eg: to-php72)
+                if [ -n "$GROUP_RECTOR_CONFIGS" ]; then
+                    # Check that this config and the last one are different
+                    if [ "${rector_config}" != "${last_rectorconfig_by_package[$package_to_downgrade]}" ]; then
+                        # Get the last rector_config for this package, replacing the current one
+                        package_last_rector_config=${last_rectorconfig_by_package[$package_to_downgrade]}
+                        # If it has already been executed, then do nothing
+                        key="${package_to_downgrade}_${package_last_rector_config}"
+                        if [[ " ${downgraded_packages[@]} " =~ " ${key} " ]]; then
+                            continue
+                        fi
+                    fi
+                fi
+
+                # This package does need downgrading (eg: it had not been already downgraded via GROUP_RECTOR_CONFIGS)
+                circular_packages_to_downgrade_for_rectorconfig+=($package_to_downgrade)
+                # Obtain the path
+                circular_paths_to_downgrade_for_rectorconfig+=(${package_paths[$package_to_downgrade]})
             done
 
-            paths_to_downgrade=$(join_by " " ${circular_paths_to_downgrade[@]})
-            echo "Running rector_config ${rector_config} for packages ${circular_packages_to_downgrade[@]}"
-            config="ci/downgrade/rector-downgrade-dependency-${rector_config}.php"
-            bin/rector process $paths_to_downgrade --config=$config --ansi
+            # Check that possibly all packages had already been downgraded via GROUP_RECTOR_CONFIGS
+            if [ ${#circular_packages_to_downgrade_for_rectorconfig[@]} -gt 0 ]; then
+                paths_to_downgrade=$(join_by " " ${circular_paths_to_downgrade_for_rectorconfig[@]})
+                echo "Running rector_config ${rector_config} for packages ${circular_packages_to_downgrade_for_rectorconfig[@]}"
+                config="ci/downgrade/rector-downgrade-dependency-${rector_config}.php"
+                bin/rector process $paths_to_downgrade --config=$config --ansi
 
-            # If Rector fails, already exit
-            if [ "$?" -gt 0 ]; then
-                fail "Rector downgrade failed on rector_config ${rector_config} for package ${package_to_downgrade}"
+                # If Rector fails, already exit
+                if [ "$?" -gt 0 ]; then
+                    fail "Rector downgrade failed on rector_config ${rector_config} for package ${package_to_downgrade}"
+                fi
+            else
+                echo "All circular packages had already been downgraded: ${circular_packages_to_downgrade[@]}"
             fi
         done
     fi
