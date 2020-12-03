@@ -31,7 +31,38 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'renderControl',
                     new ObjectType('Nette\Utils\Html')
                 ),
+                new AddReturnTypeDeclaration(
+                    'Nette\Forms\Container',
+                    'addContainer',
+                    new ObjectType('Nette\Forms\Container')
+                ),
+                new AddReturnTypeDeclaration(
+                    'Nette\Forms\Container',
+                    'addSelect',
+                    new ObjectType('Nette\Forms\Controls\SelectBox')
+                ),
+                new AddReturnTypeDeclaration(
+                    'Nette\Forms\Container',
+                    'addMultiSelect',
+                    new ObjectType('Nette\Forms\Controls\MultiSelectBox')
+                ),
+                new AddReturnTypeDeclaration(
+                    'Nette\Forms\IFormRenderer',
+                    'render',
+                    new StringType()
+                ),
+                new AddReturnTypeDeclaration(
+                    'Nette\Forms\Controls\TextBase',
+                    'getControl',
+                    new ObjectType('Nette\Utils\Html')
+                ),
+                new AddReturnTypeDeclaration(
+                    'RadekDostal\NetteComponents\DateTimePicker\DateTimePicker',
+                    'register',
+                    new VoidType()
+                ),
                 new AddReturnTypeDeclaration('Nette\Caching\Cache', 'generateKey', new StringType()),
+                new AddReturnTypeDeclaration('Nette\Localization\ITranslator', 'translate', new StringType()),
                 new AddReturnTypeDeclaration('Nette\Security\IResource', 'getResourceId', new StringType()),
                 new AddReturnTypeDeclaration(
                     'Nette\Security\IAuthenticator',

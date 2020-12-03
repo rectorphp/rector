@@ -64,6 +64,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
             'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
             'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
+            'WebChemistry\Forms\Controls\Multiplier' => 'Contributte\FormMultiplier\Multiplier'
         ],
     ]]);
     $services->set(ArgumentDefaultValueReplacerRector::class)->call('configure', [[
@@ -76,7 +77,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]]);
     $services->set(RenameMethodRector::class)->call('configure', [[
         RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
-            new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setAttribute', 'setHtmlAttribute'),
             // see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
             new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setType', 'setHtmlType'),
             new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setAttribute', 'setHtmlAttribute'),

@@ -11,6 +11,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
+use Rector\Nette\Rector\ClassMethod\TranslateClassMethodToVariadicsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -18,6 +19,8 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
+    $services->set(TranslateClassMethodToVariadicsRector::class);
 
     # scalar type hints, see https://github.com/nette/component-model/commit/f69df2ca224cad7b07f1c8835679393263ea6771
     # scalar param types https://github.com/nette/security/commit/84024f612fb3f55f5d6e3e3e28eef1ad0388fa56
@@ -61,6 +64,42 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
                 new AddParamTypeDeclaration('Nette\ComponentModel\IComponent', 'setParent', 1, new StringType()),
                 new AddParamTypeDeclaration('Nette\ComponentModel\IContainer', 'getComponents', 0, new BooleanType()),
+                new AddParamTypeDeclaration(
+                    'Nette\Forms\Container',
+                    'addSelect',
+                    0,
+                    new StringType()
+                ),
+                new AddParamTypeDeclaration(
+                    'Nette\Forms\Container',
+                    'addSelect',
+                    3,
+                    new IntegerType()
+                ),
+                new AddParamTypeDeclaration(
+                    'Nette\Forms\Container',
+                    'addMultiSelect',
+                    0,
+                    new StringType()
+                ),
+                new AddParamTypeDeclaration(
+                    'Nette\Forms\Container',
+                    'addMultiSelect',
+                    3,
+                    new IntegerType()
+                ),
+                new AddParamTypeDeclaration(
+                    'Nette\Forms\Rendering\DefaultFormRenderer',
+                    'render',
+                    1,
+                    new StringType()
+                ),
+                new AddParamTypeDeclaration(
+                    'RadekDostal\NetteComponents\DateTimePicker\DateTimePicker',
+                    'register',
+                    0,
+                    new StringType()
+                ),
                 new AddParamTypeDeclaration(
                     'Nette\Bridges\SecurityDI\SecurityExtension',
                     '__construct',
