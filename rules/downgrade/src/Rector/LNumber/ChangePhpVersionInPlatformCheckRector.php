@@ -16,6 +16,7 @@ use Rector\Core\Util\PhpVersionFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Webmozart\Assert\Assert;
 
 /**
@@ -92,6 +93,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isPlatformCheckFile($node)) {
+            return null;
+        }
+
         if ($node instanceof LNumber) {
             return $this->refactorLNumber($node);
         }
@@ -112,6 +117,16 @@ CODE_SAMPLE
         Assert::integer($targetPhpVersion);
 
         $this->targetPhpVersion = $targetPhpVersion;
+    }
+
+    private function isPlatformCheckFile(Node $node): bool
+    {
+        $fileInfo = $node->getAttribute(SmartFileInfo::class);
+        if (! $fileInfo instanceof SmartFileInfo) {
+            return false;
+        }
+
+        return Strings::endsWith($fileInfo->getFilename(), 'platform_check.php');
     }
 
     private function refactorLNumber(LNumber $lNumber): ?LNumber
