@@ -241,9 +241,9 @@ do
 
         if [ $package_to_downgrade = "$rootPackage" ]
         then
-            config=rector-downgrade-rector.php
+            config=ci/downgrade/rector-downgrade-rector.php
         else
-            config=rector-downgrade-dependency.php
+            config=ci/downgrade/rector-downgrade-dependency.php
         fi
 
         echo "Running set ${set_to_downgrade} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
@@ -286,7 +286,7 @@ do
 
             paths_to_downgrade=$(join_by " " ${circular_paths_to_downgrade[@]})
             echo "Running set ${set_to_downgrade} for packages ${circular_packages_to_downgrade[@]}"
-            config=rector-downgrade-dependency.php
+            config=ci/downgrade/rector-downgrade-dependency.php
             bin/rector process $paths_to_downgrade --set=$set_to_downgrade --config=$config --ansi
 
             # If Rector fails, already exit
