@@ -1,6 +1,5 @@
 /vendor
 composer.lock
-stubs
 
 # PHPStorm meta files
 .idea/
