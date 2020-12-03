@@ -36,15 +36,14 @@ declare -A downgrade_php_whynots=( \
     ["7.4"]="7.4.*" \
 )
 # Notice that these values currently contain only 1 item, but they can contain many
-# rector config files, separated by space:
-# For instance: ["7.0"]="php80-to-74 php72-to-71" \ (this skips downgrading PHP 7.3)
-
+# rector config files, separated by space, such as "to-php74 to-php72"
+# (this is because the original solution, which was to downgrade an array of sets, has been kept...)
 declare -A downgrade_php_rectorconfigs=( \
-    ["7.0"]="php80-to-71" \
-    ["7.1"]="php80-to-72" \
-    ["7.2"]="php80-to-73" \
-    ["7.3"]="php80-to-74" \
-    ["7.4"]="php80" \
+    ["7.0"]="to-php70" \
+    ["7.1"]="to-php71" \
+    ["7.2"]="to-php72" \
+    ["7.3"]="to-php73" \
+    ["7.4"]="to-php74" \
 )
 
 ########################################################################
