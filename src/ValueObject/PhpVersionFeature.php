@@ -143,6 +143,12 @@ final class PhpVersionFeature
     public const COVARIANT_RETURN = 70400;
 
     /**
+     * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
+     * @var int
+     */
+    public const CONTRAVARIANT_ARGUMENT = 70400;
+
+    /**
      * @var int
      */
     public const ARRAY_SPREAD = 70400;
