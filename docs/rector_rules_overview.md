@@ -1,4 +1,4 @@
-# 627 Rules Overview
+# 628 Rules Overview
 
 <br>
 
@@ -34,7 +34,7 @@
 
 - [DowngradePhp73](#downgradephp73) (2)
 
-- [DowngradePhp74](#downgradephp74) (7)
+- [DowngradePhp74](#downgradephp74) (8)
 
 - [DowngradePhp80](#downgradephp80) (6)
 
@@ -5284,6 +5284,35 @@ Replace array spread with `array_merge` function
 +        $item0Unpacked = new ArrayIterator(['durian', 'kiwi']);
 +        $fruits = array_merge(['banana', 'orange'], is_array($item0Unpacked) ? $item0Unpacked : iterator_to_array($item0Unpacked), ['watermelon']);
      }
+ }
+```
+
+<br>
+
+### DowngradeCovarianReturnTypeRector
+
+Make method return same type as parent
+
+- class: `Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovarianReturnTypeRector`
+
+```diff
+ class ParentType {}
+ class ChildType extends ParentType {}
+
+ class A
+ {
+     public function covariantReturnTypes(): ParentType
+     { /* … */ }
+ }
+
+ class B extends A
+ {
+-    public function covariantReturnTypes(): ChildType
++    /**
++     * @return ChildType
++     */
++    public function covariantReturnTypes(): ParentType
+     { /* … */ }
  }
 ```
 
