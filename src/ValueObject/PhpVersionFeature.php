@@ -94,6 +94,11 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const PARAMETER_TYPE_WIDENING = 70200;
+
+    /**
+     * @var int
+     */
     public const IS_COUNTABLE = 70300;
 
     /**
