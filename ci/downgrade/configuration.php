@@ -16,6 +16,7 @@ final class DowngradeRectorConfig
         // they are not used by Rector, and they use classes
         // loaded with "require-dev" so it'd throw an error
         __DIR__ . '/../../vendor/symfony/cache/DoctrineProvider.php',
+        __DIR__ . '/../../vendor/symfony/cache/Messenger/EarlyExpirationHandler.php',
         __DIR__ . '/../../vendor/symfony/http-kernel/HttpKernelBrowser.php',
         __DIR__ . '/../../vendor/symfony/string/Slugger/AsciiSlugger.php',
     ];
