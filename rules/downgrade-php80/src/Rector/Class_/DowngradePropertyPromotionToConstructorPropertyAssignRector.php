@@ -128,6 +128,24 @@ CODE_SAMPLE
     }
 
     /**
+     * @param Property[] $properties
+     */
+    private function addPropertyAssignsToConstructorClassMethod(array $properties, Class_ $class): void
+    {
+        $assigns = [];
+
+        foreach ($properties as $property) {
+            $propertyName = $this->getName($property);
+            $assign = $this->nodeFactory->createPropertyAssignment($propertyName);
+            $assigns[] = new Expression($assign);
+        }
+
+        /** @var ClassMethod $constructorClassMethod */
+        $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        $constructorClassMethod->stmts = array_merge($assigns, (array) $constructorClassMethod->stmts);
+    }
+
+    /**
      * @param Param[] $params
      * @return Property[]
      */
@@ -147,23 +165,5 @@ CODE_SAMPLE
         }
 
         return $properties;
-    }
-
-    /**
-     * @param Property[] $properties
-     */
-    private function addPropertyAssignsToConstructorClassMethod(array $properties, Class_ $class): void
-    {
-        $assigns = [];
-
-        foreach ($properties as $property) {
-            $propertyName = $this->getName($property);
-            $assign = $this->nodeFactory->createPropertyAssignment($propertyName);
-            $assigns[] = new Expression($assign);
-        }
-
-        /** @var ClassMethod $constructorClassMethod */
-        $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        $constructorClassMethod->stmts = array_merge($assigns, (array) $constructorClassMethod->stmts);
     }
 }
