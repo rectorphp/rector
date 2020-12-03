@@ -48,7 +48,7 @@ declare -A downgrade_php_rectorconfigs=( \
 # (only to-php73, no need for to-php74) or a same downgrade will be executed more than once
 # This logic is a bit redundant, but it enables to execute several config files on each package,
 # eg: defining the set to execute using `--set` in the CLI (not supported anymore)
-groupRectorConfigs="true"
+GROUP_RECTOR_CONFIGS="true"
 
 ########################################################################
 # Helper functions
@@ -62,7 +62,7 @@ function fail {
 function join_by { local d=$1; shift; local f=$1; shift; printf %s "$f" "${@/#/$d}"; }
 ########################################################################
 # Silent output
-# set +x
+set +x
 
 target_php_version=$1
 if [ -z "$target_php_version" ]; then
@@ -84,6 +84,7 @@ packages_to_downgrade=()
 rectorconfigs_to_downgrade=()
 declare -A package_paths
 declare -A packages_by_rectorconfig
+declare -A last_rectorconfig_by_package
 
 # Switch to production
 composer install --no-dev
@@ -120,6 +121,12 @@ do
             rectorconfigs_to_downgrade+=($rector_config)
             package_paths[$package]=$path
             packages_by_rectorconfig[$rector_config]=$(echo "${packages_by_rectorconfig[$rector_config]} ${package}")
+
+            # If the downgrades are grouped in the same Rector config, then we must only
+            # execute the last config (eg: to-php71) and not the previous ones (eg: to-php72)
+            if [ -n "$GROUP_RECTOR_CONFIGS" ]; then
+                last_rectorconfig_by_package[$package]=$rector_config
+            fi
         done
     else
         echo No packages to downgrade
@@ -234,6 +241,24 @@ do
         # Mark this package as downgraded
         downgraded_packages+=($key)
         ((numberDowngradedPackages++))
+
+        # If the downgrades are grouped in the same Rector config, then we must only
+        # execute the last config (eg: to-php71) and not the previous ones (eg: to-php72)
+        if [ -n "$GROUP_RECTOR_CONFIGS" ]; then
+            # Check that this config and the last one are different
+            if [ "${rector_config}" != "${last_rectorconfig_by_package[$package_to_downgrade]}" ]; then
+                # Get the last rector_config for this package, replacing the current one
+                rector_config=${last_rectorconfig_by_package[$package_to_downgrade]}
+                # If it has already been executed, then do nothing
+                key="${package_to_downgrade}_${rector_config}"
+                if [[ " ${downgraded_packages[@]} " =~ " ${key} " ]]; then
+                    continue
+                fi
+                # Mark this package as downgraded
+                downgraded_packages+=($key)
+                ((numberDowngradedPackages++))
+            fi
+        fi
 
         path_to_downgrade=${package_paths[$package_to_downgrade]}
         # exclude=${package_excludes[$package_to_downgrade]}
