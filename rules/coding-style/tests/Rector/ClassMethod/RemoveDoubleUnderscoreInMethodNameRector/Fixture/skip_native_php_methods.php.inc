@@ -15,7 +15,7 @@ class SkipNativePhpMethods
     function __sleep(){}
     function __wakeup(){}
     function __serialize(){}
-    function __unserialize(){}
+    function __unserialize($content){}
 
     function __toString()
     {
@@ -23,7 +23,7 @@ class SkipNativePhpMethods
     }
 
     function __invoke(){}
-    function __set_state(){}
+    static function __set_state($state){}
     function __clone(){}
     function __debugInfo(){}
 }
