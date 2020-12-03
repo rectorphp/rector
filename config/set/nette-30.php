@@ -64,7 +64,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
             'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
             'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
-            'WebChemistry\Forms\Controls\Multiplier' => 'Contributte\FormMultiplier\Multiplier'
+            'WebChemistry\Forms\Controls\Multiplier' => 'Contributte\FormMultiplier\Multiplier',
         ],
     ]]);
     $services->set(ArgumentDefaultValueReplacerRector::class)->call('configure', [[

@@ -46,11 +46,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'addMultiSelect',
                     new ObjectType('Nette\Forms\Controls\MultiSelectBox')
                 ),
-                new AddReturnTypeDeclaration(
-                    'Nette\Forms\IFormRenderer',
-                    'render',
-                    new StringType()
-                ),
+                new AddReturnTypeDeclaration('Nette\Forms\IFormRenderer', 'render', new StringType()),
                 new AddReturnTypeDeclaration(
                     'Nette\Forms\Controls\TextBase',
                     'getControl',

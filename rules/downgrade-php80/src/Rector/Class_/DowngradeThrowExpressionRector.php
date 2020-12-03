@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,7 +21,7 @@ final class DowngradeThrowExpressionRector extends AbstractRector
     {
         return new RuleDefinition('Change constructor property promotion to property asssign', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct($nullableValue)
@@ -28,10 +29,10 @@ class SomeClass
         return $nullableValue ?? throw new InvalidArgumentException()
     }
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct($nullableValue)
@@ -43,9 +44,9 @@ class SomeClass
         throw new InvalidArgumentException()
     }
 }
-PHP
+CODE_SAMPLE
 
-            )
+            ),
         ]);
     }
 
@@ -54,11 +55,11 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\Class_ $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
