@@ -35,16 +35,20 @@ declare -A downgrade_php_whynots=( \
     ["7.3"]="7.4.* 7.3.*" \
     ["7.4"]="7.4.*" \
 )
-# Notice that these values currently contain only 1 item, but they can contain many
-# rector config files, separated by space, such as "to-php74 to-php72"
-# (this is because the original solution, which was to downgrade an array of sets, has been kept...)
 declare -A downgrade_php_rectorconfigs=( \
-    ["7.0"]="to-php70" \
-    ["7.1"]="to-php71" \
-    ["7.2"]="to-php72" \
-    ["7.3"]="to-php73" \
+    ["7.0"]="to-php74 to-php73 to-php72 to-php71 to-php70" \
+    ["7.1"]="to-php74 to-php73 to-php72 to-php71" \
+    ["7.2"]="to-php74 to-php73 to-php72" \
+    ["7.3"]="to-php74 to-php73" \
     ["7.4"]="to-php74" \
 )
+# Rector configs carry the previous downgrade sets starting from php80
+# (eg: to-php73 has downgrade sets php80 and php74)
+# so even though we're storing all the stages, only the last item must be executed
+# (only to-php73, no need for to-php74) or a same downgrade will be executed more than once
+# This logic is a bit redundant, but it enables to execute several config files on each package,
+# eg: defining the set to execute using `--set` in the CLI (not supported anymore)
+groupRectorConfigs="true"
 
 ########################################################################
 # Helper functions
@@ -57,6 +61,8 @@ function fail {
 # Print array helpers (https://stackoverflow.com/a/17841619)
 function join_by { local d=$1; shift; local f=$1; shift; printf %s "$f" "${@/#/$d}"; }
 ########################################################################
+# Silent output
+# set +x
 
 target_php_version=$1
 if [ -z "$target_php_version" ]; then
