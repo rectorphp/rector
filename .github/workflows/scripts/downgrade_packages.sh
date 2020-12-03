@@ -35,12 +35,16 @@ declare -A downgrade_php_whynots=( \
     ["7.3"]="7.4.* 7.3.*" \
     ["7.4"]="7.4.*" \
 )
-declare -A downgrade_php_sets=( \
-    ["7.0"]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72 downgrade-php71" \
-    ["7.1"]="downgrade-php80 downgrade-php74 downgrade-php73 downgrade-php72" \
-    ["7.2"]="downgrade-php80 downgrade-php74 downgrade-php73" \
-    ["7.3"]="downgrade-php80 downgrade-php74" \
-    ["7.4"]="downgrade-php80" \
+# Notice that these values currently contain only 1 item, but they can contain many
+# rector config files, separated by space:
+# For instance: ["7.0"]="php80-to-74 php72-to-71" \ (this skips downgrading PHP 7.3)
+
+declare -A downgrade_php_rectorconfigs=( \
+    ["7.0"]="php80-to-71" \
+    ["7.1"]="php80-to-72" \
+    ["7.2"]="php80-to-73" \
+    ["7.3"]="php80-to-74" \
+    ["7.4"]="php80" \
 )
 
 ########################################################################
@@ -69,12 +73,12 @@ fi
 
 target_downgrade_php_versions=($(echo ${downgrade_php_versions[$target_php_version]} | tr " " "\n"))
 target_downgrade_php_whynots=($(echo ${downgrade_php_whynots[$target_php_version]} | tr " " "\n"))
-target_downgrade_php_sets=($(echo ${downgrade_php_sets[$target_php_version]} | tr " " "\n"))
+target_downgrade_php_rectorconfigs=($(echo ${downgrade_php_rectorconfigs[$target_php_version]} | tr " " "\n"))
 
 packages_to_downgrade=()
-sets_to_downgrade=()
+rectorconfigs_to_downgrade=()
 declare -A package_paths
-declare -A packages_by_set
+declare -A packages_by_rectorconfig
 
 # Switch to production
 composer install --no-dev
@@ -88,7 +92,7 @@ do
     pos=$(( $counter - 1 ))
     version=${target_downgrade_php_versions[$pos]}
     whynot=${target_downgrade_php_whynots[$pos]}
-    set=${target_downgrade_php_sets[$pos]}
+    rector_config=${target_downgrade_php_rectorconfigs[$pos]}
     echo Analyzing packages to downgrade from PHP version "$version"
 
     # Obtain the list of packages for production that need a higher version that the input one.
@@ -97,7 +101,7 @@ do
     if [ -n "$PACKAGES" ]; then
         for package in $PACKAGES
         do
-            echo "Enqueueing set $set on package $package"
+            echo "Enqueueing rector_config $rector_config on package $package"
             # Composer also analyzes the root project but its path is directly the root folder
             if [ $package = "$rootPackage" ]
             then
@@ -108,9 +112,9 @@ do
                 path=$(composer info $package --path | cut -d' ' -f2-)
             fi
             packages_to_downgrade+=($package)
-            sets_to_downgrade+=($set)
+            rectorconfigs_to_downgrade+=($rector_config)
             package_paths[$package]=$path
-            packages_by_set[$set]=$(echo "${packages_by_set[$set]} ${package}")
+            packages_by_rectorconfig[$rector_config]=$(echo "${packages_by_rectorconfig[$rector_config]} ${package}")
         done
     else
         echo No packages to downgrade
@@ -128,9 +132,9 @@ numberPackages=${#packages_to_downgrade[@]}
 # if [ ! $numberPaths -eq $numberPackages ]; then
 #     fail "Number of paths ($numberPaths) and number of packages ($numberPackages) should not be different"
 # fi
-numberSets=${#sets_to_downgrade[@]}
-if [ ! $numberSets -eq $numberPackages ]; then
-    fail "Number of sets ($numberSets) and number of packages ($numberPackages) should not be different"
+numberRectorConfigs=${#rectorconfigs_to_downgrade[@]}
+if [ ! $numberRectorConfigs -eq $numberPackages ]; then
+    fail "Number of Rector configs ($numberRectorConfigs) and number of packages ($numberPackages) should not be different"
 fi
 
 # We must downgrade packages in the strict dependency order,
@@ -148,8 +152,8 @@ while [ $counter -le $numberPackages ]
 do
     pos=$(( $counter - 1 ))
     package_to_downgrade=${packages_to_downgrade[$pos]}
-    set_to_downgrade=${sets_to_downgrade[$pos]}
-    IFS=' ' read -r -a packages_to_downgrade_by_set <<< "${packages_by_set[$set_to_downgrade]}"
+    rector_config=${rectorconfigs_to_downgrade[$pos]}
+    IFS=' ' read -r -a packages_to_downgrade_by_rectorconfig <<< "${packages_by_rectorconfig[$rector_config]}"
 
     dependents_to_downgrade=()
     # Obtain recursively the list of dependents, keep the first word only,
@@ -162,17 +166,17 @@ do
         if [ $dependent = $package_to_downgrade ]; then
             continue
         fi
-        # Only add the ones which must themselves be downgraded for that same set
-        if [[ ! " ${packages_to_downgrade_by_set[@]} " =~ " ${dependent} " ]]; then
+        # Only add the ones which must themselves be downgraded for that same rector config
+        if [[ ! " ${packages_to_downgrade_by_rectorconfig[@]} " =~ " ${dependent} " ]]; then
             continue;
         fi
         dependents_to_downgrade+=($dependent)
     done
-    # The dependents are identified per package and set, because a same dependency
-    # downgraded for 2 set might have dependencies downgraded for one set and not the other
-    key="${package_to_downgrade}_${set_to_downgrade}"
+    # The dependents are identified per package and rector_config, because a same dependency
+    # downgraded for 2 rector_config might have dependencies downgraded for one rector_config and not the other
+    key="${package_to_downgrade}_${rector_config}"
     package_dependents[$key]=$(echo "${dependents_to_downgrade[@]}")
-    echo "Dependents for package ${package_to_downgrade} and set ${set_to_downgrade}: ${dependents_to_downgrade[@]}"
+    echo "Dependents for package ${package_to_downgrade} and rector_config ${rector_config}: ${dependents_to_downgrade[@]}"
     ((counter++))
 done
 
@@ -182,7 +186,7 @@ done
 # In case of circular dependencies (eg: package1 requires package2
 # and package2 requires package1), the process will fail
 # hasNonDowngradedDependents=()
-declare -A circular_reference_packages_by_set
+declare -A circular_reference_packages_by_rector_config
 
 echo Executing Rector to downgrade $numberDowngradedPackages packages
 downgraded_packages=()
@@ -200,8 +204,8 @@ do
         pos=$(( $counter - 1 ))
         ((counter++))
         package_to_downgrade=${packages_to_downgrade[$pos]}
-        set_to_downgrade=${sets_to_downgrade[$pos]}
-        key="${package_to_downgrade}_${set_to_downgrade}"
+        rector_config=${rectorconfigs_to_downgrade[$pos]}
+        key="${package_to_downgrade}_${rector_config}"
         # Check if this package has already been downgraded on a previous iteration
         if [[ " ${downgraded_packages[@]} " =~ " ${key} " ]]; then
             continue
@@ -210,11 +214,11 @@ do
         hasNonDowngradedDependent=""
         IFS=' ' read -r -a dependents <<< "${package_dependents[$key]}"
         for dependent in "${dependents[@]}"; do
-            dependentKey="${dependent}_${set_to_downgrade}"
+            dependentKey="${dependent}_${rector_config}"
             if [[ ! " ${downgraded_packages[@]} " =~ " ${dependentKey} " ]]; then
                 hasNonDowngradedDependent="true"
                 # hasNonDowngradedDependents+=("${dependent}=>${package_to_downgrade}")
-                circular_reference_packages_by_set[${set_to_downgrade}]=$(echo "${circular_reference_packages_by_set[$set_to_downgrade]} ${dependent}")
+                circular_reference_packages_by_rector_config[${rector_config}]=$(echo "${circular_reference_packages_by_rector_config[$rector_config]} ${dependent}")
                 # echo "${package_to_downgrade} has non-downgraded dependent: ${dependentKey}"
             fi
         done
@@ -241,37 +245,38 @@ do
 
         if [ $package_to_downgrade = "$rootPackage" ]
         then
-            config=ci/downgrade/rector-downgrade-rector.php
+            config=ci/downgrade/rector-downgrade-rector
         else
-            config=ci/downgrade/rector-downgrade-dependency.php
+            config=ci/downgrade/rector-downgrade-dependency
         fi
+        # Attach the specific rector config as a file suffix
+        config="${config}-${rector_config}.php"
 
-        echo "Running set ${set_to_downgrade} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
+        echo "Running rector_config ${rector_config} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
 
         # Execute the downgrade
         # Print command in output for testing
         # set -x
-        # bin/rector process $path_to_downgrade --set=$set_to_downgrade --exclude-path=$exclude --target-php-version=$target_php_version --dry-run --ansi
-        bin/rector process $path_to_downgrade --set=$set_to_downgrade --config=$config --ansi
+        bin/rector process $path_to_downgrade --config=$config --ansi --dry-run
         # set +x
 
         # If Rector fails, already exit
         if [ "$?" -gt 0 ]; then
-            fail "Rector downgrade failed on set ${set_to_downgrade} for package ${package_to_downgrade}"
+            fail "Rector downgrade failed on rector_config ${rector_config} for package ${package_to_downgrade}"
         fi
     done
     # If no new package was downgraded, it must be because of circular dependencies
     if [ $numberDowngradedPackages -eq $previousNumberDowngradedPackages ]
     then
-        if [ ${#circular_reference_packages_by_set[@]} -eq 0 ]; then
+        if [ ${#circular_reference_packages_by_rector_config[@]} -eq 0 ]; then
             fail "For some unknown reason, not all packages have been downgraded"
         fi
 
         # Resolve all involved packages all together
         echo "Resolving circular reference packages all together"
-        for set_to_downgrade in "${!circular_reference_packages_by_set[@]}";
+        for rector_config in "${!circular_reference_packages_by_rector_config[@]}";
         do
-            circular_packages_to_downgrade=($(echo "${circular_reference_packages_by_set[$set_to_downgrade]}" | tr ' ' '\n' | sort -u))
+            circular_packages_to_downgrade=($(echo "${circular_reference_packages_by_rector_config[$rector_config]}" | tr ' ' '\n' | sort -u))
             circular_paths_to_downgrade=()
             for package_to_downgrade in "${circular_packages_to_downgrade[@]}";
             do
@@ -279,23 +284,23 @@ do
                 circular_paths_to_downgrade+=(${package_paths[$package_to_downgrade]})
 
                 # Mark this package as downgraded
-                key="${package_to_downgrade}_${set_to_downgrade}"
+                key="${package_to_downgrade}_${rector_config}"
                 downgraded_packages+=($key)
                 ((numberDowngradedPackages++))
             done
 
             paths_to_downgrade=$(join_by " " ${circular_paths_to_downgrade[@]})
-            echo "Running set ${set_to_downgrade} for packages ${circular_packages_to_downgrade[@]}"
-            config=ci/downgrade/rector-downgrade-dependency.php
-            bin/rector process $paths_to_downgrade --set=$set_to_downgrade --config=$config --ansi
+            echo "Running rector_config ${rector_config} for packages ${circular_packages_to_downgrade[@]}"
+            config="ci/downgrade/rector-downgrade-dependency-${rector_config}.php"
+            bin/rector process $paths_to_downgrade --config=$config --ansi
 
             # If Rector fails, already exit
             if [ "$?" -gt 0 ]; then
-                fail "Rector downgrade failed on set ${set_to_downgrade} for package ${package_to_downgrade}"
+                fail "Rector downgrade failed on rector_config ${rector_config} for package ${package_to_downgrade}"
             fi
         done
     fi
     # hasNonDowngradedDependents=()
-    circular_reference_packages_by_set=()
+    circular_reference_packages_by_rector_config=()
     previousNumberDowngradedPackages=$numberDowngradedPackages
 done
