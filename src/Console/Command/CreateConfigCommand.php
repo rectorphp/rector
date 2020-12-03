@@ -52,9 +52,8 @@ final class CreateConfigCommand extends AbstractCommand
             'The PHP file with the configuration in YAML format.'
         );
         $this->addOption(
-            //Option::OUTPUT,
-            'output',
-            'o',
+            Option::OPTION_OUTPUT_FILE,
+            null,
             InputOption::VALUE_REQUIRED,
             'The name of the config file to generate. Default: rector.php.',
             'rector.php'
@@ -63,7 +62,7 @@ final class CreateConfigCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $outputFilename = (string) $input->getOption('output'/*Option::OUTPUT*/);
+        $outputFilename = (string) $input->getOption(Option::OPTION_OUTPUT_FILE);
         $outputFile = getcwd() . '/' . $outputFilename;
         $rectorConfigFiles = $this->smartFileSystem->exists($outputFile);
 
