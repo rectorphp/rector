@@ -64,30 +64,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
                 new AddParamTypeDeclaration('Nette\ComponentModel\IComponent', 'setParent', 1, new StringType()),
                 new AddParamTypeDeclaration('Nette\ComponentModel\IContainer', 'getComponents', 0, new BooleanType()),
-                new AddParamTypeDeclaration(
-                    'Nette\Forms\Container',
-                    'addSelect',
-                    0,
-                    new StringType()
-                ),
-                new AddParamTypeDeclaration(
-                    'Nette\Forms\Container',
-                    'addSelect',
-                    3,
-                    new IntegerType()
-                ),
-                new AddParamTypeDeclaration(
-                    'Nette\Forms\Container',
-                    'addMultiSelect',
-                    0,
-                    new StringType()
-                ),
-                new AddParamTypeDeclaration(
-                    'Nette\Forms\Container',
-                    'addMultiSelect',
-                    3,
-                    new IntegerType()
-                ),
+                new AddParamTypeDeclaration('Nette\Forms\Container', 'addSelect', 0, new StringType()),
+                new AddParamTypeDeclaration('Nette\Forms\Container', 'addSelect', 3, new IntegerType()),
+                new AddParamTypeDeclaration('Nette\Forms\Container', 'addMultiSelect', 0, new StringType()),
+                new AddParamTypeDeclaration('Nette\Forms\Container', 'addMultiSelect', 3, new IntegerType()),
                 new AddParamTypeDeclaration(
                     'Nette\Forms\Rendering\DefaultFormRenderer',
                     'render',
