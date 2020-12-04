@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Core\Exclusion\Check;
 
-use Nette\Utils\Strings;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Exclusion\ExclusionCheckInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -19,12 +20,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
 {
-    /**
-     * @var string
-     * @see https://regex101.com/r/d1NMi6/1
-     */
-    private const NO_RECTORE_ANNOTATION_WITH_CLASS_REGEX = '#\@noRector(\s)+[^\w\\\\]#i';
-
     public function isNodeSkippedByRector(PhpRectorInterface $phpRector, Node $node): bool
     {
         if ($node instanceof PropertyProperty || $node instanceof Const_) {
@@ -34,8 +29,7 @@ final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
             }
         }
 
-        $doc = $node->getDocComment();
-        if ($doc !== null && $this->hasNoRectorComment($phpRector, $doc)) {
+        if ($this->hasNoRectorPhpDocTagMatch($node, $phpRector)) {
             return true;
         }
 
@@ -48,14 +42,33 @@ final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
         return false;
     }
 
-    private function hasNoRectorComment(PhpRectorInterface $phpRector, Doc $doc): bool
+    private function hasNoRectorPhpDocTagMatch(Node $node, PhpRectorInterface $phpRector): bool
     {
-        // bare @noRector ignored all rules
-        if (Strings::match($doc->getText(), self::NO_RECTORE_ANNOTATION_WITH_CLASS_REGEX)) {
-            return true;
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return false;
         }
 
-        $regex = '#@noRector\s*\\\\?' . preg_quote(get_class($phpRector), '/') . '#i';
-        return (bool) Strings::match($doc->getText(), $regex);
+        /** @var PhpDocTagNode[] $noRectorTags */
+        $noRectorTags = array_merge($phpDocInfo->getTagsByName('noRector'), $phpDocInfo->getTagsByName('norector'));
+        foreach ($noRectorTags as $noRectorTag) {
+            if ($noRectorTag->value instanceof GenericTagValueNode) {
+                $rectorClass = get_class($phpRector);
+
+                if ($noRectorTag->value->value === $rectorClass) {
+                    return true;
+                }
+
+                if ($noRectorTag->value->value === '\\' . $rectorClass) {
+                    return true;
+                }
+
+                if ($noRectorTag->value->value === '') {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

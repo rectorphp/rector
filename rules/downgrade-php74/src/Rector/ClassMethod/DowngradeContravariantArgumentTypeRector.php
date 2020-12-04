@@ -131,7 +131,7 @@ CODE_SAMPLE
         $parentClassNames = array_merge(
             $classReflection->getParentClassesNames(),
             array_map(
-                function (ClassReflection $interfaceReflection) : string {
+                function (ClassReflection $interfaceReflection): string {
                     return $interfaceReflection->getName();
                 },
                 $classReflection->getInterfaces()

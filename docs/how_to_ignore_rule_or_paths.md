@@ -1,6 +1,6 @@
 # How To Ignore Rule or Paths
 
-## Prefered Way: Config
+## Preferred Way: Config
 
 ```php
 <?php
@@ -43,7 +43,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ## In a File
 
-For in-file exclusion, use `@noRector \FQN name` annotation:
+For in-file exclusion, use `@noRector \Rector\SomeClass\NameRector` annotation:
 
 ```php
 <?php

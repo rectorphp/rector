@@ -1,5 +1,14 @@
 services:
     -
+        class: Rector\PHPStanExtensions\Rule\ForbiddenMethodCallOnTypeRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            forbiddenMethodNamesByTypes:
+                PhpParser\Node:
+                    - 'getComments'
+                    - getDocComment
+
+    -
         class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
         tags: [phpstan.rules.rule]
 

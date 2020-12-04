@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PHPUnit\Rector\ClassMethod;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -34,9 +33,13 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
 
     /**
      * @var string
-     * @see https://regex101.com/r/pn4Kma/1
      */
-    private const DOES_NOT_PERFORM_ASSERTION_REGEX = '#@(doesNotPerformAssertion|expectedException\b)#';
+    private const DOES_NOT_PERFORM_ASSERTION_TAG = 'doesNotPerformAssertions';
+
+    /**
+     * @var string
+     */
+    private const EXPECTED_EXCEPTION_TAG = 'expectedException';
 
     /**
      * This should prevent segfaults while going too deep into to parsed code.
@@ -82,7 +85,9 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-class SomeClass extends PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SomeClass extends TestCase
 {
     public function test()
     {
@@ -92,7 +97,9 @@ class SomeClass extends PHPUnit\Framework\TestCase
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-class SomeClass extends PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SomeClass extends TestCase
 {
     /**
      * @doesNotPerformAssertions
@@ -142,11 +149,12 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($classMethod->getDocComment() !== null) {
-            $doc = $classMethod->getDocComment();
-            if (Strings::match($doc->getText(), self::DOES_NOT_PERFORM_ASSERTION_REGEX)) {
-                return true;
-            }
+        if ($this->hasTagByName($classMethod, self::DOES_NOT_PERFORM_ASSERTION_TAG)) {
+            return true;
+        }
+
+        if ($this->hasTagByName($classMethod, self::EXPECTED_EXCEPTION_TAG)) {
+            return true;
         }
 
         return $this->containsAssertCall($classMethod);
@@ -156,7 +164,7 @@ CODE_SAMPLE
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->addBareTag('@doesNotPerformAssertions');
+        $phpDocInfo->addBareTag('@' . self::DOES_NOT_PERFORM_ASSERTION_TAG);
     }
 
     private function containsAssertCall(ClassMethod $classMethod): bool

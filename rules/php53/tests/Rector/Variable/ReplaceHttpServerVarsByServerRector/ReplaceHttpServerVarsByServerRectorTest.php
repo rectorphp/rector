@@ -13,7 +13,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ReplaceHttpServerVarsByServerRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
     {
@@ -23,7 +23,7 @@ final class ReplaceHttpServerVarsByServerRectorTest extends AbstractRectorTestCa
     /**
      * @return Iterator<SplFileInfo>
      */
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

@@ -81,6 +81,7 @@
             "Rector\\ConsoleDiffer\\": "packages/console-differ/src",
             "Rector\\Core\\": "src",
             "Rector\\DeadCode\\": "rules/dead-code/src",
+            "Rector\\DeadDocBlock\\": "rules/dead-doc-block/src",
             "Rector\\DoctrineAnnotationGenerated\\": "packages/doctrine-annotation-generated/src",
             "Rector\\DoctrineCodeQuality\\": "rules/doctrine-code-quality/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "rules/doctrine-gedmo-to-knplabs/src",

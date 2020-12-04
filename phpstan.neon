@@ -59,6 +59,7 @@ services:
                     getArgument: [0]
                 PhpParser\Node:
                     getAttribute: [0]
+                    hasAttribute: [0]
                     setAttribute: [0]
 
     -
@@ -769,3 +770,22 @@ parameters:
         - '#Method Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard\:\:getParentClasses\(\) should return array<class\-string\> but returns array<int\|string, class\-string\|false\>#'
         - '#Method Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector\:\:getParentClasses\(\) should return array<class\-string\> but returns array<int\|string, class\-string\|false\>#'
         - '#Only EntityManager\* type as dependency is allowed#'
+
+        -
+            message: '#"(getComments|getDocComment)\(\)" call on "PhpParser\\Node" type is not allowed#'
+            paths:
+                # merging comments
+                - src/Rector/AbstractRector.php
+                - src/PhpParser/NodeTransformer.php
+                - src/PhpDoc/CommentCombiner.php
+                # playing around with doc block format
+                - rules/phpstan/src/Rector/Assign/PHPStormVarAnnotationRector.php
+                - rules/code-quality/src/Rector/Return_/SimplifyUselessVariableRector.php
+                - rules/phpstan/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php
+                - rules/dead-code/src/Rector/Expression/RemoveDeadStmtRector.php
+                - rules/code-quality/src/Rector/FuncCall/ChangeArrayPushToArrayAssignRector.php
+                - packages/better-php-doc-parser/src/Comment/CommentsMerger.php
+                - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php
+                - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfoFactory.php
+                - rules/coding-style/src/Node/DocAliasResolver.php
+                - packages/better-php-doc-parser/tests/PhpDocParser/AbstractPhpDocInfoTest.php

@@ -31,8 +31,10 @@ final class CommentCombiner
         $this->comments = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable($originalNode, function (Node $node): void {
-            if ($node->hasAttribute('comments')) {
-                $this->comments = array_merge($this->comments, $node->getComments());
+            $comments = $node->getComments();
+
+            if ($comments !== []) {
+                $this->comments = array_merge($this->comments, $comments);
             }
         });
 

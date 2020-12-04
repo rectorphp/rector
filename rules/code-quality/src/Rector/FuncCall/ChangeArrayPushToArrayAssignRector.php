@@ -80,14 +80,14 @@ CODE_SAMPLE
         $position = 1;
         while (isset($node->args[$position])) {
             $assign = new Assign($arrayDimFetch, $node->args[$position]->value);
+            $assignExpression = new Expression($assign);
 
             // keep comments of first line
             if ($position === 1) {
-                $assign = new Expression($assign);
-                $assign->setAttribute(AttributeKey::COMMENTS, $node->getComments());
+                $assignExpression->setAttribute(AttributeKey::COMMENTS, $node->getComments());
             }
 
-            $this->addNodeAfterNode($assign, $node);
+            $this->addNodeAfterNode($assignExpression, $node);
 
             ++$position;
         }

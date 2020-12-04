@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\Comment\MergedNodeCommentPreserver;
+use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
@@ -36,23 +36,22 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
     private $staticTypeAnalyzer;
 
     /**
-     * @var MergedNodeCommentPreserver
-     */
-    private $mergedNodeCommentPreserver;
-
-    /**
      * @var TypeUnwrapper
      */
     private $typeUnwrapper;
+    /**
+     * @var CommentsMerger
+     */
+    private $commentsMerger;
 
     public function __construct(
-        MergedNodeCommentPreserver $mergedNodeCommentPreserver,
+        CommentsMerger $commentsMerger,
         StaticTypeAnalyzer $staticTypeAnalyzer,
         TypeUnwrapper $typeUnwrapper
     ) {
-        $this->mergedNodeCommentPreserver = $mergedNodeCommentPreserver;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
+        $this->commentsMerger = $commentsMerger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -113,10 +112,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->mergedNodeCommentPreserver->keepComments(
-            $newReturnNode,
-            [$node, $ifInnerNode, $nextNode, $newReturnNode]
-        );
+        $this->commentsMerger->keepComments($newReturnNode, [$node, $ifInnerNode, $nextNode, $newReturnNode]);
         $this->removeNode($nextNode);
 
         return $newReturnNode;
