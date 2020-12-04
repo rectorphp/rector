@@ -63,6 +63,7 @@ CODE_SAMPLE
             return null;
         }
 
+        $originalCatches = $node->catches;
         foreach ($node->catches as $key => $catch) {
             if (count($catch->types) === 1) {
                 continue;
@@ -79,6 +80,10 @@ CODE_SAMPLE
             }
         }
 
-        return null;
+        if ($this->areNodesEqual($originalCatches, $node->catches)) {
+            return null;
+        }
+
+        return $node;
     }
 }
