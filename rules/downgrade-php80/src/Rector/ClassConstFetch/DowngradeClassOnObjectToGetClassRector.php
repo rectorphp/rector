@@ -62,23 +62,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        dump(
-            PHP_VERSION,
-            $this->isAtLeastPhpVersion(PhpVersionFeature::CLASS_ON_OBJECT)
-        );
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CLASS_ON_OBJECT)) { dump('here 1');die;
-            return null;
-        }
-
-        dump($node->class);
-        dump($node->name);
-        dump('here 2');die;
-
         if (! $this->isName($node->name, 'class')) {
             return null;
         }
 
-        dump($node->class);
+        if (! $node->class instanceof Variable) {
+            return null;
+        }
 
         return new FuncCall(new Name('get_class'), [new Arg($node->class)]);
     }

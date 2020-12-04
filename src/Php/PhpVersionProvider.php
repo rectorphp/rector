@@ -63,6 +63,7 @@ final class PhpVersionProvider
 
     public function isAtLeastPhpVersion(int $phpVersion): bool
     {
+        dump($this->provide());
         return $phpVersion <= $this->provide();
     }
 
