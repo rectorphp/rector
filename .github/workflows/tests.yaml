@@ -30,10 +30,7 @@ jobs:
             -   run: composer update --prefer-lowest --no-progress --ansi
                 if: "matrix.dependencies == 'lowest'"
 
-            -   run: composer install --no-progress --ansi
+            -   run: composer install --no-progress --ansi --ignore-platform-req=php
                 if: "matrix.dependencies != 'lowest'"
-
-            -   run: composer update --prefer-latest --no-progress --ansi --ignore-platform-req=php
-                if: "matrix.dependencies == 'latest'"
 
             -   run: vendor/bin/phpunit
