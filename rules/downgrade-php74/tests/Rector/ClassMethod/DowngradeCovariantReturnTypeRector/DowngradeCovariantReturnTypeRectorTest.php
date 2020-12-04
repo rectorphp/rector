@@ -10,7 +10,7 @@ use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeCovarianReturnTypeRectorTest extends AbstractRectorTestCase
+final class DowngradeCovariantReturnTypeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP 7.4
