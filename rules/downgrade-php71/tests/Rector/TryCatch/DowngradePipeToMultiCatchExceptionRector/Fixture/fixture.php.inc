@@ -1,0 +1,35 @@
+<?php
+
+namespace Rector\DowngradePhp71\Tests\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector;
+
+function pipedExceptionCatch()
+{
+    try {
+        // Some code...
+    } catch (ExceptionType1|ExceptionType2 $e) {
+        // Code to handle the exception
+    } catch (Exception $e) {
+        // ...
+    }
+}
+
+?>
+-----
+<?php
+
+namespace Rector\DowngradePhp71\Tests\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector;
+
+function pipedExceptionCatch()
+{
+    try {
+        // Some code...
+    } catch (ExceptionType1 $e) {
+        // Code to handle the exception
+    } catch (ExceptionType2 $e) {
+        // Code to handle the exception
+    } catch (Exception $e) {
+        // ...
+    }
+}
+
+?>

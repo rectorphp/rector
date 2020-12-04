@@ -57,6 +57,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return [];
+        return null;
     }
 }
