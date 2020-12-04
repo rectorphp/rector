@@ -1,4 +1,4 @@
-# 628 Rules Overview
+# 629 Rules Overview
 
 <br>
 
@@ -36,7 +36,7 @@
 
 - [DowngradePhp74](#downgradephp74) (8)
 
-- [DowngradePhp80](#downgradephp80) (6)
+- [DowngradePhp80](#downgradephp80) (7)
 
 - [FileSystemRector](#filesystemrector) (1)
 
@@ -5457,6 +5457,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +     */
 +    public function someFunction($anything)
      {
+     }
+ }
+```
+
+<br>
+
+### DowngradePropertyPromotionToConstructorPropertyAssignRector
+
+Change constructor property promotion to property asssign
+
+- class: `Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector`
+
+```diff
+ class SomeClass
+ {
+-    public function __construct(public float $value = 0.0)
++    public float $value;
++
++    public function __construct(float $value = 0.0)
+     {
++        $this->value = $value;
      }
  }
 ```
