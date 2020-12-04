@@ -6,6 +6,7 @@ use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
 use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
 use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector;
+use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector;
 use Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
 use Rector\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector;
 use Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector;
@@ -18,6 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeTypedPropertyRector::class);
     $services->set(ArrowFunctionToAnonymousFunctionRector::class);
     $services->set(DowngradeCovariantReturnTypeRector::class);
+    $services->set(DowngradeContravariantArgumentTypeRector::class);
     $services->set(DowngradeNullCoalescingOperatorRector::class);
     $services->set(DowngradeNumericLiteralSeparatorRector::class);
     $services->set(DowngradeStripTagsCallWithArrayRector::class);

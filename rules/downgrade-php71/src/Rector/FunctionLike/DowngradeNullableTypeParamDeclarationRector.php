@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -55,7 +56,7 @@ CODE_SAMPLE
         );
     }
 
-    public function shouldRemoveParamDeclaration(Param $param): bool
+    public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->variadic) {
             return false;
