@@ -125,6 +125,10 @@ CODE_SAMPLE
 
     private function shouldSkip(Node $node): bool
     {
+        if ($node instanceof Nop && count($node->getComments()) > 1) {
+            return true;
+        }
+
         foreach (self::NODES_TO_MATCH as $nodeToMatch) {
             if (! is_a($node, $nodeToMatch, true)) {
                 continue;
