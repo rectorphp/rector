@@ -20,6 +20,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ConsistentPregDelimiterRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    public $testSamples = true;
+
     /**
      * @api
      * @var string

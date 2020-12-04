@@ -17,6 +17,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ActionSuffixRemoverRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var ControllerMethodAnalyzer
      */

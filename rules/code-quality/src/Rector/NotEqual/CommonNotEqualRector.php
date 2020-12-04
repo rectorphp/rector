@@ -17,6 +17,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CommonNotEqualRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(

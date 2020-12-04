@@ -13,6 +13,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeTypedPropertyRector extends AbstractDowngradeTypedPropertyRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes property type definition from type definitions to `@var` annotations.', [
@@ -28,8 +30,8 @@ CODE_SAMPLE
 class SomeClass
 {
     /**
-    * @var string
-    */
+     * @var string
+     */
     private $property;
 }
 CODE_SAMPLE

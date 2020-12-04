@@ -21,6 +21,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RenameVariableToMatchNewTypeRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var ExpectedNameResolver
      */

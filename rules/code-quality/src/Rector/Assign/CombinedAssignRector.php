@@ -17,6 +17,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CombinedAssignRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var AssignAndBinaryMap
      */

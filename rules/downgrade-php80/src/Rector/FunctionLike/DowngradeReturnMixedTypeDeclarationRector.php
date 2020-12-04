@@ -13,6 +13,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeReturnMixedTypeDeclarationRector extends AbstractDowngradeReturnTypeDeclarationRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -20,8 +22,6 @@ final class DowngradeReturnMixedTypeDeclarationRector extends AbstractDowngradeR
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function getAnything(bool $flag): mixed
@@ -29,14 +29,12 @@ class SomeClass
         if ($flag) {
             return 1;
         }
-        return 'Hello world'
+        return 'Hello world';
     }
 }
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**
@@ -47,7 +45,7 @@ class SomeClass
         if ($flag) {
             return 1;
         }
-        return 'Hello world'
+        return 'Hello world';
     }
 }
 CODE_SAMPLE

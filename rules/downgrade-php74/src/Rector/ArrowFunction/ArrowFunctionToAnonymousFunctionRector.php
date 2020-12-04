@@ -23,6 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ArrowFunctionToAnonymousFunctionRector extends AbstractConvertToAnonymousFunctionRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -46,7 +48,7 @@ class SomeClass
     public function run()
     {
         $delimiter = ",";
-        $callable = function ($matches) use ($delimiter) {
+        $callable = function ($matches) use($delimiter) {
             return $delimiter . strtolower($matches[1]);
         };
     }

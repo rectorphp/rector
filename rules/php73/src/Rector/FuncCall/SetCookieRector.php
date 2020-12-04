@@ -26,6 +26,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SetCookieRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * Conversion table from argument index to options name
      * @var array<int, string>

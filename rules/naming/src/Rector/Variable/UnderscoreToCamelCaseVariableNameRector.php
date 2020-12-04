@@ -23,6 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnderscoreToCamelCaseVariableNameRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var ReservedKeywordAnalyzer
      */

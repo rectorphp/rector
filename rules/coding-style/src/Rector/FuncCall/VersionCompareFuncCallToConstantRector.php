@@ -28,6 +28,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class VersionCompareFuncCallToConstantRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string[]
      */

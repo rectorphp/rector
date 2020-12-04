@@ -26,6 +26,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MinutesToSecondsInCacheRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string
      */

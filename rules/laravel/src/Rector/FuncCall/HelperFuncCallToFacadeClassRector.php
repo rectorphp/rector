@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class HelperFuncCallToFacadeClassRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change app() func calls to facade calls', [

@@ -19,6 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var IfManipulator
      */

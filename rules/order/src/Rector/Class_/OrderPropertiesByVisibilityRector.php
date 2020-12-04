@@ -17,6 +17,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class OrderPropertiesByVisibilityRector extends AbstractConstantPropertyMethodOrderRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Orders properties by visibility', [

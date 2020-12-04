@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StringifyDefineRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make first argument of define() string', [
@@ -27,8 +29,8 @@ class SomeClass
 {
     public function run(int $a)
     {
-         define(CONSTANT_2, 'value');
-         define('CONSTANT', 'value');
+        define(CONSTANT_2, 'value');
+        define('CONSTANT', 'value');
     }
 }
 CODE_SAMPLE
@@ -38,8 +40,8 @@ class SomeClass
 {
     public function run(int $a)
     {
-         define('CONSTANT_2', 'value');
-         define('CONSTANT', 'value');
+        define('CONSTANT_2', 'value');
+        define('CONSTANT', 'value');
     }
 }
 CODE_SAMPLE

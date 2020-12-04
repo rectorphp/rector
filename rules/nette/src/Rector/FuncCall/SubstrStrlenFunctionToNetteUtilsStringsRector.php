@@ -16,6 +16,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SubstrStrlenFunctionToNetteUtilsStringsRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var array<string, string>
      */

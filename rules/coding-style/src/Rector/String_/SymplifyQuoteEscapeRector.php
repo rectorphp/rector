@@ -17,6 +17,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SymplifyQuoteEscapeRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string
      * @see https://regex101.com/r/qEkCe9/1
@@ -34,8 +36,8 @@ class SomeClass
 {
     public function run()
     {
-         $name = "\" Tom";
-         $name = '\' Sara';
+        $name = "\" Tom";
+        $name = '\' Sara';
     }
 }
 CODE_SAMPLE
@@ -45,8 +47,8 @@ class SomeClass
 {
     public function run()
     {
-         $name = '" Tom';
-         $name = "' Sara";
+        $name = '" Tom';
+        $name = "' Sara";
     }
 }
 CODE_SAMPLE

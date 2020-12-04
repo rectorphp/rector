@@ -19,6 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveCodeAfterReturnRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove dead code after return statement', [
@@ -28,8 +30,8 @@ class SomeClass
 {
     public function run(int $a)
     {
-         return $a;
-         $a++;
+        return $a;
+        $a++;
     }
 }
 CODE_SAMPLE
@@ -39,7 +41,7 @@ class SomeClass
 {
     public function run(int $a)
     {
-         return $a;
+        return $a;
     }
 }
 CODE_SAMPLE

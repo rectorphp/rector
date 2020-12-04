@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeChartRendererRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change chart renderer', [
@@ -25,7 +27,7 @@ final class ChangeChartRendererRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run(): void
+    public function run() : void
     {
         \PHPExcel_Settings::setChartRenderer($rendererName, $rendererLibraryPath);
     }
@@ -35,7 +37,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run(): void
+    public function run() : void
     {
         \PHPExcel_Settings::setChartRenderer(\PhpOffice\PhpSpreadsheet\Chart\Renderer\JpGraph::class);
     }

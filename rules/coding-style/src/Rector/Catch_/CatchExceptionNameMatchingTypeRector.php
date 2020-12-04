@@ -16,6 +16,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CatchExceptionNameMatchingTypeRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string
      * @see https://regex101.com/r/xmfMAX/1

@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MultiDirnameRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string
      */

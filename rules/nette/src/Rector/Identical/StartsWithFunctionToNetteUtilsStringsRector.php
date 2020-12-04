@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StartsWithFunctionToNetteUtilsStringsRector extends AbstractWithFunctionToNetteUtilsStringsRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -30,7 +32,6 @@ class SomeClass
     public function start($needle)
     {
         $content = 'Hi, my name is Tom';
-
         $yes = substr($content, 0, strlen($needle)) === $needle;
     }
 }
@@ -42,7 +43,6 @@ class SomeClass
     public function start($needle)
     {
         $content = 'Hi, my name is Tom';
-
         $yes = \Nette\Utils\Strings::startsWith($content, $needle);
     }
 }

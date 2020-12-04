@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class GetCalledClassToStaticClassRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change get_called_class() to static::class', [
@@ -25,20 +27,20 @@ final class GetCalledClassToStaticClassRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-   public function callOnMe()
-   {
-       var_dump(get_called_class());
-   }
+    public function callOnMe()
+    {
+        var_dump(get_called_class());
+    }
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-   public function callOnMe()
-   {
-       var_dump(static::class);
-   }
+    public function callOnMe()
+    {
+        var_dump(static::class);
+    }
 }
 CODE_SAMPLE
             ),

@@ -20,6 +20,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ClassConstantToSelfClassRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `__CLASS__` to self::class', [
@@ -27,20 +29,20 @@ final class ClassConstantToSelfClassRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-   public function callOnMe()
-   {
-       var_dump(__CLASS__);
-   }
+    public function callOnMe()
+    {
+        var_dump(__CLASS__);
+    }
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-   public function callOnMe()
-   {
-       var_dump(self::class);
-   }
+    public function callOnMe()
+    {
+        var_dump(self::class);
+    }
 }
 CODE_SAMPLE
             ),

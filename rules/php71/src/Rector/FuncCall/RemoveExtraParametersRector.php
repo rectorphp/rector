@@ -25,6 +25,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveExtraParametersRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var CallReflectionResolver
      */

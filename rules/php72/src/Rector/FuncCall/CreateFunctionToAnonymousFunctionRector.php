@@ -33,6 +33,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CreateFunctionToAnonymousFunctionRector extends AbstractConvertToAnonymousFunctionRector
 {
+    public $testSamples = true;
+
     /**
      * @var InlineCodeParser
      */
@@ -64,7 +66,7 @@ class ClassWithCreateFunction
 {
     public function run()
     {
-        $callable = function($matches) use ($delimiter) {
+        $callable = function ($matches) use($delimiter) {
             return $delimiter . strtolower($matches[1]);
         };
     }

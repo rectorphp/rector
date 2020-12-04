@@ -23,6 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class WhileEachToForeachRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var AssignManipulator
      */

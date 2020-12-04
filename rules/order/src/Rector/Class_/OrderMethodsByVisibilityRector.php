@@ -19,6 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class OrderMethodsByVisibilityRector extends AbstractConstantPropertyMethodOrderRector
 {
+    public $testSamples = true;
+
     /**
      * @var string[]
      */

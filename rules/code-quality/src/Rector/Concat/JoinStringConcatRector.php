@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class JoinStringConcatRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var int
      */

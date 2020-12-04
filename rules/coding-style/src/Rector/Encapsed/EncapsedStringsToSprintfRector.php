@@ -25,6 +25,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class EncapsedStringsToSprintfRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string
      */

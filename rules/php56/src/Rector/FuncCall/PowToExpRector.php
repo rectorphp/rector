@@ -17,11 +17,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class PowToExpRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
             'Changes pow(val, val2) to ** (exp) parameter',
-            [new CodeSample('pow(1, 2);', '1**2;')]
+            [new CodeSample('pow(1, 2);', '1 ** 2;')]
         );
     }
 

@@ -22,6 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ClosureToArrowFunctionRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change closure to arrow function', [

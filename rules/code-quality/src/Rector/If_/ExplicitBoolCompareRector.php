@@ -33,6 +33,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ExplicitBoolCompareRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make if conditions more explicit', [

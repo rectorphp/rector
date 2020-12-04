@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDuplicatedCaseInSwitchRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -30,14 +32,14 @@ class SomeClass
     public function run()
     {
         switch ($name) {
-             case 'clearHeader':
-                 return $this->modifyHeader($node, 'remove');
-             case 'clearAllHeaders':
-                 return $this->modifyHeader($node, 'replace');
-             case 'clearRawHeaders':
-                 return $this->modifyHeader($node, 'replace');
-             case '...':
-                 return 5;
+            case 'clearHeader':
+                return $this->modifyHeader($node, 'remove');
+            case 'clearAllHeaders':
+                return $this->modifyHeader($node, 'replace');
+            case 'clearRawHeaders':
+                return $this->modifyHeader($node, 'replace');
+            case '...':
+                return 5;
         }
     }
 }
@@ -49,13 +51,13 @@ class SomeClass
     public function run()
     {
         switch ($name) {
-             case 'clearHeader':
-                 return $this->modifyHeader($node, 'remove');
-             case 'clearAllHeaders':
-             case 'clearRawHeaders':
-                 return $this->modifyHeader($node, 'replace');
-             case '...':
-                 return 5;
+            case 'clearHeader':
+                return $this->modifyHeader($node, 'remove');
+            case 'clearAllHeaders':
+            case 'clearRawHeaders':
+                return $this->modifyHeader($node, 'replace');
+            case '...':
+                return 5;
         }
     }
 }

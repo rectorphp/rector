@@ -29,6 +29,8 @@ use Throwable;
  */
 final class ThrowWithPreviousExceptionRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var int
      */

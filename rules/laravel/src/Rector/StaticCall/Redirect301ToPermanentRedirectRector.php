@@ -17,6 +17,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class Redirect301ToPermanentRedirectRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string[]
      */

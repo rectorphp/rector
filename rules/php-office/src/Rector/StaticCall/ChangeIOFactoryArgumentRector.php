@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeIOFactoryArgumentRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string[]
      */
@@ -43,7 +45,7 @@ final class ChangeIOFactoryArgumentRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run(): void
+    public function run() : void
     {
         $writer = \PHPExcel_IOFactory::createWriter('CSV');
     }
@@ -53,7 +55,7 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run(): void
+    public function run() : void
     {
         $writer = \PHPExcel_IOFactory::createWriter('Csv');
     }

@@ -38,6 +38,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 {
     use AbstractRectorTrait;
 
+    public $testSamples = false;
+
     /**
      * @var string[]
      */

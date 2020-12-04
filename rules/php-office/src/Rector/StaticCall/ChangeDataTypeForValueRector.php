@@ -27,7 +27,7 @@ final class ChangeDataTypeForValueRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run(): void
+    public function run() : void
     {
         $type = \PHPExcel_Cell_DataType::dataTypeForValue('value');
     }
@@ -37,7 +37,7 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run(): void
+    public function run() : void
     {
         $type = \PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder::dataTypeForValue('value');
     }

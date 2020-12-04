@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FilterVarToAddSlashesRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -25,12 +27,12 @@ final class FilterVarToAddSlashesRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-$var= "Satya's here!";
+$var = "Satya's here!";
 filter_var($var, FILTER_SANITIZE_MAGIC_QUOTES);
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-$var= "Satya's here!";
+$var = "Satya's here!";
 addslashes($var);
 CODE_SAMPLE
                 ),

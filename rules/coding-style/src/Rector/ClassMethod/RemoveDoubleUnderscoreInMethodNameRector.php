@@ -22,6 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDoubleUnderscoreInMethodNameRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string
      * @see https://regex101.com/r/oRrhDJ/3

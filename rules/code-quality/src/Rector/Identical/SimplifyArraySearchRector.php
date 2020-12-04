@@ -19,6 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyArraySearchRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var BinaryOpManipulator
      */

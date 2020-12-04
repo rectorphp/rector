@@ -19,6 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeSearchLocationToRegisterReaderRector extends AbstractRector
 {
+    public $testSamples = true;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -28,7 +30,7 @@ final class ChangeSearchLocationToRegisterReaderRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run(): void
+    public function run() : void
     {
         \PHPExcel_IOFactory::addSearchLocation($type, $location, $classname);
     }
@@ -38,7 +40,7 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run(): void
+    public function run() : void
     {
         \PhpOffice\PhpSpreadsheet\IOFactory::registerReader($type, $classname);
     }

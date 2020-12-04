@@ -21,6 +21,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SubstrMinusToStringEndsWithRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string
      */
@@ -38,7 +40,7 @@ substr($var, -4) === 'Test';
 CODE_SAMPLE
 ,
                     <<<'CODE_SAMPLE'
-! \Nette\Utils\Strings::endsWith($var, 'Test');
+!\Nette\Utils\Strings::endsWith($var, 'Test');
 \Nette\Utils\Strings::endsWith($var, 'Test');
 CODE_SAMPLE
                 ),

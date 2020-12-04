@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StringifyStrNeedlesRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @var string[]
      */

@@ -18,6 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReplaceTimeNumberWithDateTimeConstantRector extends AbstractRector
 {
+    public $testSamples = true;
+
     /**
      * @noRector
      * @var array<int, string>
