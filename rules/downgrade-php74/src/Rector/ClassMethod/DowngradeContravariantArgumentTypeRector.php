@@ -7,28 +7,30 @@ namespace Rector\DowngradePhp74\Rector\ClassMethod;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use PhpParser\Node;
 use PhpParser\Node\Param;
 use PHPStan\Analyser\Scope;
 use PhpParser\Node\UnionType;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 
 /**
  * @see https://www.php.net/manual/en/language.oop5.variance.php#language.oop5.variance.contravariance
  *
- * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravarianArgumentTypeRector\DowngradeContravarianArgumentTypeRectorTest
+ * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\DowngradeContravariantArgumentTypeRectorTest
  */
 final class DowngradeContravariantArgumentTypeRector extends AbstractDowngradeParamDeclarationRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove contravariant argument type declarations', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class ParentType {}
 class ChildType extends ParentType {}
@@ -65,6 +67,10 @@ class B extends A
     { /* … */ }
 }
 CODE_SAMPLE
+,
+                [
+                    self::ADD_DOC_BLOCK => true,
+                ]
             ),
         ]);
     }
@@ -88,9 +94,6 @@ CODE_SAMPLE
         return $this->getDifferentParamTypeFromAncestorClass($param, $functionLike) !== null;
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
     private function getDifferentParamTypeFromAncestorClass(Param $param, FunctionLike $functionLike): ?string
     {
         /** @var Scope|null $scope */
@@ -108,17 +111,22 @@ CODE_SAMPLE
         $paramName = $this->getName($param);
 
         // If it is the NullableType, extract the name from its inner type
+        /** @var Node */
+        $paramType = $param->type;
         $isNullableType = $param->type instanceof NullableType;
         if ($isNullableType) {
             /** @var NullableType */
-            $nullableType = $param->type;
+            $nullableType = $paramType;
             $paramTypeName = $this->getName($nullableType->type);
         } else {
-            $paramTypeName = $this->getName($param->type);
+            $paramTypeName = $this->getName($paramType);
+        }
+        if ($paramTypeName === null) {
+            return null;
         }
 
         /** @var string $methodName */
-        $methodName = $this->getName($functionLike->name);
+        $methodName = $this->getName($functionLike);
 
         foreach ($classReflection->getParentClassesNames() as $parentClassName) {
             if (! method_exists($parentClassName, $methodName)) {
@@ -127,19 +135,26 @@ CODE_SAMPLE
 
             // Find the param we're looking for
             $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
-            /** @var ReflectionParameter[] */
-            $parentReflectionMethodParams = $parentReflectionMethod->getParameters();
-            if ($parentReflectionMethodParams === null) {
-                continue;
+            $differentAncestorParamTypeName = $this->getDifferentParamTypeFromReflectionMethod($parentReflectionMethod, $paramName, $paramTypeName);
+            if ($differentAncestorParamTypeName !== null) {
+                return $differentAncestorParamTypeName;
             }
-            foreach ($parentReflectionMethodParams as $reflectionParameter) {
-                if ($reflectionParameter->name == $paramName) {
-                    /** @var ReflectionNamedType */
-                    $reflectionParamType = $reflectionParameter->getType();
-                    if ($reflectionParamType->getName() != $paramTypeName) {
-                        // We found it: a different param type in some ancestor
-                        return $reflectionParamType->getName();
-                    }
+        }
+
+        return null;
+    }
+
+    private function getDifferentParamTypeFromReflectionMethod(ReflectionMethod $parentReflectionMethod, string $paramName, string $paramTypeName): ?string
+    {
+        /** @var ReflectionParameter[] */
+        $parentReflectionMethodParams = $parentReflectionMethod->getParameters();
+        foreach ($parentReflectionMethodParams as $reflectionParameter) {
+            if ($reflectionParameter->name == $paramName) {
+                /** @var ReflectionNamedType */
+                $reflectionParamType = $reflectionParameter->getType();
+                if ($reflectionParamType->getName() != $paramTypeName) {
+                    // We found it: a different param type in some ancestor
+                    return $reflectionParamType->getName();
                 }
             }
         }
