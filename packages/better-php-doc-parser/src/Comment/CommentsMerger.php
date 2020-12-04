@@ -24,7 +24,6 @@ final class CommentsMerger
             return;
         }
 
-//        $comments = array_merge($newNode->getComments(), $comments);
         $newNode->setAttribute(AttributeKey::COMMENTS, $comments);
 
         // remove so comments "win"
