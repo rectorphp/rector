@@ -22,9 +22,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
-    // This rule does not work, so commented out
-    // $services->set(ChangePhpVersionInPlatformCheckRector::class)
-    //     ->call('configure', [[
-    //         ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70200,
-    //     ]]);
+    $services->set(ChangePhpVersionInPlatformCheckRector::class)
+        ->call('configure', [[
+            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70200,
+        ]]);
 };
