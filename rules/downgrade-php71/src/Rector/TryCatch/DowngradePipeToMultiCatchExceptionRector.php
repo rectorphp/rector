@@ -8,14 +8,14 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeRector;
+use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp71\Tests\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRectorTest
+ * @see \Rector\DowngradePhp71\Tests\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector\DowngradePipeToMultiCatchExceptionRectorTest
  */
-final class DowngradePipeToMultiCatchExceptionRector extends AbstractDowngradeRector
+final class DowngradePipeToMultiCatchExceptionRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
