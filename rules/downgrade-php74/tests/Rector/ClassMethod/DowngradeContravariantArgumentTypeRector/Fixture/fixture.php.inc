@@ -35,7 +35,7 @@ class A
 class B extends A
 {
     /**
-     * @param ParentType $type
+     * @param \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture\ParentType $type
      */
     public function contraVariantArguments($type)
     { /* … */ }
