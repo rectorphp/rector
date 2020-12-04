@@ -66,6 +66,9 @@ CODE_SAMPLE
             return null;
         }
 
+        dump($node->class);
+        dump($node->name);
+
         if (! $this->isName($node->name, 'class')) {
             return null;
         }
