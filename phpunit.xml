@@ -3,6 +3,7 @@
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     bootstrap="tests/bootstrap.php"
     colors="true"
+    testdox="true"
 >
     <php>
         <const name="RECTOR_REPOSITORY" value="true"/>
