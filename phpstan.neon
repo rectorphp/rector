@@ -769,3 +769,8 @@ parameters:
         - '#Method Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard\:\:getParentClasses\(\) should return array<class\-string\> but returns array<int\|string, class\-string\|false\>#'
         - '#Method Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector\:\:getParentClasses\(\) should return array<class\-string\> but returns array<int\|string, class\-string\|false\>#'
         - '#Only EntityManager\* type as dependency is allowed#'
+
+        -
+            message: '#"getComments\(\)" call on "PhpParser\\Node" type is not allowed#'
+            paths:
+                - src/Rector/AbstractRector.php

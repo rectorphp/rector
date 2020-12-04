@@ -82,7 +82,9 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-class SomeClass extends PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SomeClass extends TestCase
 {
     public function test()
     {

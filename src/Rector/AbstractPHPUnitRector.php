@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\Core\Rector;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
 {
-    /**
-     * @var string
-     * @see https://regex101.com/r/76ZfTX/1
-     */
-    private const TEST_ANNOTATOIN_REGEX = '#@test\b#';
-
     protected function isTestClassMethod(ClassMethod $classMethod): bool
     {
         if (! $classMethod->isPublic()) {
@@ -29,9 +23,10 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return true;
         }
 
-        $docComment = $classMethod->getDocComment();
-        if ($docComment !== null) {
-            return (bool) Strings::match($docComment->getText(), self::TEST_ANNOTATOIN_REGEX);
+        $phpDocInfo = $classMethod->getAttribute(PhpDocInfo::class);
+
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            return $phpDocInfo->hasByName('test');
         }
 
         return false;
