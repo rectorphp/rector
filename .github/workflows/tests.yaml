@@ -9,11 +9,14 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: ['7.4', '8.0']
+                php: ['7.4']
                 dependencies: ['locked']
                 include:
                     - php: '7.3'
                       dependencies: 'lowest'
+                    - php: '8.0'
+                      dependencies: 'latest'
+
 
         name: PHP ${{ matrix.php }} tests
         steps:
@@ -29,5 +32,8 @@ jobs:
 
             -   run: composer install --no-progress --ansi
                 if: "matrix.dependencies != 'lowest'"
+
+            -   run: composer update --prefer-latest --no-progress --ansi --ignore-platform-req=php
+                if: "matrix.dependencies == 'latest'"
 
             -   run: vendor/bin/phpunit
