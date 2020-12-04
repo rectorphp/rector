@@ -43,7 +43,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ## In a File
 
-For in-file exclusion, use `@noRector \FQN name` annotation:
+For in-file exclusion, use `@norector \FQN name` annotation:
 
 ```php
 <?php
@@ -53,16 +53,16 @@ declare(strict_types=1);
 class SomeClass
 {
     /**
-     * @noRector
+     * @norector
      */
     public const NAME = '102';
 
     /**
-     * @noRector
+     * @norector
      */
     public function foo(): void
     {
-        /** @noRector \Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector */
+        /** @norector \Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector */
         round(1 + 0);
     }
 }

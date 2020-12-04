@@ -774,3 +774,4 @@ parameters:
             message: '#"getComments\(\)" call on "PhpParser\\Node" type is not allowed#'
             paths:
                 - src/Rector/AbstractRector.php
+                - '#"getComments\(\)" call on "PhpParser\\Node" type is not allowed#'
