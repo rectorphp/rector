@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\UnionType;
-use PHPStan\Analyser\Scope;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use ReflectionNamedType;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use ReflectionParameter;
+use PhpParser\Node\Param;
+use PHPStan\Analyser\Scope;
+use PhpParser\Node\UnionType;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\ClassMethod;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 
 /**
  * @see https://www.php.net/manual/en/language.oop5.variance.php#language.oop5.variance.contravariance
  *
  * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravarianArgumentTypeRector\DowngradeContravarianArgumentTypeRectorTest
  */
-final class DowngradeContravariantArgumentTypeRector extends AbstractRector
+final class DowngradeContravariantArgumentTypeRector extends AbstractDowngradeParamDeclarationRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -69,49 +69,32 @@ CODE_SAMPLE
         ]);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getNodeTypes(): array
+    public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
     {
-        return [ClassMethod::class];
-    }
-
-    /**
-     * @param ClassMethod $node
-     */
-    public function refactor(Node $node): ?Node
-    {
-        if (! $this->shouldRefactor($node)) {
-            return null;
+        if ($param->variadic) {
+            return false;
         }
 
-        /** @var string */
-        $parentReflectionMethodClassname = $this->getDifferentReturnTypeClassnameFromAncestorClass($node);
-        $newType = new FullyQualified($parentReflectionMethodClassname);
-
-        // Make it nullable?
-        if ($node->returnType instanceof NullableType) {
-            $newType = new NullableType($newType);
+        if ($param->type === null) {
+            return false;
         }
 
-        // Add the docblock before changing the type
-        $this->addDocBlockReturn($node);
+        // Don't consider for Union types
+        if ($param->type instanceof UnionType) {
+            return false;
+        }
 
-        $node->returnType = $newType;
-
-        return $node;
+        // Check if the type is different from the one declared in some ancestor
+        return $this->getDifferentParamTypeFromAncestorClass($param, $functionLike) !== null;
     }
 
-    private function shouldRefactor(ClassMethod $classMethod): bool
-    {
-        return $this->getDifferentReturnTypeClassnameFromAncestorClass($classMethod) !== null;
-    }
-
-    private function getDifferentReturnTypeClassnameFromAncestorClass(ClassMethod $classMethod): ?string
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     */
+    private function getDifferentParamTypeFromAncestorClass(Param $param, FunctionLike $functionLike): ?string
     {
         /** @var Scope|null $scope */
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        $scope = $functionLike->getAttribute(AttributeKey::SCOPE);
         if ($scope === null) {
             // possibly trait
             return null;
@@ -122,45 +105,45 @@ CODE_SAMPLE
             return null;
         }
 
-        $nodeReturnType = $classMethod->returnType;
-        if ($nodeReturnType === null || $nodeReturnType instanceof UnionType) {
-            return null;
+        $paramName = $this->getName($param);
+
+        // If it is the NullableType, extract the name from its inner type
+        $isNullableType = $param->type instanceof NullableType;
+        if ($isNullableType) {
+            /** @var NullableType */
+            $nullableType = $param->type;
+            $paramTypeName = $this->getName($nullableType->type);
+        } else {
+            $paramTypeName = $this->getName($param->type);
         }
-        $nodeReturnTypeName = $this->getName($nodeReturnType);
 
         /** @var string $methodName */
-        $methodName = $this->getName($classMethod->name);
+        $methodName = $this->getName($functionLike->name);
 
         foreach ($classReflection->getParentClassesNames() as $parentClassName) {
             if (! method_exists($parentClassName, $methodName)) {
                 continue;
             }
 
+            // Find the param we're looking for
             $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
-            /** @var ReflectionNamedType|null */
-            $parentReflectionMethodReturnType = $parentReflectionMethod->getReturnType();
-            if ($parentReflectionMethodReturnType === null || $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
+            /** @var ReflectionParameter[] */
+            $parentReflectionMethodParams = $parentReflectionMethod->getParameters();
+            if ($parentReflectionMethodParams === null) {
                 continue;
             }
-
-            // This is an ancestor class with a different return type
-            return $parentReflectionMethodReturnType->getName();
+            foreach ($parentReflectionMethodParams as $reflectionParameter) {
+                if ($reflectionParameter->name == $paramName) {
+                    /** @var ReflectionNamedType */
+                    $reflectionParamType = $reflectionParameter->getType();
+                    if ($reflectionParamType->getName() != $paramTypeName) {
+                        // We found it: a different param type in some ancestor
+                        return $reflectionParamType->getName();
+                    }
+                }
+            }
         }
 
         return null;
-    }
-
-    private function addDocBlockReturn(ClassMethod $classMethod): void
-    {
-        /** @var PhpDocInfo|null */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
-        }
-
-        /** @var Node */
-        $returnType = $classMethod->returnType;
-        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
-        $phpDocInfo->changeReturnType($type);
     }
 }
