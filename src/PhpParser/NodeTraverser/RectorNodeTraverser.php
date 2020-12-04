@@ -187,6 +187,14 @@ final class RectorNodeTraverser extends NodeTraverser
         }
 
         if ($phpRector instanceof ConfigurableRectorInterface) {
+            if ($configuration === []) {
+                $message = sprintf(
+                    'Rule "%s" is running without any configuration, is that on purpose?',
+                    get_class($phpRector)
+                );
+                throw new ShouldNotHappenException($message);
+            }
+
             $phpRector->configure($configuration);
         } elseif ($configuration !== []) {
             $message = sprintf(
