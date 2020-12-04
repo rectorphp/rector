@@ -10,6 +10,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
@@ -126,7 +127,17 @@ CODE_SAMPLE
         /** @var string $methodName */
         $methodName = $this->getName($functionLike);
 
-        foreach ($classReflection->getParentClassesNames() as $parentClassName) {
+        // Either Ancestor classes or implemented interfaces
+        $parentClassNames = array_merge(
+            $classReflection->getParentClassesNames(),
+            array_map(
+                function (ClassReflection $interfaceReflection) : string {
+                    return $interfaceReflection->getName();
+                },
+                $classReflection->getInterfaces()
+            )
+        );
+        foreach ($parentClassNames as $parentClassName) {
             if (! method_exists($parentClassName, $methodName)) {
                 continue;
             }
