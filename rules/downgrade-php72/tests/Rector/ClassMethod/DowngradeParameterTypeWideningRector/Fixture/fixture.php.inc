@@ -26,7 +26,7 @@ namespace Rector\DowngradePhp72\Tests\Rector\ClassMethod\DowngradeParameterTypeW
 interface A
 {
     /**
-     * @param array $input
+     * @param mixed[] $input
      */
     public function test($input);
 }
@@ -39,7 +39,7 @@ class B implements A
 class C implements A
 {
     /**
-     * @param array $input
+     * @param mixed[] $input
      */
     public function test($input);
 }
