@@ -7,8 +7,8 @@ namespace Rector\CodeQuality\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt\If_;
+use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -17,6 +17,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CombineIfRector extends AbstractRector
 {
+    /**
+     * @var CommentsMerger
+     */
+    private $commentsMerger;
+
+    public function __construct(CommentsMerger $commentsMerger)
+    {
+        $this->commentsMerger = $commentsMerger;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Merges nested if statements', [
@@ -72,7 +82,7 @@ CODE_SAMPLE
         $node->cond = new BooleanAnd($node->cond, $subIf->cond);
         $node->stmts = $subIf->stmts;
 
-        $this->combineComments($node, $subIf);
+        $this->commentsMerger->keepComments($node, [$subIf]);
 
         return $node;
     }
@@ -100,17 +110,5 @@ CODE_SAMPLE
         }
 
         return (bool) $if->stmts[0]->elseifs;
-    }
-
-    private function combineComments(Node $firstNode, Node $secondNode): void
-    {
-        // merge comments
-        $comments = array_merge($firstNode->getComments(), $secondNode->getComments());
-        if ($comments === []) {
-            return;
-        }
-
-        $firstNode->setAttribute(AttributeKey::COMMENTS, $comments);
-        $firstNode->setAttribute(AttributeKey::PHP_DOC_INFO, null);
     }
 }

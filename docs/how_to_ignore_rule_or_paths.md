@@ -1,6 +1,6 @@
 # How To Ignore Rule or Paths
 
-## Prefered Way: Config
+## Preferred Way: Config
 
 ```php
 <?php
@@ -43,7 +43,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ## In a File
 
-For in-file exclusion, use `@norector \FQN name` annotation:
+For in-file exclusion, use `@noRector \Rector\SomeClass\NameRector` annotation:
 
 ```php
 <?php
@@ -53,16 +53,16 @@ declare(strict_types=1);
 class SomeClass
 {
     /**
-     * @norector
+     * @noRector
      */
     public const NAME = '102';
 
     /**
-     * @norector
+     * @noRector
      */
     public function foo(): void
     {
-        /** @norector \Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector */
+        /** @noRector \Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector */
         round(1 + 0);
     }
 }

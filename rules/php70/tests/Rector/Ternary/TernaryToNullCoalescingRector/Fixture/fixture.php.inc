@@ -16,7 +16,7 @@ function ternaryToNullCoalescing()
 
     $x = (isset($a) ? $a : isset($b)) ? $b : "";
 
-    $x = isset($a) ? $a : isset($b) ? $b : isset($c) ? $c : "";
+    $x = ((isset($a) ? $a : isset($b)) ? $b : isset($c)) ? $c : "";
 }
 
 ?>
@@ -39,7 +39,7 @@ function ternaryToNullCoalescing()
 
     $x = ($a ?? isset($b)) ? $b : "";
 
-    $x = $a ?? isset($b) ? $b : isset($c) ? $c : "";
+    $x = (($a ?? isset($b)) ? $b : isset($c)) ? $c : "";
 }
 
 ?>

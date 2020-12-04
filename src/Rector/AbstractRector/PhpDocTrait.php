@@ -46,6 +46,16 @@ trait PhpDocTrait
         $this->phpDocInfoManipulator = $phpDocInfoManipulator;
     }
 
+    protected function hasTagByName(Node $node, string $tagName): bool
+    {
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return false;
+        }
+
+        return $phpDocInfo->hasByName($tagName);
+    }
+
     protected function getPhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): ?PhpDocTagValueNode
     {
         /** @var PhpDocInfo|null $phpDocInfo */

@@ -444,7 +444,11 @@ final class NodeFactory
 
     public function createStaticCall(string $class, string $method): StaticCall
     {
-        return new StaticCall(new Name($class), $method);
+        if (in_array($class, ['self', 'parent', 'static'], true)) {
+            return new StaticCall(new Name($class), $method);
+        }
+
+        return new StaticCall(new FullyQualified($class), $method);
     }
 
     /**

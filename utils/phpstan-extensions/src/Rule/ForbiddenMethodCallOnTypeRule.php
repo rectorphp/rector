@@ -63,8 +63,6 @@ final class ForbiddenMethodCallOnTypeRule implements Rule
             }
 
             $methodName = $this->simpleNameResolver->getName($node->name);
-
-            dump($methodName);
             $errorMessage = sprintf(self::ERROR_MESSAGE, $methodName, $type);
 
             return [$errorMessage];
