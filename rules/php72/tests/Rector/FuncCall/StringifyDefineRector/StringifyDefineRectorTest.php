@@ -9,11 +9,13 @@ use Rector\Php72\Rector\FuncCall\StringifyDefineRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @requires PHP < 8.0
+ */
 final class StringifyDefineRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
-     * @requires PHP < 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {
