@@ -10,6 +10,8 @@ function pipedExceptionCatch()
         // Code to handle the exception
     } catch (Exception $e) {
         // ...
+    } catch (RuntimeException $e) {
+        // ...
     }
 
     try {
@@ -42,6 +44,8 @@ function pipedExceptionCatch()
     } catch (ExceptionType2 $e) {
         // Code to handle the exception
     } catch (Exception $e) {
+        // ...
+    } catch (RuntimeException $e) {
         // ...
     }
 
