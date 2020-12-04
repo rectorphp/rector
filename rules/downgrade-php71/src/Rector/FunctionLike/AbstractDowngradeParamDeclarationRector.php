@@ -49,7 +49,7 @@ abstract class AbstractDowngradeParamDeclarationRector extends AbstractDowngrade
      */
     private function refactorParam(Param $param, FunctionLike $functionLike): void
     {
-        if (! $this->shouldRemoveParamDeclaration($param)) {
+        if (! $this->shouldRemoveParamDeclaration($param, $functionLike)) {
             return;
         }
 

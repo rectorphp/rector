@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\Rector\FunctionLike;
 
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
@@ -12,7 +13,7 @@ use Rector\DowngradePhp72\Contract\Rector\DowngradeTypeRectorInterface;
 
 abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractDowngradeParamDeclarationRector implements DowngradeTypeRectorInterface
 {
-    public function shouldRemoveParamDeclaration(Param $param): bool
+    public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->variadic) {
             return false;
