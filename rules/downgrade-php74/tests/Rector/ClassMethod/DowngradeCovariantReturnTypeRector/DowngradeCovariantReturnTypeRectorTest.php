@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector;
+namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector;
 
 use Iterator;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovarianReturnTypeRector;
+use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeCovarianReturnTypeRectorTest extends AbstractRectorTestCase
+final class DowngradeCovariantReturnTypeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP 7.4
@@ -28,7 +28,7 @@ final class DowngradeCovarianReturnTypeRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return DowngradeCovarianReturnTypeRector::class;
+        return DowngradeCovariantReturnTypeRector::class;
     }
 
     protected function getPhpVersion(): int

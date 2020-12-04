@@ -10,6 +10,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -21,9 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.type-variance
  *
- * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\DowngradeCovarianReturnTypeRectorTest
+ * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\DowngradeCovariantReturnTypeRectorTest
  */
-final class DowngradeCovarianReturnTypeRector extends AbstractRector
+final class DowngradeCovariantReturnTypeRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -131,7 +132,17 @@ CODE_SAMPLE
         /** @var string $methodName */
         $methodName = $this->getName($classMethod->name);
 
-        foreach ($classReflection->getParentClassesNames() as $parentClassName) {
+        // Either Ancestor classes or implemented interfaces
+        $parentClassNames = array_merge(
+            $classReflection->getParentClassesNames(),
+            array_map(
+                function (ClassReflection $interfaceReflection) : string {
+                    return $interfaceReflection->getName();
+                },
+                $classReflection->getInterfaces()
+            )
+        );
+        foreach ($parentClassNames as $parentClassName) {
             if (! method_exists($parentClassName, $methodName)) {
                 continue;
             }
