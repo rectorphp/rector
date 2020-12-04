@@ -182,7 +182,7 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     private function configureTestedRector(PhpRectorInterface $phpRector, array $configuration): void
     {
-        $isPHPUnitRun         = StaticPHPUnitEnvironment::isPHPUnitRun();
+        $isPHPUnitRun = StaticPHPUnitEnvironment::isPHPUnitRun();
         $isConfigurableRector = $phpRector instanceof ConfigurableRectorInterface;
 
         if (! $isPHPUnitRun) {
