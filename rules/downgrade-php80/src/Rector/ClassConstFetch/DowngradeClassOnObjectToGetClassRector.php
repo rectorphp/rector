@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
@@ -75,6 +76,10 @@ CODE_SAMPLE
         /** @var string $name */
         $name = $nameIdentifier->toString();
         if ($name !== 'class') {
+            return null;
+        }
+
+        if (! $node->class instanceof Variable) {
             return null;
         }
 
