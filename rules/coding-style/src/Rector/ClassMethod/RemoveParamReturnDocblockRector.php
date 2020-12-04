@@ -115,15 +115,15 @@ CODE_SAMPLE
 
     private function refactorReturnTag(ClassMethod $classMethod, PhpDocInfo $phpDocInfo): void
     {
-        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if ($returnTagValueNode === null) {
+        $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if ($attributeAwareReturnTagValueNode === null) {
             return;
         }
 
-        if (! $this->deadReturnTagValueNodeAnalyzer->isDead($returnTagValueNode, $classMethod)) {
+        if (! $this->deadReturnTagValueNodeAnalyzer->isDead($attributeAwareReturnTagValueNode, $classMethod)) {
             return;
         }
 
-        $phpDocInfo->removeTagValueNodeFromNode($returnTagValueNode);
+        $phpDocInfo->removeTagValueNodeFromNode($attributeAwareReturnTagValueNode);
     }
 }

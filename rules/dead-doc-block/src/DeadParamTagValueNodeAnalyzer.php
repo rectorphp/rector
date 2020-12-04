@@ -22,6 +22,7 @@ final class DeadParamTagValueNodeAnalyzer
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
+
     /**
      * @var TypeComparator
      */
@@ -36,7 +37,6 @@ final class DeadParamTagValueNodeAnalyzer
         $this->staticTypeMapper = $staticTypeMapper;
         $this->typeComparator = $typeComparator;
     }
-
 
     public function isDead(ParamTagValueNode $paramTagValueNode, ClassMethod $classMethod): bool
     {
@@ -56,13 +56,12 @@ final class DeadParamTagValueNodeAnalyzer
         );
 
         $areTypesEqual = $this->typeComparator->areTypesEqual($docParamType, $phpParamType);
-        if ($areTypesEqual === false) {
+        if (! $areTypesEqual) {
             return false;
         }
 
         return $paramTagValueNode->description === '';
     }
-
 
     private function matchParamByName(string $desiredParamName, ClassMethod $classMethod): ?Param
     {

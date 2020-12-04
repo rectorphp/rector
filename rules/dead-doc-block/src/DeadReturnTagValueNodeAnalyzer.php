@@ -15,6 +15,7 @@ final class DeadReturnTagValueNodeAnalyzer
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
+
     /**
      * @var TypeComparator
      */
@@ -40,7 +41,7 @@ final class DeadReturnTagValueNodeAnalyzer
         );
 
         $areTypesEqual = $this->typeComparator->areTypesEqual($phpReturnType, $docReturnType);
-        if ($areTypesEqual === false) {
+        if (! $areTypesEqual) {
             return false;
         }
 
