@@ -9,7 +9,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use Rector\Core\Rector\AbstractRector;
@@ -68,14 +67,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $nameIdentifier = $node->name;
-        if (! $nameIdentifier instanceof Identifier) {
-            return null;
-        }
-
-        /** @var string $name */
-        $name = $nameIdentifier->toString();
-        if ($name !== 'class') {
+        if (! $this->isName($node->name, 'class')) {
             return null;
         }
 
