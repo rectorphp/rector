@@ -85,7 +85,14 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, []),
+,
+    [
+        self::DETECTED_TRAITS => [
+            'Knp\DoctrineBehaviors\Model\Translatable\Translation',
+            'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait',
+        ]
+    ]
+),
 
             ]);
     }
