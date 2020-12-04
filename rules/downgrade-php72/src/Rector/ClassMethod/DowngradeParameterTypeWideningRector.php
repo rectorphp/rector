@@ -37,6 +37,8 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Reflection\ClassReflectionToAstResolver;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
+use PhpParser\Node\Stmt\ClassLike;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
 
 /**
  * @see https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
@@ -55,10 +57,16 @@ final class DowngradeParameterTypeWideningRector extends AbstractTypeDeclaration
      */
     private $childParamPopulator;
 
-    public function __construct(ChildParamPopulator $childParamPopulator, ParamTypeInferer $paramTypeInferer)
+    /**
+     * @var RectorChangeCollector
+     */
+    private $rectorChangeCollector;
+
+    public function __construct(ChildParamPopulator $childParamPopulator, ParamTypeInferer $paramTypeInferer, RectorChangeCollector $rectorChangeCollector)
     {
         $this->paramTypeInferer = $paramTypeInferer;
         $this->childParamPopulator = $childParamPopulator;
+        $this->rectorChangeCollector = $rectorChangeCollector;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -125,7 +133,6 @@ CODE_SAMPLE
 
     private function refactorParamForAncestorsAndSiblings(Param $param, FunctionLike $functionLike, int $position): void
     {
-        // dump($param->type);
         // The param on the child class must have no type
         if ($param->type !== null) {
             return;
@@ -147,12 +154,9 @@ CODE_SAMPLE
 
         /** @var string $methodName */
         $methodName = $this->getName($functionLike);
-        // dump('---', $methodName, $paramName);
         // Obtain the list of the ancestors with a different signature
         $refactorableAncestorClasses = [];
-        var_dump('---', $classReflection->getParentClassesNames());
         foreach ($classReflection->getParentClassesNames() as $parentClassName) {
-            var_dump('++', $parentClassName, $methodName, method_exists($parentClassName, $methodName));
             if (! method_exists($parentClassName, $methodName)) {
                 continue;
             }
@@ -164,7 +168,6 @@ CODE_SAMPLE
         $refactorableInterfaceClasses = [];
         foreach ($classReflection->getInterfaces() as $interfaceReflection) {
             $interfaceClassName = $interfaceReflection->getName();
-            var_dump('++', $interfaceClassName, $methodName, method_exists($interfaceClassName, $methodName));
             if (! method_exists($interfaceClassName, $methodName)) {
                 continue;
             }
@@ -176,17 +179,15 @@ CODE_SAMPLE
 
         // Remove the types in all ancestors, and in their descendant classes
         foreach ($refactorableAncestorClasses as $ancestorClass) {
-            dump($ancestorClass);
-            $ancestorClassNode = $this->nodeRepository->findClass($ancestorClass);
+            // $ancestorClassNode = $this->nodeRepository->findClass($ancestorClass);
             // $ancestorClassNode->type = null;
             $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($ancestorClass);
             foreach ($childrenClassLikes as $childrenClassLike) {
-                // $this->childParamPopulator->populateChildClassMethod($ancestorClassNode, $position, null);
+                // $this->childParamPopulator->populateChildClassMethod($ancestorClassNode, $position, null, true);
                 //
             }
         }
         foreach ($refactorableInterfaceClasses as $interfaceClass) {
-            // dump('***', $interfaceClass, $this->nodeRepository->findClassMethod($interfaceClass, $methodName));
             // $interfaceNode = $this->nodeRepository->findInterface($interfaceClass);
             // // $interfaceNode->type = null;
             /** @var ClassMethod */
@@ -200,22 +201,84 @@ CODE_SAMPLE
                         $phpDocInfo = $this->phpDocInfoFactory->createEmpty($methodNode);
                     }
 
-                    /** @var Node */
                     $paramType = $methodParam->type;
-                    $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($paramType);
-                    $phpDocInfo->changeParamType($type, $methodParam, $paramName);
-
+                    if ($paramType !== null) {
+                        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($paramType);
+                        $phpDocInfo->changeParamType($type, $methodParam, $paramName);
+                    }
                     $methodParam->type = null;
-
                     break;
                 }
             }
+
+
+
             $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($interfaceClass);
-            foreach ($childrenClassLikes as $childrenClassLike) {
-                // $this->childParamPopulator->populateChildClassMethod($ancestorClassNode, $position, null);
-                //
+
+            // update their methods as well
+            foreach ($childrenClassLikes as $childClassLike) {
+                // if ($childClassLike instanceof Class_) {
+                //     $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childClassLike);
+
+                //     foreach ($usedTraits as $trait) {
+                //         $this->removeParamTypeFromMethod($trait, $position, $functionLike, $paramType, $changePhpDoc);
+                //     }
+                // }
+
+                $this->removeParamTypeFromMethod($childClassLike, $position, $methodNode);
             }
+
+            // $this->childParamPopulator->populateChildClassMethod($methodNode, $position, null, true);
+
+            // $interfaceNode = $this->nodeRepository->findInterface($interfaceClass);
+            // $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($interfaceClass);
+            // foreach ($childrenClassLikes as $childrenClassLike) {
+            //     //
+            // }
         }
+    }
+
+    private function removeParamTypeFromMethod(
+        ClassLike $classLike,
+        int $position,
+        ClassMethod $classMethod
+    ): void {
+        $methodName = $this->getName($classMethod);
+        if ($methodName === null) {
+            return;
+        }
+
+        $currentClassMethod = $classLike->getMethod($methodName);
+        if ($currentClassMethod === null) {
+            return;
+        }
+
+        if (! isset($currentClassMethod->params[$position])) {
+            return;
+        }
+
+        $paramNode = $currentClassMethod->params[$position];
+
+        // It already has no type => nothing to do
+        if ($paramNode->type === null) {
+            return;
+        }
+
+        // Add the current type in the PHPDoc
+        /** @var PhpDocInfo|null */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
+        }
+        $paramName = $this->getName($paramNode);
+        $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($paramNode->type);
+        $phpDocInfo->changeParamType($mappedCurrentParamType, $paramNode, $paramName);
+
+        // Remove the type
+        $paramNode->type = null;
+
+        $this->rectorChangeCollector->notifyNodeFileInfo($classMethod);
+        $this->rectorChangeCollector->notifyNodeFileInfo($paramNode);
     }
 
     private function hasMethodWithTypedParam(ClassReflection $classReflection, string $parentClassName, string $methodName, string $paramName): bool
@@ -224,7 +287,6 @@ CODE_SAMPLE
         /** @var ReflectionParameter[] */
         $parentReflectionMethodParams = $parentReflectionMethod->getParameters();
         foreach ($parentReflectionMethodParams as $reflectionParameter) {
-            dump($reflectionParameter->name, $reflectionParameter->getType());
             if ($reflectionParameter->name === $paramName && $reflectionParameter->getType() !== null) {
                 return true;
             }

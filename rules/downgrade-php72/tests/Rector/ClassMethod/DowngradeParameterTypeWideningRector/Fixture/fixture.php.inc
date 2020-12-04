@@ -41,7 +41,7 @@ class C implements A
     /**
      * @param mixed[] $input
      */
-    public function test($input);
+    public function test($input){}
 }
 
 ?>
