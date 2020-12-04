@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
+use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
+use PhpParser\Node\UnionType;
+use PHPStan\Analyser\Scope;
+use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
-use PhpParser\Node;
-use PhpParser\Node\Param;
-use PHPStan\Analyser\Scope;
-use PhpParser\Node\UnionType;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://www.php.net/manual/en/language.oop5.variance.php#language.oop5.variance.contravariance
@@ -135,7 +133,11 @@ CODE_SAMPLE
 
             // Find the param we're looking for
             $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
-            $differentAncestorParamTypeName = $this->getDifferentParamTypeFromReflectionMethod($parentReflectionMethod, $paramName, $paramTypeName);
+            $differentAncestorParamTypeName = $this->getDifferentParamTypeFromReflectionMethod(
+                $parentReflectionMethod,
+                $paramName,
+                $paramTypeName
+            );
             if ($differentAncestorParamTypeName !== null) {
                 return $differentAncestorParamTypeName;
             }
@@ -144,15 +146,18 @@ CODE_SAMPLE
         return null;
     }
 
-    private function getDifferentParamTypeFromReflectionMethod(ReflectionMethod $parentReflectionMethod, string $paramName, string $paramTypeName): ?string
-    {
+    private function getDifferentParamTypeFromReflectionMethod(
+        ReflectionMethod $parentReflectionMethod,
+        string $paramName,
+        string $paramTypeName
+    ): ?string {
         /** @var ReflectionParameter[] */
         $parentReflectionMethodParams = $parentReflectionMethod->getParameters();
         foreach ($parentReflectionMethodParams as $reflectionParameter) {
-            if ($reflectionParameter->name == $paramName) {
+            if ($reflectionParameter->name === $paramName) {
                 /** @var ReflectionNamedType */
                 $reflectionParamType = $reflectionParameter->getType();
-                if ($reflectionParamType->getName() != $paramTypeName) {
+                if ($reflectionParamType->getName() !== $paramTypeName) {
                     // We found it: a different param type in some ancestor
                     return $reflectionParamType->getName();
                 }
