@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
@@ -28,6 +30,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeAndIfToEarlyReturnRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    public const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
+
     /**
      * @var IfManipulator
      */
@@ -166,6 +173,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->isNestedIfInLoop($if)) {
+            return true;
+        }
+
         return ! $this->isLastIfOrBeforeLastReturn($if);
     }
 
@@ -243,10 +254,7 @@ CODE_SAMPLE
 
     private function isIfInLoop(If_ $if): bool
     {
-        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf(
-            $if,
-            [Foreach_::class, For_::class, While_::class]
-        );
+        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf($if, self::LOOP_TYPES);
 
         return $parentLoop !== null;
     }
@@ -289,6 +297,15 @@ CODE_SAMPLE
         });
 
         return $nonVoidReturns === [];
+    }
+
+    private function isNestedIfInLoop(If_ $if): bool
+    {
+        return $this->isIfInLoop($if)
+            && (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
+                $if,
+                [If_::class, Else_::class, ElseIf_::class]
+            );
     }
 
     private function isLastIfOrBeforeLastReturn(If_ $if): bool

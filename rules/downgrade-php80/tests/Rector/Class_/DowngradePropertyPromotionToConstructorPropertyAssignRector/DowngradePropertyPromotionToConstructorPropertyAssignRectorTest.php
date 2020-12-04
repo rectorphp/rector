@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector;
+namespace Rector\DowngradePhp80\Tests\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector;
 
 use Iterator;
-use Rector\Order\Rector\Class_\OrderMethodsByVisibilityRector;
+use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class OrderMethodsByVisibilityRectorTest extends AbstractRectorTestCase
+final class DowngradePropertyPromotionToConstructorPropertyAssignRectorTest extends AbstractRectorTestCase
 {
     /**
-     * Final + private method breaks :)
-     * @requires PHP < 8.0
+     * @requires PHP 8.0
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
@@ -28,6 +27,6 @@ final class OrderMethodsByVisibilityRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return OrderMethodsByVisibilityRector::class;
+        return DowngradePropertyPromotionToConstructorPropertyAssignRector::class;
     }
 }

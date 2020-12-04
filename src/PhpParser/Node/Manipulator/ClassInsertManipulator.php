@@ -57,6 +57,16 @@ final class ClassInsertManipulator
         $this->addAsFirstMethod($class, $classConst);
     }
 
+    /**
+     * @param Property[] $properties
+     */
+    public function addPropertiesToClass(Class_ $class, array $properties): void
+    {
+        foreach ($properties as $property) {
+            $this->addAsFirstMethod($class, $property);
+        }
+    }
+
     public function addPropertyToClass(Class_ $class, string $name, ?Type $type): void
     {
         if ($this->hasClassProperty($class, $name)) {

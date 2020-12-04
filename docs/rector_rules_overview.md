@@ -1,4 +1,4 @@
-# 627 Rules Overview
+# 629 Rules Overview
 
 <br>
 
@@ -34,9 +34,9 @@
 
 - [DowngradePhp73](#downgradephp73) (2)
 
-- [DowngradePhp74](#downgradephp74) (7)
+- [DowngradePhp74](#downgradephp74) (8)
 
-- [DowngradePhp80](#downgradephp80) (6)
+- [DowngradePhp80](#downgradephp80) (7)
 
 - [FileSystemRector](#filesystemrector) (1)
 
@@ -5289,6 +5289,35 @@ Replace array spread with `array_merge` function
 
 <br>
 
+### DowngradeCovarianReturnTypeRector
+
+Make method return same type as parent
+
+- class: `Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovarianReturnTypeRector`
+
+```diff
+ class ParentType {}
+ class ChildType extends ParentType {}
+
+ class A
+ {
+     public function covariantReturnTypes(): ParentType
+     { /* … */ }
+ }
+
+ class B extends A
+ {
+-    public function covariantReturnTypes(): ChildType
++    /**
++     * @return ChildType
++     */
++    public function covariantReturnTypes(): ParentType
+     { /* … */ }
+ }
+```
+
+<br>
+
 ### DowngradeNullCoalescingOperatorRector
 
 Remove null coalescing operator ??=
@@ -5428,6 +5457,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +     */
 +    public function someFunction($anything)
      {
+     }
+ }
+```
+
+<br>
+
+### DowngradePropertyPromotionToConstructorPropertyAssignRector
+
+Change constructor property promotion to property asssign
+
+- class: `Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector`
+
+```diff
+ class SomeClass
+ {
+-    public function __construct(public float $value = 0.0)
++    public float $value;
++
++    public function __construct(float $value = 0.0)
+     {
++        $this->value = $value;
      }
  }
 ```

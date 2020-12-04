@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
+use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector;
@@ -30,9 +31,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
-    // This rule does not work, so commented out
-    // $services->set(ChangePhpVersionInPlatformCheckRector::class)
-    //     ->call('configure', [[
-    //         ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 80000,
-    //     ]]);
+    $services->set(ChangePhpVersionInPlatformCheckRector::class)->call('configure', [[
+        ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 80000,
+    ]]);
+    $services->set(DowngradePropertyPromotionToConstructorPropertyAssignRector::class);
 };

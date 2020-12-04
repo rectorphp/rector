@@ -174,7 +174,6 @@ final class NodeFactory
     public function createPropertyAssignment(string $propertyName): Assign
     {
         $variable = new Variable($propertyName);
-
         return $this->createPropertyAssignmentWithExpr($propertyName, $variable);
     }
 
@@ -313,6 +312,18 @@ final class NodeFactory
         $property = $propertyBuilder->getNode();
 
         $this->decorateParentPropertyProperty($property);
+
+        return $property;
+    }
+
+    public function createProperty(string $name): Property
+    {
+        $propertyBuilder = new PropertyBuilder($name);
+
+        $property = $propertyBuilder->getNode();
+        $this->decorateParentPropertyProperty($property);
+
+        $this->phpDocInfoFactory->createFromNode($property);
 
         return $property;
     }
