@@ -62,13 +62,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CLASS_ON_OBJECT)) { dump('here');die;
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CLASS_ON_OBJECT)) { dump('here 1');die;
             return null;
         }
 
         dump($node->class);
         dump($node->name);
-        dump('here');die;
+        dump('here 2');die;
 
         if (! $this->isName($node->name, 'class')) {
             return null;
