@@ -10,7 +10,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @requires PHP 7.2
+ * @requires PHP <= 7.2
  */
 final class UnsetCastRectorTest extends AbstractRectorTestCase
 {
