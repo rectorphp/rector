@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\TryCatch;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\TryCatch;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -57,6 +59,26 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::MULTI_EXCEPTION_CATCH)) {
+            return null;
+        }
+
+        foreach ($node->catches as $key => $catch) {
+            if (count($catch->types) === 1) {
+                continue;
+            }
+
+            $types = $catch->types;
+            $node->catches[$key]->types = [$catch->types[0]];
+            foreach ($types as $keyCatchType => $catchType) {
+                if ($keyCatchType === 0) {
+                    continue;
+                }
+
+                $this->addNodeAfterNode(new Catch_([$catchType], $catch->var, $catch->stmts), $node->catches[$key]);
+            }
+        }
+
         return null;
     }
 }

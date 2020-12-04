@@ -11,6 +11,12 @@ function pipedExceptionCatch()
     } catch (Exception $e) {
         // ...
     }
+
+    try {
+        // Some code...
+    } catch (ExceptionType1|ExceptionType2 $e) {
+        // Code to handle the exception
+    }
 }
 
 ?>
@@ -29,6 +35,14 @@ function pipedExceptionCatch()
         // Code to handle the exception
     } catch (Exception $e) {
         // ...
+    }
+
+    try {
+        // Some code...
+    } catch (ExceptionType1 $e) {
+        // Code to handle the exception
+    } catch (ExceptionType2 $e) {
+        // Code to handle the exception
     }
 }
 
