@@ -12,5 +12,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public()
         ->autoconfigure();
 
-    $services->load('Rector\DeadDocBlock\\', __DIR__ . '/../src');
+    $services->load('Rector\DeadDocBlock\\', __DIR__ . '/../src')
+        ->exclude([__DIR__ . '/../src/Rector']);
 };

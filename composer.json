@@ -225,6 +225,7 @@
             "Rector\\MockistaToMockery\\Tests\\": "rules/mockista-to-mockery/tests",
             "Rector\\MysqlToMysqli\\Tests\\": "rules/mysql-to-mysqli/tests",
             "Rector\\Naming\\Tests\\": "rules/naming/tests",
+            "Rector\\DeadDocBlock\\Tests\\": "rules/dead-doc-block/tests",
             "Rector\\NetteCodeQuality\\Tests\\": "rules/nette-code-quality/tests",
             "Rector\\NetteKdyby\\Tests\\": "rules/nette-kdyby/tests",
             "Rector\\NetteTesterToPHPUnit\\Tests\\": "rules/nette-tester-to-phpunit/tests",

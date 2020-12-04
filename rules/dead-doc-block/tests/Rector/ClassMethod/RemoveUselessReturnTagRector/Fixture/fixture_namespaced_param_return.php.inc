@@ -1,13 +1,12 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\RemoveParamReturnDocblockRector\Fixture;
+namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
 
 use PhpParser\Node\Expr\PropertyFetch;
 
 class SomeClassNamespacedParamReturn
 {
     /**
-     * @param PropertyFetch $propertyFetch
      * @return PropertyFetch
      */
     function foo(PropertyFetch $propertyFetch): PropertyFetch
@@ -20,7 +19,7 @@ class SomeClassNamespacedParamReturn
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\RemoveParamReturnDocblockRector\Fixture;
+namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
 
 use PhpParser\Node\Expr\PropertyFetch;
 

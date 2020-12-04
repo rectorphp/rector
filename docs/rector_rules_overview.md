@@ -2237,7 +2237,7 @@ Non-magic PHP object methods cannot start with "__"
 
 Remove `@param` and `@return` docblock with same type and no description on typed argument and return
 
-- class: `Rector\CodingStyle\Rector\ClassMethod\RemoveParamReturnDocblockRector`
+- class: `Rector\DeadDocBlock\Rector\ClassMethod\RemoveParamReturnDocblockRector`
 
 ```diff
  use stdClass;

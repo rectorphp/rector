@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\RemoveParamReturnDocblockRector;
+namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\ClassMethod\RemoveParamReturnDocblockRector;
+use Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RemoveParamReturnDocblockRectorTest extends AbstractRectorTestCase
+final class RemoveUselessReturnTagRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -30,6 +30,6 @@ final class RemoveParamReturnDocblockRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return RemoveParamReturnDocblockRector::class;
+        return RemoveUselessReturnTagRector::class;
     }
 }
