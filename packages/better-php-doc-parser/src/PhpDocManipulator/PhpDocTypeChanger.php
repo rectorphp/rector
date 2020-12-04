@@ -63,7 +63,7 @@ final class PhpDocTypeChanger
     public function changeVarType(PhpDocInfo $phpDocInfo, Type $newType): void
     {
         // make sure the tags are not identical, e.g imported class vs FQN class
-        if ($this->typeComparator->areTypesEquals($phpDocInfo->getVarType(), $newType)) {
+        if ($this->typeComparator->areTypesEqual($phpDocInfo->getVarType(), $newType)) {
             return;
         }
 
@@ -92,7 +92,7 @@ final class PhpDocTypeChanger
     public function changeReturnType(PhpDocInfo $phpDocInfo, Type $newType): void
     {
         // make sure the tags are not identical, e.g imported class vs FQN class
-        if ($this->typeComparator->areTypesEquals($phpDocInfo->getReturnType(), $newType)) {
+        if ($this->typeComparator->areTypesEqual($phpDocInfo->getReturnType(), $newType)) {
             return;
         }
 
@@ -127,7 +127,7 @@ final class PhpDocTypeChanger
                 $param
             );
 
-            if ($this->typeComparator->areTypesEquals($currentType, $newType)) {
+            if ($this->typeComparator->areTypesEqual($currentType, $newType)) {
                 return;
             }
 

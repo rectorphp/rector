@@ -72,7 +72,7 @@ final class DocAliasResolver
         $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getVarType(), $possibleDocAliases);
         $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getReturnType(), $possibleDocAliases);
 
-        foreach ($phpDocInfo->getParamTypes() as $paramType) {
+        foreach ($phpDocInfo->getParamTypesByName() as $paramType) {
             $possibleDocAliases = $this->appendPossibleAliases($paramType, $possibleDocAliases);
         }
 

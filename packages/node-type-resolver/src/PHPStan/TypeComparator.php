@@ -33,7 +33,7 @@ final class TypeComparator
         $this->typeNormalizer = $typeNormalizer;
     }
 
-    public function areTypesEquals(Type $firstType, Type $secondType): bool
+    public function areTypesEqual(Type $firstType, Type $secondType): bool
     {
         if ($this->areBothSameScalarType($firstType, $secondType)) {
             return true;
