@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture;
+namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class TwoLevelParentType {}
 class TwoLevelChildType extends TwoLevelParentType {}
@@ -27,7 +27,7 @@ class TwoLevelC extends TwoLevelB
 -----
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture;
+namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class TwoLevelParentType {}
 class TwoLevelChildType extends TwoLevelParentType {}
@@ -41,18 +41,18 @@ class TwoLevelA
 class TwoLevelB extends TwoLevelA
 {
     /**
-     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture\TwoLevelChildType
+     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\TwoLevelChildType
      */
-    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture\TwoLevelParentType
+    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\TwoLevelParentType
     { /* … */ }
 }
 
 class TwoLevelC extends TwoLevelB
 {
     /**
-     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture\TwoLevelChildType
+     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\TwoLevelChildType
      */
-    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture\TwoLevelParentType
+    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\TwoLevelParentType
     { /* … */ }
 }
 

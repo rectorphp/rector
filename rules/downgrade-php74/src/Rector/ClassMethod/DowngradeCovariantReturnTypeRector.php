@@ -22,9 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.type-variance
  *
- * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\DowngradeCovarianReturnTypeRectorTest
+ * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\DowngradeCovarianReturnTypeRectorTest
  */
-final class DowngradeCovarianReturnTypeRector extends AbstractRector
+final class DowngradeCovariantReturnTypeRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {

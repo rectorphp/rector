@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture;
+namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class WithInterfaceParentType {}
 class WithInterfaceChildType extends WithInterfaceParentType {}
@@ -19,7 +19,7 @@ interface WithInterfaceB extends WithInterfaceA
 -----
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture;
+namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class WithInterfaceParentType {}
 class WithInterfaceChildType extends WithInterfaceParentType {}
@@ -32,9 +32,9 @@ interface WithInterfaceA
 interface WithInterfaceB extends WithInterfaceA
 {
     /**
-     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture\WithInterfaceChildType
+     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\WithInterfaceChildType
      */
-    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture\WithInterfaceParentType;
+    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\WithInterfaceParentType;
 }
 
 ?>

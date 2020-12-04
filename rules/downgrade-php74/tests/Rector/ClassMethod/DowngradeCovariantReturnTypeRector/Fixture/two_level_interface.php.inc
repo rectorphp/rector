@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture;
+namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class TwoLevelInterfaceParentType {}
 class TwoLevelInterfaceChildType extends TwoLevelInterfaceParentType {}
@@ -23,7 +23,7 @@ interface TwoLevelInterfaceC extends TwoLevelInterfaceB
 -----
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture;
+namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class TwoLevelInterfaceParentType {}
 class TwoLevelInterfaceChildType extends TwoLevelInterfaceParentType {}
@@ -40,9 +40,9 @@ interface TwoLevelInterfaceB extends TwoLevelInterfaceA
 interface TwoLevelInterfaceC extends TwoLevelInterfaceB
 {
     /**
-     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture\TwoLevelInterfaceChildType
+     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\TwoLevelInterfaceChildType
      */
-    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovarianReturnTypeRector\Fixture\TwoLevelInterfaceParentType;
+    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\TwoLevelInterfaceParentType;
 }
 
 ?>
