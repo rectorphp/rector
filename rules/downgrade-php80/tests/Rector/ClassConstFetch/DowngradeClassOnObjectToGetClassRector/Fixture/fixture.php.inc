@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\Variable\DowngradeClassOnObjectToGetClassRector\Fixture;
+namespace Rector\DowngradePhp80\Tests\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector\Fixture;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\Variable\DowngradeClassOnObjectToGetClassRector\Fixture;
+namespace Rector\DowngradePhp80\Tests\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector\Fixture;
 
 class SomeClass
 {

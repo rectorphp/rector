@@ -2,20 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Rector\Variable;
+namespace Rector\DowngradePhp80\Rector\ClassConstFetch;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use PhpParser\Node\Expr\ClassConstFetch;
 
 /**
- * @see \Rector\DowngradePhp80\Tests\Rector\Variable\DowngradeClassOnObjectToGetClassRector\DowngradeClassOnObjectToGetClassRectorTest
+ * @see \Rector\DowngradePhp80\Tests\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector\DowngradeClassOnObjectToGetClassRectorTest
  */
 final class DowngradeClassOnObjectToGetClassRector extends AbstractRector
 {
@@ -53,11 +55,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Variable::class];
+        return [ClassConstFetch::class];
     }
 
     /**
-     * @param Variable $node
+     * @param ClassConstFetch $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -65,16 +67,17 @@ CODE_SAMPLE
             return null;
         }
 
-        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $next instanceof Node) {
+        $nameIdentifier = $node->name;
+        if (! $nameIdentifier instanceof Identifier) {
             return null;
         }
 
-        dump($next);
-        if ($next instanceof ClassConstFetch) {
-
+        /** @var string $name */
+        $name = $nameIdentifier->toString();
+        if ($name !== 'class') {
+            return null;
         }
 
-        return [];
+        return new FuncCall(new Name('get_class'), [new Arg($node->class)]);
     }
 }

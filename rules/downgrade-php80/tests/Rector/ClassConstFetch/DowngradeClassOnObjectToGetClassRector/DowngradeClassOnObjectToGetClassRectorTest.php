@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Tests\Rector\Variable\DowngradeClassOnObjectToGetClassRector;
+namespace Rector\DowngradePhp80\Tests\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector;
 
 use Iterator;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DowngradePhp80\Rector\Variable\DowngradeClassOnObjectToGetClassRector;
+use Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
