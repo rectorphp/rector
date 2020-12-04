@@ -11,7 +11,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeFactory\EntityIdNodeFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -59,7 +59,7 @@ final class AddEntityIdByConditionRector extends AbstractRector implements Confi
         return new RuleDefinition(
             'Add entity id with annotations when meets condition',
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -85,7 +85,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, []),
+),
 
             ]);
     }
