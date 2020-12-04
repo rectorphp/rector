@@ -62,6 +62,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        dump(
+            PHP_VERSION,
+            $this->isAtLeastPhpVersion(PhpVersionFeature::CLASS_ON_OBJECT)
+        );
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CLASS_ON_OBJECT)) { dump('here 1');die;
             return null;
         }
