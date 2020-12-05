@@ -7,23 +7,16 @@ namespace Rector\DeadDocBlock;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class DeadReturnTagValueNodeAnalyzer
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
     /**
      * @var TypeComparator
      */
     private $typeComparator;
 
-    public function __construct(StaticTypeMapper $staticTypeMapper, TypeComparator $typeComparator)
+    public function __construct(TypeComparator $typeComparator)
     {
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->typeComparator = $typeComparator;
     }
 
@@ -34,14 +27,9 @@ final class DeadReturnTagValueNodeAnalyzer
             return false;
         }
 
-        $phpReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
-        $docReturnType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
-            $returnTagValueNode->type,
+        if (! $this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($returnType, $returnTagValueNode->type,
             $classMethod
-        );
-
-        $areTypesEqual = $this->typeComparator->areTypesEqual($phpReturnType, $docReturnType);
-        if (! $areTypesEqual) {
+        )) {
             return false;
         }
 
