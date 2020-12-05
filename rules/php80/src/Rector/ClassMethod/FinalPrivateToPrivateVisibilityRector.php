@@ -67,11 +67,6 @@ CODE_SAMPLE
         if (! $classMethod->isFinal()) {
             return true;
         }
-
-        if (! $classMethod->isPrivate()) {
-            return true;
-        }
-
-        return false;
+        return ! $classMethod->isPrivate();
     }
 }
