@@ -15,7 +15,7 @@ class FixtureVariableUsage {
 }
 
 ?>
-    -----
+-----
 <?php
 
 namespace Rector\CodeQuality\Tests\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector\Fixture;

@@ -10,7 +10,7 @@ class FixtureFqn {
 }
 
 ?>
-    -----
+-----
 <?php
 
 namespace Rector\CodeQuality\Tests\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector\Fixture;

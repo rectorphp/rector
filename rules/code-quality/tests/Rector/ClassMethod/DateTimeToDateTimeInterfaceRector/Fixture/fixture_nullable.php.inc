@@ -10,7 +10,7 @@ class FixtureNullable {
 }
 
 ?>
-    -----
+-----
 <?php
 
 namespace Rector\CodeQuality\Tests\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector\Fixture;
