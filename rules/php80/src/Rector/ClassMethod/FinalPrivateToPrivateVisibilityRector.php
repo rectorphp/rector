@@ -17,12 +17,12 @@ final class FinalPrivateToPrivateVisibilityRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Adds static visibility to __set_state() methods', [
+        return new RuleDefinition('Changes method visibility from final private to only private', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    final private function setter() {
+    final private function getter() {
         return $this;
     }
 }
@@ -31,7 +31,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    private function setter() {
+    private function getter() {
         return $this;
     }
 }
