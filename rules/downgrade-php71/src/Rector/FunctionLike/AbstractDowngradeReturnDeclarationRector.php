@@ -37,7 +37,7 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractRector i
             return null;
         }
 
-        $this->addDocBlockReturn($node);
+        $this->decorateFunctionLikeWithReturnTagValueNode($node);
 
         $node->returnType = null;
 
@@ -47,7 +47,7 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractRector i
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function addDocBlockReturn(FunctionLike $functionLike): void
+    private function decorateFunctionLikeWithReturnTagValueNode(FunctionLike $functionLike): void
     {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);

@@ -34,24 +34,26 @@ abstract class AbstractDowngradeTypedPropertyRector extends AbstractRector imple
             return null;
         }
 
-        $this->decorateWithDocBlock($node);
+        $this->decoratePropertyWithDocBlock($node, $node->type);
 
         $node->type = null;
 
         return $node;
     }
 
-    private function decorateWithDocBlock(Node $node): void
+    private function decoratePropertyWithDocBlock(Property $property, Node $typeNode): void
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($property);
         }
 
-        if ($phpDocInfo->getVarTagValueNode() === null) {
-            $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->type);
-            $phpDocInfo->changeVarType($newType);
+        if ($phpDocInfo->getVarTagValueNode() !== null) {
+            return;
         }
+
+        $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
+        $phpDocInfo->changeVarType($newType);
     }
 }

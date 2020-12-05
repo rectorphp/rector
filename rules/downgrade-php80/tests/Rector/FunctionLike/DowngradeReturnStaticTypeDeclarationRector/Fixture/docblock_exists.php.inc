@@ -25,7 +25,7 @@ namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnStaticT
 class DocBlockExists {
     /**
      * This property is the best one
-     * @return static
+     * @return $this
      */
     public function getAnything()
     {

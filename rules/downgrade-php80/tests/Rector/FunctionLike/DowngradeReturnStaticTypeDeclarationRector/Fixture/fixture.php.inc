@@ -23,7 +23,7 @@ namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnStaticT
 class SomeClass
 {
     /**
-     * @return static
+     * @return $this
      */
     public function getAnything()
     {

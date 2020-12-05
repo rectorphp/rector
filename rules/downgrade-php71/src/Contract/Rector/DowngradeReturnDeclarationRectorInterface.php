@@ -8,8 +8,5 @@ use PhpParser\Node\FunctionLike;
 
 interface DowngradeReturnDeclarationRectorInterface
 {
-    /**
-     * Indicate if the return declaration must be removed
-     */
     public function shouldRemoveReturnDeclaration(FunctionLike $functionLike): bool;
 }
