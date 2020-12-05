@@ -777,7 +777,6 @@ parameters:
                 # merging comments
                 - src/Rector/AbstractRector.php
                 - src/PhpParser/NodeTransformer.php
-                - src/PhpDoc/CommentCombiner.php
                 # playing around with doc block format
                 - rules/phpstan/src/Rector/Assign/PHPStormVarAnnotationRector.php
                 - rules/code-quality/src/Rector/Return_/SimplifyUselessVariableRector.php
