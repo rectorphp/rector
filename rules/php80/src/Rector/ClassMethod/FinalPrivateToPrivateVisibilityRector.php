@@ -45,9 +45,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [
-            ClassMethod::class,
-        ];
+        return [ClassMethod::class];
     }
 
     /**
