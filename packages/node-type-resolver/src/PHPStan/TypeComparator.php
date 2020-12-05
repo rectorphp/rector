@@ -82,7 +82,8 @@ final class TypeComparator
     private function areBothSameScalarType(Type $firstType, Type $secondType): bool
     {
         if ($firstType instanceof StringType && $secondType instanceof StringType) {
-            return true;
+            // prevents "class-string" vs "string"
+            return get_class($firstType) === get_class($secondType);
         }
 
         if ($firstType instanceof IntegerType && $secondType instanceof IntegerType) {
