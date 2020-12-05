@@ -158,7 +158,7 @@ CODE_SAMPLE
     {
         /** @var string $functionName */
         $functionName = $this->getName($funcCall);
-        if (!isset(self::FUNCTION_CONNECTION_PARAMETER_POSITION_MAP[$functionName])){
+        if (! isset(self::FUNCTION_CONNECTION_PARAMETER_POSITION_MAP[$functionName])){
             return;
         }
 
