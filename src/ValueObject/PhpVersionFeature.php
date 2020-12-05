@@ -16,6 +16,8 @@ final class PhpVersionFeature
      */
     public const ELVIS_OPERATOR = 50300;
 
+    public const DATE_TIME_INTERFACE = 50500;
+
     /**
      * @var int
      */
