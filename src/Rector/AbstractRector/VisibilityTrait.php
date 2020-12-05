@@ -98,4 +98,12 @@ trait VisibilityTrait
     {
         $this->visibilityManipulator->makeNonStatic($node);
     }
+
+    /**
+     * @param ClassMethod|Class_ $class
+     */
+    public function makeNonFinal(Node $class): void
+    {
+        $this->visibilityManipulator->makeNonFinal($class);
+    }
 }
