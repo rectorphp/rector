@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
@@ -55,5 +56,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
+    $services->set(RemoveParentCallWithoutParentRector::class);
     $services->set(SetStateToStaticRector::class);
 };
