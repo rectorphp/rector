@@ -22,6 +22,7 @@ use PHPStan\Type\UnionType as PHPStanUnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,7 +35,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class DateTimeToDateTimeInterfaceRector extends AbstractRector
 {
     private const METHODS_RETURNING_CLASS_INSTANCE_MAP = [
-        'add', 'modify', '__set_state', 'setDate', 'setISODate', 'setTime', 'setTimestamp', 'setTimezone', 'sub',
+        'add', 'modify', MethodName::SET_STATE, 'setDate', 'setISODate', 'setTime', 'setTimestamp', 'setTimezone', 'sub',
     ];
 
     /**
