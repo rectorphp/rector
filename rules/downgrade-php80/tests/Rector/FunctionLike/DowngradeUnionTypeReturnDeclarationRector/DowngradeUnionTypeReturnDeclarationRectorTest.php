@@ -11,7 +11,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @requires PHP 8.0
+ * @requires PHP 8.1
  */
 final class DowngradeUnionTypeReturnDeclarationRectorTest extends AbstractRectorTestCase
 {
