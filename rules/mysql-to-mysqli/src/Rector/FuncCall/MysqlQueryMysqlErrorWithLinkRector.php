@@ -50,6 +50,29 @@ final class MysqlQueryMysqlErrorWithLinkRector extends AbstractRector
         'mysql_thread_id' => 'mysqli_thread_id',
     ];
 
+    /**
+     * @var array<string, int>
+     */
+    private const FUNCTION_CONNECTION_PARAMETER_POSITION_MAP = [
+        'mysql_affected_rows' => 0,
+        'mysql_client_encoding' => 0,
+        'mysql_close' => 0,
+        'mysql_errno' => 0,
+        'mysql_error' => 0,
+        'mysql_get_host_info' => 0,
+        'mysql_get_proto_info' => 0,
+        'mysql_get_server_info' => 0,
+        'mysql_info' => 0,
+        'mysql_insert_id' => 0,
+        'mysql_ping' => 0,
+        'mysql_query' => 1,
+        'mysql_real_escape_string' => 1,
+        'mysql_select_db' => 1,
+        'mysql_set_charset' => 1,
+        'mysql_stat' => 0,
+        'mysql_thread_id' => 0,
+    ];
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -114,6 +137,8 @@ CODE_SAMPLE
             ) {
                 $connectionVariable = $this->findConnectionVariable($node);
 
+                $this->removeExistingConnectionParameter($node);
+
                 if ($connectionVariable === null) {
                     return null;
                 }
@@ -127,6 +152,18 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function removeExistingConnectionParameter(FuncCall $funcCall): void
+    {
+        /** @var string $functionName */
+        $functionName = $this->getName($funcCall);
+        if (! isset(self::FUNCTION_CONNECTION_PARAMETER_POSITION_MAP[$functionName])){
+            return;
+        }
+
+        $connectionPosition = self::FUNCTION_CONNECTION_PARAMETER_POSITION_MAP[$functionName];
+        unset($funcCall->args[$connectionPosition]);
     }
 
     private function isProbablyMysql(Node $node): bool
