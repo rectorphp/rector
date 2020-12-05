@@ -39,6 +39,7 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
      * @var TypeUnwrapper
      */
     private $typeUnwrapper;
+
     /**
      * @var CommentsMerger
      */

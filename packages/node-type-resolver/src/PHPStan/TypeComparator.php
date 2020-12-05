@@ -29,6 +29,7 @@ final class TypeComparator
      * @var TypeNormalizer
      */
     private $typeNormalizer;
+
     /**
      * @var StaticTypeMapper
      */
