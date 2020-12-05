@@ -1,4 +1,4 @@
-# 633 Rules Overview
+# 639 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [Carbon](#carbon) (2)
 
-- [CodeQuality](#codequality) (61)
+- [CodeQuality](#codequality) (62)
 
 - [CodingStyle](#codingstyle) (33)
 
@@ -34,11 +34,11 @@
 
 - [DowngradePhp72](#downgradephp72) (2)
 
-- [DowngradePhp73](#downgradephp73) (2)
+- [DowngradePhp73](#downgradephp73) (3)
 
 - [DowngradePhp74](#downgradephp74) (9)
 
-- [DowngradePhp80](#downgradephp80) (8)
+- [DowngradePhp80](#downgradephp80) (10)
 
 - [FileSystemRector](#filesystemrector) (1)
 
@@ -108,7 +108,7 @@
 
 - [Php74](#php74) (15)
 
-- [Php80](#php80) (13)
+- [Php80](#php80) (15)
 
 - [PhpDeglobalize](#phpdeglobalize) (1)
 
@@ -307,12 +307,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
-                'ValueObjectInterfaceClassName',
-            ],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
-                'Search',
-            ],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -912,6 +908,27 @@ Change multiple null compares to ?? queue
 -
 -        return null;
 +        return $this->orderItem ?? $this->orderItemUnit;
+     }
+ }
+```
+
+<br>
+
+### DateTimeToDateTimeInterfaceRector
+
+Changes DateTime type-hint to DateTimeInterface
+
+- class: `Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector`
+
+```diff
+ class SomeClass {
+-    public function methodWithDateTime(\DateTime $dateTime)
++    /**
++     * @param \DateTime|\DateTimeImmutable $dateTime
++     */
++    public function methodWithDateTime(\DateTimeInterface $dateTime)
+     {
+         return true;
      }
  }
 ```
@@ -2296,7 +2313,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -4883,25 +4900,7 @@ Downgrade class constant visibility
 
 Remove the iterable pseudo type params, add `@param` tags instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector`
-
-```php
-use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeIterablePseudoTypeParamDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeIterablePseudoTypeParamDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -4925,25 +4924,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Remove returning iterable pseud type, add a `@return` tag instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector`
-
-```php
-use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeIterablePseudoTypeReturnDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeIterablePseudoTypeReturnDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -4967,25 +4948,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Remove the nullable type params, add `@param` tags instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector`
-
-```php
-use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeNullableTypeParamDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeNullableTypeParamDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5009,25 +4972,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Remove returning nullable types, add a `@return` tag instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector`
-
-```php
-use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeNullableTypeReturnDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeNullableTypeReturnDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5074,25 +5019,7 @@ Downgrade single one | separated to multi catch exception
 
 Remove the 'void' function type, add a `@return` tag instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector`
-
-```php
-use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeVoidTypeReturnDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeVoidTypeReturnDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5118,25 +5045,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Remove the 'object' param type, add a `@param` tag instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp72\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector`
-
-```php
-use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeParamObjectTypeDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeParamObjectTypeDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5159,25 +5068,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Remove the 'object' function type, add a `@return` tag instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector`
-
-```php
-use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeReturnObjectTypeDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeReturnObjectTypeDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5244,6 +5135,28 @@ Convert the list reference assignment to its equivalent PHP 7.2 code
 -        list(&$a, &$b) = $array;
 +        $a =& $array[0];
 +        $b =& $array[1];
+     }
+ }
+```
+
+<br>
+
+### DowngradeTrailingCommasInFunctionCallsRector
+
+Remove trailing commas in function calls
+
+- class: `Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector`
+
+```diff
+ class SomeClass
+ {
+     public function __construct(string $value)
+     {
+         $compacted = compact(
+             'posts',
+-            'units',
++            'units'
+         );
      }
  }
 ```
@@ -5326,25 +5239,7 @@ Replace array spread with `array_merge` function
 
 Remove contravariant argument type declarations
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector`
-
-```php
-use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeContravariantArgumentTypeRector::class)
-        ->call('configure', [[
-            DowngradeContravariantArgumentTypeRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  class ParentType {}
@@ -5467,25 +5362,7 @@ Convert 2nd param to `strip_tags` from array to string
 
 Changes property type definition from type definitions to `@var` annotations.
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector`
-
-```php
-use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeTypedPropertyRector::class)
-        ->call('configure', [[
-            DowngradeTypedPropertyRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  class SomeClass
@@ -5521,29 +5398,68 @@ Change `$object::class` to get_class($object)
 
 <br>
 
+### DowngradeMatchToSwitchRector
+
+Downgrade `match()` to `switch()`
+
+- class: `Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $message = match ($statusCode) {
+-            200, 300 => null,
+-            400 => 'not found',
+-            default => 'unknown status code',
+-        };
++        switch ($statusCode) {
++            case 200:
++            case 300:
++                $message = null;
++                break;
++            case 400:
++                $message = 'not found';
++                break;
++            default:
++                $message = 'unknown status code';
++                break;
++        }
+     }
+ }
+```
+
+<br>
+
+### DowngradeNonCapturingCatchesRector
+
+Downgrade catch () without variable to one
+
+- class: `Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         try {
+             // code
+-        } catch (\Exception) {
++        } catch (\Exception $exception) {
+             // error
+         }
+     }
+ }
+```
+
+<br>
+
 ### DowngradeParamMixedTypeDeclarationRector
 
 Remove the 'mixed' param type, add a `@param` tag instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector`
-
-```php
-use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeParamMixedTypeDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeParamMixedTypeDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5587,25 +5503,7 @@ Change constructor property promotion to property asssign
 
 Remove the 'mixed' function type, add a `@return` tag instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector`
-
-```php
-use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeReturnMixedTypeDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeReturnMixedTypeDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5632,25 +5530,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Remove the 'static' function type, add a `@return` tag instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector`
-
-```php
-use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeReturnStaticTypeDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeReturnStaticTypeDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5674,25 +5554,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Remove the union type params, add `@param` tags instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector`
-
-```php
-use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeUnionTypeParamDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeUnionTypeParamDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5716,25 +5578,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Remove returning union types, add a `@return` tag instead
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector`
-
-```php
-use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeUnionTypeReturnDeclarationRector::class)
-        ->call('configure', [[
-            DowngradeUnionTypeReturnDeclarationRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5761,25 +5605,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Removes union type property type definition, adding `@var` annotations instead.
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector`
-
-```php
-use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeUnionTypeTypedPropertyRector::class)
-        ->call('configure', [[
-            DowngradeUnionTypeTypedPropertyRector::ADD_DOC_BLOCK => true,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  class SomeClass
@@ -6430,7 +6256,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(InjectAnnotationClassRector::class)
         ->call('configure', [[
-            InjectAnnotationClassRector::ANNOTATION_CLASSES => ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject'],
+            InjectAnnotationClassRector::ANNOTATION_CLASSES => [
+                'DI\Annotation\Inject',
+                'JMS\DiExtraBundle\Annotation\Inject',
+            ],
         ]]);
 };
 ```
@@ -7441,10 +7270,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => [
-                'pat*/*/?ame.php',
-                'somepath/?ame.php',
-            ],
+            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
         ]]);
 };
 ```
@@ -12492,6 +12318,24 @@ Change simple property init and assign to constructor promotion
 
 <br>
 
+### FinalPrivateToPrivateVisibilityRector
+
+Changes method visibility from final private to only private
+
+- class: `Rector\Php80\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector`
+
+```diff
+ class SomeClass
+ {
+-    final private function getter() {
++    private function getter() {
+         return $this;
+     }
+ }
+```
+
+<br>
+
 ### GetDebugTypeRector
 
 Change ternary type resolve to `get_debug_type()`
@@ -12550,6 +12394,24 @@ Remove unused variable in `catch()`
 -        } catch (Throwable $notUsedThrowable) {
 +        } catch (Throwable) {
          }
+     }
+ }
+```
+
+<br>
+
+### SetStateToStaticRector
+
+Adds static visibility to `__set_state()` methods
+
+- class: `Rector\Php80\Rector\ClassMethod\SetStateToStaticRector`
+
+```diff
+ class SomeClass
+ {
+-    public function __set_state($properties) {
++    public static function __set_state($properties) {
+
      }
  }
 ```
@@ -13392,7 +13254,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 
@@ -15193,7 +15055,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
+                'SymfonyControllerClassName',
+                'GetTraitClassName',
+            ],
         ]]);
 };
 ```
