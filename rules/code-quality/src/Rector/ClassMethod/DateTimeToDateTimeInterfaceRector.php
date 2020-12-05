@@ -177,7 +177,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! in_array($this->getName($methodCall->name), self::METHODS_MAP)) {
+        if (! $this->isNames($methodCall->name, self::METHODS_MAP)) {
             return true;
         }
 
