@@ -22,6 +22,7 @@ use PHPStan\Type\UnionType as PHPStanUnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -32,7 +33,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
  */
 final class DateTimeToDateTimeInterfaceRector extends AbstractRector
 {
-    private const METHODS_MAP = [
+    private const METHODS_RETURNING_CLASS_INSTANCE_MAP = [
         'add', 'modify', '__set_state', 'setDate', 'setISODate', 'setTime', 'setTimestamp', 'setTimezone', 'sub',
     ];
 
@@ -87,6 +88,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::DATE_TIME_INTERFACE)) {
+            return null;
+        }
+
         $isModifiedNode = false;
         foreach ($node->getParams() as $param) {
             if (! $this->isDateTimeParam($param)) {
@@ -177,7 +182,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->isNames($methodCall->name, self::METHODS_MAP)) {
+        if (! $this->isNames($methodCall->name, self::METHODS_RETURNING_CLASS_INSTANCE_MAP)) {
             return true;
         }
 

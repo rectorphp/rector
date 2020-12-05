@@ -19,6 +19,11 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const DATE_TIME_INTERFACE = 50300;
+
+    /**
+     * @var int
+     */
     public const CLASSNAME_CONSTANT = 50500;
 
     /**
