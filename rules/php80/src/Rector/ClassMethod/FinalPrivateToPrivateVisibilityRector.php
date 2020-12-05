@@ -45,9 +45,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [
-            ClassMethod::class,
-        ];
+        return [ClassMethod::class];
     }
 
     /**
@@ -69,11 +67,6 @@ CODE_SAMPLE
         if (! $classMethod->isFinal()) {
             return true;
         }
-
-        if (! $classMethod->isPrivate()) {
-            return true;
-        }
-
-        return false;
+        return ! $classMethod->isPrivate();
     }
 }

@@ -247,6 +247,11 @@ final class NodeRepository
         }
 
         $parentClass = $className;
+
+        if (! class_exists($parentClass)) {
+            return null;
+        }
+
         while ($parentClass = get_parent_class($parentClass)) {
             if (isset($this->classMethodsByType[$parentClass][$methodName])) {
                 return $this->classMethodsByType[$parentClass][$methodName];

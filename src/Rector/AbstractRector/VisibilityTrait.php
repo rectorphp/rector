@@ -100,10 +100,10 @@ trait VisibilityTrait
     }
 
     /**
-     * @param ClassMethod|Class_ $class
+     * @param ClassMethod|Class_ $node
      */
-    public function makeNonFinal(Node $class): void
+    public function makeNonFinal(Node $node): void
     {
-        $this->visibilityManipulator->makeNonFinal($class);
+        $this->visibilityManipulator->makeNonFinal($node);
     }
 }
