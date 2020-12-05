@@ -9,6 +9,7 @@ use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\Php80\Rector\ClassMethod\SetStateToStaticRector;
+use Rector\Php80\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector;
 use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
 use Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector;
 use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
@@ -56,4 +57,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(SetStateToStaticRector::class);
+    $services->set(FinalPrivateToPrivateVisibilityRector::class);
 };
