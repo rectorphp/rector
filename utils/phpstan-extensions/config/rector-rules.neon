@@ -1,6 +1,6 @@
 services:
     -
-        class: Rector\PHPStanExtensions\Rule\ForbiddenMethodCallOnTypeRule
+        class: Symplify\PHPStanRules\Rules\ForbiddenMethodCallOnTypeRule
         tags: [phpstan.rules.rule]
         arguments:
             forbiddenMethodNamesByTypes:
