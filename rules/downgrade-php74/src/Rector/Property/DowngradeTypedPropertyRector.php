@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\Property;
 
 use PhpParser\Node\Stmt\Property;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -16,7 +16,7 @@ final class DowngradeTypedPropertyRector extends AbstractDowngradeTypedPropertyR
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes property type definition from type definitions to `@var` annotations.', [
-            new ConfiguredCodeSample(
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -33,10 +33,6 @@ class SomeClass
     private $property;
 }
 CODE_SAMPLE
-,
-                [
-                    self::ADD_DOC_BLOCK => true,
-                ]
             ),
         ]);
     }

@@ -26,18 +26,6 @@ final class DowngradeReturnMixedTypeDeclarationRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
-    {
-        return [
-            DowngradeReturnMixedTypeDeclarationRector::class => [
-                DowngradeReturnMixedTypeDeclarationRector::ADD_DOC_BLOCK => true,
-            ],
-        ];
-    }
-
     protected function getRectorClass(): string
     {
         return DowngradeReturnMixedTypeDeclarationRector::class;

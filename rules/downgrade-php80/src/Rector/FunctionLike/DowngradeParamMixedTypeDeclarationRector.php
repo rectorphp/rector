@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\FunctionLike;
 
 use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeParamTypeDeclarationRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -18,7 +18,7 @@ final class DowngradeParamMixedTypeDeclarationRector extends AbstractDowngradePa
         return new RuleDefinition(
             $this->getRectorDefinitionDescription(),
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 <?php
 
@@ -43,10 +43,6 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                    [
-                        self::ADD_DOC_BLOCK => true,
-                    ]
                 ),
             ]
         );

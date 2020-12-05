@@ -8,7 +8,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\UnionType;
 use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -21,7 +21,7 @@ final class DowngradeUnionTypeParamDeclarationRector extends AbstractDowngradePa
         return new RuleDefinition(
             'Remove the union type params, add @param tags instead',
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 <?php
 
@@ -48,10 +48,6 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                    [
-                        self::ADD_DOC_BLOCK => true,
-                    ]
                 ),
             ]
         );

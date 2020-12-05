@@ -16,7 +16,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -29,7 +29,7 @@ final class DowngradeContravariantArgumentTypeRector extends AbstractDowngradePa
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove contravariant argument type declarations', [
-            new ConfiguredCodeSample(
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 class ParentType {}
 class ChildType extends ParentType {}
@@ -66,10 +66,6 @@ class B extends A
     { /* … */ }
 }
 CODE_SAMPLE
-,
-                [
-                    self::ADD_DOC_BLOCK => true,
-                ]
             ),
         ]);
     }

@@ -25,18 +25,6 @@ final class DowngradeVoidTypeReturnDeclarationRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
-    {
-        return [
-            DowngradeVoidTypeReturnDeclarationRector::class => [
-                DowngradeVoidTypeReturnDeclarationRector::ADD_DOC_BLOCK => true,
-            ],
-        ];
-    }
-
     protected function getRectorClass(): string
     {
         return DowngradeVoidTypeReturnDeclarationRector::class;
