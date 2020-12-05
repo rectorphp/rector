@@ -23,10 +23,10 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector\DateTimeToDateTimeInterfaceRectorTest
@@ -148,8 +148,8 @@ CODE_SAMPLE
             return;
         }
 
-        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use ($param) {
-            if (!($node instanceof MethodCall)){
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use ($param): void {
+            if (! ($node instanceof MethodCall)) {
                 return;
             }
 
@@ -186,7 +186,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE) ;
+        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
             return true;
         }
