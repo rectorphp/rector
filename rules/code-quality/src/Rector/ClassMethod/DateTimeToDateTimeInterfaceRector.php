@@ -16,9 +16,9 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\NullType as PHPStanNullType;
-use PHPStan\Type\ObjectType as PHPStanObjectType;
-use PHPStan\Type\UnionType as PHPStanUnionType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -111,15 +111,20 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function isDateTimeParam(Param $param): bool
+    {
+        return $this->nodeTypeResolver->isObjectTypeOrNullableObjectType($param, DateTime::class);
+    }
+
     private function refactorParamTypeHint(Param $param): void
     {
-        $dateTimeInterfaceType = new FullyQualified(DateTimeInterface::class);
+        $fullyQualified = new FullyQualified(DateTimeInterface::class);
         if ($param->type instanceof NullableType) {
-            $param->type = new NullableType($dateTimeInterfaceType);
+            $param->type = new NullableType($fullyQualified);
             return;
         }
 
-        $param->type = $dateTimeInterfaceType;
+        $param->type = $fullyQualified;
     }
 
     private function refactorParamDocBlock(Param $param, ClassMethod $classMethod): void
@@ -130,16 +135,16 @@ CODE_SAMPLE
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
         }
 
-        $types = [new PHPStanObjectType(DateTime::class), new PHPStanObjectType(DateTimeImmutable::class)];
+        $types = [new ObjectType(DateTime::class), new ObjectType(DateTimeImmutable::class)];
         if ($param->type instanceof NullableType) {
-            $types[] = new PHPStanNullType();
+            $types[] = new NullType();
         }
 
         $paramName = $this->getName($param->var);
         if ($paramName === null) {
             throw new ShouldNotHappenException();
         }
-        $phpDocInfo->changeParamType(new PHPStanUnionType($types), $param, $paramName);
+        $phpDocInfo->changeParamType(new UnionType($types), $param, $paramName);
     }
 
     private function refactorMethodCalls(Param $param, ClassMethod $classMethod): void
@@ -164,16 +169,16 @@ CODE_SAMPLE
             return;
         }
 
-        $newAssignNode = new Assign(new Variable($paramName), $methodCall);
+        $assign = new Assign(new Variable($paramName), $methodCall);
 
         /** @var Node $parentNode */
         $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Arg) {
-            $parentNode->value = $newAssignNode;
+            $parentNode->value = $assign;
             return;
         }
 
-        $parentNode->expr = $newAssignNode;
+        $parentNode->expr = $assign;
     }
 
     private function shouldSkipMethodCallRefactor(string $paramName, MethodCall $methodCall): bool
@@ -192,10 +197,5 @@ CODE_SAMPLE
         }
 
         return $parentNode instanceof Assign;
-    }
-
-    private function isDateTimeParam(Param $param): bool
-    {
-        return $this->nodeTypeResolver->isObjectTypeOrNullableObjectType($param, DateTime::class);
     }
 }
