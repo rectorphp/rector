@@ -13,7 +13,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class DowngradeReturnStaticTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP >= 8.0
+     * @requires PHP = 8.1
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void

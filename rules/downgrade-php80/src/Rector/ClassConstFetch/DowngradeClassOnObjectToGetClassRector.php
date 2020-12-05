@@ -63,10 +63,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CLASS_ON_OBJECT)) {
-            return null;
-        }
-
         if (! $this->isName($node->name, 'class')) {
             return null;
         }

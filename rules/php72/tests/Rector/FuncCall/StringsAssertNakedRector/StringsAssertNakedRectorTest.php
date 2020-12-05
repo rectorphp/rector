@@ -9,6 +9,9 @@ use Rector\Php72\Rector\FuncCall\StringsAssertNakedRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @requires PHP < 8.0
+ */
 final class StringsAssertNakedRectorTest extends AbstractRectorTestCase
 {
     /**

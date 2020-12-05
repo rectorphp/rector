@@ -12,7 +12,7 @@ class MyCustomType extends AbstractType
     }
 }
 
-class AnotherClass
+class AnotherClass extends \DateTime
 {
     public function setDefaultOptions(SomeResolver $resolver)
     {
@@ -36,7 +36,7 @@ class MyCustomType extends AbstractType
     }
 }
 
-class AnotherClass
+class AnotherClass extends \DateTime
 {
     public function setDefaultOptions(SomeResolver $resolver)
     {
