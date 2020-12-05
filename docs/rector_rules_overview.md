@@ -1,4 +1,4 @@
-# 629 Rules Overview
+# 633 Rules Overview
 
 <br>
 
@@ -14,9 +14,11 @@
 
 - [CodeQuality](#codequality) (61)
 
-- [CodingStyle](#codingstyle) (34)
+- [CodingStyle](#codingstyle) (33)
 
 - [DeadCode](#deadcode) (41)
+
+- [DeadDocBlock](#deaddocblock) (2)
 
 - [Defluent](#defluent) (8)
 
@@ -28,15 +30,15 @@
 
 - [Downgrade](#downgrade) (1)
 
-- [DowngradePhp71](#downgradephp71) (6)
+- [DowngradePhp71](#downgradephp71) (7)
 
 - [DowngradePhp72](#downgradephp72) (2)
 
 - [DowngradePhp73](#downgradephp73) (2)
 
-- [DowngradePhp74](#downgradephp74) (8)
+- [DowngradePhp74](#downgradephp74) (9)
 
-- [DowngradePhp80](#downgradephp80) (7)
+- [DowngradePhp80](#downgradephp80) (8)
 
 - [FileSystemRector](#filesystemrector) (1)
 
@@ -2233,31 +2235,6 @@ Non-magic PHP object methods cannot start with "__"
 
 <br>
 
-### RemoveParamReturnDocblockRector
-
-Remove `@param` and `@return` docblock with same type and no description on typed argument and return
-
-- class: `Rector\DeadDocBlock\Rector\ClassMethod\RemoveParamReturnDocblockRector`
-
-```diff
- use stdClass;
-
- class SomeClass
- {
-     /**
--     * @param string $a
-      * @param string $b description
--     * @return stdClass
-      */
-     function foo(string $a, string $b): stdClass
-     {
-
-     }
- }
-```
-
-<br>
-
 ### RemoveUnusedAliasRector
 
 Removes unused use aliases. Keep annotation aliases like "Doctrine\ORM\Mapping as ORM" to keep convention format
@@ -3467,6 +3444,51 @@ Change ternary of bool : false to && bool
 
 <br>
 
+## DeadDocBlock
+
+### RemoveUselessParamTagRector
+
+Remove `@param` docblock with same type as parameter type
+
+- class: `Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector`
+
+```diff
+ class SomeClass
+ {
+     /**
+-     * @param string $a
+      * @param string $b description
+      */
+     public function foo(string $a, string $b)
+     {
+     }
+ }
+```
+
+<br>
+
+### RemoveUselessReturnTagRector
+
+Remove `@return` docblock with same type as defined in PHP
+
+- class: `Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector`
+
+```diff
+ use stdClass;
+
+ class SomeClass
+ {
+-    /**
+-     * @return stdClass
+-     */
+     public function foo(): stdClass
+     {
+     }
+ }
+```
+
+<br>
+
 ## Defluent
 
 ### DefluentReturnMethodCallRector
@@ -3642,7 +3664,13 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(AddEntityIdByConditionRector::class);
+    $services->set(AddEntityIdByConditionRector::class)
+        ->call('configure', [[
+            AddEntityIdByConditionRector::DETECTED_TRAITS => [
+                'Knp\DoctrineBehaviors\Model\Translatable\Translation',
+                'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait',
+            ],
+        ]]);
 };
 ```
 
@@ -4833,22 +4861,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Downgrade class constant visibility
 
-:wrench: **configure it!**
-
 - class: `Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector`
-
-```php
-use Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(DowngradeClassConstantVisibilityRector::class);
-};
-```
-
-↓
 
 ```diff
  <?php
@@ -5033,6 +5046,26 @@ return static function (ContainerConfigurator $containerConfigurator): void {
          return null;
      }
  }
+```
+
+<br>
+
+### DowngradePipeToMultiCatchExceptionRector
+
+Downgrade single one | separated to multi catch exception
+
+- class: `Rector\DowngradePhp71\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector`
+
+```diff
+ try {
+     // Some code...
+- } catch (ExceptionType1 | ExceptionType2 $exception) {
++} catch (ExceptionType1 $exception) {
+     $sameCode;
+- }
++} catch (ExceptionType2 $exception) {
++    $sameCode;
++}
 ```
 
 <br>
@@ -5289,11 +5322,58 @@ Replace array spread with `array_merge` function
 
 <br>
 
-### DowngradeCovarianReturnTypeRector
+### DowngradeContravariantArgumentTypeRector
+
+Remove contravariant argument type declarations
+
+:wrench: **configure it!**
+
+- class: `Rector\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector`
+
+```php
+use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DowngradeContravariantArgumentTypeRector::class)
+        ->call('configure', [[
+            DowngradeContravariantArgumentTypeRector::ADD_DOC_BLOCK => true,
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class ParentType {}
+ class ChildType extends ParentType {}
+
+ class A
+ {
+     public function contraVariantArguments(ChildType $type)
+     { /* … */ }
+ }
+
+ class B extends A
+ {
+-    public function contraVariantArguments(ParentType $type)
++    /**
++     * @param ParentType $type
++     */
++    public function contraVariantArguments($type)
+     { /* … */ }
+ }
+```
+
+<br>
+
+### DowngradeCovariantReturnTypeRector
 
 Make method return same type as parent
 
-- class: `Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovarianReturnTypeRector`
+- class: `Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector`
 
 ```diff
  class ParentType {}
@@ -5421,6 +5501,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ## DowngradePhp80
+
+### DowngradeClassOnObjectToGetClassRector
+
+Change `$object::class` to get_class($object)
+
+- class: `Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector`
+
+```diff
+ class SomeClass
+ {
+     public function run($object)
+     {
+-        return $object::class;
++        return get_class($object);
+     }
+ }
+```
+
+<br>
 
 ### DowngradeParamMixedTypeDeclarationRector
 
@@ -9690,7 +9789,9 @@ Tests without assertion will have `@doesNotPerformAssertion`
 - class: `Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector`
 
 ```diff
- class SomeClass extends PHPUnit\Framework\TestCase
+ use PHPUnit\Framework\TestCase;
+
+ class SomeClass extends TestCase
  {
 +    /**
 +     * @doesNotPerformAssertions
