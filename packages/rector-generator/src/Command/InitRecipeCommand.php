@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Console\Command;
+namespace Rector\RectorGenerator\Command;
 
 use Rector\RectorGenerator\TemplateInitializer;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\ShellCode;
 
-final class InitCommand extends AbstractCommand
+final class InitRecipeCommand extends Command
 {
     /**
      * @var TemplateInitializer
@@ -25,12 +26,15 @@ final class InitCommand extends AbstractCommand
 
     protected function configure(): void
     {
-        $this->setDescription('Generate rector.php configuration file');
+        $this->setDescription('[DEV] Initialize "rector-recipe.php" config');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->templateInitializer->initialize(__DIR__ . '/../../../templates/rector.php.dist', 'rector.php');
+        $this->templateInitializer->initialize(
+            __DIR__ . '/../../../../templates/rector-recipe.php.dist',
+            'rector-recipe.php'
+        );
 
         return ShellCode::SUCCESS;
     }
