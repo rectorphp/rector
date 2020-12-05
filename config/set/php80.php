@@ -8,6 +8,7 @@ use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
+use Rector\Php80\Rector\ClassMethod\SetStateToStaticRector;
 use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
 use Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector;
 use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
@@ -53,4 +54,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new ArgumentAdder('Nette\Utils\Strings', 'replace', 2, 'replacement', ''),
             ]),
         ]]);
+
+    $services->set(SetStateToStaticRector::class);
 };

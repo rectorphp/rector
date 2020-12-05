@@ -28,5 +28,8 @@ final class MethodName
      */
     public const TEAR_DOWN = 'tearDown';
 
+    /**
+     * @var string
+     */
     public const SET_STATE = '__set_state';
 }
