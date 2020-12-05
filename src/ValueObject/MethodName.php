@@ -27,4 +27,6 @@ final class MethodName
      * @var string
      */
     public const TEAR_DOWN = 'tearDown';
+
+    public const SET_STATE = '__set_state';
 }
