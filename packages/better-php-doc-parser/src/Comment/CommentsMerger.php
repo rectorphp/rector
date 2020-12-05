@@ -4,11 +4,23 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Comment;
 
+use PhpParser\Comment;
 use PhpParser\Node;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class CommentsMerger
 {
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
+
+    public function __construct(CallableNodeTraverser $callableNodeTraverser)
+    {
+        $this->callableNodeTraverser = $callableNodeTraverser;
+    }
+
     /**
      * @param Node[] $mergedNodes
      */
@@ -46,5 +58,41 @@ final class CommentsMerger
 
         $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $arrayPhpDocInfo);
         $newNode->setAttribute(AttributeKey::COMMENTS, $arrayComments);
+    }
+
+    public function keepChildren(Node $newNode, Node $oldNode): void
+    {
+        $childrenComments = $this->collectChildrenComments($oldNode);
+
+        if ($childrenComments === []) {
+            return;
+        }
+
+        $commentContent = '';
+        foreach ($childrenComments as $comment) {
+            $commentContent .= $comment->getText() . PHP_EOL;
+        }
+
+        $newNode->setAttribute(AttributeKey::COMMENTS, [new Comment($commentContent)]);
+    }
+
+    /**
+     * @return Comment[]
+     */
+    private function collectChildrenComments(Node $node): array
+    {
+        $childrenComments = [];
+
+        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
+            &$childrenComments
+        ): void {
+            $comments = $node->getComments();
+
+            if ($comments !== []) {
+                $childrenComments = array_merge($childrenComments, $comments);
+            }
+        });
+
+        return $childrenComments;
     }
 }
