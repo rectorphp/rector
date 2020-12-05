@@ -60,13 +60,17 @@ CODE_SAMPLE
         return [FuncCall::class, MethodCall::class, StaticCall::class];
     }
 
+    /**
+     * @param FuncCall|MethodCall|StaticCall $node
+     */
     public function refactor(Node $node): ?Node
     {
         if ($node->args) {
             $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             $last = $node->args[array_key_last($node->args)];
-            $last->setAttribute(AttributeKey::TRAILING_COMMA, false);
+            $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, false);
         }
+
         return $node;
     }
 }

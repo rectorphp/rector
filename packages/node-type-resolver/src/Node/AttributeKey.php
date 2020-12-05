@@ -231,5 +231,5 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const TRAILING_COMMA = 'trailing_comma';
+    public const FUNC_ARGS_TRAILING_COMMA = 'trailing_comma';
 }

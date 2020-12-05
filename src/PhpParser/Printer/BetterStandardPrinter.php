@@ -517,7 +517,7 @@ final class BetterStandardPrinter extends Standard
         $last = end($nodes);
 
         if ($last instanceof Node) {
-            $trailingComma = $last->getAttribute(AttributeKey::TRAILING_COMMA);
+            $trailingComma = $last->getAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA);
             if ($trailingComma === false) {
                 $result = rtrim($result, ',');
             }
