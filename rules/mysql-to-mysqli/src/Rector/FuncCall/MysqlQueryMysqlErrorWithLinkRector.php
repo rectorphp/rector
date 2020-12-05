@@ -154,18 +154,6 @@ CODE_SAMPLE
         return null;
     }
 
-    private function removeExistingConnectionParameter(FuncCall $funcCall): void
-    {
-        /** @var string $functionName */
-        $functionName = $this->getName($funcCall);
-        if (! isset(self::FUNCTION_CONNECTION_PARAMETER_POSITION_MAP[$functionName])) {
-            return;
-        }
-
-        $connectionPosition = self::FUNCTION_CONNECTION_PARAMETER_POSITION_MAP[$functionName];
-        unset($funcCall->args[$connectionPosition]);
-    }
-
     private function isProbablyMysql(Node $node): bool
     {
         if ($this->isObjectType($node, 'mysqli')) {
@@ -197,6 +185,18 @@ CODE_SAMPLE
         });
 
         return $connectionAssign !== null ? $connectionAssign->var : null;
+    }
+
+    private function removeExistingConnectionParameter(FuncCall $funcCall): void
+    {
+        /** @var string $functionName */
+        $functionName = $this->getName($funcCall);
+        if (! isset(self::FUNCTION_CONNECTION_PARAMETER_POSITION_MAP[$functionName])) {
+            return;
+        }
+
+        $connectionPosition = self::FUNCTION_CONNECTION_PARAMETER_POSITION_MAP[$functionName];
+        unset($funcCall->args[$connectionPosition]);
     }
 
     private function isUnionTypeWithResourceSubType(Type $staticType, ResourceType $resourceType): bool
