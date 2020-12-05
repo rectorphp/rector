@@ -13,11 +13,12 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\Contract\Rector\DowngradeReturnDeclarationRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Traversable;
 
-abstract class AbstractDowngradeReturnDeclarationRector extends AbstractDowngradeRector implements DowngradeReturnDeclarationRectorInterface
+abstract class AbstractDowngradeReturnDeclarationRector extends AbstractRector implements DowngradeReturnDeclarationRectorInterface
 {
     /**
      * @return string[]
@@ -36,9 +37,7 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractDowngrad
             return null;
         }
 
-        if ($this->addDocBlock) {
-            $this->addDocBlockReturn($node);
-        }
+        $this->addDocBlockReturn($node);
 
         $node->returnType = null;
 

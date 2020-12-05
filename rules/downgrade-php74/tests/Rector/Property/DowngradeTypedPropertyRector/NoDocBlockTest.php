@@ -26,18 +26,6 @@ final class NoDocBlockTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureNoDocBlock');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
-    {
-        return [
-            DowngradeTypedPropertyRector::class => [
-                DowngradeTypedPropertyRector::ADD_DOC_BLOCK => false,
-            ],
-        ];
-    }
-
     protected function getRectorClass(): string
     {
         return DowngradeTypedPropertyRector::class;

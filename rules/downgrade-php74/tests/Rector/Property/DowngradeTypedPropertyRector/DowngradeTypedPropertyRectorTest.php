@@ -26,18 +26,6 @@ final class DowngradeTypedPropertyRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
-    {
-        return [
-            DowngradeTypedPropertyRector::class => [
-                DowngradeTypedPropertyRector::ADD_DOC_BLOCK => true,
-            ],
-        ];
-    }
-
     protected function getRectorClass(): string
     {
         return DowngradeTypedPropertyRector::class;

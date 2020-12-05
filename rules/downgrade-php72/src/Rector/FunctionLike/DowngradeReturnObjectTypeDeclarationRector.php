@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\Rector\FunctionLike;
 
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -17,7 +17,7 @@ final class DowngradeReturnObjectTypeDeclarationRector extends AbstractDowngrade
         return new RuleDefinition(
             $this->getRectorDefinitionDescription(),
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 <?php
 
@@ -44,10 +44,6 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                    [
-                        self::ADD_DOC_BLOCK => true,
-                    ]
                 ),
             ]
         );
