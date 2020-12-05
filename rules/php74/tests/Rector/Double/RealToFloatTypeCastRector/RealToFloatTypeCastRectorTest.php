@@ -9,6 +9,9 @@ use Rector\Php74\Rector\Double\RealToFloatTypeCastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @requires PHP < 8.0
+ */
 final class RealToFloatTypeCastRectorTest extends AbstractRectorTestCase
 {
     /**

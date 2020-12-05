@@ -9,6 +9,9 @@ use Rector\Php72\Rector\While_\WhileEachToForeachRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @requires PHP < 8.0
+ */
 final class WhileEachToForeachRectorTest extends AbstractRectorTestCase
 {
     /**
