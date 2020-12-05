@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PHPStan;
 
+use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
@@ -13,6 +15,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeNormalizer;
 
 final class TypeComparator
@@ -26,11 +29,19 @@ final class TypeComparator
      * @var TypeNormalizer
      */
     private $typeNormalizer;
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
 
-    public function __construct(TypeHasher $typeHasher, TypeNormalizer $typeNormalizer)
-    {
+    public function __construct(
+        TypeHasher $typeHasher,
+        TypeNormalizer $typeNormalizer,
+        StaticTypeMapper $staticTypeMapper
+    ) {
         $this->typeHasher = $typeHasher;
         $this->typeNormalizer = $typeNormalizer;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function areTypesEqual(Type $firstType, Type $secondType): bool
@@ -52,6 +63,20 @@ final class TypeComparator
         }
 
         return $this->areArrayTypeWithSingleObjectChildToParent($firstType, $secondType);
+    }
+
+    public function arePhpParserAndPhpStanPhpDocTypesEqual(
+        Node $phpParserNode,
+        TypeNode $phpStanDocTypeNode,
+        Node $node
+    ): bool {
+        $phpParserNodeType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($phpParserNode);
+        $phpStanDocType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
+            $phpStanDocTypeNode,
+            $node
+        );
+
+        return $this->areTypesEqual($phpParserNodeType, $phpStanDocType);
     }
 
     private function areBothSameScalarType(Type $firstType, Type $secondType): bool

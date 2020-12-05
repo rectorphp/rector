@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class DeadParamTagValueNodeAnalyzer
 {
@@ -19,22 +18,13 @@ final class DeadParamTagValueNodeAnalyzer
     private $nodeNameResolver;
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var TypeComparator
      */
     private $typeComparator;
 
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        StaticTypeMapper $staticTypeMapper,
-        TypeComparator $typeComparator
-    ) {
+    public function __construct(NodeNameResolver $nodeNameResolver, TypeComparator $typeComparator)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->typeComparator = $typeComparator;
     }
 
@@ -49,14 +39,11 @@ final class DeadParamTagValueNodeAnalyzer
             return false;
         }
 
-        $phpParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        $docParamType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
+        if (! $this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual(
+            $param->type,
             $paramTagValueNode->type,
             $classMethod
-        );
-
-        $areTypesEqual = $this->typeComparator->areTypesEqual($docParamType, $phpParamType);
-        if (! $areTypesEqual) {
+        )) {
             return false;
         }
 

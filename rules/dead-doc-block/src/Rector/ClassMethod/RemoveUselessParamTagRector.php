@@ -91,7 +91,7 @@ CODE_SAMPLE
             $hasChanged = true;
         }
 
-        if ($hasChanged === false) {
+        if (! $hasChanged) {
             return null;
         }
 
