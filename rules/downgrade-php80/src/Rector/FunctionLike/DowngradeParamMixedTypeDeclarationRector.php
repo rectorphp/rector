@@ -21,8 +21,6 @@ final class DowngradeParamMixedTypeDeclarationRector extends AbstractDowngradePa
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function someFunction(mixed $anything)
@@ -32,8 +30,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**

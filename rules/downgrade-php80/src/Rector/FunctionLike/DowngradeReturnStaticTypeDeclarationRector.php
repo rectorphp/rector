@@ -21,8 +21,6 @@ final class DowngradeReturnStaticTypeDeclarationRector extends AbstractDowngrade
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function getStatic(): static
@@ -33,8 +31,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**

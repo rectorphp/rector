@@ -22,8 +22,6 @@ final class DowngradeIterablePseudoTypeParamDeclarationRector extends AbstractDo
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function run(iterable $iterator)
@@ -34,8 +32,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**

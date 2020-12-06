@@ -21,8 +21,6 @@ final class DowngradeReturnMixedTypeDeclarationRector extends AbstractDowngradeR
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function getAnything(bool $flag): mixed
@@ -36,8 +34,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**

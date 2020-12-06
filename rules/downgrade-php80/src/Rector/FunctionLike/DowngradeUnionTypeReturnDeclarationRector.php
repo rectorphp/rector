@@ -24,8 +24,6 @@ final class DowngradeUnionTypeReturnDeclarationRector extends AbstractDowngradeR
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function getSomeObject(bool $flag): string|int
@@ -39,8 +37,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**

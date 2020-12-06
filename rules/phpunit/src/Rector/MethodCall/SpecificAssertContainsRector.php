@@ -37,8 +37,6 @@ final class SpecificAssertContainsRector extends AbstractPHPUnitRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -50,8 +48,6 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()

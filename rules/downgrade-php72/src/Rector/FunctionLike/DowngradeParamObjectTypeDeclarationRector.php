@@ -20,8 +20,6 @@ final class DowngradeParamObjectTypeDeclarationRector extends AbstractDowngradeP
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function someFunction(object $someObject)
@@ -31,8 +29,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**

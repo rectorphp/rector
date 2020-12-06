@@ -23,8 +23,6 @@ final class DowngradeUnionTypeParamDeclarationRector extends AbstractDowngradePa
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function echoInput(string|int $input)
@@ -35,8 +33,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**
