@@ -25,7 +25,7 @@ final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
 {
     /**
      * Conversion table from argument index to options name
-     * @var array<int, string>
+     * @var array<string, int>
      */
     private const ARGUMENTS_ORDER = [
         'expires' => 2,
@@ -112,8 +112,13 @@ CODE_SAMPLE
 
         /** @var Array_ $optionsArray */
         $optionsArray = $funcCall->args[2]->value;
-        /** @var ArrayItem $arrayItem */
+        /** @var ArrayItem|null $arrayItem */
         foreach ($optionsArray->items as $arrayItem) {
+            if ($arrayItem === null) {
+                continue;
+            }
+
+            /** @var Arg $value */
             $value = $arrayItem->value;
             $name = $arrayItem->key->value;
 
