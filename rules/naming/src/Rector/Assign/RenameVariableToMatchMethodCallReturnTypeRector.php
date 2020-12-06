@@ -22,7 +22,6 @@ use Rector\Naming\NamingConvention\NamingConventionAnalyzer;
 use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
 use Rector\Naming\ValueObject\VariableAndCallAssign;
 use Rector\Naming\VariableRenamer;
-use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -71,17 +70,11 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
      */
     private $varTagValueNodeRenamer;
 
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
     public function __construct(
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ExpectedNameResolver $expectedNameResolver,
         FamilyRelationsAnalyzer $familyRelationsAnalyzer,
         NamingConventionAnalyzer $namingConventionAnalyzer,
-        TypeUnwrapper $typeUnwrapper,
         VarTagValueNodeRenamer $varTagValueNodeRenamer,
         VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
         VariableRenamer $variableRenamer
@@ -93,7 +86,6 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
         $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
         $this->namingConventionAnalyzer = $namingConventionAnalyzer;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
-        $this->typeUnwrapper = $typeUnwrapper;
     }
 
     public function getRuleDefinition(): RuleDefinition

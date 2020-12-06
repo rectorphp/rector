@@ -21,7 +21,6 @@ use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
-use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -36,21 +35,12 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
     private $staticTypeAnalyzer;
 
     /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
-    /**
      * @var CommentsMerger
      */
     private $commentsMerger;
 
-    public function __construct(
-        CommentsMerger $commentsMerger,
-        StaticTypeAnalyzer $staticTypeAnalyzer,
-        TypeUnwrapper $typeUnwrapper
-    ) {
-        $this->typeUnwrapper = $typeUnwrapper;
+    public function __construct(CommentsMerger $commentsMerger, StaticTypeAnalyzer $staticTypeAnalyzer)
+    {
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
         $this->commentsMerger = $commentsMerger;
     }

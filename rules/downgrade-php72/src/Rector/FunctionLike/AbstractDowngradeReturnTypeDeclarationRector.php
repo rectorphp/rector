@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FunctionLike;
 
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeReturnDeclarationRector;
@@ -23,9 +22,7 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractDown
         }
 
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
-        if ($type instanceof NullableType) {
-            $type = $type->type;
-        }
+        $type = $this->typeUnwrapper->unwrapNullableType($type);
 
         return is_a($type, $this->getTypeToRemove(), true);
     }

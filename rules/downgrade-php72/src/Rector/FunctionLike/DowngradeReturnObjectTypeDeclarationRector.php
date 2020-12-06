@@ -20,8 +20,6 @@ final class DowngradeReturnObjectTypeDeclarationRector extends AbstractDowngrade
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function getSomeObject(): object
@@ -32,8 +30,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**

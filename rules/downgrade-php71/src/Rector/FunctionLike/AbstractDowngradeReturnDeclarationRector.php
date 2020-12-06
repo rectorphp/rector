@@ -38,7 +38,6 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractRector i
         }
 
         $this->decorateFunctionLikeWithReturnTagValueNode($node);
-
         $node->returnType = null;
 
         return $node;
