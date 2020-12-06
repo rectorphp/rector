@@ -13,6 +13,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector\DowngradeUnionTypeParamDeclarationRectorTest
+ *
+ * @requires PHP 8.0
  */
 final class DowngradeUnionTypeParamDeclarationRector extends AbstractDowngradeParamDeclarationRector
 {

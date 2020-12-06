@@ -10,9 +10,6 @@ use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclaration
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 8.1
- */
 final class DowngradeUnionTypeParamDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**

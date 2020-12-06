@@ -31,7 +31,7 @@ final class UnionTypeNodeMapper implements PhpParserNodeMapperInterface
     /**
      * @required
      */
-    public function autowireNullableTypeNodeMapper(PhpParserNodeMapper $phpParserNodeMapper): void
+    public function autowireUnionTypeNodeMapper(PhpParserNodeMapper $phpParserNodeMapper): void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
