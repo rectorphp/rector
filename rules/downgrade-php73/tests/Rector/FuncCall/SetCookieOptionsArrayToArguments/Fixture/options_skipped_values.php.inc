@@ -1,0 +1,17 @@
+<?php
+if (false) {
+    setcookie('name', 'value', ['path' => 'path']);
+    setcookie('name', 'value', ['domain' => 'domain']);
+    setcookie('name', 'value', ['secure' => true]);
+    setcookie('name', 'value', ['httponly' => true]);
+}
+?>
+-----
+<?php
+if (false) {
+    setcookie('name', 'value', 0, 'path');
+    setcookie('name', 'value', 0, '', 'domain');
+    setcookie('name', 'value', 0, '', '', true);
+    setcookie('name', 'value', 0, '', '', false, true);
+}
+?>
