@@ -159,8 +159,6 @@ Handles method calls in child of Doctrine EntityRepository and moves them to `$t
 - class: `Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
 
 ```diff
- <?php
-
  use Doctrine\ORM\EntityRepository;
 
  class SomeRepository extends EntityRepository
@@ -307,8 +305,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
+                'ValueObjectInterfaceClassName',
+            ],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
+                'Search',
+            ],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -1409,8 +1411,6 @@ Simplify negated conditions with de Morgan theorem
 - class: `Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector`
 
 ```diff
- <?php
-
  $a = 5;
  $b = 10;
 -$result = !($a > 20 || $b <= 50);
@@ -2313,7 +2313,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to each own lines default value, to prevent undefined array issues
+Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -4881,8 +4881,6 @@ Downgrade class constant visibility
 - class: `Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -   public const PUBLIC_CONST_B = 2;
@@ -4903,8 +4901,6 @@ Remove the iterable pseudo type params, add `@param` tags instead
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function run(iterable $iterator)
@@ -4927,8 +4923,6 @@ Remove returning iterable pseud type, add a `@return` tag instead
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function run(): iterable
@@ -4951,8 +4945,6 @@ Remove the nullable type params, add `@param` tags instead
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function run(?string $input)
@@ -4975,8 +4967,6 @@ Remove returning nullable types, add a `@return` tag instead
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function getResponseOrNothing(bool $flag): ?string
@@ -5017,13 +5007,11 @@ Downgrade single one | separated to multi catch exception
 
 ### DowngradeVoidTypeReturnDeclarationRector
 
-Remove the 'void' function type, add a `@return` tag instead
+Remove the 'PHPStan\Type\VoidType' function type, add a `@return` tag instead
 
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function run(): void
@@ -5032,7 +5020,6 @@ Remove the 'void' function type, add a `@return` tag instead
 +     */
 +    public function run()
      {
-         // do something
      }
  }
 ```
@@ -5043,13 +5030,11 @@ Remove the 'void' function type, add a `@return` tag instead
 
 ### DowngradeParamObjectTypeDeclarationRector
 
-Remove the 'object' param type, add a `@param` tag instead
+Remove the 'PHPStan\Type\ObjectWithoutClassType' param type, add a `@param` tag instead
 
 - class: `Rector\DowngradePhp72\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function someFunction(object $someObject)
@@ -5066,13 +5051,11 @@ Remove the 'object' param type, add a `@param` tag instead
 
 ### DowngradeReturnObjectTypeDeclarationRector
 
-Remove the 'object' function type, add a `@return` tag instead
+Remove the 'PHPStan\Type\ObjectWithoutClassType' function type, add a `@return` tag instead
 
 - class: `Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function getSomeObject(): object
@@ -5457,13 +5440,11 @@ Downgrade catch () without variable to one
 
 ### DowngradeParamMixedTypeDeclarationRector
 
-Remove the 'mixed' param type, add a `@param` tag instead
+Remove the 'PHPStan\Type\MixedType' param type, add a `@param` tag instead
 
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function someFunction(mixed $anything)
@@ -5501,13 +5482,11 @@ Change constructor property promotion to property asssign
 
 ### DowngradeReturnMixedTypeDeclarationRector
 
-Remove the 'mixed' function type, add a `@return` tag instead
+Remove the 'PHPStan\Type\MixedType' function type, add a `@return` tag instead
 
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function getAnything(bool $flag): mixed
@@ -5528,13 +5507,11 @@ Remove the 'mixed' function type, add a `@return` tag instead
 
 ### DowngradeReturnStaticTypeDeclarationRector
 
-Remove the 'static' function type, add a `@return` tag instead
+Remove the 'PHPStan\Type\StaticType' function type, add a `@return` tag instead
 
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function getStatic(): static
@@ -5557,8 +5534,6 @@ Remove the union type params, add `@param` tags instead
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function echoInput(string|int $input)
@@ -5581,8 +5556,6 @@ Remove returning union types, add a `@return` tag instead
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    public function getSomeObject(bool $flag): string|int
@@ -6256,10 +6229,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(InjectAnnotationClassRector::class)
         ->call('configure', [[
-            InjectAnnotationClassRector::ANNOTATION_CLASSES => [
-                'DI\Annotation\Inject',
-                'JMS\DiExtraBundle\Annotation\Inject',
-            ],
+            InjectAnnotationClassRector::ANNOTATION_CLASSES => ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject'],
         ]]);
 };
 ```
@@ -7270,7 +7240,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
+            AddTopIncludeRector::PATTERNS => [
+                'pat*/*/?ame.php',
+                'somepath/?ame.php',
+            ],
         ]]);
 };
 ```
@@ -10335,8 +10308,6 @@ Change `assertContains()/assertNotContains()` method to new string and iterable 
 - class: `Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector`
 
 ```diff
- <?php
-
  final class SomeTest extends \PHPUnit\Framework\TestCase
  {
      public function test()
@@ -10358,8 +10329,6 @@ Change `assertContains()/assertNotContains()` with non-strict comparison to new 
 - class: `Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector`
 
 ```diff
- <?php
-
 -final class SomeTest extends \PHPUnit\Framework\TestCase
 +final class SomeTest extends TestCase
  {
@@ -13254,7 +13223,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
 
 :wrench: **configure it!**
 
@@ -15055,10 +15024,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
-                'SymfonyControllerClassName',
-                'GetTraitClassName',
-            ],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
         ]]);
 };
 ```
@@ -15391,8 +15357,6 @@ Change Symfony Event listener class to Event Subscriber based on configuration i
 - class: `Rector\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector`
 
 ```diff
- <?php
-
 -class SomeListener
 +use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 +
@@ -16317,8 +16281,6 @@ Change `@param` types to type declarations if not a BC-break
 - class: `Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector`
 
 ```diff
- <?php
-
  class ParentClass
  {
      /**
@@ -16380,8 +16342,6 @@ Change `@return` types and type from static analysis to type declarations if not
 - class: `Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector`
 
 ```diff
- <?php
-
  class SomeClass
  {
 -    /**
