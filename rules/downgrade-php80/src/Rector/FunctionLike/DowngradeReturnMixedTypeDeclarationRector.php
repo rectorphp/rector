@@ -17,7 +17,7 @@ final class DowngradeReturnMixedTypeDeclarationRector extends AbstractDowngradeR
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            $this->getRectorDefinitionDescription(),
+            'Remove "mixed" return type, add a "@return mixed" tag instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

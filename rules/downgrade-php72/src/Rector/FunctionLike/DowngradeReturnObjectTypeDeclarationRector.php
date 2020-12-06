@@ -16,7 +16,7 @@ final class DowngradeReturnObjectTypeDeclarationRector extends AbstractDowngrade
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            $this->getRectorDefinitionDescription(),
+            'Remove "object" return type, add a "@return object" tag instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

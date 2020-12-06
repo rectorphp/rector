@@ -17,7 +17,7 @@ final class DowngradeReturnStaticTypeDeclarationRector extends AbstractDowngrade
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            $this->getRectorDefinitionDescription(),
+            'Remove "static" return type, add a "@return $this" tag instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

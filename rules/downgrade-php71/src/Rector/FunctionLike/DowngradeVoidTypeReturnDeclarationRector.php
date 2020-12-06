@@ -17,7 +17,7 @@ final class DowngradeVoidTypeReturnDeclarationRector extends AbstractDowngradeRe
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            $this->getRectorDefinitionDescription(),
+            'Remove "void" return type, add a "@return void" tag instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
