@@ -12,6 +12,7 @@ use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclaratio
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector;
+use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -30,4 +31,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeNonCapturingCatchesRector::class);
     $services->set(DowngradeMatchToSwitchRector::class);
     $services->set(DowngradeClassOnObjectToGetClassRector::class);
+    $services->set(DowngradeNullsafeToTernaryOperatorRector::class);
 };
