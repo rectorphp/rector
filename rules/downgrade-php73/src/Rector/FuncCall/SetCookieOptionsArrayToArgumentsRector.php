@@ -19,9 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp73\Tests\Rector\FuncCall\SetCookieOptionsArrayToArguments\SetCookieOptionsArrayToArgumentsTest
+ * @see \Rector\DowngradePhp73\Tests\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector\SetCookieOptionsArrayToArgumentsRectorTest
  */
-final class SetCookieOptionsArrayToArguments extends AbstractRector
+final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
 {
     /**
      * Conversion table from argument index to options name

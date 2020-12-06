@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\SetCookieOptionsArrayToArguments;
+namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector;
 
 use Iterator;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArguments;
+use Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector;
 use Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class SetCookieOptionsArrayToArgumentsTest extends AbstractRectorTestCase
+final class SetCookieOptionsArrayToArgumentsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP 7.3
@@ -29,6 +29,6 @@ final class SetCookieOptionsArrayToArgumentsTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return SetCookieOptionsArrayToArguments::class;
+        return SetCookieOptionsArrayToArgumentsRector::class;
     }
 }
