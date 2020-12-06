@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FunctionLike;
 
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 use Rector\DowngradePhp72\Contract\Rector\DowngradeTypeRectorInterface;
@@ -23,27 +21,14 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractDowng
             return false;
         }
 
-        // It can either be the type, or the nullable type (eg: ?object)
-        $isNullableType = $param->type instanceof NullableType;
-        if (! $param->type instanceof Identifier && ! $isNullableType) {
-            return false;
-        }
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        $type = $this->typeUnwrapper->unwrapNullableType($type);
 
-        // If it is the NullableType, extract the name from its inner type
-        if ($isNullableType) {
-            /** @var NullableType */
-            $nullableType = $param->type;
-            $typeName = $this->getName($nullableType->type);
-        } else {
-            $typeName = $this->getName($param->type);
-        }
-
-        // Check it is the type to be removed
-        return $typeName === $this->getTypeNameToRemove();
+        return is_a($type, $this->getTypeToRemove(), true);
     }
 
     protected function getRectorDefinitionDescription(): string
     {
-        return sprintf("Remove the '%s' param type, add a @param tag instead", $this->getTypeNameToRemove());
+        return sprintf("Remove the '%s' param type, add a @param tag instead", $this->getTypeToRemove());
     }
 }

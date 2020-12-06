@@ -22,8 +22,6 @@ final class DowngradeClassConstantVisibilityRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
    public const PUBLIC_CONST_B = 2;
@@ -33,8 +31,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
    const PUBLIC_CONST_B = 2;

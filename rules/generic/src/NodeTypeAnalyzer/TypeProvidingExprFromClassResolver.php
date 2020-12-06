@@ -20,7 +20,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -153,9 +152,7 @@ final class TypeProvidingExprFromClassResolver
             return false;
         }
 
-        if ($readableType instanceof UnionType) {
-            $readableType = $this->typeUnwrapper->unwrapNullableType($readableType);
-        }
+        $readableType = $this->typeUnwrapper->unwrapNullableType($readableType);
 
         if (! $readableType instanceof TypeWithClassName) {
             return false;

@@ -40,8 +40,6 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 use Doctrine\ORM\EntityRepository;
 
 class SomeRepository extends EntityRepository
@@ -54,8 +52,6 @@ class SomeRepository extends EntityRepository
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 use Doctrine\ORM\EntityRepository;
 
 class SomeRepository extends EntityRepository

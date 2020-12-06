@@ -23,8 +23,6 @@ final class DowngradeNullableTypeReturnDeclarationRector extends AbstractDowngra
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function getResponseOrNothing(bool $flag): ?string
@@ -38,8 +36,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**

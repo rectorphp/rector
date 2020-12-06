@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp80\Rector\FunctionLike;
 
+use PHPStan\Type\MixedType;
 use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeParamTypeDeclarationRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,8 +21,6 @@ final class DowngradeParamMixedTypeDeclarationRector extends AbstractDowngradePa
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function someFunction(mixed $anything)
@@ -31,8 +30,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**
@@ -48,8 +45,8 @@ CODE_SAMPLE
         );
     }
 
-    public function getTypeNameToRemove(): string
+    public function getTypeToRemove(): string
     {
-        return 'mixed';
+        return MixedType::class;
     }
 }

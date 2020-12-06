@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\Rector\FunctionLike;
 
+use PHPStan\Type\ObjectWithoutClassType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,8 +20,6 @@ final class DowngradeReturnObjectTypeDeclarationRector extends AbstractDowngrade
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function getSomeObject(): object
@@ -31,8 +30,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**
@@ -49,8 +46,8 @@ CODE_SAMPLE
         );
     }
 
-    public function getTypeNameToRemove(): string
+    public function getTypeToRemove(): string
     {
-        return 'object';
+        return ObjectWithoutClassType::class;
     }
 }
