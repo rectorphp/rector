@@ -64,11 +64,6 @@ CODE_SAMPLE
      */
     public function shouldRemoveReturnDeclaration(FunctionLike $functionLike): bool
     {
-        if ($functionLike->returnType === null) {
-            return false;
-        }
-
-        // Check it is the union type
         return $functionLike->returnType instanceof NullableType;
     }
 }

@@ -7,8 +7,10 @@ namespace Rector\StaticTypeMapper\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
@@ -39,6 +41,11 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
 
         if ($this->isExistingClass($name)) {
             return new FullyQualifiedObjectType($name);
+        }
+
+        if ($name === 'static') {
+            $className = (string) $node->getAttribute(AttributeKey::CLASS_NAME);
+            return new StaticType($className);
         }
 
         return new MixedType();
