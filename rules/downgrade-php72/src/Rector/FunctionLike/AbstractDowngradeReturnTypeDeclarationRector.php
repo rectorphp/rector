@@ -26,9 +26,4 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractDown
 
         return is_a($type, $this->getTypeToRemove(), true);
     }
-
-    protected function getRectorDefinitionDescription(): string
-    {
-        return sprintf("Remove the '%s' function type, add a @return tag instead", $this->getTypeToRemove());
-    }
 }
