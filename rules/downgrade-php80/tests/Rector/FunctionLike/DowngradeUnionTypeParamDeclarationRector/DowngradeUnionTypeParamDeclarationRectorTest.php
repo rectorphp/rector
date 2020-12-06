@@ -11,7 +11,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @requires PHP 8.1
+ * @requires PHP 8.0
  */
 final class DowngradeUnionTypeParamDeclarationRectorTest extends AbstractRectorTestCase
 {
@@ -35,6 +35,6 @@ final class DowngradeUnionTypeParamDeclarationRectorTest extends AbstractRectorT
 
     protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::UNION_TYPES - 1;
+        return PhpVersionFeature::UNION_TYPES;
     }
 }
