@@ -32,6 +32,7 @@ trait NodeTypeResolverTrait
      * @var TypeUnwrapper
      */
     protected $typeUnwrapper;
+
     /**
      * @var NodeTypeResolver
      */
