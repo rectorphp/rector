@@ -2,17 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Rector\Expr;
+namespace Rector\DowngradePhp80\Rector\NullsafeMethodCall;
 
 use PhpParser\Node;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp80\Tests\Rector\Expr\DowngradeNullsafeToTernaryOperatorRector\DowngradeNullsafeToTernaryOperatorRectorTest
+ * @see \Rector\DowngradePhp80\Tests\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector\DowngradeNullsafeToTernaryOperatorRectorTest
  */
 final class DowngradeNullsafeToTernaryOperatorRector extends AbstractRector
 {
@@ -46,6 +50,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $node;
+        $called = $node instanceof NullsafeMethodCall
+            ? new MethodCall($node->var, $node->name, $node->args)
+            : new PropertyFetch($node->var, $node->name);
+
+        return new Ternary($node->var, $called, $this->createNull());
     }
 }
