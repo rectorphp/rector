@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\NullsafeMethodCall;
 
 use PhpParser\Node;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
