@@ -7,6 +7,7 @@ use Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRect
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector;
+use Rector\DowngradePhp71\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -19,4 +20,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70100,
         ]]);
+    $services->set(DowngradePipeToMultiCatchExceptionRector::class);
 };
