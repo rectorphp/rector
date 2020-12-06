@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
@@ -206,10 +205,7 @@ CODE_SAMPLE
     private function isClassTypeWithChildren(Expr $expr): bool
     {
         $callStaticType = $this->getStaticType($expr);
-
-        if ($callStaticType instanceof UnionType) {
-            $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);
-        }
+        $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);
 
         if (! $callStaticType instanceof TypeWithClassName) {
             return false;
