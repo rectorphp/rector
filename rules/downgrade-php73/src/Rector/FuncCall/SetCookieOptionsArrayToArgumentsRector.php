@@ -120,7 +120,9 @@ CODE_SAMPLE
 
             /** @var Arg $value */
             $value = $arrayItem->value;
-            $name = $arrayItem->key->value;
+            /** @var String_ $key */
+            $key = $arrayItem->key;
+            $name = $key->value;
 
             if (! $this->isMappableArrayKey($name)) {
                 continue;
