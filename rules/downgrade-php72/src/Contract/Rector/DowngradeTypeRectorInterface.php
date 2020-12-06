@@ -9,5 +9,5 @@ interface DowngradeTypeRectorInterface
     /**
      * Name of the type to remove
      */
-    public function getTypeNameToRemove(): string;
+    public function getTypeToRemove(): string;
 }

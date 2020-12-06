@@ -22,22 +22,16 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractDown
             return false;
         }
 
-        // It can either be the type, or the nullable type (eg: ?object)
-        $isNullableType = $functionLike->returnType instanceof NullableType;
-        if ($isNullableType) {
-            /** @var NullableType */
-            $nullableType = $functionLike->returnType;
-            $typeName = $this->getName($nullableType->type);
-        } else {
-            $typeName = $this->getName($functionLike->returnType);
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
+        if ($type instanceof NullableType) {
+            $type = $type->type;
         }
 
-        // Check it is the type to be removed
-        return $typeName === $this->getTypeNameToRemove();
+        return is_a($type, $this->getTypeToRemove(), true);
     }
 
     protected function getRectorDefinitionDescription(): string
     {
-        return sprintf("Remove the '%s' function type, add a @return tag instead", $this->getTypeNameToRemove());
+        return sprintf("Remove the '%s' function type, add a @return tag instead", $this->getTypeToRemove());
     }
 }
