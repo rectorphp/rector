@@ -233,28 +233,14 @@ final class NameImporter
 
     private function isFoundInUse(Name $name): bool
     {
-        $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
-
-        while ($parent) {
-            if (! $parent instanceof Use_) {
-                $previousNode = $parent->getAttribute(AttributeKey::PREVIOUS_NODE);
-                while ($previousNode) {
-                    if (! $previousNode instanceof Use_) {
-                        $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
-                        continue;
-                    }
-
-                    foreach ($previousNode->uses as $use) {
-                        if ($use->name->getLast() === $name->getLast()) {
-                            return true;
-                        }
-                    }
-
-                    $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $uses = $name->getAttribute(AttributeKey::USE_NODES);
+        foreach ($uses as $use) {
+            $useUses = $use->uses;
+            foreach ($useUses as $useUse) {
+                if ($useUse->name->getLast() === $name->getLast()) {
+                    return true;
                 }
             }
-
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
         }
 
         return false;
