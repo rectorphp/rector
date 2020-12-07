@@ -194,18 +194,11 @@ CODE_SAMPLE
             $classMethod = $this->nodeRepository->findClassMethod($interfaceClass, $methodName);
             foreach ($classMethod->params as $methodParam) {
                 if ($this->getName($methodParam) == $paramName) {
-                    // Add the type in the PHPDoc
-                    /** @var PhpDocInfo|null */
-                    $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-                    if ($phpDocInfo === null) {
-                        $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
+                    // Add the current type in the PHPDoc
+                    if ($methodParam->type !== null) {
+                        $this->addPHPDocParamTypeToMethod($classMethod, $methodParam);
                     }
-
-                    $paramType = $methodParam->type;
-                    if ($paramType !== null) {
-                        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($paramType);
-                        $phpDocInfo->changeParamType($type, $methodParam, $paramName);
-                    }
+                    // Remove the type
                     $methodParam->type = null;
                     break;
                 }
