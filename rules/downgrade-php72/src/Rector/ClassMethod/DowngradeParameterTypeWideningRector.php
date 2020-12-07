@@ -257,28 +257,39 @@ CODE_SAMPLE
             return;
         }
 
-        $paramNode = $currentClassMethod->params[$position];
+        $param = $currentClassMethod->params[$position];
 
         // It already has no type => nothing to do
-        if ($paramNode->type === null) {
+        if ($param->type === null) {
             return;
         }
 
         // Add the current type in the PHPDoc
+        $this->addPHPDocParamTypeToMethod($classMethod, $param);
+
+        // Remove the type
+        $param->type = null;
+
+        $this->rectorChangeCollector->notifyNodeFileInfo($param);
+    }
+
+    /**
+     * Add the current param type in the PHPDoc
+     */
+    private function addPHPDocParamTypeToMethod(
+        ClassMethod $classMethod,
+        Param $param
+    ): void {
         /** @var PhpDocInfo|null */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
         }
-        $paramName = $this->getName($paramNode);
-        $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($paramNode->type);
-        $phpDocInfo->changeParamType($mappedCurrentParamType, $paramNode, $paramName);
-
-        // Remove the type
-        $paramNode->type = null;
+        $paramName = $this->getName($param);
+        $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        $phpDocInfo->changeParamType($mappedCurrentParamType, $param, $paramName);
 
         $this->rectorChangeCollector->notifyNodeFileInfo($classMethod);
-        $this->rectorChangeCollector->notifyNodeFileInfo($paramNode);
     }
 
     private function hasMethodWithTypedParam(ClassReflection $classReflection, string $parentClassName, string $methodName, string $paramName): bool
