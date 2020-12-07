@@ -5,41 +5,22 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp72\Rector\ClassMethod;
 
 use PhpParser\Node;
-use ReflectionClass;
-use ReflectionMethod;
-use PHPStan\Type\Type;
-use ReflectionNamedType;
-use ReflectionParameter;
-use PhpParser\Node\Param;
-use PHPStan\Analyser\Scope;
-use PHPStan\Type\MixedType;
-use PhpParser\Node\UnionType;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Function_;
-use PHPStan\Type\TypeWithClassName;
-use PhpParser\Node\Stmt\ClassMethod;
-use Rector\PHPStan\Type\ShortenedObjectType;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\ValueObject\NewType;
-use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
-use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\Reflection\ClassReflectionToAstResolver;
-use PHPStan\Reflection\ClassReflection;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use ReflectionMethod;
+use ReflectionParameter;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
@@ -60,9 +41,11 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove argument type declarations in the parent and in all child classes, whenever some child class removes it', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Remove argument type declarations in the parent and in all child classes, whenever some child class removes it',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 interface A
 {
     public function test(array $input);
@@ -78,8 +61,8 @@ class C implements A
     public function test(array $input){}
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 interface A
 {
     /**
@@ -101,8 +84,9 @@ class C implements A
     public function test($input);
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+
+            ]);
     }
 
     /**
@@ -188,8 +172,11 @@ CODE_SAMPLE
      * Obtain the list of the implemented interfaces with a different signature
      * @return Interface_[]
      */
-    private function getInterfacesWithDifferentSignature(ClassReflection $classReflection, string $methodName, string $paramName): array
-    {
+    private function getInterfacesWithDifferentSignature(
+        ClassReflection $classReflection,
+        string $methodName,
+        string $paramName
+    ): array {
         $interfaceClassNames = array_map(
             function (ClassReflection $interfaceReflection): string {
                 return $interfaceReflection->getName();
@@ -198,12 +185,12 @@ CODE_SAMPLE
         );
         $refactorableInterfaceClassNames = array_filter(
             $interfaceClassNames,
-            function (string $interfaceClassName) use ($methodName, $paramName) : bool {
+            function (string $interfaceClassName) use ($methodName, $paramName): bool {
                 return $this->hasMethodWithTypedParam($interfaceClassName, $methodName, $paramName);
             }
         );
         return array_map(
-            function (string $interfaceClassName) : Interface_ {
+            function (string $interfaceClassName): Interface_ {
                 return $this->nodeRepository->findInterface($interfaceClassName);
             },
             $refactorableInterfaceClassNames
@@ -214,17 +201,20 @@ CODE_SAMPLE
      * Obtain the list of the ancestors classes with a different signature
      * @return Class_[]
      */
-    private function getClassesWithDifferentSignature(ClassReflection $classReflection, string $methodName, string $paramName): array
-    {
+    private function getClassesWithDifferentSignature(
+        ClassReflection $classReflection,
+        string $methodName,
+        string $paramName
+    ): array {
         // 1. All ancestor classes with different signature
         $refactorableAncestorClassNames = array_filter(
             $classReflection->getParentClassesNames(),
-            function (string $ancestorClassName) use ($methodName, $paramName) : bool {
+            function (string $ancestorClassName) use ($methodName, $paramName): bool {
                 return $this->hasMethodWithTypedParam($ancestorClassName, $methodName, $paramName);
             }
         );
         return array_map(
-            function (string $ancestorClassName) : Class_ {
+            function (string $ancestorClassName): Class_ {
                 return $this->nodeRepository->findClass($ancestorClassName);
             },
             $refactorableAncestorClassNames
@@ -269,10 +259,8 @@ CODE_SAMPLE
     /**
      * Add the current param type in the PHPDoc
      */
-    private function addPHPDocParamTypeToMethod(
-        ClassMethod $classMethod,
-        Param $param
-    ): void {
+    private function addPHPDocParamTypeToMethod(ClassMethod $classMethod, Param $param): void
+    {
         /** @var PhpDocInfo|null */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
