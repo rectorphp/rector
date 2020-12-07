@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -152,19 +153,26 @@ CODE_SAMPLE
             /** @var ClassMethod */
             $classMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
             $this->removeParamTypeFromMethod($ancestorClassOrInterface, $position, $classMethod);
+            $this->removeParamTypeFromMethodForChildren($parentClassName, $methodName, $position);
+        }
+    }
 
-            $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($parentClassName);
-            foreach ($childrenClassLikes as $childClassLike) {
-                $childClassName = $childClassLike->getAttribute(AttributeKey::CLASS_NAME);
-                if ($childClassName === null) {
-                    continue;
-                }
-                $childClassMethod = $this->nodeRepository->findClassMethod($childClassName, $methodName);
-                if ($childClassMethod === null) {
-                    continue;
-                }
-                $this->removeParamTypeFromMethod($childClassLike, $position, $childClassMethod);
+    private function removeParamTypeFromMethodForChildren(
+        string $parentClassName,
+        string $methodName,
+        int $position
+    ): void {
+        $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($parentClassName);
+        foreach ($childrenClassLikes as $childClassLike) {
+            $childClassName = $childClassLike->getAttribute(AttributeKey::CLASS_NAME);
+            if ($childClassName === null) {
+                continue;
             }
+            $childClassMethod = $this->nodeRepository->findClassMethod($childClassName, $methodName);
+            if ($childClassMethod === null) {
+                continue;
+            }
+            $this->removeParamTypeFromMethod($childClassLike, $position, $childClassMethod);
         }
     }
 
@@ -189,12 +197,12 @@ CODE_SAMPLE
                 return $this->hasMethodWithTypedParam($interfaceClassName, $methodName, $paramName);
             }
         );
-        return array_map(
-            function (string $interfaceClassName): Interface_ {
+        return array_filter(array_map(
+            function (string $interfaceClassName): ?Interface_ {
                 return $this->nodeRepository->findInterface($interfaceClassName);
             },
             $refactorableInterfaceClassNames
-        );
+        ));
     }
 
     /**
@@ -213,12 +221,12 @@ CODE_SAMPLE
                 return $this->hasMethodWithTypedParam($ancestorClassName, $methodName, $paramName);
             }
         );
-        return array_map(
-            function (string $ancestorClassName): Class_ {
+        return array_filter(array_map(
+            function (string $ancestorClassName): ?Class_ {
                 return $this->nodeRepository->findClass($ancestorClassName);
             },
             $refactorableAncestorClassNames
-        );
+        ));
     }
 
     private function removeParamTypeFromMethod(
@@ -261,6 +269,10 @@ CODE_SAMPLE
      */
     private function addPHPDocParamTypeToMethod(ClassMethod $classMethod, Param $param): void
     {
+        if ($param->type === null) {
+            return;
+        }
+
         /** @var PhpDocInfo|null */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
