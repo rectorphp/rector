@@ -12,7 +12,7 @@ jobs:
                     -
                         name: 'Rector Recipe'
                         run: |
-                            cp rector-recipe.php.dist rector-recipe.php
+                            bin/rector init-recipe --ansi
                             bin/rector generate --ansi
 
         name: ${{ matrix.actions.name }}

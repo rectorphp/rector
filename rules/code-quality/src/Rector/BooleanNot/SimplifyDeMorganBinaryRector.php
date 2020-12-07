@@ -37,16 +37,12 @@ final class SimplifyDeMorganBinaryRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 $a = 5;
 $b = 10;
 $result = !($a > 20 || $b <= 50);
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 $a = 5;
 $b = 10;
 $result = $a <= 20 && $b > 50;

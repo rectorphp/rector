@@ -14,7 +14,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class RemoveFuncCallArgRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
     {
@@ -24,7 +24,7 @@ final class RemoveFuncCallArgRectorTest extends AbstractRectorTestCase
     /**
      * @return Iterator<SplFileInfo>
      */
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

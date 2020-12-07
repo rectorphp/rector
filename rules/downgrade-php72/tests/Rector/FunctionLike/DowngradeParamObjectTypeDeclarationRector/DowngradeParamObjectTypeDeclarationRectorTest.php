@@ -26,18 +26,6 @@ final class DowngradeParamObjectTypeDeclarationRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
-    {
-        return [
-            DowngradeParamObjectTypeDeclarationRector::class => [
-                DowngradeParamObjectTypeDeclarationRector::ADD_DOC_BLOCK => true,
-            ],
-        ];
-    }
-
     protected function getRectorClass(): string
     {
         return DowngradeParamObjectTypeDeclarationRector::class;

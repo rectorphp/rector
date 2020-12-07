@@ -13,6 +13,7 @@ final class StaticCallOnNonStaticToInstanceCallRectorTest extends AbstractRector
 {
     /**
      * @dataProvider provideData()
+     * @requires PHP < 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {

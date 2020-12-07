@@ -37,7 +37,7 @@ final class OrderMethodsByVisibilityRector extends AbstractConstantPropertyMetho
         '__unserialize',
         '__toString',
         '__invoke',
-        '__set_state',
+        MethodName::SET_STATE,
         '__clone',
         'setUpBeforeClass',
         'tearDownAfterClass',

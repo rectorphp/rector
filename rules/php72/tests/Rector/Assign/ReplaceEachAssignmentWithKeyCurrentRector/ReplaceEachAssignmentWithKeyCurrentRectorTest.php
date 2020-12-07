@@ -13,7 +13,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ReplaceEachAssignmentWithKeyCurrentRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
+     * @requires PHP < 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {
@@ -23,7 +24,7 @@ final class ReplaceEachAssignmentWithKeyCurrentRectorTest extends AbstractRector
     /**
      * @return Iterator<SplFileInfo>
      */
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

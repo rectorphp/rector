@@ -44,6 +44,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::CODE_QUALITY,
         SetList::CODE_QUALITY_STRICT,
         SetList::DEAD_CODE,
+        SetList::DEAD_DOC_BLOCK,
         SetList::NETTE_UTILS_CODE_QUALITY,
         SetList::SOLID,
         SetList::PRIVATIZATION,

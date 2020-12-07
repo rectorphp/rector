@@ -26,18 +26,6 @@ final class DowngradeReturnObjectTypeDeclarationRectorTest extends AbstractRecto
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
-    {
-        return [
-            DowngradeReturnObjectTypeDeclarationRector::class => [
-                DowngradeReturnObjectTypeDeclarationRector::ADD_DOC_BLOCK => true,
-            ],
-        ];
-    }
-
     protected function getRectorClass(): string
     {
         return DowngradeReturnObjectTypeDeclarationRector::class;
@@ -45,6 +33,6 @@ final class DowngradeReturnObjectTypeDeclarationRectorTest extends AbstractRecto
 
     protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::OBJECT_TYPE - 1;
+        return PhpVersionFeature::OBJECT_TYPE;
     }
 }

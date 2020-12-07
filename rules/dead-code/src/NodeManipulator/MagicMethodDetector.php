@@ -23,7 +23,7 @@ final class MagicMethodDetector
         '__invoke',
         '__isset',
         '__set',
-        '__set_state',
+        MethodName::SET_STATE,
         '__sleep',
         '__toString',
         '__unset',

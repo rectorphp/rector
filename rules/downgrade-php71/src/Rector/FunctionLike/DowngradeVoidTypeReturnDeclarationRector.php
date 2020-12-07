@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
+use PHPStan\Type\VoidType;
 use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeReturnTypeDeclarationRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -16,24 +17,19 @@ final class DowngradeVoidTypeReturnDeclarationRector extends AbstractDowngradeRe
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            $this->getRectorDefinitionDescription(),
+            'Remove "void" return type, add a "@return void" tag instead',
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function run(): void
     {
-        // do something
     }
 }
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**
@@ -41,21 +37,16 @@ class SomeClass
      */
     public function run()
     {
-        // do something
     }
 }
 CODE_SAMPLE
-,
-                    [
-                        self::ADD_DOC_BLOCK => true,
-                    ]
                 ),
             ]
         );
     }
 
-    public function getTypeNameToRemove(): string
+    public function getTypeToRemove(): string
     {
-        return 'void';
+        return VoidType::class;
     }
 }

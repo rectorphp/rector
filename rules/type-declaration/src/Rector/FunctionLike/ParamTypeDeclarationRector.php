@@ -50,8 +50,6 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class ParentClass
 {
     /**
@@ -81,8 +79,6 @@ final class ChildClass extends ParentClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class ParentClass
 {
     /**

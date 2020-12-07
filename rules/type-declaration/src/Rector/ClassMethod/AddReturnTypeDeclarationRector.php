@@ -125,7 +125,7 @@ CODE_SAMPLE
         // already set → no change
         if ($classMethod->returnType !== null) {
             $currentReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
-            if ($this->typeComparator->areTypesEquals($currentReturnType, $newType)) {
+            if ($this->typeComparator->areTypesEqual($currentReturnType, $newType)) {
                 return;
             }
         }

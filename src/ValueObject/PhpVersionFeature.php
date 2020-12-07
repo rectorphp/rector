@@ -19,6 +19,11 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const DATE_TIME_INTERFACE = 50500;
+
+    /**
+     * @var int
+     */
     public const CLASSNAME_CONSTANT = 50500;
 
     /**
@@ -148,6 +153,12 @@ final class PhpVersionFeature
     public const COVARIANT_RETURN = 70400;
 
     /**
+     * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
+     * @var int
+     */
+    public const CONTRAVARIANT_ARGUMENT = 70400;
+
+    /**
      * @var int
      */
     public const ARRAY_SPREAD = 70400;
@@ -171,6 +182,11 @@ final class PhpVersionFeature
      * @var int
      */
     public const STATIC_RETURN_TYPE = 80000;
+
+    /**
+     * @var int
+     */
+    public const NULLSAFE_OPERATOR = 80000;
 
     /**
      * @var int

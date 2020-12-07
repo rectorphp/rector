@@ -6,7 +6,6 @@ namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
 use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -32,9 +31,7 @@ final class ExprStringTypeResolver
     public function resolve(Expr $expr): ?string
     {
         $exprStaticType = $this->nodeTypeResolver->getStaticType($expr);
-        if ($exprStaticType instanceof UnionType) {
-            $exprStaticType = $this->typeUnwrapper->unwrapNullableType($exprStaticType);
-        }
+        $exprStaticType = $this->typeUnwrapper->unwrapNullableType($exprStaticType);
 
         if (! $exprStaticType instanceof TypeWithClassName) {
             // nothing we can do, unless

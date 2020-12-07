@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
-use Rector\Core\PhpDoc\CommentCombiner;
+use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -35,14 +35,14 @@ final class ForeachToInArrayRector extends AbstractRector
     private $binaryOpManipulator;
 
     /**
-     * @var CommentCombiner
+     * @var CommentsMerger
      */
-    private $commentCombiner;
+    private $commentsMerger;
 
-    public function __construct(BinaryOpManipulator $binaryOpManipulator, CommentCombiner $commentCombiner)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator, CommentsMerger $commentsMerger)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
-        $this->commentCombiner = $commentCombiner;
+        $this->commentsMerger = $commentsMerger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -130,9 +130,9 @@ CODE_SAMPLE
 
         $this->removeNode($returnToRemove);
 
-        $return = new Return_($this->isFalse($return->expr) ? new BooleanNot($funcCall) : $funcCall);
+        $return = $this->createReturn($return->expr, $funcCall);
 
-        $this->commentCombiner->combineCommentsToNode($node, $return);
+        $this->commentsMerger->keepChildren($return, $node);
 
         return $return;
     }
@@ -213,5 +213,12 @@ CODE_SAMPLE
         }
 
         return $this->createFuncCall('in_array', $arguments);
+    }
+
+    private function createReturn(Expr $expr, FuncCall $funcCall): Return_
+    {
+        $expr = $this->isFalse($expr) ? new BooleanNot($funcCall) : $funcCall;
+
+        return new Return_($expr);
     }
 }

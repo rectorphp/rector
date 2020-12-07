@@ -4,30 +4,23 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
+use Rector\RectorGenerator\TemplateInitializer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class InitCommand extends AbstractCommand
 {
     /**
-     * @var SmartFileSystem
+     * @var TemplateInitializer
      */
-    private $smartFileSystem;
+    private $templateInitializer;
 
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    public function __construct(SmartFileSystem $smartFileSystem, SymfonyStyle $symfonyStyle)
+    public function __construct(TemplateInitializer $templateInitializer)
     {
         parent::__construct();
 
-        $this->smartFileSystem = $smartFileSystem;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->templateInitializer = $templateInitializer;
     }
 
     protected function configure(): void
@@ -37,14 +30,7 @@ final class InitCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rectorConfigFiles = $this->smartFileSystem->exists(getcwd() . '/rector.php');
-
-        if (! $rectorConfigFiles) {
-            $this->smartFileSystem->copy(__DIR__ . '/../../../templates/rector.php.dist', getcwd() . '/rector.php');
-            $this->symfonyStyle->success('"rector.php" config file has been generated successfully!');
-        } else {
-            $this->symfonyStyle->error('Config file not generated. A "rector.php" configuration file already exists');
-        }
+        $this->templateInitializer->initialize(__DIR__ . '/../../../templates/rector.php.dist', 'rector.php');
 
         return ShellCode::SUCCESS;
     }

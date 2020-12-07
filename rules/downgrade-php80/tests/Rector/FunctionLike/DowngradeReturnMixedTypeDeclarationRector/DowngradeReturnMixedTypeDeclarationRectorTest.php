@@ -13,7 +13,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class DowngradeReturnMixedTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP >= 8.0
+     * @requires PHP 8.0
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
@@ -24,18 +24,6 @@ final class DowngradeReturnMixedTypeDeclarationRectorTest extends AbstractRector
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
-    }
-
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
-    {
-        return [
-            DowngradeReturnMixedTypeDeclarationRector::class => [
-                DowngradeReturnMixedTypeDeclarationRector::ADD_DOC_BLOCK => true,
-            ],
-        ];
     }
 
     protected function getRectorClass(): string

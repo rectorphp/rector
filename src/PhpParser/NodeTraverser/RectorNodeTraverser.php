@@ -183,6 +183,14 @@ final class RectorNodeTraverser extends NodeTraverser
     private function configureTestedRector(PhpRectorInterface $phpRector, array $configuration): void
     {
         if (! StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            if ($phpRector instanceof ConfigurableRectorInterface && $configuration === []) {
+                $message = sprintf(
+                    'Rule "%s" is running without any configuration, is that on purpose?',
+                    get_class($phpRector)
+                );
+                throw new ShouldNotHappenException($message);
+            }
+
             return;
         }
 
