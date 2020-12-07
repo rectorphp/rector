@@ -9,6 +9,11 @@ final class DowngradeSetList
     /**
      * @var string
      */
+    public const PHP_70 = __DIR__ . '/../../../../config/set/downgrade-php70.php';
+
+    /**
+     * @var string
+     */
     public const PHP_71 = __DIR__ . '/../../../../config/set/downgrade-php71.php';
 
     /**

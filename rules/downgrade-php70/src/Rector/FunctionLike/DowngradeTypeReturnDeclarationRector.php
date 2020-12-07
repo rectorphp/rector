@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Rector\FunctionLike;
+namespace Rector\DowngradePhp70\Rector\FunctionLike;
 
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeReturnDeclarationRector;
@@ -12,22 +13,22 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector\DowngradeIterablePseudoTypeReturnDeclarationRectorTest
+ * @see \Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector\DowngradeTypeReturnDeclarationRectorTest
  */
-final class DowngradeIterablePseudoTypeReturnDeclarationRector extends AbstractDowngradeReturnDeclarationRector
+final class DowngradeTypeReturnDeclarationRector extends AbstractDowngradeReturnDeclarationRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove returning iterable pseud type, add a @return tag instead',
+            'Remove returning types, add a @return tag instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run(): iterable
+    public function getResponse(): string
     {
-        // do something
+        return 'Hello world';
     }
 }
 CODE_SAMPLE
@@ -36,11 +37,11 @@ CODE_SAMPLE
 class SomeClass
 {
     /**
-     * @return mixed[]|\Traversable
+     * @return string
      */
-    public function run()
+    public function getResponse()
     {
-        // do something
+        return 'Hello world';
     }
 }
 CODE_SAMPLE
@@ -54,12 +55,6 @@ CODE_SAMPLE
      */
     public function shouldRemoveReturnDeclaration(FunctionLike $functionLike): bool
     {
-        $functionLikeReturnType = $functionLike->returnType;
-
-        if ($functionLikeReturnType === null) {
-            return false;
-        }
-
-        return $this->isName($functionLikeReturnType, 'iterable');
+        return true;
     }
 }

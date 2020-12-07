@@ -2,34 +2,32 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Rector\FunctionLike;
+namespace Rector\DowngradePhp70\Rector\FunctionLike;
 
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PhpParser\Node\UnionType;
 use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector\DowngradeUnionTypeParamDeclarationRectorTest
- *
- * @requires PHP 8.0
+ * @see \Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeParamDeclarationRector\DowngradeTypeParamDeclarationRectorTest
  */
-final class DowngradeUnionTypeParamDeclarationRector extends AbstractDowngradeParamDeclarationRector
+final class DowngradeTypeParamDeclarationRector extends AbstractDowngradeParamDeclarationRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove the union type params, add @param tags instead',
+            'Remove the type params, add @param tags instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function echoInput(string|int $input)
+    public function run(string $input)
     {
-        echo $input;
+        // do something
     }
 }
 CODE_SAMPLE
@@ -38,11 +36,11 @@ CODE_SAMPLE
 class SomeClass
 {
     /**
-     * @param string|int $input
+     * @param string $input
      */
-    public function echoInput($input)
+    public function run($input)
     {
-        echo $input;
+        // do something
     }
 }
 CODE_SAMPLE
@@ -53,15 +51,6 @@ CODE_SAMPLE
 
     public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
     {
-        if ($param->variadic) {
-            return false;
-        }
-
-        if ($param->type === null) {
-            return false;
-        }
-
-        // Check it is the union type
-        return $param->type instanceof UnionType;
+        return true;
     }
 }
