@@ -157,25 +157,29 @@ CODE_SAMPLE
         }
     }
 
-    private function removeParamTypeFromMethodForChildren(
-        string $parentClassName,
+    /**
+     * Obtain the list of the ancestors classes with a different signature
+     * @return Class_[]
+     */
+    private function getClassesWithDifferentSignature(
+        ClassReflection $classReflection,
         string $methodName,
-        int $position
-    ): void {
-        $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($parentClassName);
-        foreach ($childrenClassLikes as $childClassLike) {
-            $childClassName = $childClassLike->getAttribute(AttributeKey::CLASS_NAME);
-            if ($childClassName === null) {
-                continue;
+        string $paramName
+    ): array {
+        // 1. All ancestor classes with different signature
+        $refactorableAncestorClassNames = array_filter(
+            $classReflection->getParentClassesNames(),
+            function (string $ancestorClassName) use ($methodName, $paramName): bool {
+                return $this->hasMethodWithTypedParam($ancestorClassName, $methodName, $paramName);
             }
-            $childClassMethod = $this->nodeRepository->findClassMethod($childClassName, $methodName);
-            if ($childClassMethod === null) {
-                continue;
-            }
-            $this->removeParamTypeFromMethod($childClassLike, $position, $childClassMethod);
-        }
+        );
+        return array_filter(array_map(
+            function (string $ancestorClassName): ?Class_ {
+                return $this->nodeRepository->findClass($ancestorClassName);
+            },
+            $refactorableAncestorClassNames
+        ));
     }
-
     /**
      * Obtain the list of the implemented interfaces with a different signature
      * @return Interface_[]
@@ -202,30 +206,6 @@ CODE_SAMPLE
                 return $this->nodeRepository->findInterface($interfaceClassName);
             },
             $refactorableInterfaceClassNames
-        ));
-    }
-
-    /**
-     * Obtain the list of the ancestors classes with a different signature
-     * @return Class_[]
-     */
-    private function getClassesWithDifferentSignature(
-        ClassReflection $classReflection,
-        string $methodName,
-        string $paramName
-    ): array {
-        // 1. All ancestor classes with different signature
-        $refactorableAncestorClassNames = array_filter(
-            $classReflection->getParentClassesNames(),
-            function (string $ancestorClassName) use ($methodName, $paramName): bool {
-                return $this->hasMethodWithTypedParam($ancestorClassName, $methodName, $paramName);
-            }
-        );
-        return array_filter(array_map(
-            function (string $ancestorClassName): ?Class_ {
-                return $this->nodeRepository->findClass($ancestorClassName);
-            },
-            $refactorableAncestorClassNames
         ));
     }
 
@@ -264,24 +244,23 @@ CODE_SAMPLE
         $this->rectorChangeCollector->notifyNodeFileInfo($param);
     }
 
-    /**
-     * Add the current param type in the PHPDoc
-     */
-    private function addPHPDocParamTypeToMethod(ClassMethod $classMethod, Param $param): void
-    {
-        if ($param->type === null) {
-            return;
+    private function removeParamTypeFromMethodForChildren(
+        string $parentClassName,
+        string $methodName,
+        int $position
+    ): void {
+        $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($parentClassName);
+        foreach ($childrenClassLikes as $childClassLike) {
+            $childClassName = $childClassLike->getAttribute(AttributeKey::CLASS_NAME);
+            if ($childClassName === null) {
+                continue;
+            }
+            $childClassMethod = $this->nodeRepository->findClassMethod($childClassName, $methodName);
+            if ($childClassMethod === null) {
+                continue;
+            }
+            $this->removeParamTypeFromMethod($childClassLike, $position, $childClassMethod);
         }
-
-        /** @var PhpDocInfo|null */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
-        }
-
-        $paramName = $this->getName($param);
-        $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        $phpDocInfo->changeParamType($mappedCurrentParamType, $param, $paramName);
     }
 
     private function hasMethodWithTypedParam(string $parentClassName, string $methodName, string $paramName): bool
@@ -300,5 +279,24 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+    /**
+     * Add the current param type in the PHPDoc
+     */
+    private function addPHPDocParamTypeToMethod(ClassMethod $classMethod, Param $param): void
+    {
+        if ($param->type === null) {
+            return;
+        }
+
+        /** @var PhpDocInfo|null */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
+        }
+
+        $paramName = $this->getName($param);
+        $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        $phpDocInfo->changeParamType($mappedCurrentParamType, $param, $paramName);
     }
 }
