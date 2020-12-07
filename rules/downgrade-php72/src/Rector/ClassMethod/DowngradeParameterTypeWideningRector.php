@@ -160,6 +160,7 @@ CODE_SAMPLE
         // - all ancestors + their descendant classes
         // - all implemented interfaces + their implementing classes
         foreach ($refactorableAncestorAndInterfaceClassNames as $ancestorClassOrInterface) {
+            /** @var string */
             $parentClassName = $ancestorClassOrInterface->getAttribute(AttributeKey::CLASS_NAME);
             /** @var ClassMethod */
             $classMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
@@ -167,7 +168,6 @@ CODE_SAMPLE
 
             $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($parentClassName);
             foreach ($childrenClassLikes as $childClassLike) {
-                // If the class is implementing the method, then refactor it
                 $childClassName = $childClassLike->getAttribute(AttributeKey::CLASS_NAME);
                 if ($childClassName === null) {
                     continue;
