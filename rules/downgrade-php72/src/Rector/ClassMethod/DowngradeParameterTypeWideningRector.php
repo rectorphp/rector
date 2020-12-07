@@ -171,7 +171,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->hasMethodWithTypedParam($classReflection, $parentClassName, $methodName, $paramName)) {
+            if ($this->hasMethodWithTypedParam($parentClassName, $methodName, $paramName)) {
                 $refactorableAncestorAndInterfaceClassNames[] = $parentClassName;
             }
         }
@@ -263,7 +263,7 @@ CODE_SAMPLE
         $phpDocInfo->changeParamType($mappedCurrentParamType, $param, $paramName);
     }
 
-    private function hasMethodWithTypedParam(ClassReflection $classReflection, string $parentClassName, string $methodName, string $paramName): bool
+    private function hasMethodWithTypedParam(string $parentClassName, string $methodName, string $paramName): bool
     {
         $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
         /** @var ReflectionParameter[] */
