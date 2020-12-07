@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\ClassNameImport;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 final class ClassNameImportSkipper
@@ -30,6 +33,31 @@ final class ClassNameImportSkipper
         foreach ($this->classNameImportSkipVoters as $classNameImportSkipVoter) {
             if ($classNameImportSkipVoter->shouldSkip($fullyQualifiedObjectType, $node)) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isShortNameInUseStatement(Name $name): bool
+    {
+        $longName = $name->toString();
+        if (Strings::contains($longName, '\\')) {
+            return false;
+        }
+
+        return $this->isFoundInUse($name);
+    }
+
+    private function isFoundInUse(Name $name): bool
+    {
+        $uses = $name->getAttribute(AttributeKey::USE_NODES);
+        foreach ($uses as $use) {
+            $useUses = $use->uses;
+            foreach ($useUses as $useUse) {
+                if ($useUse->name->getLast() === $name->getLast()) {
+                    return true;
+                }
             }
         }
 

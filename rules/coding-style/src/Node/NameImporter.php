@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Node;
 
-use Nette\Utils\Strings;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -90,7 +89,7 @@ final class NameImporter
             return null;
         }
 
-        if ($this->isShortNameInUseStatement($name)) {
+        if ($this->classNameImportSkipper->isShortNameInUseStatement($name)) {
             return null;
         }
 
@@ -229,21 +228,6 @@ final class NameImporter
         }
 
         return ! function_exists($classOrFunctionName);
-    }
-
-    private function isFoundInUse(Name $name): bool
-    {
-        $uses = $name->getAttribute(AttributeKey::USE_NODES);
-        foreach ($uses as $use) {
-            $useUses = $use->uses;
-            foreach ($useUses as $useUse) {
-                if ($useUse->name->getLast() === $name->getLast()) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void
