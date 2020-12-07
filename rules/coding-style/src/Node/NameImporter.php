@@ -249,11 +249,14 @@ final class NameImporter
     {
         $previousNode = $classLike->getAttribute(AttributeKey::PREVIOUS_NODE);
         while ($previousNode) {
-            if ($previousNode instanceof Use_) {
-                foreach ($previousNode->uses as $use) {
-                    if ($use->name->getLast() === $name->getLast()) {
-                        return true;
-                    }
+            if (! $previousNode instanceof Use_) {
+                $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+                continue;
+            }
+
+            foreach ($previousNode->uses as $use) {
+                if ($use->name->getLast() === $name->getLast()) {
+                    return true;
                 }
             }
 
