@@ -298,8 +298,6 @@ CODE_SAMPLE
         $paramName = $this->getName($param);
         $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $phpDocInfo->changeParamType($mappedCurrentParamType, $param, $paramName);
-
-        $this->rectorChangeCollector->notifyNodeFileInfo($classMethod);
     }
 
     private function hasMethodWithTypedParam(ClassReflection $classReflection, string $parentClassName, string $methodName, string $paramName): bool
