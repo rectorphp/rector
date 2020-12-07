@@ -150,44 +150,35 @@ CODE_SAMPLE
             return;
         }
 
-        $paramName = $this->getName($param);
-
         /** @var string $methodName */
         $methodName = $this->getName($functionLike);
+        $paramName = $this->getName($param);
+
         // Obtain the list of the ancestors with a different signature
-        $refactorableAncestorClasses = [];
-        foreach ($classReflection->getParentClassesNames() as $parentClassName) {
+        $refactorableAncestorAndInterfaceClasses = [];
+        $ancestorAndInterfaceClassNames = array_merge(
+            $classReflection->getParentClassesNames(),
+            array_map(
+                function (ClassReflection $interfaceReflection): string {
+                    return $interfaceReflection->getName();
+                },
+                $classReflection->getInterfaces()
+            )
+        );
+        foreach ($ancestorAndInterfaceClassNames as $parentClassName) {
             if (! method_exists($parentClassName, $methodName)) {
                 continue;
             }
 
             if ($this->hasMethodWithTypedParam($classReflection, $parentClassName, $methodName, $paramName)) {
-                $refactorableAncestorClasses[] = $parentClassName;
-            }
-        }
-        $refactorableInterfaceClasses = [];
-        foreach ($classReflection->getInterfaces() as $interfaceReflection) {
-            $interfaceClassName = $interfaceReflection->getName();
-            if (! method_exists($interfaceClassName, $methodName)) {
-                continue;
-            }
-
-            if ($this->hasMethodWithTypedParam($classReflection, $interfaceClassName, $methodName, $paramName)) {
-                $refactorableInterfaceClasses[] = $interfaceClassName;
+                $refactorableAncestorAndInterfaceClasses[] = $parentClassName;
             }
         }
 
-        // Remove the types in all ancestors, and in their descendant classes
-        foreach ($refactorableAncestorClasses as $ancestorClass) {
-            // $ancestorClassNode = $this->nodeRepository->findClass($ancestorClass);
-            // $ancestorClassNode->type = null;
-            $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($ancestorClass);
-            foreach ($childrenClassLikes as $childrenClassLike) {
-                // $this->childParamPopulator->populateChildClassMethod($ancestorClassNode, $position, null, true);
-                //
-            }
-        }
-        foreach ($refactorableInterfaceClasses as $interfaceClass) {
+        // Remove the types in:
+        // - all ancestors and their descendant classes
+        // - all implemented interfaces and their implementing classes
+        foreach ($refactorableAncestorAndInterfaceClasses as $interfaceClass) {
             // $interfaceNode = $this->nodeRepository->findInterface($interfaceClass);
             // // $interfaceNode->type = null;
             /** @var ClassMethod */
