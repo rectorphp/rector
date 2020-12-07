@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\FunctionLike;
 
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\CallableType;
 use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -49,8 +50,17 @@ CODE_SAMPLE
         );
     }
 
+    /**
+     * Only accepted types before PHP 7.0 are `array` and `callable`
+     */
     public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
     {
-        return true;
+        if ($param->type === null) {
+            return false;
+        }
+
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+
+        return !(is_a($type, ArrayType::class, true) || is_a($type, CallableType::class, true));
     }
 }
