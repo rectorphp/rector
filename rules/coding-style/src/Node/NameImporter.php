@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -143,6 +142,16 @@ final class NameImporter
         return false;
     }
 
+    private function isShortNameInUseStatement(Name $name): bool
+    {
+        $longName = $name->toString();
+        if (Strings::contains($longName, '\\')) {
+            return false;
+        }
+
+        return $this->isFoundInUse($name);
+    }
+
     private function importNameAndCollectNewUseStatement(
         Name $name,
         FullyQualifiedObjectType $fullyQualifiedObjectType
@@ -220,16 +229,6 @@ final class NameImporter
         }
 
         return ! function_exists($classOrFunctionName);
-    }
-
-    private function isShortNameInUseStatement(Name $name): bool
-    {
-        $longName = $name->toString();
-        if (Strings::contains($longName, '\\')) {
-            return false;
-        }
-
-        return $this->isFoundInUse($name);
     }
 
     private function isFoundInUse(Name $name): bool
