@@ -266,20 +266,20 @@ CODE_SAMPLE
             return;
         }
 
-        $paramNode = $currentClassMethod->params[$position];
+        $param = $currentClassMethod->params[$position];
 
         // It already has no type => nothing to do
-        if ($paramNode->type === null) {
+        if ($param->type === null) {
             return;
         }
 
         // Add the current type in the PHPDoc
-        $this->addPHPDocParamTypeToMethod($classMethod, $paramNode);
+        $this->addPHPDocParamTypeToMethod($classMethod, $param);
 
         // Remove the type
-        $paramNode->type = null;
+        $param->type = null;
 
-        $this->rectorChangeCollector->notifyNodeFileInfo($paramNode);
+        $this->rectorChangeCollector->notifyNodeFileInfo($param);
     }
 
     /**
