@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\ClassNameImport;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Use_;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -51,6 +52,7 @@ final class ClassNameImportSkipper
 
     private function isFoundInUse(Name $name): bool
     {
+        /** @var Use_[] $uses */
         $uses = $name->getAttribute(AttributeKey::USE_NODES);
         foreach ($uses as $use) {
             $useUses = $use->uses;

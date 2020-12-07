@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
@@ -139,16 +138,6 @@ final class NameImporter
         }
 
         return false;
-    }
-
-    private function isShortNameInUseStatement(Name $name): bool
-    {
-        $longName = $name->toString();
-        if (Strings::contains($longName, '\\')) {
-            return false;
-        }
-
-        return $this->isFoundInUse($name);
     }
 
     private function importNameAndCollectNewUseStatement(
