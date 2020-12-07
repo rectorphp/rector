@@ -191,14 +191,14 @@ CODE_SAMPLE
             // $interfaceNode = $this->nodeRepository->findInterface($interfaceClass);
             // // $interfaceNode->type = null;
             /** @var ClassMethod */
-            $methodNode = $this->nodeRepository->findClassMethod($interfaceClass, $methodName);
-            foreach ($methodNode->params as $methodParam) {
+            $classMethod = $this->nodeRepository->findClassMethod($interfaceClass, $methodName);
+            foreach ($classMethod->params as $methodParam) {
                 if ($this->getName($methodParam) == $paramName) {
                     // Add the type in the PHPDoc
                     /** @var PhpDocInfo|null */
-                    $phpDocInfo = $methodNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+                    $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
                     if ($phpDocInfo === null) {
-                        $phpDocInfo = $this->phpDocInfoFactory->createEmpty($methodNode);
+                        $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
                     }
 
                     $paramType = $methodParam->type;
@@ -225,10 +225,19 @@ CODE_SAMPLE
                 //     }
                 // }
 
-                $this->removeParamTypeFromMethod($childClassLike, $position, $methodNode);
+                // If the class is implementing the method, then refactor it
+                $childClassName = $childClassLike->getAttribute(AttributeKey::CLASS_NAME);
+                if ($childClassName === null) {
+                    continue;
+                }
+                $childClassMethod = $this->nodeRepository->findClassMethod($childClassName, $methodName);
+                if ($childClassMethod === null) {
+                    continue;
+                }
+                $this->removeParamTypeFromMethod($childClassLike, $position, $childClassMethod);
             }
 
-            // $this->childParamPopulator->populateChildClassMethod($methodNode, $position, null, true);
+            // $this->childParamPopulator->populateChildClassMethod($classMethod, $position, null, true);
 
             // $interfaceNode = $this->nodeRepository->findInterface($interfaceClass);
             // $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($interfaceClass);
@@ -285,6 +294,7 @@ CODE_SAMPLE
         if ($phpDocInfo === null) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
         }
+
         $paramName = $this->getName($param);
         $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $phpDocInfo->changeParamType($mappedCurrentParamType, $param, $paramName);
