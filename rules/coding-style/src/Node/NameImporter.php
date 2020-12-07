@@ -99,6 +99,10 @@ final class NameImporter
             return null;
         }
 
+        if ($this->isShortNameInUseStatement($name)) {
+            return null;
+        }
+
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
         if (! $staticType instanceof FullyQualifiedObjectType) {
             return null;
@@ -132,10 +136,6 @@ final class NameImporter
         }
 
         if ($this->isNonExistingClassLikeAndFunctionFullyQualifiedName($name)) {
-            return true;
-        }
-
-        if ($this->isShortNameInUseStatement($name)) {
             return true;
         }
 
@@ -242,6 +242,11 @@ final class NameImporter
             return false;
         }
 
+        return $this->isFoundInPreviousNode($classLike, $name);
+    }
+
+    private function isFoundInPreviousNode(ClassLike $classLike, Name $name): bool
+    {
         $previousNode = $classLike->getAttribute(AttributeKey::PREVIOUS_NODE);
         while ($previousNode) {
             if ($previousNode instanceof Use_) {
