@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -66,6 +67,11 @@ final class NameImporter
      */
     private $renamedClassesCollector;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
     public function __construct(
         AliasUsesResolver $aliasUsesResolver,
         ClassNameImportSkipper $classNameImportSkipper,
@@ -73,7 +79,8 @@ final class NameImporter
         ParameterProvider $parameterProvider,
         RenamedClassesCollector $renamedClassesCollector,
         StaticTypeMapper $staticTypeMapper,
-        UseNodesToAddCollector $useNodesToAddCollector
+        UseNodesToAddCollector $useNodesToAddCollector,
+        BetterNodeFinder $betterNodeFinder
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
@@ -82,6 +89,7 @@ final class NameImporter
         $this->parameterProvider = $parameterProvider;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function importName(Name $name): ?Name
@@ -149,20 +157,12 @@ final class NameImporter
             return false;
         }
 
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parentNode) {
-            if ($parentNode instanceof ClassLike) {
-                break;
-            }
-
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        if (! $parentNode instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findFirstParentInstanceOf($name, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
             return false;
         }
 
-        $previousNode = $parentNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $previousNode = $classLike->getAttribute(AttributeKey::PREVIOUS_NODE);
         while ($previousNode) {
             if ($previousNode instanceof Use_) {
                 foreach ($previousNode->uses as $use) {
