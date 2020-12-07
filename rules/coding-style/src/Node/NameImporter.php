@@ -237,30 +237,33 @@ final class NameImporter
             return false;
         }
 
-        $classLike = $this->betterNodeFinder->findFirstParentInstanceOf($name, ClassLike::class);
-        if (! $classLike instanceof ClassLike) {
-            return false;
-        }
-
-        return $this->isFoundInPreviousNode($classLike, $name);
+        return $this->isFoundInUse($name);
     }
 
-    private function isFoundInPreviousNode(ClassLike $classLike, Name $name): bool
+    private function isFoundInUse(Name $name): bool
     {
-        $previousNode = $classLike->getAttribute(AttributeKey::PREVIOUS_NODE);
-        while ($previousNode) {
-            if (! $previousNode instanceof Use_) {
-                $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
-                continue;
-            }
+        $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
 
-            foreach ($previousNode->uses as $use) {
-                if ($use->name->getLast() === $name->getLast()) {
-                    return true;
+        while ($parent) {
+            if (! $parent instanceof Use_) {
+                $previousNode = $parent->getAttribute(AttributeKey::PREVIOUS_NODE);
+                while ($previousNode) {
+                    if (! $previousNode instanceof Use_) {
+                        $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+                        continue;
+                    }
+
+                    foreach ($previousNode->uses as $use) {
+                        if ($use->name->getLast() === $name->getLast()) {
+                            return true;
+                        }
+                    }
+
+                    $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
                 }
             }
 
-            $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
         }
 
         return false;
