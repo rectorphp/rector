@@ -619,6 +619,7 @@ parameters:
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector\:\:refactor\(\) expects PhpParser\\Node\\Expr\\AssignOp\\Div\|PhpParser\\Node\\Expr\\AssignOp\\Minus\|PhpParser\\Node\\Expr\\AssignOp\\Mul\|PhpParser\\Node\\Expr\\AssignOp\\Plus\|PhpParser\\Node\\Expr\\BinaryOp\\Div\|PhpParser\\Node\\Expr\\BinaryOp\\Minus\|PhpParser\\Node\\Expr\\BinaryOp\\Mul\|PhpParser\\Node\\Expr\\BinaryOp\\Plus, PhpParser\\Node\\Expr\\AssignOp\|PhpParser\\Node\\Expr\\BinaryOp given#'
 
         - '#Cognitive complexity for "Rector\\CodeQuality\\Naming\\MethodCallToVariableNameResolver\:\:resolveVariableName\(\)" is 12, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\CodingStyle\\Node\\NameImporter\:\:isFoundInUse\(\)" is 16, keep it under 9#'
 
         -
             message: '#Do not use trait#'

@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -68,11 +67,6 @@ final class NameImporter
      */
     private $renamedClassesCollector;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
         AliasUsesResolver $aliasUsesResolver,
         ClassNameImportSkipper $classNameImportSkipper,
@@ -80,8 +74,7 @@ final class NameImporter
         ParameterProvider $parameterProvider,
         RenamedClassesCollector $renamedClassesCollector,
         StaticTypeMapper $staticTypeMapper,
-        UseNodesToAddCollector $useNodesToAddCollector,
-        BetterNodeFinder $betterNodeFinder
+        UseNodesToAddCollector $useNodesToAddCollector
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
@@ -90,7 +83,6 @@ final class NameImporter
         $this->parameterProvider = $parameterProvider;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->renamedClassesCollector = $renamedClassesCollector;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function importName(Name $name): ?Name
