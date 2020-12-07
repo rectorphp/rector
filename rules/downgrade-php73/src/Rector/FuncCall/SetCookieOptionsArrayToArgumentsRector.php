@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,10 +35,14 @@ final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
         'httponly' => 6,
     ];
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $highestIndex = 1;
 
-    /** @var Arg[] */
+    /**
+     * @var Arg[]
+     */
     private $newArguments = [];
 
     public function getRuleDefinition(): RuleDefinition
@@ -91,12 +95,7 @@ CODE_SAMPLE
         if ($argsCount <= 2) {
             return true;
         }
-
-        if (! ($funcCall->args[2]->value instanceof Array_)) {
-            return true;
-        }
-
-        return false;
+        return ! ($funcCall->args[2]->value instanceof Array_);
     }
 
     /**
