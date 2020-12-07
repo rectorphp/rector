@@ -8,7 +8,6 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\CallableType;
-use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -61,6 +60,6 @@ CODE_SAMPLE
 
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
 
-        return !(is_a($type, ArrayType::class, true) || is_a($type, CallableType::class, true));
+        return ! is_a($type, ArrayType::class, true) && ! is_a($type, CallableType::class, true);
     }
 }
