@@ -1,0 +1,18 @@
+<?php
+
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\AutoImportNamesParameter;
+
+use Safe\DateTimeImmutable;
+
+final class DemoFile
+{
+    private \DateTimeImmutable $date;
+
+    public function getDate(): \DateTimeImmutable
+    {
+        $x = new \DateTimeImmutable();
+        return $this->date;
+    }
+}
+
+?>
