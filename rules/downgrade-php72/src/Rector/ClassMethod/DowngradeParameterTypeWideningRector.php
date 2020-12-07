@@ -154,8 +154,9 @@ CODE_SAMPLE
         $methodName = $this->getName($functionLike);
         $paramName = $this->getName($param);
 
-        // Obtain the list of the ancestors with a different signature
-        $refactorableAncestorAndInterfaceClasses = [];
+        // Obtain the list of the ancestors classes and implemented interfaces
+        // with a different signature
+        $refactorableAncestorAndInterfaceClassNames = [];
         $ancestorAndInterfaceClassNames = array_merge(
             $classReflection->getParentClassesNames(),
             array_map(
@@ -171,18 +172,16 @@ CODE_SAMPLE
             }
 
             if ($this->hasMethodWithTypedParam($classReflection, $parentClassName, $methodName, $paramName)) {
-                $refactorableAncestorAndInterfaceClasses[] = $parentClassName;
+                $refactorableAncestorAndInterfaceClassNames[] = $parentClassName;
             }
         }
 
         // Remove the types in:
-        // - all ancestors and their descendant classes
-        // - all implemented interfaces and their implementing classes
-        foreach ($refactorableAncestorAndInterfaceClasses as $interfaceClass) {
-            // $interfaceNode = $this->nodeRepository->findInterface($interfaceClass);
-            // // $interfaceNode->type = null;
+        // - all ancestors + their descendant classes
+        // - all implemented interfaces + their implementing classes
+        foreach ($refactorableAncestorAndInterfaceClassNames as $parentClassName) {
             /** @var ClassMethod */
-            $classMethod = $this->nodeRepository->findClassMethod($interfaceClass, $methodName);
+            $classMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
             foreach ($classMethod->params as $methodParam) {
                 if ($this->getName($methodParam) == $paramName) {
                     // Add the current type in the PHPDoc
@@ -195,20 +194,8 @@ CODE_SAMPLE
                 }
             }
 
-
-
-            $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($interfaceClass);
-
-            // update their methods as well
+            $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($parentClassName);
             foreach ($childrenClassLikes as $childClassLike) {
-                // if ($childClassLike instanceof Class_) {
-                //     $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childClassLike);
-
-                //     foreach ($usedTraits as $trait) {
-                //         $this->removeParamTypeFromMethod($trait, $position, $functionLike, $paramType, $changePhpDoc);
-                //     }
-                // }
-
                 // If the class is implementing the method, then refactor it
                 $childClassName = $childClassLike->getAttribute(AttributeKey::CLASS_NAME);
                 if ($childClassName === null) {
@@ -220,14 +207,6 @@ CODE_SAMPLE
                 }
                 $this->removeParamTypeFromMethod($childClassLike, $position, $childClassMethod);
             }
-
-            // $this->childParamPopulator->populateChildClassMethod($classMethod, $position, null, true);
-
-            // $interfaceNode = $this->nodeRepository->findInterface($interfaceClass);
-            // $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($interfaceClass);
-            // foreach ($childrenClassLikes as $childrenClassLike) {
-            //     //
-            // }
         }
     }
 
