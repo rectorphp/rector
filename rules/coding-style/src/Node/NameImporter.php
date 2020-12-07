@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Node;
 
+use Nette\Utils\Strings;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -150,34 +151,6 @@ final class NameImporter
         return false;
     }
 
-    private function isShortNameInUseStatement(Name $name): bool
-    {
-        $longName = $name->toString();
-        if (strpos($longName, '\\') !== false) {
-            return false;
-        }
-
-        $classLike = $this->betterNodeFinder->findFirstParentInstanceOf($name, ClassLike::class);
-        if (! $classLike instanceof ClassLike) {
-            return false;
-        }
-
-        $previousNode = $classLike->getAttribute(AttributeKey::PREVIOUS_NODE);
-        while ($previousNode) {
-            if ($previousNode instanceof Use_) {
-                foreach ($previousNode->uses as $use) {
-                    if ($use->name->getLast() === $name->getLast()) {
-                        return true;
-                    }
-                }
-            }
-
-            $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
-        }
-
-        return false;
-    }
-
     private function importNameAndCollectNewUseStatement(
         Name $name,
         FullyQualifiedObjectType $fullyQualifiedObjectType
@@ -255,6 +228,34 @@ final class NameImporter
         }
 
         return ! function_exists($classOrFunctionName);
+    }
+
+    private function isShortNameInUseStatement(Name $name): bool
+    {
+        $longName = $name->toString();
+        if (Strings::contains($longName, '\\')) {
+            return false;
+        }
+
+        $classLike = $this->betterNodeFinder->findFirstParentInstanceOf($name, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return false;
+        }
+
+        $previousNode = $classLike->getAttribute(AttributeKey::PREVIOUS_NODE);
+        while ($previousNode) {
+            if ($previousNode instanceof Use_) {
+                foreach ($previousNode->uses as $use) {
+                    if ($use->name->getLast() === $name->getLast()) {
+                        return true;
+                    }
+                }
+            }
+
+            $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        }
+
+        return false;
     }
 
     private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void
