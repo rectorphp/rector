@@ -95,12 +95,7 @@ CODE_SAMPLE
         if ($argsCount <= 2) {
             return true;
         }
-
-        if (! ($funcCall->args[2]->value instanceof Array_)) {
-            return true;
-        }
-
-        return false;
+        return ! ($funcCall->args[2]->value instanceof Array_);
     }
 
     /**
