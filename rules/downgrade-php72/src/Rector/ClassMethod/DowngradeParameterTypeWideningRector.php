@@ -154,25 +154,7 @@ CODE_SAMPLE
 
         // Obtain the list of the ancestors classes and implemented interfaces
         // with a different signature
-        $refactorableAncestorAndInterfaceClassNames = [];
-        $ancestorAndInterfaceClassNames = array_merge(
-            $classReflection->getParentClassesNames(),
-            array_map(
-                function (ClassReflection $interfaceReflection): string {
-                    return $interfaceReflection->getName();
-                },
-                $classReflection->getInterfaces()
-            )
-        );
-        foreach ($ancestorAndInterfaceClassNames as $parentClassName) {
-            if (! method_exists($parentClassName, $methodName)) {
-                continue;
-            }
-
-            if ($this->hasMethodWithTypedParam($parentClassName, $methodName, $paramName)) {
-                $refactorableAncestorAndInterfaceClassNames[] = $parentClassName;
-            }
-        }
+        $refactorableAncestorAndInterfaceClassNames = $this->getAncestorClassNamesWithDifferentSignature($classReflection, $methodName, $paramName);
 
         // Remove the types in:
         // - all ancestors + their descendant classes
@@ -206,6 +188,37 @@ CODE_SAMPLE
                 $this->removeParamTypeFromMethod($childClassLike, $position, $childClassMethod);
             }
         }
+    }
+
+    /**
+     * Obtain the list of the ancestors classes and implemented interfaces
+     * with a different signature
+     *
+     * @return string[]
+     */
+    private function getAncestorClassNamesWithDifferentSignature(ClassReflection $classReflection, string $methodName, string $paramName): array
+    {
+        $refactorableAncestorAndInterfaceClassNames = [];
+        $ancestorAndInterfaceClassNames = array_merge(
+            $classReflection->getParentClassesNames(),
+            array_map(
+                function (ClassReflection $interfaceReflection): string {
+                    return $interfaceReflection->getName();
+                },
+                $classReflection->getInterfaces()
+            )
+        );
+        foreach ($ancestorAndInterfaceClassNames as $parentClassName) {
+            if (! method_exists($parentClassName, $methodName)) {
+                continue;
+            }
+
+            if ($this->hasMethodWithTypedParam($parentClassName, $methodName, $paramName)) {
+                $refactorableAncestorAndInterfaceClassNames[] = $parentClassName;
+            }
+        }
+
+        return $refactorableAncestorAndInterfaceClassNames;
     }
 
     private function removeParamTypeFromMethod(
