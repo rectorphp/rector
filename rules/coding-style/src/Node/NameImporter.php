@@ -8,7 +8,9 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
@@ -124,6 +126,10 @@ final class NameImporter
             return true;
         }
 
+        if ($this->isShortNameInUseStatement($name)) {
+            return true;
+        }
+
         // Importing root namespace classes (like \DateTime) is optional
         $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES);
         if (! $importShortClasses) {
@@ -131,6 +137,42 @@ final class NameImporter
             if ($name !== null && substr_count($name, '\\') === 0) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private function isShortNameInUseStatement(Name $name): bool
+    {
+        $longName = $name->toString();
+        if (strpos($longName, '\\') !== false) {
+            return false;
+        }
+
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parentNode) {
+            if ($parentNode instanceof ClassLike) {
+                break;
+            }
+
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        if (! $parentNode instanceof ClassLike) {
+            return false;
+        }
+
+        $previousNode = $parentNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        while ($previousNode) {
+            if ($previousNode instanceof Use_) {
+                foreach ($previousNode->uses as $use) {
+                    if ($use->name->getLast() === $name->getLast()) {
+                        return true;
+                    }
+                }
+            }
+
+            $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
         }
 
         return false;
