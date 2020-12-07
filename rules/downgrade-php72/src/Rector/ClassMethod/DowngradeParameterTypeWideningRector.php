@@ -48,24 +48,12 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 final class DowngradeParameterTypeWideningRector extends AbstractTypeDeclarationRector
 {
     /**
-     * @var ParamTypeInferer
-     */
-    private $paramTypeInferer;
-
-    /**
-     * @var ChildParamPopulator
-     */
-    private $childParamPopulator;
-
-    /**
      * @var RectorChangeCollector
      */
     private $rectorChangeCollector;
 
-    public function __construct(ChildParamPopulator $childParamPopulator, ParamTypeInferer $paramTypeInferer, RectorChangeCollector $rectorChangeCollector)
+    public function __construct(RectorChangeCollector $rectorChangeCollector)
     {
-        $this->paramTypeInferer = $paramTypeInferer;
-        $this->childParamPopulator = $childParamPopulator;
         $this->rectorChangeCollector = $rectorChangeCollector;
     }
     public function getRuleDefinition(): RuleDefinition
