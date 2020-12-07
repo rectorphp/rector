@@ -39,13 +39,14 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\Rector\AbstractRector;
 
 /**
  * @see https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
  *
  * @see \Rector\DowngradePhp72\Tests\Rector\ClassMethod\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
  */
-final class DowngradeParameterTypeWideningRector extends AbstractTypeDeclarationRector
+final class DowngradeParameterTypeWideningRector extends AbstractRector
 {
     /**
      * @var RectorChangeCollector
@@ -56,6 +57,7 @@ final class DowngradeParameterTypeWideningRector extends AbstractTypeDeclaration
     {
         $this->rectorChangeCollector = $rectorChangeCollector;
     }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove argument type declarations in the parent and in all child classes, whenever some child class removes it', [
@@ -101,6 +103,14 @@ class C implements A
 CODE_SAMPLE
             ),
         ]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [Function_::class, ClassMethod::class];
     }
 
     /**
