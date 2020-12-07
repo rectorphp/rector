@@ -154,7 +154,10 @@ CODE_SAMPLE
 
         // Obtain the list of the ancestors classes and implemented interfaces
         // with a different signature
-        $refactorableAncestorAndInterfaceClassNames = $this->getClassesAndInterfacesWithDifferentSignature($classReflection, $methodName, $paramName);
+        $refactorableAncestorAndInterfaceClassNames = array_merge(
+            $this->getClassesWithDifferentSignature($classReflection, $methodName, $paramName),
+            $this->getInterfacesWithDifferentSignature($classReflection, $methodName, $paramName)
+        );
 
         // Remove the types in:
         // - all ancestors + their descendant classes
@@ -182,26 +185,11 @@ CODE_SAMPLE
     }
 
     /**
-     * Obtain the list of the ancestors classes and implemented interfaces
-     * with a different signature
-     *
-     * @return (Class_|Interface_)[]
+     * Obtain the list of the implemented interfaces with a different signature
+     * @return Interface_[]
      */
-    private function getClassesAndInterfacesWithDifferentSignature(ClassReflection $classReflection, string $methodName, string $paramName): array
+    private function getInterfacesWithDifferentSignature(ClassReflection $classReflection, string $methodName, string $paramName): array
     {
-        $refactorableAncestorClassNames = array_filter(
-            $classReflection->getParentClassesNames(),
-            function (string $ancestorClassName) use ($methodName, $paramName) : bool {
-                return $this->hasMethodWithTypedParam($ancestorClassName, $methodName, $paramName);
-            }
-        );
-        $refactorableAncestorClasses = array_map(
-            function (string $ancestorClassName) : Class_ {
-                return $this->nodeRepository->findClass($ancestorClassName);
-            },
-            $refactorableAncestorClassNames
-        );
-
         $interfaceClassNames = array_map(
             function (ClassReflection $interfaceReflection): string {
                 return $interfaceReflection->getName();
@@ -214,16 +202,32 @@ CODE_SAMPLE
                 return $this->hasMethodWithTypedParam($interfaceClassName, $methodName, $paramName);
             }
         );
-        $refactorableInterfaceClasses = array_map(
+        return array_map(
             function (string $interfaceClassName) : Interface_ {
                 return $this->nodeRepository->findInterface($interfaceClassName);
             },
             $refactorableInterfaceClassNames
         );
+    }
 
-        return array_merge(
-            $refactorableAncestorClasses,
-            $refactorableInterfaceClasses
+    /**
+     * Obtain the list of the ancestors classes with a different signature
+     * @return Class_[]
+     */
+    private function getClassesWithDifferentSignature(ClassReflection $classReflection, string $methodName, string $paramName): array
+    {
+        // 1. All ancestor classes with different signature
+        $refactorableAncestorClassNames = array_filter(
+            $classReflection->getParentClassesNames(),
+            function (string $ancestorClassName) use ($methodName, $paramName) : bool {
+                return $this->hasMethodWithTypedParam($ancestorClassName, $methodName, $paramName);
+            }
+        );
+        return array_map(
+            function (string $ancestorClassName) : Class_ {
+                return $this->nodeRepository->findClass($ancestorClassName);
+            },
+            $refactorableAncestorClassNames
         );
     }
 
