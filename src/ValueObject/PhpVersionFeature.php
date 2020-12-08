@@ -129,6 +129,16 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const TRAILING_COMMA_IN_FUNCTION = 70300;
+
+    /**
+     * @var int
+     */
+    public const FLEXIBLE_HEREDOC = 70300;
+
+    /**
+     * @var int
+     */
     public const ARROW_FUNCTION = 70400;
 
     /**
@@ -187,6 +197,12 @@ final class PhpVersionFeature
      * @var int
      */
     public const NULLSAFE_OPERATOR = 80000;
+
+    /**
+     * @var int
+     */
+    public const MATCH_EXPRESSION = 80000;
+
 
     /**
      * @var int

@@ -10,13 +10,11 @@ use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclaratio
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 8.0
- */
 final class DowngradeUnionTypeReturnDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
+     * @requires PHP 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {
@@ -35,6 +33,6 @@ final class DowngradeUnionTypeReturnDeclarationRectorTest extends AbstractRector
 
     protected function getPhpVersion(): int
     {
-        return PhpVersionFeature::UNION_TYPES;
+        return PhpVersionFeature::UNION_TYPES - 1;
     }
 }

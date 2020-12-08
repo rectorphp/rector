@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector;
 
 use Iterator;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -28,5 +29,10 @@ final class DowngradeTrailingCommasInFunctionCallsRectorTest extends AbstractRec
     protected function getRectorClass(): string
     {
         return DowngradeTrailingCommasInFunctionCallsRector::class;
+    }
+
+    protected function getPhpVersion(): int
+    {
+        return PhpVersionFeature::TRAILING_COMMA_IN_FUNCTION - 1;
     }
 }

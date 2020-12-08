@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector;
 
 use Iterator;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -28,5 +29,10 @@ final class SetCookieOptionsArrayToArgumentsRectorTest extends AbstractRectorTes
     protected function getRectorClass(): string
     {
         return SetCookieOptionsArrayToArgumentsRector::class;
+    }
+
+    protected function getPhpVersion(): int
+    {
+        return PhpVersionFeature::SETCOOKIE_ACCEPT_ARRAY_OPTIONS - 1;
     }
 }

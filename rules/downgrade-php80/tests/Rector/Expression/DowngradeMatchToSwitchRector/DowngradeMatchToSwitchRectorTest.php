@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Tests\Rector\Expression\DowngradeMatchToSwitchRector;
 
 use Iterator;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 8.0
- */
 final class DowngradeMatchToSwitchRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
+     * @requires PHP 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {
@@ -30,5 +29,10 @@ final class DowngradeMatchToSwitchRectorTest extends AbstractRectorTestCase
     protected function getRectorClass(): string
     {
         return DowngradeMatchToSwitchRector::class;
+    }
+
+    protected function getPhpVersion(): int
+    {
+        return PhpVersionFeature::MATCH_EXPRESSION - 1;
     }
 }
