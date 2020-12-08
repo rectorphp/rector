@@ -78,8 +78,11 @@ CODE_SAMPLE
 
     private function getFunction(Identical $identical): FuncCall
     {
-        return $identical->left instanceof FuncCall
+        /** @var FuncCall $funcCall */
+        $funcCall = $identical->left instanceof FuncCall
             ? $identical->left
             : $identical->right;
+
+        return $funcCall;
     }
 }
