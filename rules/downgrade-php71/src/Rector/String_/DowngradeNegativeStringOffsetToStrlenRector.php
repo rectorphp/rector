@@ -83,10 +83,7 @@ CODE_SAMPLE
 
         /** @var UnaryMinus $dim */
         $dim = $parentOfNextNode->dim;
-        $parentOfNextNode->dim = new Minus(
-            new FuncCall(new Name('strlen'), [new Arg($string)]),
-            $dim->expr
-        );
+        $parentOfNextNode->dim = new Minus(new FuncCall(new Name('strlen'), [new Arg($string)]), $dim->expr);
 
         return $string;
     }
