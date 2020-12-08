@@ -119,11 +119,6 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const LIST_REFERENCE_ASSIGNMENT = 70300;
-
-    /**
-     * @var int
-     */
     public const ARROW_FUNCTION = 70400;
 
     /**
@@ -140,18 +135,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const TYPED_PROPERTIES = 70400;
-
-    /**
-     * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
-     * @var int
-     */
-    public const COVARIANT_RETURN = 70400;
-
-    /**
-     * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
-     * @var int
-     */
-    public const CONTRAVARIANT_ARGUMENT = 70400;
 
     /**
      * @var int
@@ -171,17 +154,7 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const MIXED_TYPE = 80000;
-
-    /**
-     * @var int
-     */
     public const STATIC_RETURN_TYPE = 80000;
-
-    /**
-     * @var int
-     */
-    public const NULLSAFE_OPERATOR = 80000;
 
     /**
      * @var int
@@ -192,21 +165,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const NULLABLE_TYPE = 70100;
-
-    /**
-     * @var int
-     */
-    public const VOID_RETURN_TYPE = 70100;
-
-    /**
-     * @var int
-     */
-    public const NEGATIVE_STRING_OFFSET = 70100;
-
-    /**
-     * @var int
-     */
-    public const STRIP_TAGS_WITH_ARRAY = 70400;
 
     /**
      * @var int
