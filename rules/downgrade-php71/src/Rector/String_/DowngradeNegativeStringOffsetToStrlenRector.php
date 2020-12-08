@@ -29,11 +29,15 @@ final class DowngradeNegativeStringOffsetToStrlenRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-"abcdef"[-2];
+echo 'abcdef'[-2];
+echo strpos('aabbcc', 'b', -3);
+echo strpos($var, 'b', -3);
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-"abcdef"[strlen("abcdef")-2];
+echo 'abcdef'[strlen('abcdef') - 2];
+echo strpos('aabbcc', 'b', strlen('aabbcc') - 3);
+echo strpos($var, 'b', strlen($var) - 3);
 CODE_SAMPLE
                     ,
                 ),
