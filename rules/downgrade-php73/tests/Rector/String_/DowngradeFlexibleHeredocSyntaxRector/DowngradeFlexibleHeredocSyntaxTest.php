@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp73\Tests\Rector\String_\DowngradeFlexibleHeredocSyntaxRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -31,10 +30,5 @@ final class DowngradeFlexibleHeredocSyntaxTest extends AbstractRectorTestCase
     protected function getRectorClass(): string
     {
         return DowngradeFlexibleHeredocSyntaxRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::FLEXIBLE_HEREDOC - 1;
     }
 }
