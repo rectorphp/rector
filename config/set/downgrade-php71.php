@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
+use Rector\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector;
 use Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector;
@@ -21,4 +22,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70100,
         ]]);
     $services->set(DowngradePipeToMultiCatchExceptionRector::class);
+    $services->set(SymmetricArrayDestructuringToListRector::class);
 };
