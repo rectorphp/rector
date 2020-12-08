@@ -52,7 +52,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return null;
         $compareValue = $this->getCompareValue($node);
         if ($compareValue === null) {
             return null;
