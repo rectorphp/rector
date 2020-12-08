@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Rector\FunctionLike;
+namespace Rector\DowngradePhp70\Rector\FunctionLike;
 
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\CallableType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector\DowngradeNullableTypeParamDeclarationRectorTest
+ * @see \Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeParamDeclarationRector\DowngradeTypeParamDeclarationRectorTest
  */
-final class DowngradeNullableTypeParamDeclarationRector extends AbstractDowngradeParamDeclarationRector
+final class DowngradeTypeParamDeclarationRector extends AbstractDowngradeParamDeclarationRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove the nullable type params, add @param tags instead',
+            'Remove the type params, add @param tags instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run(?string $input)
+    public function run(string $input)
     {
         // do something
     }
@@ -36,7 +36,7 @@ CODE_SAMPLE
 class SomeClass
 {
     /**
-     * @param string|null $input
+     * @param string $input
      */
     public function run($input)
     {
@@ -49,17 +49,17 @@ CODE_SAMPLE
         );
     }
 
+    /**
+     * Only accepted types before PHP 7.0 are `array` and `callable`
+     */
     public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
     {
-        if ($param->variadic) {
-            return false;
-        }
-
         if ($param->type === null) {
             return false;
         }
 
-        // Check it is the union type
-        return $param->type instanceof NullableType;
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+
+        return ! is_a($type, ArrayType::class, true) && ! is_a($type, CallableType::class, true);
     }
 }

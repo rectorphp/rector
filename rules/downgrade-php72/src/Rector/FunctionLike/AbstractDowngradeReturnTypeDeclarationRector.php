@@ -7,7 +7,7 @@ namespace Rector\DowngradePhp72\Rector\FunctionLike;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeReturnDeclarationRector;
+use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeReturnDeclarationRector;
 use Rector\DowngradePhp72\Contract\Rector\DowngradeTypeRectorInterface;
 
 abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractDowngradeReturnDeclarationRector implements DowngradeTypeRectorInterface

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Rector\FunctionLike;
+namespace Rector\DowngradePhp70\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
@@ -15,7 +15,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DowngradePhp71\Contract\Rector\DowngradeParamDeclarationRectorInterface;
+use Rector\DowngradePhp70\Contract\Rector\DowngradeParamDeclarationRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Traversable;
 

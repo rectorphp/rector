@@ -6,7 +6,7 @@ namespace Rector\DowngradePhp72\Rector\FunctionLike;
 
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
-use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
+use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 use Rector\DowngradePhp72\Contract\Rector\DowngradeTypeRectorInterface;
 
 abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractDowngradeParamDeclarationRector implements DowngradeTypeRectorInterface
