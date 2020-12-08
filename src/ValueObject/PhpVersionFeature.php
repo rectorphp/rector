@@ -201,6 +201,11 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const NEGATIVE_STRING_OFFSET = 70100;
+
+    /**
+     * @var int
+     */
     public const STRIP_TAGS_WITH_ARRAY = 70400;
 
     /**
