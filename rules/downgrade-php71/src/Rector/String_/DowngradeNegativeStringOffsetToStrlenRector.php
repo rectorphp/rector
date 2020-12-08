@@ -46,16 +46,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [String_::class];
+        return [String_::class, FuncCall::class];
     }
 
     /**
-     * @param String_ $node
+     * @param String_|FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof String_) {
             return $this->processForString($node);
+        }
+
+        if ($node instanceof FuncCall) {
+            return $this->processForFuncCall($node);
         }
 
         return null;
@@ -74,10 +78,34 @@ CODE_SAMPLE
         }
 
         $parentOfNextNode->dim = new Minus(
-            new FuncCall(new Name('strlen'), [new Arg(new String_($string->value))]),
+            new FuncCall(new Name('strlen'), [new Arg($string)]),
             $parentOfNextNode->dim->expr
         );
 
         return $string;
+    }
+
+    private function processForFuncCall(FuncCall $funcCall): ?FuncCall
+    {
+        $name = $this->getName($funcCall);
+        if ($name !== 'strpos') {
+            return null;
+        }
+
+        $args = $funcCall->args;
+        if (! isset($args[2])) {
+            return null;
+        }
+
+        if (! $args[2]->value instanceof UnaryMinus) {
+            return null;
+        }
+
+        $funcCall->args[2] = new Minus(
+            new FuncCall(new Name('strlen'), [new Arg($args[0]->value)]),
+            $args[2]->value->expr
+        );
+
+        return $funcCall;
     }
 }

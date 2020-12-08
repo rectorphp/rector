@@ -4,9 +4,11 @@ namespace Rector\DowngradePhp71\Tests\Rector\String_\DowngradeNegativeStringOffs
 
 class SomeClass
 {
-    public function run()
+    public function run($var)
     {
         echo 'abcdef'[-2];
+        echo strpos('aabbcc', 'b', -3);
+        echo strpos($var, 'b', -3);
     }
 }
 
@@ -18,9 +20,11 @@ namespace Rector\DowngradePhp71\Tests\Rector\String_\DowngradeNegativeStringOffs
 
 class SomeClass
 {
-    public function run()
+    public function run($var)
     {
         echo 'abcdef'[strlen('abcdef') - 2];
+        echo strpos('aabbcc', 'b', strlen('aabbcc') - 3);
+        echo strpos($var, 'b', strlen($var) - 3);
     }
 }
 
