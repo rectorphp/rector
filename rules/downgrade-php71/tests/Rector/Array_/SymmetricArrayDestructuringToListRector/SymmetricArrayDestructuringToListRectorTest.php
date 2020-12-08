@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Tests\Rector\Array_\SymmetricArrayDestructuringToListRector;
 
 use Iterator;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -28,5 +29,10 @@ final class SymmetricArrayDestructuringToListRectorTest extends AbstractRectorTe
     protected function getRectorClass(): string
     {
         return SymmetricArrayDestructuringToListRector::class;
+    }
+
+    protected function getPhpVersion(): int
+    {
+        return PhpVersionFeature::ARRAY_DESTRUCT - 1;
     }
 }
