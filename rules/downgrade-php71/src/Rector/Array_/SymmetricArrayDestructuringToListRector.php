@@ -10,10 +10,12 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node\Expr;
 
 /**
  * @see \Rector\DowngradePhp71\Tests\Rector\Array_\SymmetricArrayDestructuringToListRector\SymmetricArrayDestructuringToListRectorTest
@@ -36,29 +38,29 @@ final class SymmetricArrayDestructuringToListRector extends AbstractRector
     }
 
     /**
-     * @param ArrayDimFetch $node
+     * @param Array_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Assign) {
-            return $this->processToListInAssign($node, $parent);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Assign && $this->areNodesEqual($node, $parentNode->var)) {
+            return $this->processToList($node);
+        }
+
+        if ($parentNode instanceof Foreach_ && $this->areNodesEqual($node, $parentNode->valueVar)) {
+            return $this->processToList($node);
         }
 
         return null;
     }
 
-    private function processToListInAssign(Array_ $array, Assign $assign): ?FuncCall
+    private function processToList(Array_ $array): ?FuncCall
     {
-        if ($this->areNodesEqual($assign->var, $array)) {
-            $args = [];
-            foreach ($array->items as $item) {
-                $args[] = new Arg($item->value);
-            }
-
-            return new FuncCall(new Name('list'), $args);
+        $args = [];
+        foreach ($array->items as $item) {
+            $args[] = new Arg($item->value);
         }
 
-        return null;
+        return new FuncCall(new Name('list'), $args);
     }
 }
