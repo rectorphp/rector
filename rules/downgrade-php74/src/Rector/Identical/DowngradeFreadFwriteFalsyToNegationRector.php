@@ -18,6 +18,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeFreadFwriteFalsyToNegationRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const FUNC_FREAD_FWRITE = [
+        'fread',
+        'fwrite',
+    ];
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -65,11 +73,11 @@ CODE_SAMPLE
 
     private function getCompareValue(Identical $identical): ?Expr
     {
-        if ($identical->left instanceof FuncCall && $this->isNames($identical->left, ['fread', 'fwrite'])) {
+        if ($identical->left instanceof FuncCall && $this->isNames($identical->left, self::FUNC_FREAD_FWRITE)) {
             return $identical->right;
         }
 
-        if ($identical->right instanceof FuncCall && $this->isNames($identical->right, ['fread', 'fwrite'])) {
+        if ($identical->right instanceof FuncCall && $this->isNames($identical->right, self::FUNC_FREAD_FWRITE)) {
             return $identical->left;
         }
 
