@@ -6,10 +6,8 @@ namespace Rector\PhpAttribute;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -19,7 +17,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Printer\PhpAttributteGroupFactory;
-use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class AnnotationToAttributeConverter
@@ -45,13 +42,7 @@ final class AnnotationToAttributeConverter
             return null;
         }
 
-        // special cases without tag value node
         $hasNewAttrGroups = false;
-        if ($phpDocInfo->hasByName(TagName::REQUIRED)) {
-            $phpDocInfo->removeByName(TagName::REQUIRED);
-            $node->attrGroups[] = new AttributeGroup([$this->createRequiredAttribute()]);
-            $hasNewAttrGroups = true;
-        }
 
         // 0. has 0 nodes, nothing to change
         /** @var PhpAttributableTagNodeInterface[] $phpAttributableTagNodes */
@@ -99,11 +90,5 @@ final class AnnotationToAttributeConverter
                 return class_exists($phpAttributableTagNode->getAttributeClassName());
             }
         );
-    }
-
-    private function createRequiredAttribute(): Attribute
-    {
-        $fullyQualified = new FullyQualified('Symfony\Contracts\Service\Attribute\Required');
-        return new Attribute($fullyQualified);
     }
 }

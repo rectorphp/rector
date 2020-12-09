@@ -9,7 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareDataProviderTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\DataProviderTagValueNode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 final class PHPUnitDataProviderDocNodeFactory
@@ -57,7 +57,7 @@ final class PHPUnitDataProviderDocNodeFactory
     /**
      * Override of parent private method to allow reference: https://github.com/rectorphp/rector/pull/1735
      */
-    private function parseDataProviderTagValue(TokenIterator $tokenIterator): AttributeAwareDataProviderTagValueNode
+    private function parseDataProviderTagValue(TokenIterator $tokenIterator): DataProviderTagValueNode
     {
         $method = $this->privatesCaller->callPrivateMethod(
             $this->phpDocParser,
@@ -65,6 +65,6 @@ final class PHPUnitDataProviderDocNodeFactory
             $tokenIterator
         );
 
-        return new AttributeAwareDataProviderTagValueNode($method);
+        return new DataProviderTagValueNode($method);
     }
 }

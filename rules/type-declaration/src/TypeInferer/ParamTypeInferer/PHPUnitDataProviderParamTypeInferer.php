@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareDataProviderTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\DataProviderTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -78,8 +78,8 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             return null;
         }
 
-        /** @var AttributeAwareDataProviderTagValueNode|null $attributeAwareDataProviderTagValueNode */
-        $attributeAwareDataProviderTagValueNode = $phpDocInfo->getByType(AttributeAwareDataProviderTagValueNode::class);
+        /** @var DataProviderTagValueNode|null $attributeAwareDataProviderTagValueNode */
+        $attributeAwareDataProviderTagValueNode = $phpDocInfo->getByType(DataProviderTagValueNode::class);
         if ($attributeAwareDataProviderTagValueNode === null) {
             return null;
         }

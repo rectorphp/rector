@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareDataProviderTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\DataProviderTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -107,8 +107,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var AttributeAwareDataProviderTagValueNode[] $dataProviderTagValueNodes */
-            $dataProviderTagValueNodes = $phpDocInfo->findAllByType(AttributeAwareDataProviderTagValueNode::class);
+            /** @var DataProviderTagValueNode[] $dataProviderTagValueNodes */
+            $dataProviderTagValueNodes = $phpDocInfo->findAllByType(DataProviderTagValueNode::class);
             if ($dataProviderTagValueNodes === []) {
                 continue;
             }

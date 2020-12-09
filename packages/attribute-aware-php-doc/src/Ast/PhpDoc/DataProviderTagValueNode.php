@@ -8,7 +8,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
-final class AttributeAwareDataProviderTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface
+final class DataProviderTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface
 {
     use AttributeTrait;
 
