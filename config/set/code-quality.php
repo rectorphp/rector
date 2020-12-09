@@ -158,7 +158,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'mbsubstr' => 'mb_substr',
             ],
         ],
-    ]);
+        ]);
     $services->set(SetTypeToCastRector::class);
     $services->set(LogicalToBooleanRector::class);
     $services->set(VarToPublicPropertyRector::class);

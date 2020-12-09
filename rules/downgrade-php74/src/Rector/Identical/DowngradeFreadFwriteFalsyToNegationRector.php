@@ -21,10 +21,7 @@ final class DowngradeFreadFwriteFalsyToNegationRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const FUNC_FREAD_FWRITE = [
-        'fread',
-        'fwrite',
-    ];
+    private const FUNC_FREAD_FWRITE = ['fread', 'fwrite'];
 
     public function getRuleDefinition(): RuleDefinition
     {
