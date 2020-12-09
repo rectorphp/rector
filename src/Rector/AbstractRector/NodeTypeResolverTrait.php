@@ -167,6 +167,11 @@ trait NodeTypeResolverTrait
         return $this->nodeTypeResolver->isNullableObjectType($node);
     }
 
+    protected function isNullableArrayType(Node $node): bool
+    {
+        return $this->nodeTypeResolver->isNullableArrayType($node);
+    }
+
     protected function isCountableType(Node $node): bool
     {
         return $this->countableTypeAnalyzer->isCountableType($node);

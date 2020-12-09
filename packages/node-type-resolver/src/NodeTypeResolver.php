@@ -236,6 +236,16 @@ final class NodeTypeResolver
 
     public function isNullableObjectType(Node $node): bool
     {
+        return $this->isNullableTypeOfSpecificType($node, ObjectType::class);
+    }
+
+    public function isNullableArrayType(Node $node): bool
+    {
+        return $this->isNullableTypeOfSpecificType($node, ArrayType::class);
+    }
+
+    public function isNullableTypeOfSpecificType(Node $node, string $desiredType): bool
+    {
         $nodeType = $this->resolve($node);
 
         if (! $nodeType instanceof UnionType) {
@@ -251,7 +261,7 @@ final class NodeTypeResolver
         }
 
         foreach ($nodeType->getTypes() as $type) {
-            if ($type instanceof ObjectType) {
+            if (is_a($type, $desiredType, true)) {
                 return true;
             }
         }

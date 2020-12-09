@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
@@ -46,7 +47,7 @@ CODE_SAMPLE
                 ,
 <<<'CODE_SAMPLE'
 $values = null;
-$count = is_array($values) || $values instanceof Countable ? count($values) : 0;
+$count = count((array) $values);
 CODE_SAMPLE
             )]
         );
@@ -72,6 +73,13 @@ CODE_SAMPLE
         $countedNode = $node->args[0]->value;
         if ($this->isCountableType($countedNode)) {
             return null;
+        }
+
+        if ($this->isNullableArrayType($countedNode)) {
+            $castArray = new Array_($countedNode);
+            $node->args = [new Arg($castArray)];
+
+            return $node;
         }
 
         if ($this->isNullableType($countedNode) || $this->isStaticType($countedNode, NullType::class)) {
