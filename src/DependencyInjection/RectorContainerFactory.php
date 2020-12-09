@@ -7,7 +7,7 @@ namespace Rector\Core\DependencyInjection;
 use Psr\Container\ContainerInterface;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Stubs\StubLoader;
-use Symplify\PackageBuilder\Console\Input\InputDetector;
+use Symplify\PackageBuilder\Console\Input\StaticInputDetector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorContainerFactory
@@ -20,7 +20,7 @@ final class RectorContainerFactory
     {
         // to override the configs without clearing cache
         $environment = 'prod' . random_int(1, 10000000);
-        $isDebug = InputDetector::isDebug();
+        $isDebug = StaticInputDetector::isDebug();
 
         $rectorKernel = new RectorKernel($environment, $isDebug);
         if ($configFileInfos !== []) {
