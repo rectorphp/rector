@@ -184,7 +184,6 @@ CODE_SAMPLE
 
     private function renameVariable(VariableAndCallAssign $variableAndCallAssign, string $expectedName): void
     {
-        // TODO: Remove in next PR, implemented in VariableRenamer::renameVariableIfMatchesName()
         $this->varTagValueNodeRenamer->renameAssignVarTagVariableName(
             $variableAndCallAssign->getAssign(),
             $variableAndCallAssign->getVariableName(),

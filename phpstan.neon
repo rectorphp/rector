@@ -11,6 +11,16 @@ includes:
 
 services:
     -
+        class: Symplify\PHPStanRules\Rules\ForbiddenMethodCallOnTypeRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            forbiddenMethodNamesByTypes:
+                PhpParser\Node:
+                    - 'getDocComment'
+                    - 'getComments'
+                    - 'setDocComment'
+
+    -
         class: Symplify\PHPStanRules\Rules\OnlyOneClassMethodRule
         tags: [phpstan.rules.rule]
         arguments:
@@ -780,9 +790,10 @@ parameters:
         - '#Only EntityManager\* type as dependency is allowed#'
 
         -
-            message: '#"(getComments|getDocComment)\(\)" call on "PhpParser\\Node" type is not allowed#'
+            message: '#"(getComments|getDocComment|setDocComment)\(\)" call on "PhpParser\\Node" type is not allowed#'
             paths:
                 # merging comments
+                - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php
                 - src/Rector/AbstractRector.php
                 - src/PhpParser/NodeTransformer.php
                 # playing around with doc block format
@@ -791,11 +802,13 @@ parameters:
                 - rules/phpstan/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php
                 - rules/dead-code/src/Rector/Expression/RemoveDeadStmtRector.php
                 - rules/code-quality/src/Rector/FuncCall/ChangeArrayPushToArrayAssignRector.php
+                - rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecMocksToPHPUnitMocksRector.php
                 - packages/better-php-doc-parser/src/Comment/CommentsMerger.php
                 - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php
-                - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfoFactory.php
                 - rules/coding-style/src/Node/DocAliasResolver.php
+                - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfoFactory.php
                 - packages/better-php-doc-parser/tests/PhpDocParser/AbstractPhpDocInfoTest.php
+                - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php
 
         - '#"@simplexml_load_string\(\$fileContents\)" is forbidden to use#'
         - '#@ intentionally#'
