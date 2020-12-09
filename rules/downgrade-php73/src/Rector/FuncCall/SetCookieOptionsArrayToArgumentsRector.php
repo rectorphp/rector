@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp73\Rector\FuncCall;
 
+use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -27,7 +25,7 @@ final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
      * Conversion table from argument index to options name
      * @var array<string, int>
      */
-    private const ARGUMENTS_ORDER = [
+    private const ARGUMENT_ORDER = [
         'expires' => 2,
         'path' => 3,
         'domain' => 4,
@@ -36,14 +34,21 @@ final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
     ];
 
     /**
+     * Conversion table from argument index to options name
+     * @var array<int, bool|int|string>
+     */
+    private const ARGUMENT_DEFAULT_VALUES = [
+        2 => 0,
+        3 => '',
+        4 => '',
+        5 => false,
+        6 => false,
+    ];
+
+    /**
      * @var int
      */
     private $highestIndex = 1;
-
-    /**
-     * @var Arg[]
-     */
-    private $newArguments = [];
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -104,10 +109,8 @@ CODE_SAMPLE
     private function composeNewArgs(FuncCall $funcCall): array
     {
         $this->highestIndex = 1;
-        $this->newArguments = [
-            0 => $funcCall->args[0],
-            1 => $funcCall->args[1],
-        ];
+
+        $newArgs = [$funcCall->args[0], $funcCall->args[1]];
 
         /** @var Array_ $optionsArray */
         $optionsArray = $funcCall->args[2]->value;
@@ -127,49 +130,51 @@ CODE_SAMPLE
                 continue;
             }
 
-            $order = self::ARGUMENTS_ORDER[$name];
+            $order = self::ARGUMENT_ORDER[$name];
             if ($order > $this->highestIndex) {
                 $this->highestIndex = $order;
             }
 
-            $this->newArguments[$order] = $value;
+            $newArgs[$order] = $value;
         }
 
-        $this->fillMissingArgumentsWithDefaultValues();
-        ksort($this->newArguments);
+        $newArgs = $this->fillMissingArgumentsWithDefaultValues($newArgs);
+        ksort($newArgs);
 
-        return $this->newArguments;
+        return $newArgs;
     }
 
     private function isMappableArrayKey(string $key): bool
     {
-        return isset(self::ARGUMENTS_ORDER[$key]);
+        return isset(self::ARGUMENT_ORDER[$key]);
     }
 
-    private function fillMissingArgumentsWithDefaultValues(): void
+    /**
+     * @param Arg[] $args
+     * @return Arg[]
+     */
+    private function fillMissingArgumentsWithDefaultValues(array $args): array
     {
         for ($i = 1; $i < $this->highestIndex; $i++) {
-            if (isset($this->newArguments[$i])) {
+            if (isset($args[$i])) {
                 continue;
             }
 
-            $this->newArguments[$i] = $this->getDefaultValue($i);
+            $args[$i] = $this->createDefaultValueArg($i);
         }
+
+        return $args;
     }
 
-    private function getDefaultValue(int $argumentIndex): Arg
+    private function createDefaultValueArg(int $argumentIndex): Arg
     {
-        switch ($argumentIndex) {
-            case self::ARGUMENTS_ORDER['expires']:
-                return new Arg(new LNumber(0));
-            case self::ARGUMENTS_ORDER['path']:
-            case self::ARGUMENTS_ORDER['domain']:
-                return new Arg(new String_(''));
-            case self::ARGUMENTS_ORDER['secure']:
-            case self::ARGUMENTS_ORDER['httponly']:
-                return new Arg(new ConstFetch(new Name('false')));
-            default:
-                throw new ShouldNotHappenException();
+        if (! array_key_exists($argumentIndex, self::ARGUMENT_DEFAULT_VALUES)) {
+            throw new ShouldNotHappenException();
         }
+
+        $argumentDefaultValue = self::ARGUMENT_DEFAULT_VALUES[$argumentIndex];
+        $expr = BuilderHelpers::normalizeValue($argumentDefaultValue);
+
+        return new Arg($expr);
     }
 }

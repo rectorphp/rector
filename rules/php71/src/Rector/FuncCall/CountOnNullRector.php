@@ -103,10 +103,10 @@ CODE_SAMPLE
 
         if ($this->isNullableType($countedNode) || $this->isStaticType($countedNode, NullType::class)) {
             $identical = new Identical($countedNode, $this->createNull());
-            $ternaryNode = new Ternary($identical, new LNumber(0), $node);
+            $ternary = new Ternary($identical, new LNumber(0), $node);
             // prevent infinity loop re-resolution
             $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);
-            return $ternaryNode;
+            return $ternary;
         }
 
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
@@ -116,12 +116,10 @@ CODE_SAMPLE
             $conditionNode = new BooleanOr($this->createFuncCall('is_array', [new Arg($countedNode)]), $instanceof);
         }
 
-        $ternaryNode = new Ternary($conditionNode, $node, new LNumber(0));
-
         // prevent infinity loop re-resolution
         $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);
 
-        return $ternaryNode;
+        return new Ternary($conditionNode, $node, new LNumber(0));
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
