@@ -16,7 +16,7 @@ jobs:
             # see https://github.com/shivammathur/setup-php
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 7.2
+                    php-version: 7.3
                     coverage: none
             # report phpunit errors into files-changed PR tab
             # https://github.com/actions/toolkit/blob/master/docs/problem-matchers.md
