@@ -121,7 +121,7 @@ CODE_SAMPLE
         /** @var List_ $listNode */
         $listNode = $assign->var;
 
-        if (count($listNode->items) !== 2) {
+        if (count((array) $listNode->items) !== 2) {
             return true;
         }
 

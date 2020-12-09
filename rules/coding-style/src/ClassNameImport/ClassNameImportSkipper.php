@@ -54,6 +54,7 @@ final class ClassNameImportSkipper
     {
         /** @var Use_[] $uses */
         $uses = (array) $name->getAttribute(AttributeKey::USE_NODES);
+
         foreach ($uses as $use) {
             $useUses = $use->uses;
             foreach ($useUses as $useUse) {

@@ -32,6 +32,6 @@ final class Php56Test extends AbstractRectorTestCase
 
     protected function getPhpVersion(): int
     {
-        return PhpVersion::PHP_5_6;
+        return PhpVersion::PHP_56;
     }
 }

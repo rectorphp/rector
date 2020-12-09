@@ -101,7 +101,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($node->args) !== 3) {
+        if (count((array) $node->args) !== 3) {
             return null;
         }
 

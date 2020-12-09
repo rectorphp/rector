@@ -123,14 +123,14 @@ CODE_SAMPLE
             }
 
             /** @var If_ $stmt */
-            if (count($stmt->stmts) === 1) {
+            if (count((array) $stmt->stmts) === 1) {
                 $node->stmts[$key] = $stmt->stmts[0];
                 continue;
             }
 
             $haveNodeChanged = true;
             // move all nodes one level up
-            array_splice($node->stmts, $key, count($stmt->stmts) - 1, $stmt->stmts);
+            array_splice($node->stmts, $key, count((array) $stmt->stmts) - 1, $stmt->stmts);
         }
 
         if ($haveNodeChanged) {
@@ -147,7 +147,7 @@ CODE_SAMPLE
         }
 
         // just one if
-        if (count($node->elseifs) !== 0) {
+        if (count((array) $node->elseifs) !== 0) {
             return false;
         }
 

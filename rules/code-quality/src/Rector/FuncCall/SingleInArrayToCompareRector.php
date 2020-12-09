@@ -75,7 +75,7 @@ CODE_SAMPLE
 
         /** @var Array_ $arrayNode */
         $arrayNode = $node->args[1]->value;
-        if (count($arrayNode->items) !== 1) {
+        if (count((array) $arrayNode->items) !== 1) {
             return null;
         }
 

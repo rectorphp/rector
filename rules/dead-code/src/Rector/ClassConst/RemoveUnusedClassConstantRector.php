@@ -113,7 +113,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count($node->consts) !== 1) {
+        if (count((array) $node->consts) !== 1) {
             return true;
         }
 

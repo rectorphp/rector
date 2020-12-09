@@ -73,7 +73,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (count($node->types) !== 1) {
+        if (count((array) $node->types) !== 1) {
             return null;
         }
 

@@ -117,7 +117,7 @@ final class SetterClassMethodAnalyzer
 
     private function matchSetterOnlyPropertyFetch(ClassMethod $classMethod): ?PropertyFetch
     {
-        if (count($classMethod->params) !== 1) {
+        if (count((array) $classMethod->params) !== 1) {
             return null;
         }
 

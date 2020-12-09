@@ -95,7 +95,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (count($classStmt->consts) !== 1) {
+            if (count((array) $classStmt->consts) !== 1) {
                 continue;
             }
 
