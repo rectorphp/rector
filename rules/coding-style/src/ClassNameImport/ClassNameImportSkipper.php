@@ -53,7 +53,7 @@ final class ClassNameImportSkipper
     private function isFoundInUse(Name $name): bool
     {
         /** @var Use_[] $uses */
-        $uses = $name->getAttribute(AttributeKey::USE_NODES);
+        $uses = (array) $name->getAttribute(AttributeKey::USE_NODES);
         foreach ($uses as $use) {
             $useUses = $use->uses;
             foreach ($useUses as $useUse) {
