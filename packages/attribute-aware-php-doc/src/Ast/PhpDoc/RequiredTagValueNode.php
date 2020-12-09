@@ -28,6 +28,9 @@ final class RequiredTagValueNode implements PhpDocTagValueNode, AttributeAwareNo
         return 'Symfony\Contracts\Service\Attribute\Required';
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getAttributableItems(): array
     {
         return [];
