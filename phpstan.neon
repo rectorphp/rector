@@ -18,7 +18,6 @@ services:
                 - PhpParser\Node\Expr\ErrorSuppress
                 - PhpParser\Node\Stmt\Switch_
                 - PhpParser\Node\Expr\Empty_
-                - PhpParser\Node\Expr\Isset_
 
     -
         class: Symplify\PHPStanRules\Rules\RequireClassTypeInClassMethodByTypeRule

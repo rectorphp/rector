@@ -30,7 +30,8 @@ final class ArrayCallableMethodReferenceAnalyzer
      */
     public function match(Array_ $array): ?ArrayCallable
     {
-        if (count($array->items) !== 2) {
+        $arrayItems = (array) $array->items;
+        if (count($arrayItems) !== 2) {
             return null;
         }
 

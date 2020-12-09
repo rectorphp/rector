@@ -20,14 +20,16 @@ final class BreakingRemovalGuard
             return;
         }
 
-        // validate the $parentNodenode can be removed
+        // validate the node can be removed
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Node) {
+            throw new ShouldNotHappenException();
+        }
 
         throw new ShouldNotHappenException(sprintf(
             'Node "%s" on line %d is child of "%s", so it cannot be removed as it would break PHP code. Change or remove the parent node instead.',
             get_class($node),
             $node->getLine(),
-            /** @var Node $parentNode */
             get_class($parentNode)
         ));
     }
@@ -35,7 +37,6 @@ final class BreakingRemovalGuard
     public function isLegalNodeRemoval(Node $node): bool
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-
         if ($parent instanceof If_ && $parent->cond === $node) {
             return false;
         }
