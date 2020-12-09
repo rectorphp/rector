@@ -54,6 +54,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::TYPE_DECLARATION,
         SetList::PHPUNIT_CODE_QUALITY,
         Setlist::SYMFONY_AUTOWIRE,
+        Setlist::PHP_71,
+        Setlist::PHP_72,
+        Setlist::PHP_73,
     ]);
 
     $parameters->set(Option::PATHS, [
