@@ -75,11 +75,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node instanceof Closure) {
-            return $this->processParams($node);
+        if ($node instanceof Closure) {
+            $node = $this->processUses($node);
         }
-
-        $node = $this->processUses($node);
+        
         return $this->processParams($node);
     }
 
