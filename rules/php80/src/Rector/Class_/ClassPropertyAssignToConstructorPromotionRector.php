@@ -140,11 +140,11 @@ CODE_SAMPLE
             return;
         }
 
-        $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
-        if ($paramTagValueNode === null) {
+        $attributeAwareParamTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
+        if ($attributeAwareParamTagValueNode === null) {
             return;
         }
 
-        $phpDocInfo->removeTagValueNodeFromNode($paramTagValueNode);
+        $phpDocInfo->removeTagValueNodeFromNode($attributeAwareParamTagValueNode);
     }
 }
