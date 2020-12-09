@@ -35,6 +35,9 @@
         "symplify/simple-php-doc-parser": "^9.0",
         "symplify/smart-file-system": "^9.0",
         "symplify/rule-doc-generator": "^9.0",
+        "symplify/set-config-resolver": "^9.0",
+        "symplify/console-color-diff": "^9.0",
+        "symplify/symfony-php-config": "^9.0",
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
