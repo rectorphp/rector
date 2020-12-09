@@ -637,7 +637,7 @@ parameters:
         -
             message: '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
             paths:
-                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareDataProviderTagValueNode.php # 22
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/DataProviderTagValueNode.php # 22
                 - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 33
                 - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 33
                 - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php # 33
