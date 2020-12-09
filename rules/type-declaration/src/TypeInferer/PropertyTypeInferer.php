@@ -119,7 +119,7 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
 
     private function unionWithDefaultValueType(Type $defaultValueType, ?Type $resolvedType): Type
     {
-        $types = (array) $types;
+        $types = [];
         $types[] = $defaultValueType;
 
         if ($resolvedType !== null) {

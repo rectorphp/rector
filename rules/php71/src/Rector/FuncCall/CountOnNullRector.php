@@ -104,19 +104,19 @@ CODE_SAMPLE
         if ($this->isNullableType($countedNode) || $this->isStaticType($countedNode, NullType::class)) {
             $identical = new Identical($countedNode, $this->createNull());
             $ternaryNode = new Ternary($identical, new LNumber(0), $node);
-        } else {
-            if ($this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
-                $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
-            } else {
-                $instanceof = new Instanceof_($countedNode, new FullyQualified('Countable'));
-                $conditionNode = new BooleanOr(
-                    $this->createFuncCall('is_array', [new Arg($countedNode)]),
-                    $instanceof
-                );
-            }
-
-            $ternaryNode = new Ternary($conditionNode, $node, new LNumber(0));
+            // prevent infinity loop re-resolution
+            $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);
+            return $ternaryNode;
         }
+
+        if ($this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
+            $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
+        } else {
+            $instanceof = new Instanceof_($countedNode, new FullyQualified('Countable'));
+            $conditionNode = new BooleanOr($this->createFuncCall('is_array', [new Arg($countedNode)]), $instanceof);
+        }
+
+        $ternaryNode = new Ternary($conditionNode, $node, new LNumber(0));
 
         // prevent infinity loop re-resolution
         $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);

@@ -786,3 +786,6 @@ parameters:
                 - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfoFactory.php
                 - rules/coding-style/src/Node/DocAliasResolver.php
                 - packages/better-php-doc-parser/tests/PhpDocParser/AbstractPhpDocInfoTest.php
+
+        - '#"@simplexml_load_string\(\$fileContents\)" is forbidden to use#'
+        - '#@ intentionally#'

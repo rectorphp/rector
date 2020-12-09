@@ -124,7 +124,7 @@ CODE_SAMPLE
 
         $args = $funcCall->args;
 
-        $newArgs = (array) $newArgs;
+        $newArgs = [];
         $newArgs[] = $args[0];
         $newArgs[] = $args[1];
 

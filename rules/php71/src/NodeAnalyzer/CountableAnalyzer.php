@@ -43,8 +43,11 @@ final class CountableAnalyzer
         }
 
         if ($callerObjectType instanceof UnionType) {
-            /** @var TypeWithClassName $firstObjectType */
             $callerObjectType = $callerObjectType->getTypes()[0];
+        }
+
+        if (! $callerObjectType instanceof TypeWithClassName) {
+            return false;
         }
 
         $reflectionClass = new ReflectionClass($callerObjectType->getClassName());
