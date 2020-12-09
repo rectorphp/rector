@@ -649,6 +649,11 @@ final class SetList
     /**
      * @var string
      */
+    public const SYMFONY_52 = __DIR__ . '/../../../../config/set/symfony52.php';
+
+    /**
+     * @var string
+     */
     public const SYMFONY_CODE_QUALITY = __DIR__ . '/../../../../config/set/symfony-code-quality.php';
 
     /**
