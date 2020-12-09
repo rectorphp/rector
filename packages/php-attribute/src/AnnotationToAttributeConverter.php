@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Printer\PhpAttributteGroupFactory;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class AnnotationToAttributeConverter
@@ -46,11 +47,9 @@ final class AnnotationToAttributeConverter
 
         // special cases without tag value node
         $hasNewAttrGroups = false;
-        if ($phpDocInfo->hasByName('required')) {
-            $phpDocInfo->removeByName('required');
-            $node->attrGroups[] = new AttributeGroup([
-                new Attribute(new FullyQualified('Symfony\Contracts\Service\Attribute\Required')),
-            ]);
+        if ($phpDocInfo->hasByName(TagName::REQUIRED)) {
+            $phpDocInfo->removeByName(TagName::REQUIRED);
+            $node->attrGroups[] = new AttributeGroup([$this->createRequiredAttribute()]);
             $hasNewAttrGroups = true;
         }
 
@@ -100,5 +99,11 @@ final class AnnotationToAttributeConverter
                 return class_exists($phpAttributableTagNode->getAttributeClassName());
             }
         );
+    }
+
+    private function createRequiredAttribute(): Attribute
+    {
+        $fullyQualified = new FullyQualified('Symfony\Contracts\Service\Attribute\Required');
+        return new Attribute($fullyQualified);
     }
 }

@@ -14,6 +14,7 @@ use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector;
 
 final class InjectMethodFactory
@@ -86,7 +87,7 @@ final class InjectMethodFactory
 
         if ($framework === MultiParentingToAbstractDependencyRector::FRAMEWORK_SYMFONY) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
-            $phpDocInfo->addBareTag('required');
+            $phpDocInfo->addBareTag(TagName::REQUIRED);
         }
 
         return $classMethod;

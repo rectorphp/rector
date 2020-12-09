@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -17,11 +18,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED_TAG = 'required';
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -65,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->hasTagByName($node, self::REQUIRED_TAG)) {
+        if (! $this->hasTagByName($node, TagName::REQUIRED)) {
             return null;
         }
 
