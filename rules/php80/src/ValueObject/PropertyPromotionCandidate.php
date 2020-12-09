@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 
-final class PromotionCandidate
+final class PropertyPromotionCandidate
 {
     /**
      * @var Property
