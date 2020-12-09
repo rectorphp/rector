@@ -88,11 +88,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $last = $node->params[array_key_last($node->params)];
-        $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, false);
-
-        return $node;
+        return $this->cleanTrailingComma($node, $node->params);
     }
 
     private function processUses(Closure $node): Closure
@@ -101,8 +97,13 @@ CODE_SAMPLE
             return $node;
         }
 
+        return $this->cleanTrailingComma($node, $node->uses);
+    }
+
+    private function cleanTrailingComma(Node $node, array $array): Node
+    {
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $last = $node->uses[array_key_last($node->uses)];
+        $last = $array[array_key_last($array)];
         $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, false);
 
         return $node;
