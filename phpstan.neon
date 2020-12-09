@@ -9,17 +9,6 @@ includes:
     - vendor/symplify/phpstan-rules/config/services/services.neon
     - vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-services.neon
 
-    - vendor/symplify/phpstan-rules/config/symplify-rules/array-rules.neon
-    - vendor/symplify/phpstan-rules/config/symplify-rules/code-complexity-rules.neon
-    - vendor/symplify/phpstan-rules/config/symplify-rules/static-rules.neon
-    - vendor/symplify/phpstan-rules/config/symplify-rules/doctrine-rules.neon
-    - vendor/symplify/phpstan-rules/config/symplify-rules/naming-rules.neon
-    - vendor/symplify/phpstan-rules/config/symplify-rules/regex-rules.neon
-    - vendor/symplify/phpstan-rules/config/symplify-rules/symfony-rules.neon
-    - vendor/symplify/phpstan-rules/config/symplify-rules/test-rules.neon
-    - vendor/symplify/phpstan-rules/config/symplify-rules/services-rules.neon
-    - vendor/symplify/phpstan-rules/config/symplify-rules/string-to-constant-rules.neon
-
 services:
     -
         class: Symplify\PHPStanRules\Rules\RequireClassTypeInClassMethodByTypeRule
