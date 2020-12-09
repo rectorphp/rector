@@ -22,10 +22,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SETS, [SetList::PHP_73]);
 
     $parameters->set(Option::SKIP, [
-        '/Source/',
-        '/*Source/',
-        '/Fixture/',
-        '/Expected/',
+        '*/Source/*',
+        '*/Fixture/*',
+        '*/Expected/*',
         __DIR__ . '/packages/doctrine-annotation-generated/src/*',
         __DIR__ . '/packages/rector-generator/templates/*',
         '*.php.inc',
