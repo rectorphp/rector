@@ -369,7 +369,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         $rectorClassesWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
 
-        $filePath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/current_test.php');
+        $filePath = sys_get_temp_dir() . '/rector_temp_tests/current_test.php';
         $this->createPhpConfigFileAndDumpToPath($rectorClassesWithConfiguration, $filePath);
 
         return $filePath;
@@ -501,7 +501,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             $listForConfig[$rectorClass] = null;
         }
 
-        $filePath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.php');
+        $filePath = sys_get_temp_dir() . '/rector_temp_tests/all_rectors.php';
         $this->createPhpConfigFileAndDumpToPath($listForConfig, $filePath);
 
         $this->bootKernelWithConfigs(RectorKernel::class, [$filePath]);
