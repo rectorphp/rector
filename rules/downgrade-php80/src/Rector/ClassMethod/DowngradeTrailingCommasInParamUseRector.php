@@ -78,32 +78,32 @@ CODE_SAMPLE
         if ($node instanceof Closure) {
             $node = $this->processUses($node);
         }
-        
+
         return $this->processParams($node);
     }
 
     private function processParams(Node $node): ?Node
     {
-        if ($node->params !== []) {
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $last = $node->params[array_key_last($node->params)];
-            $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, false);
-
-            return $node;
+        if ($node->params === []) {
+            return null;
         }
 
-        return null;
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $last = $node->params[array_key_last($node->params)];
+        $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, false);
+
+        return $node;
     }
 
     private function processUses(Closure $node): Closure
     {
-        if ($node->uses !== []) {
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $last = $node->uses[array_key_last($node->uses)];
-            $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, false);
-
+        if ($node->uses === []) {
             return $node;
         }
+
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $last = $node->uses[array_key_last($node->uses)];
+        $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, false);
 
         return $node;
     }
