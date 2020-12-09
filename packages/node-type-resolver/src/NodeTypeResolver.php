@@ -247,7 +247,6 @@ final class NodeTypeResolver
     public function isNullableTypeOfSpecificType(Node $node, string $desiredType): bool
     {
         $nodeType = $this->resolve($node);
-
         if (! $nodeType instanceof UnionType) {
             return false;
         }
