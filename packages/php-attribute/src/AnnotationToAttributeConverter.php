@@ -6,10 +6,8 @@ namespace Rector\PhpAttribute;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -44,15 +42,7 @@ final class AnnotationToAttributeConverter
             return null;
         }
 
-        // special cases without tag value node
         $hasNewAttrGroups = false;
-        if ($phpDocInfo->hasByName('required')) {
-            $phpDocInfo->removeByName('required');
-            $node->attrGroups[] = new AttributeGroup([
-                new Attribute(new FullyQualified('Symfony\Contracts\Service\Attribute\Required')),
-            ]);
-            $hasNewAttrGroups = true;
-        }
 
         // 0. has 0 nodes, nothing to change
         /** @var PhpAttributableTagNodeInterface[] $phpAttributableTagNodes */

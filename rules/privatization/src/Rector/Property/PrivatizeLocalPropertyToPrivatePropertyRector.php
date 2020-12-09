@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\VendorLocker\NodeVendorLocker\PropertyVisibilityVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,7 +27,7 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
     private const ANNOTATIONS_REQUIRING_PUBLIC = [
         'api',
         // Symfony DI
-        'required',
+        TagName::REQUIRED,
         // other DI
         'inject',
     ];

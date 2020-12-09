@@ -11,7 +11,6 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\PhpAttribute\Contract\ManyPhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
@@ -43,13 +42,7 @@ final class PhpAttributteGroupFactory
     public function printItemsToAttributeArgs(PhpAttributableTagNodeInterface $phpAttributableTagNode): array
     {
         $items = $phpAttributableTagNode->getAttributableItems();
-
-        $silentKey = null;
-        if ($phpAttributableTagNode instanceof SilentKeyNodeInterface) {
-            $silentKey = $phpAttributableTagNode->getSilentKey();
-        }
-
-        return $this->createArgsFromItems($items, $silentKey);
+        return $this->createArgsFromItems($items);
     }
 
     /**

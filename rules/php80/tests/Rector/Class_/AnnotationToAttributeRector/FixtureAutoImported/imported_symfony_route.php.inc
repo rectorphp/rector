@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SymfonyRoute
 {
-    #[Route('/path', name: 'action')]
+    #[Route(path: '/path', name: 'action')]
     public function action()
     {
     }
