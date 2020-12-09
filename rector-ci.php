@@ -86,6 +86,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     # so Rector code is still PHP 7.2 compatible
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_7_2);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
     $parameters->set(Option::ENABLE_CACHE, true);
 };

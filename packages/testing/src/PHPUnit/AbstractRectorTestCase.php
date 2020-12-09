@@ -181,7 +181,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         // restore PHP version if changed
         if ($this->getPhpVersion() !== self::PHP_VERSION_UNDEFINED) {
-            $this->setParameter(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_10_0);
+            $this->setParameter(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_10);
         }
     }
 

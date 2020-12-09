@@ -169,7 +169,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     // is your PHP version different from the one your refactor to? [default: your PHP version], uses PHP_VERSION_ID format
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_7_2);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
 
     // auto import fully qualified class names? [default: false]
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
