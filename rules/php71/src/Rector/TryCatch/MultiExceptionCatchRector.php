@@ -64,7 +64,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($node->catches) < 2) {
+        if (count((array) $node->catches) < 2) {
             return null;
         }
 

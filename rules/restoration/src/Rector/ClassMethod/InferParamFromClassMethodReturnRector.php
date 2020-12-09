@@ -115,7 +115,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // must be exactly 1 param
-        if (count($node->params) !== 1) {
+        if (count((array) $node->params) !== 1) {
             return null;
         }
 

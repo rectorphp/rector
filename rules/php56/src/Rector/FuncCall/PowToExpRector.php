@@ -46,7 +46,7 @@ final class PowToExpRector extends AbstractRector
             return null;
         }
 
-        if (count($node->args) !== 2) {
+        if (count((array) $node->args) !== 2) {
             return null;
         }
 

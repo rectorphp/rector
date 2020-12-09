@@ -197,7 +197,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($expr->args) < 1) {
+        if (count((array) $expr->args) < 1) {
             return null;
         }
 

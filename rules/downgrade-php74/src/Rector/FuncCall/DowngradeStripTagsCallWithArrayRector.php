@@ -146,7 +146,7 @@ CODE_SAMPLE
         }
 
         // If param not provided, do nothing
-        if (count($node->args) < 2) {
+        if (count((array) $node->args) < 2) {
             return false;
         }
 

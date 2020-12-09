@@ -170,7 +170,7 @@ CODE_SAMPLE
             return $args;
         }
 
-        if (count($funcCall->args) !== 3) {
+        if (count((array) $funcCall->args) !== 3) {
             return $args;
         }
 

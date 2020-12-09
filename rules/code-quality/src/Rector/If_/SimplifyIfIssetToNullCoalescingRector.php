@@ -112,7 +112,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count($if->elseifs) > 1) {
+        if (count((array) $if->elseifs) > 1) {
             return true;
         }
 
@@ -139,7 +139,7 @@ CODE_SAMPLE
      */
     private function hasOnlyStatementAssign(Node $node): bool
     {
-        if (count($node->stmts) !== 1) {
+        if (count((array) $node->stmts) !== 1) {
             return false;
         }
 
