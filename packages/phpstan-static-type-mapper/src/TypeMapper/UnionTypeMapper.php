@@ -230,6 +230,11 @@ final class UnionTypeMapper implements TypeMapperInterface
         $phpParserUnionedTypes = [];
 
         foreach ($unionType->getTypes() as $unionedType) {
+            // void type is not allowed in union
+            if ($unionedType instanceof VoidType) {
+                return null;
+            }
+
             /** @var Identifier|Name|null $phpParserNode */
             $phpParserNode = $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionedType);
             if ($phpParserNode === null) {
