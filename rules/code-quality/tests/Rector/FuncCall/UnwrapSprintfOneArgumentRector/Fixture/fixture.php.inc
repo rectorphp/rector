@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\UnwrapSprintfOneArgumentRector\Fixture;
 
 class SomeClass
 {
@@ -15,7 +15,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\UnwrapSprintfOneArgumentRector\Fixture;
 
 class SomeClass
 {
