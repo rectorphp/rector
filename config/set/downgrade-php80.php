@@ -6,6 +6,7 @@ use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
 use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector;
 use Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector;
+use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector;
@@ -32,4 +33,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeMatchToSwitchRector::class);
     $services->set(DowngradeClassOnObjectToGetClassRector::class);
     $services->set(DowngradeNullsafeToTernaryOperatorRector::class);
+    $services->set(DowngradeTrailingCommasInParamUseRector::class);
 };
