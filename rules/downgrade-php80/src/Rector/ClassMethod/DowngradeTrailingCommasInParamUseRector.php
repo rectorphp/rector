@@ -6,12 +6,14 @@ namespace Rector\DowngradePhp80\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node\Param;
 
 /**
  * @see \Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\DowngradeTrailingCommasInParamUseRectorTest
@@ -82,7 +84,7 @@ CODE_SAMPLE
         return $this->processParams($node);
     }
 
-    private function processUses(Closure $node): Closure
+    private function processUses(Closure $node): Node
     {
         if ($node->uses === []) {
             return $node;
@@ -100,6 +102,9 @@ CODE_SAMPLE
         return $this->cleanTrailingComma($node, $node->params);
     }
 
+    /**
+     * @param ClosureUse[]|Param[] $array
+     */
     private function cleanTrailingComma(Node $node, array $array): Node
     {
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
