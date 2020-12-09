@@ -84,13 +84,15 @@ CODE_SAMPLE
         return $this->processParams($node);
     }
 
-    private function processUses(Closure $node): Node
+    private function processUses(Closure $node): Closure
     {
         if ($node->uses === []) {
             return $node;
         }
 
-        return $this->cleanTrailingComma($node, $node->uses);
+        /** @var Closure $clean */
+        $clean = $this->cleanTrailingComma($node, $node->uses);
+        return $clean;
     }
 
     private function processParams(Node $node): ?Node
