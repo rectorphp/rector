@@ -9,13 +9,11 @@ use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 8.0
- */
 final class DowngradeMatchToSwitchRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
+     * @requires PHP 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {

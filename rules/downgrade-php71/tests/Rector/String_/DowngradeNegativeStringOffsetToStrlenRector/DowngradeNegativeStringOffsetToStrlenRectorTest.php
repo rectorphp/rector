@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Tests\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -29,10 +28,5 @@ final class DowngradeNegativeStringOffsetToStrlenRectorTest extends AbstractRect
     protected function getRectorClass(): string
     {
         return DowngradeNegativeStringOffsetToStrlenRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::NEGATIVE_STRING_OFFSET - 1;
     }
 }

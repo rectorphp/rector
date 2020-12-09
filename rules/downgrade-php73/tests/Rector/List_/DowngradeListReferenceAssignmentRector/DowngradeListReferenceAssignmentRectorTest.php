@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -29,10 +28,5 @@ final class DowngradeListReferenceAssignmentRectorTest extends AbstractRectorTes
     protected function getRectorClass(): string
     {
         return DowngradeListReferenceAssignmentRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::LIST_REFERENCE_ASSIGNMENT - 1;
     }
 }

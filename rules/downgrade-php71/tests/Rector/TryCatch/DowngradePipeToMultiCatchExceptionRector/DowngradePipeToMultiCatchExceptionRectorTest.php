@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Tests\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector;
 
 use Iterator;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp71\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -28,5 +29,10 @@ final class DowngradePipeToMultiCatchExceptionRectorTest extends AbstractRectorT
     protected function getRectorClass(): string
     {
         return DowngradePipeToMultiCatchExceptionRector::class;
+    }
+
+    protected function getPhpVersion(): int
+    {
+        return PhpVersionFeature::MULTI_EXCEPTION_CATCH - 1;
     }
 }
