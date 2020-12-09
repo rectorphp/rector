@@ -14,7 +14,7 @@ final class DoNotDuplicateCodeTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        @$this->doTestFileInfo($fileInfo);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator
