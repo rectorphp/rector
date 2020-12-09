@@ -11,6 +11,16 @@ includes:
 
 services:
     -
+        class: Symplify\PHPStanRules\Rules\OnlyOneClassMethodRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            onlyOneMethodsByType:
+                Rector\Testing\PHPUnit\AbstractRectorTestCase:
+                    - getRectorClass
+                    - provideConfigFileInfo
+                    - getRectorsWithConfiguration
+
+    -
         class: Symplify\PHPStanRules\Rules\NoParticularNodeRule
         tags: [phpstan.rules.rule]
         arguments:
