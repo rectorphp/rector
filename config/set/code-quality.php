@@ -36,6 +36,7 @@ use Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector;
 use Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector;
+use Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector;
 use Rector\CodeQuality\Rector\FunctionLike\RemoveAlwaysTrueConditionSetInConstructorRector;
 use Rector\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector;
 use Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector;
@@ -165,4 +166,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(IssetOnPropertyObjectToPropertyExistsRector::class);
     $services->set(NewStaticToNewSelfRector::class);
     $services->set(DateTimeToDateTimeInterfaceRector::class);
+    $services->set(UnwrapSprintfOneArgumentRector::class);
 };
