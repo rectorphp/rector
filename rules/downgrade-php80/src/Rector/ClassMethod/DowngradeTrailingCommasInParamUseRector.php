@@ -82,15 +82,6 @@ CODE_SAMPLE
         return $this->processParams($node);
     }
 
-    private function processParams(Node $node): ?Node
-    {
-        if ($node->params === []) {
-            return null;
-        }
-
-        return $this->cleanTrailingComma($node, $node->params);
-    }
-
     private function processUses(Closure $node): Closure
     {
         if ($node->uses === []) {
@@ -98,6 +89,15 @@ CODE_SAMPLE
         }
 
         return $this->cleanTrailingComma($node, $node->uses);
+    }
+
+    private function processParams(Node $node): ?Node
+    {
+        if ($node->params === []) {
+            return null;
+        }
+
+        return $this->cleanTrailingComma($node, $node->params);
     }
 
     private function cleanTrailingComma(Node $node, array $array): Node
