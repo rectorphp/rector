@@ -9,6 +9,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use ReflectionClass;
+use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -179,11 +181,13 @@ CODE_SAMPLE
      */
     private function getPublicMethods(string $fqcn): array
     {
+        $reflection = new ReflectionClass($fqcn);
+
         return array_map(
-            static function (\ReflectionMethod $method) {
+            static function (ReflectionMethod $method) {
                 return $method->name;
             },
-            (new \ReflectionClass($fqcn))->getMethods(\ReflectionMethod::IS_PUBLIC)
+            $reflection->getMethods(ReflectionMethod::IS_PUBLIC)
         );
     }
 }
