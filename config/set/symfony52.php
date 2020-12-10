@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\RenameClassConstant;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -21,4 +23,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new MethodCallRename('Symfony\Component\Mime\Address', 'fromString', 'create'),
             ]),
         ]]);
+
+    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#security
+    $services->set(RenameClassConstantRector::class)
+        ->call('configure', [[
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
+                new RenameClassConstant(
+                    'Symfony\Component\Security\Http\Firewall\AccessListener',
+                    'PUBLIC_ACCESS',
+                    'Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter::PUBLIC_ACCESS'
+                ),
+            ]),
+        ]]);
+
 };
