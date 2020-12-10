@@ -8,7 +8,7 @@ class CreateWithoutArguments
 {
     public function action()
     {
-        $form = BinaryFileResponse::create();
+        $binaryFileResponse = BinaryFileResponse::create();
     }
 }
 
@@ -24,7 +24,7 @@ class CreateWithoutArguments
 {
     public function action()
     {
-        $form = new BinaryFileResponse(null);
+        $binaryFileResponse = new BinaryFileResponse(null);
     }
 }
 

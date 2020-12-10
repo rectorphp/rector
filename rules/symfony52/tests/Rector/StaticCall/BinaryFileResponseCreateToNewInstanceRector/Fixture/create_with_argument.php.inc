@@ -8,7 +8,7 @@ class CreateWithArgument
 {
     public function action()
     {
-        $form = BinaryFileResponse::create('some_filename');
+        return BinaryFileResponse::create('some_file_path.txt');
     }
 }
 
@@ -24,7 +24,7 @@ class CreateWithArgument
 {
     public function action()
     {
-        $form = new BinaryFileResponse('some_filename');
+        return new BinaryFileResponse('some_file_path.txt');
     }
 }
 
