@@ -6,5 +6,5 @@ namespace Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationIn
 
 interface InterfaceFive
 {
-
+    public function methodFromInterface(): void;
 }

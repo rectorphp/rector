@@ -10,4 +10,8 @@ final class ClassThatImplementsInterfaceAndDefinesOwnPublicMethods implements In
     {
         return 'bar';
     }
+
+    public function methodFromInterface(): void
+    {
+    }
 }

@@ -7,4 +7,8 @@ namespace Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationIn
 final class ClassThatImplementsInterfaceAndUsesTraitWithAdditionalMethods implements InterfaceFive
 {
     use TraitOne;
+
+    public function methodFromInterface(): void
+    {
+    }
 }
