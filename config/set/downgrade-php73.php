@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeListReferenceAssignmentRector::class);
 
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_7_2);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
 
     // skip root namespace classes, like \DateTime or \Exception [default: true]
     $parameters->set(Option::IMPORT_SHORT_CLASSES, false);

@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeReturnObjectTypeDeclarationRector::class);
 
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_7_1);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_71);
 
     // skip root namespace classes, like \DateTime or \Exception [default: true]
     $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
