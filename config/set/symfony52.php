@@ -6,6 +6,7 @@ use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstant;
+use Rector\Symfony\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -15,6 +16,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/symfony50-types.php');
 
     $services = $containerConfigurator->services();
+
+    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
+    $services->set(BinaryFileResponseCreateToNewInstanceRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#mime
     $services->set(RenameMethodRector::class)

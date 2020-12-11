@@ -23,7 +23,7 @@ final class FunctionSupportResolver
         ],
         PhpVersion::PHP_71 => ['is_iterable'],
         PhpVersion::PHP_72 => ['spl_object_id', 'stream_isatty'],
-        PhpVersion::PHP_7_3 => ['array_key_first', 'array_key_last', 'hrtime', 'is_countable'],
+        PhpVersion::PHP_73 => ['array_key_first', 'array_key_last', 'hrtime', 'is_countable'],
         PhpVersion::PHP_74 => ['get_mangled_object_vars', 'mb_str_split', 'password_algos'],
     ];
 
