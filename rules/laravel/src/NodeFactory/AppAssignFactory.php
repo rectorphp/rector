@@ -43,11 +43,12 @@ final class AppAssignFactory
     ): void {
         $phpDocInfo = $this->phpDocInfoFactory->createEmpty($expression);
 
-        $attributeAwareFullyQualifiedIdentifierTypeNode = new FullyQualifiedIdentifierTypeNode(
+        $fullyQualifiedIdentifierTypeNode = new FullyQualifiedIdentifierTypeNode(
             $serviceNameTypeAndVariableName->getType()
         );
+
         $varTagValueNode = new VarTagValueNode(
-            $attributeAwareFullyQualifiedIdentifierTypeNode,
+            $fullyQualifiedIdentifierTypeNode,
             '$' . $serviceNameTypeAndVariableName->getVariableName(),
             ''
         );
