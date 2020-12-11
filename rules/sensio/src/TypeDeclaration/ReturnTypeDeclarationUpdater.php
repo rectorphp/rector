@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\UnionType;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoManipulator;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -73,7 +73,7 @@ final class ReturnTypeDeclarationUpdater
         );
 
         if ($returnStaticType instanceof ArrayType || $returnStaticType instanceof UnionType) {
-            $returnTagValueNode->type = new AttributeAwareFullyQualifiedIdentifierTypeNode($className);
+            $returnTagValueNode->type = new FullyQualifiedIdentifierTypeNode($className);
         }
     }
 

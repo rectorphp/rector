@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Laravel\ValueObject\ServiceNameTypeAndVariableName;
 
@@ -43,7 +43,7 @@ final class AppAssignFactory
     ): void {
         $phpDocInfo = $this->phpDocInfoFactory->createEmpty($expression);
 
-        $attributeAwareFullyQualifiedIdentifierTypeNode = new AttributeAwareFullyQualifiedIdentifierTypeNode(
+        $attributeAwareFullyQualifiedIdentifierTypeNode = new FullyQualifiedIdentifierTypeNode(
             $serviceNameTypeAndVariableName->getType()
         );
         $varTagValueNode = new VarTagValueNode(
