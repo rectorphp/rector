@@ -6,7 +6,7 @@ use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstant;
-use Rector\Symfony52\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
+use Rector\Symfony\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

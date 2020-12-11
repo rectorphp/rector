@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony52\Tests\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
+namespace Rector\Symfony\Tests\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
 
 use Iterator;
-use Rector\Symfony52\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
+use Rector\Symfony\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
