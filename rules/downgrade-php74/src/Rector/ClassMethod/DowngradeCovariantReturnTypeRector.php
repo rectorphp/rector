@@ -127,7 +127,9 @@ CODE_SAMPLE
         if ($nodeReturnType === null || $nodeReturnType instanceof UnionType) {
             return null;
         }
-        $nodeReturnTypeName = $this->getName($nodeReturnType);
+        $nodeReturnTypeName = $this->getName(
+            $nodeReturnType instanceof NullableType ? $nodeReturnType->type : $nodeReturnType
+        );
 
         /** @var string $methodName */
         $methodName = $this->getName($classMethod->name);
@@ -153,7 +155,6 @@ CODE_SAMPLE
             if ($parentReflectionMethodReturnType === null || $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
                 continue;
             }
-
             // This is an ancestor class with a different return type
             return $parentReflectionMethodReturnType->getName();
         }
