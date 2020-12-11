@@ -31,7 +31,7 @@ services:
                     - getRectorsWithConfiguration
 
     -
-        class: Symplify\PHPStanRules\Rules\NoParticularNodeRule
+        class: Symplify\PHPStanRules\Rules\ForbiddenNodeRule
         tags: [phpstan.rules.rule]
         arguments:
             forbiddenNodes:
