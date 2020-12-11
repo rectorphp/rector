@@ -1,7 +1,0 @@
-parameters:
-    kernel_class: 'Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeKernelClass'
-
-services:
-    Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector:
-        $containerAwareParentTypes:
-            - 'Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass'
