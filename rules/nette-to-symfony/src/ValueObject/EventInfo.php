@@ -29,21 +29,21 @@ final class EventInfo
     /**
      * @var string[]
      */
-    private $oldClassConstAlaises = [];
+    private $oldClassConstAliases = [];
 
     /**
      * @param string[] $oldStringAliases
-     * @param string[] $oldClassConstAlaises
+     * @param string[] $oldClassConstAliases
      */
     public function __construct(
         array $oldStringAliases,
-        array $oldClassConstAlaises,
+        array $oldClassConstAliases,
         string $class,
         string $constant,
         string $eventClass
     ) {
         $this->oldStringAliases = $oldStringAliases;
-        $this->oldClassConstAlaises = $oldClassConstAlaises;
+        $this->oldClassConstAliases = $oldClassConstAliases;
         $this->class = $class;
         $this->constant = $constant;
         $this->eventClass = $eventClass;
@@ -60,9 +60,9 @@ final class EventInfo
     /**
      * @return string[]
      */
-    public function getOldClassConstAlaises(): array
+    public function getOldClassConstAliases(): array
     {
-        return $this->oldClassConstAlaises;
+        return $this->oldClassConstAliases;
     }
 
     public function getClass(): string
