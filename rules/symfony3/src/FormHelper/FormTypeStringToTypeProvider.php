@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\FormHelper;
+namespace Rector\Symfony3\FormHelper;
 
 use Nette\Utils\Strings;
 use Rector\Symfony\ServiceMapProvider;

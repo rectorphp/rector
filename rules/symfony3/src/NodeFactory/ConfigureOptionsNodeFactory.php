@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\NodeFactory;
+namespace Rector\Symfony3\NodeFactory;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony3\Rector\MethodCall;
 
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
+use Rector\Symfony3\FormHelper\FormTypeStringToTypeProvider;
 
 abstract class AbstractFormAddRector extends AbstractRector
 {
