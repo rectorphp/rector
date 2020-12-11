@@ -52,7 +52,7 @@ final class PhpVersion
      * @api
      * @var int
      */
-    public const PHP_7_3 = 70300;
+    public const PHP_73 = 70300;
 
     /**
      * @api

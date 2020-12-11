@@ -32,6 +32,6 @@ final class CountOnNullRectorWithPHP73Test extends AbstractRectorTestCase
 
     protected function getPhpVersion(): int
     {
-        return PhpVersion::PHP_7_3;
+        return PhpVersion::PHP_73;
     }
 }
