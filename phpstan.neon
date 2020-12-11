@@ -9,6 +9,18 @@ includes:
     - vendor/symplify/phpstan-rules/config/services/services.neon
     - vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-services.neon
 
+    - vendor/symplify/phpstan-rules/config/array-rules.neon
+    - vendor/symplify/phpstan-rules/config/code-complexity-rules.neon
+    - vendor/symplify/phpstan-rules/config/doctrine-rules.neon
+    - vendor/symplify/phpstan-rules/config/naming-rules.neon
+    - vendor/symplify/phpstan-rules/config/regex-rules.neon
+    - vendor/symplify/phpstan-rules/config/services-rules.neon
+    - vendor/symplify/phpstan-rules/config/size-rules.neon
+    - vendor/symplify/phpstan-rules/config/forbid-static-rules.neon
+    - vendor/symplify/phpstan-rules/config/string-to-constant-rules.neon
+    - vendor/symplify/phpstan-rules/config/symfony-rules.neon
+    - vendor/symplify/phpstan-rules/config/test-rules.neon
+
 services:
     -
         class: Symplify\PHPStanRules\Rules\ForbiddenMethodCallOnTypeRule
