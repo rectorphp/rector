@@ -81,7 +81,7 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
 
         $objectType = new ObjectType($typeNode->name);
 
-        return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $objectType);
+        return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType);
     }
 
     private function mapSelf(Node $node): Type

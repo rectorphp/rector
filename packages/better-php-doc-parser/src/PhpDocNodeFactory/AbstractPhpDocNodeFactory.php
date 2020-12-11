@@ -88,7 +88,7 @@ abstract class AbstractPhpDocNodeFactory
             return $namespacedTargetEntity;
         }
 
-        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType(
+        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType(
             $node,
             new ObjectType($targetEntity)
         );
