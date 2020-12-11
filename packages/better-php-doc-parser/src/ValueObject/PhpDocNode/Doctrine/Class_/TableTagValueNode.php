@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
-use Rector\BetterPhpDocParser\ValueObject\OpeningAndClosingSpace;
+use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 
@@ -32,14 +32,14 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
     private $uniqueConstraints = [];
 
     /**
-     * @var OpeningAndClosingSpace|null
+     * @var AroundSpaces|null
      */
-    private $indexesOpeningAndClosingSpace;
+    private $indexesAroundSpaces;
 
     /**
-     * @var OpeningAndClosingSpace|null
+     * @var AroundSpaces|null
      */
-    private $uniqueConstraintsOpeningAndClosingSpace;
+    private $uniqueConstraintsAroundSpaces;
 
     /**
      * @param mixed[] $options
@@ -55,8 +55,8 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         ?string $originalContent = null,
         bool $haveIndexesFinalComma = false,
         bool $haveUniqueConstraintsFinalComma = false,
-        ?OpeningAndClosingSpace $indexesOpeningAndClosingSpace = null,
-        ?OpeningAndClosingSpace $uniqueConstraintsOpeningAndClosingSpace = null
+        ?AroundSpaces $indexesAroundSpaces = null,
+        ?AroundSpaces $uniqueConstraintsAroundSpaces = null
     ) {
         $this->items['name'] = $name;
         $this->items['schema'] = $schema;
@@ -69,8 +69,8 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
 
         $this->haveIndexesFinalComma = $haveIndexesFinalComma;
         $this->haveUniqueConstraintsFinalComma = $haveUniqueConstraintsFinalComma;
-        $this->indexesOpeningAndClosingSpace = $indexesOpeningAndClosingSpace;
-        $this->uniqueConstraintsOpeningAndClosingSpace = $uniqueConstraintsOpeningAndClosingSpace;
+        $this->indexesAroundSpaces = $indexesAroundSpaces;
+        $this->uniqueConstraintsAroundSpaces = $uniqueConstraintsAroundSpaces;
     }
 
     public function __toString(): string
@@ -102,28 +102,28 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
     private function addCustomItems(array $items): array
     {
         if ($this->indexes !== []) {
-            if ($this->indexesOpeningAndClosingSpace === null) {
+            if ($this->indexesAroundSpaces === null) {
                 throw new ShouldNotHappenException();
             }
 
             $items['indexes'] = $this->printNestedTag(
                 $this->indexes,
                 $this->haveIndexesFinalComma,
-                $this->indexesOpeningAndClosingSpace->getOpeningSpace(),
-                $this->indexesOpeningAndClosingSpace->getClosingSpace()
+                $this->indexesAroundSpaces->getOpeningSpace(),
+                $this->indexesAroundSpaces->getClosingSpace()
             );
         }
 
         if ($this->uniqueConstraints !== []) {
-            if ($this->uniqueConstraintsOpeningAndClosingSpace === null) {
+            if ($this->uniqueConstraintsAroundSpaces === null) {
                 throw new ShouldNotHappenException();
             }
 
             $items['uniqueConstraints'] = $this->printNestedTag(
                 $this->uniqueConstraints,
                 $this->haveUniqueConstraintsFinalComma,
-                $this->uniqueConstraintsOpeningAndClosingSpace->getOpeningSpace(),
-                $this->uniqueConstraintsOpeningAndClosingSpace->getClosingSpace()
+                $this->uniqueConstraintsAroundSpaces->getOpeningSpace(),
+                $this->uniqueConstraintsAroundSpaces->getClosingSpace()
             );
         }
 

@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\ValueObject\OpeningAndClosingSpace;
+use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
@@ -75,8 +75,8 @@ final class PhpDocTagNodeFactory
             $uuidJoinColumnTagValueNodes,
             $uuidJoinColumnTagValueNodes,
             '',
-            new OpeningAndClosingSpace('', ''),
-            new OpeningAndClosingSpace('', '')
+            new AroundSpaces('', ''),
+            new AroundSpaces('', '')
         );
 
         return new SpacelessPhpDocTagNode($joinTableTagValueNode->getShortName(), $joinTableTagValueNode);

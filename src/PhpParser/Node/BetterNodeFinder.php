@@ -309,7 +309,6 @@ final class BetterNodeFinder
 
     /**
      * @param Node|Node[] $nodes
-     * @param class-string $type
      */
     private function findInstanceOfName($nodes, string $type, string $name): ?Node
     {

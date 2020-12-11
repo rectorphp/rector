@@ -73,9 +73,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
             self::JOIN_COLUMNS
         );
 
-        $joinColumnsOpeningAndClosingSpace = $this->matchCurlyBracketOpeningAndClosingSpace(
-            $joinColumnsAnnotationContent
-        );
+        $joinColumnsAroundSpaces = $this->matchCurlyBracketAroundSpaces($joinColumnsAnnotationContent);
 
         // inversed join columns
         $inverseJoinColumnsAnnotationContent = $this->annotationContentResolver->resolveNestedKey(
@@ -88,7 +86,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
             self::INVERSE_JOIN_COLUMNS
         );
 
-        $inverseJoinColumnOpeningAndClosingSpace = $this->matchCurlyBracketOpeningAndClosingSpace(
+        $inverseJoinColumnAroundSpaces = $this->matchCurlyBracketAroundSpaces(
             $inverseJoinColumnsAnnotationContent
         );
 
@@ -98,8 +96,8 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
             $joinColumnValuesTags,
             $inverseJoinColumnValuesTags,
             $annotationContent,
-            $joinColumnsOpeningAndClosingSpace,
-            $inverseJoinColumnOpeningAndClosingSpace
+            $joinColumnsAroundSpaces,
+            $inverseJoinColumnAroundSpaces
         );
     }
 

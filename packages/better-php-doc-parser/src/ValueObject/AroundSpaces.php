@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject;
 
-final class OpeningAndClosingSpace
+final class AroundSpaces
 {
     /**
      * @var string
