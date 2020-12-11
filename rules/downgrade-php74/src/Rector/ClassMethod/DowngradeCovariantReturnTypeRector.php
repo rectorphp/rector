@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -13,6 +14,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -88,8 +90,11 @@ CODE_SAMPLE
         }
 
         /** @var string */
-        $parentReflectionMethodClassname = $this->getDifferentReturnTypeClassnameFromAncestorClass($node);
-        $newType = new FullyQualified($parentReflectionMethodClassname);
+        $parentReflectionMethodName = $this->getDifferentReturnTypeNameFromAncestorClass($node);
+        // The return type name could either be a classname, without the leading "\",
+        // or one among the reserved identifiers ("static", "self", "iterable", etc)
+        // To find out which is the case, check if this name exists as a class
+        $newType = ClassExistenceStaticHelper::doesClassLikeExist($parentReflectionMethodName) ? new FullyQualified($parentReflectionMethodName) : new Name($parentReflectionMethodName);
 
         // Make it nullable?
         if ($node->returnType instanceof NullableType) {
@@ -106,10 +111,10 @@ CODE_SAMPLE
 
     private function shouldRefactor(ClassMethod $classMethod): bool
     {
-        return $this->getDifferentReturnTypeClassnameFromAncestorClass($classMethod) !== null;
+        return $this->getDifferentReturnTypeNameFromAncestorClass($classMethod) !== null;
     }
 
-    private function getDifferentReturnTypeClassnameFromAncestorClass(ClassMethod $classMethod): ?string
+    private function getDifferentReturnTypeNameFromAncestorClass(ClassMethod $classMethod): ?string
     {
         /** @var Scope|null $scope */
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
