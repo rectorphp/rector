@@ -162,8 +162,19 @@ CODE_SAMPLE
         $parentReflectionMethodParams = $parentReflectionMethod->getParameters();
         foreach ($parentReflectionMethodParams as $reflectionParameter) {
             if ($reflectionParameter->name === $paramName) {
-                /** @var ReflectionNamedType */
+                /**
+                 * Getting a ReflectionNamedType works from PHP 7.1 onwards
+                 * @see https://www.php.net/manual/en/reflectionparameter.gettype.php#125334
+                 */
+                /** @var ReflectionNamedType|null */
                 $reflectionParamType = $reflectionParameter->getType();
+                /**
+                 * If the type is null, we don't have enough information
+                 * to check if they are different. Then do nothing
+                 */
+                if ($reflectionParamType === null) {
+                    continue;
+                }
                 if ($reflectionParamType->getName() !== $paramTypeName) {
                     // We found it: a different param type in some ancestor
                     return $reflectionParamType->getName();
