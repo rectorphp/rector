@@ -30,7 +30,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeArrayMergeCallWithoutArgumentsRector::class);
 
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_7_3);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
 
     // skip root namespace classes, like \DateTime or \Exception [default: true]
     $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
