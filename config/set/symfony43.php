@@ -9,8 +9,8 @@ use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
-use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
+use Rector\Symfony4\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
+use Rector\Symfony4\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
