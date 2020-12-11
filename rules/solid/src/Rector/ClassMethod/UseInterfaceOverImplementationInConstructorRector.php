@@ -171,7 +171,7 @@ CODE_SAMPLE
         $classMethods = $this->getPublicMethods($className);
         $interfaceMethods = $this->getPublicMethods($interfaceName);
 
-        return count(array_diff($classMethods, $interfaceMethods)) > 0;
+        return array_diff($classMethods, $interfaceMethods) !== [];
     }
 
     /**
@@ -181,13 +181,13 @@ CODE_SAMPLE
      */
     private function getPublicMethods(string $fqcn): array
     {
-        $reflection = new ReflectionClass($fqcn);
+        $reflectionClass = new ReflectionClass($fqcn);
 
         return array_map(
-            static function (ReflectionMethod $method) {
+            static function (ReflectionMethod $method): string {
                 return $method->name;
             },
-            $reflection->getMethods(ReflectionMethod::IS_PUBLIC)
+            $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC)
         );
     }
 }
