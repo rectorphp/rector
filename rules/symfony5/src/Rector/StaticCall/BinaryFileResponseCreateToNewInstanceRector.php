@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\StaticCall;
+namespace Rector\Symfony5\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
- * @see \Rector\Symfony\Tests\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector\BinaryFileResponseCreateToNewInstanceRectorTest
+ * @see \Rector\Symfony5\Tests\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector\BinaryFileResponseCreateToNewInstanceRectorTest
  */
 final class BinaryFileResponseCreateToNewInstanceRector extends AbstractRector
 {
