@@ -2,15 +2,13 @@
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\FixturePhp74;
 
-use DateTime;
+use Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Source\SameNameMethod;
 
 class ArrowFunction
 {
-    public function run()
+    public function run(SameNameMethod $sameNameMethod)
     {
-        $datetime = new DateTime();
-
-        $fn1 = fn($x) => $x + $stamp = $datetime->getTimezone();
+        $fn1 = fn($x) => $x + $stamp = $sameNameMethod->getName();
     }
 }
 
@@ -20,15 +18,13 @@ class ArrowFunction
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\FixturePhp74;
 
-use DateTime;
+use Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Source\SameNameMethod;
 
 class ArrowFunction
 {
-    public function run()
+    public function run(SameNameMethod $sameNameMethod)
     {
-        $datetime = new DateTime();
-
-        $fn1 = fn($x) => $x + $dateTimeZone = $datetime->getTimezone();
+        $fn1 = fn($x) => $x + $fullName = $sameNameMethod->getName();
     }
 }
 

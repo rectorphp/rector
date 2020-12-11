@@ -185,16 +185,11 @@ final class PhpDocInfo
     }
 
     /**
-     * @return Type[]
+     * @return ParamTagValueNode[]
      */
-    public function getParamTypes(): array
+    public function getParamTagValueNodes(): array
     {
-        $paramTypes = [];
-        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValueNode) {
-            $paramTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValueNode, $this->node);
-        }
-
-        return $paramTypes;
+        return $this->phpDocNode->getParamTagValues();
     }
 
     public function getParamTagValueNodeByName(string $parameterName): ?ParamTagValueNode

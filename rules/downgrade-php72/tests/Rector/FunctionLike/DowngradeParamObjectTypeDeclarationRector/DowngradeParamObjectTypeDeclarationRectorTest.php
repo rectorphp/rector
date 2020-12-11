@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -26,25 +25,8 @@ final class DowngradeParamObjectTypeDeclarationRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
-    {
-        return [
-            DowngradeParamObjectTypeDeclarationRector::class => [
-                DowngradeParamObjectTypeDeclarationRector::ADD_DOC_BLOCK => true,
-            ],
-        ];
-    }
-
     protected function getRectorClass(): string
     {
         return DowngradeParamObjectTypeDeclarationRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::OBJECT_TYPE - 1;
     }
 }

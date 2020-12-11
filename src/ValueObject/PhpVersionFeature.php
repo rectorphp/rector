@@ -19,6 +19,11 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const DATE_TIME_INTERFACE = 50500;
+
+    /**
+     * @var int
+     */
     public const CLASSNAME_CONSTANT = 50500;
 
     /**
@@ -114,11 +119,6 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const LIST_REFERENCE_ASSIGNMENT = 70300;
-
-    /**
-     * @var int
-     */
     public const ARROW_FUNCTION = 70400;
 
     /**
@@ -160,11 +160,6 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const MIXED_TYPE = 80000;
-
-    /**
-     * @var int
-     */
     public const STATIC_RETURN_TYPE = 80000;
 
     /**
@@ -176,16 +171,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const NULLABLE_TYPE = 70100;
-
-    /**
-     * @var int
-     */
-    public const VOID_RETURN_TYPE = 70100;
-
-    /**
-     * @var int
-     */
-    public const STRIP_TAGS_WITH_ARRAY = 70400;
 
     /**
      * @var int

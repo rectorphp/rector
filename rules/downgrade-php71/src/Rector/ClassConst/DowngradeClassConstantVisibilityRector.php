@@ -6,24 +6,22 @@ namespace Rector\DowngradePhp71\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DowngradePhp71\Tests\Rector\ClassConst\DowngradeClassConstantVisibilityRectorTest
  */
-final class DowngradeClassConstantVisibilityRector extends AbstractDowngradeRector
+final class DowngradeClassConstantVisibilityRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
             'Downgrade class constant visibility',
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
    public const PUBLIC_CONST_B = 2;
@@ -33,8 +31,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
    const PUBLIC_CONST_B = 2;
@@ -42,8 +38,6 @@ class SomeClass
    const PRIVATE_CONST = 4;
 }
 CODE_SAMPLE
-                    ,
-                    []
                 ),
             ]
         );

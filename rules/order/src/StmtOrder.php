@@ -54,7 +54,7 @@ final class StmtOrder
     {
         $reorderedStmts = [];
 
-        $stmtCount = count($classLike->stmts);
+        $stmtCount = count((array) $classLike->stmts);
 
         foreach ($classLike->stmts as $key => $stmt) {
             if (! array_key_exists($key, $oldToNewKeys)) {

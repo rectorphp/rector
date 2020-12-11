@@ -227,4 +227,9 @@ final class AttributeKey
      * @var string
      */
     public const IS_FRESH_NODE = 'is_fresh_node';
+
+    /**
+     * @var string
+     */
+    public const FUNC_ARGS_TRAILING_COMMA = 'trailing_comma';
 }

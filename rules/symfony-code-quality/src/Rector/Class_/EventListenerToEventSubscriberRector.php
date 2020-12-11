@@ -113,8 +113,6 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeListener
 {
      public function methodToBeCalled()
@@ -130,8 +128,6 @@ services:
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SomeEventSubscriber implements EventSubscriberInterface

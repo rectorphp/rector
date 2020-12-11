@@ -36,8 +36,6 @@ final class SpecificAssertContainsWithoutIdentityRector extends AbstractPHPUnitR
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -50,8 +48,6 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 final class SomeTest extends TestCase
 {
     public function test()

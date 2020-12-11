@@ -109,6 +109,11 @@ final class SetList
     /**
      * @var string
      */
+    public const DEAD_DOC_BLOCK = __DIR__ . '/../../../../config/set/dead-doc-block.php';
+
+    /**
+     * @var string
+     */
     public const DOCTRINE_25 = __DIR__ . '/../../../../config/set/doctrine25.php';
 
     /**
@@ -640,6 +645,11 @@ final class SetList
      * @var string
      */
     public const SYMFONY_50_TYPES = __DIR__ . '/../../../../config/set/symfony50-types.php';
+
+    /**
+     * @var string
+     */
+    public const SYMFONY_52 = __DIR__ . '/../../../../config/set/symfony52.php';
 
     /**
      * @var string

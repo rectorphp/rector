@@ -29,6 +29,11 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 trait NodeTypeResolverTrait
 {
     /**
+     * @var TypeUnwrapper
+     */
+    protected $typeUnwrapper;
+
+    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -47,11 +52,6 @@ trait NodeTypeResolverTrait
      * @var StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
-
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
 
     /**
      * @required
@@ -165,6 +165,11 @@ trait NodeTypeResolverTrait
     protected function isNullableObjectType(Node $node): bool
     {
         return $this->nodeTypeResolver->isNullableObjectType($node);
+    }
+
+    protected function isNullableArrayType(Node $node): bool
+    {
+        return $this->nodeTypeResolver->isNullableArrayType($node);
     }
 
     protected function isCountableType(Node $node): bool

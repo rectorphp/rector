@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Rector\ClassMethod;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,12 +18,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector extends AbstractRector
 {
-    /**
-     * @var string
-     * @see https://regex101.com/r/gn2P0C/1
-     */
-    private const REQUIRED_DOCBLOCK_REGEX = '#\*\s+@required\n?#';
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -67,12 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $docComment = $node->getDocComment();
-        if ($docComment === null) {
-            return null;
-        }
-
-        if (! Strings::match($docComment->getText(), self::REQUIRED_DOCBLOCK_REGEX)) {
+        if (! $this->hasTagByName($node, TagName::REQUIRED)) {
             return null;
         }
 

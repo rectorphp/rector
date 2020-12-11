@@ -59,7 +59,7 @@ final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
         $class = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         foreach ($classMocks as $name => $methods) {
-            if (count($methods) <= 1) {
+            if ((is_countable($methods) ? count($methods) : 0) <= 1) {
                 continue;
             }
 

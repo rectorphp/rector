@@ -7,6 +7,9 @@ on:
 
 jobs:
     daily_pull_requests:
+        # dont run jobs on forks, because gh-tokens are not available 
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        
         strategy:
             fail-fast: false
             matrix:

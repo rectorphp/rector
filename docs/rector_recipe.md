@@ -11,8 +11,14 @@ Don't worry, also generates a test case, which is required to contribute.
 
 ## How to Generate Rector rule in 3 steps?
 
-1. Copy [`rector-recipe.php.dist`](/rector-recipe.php.dist) to `rector-recipe.php`
-2. Change parameters in `rector-recipe.php` to meet you need
+1. Initialize `rector-recipe.php` config
+
+    ```bash
+    vendor/bin/rector init-recipe
+    ```
+
+2. Complete parameters in `rector-recipe.php` to design your new rule
+
 3. Run command
 
     ```bash

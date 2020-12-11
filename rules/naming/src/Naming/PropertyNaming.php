@@ -12,7 +12,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
@@ -105,10 +104,7 @@ final class PropertyNaming
 
     public function getExpectedNameFromType(Type $type): ?ExpectedName
     {
-        if ($type instanceof UnionType) {
-            $type = $this->typeUnwrapper->unwrapNullableType($type);
-        }
-
+        $type = $this->typeUnwrapper->unwrapNullableType($type);
         if (! $type instanceof TypeWithClassName) {
             return null;
         }

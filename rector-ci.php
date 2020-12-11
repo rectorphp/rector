@@ -44,6 +44,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::CODE_QUALITY,
         SetList::CODE_QUALITY_STRICT,
         SetList::DEAD_CODE,
+        SetList::DEAD_DOC_BLOCK,
         SetList::NETTE_UTILS_CODE_QUALITY,
         SetList::SOLID,
         SetList::PRIVATIZATION,
@@ -53,6 +54,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::TYPE_DECLARATION,
         SetList::PHPUNIT_CODE_QUALITY,
         Setlist::SYMFONY_AUTOWIRE,
+        Setlist::PHP_71,
+        Setlist::PHP_72,
+        Setlist::PHP_73,
     ]);
 
     $parameters->set(Option::PATHS, [
@@ -85,6 +89,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     # so Rector code is still PHP 7.2 compatible
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_7_2);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
     $parameters->set(Option::ENABLE_CACHE, true);
 };

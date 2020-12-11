@@ -65,6 +65,26 @@ final class NodeFactory
     private const THIS = 'this';
 
     /**
+     * @var string
+     */
+    private const REFERENCE_PARENT = 'parent';
+
+    /**
+     * @var string
+     */
+    private const REFERENCE_SELF = 'self';
+
+    /**
+     * @var string
+     */
+    private const REFERENCE_STATIC = 'static';
+
+    /**
+     * @var string[]
+     */
+    private const REFERENCES = [self::REFERENCE_STATIC, self::REFERENCE_PARENT, self::REFERENCE_SELF];
+
+    /**
      * @var BuilderFactory
      */
     private $builderFactory;
@@ -117,7 +137,7 @@ final class NodeFactory
      */
     public function createClassConstFetch(string $className, string $constantName): ClassConstFetch
     {
-        $classNameNode = in_array($className, ['static', 'parent', 'self'], true) ? new Name(
+        $classNameNode = in_array($className, self::REFERENCES, true) ? new Name(
             $className
         ) : new FullyQualified($className);
 
@@ -296,7 +316,7 @@ final class NodeFactory
     public function createParentConstructWithParams(array $params): StaticCall
     {
         return new StaticCall(
-            new Name('parent'),
+            new Name(self::REFERENCE_PARENT),
             new Identifier(MethodName::CONSTRUCT),
             $this->convertParamNodesToArgNodes($params)
         );
@@ -444,7 +464,13 @@ final class NodeFactory
 
     public function createStaticCall(string $class, string $method): StaticCall
     {
-        return new StaticCall(new Name($class), $method);
+        if (in_array($class, self::REFERENCES, true)) {
+            $class = new Name($class);
+        } else {
+            $class = new FullyQualified($class);
+        }
+
+        return new StaticCall($class, $method);
     }
 
     /**

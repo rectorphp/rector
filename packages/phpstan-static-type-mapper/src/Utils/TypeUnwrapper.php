@@ -15,17 +15,21 @@ final class TypeUnwrapper
     /**
      * E.g. null|ClassType → ClassType
      */
-    public function unwrapNullableType(UnionType $unionType): ?Type
+    public function unwrapNullableType(Type $type): Type
     {
-        if (count($unionType->getTypes()) !== 2) {
-            return null;
+        if (! $type instanceof UnionType) {
+            return $type;
         }
 
-        if (! $unionType->isSuperTypeOf(new NullType())->yes()) {
-            return null;
+        if (count($type->getTypes()) !== 2) {
+            return $type;
         }
 
-        foreach ($unionType->getTypes() as $unionedType) {
+        if (! $type->isSuperTypeOf(new NullType())->yes()) {
+            return $type;
+        }
+
+        foreach ($type->getTypes() as $unionedType) {
             if ($unionedType instanceof NullType) {
                 continue;
             }
@@ -33,7 +37,7 @@ final class TypeUnwrapper
             return $unionedType;
         }
 
-        return null;
+        return $type;
     }
 
     public function unwrapFirstObjectTypeFromUnionType(Type $type): Type

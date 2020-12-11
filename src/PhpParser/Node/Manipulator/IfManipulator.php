@@ -72,21 +72,21 @@ final class IfManipulator
      */
     public function matchIfNotNullReturnValue(If_ $if): ?Expr
     {
-        if (count($if->stmts) !== 1) {
+        $stmts = (array) $if->stmts;
+        if (count($stmts) !== 1) {
             return null;
         }
 
-        $insideIfNode = $if->stmts[0];
+        $insideIfNode = $stmts[0];
         if (! $insideIfNode instanceof Return_) {
             return null;
         }
+
         if (! $if->cond instanceof NotIdentical) {
             return null;
         }
-        /** @var Return_ $returnNode */
-        $returnNode = $insideIfNode;
 
-        return $this->matchComparedAndReturnedNode($if->cond, $returnNode);
+        return $this->matchComparedAndReturnedNode($if->cond, $insideIfNode);
     }
 
     /**
@@ -127,27 +127,26 @@ final class IfManipulator
      */
     public function matchIfValueReturnValue(If_ $if): ?Expr
     {
-        if (count($if->stmts) !== 1) {
+        $stmts = (array) $if->stmts;
+
+        if (count($stmts) !== 1) {
             return null;
         }
 
-        $insideIfNode = $if->stmts[0];
+        $insideIfNode = $stmts[0];
         if (! $insideIfNode instanceof Return_) {
             return null;
         }
-
-        /** @var Return_ $returnNode */
-        $returnNode = $insideIfNode;
 
         if (! $if->cond instanceof Identical) {
             return null;
         }
 
-        if ($this->betterStandardPrinter->areNodesEqual($if->cond->left, $returnNode->expr)) {
+        if ($this->betterStandardPrinter->areNodesEqual($if->cond->left, $insideIfNode->expr)) {
             return $if->cond->right;
         }
 
-        if ($this->betterStandardPrinter->areNodesEqual($if->cond->right, $returnNode->expr)) {
+        if ($this->betterStandardPrinter->areNodesEqual($if->cond->right, $insideIfNode->expr)) {
             return $if->cond->left;
         }
 
@@ -300,7 +299,7 @@ final class IfManipulator
 
     public function isIfWithOnlyOneStmt(If_ $if): bool
     {
-        return count($if->stmts) === 1;
+        return count((array) $if->stmts) === 1;
     }
 
     public function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
@@ -368,11 +367,12 @@ final class IfManipulator
 
     private function hasOnlyStmtOfType(If_ $if, string $desiredType): bool
     {
-        if (count($if->stmts) !== 1) {
+        $stmts = (array) $if->stmts;
+        if (count($stmts) !== 1) {
             return false;
         }
 
-        return is_a($if->stmts[0], $desiredType);
+        return is_a($stmts[0], $desiredType);
     }
 
     private function isIfWithElse(If_ $if): bool

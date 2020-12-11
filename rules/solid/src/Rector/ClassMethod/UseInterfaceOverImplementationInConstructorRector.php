@@ -9,6 +9,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use ReflectionClass;
+use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -101,6 +103,10 @@ CODE_SAMPLE
                 continue;
             }
 
+            if ($this->classHasWiderPublicApiThanInterface($typeName, $interfaceNames[0])) {
+                continue;
+            }
+
             $param->type = new FullyQualified($interfaceNames[0]);
         }
 
@@ -158,5 +164,30 @@ CODE_SAMPLE
         }
 
         return array_values($interfaceNames);
+    }
+
+    private function classHasWiderPublicApiThanInterface(string $className, string $interfaceName): bool
+    {
+        $classMethods = $this->getPublicMethods($className);
+        $interfaceMethods = $this->getPublicMethods($interfaceName);
+
+        return count(array_diff($classMethods, $interfaceMethods)) > 0;
+    }
+
+    /**
+     * @param string $fqcn Fully qualified class/interface name
+     *
+     * @return string[]
+     */
+    private function getPublicMethods(string $fqcn): array
+    {
+        $reflection = new ReflectionClass($fqcn);
+
+        return array_map(
+            static function (ReflectionMethod $method) {
+                return $method->name;
+            },
+            $reflection->getMethods(ReflectionMethod::IS_PUBLIC)
+        );
     }
 }

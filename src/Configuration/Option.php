@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\Configuration;
 
+use Symplify\Skipper\ValueObject\Option as SkipperOption;
+
 final class Option
 {
     /**
@@ -104,7 +106,7 @@ final class Option
     /**
      * @var string
      */
-    public const SKIP = 'skip';
+    public const SKIP = SkipperOption::SKIP;
 
     /**
      * @var string

@@ -97,8 +97,9 @@ final class NodeTransformer
             }
 
             $expressionNode = new Expression(new Yield_($arrayItem->value, $arrayItem->key));
-            if ($arrayItem->getComments() !== []) {
-                $expressionNode->setAttribute(AttributeKey::COMMENTS, $arrayItem->getComments());
+            $arrayItemComments = $arrayItem->getComments();
+            if ($arrayItemComments !== []) {
+                $expressionNode->setAttribute(AttributeKey::COMMENTS, $arrayItemComments);
             }
 
             $yieldNodes[] = $expressionNode;

@@ -9,6 +9,9 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @requires PHP < 8.0
+ */
 final class CompleteVarDocTypePropertyRectorTest extends AbstractRectorTestCase
 {
     /**

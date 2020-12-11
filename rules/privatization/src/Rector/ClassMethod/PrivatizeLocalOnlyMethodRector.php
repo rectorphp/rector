@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodVisibilityVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -161,7 +162,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $phpDocInfo->hasByNames(['api', 'required']);
+        return $phpDocInfo->hasByNames(['api', TagName::REQUIRED]);
     }
 
     private function isControllerAction(Class_ $class, ClassMethod $classMethod): bool

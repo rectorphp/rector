@@ -17,11 +17,10 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\Comment\MergedNodeCommentPreserver;
+use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
-use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -36,23 +35,14 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
     private $staticTypeAnalyzer;
 
     /**
-     * @var MergedNodeCommentPreserver
+     * @var CommentsMerger
      */
-    private $mergedNodeCommentPreserver;
+    private $commentsMerger;
 
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
-    public function __construct(
-        MergedNodeCommentPreserver $mergedNodeCommentPreserver,
-        StaticTypeAnalyzer $staticTypeAnalyzer,
-        TypeUnwrapper $typeUnwrapper
-    ) {
-        $this->mergedNodeCommentPreserver = $mergedNodeCommentPreserver;
-        $this->typeUnwrapper = $typeUnwrapper;
+    public function __construct(CommentsMerger $commentsMerger, StaticTypeAnalyzer $staticTypeAnalyzer)
+    {
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
+        $this->commentsMerger = $commentsMerger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -113,10 +103,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->mergedNodeCommentPreserver->keepComments(
-            $newReturnNode,
-            [$node, $ifInnerNode, $nextNode, $newReturnNode]
-        );
+        $this->commentsMerger->keepComments($newReturnNode, [$node, $ifInnerNode, $nextNode, $newReturnNode]);
         $this->removeNode($nextNode);
 
         return $newReturnNode;
@@ -202,7 +189,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (count($if->else->stmts) !== 1) {
+        if (count((array) $if->else->stmts) !== 1) {
             return false;
         }
 
@@ -213,7 +200,7 @@ CODE_SAMPLE
 
     private function isIfWithSingleReturnExpr(If_ $if): bool
     {
-        if (count($if->stmts) !== 1) {
+        if (count((array) $if->stmts) !== 1) {
             return false;
         }
 

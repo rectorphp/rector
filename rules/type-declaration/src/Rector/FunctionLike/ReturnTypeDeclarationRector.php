@@ -93,8 +93,6 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**
@@ -107,8 +105,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function getCount(): int

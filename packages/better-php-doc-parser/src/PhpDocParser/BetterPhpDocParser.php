@@ -15,6 +15,7 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\RequiredTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
@@ -26,6 +27,7 @@ use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -186,13 +188,16 @@ final class BetterPhpDocParser extends PhpDocParser
             throw new ShouldNotHappenException();
         }
 
-        if (strtolower($tag) === '@param') {
+        $lowercasedTag = strtolower($tag);
+        if ($lowercasedTag === '@param') {
             // to prevent circular reference of this service
             $this->paramPhpDocNodeFactory->setPhpDocParser($this);
             $tagValueNode = $this->paramPhpDocNodeFactory->createFromTokens($tokenIterator);
-        } elseif (strtolower($tag) === '@dataprovider') {
+        } elseif ($lowercasedTag === '@dataprovider') {
             $this->phpUnitDataProviderDocNodeFactory->setPhpDocParser($this);
             $tagValueNode = $this->phpUnitDataProviderDocNodeFactory->createFromTokens($tokenIterator);
+        } elseif ($lowercasedTag === '@' . TagName::REQUIRED) {
+            $tagValueNode = new RequiredTagValueNode();
         } else {
             // class-annotation
             $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);

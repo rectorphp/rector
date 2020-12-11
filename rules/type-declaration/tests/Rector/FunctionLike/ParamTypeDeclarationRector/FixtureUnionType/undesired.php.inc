@@ -21,7 +21,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRe
  * @param int $b
  * @param int|void $c
  */
-function someFunction(float|int $a, int $b, int|void $c) {
+function someFunction(float|int $a, int $b, $c) {
 }
 
 ?>

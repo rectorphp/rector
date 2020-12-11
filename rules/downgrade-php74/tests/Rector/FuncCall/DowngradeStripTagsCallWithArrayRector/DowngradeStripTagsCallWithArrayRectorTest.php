@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -29,10 +28,5 @@ final class DowngradeStripTagsCallWithArrayRectorTest extends AbstractRectorTest
     protected function getRectorClass(): string
     {
         return DowngradeStripTagsCallWithArrayRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::STRIP_TAGS_WITH_ARRAY - 1;
     }
 }

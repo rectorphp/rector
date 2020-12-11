@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use Iterator;
-use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -42,23 +42,19 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
     private $methodsToYields = [];
 
     /**
-     * @var Comment[]
-     */
-    private $returnComments = [];
-
-    /**
      * @var NodeTransformer
      */
     private $nodeTransformer;
 
     /**
-     * @var PhpDocInfo|null
+     * @var CommentsMerger
      */
-    private $returnPhpDocInfo;
+    private $commentsMerger;
 
-    public function __construct(NodeTransformer $nodeTransformer)
+    public function __construct(NodeTransformer $nodeTransformer, CommentsMerger $commentsMerger)
     {
         $this->nodeTransformer = $nodeTransformer;
+        $this->commentsMerger = $commentsMerger;
 
         // default values
         $this->methodsToYields = [
@@ -132,7 +128,7 @@ CODE_SAMPLE
 
             $this->transformArrayToYieldsOnMethodNode($node, $arrayNode);
 
-            $this->completeComments($node);
+            $this->commentsMerger->keepParent($node, $arrayNode);
             $hasChanged = true;
         }
 
@@ -143,6 +139,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration): void
     {
         $methodsToYields = $configuration[self::METHODS_TO_YIELDS] ?? [];
@@ -161,9 +160,6 @@ CODE_SAMPLE
                 if (! $statement->expr instanceof Array_) {
                     continue;
                 }
-
-                $this->returnPhpDocInfo = $statement->getAttribute(AttributeKey::PHP_DOC_INFO);
-                $this->returnComments = $statement->getComments();
 
                 return $statement->expr;
             }
@@ -196,16 +192,6 @@ CODE_SAMPLE
         }
 
         $classMethod->stmts = array_merge((array) $classMethod->stmts, $yieldNodes);
-    }
-
-    private function completeComments(ClassMethod $classMethod): void
-    {
-        if ($this->returnPhpDocInfo === null && $this->returnComments === []) {
-            return;
-        }
-
-        $classMethod->setAttribute(AttributeKey::PHP_DOC_INFO, $this->returnPhpDocInfo);
-        $classMethod->setAttribute(AttributeKey::COMMENTS, $this->returnComments);
     }
 
     private function removeReturnTag(ClassMethod $classMethod): void

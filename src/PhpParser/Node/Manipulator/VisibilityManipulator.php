@@ -76,6 +76,18 @@ final class VisibilityManipulator
     }
 
     /**
+     * @param Class_|ClassMethod $node
+     */
+    public function makeNonFinal(Node $node): void
+    {
+        if (! $node->isFinal()) {
+            return;
+        }
+
+        $node->flags -= Class_::MODIFIER_FINAL;
+    }
+
+    /**
      * This way "abstract", "static", "final" are kept
      *
      * @param ClassMethod|Property|ClassConst $node

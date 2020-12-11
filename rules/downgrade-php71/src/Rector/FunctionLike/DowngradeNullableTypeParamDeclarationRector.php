@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -19,10 +21,8 @@ final class DowngradeNullableTypeParamDeclarationRector extends AbstractDowngrad
         return new RuleDefinition(
             'Remove the nullable type params, add @param tags instead',
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function run(?string $input)
@@ -33,8 +33,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**
@@ -46,16 +44,12 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                    [
-                        self::ADD_DOC_BLOCK => true,
-                    ]
                 ),
             ]
         );
     }
 
-    public function shouldRemoveParamDeclaration(Param $param): bool
+    public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->variadic) {
             return false;

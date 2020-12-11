@@ -12,14 +12,14 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ExplicitPhpErrorApiRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
     {
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

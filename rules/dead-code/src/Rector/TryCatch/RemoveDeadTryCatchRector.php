@@ -62,13 +62,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (count($node->catches) !== 1) {
+        if (count((array) $node->catches) !== 1) {
             return null;
         }
 
         /** @var Catch_ $onlyCatch */
         $onlyCatch = $node->catches[0];
-        if (count($onlyCatch->stmts) !== 1) {
+        if (count((array) $onlyCatch->stmts) !== 1) {
             return null;
         }
 

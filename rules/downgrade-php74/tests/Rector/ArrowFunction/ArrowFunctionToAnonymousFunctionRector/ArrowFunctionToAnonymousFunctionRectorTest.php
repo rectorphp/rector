@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Tests\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -29,10 +28,5 @@ final class ArrowFunctionToAnonymousFunctionRectorTest extends AbstractRectorTes
     protected function getRectorClass(): string
     {
         return ArrowFunctionToAnonymousFunctionRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::ARROW_FUNCTION - 1;
     }
 }

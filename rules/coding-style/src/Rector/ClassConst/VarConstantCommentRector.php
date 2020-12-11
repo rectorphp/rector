@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (count($node->consts) > 1) {
+        if (count((array) $node->consts) > 1) {
             return null;
         }
 

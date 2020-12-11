@@ -94,7 +94,7 @@ CODE_SAMPLE
      */
     private function processTryCatch(TryCatch $tryCatch): ?array
     {
-        if (count($tryCatch->catches) !== 1) {
+        if (count((array) $tryCatch->catches) !== 1) {
             return null;
         }
 

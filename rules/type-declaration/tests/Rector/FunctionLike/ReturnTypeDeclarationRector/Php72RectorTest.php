@@ -27,7 +27,7 @@ final class Php72RectorTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): int
     {
-        return PhpVersion::PHP_7_2;
+        return PhpVersion::PHP_72;
     }
 
     protected function getRectorClass(): string

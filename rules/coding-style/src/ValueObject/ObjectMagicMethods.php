@@ -23,7 +23,7 @@ final class ObjectMagicMethods
         '__isset',
         '__serialize',
         '__set',
-        '__set_state',
+        MethodName::SET_STATE,
         '__sleep',
         '__toString',
         '__unserialize',

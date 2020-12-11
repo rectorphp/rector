@@ -30,7 +30,7 @@ class PropertyWithDoc
 
     public function run()
     {
-        return is_array($this->fail) || $this->fail instanceof \Countable ? count($this->fail) : 0;
+        return count((array) $this->fail);
     }
 }
 

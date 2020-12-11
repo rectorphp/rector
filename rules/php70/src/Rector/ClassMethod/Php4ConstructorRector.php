@@ -91,7 +91,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($node->stmts) === 1) {
+        if (count((array) $node->stmts) === 1) {
             /** @var Expression $stmt */
             $stmt = $node->stmts[0];
 

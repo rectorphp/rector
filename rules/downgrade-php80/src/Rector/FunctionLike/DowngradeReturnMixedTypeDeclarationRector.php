@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp80\Rector\FunctionLike;
 
+use PHPStan\Type\MixedType;
 use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeReturnTypeDeclarationRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -16,12 +17,10 @@ final class DowngradeReturnMixedTypeDeclarationRector extends AbstractDowngradeR
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            $this->getRectorDefinitionDescription(),
+            'Remove "mixed" return type, add a "@return mixed" tag instead',
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function getAnything(bool $flag): mixed
@@ -35,8 +34,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**
@@ -51,17 +48,13 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                    [
-                        self::ADD_DOC_BLOCK => true,
-                    ]
                 ),
             ]
         );
     }
 
-    public function getTypeNameToRemove(): string
+    public function getTypeToRemove(): string
     {
-        return 'mixed';
+        return MixedType::class;
     }
 }

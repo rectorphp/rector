@@ -71,7 +71,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($node->consts) !== 1) {
+        if (count((array) $node->consts) !== 1) {
             return null;
         }
 

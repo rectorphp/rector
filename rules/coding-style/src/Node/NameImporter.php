@@ -88,6 +88,10 @@ final class NameImporter
             return null;
         }
 
+        if ($this->classNameImportSkipper->isShortNameInUseStatement($name)) {
+            return null;
+        }
+
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
         if (! $staticType instanceof FullyQualifiedObjectType) {
             return null;
@@ -190,7 +194,7 @@ final class NameImporter
             return false;
         }
 
-        return count($name->parts) === 1;
+        return count((array) $name->parts) === 1;
     }
 
     private function isNonExistingClassLikeAndFunctionFullyQualifiedName(Name $name): bool

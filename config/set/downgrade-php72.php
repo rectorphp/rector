@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
+use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
 use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -26,4 +27,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70200,
         ]]);
+    $services->set(DowngradeParameterTypeWideningRector::class);
 };

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\Rector\FunctionLike;
 
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use PHPStan\Type\ObjectWithoutClassType;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -17,10 +18,8 @@ final class DowngradeParamObjectTypeDeclarationRector extends AbstractDowngradeP
         return new RuleDefinition(
             $this->getRectorDefinitionDescription(),
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function someFunction(object $someObject)
@@ -30,8 +29,6 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     /**
@@ -42,17 +39,13 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                    [
-                        self::ADD_DOC_BLOCK => true,
-                    ]
                 ),
             ]
         );
     }
 
-    public function getTypeNameToRemove(): string
+    public function getTypeToRemove(): string
     {
-        return 'object';
+        return ObjectWithoutClassType::class;
     }
 }

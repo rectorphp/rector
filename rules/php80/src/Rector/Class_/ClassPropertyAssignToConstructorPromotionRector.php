@@ -5,18 +5,16 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php80\ValueObject\PromotionCandidate;
+use Rector\Php80\NodeResolver\PromotedPropertyResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -29,9 +27,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector
 {
     /**
-     * @var PromotionCandidate[]
+     * @var PromotedPropertyResolver
      */
-    private $promotionCandidates = [];
+    private $promotedPropertyResolver;
+
+    /**
+     * @var VariableRenamer
+     */
+    private $variableRenamer;
+
+    public function __construct(PromotedPropertyResolver $promotedPropertyResolver, VariableRenamer $variableRenamer)
+    {
+        $this->promotedPropertyResolver = $promotedPropertyResolver;
+        $this->variableRenamer = $variableRenamer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -42,18 +51,11 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public float $x;
-    public float $y;
-    public float $z;
+    public float $someVariable;
 
-    public function __construct(
-        float $x = 0.0,
-        float $y = 0.0,
-        float $z = 0.0
-    ) {
-        $this->x = $x;
-        $this->y = $y;
-        $this->z = $z;
+    public function __construct(float $someVariable = 0.0)
+    {
+        $this->someVariable = $someVariable;
     }
 }
 CODE_SAMPLE
@@ -61,15 +63,12 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function __construct(
-        public float $x = 0.0,
-        public float $y = 0.0,
-        public float $z = 0.0,
-    ) {}
+    public function __construct(private float $someVariable = 0.0)
+    {
+    }
 }
 CODE_SAMPLE
                 ),
-
             ]);
     }
 
@@ -86,17 +85,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $promotionCandidates = $this->collectPromotionCandidatesFromClass($node);
+        $promotionCandidates = $this->promotedPropertyResolver->resolveFromClass($node);
         if ($promotionCandidates === []) {
             return null;
         }
 
-        foreach ($this->promotionCandidates as $promotionCandidate) {
+        /** @var ClassMethod $constructClassMethod */
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+
+        foreach ($promotionCandidates as $promotionCandidate) {
             // does property have some useful annotations?
             $property = $promotionCandidate->getProperty();
 
             $this->removeNode($property);
-
             $this->removeNode($promotionCandidate->getAssign());
 
             $property = $promotionCandidate->getProperty();
@@ -104,37 +105,21 @@ CODE_SAMPLE
 
             $this->decorateParamWithPropertyPhpDocInfo($property, $param);
 
+            /** @var string $oldName */
+            $oldName = $this->getName($param->var);
+
             // property name has higher priority
             $param->var->name = $property->props[0]->name;
-
-            // @todo add visibility - needs https://github.com/nikic/PHP-Parser/pull/667
             $param->flags = $property->flags;
+
+            // rename also following calls
+            $propertyName = $this->getName($property->props[0]);
+            $this->variableRenamer->renameVariableInFunctionLike($constructClassMethod, null, $oldName, $propertyName);
+
+            $this->removeClassMethodParam($constructClassMethod, $oldName);
         }
 
         return $node;
-    }
-
-    /**
-     * @return PromotionCandidate[]
-     */
-    private function collectPromotionCandidatesFromClass(Class_ $class): array
-    {
-        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
-            return [];
-        }
-
-        $this->promotionCandidates = [];
-
-        foreach ($class->getProperties() as $property) {
-            if (count($property->props) !== 1) {
-                continue;
-            }
-
-            $this->collectPromotionCandidate($property, $constructClassMethod);
-        }
-
-        return $this->promotionCandidates;
     }
 
     private function decorateParamWithPropertyPhpDocInfo(Property $property, Param $param): void
@@ -148,52 +133,18 @@ CODE_SAMPLE
         $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
     }
 
-    private function collectPromotionCandidate(Property $property, ClassMethod $constructClassMethod): void
+    private function removeClassMethodParam(ClassMethod $classMethod, string $paramName): void
     {
-        $onlyProperty = $property->props[0];
-        $propertyName = $this->getName($onlyProperty);
-
-        // match property name to assign in constructor
-        foreach ((array) $constructClassMethod->stmts as $stmt) {
-            if ($stmt instanceof Expression) {
-                $stmt = $stmt->expr;
-            }
-
-            if (! $stmt instanceof Assign) {
-                continue;
-            }
-
-            $assign = $stmt;
-            if (! $this->isLocalPropertyFetchNamed($assign->var, $propertyName)) {
-                continue;
-            }
-
-            // 1. is param
-            // @todo 2. is default value
-
-            $assignedExpr = $assign->expr;
-
-            $matchedParam = $this->matchClassMethodParamByAssignedVariable($constructClassMethod, $assignedExpr);
-            if ($matchedParam === null) {
-                continue;
-            }
-
-            $this->promotionCandidates[] = new PromotionCandidate($property, $assign, $matchedParam);
-        }
-    }
-
-    private function matchClassMethodParamByAssignedVariable(
-        ClassMethod $classMethod,
-        Expr $assignedExpr
-    ): ?Param {
-        foreach ($classMethod->params as $param) {
-            if (! $this->areNodesEqual($assignedExpr, $param->var)) {
-                continue;
-            }
-
-            return $param;
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return;
         }
 
-        return null;
+        $attributeAwareParamTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
+        if ($attributeAwareParamTagValueNode === null) {
+            return;
+        }
+
+        $phpDocInfo->removeTagValueNodeFromNode($attributeAwareParamTagValueNode);
     }
 }

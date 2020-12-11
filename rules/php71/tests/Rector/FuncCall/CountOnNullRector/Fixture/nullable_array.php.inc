@@ -20,7 +20,7 @@ final class NullableArray
 {
     public function number(?array $items)
     {
-        return $items === null ? 0 : count($items);
+        return count((array) $items);
     }
 }
 

@@ -172,7 +172,7 @@ CODE_SAMPLE
         // already set → no change
         if ($param->type !== null) {
             $currentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-            if ($this->typeComparator->areTypesEquals($currentParamType, $addParamTypeDeclaration->getParamType())) {
+            if ($this->typeComparator->areTypesEqual($currentParamType, $addParamTypeDeclaration->getParamType())) {
                 return;
             }
         }

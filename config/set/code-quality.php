@@ -10,6 +10,7 @@ use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
 use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
+use Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector;
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
@@ -35,6 +36,7 @@ use Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector;
 use Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector;
+use Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector;
 use Rector\CodeQuality\Rector\FunctionLike\RemoveAlwaysTrueConditionSetInConstructorRector;
 use Rector\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector;
 use Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector;
@@ -156,11 +158,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'mbsubstr' => 'mb_substr',
             ],
         ],
-    ]);
+        ]);
     $services->set(SetTypeToCastRector::class);
     $services->set(LogicalToBooleanRector::class);
     $services->set(VarToPublicPropertyRector::class);
     $services->set(FixClassCaseSensitivityNameRector::class);
     $services->set(IssetOnPropertyObjectToPropertyExistsRector::class);
     $services->set(NewStaticToNewSelfRector::class);
+    $services->set(DateTimeToDateTimeInterfaceRector::class);
+    $services->set(UnwrapSprintfOneArgumentRector::class);
 };
