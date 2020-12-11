@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\RedirectToRouteRector;
+namespace Rector\Symfony2\Tests\Rector\MethodCall\AddFlashRector;
 
 use Iterator;
-use Rector\Symfony\Rector\MethodCall\RedirectToRouteRector;
+use Rector\Symfony2\Rector\MethodCall\AddFlashRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RedirectToRouteRectorTest extends AbstractRectorTestCase
+final class AddFlashRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class RedirectToRouteRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return RedirectToRouteRector::class;
+        return AddFlashRector::class;
     }
 }

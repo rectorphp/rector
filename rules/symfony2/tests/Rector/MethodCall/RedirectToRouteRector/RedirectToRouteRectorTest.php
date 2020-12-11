@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\StaticCall\ParseFileRector;
+namespace Rector\Symfony2\Tests\Rector\MethodCall\RedirectToRouteRector;
 
 use Iterator;
-use Rector\Symfony\Rector\StaticCall\ParseFileRector;
+use Rector\Symfony2\Rector\MethodCall\RedirectToRouteRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ParseFileRectorTest extends AbstractRectorTestCase
+final class RedirectToRouteRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class ParseFileRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ParseFileRector::class;
+        return RedirectToRouteRector::class;
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony2\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\MethodCall\RedirectToRouteRector\RedirectToRouteRectorTest
+ * @see \Rector\Symfony2\Tests\Rector\MethodCall\RedirectToRouteRector\RedirectToRouteRectorTest
  */
 final class RedirectToRouteRector extends AbstractRector
 {

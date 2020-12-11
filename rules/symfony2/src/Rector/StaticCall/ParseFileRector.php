@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\StaticCall;
+namespace Rector\Symfony2\Rector\StaticCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\StaticCall\ParseFileRector\ParseFileRectorTest
+ * @see \Rector\Symfony2\Tests\Rector\StaticCall\ParseFileRector\ParseFileRectorTest
  */
 final class ParseFileRector extends AbstractRector
 {

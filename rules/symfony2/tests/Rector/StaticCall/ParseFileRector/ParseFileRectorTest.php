@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\AddFlashRector;
+namespace Rector\Symfony2\Tests\Rector\StaticCall\ParseFileRector;
 
 use Iterator;
-use Rector\Symfony\Rector\MethodCall\AddFlashRector;
+use Rector\Symfony2\Rector\StaticCall\ParseFileRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AddFlashRectorTest extends AbstractRectorTestCase
+final class ParseFileRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class AddFlashRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return AddFlashRector::class;
+        return ParseFileRector::class;
     }
 }
