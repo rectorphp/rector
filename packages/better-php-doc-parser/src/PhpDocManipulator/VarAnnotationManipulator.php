@@ -10,7 +10,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,12 +39,10 @@ final class VarAnnotationManipulator
             return;
         }
 
-        $attributeAwareFullyQualifiedIdentifierTypeNode = new AttributeAwareFullyQualifiedIdentifierTypeNode(
-            $typeWithClassName->getClassName()
-        );
+        $fullyQualifiedIdentifierTypeNode = new FullyQualifiedIdentifierTypeNode($typeWithClassName->getClassName());
 
         $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode(
-            $attributeAwareFullyQualifiedIdentifierTypeNode,
+            $fullyQualifiedIdentifierTypeNode,
             '$' . $variableName,
             ''
         );

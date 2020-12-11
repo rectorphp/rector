@@ -1,6 +1,6 @@
 includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
-    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    # allows symplify error formatter
     - vendor/symplify/phpstan-extensions/config/config.neon
 
     # see https://github.com/symplify/coding-standard
@@ -8,6 +8,18 @@ includes:
     - vendor/symplify/phpstan-rules/config/static-rules.neon
     - vendor/symplify/phpstan-rules/config/services/services.neon
     - vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-services.neon
+
+    - vendor/symplify/phpstan-rules/config/array-rules.neon
+    - vendor/symplify/phpstan-rules/config/code-complexity-rules.neon
+    - vendor/symplify/phpstan-rules/config/doctrine-rules.neon
+    - vendor/symplify/phpstan-rules/config/naming-rules.neon
+    - vendor/symplify/phpstan-rules/config/regex-rules.neon
+    - vendor/symplify/phpstan-rules/config/services-rules.neon
+    - vendor/symplify/phpstan-rules/config/size-rules.neon
+    - vendor/symplify/phpstan-rules/config/forbidden-static-rules.neon
+    - vendor/symplify/phpstan-rules/config/string-to-constant-rules.neon
+    - vendor/symplify/phpstan-rules/config/symfony-rules.neon
+    - vendor/symplify/phpstan-rules/config/test-rules.neon
 
 services:
     -
@@ -89,14 +101,6 @@ services:
                 - Rector\Core\Rector\AbstractRector
                 - Rector\FileSystemRector\Rector\AbstractFileSystemRector
 
-    -
-        class: Symplify\PHPStanRules\Rules\NoStaticCallRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            allowedStaticCallClasses:
-                - PHPStan\Type\VerbosityLevel
-                - Rector\NodeTypeResolver\ClassExistenceStaticHelper
-
     # this rule prevents bug in phar like these: https://github.com/rectorphp/rector/pull/3692/files
     -
         class: Symplify\PHPStanRules\Rules\RequireStringArgumentInMethodCallRule
@@ -113,30 +117,30 @@ services:
             parentClasses:
                 - Rector
 
-#    -
-#        class: Symplify\PHPStanRules\Rules\PreferredClassRule
-#        tags: [phpstan.rules.rule]
-#        arguments:
-#            oldToPrefferedClasses:
-#                # prevent PHPStorm autocomplete mess
-#                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
-#                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
-#                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
-#                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
-#                'Closure': 'PhpParser\Node\Expr\Closure'
-#                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
-#                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
-#                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
-#                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-#                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
-#                # builder typo nodes
-#                PhpParser\Builder\Use_: Rector\Core\PhpParser\Builder\UseBuilder
-#                PhpParser\Builder\Class_: Rector\Core\PhpParser\Builder\ClassBuilder
-#                PhpParser\Builder\Method: Rector\Core\PhpParser\Builder\MethodBuilder
-#                PhpParser\Builder\Namespace_: Rector\Core\PhpParser\Builder\NamespaceBuilder
-#                PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
-#                PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
-#                PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
+    -
+        class: Symplify\PHPStanRules\Rules\PreferredClassRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            oldToPreferredClasses:
+                # prevent PHPStorm autocomplete mess
+                'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
+                'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
+                'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
+                'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
+                'Closure': 'PhpParser\Node\Expr\Closure'
+                'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
+                'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
+                'Hoa\Protocol\Node\Node': 'PhpParser\Node'
+                'Nette\Utils\FileSystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+                'Symfony\Component\Filesystem\Filesystem': 'Symplify\SmartFileSystem\SmartFileSystem'
+                # builder typo nodes
+                PhpParser\Builder\Use_: Rector\Core\PhpParser\Builder\UseBuilder
+                PhpParser\Builder\Class_: Rector\Core\PhpParser\Builder\ClassBuilder
+                PhpParser\Builder\Method: Rector\Core\PhpParser\Builder\MethodBuilder
+                PhpParser\Builder\Namespace_: Rector\Core\PhpParser\Builder\NamespaceBuilder
+                PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
+                PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
+                PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
 
 parameters:
     level: max
@@ -457,8 +461,6 @@ parameters:
                 # 3rd party code
                 -  rules/php70/src/EregToPcreTransformer.php
 
-        - '#Cannot access property \$key on PhpParser\\Node\\Expr\\ArrayItem\|null#'
-
         # symfony/console
         -
              message: '#Use explicit return value over magic &reference#'
@@ -473,16 +475,13 @@ parameters:
             path: 'rules/php70/src/EregToPcreTransformer.php'
 
         # new symplify rules
-        - '#Do not use static calls#'
+#        - '#Do not use static calls#'
         - '#Too many public elements on class \- \d+\. Try narrow it down under 10#'
 
-        - '#Variable "\$attributeAwareFullyQualifiedIdentifierTypeNode" is too long with 46 chars\. Narrow it under 40 chars#'
+#        - '#Variable "\$attributeAwareFullyQualifiedIdentifierTypeNode" is too long with 46 chars\. Narrow it under 40 chars#'
 
         # 3rd party
         - '#Class cognitive complexity for "(NodeTypeResolver|EregToPcreTransformer|DumpNodesCommand)" is \d+, keep it under 50#'
-
-        # the smallest descriptive method
-        - '#Variable "\$inverseJoinColumnsOpeningAndClosingSpace" is too long with \d+ chars\. Narrow it under 40 chars#'
 
         # complex - single repository for all nodes
         - '#Class cognitive complexity for "NodeRepository" is \d+, keep it under 50#'
@@ -495,7 +494,7 @@ parameters:
         - '#Post operation are forbidden, as they make 2 values at the same line\. Use pre instead#'
         - '#Use value object over multi array assign#'
 
-        - '#(.*?) expects class\-string, string given#'
+#        - '#(.*?) expects class\-string, string given#'
 
         - '#Method "(.*?)" is using too many parameters \- \d+\. Make it under 8#'
 

@@ -75,7 +75,7 @@ CODE_SAMPLE
         }
 
         $args = $node->args;
-        if ([] === $args) {
+        if ($args === []) {
             $args[] = $this->createArg($this->createNull());
         }
 

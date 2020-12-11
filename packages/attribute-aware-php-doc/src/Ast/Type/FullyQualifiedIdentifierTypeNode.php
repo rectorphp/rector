@@ -8,7 +8,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
-final class AttributeAwareFullyQualifiedIdentifierTypeNode extends IdentifierTypeNode implements AttributeAwareNodeInterface
+final class FullyQualifiedIdentifierTypeNode extends IdentifierTypeNode implements AttributeAwareNodeInterface
 {
     use AttributeTrait;
 
