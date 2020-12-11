@@ -32,7 +32,7 @@ final class NoRectorsLoadedReporter
 
         $this->symfonyStyle->title('Add set of rules to "rector.php"');
         $this->symfonyStyle->writeln('  $parameters = $containerConfigurator->parameters();');
-        $this->symfonyStyle->writeln('  $parameters->set(Option::SET, [...]);');
+        $this->symfonyStyle->writeln('  $parameters->set(Option::SETS, [...]);');
         $this->symfonyStyle->newLine(2);
 
         $this->symfonyStyle->title('Missing "rector.php" in your project? Let Rector create it for you');
