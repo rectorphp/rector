@@ -22,7 +22,7 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
     {
         $this->setParameter(
             Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
-            __DIR__ . '/../GetToConstructorInjectionRector/xml/services.xml'
+            __DIR__ . '/xml/services.xml'
         );
         $this->doTestFileInfo($fileInfo);
     }
