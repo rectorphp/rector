@@ -11,6 +11,9 @@ use Rector\Reporting\DataCollector\ReportCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * @deprecated Replace with interface. Remove whole event system to keep 1 less pattern for same thing
+ */
 final class PrintReportCollectorEventSubscriber implements EventSubscriberInterface
 {
     /**

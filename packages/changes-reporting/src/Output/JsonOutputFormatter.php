@@ -8,7 +8,6 @@ use Nette\Utils\Json;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
@@ -17,11 +16,6 @@ final class JsonOutputFormatter implements OutputFormatterInterface
      * @var string
      */
     public const NAME = 'json';
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
 
     /**
      * @var Configuration
@@ -33,12 +27,8 @@ final class JsonOutputFormatter implements OutputFormatterInterface
      */
     private $smartFileSystem;
 
-    public function __construct(
-        Configuration $configuration,
-        SmartFileSystem $smartFileSystem,
-        SymfonyStyle $symfonyStyle
-    ) {
-        $this->symfonyStyle = $symfonyStyle;
+    public function __construct(Configuration $configuration, SmartFileSystem $smartFileSystem)
+    {
         $this->configuration = $configuration;
         $this->smartFileSystem = $smartFileSystem;
     }
@@ -80,6 +70,29 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         $errors = $errorAndDiffCollector->getErrors();
         $errorsArray['totals']['errors'] = count($errors);
 
+        $errorsData = $this->createErrorsData($errors);
+        if ($errorsData !== []) {
+            $errorsArray['errors'] = $errorsData;
+        }
+
+        $json = Json::encode($errorsArray, Json::PRETTY);
+
+        $outputFile = $this->configuration->getOutputFile();
+        if ($outputFile !== null) {
+            $this->smartFileSystem->dumpFile($outputFile, $json . PHP_EOL);
+        } else {
+            echo $json . PHP_EOL;
+        }
+    }
+
+    /**
+     * @param mixed[] $errors
+     * @return mixed[]
+     */
+    private function createErrorsData(array $errors): array
+    {
+        $errorsData = [];
+
         foreach ($errors as $error) {
             $errorData = [
                 'message' => $error->getMessage(),
@@ -94,16 +107,9 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 $errorData['line'] = $error->getLine();
             }
 
-            $errorsArray['errors'][] = $errorData;
+            $errorsData[] = $errorData;
         }
 
-        $json = Json::encode($errorsArray, Json::PRETTY);
-
-        $outputFile = $this->configuration->getOutputFile();
-        if ($outputFile !== null) {
-            $this->smartFileSystem->dumpFile($outputFile, $json . PHP_EOL);
-        } else {
-            $this->symfonyStyle->writeln($json);
-        }
+        return $errorsData;
     }
 }
