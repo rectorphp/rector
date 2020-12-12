@@ -154,7 +154,8 @@ final class ValidateFixtureNamespaceCommand extends Command
             ->in(__DIR__ . '/../../../../tests')
 //            ->in(__DIR__ . '/../../../../packages/*/tests')
 //            ->in(__DIR__ . '/../../../../rules/*/tests');
-                ->in(__DIR__ . '/../../../../rules/architecture/tests');
+                ->in(__DIR__ . '/../../../../rules/architecture/tests')
+                ->in(__DIR__ . '/../../../../rules/autodiscovery/tests');
 
         return $this->finderSanitizer->sanitize($finder);
     }
