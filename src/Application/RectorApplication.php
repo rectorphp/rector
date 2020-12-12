@@ -14,7 +14,6 @@ use Rector\Core\EventDispatcher\Event\AfterProcessEvent;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
@@ -83,11 +82,6 @@ final class RectorApplication
     private $nodeScopeResolver;
 
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
@@ -95,7 +89,6 @@ final class RectorApplication
     public function __construct(
         Configuration $configuration,
         ErrorAndDiffCollector $errorAndDiffCollector,
-        EventDispatcherInterface $eventDispatcher,
         FileProcessor $fileProcessor,
         NodeScopeResolver $nodeScopeResolver,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
@@ -110,7 +103,6 @@ final class RectorApplication
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->nodeScopeResolver = $nodeScopeResolver;
-        $this->eventDispatcher = $eventDispatcher;
         $this->privatesAccessor = $privatesAccessor;
     }
 

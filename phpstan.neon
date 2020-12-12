@@ -718,6 +718,5 @@ parameters:
         - '#Method (.*?) should return DOMElement but returns DOMElement\|false#'
         - '#Method (.*?) should return DOMElement\|null but returns DOMElement\|false#'
 
-
         # bug in simplify
         - '#Parameter 1 should use PhpParser\\Node\\Expr\\MethodCall type as already checked#'
