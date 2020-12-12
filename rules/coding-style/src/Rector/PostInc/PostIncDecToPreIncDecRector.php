@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\PostInc;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PostDec;
+use PhpParser\Node\Expr\PostInc;
+use PhpParser\Node\Expr\PreDec;
+use PhpParser\Node\Expr\PreInc;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -61,6 +65,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return null;
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Expression) {
+            return null;
+        }
+
+        if ($node instanceof PostInc) {
+            return new PreInc($node->var);
+        }
+
+        return new PreDec($node->var);
     }
 }
