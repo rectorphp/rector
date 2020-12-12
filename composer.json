@@ -12,6 +12,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
+        "ext-dom": "*",
         "composer/xdebug-handler": "^1.4",
         "doctrine/annotations": "^1.11",
         "doctrine/inflector": "^2.0",

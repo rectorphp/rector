@@ -283,6 +283,10 @@ final class ProcessCommand extends AbstractCommand
             return;
         }
 
+        if ($this->configuration->shouldHideClutter()) {
+            return;
+        }
+
         $message = sprintf(
             'Ruleset contains %d rules that need "--clear-cache" option to analyse full project',
             $this->rectorNodeTraverser->getZeroCacheRectorCount()

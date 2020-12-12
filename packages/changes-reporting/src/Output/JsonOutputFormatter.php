@@ -70,6 +70,29 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         $errors = $errorAndDiffCollector->getErrors();
         $errorsArray['totals']['errors'] = count($errors);
 
+        $errorsData = $this->createErrorsData($errors);
+        if ($errorsData !== []) {
+            $errorsArray['errors'] = $errorsData;
+        }
+
+        $json = Json::encode($errorsArray, Json::PRETTY);
+
+        $outputFile = $this->configuration->getOutputFile();
+        if ($outputFile !== null) {
+            $this->smartFileSystem->dumpFile($outputFile, $json . PHP_EOL);
+        } else {
+            echo $json . PHP_EOL;
+        }
+    }
+
+    /**
+     * @param mixed[] $errors
+     * @return mixed[]
+     */
+    private function createErrorsData(array $errors): array
+    {
+        $errorsData = [];
+
         foreach ($errors as $error) {
             $errorData = [
                 'message' => $error->getMessage(),
@@ -84,16 +107,9 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 $errorData['line'] = $error->getLine();
             }
 
-            $errorsArray['errors'][] = $errorData;
+            $errorsData[] = $errorData;
         }
 
-        $json = Json::encode($errorsArray, Json::PRETTY);
-
-        $outputFile = $this->configuration->getOutputFile();
-        if ($outputFile !== null) {
-            $this->smartFileSystem->dumpFile($outputFile, $json . PHP_EOL);
-        } else {
-            echo $json;
-        }
+        return $errorsData;
     }
 }

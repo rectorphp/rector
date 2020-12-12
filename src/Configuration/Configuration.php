@@ -259,6 +259,19 @@ final class Configuration
         throw new InvalidConfigurationException($message);
     }
 
+    public function shouldHideClutter(): bool
+    {
+        if ($this->outputFormat === JsonOutputFormatter::NAME) {
+            return true;
+        }
+
+        if ($this->outputFormat === CheckstyleOutputFormatter::NAME) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function canShowProgressBar(InputInterface $input): bool
     {
         $noProgressBar = (bool) $input->getOption(Option::OPTION_NO_PROGRESS_BAR);
@@ -266,7 +279,6 @@ final class Configuration
             return false;
         }
         $optionOutputFormat = $input->getOption(Option::OPTION_OUTPUT_FORMAT);
-
         if ($optionOutputFormat === JsonOutputFormatter::NAME) {
             return false;
         }

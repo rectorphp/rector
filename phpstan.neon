@@ -712,3 +712,12 @@ parameters:
                 - packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php
                 # hacking around closed design
                 - packages/better-php-doc-parser/src/PhpDocNodeFactory/ParamPhpDocNodeFactory.php
+
+        # known value
+        - '#Cannot call method (.*?)\(\) on DOMElement\|false#'
+        - '#Method (.*?) should return DOMElement but returns DOMElement\|false#'
+        - '#Method (.*?) should return DOMElement\|null but returns DOMElement\|false#'
+
+
+        # bug in simplify
+        - '#Parameter 1 should use PhpParser\\Node\\Expr\\MethodCall type as already checked#'

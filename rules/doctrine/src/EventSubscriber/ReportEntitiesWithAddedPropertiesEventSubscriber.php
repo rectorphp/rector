@@ -11,6 +11,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
+/**
+ * @deprecated Replace with interface. Remove whole event system to keep 1 less pattern for same thing
+ */
 final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSubscriberInterface
 {
     /**

@@ -212,43 +212,6 @@ final class NodeNameResolver
     }
 
     /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function reportInvalidNodeForName(Node $node): void
-    {
-        $message = sprintf('Pick more specific node than "%s", e.g. "$node->name"', get_class($node));
-
-        $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($fileInfo instanceof SmartFileInfo) {
-            $message .= PHP_EOL . PHP_EOL;
-            $message .= sprintf(
-                'Caused in "%s" file on line %d on code "%s"',
-                $fileInfo->getRelativeFilePathFromCwd(),
-                $node->getStartLine(),
-                $this->betterStandardPrinter->print($node)
-            );
-        }
-
-        $backtrace = debug_backtrace();
-        $rectorBacktrace = $this->matchRectorBacktraceCall($backtrace);
-
-        if ($rectorBacktrace) {
-            // issues to find the file in prefixed
-            if (file_exists($rectorBacktrace[self::FILE])) {
-                $fileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);
-                $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
-            } else {
-                $fileAndLine = $rectorBacktrace[self::FILE] . ':' . $rectorBacktrace['line'];
-            }
-
-            $message .= PHP_EOL . PHP_EOL;
-            $message .= sprintf('Look at %s', $fileAndLine);
-        }
-
-        throw new ShouldNotHappenException($message);
-    }
-
-    /**
      * @param Interface_|Trait_ $classLike
      */
     private function resolveNamespacedNameAwareNode(ClassLike $classLike): ?string
@@ -284,5 +247,42 @@ final class NodeNameResolver
         }
 
         return $backtrace[1] ?? null;
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function reportInvalidNodeForName(Node $node): void
+    {
+        $message = sprintf('Pick more specific node than "%s", e.g. "$node->name"', get_class($node));
+
+        $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        if ($fileInfo instanceof SmartFileInfo) {
+            $message .= PHP_EOL . PHP_EOL;
+            $message .= sprintf(
+                'Caused in "%s" file on line %d on code "%s"',
+                $fileInfo->getRelativeFilePathFromCwd(),
+                $node->getStartLine(),
+                $this->betterStandardPrinter->print($node)
+            );
+        }
+
+        $backtrace = debug_backtrace();
+        $rectorBacktrace = $this->matchRectorBacktraceCall($backtrace);
+
+        if ($rectorBacktrace) {
+            // issues to find the file in prefixed
+            if (file_exists($rectorBacktrace[self::FILE])) {
+                $fileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);
+                $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
+            } else {
+                $fileAndLine = $rectorBacktrace[self::FILE] . ':' . $rectorBacktrace['line'];
+            }
+
+            $message .= PHP_EOL . PHP_EOL;
+            $message .= sprintf('Look at %s', $fileAndLine);
+        }
+
+        throw new ShouldNotHappenException($message);
     }
 }
