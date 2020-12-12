@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\For_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -68,14 +69,27 @@ CODE_SAMPLE
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($this->isAnExpression($parentNode)) {
-            return $this->processPre($node);
+            return $this->processPrePost($node);
         }
 
         if ($parentNode instanceof ArrayDimFetch && $this->areNodesEqual($parentNode->dim, $node)) {
             return $this->processPreArray($node, $parentNode);
         }
 
+        if ($parentNode instanceof For_ && $this->areNodesEqual($parentNode->loop, $node)) {
+            return $this->processPreFor($node, $parentNode);
+        }
+
         return null;
+    }
+
+    /**
+     * @param PostInc|PostDec $node
+     */
+    private function processPreFor(Node $node, For_ $for): Node
+    {
+        $for->loop = $this->processPrePost($node);
+        return $for->loop;
     }
 
     /**
@@ -89,7 +103,7 @@ CODE_SAMPLE
         }
 
         $arrayDimFetch->dim = $node->var;
-        $this->addNodeAfterNode($this->processPre($node), $arrayDimFetch);
+        $this->addNodeAfterNode($this->processPrePost($node), $arrayDimFetch);
 
         return $arrayDimFetch->dim;
     }
@@ -97,7 +111,7 @@ CODE_SAMPLE
     /**
      * @param PostInc|PostDec $node
      */
-    private function processPre(Node $node): Node
+    private function processPrePost(Node $node): Node
     {
         if ($node instanceof PostInc) {
             return new PreInc($node->var);
