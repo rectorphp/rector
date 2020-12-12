@@ -14,7 +14,6 @@ use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
-use Rector\Core\EventDispatcher\Event\AfterReportEvent;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\Guard\RectorGuard;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
@@ -26,7 +25,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -88,11 +86,6 @@ final class ProcessCommand extends AbstractCommand
     private $symfonyStyle;
 
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * @var CachedFileInfoFilterAndReporter
      */
     private $cachedFileInfoFilterAndReporter;
@@ -102,7 +95,6 @@ final class ProcessCommand extends AbstractCommand
         ChangedFilesDetector $changedFilesDetector,
         Configuration $configuration,
         ErrorAndDiffCollector $errorAndDiffCollector,
-        EventDispatcherInterface $eventDispatcher,
         FilesFinder $phpFilesFinder,
         NonPhpFileProcessor $nonPhpFileProcessor,
         OutputFormatterCollector $outputFormatterCollector,
@@ -125,7 +117,6 @@ final class ProcessCommand extends AbstractCommand
         $this->nonPhpFileProcessor = $nonPhpFileProcessor;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
-        $this->eventDispatcher = $eventDispatcher;
         $this->cachedFileInfoFilterAndReporter = $cachedFileInfoFilterAndReporter;
 
         parent::__construct();
@@ -230,8 +221,6 @@ final class ProcessCommand extends AbstractCommand
 
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
         $outputFormatter->report($this->errorAndDiffCollector);
-
-        $this->eventDispatcher->dispatch(new AfterReportEvent());
 
         // invalidate affected files
         $this->invalidateAffectedCacheFiles();

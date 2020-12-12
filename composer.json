@@ -49,7 +49,6 @@
         "ocramius/package-versions": "^1.9",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpunit/phpunit": "^8.5|^9.2",
-        "psr/event-dispatcher": "^1.0",
         "symplify/changelog-linker": "^9.0.5",
         "symplify/easy-coding-standard": "^9.0.5",
         "symplify/coding-standard": "^9.0.5",
