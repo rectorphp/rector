@@ -77,7 +77,10 @@ CODE_SAMPLE
             return $this->processPreArray($node, $parentNode);
         }
 
-        if ($parentNode instanceof For_ && count($parentNode->loop) === 1 && $this->areNodesEqual($parentNode->loop[0], $node)) {
+        if ($parentNode instanceof For_ && count((array) $parentNode->loop) === 1 && $this->areNodesEqual(
+            $parentNode->loop[0],
+            $node
+        )) {
             return $this->processPreFor($node, $parentNode);
         }
 
@@ -88,6 +91,7 @@ CODE_SAMPLE
     {
         return $node instanceof Node && $node instanceof Expression;
     }
+
     /**
      * @param PostInc|PostDec $node
      */
@@ -99,6 +103,7 @@ CODE_SAMPLE
 
         return new PreDec($node->var);
     }
+
     /**
      * @param PostInc|PostDec $node
      */
@@ -114,6 +119,7 @@ CODE_SAMPLE
 
         return $arrayDimFetch->dim;
     }
+
     /**
      * @param PostInc|PostDec $node
      */
