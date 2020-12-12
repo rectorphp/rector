@@ -13,7 +13,6 @@ use PhpParser\ParserFactory;
 use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
 use Rector\Core\Configuration\RectorClassesProvider;
 use Rector\Core\Console\ConsoleApplication;
-use Rector\Core\EventDispatcher\AutowiredEventDispatcher;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
 use Symfony\Component\Console\Application as SymfonyApplication;
@@ -21,7 +20,6 @@ use Symfony\Component\Console\Descriptor\TextDescriptor;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
@@ -91,8 +89,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SmartFileSystem::class);
 
     $services->set(StringFormatConverter::class);
-
-    $services->alias(EventDispatcherInterface::class, AutowiredEventDispatcher::class);
 
     $services->set(SymfonyStyleFactory::class);
     $services->set(SymfonyStyle::class)

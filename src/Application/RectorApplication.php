@@ -10,11 +10,10 @@ use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\EventDispatcher\Event\AfterProcessEvent;
+use Rector\Core\Contract\PostRunnerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
@@ -46,6 +45,11 @@ final class RectorApplication
      * @var SmartFileInfo[]
      */
     private $notParsedFiles = [];
+
+    /**
+     * @var PostRunnerInterface[]
+     */
+    private $postRunners = [];
 
     /**
      * @var SymfonyStyle
@@ -83,25 +87,23 @@ final class RectorApplication
     private $nodeScopeResolver;
 
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
 
+    /**
+     * @param PostRunnerInterface[] $postRunners
+     */
     public function __construct(
         Configuration $configuration,
         ErrorAndDiffCollector $errorAndDiffCollector,
-        EventDispatcherInterface $eventDispatcher,
         FileProcessor $fileProcessor,
         NodeScopeResolver $nodeScopeResolver,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle,
-        PrivatesAccessor $privatesAccessor
+        PrivatesAccessor $privatesAccessor,
+        array $postRunners
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -110,8 +112,8 @@ final class RectorApplication
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->nodeScopeResolver = $nodeScopeResolver;
-        $this->eventDispatcher = $eventDispatcher;
         $this->privatesAccessor = $privatesAccessor;
+        $this->postRunners = $postRunners;
     }
 
     /**
@@ -157,7 +159,9 @@ final class RectorApplication
         $this->removedAndAddedFilesProcessor->run();
 
         // 5. various extensions on finish
-        $this->eventDispatcher->dispatch(new AfterProcessEvent());
+        foreach ($this->postRunners as $postRunner) {
+            $postRunner->run();
+        }
     }
 
     private function prepareProgressBar(int $fileCount): void

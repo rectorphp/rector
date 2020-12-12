@@ -11,7 +11,6 @@ use Rector\ChangesReporting\Rector\AbstractRector\NotifyingRemovingNodeTrait;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
 use Rector\FileSystemRector\Behavior\FileSystemRectorTrait;
 use Rector\PostRector\Rector\AbstractRector\NodeCommandersTrait;
-use Rector\Reporting\Rector\AbstractRector\NodeReportCollectorTrait;
 
 trait AbstractRectorTrait
 {
@@ -31,7 +30,6 @@ trait AbstractRectorTrait
     use ComplexRemovalTrait;
     use NodeCollectorTrait;
     use NotifyingRemovingNodeTrait;
-    use NodeReportCollectorTrait;
 
     protected function isNonAnonymousClass(?Node $node): bool
     {
