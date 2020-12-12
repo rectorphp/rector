@@ -4,7 +4,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\ConvertAddUploadWithThirdArgument
 
 use Nette\Forms\Form;
 
-final class SkipNoThirdArgument
+final class SkipSomeClass
 {
     public function upload()
     {

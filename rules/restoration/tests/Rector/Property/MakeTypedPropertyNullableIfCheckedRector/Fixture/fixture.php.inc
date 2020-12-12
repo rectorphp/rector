@@ -4,7 +4,7 @@ namespace Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCh
 
 use Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCheckedRector\Source\PropertyTypeClass;
 
-final class Fixture
+final class SomeClass
 {
     private PropertyTypeClass $propertyTypeClass;
 
@@ -28,7 +28,7 @@ namespace Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCh
 
 use Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCheckedRector\Source\PropertyTypeClass;
 
-final class Fixture
+final class SomeClass
 {
     private ?PropertyTypeClass $propertyTypeClass = null;
 

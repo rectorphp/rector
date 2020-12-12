@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_;
 
-final class KeepSameEndWithExistingImport
+final class SameEndWithExistingImport
 {
     public function __construct(\Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_ $firstTrait)
     {
@@ -19,7 +19,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_;
 
-final class KeepSameEndWithExistingImport
+final class SameEndWithExistingImport
 {
     public function __construct(Trait_ $firstTrait)
     {

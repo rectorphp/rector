@@ -4,7 +4,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\MagicHtmlCallToAppendAttributeRec
 
 use Nette\Utils\Html;
 
-final class Fixture
+final class SomeClass
 {
     public function run()
     {
@@ -21,7 +21,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\MagicHtmlCallToAppendAttributeRec
 
 use Nette\Utils\Html;
 
-final class Fixture
+final class SomeClass
 {
     public function run()
     {

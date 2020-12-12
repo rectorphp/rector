@@ -4,7 +4,7 @@ namespace Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector
 
 use Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\Source\LocalFormEvents;
 
-class Fixture
+class SomeClass
 {
     public function subscribe()
     {
@@ -24,7 +24,7 @@ namespace Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector
 
 use Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\Source\LocalFormEvents;
 
-class Fixture
+class SomeClass
 {
     public function subscribe()
     {

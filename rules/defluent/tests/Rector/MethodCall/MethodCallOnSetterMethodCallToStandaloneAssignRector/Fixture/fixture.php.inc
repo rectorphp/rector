@@ -4,7 +4,7 @@ namespace Rector\Defluent\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallTo
 
 use Rector\Defluent\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\Source\AnotherClass;
 
-class Fixture
+class SomeClass
 {
     public function some()
     {
@@ -26,7 +26,7 @@ namespace Rector\Defluent\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallTo
 
 use Rector\Defluent\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\Source\AnotherClass;
 
-class Fixture
+class SomeClass
 {
     public function some()
     {

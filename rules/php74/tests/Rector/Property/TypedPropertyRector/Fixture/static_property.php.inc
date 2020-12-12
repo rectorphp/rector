@@ -4,7 +4,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
-final class StaticProperty
+final class ClassWithStaticProperty
 {
     /**
      * @var iterable
@@ -20,7 +20,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
-final class StaticProperty
+final class ClassWithStaticProperty
 {
     private static iterable $iterable;
 }

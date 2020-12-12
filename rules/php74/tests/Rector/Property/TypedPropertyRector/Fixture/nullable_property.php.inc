@@ -4,7 +4,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
-final class NullableProperty
+final class ClassWithNullableProperty
 {
     /**
      * @var AnotherClass|null
@@ -25,7 +25,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
-final class NullableProperty
+final class ClassWithNullableProperty
 {
     private ?\Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $nullableClassWithDefaultNull = null;
 

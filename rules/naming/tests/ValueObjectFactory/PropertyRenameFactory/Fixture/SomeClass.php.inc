@@ -6,7 +6,7 @@ namespace Rector\Naming\Tests\ValueObjectFactory\PropertyRenameFactory\Fixture;
 
 use Rector\Naming\Tests\ValueObjectFactory\PropertyRenameFactory\Source\EliteManager;
 
-class Someclass
+class SomeClass
 {
     /**
      * @var EliteManager

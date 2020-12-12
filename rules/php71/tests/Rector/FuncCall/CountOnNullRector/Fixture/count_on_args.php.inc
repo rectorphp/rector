@@ -4,7 +4,7 @@ namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
 
 use PhpParser\Node\Expr\MethodCall;
 
-class CountOnArgs
+class CountOrArgs
 {
     public function run(MethodCall $methodCall)
     {
@@ -24,7 +24,7 @@ namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
 
 use PhpParser\Node\Expr\MethodCall;
 
-class CountOnArgs
+class CountOrArgs
 {
     public function run(MethodCall $methodCall)
     {

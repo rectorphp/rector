@@ -4,7 +4,7 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRe
 
 use Symfony\Component\Translation\Translator;
 
-final class Fixture
+final class SomeController
 {
     public function run()
     {
@@ -24,7 +24,7 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRe
 
 use Symfony\Component\Translation\Translator;
 
-final class Fixture
+final class SomeController
 {
     public function run()
     {

@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\Fixtur
 
 use Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
 
-class Fixture
+class SomeClass
 {
     public function run(ReturnDeny $returnDeny)
     {
@@ -20,7 +20,7 @@ namespace Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\Fixtur
 
 use Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
 
-class Fixture
+class SomeClass
 {
     public function run(ReturnDeny $returnDeny)
     {

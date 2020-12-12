@@ -4,7 +4,7 @@ namespace Rector\Carbon\Tests\Rector\MethodCall\ChangeDiffForHumansArgsRector\Fi
 
 use Carbon\Carbon;
 
-final class Fixture
+final class SomeClass
 {
     public function run(Carbon $carbon): void
     {
@@ -22,7 +22,7 @@ namespace Rector\Carbon\Tests\Rector\MethodCall\ChangeDiffForHumansArgsRector\Fi
 
 use Carbon\Carbon;
 
-final class Fixture
+final class SomeClass
 {
     public function run(Carbon $carbon): void
     {

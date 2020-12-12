@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class InvoiceAdminController.
  */
-class SkipAnnotationComment
+class InvoiceAdminController
 {
     /**
      * @Route("/admin/invoice/show/{id}", options={ "expose" = true, "another_option" = false }, name="invoice_admin_show")

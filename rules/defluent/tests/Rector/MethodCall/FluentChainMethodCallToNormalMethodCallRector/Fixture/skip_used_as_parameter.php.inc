@@ -4,7 +4,7 @@ namespace Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalM
 
 use Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
 
-class SkipUsedAsParameter
+class UsedAsParameter
 {
     public function someFunction(FluentInterfaceClass $someClass)
     {

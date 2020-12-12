@@ -4,7 +4,7 @@ namespace Rector\Defluent\Tests\Rector\MethodCall\InArgChainFluentMethodCallToSt
 
 use Rector\Defluent\Tests\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest\Source\FluentClass;
 
-class SkipSingleCall
+class SkipSingleClass
 {
     public function someFunction(FluentClass $someClass)
     {

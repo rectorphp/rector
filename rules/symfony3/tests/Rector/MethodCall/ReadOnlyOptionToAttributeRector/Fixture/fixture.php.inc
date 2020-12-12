@@ -4,7 +4,7 @@ namespace Rector\Symfony3\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRecto
 
 use Symfony\Component\Form\FormBuilder;
 
-class Fixture
+class ReadOnlyOptionToAttribute
 {
     function buildForm(FormBuilder $builder, array $options)
     {
@@ -20,7 +20,7 @@ namespace Rector\Symfony3\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRecto
 
 use Symfony\Component\Form\FormBuilder;
 
-class Fixture
+class ReadOnlyOptionToAttribute
 {
     function buildForm(FormBuilder $builder, array $options)
     {

@@ -4,7 +4,7 @@ namespace Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityM
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
-class Fixture
+class CustomRepository
 {
     /**
      * @var ManagerRegistry
@@ -31,7 +31,7 @@ namespace Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityM
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
-class Fixture
+class CustomRepository
 {
     private \Doctrine\ORM\EntityManagerInterface $entityManager;
 

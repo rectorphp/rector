@@ -4,7 +4,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRe
 
 use Symfony\Component\HttpFoundation\File\File;
 
-final class SingleNullableReturn
+final class FileUpload
 {
     private $file;
 
@@ -27,7 +27,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRe
 
 use Symfony\Component\HttpFoundation\File\File;
 
-final class SingleNullableReturn
+final class FileUpload
 {
     /**
      * @var \Symfony\Component\HttpFoundation\File\File|null

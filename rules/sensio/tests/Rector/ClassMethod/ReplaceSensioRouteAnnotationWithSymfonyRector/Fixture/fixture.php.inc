@@ -4,7 +4,7 @@ namespace Rector\Sensio\Tests\Rector\ClassMethod\ReplaceSensioRouteAnnotationWit
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-final class Fixture
+final class SomeClass
 {
     /**
      * @Route()
@@ -22,7 +22,7 @@ namespace Rector\Sensio\Tests\Rector\ClassMethod\ReplaceSensioRouteAnnotationWit
 
 use Symfony\Component\Routing\Annotation\Route;
 
-final class Fixture
+final class SomeClass
 {
     /**
      * @Route()

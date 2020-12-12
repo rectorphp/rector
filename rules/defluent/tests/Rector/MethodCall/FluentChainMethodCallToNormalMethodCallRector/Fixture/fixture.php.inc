@@ -4,7 +4,7 @@ namespace Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalM
 
 use Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
 
-class Fixture
+class ActionClass
 {
     /**
      * @var FluentInterfaceClass
@@ -28,7 +28,7 @@ namespace Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalM
 
 use Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
 
-class Fixture
+class ActionClass
 {
     /**
      * @var FluentInterfaceClass

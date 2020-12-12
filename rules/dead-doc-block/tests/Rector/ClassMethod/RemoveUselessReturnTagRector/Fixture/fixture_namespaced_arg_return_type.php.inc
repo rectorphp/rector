@@ -4,7 +4,7 @@ namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRec
 
 use PhpParser\Node\Expr\PropertyFetch;
 
-class FixtureNamespacedArgReturnType
+class SomeClassNamespacedArgParamReturnFQCN
 {
     /**
      * @return PropertyFetch
@@ -23,7 +23,7 @@ namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRec
 
 use PhpParser\Node\Expr\PropertyFetch;
 
-class FixtureNamespacedArgReturnType
+class SomeClassNamespacedArgParamReturnFQCN
 {
     function foo(): \PhpParser\Node\Expr\PropertyFetch
     {

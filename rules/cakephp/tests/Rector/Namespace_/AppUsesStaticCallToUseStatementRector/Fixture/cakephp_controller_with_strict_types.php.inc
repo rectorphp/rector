@@ -6,7 +6,7 @@ namespace Rector\CakePHP\Tests\Rector\Namespace_\AppUsesStaticCallToUseStatement
 
 \App::uses('Component', 'Controller');
 
-class CakephpControllerWithStrictTypes
+class CakeControllerWithStrictTypes
 {
 }
 
@@ -20,7 +20,7 @@ namespace Rector\CakePHP\Tests\Rector\Namespace_\AppUsesStaticCallToUseStatement
 
 use Cake\Controller\Component;
 
-class CakephpControllerWithStrictTypes
+class CakeControllerWithStrictTypes
 {
 }
 

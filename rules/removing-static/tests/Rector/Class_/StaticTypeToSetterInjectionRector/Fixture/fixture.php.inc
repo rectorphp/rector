@@ -6,7 +6,7 @@ namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionR
 
 use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
 
-final class Fixture
+final class CheckoutEntityFactory
 {
     public function run()
     {
@@ -24,7 +24,7 @@ namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionR
 
 use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
 
-final class Fixture
+final class CheckoutEntityFactory
 {
     /**
      * @var \Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory

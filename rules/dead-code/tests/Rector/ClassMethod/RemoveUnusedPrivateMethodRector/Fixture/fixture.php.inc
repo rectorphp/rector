@@ -4,7 +4,7 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRect
 
 use Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Source\AnotherCaller;
 
-final class Fixture
+final class SomeController
 {
     /**
      * @var AnotherCaller
@@ -36,7 +36,7 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRect
 
 use Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Source\AnotherCaller;
 
-final class Fixture
+final class SomeController
 {
     /**
      * @var AnotherCaller

@@ -4,7 +4,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\SetClassWithArgumentToSetFactoryR
 
 use Nette\DI\ContainerBuilder;
 
-class Fixture
+class SomeClass
 {
     public function run(ContainerBuilder $containerBuilder)
     {
@@ -21,7 +21,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\SetClassWithArgumentToSetFactoryR
 
 use Nette\DI\ContainerBuilder;
 
-class Fixture
+class SomeClass
 {
     public function run(ContainerBuilder $containerBuilder)
     {

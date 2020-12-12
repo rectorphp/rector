@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Fixtu
 
 use DI\Annotation\Inject;
 
-class InjectFromVar2
+class InjectFromProtectedVar
 {
     /**
      * @Inject
@@ -21,7 +21,7 @@ namespace Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Fixtu
 
 use DI\Annotation\Inject;
 
-class InjectFromVar2
+class InjectFromProtectedVar
 {
     /**
      * @var \Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\ExistingDependency

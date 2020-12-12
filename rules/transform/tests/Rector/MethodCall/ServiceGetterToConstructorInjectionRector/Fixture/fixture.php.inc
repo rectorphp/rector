@@ -4,7 +4,7 @@ namespace Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInj
 
 use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
 
-final class Fixture
+final class SomeClass
 {
     /**
      * @var FirstService
@@ -31,7 +31,7 @@ namespace Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInj
 
 use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
 
-final class Fixture
+final class SomeClass
 {
     /**
      * @var FirstService

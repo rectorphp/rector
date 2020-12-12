@@ -6,7 +6,7 @@ use Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRect
 use Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\SomeProduct;
 use Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\SomeRequest;
 
-final class Fixture2
+final class AnotherController
 {
     public function default(ProductRepository $productRepository)
     {
@@ -27,7 +27,7 @@ use Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRect
 use Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\SomeProduct;
 use Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\SomeRequest;
 
-final class Fixture2
+final class AnotherController
 {
     private \Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository $productRepository;
     public function __construct(\Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository $productRepository)

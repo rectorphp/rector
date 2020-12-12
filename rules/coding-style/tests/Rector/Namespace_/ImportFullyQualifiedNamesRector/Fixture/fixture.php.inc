@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function create()
     {
@@ -17,7 +17,7 @@ class Fixture
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
 use SomeAnother\AnotherClass;
-class Fixture
+class SomeClass
 {
     public function create()
     {

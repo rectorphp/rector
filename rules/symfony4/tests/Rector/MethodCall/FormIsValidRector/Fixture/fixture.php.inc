@@ -4,7 +4,7 @@ namespace Rector\Symfony4\Tests\Rector\MethodCall\FormIsValidRector\Fixture;
 
 use Symfony\Component\Form\Form;
 
-class Fixture
+class SomeController
 {
     public function action()
     {
@@ -24,7 +24,7 @@ namespace Rector\Symfony4\Tests\Rector\MethodCall\FormIsValidRector\Fixture;
 
 use Symfony\Component\Form\Form;
 
-class Fixture
+class SomeController
 {
     public function action()
     {

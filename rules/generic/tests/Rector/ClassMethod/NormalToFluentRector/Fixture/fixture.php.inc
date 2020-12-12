@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\Fixture;
 
 use Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\Source\FluentInterfaceClass;
 
-class Fixture
+class ActionClass
 {
     public function someFunction()
     {
@@ -22,7 +22,7 @@ namespace Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\Fixture;
 
 use Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\Source\FluentInterfaceClass;
 
-class Fixture
+class ActionClass
 {
     public function someFunction()
     {

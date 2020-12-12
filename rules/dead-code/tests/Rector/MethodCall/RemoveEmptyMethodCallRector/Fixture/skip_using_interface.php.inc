@@ -4,7 +4,7 @@ namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fi
 
 use Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Source\SomeInterface;
 
-class SkipUsingInterface
+class C
 {
     public function execute(SomeInterface $obj)
     {

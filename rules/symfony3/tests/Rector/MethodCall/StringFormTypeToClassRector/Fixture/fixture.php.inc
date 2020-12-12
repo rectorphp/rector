@@ -4,7 +4,7 @@ namespace Rector\Symfony3\Tests\Rector\MethodCall\StringFormTypeToClassRector\Fi
 
 use Symfony\Component\Form\FormBuilder;
 
-final class Fixture
+final class SomePresenter
 {
     public function action()
     {
@@ -21,7 +21,7 @@ namespace Rector\Symfony3\Tests\Rector\MethodCall\StringFormTypeToClassRector\Fi
 
 use Symfony\Component\Form\FormBuilder;
 
-final class Fixture
+final class SomePresenter
 {
     public function action()
     {

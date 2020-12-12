@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\MethodCall\UseMessageVariableForSprint
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class Fixture
+final class SomeClass
 {
     public function run(SymfonyStyle $symfonyStyle)
     {
@@ -20,7 +20,7 @@ namespace Rector\CodingStyle\Tests\Rector\MethodCall\UseMessageVariableForSprint
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class Fixture
+final class SomeClass
 {
     public function run(SymfonyStyle $symfonyStyle)
     {

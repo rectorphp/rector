@@ -4,7 +4,7 @@ namespace Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCa
 
 use Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy;
 
-final class Fixture
+final class SomeClass
 {
     public function __construct(TypeClassToReplaceMethodCallBy $typeClassToReplaceMethodCallBy)
     {
@@ -20,7 +20,7 @@ namespace Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCa
 
 use Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy;
 
-final class Fixture
+final class SomeClass
 {
     public function __construct(TypeClassToReplaceMethodCallBy $typeClassToReplaceMethodCallBy)
     {

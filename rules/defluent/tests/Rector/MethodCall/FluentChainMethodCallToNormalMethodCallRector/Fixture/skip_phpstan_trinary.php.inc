@@ -4,7 +4,7 @@ namespace Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalM
 
 use PHPStan\Type\MixedType;
 
-class SkipPhpstanTrinary
+class SkipPhpStanTrinary
 {
     public function run(MixedType $variableType)
     {

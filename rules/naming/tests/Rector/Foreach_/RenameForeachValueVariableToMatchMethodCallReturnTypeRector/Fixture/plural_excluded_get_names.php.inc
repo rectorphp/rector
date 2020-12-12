@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class PluralExcludedGetNames
+class PluralExcludedGetNamesClass
 {
     public function run()
     {
@@ -32,7 +32,7 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class PluralExcludedGetNames
+class PluralExcludedGetNamesClass
 {
     public function run()
     {

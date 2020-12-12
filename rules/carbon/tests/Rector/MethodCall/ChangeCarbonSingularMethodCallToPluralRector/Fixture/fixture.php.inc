@@ -4,7 +4,7 @@ namespace Rector\Carbon\Tests\Rector\MethodCall\ChangeCarbonSingularMethodCallTo
 
 use Carbon\Carbon;
 
-final class Fixture
+final class SomeClass
 {
     public function run(Carbon $carbon, $value): void
     {
@@ -20,7 +20,7 @@ namespace Rector\Carbon\Tests\Rector\MethodCall\ChangeCarbonSingularMethodCallTo
 
 use Carbon\Carbon;
 
-final class Fixture
+final class SomeClass
 {
     public function run(Carbon $carbon, $value): void
     {

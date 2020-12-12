@@ -4,7 +4,7 @@ namespace Rector\Symfony4\Tests\Rector\New_\RootNodeTreeBuilderRector\Fixture;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-class Fixture2
+class SomeConfiguration2
 {
     public function configure()
     {
@@ -21,7 +21,7 @@ namespace Rector\Symfony4\Tests\Rector\New_\RootNodeTreeBuilderRector\Fixture;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-class Fixture2
+class SomeConfiguration2
 {
     public function configure()
     {

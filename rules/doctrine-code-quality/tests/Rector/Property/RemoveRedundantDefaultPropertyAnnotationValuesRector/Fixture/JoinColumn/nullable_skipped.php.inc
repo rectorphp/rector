@@ -8,7 +8,7 @@ use Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPrope
 /**
  * @ORM\Entity
  */
-class NullableSkipped
+class NullableFalseSkipped
 {
     /**
      * @ORM\ManyToOne(targetEntity=Training::class)

@@ -4,7 +4,7 @@ namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWit
 
 use Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Source\SomeUser;
 
-final class SimpleEvent
+final class FileManager
 {
     public $onUpload;
 
@@ -22,7 +22,7 @@ namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWit
 
 use Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Source\SomeUser;
 
-final class SimpleEvent
+final class FileManager
 {
     /**
      * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface

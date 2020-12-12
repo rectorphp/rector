@@ -4,7 +4,7 @@ namespace Rector\Symfony4\Tests\Rector\MethodCall\FormIsValidRector\Fixture;
 
 use Symfony\Component\Form\Form;
 
-class SkipNestedIf
+class SkipNestedIfsController
 {
     public function action()
     {

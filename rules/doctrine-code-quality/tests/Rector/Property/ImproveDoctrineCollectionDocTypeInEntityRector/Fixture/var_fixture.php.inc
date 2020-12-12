@@ -9,7 +9,7 @@ use Rector\DoctrineCodeQuality\Tests\Rector\Property\ImproveDoctrineCollectionDo
 /**
  * @ORM\Entity
  */
-class VarFixture
+class VarSomeClass
 {
     /**
      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
@@ -31,7 +31,7 @@ use Rector\DoctrineCodeQuality\Tests\Rector\Property\ImproveDoctrineCollectionDo
 /**
  * @ORM\Entity
  */
-class VarFixture
+class VarSomeClass
 {
     /**
      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")

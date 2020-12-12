@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class SkipSingularAfterGetNames
+class SkipSingularAfterGetNamesClass
 {
     public function run()
     {

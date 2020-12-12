@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 
-class Fixture
+class SomeClass
 {
     /**
      * @param PropertyFetch|StaticPropertyFetch $node
@@ -27,7 +27,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 
-class Fixture
+class SomeClass
 {
     /**
      * @param PropertyFetch|StaticPropertyFetch $node

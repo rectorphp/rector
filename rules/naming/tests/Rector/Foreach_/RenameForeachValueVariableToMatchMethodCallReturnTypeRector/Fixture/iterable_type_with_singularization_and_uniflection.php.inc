@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\PackagesData;
 
-class IterableTypeWithSingularizationAndUniflection
+class IterableTypeWithSingularizationAndUninflectionClass
 {
     public function run()
     {
@@ -28,7 +28,7 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\PackagesData;
 
-class IterableTypeWithSingularizationAndUniflection
+class IterableTypeWithSingularizationAndUninflectionClass
 {
     public function run()
     {

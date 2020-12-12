@@ -5,7 +5,7 @@ namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixtur
 use function Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\i_throw_an_exception;
 use \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException;
 
-class UseOfAFunctionThatMayThrowAnExceptionAlreadyAnnotated
+class UseOfAFunctionThatThrowsAnExceptionAlreadyAnnotated
 {
     /**
      * @throws TheException
@@ -26,7 +26,7 @@ namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixtur
 use function Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\i_throw_an_exception;
 use \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException;
 
-class UseOfAFunctionThatMayThrowAnExceptionAlreadyAnnotated
+class UseOfAFunctionThatThrowsAnExceptionAlreadyAnnotated
 {
     /**
      * @throws TheException

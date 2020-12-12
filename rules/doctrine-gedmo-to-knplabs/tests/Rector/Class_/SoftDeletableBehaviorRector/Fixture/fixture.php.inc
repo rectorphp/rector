@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
-class Fixture
+class SomeClass
 {
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
@@ -33,7 +33,7 @@ namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\SoftDeletableBehavio
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
-class Fixture implements \Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface
+class SomeClass implements \Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface
 {
     use \Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
 }

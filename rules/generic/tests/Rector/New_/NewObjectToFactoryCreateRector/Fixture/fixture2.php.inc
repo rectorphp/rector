@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Fixtur
 
 use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClass;
 
-final class Fixture2
+final class SomeOtherController
 {
     /**
      * @var \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory
@@ -28,7 +28,7 @@ namespace Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Fixtur
 
 use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClass;
 
-final class Fixture2
+final class SomeOtherController
 {
     /**
      * @var \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory

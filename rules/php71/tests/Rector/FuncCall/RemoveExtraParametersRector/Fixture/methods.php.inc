@@ -4,7 +4,7 @@ namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture
 
 use Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\SomeExternalClass;
 
-final class Methods
+final class MethodExtraArgument
 {
     public function run()
     {
@@ -31,7 +31,7 @@ namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture
 
 use Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\SomeExternalClass;
 
-final class Methods
+final class MethodExtraArgument
 {
     public function run()
     {

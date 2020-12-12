@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToS
 
 use Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
 
-class Fixture
+class ClassWithExternalConstant
 {
     public function getValue()
     {
@@ -20,7 +20,7 @@ namespace Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToS
 
 use Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
 
-class Fixture
+class ClassWithExternalConstant
 {
     public function getValue()
     {

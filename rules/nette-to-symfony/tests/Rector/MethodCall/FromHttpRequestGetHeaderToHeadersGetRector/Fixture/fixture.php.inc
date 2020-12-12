@@ -4,7 +4,7 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeader
 
 use Symfony\Component\HttpFoundation\Request;
 
-final class Fixture
+final class SomeController
 {
     /**
      * @var \Nette\Http\Request
@@ -25,7 +25,7 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeader
 
 use Symfony\Component\HttpFoundation\Request;
 
-final class Fixture
+final class SomeController
 {
     /**
      * @var \Nette\Http\Request

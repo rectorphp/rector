@@ -4,7 +4,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\ConvertAddUploadWithThirdArgument
 
 use Nette\Forms\Form;
 
-final class Fixture
+final class SomeClass
 {
     public function upload()
     {
@@ -21,7 +21,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\ConvertAddUploadWithThirdArgument
 
 use Nette\Forms\Form;
 
-final class Fixture
+final class SomeClass
 {
     public function upload()
     {

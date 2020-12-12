@@ -5,7 +5,7 @@ namespace Rector\Symfony3\Tests\Rector\ClassMethod\MergeMethodAnnotationToRouteA
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 
-class Fixture
+class DefaultController
 {
     /**
      * @Route("/show/{id}")
@@ -25,7 +25,7 @@ namespace Rector\Symfony3\Tests\Rector\ClassMethod\MergeMethodAnnotationToRouteA
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 
-class Fixture
+class DefaultController
 {
     /**
      * @Route("/show/{id}", methods={"GET", "HEAD"})

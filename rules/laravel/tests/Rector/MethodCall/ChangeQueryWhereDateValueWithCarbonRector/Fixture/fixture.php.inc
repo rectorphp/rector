@@ -5,7 +5,7 @@ namespace Rector\Laravel\Tests\Rector\MethodCall\ChangeQueryWhereDateValueWithCa
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
 
-class Fixture
+class SomeClass
 {
     public function run(Builder $query)
     {
@@ -22,7 +22,7 @@ namespace Rector\Laravel\Tests\Rector\MethodCall\ChangeQueryWhereDateValueWithCa
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
 
-class Fixture
+class SomeClass
 {
     public function run(Builder $query)
     {

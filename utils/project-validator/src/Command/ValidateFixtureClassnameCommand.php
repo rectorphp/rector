@@ -41,9 +41,9 @@ final class ValidateFixtureClassnameCommand extends Command
 
     /**
      * @var string
-     * @see https://regex101.com/r/T5LUbA/2
+     * @see https://regex101.com/r/T5LUbA/4
      */
-    private const CLASS_USE_TRAIT_REGEX = '#\s+use\s+(\w+);#msU';
+    private const CLASS_USE_TRAIT_REGEX = '#^\s{0,}use\s+(\w+|[\w\\\\]+);$#msU';
 
     /**
      * @var FinderSanitizer

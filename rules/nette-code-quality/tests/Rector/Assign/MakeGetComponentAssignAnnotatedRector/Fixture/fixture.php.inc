@@ -4,7 +4,7 @@ namespace Rector\NetteCodeQuality\Tests\Rector\Assign\MakeGetComponentAssignAnno
 
 use Rector\NetteCodeQuality\Tests\Rector\Assign\MakeGetComponentAssignAnnotatedRector\Source\ExternalControl;
 
-final class Fixture
+final class SomeClass
 {
     public function run()
     {
@@ -21,7 +21,7 @@ namespace Rector\NetteCodeQuality\Tests\Rector\Assign\MakeGetComponentAssignAnno
 
 use Rector\NetteCodeQuality\Tests\Rector\Assign\MakeGetComponentAssignAnnotatedRector\Source\ExternalControl;
 
-final class Fixture
+final class SomeClass
 {
     public function run()
     {

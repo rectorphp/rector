@@ -4,7 +4,7 @@ namespace Rector\Laravel\Tests\Rector\New_\AddGuardToLoginEventRector\Fixture;
 
 use Illuminate\Auth\Events\Login;
 
-final class Fixture
+final class SomeClass
 {
     public function run(): void
     {
@@ -20,7 +20,7 @@ namespace Rector\Laravel\Tests\Rector\New_\AddGuardToLoginEventRector\Fixture;
 
 use Illuminate\Auth\Events\Login;
 
-final class Fixture
+final class SomeClass
 {
     public function run(): void
     {
