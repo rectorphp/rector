@@ -77,7 +77,7 @@ CODE_SAMPLE
             return $this->processPreArray($node, $parentNode);
         }
 
-        if ($parentNode instanceof For_ && $this->areNodesEqual($parentNode->loop, $node)) {
+        if ($parentNode instanceof For_ && count($parentNode->loop) === 1 && $this->areNodesEqual($parentNode->loop[0], $node)) {
             return $this->processPreFor($node, $parentNode);
         }
 
