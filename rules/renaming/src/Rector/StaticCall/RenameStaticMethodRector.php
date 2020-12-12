@@ -36,24 +36,28 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
 
     public function getRuleDefinition(): RuleDefinition
     {
+        $renameClassConfiguration = [
+            self::OLD_TO_NEW_METHODS_BY_CLASSES => [
+                new RenameStaticMethod(self::SOME_CLASS, 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'),
+            ],
+        ];
+
+        $renameMethodConfiguration = [
+            self::OLD_TO_NEW_METHODS_BY_CLASSES => [
+                new RenameStaticMethod(self::SOME_CLASS, 'oldMethod', self::SOME_CLASS, 'newStaticMethod'),
+            ],
+        ];
+
         return new RuleDefinition('Turns method names to new ones.', [
             new ConfiguredCodeSample(
                 'SomeClass::oldStaticMethod();',
                 'AnotherExampleClass::newStaticMethod();',
-                [
-                    self::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                        new RenameStaticMethod(self::SOME_CLASS, 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'),
-                    ],
-                ]
+                $renameClassConfiguration
             ),
             new ConfiguredCodeSample(
                 'SomeClass::oldStaticMethod();',
                 'SomeClass::newStaticMethod();',
-                [
-                    self::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                        new RenameStaticMethod(self::SOME_CLASS, 'oldMethod', self::SOME_CLASS, 'newStaticMethod'),
-                    ],
-                ]
+                $renameMethodConfiguration
             ),
         ]);
     }

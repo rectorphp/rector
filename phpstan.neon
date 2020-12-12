@@ -486,28 +486,10 @@ parameters:
         # complex - single repository for all nodes
         - '#Class cognitive complexity for "NodeRepository" is \d+, keep it under 50#'
 
-        # symplify rules fix later
-        - '#Use another value object over string with value object arrays#'
-        - '#Use decouled factory service to create "(.*?)" object#'
-
-        # hotskips, fix sooner
-        - '#Post operation are forbidden, as they make 2 values at the same line\. Use pre instead#'
-        - '#Use value object over multi array assign#'
-
-#        - '#(.*?) expects class\-string, string given#'
-
-        - '#Method "(.*?)" is using too many parameters \- \d+\. Make it under 8#'
-
         -
             message: '#Instead of "Symfony\\Component\\Finder\\SplFileInfo" class/interface use "Symplify\\SmartFileSystem\\SmartFileInfo"#'
             paths:
                 - src/FileSystem/FilesFinder.php
-
-        -
-            message: '#Node "errorsuppress" is fobidden to use#'
-            paths:
-                - rules/symfony/src/ServiceMapProvider.php # 67
-                - utils/project-validator/src/CpuCoreCountResolver.php # 35
 
         -
             message: '#Instead of container injection, use specific service#'
@@ -538,12 +520,6 @@ parameters:
                  - rules/nette-code-quality/src/NodeResolver/MethodNamesByInputNamesResolver.php # 25
 
         -
-            message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\. You have \d+ nesting#'
-            paths:
-                - *Rector.php
-                - packages/caching/src/Config/FileHashComputer.php
-
-        -
             message: '#Property with protected modifier is not allowed\. Use interface instead#'
             paths:
                 - packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
@@ -552,9 +528,6 @@ parameters:
                 - rules/downgrade-php71/src/Rector/FunctionLike/AbstractMaybeAddDocBlockRector.php # 20
                 - packages/testing/src/PHPUnit/AbstractGenericRectorTestCase.php # 68
                 - packages/testing/src/PHPUnit/AbstractRectorTestCase.php # 24
-
-        - '#Method call in if or elseif is not allowed#'
-        - '#Method or Static call in foreach is not allowed#'
 
         -
             message: '#Do not use static property#'
@@ -590,48 +563,48 @@ parameters:
                 - utils/doctrine-annotation-parser-syncer/src/Rector/Namespace_/RenameAnnotationReaderClassRector.php # 41
                 - utils/doctrine-annotation-parser-syncer/src/Rector/Namespace_/RenameDocParserClassRector.php # 41
 
-        -
-            message: '#Do not use setter on a service#'
-            paths:
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareExtendsTagValueNodeFactory.php # 42
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareImplementsTagValueNodeFactory.php # 42
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareMethodTagValueNodeFactory.php # 53
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareMethodTagValueParameterNodeFactory.php # 50
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareParamTagValueNodeFactory.php # 48
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwarePhpDocNodeFactory.php # 61
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwarePropertyTagValueNodeFactory.php # 42
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareReturnTagValueNodeFactory.php # 42
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareThrowsTagValueNodeFactory.php # 42
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareVarTagValueNodeFactory.php # 42
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareArrayShapeItemNodeFactory.php # 41
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareArrayShapeNodeFactory.php # 45
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareArrayTypeNodeFactory.php # 42
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareCallableTypeNodeFactory.php # 48
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareGenericTypeNodeFactory.php # 47
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareIntersectionTypeNodeFactory.php # 44
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareNullableTypeNodeFactory.php # 42
-                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareUnionTypeNodeFactory.php # 44
-                - packages/better-php-doc-parser/src/PhpDocNodeFactory/PHPUnitDataProviderDocNodeFactory.php # 52
-                - packages/better-php-doc-parser/src/PhpDocNodeFactory/ParamPhpDocNodeFactory.php # 81
-                - packages/node-type-resolver/src/FileSystem/CurrentFileInfoProvider.php # 35
-                - packages/phpstan-static-type-mapper/src/TypeMapper/ObjectTypeMapper.php # 123
-                - packages/phpstan-static-type-mapper/src/TypeMapper/ObjectWithoutClassTypeMapper.php # 72
-                - packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php # 39
-                - rules/nette-code-quality/src/FormControlTypeResolver/AssignedVariablesMethodCallsFormTypeResolver.php # 50
-                - rules/nette-code-quality/src/FormControlTypeResolver/ClassMethodFormTypeResolver.php # 67
-                - rules/nette-code-quality/src/FormControlTypeResolver/ConstructorFormControlTypeResolver.php # 62
-                - rules/nette-code-quality/src/FormControlTypeResolver/GetComponentMethodCallFormControlTypeResolver.php # 110
-                - rules/nette-code-quality/src/FormControlTypeResolver/MagicNetteFactoryInterfaceFormControlTypeResolver.php # 95
-                - rules/nette-code-quality/src/FormControlTypeResolver/MethodCallFormControlTypeResolver.php # 59
-                - rules/nette-code-quality/src/FormControlTypeResolver/NewFormControlTypeResolver.php # 61
-                - rules/nette-code-quality/src/FormControlTypeResolver/ReturnFormControlTypeResolver.php # 54
-                - rules/nette-code-quality/src/FormControlTypeResolver/ThisVariableInAnotherMethodFormControlTypeResolver.php # 52
-                - rules/nette-code-quality/src/FormControlTypeResolver/VariableConstructorFormControlTypeResolver.php # 84
-                - src/Configuration/ChangeConfiguration.php # 17
-                - src/Configuration/Configuration.php # 228
-                - src/Configuration/CurrentNodeProvider.php # 16
-                - src/HttpKernel/RectorKernel.php # 71
-                - packages/testing/src/NodeVisitor/AttributeCollectingNodeVisitor.php # 24
+#        -
+#            message: '#Do not use setter on a service#'
+#            paths:
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareExtendsTagValueNodeFactory.php # 42
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareImplementsTagValueNodeFactory.php # 42
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareMethodTagValueNodeFactory.php # 53
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareMethodTagValueParameterNodeFactory.php # 50
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareParamTagValueNodeFactory.php # 48
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwarePhpDocNodeFactory.php # 61
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwarePropertyTagValueNodeFactory.php # 42
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareReturnTagValueNodeFactory.php # 42
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareThrowsTagValueNodeFactory.php # 42
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/AttributeAwareVarTagValueNodeFactory.php # 42
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareArrayShapeItemNodeFactory.php # 41
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareArrayShapeNodeFactory.php # 45
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareArrayTypeNodeFactory.php # 42
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareCallableTypeNodeFactory.php # 48
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareGenericTypeNodeFactory.php # 47
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareIntersectionTypeNodeFactory.php # 44
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareNullableTypeNodeFactory.php # 42
+#                - packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/AttributeAwareUnionTypeNodeFactory.php # 44
+#                - packages/better-php-doc-parser/src/PhpDocNodeFactory/PHPUnitDataProviderDocNodeFactory.php # 52
+#                - packages/better-php-doc-parser/src/PhpDocNodeFactory/ParamPhpDocNodeFactory.php # 81
+#                - packages/node-type-resolver/src/FileSystem/CurrentFileInfoProvider.php # 35
+#                - packages/phpstan-static-type-mapper/src/TypeMapper/ObjectTypeMapper.php # 123
+#                - packages/phpstan-static-type-mapper/src/TypeMapper/ObjectWithoutClassTypeMapper.php # 72
+#                - packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php # 39
+#                - rules/nette-code-quality/src/FormControlTypeResolver/AssignedVariablesMethodCallsFormTypeResolver.php # 50
+#                - rules/nette-code-quality/src/FormControlTypeResolver/ClassMethodFormTypeResolver.php # 67
+#                - rules/nette-code-quality/src/FormControlTypeResolver/ConstructorFormControlTypeResolver.php # 62
+#                - rules/nette-code-quality/src/FormControlTypeResolver/GetComponentMethodCallFormControlTypeResolver.php # 110
+#                - rules/nette-code-quality/src/FormControlTypeResolver/MagicNetteFactoryInterfaceFormControlTypeResolver.php # 95
+#                - rules/nette-code-quality/src/FormControlTypeResolver/MethodCallFormControlTypeResolver.php # 59
+#                - rules/nette-code-quality/src/FormControlTypeResolver/NewFormControlTypeResolver.php # 61
+#                - rules/nette-code-quality/src/FormControlTypeResolver/ReturnFormControlTypeResolver.php # 54
+#                - rules/nette-code-quality/src/FormControlTypeResolver/ThisVariableInAnotherMethodFormControlTypeResolver.php # 52
+#                - rules/nette-code-quality/src/FormControlTypeResolver/VariableConstructorFormControlTypeResolver.php # 84
+#                - src/Configuration/ChangeConfiguration.php # 17
+#                - src/Configuration/Configuration.php # 228
+#                - src/Configuration/CurrentNodeProvider.php # 16
+#                - src/HttpKernel/RectorKernel.php # 71
+#                - packages/testing/src/NodeVisitor/AttributeCollectingNodeVisitor.php # 24
 
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector\:\:refactor\(\) expects PhpParser\\Node\\Expr\\AssignOp\\Div\|PhpParser\\Node\\Expr\\AssignOp\\Minus\|PhpParser\\Node\\Expr\\AssignOp\\Mul\|PhpParser\\Node\\Expr\\AssignOp\\Plus\|PhpParser\\Node\\Expr\\BinaryOp\\Div\|PhpParser\\Node\\Expr\\BinaryOp\\Minus\|PhpParser\\Node\\Expr\\BinaryOp\\Mul\|PhpParser\\Node\\Expr\\BinaryOp\\Plus, PhpParser\\Node\\Expr\\AssignOp\|PhpParser\\Node\\Expr\\BinaryOp given#'
 
@@ -809,5 +782,7 @@ parameters:
                 - packages/better-php-doc-parser/tests/PhpDocParser/AbstractPhpDocInfoTest.php
                 - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php
 
-        - '#"@simplexml_load_string\(\$fileContents\)" is forbidden to use#'
-        - '#@ intentionally#'
+        -
+            message: '#Use value object over multi array assign#'
+            paths:
+                - packages/node-collector/src/NodeCollector/ParsedClassConstFetchNodeCollector.php

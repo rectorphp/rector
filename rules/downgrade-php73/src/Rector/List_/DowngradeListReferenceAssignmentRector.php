@@ -160,11 +160,11 @@ CODE_SAMPLE
         $count = 0;
         $listItemsCount = count($listItems);
         // Start from the end => right-side-most params
-        for ($i = $listItemsCount - 1; $i >= 0; $i--) {
+        for ($i = $listItemsCount - 1; $i >= 0; --$i) {
             $listItem = $listItems[$i];
             // Also include null items, since they can be removed
             if ($listItem === null || $listItem->byRef) {
-                $count++;
+                ++$count;
                 continue;
             }
             // If it is a nested list, check if all its items are by reference
@@ -173,7 +173,7 @@ CODE_SAMPLE
                 /** @var List_|Array_ */
                 $nestedList = $listItem->value;
                 if ($this->hasAllItemsByRef($nestedList->items)) {
-                    $count++;
+                    ++$count;
                     continue;
                 }
             }

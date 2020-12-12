@@ -49,12 +49,13 @@ final class FileHashComputer
     {
         $fileLocator = new FileLocator([$fileInfo->getPath()]);
 
-        $loaderResolver = new LoaderResolver([
+        $fileLoaders = [
             new GlobFileLoader($containerBuilder, $fileLocator),
             new PhpFileLoader($containerBuilder, $fileLocator),
             new YamlFileLoader($containerBuilder, $fileLocator),
-        ]);
+        ];
 
+        $loaderResolver = new LoaderResolver($fileLoaders);
         $loader = $loaderResolver->resolve($fileInfo->getRealPath());
         if (! $loader) {
             throw new ShouldNotHappenException();

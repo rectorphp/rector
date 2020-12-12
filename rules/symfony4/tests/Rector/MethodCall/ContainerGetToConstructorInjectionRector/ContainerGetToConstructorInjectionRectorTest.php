@@ -20,10 +20,7 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        $this->setParameter(
-            Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
-            __DIR__ . '/xml/services.xml'
-        );
+        $this->setParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/xml/services.xml');
         $this->doTestFileInfo($fileInfo);
     }
 

@@ -74,7 +74,7 @@ final class RemoveExtraParametersRector extends AbstractRector
         $numberOfParameters = count($parametersAcceptor->getParameters());
         $numberOfArguments = count((array) $node->args);
 
-        for ($i = $numberOfParameters; $i <= $numberOfArguments; $i++) {
+        for ($i = $numberOfParameters; $i <= $numberOfArguments; ++$i) {
             unset($node->args[$i]);
         }
 
