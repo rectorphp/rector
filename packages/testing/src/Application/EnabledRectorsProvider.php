@@ -39,7 +39,9 @@ final class EnabledRectorsProvider
             return;
         }
         // only in unit tests
-        $this->renamedClassesDataCollector->setOldToNewClasses($configuration[RenameClassRector::OLD_TO_NEW_CLASSES] ?? []);
+        $this->renamedClassesDataCollector->setOldToNewClasses(
+            $configuration[RenameClassRector::OLD_TO_NEW_CLASSES] ?? []
+        );
     }
 
     public function reset(): void

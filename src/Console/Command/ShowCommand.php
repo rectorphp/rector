@@ -6,7 +6,6 @@ namespace Rector\Core\Console\Command;
 
 use Rector\Core\Application\ActiveRectorsProvider;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Output\RectorConfigurationFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -31,24 +30,16 @@ final class ShowCommand extends AbstractCommand
      */
     private $parameterProvider;
 
-    /**
-     * @var RectorConfigurationFormatter
-     */
-    private $rectorConfigurationFormatter;
-
     public function __construct(
         SymfonyStyle $symfonyStyle,
         ActiveRectorsProvider $activeRectorsProvider,
-        ParameterProvider $parameterProvider,
-        RectorConfigurationFormatter $rectorConfigurationFormatter
+        ParameterProvider $parameterProvider
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->activeRectorsProvider = $activeRectorsProvider;
         $this->parameterProvider = $parameterProvider;
 
         parent::__construct();
-
-        $this->rectorConfigurationFormatter = $rectorConfigurationFormatter;
     }
 
     protected function configure(): void
@@ -75,7 +66,6 @@ final class ShowCommand extends AbstractCommand
 
             foreach ($activeRectors as $rector) {
                 $this->symfonyStyle->writeln(' * ' . get_class($rector));
-                $this->rectorConfigurationFormatter->printRectorConfiguration($rector);
             }
 
             $message = sprintf('%d loaded Rectors', $rectorCount);

@@ -8,7 +8,6 @@ use Nette\Utils\Json;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
@@ -17,11 +16,6 @@ final class JsonOutputFormatter implements OutputFormatterInterface
      * @var string
      */
     public const NAME = 'json';
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
 
     /**
      * @var Configuration
@@ -33,12 +27,8 @@ final class JsonOutputFormatter implements OutputFormatterInterface
      */
     private $smartFileSystem;
 
-    public function __construct(
-        Configuration $configuration,
-        SmartFileSystem $smartFileSystem,
-        SymfonyStyle $symfonyStyle
-    ) {
-        $this->symfonyStyle = $symfonyStyle;
+    public function __construct(Configuration $configuration, SmartFileSystem $smartFileSystem)
+    {
         $this->configuration = $configuration;
         $this->smartFileSystem = $smartFileSystem;
     }
@@ -103,7 +93,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         if ($outputFile !== null) {
             $this->smartFileSystem->dumpFile($outputFile, $json . PHP_EOL);
         } else {
-            $this->symfonyStyle->writeln($json);
+            echo $json;
         }
     }
 }
