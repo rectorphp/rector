@@ -13,8 +13,7 @@ jobs:
                 dependencies: ['locked']
                 include:
                     - php: '7.3'
-                      dependencies: 'latest'
-#                      dependencies: 'lowest'
+                      dependencies: 'lowest'
                     - php: '8.0'
                       dependencies: 'latest'
 
