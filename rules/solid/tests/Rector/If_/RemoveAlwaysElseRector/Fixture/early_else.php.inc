@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
 class EarlyElse
 {
@@ -18,7 +18,7 @@ class EarlyElse
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
 class EarlyElse
 {

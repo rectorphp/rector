@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
+namespace Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use JsonApiBundle\Paging\PageLinksGenerator;
 use JsonApiBundle\Paging\Paginator;
@@ -52,7 +52,7 @@ class PageLinksGeneratorSpec extends ObjectBehavior
 -----
 <?php
 
-namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
+namespace Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use JsonApiBundle\Paging\PageLinksGenerator;
 use JsonApiBundle\Paging\Paginator;

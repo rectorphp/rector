@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\phpunit\Tests\Rector\MethodCall\CreateMockToCreateStubRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\MethodCall\CreateMockToCreateStubRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 

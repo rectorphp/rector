@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Fixture;
+namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Fixture;
 
 use Nette\Application\IPresenter;
 use Nette\Application\IResponse;
@@ -33,7 +33,7 @@ final class WithParameterSomePresenter implements IPresenter
 -----
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Fixture;
+namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Fixture;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Nette\Application\IPresenter;

@@ -1,6 +1,6 @@
 <?php
 
-namespace OldNamespace\SubNamespace;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 class AnnotationsTest
 {
@@ -18,7 +18,7 @@ class AnnotationsTest
 -----
 <?php
 
-namespace OldNamespace\SubNamespace;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 class AnnotationsTest
 {

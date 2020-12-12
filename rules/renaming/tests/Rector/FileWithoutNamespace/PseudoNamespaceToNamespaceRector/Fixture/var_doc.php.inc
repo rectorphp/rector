@@ -1,6 +1,6 @@
 <?php
 
-namespace OldNamespace\SubNamespace;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 class VarDoc
 {
@@ -14,7 +14,7 @@ class VarDoc
 -----
 <?php
 
-namespace OldNamespace\SubNamespace;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 class VarDoc
 {

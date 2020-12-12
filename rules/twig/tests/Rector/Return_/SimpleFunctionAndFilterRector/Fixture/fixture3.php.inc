@@ -1,6 +1,6 @@
 <?php
 
-namespace  Rector\Twig\Tests\Rector\Return_\SimpleFunctionAndFilterRector\Fixture;
+namespace Rector\Twig\Tests\Rector\Return_\SimpleFunctionAndFilterRector\Fixture;
 
 use Twig_Extension;
 use Twig_Filter_Method;
@@ -19,7 +19,7 @@ final class SomeExtension3 extends Twig_Extension
 -----
 <?php
 
-namespace  Rector\Twig\Tests\Rector\Return_\SimpleFunctionAndFilterRector\Fixture;
+namespace Rector\Twig\Tests\Rector\Return_\SimpleFunctionAndFilterRector\Fixture;
 
 use Twig_Extension;
 use Twig_Filter_Method;

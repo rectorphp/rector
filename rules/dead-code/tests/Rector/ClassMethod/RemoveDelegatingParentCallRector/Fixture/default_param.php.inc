@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\DefaultParam;
+namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\Fixture;
 Class Base
 {
     public function __construct($a, $b = null)
@@ -20,7 +20,7 @@ class Override extends Base
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\DefaultParam;
+namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\Fixture;
 Class Base
 {
     public function __construct($a, $b = null)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\Fixture;
 
 use App\Entity\Post;
 use Doctrine\ORM\EntityRepository;
@@ -30,7 +30,7 @@ final class FirstPostRepository extends EntityRepository
 -----
 <?php
 
-namespace App\Repository;
+namespace Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\Fixture;
 
 use App\Entity\Post;
 use Doctrine\ORM\EntityRepository;

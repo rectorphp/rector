@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\ParentElse;
+namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
 
 class SomeClass
 {

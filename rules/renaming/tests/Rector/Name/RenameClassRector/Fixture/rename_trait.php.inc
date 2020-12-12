@@ -1,6 +1,6 @@
 <?php
 
-namespace MyNamespace;
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
 
 trait MyTrait
 {
@@ -10,7 +10,7 @@ trait MyTrait
 -----
 <?php
 
-namespace MyNewNamespace;
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
 
 trait MyNewTrait
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace MyNamespace;
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
 
 interface MyInterface
 {
@@ -14,7 +14,7 @@ interface MyInterface
 -----
 <?php
 
-namespace MyNewNamespace;
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
 
 interface MyNewInterface
 {

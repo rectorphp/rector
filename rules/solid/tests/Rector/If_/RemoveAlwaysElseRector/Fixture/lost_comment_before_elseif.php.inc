@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
 class LostCommentBeforeElseIf
 {
@@ -27,7 +27,7 @@ class LostCommentBeforeElseIf
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
 class LostCommentBeforeElseIf
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector;
+namespace Rector\Php72\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector\Fixture;
 
 use __PHP_Incomplete_Class;
 use stdClass;
@@ -19,7 +19,7 @@ $isObject = is_object($classicObject);
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector;
+namespace Rector\Php72\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector\Fixture;
 
 use __PHP_Incomplete_Class;
 use stdClass;

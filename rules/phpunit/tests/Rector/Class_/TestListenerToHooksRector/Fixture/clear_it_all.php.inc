@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\Class_\TryCatchToExpectExceptionRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\Class_\TestListenerToHooksRector\Fixture;
 
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Test;
@@ -55,7 +55,7 @@ final class SomeListener implements TestListener
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\Class_\TryCatchToExpectExceptionRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\Class_\TestListenerToHooksRector\Fixture;
 
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Test;

@@ -1,6 +1,6 @@
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 class SomeTestCase
 {

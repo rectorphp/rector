@@ -12,7 +12,7 @@ class PHPUnit_Abc
 -----
 <?php
 
-namespace PHPUnit;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 class Abc
 {

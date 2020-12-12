@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues\Issue4581\DoNotChangeAnnotationComment\Fixture;
+namespace Rector\Core\Tests\Issues\Issue4581\DoNotChangeAnnotationColumn\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\TimestampableEntity;
