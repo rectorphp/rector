@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\PostInc;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
@@ -90,7 +91,7 @@ CODE_SAMPLE
     /**
      * @param PostInc|PostDec $node
      */
-    private function processPrePost(Node $node): Node
+    private function processPrePost(Node $node): Expr
     {
         if ($node instanceof PostInc) {
             return new PreInc($node->var);
@@ -101,7 +102,7 @@ CODE_SAMPLE
     /**
      * @param PostInc|PostDec $node
      */
-    private function processPreArray(Node $node, ArrayDimFetch $arrayDimFetch): ?Node
+    private function processPreArray(Node $node, ArrayDimFetch $arrayDimFetch): ?Expr
     {
         $parentOfArrayDimFetch = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
         if (! $this->isAnExpression($parentOfArrayDimFetch)) {
@@ -116,9 +117,9 @@ CODE_SAMPLE
     /**
      * @param PostInc|PostDec $node
      */
-    private function processPreFor(Node $node, For_ $for): Node
+    private function processPreFor(Node $node, For_ $for): Expr
     {
-        $for->loop = $this->processPrePost($node);
-        return $for->loop;
+        $for->loop = [$this->processPrePost($node)];
+        return $for->loop[0];
     }
 }
