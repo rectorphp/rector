@@ -2,7 +2,7 @@
 
 namespace Rector\Generic\Tests\Rector\FuncCall\SwapFuncCallArgumentsRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run($one, $two)
     {
@@ -16,7 +16,7 @@ final class Fixture
 
 namespace Rector\Generic\Tests\Rector\FuncCall\SwapFuncCallArgumentsRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run($one, $two)
     {

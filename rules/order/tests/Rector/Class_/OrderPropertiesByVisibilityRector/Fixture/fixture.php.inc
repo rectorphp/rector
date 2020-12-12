@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderPropertiesByVisibilityRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     protected $protectedProperty;
     public $publicProperty;
@@ -18,7 +18,7 @@ final class Fixture
 
 namespace Rector\Order\Tests\Rector\Class_\OrderPropertiesByVisibilityRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public $publicProperty;
     public static $publicStaticProperty;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\DocBlock;
 
-class Docblock
+class SomeClass
 {
     public function run()
     {
@@ -28,9 +28,9 @@ class Docblock
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\DocBlock;
 
-class Docblock
+class SomeClass
 {
     public function run()
     {

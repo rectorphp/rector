@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Property\AddFalseDefaultToBoolPropertyRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @var bool
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\SOLID\Tests\Rector\Property\AddFalseDefaultToBoolPropertyRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @var bool

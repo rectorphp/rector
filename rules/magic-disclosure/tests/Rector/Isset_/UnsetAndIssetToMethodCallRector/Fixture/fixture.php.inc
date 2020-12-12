@@ -2,7 +2,7 @@
 
 namespace Rector\MagicDisclosure\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     function unsetAndIsset()
     {
@@ -18,7 +18,7 @@ class Fixture
 
 namespace Rector\MagicDisclosure\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     function unsetAndIsset()
     {

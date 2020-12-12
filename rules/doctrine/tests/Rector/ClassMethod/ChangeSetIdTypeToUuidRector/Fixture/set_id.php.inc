@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeSetIdTypeToUuidRector\Fixture;
+namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeGetIdTypeToUuidRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -21,7 +21,7 @@ class SetId
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeSetIdTypeToUuidRector\Fixture;
+namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeGetIdTypeToUuidRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Property\UnderscoreToCamelCasePropertyNameRector\Fixture;
 
-final class Fixture
+final class Property
 {
     private $some_property;
 
@@ -28,7 +28,7 @@ final class Fixture
 
 namespace Rector\Naming\Tests\Rector\Property\UnderscoreToCamelCasePropertyNameRector\Fixture;
 
-final class Fixture
+final class Property
 {
     private $someProperty;
 

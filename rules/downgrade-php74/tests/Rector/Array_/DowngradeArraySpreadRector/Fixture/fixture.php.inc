@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class Fixture
+class FixtureClass
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class Fixture
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class Fixture
+class FixtureClass
 {
     public function run()
     {

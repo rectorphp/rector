@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Plus\RemoveDeadZeroAndOneOperationRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Plus\RemoveZeroAndOneBinaryRector\Fixture;
 
 
-class NoUnintended
+class SomeOtherClass
 {
     private function do(int $var)
     {

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class Fixture
+class UserEntity
 {
     /**
      * @ORM\Column
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class Fixture
+class UserEntity
 {
 }
 

@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector\Fixture;
 
-final class Fixture
+final class MyClass
 {
     public function hasKey(): bool
     {
@@ -35,7 +35,7 @@ final class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector\Fixture;
 
-final class Fixture
+final class MyClass
 {
     public function hasKey(): bool
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     const HI = 'hi';
 }
@@ -13,7 +13,7 @@ class Fixture
 
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @var string

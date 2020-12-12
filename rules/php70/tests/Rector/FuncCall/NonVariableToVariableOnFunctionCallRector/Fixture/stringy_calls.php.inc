@@ -2,7 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
-class StringyCalls
+class MyClass
 {
     public static function staticMethod(&$bar) {}
 }
@@ -24,7 +24,7 @@ function stringyCalls()
 
 namespace Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
-class StringyCalls
+class MyClass
 {
     public static function staticMethod(&$bar) {}
 }

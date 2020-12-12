@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\CreateMockToCreateStubRector\Fixture;
+namespace Rector\phpunit\Tests\Rector\MethodCall\CreateMockToCreateStubRector\Fixture;
 
-class SkipNonPhpunit
+class SkipNonPHPUnit
 {
     public function run()
     {

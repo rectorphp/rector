@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector;
 
 final class ExtraBreak
 {
@@ -21,7 +21,7 @@ final class ExtraBreak
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector;
 
 final class ExtraBreak
 {

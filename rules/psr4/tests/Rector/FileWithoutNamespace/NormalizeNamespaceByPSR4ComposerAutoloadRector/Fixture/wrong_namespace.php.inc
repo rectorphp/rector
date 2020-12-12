@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PSR4\Tests\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Fixture;
+namespace ThisIsWrong;
 
 final class WrongNamespace
 {

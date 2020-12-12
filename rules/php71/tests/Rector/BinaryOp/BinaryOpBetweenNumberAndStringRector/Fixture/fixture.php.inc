@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class Fixture
 
 namespace Rector\Php71\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

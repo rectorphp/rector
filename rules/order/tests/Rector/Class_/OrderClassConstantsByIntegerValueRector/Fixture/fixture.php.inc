@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderClassConstantsByIntegerValueRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     const MODE_ON = 100;
 
@@ -17,7 +17,7 @@ class Fixture
 
 namespace Rector\Order\Tests\Rector\Class_\OrderClassConstantsByIntegerValueRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     const MODE_ON = 100;
 

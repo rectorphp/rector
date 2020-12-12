@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyEmptyArrayCheckRector\Fixture;
 
-class Fixture3
+class SomeClass
 {
     public function isntEmptyArray($values): bool
     {

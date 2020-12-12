@@ -14,7 +14,7 @@ class Rector_Generic_Tests_Rector_Name_PseudoNamespaceToNamespaceRector_Fixture_
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
+namespace Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Fixture;
 
 use Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 class UseStatement

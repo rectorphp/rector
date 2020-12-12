@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentPregDelimiterRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class Fixture
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentPregDelimiterRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

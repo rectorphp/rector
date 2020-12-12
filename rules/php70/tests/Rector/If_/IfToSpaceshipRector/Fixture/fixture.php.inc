@@ -2,7 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -44,7 +44,7 @@ class Fixture
 
 namespace Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
 
-final class SkipFromExpressionWithCheckValueYoda
+final class FromExpressionWithCheckValueComparisonYoda
 {
     public function run($a_b)
     {

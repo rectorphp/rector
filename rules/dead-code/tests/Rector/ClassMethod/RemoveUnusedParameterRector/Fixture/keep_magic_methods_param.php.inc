@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture;
 
-class KeepMagicMethodsParam
+class SomeClassWithMagicMethods
 {
     public function __call($one, $two)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class Count
+final class SomeController
 {
     public function run($items)
     {
@@ -20,7 +20,7 @@ final class Count
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class Count
+final class SomeController
 {
     public function run($items)
     {

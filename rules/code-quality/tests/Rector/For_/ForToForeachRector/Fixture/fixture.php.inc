@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($tokens)
     {
@@ -28,7 +28,7 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($tokens)
     {

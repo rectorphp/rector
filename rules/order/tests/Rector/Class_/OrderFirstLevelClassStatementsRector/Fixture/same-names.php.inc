@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Fixture;
 
-final class Same-names
+final class SameNameClass
 {
     public function name()
     {
@@ -17,7 +17,7 @@ final class Same-names
 
 namespace Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Fixture;
 
-final class Same-names
+final class SameNameClass
 {
     protected $name;
     protected $anotherName;

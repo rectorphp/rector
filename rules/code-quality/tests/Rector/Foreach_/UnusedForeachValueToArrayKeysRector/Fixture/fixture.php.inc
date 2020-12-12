@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\UnusedForeachValueToArrayKeysRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($values)
     {
@@ -19,7 +19,7 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\UnusedForeachValueToArrayKeysRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($values)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector\Fixture;
 
-class SkipOnlyDoubleUnderscore
+class SkipMethodOnlyDoubleUnderscore
 {
     function __() {}
 }

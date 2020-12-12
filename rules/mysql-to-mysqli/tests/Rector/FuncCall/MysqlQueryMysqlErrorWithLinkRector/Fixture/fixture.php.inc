@@ -2,7 +2,7 @@
 
 namespace Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class Fixture
 
 namespace Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

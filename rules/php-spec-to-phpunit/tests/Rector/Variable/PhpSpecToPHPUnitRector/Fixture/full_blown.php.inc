@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
+namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use Ecommerce\Cart\Cart;
 use Ecommerce\Cart\Exception\NotFoundException;
@@ -175,7 +175,7 @@ class CartSpec extends ObjectBehavior
 -----
 <?php
 
-namespace Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
+namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use Ecommerce\Cart\Cart;
 use Ecommerce\Cart\Exception\NotFoundException;

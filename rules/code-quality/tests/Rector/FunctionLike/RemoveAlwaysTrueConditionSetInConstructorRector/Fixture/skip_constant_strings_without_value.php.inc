@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FunctionLike\RemoveAlwaysTrueConditionSetInConstructorRector\Fixture;
 
-final class SkipConstantStringsWithoutValue
+final class SkipConstantStringWithoutValue
 {
     private $smallValue;
 

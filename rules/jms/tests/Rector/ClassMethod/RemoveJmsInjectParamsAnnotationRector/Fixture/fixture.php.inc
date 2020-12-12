@@ -4,7 +4,7 @@ namespace Rector\JMS\Tests\Rector\ClassMethod\RemoveJmsInjectParamsAnnotationRec
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-class Fixture
+class SomeClass
 {
     /**
      * @DI\InjectParams({
@@ -24,7 +24,7 @@ namespace Rector\JMS\Tests\Rector\ClassMethod\RemoveJmsInjectParamsAnnotationRec
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-class Fixture
+class SomeClass
 {
     public function __construct() {
     }

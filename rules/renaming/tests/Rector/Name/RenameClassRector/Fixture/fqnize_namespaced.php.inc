@@ -12,7 +12,7 @@ class FqnizeNamespaced
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Abc;
 
 class FqnizeNamespaced
 {

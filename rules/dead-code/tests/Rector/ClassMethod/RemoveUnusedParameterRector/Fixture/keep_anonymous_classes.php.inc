@@ -1,12 +1,18 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\FixtureInterface
+{
+    interface Foo
+    {
+        public function bar($value1);
     }
 }
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture
+{
+    use Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\FixtureInterface\Foo;
 
-    class KeepAnonymousClasses
+    class Baz
     {
         public function test()
         {

@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\StaticCall\ExportToReflectionFunctionRector\Fixture;
 
-class Fixture
+class ReflectableFunction
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class Fixture
 
 namespace Rector\Php74\Tests\Rector\StaticCall\ExportToReflectionFunctionRector\Fixture;
 
-class Fixture
+class ReflectableFunction
 {
     public function run()
     {

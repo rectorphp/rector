@@ -2,7 +2,7 @@
 
 namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

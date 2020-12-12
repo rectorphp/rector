@@ -2,7 +2,7 @@
 
 namespace Rector\Php52\Tests\Rector\Property\VarToPublicPropertyRector\Fixture;
 
-final class Fixture
+final class SomeController
 {
     var $name = 'Tom';
     public $age = 50;
@@ -14,7 +14,7 @@ final class Fixture
 
 namespace Rector\Php52\Tests\Rector\Property\VarToPublicPropertyRector\Fixture;
 
-final class Fixture
+final class SomeController
 {
     public $name = 'Tom';
     public $age = 50;

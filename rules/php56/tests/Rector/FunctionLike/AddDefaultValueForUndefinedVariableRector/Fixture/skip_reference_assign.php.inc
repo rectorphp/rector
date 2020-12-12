@@ -2,7 +2,7 @@
 
 namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
 
-class SkipReferenceAssign
+class SkipRefernceAssign
 {
     public function run(array $nodes)
     {

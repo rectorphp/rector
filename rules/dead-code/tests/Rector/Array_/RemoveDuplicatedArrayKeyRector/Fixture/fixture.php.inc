@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Array_\RemoveDuplicatedArrayKeyRector\Fixture;
 
-class Fixture
+class Items
 {
     public function lists()
     {
@@ -26,7 +26,7 @@ class Fixture
 
 namespace Rector\DeadCode\Tests\Rector\Array_\RemoveDuplicatedArrayKeyRector\Fixture;
 
-class Fixture
+class Items
 {
     public function lists()
     {

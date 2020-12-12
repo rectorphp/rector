@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Fixture;
+namespace Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\StaticTypeToSetterInjectionRector\Fixture;
 
 use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactoryWithInterface;
 
@@ -20,7 +20,7 @@ final class TheSameButWithImplements
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Fixture;
+namespace Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\StaticTypeToSetterInjectionRector\Fixture;
 
 use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactoryWithInterface;
 

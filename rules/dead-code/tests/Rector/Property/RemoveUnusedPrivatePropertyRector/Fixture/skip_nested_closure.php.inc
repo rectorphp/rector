@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
+namespace Tests\Unit\Exceptions;
 
 use stdClass;
 

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class Fixture
+class Product
 {
     /**
      * @ORM\ManyToOne(targetEntity="AnotherEntity")
@@ -31,7 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class Fixture
+class Product
 {
     /**
      * @ORM\ManyToOne(targetEntity="AnotherEntity")

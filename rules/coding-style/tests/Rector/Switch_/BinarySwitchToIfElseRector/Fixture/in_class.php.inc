@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector;
 
 final class InClass
 {
@@ -20,7 +20,7 @@ final class InClass
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector;
 
 final class InClass
 {

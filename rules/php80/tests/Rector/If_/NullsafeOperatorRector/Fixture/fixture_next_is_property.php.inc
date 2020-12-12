@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class FixtureNextIsProperty
+class SomeClassNextProperty
 {
     public function f($o)
     {
@@ -21,7 +21,7 @@ class FixtureNextIsProperty
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class FixtureNextIsProperty
+class SomeClassNextProperty
 {
     public function f($o)
     {

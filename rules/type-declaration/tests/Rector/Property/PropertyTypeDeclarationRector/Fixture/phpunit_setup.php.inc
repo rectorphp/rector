@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Fixture;
 
-class PhpunitSetup
+class PhpUnitTestCase
 {
     private $value;
 
@@ -18,7 +18,7 @@ class PhpunitSetup
 
 namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Fixture;
 
-class PhpunitSetup
+class PhpUnitTestCase
 {
     /**
      * @var int|null

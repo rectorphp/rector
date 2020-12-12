@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture;
 
-class Compact
+class CompactExtract
 {
     public function keepThis($group, $missed)
     {
@@ -22,7 +22,7 @@ class Compact
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture;
 
-class Compact
+class CompactExtract
 {
     public function keepThis($group)
     {

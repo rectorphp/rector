@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class NoUnpacks
+class NoUnpacksClass
 {
     public function run()
     {

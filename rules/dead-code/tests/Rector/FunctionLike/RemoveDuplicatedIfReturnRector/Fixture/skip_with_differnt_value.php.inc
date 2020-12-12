@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveDuplicatedIfReturnRector\Fixture;
 
-class SkipWithDifferntValue
+class SkipWithDifferentValue
 {
     public function run($value)
     {

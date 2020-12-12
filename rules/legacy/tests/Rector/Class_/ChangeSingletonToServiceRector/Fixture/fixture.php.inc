@@ -2,7 +2,7 @@
 
 namespace Rector\Legacy\Tests\Rector\Class_\ChangeSingletonToServiceRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     private static $instance;
 
@@ -22,7 +22,7 @@ class Fixture
 
 namespace Rector\Legacy\Tests\Rector\Class_\ChangeSingletonToServiceRector\Fixture;
 
-class Fixture
+class SomeClass
 {
 }
 

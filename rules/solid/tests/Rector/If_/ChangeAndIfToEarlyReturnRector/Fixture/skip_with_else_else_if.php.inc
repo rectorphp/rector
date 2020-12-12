@@ -4,7 +4,7 @@
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
 
-class SkipWithElseElseIf
+class SkipElseElseIfClass
 {
     public function canDrive(Car $car): void
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfIssetToNullCoalescingRector\Fixture;
 
-final class Fixture
+final class SomeController
 {
     public function run($possibleStatieYamlFile)
     {
@@ -20,7 +20,7 @@ final class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfIssetToNullCoalescingRector\Fixture;
 
-final class Fixture
+final class SomeController
 {
     public function run($possibleStatieYamlFile)
     {

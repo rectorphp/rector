@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\SimplifyDuplicatedTernaryRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run(bool $value, string $name)
     {
@@ -17,7 +17,7 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\SimplifyDuplicatedTernaryRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run(bool $value, string $name)
     {

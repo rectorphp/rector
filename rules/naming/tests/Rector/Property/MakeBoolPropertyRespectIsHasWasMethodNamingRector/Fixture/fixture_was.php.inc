@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector\Fixture;
 
-class FixtureWas
+class SomeClassWas
 {
     /**
      * @var bool
@@ -21,7 +21,7 @@ class FixtureWas
 
 namespace Rector\Naming\Tests\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector\Fixture;
 
-class FixtureWas
+class SomeClassWas
 {
     /**
      * @var bool

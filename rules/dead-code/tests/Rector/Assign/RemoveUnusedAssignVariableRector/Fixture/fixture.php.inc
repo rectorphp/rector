@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedAssignVariableRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedAssignVariableRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\StrictCodeQuality\Tests\Rector\Stmt\VarInlineAnnotationToAssertRector\Fixture;
 
-class Scalar
+class ScalarClass
 {
     public function run($value)
     {
@@ -23,7 +23,7 @@ class Scalar
 
 namespace Rector\StrictCodeQuality\Tests\Rector\Stmt\VarInlineAnnotationToAssertRector\Fixture;
 
-class Scalar
+class ScalarClass
 {
     public function run($value)
     {

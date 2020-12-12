@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class MultilevelNestedListWithArrayKeysEndByValue
+class MultilevelNestedListWithArrayKeysEndByValueClass
 {
     public function run($string)
     {
@@ -17,7 +17,7 @@ class MultilevelNestedListWithArrayKeysEndByValue
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class MultilevelNestedListWithArrayKeysEndByValue
+class MultilevelNestedListWithArrayKeysEndByValueClass
 {
     public function run($string)
     {

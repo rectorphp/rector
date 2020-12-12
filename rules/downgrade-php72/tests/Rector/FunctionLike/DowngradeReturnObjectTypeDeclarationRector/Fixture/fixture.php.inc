@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function getSomeObject(): object
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @return object

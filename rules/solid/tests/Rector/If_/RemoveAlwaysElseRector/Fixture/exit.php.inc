@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Exit_;
 
-class Exit
+class SomeClass
 {
     public function run()
     {
@@ -19,9 +19,9 @@ class Exit
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Exit_;
 
-class Exit
+class SomeClass
 {
     public function run()
     {

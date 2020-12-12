@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class ArrayDestructuringWithArrayKeysEndByValue
+class ArrayDestructuringWithArrayKeysEndByValueClass
 {
     public function run($string)
     {
@@ -20,7 +20,7 @@ class ArrayDestructuringWithArrayKeysEndByValue
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class ArrayDestructuringWithArrayKeysEndByValue
+class ArrayDestructuringWithArrayKeysEndByValueClass
 {
     public function run($string)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\Catch_\RemoveUnusedVariableInCatchRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run()
     {
@@ -18,7 +18,7 @@ final class Fixture
 
 namespace Rector\Php80\Tests\Rector\Catch_\RemoveUnusedVariableInCatchRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run()
     {

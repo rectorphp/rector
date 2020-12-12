@@ -2,7 +2,7 @@
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class FixtureFromMethodCall
+class SomeClassFromMethodCall
 {
     public function run()
     {
@@ -25,7 +25,7 @@ class FixtureFromMethodCall
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class FixtureFromMethodCall
+class SomeClassFromMethodCall
 {
     public function run()
     {

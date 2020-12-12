@@ -2,7 +2,7 @@
 
 namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessParamTagRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @param string $a
@@ -21,7 +21,7 @@ class Fixture
 
 namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessParamTagRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @param string $c description

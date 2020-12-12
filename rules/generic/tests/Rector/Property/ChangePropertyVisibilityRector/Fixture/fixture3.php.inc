@@ -2,7 +2,7 @@
 
 namespace Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector\Fixture;
 
-class Fixture3
+class NormalObject
 {
     private static $toBePublicStaticProperty;
 }
@@ -13,7 +13,7 @@ class Fixture3
 
 namespace Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector\Fixture;
 
-class Fixture3
+class NormalObject
 {
     public static $toBePublicStaticProperty;
 }

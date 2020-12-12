@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Plus\RemoveDeadZeroAndOneOperationRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Plus\RemoveDeadZeroAndOneOperationRector\ZeroMinus;
 
-class ZeroMinus
+class Assigns
 {
     public function run(int $value)
     {
@@ -13,9 +13,9 @@ class ZeroMinus
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Plus\RemoveDeadZeroAndOneOperationRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Plus\RemoveDeadZeroAndOneOperationRector\ZeroMinus;
 
-class ZeroMinus
+class Assigns
 {
     public function run(int $value)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyBoolIdenticalTrueRector\Fixture;
 
-class Negate
+class InArray
 {
     public function run($value, array $items)
     {
@@ -19,7 +19,7 @@ class Negate
 
 namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyBoolIdenticalTrueRector\Fixture;
 
-class Negate
+class InArray
 {
     public function run($value, array $items)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Nette\Tests\Rector\NotIdentical\StrposToStringsContainsRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -23,7 +23,7 @@ class Fixture
 
 namespace Rector\Nette\Tests\Rector\NotIdentical\StrposToStringsContainsRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

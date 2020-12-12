@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedClassConstantRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     private const SOME_CONST = 'dead';
 
@@ -17,7 +17,7 @@ class Fixture
 
 namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedClassConstantRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

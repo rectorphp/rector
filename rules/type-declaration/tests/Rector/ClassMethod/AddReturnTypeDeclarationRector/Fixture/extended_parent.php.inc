@@ -1,6 +1,7 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture;
+namespace {
+    use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
 
     abstract class Abstract_Test_Case extends PHPUnitTestCase
     {
@@ -10,7 +11,22 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarati
     }
 }
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture
+{
+    final class FinalTestCase extends \Abstract_Test_Case
+    {
+        public function tearDown()
+        {
+        }
+    }
+}
+
+?>
+-----
+<?php
+
+namespace {
+    use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
 
     abstract class Abstract_Test_Case extends PHPUnitTestCase
     {

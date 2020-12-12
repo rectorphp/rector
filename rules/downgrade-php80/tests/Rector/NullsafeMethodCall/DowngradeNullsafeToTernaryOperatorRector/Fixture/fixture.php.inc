@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($booking)
     {
@@ -26,7 +26,7 @@ class Fixture
 
 namespace Rector\DowngradePhp80\Tests\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($booking)
     {

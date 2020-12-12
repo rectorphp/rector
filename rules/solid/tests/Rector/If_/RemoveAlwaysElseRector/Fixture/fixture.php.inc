@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($value)
     {
@@ -18,9 +18,9 @@ class Fixture
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($value)
     {

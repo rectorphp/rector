@@ -1,6 +1,6 @@
 <?php
 
-class Fixture3
+class PHPUnit_Abc
 {
     public function run()
     {
@@ -12,7 +12,7 @@ class Fixture3
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
+namespace PHPUnit;
 
 class Abc
 {

@@ -2,7 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\Assign\ListSwapArrayOrderRector\Fixture;
 
-class Fixture
+class ListSwapArrayOrder
 {
     public function a()
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\Php70\Tests\Rector\Assign\ListSwapArrayOrderRector\Fixture;
 
-class Fixture
+class ListSwapArrayOrder
 {
     public function a()
     {

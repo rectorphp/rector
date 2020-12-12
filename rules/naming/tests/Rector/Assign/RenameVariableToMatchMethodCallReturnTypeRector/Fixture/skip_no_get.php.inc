@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Fixture;
 
-class SkipNoGet
+class SkipNoGetClass
 {
     public function run()
     {

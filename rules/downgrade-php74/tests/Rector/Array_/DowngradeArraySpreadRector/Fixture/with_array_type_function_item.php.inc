@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class WithArrayTypeFunctionItem
+class WithArrayTypeFunctionItemClass
 {
     function getArray(): array
     {
@@ -21,7 +21,7 @@ class WithArrayTypeFunctionItem
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class WithArrayTypeFunctionItem
+class WithArrayTypeFunctionItemClass
 {
     function getArray(): array
     {

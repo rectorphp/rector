@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class Route
+class SomeRouteController
 {
     public function action()
     {
@@ -16,7 +16,7 @@ class Route
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class Route
+class SomeRouteController
 {
     private \Illuminate\Routing\UrlGenerator $urlGenerator;
     public function __construct(\Illuminate\Routing\UrlGenerator $urlGenerator)

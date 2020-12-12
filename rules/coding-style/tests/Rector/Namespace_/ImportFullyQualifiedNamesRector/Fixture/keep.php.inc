@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 use PHPStan\Analyser\ScopeFactory as PHPStanScopeFactory;
 
-final class Keep
+final class ScopeFactory
 {
     /**
      * @var PHPStanScopeFactory

@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyBoolIdenticalTrueRector\Fixture;
 
-class Directly
+class SomeClass
 {
     public function run(bool $value, string $items)
     {
@@ -20,7 +20,7 @@ class Directly
 
 namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyBoolIdenticalTrueRector\Fixture;
 
-class Directly
+class SomeClass
 {
     public function run(bool $value, string $items)
     {

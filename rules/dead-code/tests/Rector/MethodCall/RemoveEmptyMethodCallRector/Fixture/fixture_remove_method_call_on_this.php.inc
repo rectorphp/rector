@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
 
-final class FixtureRemoveMethodCallOnThis
+final class GeneratorStub
 {
 	public function __construct()
 	{
@@ -20,7 +20,7 @@ final class FixtureRemoveMethodCallOnThis
 
 namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
 
-final class FixtureRemoveMethodCallOnThis
+final class GeneratorStub
 {
 	public function __construct()
 	{

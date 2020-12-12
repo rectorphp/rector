@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\StaticProperty;
 
-class StaticProperty
+class SomeClass
 {
     public static $publicProperty;
     protected static $protectedProperty;
@@ -19,9 +19,9 @@ class StaticProperty
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\StaticProperty;
 
-class StaticProperty
+class SomeClass
 {
     public static $publicProperty;
     protected static $protectedProperty;

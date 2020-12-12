@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function __construct($value, $value2)
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function __construct($value)
     {

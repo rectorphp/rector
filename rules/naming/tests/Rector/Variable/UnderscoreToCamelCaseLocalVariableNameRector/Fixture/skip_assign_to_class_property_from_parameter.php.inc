@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
 
-final class SkipAssignToClassPropertyFromParameter
+final class AssignToClassProperty
 {
     public function run($a_b)
     {

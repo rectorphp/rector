@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\NoBreak;
 
-class NoBreak
+class SomeClass
 {
     public function run()
     {

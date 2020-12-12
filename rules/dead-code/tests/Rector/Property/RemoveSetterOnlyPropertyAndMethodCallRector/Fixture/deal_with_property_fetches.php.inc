@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\deal_with_property_of_methodcall;
 
-class DealWithPropertyFetches
+class MyClass
 {
     private $unused;
     private $prop;
@@ -22,9 +22,9 @@ class DealWithPropertyFetches
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\deal_with_property_of_methodcall;
 
-class DealWithPropertyFetches
+class MyClass
 {
     public function __construct()
     {

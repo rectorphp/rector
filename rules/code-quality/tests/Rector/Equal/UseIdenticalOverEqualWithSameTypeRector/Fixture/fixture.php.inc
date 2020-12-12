@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run(int $firstValue, int $secondValue)
     {
@@ -17,7 +17,7 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run(int $firstValue, int $secondValue)
     {

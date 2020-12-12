@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
 
 class ForContinue
 {
@@ -33,7 +33,7 @@ class ForContinue
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
 
 class ForContinue
 {

@@ -2,7 +2,7 @@
 
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
 
-final class ConcatNumber
+final class PlusNumber
 {
     public function run(): void
     {
@@ -19,7 +19,7 @@ final class ConcatNumber
 
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
 
-final class ConcatNumber
+final class PlusNumber
 {
     public function run(): void
     {

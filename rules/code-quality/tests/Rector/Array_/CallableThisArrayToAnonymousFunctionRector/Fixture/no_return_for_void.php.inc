@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Fixture;
 
-class NoReturnForVoid
+class HasVoidMethod
 {
     public function run(array $values)
     {
@@ -28,7 +28,7 @@ class NoReturnForVoid
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Fixture;
 
-class NoReturnForVoid
+class HasVoidMethod
 {
     public function run(array $values)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Class_\RepeatedLiteralToClassConstantRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($key, $items)
     {
@@ -20,7 +20,7 @@ class Fixture
 
 namespace Rector\SOLID\Tests\Rector\Class_\RepeatedLiteralToClassConstantRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @var string

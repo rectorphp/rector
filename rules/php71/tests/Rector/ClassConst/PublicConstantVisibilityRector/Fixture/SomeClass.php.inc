@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\ClassConst\PublicConstantVisibilityRector\Fixture;
 
-final class Someclass
+final class SomeClass
 {
     const VALUE = 'hey';
 
@@ -17,7 +17,7 @@ final class Someclass
 
 namespace Rector\Php71\Tests\Rector\ClassConst\PublicConstantVisibilityRector\Fixture;
 
-final class Someclass
+final class SomeClass
 {
     public const VALUE = 'hey';
 

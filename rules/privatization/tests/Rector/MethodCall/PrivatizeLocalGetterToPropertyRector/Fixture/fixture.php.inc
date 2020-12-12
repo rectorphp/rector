@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     private $some;
 
@@ -23,7 +23,7 @@ class Fixture
 
 namespace Rector\Privatization\Tests\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     private $some;
 

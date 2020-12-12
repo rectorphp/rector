@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($values, $keyToMatch)
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($values, $keyToMatch)
     {

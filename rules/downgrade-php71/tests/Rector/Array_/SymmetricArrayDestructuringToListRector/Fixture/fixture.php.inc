@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp71\Tests\Rector\Array_\SymmetricArrayDestructuringToListRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function __construct(array $data)
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\DowngradePhp71\Tests\Rector\Array_\SymmetricArrayDestructuringToListRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function __construct(array $data)
     {

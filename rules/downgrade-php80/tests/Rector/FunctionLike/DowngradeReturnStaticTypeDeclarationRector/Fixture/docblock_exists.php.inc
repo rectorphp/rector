@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector\Fixture;
 
-class DocblockExists {
+class DocBlockExists {
     /**
      * This property is the best one
      */
@@ -22,7 +22,7 @@ class DocblockExists {
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector\Fixture;
 
-class DocblockExists {
+class DocBlockExists {
     /**
      * This property is the best one
      * @return $this

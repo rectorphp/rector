@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\If_\SimplifyIfElseWithSameContentRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class Fixture
 
 namespace Rector\DeadCode\Tests\Rector\If_\SimplifyIfElseWithSameContentRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

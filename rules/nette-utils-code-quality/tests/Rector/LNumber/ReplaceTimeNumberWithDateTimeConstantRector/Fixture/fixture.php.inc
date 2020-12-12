@@ -2,7 +2,7 @@
 
 namespace Rector\NetteUtilsCodeQuality\Tests\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run()
     {
@@ -16,7 +16,7 @@ final class Fixture
 
 namespace Rector\NetteUtilsCodeQuality\Tests\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run()
     {

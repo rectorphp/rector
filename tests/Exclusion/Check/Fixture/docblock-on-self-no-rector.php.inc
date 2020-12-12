@@ -3,7 +3,7 @@
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
 
-final class Docblock-on-self-no-rector
+final class DocblockOnSelfNoRector
 {
     /**
      * @noRector Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector

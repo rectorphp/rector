@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -25,7 +25,7 @@ class Fixture
 
 namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

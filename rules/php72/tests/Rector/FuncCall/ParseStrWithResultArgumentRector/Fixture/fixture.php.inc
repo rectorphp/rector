@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\ParseStrWithResultArgumentRector\Fixture;
 
-class Fixture
+class ParsingClass
 {
     public function run()
     {
@@ -18,7 +18,7 @@ class Fixture
 
 namespace Rector\Php72\Tests\Rector\FuncCall\ParseStrWithResultArgumentRector\Fixture;
 
-class Fixture
+class ParsingClass
 {
     public function run()
     {

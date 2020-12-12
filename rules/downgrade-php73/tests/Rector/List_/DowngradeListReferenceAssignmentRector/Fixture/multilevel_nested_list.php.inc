@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class MultilevelNestedList
+class MultilevelNestedListClass
 {
     public function run($string)
     {
@@ -17,7 +17,7 @@ class MultilevelNestedList
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class MultilevelNestedList
+class MultilevelNestedListClass
 {
     public function run($string)
     {

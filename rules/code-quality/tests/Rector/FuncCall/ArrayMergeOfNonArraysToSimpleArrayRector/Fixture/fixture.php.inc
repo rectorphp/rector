@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function go()
     {
@@ -19,7 +19,7 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function go()
     {

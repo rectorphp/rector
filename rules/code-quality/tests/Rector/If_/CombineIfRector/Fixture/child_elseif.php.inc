@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\ChildElseIf;
 
-class ChildElseif
+class SomeClass
 {
     public function run()
     {

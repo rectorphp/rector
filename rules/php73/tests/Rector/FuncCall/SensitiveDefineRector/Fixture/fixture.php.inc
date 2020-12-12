@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\SensitiveDefineRector\Fixture;
+namespace Rector\Php73\Tests\Rector\FuncCall\SensitiveDefineRector;
 
 function sensitiveDefine()
 {
@@ -11,7 +11,7 @@ function sensitiveDefine()
 -----
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\SensitiveDefineRector\Fixture;
+namespace Rector\Php73\Tests\Rector\FuncCall\SensitiveDefineRector;
 
 function sensitiveDefine()
 {

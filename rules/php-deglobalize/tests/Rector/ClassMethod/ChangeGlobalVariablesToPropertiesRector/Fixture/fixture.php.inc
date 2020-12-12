@@ -2,7 +2,7 @@
 
 namespace Rector\PhpDeglobalize\Tests\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function go()
     {
@@ -23,7 +23,7 @@ class Fixture
 
 namespace Rector\PhpDeglobalize\Tests\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     private $variable;
     public function go()

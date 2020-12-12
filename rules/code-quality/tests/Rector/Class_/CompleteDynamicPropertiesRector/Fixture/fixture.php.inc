@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function set()
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public int $value;
     public function set()

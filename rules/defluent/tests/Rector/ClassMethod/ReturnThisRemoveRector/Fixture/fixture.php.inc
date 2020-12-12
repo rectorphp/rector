@@ -2,7 +2,7 @@
 
 namespace Rector\Defluent\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
 
-class Fixture
+class AnyClass
 {
     /**
      * @return AnyClass
@@ -29,7 +29,7 @@ class Fixture
 
 namespace Rector\Defluent\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
 
-class Fixture
+class AnyClass
 {
     public function someFunction(): void
     {

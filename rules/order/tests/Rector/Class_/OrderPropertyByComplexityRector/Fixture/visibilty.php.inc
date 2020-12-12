@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Fixture;
 
-class Visibilty
+class VisibilityClass
 {
     /**
      * @var array
@@ -26,7 +26,7 @@ class Visibilty
 
 namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Fixture;
 
-class Visibilty
+class VisibilityClass
 {
     /**
      * @var int

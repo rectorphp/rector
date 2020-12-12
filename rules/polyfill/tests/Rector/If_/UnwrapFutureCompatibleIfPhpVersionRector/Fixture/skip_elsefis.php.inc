@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
+namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 
-class SkipElsefis
+class SkipElseifs
 {
     public function run()
     {

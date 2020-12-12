@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class Equals
+class EqualsClass
 {
     public function canDrive(Car $car)
     {
@@ -20,7 +20,7 @@ class Equals
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class Equals
+class EqualsClass
 {
     public function canDrive(Car $car)
     {

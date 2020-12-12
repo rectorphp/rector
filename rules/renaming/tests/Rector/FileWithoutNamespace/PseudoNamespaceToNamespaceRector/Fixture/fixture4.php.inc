@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
+namespace SomeNamespace;
 
-class Fixture4
+class SomeTestCase
 {
     /**
      * @return Synapse|\PHPUnit_Framework_MockObject_MockObject

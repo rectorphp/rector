@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\Identical\StrEndsWithRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\Php80\Tests\Rector\Identical\StrEndsWithRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

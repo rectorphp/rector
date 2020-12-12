@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class MoreThanTwoConditions
+class MoreThanTwoConditionsClass
 {
     public function canDrive(Car $car): void
     {
@@ -18,7 +18,7 @@ class MoreThanTwoConditions
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class MoreThanTwoConditions
+class MoreThanTwoConditionsClass
 {
     public function canDrive(Car $car): void
     {

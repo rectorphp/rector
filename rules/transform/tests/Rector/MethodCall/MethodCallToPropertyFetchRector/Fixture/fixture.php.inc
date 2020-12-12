@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

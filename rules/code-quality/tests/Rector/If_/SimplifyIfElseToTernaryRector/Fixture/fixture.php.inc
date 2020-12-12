@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfElseToTernaryRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfElseToTernaryRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

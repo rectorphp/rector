@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Assign\SplitListAssignToSeparateLineRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run(): void
     {
@@ -16,7 +16,7 @@ final class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\Assign\SplitListAssignToSeparateLineRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run(): void
     {

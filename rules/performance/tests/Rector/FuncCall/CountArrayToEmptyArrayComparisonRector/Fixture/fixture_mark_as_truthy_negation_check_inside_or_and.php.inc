@@ -2,7 +2,7 @@
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class FixtureMarkAsTruthyNegationCheckInsideOrAnd
+class SomeClassMarkTruthyInsideOrAnd
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class FixtureMarkAsTruthyNegationCheckInsideOrAnd
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class FixtureMarkAsTruthyNegationCheckInsideOrAnd
+class SomeClassMarkTruthyInsideOrAnd
 {
     public function run()
     {

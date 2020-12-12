@@ -2,7 +2,7 @@
 
 namespace Rector\Php73\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector\Fixture;
 
-class ArrayArgumentWithMissingAndPresentVariables
+class MissingAndPresentVariable
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class ArrayArgumentWithMissingAndPresentVariables
 
 namespace Rector\Php73\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector\Fixture;
 
-class ArrayArgumentWithMissingAndPresentVariables
+class MissingAndPresentVariable
 {
     public function run()
     {

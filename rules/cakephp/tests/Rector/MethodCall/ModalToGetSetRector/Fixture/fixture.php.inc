@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Fixture;
+namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector;
 
-class Fixture
+class SomeClass
 {
     function run()
     {
@@ -20,9 +20,9 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Fixture;
+namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector;
 
-class Fixture
+class SomeClass
 {
     function run()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\Fixture;
+namespace App\Repository;
 
 use App\Entity\Post;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +22,7 @@ final class PostRepository
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\Fixture;
+namespace App\Repository;
 
 use App\Entity\Post;
 use Doctrine\ORM\EntityManagerInterface;

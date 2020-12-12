@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-class SkipDifferentOrder
+class Uri
 {
     public function __construct($value)
     {

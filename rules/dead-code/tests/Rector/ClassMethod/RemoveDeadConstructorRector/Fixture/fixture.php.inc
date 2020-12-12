@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDeadConstructorRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function __construct()
     {
@@ -15,7 +15,7 @@ class Fixture
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDeadConstructorRector\Fixture;
 
-class Fixture
+class SomeClass
 {
 }
 

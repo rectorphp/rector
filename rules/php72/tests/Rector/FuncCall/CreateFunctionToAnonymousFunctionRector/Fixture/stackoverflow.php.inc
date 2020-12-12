@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
 
-class Stackoverflow
+class ClassWithCreateFunctionWithStackoverflow
 {
     public function run()
     {
@@ -22,7 +22,7 @@ class Stackoverflow
 
 namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
 
-class Stackoverflow
+class ClassWithCreateFunctionWithStackoverflow
 {
     public function run()
     {

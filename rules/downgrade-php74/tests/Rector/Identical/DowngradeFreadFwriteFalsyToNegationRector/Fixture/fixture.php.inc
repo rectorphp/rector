@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector\Fixture;
 
-class Fixture
+class FixtureClass
 {
     public function run($handle, $fp)
     {
@@ -19,7 +19,7 @@ class Fixture
 
 namespace Rector\DowngradePhp74\Tests\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector\Fixture;
 
-class Fixture
+class FixtureClass
 {
     public function run($handle, $fp)
     {

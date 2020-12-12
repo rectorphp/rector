@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\Fixture;
 
-class DocblockExists {
+class DocBlockExists {
     /**
      * This property is the best one
      */
@@ -17,7 +17,7 @@ class DocblockExists {
 
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\Fixture;
 
-class DocblockExists {
+class DocBlockExists {
     /**
      * This property is the best one
      * @param object $someObject

@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Encapsed\EncapsedStringsToSprintfRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run(string $format)
     {
@@ -16,7 +16,7 @@ final class Fixture
 
 namespace Rector\CodingStyle\Tests\Rector\Encapsed\EncapsedStringsToSprintfRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run(string $format)
     {

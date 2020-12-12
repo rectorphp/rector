@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector\Fixture;
 
-class MagicPhpunitPreferredOrder
+class MagicPhpUnitPreferredOrderClass
 {
 
     protected function protectedFunctionName()
@@ -32,7 +32,7 @@ class MagicPhpunitPreferredOrder
 
 namespace Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector\Fixture;
 
-class MagicPhpunitPreferredOrder
+class MagicPhpUnitPreferredOrderClass
 {
 
     public function __construct()

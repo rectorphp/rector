@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
 
-class SkipUsageInMultipleLevelsHasStmtBetween
+class SkipUsageInMultipleLevelsHasStatementBetween
 {
     function myMethod()
     {

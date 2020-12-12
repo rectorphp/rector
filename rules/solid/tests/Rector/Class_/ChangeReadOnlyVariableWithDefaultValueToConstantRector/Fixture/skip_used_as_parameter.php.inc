@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector\Fixture;
 
-class SkipUsedAsParameter
+class SkipUsedAsParameters
 {
     public function run($items)
     {

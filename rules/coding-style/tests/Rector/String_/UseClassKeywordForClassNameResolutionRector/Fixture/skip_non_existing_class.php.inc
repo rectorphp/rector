@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
-class SkipNonExistingClass
+class NonExistingClassName
 {
     public function run()
     {

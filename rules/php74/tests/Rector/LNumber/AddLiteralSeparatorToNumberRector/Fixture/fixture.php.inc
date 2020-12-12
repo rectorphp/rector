@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class Fixture
 
 namespace Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class Fixture
 
 namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

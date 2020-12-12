@@ -2,7 +2,7 @@
 
 namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
-class NonCommentMultilineNext
+class NonCommentMultiLineNext
 {
     public function get($_some)
     {
@@ -20,7 +20,7 @@ class NonCommentMultilineNext
 
 namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
-class NonCommentMultilineNext
+class NonCommentMultiLineNext
 {
     public function get($_some)
     {

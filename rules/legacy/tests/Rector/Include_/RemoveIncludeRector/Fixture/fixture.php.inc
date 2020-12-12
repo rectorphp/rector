@@ -2,7 +2,7 @@
 
 namespace Rector\Legacy\Tests\Rector\Include_\RemoveIncludeRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     private function someMethod() : void
     {
@@ -18,7 +18,7 @@ class Fixture
 
 namespace Rector\Legacy\Tests\Rector\Include_\RemoveIncludeRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     private function someMethod() : void
     {

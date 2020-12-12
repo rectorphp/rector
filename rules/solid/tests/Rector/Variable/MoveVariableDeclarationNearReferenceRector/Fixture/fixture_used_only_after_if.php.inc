@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
 
-class FixtureUsedOnlyAfterIf
+class SomeClassUsedOnlyAfterIf
 {
     function myMethod()
     {
@@ -20,7 +20,7 @@ class FixtureUsedOnlyAfterIf
 
 namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
 
-class FixtureUsedOnlyAfterIf
+class SomeClassUsedOnlyAfterIf
 {
     function myMethod()
     {

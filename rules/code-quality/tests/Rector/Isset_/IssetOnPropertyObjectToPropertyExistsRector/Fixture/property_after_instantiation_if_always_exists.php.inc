@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
-class PropertyAfterInstantiationIfAlwaysExists
+class SomeClass2
 {
     public $x;
     public $y;
@@ -22,7 +22,7 @@ class PropertyAfterInstantiationIfAlwaysExists
 
 namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
-class PropertyAfterInstantiationIfAlwaysExists
+class SomeClass2
 {
     public $x;
     public $y;

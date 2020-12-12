@@ -2,7 +2,7 @@
 
 namespace Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture;
 
-class Fixture2
+class AnotherClassWithInvalidConstants
 {
     public const TO_BE_PRIVATE_CONSTANT = 1;
 }
@@ -13,7 +13,7 @@ class Fixture2
 
 namespace Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture;
 
-class Fixture2
+class AnotherClassWithInvalidConstants
 {
     private const TO_BE_PRIVATE_CONSTANT = 1;
 }

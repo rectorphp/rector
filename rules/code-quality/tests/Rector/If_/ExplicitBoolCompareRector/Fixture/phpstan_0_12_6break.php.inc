@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class Phpstan0126break
+final class PhpStan0126Break
 {
     public function run(int $item)
     {
@@ -18,7 +18,7 @@ final class Phpstan0126break
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class Phpstan0126break
+final class PhpStan0126Break
 {
     public function run(int $item)
     {

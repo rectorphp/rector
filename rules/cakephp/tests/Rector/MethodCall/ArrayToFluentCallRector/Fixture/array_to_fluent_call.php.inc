@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Fixture;
+namespace Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector;
 
 function arrayToFluentCall2()
 {
@@ -25,7 +25,7 @@ function arrayToFluentCall2()
 -----
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Fixture;
+namespace Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector;
 
 function arrayToFluentCall2()
 {

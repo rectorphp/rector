@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class FixtureNotIdenticalProcessOnlyDirectIfAfterAssign
+class SomeClassNotIdenticalProcessOnlyDirectAssignAfterIf
 {
     public function f($o)
     {
@@ -30,7 +30,7 @@ class FixtureNotIdenticalProcessOnlyDirectIfAfterAssign
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class FixtureNotIdenticalProcessOnlyDirectIfAfterAssign
+class SomeClassNotIdenticalProcessOnlyDirectAssignAfterIf
 {
     public function f($o)
     {

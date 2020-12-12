@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @var int[]
@@ -21,7 +21,7 @@ class Fixture
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @var int[]

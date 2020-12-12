@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\FunctionCallToConstantRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -18,7 +18,7 @@ class Fixture
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\FunctionCallToConstantRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

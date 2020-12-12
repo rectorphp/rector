@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-class YieldStrings
+class YieldsStrings
 {
     public function getValues(): iterable
     {
@@ -17,7 +17,7 @@ class YieldStrings
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-class YieldStrings
+class YieldsStrings
 {
     /**
      * @return string[]

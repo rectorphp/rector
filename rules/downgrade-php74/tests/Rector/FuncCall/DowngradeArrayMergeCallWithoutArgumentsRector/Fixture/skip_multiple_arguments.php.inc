@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector\Fixture;
 
-class SkipMultipleArguments
+class SkipMultipleArgumentsClass
 {
     public function run()
     {

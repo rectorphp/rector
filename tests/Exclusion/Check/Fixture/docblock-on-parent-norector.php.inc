@@ -3,7 +3,7 @@
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
 
-final class Docblock-on-parent-norector
+final class DocblockOnParentNorector
 {
     public function foo()
     {

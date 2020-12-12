@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
-class Fixture
+class ClassWithConstantUsedOnlyHere
 {
     const LOCAL_ONLY = true;
 
@@ -18,7 +18,7 @@ class Fixture
 
 namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
-class Fixture
+class ClassWithConstantUsedOnlyHere
 {
     private const LOCAL_ONLY = true;
 

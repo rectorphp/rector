@@ -2,7 +2,7 @@
 
 namespace Rector\Phalcon\Tests\Rector\MethodCall\AddRequestToHandleMethodCallRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($di)
     {
@@ -17,7 +17,7 @@ class Fixture
 
 namespace Rector\Phalcon\Tests\Rector\MethodCall\AddRequestToHandleMethodCallRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($di)
     {

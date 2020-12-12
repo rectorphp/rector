@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\DifferentDefaults;
 
 use Throwable;
 

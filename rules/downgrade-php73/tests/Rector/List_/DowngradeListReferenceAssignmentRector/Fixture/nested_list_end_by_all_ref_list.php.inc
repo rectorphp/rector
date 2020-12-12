@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class NestedListEndByAllRefList
+class NestedListEndByAllRefListClass
 {
     public function run($string)
     {
@@ -17,7 +17,7 @@ class NestedListEndByAllRefList
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class NestedListEndByAllRefList
+class NestedListEndByAllRefListClass
 {
     public function run($string)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
-class Fixture8
+class WithSomeInMethodExpressions
 {
     public function fun()
     {
@@ -21,7 +21,7 @@ class Fixture8
 
 namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
-class Fixture8
+class WithSomeInMethodExpressions
 {
     public function fun()
     {

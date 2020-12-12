@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -25,7 +25,7 @@ class Fixture
 
 namespace Rector\DeadCode\Tests\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

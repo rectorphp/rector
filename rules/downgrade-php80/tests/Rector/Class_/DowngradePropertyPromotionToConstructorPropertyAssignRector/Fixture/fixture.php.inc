@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function __construct(public float $value = 0.0)
     {
@@ -15,7 +15,7 @@ class Fixture
 
 namespace Rector\DowngradePhp80\Tests\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public float $value;
     public function __construct(float $value = 0.0)

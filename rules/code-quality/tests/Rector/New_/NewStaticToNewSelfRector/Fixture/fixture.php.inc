@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\New_\NewStaticToNewSelfRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function build()
     {
@@ -16,7 +16,7 @@ final class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\New_\NewStaticToNewSelfRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function build()
     {

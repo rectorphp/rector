@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\For_\RemoveDeadIfForeachForRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($someObject)
     {
@@ -33,7 +33,7 @@ class Fixture
 
 namespace Rector\DeadCode\Tests\Rector\For_\RemoveDeadIfForeachForRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($someObject)
     {

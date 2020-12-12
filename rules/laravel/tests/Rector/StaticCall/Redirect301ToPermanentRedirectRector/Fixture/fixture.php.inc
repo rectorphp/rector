@@ -2,7 +2,7 @@
 
 namespace Rector\Laravel\Tests\Rector\StaticCall\Redirect301ToPermanentRedirectRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\Laravel\Tests\Rector\StaticCall\Redirect301ToPermanentRedirectRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Fixture;
+namespace AppBundle\Controller;
 
 use Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Source\ClassToBeCreated;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -25,7 +25,7 @@ final class SkipArrayMapReturnController extends AbstractController
 -----
 <?php declare (strict_types=1);
 
-namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Fixture;
+namespace AppBundle\Controller;
 
 use Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Source\ClassToBeCreated;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;

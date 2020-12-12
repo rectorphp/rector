@@ -16,7 +16,7 @@ $fn = function() {
     }
 };
 
-class DoubleSameVariable
+class Dibi
 {
     public static function getColumns(): array
     {

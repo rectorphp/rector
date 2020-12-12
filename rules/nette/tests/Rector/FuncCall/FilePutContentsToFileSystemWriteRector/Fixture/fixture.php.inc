@@ -2,7 +2,7 @@
 
 namespace Rector\Nette\Tests\Rector\FuncCall\FilePutContentsToFileSystemWriteRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -18,7 +18,7 @@ class Fixture
 
 namespace Rector\Nette\Tests\Rector\FuncCall\FilePutContentsToFileSystemWriteRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

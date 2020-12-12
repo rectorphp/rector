@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\Class_\StringableForToStringRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function __toString()
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\Php80\Tests\Rector\Class_\StringableForToStringRector\Fixture;
 
-class Fixture implements \Stringable
+class SomeClass implements \Stringable
 {
     public function __toString(): string
     {

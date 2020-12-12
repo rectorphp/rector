@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class Broadcast
+class SomeBroadcastController
 {
     public function action()
     {
@@ -16,7 +16,7 @@ class Broadcast
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class Broadcast
+class SomeBroadcastController
 {
     private \Illuminate\Contracts\Broadcasting\Factory $broadcastingFactory;
     public function __construct(\Illuminate\Contracts\Broadcasting\Factory $broadcastingFactory)

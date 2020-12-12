@@ -152,8 +152,9 @@ final class ValidateFixtureNamespaceCommand extends Command
             ->notPath('#/ParamTypeDeclarationRector/#')
             ->notPath('#/ReturnTypeDeclarationRector/#')
             ->in(__DIR__ . '/../../../../tests')
-            ->in(__DIR__ . '/../../../../packages/*/tests')
-            ->in(__DIR__ . '/../../../../rules/*/tests');
+//            ->in(__DIR__ . '/../../../../packages/*/tests')
+//            ->in(__DIR__ . '/../../../../rules/*/tests');
+                ->in(__DIR__ . '/../../../../rules/architecture/tests');
 
         return $this->finderSanitizer->sanitize($finder);
     }

@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($items)
     {
@@ -19,7 +19,7 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($items)
     {

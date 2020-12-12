@@ -5,7 +5,7 @@ namespace Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCa
 /**
  * @method static array fetchAll(...$args)
  */
-final class KeepAnnotated
+final class HarryPotter
 {
 }
 

@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
-class Fixture5
+class WithSomeInMethodPropertySetDefaultAbove
 {
     private $property;
 
@@ -19,7 +19,7 @@ class Fixture5
 
 namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
-class Fixture5
+class WithSomeInMethodPropertySetDefaultAbove
 {
     private $property;
 

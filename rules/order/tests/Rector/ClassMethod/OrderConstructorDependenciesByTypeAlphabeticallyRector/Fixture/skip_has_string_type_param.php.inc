@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\Fixture;
 
-class SkipHasStringTypeParam
+class SkipHasStringType
 {
     public function __construct(
         LatteToTwigConverter $latteToTwigConverter,

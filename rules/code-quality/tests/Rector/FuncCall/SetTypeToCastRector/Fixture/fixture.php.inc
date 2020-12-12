@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($foo)
     {
@@ -29,7 +29,7 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($foo)
     {

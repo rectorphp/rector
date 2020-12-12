@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\Php\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class NestedElseif
+class NestedElseIfClass
 {
     /**
      * @var bool
@@ -42,9 +42,9 @@ class NestedElseif
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\Php\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class NestedElseif
+class NestedElseIfClass
 {
     /**
      * @var bool

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source;
 
-final class KeepVariousRequest
+final class ResponseFactory
 {
     public function collection(): Response
     {

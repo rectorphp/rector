@@ -2,7 +2,7 @@
 
 namespace Rector\Phalcon\Tests\Rector\Assign\NewApplicationToToFactoryWithDefaultContainerRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($di)
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\Phalcon\Tests\Rector\Assign\NewApplicationToToFactoryWithDefaultContainerRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($di)
     {

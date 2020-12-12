@@ -3,7 +3,7 @@
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
 
-final class Docblock-on-parent-baseline
+final class DocblockOnParentBaseline
 {
     public function foo()
     {
@@ -19,7 +19,7 @@ final class Docblock-on-parent-baseline
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
 
-final class Docblock-on-parent-baseline
+final class DocblockOnParentBaseline
 {
     public function foo()
     {

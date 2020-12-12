@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @var string[]
@@ -26,7 +26,7 @@ class Fixture
 
 namespace Rector\SOLID\Tests\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @var string[]

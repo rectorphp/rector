@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -24,7 +24,7 @@ class Fixture
 
 namespace Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

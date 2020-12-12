@@ -2,7 +2,7 @@
 
 namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -26,7 +26,7 @@ class Fixture
 
 namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

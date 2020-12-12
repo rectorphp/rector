@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\Fixture;
 
-class AssignToExistingVar
+class AssignToExistingVarClass
 {
     public function run($string)
     {
@@ -18,7 +18,7 @@ class AssignToExistingVar
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\Fixture;
 
-class AssignToExistingVar
+class AssignToExistingVarClass
 {
     public function run($string)
     {

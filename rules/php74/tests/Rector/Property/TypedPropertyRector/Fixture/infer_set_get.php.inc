@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
 final class InferSetGet
 {
@@ -24,7 +24,7 @@ final class InferSetGet
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
 final class InferSetGet
 {

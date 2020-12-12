@@ -2,7 +2,7 @@
 
 namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangePdfWriterRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run(): void
     {
@@ -18,7 +18,7 @@ final class Fixture
 
 namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangePdfWriterRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run(): void
     {

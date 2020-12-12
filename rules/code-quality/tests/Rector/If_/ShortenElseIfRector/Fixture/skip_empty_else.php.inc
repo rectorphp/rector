@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\Php\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
 class SkipEmptyElse
 {

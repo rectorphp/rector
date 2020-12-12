@@ -2,7 +2,7 @@
 
 namespace Rector\Php53\Tests\Rector\Variable\ReplaceHttpServerVarsByServerRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class Fixture
 
 namespace Rector\Php53\Tests\Rector\Variable\ReplaceHttpServerVarsByServerRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

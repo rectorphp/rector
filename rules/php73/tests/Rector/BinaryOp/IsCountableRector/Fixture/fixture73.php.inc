@@ -2,7 +2,7 @@
 
 namespace Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector\Fixture;
 
-class Fixture73
+class CountableOnPhp73
 {
     public function go($foo)
     {
@@ -16,7 +16,7 @@ class Fixture73
 
 namespace Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector\Fixture;
 
-class Fixture73
+class CountableOnPhp73
 {
     public function go($foo)
     {

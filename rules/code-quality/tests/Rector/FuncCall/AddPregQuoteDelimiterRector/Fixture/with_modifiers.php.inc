@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\WithModifiers;
 
-class WithModifiers
+class SomeClass
 {
     public function test($input)
     {
@@ -15,9 +15,9 @@ class WithModifiers
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\WithModifiers;
 
-class WithModifiers
+class SomeClass
 {
     public function test($input)
     {

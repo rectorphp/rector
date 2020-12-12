@@ -5,7 +5,7 @@ namespace Rector\Generic\Tests\Rector\ClassLike\RemoveAnnotationRector\Fixture;
 /**
  * @method getName()
  */
-final class Fixture
+final class SomeClass
 {
 }
 
@@ -15,7 +15,7 @@ final class Fixture
 
 namespace Rector\Generic\Tests\Rector\ClassLike\RemoveAnnotationRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
 }
 

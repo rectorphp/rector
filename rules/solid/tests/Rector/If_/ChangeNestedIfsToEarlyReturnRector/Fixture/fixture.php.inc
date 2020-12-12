@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeNestedIfsToEarlyReturnRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -22,7 +22,7 @@ class Fixture
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeNestedIfsToEarlyReturnRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     protected function protectedFunctionName()
     {
@@ -48,7 +48,7 @@ class Fixture
 
 namespace Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function publicFunctionName()
     {

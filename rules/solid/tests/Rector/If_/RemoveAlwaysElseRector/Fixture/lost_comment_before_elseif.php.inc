@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
 
-class LostCommentBeforeElseif
+class LostCommentBeforeElseIf
 {
     public function convert($data)
     {
@@ -27,9 +27,9 @@ class LostCommentBeforeElseif
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
 
-class LostCommentBeforeElseif
+class LostCommentBeforeElseIf
 {
     public function convert($data)
     {

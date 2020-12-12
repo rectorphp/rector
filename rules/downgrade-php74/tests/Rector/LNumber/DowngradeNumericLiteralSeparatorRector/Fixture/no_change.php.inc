@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\LNumber\DowngradeNumericLiteralSeparatorRector\Fixture;
 
-class NoChange
+class NoChangeClass
 {
     public function run()
     {

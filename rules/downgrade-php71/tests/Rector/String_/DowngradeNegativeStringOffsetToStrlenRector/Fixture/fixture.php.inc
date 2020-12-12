@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DowngradePhp71\Tests\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector\Fixture;
+namespace Rector\DowngradePhp71\Tests\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector;
 
-class Fixture
+class SomeClass
 {
     public function run($var)
     {
@@ -16,9 +16,9 @@ class Fixture
 -----
 <?php
 
-namespace Rector\DowngradePhp71\Tests\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector\Fixture;
+namespace Rector\DowngradePhp71\Tests\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector;
 
-class Fixture
+class SomeClass
 {
     public function run($var)
     {

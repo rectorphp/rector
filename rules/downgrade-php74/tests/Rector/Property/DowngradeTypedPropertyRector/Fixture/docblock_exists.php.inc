@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class DocblockExists {
+class DocBlockExists {
     /**
      * This property is the best one
      */
@@ -15,7 +15,7 @@ class DocblockExists {
 
 namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class DocblockExists {
+class DocBlockExists {
     /**
      * This property is the best one
      * @var string|null

@@ -2,7 +2,7 @@
 
 namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function shorten($value)
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function shorten($value)
     {

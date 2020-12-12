@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveDuplicatedIfReturnRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($value)
     {
@@ -24,7 +24,7 @@ class Fixture
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveDuplicatedIfReturnRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($value)
     {

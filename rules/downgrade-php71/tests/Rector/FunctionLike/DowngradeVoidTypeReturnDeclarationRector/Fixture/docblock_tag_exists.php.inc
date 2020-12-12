@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector\Fixture;
 
-class DocblockTagExists {
+class DocBlockTagExists {
     /**
      * This property is the best one
      * @return void
@@ -19,7 +19,7 @@ class DocblockTagExists {
 
 namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector\Fixture;
 
-class DocblockTagExists {
+class DocBlockTagExists {
     /**
      * This property is the best one
      * @return void

@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class SkipParentIfVoidReturn
+class SkipParentIfWithVoidReturn
 {
     public function canDrive(Car $car): void
     {

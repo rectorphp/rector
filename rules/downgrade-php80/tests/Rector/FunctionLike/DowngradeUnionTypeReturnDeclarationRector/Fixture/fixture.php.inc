@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector\Fixture;
 
-class Fixture
+class ReturnOnClassMethod
 {
     public function run(): int|string
     {
@@ -20,7 +20,7 @@ class Fixture
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector\Fixture;
 
-class Fixture
+class ReturnOnClassMethod
 {
     /**
      * @return int|string

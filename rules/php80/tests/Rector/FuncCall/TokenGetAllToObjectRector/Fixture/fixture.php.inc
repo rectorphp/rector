@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\FuncCall\TokenGetAllToObjectRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run()
     {
@@ -27,7 +27,7 @@ final class Fixture
 
 namespace Rector\Php80\Tests\Rector\FuncCall\TokenGetAllToObjectRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run()
     {

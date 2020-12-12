@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\List_\ListToArrayDestructRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class Fixture
 
 namespace Rector\Php71\Tests\Rector\List_\ListToArrayDestructRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

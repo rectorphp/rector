@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class Fixture
+class SomeEntityWithIntegerId
 {
     /**
      * @var int
@@ -29,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class Fixture
+class SomeEntityWithIntegerId
 {
     /**
      * @var \Ramsey\Uuid\UuidInterface

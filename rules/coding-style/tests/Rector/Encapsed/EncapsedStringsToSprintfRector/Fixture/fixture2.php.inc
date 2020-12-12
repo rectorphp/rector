@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Encapsed\EncapsedStringsToSprintfRector\Fixture;
 
-final class Fixture2
+final class SomeClassProperty
 {
     private $format = 'json';
 
@@ -18,7 +18,7 @@ final class Fixture2
 
 namespace Rector\CodingStyle\Tests\Rector\Encapsed\EncapsedStringsToSprintfRector\Fixture;
 
-final class Fixture2
+final class SomeClassProperty
 {
     private $format = 'json';
 

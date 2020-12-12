@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitor\Fixture;
+namespace Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\Fixture;
 
-class Simple
+class Foo
 {
     public function bar()
     {

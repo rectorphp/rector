@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -22,7 +22,7 @@ class Fixture
 
 namespace Rector\SOLID\Tests\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @var array<string, string>

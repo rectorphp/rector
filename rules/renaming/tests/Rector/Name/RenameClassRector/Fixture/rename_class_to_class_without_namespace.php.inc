@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace MyNamespace;
 
-class RenameClassToClassWithoutNamespace
+class AnotherMyClass
 {
     /**
      * @return AnotherMyClass

@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
-class SymfonyRequiredProperty
+class SymfonyRequiredPropety
 {
     /**
      * @required
@@ -16,7 +16,7 @@ class SymfonyRequiredProperty
 
 namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
-class SymfonyRequiredProperty
+class SymfonyRequiredPropety
 {
     #[\Symfony\Contracts\Service\Attribute\Required]
     public $someProperty;

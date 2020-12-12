@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Fixture;
 
-class SkipOnConflict
+class SkipOnConflictClass
 {
     public function run()
     {

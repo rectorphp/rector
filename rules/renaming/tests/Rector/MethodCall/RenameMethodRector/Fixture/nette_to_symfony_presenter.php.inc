@@ -2,7 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-class NetteToSymfonyPresenter
+class SomePresenter
 {
     public function run()
     {
@@ -15,7 +15,7 @@ class NetteToSymfonyPresenter
 
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-class NetteToSymfonyPresenter
+class SomePresenter
 {
     public function __invoke()
     {

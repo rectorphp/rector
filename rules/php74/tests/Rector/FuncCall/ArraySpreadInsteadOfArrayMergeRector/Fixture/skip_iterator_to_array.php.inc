@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Fixture;
 
-final class SkipIteratorToArray
+final class IteratorToArray
 {
     public function run($items)
     {

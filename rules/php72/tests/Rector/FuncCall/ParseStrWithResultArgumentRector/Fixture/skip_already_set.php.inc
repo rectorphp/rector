@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\ParseStrWithResultArgumentRector\Fixture;
 
-class SkipAlreadySet
+class AlreadySet
 {
     public function run()
     {

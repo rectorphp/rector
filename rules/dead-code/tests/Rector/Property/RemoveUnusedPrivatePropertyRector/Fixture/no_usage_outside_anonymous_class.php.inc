@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\OutsideAnonymousClass;
 
-class NoUsageOutsideAnonymousClass
+class SomeClass
 {
     private $var;
     public function foo()
@@ -20,9 +20,9 @@ class NoUsageOutsideAnonymousClass
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\OutsideAnonymousClass;
 
-class NoUsageOutsideAnonymousClass
+class SomeClass
 {
     public function foo()
     {

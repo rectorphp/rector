@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Double\RealToFloatTypeCastRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -18,7 +18,7 @@ class Fixture
 
 namespace Rector\Php74\Tests\Rector\Double\RealToFloatTypeCastRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

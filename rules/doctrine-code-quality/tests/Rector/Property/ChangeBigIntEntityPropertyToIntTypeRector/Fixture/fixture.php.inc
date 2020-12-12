@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class Fixture
+class SomeEntity
 {
     /**
      * @var int|null
@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class Fixture
+class SomeEntity
 {
     /**
      * @var string|null

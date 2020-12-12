@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\ElseIf_;
 
-class Elseif
+class SomeClass
 {
     public function run()
     {
@@ -22,9 +22,9 @@ class Elseif
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\ElseIf_;
 
-class Elseif
+class SomeClass
 {
     public function run()
     {

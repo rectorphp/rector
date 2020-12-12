@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Class_\AddArrayDefaultToArrayPropertyRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Property\ArrayPropertyDefaultValueRector\Fixture;
 
-class Fixture2
+class SomeClass
 {
     /**
      * @var int[]
@@ -30,9 +30,9 @@ class Fixture2
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Class_\AddArrayDefaultToArrayPropertyRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Property\ArrayPropertyDefaultValueRector\Fixture;
 
-class Fixture2
+class SomeClass
 {
     /**
      * @var int[]

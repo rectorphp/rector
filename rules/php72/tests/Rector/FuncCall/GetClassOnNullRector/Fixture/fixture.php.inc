@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function getItem()
     {
@@ -29,7 +29,7 @@ function getClassOnNullOutsideClass()
 
 namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function getItem()
     {

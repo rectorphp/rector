@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector\KeepFalsePositiveWhile;
 
-class KeepFalsePositiveWhile
+class SomeFilter
 {
     public function filter($in, $out, &$consumed, $closing)
     {

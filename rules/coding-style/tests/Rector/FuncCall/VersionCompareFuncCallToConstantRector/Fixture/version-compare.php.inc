@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\VersionCompareFuncCallToConstantRector\Fixture;
 
-class Version-compare
+class VersionCompareClass
 {
     public function run()
     {
@@ -22,7 +22,7 @@ class Version-compare
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\VersionCompareFuncCallToConstantRector\Fixture;
 
-class Version-compare
+class VersionCompareClass
 {
     public function run()
     {

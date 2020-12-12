@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveDoubleAssignRector\Fixture;
 
-class SkipDoubleCase {
+class DoubleCashe {
 
     public function action($var)
     {

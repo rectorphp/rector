@@ -2,7 +2,7 @@
 
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\ChangeDuplicateStyleArrayToApplyFromArrayRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run(): void
     {
@@ -17,7 +17,7 @@ final class Fixture
 
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\ChangeDuplicateStyleArrayToApplyFromArrayRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run(): void
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\Fixture;
 
-final class Fixture
+final class MyClass
 {
     public function unnecessaryTernary(): bool
     {
@@ -50,7 +50,7 @@ final class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\Fixture;
 
-final class Fixture
+final class MyClass
 {
     public function unnecessaryTernary(): bool
     {

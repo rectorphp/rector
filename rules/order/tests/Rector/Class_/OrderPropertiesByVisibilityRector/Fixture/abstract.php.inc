@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderPropertiesByVisibilityRector\Fixture;
 
-abstract class Abstract
+abstract class AbstractClass
 {
     protected $protectedProperty;
     public $publicProperty;
@@ -18,7 +18,7 @@ abstract class Abstract
 
 namespace Rector\Order\Tests\Rector\Class_\OrderPropertiesByVisibilityRector\Fixture;
 
-abstract class Abstract
+abstract class AbstractClass
 {
     public $publicProperty;
     public static $publicStaticProperty;

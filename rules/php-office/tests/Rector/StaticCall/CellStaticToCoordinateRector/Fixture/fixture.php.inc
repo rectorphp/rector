@@ -2,7 +2,7 @@
 
 namespace Rector\PHPOffice\Tests\Rector\StaticCall\CellStaticToCoordinateRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\PHPOffice\Tests\Rector\StaticCall\CellStaticToCoordinateRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

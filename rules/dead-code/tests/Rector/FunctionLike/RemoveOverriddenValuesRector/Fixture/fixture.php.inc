@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\Fixture;
 
-final class Fixture
+final class SomeController
 {
     public function run()
     {
@@ -20,7 +20,7 @@ final class Fixture
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\Fixture;
 
-final class Fixture
+final class SomeController
 {
     public function run()
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Fixture;
 
-final class Fixture2
+final class SomeClassWithParameters
 {
     private $parameter;
 
@@ -18,7 +18,7 @@ final class Fixture2
 
 namespace Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Fixture;
 
-final class Fixture2
+final class SomeClassWithParameters
 {
     private $parameter;
 

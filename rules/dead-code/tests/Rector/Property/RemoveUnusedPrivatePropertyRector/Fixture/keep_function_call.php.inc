@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\KeepFunctionCall;
 
-class KeepFunctionCall
+class SomeClass
 {
     private $prop;
 
@@ -20,9 +20,9 @@ class KeepFunctionCall
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\KeepFunctionCall;
 
-class KeepFunctionCall
+class SomeClass
 {
     public function doThing()
     {

@@ -4,7 +4,7 @@ namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMetho
 
 use JMS\Serializer\Annotation as Serializer;
 
-final class KeepSerializableObject
+final class KeepSerialiazableObject
 {
     /**
      * @var string

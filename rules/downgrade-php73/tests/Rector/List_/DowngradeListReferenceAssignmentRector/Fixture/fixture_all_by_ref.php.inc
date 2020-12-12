@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class FixtureAllByRef
+class FixtureAllByRefClass
 {
     public function run($string)
     {
@@ -17,7 +17,7 @@ class FixtureAllByRef
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class FixtureAllByRef
+class FixtureAllByRefClass
 {
     public function run($string)
     {

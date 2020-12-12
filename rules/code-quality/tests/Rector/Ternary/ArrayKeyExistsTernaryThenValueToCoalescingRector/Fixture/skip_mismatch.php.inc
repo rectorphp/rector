@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector\Fixture;
 
-class SkipMismatch
+class SkipMissMatch
 {
     public function run($values, $keyToMatch)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Nette\Tests\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector\Fixture;
 
-class Substr
+class SomeClass
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class Substr
 
 namespace Rector\Nette\Tests\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector\Fixture;
 
-class Substr
+class SomeClass
 {
     public function run()
     {

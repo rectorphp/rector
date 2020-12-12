@@ -5,7 +5,7 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRect
 /**
  * @see https://3v4l.org/IsSHq
  */
-class SkipLocalCalled
+class Customer
 {
     private $id;
     public static function create($id){

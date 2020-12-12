@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run(): void
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @return void

@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($meetups)
     {
@@ -18,7 +18,7 @@ class Fixture
 
 namespace Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($meetups)
     {

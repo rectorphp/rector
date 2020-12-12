@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class KnownArrayType
+class KnownArrayTypeClass
 {
     public function run(array $parts)
     {
@@ -16,7 +16,7 @@ class KnownArrayType
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class KnownArrayType
+class KnownArrayTypeClass
 {
     public function run(array $parts)
     {

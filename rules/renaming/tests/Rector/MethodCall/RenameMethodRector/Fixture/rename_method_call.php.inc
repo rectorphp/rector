@@ -2,7 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-class RenameMethodCall
+class VariableReAssign
 {
     private function createHtml()
     {
@@ -20,7 +20,7 @@ class RenameMethodCall
 
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-class RenameMethodCall
+class VariableReAssign
 {
     private function createHtml()
     {

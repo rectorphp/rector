@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace MyNamespace;
 
-class RenameClass
+class MyClass
 {
     /**
      * @return MyClass
@@ -17,7 +17,7 @@ class RenameClass
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace MyNewNamespace;
 
 class MyNewClass
 {

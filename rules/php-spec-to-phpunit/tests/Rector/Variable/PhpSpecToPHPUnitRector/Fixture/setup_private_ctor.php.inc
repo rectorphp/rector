@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
+namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use PhpSpec\ObjectBehavior;
 
@@ -23,7 +23,7 @@ class ResultSpec extends ObjectBehavior
 -----
 <?php
 
-namespace Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
+namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use PhpSpec\ObjectBehavior;
 

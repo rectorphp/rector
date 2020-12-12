@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\BooleanAnd\RemoveAndTrueRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -18,7 +18,7 @@ class Fixture
 
 namespace Rector\DeadCode\Tests\Rector\BooleanAnd\RemoveAndTrueRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

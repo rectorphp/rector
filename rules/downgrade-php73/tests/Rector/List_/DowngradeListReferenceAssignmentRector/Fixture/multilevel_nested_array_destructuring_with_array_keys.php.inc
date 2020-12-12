@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class MultilevelNestedArrayDestructuringWithArrayKeys
+class MultilevelNestedArrayDestructuringWithArrayKeysClass
 {
     public function run($string)
     {
@@ -17,7 +17,7 @@ class MultilevelNestedArrayDestructuringWithArrayKeys
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class MultilevelNestedArrayDestructuringWithArrayKeys
+class MultilevelNestedArrayDestructuringWithArrayKeysClass
 {
     public function run($string)
     {

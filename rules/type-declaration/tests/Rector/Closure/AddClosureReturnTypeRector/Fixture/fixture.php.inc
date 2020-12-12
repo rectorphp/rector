@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\Function_\AddClosureReturnTypeRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($meetups)
     {
@@ -16,9 +16,9 @@ class Fixture
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\Function_\AddClosureReturnTypeRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run($meetups)
     {

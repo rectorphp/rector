@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class NonFirstLevelIf
+class NonFirstLevelIfClass
 {
     public function canDrive(Car $car): void
     {
@@ -20,7 +20,7 @@ class NonFirstLevelIf
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class NonFirstLevelIf
+class NonFirstLevelIfClass
 {
     public function canDrive(Car $car): void
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -24,7 +24,7 @@ class Fixture
 
 namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

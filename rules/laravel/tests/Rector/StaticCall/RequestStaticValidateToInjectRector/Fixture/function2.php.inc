@@ -2,7 +2,7 @@
 
 namespace Rector\Laravel\Tests\Rector\StaticCall\RequestStaticValidateToInjectRector\Fixture;
 
-class Function2
+class SomeFunction2
 {
     public function store()
     {
@@ -16,7 +16,7 @@ class Function2
 
 namespace Rector\Laravel\Tests\Rector\StaticCall\RequestStaticValidateToInjectRector\Fixture;
 
-class Function2
+class SomeFunction2
 {
     public function store(\Illuminate\Http\Request $request)
     {

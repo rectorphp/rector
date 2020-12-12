@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class FixtureMultipleIf
+class SomeClassMultipleIf
 {
     public function f($o)
     {
@@ -36,7 +36,7 @@ class FixtureMultipleIf
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class FixtureMultipleIf
+class SomeClassMultipleIf
 {
     public function f($o)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public function getAnything(): mixed
     {
@@ -20,7 +20,7 @@ class Fixture
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     /**
      * @return mixed

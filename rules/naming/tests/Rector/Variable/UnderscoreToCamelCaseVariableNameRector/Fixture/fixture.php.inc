@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run($a_b)
     {
@@ -18,7 +18,7 @@ final class Fixture
 
 namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\Fixture;
 
-final class Fixture
+final class SomeClass
 {
     public function run($aB)
     {
