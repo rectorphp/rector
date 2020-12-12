@@ -47,6 +47,11 @@ final class RectorApplication
     private $notParsedFiles = [];
 
     /**
+     * @var PostRunnerInterface[]
+     */
+    private $postRunners = [];
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -85,11 +90,6 @@ final class RectorApplication
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
-
-    /**
-     * @var PostRunnerInterface[]
-     */
-    private $postRunners;
 
     /**
      * @param PostRunnerInterface[] $postRunners
