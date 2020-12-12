@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\NonPhpFile;
 
-use Rector\Core\Configuration\ChangeConfiguration;
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -22,9 +22,9 @@ final class NonPhpFileProcessor
     private $configuration;
 
     /**
-     * @var ChangeConfiguration
+     * @var RenamedClassesDataCollector
      */
-    private $changeConfiguration;
+    private $renamedClassesDataCollector;
 
     /**
      * @var SymfonyStyle
@@ -47,7 +47,7 @@ final class NonPhpFileProcessor
     private $nonPhpFileClassRenamer;
 
     public function __construct(
-        ChangeConfiguration $changeConfiguration,
+        RenamedClassesDataCollector $renamedClassesDataCollector,
         Configuration $configuration,
         RenamedClassesCollector $renamedClassesCollector,
         SmartFileSystem $smartFileSystem,
@@ -55,7 +55,7 @@ final class NonPhpFileProcessor
         NonPhpFileClassRenamer $nonPhpFileClassRenamer
     ) {
         $this->configuration = $configuration;
-        $this->changeConfiguration = $changeConfiguration;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->symfonyStyle = $symfonyStyle;
         $this->renamedClassesCollector = $renamedClassesCollector;
         $this->smartFileSystem = $smartFileSystem;
@@ -77,7 +77,7 @@ final class NonPhpFileProcessor
         $oldContents = $smartFileInfo->getContents();
 
         $classRenames = array_merge(
-            $this->changeConfiguration->getOldToNewClasses(),
+            $this->renamedClassesDataCollector->getOldToNewClasses(),
             $this->renamedClassesCollector->getOldToNewClasses()
         );
 

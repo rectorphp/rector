@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Configuration;
 
-final class ChangeConfiguration
+final class RenamedClassesDataCollector
 {
     /**
      * @var array<string, string>

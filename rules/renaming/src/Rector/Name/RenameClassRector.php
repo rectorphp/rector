@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
-use Rector\Core\Configuration\ChangeConfiguration;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
@@ -40,14 +40,14 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
     private $classRenamer;
 
     /**
-     * @var ChangeConfiguration
+     * @var RenamedClassesDataCollector
      */
-    private $changeConfiguration;
+    private $renamedClassesDataCollector;
 
-    public function __construct(ChangeConfiguration $changeConfiguration, ClassRenamer $classRenamer)
+    public function __construct(RenamedClassesDataCollector $changeConfiguration, ClassRenamer $classRenamer)
     {
         $this->classRenamer = $classRenamer;
-        $this->changeConfiguration = $changeConfiguration;
+        $this->renamedClassesDataCollector = $changeConfiguration;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -117,7 +117,7 @@ CODE_SAMPLE
     {
         $this->oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? [];
         if ($this->oldToNewClasses !== []) {
-            $this->changeConfiguration->setOldToNewClasses($this->oldToNewClasses);
+            $this->renamedClassesDataCollector->setOldToNewClasses($this->oldToNewClasses);
         }
     }
 }
