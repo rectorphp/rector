@@ -264,12 +264,7 @@ final class Configuration
         if ($this->outputFormat === JsonOutputFormatter::NAME) {
             return true;
         }
-
-        if ($this->outputFormat === CheckstyleOutputFormatter::NAME) {
-            return true;
-        }
-
-        return false;
+        return $this->outputFormat === CheckstyleOutputFormatter::NAME;
     }
 
     private function canShowProgressBar(InputInterface $input): bool
