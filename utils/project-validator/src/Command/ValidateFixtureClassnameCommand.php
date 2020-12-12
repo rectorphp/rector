@@ -35,9 +35,9 @@ final class ValidateFixtureClassnameCommand extends Command
 
     /**
      * @var string
-     * @see https://regex101.com/r/yv2Rul/3
+     * @see https://regex101.com/r/yv2Rul/4
      */
-    private const CLASS_WITH_EXTENDS_IMPLEMENTS_REGEX = '#(class) (\w+)\s+(extends|implements)\s+(\w+)\s+\{$#msU';
+    private const CLASS_WITH_EXTENDS_IMPLEMENTS_REGEX = '#(class) (\w+)\s+(extends|implements)\s+(.*)\s+\{$#msU';
 
     /**
      * @var string
