@@ -25,13 +25,10 @@ final class PostIncDecToPreIncDecRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run()
+    public function run($value = 1)
     {
-        if ($value++) {
-        }
-
-        if ($value--) {
-        }
+        $value++; echo $value;
+        $value--; echo $value;
     }
 }
 CODE_SAMPLE
@@ -39,13 +36,10 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run()
+    public function run($value = 1)
     {
-        if (++$value) {
-        }
-
-        if (--$value) {
-        }
+        ++$value; echo $value;
+        --$value; echo $value;
     }
 }
 CODE_SAMPLE
