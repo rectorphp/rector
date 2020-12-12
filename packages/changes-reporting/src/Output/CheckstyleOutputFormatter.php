@@ -38,8 +38,8 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
     {
         $domDocument = new DOMDocument('1.0', 'UTF-8');
 
-        $checkstyleDOMElement = $this->checkstyleDOMElementFactory->create($domDocument, $errorAndDiffCollector);
-        $domDocument->appendChild($checkstyleDOMElement);
+        $domElement = $this->checkstyleDOMElementFactory->create($domDocument, $errorAndDiffCollector);
+        $domDocument->appendChild($domElement);
 
         // pretty print with spaces
         $domDocument->formatOutput = true;

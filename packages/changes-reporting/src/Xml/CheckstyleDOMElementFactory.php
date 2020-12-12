@@ -32,32 +32,32 @@ final class CheckstyleDOMElementFactory
 
     public function create(DOMDocument $domDocument, ErrorAndDiffCollector $errorAndDiffCollector): DOMElement
     {
-        $checkstyleDOMElement = $domDocument->createElement(self::CHECKSTYLE);
+        $domElement = $domDocument->createElement(self::CHECKSTYLE);
 
         foreach ($errorAndDiffCollector->getFileDiffs() as $fileDiff) {
             $fileDOMElement = $this->createFileDOMElement($domDocument, $fileDiff);
-            $checkstyleDOMElement->appendChild($fileDOMElement);
+            $domElement->appendChild($fileDOMElement);
         }
 
         $nonFileErrorDOMElement = $this->createNonFileErrorDOMElements($domDocument, $errorAndDiffCollector);
         if ($nonFileErrorDOMElement !== null) {
-            $checkstyleDOMElement->appendChild($nonFileErrorDOMElement);
+            $domElement->appendChild($nonFileErrorDOMElement);
         }
 
-        return $checkstyleDOMElement;
+        return $domElement;
     }
 
     private function createFileDOMElement(DOMDocument $domDocument, FileDiff $fileDiff): DOMElement
     {
-        $fileDOMElement = $domDocument->createElement(self::FILE);
-        $fileDOMElement->setAttribute('name', $this->escapeForXml($fileDiff->getRelativeFilePath()));
+        $domElement = $domDocument->createElement(self::FILE);
+        $domElement->setAttribute('name', $this->escapeForXml($fileDiff->getRelativeFilePath()));
 
         foreach ($fileDiff->getRectorChanges() as $rectorWithFileAndLineChange) {
             $errorDOMElement = $this->createErrorDOMElement($rectorWithFileAndLineChange, $domDocument);
-            $fileDOMElement->appendChild($errorDOMElement);
+            $domElement->appendChild($errorDOMElement);
         }
 
-        return $fileDOMElement;
+        return $domElement;
     }
 
     private function createNonFileErrorDOMElements(
@@ -68,17 +68,17 @@ final class CheckstyleDOMElementFactory
             return null;
         }
 
-        $fileDOMElement = $domDocument->createElement(self::FILE);
+        $domElement = $domDocument->createElement(self::FILE);
 
         foreach ($errorAndDiffCollector->getErrors() as $rectorError) {
             $errorDOMElement = $domDocument->createElement(self::ERROR);
             $errorDOMElement->setAttribute('severity', self::ERROR);
             $errorDOMElement->setAttribute('message', $this->escapeForXml($rectorError->getMessage()));
 
-            $fileDOMElement->appendChild($errorDOMElement);
+            $domElement->appendChild($errorDOMElement);
         }
 
-        return $fileDOMElement;
+        return $domElement;
     }
 
     private function escapeForXml(string $string): string
@@ -90,15 +90,15 @@ final class CheckstyleDOMElementFactory
         RectorWithFileAndLineChange $rectorWithFileAndLineChange,
         DOMDocument $domDocument
     ): DOMElement {
-        $errorDOMElement = $domDocument->createElement(self::ERROR);
+        $domElement = $domDocument->createElement(self::ERROR);
 
-        $errorDOMElement->setAttribute('line', $this->escapeForXml((string) $rectorWithFileAndLineChange->getLine()));
-        $errorDOMElement->setAttribute('column', '1');
-        $errorDOMElement->setAttribute('severity', self::ERROR);
+        $domElement->setAttribute('line', $this->escapeForXml((string) $rectorWithFileAndLineChange->getLine()));
+        $domElement->setAttribute('column', '1');
+        $domElement->setAttribute('severity', self::ERROR);
 
         $message = $rectorWithFileAndLineChange->getRectorDefinitionsDescription() . ' (Reported by: ' . $rectorWithFileAndLineChange->getRectorClass() . ')';
-        $errorDOMElement->setAttribute('message', $this->escapeForXml($message));
+        $domElement->setAttribute('message', $this->escapeForXml($message));
 
-        return $errorDOMElement;
+        return $domElement;
     }
 }
