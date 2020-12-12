@@ -67,7 +67,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($this->isInsideExpression($parentNode)) {
+        if ($this->isAnExpression($parentNode)) {
             return $this->processPre($node);
         }
 
@@ -78,10 +78,13 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processPreArray(Node $node, ArrayDimFetch $arrayDimFetch)
+    /**
+     * @param PostInc|PostDec $node
+     */
+    private function processPreArray(Node $node, ArrayDimFetch $arrayDimFetch): ?Node
     {
         $parentOfArrayDimFetch = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $this->isInsideExpression($parentOfArrayDimFetch)) {
+        if (! $this->isAnExpression($parentOfArrayDimFetch)) {
             return null;
         }
 
@@ -91,6 +94,9 @@ CODE_SAMPLE
         return $arrayDimFetch->dim;
     }
 
+    /**
+     * @param PostInc|PostDec $node
+     */
     private function processPre(Node $node): Node
     {
         if ($node instanceof PostInc) {
@@ -100,8 +106,8 @@ CODE_SAMPLE
         return new PreDec($node->var);
     }
 
-    private function isInsideExpression(Node $node): bool
+    private function isAnExpression(?Node $node = null): bool
     {
-        return $node instanceof Expression;
+        return $node instanceof Node && $node instanceof Expression;
     }
 }
