@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector
 
 use Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector\Source\MissCaseTypedClass;
 
-final class NamespaceAndConstant
+final class NamespaceAndConstants
 {
     public function run()
     {
@@ -20,7 +20,7 @@ namespace Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector
 
 use Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector\Source\MissCaseTypedClass;
 
-final class NamespaceAndConstant
+final class NamespaceAndConstants
 {
     public function run()
     {

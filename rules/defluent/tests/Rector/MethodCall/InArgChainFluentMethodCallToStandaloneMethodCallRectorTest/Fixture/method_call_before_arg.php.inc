@@ -5,7 +5,7 @@ namespace Rector\Defluent\Tests\Rector\MethodCall\InArgChainFluentMethodCallToSt
 use Rector\Defluent\Tests\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest\Source\DummyUserProfile;
 use Rector\Defluent\Tests\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest\Source\DummyUserProvider;
 
-class SomeClass
+class MethodCallBeforeArg
 {
     public function run(DummyUserProvider $dummyUserProvider, $oldDescription)
     {
@@ -32,7 +32,7 @@ namespace Rector\Defluent\Tests\Rector\MethodCall\InArgChainFluentMethodCallToSt
 use Rector\Defluent\Tests\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest\Source\DummyUserProfile;
 use Rector\Defluent\Tests\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest\Source\DummyUserProvider;
 
-class SomeClass
+class MethodCallBeforeArg
 {
     public function run(DummyUserProvider $dummyUserProvider, $oldDescription)
     {

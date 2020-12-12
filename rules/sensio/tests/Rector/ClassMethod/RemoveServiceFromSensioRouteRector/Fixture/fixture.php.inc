@@ -4,7 +4,7 @@ namespace Rector\Sensio\Tests\Rector\ClassMethod\RemoveServiceFromSensioRouteRec
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-final class SomeClass
+final class Fixture
 {
     /**
      * @Route(service="some_service")
@@ -22,7 +22,7 @@ namespace Rector\Sensio\Tests\Rector\ClassMethod\RemoveServiceFromSensioRouteRec
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-final class SomeClass
+final class Fixture
 {
     /**
      * @Route()

@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {
@@ -20,7 +20,7 @@ class SomeClass
 
 namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {

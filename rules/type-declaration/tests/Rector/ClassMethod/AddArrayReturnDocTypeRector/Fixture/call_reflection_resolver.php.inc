@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 
-class CallReflectionResolverFixture
+class CallReflectionResolver
 {
     public function resolveCall(Node $node)
     {
@@ -41,7 +41,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 
-class CallReflectionResolverFixture
+class CallReflectionResolver
 {
     /**
      * @return \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null

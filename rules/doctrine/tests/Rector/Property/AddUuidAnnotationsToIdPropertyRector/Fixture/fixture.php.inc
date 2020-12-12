@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\Table
  * @ORM\Entity
  */
-class SomeFixture
+class Fixture
 {
     /**
      * @var int
@@ -34,7 +34,7 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\Table
  * @ORM\Entity
  */
-class SomeFixture
+class Fixture
 {
     /**
      * @var \Ramsey\Uuid\UuidInterface

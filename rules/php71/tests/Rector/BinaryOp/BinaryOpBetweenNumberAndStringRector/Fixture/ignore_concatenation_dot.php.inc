@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector\Fixture;
 
-class IgnoreConcatenationDots
+class IgnoreConcatenationDot
 {
     public function run()
     {

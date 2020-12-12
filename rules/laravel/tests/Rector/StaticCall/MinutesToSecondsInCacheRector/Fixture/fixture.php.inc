@@ -4,7 +4,7 @@ namespace Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\F
 
 use Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Source\ArrayStore;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var ArrayStore
@@ -35,7 +35,7 @@ namespace Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\F
 
 use Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Source\ArrayStore;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var ArrayStore

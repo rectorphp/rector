@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class AlreadyConstructor
+class AlreadyConsturctor
 {
     /**
      * @var DateTimeInterface
@@ -35,7 +35,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class AlreadyConstructor
+class AlreadyConsturctor
 {
     /**
      * @var DateTimeInterface

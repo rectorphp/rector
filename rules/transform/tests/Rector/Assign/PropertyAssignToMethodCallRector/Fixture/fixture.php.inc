@@ -4,7 +4,7 @@ namespace Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\
 
 use Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
 
-class SomePresenter
+class Fixture
 {
     public function createForm()
     {
@@ -21,7 +21,7 @@ namespace Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\
 
 use Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
 
-class SomePresenter
+class Fixture
 {
     public function createForm()
     {

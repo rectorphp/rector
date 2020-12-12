@@ -2,7 +2,7 @@
 
 use Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 
-class Rector_Generic_Tests_Rector_Name_PseudoNamespaceToNamespaceRector_Fixture_UseStatement
+class UseStatement
 {
     public function run()
     {

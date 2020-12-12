@@ -2,7 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function someMethod()
     {
@@ -20,7 +20,7 @@ function a(callable $a) {
 
 namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function someMethod()
     {

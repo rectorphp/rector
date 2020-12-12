@@ -2,7 +2,7 @@
 
 namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessParamTagRector\Fixture;
 
-class SomeClassParamUnion
+class SkipRemoveParamUnion
 {
     /**
      * @param array|string $a

@@ -4,7 +4,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\F
 
 use ArrayIterator;
 
-class WithIterablePseudotypeFunctionItemClass
+class WithIterablePseudotypeFunctionItem
 {
     function getIterable(): iterable
     {
@@ -25,7 +25,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\F
 
 use ArrayIterator;
 
-class WithIterablePseudotypeFunctionItemClass
+class WithIterablePseudotypeFunctionItem
 {
     function getIterable(): iterable
     {

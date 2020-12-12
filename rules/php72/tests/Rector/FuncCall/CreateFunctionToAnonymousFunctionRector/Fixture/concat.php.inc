@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
 
-class ClassWithCreateFunctionWithConcat
+class Concat
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class ClassWithCreateFunctionWithConcat
 
 namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
 
-class ClassWithCreateFunctionWithConcat
+class Concat
 {
     public function run()
     {

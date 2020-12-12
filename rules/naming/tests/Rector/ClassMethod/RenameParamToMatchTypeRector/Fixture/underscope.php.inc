@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fi
 
 use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\Twig_Template;
 
-class Underscore
+class Underscope
 {
     public function method(Twig_Template $total_random)
     {
@@ -19,7 +19,7 @@ namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fi
 
 use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\Twig_Template;
 
-class Underscore
+class Underscope
 {
     public function method(Twig_Template $twigTemplate)
     {

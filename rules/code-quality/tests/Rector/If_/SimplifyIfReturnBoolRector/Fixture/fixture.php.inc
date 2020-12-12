@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture
 
 use PhpCsFixer\Tokenizer\Token;
 
-class SomeClass
+class Fixture
 {
     public function first()
     {
@@ -35,7 +35,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture
 
 use PhpCsFixer\Tokenizer\Token;
 
-class SomeClass
+class Fixture
 {
     public function first()
     {

@@ -4,7 +4,7 @@ namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAcce
 
 use Nette\Application\UI\Form;
 
-class FormBuilderInAnotherCall
+class FormBuildInAnotherCall
 {
     public function run()
     {
@@ -29,7 +29,7 @@ namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAcce
 
 use Nette\Application\UI\Form;
 
-class FormBuilderInAnotherCall
+class FormBuildInAnotherCall
 {
     public function run()
     {

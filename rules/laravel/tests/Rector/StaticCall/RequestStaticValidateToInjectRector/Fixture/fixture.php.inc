@@ -4,7 +4,7 @@ namespace Rector\Laravel\Tests\Rector\StaticCall\RequestStaticValidateToInjectRe
 
 use Illuminate\Http\Request;
 
-class SomeClass
+class Fixture
 {
     public function store()
     {
@@ -20,7 +20,7 @@ namespace Rector\Laravel\Tests\Rector\StaticCall\RequestStaticValidateToInjectRe
 
 use Illuminate\Http\Request;
 
-class SomeClass
+class Fixture
 {
     public function store(\Illuminate\Http\Request $request)
     {

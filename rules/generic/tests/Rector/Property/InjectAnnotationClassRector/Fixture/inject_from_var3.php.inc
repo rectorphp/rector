@@ -8,7 +8,7 @@ use Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\Foo;
 use Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\DifferntButFirstListed\Foo as BarFooLast;
 use DI\Annotation\Inject;
 
-class InjectFromVarWithTypeOfSameName
+class InjectFromVar3
 {
     /**
      * @Inject
@@ -37,7 +37,7 @@ use Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\Foo;
 use Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\DifferntButFirstListed\Foo as BarFooLast;
 use DI\Annotation\Inject;
 
-class InjectFromVarWithTypeOfSameName
+class InjectFromVar3
 {
     /**
      *

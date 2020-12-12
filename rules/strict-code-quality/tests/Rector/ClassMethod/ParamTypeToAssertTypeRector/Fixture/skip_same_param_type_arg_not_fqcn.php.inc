@@ -5,7 +5,7 @@ namespace Rector\StrictCodeQuality\Tests\Rector\ClassMethod\ParamTypeToAssertTyp
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 
-class SkipSomeClassSameTypeArgNotFQCN
+class SkipSameParamTypeArgNotFqcn
 {
     /**
      * @param PropertyFetch $propertyFetch

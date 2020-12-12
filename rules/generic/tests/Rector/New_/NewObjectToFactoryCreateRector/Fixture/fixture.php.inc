@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Fixtur
 
 use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClass;
 
-final class SomeController
+final class Fixture
 {
     public function default()
     {
@@ -20,7 +20,7 @@ namespace Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Fixtur
 
 use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClass;
 
-final class SomeController
+final class Fixture
 {
     private \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory;
     public function __construct(\Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory)

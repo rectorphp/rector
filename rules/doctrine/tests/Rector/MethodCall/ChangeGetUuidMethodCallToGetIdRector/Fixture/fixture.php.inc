@@ -4,7 +4,7 @@ namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetId
 
 use Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\Source\Car;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -22,7 +22,7 @@ namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetId
 
 use Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\Source\Car;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

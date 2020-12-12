@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

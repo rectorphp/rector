@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector\Fixture;
 
-class WithNoParamsOrUseClass
+class NoParamsOrUse
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class WithNoParamsOrUseClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector\Fixture;
 
-class WithNoParamsOrUseClass
+class NoParamsOrUse
 {
     public function run()
     {

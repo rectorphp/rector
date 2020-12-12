@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Include_\FollowRequireByDirRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -25,7 +25,7 @@ class SomeClass
 
 namespace Rector\CodingStyle\Tests\Rector\Include_\FollowRequireByDirRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

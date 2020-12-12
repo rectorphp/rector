@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\FunctionLike\RemoveAlwaysTrueCondition
 
 use stdClass;
 
-final class SomeClass
+final class Fixture
 {
     private $value;
 
@@ -29,7 +29,7 @@ namespace Rector\CodeQuality\Tests\Rector\FunctionLike\RemoveAlwaysTrueCondition
 
 use stdClass;
 
-final class SomeClass
+final class Fixture
 {
     private $value;
 

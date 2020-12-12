@@ -6,7 +6,7 @@ namespace Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor\F
 
 use Nette\DI\ContainerBuilder;
 
-final class SkipNoNFluentNetteContainerBuilder
+final class SkipNonFluentNetteContainerBuilder
 {
     public function run()
     {

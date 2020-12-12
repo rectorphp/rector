@@ -4,7 +4,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRect
 
 use Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass;
 
-class ClassNameNullableTypeClass
+class ClassnameNullableType
 {
     private ?AnotherClass $property;
 }
@@ -17,7 +17,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRect
 
 use Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass;
 
-class ClassNameNullableTypeClass
+class ClassnameNullableType
 {
     /**
      * @var \Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass|null

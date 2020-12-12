@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector\Fixture;
 
-class SomeClass
+class AnonymousClassWithoutParent
 {
     public function foo()
     {
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector\Fixture;
 
-class SomeClass
+class AnonymousClassWithoutParent
 {
     public function foo()
     {

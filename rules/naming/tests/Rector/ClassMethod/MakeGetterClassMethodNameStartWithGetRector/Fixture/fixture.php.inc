@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var string
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\Naming\Tests\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var string

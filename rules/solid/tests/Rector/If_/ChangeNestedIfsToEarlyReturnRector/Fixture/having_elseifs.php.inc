@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeNestedIfsToEarlyReturnRector\Fixture;
 
-class HavingElseIfs
+class HavingElseifs
 {
     public function run()
     {
@@ -24,7 +24,7 @@ class HavingElseIfs
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeNestedIfsToEarlyReturnRector\Fixture;
 
-class HavingElseIfs
+class HavingElseifs
 {
     public function run()
     {

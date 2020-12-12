@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\MethodCall\FormerNullableArgumentToScalarT
 
 use Rector\Generic\Tests\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector\Source\NowString;
 
-final class SomeClass
+final class Fixture
 {
     public function run(NowString $nowString)
     {
@@ -20,7 +20,7 @@ namespace Rector\Generic\Tests\Rector\MethodCall\FormerNullableArgumentToScalarT
 
 use Rector\Generic\Tests\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector\Source\NowString;
 
-final class SomeClass
+final class Fixture
 {
     public function run(NowString $nowString)
     {

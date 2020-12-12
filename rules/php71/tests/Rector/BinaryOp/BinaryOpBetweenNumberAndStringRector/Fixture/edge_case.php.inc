@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector\Fixture;
 
-class SkipVaribleThatCanChangeType
+class EdgeCase
 {
     public function run()
     {

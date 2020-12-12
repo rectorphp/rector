@@ -4,7 +4,7 @@ namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAcce
 
 use Nette\Application\UI\Form;
 
-class SelectBoxPresenter
+class SelectBox
 {
     public function run()
     {
@@ -22,7 +22,7 @@ namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAcce
 
 use Nette\Application\UI\Form;
 
-class SelectBoxPresenter
+class SelectBox
 {
     public function run()
     {

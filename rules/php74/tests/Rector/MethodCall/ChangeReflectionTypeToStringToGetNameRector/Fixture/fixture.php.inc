@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function go(\ReflectionFunction $reflectionFunction)
     {
@@ -20,7 +20,7 @@ class SomeClass
 
 namespace Rector\Php74\Tests\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function go(\ReflectionFunction $reflectionFunction)
     {

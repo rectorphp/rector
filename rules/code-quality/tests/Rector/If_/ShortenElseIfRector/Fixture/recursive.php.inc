@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class RecursiveClass
+class Recursive
 {
     /**
      * @var bool
@@ -46,7 +46,7 @@ class RecursiveClass
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class RecursiveClass
+class Recursive
 {
     /**
      * @var bool

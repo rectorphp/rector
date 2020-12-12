@@ -4,7 +4,7 @@ namespace Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Fixture;
 
 use Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -20,7 +20,7 @@ namespace Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Fixture;
 
 use Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

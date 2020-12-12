@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
-class AnyClass
+class Fixture10
 {
     public function reset()
     {
@@ -24,7 +24,7 @@ class AnyClass
 
 namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
-class AnyClass
+class Fixture10
 {
     public function reset()
     {

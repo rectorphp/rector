@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Fixtu
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-class ClassWithPublicInjects
+class Fixture4
 {
     /**
      * @DI\Inject
@@ -20,7 +20,7 @@ namespace Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Fixtu
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-class ClassWithPublicInjects
+class Fixture4
 {
     /**
      * @var \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface

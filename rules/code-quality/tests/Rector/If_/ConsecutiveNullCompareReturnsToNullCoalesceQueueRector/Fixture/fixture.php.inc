@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var int|null
@@ -47,7 +47,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var int|null

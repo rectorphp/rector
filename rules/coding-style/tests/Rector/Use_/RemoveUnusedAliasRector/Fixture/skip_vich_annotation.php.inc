@@ -13,7 +13,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @UniqueEntity("slug")
  * @Vich\Uploadable
  */
-class Entity
+class SkipVichAnnotation
 {
     /**
      * @var string

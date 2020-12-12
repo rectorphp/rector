@@ -6,7 +6,7 @@ namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionR
 
 use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactoryWithInterface;
 
-final class TheSameButWithImplements
+final class FixtureWithImplements
 {
     public function run()
     {
@@ -24,7 +24,7 @@ namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionR
 
 use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactoryWithInterface;
 
-final class TheSameButWithImplements implements \ParentSetterEnforcingInterface
+final class FixtureWithImplements implements \ParentSetterEnforcingInterface
 {
     /**
      * @var \Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactoryWithInterface

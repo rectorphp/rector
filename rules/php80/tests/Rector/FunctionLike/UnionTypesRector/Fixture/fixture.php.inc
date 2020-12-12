@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @param array|int $number
@@ -19,7 +19,7 @@ class SomeClass
 
 namespace Rector\Php80\Tests\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @param array|int $number

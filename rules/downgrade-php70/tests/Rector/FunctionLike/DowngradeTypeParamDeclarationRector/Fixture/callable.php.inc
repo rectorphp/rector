@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeParamDeclarationRector\Fixture;
 
-class CallableFunctionParam
+class Callable
 {
     public function run(callable $value)
     {

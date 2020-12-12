@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Fixture;
 
 use Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeContainerBuilder;
 
-class SomeClass2
+class Fixture2
 {
     public function create()
     {
@@ -21,7 +21,7 @@ namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Fixture;
 
 use Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeContainerBuilder;
 
-class SomeClass2
+class Fixture2
 {
     public function create()
     {

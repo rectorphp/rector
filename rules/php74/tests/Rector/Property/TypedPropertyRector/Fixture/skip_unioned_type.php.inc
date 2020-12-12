@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-class SkipUnionType
+class SkipUnionedType
 {
     /**
      * @var bool|int

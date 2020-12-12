@@ -4,7 +4,7 @@ namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\
 
 use Illuminate\Support\Facades\Response;
 
-class ExampleController
+class WithAsterisk
 {
     public function store()
     {
@@ -20,7 +20,7 @@ namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\
 
 use Illuminate\Support\Facades\Response;
 
-class ExampleController
+class WithAsterisk
 {
     private \Illuminate\Contracts\Routing\ResponseFactory $responseFactory;
     public function __construct(\Illuminate\Contracts\Routing\ResponseFactory $responseFactory)

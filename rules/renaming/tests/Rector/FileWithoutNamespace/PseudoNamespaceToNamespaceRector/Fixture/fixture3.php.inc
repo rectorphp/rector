@@ -1,6 +1,6 @@
 <?php
 
-class PHPUnit_Abc
+class Fixture3
 {
     public function run()
     {

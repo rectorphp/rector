@@ -2,7 +2,7 @@
 
 namespace Rector\Phalcon\Tests\Rector\MethodCall\DecoupleSaveMethodCallWithArgumentToAssignRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(\Phalcon\Mvc\Model $model, $data)
     {
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\Phalcon\Tests\Rector\MethodCall\DecoupleSaveMethodCallWithArgumentToAssignRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(\Phalcon\Mvc\Model $model, $data)
     {

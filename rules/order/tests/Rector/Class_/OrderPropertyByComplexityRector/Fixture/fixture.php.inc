@@ -4,7 +4,7 @@ namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Fixtu
 
 use Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Source\ComplexType;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var string
@@ -30,7 +30,7 @@ namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Fixtu
 
 use Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Source\ComplexType;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var string

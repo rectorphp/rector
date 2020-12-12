@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class SkipNoElseIfClass
+class SkipNoElseIf
 {
     /**
      * @var bool

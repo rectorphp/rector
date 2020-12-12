@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector\Fixture;
 
-abstract class AbstractClass
+abstract class Abstract
 {
     abstract protected function abstractProtectedFunctionName();
     public function publicFunctionName()
@@ -33,7 +33,7 @@ abstract class AbstractClass
 
 namespace Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector\Fixture;
 
-abstract class AbstractClass
+abstract class Abstract
 {
     abstract public function abstractPublicFunctionName();
     public function publicFunctionName()

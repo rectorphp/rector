@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class SomeClass
+class NoUsageInAnonymousClass
 {
     private $var;
     public function foo()
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class SomeClass
+class NoUsageInAnonymousClass
 {
     private $var;
     public function foo()

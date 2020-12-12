@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class OnlyOneIfBeforeClassMethodReturnClass
+class OnlyOneIfBeforeClassMethodReturn
 {
     public function canDrive(Car $car)
     {
@@ -24,7 +24,7 @@ class OnlyOneIfBeforeClassMethodReturnClass
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class OnlyOneIfBeforeClassMethodReturnClass
+class OnlyOneIfBeforeClassMethodReturn
 {
     public function canDrive(Car $car)
     {

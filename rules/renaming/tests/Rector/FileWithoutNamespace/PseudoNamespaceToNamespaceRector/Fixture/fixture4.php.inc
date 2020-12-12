@@ -2,7 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
-class SomeTestCase
+class Fixture4
 {
     /**
      * @return Synapse|\PHPUnit_Framework_MockObject_MockObject

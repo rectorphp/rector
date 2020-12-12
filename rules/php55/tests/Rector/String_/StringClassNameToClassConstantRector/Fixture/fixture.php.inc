@@ -2,7 +2,7 @@
 
 namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Fixture;
 
-class StringClassReference
+class Fixture
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class StringClassReference
 
 namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Fixture;
 
-class StringClassReference
+class Fixture
 {
     public function run()
     {

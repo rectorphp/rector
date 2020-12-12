@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
 
-class SomeClass
+class ChildElseif
 {
     public function run()
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
-class SomeClass
+class NoSlash
 {
     /**
      * Some text comment
@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
-class SomeClass
+class NoSlash
 {
     /**
      * Some text comment

@@ -6,7 +6,7 @@ namespace Rector\Nette\Tests\Rector\ClassMethod\RemoveParentAndNameFromComponent
 
 use Rector\Nette\Tests\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector\Source\SomeControlWithoutConstructorParentAndName;
 
-final class SkipAnotherParamInNewInstance
+final class SkipAnotherParamsInNewInstance
 {
     public function run()
     {

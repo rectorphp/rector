@@ -2,7 +2,7 @@
 
 namespace Rector\CakePHP\Tests\Rector\Namespace_\AppUsesStaticCallToUseStatementRector\Fixture;
 
-class ImportNamespacesUp
+class CakephpImportNamespacesUp
 {
     public function test()
     {
@@ -21,7 +21,7 @@ namespace Rector\CakePHP\Tests\Rector\Namespace_\AppUsesStaticCallToUseStatement
 
 use Foo\Lib\HtmlDomLib;
 use Foo\Lib\HtmlDomLibExt;
-class ImportNamespacesUp
+class CakephpImportNamespacesUp
 {
     public function test()
     {

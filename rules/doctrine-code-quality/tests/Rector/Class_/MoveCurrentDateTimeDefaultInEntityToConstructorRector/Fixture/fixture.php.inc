@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class User
+class Fixture
 {
     /**
      * @var DateTimeInterface
@@ -30,7 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class User
+class Fixture
 {
     /**
      * @var DateTimeInterface

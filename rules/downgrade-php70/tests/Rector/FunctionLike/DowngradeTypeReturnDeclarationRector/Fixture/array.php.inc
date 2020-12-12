@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector\Fixture;
 
-class ReturnArrayTypeOnClassMethod
+class Array
 {
     public function run(): array
     {
@@ -16,7 +16,7 @@ class ReturnArrayTypeOnClassMethod
 
 namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector\Fixture;
 
-class ReturnArrayTypeOnClassMethod
+class Array
 {
     /**
      * @return mixed[]

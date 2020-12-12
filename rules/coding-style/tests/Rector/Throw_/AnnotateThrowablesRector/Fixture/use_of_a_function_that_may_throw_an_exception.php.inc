@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixtur
 
 use function Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\i_throw_an_exception;
 
-class UseOfAFunctionThatThrowsAnException
+class UseOfAFunctionThatMayThrowAnException
 {
     public function iUseAFunctionThatMayThrowAnException()
     {
@@ -20,7 +20,7 @@ namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixtur
 
 use function Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\i_throw_an_exception;
 
-class UseOfAFunctionThatThrowsAnException
+class UseOfAFunctionThatMayThrowAnException
 {
     /**
      * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException

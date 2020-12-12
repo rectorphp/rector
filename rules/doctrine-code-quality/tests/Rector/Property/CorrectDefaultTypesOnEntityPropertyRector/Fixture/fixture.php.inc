@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class User
+class Fixture
 {
     /**
      * @ORM\Column(name="is_old", type="boolean")
@@ -26,7 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class User
+class Fixture
 {
     /**
      * @ORM\Column(name="is_old", type="boolean")

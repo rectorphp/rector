@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fi
 
 use ReflectionProperty;
 
-class ReflectionPropertyChange
+class ReflectinProperty
 {
     public function method(ReflectionProperty $propertyReflection)
     {
@@ -24,7 +24,7 @@ namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fi
 
 use ReflectionProperty;
 
-class ReflectionPropertyChange
+class ReflectinProperty
 {
     public function method(ReflectionProperty $reflectionProperty)
     {

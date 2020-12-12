@@ -2,7 +2,7 @@
 
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\CreateMockToCreateStubRector\Fixture;
 
-class SkipNonPHPUnit
+class SkipNonPhpunit
 {
     public function run()
     {

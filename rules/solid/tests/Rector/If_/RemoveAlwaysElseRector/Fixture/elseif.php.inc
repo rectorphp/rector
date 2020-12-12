@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SomeClass
+class Elseif
 {
     public function run()
     {
@@ -24,7 +24,7 @@ class SomeClass
 
 namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SomeClass
+class Elseif
 {
     public function run()
     {

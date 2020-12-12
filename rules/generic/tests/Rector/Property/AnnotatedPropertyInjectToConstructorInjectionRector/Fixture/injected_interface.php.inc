@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstruc
 
 use Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
 
-class ClassWithInjects4
+class InjectedInterface
 {
     /**
      * @var SomeProductWithInterface
@@ -21,7 +21,7 @@ namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstruc
 
 use Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
 
-class ClassWithInjects4
+class InjectedInterface
 {
     /**
      * @var SomeProductWithInterface

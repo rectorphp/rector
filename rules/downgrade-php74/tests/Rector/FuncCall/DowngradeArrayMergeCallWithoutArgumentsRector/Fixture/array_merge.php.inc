@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector\Fixture;
 
-class ArrayMergeClass
+class ArrayMerge
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class ArrayMergeClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector\Fixture;
 
-class ArrayMergeClass
+class ArrayMerge
 {
     public function run()
     {

@@ -4,7 +4,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropert
 
 use Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Source\SomeService as SignalSlotDispatcher;
 
-class SlotReplacement
+class SkipAlreadyUsed
 {
     /**
      * @var SignalSlotDispatcher

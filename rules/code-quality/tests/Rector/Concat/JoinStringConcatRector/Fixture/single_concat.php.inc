@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Concat\JoinStringConcatRector\Fixture;
 
-class SineConcat
+class SingleConcat
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class SineConcat
 
 namespace Rector\CodeQuality\Tests\Rector\Concat\JoinStringConcatRector\Fixture;
 
-class SineConcat
+class SingleConcat
 {
     public function run()
     {

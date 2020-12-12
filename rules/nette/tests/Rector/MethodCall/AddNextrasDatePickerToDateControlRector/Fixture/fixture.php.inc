@@ -4,7 +4,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\AddNextrasDatePickerToDateControl
 
 use Nette\Application\UI\Form;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -21,7 +21,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\AddNextrasDatePickerToDateControl
 
 use Nette\Application\UI\Form;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

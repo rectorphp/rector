@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
 
-class SomeClass
+class MoreStatements
 {
     public function run()
     {

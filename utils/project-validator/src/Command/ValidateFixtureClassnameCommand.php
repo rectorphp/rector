@@ -29,15 +29,21 @@ final class ValidateFixtureClassnameCommand extends Command
 
     /**
      * @var string
-     * @see https://regex101.com/r/IDSGdI/5
+     * @see https://regex101.com/r/IDSGdI/6
      */
-    private const CLASS_REGEX = '#(class|interface|trait) (\w+)\s+{$#msU';
+    private const CLASS_REGEX = '#(class) (\w+)\s+{$#msU';
 
     /**
      * @var string
-     * @see https://regex101.com/r/yv2Rul/2
+     * @see https://regex101.com/r/yv2Rul/3
      */
-    private const CLASS_WITH_EXTENDS_IMPLEMENTS_REGEX = '#(class|interface|trait) (\w+)\s+(extends|implements)\s+(\w+)\s+\{$#msU';
+    private const CLASS_WITH_EXTENDS_IMPLEMENTS_REGEX = '#(class) (\w+)\s+(extends|implements)\s+(\w+)\s+\{$#msU';
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/T5LUbA/1
+     */
+    private const CLASS_USE_TRAIT_REGEX = '#(class) (\w+)\s+{\s+use\s+(\w+);\s#msU';
 
     /**
      * @var FinderSanitizer
@@ -58,6 +64,17 @@ final class ValidateFixtureClassnameCommand extends Command
      * @var string
      */
     private $currentDirectory;
+
+    private const EXCLUDE_NAME = [
+        'string',
+        'false',
+        'resource',
+        'mixed',
+        'git_wrapper',
+        'this',
+        'object',
+        'array_item',
+    ];
 
     public function __construct(
         FinderSanitizer $finderSanitizer,
@@ -145,7 +162,16 @@ final class ValidateFixtureClassnameCommand extends Command
             return $incorrectClassNameFiles;
         }
 
-        $fileName          = substr($fixtureFile->getFileName(), 0, -8);
+        $fileName  = substr($fixtureFile->getFileName(), 0, -8);
+        if (in_array($fileName, self::EXCLUDE_NAME, true)) {
+            return $incorrectClassNameFiles;
+        }
+
+        $hasTrait = (bool) Strings::match($fileContent, self::CLASS_USE_TRAIT_REGEX);
+        if ($hasTrait) {
+            return $incorrectClassNameFiles;
+        }
+
         $expectedClassName = ucfirst(StaticRectorStrings::uppercaseUnderscoreToCamelCase($fileName));
         $incorrectClassName = $this->getClassName($matchAll);
         if ($expectedClassName === $incorrectClassName) {
@@ -172,7 +198,7 @@ final class ValidateFixtureClassnameCommand extends Command
         string $incorrectFileContent,
         string $expectedClassName
     ): void {
-        $newContent = str_replace($incorrectClassName, $expectedClassName, $incorrectFileContent);
+        $newContent = str_replace('class ' . $incorrectClassName, 'class ' . $expectedClassName, $incorrectFileContent);
         FileSystem::write((string) $incorrectClassNameFile, $newContent);
     }
 

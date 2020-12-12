@@ -2,7 +2,7 @@
 
 namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
-class MultipleMethods
+class MultipleListeners
 {
     public function callMe()
     {
@@ -23,7 +23,7 @@ class MultipleMethods
 
 namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
-class MultipleMethodsEventSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
+class MultipleListenersEventSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     public function callMe()
     {

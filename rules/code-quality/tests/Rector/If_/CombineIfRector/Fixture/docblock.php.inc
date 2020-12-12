@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
 
-class SomeClass
+class Docblock
 {
     public function run()
     {
@@ -30,7 +30,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
 
-class SomeClass
+class Docblock
 {
     public function run()
     {

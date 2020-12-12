@@ -4,7 +4,7 @@ namespace Rector\Restoration\Tests\Rector\Use_\RestoreFullyQualifiedNameRector\F
 
 use ShortClassOnly;
 
-class AnotherClass
+class Fixture
 {
 }
 
@@ -16,7 +16,7 @@ namespace Rector\Restoration\Tests\Rector\Use_\RestoreFullyQualifiedNameRector\F
 
 use Rector\Restoration\Tests\Rector\Use_\RestoreFullyQualifiedNameRector\Source\ShortClassOnly;
 
-class AnotherClass
+class Fixture
 {
 }
 

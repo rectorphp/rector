@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function __construct(string $value1, string $value2,)
     {
@@ -15,7 +15,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function __construct(string $value1, string $value2)
     {

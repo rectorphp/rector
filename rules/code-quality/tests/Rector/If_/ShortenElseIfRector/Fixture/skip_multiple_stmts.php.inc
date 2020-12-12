@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class SkipMultipleStmtsClass
+class SkipMultipleStmts
 {
     /**
      * @var bool

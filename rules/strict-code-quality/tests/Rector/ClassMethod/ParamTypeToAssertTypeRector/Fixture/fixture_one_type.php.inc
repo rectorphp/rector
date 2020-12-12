@@ -5,7 +5,7 @@ namespace Rector\StrictCodeQuality\Tests\Rector\ClassMethod\ParamTypeToAssertTyp
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 
-class SomeClassOneType
+class FixtureOneType
 {
     /**
      * @param PropertyFetch $node
@@ -25,7 +25,7 @@ namespace Rector\StrictCodeQuality\Tests\Rector\ClassMethod\ParamTypeToAssertTyp
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 
-class SomeClassOneType
+class FixtureOneType
 {
     /**
      * @param PropertyFetch $node

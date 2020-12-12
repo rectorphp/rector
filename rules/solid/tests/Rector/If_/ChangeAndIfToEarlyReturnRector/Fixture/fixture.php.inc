@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function canDrive(Car $car): void
     {
@@ -20,7 +20,7 @@ class SomeClass
 
 namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function canDrive(Car $car): void
     {

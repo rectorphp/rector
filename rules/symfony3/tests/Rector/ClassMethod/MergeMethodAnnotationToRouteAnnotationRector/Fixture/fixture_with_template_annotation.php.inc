@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ClassWithTemplateAnnotationController
+class FixtureWithTemplateAnnotation
 {
     /**
      * @Route("/show/{id}")
@@ -28,7 +28,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ClassWithTemplateAnnotationController
+class FixtureWithTemplateAnnotation
 {
     /**
      * @Route("/show/{id}", methods={"GET", "HEAD"})

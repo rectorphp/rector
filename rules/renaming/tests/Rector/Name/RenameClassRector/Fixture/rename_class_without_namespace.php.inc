@@ -1,6 +1,6 @@
 <?php
 
-class MyOldClass
+class RenameClassWithoutNamespace
 {
     /**
      * @return MyOldClass

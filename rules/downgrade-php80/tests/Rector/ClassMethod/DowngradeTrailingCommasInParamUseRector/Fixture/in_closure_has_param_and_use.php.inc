@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\Fixture;
 
-class InClosureUseHasParamAndUse
+class InClosureHasParamAndUse
 {
     public function run($param1, $param2, $value1, $value2)
     {
@@ -17,7 +17,7 @@ class InClosureUseHasParamAndUse
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\Fixture;
 
-class InClosureUseHasParamAndUse
+class InClosureHasParamAndUse
 {
     public function run($param1, $param2, $value1, $value2)
     {

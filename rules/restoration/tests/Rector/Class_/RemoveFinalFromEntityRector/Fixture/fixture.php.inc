@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-final class SomeClass
+final class Fixture
 {
 }
 
@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class SomeClass
+class Fixture
 {
 }
 

@@ -5,7 +5,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\F
 use Traversable;
 use ArrayIterator;
 
-class WithIteratorTypeFunctionItemClass
+class WithIteratorTypeFunctionItem
 {
     function getIterator(): Traversable
     {
@@ -27,7 +27,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\F
 use Traversable;
 use ArrayIterator;
 
-class WithIteratorTypeFunctionItemClass
+class WithIteratorTypeFunctionItem
 {
     function getIterator(): Traversable
     {

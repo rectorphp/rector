@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Fixt
 
 use A, B;
 
-class SomeClass
+class Fixture
 {
 }
 
@@ -16,7 +16,7 @@ namespace Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Fixt
 
 use A;
 use B;
-class SomeClass
+class Fixture
 {
 }
 

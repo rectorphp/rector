@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedPrivateConstantRector\Fixture;
 
-final class KeepStaticConstant
+final class UsedInTrait
 {
     use aTrait;
     private const SOME_CONSTANT = 5;

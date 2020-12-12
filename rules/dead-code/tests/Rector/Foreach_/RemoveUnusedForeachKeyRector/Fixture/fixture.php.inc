@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Foreach_\RemoveUnusedForeachKeyRector\Fixture;
 
-class RemoveUnusedForeachKey
+class Fixture
 {
     public function run()
     {
@@ -23,7 +23,7 @@ class RemoveUnusedForeachKey
 
 namespace Rector\DeadCode\Tests\Rector\Foreach_\RemoveUnusedForeachKeyRector\Fixture;
 
-class RemoveUnusedForeachKey
+class Fixture
 {
     public function run()
     {

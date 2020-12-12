@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
-class SkipReferenceInSerivceConfigurator
+class SkipReferenceInServiceConfigurator
 {
     public function run()
     {

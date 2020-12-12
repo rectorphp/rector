@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class FixtureEndByValueClass
+class FixtureEndByValue
 {
     public function run($string)
     {
@@ -17,7 +17,7 @@ class FixtureEndByValueClass
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class FixtureEndByValueClass
+class FixtureEndByValue
 {
     public function run($string)
     {

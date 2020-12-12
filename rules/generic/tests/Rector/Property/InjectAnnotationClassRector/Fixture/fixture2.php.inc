@@ -6,7 +6,7 @@ use Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInj
 use JMS\DiExtraBundle\Annotation as DI;
 use Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
 
-class ClassWithInjects7
+class Fixture2
 {
     /**
      * @var SomeInterface
@@ -31,7 +31,7 @@ use Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInj
 use JMS\DiExtraBundle\Annotation as DI;
 use Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
 
-class ClassWithInjects7
+class Fixture2
 {
     /**
      * @var SomeInterface

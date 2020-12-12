@@ -4,7 +4,7 @@ namespace Rector\Defluent\Tests\Rector\Return_\DefluentReturnMethodCallRector\Fi
 
 use Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
 
-class SomeClass
+class Fixture
 {
     public function someFunction()
     {
@@ -21,7 +21,7 @@ namespace Rector\Defluent\Tests\Rector\Return_\DefluentReturnMethodCallRector\Fi
 
 use Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
 
-class SomeClass
+class Fixture
 {
     public function someFunction()
     {

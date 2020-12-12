@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
-class SomeClass4
+class PropertyMaybeExistsAfterInstantiation
 {
     public function init()
     {
@@ -27,7 +27,7 @@ class SomeClass4
 
 namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
-class SomeClass4
+class PropertyMaybeExistsAfterInstantiation
 {
     public function init()
     {

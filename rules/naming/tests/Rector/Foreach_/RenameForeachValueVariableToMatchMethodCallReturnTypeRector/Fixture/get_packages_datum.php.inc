@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class GetPackagesData
+class GetPackagesDatum
 {
     public function run()
     {
@@ -31,7 +31,7 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class GetPackagesData
+class GetPackagesDatum
 {
     public function run()
     {

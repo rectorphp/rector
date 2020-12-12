@@ -4,7 +4,7 @@ namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEvent
 
 use Kdyby\Events\EventManager;
 
-final class SomeClass
+final class Fixture
 {
     /**
      * @var EventManager
@@ -31,7 +31,7 @@ namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEvent
 
 use Kdyby\Events\EventManager;
 
-final class SomeClass
+final class Fixture
 {
     /**
      * @var EventManager

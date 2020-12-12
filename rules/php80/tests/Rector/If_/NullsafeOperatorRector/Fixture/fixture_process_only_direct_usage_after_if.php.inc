@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class SomeClassProcessOnlyDirectUsageAfterIf
+class FixtureProcessOnlyDirectUsageAfterIf
 {
     public function f($o)
     {
@@ -33,7 +33,7 @@ class SomeClassProcessOnlyDirectUsageAfterIf
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class SomeClassProcessOnlyDirectUsageAfterIf
+class FixtureProcessOnlyDirectUsageAfterIf
 {
     public function f($o)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
-class IfConditionWithMethodCallInside
+class SkipMultipleMethodCallInsideIfCondition
 {
     public function run($arg1, $arg2)
     {

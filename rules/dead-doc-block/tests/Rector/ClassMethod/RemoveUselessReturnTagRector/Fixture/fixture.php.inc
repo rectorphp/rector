@@ -4,7 +4,7 @@ namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRec
 
 use stdClass;
 
-class SomeClass
+class Fixture
 {
     /**
      * @return stdClass
@@ -23,7 +23,7 @@ namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRec
 
 use stdClass;
 
-class SomeClass
+class Fixture
 {
     function foo(): stdClass
     {

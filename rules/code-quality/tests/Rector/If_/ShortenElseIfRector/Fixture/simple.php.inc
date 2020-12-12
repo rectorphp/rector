@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class SimpleClass
+class Simple
 {
     /**
      * @var bool
@@ -37,7 +37,7 @@ class SimpleClass
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class SimpleClass
+class Simple
 {
     /**
      * @var bool

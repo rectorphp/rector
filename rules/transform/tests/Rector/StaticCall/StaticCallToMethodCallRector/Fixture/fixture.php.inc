@@ -4,7 +4,7 @@ namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\
 
 use Nette\Utils\FileSystem;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -20,7 +20,7 @@ namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\
 
 use Nette\Utils\FileSystem;
 
-class SomeClass
+class Fixture
 {
     private \Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem;
     public function __construct(\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)

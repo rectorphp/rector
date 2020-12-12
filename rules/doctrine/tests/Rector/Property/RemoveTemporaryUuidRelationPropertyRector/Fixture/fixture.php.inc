@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class Column
+class Fixture
 {
     /**
      * @ORM\ManyToMany(targetEntity="Phonenumber")
@@ -31,7 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class Column
+class Fixture
 {
     /**
      * @ORM\ManyToMany(targetEntity="Phonenumber")

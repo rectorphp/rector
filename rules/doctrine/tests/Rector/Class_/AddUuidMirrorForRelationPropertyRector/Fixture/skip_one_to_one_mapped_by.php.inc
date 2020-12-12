@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class SkipOneToOne
+class SkipOneToOneMappedBy
 {
     /**
      * @ORM\OneToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\EntityOneToOne", cascade={"persist", "merge"}, mappedBy="skip")

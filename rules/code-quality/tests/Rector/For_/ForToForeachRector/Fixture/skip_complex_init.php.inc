@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
 
-class SkipComplexAssignmentInInit
+class SkipComplexInit
 {
     public function run($tokens)
     {

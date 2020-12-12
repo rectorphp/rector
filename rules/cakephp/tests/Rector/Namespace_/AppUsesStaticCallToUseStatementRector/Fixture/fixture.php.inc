@@ -4,7 +4,7 @@ namespace Rector\CakePHP\Tests\Rector\Namespace_\AppUsesStaticCallToUseStatement
 
 \App::uses('NotificationListener', 'Event');
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -20,7 +20,7 @@ namespace Rector\CakePHP\Tests\Rector\Namespace_\AppUsesStaticCallToUseStatement
 
 use Event\NotificationListener;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

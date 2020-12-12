@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\StringifyDefineRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(int $a)
     {
@@ -17,7 +17,7 @@ class SomeClass
 
 namespace Rector\Php72\Tests\Rector\FuncCall\StringifyDefineRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(int $a)
     {

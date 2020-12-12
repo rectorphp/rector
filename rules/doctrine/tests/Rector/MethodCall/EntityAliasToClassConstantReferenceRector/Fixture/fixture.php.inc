@@ -5,7 +5,7 @@ namespace Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantRefe
 use App\Entity\Post;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class PostRepository
+final class Fixture
 {
     /**
      * @var EntityManagerInterface
@@ -27,7 +27,7 @@ namespace Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantRefe
 use App\Entity\Post;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class PostRepository
+final class Fixture
 {
     /**
      * @var EntityManagerInterface

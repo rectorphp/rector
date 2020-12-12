@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class RectorRun
+class WithDoctrineAnnotations
 {
     /**
      * @ORM\Column(type="text")
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class RectorRun
+class WithDoctrineAnnotations
 {
     public function __construct(
         /**

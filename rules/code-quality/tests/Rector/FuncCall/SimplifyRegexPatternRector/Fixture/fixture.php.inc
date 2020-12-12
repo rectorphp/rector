@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyRegexPatternRector\Fi
 
 use Nette\Utils\Strings;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {
@@ -21,7 +21,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyRegexPatternRector\Fi
 
 use Nette\Utils\Strings;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {

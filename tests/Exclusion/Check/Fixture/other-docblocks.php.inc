@@ -3,7 +3,7 @@
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
 
-final class SomeController
+final class Other-docblocks
 {
     public function foo()
     {
@@ -28,7 +28,7 @@ final class SomeController
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
 
-final class SomeController
+final class Other-docblocks
 {
     public function foo()
     {

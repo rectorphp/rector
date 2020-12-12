@@ -4,7 +4,7 @@ namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
 
 use JMS\Serializer\Annotation as Serializer;
 
-class ClassAnnotationsSerializerIterableType
+class ClassAnnotationsSerializerType
 {
     /**
      * @Serializer\Type("array<Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass>")
@@ -20,7 +20,7 @@ namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
 
 use JMS\Serializer\Annotation as Serializer;
 
-class ClassAnnotationsSerializerIterableType
+class ClassAnnotationsSerializerType
 {
     /**
      * @Serializer\Type("array<Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass>")

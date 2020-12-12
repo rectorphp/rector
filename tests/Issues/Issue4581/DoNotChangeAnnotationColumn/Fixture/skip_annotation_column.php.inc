@@ -13,7 +13,7 @@ use App\Entity\Traits\TimestampableEntity;
  * @ORM\Table(name="sessions")
  * @ORM\Entity
  */
-class Session
+class SkipAnnotationColumn
 {
     /**
      * @ORM\Column(name="sess_id", type="string", length=128, nullable=false)

@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\FunctionLike\RemoveAlwaysTrueCondition
 
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 
-final class SkipAfterOverriden
+final class SkipAfterOverridden
 {
     /**
      * @var bool

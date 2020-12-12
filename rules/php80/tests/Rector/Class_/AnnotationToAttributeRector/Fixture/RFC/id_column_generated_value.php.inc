@@ -4,7 +4,7 @@ namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture\R
 
 use Doctrine\ORM\Mapping as ORM;
 
-class IdColumnGeneratedvalue
+class IdColumnGeneratedValue
 {
     /**
      * @ORM\Column(type="integer")
@@ -21,7 +21,7 @@ namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture\R
 
 use Doctrine\ORM\Mapping as ORM;
 
-class IdColumnGeneratedvalue
+class IdColumnGeneratedValue
 {
     #[@ORM\Column(type: 'integer')]
     #[@ORM\GeneratedValue]

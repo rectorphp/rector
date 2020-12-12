@@ -5,7 +5,7 @@ namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstruc
 use stdClass;
 use DateTimeInterface;
 
-class ClassWithInjects
+class Fixture
 {
     /**
      * @var stdClass
@@ -29,7 +29,7 @@ namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstruc
 use stdClass;
 use DateTimeInterface;
 
-class ClassWithInjects
+class Fixture
 {
     /**
      * @var stdClass

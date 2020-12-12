@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
 
-class SkipOtherUseOfLoopVar
+class OtherUseOfLoopVar
 {
     public function run($tokens)
     {
@@ -20,7 +20,7 @@ class SkipOtherUseOfLoopVar
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
 
-class SkipOtherUseOfLoopVar
+class OtherUseOfLoopVar
 {
     public function run($tokens)
     {

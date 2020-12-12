@@ -4,7 +4,7 @@ namespace Rector\Restoration\Tests\Rector\New_\CompleteMissingDependencyInNewRec
 
 use Rector\Restoration\Tests\Rector\New_\CompleteMissingDependencyInNewRector\Source\RandomValueObject;
 
-final class SomeClass
+final class Fixture
 {
     public function run()
     {
@@ -20,7 +20,7 @@ namespace Rector\Restoration\Tests\Rector\New_\CompleteMissingDependencyInNewRec
 
 use Rector\Restoration\Tests\Rector\New_\CompleteMissingDependencyInNewRector\Source\RandomValueObject;
 
-final class SomeClass
+final class Fixture
 {
     public function run()
     {

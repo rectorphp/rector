@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector\Fixture;
 
-class ProcessHasValue
+class FixtureProcessHasValueWithElseNull
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class ProcessHasValue
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector\Fixture;
 
-class ProcessHasValue
+class FixtureProcessHasValueWithElseNull
 {
     public function run()
     {

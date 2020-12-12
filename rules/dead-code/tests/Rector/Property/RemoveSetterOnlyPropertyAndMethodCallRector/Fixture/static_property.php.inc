@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\Fixture;
 
-class SomeClass
+class StaticProperty
 {
     public static $publicProperty;
     protected static $protectedProperty;
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\Fixture;
 
-class SomeClass
+class StaticProperty
 {
     public static $publicProperty;
     protected static $protectedProperty;

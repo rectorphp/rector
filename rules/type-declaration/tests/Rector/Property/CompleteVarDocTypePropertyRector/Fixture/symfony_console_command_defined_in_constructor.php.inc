@@ -4,7 +4,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropert
 
 use Symfony\Component\Console\Input\InputDefinition;
 
-final class CommandDefinedInConstructor
+final class SymfonyConsoleCommandDefinedInConstructor
 {
     private $definition;
 
@@ -34,7 +34,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropert
 
 use Symfony\Component\Console\Input\InputDefinition;
 
-final class CommandDefinedInConstructor
+final class SymfonyConsoleCommandDefinedInConstructor
 {
     /**
      * @var \Symfony\Component\Console\Input\InputDefinition

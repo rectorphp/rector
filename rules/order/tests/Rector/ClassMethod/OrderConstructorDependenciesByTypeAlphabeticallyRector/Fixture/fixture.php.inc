@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function __construct(
         LatteToTwigConverter $latteToTwigConverter,
@@ -19,7 +19,7 @@ class SomeClass
 
 namespace Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function __construct(
         LatteAndTwigFinder $latteAndTwigFinder,

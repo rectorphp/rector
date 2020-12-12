@@ -4,7 +4,7 @@ namespace Rector\Privatization\Tests\Rector\MethodCall\PrivatizeLocalGetterToPro
 
 use stdClass;
 
-class SkipDifferentObjectGetter
+class SkipDifferntObjectGetter
 {
     private $some;
 

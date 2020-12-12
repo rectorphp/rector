@@ -6,7 +6,7 @@ namespace Rector\Core\Tests\Issues\Issue3388\DoNotChangeAnnotationRouteLocalizat
 
 use Symfony\Component\Routing\Annotation\Route;
 
-class TestController
+class SkipAnnotationRouteLocalization
 {
     /**
      * @Route({

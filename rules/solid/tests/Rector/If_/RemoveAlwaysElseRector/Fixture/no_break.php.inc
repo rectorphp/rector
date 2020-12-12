@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SomeClass
+class NoBreak
 {
     public function run()
     {

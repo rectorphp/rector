@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Plus\RemoveDeadZeroAndOneOperationRector\Fixture;
 
-class Assigns
+class ZeroMinus
 {
     public function run(int $value)
     {
@@ -15,7 +15,7 @@ class Assigns
 
 namespace Rector\DeadCode\Tests\Rector\Plus\RemoveDeadZeroAndOneOperationRector\Fixture;
 
-class Assigns
+class ZeroMinus
 {
     public function run(int $value)
     {

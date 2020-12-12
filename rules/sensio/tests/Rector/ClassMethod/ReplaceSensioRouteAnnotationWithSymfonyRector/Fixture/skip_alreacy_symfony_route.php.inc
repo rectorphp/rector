@@ -4,7 +4,7 @@ namespace Rector\Sensio\Tests\Rector\ClassMethod\ReplaceSensioRouteAnnotationWit
 
 use Symfony\Component\Routing\Annotation\Route;
 
-final class SkipAlreadyRouteAnnotation
+final class SkipAlreacySymfonyRoute
 {
     /**
      * @Route()

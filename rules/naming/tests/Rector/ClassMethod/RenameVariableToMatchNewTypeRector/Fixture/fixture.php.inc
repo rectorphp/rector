@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRec
 
 use Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Source\DreamSearch;
 
-final class SomeClass
+final class Fixture
 {
     public function run()
     {
@@ -21,7 +21,7 @@ namespace Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRec
 
 use Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Source\DreamSearch;
 
-final class SomeClass
+final class Fixture
 {
     public function run()
     {

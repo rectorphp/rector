@@ -6,7 +6,7 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\F
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture;
 
-    class Baz
+    class KeepAnonymousClasses
     {
         public function test()
         {

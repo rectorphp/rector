@@ -2,7 +2,7 @@
 
 namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     function run()
     {
@@ -22,7 +22,7 @@ class SomeClass
 
 namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     function run()
     {

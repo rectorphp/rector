@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @Gedmo\Loggable
  */
-class SomeClass
+class Fixture
 {
     /**
      * @Gedmo\Versioned
@@ -30,7 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class SomeClass implements \Knp\DoctrineBehaviors\Contract\Entity\LoggableInterface
+class Fixture implements \Knp\DoctrineBehaviors\Contract\Entity\LoggableInterface
 {
     use \Knp\DoctrineBehaviors\Model\Loggable\LoggableTrait;
     /**

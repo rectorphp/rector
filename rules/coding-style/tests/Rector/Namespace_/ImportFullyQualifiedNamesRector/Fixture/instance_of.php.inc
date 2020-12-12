@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 
-final class ImportPartialInstanceOf
+final class InstanceOf
 {
     /**
      * @return string[]
@@ -36,7 +36,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 
-final class ImportPartialInstanceOf
+final class InstanceOf
 {
     /**
      * @return string[]

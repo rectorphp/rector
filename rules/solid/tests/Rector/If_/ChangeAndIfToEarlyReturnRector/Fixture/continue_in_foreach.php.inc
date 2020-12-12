@@ -5,7 +5,7 @@ namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 
-class ContinueInForeachClass
+class ContinueInForeach
 {
     private function refactorStmts(array $nodes): void
     {
@@ -26,7 +26,7 @@ namespace Rector\SOLID\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 
-class ContinueInForeachClass
+class ContinueInForeach
 {
     private function refactorStmts(array $nodes): void
     {

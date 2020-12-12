@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Fixture;
 
 use Rector;
 
-class ClassWithExternalConstant3 extends Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject
+class Fixture3 extends Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject
 {
     public $property;
 }
@@ -17,7 +17,7 @@ namespace Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Fixture;
 
 use Rector;
 
-class ClassWithExternalConstant3
+class Fixture3
 {
     use \Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
     public $property;

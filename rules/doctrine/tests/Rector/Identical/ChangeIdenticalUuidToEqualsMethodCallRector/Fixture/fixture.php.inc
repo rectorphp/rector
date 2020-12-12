@@ -4,7 +4,7 @@ namespace Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMeth
 
 use Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\Source\Building;
 
-class SomeClass
+class Fixture
 {
     public function match($checkedId): int
     {
@@ -23,7 +23,7 @@ namespace Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMeth
 
 use Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\Source\Building;
 
-class SomeClass
+class Fixture
 {
     public function match($checkedId): int
     {

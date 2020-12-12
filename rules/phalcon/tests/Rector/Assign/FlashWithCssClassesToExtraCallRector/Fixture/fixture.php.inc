@@ -2,7 +2,7 @@
 
 namespace Rector\Phalcon\Tests\Rector\Assign\FlashWithCssClassesToExtraCallRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class SomeClass
 
 namespace Rector\Phalcon\Tests\Rector\Assign\FlashWithCssClassesToExtraCallRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

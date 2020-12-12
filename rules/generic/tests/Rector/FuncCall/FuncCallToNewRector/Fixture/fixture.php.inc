@@ -2,7 +2,7 @@
 
 namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToNewRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToNewRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

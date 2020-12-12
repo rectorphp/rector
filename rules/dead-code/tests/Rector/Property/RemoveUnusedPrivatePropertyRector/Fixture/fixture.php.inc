@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public $publicProperty;
     protected $protectedProperty;
@@ -15,7 +15,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public $publicProperty;
     protected $protectedProperty;

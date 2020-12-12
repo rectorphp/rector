@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector\Fixture;
 
-class FirstClass
+class Fixture
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class FirstClass
 
 namespace Rector\Php74\Tests\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector\Fixture;
 
-class FirstClass
+class Fixture
 {
     public function run()
     {

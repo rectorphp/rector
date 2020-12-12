@@ -4,7 +4,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
-final class ClassWithClassProperty
+final class ClassProperty
 {
     /**
      * @var AnotherClass
@@ -20,7 +20,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
-final class ClassWithClassProperty
+final class ClassProperty
 {
     private \Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $anotherClass;
 }

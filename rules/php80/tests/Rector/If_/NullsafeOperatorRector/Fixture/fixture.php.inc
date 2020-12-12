@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function f($o)
     {
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function f($o)
     {

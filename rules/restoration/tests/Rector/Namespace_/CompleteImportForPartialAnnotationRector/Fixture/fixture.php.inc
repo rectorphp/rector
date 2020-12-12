@@ -2,7 +2,7 @@
 
 namespace Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnnotationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @ORM\Id
@@ -17,7 +17,7 @@ class SomeClass
 namespace Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnnotationRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-class SomeClass
+class Fixture
 {
     /**
      * @ORM\Id

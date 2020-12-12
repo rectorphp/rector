@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Class_\AddArrayDefaultToArrayPropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var int[]
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\CodingStyle\Tests\Rector\Class_\AddArrayDefaultToArrayPropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var int[]

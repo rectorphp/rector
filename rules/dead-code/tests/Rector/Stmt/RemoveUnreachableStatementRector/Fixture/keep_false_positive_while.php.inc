@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector\Fixture;
 
-class SomeFilter
+class KeepFalsePositiveWhile
 {
     public function filter($in, $out, &$consumed, $closing)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Php73\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector\Fixture;
 
-class SingleMissingVariable
+class ArrayArgumentWithSingleMissingVariable
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class SingleMissingVariable
 
 namespace Rector\Php73\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector\Fixture;
 
-class SingleMissingVariable
+class ArrayArgumentWithSingleMissingVariable
 {
     public function run()
     {

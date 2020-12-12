@@ -4,7 +4,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\F
 
 use ArrayIterator;
 
-class CombinedItemsClass
+class CombinedItems
 {
     public function run()
     {
@@ -21,7 +21,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\F
 
 use ArrayIterator;
 
-class CombinedItemsClass
+class CombinedItems
 {
     public function run()
     {

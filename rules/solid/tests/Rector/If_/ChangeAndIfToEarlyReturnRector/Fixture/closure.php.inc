@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 
-class ClosureClass
+class Closure
 {
     private function refactorStmts(array $nodes): array
     {
@@ -32,7 +32,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 
-class ClosureClass
+class Closure
 {
     private function refactorStmts(array $nodes): array
     {

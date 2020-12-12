@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\Method;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -31,7 +31,7 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchM
 
 use Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\Method;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

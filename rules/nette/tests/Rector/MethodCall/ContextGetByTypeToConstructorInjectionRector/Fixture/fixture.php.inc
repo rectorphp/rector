@@ -4,7 +4,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInje
 
 use Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\SomeTypeToInject;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var \Nette\DI\Container
@@ -25,7 +25,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInje
 
 use Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\SomeTypeToInject;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var \Nette\DI\Container

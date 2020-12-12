@@ -4,7 +4,7 @@ namespace Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityM
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
-class KeepDifferntMethods
+class KeepDifferentMethods
 {
     /**
      * @var ManagerRegistry

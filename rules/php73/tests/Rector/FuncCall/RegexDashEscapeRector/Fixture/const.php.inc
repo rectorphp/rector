@@ -2,7 +2,7 @@
 
 namespace Rector\Php73\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
-class ConstPattern
+class Const
 {
     const COMPAT_PATTERN = '#[-\w()]#';
     const NON_COMPAT_PATTERN = '#[\w-()]#';
@@ -20,7 +20,7 @@ class ConstPattern
 
 namespace Rector\Php73\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
-class ConstPattern
+class Const
 {
     const COMPAT_PATTERN = '#[-\w()]#';
     const NON_COMPAT_PATTERN = '#[\w\-()]#';

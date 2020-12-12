@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
 
-final class HeaderControl
+final class LocalProperty
 {
     private $titles = [];
 
@@ -33,7 +33,7 @@ final class HeaderControl
 
 namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
 
-final class HeaderControl
+final class LocalProperty
 {
     private $titles = [];
 

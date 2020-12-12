@@ -4,7 +4,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\RequestGetCookieDefaultArgumentTo
 
 use Nette\Http\Request;
 
-class SomeClass
+class Fixture
 {
     public function run(Request $request)
     {
@@ -20,7 +20,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\RequestGetCookieDefaultArgumentTo
 
 use Nette\Http\Request;
 
-class SomeClass
+class Fixture
 {
     public function run(Request $request)
     {

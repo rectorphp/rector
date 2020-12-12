@@ -2,7 +2,7 @@
 
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     public function run(): void
     {
@@ -17,7 +17,7 @@ final class SomeClass
 
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     public function run(): void
     {

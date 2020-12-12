@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="wohoo")
  */
-class SkipTooManyWithoutTargetEntityUuid
+class SkipToManyWithoutTargetEntityUuid
 {
     /**
      * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntityWithoutUuid", cascade={"persist", "merge"})

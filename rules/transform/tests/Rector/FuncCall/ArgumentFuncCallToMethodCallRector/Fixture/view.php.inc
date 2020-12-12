@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class SomeViewController
+class View
 {
     public function action()
     {
@@ -17,7 +17,7 @@ class SomeViewController
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class SomeViewController
+class View
 {
     private \Illuminate\Contracts\View\Factory $viewFactory;
     public function __construct(\Illuminate\Contracts\View\Factory $viewFactory)

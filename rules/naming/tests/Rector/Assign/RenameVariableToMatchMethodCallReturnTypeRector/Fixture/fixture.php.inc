@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallRetur
 
 use Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Source\FastRunner;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -26,7 +26,7 @@ namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallRetur
 
 use Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Source\FastRunner;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

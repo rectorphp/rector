@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-final class ClassWithProperty
+final class Property
 {
     /**
      * @var int
@@ -36,7 +36,7 @@ final class ClassWithProperty
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-final class ClassWithProperty
+final class Property
 {
     private int $count;
 

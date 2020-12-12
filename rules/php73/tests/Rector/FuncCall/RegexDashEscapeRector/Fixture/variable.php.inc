@@ -2,7 +2,7 @@
 
 namespace Rector\Php73\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
-class RegexInAVar
+class Variable
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class RegexInAVar
 
 namespace Rector\Php73\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
-class RegexInAVar
+class Variable
 {
     public function run()
     {

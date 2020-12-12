@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\Fixture;
 
-abstract class AbstractClass
+abstract class Abstract
 {
     private const PRIVATE_CONST = 'private';
     protected const PROTECTED_CONST = 'protected';
@@ -15,7 +15,7 @@ abstract class AbstractClass
 
 namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\Fixture;
 
-abstract class AbstractClass
+abstract class Abstract
 {
     public const PUBLIC_CONST = 'public';
     protected const PROTECTED_CONST = 'protected';

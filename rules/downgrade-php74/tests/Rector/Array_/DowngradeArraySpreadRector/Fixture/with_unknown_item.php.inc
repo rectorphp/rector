@@ -4,7 +4,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\F
 
 use ArrayIterator;
 
-class WithUnknownItemClass
+class WithUnknownItem
 {
     public function run()
     {
@@ -21,7 +21,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\F
 
 use ArrayIterator;
 
-class WithUnknownItemClass
+class WithUnknownItem
 {
     public function run()
     {

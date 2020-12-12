@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 use Me\Properly;
 
-class AlreadyWithDoubleImport
+class DoubleImport
 {
     public function create()
     {
@@ -32,7 +32,7 @@ use SomeAnother\AnotherClass;
 use SomeAnother\YetAnotherClass;
 use Me\Properly;
 
-class AlreadyWithDoubleImport
+class DoubleImport
 {
     public function create()
     {

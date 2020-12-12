@@ -2,7 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
 
-class MyClass
+class RenameClass
 {
     /**
      * @return MyClass

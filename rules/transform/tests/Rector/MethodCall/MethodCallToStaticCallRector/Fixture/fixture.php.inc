@@ -4,7 +4,7 @@ namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\
 
 use Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\AnotherDependency;
 
-final class SomeClass
+final class Fixture
 {
     private $anotherDependency;
 
@@ -27,7 +27,7 @@ namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\
 
 use Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\AnotherDependency;
 
-final class SomeClass
+final class Fixture
 {
     private $anotherDependency;
 

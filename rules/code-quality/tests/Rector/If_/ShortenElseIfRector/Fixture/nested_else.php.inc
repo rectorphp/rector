@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class NestedElseClass
+class NestedElse
 {
     /**
      * @var bool
@@ -39,7 +39,7 @@ class NestedElseClass
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class NestedElseClass
+class NestedElse
 {
     /**
      * @var bool

@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\IntvalToTypeCastRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {
@@ -20,7 +20,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\IntvalToTypeCastRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {

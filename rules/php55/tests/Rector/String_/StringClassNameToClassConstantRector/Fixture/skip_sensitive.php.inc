@@ -2,7 +2,7 @@
 
 namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Fixture;
 
-class SkipSensitiveName
+class SkipSensitive
 {
     public function run()
     {

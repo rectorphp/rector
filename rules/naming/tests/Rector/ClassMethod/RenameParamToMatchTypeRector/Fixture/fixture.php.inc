@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fi
 
 use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var EliteManager
@@ -25,7 +25,7 @@ namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fi
 
 use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var EliteManager

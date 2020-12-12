@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @Gedmo\Tree(type="nested")
  */
-class SomeClass
+class Fixture
 {
     /**
      * @Gedmo\TreeLeft
@@ -80,7 +80,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-class SomeClass implements \Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface
+class Fixture implements \Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface
 {
     use \Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait;
     /**

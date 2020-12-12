@@ -4,7 +4,7 @@ namespace Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Fixtu
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-class SomeController
+class Fixture
 {
     /**
      * @DI\Inject("entity.manager")
@@ -25,7 +25,7 @@ namespace Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Fixtu
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-class SomeController
+class Fixture
 {
     /**
      * @var \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeEntityManager

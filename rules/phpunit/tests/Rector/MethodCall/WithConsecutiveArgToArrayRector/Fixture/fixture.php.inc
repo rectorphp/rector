@@ -2,7 +2,7 @@
 
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\WithConsecutiveArgToArrayRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($one, $two)
     {
@@ -26,7 +26,7 @@ class SomeTestCase extends \PHPUnit\Framework\TestCase
 
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\WithConsecutiveArgToArrayRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($one, $two)
     {

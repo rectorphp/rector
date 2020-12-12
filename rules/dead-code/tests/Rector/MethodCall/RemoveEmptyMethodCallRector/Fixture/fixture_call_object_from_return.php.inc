@@ -4,7 +4,7 @@ namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fi
 
 use Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Source\EmptyMethod;
 
-class B
+class FixtureCallObjectFromReturn
 {
     private function getObj(): EmptyMethod
     {
@@ -27,7 +27,7 @@ namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fi
 
 use Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Source\EmptyMethod;
 
-class B
+class FixtureCallObjectFromReturn
 {
     private function getObj(): EmptyMethod
     {

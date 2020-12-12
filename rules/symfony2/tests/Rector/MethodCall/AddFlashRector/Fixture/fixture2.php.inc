@@ -4,7 +4,7 @@ namespace Rector\Symfony2\Tests\Rector\MethodCall\AddFlashRector\Fixture;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class AnyClass2
+class Fixture2
 {
     public function someAction(Request $request)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public float $x;
     public float $y;
@@ -25,7 +25,7 @@ class SomeClass
 
 namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function __construct(public float $x = 0.0, public float $y = 0.0, public float $z = 0.0)
     {

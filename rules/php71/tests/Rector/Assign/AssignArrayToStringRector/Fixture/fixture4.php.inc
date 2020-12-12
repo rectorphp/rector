@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
-class WithSomeInMethod
+class Fixture4
 {
     public function run()
     {
@@ -30,7 +30,7 @@ class WithSomeInMethod
 
 namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
-class WithSomeInMethod
+class Fixture4
 {
     public function run()
     {

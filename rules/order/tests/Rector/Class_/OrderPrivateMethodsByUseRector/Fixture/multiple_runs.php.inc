@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class MultipleRunsClass
+class MultipleRuns
 {
     public function refactor(Node $node): ?Node
     {
@@ -92,7 +92,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class MultipleRunsClass
+class MultipleRuns
 {
     public function refactor(Node $node): ?Node
     {

@@ -4,7 +4,7 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterT
 
 use Nette\Application\Request;
 
-final class SomeController
+final class Fixture
 {
     public function someAction(Request $request)
     {
@@ -25,7 +25,7 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterT
 
 use Nette\Application\Request;
 
-final class SomeController
+final class Fixture
 {
     public function someAction(Request $request)
     {

@@ -5,7 +5,7 @@ namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\F
 use Ramsey\Uuid\Uuid;
 use Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -27,7 +27,7 @@ namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\F
 use Ramsey\Uuid\Uuid;
 use Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

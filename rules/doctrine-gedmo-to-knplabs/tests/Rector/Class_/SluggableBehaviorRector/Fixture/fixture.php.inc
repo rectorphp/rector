@@ -4,7 +4,7 @@ namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\SluggableBehaviorRec
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
-class SomeClass
+class Fixture
 {
     /**
      * @Gedmo\Slug(fields={"name"})
@@ -30,7 +30,7 @@ namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\SluggableBehaviorRec
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
-class SomeClass implements \Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface
+class Fixture implements \Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface
 {
     use \Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
     /**

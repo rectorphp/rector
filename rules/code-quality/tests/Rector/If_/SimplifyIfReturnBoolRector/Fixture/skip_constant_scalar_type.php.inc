@@ -5,7 +5,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\NullType;
 
-class BooleanNullableButNonTruableType
+class SkipConstantScalarType
 {
     public function run(ConstantScalarType $type)
     {
@@ -30,7 +30,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\NullType;
 
-class BooleanNullableButNonTruableType
+class SkipConstantScalarType
 {
     public function run(ConstantScalarType $type)
     {

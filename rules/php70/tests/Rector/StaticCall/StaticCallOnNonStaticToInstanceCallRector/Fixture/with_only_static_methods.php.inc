@@ -4,7 +4,7 @@ namespace Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCa
 
 use Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\Source\WithOnlyStaticMethods;
 
-class TryWithReallyStaticMethod
+class WithOnlyStaticMethods
 {
     public function run()
     {

@@ -4,7 +4,7 @@ namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeReturnTypeOfClassMethod
 
 use Rector\Doctrine\Tests\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector\Source\Building;
 
-class SomeClass
+class Fixture
 {
     public function getBuildingId(): int
     {
@@ -22,7 +22,7 @@ namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeReturnTypeOfClassMethod
 
 use Rector\Doctrine\Tests\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector\Source\Building;
 
-class SomeClass
+class Fixture
 {
     public function getBuildingId(): \Ramsey\Uuid\UuidInterface
     {

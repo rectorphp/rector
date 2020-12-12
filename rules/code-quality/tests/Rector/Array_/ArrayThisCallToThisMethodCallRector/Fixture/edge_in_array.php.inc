@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRector\Fixture;
 
-final class Helpers
+final class EdgeInArray
 {
     public function provideFilters(): array
     {
@@ -23,7 +23,7 @@ final class Helpers
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRector\Fixture;
 
-final class Helpers
+final class EdgeInArray
 {
     public function provideFilters(): array
     {

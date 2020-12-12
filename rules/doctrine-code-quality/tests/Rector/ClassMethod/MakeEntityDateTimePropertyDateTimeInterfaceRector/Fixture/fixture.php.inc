@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class User
+class Fixture
 {
     /**
      * @var DateTime|null
@@ -35,7 +35,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class User
+class Fixture
 {
     /**
      * @var \DateTimeInterface|null

@@ -5,7 +5,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 use SomeAnother\AnotherClass;
 use Me\Properly;
 
-class AlreadyWithDoubleImportWithExisting
+class DoubleImportWithExisting
 {
     public function create()
     {
@@ -33,7 +33,7 @@ use SomeAnother\YetAnotherClass;
 use SomeAnother\AnotherClass;
 use Me\Properly;
 
-class AlreadyWithDoubleImportWithExisting
+class DoubleImportWithExisting
 {
     public function create()
     {

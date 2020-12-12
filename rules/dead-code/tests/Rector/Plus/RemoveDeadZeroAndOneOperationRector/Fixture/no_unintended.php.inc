@@ -3,7 +3,7 @@
 namespace Rector\DeadCode\Tests\Rector\Plus\RemoveDeadZeroAndOneOperationRector\Fixture;
 
 
-class SomeOtherClass
+class NoUnintended
 {
     private function do(int $var)
     {

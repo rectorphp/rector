@@ -5,7 +5,7 @@ namespace Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTy
 use Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\Source\Apple\Red;
 use Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\Source\Banana\Green;
 
-class IgnoreNamespaceClass
+class IgnoreNamespace
 {
     public function __construct(
         Red $red,
@@ -23,7 +23,7 @@ namespace Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTy
 use Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\Source\Apple\Red;
 use Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\Source\Banana\Green;
 
-class IgnoreNamespaceClass
+class IgnoreNamespace
 {
     public function __construct(
         Green $green,

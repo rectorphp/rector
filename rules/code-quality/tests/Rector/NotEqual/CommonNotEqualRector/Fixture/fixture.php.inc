@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\NotEqual\CommonNotEqualRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     public function run($one, $two)
     {
@@ -16,7 +16,7 @@ final class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\NotEqual\CommonNotEqualRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     public function run($one, $two)
     {

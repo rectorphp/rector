@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector\Fixture;
 
-class SomeClass
+class Fixture3
 {
     public function isntEmptyArray($values): bool
     {

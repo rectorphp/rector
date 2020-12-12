@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class SomeClass
+class Fixture
 {
     /**
      * @ORM\OneToMany(targetEntity="MarketingEvent")
@@ -26,7 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class SomeClass
+class Fixture
 {
     /**
      * @ORM\OneToMany(targetEntity="MarketingEvent")

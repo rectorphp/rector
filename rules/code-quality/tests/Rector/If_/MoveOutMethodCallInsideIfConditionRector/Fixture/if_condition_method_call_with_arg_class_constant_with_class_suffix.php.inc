@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfCondition
 
 use Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Source\SomeClassWithConstants;
 
-class IfConditionMethodCallWithArgClassConstantSuffixClass
+class IfConditionMethodCallWithArgClassConstantWithClassSuffix
 {
     public function run($arg)
     {
@@ -28,7 +28,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfCondition
 
 use Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Source\SomeClassWithConstants;
 
-class IfConditionMethodCallWithArgClassConstantSuffixClass
+class IfConditionMethodCallWithArgClassConstantWithClassSuffix
 {
     public function run($arg)
     {

@@ -4,7 +4,7 @@ namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\
 
 use Nette\Utils\FileSystem;
 
-class InConstructor
+class InConsturctor
 {
     public function __construct()
     {
@@ -20,7 +20,7 @@ namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\
 
 use Nette\Utils\FileSystem;
 
-class InConstructor
+class InConsturctor
 {
     public function __construct(\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {

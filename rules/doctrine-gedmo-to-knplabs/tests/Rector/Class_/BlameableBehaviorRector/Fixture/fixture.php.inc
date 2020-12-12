@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class SomeClass
+class Fixture
 {
     /**
      * @Gedmo\Blameable(on="create")
@@ -53,7 +53,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class SomeClass implements \Knp\DoctrineBehaviors\Contract\Entity\BlameableInterface
+class Fixture implements \Knp\DoctrineBehaviors\Contract\Entity\BlameableInterface
 {
     use \Knp\DoctrineBehaviors\Model\Blameable\BlameableTrait;
 }

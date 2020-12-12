@@ -5,7 +5,7 @@ namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Fixture;
 use DateTime as PhpDateTime;
 use DateTimeImmutable as PhpDateTimeImmutable;
 
-class DocBlock
+class DocBlockUniontype
 {
     /**
      * @var PhpDateTime|bool

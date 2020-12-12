@@ -6,7 +6,7 @@ namespace Rector\Core\Tests\Issues\Issue4274_4573\DoNotChangeAnnotationCallback\
 
 use Symfony\Component\Routing\Annotation\Route;
 
-class Controller
+class SkipSymfonyRouteAnnotation
 {
     /**
      * @Route("/route/{view}.{_format}", name="views.test", defaults={"_format": "json"}, methods={"POST"})

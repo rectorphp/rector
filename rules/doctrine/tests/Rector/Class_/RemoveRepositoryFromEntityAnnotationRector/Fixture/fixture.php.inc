@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="ProductRepository")
  */
-class Product
+class Fixture
 {
 }
 
@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class Product
+class Fixture
 {
 }
 
