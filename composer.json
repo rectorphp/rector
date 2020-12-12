@@ -142,7 +142,6 @@
             "Rector\\RectorGenerator\\": "packages/rector-generator/src",
             "Rector\\RemovingStatic\\": "rules/removing-static/src",
             "Rector\\Renaming\\": "rules/renaming/src",
-            "Rector\\Reporting\\": "packages/reporting/src",
             "Rector\\Restoration\\": "rules/restoration/src",
             "Rector\\SOLID\\": "rules/solid/src",
             "Rector\\Sensio\\": "rules/sensio/src",

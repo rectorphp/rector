@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\EventSubscriber;
+namespace Rector\Doctrine\PostRunner;
 
 use Nette\Utils\Json;
-use Rector\Core\EventDispatcher\Event\AfterProcessEvent;
+use Rector\Core\Contract\PostRunnerInterface;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * @deprecated Replace with interface. Remove whole event system to keep 1 less pattern for same thing
  */
-final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSubscriberInterface
+final class ReportEntitiesWithAddedPropertiesPostRunner implements PostRunnerInterface
 {
     /**
      * @var UuidMigrationDataCollector
@@ -41,7 +40,7 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
         $this->smartFileSystem = $smartFileSystem;
     }
 
-    public function reportEntities(): void
+    public function run(): void
     {
         $this->generatePropertiesJsonWithFileName(
             'uuid-migration-new-column-properties.json',
@@ -52,16 +51,6 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
             'uuid-migration-new-relation-properties.json',
             $this->uuidMigrationDataCollector->getRelationPropertiesByClass()
         );
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            AfterProcessEvent::class => 'reportEntities',
-        ];
     }
 
     /**

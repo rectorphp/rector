@@ -574,7 +574,6 @@ parameters:
                 - packages/better-php-doc-parser/src/PhpDocNode/PrintTagValueNodeTrait.php # 13
                 - packages/changes-reporting/src/Rector/AbstractRector/NotifyingRemovingNodeTrait.php # 17
                 - packages/post-rector/src/Rector/AbstractRector/NodeCommandersTrait.php # 31
-                - packages/reporting/src/Rector/AbstractRector/NodeReportCollectorTrait.php # 14
                 - rules/doctrine/src/AbstractRector/DoctrineTrait.php # 13
                 - src/Rector/AbstractRector/*
 
