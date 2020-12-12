@@ -40,7 +40,7 @@ class SomeClass
 {
     public function run()
     {
-        ++$style
+        ++$style;
     }
 }
 CODE_SAMPLE
