@@ -83,15 +83,21 @@ CODE_SAMPLE
         return null;
     }
 
+    private function isAnExpression(?Node $node = null): bool
+    {
+        return $node instanceof Node && $node instanceof Expression;
+    }
     /**
      * @param PostInc|PostDec $node
      */
-    private function processPreFor(Node $node, For_ $for): Node
+    private function processPrePost(Node $node): Node
     {
-        $for->loop = $this->processPrePost($node);
-        return $for->loop;
-    }
+        if ($node instanceof PostInc) {
+            return new PreInc($node->var);
+        }
 
+        return new PreDec($node->var);
+    }
     /**
      * @param PostInc|PostDec $node
      */
@@ -107,21 +113,12 @@ CODE_SAMPLE
 
         return $arrayDimFetch->dim;
     }
-
     /**
      * @param PostInc|PostDec $node
      */
-    private function processPrePost(Node $node): Node
+    private function processPreFor(Node $node, For_ $for): Node
     {
-        if ($node instanceof PostInc) {
-            return new PreInc($node->var);
-        }
-
-        return new PreDec($node->var);
-    }
-
-    private function isAnExpression(?Node $node = null): bool
-    {
-        return $node instanceof Node && $node instanceof Expression;
+        $for->loop = $this->processPrePost($node);
+        return $for->loop;
     }
 }
