@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\String_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -83,7 +81,9 @@ CODE_SAMPLE
 
         /** @var UnaryMinus $dim */
         $dim = $parentOfNextNode->dim;
-        $parentOfNextNode->dim = new Minus(new FuncCall(new Name('strlen'), [new Arg($string)]), $dim->expr);
+
+        $strlenFuncCall = $this->createFuncCall('strlen', [$string]);
+        $parentOfNextNode->dim = new Minus($strlenFuncCall, $dim->expr);
 
         return $string;
     }
@@ -104,10 +104,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $funcCall->args[2]->value = new Minus(
-            new FuncCall(new Name('strlen'), [new Arg($args[0]->value)]),
-            $args[2]->value->expr
-        );
+        $strlenFuncCall = $this->createFuncCall('strlen', [$args[0]]);
+        $funcCall->args[2]->value = new Minus($strlenFuncCall, $args[2]->value->expr);
 
         return $funcCall;
     }

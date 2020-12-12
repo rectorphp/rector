@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Rector\Generic\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -127,8 +124,7 @@ CODE_SAMPLE
 
     private function createParentStaticCall(string $method): Expression
     {
-        $staticCall = new StaticCall(new Name('parent'), new Identifier($method));
-
+        $staticCall = $this->createStaticCall('parent', $method);
         return new Expression($staticCall);
     }
 

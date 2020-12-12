@@ -155,7 +155,7 @@ CODE_SAMPLE
      */
     private function fillMissingArgumentsWithDefaultValues(array $args): array
     {
-        for ($i = 1; $i < $this->highestIndex; $i++) {
+        for ($i = 1; $i < $this->highestIndex; ++$i) {
             if (isset($args[$i])) {
                 continue;
             }

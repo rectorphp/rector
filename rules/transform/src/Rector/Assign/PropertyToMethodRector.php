@@ -33,6 +33,17 @@ final class PropertyToMethodRector extends AbstractRector implements Configurabl
 
     public function getRuleDefinition(): RuleDefinition
     {
+        $firstConfiguration = [
+            self::PROPERTIES_TO_METHOD_CALLS => [
+                new PropertyToMethod('SomeObject', 'property', 'getProperty', 'setProperty'),
+            ],
+        ];
+
+        $secondConfiguration = [
+            self::PROPERTIES_TO_METHOD_CALLS => [
+                new PropertyToMethod('SomeObject', 'property', 'getConfig', null, ['someArg']),
+            ],
+        ];
         return new RuleDefinition('Replaces properties assign calls be defined methods.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
@@ -45,11 +56,7 @@ $result = $object->getProperty();
 $object->setProperty($value);
 CODE_SAMPLE
                 ,
-                [
-                    self::PROPERTIES_TO_METHOD_CALLS => [
-                        new PropertyToMethod('SomeObject', 'property', 'getProperty', 'setProperty'),
-                    ],
-                ]
+                $firstConfiguration
             ),
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
@@ -60,11 +67,7 @@ CODE_SAMPLE
 $result = $object->getProperty('someArg');
 CODE_SAMPLE
                 ,
-                [
-                    self::PROPERTIES_TO_METHOD_CALLS => [
-                        new PropertyToMethod('SomeObject', 'property', 'getConfig', null, ['someArg']),
-                    ],
-                ]
+                $secondConfiguration
             ),
         ]);
     }
