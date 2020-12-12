@@ -4,7 +4,7 @@ namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRec
 
 use stdClass;
 
-class FixtureFqcnParamReturn
+class SomeClassFQCNParamReturn
 {
     /**
      * @return stdClass
@@ -23,7 +23,7 @@ namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRec
 
 use stdClass;
 
-class FixtureFqcnParamReturn
+class SomeClassFQCNParamReturn
 {
     function foo(): \stdClass
     {

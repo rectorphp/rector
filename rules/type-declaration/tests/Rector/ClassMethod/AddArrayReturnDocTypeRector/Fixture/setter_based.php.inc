@@ -4,7 +4,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeR
 
 use stdClass;
 
-class SetterBased
+class GetterBased
 {
     private $values;
 
@@ -30,7 +30,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeR
 
 use stdClass;
 
-class SetterBased
+class GetterBased
 {
     private $values;
 

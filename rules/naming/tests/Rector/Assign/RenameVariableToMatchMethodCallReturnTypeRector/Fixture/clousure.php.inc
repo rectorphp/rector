@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallRetur
 
 use DateTime;
 
-class Clousure
+class ClosureClass
 {
     public function run()
     {
@@ -24,7 +24,7 @@ namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallRetur
 
 use DateTime;
 
-class Clousure
+class ClosureClass
 {
     public function run()
     {

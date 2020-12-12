@@ -4,7 +4,7 @@ namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessParamTagRect
 
 use stdClass;
 
-class FixtureFqcnDocblock
+class SomeClassFQCNDocblock
 {
     /**
      * @param \stdClass $a
@@ -23,7 +23,7 @@ namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessParamTagRect
 
 use stdClass;
 
-class FixtureFqcnDocblock
+class SomeClassFQCNDocblock
 {
     function foo(stdClass $a)
     {

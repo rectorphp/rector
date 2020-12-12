@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector\Fixtur
 
 use stdClass;
 
-class Fixture3
+class SomeClass
 {
     public function run()
     {
@@ -29,7 +29,7 @@ namespace Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector\Fixtur
 
 use stdClass;
 
-class Fixture3
+class SomeClass
 {
     public function run()
     {

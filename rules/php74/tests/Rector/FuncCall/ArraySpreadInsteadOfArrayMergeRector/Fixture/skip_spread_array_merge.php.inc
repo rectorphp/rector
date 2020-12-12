@@ -4,7 +4,7 @@ namespace Rector\Php74\Tests\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRecto
 
 use stdClass;
 
-class SkipSpreadArrayMerge
+class SkipSpreadyArrayMerge
 {
     public function run()
     {

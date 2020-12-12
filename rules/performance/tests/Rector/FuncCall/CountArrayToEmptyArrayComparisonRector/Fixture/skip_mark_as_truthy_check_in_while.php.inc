@@ -4,7 +4,7 @@ namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayCompari
 
 use Countable;
 
-class SkipMarkAsTruthyCheckInWhile
+class SkipMarkTruthyCheckInWhile
 {
     public function run(Countable $c)
     {

@@ -4,7 +4,7 @@ namespace Rector\Restoration\Tests\Rector\ClassConstFetch\MissingClassConstantRe
 
 use NonExistingClass;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {
@@ -20,7 +20,7 @@ namespace Rector\Restoration\Tests\Rector\ClassConstFetch\MissingClassConstantRe
 
 use NonExistingClass;
 
-class Fixture
+class SomeClass
 {
     public function run()
     {

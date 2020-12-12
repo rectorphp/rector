@@ -4,7 +4,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\ConvertAddUploadWithThirdArgument
 
 use DateTime;
 
-final class SkipNotNetteFormsForm
+final class SkipSomeClass2
 {
     public function run()
     {

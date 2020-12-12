@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-final class ManyImports
+final class StockRepository
 {
     public function filter(Stock\Query $query)
     {
@@ -36,7 +36,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Stock\Query;
 use InvalidArgumentException;
-final class ManyImports
+final class StockRepository
 {
     public function filter(Query $query)
     {

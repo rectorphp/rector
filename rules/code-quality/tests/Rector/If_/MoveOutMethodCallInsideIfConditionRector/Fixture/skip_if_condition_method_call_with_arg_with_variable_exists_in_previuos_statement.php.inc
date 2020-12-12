@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfCondition
 
 use stdClass;
 
-class SkipIfConditionMethodCallWithArgWithVariableExistsInPreviuosStatement
+class SkipIfConditionMethodCallWithArgWithVariableExistsInPreviousStatement
 {
     public function run($arg, $objCondition)
     {
