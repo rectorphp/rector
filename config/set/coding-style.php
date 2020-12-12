@@ -22,6 +22,7 @@ use Rector\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRecto
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector;
 use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
+use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
@@ -69,4 +70,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CamelCaseFunctionNamingToUnderscoreRector::class);
     $services->set(SplitGroupedUseImportsRector::class);
     $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
+    $services->set(PostIncDecToPreIncDecRector::class);
 };
