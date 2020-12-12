@@ -7,7 +7,6 @@ use Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantR
 use Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 use Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector;
-use Rector\SOLID\Rector\If_\RemoveAlwaysElseRector;
 use Rector\SOLID\Rector\Property\AddFalseDefaultToBoolPropertyRector;
 use Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector;
 use Rector\SOLID\Rector\Variable\MoveVariableDeclarationNearReferenceRector;
@@ -22,7 +21,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
     $services->set(AddFalseDefaultToBoolPropertyRector::class);
     $services->set(RepeatedLiteralToClassConstantRector::class);
-    $services->set(RemoveAlwaysElseRector::class);
     $services->set(UseMessageVariableForSprintfInSymfonyStyleRector::class);
     $services->set(MoveVariableDeclarationNearReferenceRector::class);
 };
