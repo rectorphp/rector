@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Param;
@@ -80,15 +81,16 @@ CODE_SAMPLE
             StaticCall::class,
             FuncCall::class,
             MethodCall::class,
+            New_::class,
         ];
     }
 
     /**
-     * @param ClassMethod|Function_|Closure|FuncCall|MethodCall|StaticCall $node
+     * @param ClassMethod|Function_|Closure|FuncCall|MethodCall|StaticCall|New_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof MethodCall || $node instanceof FuncCall || $node instanceof StaticCall) {
+        if ($node instanceof MethodCall || $node instanceof FuncCall || $node instanceof StaticCall || $node instanceof New_) {
             return $this->processArgs($node);
         }
 
@@ -100,7 +102,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param FuncCall|MethodCall|StaticCall $node
+     * @param FuncCall|MethodCall|StaticCall|New_ $node
      */
     private function processArgs(Node $node): ?Node
     {
