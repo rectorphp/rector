@@ -1,0 +1,158 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\Symfony5\Rector\MethodCall;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
+/**
+ * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
+ * @see \Rector\Symfony5\Tests\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector\ReflectionExtractorEnableMagicCallExtractorRectorTest
+ */
+final class ReflectionExtractorEnableMagicCallExtractorRector extends AbstractRector
+{
+    private const OLD_OPTION_NAME = 'enable_magic_call_extraction';
+    private const NEW_OPTION_NAME = 'enable_magic_methods_extraction';
+
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Migrates from deprecated enable_magic_call_extraction context option in ReflectionExtractor', [
+            new CodeSample(
+                <<<'PHP'
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+
+class SomeClass
+{
+    public function run()
+    {
+        $reflectionExtractor = new ReflectionExtractor();
+        $readInfo = $reflectionExtractor->getReadInfo(Dummy::class, 'bar', [
+            'enable_magic_call_extraction' => true,
+        ]);
+    }
+}
+PHP
+                ,
+                <<<'PHP'
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+
+class SomeClass
+{
+    public function run()
+    {
+        $reflectionExtractor = new ReflectionExtractor();
+        $readInfo = $reflectionExtractor->getReadInfo(Dummy::class, 'bar', [
+            'enable_magic_methods_extraction' => PropertyAccessor::MAGIC_CALL | PropertyAccessor::MAGIC_GET | PropertyAccessor::MAGIC_SET,
+        ]);
+    }
+}
+PHP
+            ),
+        ]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [MethodCall::class];
+    }
+
+    /**
+     * @param MethodCall $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
+
+        $contextOptionValue = $this->getContextOptionValue($node);
+        if ($contextOptionValue === null) {
+            return null;
+        }
+
+        /** @var Array_ $contextOptions */
+        $contextOptions = $node->args[2]->value;
+        $contextOptions->items[] = new ArrayItem(
+            $this->prepareEnableMagicMethodsExtractionFlags($contextOptionValue),
+            new String_(self::NEW_OPTION_NAME),
+        );
+
+        return $node;
+    }
+
+    private function prepareEnableMagicMethodsExtractionFlags(bool $enableMagicCallExtractionValue): BitwiseOr
+    {
+        $magicGet = $this->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_GET');
+        $magicSet = $this->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_SET');
+        if (!$enableMagicCallExtractionValue) {
+            return new BitwiseOr($magicGet, $magicSet);
+        }
+
+        return new BitwiseOr(
+            new BitwiseOr(
+                $this->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_CALL'),
+                $magicGet,
+            ),
+            $magicSet,
+        );
+    }
+
+    private function getContextOptionValue(MethodCall $methodCall): ?bool
+    {
+        /** @var Array_ $contextOptions */
+        $contextOptions = $methodCall->args[2]->value;
+
+        $contextOptionValue = null;
+        /** @var ArrayItem $arrayItem */
+        foreach ($contextOptions->items as $index => $arrayItem) {
+            if ($arrayItem === null) {
+                continue;
+            }
+
+            if (!$arrayItem->key instanceof String_) {
+                continue;
+            }
+
+            if ($arrayItem->key->value !== self::OLD_OPTION_NAME) {
+                continue;
+            }
+
+            $contextOptionValue = $this->isTrue($arrayItem->value);
+            unset($contextOptions->items[$index]);
+        }
+
+        return $contextOptionValue;
+    }
+
+    private function shouldSkip(MethodCall $methodCall): bool
+    {
+        if (! $this->isObjectType($methodCall, 'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor')) {
+            return true;
+        }
+
+        if (! $this->isNames($methodCall->name, ['getWriteInfo', 'getReadInfo'])) {
+            return true;
+        }
+
+        if (count((array) $methodCall->args) < 3) {
+            return true;
+        }
+
+        /** @var Array_ $contextOptions */
+        $contextOptions = $methodCall->args[2]->value;
+
+        return count($contextOptions->items) === 0;
+    }
+}
