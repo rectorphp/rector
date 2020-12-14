@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Utils\ProjectValidator\Command;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use const PATHINFO_DIRNAME;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\PSR4\Composer\PSR4AutoloadPathsProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Rector\Core\Util\StaticRectorStrings;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ValidateFixtureClassnameCommand extends Command
 {
@@ -45,6 +45,17 @@ final class ValidateFixtureClassnameCommand extends Command
      */
     private const CLASS_USE_TRAIT_REGEX = '#^\s{0,}use\s+(\w+|[\w\\\\]+);$#msU';
 
+    private const EXCLUDE_NAME = [
+        'string',
+        'false',
+        'resource',
+        'mixed',
+        'git_wrapper',
+        'this',
+        'object',
+        'array_item',
+    ];
+
     /**
      * @var FinderSanitizer
      */
@@ -65,26 +76,22 @@ final class ValidateFixtureClassnameCommand extends Command
      */
     private $currentDirectory;
 
-    private const EXCLUDE_NAME = [
-        'string',
-        'false',
-        'resource',
-        'mixed',
-        'git_wrapper',
-        'this',
-        'object',
-        'array_item',
-    ];
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
 
     public function __construct(
         FinderSanitizer $finderSanitizer,
         PSR4AutoloadPathsProvider $psr4AutoloadPathsProvider,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        SmartFileSystem $smartFileSystem
     ) {
         $this->finderSanitizer = $finderSanitizer;
         $this->symfonyStyle = $symfonyStyle;
         $this->psr4autoloadPaths = $psr4AutoloadPathsProvider->provide();
         $this->currentDirectory = getcwd();
+        $this->smartFileSystem = $smartFileSystem;
 
         parent::__construct();
     }
@@ -116,7 +123,7 @@ final class ValidateFixtureClassnameCommand extends Command
             }
 
             // 2. reading file contents
-            $fileContent = (string) FileSystem::read((string) $fixtureFile);
+            $fileContent = $this->smartFileSystem->readFile((string) $fixtureFile);
             $matchAll = Strings::matchAll($fileContent, self::NAMESPACE_REGEX);
 
             if ($matchAll === []) {
@@ -124,7 +131,13 @@ final class ValidateFixtureClassnameCommand extends Command
             }
 
             if ($this->isFoundCorrectNamespace($matchAll, $expectedNamespace)) {
-                $incorrectClassNameFiles = $this->checkAndFixClassName($fileContent, $fixtureFile, $incorrectClassNameFiles, $expectedNamespace, $optionFix);
+                $incorrectClassNameFiles = $this->checkAndFixClassName(
+                    $fileContent,
+                    $fixtureFile,
+                    $incorrectClassNameFiles,
+                    $expectedNamespace,
+                    $optionFix
+                );
             }
         }
 
@@ -154,15 +167,20 @@ final class ValidateFixtureClassnameCommand extends Command
      * @param string[] $incorrectClassNameFiles
      * @return string[]
      */
-    private function checkAndFixClassName(string $fileContent, SmartFileInfo $fixtureFile, array $incorrectClassNameFiles, string $expectedNamespace, bool $optionFix): array
-    {
+    private function checkAndFixClassName(
+        string $fileContent,
+        SmartFileInfo $fixtureFile,
+        array $incorrectClassNameFiles,
+        string $expectedNamespace,
+        bool $optionFix
+    ): array {
         $matchAll = Strings::matchAll($fileContent, self::CLASS_REGEX);
 
         if ($matchAll === [] || count($matchAll) > 2) {
             return $incorrectClassNameFiles;
         }
 
-        $fileName  = substr($fixtureFile->getFileName(), 0, -8);
+        $fileName = substr($fixtureFile->getFileName(), 0, -8);
         if (in_array($fileName, self::EXCLUDE_NAME, true)) {
             return $incorrectClassNameFiles;
         }
@@ -200,7 +218,7 @@ final class ValidateFixtureClassnameCommand extends Command
         string $expectedClassName
     ): void {
         $newContent = str_replace('class ' . $incorrectClassName, 'class ' . $expectedClassName, $incorrectFileContent);
-        FileSystem::write((string) $incorrectClassNameFile, $newContent);
+        $this->smartFileSystem->dumpFile((string) $incorrectClassNameFile, $newContent);
     }
 
     /**

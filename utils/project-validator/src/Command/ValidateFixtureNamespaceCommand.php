@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Utils\ProjectValidator\Command;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use const PATHINFO_DIRNAME;
 use Rector\Core\Configuration\Option;
@@ -17,6 +16,7 @@ use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ValidateFixtureNamespaceCommand extends Command
 {
@@ -37,7 +37,7 @@ final class ValidateFixtureNamespaceCommand extends Command
     private $symfonyStyle;
 
     /**
-     * @var array<string, string>
+     * @var array<string, string>|array<string, string[]>
      */
     private $psr4autoloadPaths;
 
@@ -46,15 +46,22 @@ final class ValidateFixtureNamespaceCommand extends Command
      */
     private $currentDirectory;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
         FinderSanitizer $finderSanitizer,
         PSR4AutoloadPathsProvider $psr4AutoloadPathsProvider,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        SmartFileSystem $smartFileSystem
     ) {
         $this->finderSanitizer = $finderSanitizer;
         $this->symfonyStyle = $symfonyStyle;
         $this->psr4autoloadPaths = $psr4AutoloadPathsProvider->provide();
         $this->currentDirectory = getcwd();
+        $this->smartFileSystem = $smartFileSystem;
 
         parent::__construct();
     }
@@ -86,12 +93,8 @@ final class ValidateFixtureNamespaceCommand extends Command
             }
 
             // 2. reading file contents
-            $fileContent = (string) FileSystem::read((string) $fixtureFile);
+            $fileContent = $this->smartFileSystem->readFile((string) $fixtureFile);
             $matchAll = Strings::matchAll($fileContent, self::NAMESPACE_REGEX);
-
-            if ($matchAll === []) {
-                continue;
-            }
 
             if ($this->isFoundCorrectNamespace($matchAll, $expectedNamespace)) {
                 continue;
@@ -134,8 +137,12 @@ final class ValidateFixtureNamespaceCommand extends Command
         string $incorrectFileContent,
         string $expectedNamespace
     ): void {
-        $newContent = str_replace('namespace ' . $incorrectNamespace, 'namespace ' . $expectedNamespace, $incorrectFileContent);
-        FileSystem::write((string) $incorrectNamespaceFile, $newContent);
+        $newContent = str_replace(
+            'namespace ' . $incorrectNamespace,
+            'namespace ' . $expectedNamespace,
+            $incorrectFileContent
+        );
+        $this->smartFileSystem->dumpFile((string) $incorrectNamespaceFile, $newContent);
     }
 
     /**
@@ -167,7 +174,7 @@ final class ValidateFixtureNamespaceCommand extends Command
     {
         $relativePath = str_replace('/', '\\', dirname($relativePath, PATHINFO_DIRNAME));
         foreach ($this->psr4autoloadPaths as $prefix => $psr4autoloadPath) {
-            if ($psr4autoloadPath === $path) {
+            if (is_string($psr4autoloadPath) && $psr4autoloadPath === $path) {
                 return $prefix . $relativePath;
             }
         }
@@ -180,6 +187,10 @@ final class ValidateFixtureNamespaceCommand extends Command
      */
     private function isFoundCorrectNamespace(array $matchAll, string $expectedNamespace): bool
     {
+        if ($matchAll === []) {
+            return true;
+        }
+
         $countMatchAll = count($matchAll);
         if ($countMatchAll === 1 && $matchAll[0][1] === $expectedNamespace) {
             return true;
