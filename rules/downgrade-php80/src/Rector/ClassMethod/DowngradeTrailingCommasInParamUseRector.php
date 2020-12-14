@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -134,7 +135,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClosureUse[]|Param[] $array
+     * @param ClosureUse[]|Param[]|Arg[] $array
      */
     private function cleanTrailingComma(Node $node, array $array): Node
     {
