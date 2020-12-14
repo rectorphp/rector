@@ -15,7 +15,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeListReferenceAssignmentRector::class);
     $services->set(ChangePhpVersionInPlatformCheckRector::class)
         ->call('configure', [[
-            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70300,
+            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70200,
         ]]);
     $services->set(DowngradeTrailingCommasInFunctionCallsRector::class);
     $services->set(SetCookieOptionsArrayToArgumentsRector::class);
