@@ -67,9 +67,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $arg = null;
+        $arg = [];
         if (isset($node->args[0])) {
-            $arg = $node->args[0];
+            $arg = [$node->args[0]];
         }
 
         return $this->generateNewInstances($arg);
@@ -84,11 +84,11 @@ CODE_SAMPLE
         return ! $this->isName($new->class, 'Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper');
     }
 
-    private function generateNewInstances(?Arg $arg): New_
+    private function generateNewInstances(array $args): New_
     {
         $new = new New_(
             new FullyQualified('Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor'),
-            [$arg]
+            $args
         );
 
         return new New_(
