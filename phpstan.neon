@@ -99,7 +99,6 @@ services:
             requiredSeeTypes:
                 - PHPStan\Rules\Rule
                 - Rector\Core\Rector\AbstractRector
-                - Rector\FileSystemRector\Rector\AbstractFileSystemRector
 
     # this rule prevents bug in phar like these: https://github.com/rectorphp/rector/pull/3692/files
     -
@@ -173,7 +172,6 @@ parameters:
 
         # broken in PHPStan https://github.com/rectorphp/rector/runs/1305002460#step:5:56
         - packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
-        - packages/file-system-rector/src/Rector/AbstractFileSystemRector.php
         - packages/testing/src/PHPUnit/*.php
         - packages/node-type-resolver/tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
 
