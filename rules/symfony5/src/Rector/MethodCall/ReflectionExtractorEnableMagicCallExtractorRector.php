@@ -97,7 +97,7 @@ PHP
     {
         $magicGet = $this->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_GET');
         $magicSet = $this->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_SET');
-        if (!$enableMagicCallExtractionValue) {
+        if (! $enableMagicCallExtractionValue) {
             return new BitwiseOr($magicGet, $magicSet);
         }
 
