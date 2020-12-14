@@ -150,7 +150,6 @@ CODE_SAMPLE
         foreach ($ancestorAndInterfaces as $ancestorClassOrInterface) {
             /** @var string */
             $parentClassName = $ancestorClassOrInterface->getAttribute(AttributeKey::CLASS_NAME);
-            /** @var ClassMethod */
             $classMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
             /**
              * If it doesn't find the method, it's because the method
@@ -163,7 +162,7 @@ CODE_SAMPLE
              * The interface is also retrieve though, so that method
              * will eventually be refactored.
              */
-            if (!$classMethod) {
+            if ($classMethod === null) {
                 continue;
             }
             $this->removeParamTypeFromMethod($ancestorClassOrInterface, $position, $classMethod);
