@@ -20,15 +20,28 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReflectionExtractorEnableMagicCallExtractorRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
     private const OLD_OPTION_NAME = 'enable_magic_call_extraction';
+
+    /**
+     * @var string
+     */
     private const NEW_OPTION_NAME = 'enable_magic_methods_extraction';
+
+    /**
+     * @var string[]
+     */
     private const METHODS_WITH_OPTION = ['getWriteInfo', 'getReadInfo'];
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Migrates from deprecated enable_magic_call_extraction context option in ReflectionExtractor', [
-            new CodeSample(
-                <<<'PHP'
+        return new RuleDefinition(
+            'Migrates from deprecated enable_magic_call_extraction context option in ReflectionExtractor',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 
 class SomeClass
@@ -41,9 +54,9 @@ class SomeClass
         ]);
     }
 }
-PHP
-                ,
-                <<<'PHP'
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 
 class SomeClass
@@ -56,9 +69,10 @@ class SomeClass
         ]);
     }
 }
-PHP
-            ),
-        ]);
+CODE_SAMPLE
+                ),
+                
+            ]);
     }
 
     /**
@@ -93,21 +107,24 @@ PHP
         return $node;
     }
 
-    private function prepareEnableMagicMethodsExtractionFlags(bool $enableMagicCallExtractionValue): BitwiseOr
+    private function shouldSkip(MethodCall $methodCall): bool
     {
-        $magicGet = $this->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_GET');
-        $magicSet = $this->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_SET');
-        if (! $enableMagicCallExtractionValue) {
-            return new BitwiseOr($magicGet, $magicSet);
+        if (! $this->isObjectType($methodCall, 'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor')) {
+            return true;
         }
 
-        return new BitwiseOr(
-            new BitwiseOr(
-                $this->createClassConstFetch('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor', 'MAGIC_CALL'),
-                $magicGet,
-            ),
-            $magicSet,
-        );
+        if (! $this->isNames($methodCall->name, self::METHODS_WITH_OPTION)) {
+            return true;
+        }
+
+        if (count((array) $methodCall->args) < 3) {
+            return true;
+        }
+
+        /** @var Array_ $contextOptions */
+        $contextOptions = $methodCall->args[2]->value;
+
+        return $contextOptions->items === [];
     }
 
     private function getContextOptionValue(MethodCall $methodCall): ?bool
@@ -137,23 +154,29 @@ PHP
         return $contextOptionValue;
     }
 
-    private function shouldSkip(MethodCall $methodCall): bool
+    private function prepareEnableMagicMethodsExtractionFlags(bool $enableMagicCallExtractionValue): BitwiseOr
     {
-        if (! $this->isObjectType($methodCall, 'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor')) {
-            return true;
+        $classConstFetch = $this->createClassConstFetch(
+            'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
+            'MAGIC_GET'
+        );
+        $magicSet = $this->createClassConstFetch(
+            'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
+            'MAGIC_SET'
+        );
+        if (! $enableMagicCallExtractionValue) {
+            return new BitwiseOr($classConstFetch, $magicSet);
         }
 
-        if (! $this->isNames($methodCall->name, self::METHODS_WITH_OPTION)) {
-            return true;
-        }
-
-        if (count((array) $methodCall->args) < 3) {
-            return true;
-        }
-
-        /** @var Array_ $contextOptions */
-        $contextOptions = $methodCall->args[2]->value;
-
-        return count($contextOptions->items) === 0;
+        return new BitwiseOr(
+            new BitwiseOr(
+                $this->createClassConstFetch(
+                    'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
+                    'MAGIC_CALL'
+                ),
+                $classConstFetch,
+            ),
+            $magicSet,
+        );
     }
 }
