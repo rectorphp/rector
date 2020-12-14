@@ -8,10 +8,7 @@ class InConstructorCall
     {
         $codeSampleFrom = '...';
         $codeSampleTo = '...';
-        return new ConfiguredCodeSample(
-            $codeSampleFrom,
-            $codeSampleTo,
-        );
+        return new ConfiguredCodeSample($codeSampleFrom, $codeSampleTo, );
     }
 }
 
@@ -27,10 +24,7 @@ class InConstructorCall
     {
         $codeSampleFrom = '...';
         $codeSampleTo = '...';
-        return new ConfiguredCodeSample(
-            $codeSampleFrom,
-            $codeSampleTo
-        );
+        return new ConfiguredCodeSample($codeSampleFrom, $codeSampleTo);
     }
 }
 
