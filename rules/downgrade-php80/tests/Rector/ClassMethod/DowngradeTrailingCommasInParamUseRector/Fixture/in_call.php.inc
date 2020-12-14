@@ -2,11 +2,11 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\Fixture;
 
-class InConstructor
+class InCall
 {
-    public function getObject(): object
+    public function run(): void
     {
-        return new ConfiguredCodeSample('foo',);
+        var_dump('foo',);
     }
 }
 
@@ -16,11 +16,11 @@ class InConstructor
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\Fixture;
 
-class InConstructor
+class InCall
 {
-    public function getObject(): object
+    public function run(): void
     {
-        return new ConfiguredCodeSample('foo');
+        var_dump('foo');
     }
 }
 
