@@ -13,6 +13,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // [REQUIRED]
 
     $rectorRecipe = new RectorRecipe(
+        // [RECTOR CORE CONTRIBUTION - REQUIRED]
+        // package name, basically namespace part in `rules/<package>/src`, use PascalCase
+        'Naming',
+
         // name, basically short class name; use PascalCase
         'RenameMethodCallRector',
 
@@ -64,12 +68,6 @@ CODE_SAMPLE
 
     // is the rule configurable? add default configuration here
     // $rectorRecipe->setConfiguration(['SOME_CONSTANT_KEY' => ['before' => 'after']]);
-
-
-    // [RECTOR CORE CONTRIBUTION]
-    // [RECTOR CORE CONTRIBUTION - REQUIRED]
-    // package name, basically part namespace in `rule/<package>/src`, use PascalCase
-    $rectorRecipe->setPackage('Naming');
 
     // [RECTOR CORE CONTRIBUTION - OPTIONAL]
     // set the rule belongs to; is optional, because e.g. generic rules don't need a specific set to belong to

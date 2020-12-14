@@ -56,6 +56,7 @@ class SomeClass
         ]);
     }
 }
+<<<<<<< HEAD
 PHP
             ),
         ]);
