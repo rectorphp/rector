@@ -7,6 +7,10 @@ namespace Rector\DowngradePhp80\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -69,19 +73,42 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class, Function_::class, Closure::class];
+        return [
+            ClassMethod::class,
+            Function_::class,
+            Closure::class,
+            StaticCall::class,
+            FuncCall::class,
+            MethodCall::class,
+        ];
     }
 
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param ClassMethod|Function_|Closure|FuncCall|MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof MethodCall || $node instanceof FuncCall || $node instanceof StaticCall) {
+            return $this->processArgs($node);
+        }
+
         if ($node instanceof Closure) {
             $node = $this->processUses($node);
         }
 
         return $this->processParams($node);
+    }
+
+    /**
+     * @param FuncCall|MethodCall|StaticCall $node
+     */
+    private function processArgs(Node $node): ?Node
+    {
+        if ($node->args === []) {
+            return null;
+        }
+
+        return $this->cleanTrailingComma($node, $node->args);
     }
 
     private function processUses(Closure $node): Closure
@@ -95,6 +122,9 @@ CODE_SAMPLE
         return $clean;
     }
 
+    /**
+     * @param ClassMethod|Function_|Closure $node
+     */
     private function processParams(Node $node): ?Node
     {
         if ($node->params === []) {
@@ -105,7 +135,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClosureUse[]|Param[] $array
+     * @param ClosureUse[]|Param[]|Arg[] $array
      */
     private function cleanTrailingComma(Node $node, array $array): Node
     {
