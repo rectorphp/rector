@@ -137,4 +137,9 @@ final class Option
      * @var string
      */
     public const OPTION_CONFIG = 'config';
+
+    /**
+     * @var string
+     */
+    public const FIX = 'fix';
 }
