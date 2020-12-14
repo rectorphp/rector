@@ -75,25 +75,25 @@ CODE_SAMPLE
         return $this->generateNewInstances($arg);
     }
 
-    private function shouldSkip(New_ $new_): bool
+    private function shouldSkip(New_ $new): bool
     {
-        if (! $new_->class instanceof Name) {
+        if (! $new->class instanceof Name) {
             return true;
         }
 
-        return ! $this->isName($new_->class, 'Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper');
+        return ! $this->isName($new->class, 'Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper');
     }
 
     private function generateNewInstances(?Arg $arg): New_
     {
-        $propertyPathAccessor = new New_(
+        $new = new New_(
             new FullyQualified('Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor'),
             [$arg]
         );
 
         return new New_(
             new FullyQualified('Symfony\Component\Form\Extension\Core\DataMapper\DataMapper'),
-            [$this->createArg($propertyPathAccessor)]
+            [$this->createArg($new)]
         );
     }
 }
