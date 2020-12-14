@@ -19,6 +19,11 @@ final class DowngradeRectorConfig
         __DIR__ . '/../../vendor/symfony/cache/Messenger/EarlyExpirationHandler.php',
         __DIR__ . '/../../vendor/symfony/http-kernel/HttpKernelBrowser.php',
         __DIR__ . '/../../vendor/symfony/string/Slugger/AsciiSlugger.php',
+        // This class has an issue for PHP 7.1:
+        // https://github.com/rectorphp/rector/issues/4816#issuecomment-743209526
+        // It doesn't happen often, and Rector doesn't use it, so then
+        // we simply skip downgrading this class
+        __DIR__ . '/../../vendor/symfony/cache/Adapter/CouchbaseBucketAdapter.php',
     ];
     /**
      * Exclude paths when downgrading the Rector source code
