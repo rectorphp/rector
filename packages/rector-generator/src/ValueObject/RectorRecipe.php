@@ -243,9 +243,10 @@ final class RectorRecipe
     }
 
     /**
+     * For tests
      * @api
      */
-    private function setPackage(string $package): void
+    public function setPackage(string $package): void
     {
         if (is_file($package)) {
             $message = sprintf(
