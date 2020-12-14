@@ -13,6 +13,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeTypeReturnDeclarationRector::class);
     $services->set(ChangePhpVersionInPlatformCheckRector::class)
         ->call('configure', [[
-            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70000,
+            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 50600,
         ]]);
 };
