@@ -14,7 +14,7 @@ jobs:
             -   uses: actions/checkout@v2
 
             # see https://github.com/shivammathur/setup-php
-            -   uses: shivammathur/setup-php@v1
+            -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.4
                     coverage: none
@@ -37,7 +37,7 @@ jobs:
             -   run: composer dumpautoload
 
             # see https://github.com/shivammathur/setup-php
-            -   uses: shivammathur/setup-php@v1
+            -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.1
                     coverage: none
