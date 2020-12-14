@@ -126,6 +126,10 @@ final class ValidateFixtureClassnameCommand extends Command
             $fileContent = $this->smartFileSystem->readFile((string) $fixtureFile);
             $matchAll = Strings::matchAll($fileContent, self::NAMESPACE_REGEX);
 
+            if ($matchAll === []) {
+                continue;
+            }
+
             if ($this->isFoundCorrectNamespace($matchAll, $expectedNamespace)) {
                 $incorrectClassNameFiles = $this->checkAndFixClassName(
                     $fileContent,
@@ -259,10 +263,6 @@ final class ValidateFixtureClassnameCommand extends Command
      */
     private function isFoundCorrectNamespace(array $matchAll, string $expectedNamespace): bool
     {
-        if ($matchAll === []) {
-            return true;
-        }
-
         $countMatchAll = count($matchAll);
         if ($countMatchAll === 1 && $matchAll[0][1] === $expectedNamespace) {
             return true;
