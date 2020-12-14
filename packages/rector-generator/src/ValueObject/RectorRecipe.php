@@ -88,6 +88,7 @@ final class RectorRecipe
      * @param class-string[] $nodeTypes
      */
     public function __construct(
+        string $package,
         string $name,
         array $nodeTypes,
         string $description,
@@ -96,6 +97,7 @@ final class RectorRecipe
     ) {
         $this->isRectorRepository = file_exists(__DIR__ . '/../../../../vendor');
 
+        $this->setPackage($package);
         $this->setName($name);
         $this->setNodeTypes($nodeTypes);
 
@@ -207,23 +209,6 @@ final class RectorRecipe
     /**
      * @api
      */
-    public function setPackage(string $package): void
-    {
-        if (is_file($package)) {
-            $message = sprintf(
-                'The "%s()" method only accepts package name, file path "%s" given',
-                __METHOD__,
-                $package
-            );
-            throw new ShouldNotHappenException($message);
-        }
-
-        $this->package = $package;
-    }
-
-    /**
-     * @api
-     */
     public function addExtraFile(string $extraFileName, string $extraFileContent): void
     {
         $this->extraFileName = $extraFileName;
@@ -255,6 +240,24 @@ final class RectorRecipe
     public function setIsRectorRepository(bool $isRectorRepository): void
     {
         $this->isRectorRepository = $isRectorRepository;
+    }
+
+    /**
+     * For tests
+     * @api
+     */
+    public function setPackage(string $package): void
+    {
+        if (is_file($package)) {
+            $message = sprintf(
+                'The "%s()" method only accepts package name, file path "%s" given',
+                __METHOD__,
+                $package
+            );
+            throw new ShouldNotHappenException($message);
+        }
+
+        $this->package = $package;
     }
 
     private function setName(string $name): void

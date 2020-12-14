@@ -13,6 +13,7 @@ final class StaticRectorRecipeFactory
     public static function createRectorRecipe(bool $isRectorRepository): RectorRecipe
     {
         $rectorRecipe = new RectorRecipe(
+            'Utils',
             'WhateverRector',
             [MethodCall::class],
             'Change $service->arg(...) to $service->call(...)',
