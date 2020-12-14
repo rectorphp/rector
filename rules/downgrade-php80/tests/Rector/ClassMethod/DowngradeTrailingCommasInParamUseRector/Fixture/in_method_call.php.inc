@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\Fixture;
 
-class InCall
+class InMethodCall
 {
     public function run(): void
     {
@@ -16,7 +16,7 @@ class InCall
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\Fixture;
 
-class InCall
+class InMethodCall
 {
     public function run(): void
     {
