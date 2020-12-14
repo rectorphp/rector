@@ -10,11 +10,3 @@ services:
     -
         class: Rector\PHPStanExtensions\Rule\ConfigurableRectorRule
         tags: [phpstan.rules.rule]
-
-    -
-        class: Symplify\PHPStanRules\Rules\RequireClassTypeInClassMethodByTypeRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            requiredTypeInMethodByClass:
-                Rector\Core\Contract\Rector\PhpRectorInterface:
-                    getNodeTypes: 'PhpParser\Node'
