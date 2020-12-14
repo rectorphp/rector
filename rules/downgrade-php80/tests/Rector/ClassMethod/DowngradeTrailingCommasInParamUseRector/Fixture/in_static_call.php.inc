@@ -2,14 +2,14 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\Fixture;
 
-class InMethodCall
+class InStaticCall
 {
     public function run(): void
     {
-        $string = $this->getString('foo',);
+        $string = self::getString('foo',);
         // ...
     }
-    public function getString(...$params): string
+    public static function getString(...$params): string
     {
         return implode(', ', $params);
     }
@@ -21,14 +21,14 @@ class InMethodCall
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\Fixture;
 
-class InMethodCall
+class InStaticCall
 {
     public function run(): void
     {
-        $string = $this->getString('foo');
+        $string = self::getString('foo');
         // ...
     }
-    public function getString(...$params): string
+    public static function getString(...$params): string
     {
         return implode(', ', $params);
     }
