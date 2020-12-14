@@ -15,13 +15,14 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
+ * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyinfo
  * @see \Rector\Symfony5\Tests\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector\ReflectionExtractorEnableMagicCallExtractorRectorTest
  */
 final class ReflectionExtractorEnableMagicCallExtractorRector extends AbstractRector
 {
     private const OLD_OPTION_NAME = 'enable_magic_call_extraction';
     private const NEW_OPTION_NAME = 'enable_magic_methods_extraction';
+    private const METHODS_WITH_OPTION = ['getWriteInfo', 'getReadInfo'];
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -51,7 +52,7 @@ class SomeClass
     {
         $reflectionExtractor = new ReflectionExtractor();
         $readInfo = $reflectionExtractor->getReadInfo(Dummy::class, 'bar', [
-            'enable_magic_methods_extraction' => PropertyAccessor::MAGIC_CALL | PropertyAccessor::MAGIC_GET | PropertyAccessor::MAGIC_SET,
+            'enable_magic_methods_extraction' => ReflectionExtractor::MAGIC_CALL | ReflectionExtractor::MAGIC_GET | ReflectionExtractor::MAGIC_SET,
         ]);
     }
 }
@@ -121,7 +122,7 @@ PHP
                 continue;
             }
 
-            if (!$arrayItem->key instanceof String_) {
+            if (! $arrayItem->key instanceof String_) {
                 continue;
             }
 
@@ -142,7 +143,7 @@ PHP
             return true;
         }
 
-        if (! $this->isNames($methodCall->name, ['getWriteInfo', 'getReadInfo'])) {
+        if (! $this->isNames($methodCall->name, self::METHODS_WITH_OPTION)) {
             return true;
         }
 
