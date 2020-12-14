@@ -67,12 +67,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $arg = [];
-        if (isset($node->args[0])) {
-            $arg = [$node->args[0]];
-        }
-
-        return $this->generateNewInstances($arg);
+        return $this->generateNewInstances($node);
     }
 
     private function shouldSkip(New_ $new): bool
@@ -84,11 +79,16 @@ CODE_SAMPLE
         return ! $this->isName($new->class, 'Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper');
     }
 
-    private function generateNewInstances(array $args): New_
+    private function generateNewInstances(New_ $new): New_
     {
+        $arguments = [];
+        if (isset($new->args[0])) {
+            $arguments = [$new->args[0]];
+        }
+
         $new = new New_(
             new FullyQualified('Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor'),
-            $args
+            $arguments
         );
 
         return new New_(
