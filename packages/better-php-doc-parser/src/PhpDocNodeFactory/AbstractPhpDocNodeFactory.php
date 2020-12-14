@@ -11,7 +11,7 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
 use Rector\BetterPhpDocParser\AnnotationReader\NodeAnnotationReader;
 use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
-use Rector\BetterPhpDocParser\ValueObject\OpeningAndClosingSpace;
+use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
@@ -88,7 +88,7 @@ abstract class AbstractPhpDocNodeFactory
             return $namespacedTargetEntity;
         }
 
-        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType(
+        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType(
             $node,
             new ObjectType($targetEntity)
         );
@@ -103,7 +103,7 @@ abstract class AbstractPhpDocNodeFactory
     /**
      * Covers spaces like https://github.com/rectorphp/rector/issues/2110
      */
-    protected function matchCurlyBracketOpeningAndClosingSpace(string $annotationContent): OpeningAndClosingSpace
+    protected function matchCurlyBracketAroundSpaces(string $annotationContent): AroundSpaces
     {
         $match = Strings::match($annotationContent, self::OPENING_SPACE_REGEX);
         $openingSpace = $match['opening_space'] ?? '';
@@ -111,7 +111,7 @@ abstract class AbstractPhpDocNodeFactory
         $match = Strings::match($annotationContent, self::CLOSING_SPACE_REGEX);
         $closingSpace = $match['closing_space'] ?? '';
 
-        return new OpeningAndClosingSpace($openingSpace, $closingSpace);
+        return new AroundSpaces($openingSpace, $closingSpace);
     }
 
     private function getCleanedUpTargetEntity(string $targetEntity): string

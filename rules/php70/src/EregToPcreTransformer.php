@@ -222,13 +222,14 @@ final class EregToPcreTransformer
                 /** @var string $cls */
                 [$cls, $i] = $this->processCharacterClass($s, $i, $cls);
             } else {
-                $a = $s[$i++];
+                $a = $s[$i];
+                ++$i;
                 if ($a === '-' && ! $start && ! ($i < $l && $s[$i] === ']')) {
                     throw new InvalidEregException('"-" is invalid for the start character in the brackets');
                 }
                 if ($i < $l && $s[$i] === '-') {
+                    $b = $s[++$i];
                     ++$i;
-                    $b = $s[$i++];
                     if ($b === ']') {
                         $cls .= $this->_ere2pcre_escape($a) . '\-';
                         break;

@@ -25,7 +25,6 @@ use PHPStan\Type\Type;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\NotImplementedYetException;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -147,10 +146,7 @@ final class VariableNaming
             return $this->resolveFromPropertyFetch($node);
         }
 
-        if ($node instanceof MethodCall
-            || $node instanceof NullsafeMethodCall
-            || $node instanceof StaticCall
-        ) {
+        if ($node instanceof MethodCall || $node instanceof NullsafeMethodCall || $node instanceof StaticCall) {
             return $this->resolveFromMethodCall($node);
         }
 
@@ -248,21 +244,11 @@ final class VariableNaming
         return $varName . ucfirst($propertyName);
     }
 
+    /**
+     * @param MethodCall|NullsafeMethodCall|StaticCall $expr
+     */
     private function resolveFromMethodCall(Expr $expr): ?string
     {
-        if (! $expr instanceof MethodCall
-            && ! $expr instanceof NullsafeMethodCall
-            && ! $expr instanceof StaticCall
-        ) {
-            $allowedTypes = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
-
-            throw new ShouldNotHappenException(sprintf(
-                'Only "%s" are supported, "%s" given',
-                implode('", "', $allowedTypes),
-                get_class($expr)
-            ));
-        }
-
         if ($expr->name instanceof MethodCall) {
             return $this->resolveFromMethodCall($expr->name);
         }

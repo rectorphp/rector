@@ -53,7 +53,6 @@ final class ParsedClassConstFetchNodeCollector
         }
 
         $constantName = $this->nodeNameResolver->getName($node->name);
-
         if ($constantName === 'class' || $constantName === null) {
             // this is not a manual constant
             return;

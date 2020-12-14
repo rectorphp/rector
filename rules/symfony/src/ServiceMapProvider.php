@@ -64,8 +64,8 @@ final class ServiceMapProvider
 
     private function createServiceMapFromXml(string $fileContents): ServiceMap
     {
+        // "@" intentionally
         $xml = @simplexml_load_string($fileContents);
-
         if (! $xml) {
             throw new XmlContainerNotExistsException(sprintf(
                 'Container %s cannot be parsed', $this->getSymfonyContainerXmlPath()

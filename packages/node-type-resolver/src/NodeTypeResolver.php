@@ -189,7 +189,7 @@ final class NodeTypeResolver
             return $staticType;
         }
 
-        return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $staticType);
+        return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $staticType);
     }
 
     public function isNumberType(Node $node): bool

@@ -94,7 +94,9 @@ CODE_SAMPLE
         // The return type name could either be a classname, without the leading "\",
         // or one among the reserved identifiers ("static", "self", "iterable", etc)
         // To find out which is the case, check if this name exists as a class
-        $newType = ClassExistenceStaticHelper::doesClassLikeExist($parentReflectionMethodName) ? new FullyQualified($parentReflectionMethodName) : new Name($parentReflectionMethodName);
+        $newType = ClassExistenceStaticHelper::doesClassLikeExist($parentReflectionMethodName) ? new FullyQualified(
+            $parentReflectionMethodName
+        ) : new Name($parentReflectionMethodName);
 
         // Make it nullable?
         if ($node->returnType instanceof NullableType) {

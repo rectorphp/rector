@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Testing\Application;
 
-use Rector\Core\Configuration\ChangeConfiguration;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -17,13 +17,13 @@ final class EnabledRectorsProvider
     private $enabledRectorsWithConfiguration = [];
 
     /**
-     * @var ChangeConfiguration
+     * @var RenamedClassesDataCollector
      */
-    private $changeConfiguration;
+    private $renamedClassesDataCollector;
 
-    public function __construct(ChangeConfiguration $changeConfiguration)
+    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector)
     {
-        $this->changeConfiguration = $changeConfiguration;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
 
     /**
@@ -39,7 +39,9 @@ final class EnabledRectorsProvider
             return;
         }
         // only in unit tests
-        $this->changeConfiguration->setOldToNewClasses($configuration[RenameClassRector::OLD_TO_NEW_CLASSES] ?? []);
+        $this->renamedClassesDataCollector->setOldToNewClasses(
+            $configuration[RenameClassRector::OLD_TO_NEW_CLASSES] ?? []
+        );
     }
 
     public function reset(): void

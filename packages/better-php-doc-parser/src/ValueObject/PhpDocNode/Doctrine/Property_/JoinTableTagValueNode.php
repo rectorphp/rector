@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_;
 
-use Rector\BetterPhpDocParser\ValueObject\OpeningAndClosingSpace;
+use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpAttribute\Contract\ManyPhpAttributableTagNodeInterface;
@@ -38,14 +38,14 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     private $inverseJoinColumns = [];
 
     /**
-     * @var OpeningAndClosingSpace|null
+     * @var AroundSpaces|null
      */
-    private $inverseJoinColumnsOpeningAndClosingSpace;
+    private $inverseJoinColumnsAroundSpaces;
 
     /**
-     * @var OpeningAndClosingSpace|null
+     * @var AroundSpaces|null
      */
-    private $joinColumnsOpeningAndClosingSpace;
+    private $joinColumnsAroundSpaces;
 
     /**
      * @var string|null
@@ -62,16 +62,16 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         array $joinColumns = [],
         array $inverseJoinColumns = [],
         ?string $originalContent = null,
-        ?OpeningAndClosingSpace $joinColumnsOpeningAndClosingSpace = null,
-        ?OpeningAndClosingSpace $inverseJoinColumnsOpeningAndClosingSpace = null
+        ?AroundSpaces $joinColumnsAroundSpaces = null,
+        ?AroundSpaces $inverseJoinColumnsAroundSpaces = null
     ) {
         $this->name = $name;
         $this->schema = $schema;
         $this->joinColumns = $joinColumns;
         $this->inverseJoinColumns = $inverseJoinColumns;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
-        $this->inverseJoinColumnsOpeningAndClosingSpace = $inverseJoinColumnsOpeningAndClosingSpace;
-        $this->joinColumnsOpeningAndClosingSpace = $joinColumnsOpeningAndClosingSpace;
+        $this->inverseJoinColumnsAroundSpaces = $inverseJoinColumnsAroundSpaces;
+        $this->joinColumnsAroundSpaces = $joinColumnsAroundSpaces;
     }
 
     public function __toString(): string
@@ -151,28 +151,28 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         $items = [];
 
         if ($this->joinColumns !== []) {
-            if ($this->joinColumnsOpeningAndClosingSpace === null) {
+            if ($this->joinColumnsAroundSpaces === null) {
                 throw new ShouldNotHappenException();
             }
 
             $items[$joinColumnsKey] = $this->printNestedTag(
                 $this->joinColumns,
                 false,
-                $this->joinColumnsOpeningAndClosingSpace->getOpeningSpace(),
-                $this->joinColumnsOpeningAndClosingSpace->getClosingSpace()
+                $this->joinColumnsAroundSpaces->getOpeningSpace(),
+                $this->joinColumnsAroundSpaces->getClosingSpace()
             );
         }
 
         if ($this->inverseJoinColumns !== []) {
-            if ($this->inverseJoinColumnsOpeningAndClosingSpace === null) {
+            if ($this->inverseJoinColumnsAroundSpaces === null) {
                 throw new ShouldNotHappenException();
             }
 
             $items[$inverseJoinColumnsKey] = $this->printNestedTag(
                 $this->inverseJoinColumns,
                 false,
-                $this->inverseJoinColumnsOpeningAndClosingSpace->getOpeningSpace(),
-                $this->inverseJoinColumnsOpeningAndClosingSpace->getClosingSpace()
+                $this->inverseJoinColumnsAroundSpaces->getOpeningSpace(),
+                $this->inverseJoinColumnsAroundSpaces->getClosingSpace()
             );
         }
 

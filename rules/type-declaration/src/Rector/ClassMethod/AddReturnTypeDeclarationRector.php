@@ -44,6 +44,11 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
 
     public function getRuleDefinition(): RuleDefinition
     {
+        $arrayType = new ArrayType(new MixedType(), new MixedType());
+        $configuration = [
+            self::METHOD_RETURN_TYPES => [new AddReturnTypeDeclaration('SomeClass', 'getData', $arrayType)],
+        ];
+
         return new RuleDefinition('Changes defined return typehint of method and class.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
@@ -64,14 +69,7 @@ class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::METHOD_RETURN_TYPES => [
-                        new AddReturnTypeDeclaration('SomeClass', 'getData', new ArrayType(
-                            new MixedType(),
-                            new MixedType()
-                        )),
-                    ],
-                ]
+                $configuration
             ),
         ]);
     }

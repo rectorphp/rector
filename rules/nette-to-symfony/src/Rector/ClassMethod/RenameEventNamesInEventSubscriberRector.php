@@ -193,7 +193,7 @@ CODE_SAMPLE
 
     private function resolveClassConstAliasMatch(ArrayItem $arrayItem, EventInfo $eventInfo): bool
     {
-        foreach ($eventInfo->getOldClassConstAlaises() as $netteClassConst) {
+        foreach ($eventInfo->getOldClassConstAliases() as $netteClassConst) {
             $classConstFetchNode = $arrayItem->key;
             if ($classConstFetchNode === null) {
                 continue;

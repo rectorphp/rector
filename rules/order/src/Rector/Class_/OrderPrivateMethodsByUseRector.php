@@ -101,7 +101,7 @@ CODE_SAMPLE
 
         $attempt = 0;
         while (! $sortedAndOriginalClassMethods->hasOrderSame()) {
-            $attempt++;
+            ++$attempt;
             if ($attempt >= self::MAX_ATTEMPTS) {
                 throw new ShouldNotHappenException('Number of attempts to reorder the methods exceeded');
             }

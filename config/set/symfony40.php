@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Symfony\Rector\ConstFetch\ConstraintUrlOptionRector;
-use Rector\Symfony\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
-use Rector\Symfony\Rector\MethodCall\FormIsValidRector;
-use Rector\Symfony\Rector\MethodCall\ProcessBuilderGetProcessRector;
-use Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
-use Rector\Symfony\Rector\StaticCall\ProcessBuilderInstanceRector;
+use Rector\Symfony4\Rector\ConstFetch\ConstraintUrlOptionRector;
+use Rector\Symfony4\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
+use Rector\Symfony4\Rector\MethodCall\FormIsValidRector;
+use Rector\Symfony4\Rector\MethodCall\ProcessBuilderGetProcessRector;
+use Rector\Symfony4\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
+use Rector\Symfony4\Rector\StaticCall\ProcessBuilderInstanceRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

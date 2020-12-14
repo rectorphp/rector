@@ -8,11 +8,11 @@ class FixtureClass
     {
         compact('posts','units',);
         $this->setData('posts','units',);
+
         self::run('posts','units',);
+
         self::run('posts',
                   'units',);
-
-        $this->setOnClick("[Zip ID: {$modelid}]  {$e->getMessage($modelId,)}",);
     }
 }
 
@@ -28,10 +28,10 @@ class FixtureClass
     {
         compact('posts', 'units');
         $this->setData('posts', 'units');
-        self::run('posts', 'units');
+
         self::run('posts', 'units');
 
-        $this->setOnClick("[Zip ID: {$modelid}]  {{$e->getMessage($modelId)}}");
+        self::run('posts', 'units');
     }
 }
 

@@ -6,7 +6,8 @@ use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstant;
-use Rector\Symfony\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
+use Rector\Symfony5\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
+use Rector\Symfony5\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -28,6 +29,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
+    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
+    $services->set(PropertyAccessorCreationBooleanToFlagsRector::class);
+
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#security
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
@@ -39,5 +43,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
             ]),
         ]]);
-
 };

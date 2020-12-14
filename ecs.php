@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff;
+use PhpCsFixer\Fixer\Basic\Psr4Fixer;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
@@ -79,6 +80,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         UnusedVariableSniff::class,
         GlobalNamespaceImportFixer::class,
         MethodDeclarationSniff::class . '.Underscore',
+        UnaryOperatorSpacesFixer::class,
+        // breaks on-purpose annotated variables
+        ReturnAssignmentFixer::class,
+        // buggy with specific markdown snippet file in docs/rules_overview.md
+        ArrayListItemNewlineFixer::class,
+        BlankLineAfterOpeningTagFixer::class,
+        Psr4Fixer::class,
 
         PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
         CommentedOutCodeSniff::class . '.Found' => [
@@ -91,12 +99,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
             '*TypeResolverTest.php',
         ],
-        UnaryOperatorSpacesFixer::class,
-        // breaks on-purpose annotated variables
-        ReturnAssignmentFixer::class,
-        // buggy with specific markdown snippet file in docs/rules_overview.md
-        ArrayListItemNewlineFixer::class,
-        BlankLineAfterOpeningTagFixer::class,
 
         StrictComparisonFixer::class => [__DIR__ . '/rules/polyfill/src/ConditionEvaluator.php'],
 

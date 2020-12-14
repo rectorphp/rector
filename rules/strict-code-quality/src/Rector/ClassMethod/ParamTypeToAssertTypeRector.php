@@ -9,7 +9,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -175,15 +174,14 @@ CODE_SAMPLE
             }
 
             if (count($types) > 1) {
-                $assertStatements[] = new Expression(new StaticCall(new Name('\Webmozart\Assert\Assert'), 'isAnyOf', [
-                    new Arg(new Variable($key)),
-                    new Arg(new Array_($types)),
-                ]));
+                $args = [new Arg(new Variable($key)), new Arg(new Array_($types))];
+                $staticCall = $this->createStaticCall('Webmozart\Assert\Assert', 'isAnyOf', $args);
+                $assertStatements[] = new Expression($staticCall);
             } else {
-                $assertStatements[] = new Expression(new StaticCall(new Name('\Webmozart\Assert\Assert'), 'isAOf', [
-                    new Arg(new Variable($key)),
-                    new Arg(new ConstFetch(new Name($toBeProcessedType[0]))),
-                ]));
+                $args = [new Arg(new Variable($key)), new Arg(new ConstFetch(new Name($toBeProcessedType[0])))];
+
+                $staticCall = $this->createStaticCall('Webmozart\Assert\Assert', 'isAOf', $args);
+                $assertStatements[] = new Expression($staticCall);
             }
         }
 

@@ -14096,7 +14096,7 @@ Add false default to bool properties, to prevent null compare errors
 
 Changes if && to early return
 
-- class: `Rector\SOLID\Rector\If_\ChangeAndIfToEarlyReturnRector`
+- class: `Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector`
 
 ```diff
  class SomeClass
@@ -14125,7 +14125,7 @@ Changes if && to early return
 
 Change if/else value to early return
 
-- class: `Rector\SOLID\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector`
+- class: `Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector`
 
 ```diff
  class SomeClass
@@ -14151,7 +14151,7 @@ Change if/else value to early return
 
 Change nested ifs to foreach with continue
 
-- class: `Rector\SOLID\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector`
+- class: `Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector`
 
 ```diff
  class SomeClass
@@ -14184,7 +14184,7 @@ Change nested ifs to foreach with continue
 
 Change nested ifs to early return
 
-- class: `Rector\SOLID\Rector\If_\ChangeNestedIfsToEarlyReturnRector`
+- class: `Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector`
 
 ```diff
  class SomeClass
@@ -14395,7 +14395,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Split if statement, when if condition always break execution flow
 
-- class: `Rector\SOLID\Rector\If_\RemoveAlwaysElseRector`
+- class: `Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector`
 
 ```diff
  class SomeClass

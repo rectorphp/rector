@@ -72,7 +72,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             $indexesContent
         );
 
-        $indexesOpeningAndClosingSpace = $this->matchCurlyBracketOpeningAndClosingSpace($indexesContent);
+        $indexesAroundSpaces = $this->matchCurlyBracketAroundSpaces($indexesContent);
 
         $haveIndexesFinalComma = (bool) Strings::match($indexesContent, self::SPACE_BEFORE_CLOSING_BRACKET_REGEX);
         $uniqueConstraintsContent = $this->annotationContentResolver->resolveNestedKey(
@@ -80,9 +80,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             'uniqueConstraints'
         );
 
-        $uniqueConstraintOpeningAndClosingSpace = $this->matchCurlyBracketOpeningAndClosingSpace(
-            $uniqueConstraintsContent
-        );
+        $uniqueConstraintAroundSpaces = $this->matchCurlyBracketAroundSpaces($uniqueConstraintsContent);
 
         $uniqueConstraintTagValueNodes = $this->uniqueConstraintPhpDocNodeFactory->createUniqueConstraintTagValueNodes(
             $table->uniqueConstraints,
@@ -103,8 +101,8 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             $annotationContent,
             $haveIndexesFinalComma,
             $haveUniqueConstraintsFinalComma,
-            $indexesOpeningAndClosingSpace,
-            $uniqueConstraintOpeningAndClosingSpace
+            $indexesAroundSpaces,
+            $uniqueConstraintAroundSpaces
         );
     }
 }
