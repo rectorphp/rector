@@ -21,7 +21,7 @@ final class PropertyPathMapperToDataMapperRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes first argument of PropertyAccessor::__construct() to flags from boolean', [
+        return new RuleDefinition('Migrate from PropertyPathMapper to DataMapper and PropertyPathAccessor', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
