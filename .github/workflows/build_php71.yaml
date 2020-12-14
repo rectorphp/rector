@@ -36,13 +36,19 @@ jobs:
             # Regenerating the autoload files will remove vendor/composer/platform_check.php, otherwise executing bin/rector on 7.1 fails
             -   run: composer dumpautoload
 
-            # see https://github.com/shivammathur/setup-php
+            # Run all the tests on PHP 7.4 (because JUnit needs PHP 7.3+),
+            # but using Rector downgraded to PHP 7.1
+            -   run: vendor/bin/phpunit
+
+            # Test the downgraded Rector by running the default set on its own src
+            -   run: bin/rector process src --dry-run
+
+            # Switch to PHP 7.1 and run PHPStan to analyze the code,
+            # as to make sure no 7.2+ code was left behind (if there is, PHP will throw some error)
             -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.1
                     coverage: none
 
-            # -   run: composer install --ignore-platform-req=php
-            # -   run: composer phpstan
-            # For testing, run downgraded Rector over its own src, for ALL sets!
-            -   run: bin/rector process src --dry-run
+            -   run: composer install --ignore-platform-req=php
+            -   run: composer phpstan --level 0
