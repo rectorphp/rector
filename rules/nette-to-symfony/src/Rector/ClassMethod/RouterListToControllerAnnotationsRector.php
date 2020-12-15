@@ -38,6 +38,14 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private const ACTION_RENDER_NAME_MATCHING_REGEX = '#^(action|render)(?<short_action_name>.*?$)#sm';
 
+    // Package "nette/application" is required for DEV, might not exist for PROD
+    // $routeListClass = RouteList::class;
+
+    /**
+     * @var string
+     */
+    private const ROUTE_LIST_CLASS = '\Nette\Application\Routers\RouteList';
+
     /**
      * @var RouteInfoFactory
      */
@@ -139,11 +147,7 @@ CODE_SAMPLE
         }
 
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
-
-        // Package "nette/application" is required for DEV, might not exist for PROD
-        // $routeListClass = RouteList::class;
-        $routeListClass = '\Nette\Application\Routers\RouteList';
-        $routeListObjectType = new ObjectType($routeListClass);
+        $routeListObjectType = new ObjectType(self::ROUTE_LIST_CLASS);
         if (! $inferedReturnType->isSuperTypeOf($routeListObjectType)->yes()) {
             return null;
         }

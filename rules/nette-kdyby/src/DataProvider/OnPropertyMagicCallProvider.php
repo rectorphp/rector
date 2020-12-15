@@ -13,6 +13,14 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class OnPropertyMagicCallProvider
 {
+    // Package "nette/application" is required for DEV, might not exist for PROD
+    // $controlClass = Control::class;
+
+    /**
+     * @var string
+     */
+    private const CONTROL_CLASS = '\Nette\Application\UI\Control';
+
     /**
      * @var MethodCall[]
      */
@@ -85,12 +93,8 @@ final class OnPropertyMagicCallProvider
         if ($className === null) {
             return false;
         }
-
-        // Package "nette/application" is required for DEV, might not exist for PROD
-        // $controlClass = Control::class;
-        $controlClass = '\Nette\Application\UI\Control';
         // control event, inner only
-        if (is_a($className, $controlClass, true)) {
+        if (is_a($className, self::CONTROL_CLASS, true)) {
             return false;
         }
 
