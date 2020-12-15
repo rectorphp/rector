@@ -48,7 +48,7 @@ declare -A downgrade_php_rectorconfigs=( \
 # (only to-php73, no need for to-php74) or a same downgrade will be executed more than once
 # This logic is a bit redundant, but it enables to execute several config files on each package,
 # eg: defining the set to execute using `--set` in the CLI (not supported anymore)
-GROUP_RECTOR_CONFIGS="true"
+GROUP_RECTOR_CONFIGS=true
 
 ########################################################################
 # Helper functions
