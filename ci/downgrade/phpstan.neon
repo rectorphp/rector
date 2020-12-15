@@ -167,6 +167,8 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
+        - "*/tests/*"
+
         - */config.php
         - ../../packages/*/config/*
         - ../../tests/debug_functions.php
