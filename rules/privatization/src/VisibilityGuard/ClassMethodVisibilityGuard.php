@@ -39,7 +39,7 @@ final class ClassMethodVisibilityGuard
     }
 
     /**
-     * @return class-string[]
+     * @return class-string[]|bool[]
      */
     private function getParentClasses(Class_ $class): array
     {
