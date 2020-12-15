@@ -54,6 +54,9 @@ jobs:
             # Remove DEV dependencies
             -   run: composer install --ignore-platform-req=php --no-dev
 
+            # Rector without DEV needs phpstan.neon removed
+            -   run: rm phpstan.neon
+
             # Test the downgraded Rector by running the default set on its own src
             -   run: bin/rector process src --dry-run
 
