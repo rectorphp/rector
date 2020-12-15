@@ -7,12 +7,11 @@ namespace Rector\PHPStanExtensions\Rule;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Stmt\ClassLike;
+use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use Rector\PHPStanExtensions\NodeAnalyzer\SymfonyConfigRectorValueObjectResolver;
 use Rector\PHPStanExtensions\NodeAnalyzer\TypeAndNameAnalyzer;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\PathsAreNotTooLongRule\PathsAreNotTooLongRuleTest
@@ -27,20 +26,16 @@ final class PathsAreNotTooLongRule implements Rule
 
     public function getNodeType(): string
     {
-        return Classlike::class;
+        return FileNode::class;
     }
 
     /**
-     * @param Classlike $node
+     * @param FileNode $node
      * @return string[]
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        $fileName = $this->getRealPath($node);
-
-        if (!$fileName) {
-            return [];
-        }
+        $fileName = $scope->getFile();
 
         if (strlen($fileName) < self::MAX_LENGTH) {
             return [];
@@ -49,18 +44,5 @@ final class PathsAreNotTooLongRule implements Rule
 
         $errorMessage = sprintf(self::ERROR_MESSAGE, $fileName);
         return [$errorMessage];
-    }
-
-    /**
-     * @return false|string
-     */
-    private function getRealPath(Node $node)
-    {
-        $fileInfo = $node->getAttribute(SmartFileInfo::class);
-        if (! $fileInfo instanceof SmartFileInfo) {
-            return false;
-        }
-
-        return $fileInfo->getRealPath();
     }
 }
