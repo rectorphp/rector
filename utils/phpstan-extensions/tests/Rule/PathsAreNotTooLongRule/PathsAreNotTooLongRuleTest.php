@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanExtensions\Tests\Rule\KeepRectorNamespaceForRectorRule;
+namespace Rector\PHPStanExtensions\Tests\Rule\PathsAreNotTooLongRule;
 
 use Iterator;
 use PHPStan\Rules\Rule;
-use Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule;
+use Rector\PHPStanExtensions\Rule\PathsAreNotTooLongRule;
 use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
 final class PathsAreNotTooLongRuleTest extends AbstractServiceAwareRuleTestCase
