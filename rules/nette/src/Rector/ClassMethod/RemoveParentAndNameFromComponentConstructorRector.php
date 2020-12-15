@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\ClassMethod;
 
-use Nette\Application\UI\Control;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
@@ -125,7 +124,10 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        if (! $this->isInObjectType($classMethod, Control::class)) {
+        // Package "nette/application" is required for DEV, might not exist for PROD
+        // $controlClass = Control::class;
+        $controlClass = '\Nette\Application\UI\Control';
+        if (! $this->isInObjectType($classMethod, $controlClass)) {
             return null;
         }
 
