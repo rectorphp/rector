@@ -28,7 +28,7 @@ jobs:
                     args: zip -X -r build/rector-php71.zip . -x *.git* .* "*/\.*" build** ci** stubs** tests** "**/tests/\*"
             -   uses: actions/upload-artifact@v2
                 with:
-                    name: rector-php71
+                    name: rector-downgraded-code
                     path: build/rector-php71.zip
 
             # Avoid Composer v2 platform checks (composer.json requires PHP 7.2, but we run 7.1 below)
