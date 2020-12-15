@@ -7,7 +7,7 @@ namespace Rector\PHPStanExtensions\Rule;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use Rector\PHPStanExtensions\NodeAnalyzer\SymfonyConfigRectorValueObjectResolver;
@@ -31,7 +31,7 @@ final class PathsAreNotTooLongRule implements Rule
     }
 
     /**
-     * @param MethodCall $node
+     * @param Classlike $node
      * @return string[]
      */
     public function processNode(Node $node, Scope $scope): array
