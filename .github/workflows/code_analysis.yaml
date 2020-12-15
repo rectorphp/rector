@@ -22,7 +22,7 @@ jobs:
                         run: bin/rector show --config rector-ci.php --ansi
 
                     -
-                        name: Validate Fixtures Suffix
+                        name: Validate Fixtures
                         run: bin/rector validate-fixture-suffix --ansi
 
                     -
