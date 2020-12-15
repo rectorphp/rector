@@ -51,4 +51,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
             ]),
         ]]);
+
+    $services->set(RenameMethodRector::class)
+        ->call('configure', [[
+            new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken', 'setProviderKey', 'setFirewallName'),
+            new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken', 'getProviderKey', 'getFirewallName'),
+            new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\RememberMeToken', 'setProviderKey', 'setFirewallName'),
+            new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\RememberMeToken', 'getProviderKey', 'getFirewallName'),
+            new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken', 'setProviderKey', 'setFirewallName'),
+            new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken', 'getProviderKey', 'getFirewallName'),
+            new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken', 'setProviderKey', 'setFirewallName'),
+            new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken', 'getProviderKey', 'getFirewallName'),
+            new MethodCallRename('Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler', 'setProviderKey', 'setFirewallName'),
+            new MethodCallRename('Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler', 'getProviderKey', 'getFirewallName'),
+        ]]);
 };
