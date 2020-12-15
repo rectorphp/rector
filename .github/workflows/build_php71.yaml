@@ -48,7 +48,8 @@ jobs:
                     coverage: none
 
             # Change Composer's PHP requirement to 7.1
-            -   run: composer require php --ignore-platform-req=php
+            # In addition, Symfony Polyfill libraries are needed
+            -   run: composer require php symfony/polyfill-php72 symfony/polyfill-php73 --ignore-platform-req=php
 
             # Remove DEV dependencies
             -   run: composer install --ignore-platform-req=php --no-dev
