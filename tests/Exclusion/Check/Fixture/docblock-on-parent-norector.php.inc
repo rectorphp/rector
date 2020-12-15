@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Core\Tests\Exclusion\Check\Fixture;
+namespace Rector\Core\Tests\Rector\Exclusion\Check\DocBlockOnParentNoRector;
 
 
-final class DocblockOnParentNorector
+final class SomeController
 {
     public function foo()
     {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Core\Tests\Exclusion\Check\Fixture;
+namespace Rector\Core\Tests\Rector\Exclusion\Check\DocBlockOnSelfNoRector;
 
 
-final class DocblockOnSelfNoRector
+final class SomeController
 {
     /**
      * @noRector Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector

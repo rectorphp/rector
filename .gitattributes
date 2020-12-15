@@ -20,8 +20,6 @@ ecs.php export-ignore
 phpstan.neon export-ignore
 phpunit.xml export-ignore
 rector.php export-ignore
-# @see: https://github.com/rectorphp/rector/issues/4905
-bin/rector.php !export-ignore
 utils export-ignore
 stubs export-ignore
 
