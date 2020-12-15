@@ -48,7 +48,7 @@ jobs:
                     coverage: none
 
             # Change Composer's PHP requirement to 7.1
-            # -   run: composer require php --ignore-platform-req=php
+            -   run: composer require php --ignore-platform-req=php
 
             # Test the downgraded Rector by running the default set on its own src
             -   run: bin/rector process src --dry-run
