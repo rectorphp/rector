@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Php72\Rector\While_;
 
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
@@ -109,7 +110,7 @@ CODE_SAMPLE
             'stmts' => $node->stmts,
         ]);
 
-        /** @var array $comments */
+        /** @var Comment[] $comments */
         $comments = $node->getAttribute(AttributeKey::COMMENTS);
         $foreach->setAttribute(AttributeKey::COMMENTS, $comments);
 
