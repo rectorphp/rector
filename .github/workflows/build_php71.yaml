@@ -22,14 +22,10 @@ jobs:
             -   run: ./.github/workflows/scripts/downgrade_packages.sh 7.1
 
             # Upload the artifact so we can download and review the downgraded code
-            -   run: mkdir build
-            -   uses: montudor/action-zip@v0.1.0
-                with:
-                    args: zip -X -r build/rector-php71.zip . -x *.git* .* "*/\.*" build** tests**
             -   uses: actions/upload-artifact@v2
                 with:
                     name: rector-php71
-                    path: build/rector-php71.zip
+                    path: ./
 
             # Avoid Composer v2 platform checks (composer.json requires PHP 7.2, but we run 7.1 below)
             -   run: composer config platform-check false
