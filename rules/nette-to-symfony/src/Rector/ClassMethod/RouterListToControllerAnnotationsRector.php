@@ -44,7 +44,7 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      *
      * @var string
      */
-    private const ROUTE_LIST_CLASS = '\Nette\Application\Routers\RouteList';
+    private const ROUTE_LIST_CLASS = 'Nette\Application\Routers\RouteList';
 
     /**
      * @var RouteInfoFactory
