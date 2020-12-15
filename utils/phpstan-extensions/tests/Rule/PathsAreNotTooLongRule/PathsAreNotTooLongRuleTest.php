@@ -13,19 +13,18 @@ final class PathsAreNotTooLongRuleTest extends AbstractServiceAwareRuleTestCase
 {
     /**
      * @dataProvider provideData()
-     * @param array<string|string[]|int[]> $expectedErrorsWithLines
+     * @param array<string|string[]> $expectedError
      */
-    public function testRule(string $filePath, array $expectedErrorsWithLines): void
+    public function testRule(string $filePath, array $expectedError): void
     {
-        $this->analyse([$filePath], $expectedErrorsWithLines);
+        $this->analyse([$filePath], $expectedError);
     }
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Fixture/Rector/ClassInCorrectNamespaceRector.php', []];
-
-        $errorMessage = sprintf(KeepRectorNamespaceForRectorRule::ERROR_MESSAGE, 'WrongClass');
-        yield [__DIR__ . '/Fixture/Rector/WrongClass.php', [[$errorMessage, 7]]];
+        $fileName = 'PrettyLongClassNameWaaaaayyyTooLongFileNameWithLoooootsOfCharacters.php';
+        $errorMessage = sprintf(PathsAreNotTooLongRule::ERROR_MESSAGE, $fileName);
+        yield [__DIR__ . '/Fixture/Rector/'. fileName, [[$errorMessage]]];
     }
 
     protected function getRule(): Rule
