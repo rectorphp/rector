@@ -36,7 +36,7 @@ final class PathsAreNotTooLongRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        $fileName = $this->getFileName($node);
+        $fileName = $this->getRealPath($node);
 
         if (!$fileName) {
             return [];
@@ -54,13 +54,13 @@ final class PathsAreNotTooLongRule implements Rule
     /**
      * @return false|string
      */
-    private function getFileName(Node $node)
+    private function getRealPath(Node $node)
     {
         $fileInfo = $node->getAttribute(SmartFileInfo::class);
         if (! $fileInfo instanceof SmartFileInfo) {
             return false;
         }
 
-        return $fileInfo->getFilename();
+        return $fileInfo->getRealPath();
     }
 }
