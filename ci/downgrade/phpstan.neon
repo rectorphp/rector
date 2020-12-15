@@ -147,11 +147,11 @@ parameters:
 
     paths:
         # - bin
-        - src
-        - rules
-        - packages
+        - ../../src
+        - ../../rules
+        - ../../packages
         # - tests
-        - utils
+        - ../../utils
         # this cannot be put it, because it wipes PHPStan cache on each run :( - must run in separate
         #- config
 
@@ -168,24 +168,24 @@ parameters:
 
     excludes_analyse:
         - */config.php
-        - packages/*/config/*
-        - tests/debug_functions.php
+        - ../../packages/*/config/*
+        - ../../tests/debug_functions.php
 
         # broken in PHPStan https://github.com/rectorphp/rector/runs/1305002460#step:5:56
-        - packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
-        - packages/testing/src/PHPUnit/*.php
-        - packages/node-type-resolver/tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
+        - ../../packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
+        - ../../packages/testing/src/PHPUnit/*.php
+        - ../../packages/node-type-resolver/tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
 
         # phsptan bug
-        - utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
-        - packages/rector-generator/templates/*
+        - ../../utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
+        - ../../packages/rector-generator/templates/*
         # this invalidates whole cache everytime
-        - 'packages/symfony-php-config/*'
-        - 'packages/simple-php-doc-parser'
+        - '../../packages/symfony-php-config/*'
+        - '../../packages/simple-php-doc-parser'
 
         # generated files
-        - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
-        - 'packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
+        - '../../packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
+        - '../../packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
 
         - "*/Expected/*"
         # complex printer
@@ -198,7 +198,7 @@ parameters:
         - '*/tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Expected/Just*ExceptionWithoutNamespace.php'
 
         # tests
-        - tests/DependencyInjection/config
+        - ../../tests/DependencyInjection/config
 
     ignoreErrors:
         # false positive
