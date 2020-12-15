@@ -47,6 +47,14 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private const ROUTE_LIST_CLASS = '\Nette\Application\Routers\RouteList';
 
     /**
+     * Package "nette/application" is required for DEV, might not exist for PROD.
+     * So access the class throgh the string
+     *
+     * @var string
+     */
+    private const ROUTE_LIST_CLASS = '\Nette\Application\Routers\RouteList';
+
+    /**
      * @var RouteInfoFactory
      */
     private $routeInfoFactory;
