@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -107,6 +108,10 @@ CODE_SAMPLE
         $foreach = new Foreach_($foreachedExpr, $arrayItem, [
             'stmts' => $node->stmts,
         ]);
+
+        /** @var array $comments */
+        $comments = $node->getAttribute(AttributeKey::COMMENTS);
+        $foreach->setAttribute(AttributeKey::COMMENTS, $comments);
 
         // is key included? add it to foreach
         if ($listNode->items !== []) {
