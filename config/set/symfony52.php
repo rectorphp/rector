@@ -6,7 +6,9 @@ use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstant;
+use Rector\Symfony5\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
 use Rector\Symfony5\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
+use Rector\Symfony5\Rector\New_\PropertyPathMapperToDataMapperRector;
 use Rector\Symfony5\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -17,6 +19,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/symfony50-types.php');
 
     $services = $containerConfigurator->services();
+
+    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
+    $services->set(PropertyPathMapperToDataMapperRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
     $services->set(BinaryFileResponseCreateToNewInstanceRector::class);
@@ -31,6 +36,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
     $services->set(PropertyAccessorCreationBooleanToFlagsRector::class);
+
+    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyinfo
+    $services->set(ReflectionExtractorEnableMagicCallExtractorRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#security
     $services->set(RenameClassConstantRector::class)

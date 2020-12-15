@@ -31,7 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeClassConstantVisibilityRector::class);
     $services->set(ChangePhpVersionInPlatformCheckRector::class)
         ->call('configure', [[
-            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70100,
+            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70000,
         ]]);
     $services->set(DowngradePipeToMultiCatchExceptionRector::class);
     $services->set(SymmetricArrayDestructuringToListRector::class);

@@ -37,7 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
     $services->set(ChangePhpVersionInPlatformCheckRector::class)->call('configure', [[
-        ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 80000,
+        ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70400,
     ]]);
     $services->set(DowngradePropertyPromotionToConstructorPropertyAssignRector::class);
     $services->set(DowngradeNonCapturingCatchesRector::class);

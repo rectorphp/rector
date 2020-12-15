@@ -26,7 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
     $services->set(ChangePhpVersionInPlatformCheckRector::class)
         ->call('configure', [[
-            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70300,
+            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70200,
         ]]);
     $services->set(DowngradeTrailingCommasInFunctionCallsRector::class);
     $services->set(SetCookieOptionsArrayToArgumentsRector::class);
