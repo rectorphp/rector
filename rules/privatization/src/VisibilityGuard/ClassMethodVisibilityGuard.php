@@ -30,7 +30,7 @@ final class ClassMethodVisibilityGuard
         $propertyName = $this->nodeNameResolver->getName($classMethod);
 
         foreach ($parentClasses as $parentClass) {
-            if (method_exists($parentClass, $propertyName)) {
+            if (is_string($parentClass) && method_exists($parentClass, $propertyName)) {
                 return true;
             }
         }

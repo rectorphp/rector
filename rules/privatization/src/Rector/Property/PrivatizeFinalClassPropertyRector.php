@@ -97,7 +97,7 @@ CODE_SAMPLE
         $propertyName = $this->getName($property);
 
         foreach ($parentClasses as $parentClass) {
-            if (property_exists($parentClass, $propertyName)) {
+            if (is_string($parentClass) && property_exists($parentClass, $propertyName)) {
                 return true;
             }
         }
