@@ -39,6 +39,14 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
      */
     private const NAME = 'name';
 
+    // Package "nette/application" is required for DEV, might not exist for PROD
+    // $controlClass = Control::class;
+
+    /**
+     * @var string
+     */
+    private const CONTROL_CLASS = '\Nette\Application\UI\Control';
+
     /**
      * @var StaticCallAnalyzer
      */
@@ -124,10 +132,7 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        // Package "nette/application" is required for DEV, might not exist for PROD
-        // $controlClass = Control::class;
-        $controlClass = '\Nette\Application\UI\Control';
-        if (! $this->isInObjectType($classMethod, $controlClass)) {
+        if (! $this->isInObjectType($classMethod, self::CONTROL_CLASS)) {
             return null;
         }
 
