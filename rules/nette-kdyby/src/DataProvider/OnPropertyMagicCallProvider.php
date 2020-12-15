@@ -13,14 +13,6 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class OnPropertyMagicCallProvider
 {
-    // Package "nette/application" is required for DEV, might not exist for PROD
-    // $controlClass = Control::class;
-
-    /**
-     * @var string
-     */
-    private const CONTROL_CLASS = '\Nette\Application\UI\Control';
-
     /**
      * Package "nette/application" is required for DEV, might not exist for PROD.
      * So access the class throgh the string
