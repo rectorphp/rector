@@ -61,4 +61,4 @@ jobs:
             -   run: bin/rector process src --dry-run
 
             # Run PHPStan to make sure no PHP 7.2+ code was left behind
-            -   run: vendor/bin/phpstan analyse --ansi --level 0
+            -   run: vendor/bin/phpstan analyse src rules packages utils --ansi --level 0
