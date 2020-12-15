@@ -36,7 +36,7 @@ final class PathsAreNotTooLongRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        $fileInfo = $scope->getFileInfo();
+        $fileInfo = $node->getFileInfo();
         $fileName = $fileInfo->getRealPath();
 
         if (!$fileName) {
