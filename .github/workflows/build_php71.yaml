@@ -23,7 +23,7 @@ jobs:
 
             # Upload the artifact so we can download and review the downgraded code
             -   run: mkdir build
-            -   uses: montudor/action-zip@v0.1.0
+            -   uses: montudor/action-zip@v0.1.1
                 with:
                     args: zip -X -r build/rector-php71.zip . -x *.git* .* "*/\.*" build** ci** stubs** tests/\*
             -   uses: actions/upload-artifact@v2
