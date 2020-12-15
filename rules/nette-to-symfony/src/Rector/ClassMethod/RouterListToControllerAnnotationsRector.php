@@ -38,10 +38,10 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private const ACTION_RENDER_NAME_MATCHING_REGEX = '#^(action|render)(?<short_action_name>.*?$)#sm';
 
-    // Package "nette/application" is required for DEV, might not exist for PROD
-    // $routeListClass = RouteList::class;
-
     /**
+     * Package "nette/application" is required for DEV, might not exist for PROD.
+     * So access the class throgh the string
+     *
      * @var string
      */
     private const ROUTE_LIST_CLASS = '\Nette\Application\Routers\RouteList';

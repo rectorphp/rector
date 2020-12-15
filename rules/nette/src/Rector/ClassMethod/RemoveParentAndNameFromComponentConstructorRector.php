@@ -39,10 +39,10 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
      */
     private const NAME = 'name';
 
-    // Package "nette/application" is required for DEV, might not exist for PROD
-    // $controlClass = Control::class;
-
     /**
+     * Package "nette/application" is required for DEV, might not exist for PROD.
+     * So access the class throgh the string
+     *
      * @var string
      */
     private const CONTROL_CLASS = '\Nette\Application\UI\Control';
