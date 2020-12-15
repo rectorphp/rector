@@ -51,6 +51,6 @@ jobs:
                     coverage: none
 
             # Change Composer's PHP requirement to 7.1
-            -   run: composer require php
+            # -   run: composer require php
             -   run: composer install --ignore-platform-req=php
             -   run: composer phpstan --level 0
