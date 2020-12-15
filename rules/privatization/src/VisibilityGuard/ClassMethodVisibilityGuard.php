@@ -30,7 +30,7 @@ final class ClassMethodVisibilityGuard
         $propertyName = $this->nodeNameResolver->getName($classMethod);
 
         foreach ($parentClasses as $parentClass) {
-            if (is_string($parentClass) && method_exists($parentClass, $propertyName)) {
+            if (method_exists($parentClass, $propertyName)) {
                 return true;
             }
         }
@@ -39,13 +39,15 @@ final class ClassMethodVisibilityGuard
     }
 
     /**
-     * @return class-string[]|bool[]
+     * @return class-string[]
      */
     private function getParentClasses(Class_ $class): array
     {
         /** @var string $className */
         $className = $this->nodeNameResolver->getName($class);
 
-        return (array) class_parents($className);
+        /** @var class-string[] $parents */
+        $parents = (array) class_parents($className);
+        return $parents;
     }
 }

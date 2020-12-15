@@ -97,7 +97,7 @@ CODE_SAMPLE
         $propertyName = $this->getName($property);
 
         foreach ($parentClasses as $parentClass) {
-            if (is_string($parentClass) && property_exists($parentClass, $propertyName)) {
+            if (property_exists($parentClass, $propertyName)) {
                 return true;
             }
         }
@@ -106,13 +106,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @return class-string[]|bool[]
+     * @return class-string[]
      */
     private function getParentClasses(Class_ $class): array
     {
         /** @var string $className */
         $className = $this->getName($class);
 
-        return (array) class_parents($className);
+        /** @var class-string[] $parents */
+        $parents = (array) class_parents($className);
+        return $parents;
     }
 }
