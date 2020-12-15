@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Rector\ClassMethod;
 
-use Nette\Application\Routers\RouteList;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -141,7 +140,10 @@ CODE_SAMPLE
 
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
 
-        $routeListObjectType = new ObjectType(RouteList::class);
+        // Package "nette/application" is required for DEV, might not exist for PROD
+        // $routeListClass = RouteList::class;
+        $routeListClass = '\Nette\Application\Routers\RouteList';
+        $routeListObjectType = new ObjectType($routeListClass);
         if (! $inferedReturnType->isSuperTypeOf($routeListObjectType)->yes()) {
             return null;
         }

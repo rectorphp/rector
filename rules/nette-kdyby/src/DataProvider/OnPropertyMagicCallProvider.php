@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\DataProvider;
 
-use Nette\Application\UI\Control;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
@@ -87,8 +86,11 @@ final class OnPropertyMagicCallProvider
             return false;
         }
 
+        // Package "nette/application" is required for DEV, might not exist for PROD
+        // $controlClass = Control::class;
+        $controlClass = '\Nette\Application\UI\Control';
         // control event, inner only
-        if (is_a($className, Control::class, true)) {
+        if (is_a($className, $controlClass, true)) {
             return false;
         }
 
