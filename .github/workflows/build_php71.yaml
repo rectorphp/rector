@@ -31,14 +31,14 @@ jobs:
                     name: rector-downgraded-code
                     path: build/rector-php71.zip
 
-            # Avoid Composer v2 platform checks (composer.json requires PHP 7.2, but we run 7.1 below)
-            -   run: composer config platform-check false
-            # Regenerating the autoload files will remove vendor/composer/platform_check.php, otherwise executing bin/rector on 7.1 fails
-            -   run: composer dumpautoload
-
             # Run all the tests on PHP 7.4 (because JUnit needs PHP 7.3+),
             # but using Rector downgraded to PHP 7.1
             -   run: vendor/bin/phpunit
+
+            # Avoid Composer v2 platform checks (composer.json requires PHP 7.3+, but below we are running 7.1)
+            -   run: composer config platform-check false
+            # Regenerating the autoload files will remove vendor/composer/platform_check.php, otherwise executing bin/rector on 7.1 fails
+            -   run: composer dumpautoload
 
             # Switch to PHP 7.1 and run PHPStan to analyze the code,
             # as to make sure no 7.2+ code was left behind (if there is, PHP will throw some error)
@@ -49,6 +49,9 @@ jobs:
 
             # Change Composer's PHP requirement to 7.1
             -   run: composer require php --ignore-platform-req=php
+
+            # Remove DEV dependencies
+            -   run: composer install --ignore-platform-req=php --no-dev
 
             # Test the downgraded Rector by running the default set on its own src
             -   run: bin/rector process src --dry-run
