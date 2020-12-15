@@ -159,8 +159,8 @@ parameters:
     # bootstrapFiles:
     #     - vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php
 
-    # scanDirectories:
-    #     - stubs
+    scanDirectories:
+        - ../../stubs
 
     reportUnmatchedIgnoredErrors: false
 
