@@ -45,7 +45,7 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
      *
      * @var string
      */
-    private const CONTROL_CLASS = '\Nette\Application\UI\Control';
+    private const CONTROL_CLASS = 'Nette\Application\UI\Control';
 
     /**
      * @var StaticCallAnalyzer
