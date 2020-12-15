@@ -60,5 +60,5 @@ jobs:
             # Test the downgraded Rector by running the default set on its own src
             -   run: bin/rector process src --dry-run
 
-            # -   run: composer install --ignore-platform-req=php
-            # -   run: vendor/bin/phpstan analyse --ansi --error-format symplify --level 0
+            # Run PHPStan to make sure no PHP 7.2+ code was left behind
+            -   run: vendor/bin/phpstan analyse --ansi --level 0
