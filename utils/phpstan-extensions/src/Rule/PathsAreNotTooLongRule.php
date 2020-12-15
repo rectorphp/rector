@@ -12,6 +12,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use Rector\PHPStanExtensions\NodeAnalyzer\SymfonyConfigRectorValueObjectResolver;
 use Rector\PHPStanExtensions\NodeAnalyzer\TypeAndNameAnalyzer;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\PathsAreNotTooLongRule\PathsAreNotTooLongRuleTest
@@ -35,7 +36,12 @@ final class PathsAreNotTooLongRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        $fileName = $scope->getFile();
+        $fileInfo = $scope->getFileInfo();
+        $fileName = $fileInfo->getRealPath();
+
+        if (!$fileName) {
+            return [];
+        }
 
         if (strlen($fileName) < self::MAX_LENGTH) {
             return [];
