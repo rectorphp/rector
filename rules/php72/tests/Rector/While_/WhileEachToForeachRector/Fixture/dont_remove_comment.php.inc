@@ -4,9 +4,9 @@ namespace Rector\Php72\Tests\Rector\While_\Fixture;
 
 function dontremovecomment()
 {
-    // a comment
+    // a comment before
     while (list($key, $callback) = each($callbacks)) {
-        // comment
+        // comment inside
     }
 }
 
@@ -18,9 +18,9 @@ namespace Rector\Php72\Tests\Rector\While_\Fixture;
 
 function dontremovecomment()
 {
-    // a comment
+    // a comment before
     foreach ($callbacks as $key => $callback) {
-        // comment
+        // comment inside
     }
 }
 
