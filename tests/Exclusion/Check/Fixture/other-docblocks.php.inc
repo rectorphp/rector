@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Core\Tests\Rector\Exclusion\Check\OtherDocBlocks;
+namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
 
-final class SomeController
+final class OtherDocblocks
 {
     public function foo()
     {
@@ -25,10 +25,10 @@ final class SomeController
 -----
 <?php
 
-namespace Rector\Core\Tests\Rector\Exclusion\Check\OtherDocBlocks;
+namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
 
-final class SomeController
+final class OtherDocblocks
 {
     public function foo()
     {

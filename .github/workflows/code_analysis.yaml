@@ -22,8 +22,16 @@ jobs:
                         run: bin/rector show --config rector-ci.php --ansi
 
                     -
-                        name: Validate Fixtures
+                        name: Validate Fixtures Suffix
                         run: bin/rector validate-fixture-suffix --ansi
+
+                    -
+                        name: Validate Fixtures Namespace
+                        run: bin/rector validate-fixture-namespace --ansi
+
+                    -
+                        name: Validate Fixtures class name
+                        run: bin/rector validate-fixture-classname --ansi
 
                     -
                         name: 'Validate Sets Loading'
