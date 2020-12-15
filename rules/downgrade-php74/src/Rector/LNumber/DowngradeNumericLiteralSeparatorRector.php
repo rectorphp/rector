@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp74\Rector\LNumber;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
@@ -68,6 +69,17 @@ CODE_SAMPLE
         }
 
         $node->value = (string) $node->value;
+
+        /**
+         * This code follows a guess, to avoid modifying floats needlessly.
+         * If the node is a float, but it doesn't contain ".",
+         * then it's likely that the number was forced to be a float
+         * by adding ".0" at the end (eg: 0.0).
+         * Then, add it again.
+         */
+        if ($node instanceof DNumber && ! Strings::contains($node->value, '.')) {
+            $node->value .= '.0';
+        }
         return $node;
     }
 
