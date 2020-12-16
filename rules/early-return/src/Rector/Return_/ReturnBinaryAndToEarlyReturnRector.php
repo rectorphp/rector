@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
@@ -103,5 +104,10 @@ CODE_SAMPLE
                 'stmts' => [new Return_($this->createFalse())],
             ]
         );
+    }
+
+    private function createMultipleIfs(Expr $expr): Return_
+    {
+
     }
 }
