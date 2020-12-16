@@ -20,11 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnBinaryAndToEarlyReturnRector extends AbstractRector
 {
-    /**
-     * @var If_[]
-     */
-    private $ifNegations = [];
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes Single return of && && to early returns', [
@@ -74,49 +69,49 @@ CODE_SAMPLE
         }
 
         $left = $node->expr->left;
-        $this->createMultipleIfsNegation($left, $node);
+        $ifNegations = $this->createMultipleIfsNegation($left, $node, []);
 
-        $if = $this->ifNegations[0];
-        unset($this->ifNegations[0]);
-        foreach ($this->ifNegations as $ifNegation) {
-            $this->addNodeAfterNode($ifNegation, $if);
+        foreach ($ifNegations as $ifNegation) {
+            $this->addNodeBeforeNode($ifNegation, $node);
         }
 
         $next = $node->expr->right instanceof Bool_
             ? $node->expr->right
             : new Bool_($node->expr->right);
-        $this->addNodeAfterNode(new Return_($next), $if);
+        $this->addNodeBeforeNode(new Return_($next), $node);
+        $this->removeNode($node);
 
-        return $if;
+        return $node;
     }
 
     /**
+     * @param If_[] $ifNegations
      * @return If_[]
      */
-    private function createMultipleIfsNegation(Expr $expr, Return_ $return): array
+    private function createMultipleIfsNegation(Expr $expr, Return_ $return, array $ifNegations): array
     {
         while ($expr instanceof BooleanAnd) {
-            $this->ifNegations = $this->collectLeftBooleanAndToIfs($expr, $return);
-            $this->ifNegations[] = $this->createIfNegation($expr->right);
+            $ifNegations = array_merge($ifNegations, $this->collectLeftBooleanAndToIfs($expr, $return, $ifNegations));
+            $ifNegations[] = $this->createIfNegation($expr->right);
 
             $expr = $expr->right;
         }
 
-        $this->ifNegations += [$this->createIfNegation($expr)];
-        return $this->ifNegations;
+        $ifNegations += [$this->createIfNegation($expr)];
+        return $ifNegations;
     }
 
     /**
      * @return If_[]
      */
-    private function collectLeftBooleanAndToIfs(BooleanAnd $booleanAnd, Return_ $return): array
+    private function collectLeftBooleanAndToIfs(BooleanAnd $booleanAnd, Return_ $return, array $ifNegations): array
     {
         $left = $booleanAnd->left;
         if (! $left instanceof BooleanAnd) {
             return [$this->createIfNegation($left)];
         }
 
-        return $this->createMultipleIfsNegation($left, $return);
+        return $this->createMultipleIfsNegation($left, $return, $ifNegations);
     }
 
     private function createIfNegation(Expr $expr): If_
