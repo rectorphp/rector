@@ -75,13 +75,24 @@ CODE_SAMPLE
             $this->addNodeBeforeNode($ifNegation, $node);
         }
 
-        $next = $node->expr->right instanceof Bool_
-            ? $node->expr->right
-            : new Bool_($node->expr->right);
-        $this->addNodeBeforeNode(new Return_($next), $node);
+        $lastReturnExpr = $this->getLastReturnExpr($node->expr->right);
+        $this->addNodeBeforeNode(new Return_($lastReturnExpr), $node);
         $this->removeNode($node);
 
         return $node;
+    }
+
+    private function getLastReturnExpr(Expr $expr): Expr
+    {
+        if ($expr instanceof Bool_) {
+            return $expr;
+        }
+
+        if ($expr instanceof BooleanNot) {
+            return $expr;
+        }
+
+        return new Bool_($expr);
     }
 
     /**
@@ -115,8 +126,12 @@ CODE_SAMPLE
 
     private function createIfNegation(Expr $expr): If_
     {
+        $expr = $expr instanceof BooleanNot
+            ? $expr->expr
+            : new BooleanNot($expr);
+
         return new If_(
-            new BooleanNot($expr),
+            $expr,
             [
                 'stmts' => [new Return_($this->createFalse())],
             ]
