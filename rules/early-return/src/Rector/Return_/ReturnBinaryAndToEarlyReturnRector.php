@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
@@ -19,6 +20,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnBinaryAndToEarlyReturnRector extends AbstractRector
 {
+    private $first;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes Single return of && && to early returns', [
@@ -68,12 +71,7 @@ CODE_SAMPLE
         }
 
         $left = $node->expr->left;
-        while ($left instanceof BooleanAnd) {
-            $this->addNodeBeforeNode($this->createIfNotReturnFalseLeft($left), $node);
-            $this->addNodeBeforeNode($this->createIfNotReturnFalseRight($left), $node);
-
-            $left = $left->right;
-        }
+        $this->createMultipleIfsNegation($left, $node);
 
         $next = $node->expr->right instanceof Bool_
             ? $node->expr->right
@@ -85,14 +83,10 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function createIfNotReturnFalseLeft(BooleanAnd $booleanAnd): If_
+    private function createIfNotReturnFalseLeft(BooleanAnd $booleanAnd, Return_ $return): void
     {
-        return new If_(
-            new BooleanNot($booleanAnd->left),
-            [
-                'stmts' => [new Return_($this->createFalse())],
-            ]
-        );
+        $left = $booleanAnd->left;
+        $this->createMultipleIfsNegation($left, $return);
     }
 
     private function createIfNotReturnFalseRight(BooleanAnd $booleanAnd): If_
@@ -103,5 +97,15 @@ CODE_SAMPLE
                 'stmts' => [new Return_($this->createFalse())],
             ]
         );
+    }
+
+    private function createMultipleIfsNegation(Expr $expr, Return_ $return)
+    {
+        while ($expr instanceof BooleanAnd) {
+            $this->createIfNotReturnFalseLeft($expr, $return);
+            $this->addNodeBeforeNode($this->createIfNotReturnFalseRight($expr), $return);
+
+            $expr = $expr->right;
+        }
     }
 }
