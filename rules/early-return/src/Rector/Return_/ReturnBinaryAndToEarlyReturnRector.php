@@ -20,7 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnBinaryAndToEarlyReturnRector extends AbstractRector
 {
-    private $first;
+    /**
+     * @var If_[]
+     */
+    private $ifNegations = [];
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -73,6 +76,10 @@ CODE_SAMPLE
         $left = $node->expr->left;
         $this->createMultipleIfsNegation($left, $node);
 
+        foreach ($this->ifNegations as $ifNegation) {
+            $this->addNodeBeforeNode($ifNegation, $node);
+        }
+
         $next = $node->expr->right instanceof Bool_
             ? $node->expr->right
             : new Bool_($node->expr->right);
@@ -83,29 +90,42 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function createIfNotReturnFalseLeft(BooleanAnd $booleanAnd, Return_ $return): void
+    /**
+     * @return If_[]
+     */
+    private function collectLeftBooleanAndToIfs(BooleanAnd $booleanAnd, Return_ $return): array
     {
         $left = $booleanAnd->left;
-        $this->createMultipleIfsNegation($left, $return);
+        if (! $left instanceof BooleanAnd) {
+            return [$this->createIfNegation($left)];
+        }
+
+        return $this->createMultipleIfsNegation($left, $return);
     }
 
-    private function createIfNotReturnFalseRight(BooleanAnd $booleanAnd): If_
+    /**
+     * @return if_[]
+     */
+    private function createMultipleIfsNegation(Expr $expr, Return_ $return): array
+    {
+        while ($expr instanceof BooleanAnd) {
+            $this->ifNegations = $this->collectLeftBooleanAndToIfs($expr, $return);
+            $this->ifNegations[] = $this->createIfNegation($expr->right);
+
+            $expr = $expr->right;
+        }
+
+        $this->ifNegations += [$this->createIfNegation($expr)];
+        return $this->ifNegations;
+    }
+
+    private function createIfNegation(Expr $expr): If_
     {
         return new If_(
-            new BooleanNot($booleanAnd->right),
+            new BooleanNot($expr),
             [
                 'stmts' => [new Return_($this->createFalse())],
             ]
         );
-    }
-
-    private function createMultipleIfsNegation(Expr $expr, Return_ $return)
-    {
-        while ($expr instanceof BooleanAnd) {
-            $this->createIfNotReturnFalseLeft($expr, $return);
-            $this->addNodeBeforeNode($this->createIfNotReturnFalseRight($expr), $return);
-
-            $expr = $expr->right;
-        }
     }
 }
