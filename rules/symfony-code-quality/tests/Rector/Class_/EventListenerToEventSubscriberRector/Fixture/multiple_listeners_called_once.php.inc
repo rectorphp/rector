@@ -2,7 +2,7 @@
 
 namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
-class MultipleMethodsCalledOnce
+class MultipleListenersCalledOnce
 {
     public function singles()
     {
