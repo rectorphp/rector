@@ -96,9 +96,7 @@ CODE_SAMPLE
 
             $expr = $expr->right;
         }
-
-        $ifNegations += [$this->createIfNegation($expr)];
-        return $ifNegations;
+        return $ifNegations + [$this->createIfNegation($expr)];
     }
 
     /**
