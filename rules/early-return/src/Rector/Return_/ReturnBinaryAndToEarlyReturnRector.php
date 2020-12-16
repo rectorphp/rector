@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Cast\Bool_;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,10 +39,9 @@ class SomeClass
 {
     public function accept($something, $somethingelse)
     {
-        if (! $something) {
+        if (!$something) {
             return false;
         }
-
         return (bool) $somethingelse;
     }
 }
@@ -60,6 +63,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $node;
+        if (! $node->expr instanceof BooleanAnd) {
+            return null;
+        }
+
+        $if = new If_(
+            new BooleanNot($node->expr->left),
+            [
+                'stmts' => [new Return_($this->createFalse())],
+            ]
+        );
+        $this->addNodeAfterNode(new Return_(new Bool_($node->expr->right)), $if);
+        $this->removeNode($node);
+
+        return $if;
     }
 }

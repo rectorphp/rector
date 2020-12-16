@@ -20,10 +20,9 @@ class Fixture
 {
     public function accept($something, $somethingelse)
     {
-        if (! $something) {
+        if (!$something) {
             return false;
         }
-
         return (bool) $somethingelse;
     }
 }
