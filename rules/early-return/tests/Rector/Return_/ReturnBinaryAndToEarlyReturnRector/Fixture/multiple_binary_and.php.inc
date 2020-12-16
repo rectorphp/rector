@@ -6,7 +6,7 @@ class MultipleBinaryAnd
 {
     public function accept($something, $somethingelse, $anotherelse)
     {
-        return $something && $somethingelse;
+        return $something && $somethingelse && $anotherelse;
     }
 }
 

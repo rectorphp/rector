@@ -67,16 +67,41 @@ CODE_SAMPLE
             return null;
         }
 
-        $if = new If_(
-            new BooleanNot($node->expr->left),
+        $left = $node->expr->left;
+        while ($left instanceof BooleanAnd) {
+            $this->addNodeBeforeNode($this->createIfNotReturnFalseLeft($left), $node);
+            $this->addNodeBeforeNode($this->createIfNotReturnFalseRight($left), $node);
+
+            $left = $left->right;
+        }
+
+        $next = $node->expr->right instanceof Bool_
+            ? $node->expr->right
+            : new Bool_($node->expr->right);
+
+        $this->addNodeBeforeNode(new Return_($next), $node);
+        $this->removeNode($node);
+
+        return $node;
+    }
+
+    private function createIfNotReturnFalseLeft(BooleanAnd $booleanAnd): If_
+    {
+        return new If_(
+            new BooleanNot($booleanAnd->left),
             [
                 'stmts' => [new Return_($this->createFalse())],
             ]
         );
-        $next = $node->expr->right instanceof Bool_ ? $node->expr->right : new Bool_($node->expr->right);
-        $this->addNodeAfterNode(new Return_($next), $if);
-        $this->removeNode($node);
+    }
 
-        return $if;
+    private function createIfNotReturnFalseRight(BooleanAnd $booleanAnd): If_
+    {
+        return new If_(
+            new BooleanNot($booleanAnd->right),
+            [
+                'stmts' => [new Return_($this->createFalse())],
+            ]
+        );
     }
 }
