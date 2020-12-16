@@ -73,7 +73,8 @@ CODE_SAMPLE
                 'stmts' => [new Return_($this->createFalse())],
             ]
         );
-        $this->addNodeAfterNode(new Return_(new Bool_($node->expr->right)), $if);
+        $next = $node->expr->right instanceof Bool_ ? $node->expr->right : new Bool_($node->expr->right);
+        $this->addNodeAfterNode(new Return_($next), $if);
         $this->removeNode($node);
 
         return $if;
