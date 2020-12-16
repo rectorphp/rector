@@ -76,18 +76,18 @@ CODE_SAMPLE
         $left = $node->expr->left;
         $this->createMultipleIfsNegation($left, $node);
 
+        $if = $this->ifNegations[0];
+        unset($this->ifNegations[0]);
         foreach ($this->ifNegations as $ifNegation) {
-            $this->addNodeBeforeNode($ifNegation, $node);
+            $this->addNodeAfterNode($ifNegation, $if);
         }
 
         $next = $node->expr->right instanceof Bool_
             ? $node->expr->right
             : new Bool_($node->expr->right);
+        $this->addNodeAfterNode(new Return_($next), $if);
 
-        $this->addNodeBeforeNode(new Return_($next), $node);
-        //$this->removeNode($node);
-
-        return $node;
+        return $if;
     }
 
     /**
