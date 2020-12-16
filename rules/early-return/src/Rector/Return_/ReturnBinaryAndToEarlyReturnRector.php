@@ -93,19 +93,6 @@ CODE_SAMPLE
     /**
      * @return If_[]
      */
-    private function collectLeftBooleanAndToIfs(BooleanAnd $booleanAnd, Return_ $return): array
-    {
-        $left = $booleanAnd->left;
-        if (! $left instanceof BooleanAnd) {
-            return [$this->createIfNegation($left)];
-        }
-
-        return $this->createMultipleIfsNegation($left, $return);
-    }
-
-    /**
-     * @return if_[]
-     */
     private function createMultipleIfsNegation(Expr $expr, Return_ $return): array
     {
         while ($expr instanceof BooleanAnd) {
@@ -117,6 +104,19 @@ CODE_SAMPLE
 
         $this->ifNegations += [$this->createIfNegation($expr)];
         return $this->ifNegations;
+    }
+
+    /**
+     * @return If_[]
+     */
+    private function collectLeftBooleanAndToIfs(BooleanAnd $booleanAnd, Return_ $return): array
+    {
+        $left = $booleanAnd->left;
+        if (! $left instanceof BooleanAnd) {
+            return [$this->createIfNegation($left)];
+        }
+
+        return $this->createMultipleIfsNegation($left, $return);
     }
 
     private function createIfNegation(Expr $expr): If_
