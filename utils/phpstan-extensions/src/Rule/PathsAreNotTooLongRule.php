@@ -16,6 +16,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\PathsAreNotTooLongRule\PathsAreNotTooLongRuleTest
+ * @implements Rule<FileNode>
  */
 final class PathsAreNotTooLongRule implements Rule
 {
