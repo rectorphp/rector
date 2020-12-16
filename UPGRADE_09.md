@@ -21,7 +21,6 @@ Replace deprecated `Option::EXCLUDE_RECTORS` parameters with `Option::SKIP`:
 -    $parameters->set(Option::EXCLUDE_RECTORS, [
 +    $parameters->set(Option::SKIP, [
          SomeRector::class,
-         SomeRector::class,
      ]);
  };
 ```
@@ -52,7 +51,6 @@ Be sure to have **exactly 1** `Option::SKIP` in the end, as the Symfony paramete
      $parameters = $containerConfigurator->parameters();
 
      $parameters->set(Option::SKIP, [
-         SomeRector::class,
          SomeRector::class,
 -    ]);
 -
