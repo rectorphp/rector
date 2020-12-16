@@ -85,7 +85,7 @@ CODE_SAMPLE
             : new Bool_($node->expr->right);
 
         $this->addNodeBeforeNode(new Return_($next), $node);
-        $this->removeNode($node);
+        //$this->removeNode($node);
 
         return $node;
     }
