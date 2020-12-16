@@ -19,7 +19,7 @@ class MultipleListenersCalledOnce
 
 namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
-class MultipleMethodsCalledOnceEventSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
+class MultipleListenersCalledOnceEventSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     public function singles()
     {
