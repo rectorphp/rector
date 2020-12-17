@@ -333,6 +333,10 @@ CODE_SAMPLE
             }
         }
 
+        if (! isset($methodName, $priority)) {
+            return;
+        }
+
         if ($priority !== 0) {
             $methodNameWithPriorityArray = new Array_();
             $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($methodName));
