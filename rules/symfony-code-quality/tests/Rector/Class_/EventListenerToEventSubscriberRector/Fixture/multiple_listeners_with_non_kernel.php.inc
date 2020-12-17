@@ -8,7 +8,7 @@ class MultipleMethodsWithNonKernel
     {
     }
 
-    public function unkownMethod()
+    public function unknownMethod()
     {
     }
 }

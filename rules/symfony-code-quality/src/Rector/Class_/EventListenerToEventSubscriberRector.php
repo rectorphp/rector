@@ -28,6 +28,7 @@ use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\Symfony\ValueObject\Tag;
 
 /**
  * @see \Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\EventListenerToEventSubscriberRectorTest
@@ -261,11 +262,12 @@ CODE_SAMPLE
 
         $this->makeStatic($getSubscribersClassMethod);
 
+        $keyTag = 0;
         foreach ($eventsToMethods as $eventName => $methodNamesWithPriorities) {
             $eventNameExpr = $this->createEventName($eventName);
 
             if (count($methodNamesWithPriorities) === 1) {
-                $this->createSingleMethod($methodNamesWithPriorities, $eventNameExpr, $eventsToMethodsArray);
+                $this->createSingleMethod($methodNamesWithPriorities, $eventName, $eventNameExpr, $eventsToMethodsArray, $keyTag);
             } else {
                 $this->createMultipleMethods(
                     $methodNamesWithPriorities,
@@ -274,6 +276,8 @@ CODE_SAMPLE
                     $eventName
                 );
             }
+
+            ++$keyTag;
         }
 
         $getSubscribersClassMethod->stmts[] = new Return_($eventsToMethodsArray);
@@ -312,15 +316,29 @@ CODE_SAMPLE
      */
     private function createSingleMethod(
         array $methodNamesWithPriorities,
+        string $eventName,
         Expr $expr,
-        Array_ $eventsToMethodsArray
+        Array_ $eventsToMethodsArray,
+        int $keyTag
     ): void {
 
-        /** @var EventListenerTag $eventTag */
-        $eventTag = $methodNamesWithPriorities[0]->getTags()[0];
+        /** @var EventListenerTag[]|Tag[] $eventTags */
+        $eventTags = $methodNamesWithPriorities[0]->getTags();
+        /** @var EventListenerTag|Tag $eventTag */
+        $eventTag = $eventTags[$keyTag];
 
-        $methodName = $eventTag->getMethod();
-        $priority = $eventTag->getPriority();
+        if ($eventTag instanceof Tag) {
+            foreach ($eventTags as $eventTag) {
+                if ($eventTag instanceof EventListenerTag && $eventTag->getEvent() === $eventName) {
+                    $methodName = $eventTag->getMethod();
+                    $priority = $eventTag->getPriority();
+                    break;
+                }
+            }
+        } else {
+            $methodName = $eventTag->getMethod();
+            $priority = $eventTag->getPriority();
+        }
 
         if ($priority !== 0) {
             $methodNameWithPriorityArray = new Array_();
