@@ -7,7 +7,7 @@ Save your time from looking into failed CI build, when you can see comment right
 ## Add GitHub Actions Workflow
 
 ```yaml
-# .github/workflows/rector_chekcstyle.yaml
+# .github/workflows/rector_checkstyle.yaml
 # see https://github.com/staabm/annotate-pull-request-from-checkstyle
 name: Rector Checkstyle
 
