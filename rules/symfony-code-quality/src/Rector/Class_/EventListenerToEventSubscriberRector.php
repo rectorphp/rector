@@ -24,11 +24,11 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceDefinition;
+use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\Symfony\ValueObject\Tag;
 
 /**
  * @see \Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\EventListenerToEventSubscriberRectorTest
@@ -262,12 +262,16 @@ CODE_SAMPLE
 
         $this->makeStatic($getSubscribersClassMethod);
 
-        $keyTag = 0;
         foreach ($eventsToMethods as $eventName => $methodNamesWithPriorities) {
             $eventNameExpr = $this->createEventName($eventName);
 
             if (count($methodNamesWithPriorities) === 1) {
-                $this->createSingleMethod($methodNamesWithPriorities, $eventName, $eventNameExpr, $eventsToMethodsArray, $keyTag);
+                $this->createSingleMethod(
+                    $methodNamesWithPriorities,
+                    $eventName,
+                    $eventNameExpr,
+                    $eventsToMethodsArray
+                );
             } else {
                 $this->createMultipleMethods(
                     $methodNamesWithPriorities,
@@ -276,8 +280,6 @@ CODE_SAMPLE
                     $eventName
                 );
             }
-
-            ++$keyTag;
         }
 
         $getSubscribersClassMethod->stmts[] = new Return_($eventsToMethodsArray);
@@ -318,26 +320,17 @@ CODE_SAMPLE
         array $methodNamesWithPriorities,
         string $eventName,
         Expr $expr,
-        Array_ $eventsToMethodsArray,
-        int $keyTag
+        Array_ $eventsToMethodsArray
     ): void {
 
         /** @var EventListenerTag[]|Tag[] $eventTags */
         $eventTags = $methodNamesWithPriorities[0]->getTags();
-        /** @var EventListenerTag|Tag $eventTag */
-        $eventTag = $eventTags[$keyTag];
-
-        if ($eventTag instanceof Tag) {
-            foreach ($eventTags as $eventTag) {
-                if ($eventTag instanceof EventListenerTag && $eventTag->getEvent() === $eventName) {
-                    $methodName = $eventTag->getMethod();
-                    $priority = $eventTag->getPriority();
-                    break;
-                }
+        foreach ($eventTags as $eventTag) {
+            if ($eventTag instanceof EventListenerTag && $eventTag->getEvent() === $eventName) {
+                $methodName = $eventTag->getMethod();
+                $priority = $eventTag->getPriority();
+                break;
             }
-        } else {
-            $methodName = $eventTag->getMethod();
-            $priority = $eventTag->getPriority();
         }
 
         if ($priority !== 0) {
