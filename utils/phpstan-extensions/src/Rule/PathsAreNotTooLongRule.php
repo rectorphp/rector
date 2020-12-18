@@ -24,7 +24,7 @@ final class PathsAreNotTooLongRule implements Rule
     /**
      * @var string
      */
-    public const ERROR_MESSAGE = 'The filename "%s" is too long, to be checked out on windows.';
+    public const ERROR_MESSAGE = 'The filename "%s" is %s chars long, to be checked out on windows (limit %s).';
 
     public function getNodeType(): string
     {
@@ -47,8 +47,7 @@ final class PathsAreNotTooLongRule implements Rule
             return [];
         }
 
-
-        $errorMessage = sprintf(self::ERROR_MESSAGE, $fileName);
+        $errorMessage = sprintf(self::ERROR_MESSAGE, $fileName, strlen($fileName), self::MAX_LENGTH);
         return [$errorMessage];
     }
 }
