@@ -8,6 +8,6 @@ if (class_exists('Nette\Application\UI\Control')) {
     return;
 }
 
-abstract class Control
+abstract class Control extends Component implements IRenderable
 {
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\ClassMethod;
 
 use Nette\Application\UI\Control;
+use Nette\ComponentModel\IContainer;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
@@ -25,11 +26,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const COMPONENT_CONTAINER_CLASS = 'Nette\ComponentModel\IContainer';
-
     /**
      * @var string
      */
@@ -116,7 +112,7 @@ CODE_SAMPLE
             return $this->refactorStaticCall($node);
         }
 
-        if ($node instanceof New_ && $this->isObjectType($node->class, self::COMPONENT_CONTAINER_CLASS)) {
+        if ($node instanceof New_ && $this->isObjectType($node->class, IContainer::class)) {
             return $this->refactorNew($node);
         }
 
@@ -137,7 +133,7 @@ CODE_SAMPLE
         foreach ($classMethod->params as $param) {
             if ($this->isName($param, self::PARENT) && $param->type !== null && $this->isName(
                 $param->type,
-                    self::COMPONENT_CONTAINER_CLASS
+                IContainer::class
             )) {
                 $this->removeNode($param);
                 $hasClassMethodChanged = true;
