@@ -8,6 +8,6 @@ if (class_exists('Nette\Application\Routers\RouteList')) {
     return;
 }
 
-final class RouteList
+class RouteList
 {
 }
