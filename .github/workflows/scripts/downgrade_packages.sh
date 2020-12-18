@@ -169,8 +169,6 @@ then
     # Iterate all the packages, and obtain their paths
     for package_to_downgrade in "${packages_to_downgrade[@]}"; do
         path_to_downgrade=${package_paths[$package_to_downgrade]}
-        # If more than one path, these are split with ";". Replace with space
-        path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
 
         if [ $package_to_downgrade != "$rootPackage" ]
         then
@@ -319,8 +317,6 @@ do
         fi
 
         path_to_downgrade=${package_paths[$package_to_downgrade]}
-        # If more than one path, these are split with ";". Replace with space
-        path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
 
         if [ $package_to_downgrade = "$rootPackage" ]
         then
