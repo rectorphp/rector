@@ -113,8 +113,6 @@ CODE_SAMPLE
         /** @var string $className */
         $className = $this->getName($class);
 
-        /** @var class-string[] $parents */
-        $parents = (array) class_parents($className);
-        return $parents;
+        return (array) class_parents($className);
     }
 }
