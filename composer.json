@@ -63,7 +63,9 @@
     },
     "autoload": {
         "files": [
-            "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php"
+            "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
+            "stubs/Nette/Application/Routers/RouteList.php",
+            "stubs/Nette/Application/UI/Control.php"
         ],
         "psr-4": {
             "Rector\\Testing\\": "packages/testing/src",
