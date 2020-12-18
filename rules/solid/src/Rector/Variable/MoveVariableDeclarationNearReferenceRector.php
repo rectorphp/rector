@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Do_;
@@ -209,6 +210,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->hasStaticCall($next)) {
+            return null;
+        }
+
         $countFound = $this->getCountFound($next, $node);
         if ($countFound === 0 || $countFound >= 2) {
             return null;
@@ -221,6 +226,13 @@ CODE_SAMPLE
         }
 
         return $this->getSameVarNameInNexts($next, $node);
+    }
+
+    private function hasStaticCall(Node $node): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $n): bool {
+            return $n instanceof StaticCall;
+        });
     }
 
     private function isInsideLoopStmts(Node $node): bool
