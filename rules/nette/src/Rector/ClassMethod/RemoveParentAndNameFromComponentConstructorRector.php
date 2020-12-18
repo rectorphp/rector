@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\ClassMethod;
 
+use Nette\Application\UI\Control;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
@@ -38,14 +39,6 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
      * @var string
      */
     private const NAME = 'name';
-
-    /**
-     * Package "nette/application" is required for DEV, might not exist for PROD.
-     * So access the class throgh the string
-     *
-     * @var string
-     */
-    private const CONTROL_CLASS = 'Nette\Application\UI\Control';
 
     /**
      * @var StaticCallAnalyzer
@@ -132,7 +125,7 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        if (! $this->isInObjectType($classMethod, self::CONTROL_CLASS)) {
+        if (! $this->isInObjectType($classMethod, Control::class)) {
             return null;
         }
 
