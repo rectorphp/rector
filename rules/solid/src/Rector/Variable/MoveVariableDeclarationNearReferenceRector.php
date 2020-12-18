@@ -228,13 +228,6 @@ CODE_SAMPLE
         return $this->getSameVarNameInNexts($next, $node);
     }
 
-    private function hasStaticCall(Node $node): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $n): bool {
-            return $n instanceof StaticCall;
-        });
-    }
-
     private function isInsideLoopStmts(Node $node): bool
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -258,6 +251,13 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    private function hasStaticCall(Node $node): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $n): bool {
+            return $n instanceof StaticCall;
+        });
     }
 
     private function getCountFound(Node $node, Variable $variable): int
