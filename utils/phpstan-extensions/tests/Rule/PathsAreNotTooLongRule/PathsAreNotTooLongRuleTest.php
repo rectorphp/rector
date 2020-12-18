@@ -28,7 +28,7 @@ final class PathsAreNotTooLongRuleTest extends AbstractServiceAwareRuleTestCase
         yield [__DIR__ . '/Fixture/Rector/ShortClassName.php.php', [[]]];
 
         $longFile = __DIR__ . '/Fixture/Rector/PrettyLongClassNameWaaaaayyyTooLongFileNameWithLoooootsOfCharacters.php.php';
-        $errorMessage = sprintf(PathsAreNotTooLongRule::ERROR_MESSAGE, $longFile, '%s', '%s');
+        $errorMessage = sprintf(PathsAreNotTooLongRule::ERROR_MESSAGE, $longFile, strlen(realpath($longFile)), 0);
         yield [$longFile, [$errorMessage]];
     }
 
