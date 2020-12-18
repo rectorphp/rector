@@ -19,6 +19,10 @@ jobs:
                     php-version: 7.4
                     coverage: none
 
+            # The Symfony Polyfill libraries are needed
+            -   run: composer require symfony/polyfill-php72 symfony/polyfill-php73 symfony/polyfill-php74 symfony/polyfill-php80 --no-install --no-update
+
+            # Execute the downgrade script
             -   run: ./.github/workflows/scripts/downgrade_packages.sh 7.1
 
             # Upload the artifact so we can download and review the downgraded code
@@ -45,9 +49,6 @@ jobs:
 
             # Replace the composer.json file
             -   run: cp ci/downgrade/composer.json ./composer.json
-
-            # The Symfony Polyfill libraries are needed
-            -   run: composer require symfony/polyfill-php72 symfony/polyfill-php73 symfony/polyfill-php74 symfony/polyfill-php80
 
             # Rector without DEV needs phpstan.neon removed
             -   run: rm phpstan.neon
