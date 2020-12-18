@@ -24,7 +24,7 @@ final class PathsAreNotTooLongRule implements Rule
     /**
      * @var string
      */
-    public const ERROR_MESSAGE = 'The filename "%s" is %s chars long, to be checked out on windows (limit %s).';
+    public const ERROR_MESSAGE = 'The file "%s" is too long, to be checked out on windows (%s chars; limit %s).';
 
     public function getNodeType(): string
     {
