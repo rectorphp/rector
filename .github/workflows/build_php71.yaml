@@ -46,13 +46,6 @@ jobs:
             # Replace the composer.json file
             -   run: cp ci/downgrade/composer.json ./composer.json
 
-            # Switch to PHP 7.1 and run PHPStan to analyze the code,
-            # as to make sure no 7.2+ code was left behind (if there is, PHP will throw some error)
-            -   uses: shivammathur/setup-php@v2
-                with:
-                    php-version: 7.1
-                    coverage: none
-
             # The Symfony Polyfill libraries are needed
             -   run: composer require symfony/polyfill-php72 symfony/polyfill-php73 --ignore-platform-req=php
 
@@ -68,6 +61,13 @@ jobs:
                 with:
                     name: rector-downgraded-code
                     path: build/rector-php71.zip
+
+            # Switch to PHP 7.1 and run PHPStan to analyze the code,
+            # as to make sure no 7.2+ code was left behind (if there is, PHP will throw some error)
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.1
+                    coverage: none
 
             # Test the downgraded Rector by running the default set on its own src
             -   run: bin/rector process src --dry-run
