@@ -18,7 +18,7 @@
 # .github/workflows/scripts/downgrade_packages.sh 7.1
 ########################################################################
 # Variables to modify when new PHP versions are released
-
+# ----------------------------------------------------------------------
 supported_target_php_versions=(7.0 7.1 7.2 7.3 7.4)
 
 declare -A downgrade_php_versions=( \
@@ -50,8 +50,11 @@ declare -A downgrade_php_rectorconfigs=( \
 # eg: defining the set to execute using `--set` in the CLI (not supported anymore)
 GROUP_RECTOR_CONFIGS=true
 
+# Execute a single call to Rector for all dependencies together?
+DOWNGRADE_DEPENDENCIES_TOGETHER=true
 ########################################################################
 # Helper functions
+# ----------------------------------------------------------------------
 # Failure helper function (https://stackoverflow.com/a/24597941)
 function fail {
     printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
@@ -147,6 +150,61 @@ numberPackages=${#packages_to_downgrade[@]}
 numberRectorConfigs=${#rectorconfigs_to_downgrade[@]}
 if [ ! $numberRectorConfigs -eq $numberPackages ]; then
     fail "Number of Rector configs ($numberRectorConfigs) and number of packages ($numberPackages) should not be different"
+fi
+
+# Execute a single call to Rector for all dependencies together:
+# If grouping the PHP-version downgrades together, and downgrading the packages together
+if [ -n "$GROUP_RECTOR_CONFIGS" ] && [ -n "$DOWNGRADE_DEPENDENCIES_TOGETHER" ]
+then
+    # The config is the last element on the array
+    target_rector_configs=($(echo ${downgrade_php_rectorconfigs[$target_php_version]} | tr " " "\n"))
+    numberElems=${#target_rector_configs[@]}
+    lastPos=$(( $numberElems - 1 ))
+    rector_config=${target_rector_configs[$lastPos]}
+
+    # Collect the list of all dependencies and their paths
+    dependency_packages=()
+    dependency_package_paths=()
+
+    # Iterate all the packages, and obtain their paths
+    for package_to_downgrade in "${packages_to_downgrade[@]}"; do
+        path_to_downgrade=${package_paths[$package_to_downgrade]}
+        # If more than one path, these are split with ";". Replace with space
+        path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
+
+        if [ $package_to_downgrade != "$rootPackage" ]
+        then
+            #Check it's not been added yet (eg: from needing downgrade for several PHP versions)
+            if [[ " ${dependency_packages[@]} " =~ " ${package_to_downgrade} " ]]; then
+                continue;
+            fi
+            dependency_packages+=($package_to_downgrade)
+            dependency_package_path=${package_paths[$package_to_downgrade]}
+            dependency_package_paths+=($dependency_package_path)
+        fi
+    done
+
+    # Execute the downgrade
+    # Print command in output for testing
+    # set -x
+    # Downgrade Rector first
+    path_to_downgrade=${package_paths[$rootPackage]}
+    config=ci/downgrade/rector-downgrade-rector
+    config="${config}-${rector_config}.php"
+    echo "Running rector_config ${rector_config} for main package ${rootPackage} on path(s) ${path_to_downgrade}"
+    bin/rector process $path_to_downgrade --config=$config --ansi
+
+    #Downgrade all the dependencies then
+    packages_to_downgrade=$(join_by " " ${dependency_packages[@]})
+    paths_to_downgrade=$(join_by " " ${dependency_package_paths[@]})
+    config=ci/downgrade/rector-downgrade-dependency
+    config="${config}-${rector_config}.php"
+    echo "Running rector_config ${rector_config} for dependency packages ${packages_to_downgrade} on paths ${paths_to_downgrade}"
+    bin/rector process $paths_to_downgrade --config=$config --ansi
+    # set +x
+
+    # Success
+    exit 0
 fi
 
 # We must downgrade packages in the strict dependency order,
@@ -261,17 +319,8 @@ do
         fi
 
         path_to_downgrade=${package_paths[$package_to_downgrade]}
-        # exclude=${package_excludes[$package_to_downgrade]}
-
-        # # If there's no explicit path to exclude, set to exclude the "tests" folders
-        # if [ -z $exclude ]
-        # then
-        #     exclude="${path_to_downgrade}/**/tests/*"
-        # fi
-
         # If more than one path, these are split with ";". Replace with space
         path_to_downgrade=$(echo "$path_to_downgrade" | tr ";" " ")
-        # exclude=$(echo "$exclude" | sed "s/;/ --exclude-path=/g")
 
         if [ $package_to_downgrade = "$rootPackage" ]
         then
