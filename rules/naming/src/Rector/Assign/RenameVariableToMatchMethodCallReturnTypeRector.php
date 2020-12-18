@@ -173,7 +173,7 @@ CODE_SAMPLE
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         while ($parentNode) {
-            $countUsed = count($this->betterNodeFinder->find($parentNode, function (Node $n) use ($node) {
+            $countUsed = count($this->betterNodeFinder->find($parentNode, function (Node $n) use ($node): bool {
                 if (get_class($node) !== get_class($n)) {
                     return false;
                 }
