@@ -40,6 +40,9 @@ jobs:
             # Regenerating the autoload files will remove vendor/composer/platform_check.php, otherwise executing bin/rector on 7.1 fails
             -   run: composer dumpautoload
 
+            # Replace the composer.json file
+            -   run: cp ci/downgrade/composer.json ./composer.json
+
             # Switch to PHP 7.1 and run PHPStan to analyze the code,
             # as to make sure no 7.2+ code was left behind (if there is, PHP will throw some error)
             -   uses: shivammathur/setup-php@v2
