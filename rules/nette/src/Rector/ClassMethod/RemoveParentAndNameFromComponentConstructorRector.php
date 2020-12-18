@@ -112,7 +112,7 @@ CODE_SAMPLE
             return $this->refactorStaticCall($node);
         }
 
-        if ($node instanceof New_ && $this->isObjectType($node->class, IContainer::class)) {
+        if ($node instanceof New_ && $this->isObjectType($node->class, (string) IContainer::class)) {
             return $this->refactorNew($node);
         }
 
