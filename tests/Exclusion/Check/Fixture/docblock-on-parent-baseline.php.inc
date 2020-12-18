@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Core\Tests\Rector\Exclusion\Check\DocBlockOnParentBaseLine;
+namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
 
-final class SomeController
+final class DocblockOnParentBaseline
 {
     public function foo()
     {
@@ -16,10 +16,10 @@ final class SomeController
 -----
 <?php
 
-namespace Rector\Core\Tests\Rector\Exclusion\Check\DocBlockOnParentBaseLine;
+namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
 
-final class SomeController
+final class DocblockOnParentBaseline
 {
     public function foo()
     {
