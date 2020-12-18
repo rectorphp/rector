@@ -8,6 +8,6 @@ if (class_exists('Nette\Application\UI\Control')) {
     return;
 }
 
-class Control
+abstract class Control
 {
 }
