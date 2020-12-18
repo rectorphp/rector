@@ -7,7 +7,7 @@ namespace Rector\PHPStanExtensions\Rule;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use Rector\Core\PhpParser\Node\CustomNode\FileNode;
+use PHPStan\Node\FileNode;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use Rector\PHPStanExtensions\NodeAnalyzer\SymfonyConfigRectorValueObjectResolver;
