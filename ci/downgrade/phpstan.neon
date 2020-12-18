@@ -155,53 +155,23 @@ parameters:
         # this cannot be put it, because it wipes PHPStan cache on each run :( - must run in separate
         #- config
 
-    # # to allow installing with various phsptan versions without reporting old errors here
-    # bootstrapFiles:
-    #     - vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php
-
-    scanDirectories:
-        - ../../stubs
-
     reportUnmatchedIgnoredErrors: false
 
-    checkGenericClassInNonGenericObjectType: false
-
     excludes_analyse:
-        - "*/tests/*"
-        - ../../utils/phpstan-extensions/*
-
-        - */config.php
-        - ../../packages/*/config/*
-        - ../../tests/debug_functions.php
-
-        # broken in PHPStan https://github.com/rectorphp/rector/runs/1305002460#step:5:56
-        - ../../packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
-        - ../../packages/testing/src/PHPUnit/*.php
-        - ../../packages/node-type-resolver/tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
-
-        # phsptan bug
-        - ../../utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
+        # List of all excluded elements for Rector and its dependencies
+        # from ci/downgrade/configuration.php
+        # Rector:
+        - */tests/*
+        - ../../ci/*
+        - ../../stubs/*
         - ../../packages/rector-generator/templates/*
-        # this invalidates whole cache everytime
-        - '../../packages/symfony-php-config/*'
-        - '../../packages/simple-php-doc-parser'
-
-        # generated files
-        - '../../packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
-        - '../../packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
-
-        - "*/Expected/*"
-        # complex printer
-        - '*tests/Rector/MethodCall/RenameMethodRector/**/SomeClass.php'
-        # tests files
-        - '*tests/*/Fixture/*'
-        - '*tests/*/Source/*'
-        - '*tests/Source/*'
-        # part of composer
-        - '*/tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Expected/Just*ExceptionWithoutNamespace.php'
-
-        # tests
-        - ../../tests/DependencyInjection/config
+        - ../../packages/doctrine-annotation-generated/src/*
+        # Dependencies:
+        - ../../vendor/symfony/cache/DoctrineProvider.php
+        - ../../vendor/symfony/cache/Messenger/EarlyExpirationHandler.php
+        - ../../vendor/symfony/http-kernel/HttpKernelBrowser.php
+        - ../../vendor/symfony/string/Slugger/AsciiSlugger.php
+        - ../../vendor/symfony/cache/Adapter/CouchbaseBucketAdapter.php
 
     ignoreErrors:
         # trait in trait call
