@@ -143,6 +143,9 @@ CODE_SAMPLE
     private function isFoundInPreviousNode(Variable $variable): bool
     {
         $previousNode = $variable->getAttribute(AttributeKey::PREVIOUS_NODE);
-        return $previousNode instanceof Expr && $this->isFoundInParentNode($variable);
+        if (! $previousNode instanceof Expr) {
+            return false;
+        }
+        return $this->isFoundInParentNode($variable);
     }
 }

@@ -129,7 +129,9 @@ final class ArrayTypeAnalyzer
         } else {
             $propertyOwnerStaticType = $this->nodeTypeResolver->resolve($node->class);
         }
-
-        return ! $propertyOwnerStaticType instanceof ThisType && $propertyOwnerStaticType instanceof TypeWithClassName;
+        if ($propertyOwnerStaticType instanceof ThisType) {
+            return false;
+        }
+        return $propertyOwnerStaticType instanceof TypeWithClassName;
     }
 }

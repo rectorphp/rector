@@ -307,11 +307,10 @@ final class IfManipulator
         if (! ($if instanceof If_ && $assign instanceof Assign)) {
             return false;
         }
-
-        return $if->cond instanceof Identical && $this->betterStandardPrinter->areNodesEqual(
-            $this->getIfVar($if),
-            $assign->var
-        );
+        if (! $if->cond instanceof Identical) {
+            return false;
+        }
+        return $this->betterStandardPrinter->areNodesEqual($this->getIfVar($if), $assign->var);
     }
 
     public function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $node): bool
@@ -319,11 +318,10 @@ final class IfManipulator
         if (! $node instanceof MethodCall && ! $node instanceof PropertyFetch) {
             return false;
         }
-
-        return $if->cond instanceof NotIdentical && ! $this->betterStandardPrinter->areNodesEqual(
-            $this->getIfVar($if),
-            $node->var
-        );
+        if (! $if->cond instanceof NotIdentical) {
+            return false;
+        }
+        return ! $this->betterStandardPrinter->areNodesEqual($this->getIfVar($if), $node->var);
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr

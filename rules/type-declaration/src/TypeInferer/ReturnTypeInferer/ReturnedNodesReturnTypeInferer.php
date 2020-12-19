@@ -146,7 +146,11 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
             return true;
         }
 
+        if (! $classLike instanceof Class_) {
+            return false;
+        }
+
         // abstract class
-        return $classLike instanceof Class_ && $classLike->isAbstract();
+        return $classLike->isAbstract();
     }
 }

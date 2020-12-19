@@ -118,7 +118,10 @@ CODE_SAMPLE
         }
 
         $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        return $classLike instanceof Class_ && $classLike->name === null;
+        if (! $classLike instanceof Class_) {
+            return false;
+        }
+        return $classLike->name === null;
     }
 
     private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod): void

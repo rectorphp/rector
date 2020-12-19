@@ -53,8 +53,10 @@ final class ParameterDefaultsComparator
         if ($parameterReflection->getDefaultValue() === null && $param->default !== null) {
             return true;
         }
-
-        return $parameterReflection->getDefaultValue() !== null && $param->default === null;
+        if ($parameterReflection->getDefaultValue() === null) {
+            return false;
+        }
+        return $param->default === null;
     }
 
     /**

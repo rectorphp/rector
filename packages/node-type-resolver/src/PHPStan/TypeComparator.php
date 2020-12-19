@@ -94,7 +94,10 @@ final class TypeComparator
         if ($firstType instanceof FloatType && $secondType instanceof FloatType) {
             return true;
         }
-        return $firstType instanceof BooleanType && $secondType instanceof BooleanType;
+        if (! $firstType instanceof BooleanType) {
+            return false;
+        }
+        return $secondType instanceof BooleanType;
     }
 
     private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType): bool
@@ -102,7 +105,13 @@ final class TypeComparator
         if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType && $firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
             return true;
         }
-        return $secondType instanceof AliasedObjectType && $firstType instanceof ObjectType && $secondType->getFullyQualifiedClass() === $firstType->getClassName();
+        if (! $secondType instanceof AliasedObjectType) {
+            return false;
+        }
+        if (! $firstType instanceof ObjectType) {
+            return false;
+        }
+        return $secondType->getFullyQualifiedClass() === $firstType->getClassName();
     }
 
     /**

@@ -106,7 +106,10 @@ CODE_SAMPLE
     {
         // Check that any item in the array is the spread
         return array_filter($array->items, function (?ArrayItem $item): bool {
-            return $item !== null && $item->unpack;
+            if ($item === null) {
+                return false;
+            }
+            return $item->unpack;
         }) !== [];
     }
 

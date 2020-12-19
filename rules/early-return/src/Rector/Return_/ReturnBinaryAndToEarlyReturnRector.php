@@ -7,11 +7,16 @@ namespace Rector\EarlyReturn\Rector\Return_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -70,8 +75,13 @@ CODE_SAMPLE
 
         $left = $node->expr->left;
         $ifNegations = $this->createMultipleIfsNegation($left, $node, []);
+        $nodeComments = $node->getAttribute(AttributeKey::COMMENTS);
 
-        foreach ($ifNegations as $ifNegation) {
+        foreach ($ifNegations as $key => $ifNegation) {
+            if ($key === 0) {
+                $ifNegation->setAttribute(AttributeKey::COMMENTS, $nodeComments);
+            }
+
             $this->addNodeBeforeNode($ifNegation, $node);
         }
 
@@ -107,6 +117,16 @@ CODE_SAMPLE
             return $expr;
         }
 
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return new Bool_($expr);
+        }
+
+        $type = $scope->getType($expr);
+        if ($type instanceof BooleanType) {
+            return $expr;
+        }
+
         return new Bool_($expr);
     }
 
@@ -126,9 +146,15 @@ CODE_SAMPLE
 
     private function createIfNegation(Expr $expr): If_
     {
-        $expr = $expr instanceof BooleanNot
-            ? $expr->expr
-            : new BooleanNot($expr);
+        if ($expr instanceof Identical) {
+            $expr = new NotIdentical($expr->left, $expr->right);
+        } elseif ($expr instanceof NotIdentical) {
+            $expr = new Identical($expr->left, $expr->right);
+        } elseif ($expr instanceof BooleanNot) {
+            $expr = $expr->expr;
+        } else {
+            $expr = new BooleanNot($expr);
+        }
 
         return new If_(
             $expr,

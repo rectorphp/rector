@@ -269,10 +269,13 @@ CODE_SAMPLE
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
             function (Node $node): bool {
-                return $node instanceof Assign && $node->var instanceof ArrayDimFetch && $this->isVariableName(
-                    $node->var->dim,
-                    $this->keyValueName
-                );
+                if (! $node instanceof Assign) {
+                    return false;
+                }
+                if (! $node->var instanceof ArrayDimFetch) {
+                    return false;
+                }
+                return $this->isVariableName($node->var->dim, $this->keyValueName);
             }
         );
     }
@@ -284,7 +287,10 @@ CODE_SAMPLE
             function (Node $node): bool {
                 /** @var Node $parent */
                 $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-                return $parent instanceof Unset_ && $node instanceof ArrayDimFetch;
+                if (! $parent instanceof Unset_) {
+                    return false;
+                }
+                return $node instanceof ArrayDimFetch;
             }
         );
     }

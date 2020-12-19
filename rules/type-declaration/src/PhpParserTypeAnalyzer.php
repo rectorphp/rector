@@ -48,8 +48,10 @@ final class PhpParserTypeAnalyzer
         if ($possibleParentType === $possibleSubtype) {
             return true;
         }
-
-        return ctype_upper($possibleSubtype[0]) && $possibleParentType === 'object';
+        if (! ctype_upper($possibleSubtype[0])) {
+            return false;
+        }
+        return $possibleParentType === 'object';
     }
 
     /**
@@ -69,7 +71,9 @@ final class PhpParserTypeAnalyzer
         if (in_array($possibleSubtype, ['array', 'Traversable'], true) && $possibleParentType === 'iterable') {
             return true;
         }
-
-        return in_array($possibleSubtype, ['array', 'ArrayIterator'], true) && $possibleParentType === 'countable';
+        if (! in_array($possibleSubtype, ['array', 'ArrayIterator'], true)) {
+            return false;
+        }
+        return $possibleParentType === 'countable';
     }
 }

@@ -205,7 +205,10 @@ CODE_SAMPLE
 
         if ($node instanceof ClassMethod) {
             // already added?
-            return isset($node->params[$position]) && $this->isName($node->params[$position], $argumentName);
+            if (! isset($node->params[$position])) {
+                return false;
+            }
+            return $this->isName($node->params[$position], $argumentName);
         }
 
         // already added?

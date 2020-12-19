@@ -59,7 +59,9 @@ CODE_SAMPLE
         }
 
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-
-        return ! is_a($type, ArrayType::class, true) && ! is_a($type, CallableType::class, true);
+        if (is_a($type, ArrayType::class, true)) {
+            return false;
+        }
+        return ! is_a($type, CallableType::class, true);
     }
 }

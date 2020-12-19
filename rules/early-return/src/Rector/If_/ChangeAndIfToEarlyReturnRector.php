@@ -262,7 +262,10 @@ CODE_SAMPLE
     private function isIfReturnsVoid(If_ $if): bool
     {
         $lastStmt = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
-        return $lastStmt instanceof Return_ && $lastStmt->expr === null;
+        if (! $lastStmt instanceof Return_) {
+            return false;
+        }
+        return $lastStmt->expr === null;
     }
 
     private function isParentIfReturnsVoid(If_ $if): bool
@@ -301,11 +304,13 @@ CODE_SAMPLE
 
     private function isNestedIfInLoop(If_ $if): bool
     {
-        return $this->isIfInLoop($if)
-            && (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
-                $if,
-                [If_::class, Else_::class, ElseIf_::class]
-            );
+        if (! $this->isIfInLoop($if)) {
+            return false;
+        }
+        return (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
+            $if,
+            [If_::class, Else_::class, ElseIf_::class]
+        );
     }
 
     private function isLastIfOrBeforeLastReturn(If_ $if): bool

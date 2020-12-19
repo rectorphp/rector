@@ -57,6 +57,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         Setlist::PHP_71,
         Setlist::PHP_72,
         Setlist::PHP_73,
+        Setlist::EARLY_RETURN,
     ]);
 
     $parameters->set(Option::PATHS, [

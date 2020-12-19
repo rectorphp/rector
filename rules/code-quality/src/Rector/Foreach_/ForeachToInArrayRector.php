@@ -173,7 +173,10 @@ CODE_SAMPLE
     private function shouldSkipIf(If_ $if): bool
     {
         $ifCondition = $if->cond;
-        return ! $ifCondition instanceof Identical && ! $ifCondition instanceof Equal;
+        if ($ifCondition instanceof Identical) {
+            return false;
+        }
+        return ! $ifCondition instanceof Equal;
     }
 
     private function matchNodes(BinaryOp $binaryOp, Expr $expr): ?TwoNodeMatch

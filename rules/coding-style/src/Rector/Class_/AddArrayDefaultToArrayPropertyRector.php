@@ -256,8 +256,9 @@ CODE_SAMPLE
         )) {
             return true;
         }
-        return $this->propertyFetchManipulator->isLocalPropertyOfNames($expr->right, $propertyNames) && $this->isNull(
-            $expr->left
-        );
+        if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($expr->right, $propertyNames)) {
+            return false;
+        }
+        return $this->isNull($expr->left);
     }
 }

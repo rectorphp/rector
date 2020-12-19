@@ -54,7 +54,9 @@ CODE_SAMPLE
         if ($param->type === null) {
             return false;
         }
-
-        return $param->type instanceof Identifier && $param->type->toString() === 'iterable';
+        if (! $param->type instanceof Identifier) {
+            return false;
+        }
+        return $param->type->toString() === 'iterable';
     }
 }

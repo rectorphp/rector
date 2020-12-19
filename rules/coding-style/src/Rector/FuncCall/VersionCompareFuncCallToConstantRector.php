@@ -123,7 +123,10 @@ CODE_SAMPLE
 
     private function isPhpVersionConstant(Expr $expr): bool
     {
-        return $expr instanceof ConstFetch && $expr->name->toString() === 'PHP_VERSION';
+        if (! $expr instanceof ConstFetch) {
+            return false;
+        }
+        return $expr->name->toString() === 'PHP_VERSION';
     }
 
     private function getNewNodeForArg(Expr $expr): Node
