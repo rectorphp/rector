@@ -170,8 +170,10 @@ CODE_SAMPLE
         if ($this->isUnionTypeWithResourceSubType($staticType, $resourceType)) {
             return true;
         }
-
-        return $node instanceof Variable && $this->isName($node, 'connection');
+        if (! $node instanceof Variable) {
+            return false;
+        }
+        return $this->isName($node, 'connection');
     }
 
     private function findConnectionVariable(FuncCall $funcCall): ?Expr

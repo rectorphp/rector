@@ -176,8 +176,6 @@ CODE_SAMPLE
             if (! $node instanceof BooleanAnd) {
                 return null;
             }
-
-            // $this->value !== null
             if (! $this->isLocalPropertyOfNamesNotIdenticalToNull($node->left, $propertyNames)) {
                 return null;
             }
@@ -256,8 +254,9 @@ CODE_SAMPLE
         )) {
             return true;
         }
-        return $this->propertyFetchManipulator->isLocalPropertyOfNames($expr->right, $propertyNames) && $this->isNull(
-            $expr->left
-        );
+        if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($expr->right, $propertyNames)) {
+            return false;
+        }
+        return $this->isNull($expr->left);
     }
 }

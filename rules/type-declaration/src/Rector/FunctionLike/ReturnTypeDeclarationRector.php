@@ -197,9 +197,11 @@ CODE_SAMPLE
         if ($inferredReturnNode === null) {
             return true;
         }
-
         // already overridden by previous populateChild() method run
-        return $functionLike->returnType && $functionLike->returnType->getAttribute(AttributeKey::DO_NOT_CHANGE);
+        if (! $functionLike->returnType) {
+            return false;
+        }
+        return (bool) $functionLike->returnType->getAttribute(AttributeKey::DO_NOT_CHANGE);
     }
 
     /**

@@ -89,7 +89,10 @@ CODE_SAMPLE
 
     private function isAnExpression(?Node $node = null): bool
     {
-        return $node instanceof Node && $node instanceof Expression;
+        if (! $node instanceof Node) {
+            return false;
+        }
+        return $node instanceof Expression;
     }
 
     /**

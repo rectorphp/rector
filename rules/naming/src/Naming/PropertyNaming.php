@@ -363,8 +363,10 @@ final class PropertyNaming
         if (! Strings::startsWith($shortClassName, 'I')) {
             return false;
         }
-
-        return ctype_upper($shortClassName[1]) && ctype_lower($shortClassName[2]);
+        if (! ctype_upper($shortClassName[1])) {
+            return false;
+        }
+        return ctype_lower($shortClassName[2]);
     }
 
     private function isNumberOrUpper(string $char): bool

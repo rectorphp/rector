@@ -167,7 +167,10 @@ CODE_SAMPLE
 
     private function isEmptyStringNode(Node $node): bool
     {
-        return $node instanceof String_ && $node->value === '';
+        if (! $node instanceof String_) {
+            return false;
+        }
+        return $node->value === '';
     }
 
     private function shouldSkipVariable(Expr $expr): bool

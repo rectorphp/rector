@@ -199,7 +199,6 @@ CODE_SAMPLE
             if ($listItem === null) {
                 continue;
             }
-            // If it's a variable by value, not by reference, then skip
             if ($listItem->value instanceof Variable && ! $listItem->byRef) {
                 continue;
             }
@@ -345,6 +344,9 @@ CODE_SAMPLE
             // $condition === self::ANY
             return $this->hasAnyItemByRef($nestedList->items);
         }
-        return $arrayItem->value instanceof Variable && $arrayItem->byRef;
+        if (! $arrayItem->value instanceof Variable) {
+            return false;
+        }
+        return $arrayItem->byRef;
     }
 }

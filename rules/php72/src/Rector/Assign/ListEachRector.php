@@ -124,8 +124,10 @@ CODE_SAMPLE
         if (count((array) $listNode->items) !== 2) {
             return true;
         }
-
         // empty list → cannot handle
-        return $listNode->items[0] === null && $listNode->items[1] === null;
+        if ($listNode->items[0] !== null) {
+            return false;
+        }
+        return $listNode->items[1] === null;
     }
 }

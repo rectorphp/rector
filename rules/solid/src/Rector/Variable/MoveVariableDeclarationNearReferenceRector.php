@@ -180,9 +180,10 @@ CODE_SAMPLE
                 $isReAssign = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node): bool {
                     $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
                     $node = $this->mayBeArrayDimFetch($node);
-                    return $parent instanceof Assign && (string) $this->getName($node) === (string) $this->getName(
-                        $parent->var
-                    );
+                    if (! $parent instanceof Assign) {
+                        return false;
+                    }
+                    return (string) $this->getName($node) === (string) $this->getName($parent->var);
                 });
 
                 if (! $isReAssign) {
@@ -294,7 +295,10 @@ CODE_SAMPLE
             /** @var Variable|null $found */
             $found = $this->betterNodeFinder->findFirst($multiNode, function (Node $n) use ($node): bool {
                 $n = $this->mayBeArrayDimFetch($n);
-                return $n instanceof Variable && $this->isName($n, (string) $this->getName($node));
+                if (! $n instanceof Variable) {
+                    return false;
+                }
+                return $this->isName($n, (string) $this->getName($node));
             });
 
             if ($found !== null) {

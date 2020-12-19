@@ -184,10 +184,10 @@ CODE_SAMPLE
         )) {
             return true;
         }
-        return $this->areNodesEqual($binaryOp->right, $firstValue) && $this->areNodesEqual(
-            $binaryOp->left,
-            $secondValue
-        );
+        if (! $this->areNodesEqual($binaryOp->right, $firstValue)) {
+            return false;
+        }
+        return $this->areNodesEqual($binaryOp->left, $secondValue);
     }
 
     private function matchOnEqual(If_ $if): void
