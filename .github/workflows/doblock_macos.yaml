@@ -4,7 +4,7 @@ on:
     pull_request: null
 
 jobs:
-    matrix:
+    docblock_macos:
         strategy:
             fail-fast: false
             matrix:
