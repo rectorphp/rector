@@ -121,6 +121,9 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
         if ($assignedExprTypes === []) {
             return false;
         }
-        return ! $isAssignedInConstructor && ! $hasPropertyDefaultValue;
+        if ($isAssignedInConstructor) {
+            return false;
+        }
+        return ! $hasPropertyDefaultValue;
     }
 }

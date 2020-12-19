@@ -198,7 +198,7 @@ CODE_SAMPLE
             return true;
         }
         // already overridden by previous populateChild() method run
-        if (! $functionLike->returnType) {
+        if ($functionLike->returnType === null) {
             return false;
         }
         return (bool) $functionLike->returnType->getAttribute(AttributeKey::DO_NOT_CHANGE);
