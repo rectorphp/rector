@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
-use Rector\Set\ValueObject\SetList;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(RenameClassRector::class)
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'A' => 'B',
+            ]
+        ]]);
+
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::PATHS, [
@@ -18,8 +27,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages',
         __DIR__ . '/bin/rector',
     ]);
-
-    $parameters->set(Option::SETS, [SetList::PHP_73]);
 
     $parameters->set(Option::SKIP, [
         '*/Source/*',
