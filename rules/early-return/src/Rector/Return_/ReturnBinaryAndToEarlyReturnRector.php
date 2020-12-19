@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\ReturnBinaryAndToEarlyReturnRectorTest
@@ -70,8 +71,13 @@ CODE_SAMPLE
 
         $left = $node->expr->left;
         $ifNegations = $this->createMultipleIfsNegation($left, $node, []);
+        $nodeComments = $node->getAttribute(AttributeKey::COMMENTS);
 
-        foreach ($ifNegations as $ifNegation) {
+        foreach ($ifNegations as $key => $ifNegation) {
+            if ($key === 0) {
+                $ifNegation->setAttribute(AttributeKey::COMMENTS, $nodeComments);
+            }
+
             $this->addNodeBeforeNode($ifNegation, $node);
         }
 
