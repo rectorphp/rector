@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -112,6 +114,16 @@ CODE_SAMPLE
         }
 
         if ($expr instanceof BooleanNot) {
+            return $expr;
+        }
+
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return new Bool_($expr);
+        }
+
+        $type = $scope->getType($expr);
+        if ($type instanceof BooleanType) {
             return $expr;
         }
 
