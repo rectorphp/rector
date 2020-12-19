@@ -24,6 +24,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceDefinition;
+use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -265,7 +266,12 @@ CODE_SAMPLE
             $eventNameExpr = $this->createEventName($eventName);
 
             if (count($methodNamesWithPriorities) === 1) {
-                $this->createSingleMethod($methodNamesWithPriorities, $eventNameExpr, $eventsToMethodsArray);
+                $this->createSingleMethod(
+                    $methodNamesWithPriorities,
+                    $eventName,
+                    $eventNameExpr,
+                    $eventsToMethodsArray
+                );
             } else {
                 $this->createMultipleMethods(
                     $methodNamesWithPriorities,
@@ -312,15 +318,24 @@ CODE_SAMPLE
      */
     private function createSingleMethod(
         array $methodNamesWithPriorities,
+        string $eventName,
         Expr $expr,
         Array_ $eventsToMethodsArray
     ): void {
 
-        /** @var EventListenerTag $eventTag */
-        $eventTag = $methodNamesWithPriorities[0]->getTags()[0];
+        /** @var EventListenerTag[]|Tag[] $eventTags */
+        $eventTags = $methodNamesWithPriorities[0]->getTags();
+        foreach ($eventTags as $eventTag) {
+            if ($eventTag instanceof EventListenerTag && $eventTag->getEvent() === $eventName) {
+                $methodName = $eventTag->getMethod();
+                $priority = $eventTag->getPriority();
+                break;
+            }
+        }
 
-        $methodName = $eventTag->getMethod();
-        $priority = $eventTag->getPriority();
+        if (! isset($methodName, $priority)) {
+            return;
+        }
 
         if ($priority !== 0) {
             $methodNameWithPriorityArray = new Array_();

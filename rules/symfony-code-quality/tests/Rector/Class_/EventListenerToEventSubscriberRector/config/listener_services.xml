@@ -15,6 +15,16 @@
             <tag name="kernel.event_listener" event="multi_event" method="meToo"/>
         </service>
 
+        <service id="fourth_listener" class="Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\MultipleListenersCalledOnce">
+            <tag name="kernel.event_listener" event="single_event" method="singles"/>
+            <tag name="kernel.event_listener" event="single_second_event" method="second"/>
+        </service>
+
+        <service id="fifth_listener" class="Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\MultipleMethodsWithNonKernel">
+            <tag name="another_listener" event="unknown_event" method="unknownMethod"/>
+            <tag name="kernel.event_listener" event="single_event" method="singles"/>
+        </service>
+
         <service id="event_dispatcher" class="Symfony\Component\EventDispatcher\EventDispatcher"/>
     </services>
 </container>
