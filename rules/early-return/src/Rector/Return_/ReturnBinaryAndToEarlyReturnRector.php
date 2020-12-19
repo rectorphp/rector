@@ -7,6 +7,8 @@ namespace Rector\EarlyReturn\Rector\Return_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Stmt\If_;
@@ -132,9 +134,15 @@ CODE_SAMPLE
 
     private function createIfNegation(Expr $expr): If_
     {
-        $expr = $expr instanceof BooleanNot
-            ? $expr->expr
-            : new BooleanNot($expr);
+        if ($expr instanceof Identical) {
+            $expr = new NotIdentical($expr->left, $expr->right);
+        } elseif ($expr instanceof NotIdentical) {
+            $expr = new Identical($expr->left, $expr->right);
+        } elseif ($expr instanceof BooleanNot) {
+            $expr = $expr->expr;
+        } else {
+            $expr = new BooleanNot($expr);
+        }
 
         return new If_(
             $expr,
