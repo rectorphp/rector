@@ -221,7 +221,7 @@ CODE_SAMPLE
 
     private function processAssignInCurrentNode(
         Assign $assign,
-        Node $prevNode,
+        Expression $expression,
         Node $nextNode,
         bool $isStartIf
     ): ?Node {
@@ -230,7 +230,7 @@ CODE_SAMPLE
             : $assign->expr;
         $nullSafe = $this->nullsafeManipulator->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
 
-        $prevAssign = $prevNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $prevAssign = $expression->getAttribute(AttributeKey::PREVIOUS_NODE);
         if ($prevAssign instanceof If_) {
             $nullSafe = $this->getNullSafeOnPrevAssignIsIf($prevAssign, $nextNode, $nullSafe);
         }
@@ -298,10 +298,10 @@ CODE_SAMPLE
         return $expr;
     }
 
-    private function getStartNode(Identifier $identifier): ?Node
+    private function getStartNode(Node $node): ?Node
     {
         /** @var If_ $start */
-        $start = $identifier->getAttribute(AttributeKey::NEXT_NODE);
+        $start = $node->getAttribute(AttributeKey::NEXT_NODE);
 
         /** @var Expression $start */
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);

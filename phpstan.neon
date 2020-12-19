@@ -715,5 +715,21 @@ parameters:
         - '#Method (.*?) should return DOMElement but returns DOMElement\|false#'
         - '#Method (.*?) should return DOMElement\|null but returns DOMElement\|false#'
 
-        # bug in simplify
-        - '#Parameter 1 should use PhpParser\\Node\\Expr\\MethodCall type as already checked#'
+        # bug in simplify - @todo fix
+        - '#Parameter 2 should use "PhpParser\\Node\\Stmt\\Namespace_" type as the only type passed to this method#'
+        - '#Parameter 2 should use "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace" type as the only type passed to this method#'
+
+        - '#Content of method "(.*?)\(\)" is duplicated with method in "Rector\\Defluent\\ValueObject\\FirstAssignFluentCall" class\. Use unique content or abstract service instead#'
+        - '#Content of method "crateVariableFromNew\(\)" is duplicated with method in "Rector\\Defluent\\Rector\\MethodCall\\MethodCallOnSetterMethodCallToStandaloneAssignRector" class\. Use unique content or abstract service instead#'
+
+        # cache bug in PHPStan
+        - '#Content of method "isFoundCorrectNamespace\(\)" is duplicated with method in "Rector\\Utils\\ProjectValidator\\Command\\ValidateFixtureNamespaceCommand" class\. Use unique content or abstract service instead#'
+        -
+            message: '#Parameter 1 should use "PhpParser\\Node\\Stmt" type as the only type passed to this method#'
+            paths:
+                - rules/dead-code/src/Rector/Stmt/RemoveUnreachableStatementRector.php
+
+        -
+            message: '#Parameter 1 should use "PhpParser\\Node\\Identifier" type as the only type passed to this method#'
+            paths:
+                - rules/php80/src/Rector/If_/NullsafeOperatorRector.php

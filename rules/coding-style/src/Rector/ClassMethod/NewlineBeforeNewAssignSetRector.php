@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
@@ -136,15 +135,6 @@ CODE_SAMPLE
 
         // this is already empty line before
         return ! $this->isPreceededByEmptyLine($node, $key);
-    }
-
-    private function unwrapExpression(Node $node): Node
-    {
-        if ($node instanceof Expression) {
-            return $node->expr;
-        }
-
-        return $node;
     }
 
     /**

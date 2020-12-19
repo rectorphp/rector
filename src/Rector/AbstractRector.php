@@ -391,6 +391,15 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return $this->currentFileInfo;
     }
 
+    protected function unwrapExpression(Stmt $stmt): Node
+    {
+        if ($stmt instanceof Expression) {
+            return $stmt->expr;
+        }
+
+        return $stmt;
+    }
+
     private function isMatchingNodeType(string $nodeClass): bool
     {
         foreach ($this->getNodeTypes() as $nodeType) {

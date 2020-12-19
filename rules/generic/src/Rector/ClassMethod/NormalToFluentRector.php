@@ -137,13 +137,13 @@ CODE_SAMPLE
         return ! $prevStmt instanceof Expression;
     }
 
-    private function isBothMethodCallMatch(Stmt $firstStmt, Expression $secondStmt): bool
+    private function isBothMethodCallMatch(Stmt $firstStmt, Expression $expression): bool
     {
         if (! $firstStmt->expr instanceof MethodCall) {
             return false;
         }
 
-        if (! $secondStmt->expr instanceof MethodCall) {
+        if (! $expression->expr instanceof MethodCall) {
             return false;
         }
 
@@ -152,7 +152,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $secondMethodCallMatch = $this->matchMethodCall($secondStmt->expr);
+        $secondMethodCallMatch = $this->matchMethodCall($expression->expr);
         if ($secondMethodCallMatch === null) {
             return false;
         }

@@ -23,7 +23,7 @@ abstract class AbstractChildPopulator
     private $staticTypeMapper;
 
     /**
-     * @requires
+     * @required
      */
     public function autowireAbstractChildPopulator(StaticTypeMapper $staticTypeMapper): void
     {

@@ -78,7 +78,6 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
         }
 
         $renamedNamespaceValueObject = $this->namespaceMatcher->matchRenamedNamespace($name, $this->oldToNewNamespaces);
-
         if ($renamedNamespaceValueObject === null) {
             return null;
         }

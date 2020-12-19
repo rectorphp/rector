@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Utils\ProjectValidator\Command;
 
 use Nette\Utils\Strings;
-use const PATHINFO_DIRNAME;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Util\StaticRectorStrings;
-use Rector\PSR4\Composer\PSR4AutoloadPathsProvider;
 use Rector\Utils\ProjectValidator\Finder\FixtureFinder;
+use Rector\Utils\ProjectValidator\Naming\ExpectedNameResolver;
+use Rector\Utils\ProjectValidator\Naming\NamespaceMatcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -70,11 +70,6 @@ final class ValidateFixtureClassnameCommand extends Command
     private $symfonyStyle;
 
     /**
-     * @var array<string, string>|array<string, string[]>
-     */
-    private $psr4autoloadPaths;
-
-    /**
      * @var string
      */
     private $currentDirectory;
@@ -87,23 +82,33 @@ final class ValidateFixtureClassnameCommand extends Command
      * @var FixtureFinder
      */
     private $fixtureFinder;
+    /**
+     * @var NamespaceMatcher
+     */
+    private $namespaceMather;
+    /**
+     * @var ExpectedNameResolver
+     */
+    private $expectedNameResolver;
 
     public function __construct(
         FinderSanitizer $finderSanitizer,
-        PSR4AutoloadPathsProvider $psr4AutoloadPathsProvider,
         SymfonyStyle $symfonyStyle,
+        ExpectedNameResolver $expectedNameResolver,
         SmartFileSystem $smartFileSystem,
-        FixtureFinder $fixtureFinder
+        FixtureFinder $fixtureFinder,
+        NamespaceMatcher $namespaceMather
     ) {
         $this->finderSanitizer = $finderSanitizer;
         $this->symfonyStyle = $symfonyStyle;
-        $this->psr4autoloadPaths = $psr4AutoloadPathsProvider->provide();
         $this->currentDirectory = getcwd();
         $this->smartFileSystem = $smartFileSystem;
 
         parent::__construct();
 
         $this->fixtureFinder = $fixtureFinder;
+        $this->namespaceMather = $namespaceMather;
+        $this->expectedNameResolver = $expectedNameResolver;
     }
 
     protected function configure(): void
@@ -127,17 +132,18 @@ final class ValidateFixtureClassnameCommand extends Command
             }
 
             $path = ltrim(substr($paths[0], strlen($this->currentDirectory)) . '/tests', '/');
-            $expectedNamespace = $this->getExpectedNamespace($path, $paths[1]);
 
+            $expectedNamespace = $this->expectedNameResolver->resolve($path, $paths[1]);
             if ($expectedNamespace === null) {
                 continue;
             }
 
             // 2. reading file contents
             $fileContent = $this->smartFileSystem->readFile((string) $fixtureFileInfo);
+
             $matchAll = Strings::matchAll($fileContent, self::NAMESPACE_REGEX);
 
-            if (! $this->isFoundCorrectNamespace($matchAll, $expectedNamespace)) {
+            if (! $this->namespaceMather->isFoundCorrectNamespace($matchAll, $expectedNamespace)) {
                 continue;
             }
 
@@ -145,7 +151,6 @@ final class ValidateFixtureClassnameCommand extends Command
                 $fileContent,
                 $fixtureFileInfo,
                 $incorrectClassNameFiles,
-                $expectedNamespace,
                 $optionFix
             );
         }
@@ -180,7 +185,6 @@ final class ValidateFixtureClassnameCommand extends Command
         string $fileContent,
         SmartFileInfo $fixtureFile,
         array $incorrectClassNameFiles,
-        string $expectedNamespace,
         bool $optionFix
     ): array {
         $matchAll = Strings::matchAll($fileContent, self::CLASS_REGEX);
@@ -231,44 +235,11 @@ final class ValidateFixtureClassnameCommand extends Command
         $this->smartFileSystem->dumpFile((string) $incorrectClassNameFile, $newContent);
     }
 
-
-
-    private function getExpectedNamespace(string $path, string $relativePath): ?string
-    {
-        $relativePath = str_replace('/', '\\', dirname($relativePath, PATHINFO_DIRNAME));
-        foreach ($this->psr4autoloadPaths as $prefix => $psr4autoloadPath) {
-            if (is_string($psr4autoloadPath) && $psr4autoloadPath === $path) {
-                return $prefix . $relativePath;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param array<int, array<int, string>> $matchAll
-     */
-    private function isFoundCorrectNamespace(array $matchAll, string $expectedNamespace): bool
-    {
-        if ($matchAll === []) {
-            return true;
-        }
-
-        $countMatchAll = count($matchAll);
-        if ($countMatchAll === 1 && $matchAll[0][1] === $expectedNamespace) {
-            return true;
-        }
-
-        return $countMatchAll === 2 && $matchAll[0][1] === $expectedNamespace && $matchAll[1][1] === $expectedNamespace;
-    }
-
     /**
      * @param array<int, array<int, string>> $matchAll
      */
     private function getClassName(array $matchAll): string
     {
-        $countMatchAll = count($matchAll);
-
         return $matchAll[0][2];
     }
 }

@@ -164,20 +164,20 @@ CODE_SAMPLE
     /**
      * Check nodes that breaks scope while traversing up
      */
-    private function isBreakingScopeNode(Stmt $stmt): bool
+    private function isBreakingScopeNode(Node $node): bool
     {
-        if ($stmt instanceof ClassLike) {
+        if ($node instanceof ClassLike) {
             return true;
         }
 
-        if ($stmt instanceof ClassMethod) {
+        if ($node instanceof ClassMethod) {
             return true;
         }
 
-        if ($stmt instanceof Namespace_) {
+        if ($node instanceof Namespace_) {
             return true;
         }
 
-        return $stmt instanceof Else_;
+        return $node instanceof Else_;
     }
 }

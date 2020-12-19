@@ -17,7 +17,6 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -170,7 +169,7 @@ CODE_SAMPLE
     {
         $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
-            throw new ShouldNotHappenException();
+            return new MixedType();
         }
 
         $propertyName = $this->getName($propertyFetch);

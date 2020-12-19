@@ -10,23 +10,17 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
-use Rector\Core\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class TypeWithClassNameTypeMapper implements TypeMapperInterface
 {
     /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-    /**
      * @var StringTypeMapper
      */
     private $stringTypeMapper;
 
-    public function __construct(PhpVersionProvider $phpVersionProvider, StringTypeMapper $stringTypeMapper)
+    public function __construct(StringTypeMapper $stringTypeMapper)
     {
-        $this->phpVersionProvider = $phpVersionProvider;
         $this->stringTypeMapper = $stringTypeMapper;
     }
 
