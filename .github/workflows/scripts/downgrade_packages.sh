@@ -22,9 +22,9 @@
 supported_target_php_versions=(7.0 7.1 7.2 7.3 7.4)
 
 # Rector configs carry the previous downgrade sets starting from php80
-# (eg: to-php73 has downgrade sets php80 and php74)
+# (eg: latest-to-php73 has downgrade sets php80 and php74)
 # so even though we're storing all the stages, only the last item must be executed
-# (only to-php73, no need for to-php74) or a same downgrade will be executed more than once
+# (only latest-to-php73, no need for latest-to-php74) or a same downgrade will be executed more than once
 # This logic is a bit redundant, but it enables to execute several config files on each package,
 # eg: defining the set to execute using `--set` in the CLI (not supported anymore)
 GROUP_RECTOR_CONFIGS=true
@@ -48,11 +48,11 @@ if [ -n "$GROUP_RECTOR_CONFIGS" ]; then
         ["7.4"]="7.4.*" \
     )
     downgrade_php_rectorconfigs=( \
-        ["7.0"]="to-php70" \
-        ["7.1"]="to-php71" \
-        ["7.2"]="to-php72" \
-        ["7.3"]="to-php73" \
-        ["7.4"]="to-php74" \
+        ["7.0"]="latest-to-php70" \
+        ["7.1"]="latest-to-php71" \
+        ["7.2"]="latest-to-php72" \
+        ["7.3"]="latest-to-php73" \
+        ["7.4"]="latest-to-php74" \
     )
 else
     downgrade_php_whynots=( \
@@ -63,11 +63,11 @@ else
         ["7.4"]="7.4.*" \
     )
     downgrade_php_rectorconfigs=( \
-        ["7.0"]="to-php74 to-php73 to-php72 to-php71 to-php70" \
-        ["7.1"]="to-php74 to-php73 to-php72 to-php71" \
-        ["7.2"]="to-php74 to-php73 to-php72" \
-        ["7.3"]="to-php74 to-php73" \
-        ["7.4"]="to-php74" \
+        ["7.0"]="php80-to-74 php74-to-73 php73-to-72 php72-to-71 php71-to-70" \
+        ["7.1"]="php80-to-74 php74-to-73 php73-to-72 php72-to-71" \
+        ["7.2"]="php80-to-74 php74-to-73 php73-to-72" \
+        ["7.3"]="php80-to-74 php74-to-73" \
+        ["7.4"]="php80-to-74" \
     )
 fi
 ########################################################################
