@@ -91,6 +91,9 @@ final class ArrayManipulator
 
     public function hasKeyName(ArrayItem $arrayItem, string $name): bool
     {
-        return $arrayItem->key instanceof String_ && $arrayItem->key->value === $name;
+        if (! $arrayItem->key instanceof String_) {
+            return false;
+        }
+        return $arrayItem->key->value === $name;
     }
 }
