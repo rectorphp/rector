@@ -82,19 +82,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function getLastReturnExpr(Expr $expr): Expr
-    {
-        if ($expr instanceof Bool_) {
-            return $expr;
-        }
-
-        if ($expr instanceof BooleanNot) {
-            return $expr;
-        }
-
-        return new Bool_($expr);
-    }
-
     /**
      * @param If_[] $ifNegations
      * @return If_[]
@@ -108,6 +95,19 @@ CODE_SAMPLE
             $expr = $expr->right;
         }
         return $ifNegations + [$this->createIfNegation($expr)];
+    }
+
+    private function getLastReturnExpr(Expr $expr): Expr
+    {
+        if ($expr instanceof Bool_) {
+            return $expr;
+        }
+
+        if ($expr instanceof BooleanNot) {
+            return $expr;
+        }
+
+        return new Bool_($expr);
     }
 
     /**
