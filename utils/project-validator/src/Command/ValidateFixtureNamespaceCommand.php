@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Utils\ProjectValidator\Command;
 
 use Nette\Utils\Strings;
+use Rector\Utils\ProjectValidator\Finder\FixtureFinder;
 use const PATHINFO_DIRNAME;
 use Rector\Core\Configuration\Option;
 use Rector\PSR4\Composer\PSR4AutoloadPathsProvider;
@@ -50,18 +51,24 @@ final class ValidateFixtureNamespaceCommand extends Command
      * @var SmartFileSystem
      */
     private $smartFileSystem;
+    /**
+     * @var FixtureFinder
+     */
+    private $fixtureFinder;
 
     public function __construct(
         FinderSanitizer $finderSanitizer,
         PSR4AutoloadPathsProvider $psr4AutoloadPathsProvider,
         SymfonyStyle $symfonyStyle,
-        SmartFileSystem $smartFileSystem
+        SmartFileSystem $smartFileSystem,
+        FixtureFinder $fixtureFinder
     ) {
         $this->finderSanitizer = $finderSanitizer;
         $this->symfonyStyle = $symfonyStyle;
         $this->psr4autoloadPaths = $psr4AutoloadPathsProvider->provide();
         $this->currentDirectory = getcwd();
         $this->smartFileSystem = $smartFileSystem;
+        $this->fixtureFinder = $fixtureFinder;
 
         parent::__construct();
     }
@@ -75,10 +82,11 @@ final class ValidateFixtureNamespaceCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $optionFix = $input->getOption(Option::FIX);
-        $fixtureFiles = $this->getFixtureFiles();
+
+        $fixtureFileInfos = $this->fixtureFinder->findFixtureFileInfos();
         $incorrectNamespaceFiles = [];
 
-        foreach ($fixtureFiles as $fixtureFile) {
+        foreach ($fixtureFileInfos as $fixtureFile) {
             // 1. geting expected namespace ...
             $paths = explode('/tests/', (string) $fixtureFile);
             if (count($paths) > 2) {

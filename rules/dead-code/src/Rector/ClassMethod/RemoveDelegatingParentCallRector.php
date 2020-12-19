@@ -7,6 +7,7 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -118,16 +119,13 @@ CODE_SAMPLE
         return $classLike->extends === null;
     }
 
-    /**
-     * @param Node|Expression $node
-     */
-    private function unwrapExpression(Node $node): Node
+    private function unwrapExpression(Stmt $stmt): Node
     {
-        if ($node instanceof Expression) {
-            return $node->expr;
+        if ($stmt instanceof Expression) {
+            return $stmt->expr;
         }
 
-        return $node;
+        return $stmt;
     }
 
     private function isMethodReturnType(ClassMethod $classMethod, string $type): bool
@@ -157,10 +155,10 @@ CODE_SAMPLE
         return null;
     }
 
-    private function hasRequiredAnnotation(Node $node): bool
+    private function hasRequiredAnnotation(ClassMethod $classMethod): bool
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return false;
         }

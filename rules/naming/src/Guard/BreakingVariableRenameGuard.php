@@ -6,7 +6,6 @@ namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
@@ -15,7 +14,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\TypeWithClassName;
 use Ramsey\Uuid\UuidInterface;
@@ -247,20 +245,18 @@ final class BreakingVariableRenameGuard
 
     /**
      * @TODO Remove once ParamRenamer created
-     * @param Param|Property $node
      */
-    private function isRamseyUuidInterface(Node $node): bool
+    private function isRamseyUuidInterface(Param $param): bool
     {
-        return $this->nodeTypeResolver->isObjectType($node, UuidInterface::class);
+        return $this->nodeTypeResolver->isObjectType($param, UuidInterface::class);
     }
 
     /**
      * @TODO Remove once ParamRenamer created
-     * @param Param|Property $node
      */
-    private function isDateTimeAtNamingConvention(Node $node): bool
+    private function isDateTimeAtNamingConvention(Param $param): bool
     {
-        $type = $this->nodeTypeResolver->resolve($node);
+        $type = $this->nodeTypeResolver->resolve($param);
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
         if (! $type instanceof TypeWithClassName) {
             return false;
@@ -270,7 +266,7 @@ final class BreakingVariableRenameGuard
             return false;
         }
 
-        $currentName = $this->nodeNameResolver->getName($node);
+        $currentName = $this->nodeNameResolver->getName($param);
         if ($currentName === null) {
             return false;
         }

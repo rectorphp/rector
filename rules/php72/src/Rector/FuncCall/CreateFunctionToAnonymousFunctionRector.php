@@ -143,18 +143,17 @@ CODE_SAMPLE
     }
 
     /**
-     * @param String_|Expr $node
      * @return Expression[]|Stmt[]
      */
-    private function parseStringToBody(Node $node): array
+    private function parseStringToBody(Expr $expr): array
     {
-        if (! $node instanceof String_ && ! $node instanceof Encapsed && ! $node instanceof Concat) {
+        if (! $expr instanceof String_ && ! $expr instanceof Encapsed && ! $expr instanceof Concat) {
             // special case of code elsewhere
-            return [$this->createEval($node)];
+            return [$this->createEval($expr)];
         }
 
-        $node = $this->inlineCodeParser->stringify($node);
-        return $this->inlineCodeParser->parse($node);
+        $expr = $this->inlineCodeParser->stringify($expr);
+        return $this->inlineCodeParser->parse($expr);
     }
 
     private function createEval(Expr $expr): Expression

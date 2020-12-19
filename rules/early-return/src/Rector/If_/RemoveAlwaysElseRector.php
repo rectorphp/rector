@@ -102,18 +102,19 @@ CODE_SAMPLE
         return null;
     }
 
-    private function doesLastStatementBreakFlow(Node $node): bool
+    private function doesLastStatementBreakFlow(If_ $if): bool
     {
-        $lastStmt = end($node->stmts);
+        $lastStmt = end($if->stmts);
+
         return ! ($lastStmt instanceof Return_
             || $lastStmt instanceof Throw_
             || $lastStmt instanceof Continue_
             || ($lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_));
     }
 
-    private function copyCommentIfExists(Node $from, Node $to): void
+    private function copyCommentIfExists(ElseIf_ $elseIf, If_ $if): void
     {
-        $nodeComments = $from->getAttribute(AttributeKey::COMMENTS);
-        $to->setAttribute(AttributeKey::COMMENTS, $nodeComments);
+        $nodeComments = $elseIf->getAttribute(AttributeKey::COMMENTS);
+        $if->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 }

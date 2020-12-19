@@ -117,12 +117,15 @@ CODE_SAMPLE
         return $this->createReturnNodes($newNodes);
     }
 
-    private function replaceToPropertyExistsWithNullCheck(Expr $expr, string $property, Expr $issetVar): BooleanAnd
-    {
+    private function replaceToPropertyExistsWithNullCheck(
+        Expr $expr,
+        string $property,
+        PropertyFetch $propertyFetch
+    ): BooleanAnd {
         $args = [new Arg($expr), new Arg(new String_($property))];
         $propertyExistsFuncCall = new FuncCall(new Name('property_exists'), $args);
 
-        return new BooleanAnd($propertyExistsFuncCall, new NotIdentical($issetVar, $this->createNull()));
+        return new BooleanAnd($propertyExistsFuncCall, new NotIdentical($propertyFetch, $this->createNull()));
     }
 
     /**

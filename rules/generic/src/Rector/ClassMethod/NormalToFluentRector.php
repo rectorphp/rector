@@ -120,10 +120,10 @@ CODE_SAMPLE
         $this->callsToFluent = $callsToFluent;
     }
 
-    private function shouldSkipPreviousStmt(Node $node, int $i, Stmt $stmt): bool
+    private function shouldSkipPreviousStmt(ClassMethod $classMethod, int $i, Stmt $stmt): bool
     {
         // we look only for 2+ stmts
-        if (! isset($node->stmts[$i - 1])) {
+        if (! isset($classMethod->stmts[$i - 1])) {
             return true;
         }
 
@@ -132,12 +132,12 @@ CODE_SAMPLE
             return true;
         }
 
-        $prevStmt = $node->stmts[$i - 1];
+        $prevStmt = $classMethod->stmts[$i - 1];
 
         return ! $prevStmt instanceof Expression;
     }
 
-    private function isBothMethodCallMatch(Expression $firstStmt, Expression $secondStmt): bool
+    private function isBothMethodCallMatch(Stmt $firstStmt, Expression $secondStmt): bool
     {
         if (! $firstStmt->expr instanceof MethodCall) {
             return false;

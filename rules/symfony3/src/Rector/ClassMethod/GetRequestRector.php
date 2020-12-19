@@ -106,16 +106,11 @@ CODE_SAMPLE
         return null;
     }
 
-    /**
-     * @param ClassMethod|MethodCall $node
-     */
-    private function resolveUniqueName(Node $node, string $name): string
+    private function resolveUniqueName(ClassMethod $classMethod, string $name): string
     {
-        $candidates = $node instanceof ClassMethod ? $node->params : $node->args;
-
         $candidateNames = [];
-        foreach ($candidates as $candidate) {
-            $candidateNames[] = $this->getName($candidate);
+        foreach ($classMethod->params as $param) {
+            $candidateNames[] = $this->getName($param);
         }
 
         $bareName = $name;

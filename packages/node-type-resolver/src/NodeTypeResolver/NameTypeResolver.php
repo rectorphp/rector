@@ -69,7 +69,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
         return $type;
     }
 
-    private function resolveFullyQualifiedName(Node $nameNode, string $name): string
+    private function resolveFullyQualifiedName(Name $nameNode, string $name): string
     {
         if (in_array($name, ['self', 'static', 'this'], true)) {
             /** @var string|null $class */

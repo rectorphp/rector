@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -172,13 +173,13 @@ CODE_SAMPLE
 
     private function createMethodCallNodeFromAssignNode(
         PropertyFetch $propertyFetch,
-        Node $node,
+        Expr $expr,
         string $method
     ): MethodCall {
         /** @var Variable $variableNode */
         $variableNode = $propertyFetch->var;
 
-        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch), $node]);
+        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch), $expr]);
     }
 
     private function createMethodCallNodeFromPropertyFetchNode(
