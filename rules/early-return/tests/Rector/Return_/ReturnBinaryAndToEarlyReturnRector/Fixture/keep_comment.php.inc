@@ -7,7 +7,13 @@ class KeepComment
     public function accept($something, $somethingelse, $anotherelse, $last)
     {
         // a comment
-        return $something && $somethingelse && $anotherelse && $last;
+        if ($a) {
+            // another comment
+            return $something && $somethingelse && $anotherelse && $last;
+        }
+
+        // another next comment
+        return $a;
     }
 }
 
@@ -22,16 +28,22 @@ class KeepComment
     public function accept($something, $somethingelse, $anotherelse, $last)
     {
         // a comment
-        if (!$something) {
-            return false;
+        if ($a) {
+            // another comment
+            if (!$something) {
+                return false;
+            }
+            if (!$somethingelse) {
+                return false;
+            }
+            if (!$anotherelse) {
+                return false;
+            }
+            return (bool) $last;
         }
-        if (!$somethingelse) {
-            return false;
-        }
-        if (!$anotherelse) {
-            return false;
-        }
-        return (bool) $last;
+
+        // another next comment
+        return $a;
     }
 }
 
