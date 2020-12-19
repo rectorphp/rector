@@ -241,7 +241,6 @@ CODE_SAMPLE
         $serviceName = $jmsInjectTagValueNode->getServiceName();
 
         if ($serviceName) {
-            // 1. service class
             if (class_exists($serviceName)) {
                 return new ObjectType($serviceName);
             }

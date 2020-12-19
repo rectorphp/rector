@@ -174,8 +174,6 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         if ($this->shouldSkip($node)) {
             return null;
         }
-
-        // $this->clone() → clone $this->testedObject
         if ($this->isName($node->name, 'clone')) {
             return new Clone_($this->testedObjectPropertyFetch);
         }
@@ -260,7 +258,6 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         if ($this->isName($methodCall->name, 'beConstructedThrough')) {
-            // static method
             $methodName = $this->getValue($methodCall->args[0]->value);
             $staticCall = $this->createStaticCall($this->testedClass, $methodName);
 

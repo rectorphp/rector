@@ -280,8 +280,6 @@ CODE_SAMPLE
         }
 
         $nextExpressionNode = $nextExpression->expr;
-
-        // $value .= '...';
         if ($nextExpressionNode instanceof ConcatAssign) {
             // is assign to same variable?
             if (! $this->areNodesEqual($expr, $nextExpressionNode->var)) {

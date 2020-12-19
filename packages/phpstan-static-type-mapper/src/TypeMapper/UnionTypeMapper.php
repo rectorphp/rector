@@ -97,7 +97,6 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
-        // match array types
         $arrayNode = $this->matchArrayTypes($type);
         if ($arrayNode !== null) {
             return $arrayNode;

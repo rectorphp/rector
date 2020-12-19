@@ -57,8 +57,6 @@ final class RectorConfigsResolver
 
         $argvInput = new ArgvInput();
         $this->guardDeprecatedSetOption($argvInput);
-
-        // And from --config or default one
         $inputOrFallbackConfigFileInfo = $this->configResolver->resolveFromInputWithFallback(
             $argvInput,
             ['rector.php']

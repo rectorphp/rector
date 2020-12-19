@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony5\Rector\New_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;

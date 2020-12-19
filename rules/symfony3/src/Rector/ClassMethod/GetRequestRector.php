@@ -164,8 +164,6 @@ CODE_SAMPLE
         if ($containsGetRequestMethod) {
             return true;
         }
-
-        // "$this->get('request')"
         /** @var MethodCall[] $getMethodCalls */
         $getMethodCalls = $this->betterNodeFinder->find($node, function (Node $node): bool {
             return $this->isLocalMethodCallNamed($node, 'get');
@@ -202,7 +200,6 @@ CODE_SAMPLE
 
     private function containsGetRequestMethod(Node $node): bool
     {
-        // "$this->getRequest()"
         return (bool) $this->betterNodeFinder->find($node, function (Node $node): bool {
             return $this->isLocalMethodCallNamed($node, 'getRequest');
         });

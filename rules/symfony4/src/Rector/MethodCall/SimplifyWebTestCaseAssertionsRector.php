@@ -125,8 +125,6 @@ CODE_SAMPLE
         if ($args !== null) {
             return $this->createLocalMethodCall('assertSelectorTextContains', $args);
         }
-
-        // 3. assertResponseRedirects
         return $this->processAssertResponseRedirects($node);
     }
 

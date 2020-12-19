@@ -167,8 +167,6 @@ CODE_SAMPLE
         if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetch, $objectType)) {
             return true;
         }
-
-        // $this->value = $value
         return $this->propertyFetchManipulator->isPropertyToSelf($propertyFetch);
     }
 

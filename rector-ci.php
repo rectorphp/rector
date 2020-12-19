@@ -85,7 +85,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages/doctrine-annotation-generated/src',
         // template files
         __DIR__ . '/packages/rector-generator/templates',
-        // public api
         __DIR__ . '/packages/rector-generator/src/ValueObject/RectorRecipe.php',
     ]);
 
