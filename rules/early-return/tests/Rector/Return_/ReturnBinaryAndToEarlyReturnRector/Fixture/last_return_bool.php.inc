@@ -9,9 +9,9 @@ class LastReturnBool
         return $something && $this->getSomethingElse();
     }
 
-    public function accept2($something)
+    public function accept2($something, $somethingelse)
     {
-        return $something && $this->getSomethingElse() === true;
+        return $something && $somethingelse === 'something else';
     }
 
     private function getSomethingElse(): bool
@@ -36,12 +36,12 @@ class LastReturnBool
         return $this->getSomethingElse();
     }
 
-    public function accept2($something)
+    public function accept2($something, $somethingelse)
     {
         if (!$something) {
             return false;
         }
-        return $this->getSomethingElse() === true;
+        return $somethingelse === 'something else';
     }
 
     private function getSomethingElse(): bool
