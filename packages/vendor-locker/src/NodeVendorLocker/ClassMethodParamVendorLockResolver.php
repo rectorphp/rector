@@ -57,6 +57,8 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
                 return $parentClassMethod->params[$paramPosition]->type === null;
             }
         }
+
+        // if not, look for it's parent parent
         if (method_exists($parentClassName, $methodName)) {
             // parent class method in external scope → it's not ok
             // if not, look for it's parent parent

@@ -176,6 +176,8 @@ CODE_SAMPLE
             if (! $node instanceof BooleanAnd) {
                 return null;
             }
+
+            // $this->value !== null
             if (! $this->isLocalPropertyOfNamesNotIdenticalToNull($node->left, $propertyNames)) {
                 return null;
             }

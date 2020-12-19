@@ -141,12 +141,16 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
 
     private function isAbstractMethod(ClassLike $classLike, FunctionLike $functionLike): bool
     {
+        // abstract class method
         if ($functionLike instanceof ClassMethod && $functionLike->isAbstract()) {
             return true;
         }
+
         if (! $classLike instanceof Class_) {
             return false;
         }
+
+        // abstract class
         return $classLike->isAbstract();
     }
 }
