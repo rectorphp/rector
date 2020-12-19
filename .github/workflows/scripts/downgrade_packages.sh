@@ -104,7 +104,6 @@ packages_to_downgrade=()
 rectorconfigs_to_downgrade=()
 declare -A package_paths
 declare -A packages_by_rectorconfig
-declare -A last_rectorconfig_by_package
 
 # Switch to production
 composer install --no-dev
@@ -140,12 +139,6 @@ do
             rectorconfigs_to_downgrade+=($rector_config)
             package_paths[$package]=$path
             packages_by_rectorconfig[$rector_config]=$(echo "${packages_by_rectorconfig[$rector_config]} ${package}")
-
-            # If the downgrades are grouped in the same Rector config, then we must only
-            # execute the last config (eg: to-php71) and not the previous ones (eg: to-php72)
-            if [ -n "$GROUP_RECTOR_CONFIGS" ]; then
-                last_rectorconfig_by_package[$package]=$rector_config
-            fi
         done
     else
         echo No packages to downgrade
@@ -314,24 +307,6 @@ do
         downgraded_packages+=($key)
         ((numberDowngradedPackages++))
 
-        # If the downgrades are grouped in the same Rector config, then we must only
-        # execute the last config (eg: to-php71) and not the previous ones (eg: to-php72)
-        if [ -n "$GROUP_RECTOR_CONFIGS" ]; then
-            # Check that this config and the last one are different
-            if [ "${rector_config}" != "${last_rectorconfig_by_package[$package_to_downgrade]}" ]; then
-                # Get the last rector_config for this package, replacing the current one
-                rector_config=${last_rectorconfig_by_package[$package_to_downgrade]}
-                # If it has already been executed, then do nothing
-                key="${package_to_downgrade}_${rector_config}"
-                if [[ " ${downgraded_packages[@]} " =~ " ${key} " ]]; then
-                    continue
-                fi
-                # Mark this package as downgraded
-                downgraded_packages+=($key)
-                ((numberDowngradedPackages++))
-            fi
-        fi
-
         path_to_downgrade=${package_paths[$package_to_downgrade]}
 
         if [ $package_to_downgrade = "$rootPackage" ]
@@ -376,21 +351,6 @@ do
                 key="${package_to_downgrade}_${rector_config}"
                 downgraded_packages+=($key)
                 ((numberDowngradedPackages++))
-
-                # If the downgrades are grouped in the same Rector config, then we must only
-                # execute the last config (eg: to-php71) and not the previous ones (eg: to-php72)
-                if [ -n "$GROUP_RECTOR_CONFIGS" ]; then
-                    # Check that this config and the last one are different
-                    if [ "${rector_config}" != "${last_rectorconfig_by_package[$package_to_downgrade]}" ]; then
-                        # Get the last rector_config for this package, replacing the current one
-                        package_last_rector_config=${last_rectorconfig_by_package[$package_to_downgrade]}
-                        # If it has already been executed, then do nothing
-                        key="${package_to_downgrade}_${package_last_rector_config}"
-                        if [[ " ${downgraded_packages[@]} " =~ " ${key} " ]]; then
-                            continue
-                        fi
-                    fi
-                fi
 
                 # This package does need downgrading (eg: it had not been already downgraded via GROUP_RECTOR_CONFIGS)
                 circular_packages_to_downgrade_for_rectorconfig+=($package_to_downgrade)
