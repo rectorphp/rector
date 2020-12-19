@@ -189,8 +189,10 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         )) {
             return true;
         }
-
-        return $this->tagValueNodeConfiguration->hasOpeningBracket() && $this->tagValueNodeConfiguration->hasClosingBracket();
+        if (! $this->tagValueNodeConfiguration->hasOpeningBracket()) {
+            return false;
+        }
+        return $this->tagValueNodeConfiguration->hasClosingBracket();
     }
 
     /**

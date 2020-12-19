@@ -155,8 +155,10 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($unionTypeAnalysis === null) {
             return false;
         }
-
-        return $unionTypeAnalysis->hasIterable() && $unionTypeAnalysis->hasArray();
+        if (! $unionTypeAnalysis->hasIterable()) {
+            return false;
+        }
+        return $unionTypeAnalysis->hasArray();
     }
 
     /**

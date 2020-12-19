@@ -375,7 +375,10 @@ final class NodeTypeResolver
 
     private function isArrayExpr(Node $node): bool
     {
-        return $node instanceof Expr && $this->arrayTypeAnalyzer->isArrayType($node);
+        if (! $node instanceof Expr) {
+            return false;
+        }
+        return $this->arrayTypeAnalyzer->isArrayType($node);
     }
 
     private function resolveArrayType(Expr $expr): Type
