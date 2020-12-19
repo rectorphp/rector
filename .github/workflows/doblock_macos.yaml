@@ -10,7 +10,7 @@ jobs:
             matrix:
                 platform: [ubuntu-latest, macos-latest]
 
-        runs-on: ${{ matrix.platform }
+        runs-on: ${{ matrix.platform }}
 
         steps:
             -   uses: actions/checkout@v2
