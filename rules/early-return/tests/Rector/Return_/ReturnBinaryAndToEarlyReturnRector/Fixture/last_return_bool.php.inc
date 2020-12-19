@@ -9,6 +9,11 @@ class LastReturnBool
         return $something && $this->getSomethingElse();
     }
 
+    public function accept2($something)
+    {
+        return $something && $this->getSomethingElse() === true;
+    }
+
     private function getSomethingElse(): bool
     {
         return true;
@@ -29,6 +34,14 @@ class LastReturnBool
             return false;
         }
         return $this->getSomethingElse();
+    }
+
+    public function accept2($something)
+    {
+        if (!$something) {
+            return false;
+        }
+        return $this->getSomethingElse() === true;
     }
 
     private function getSomethingElse(): bool
