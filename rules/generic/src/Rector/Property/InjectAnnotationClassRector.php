@@ -242,6 +242,7 @@ CODE_SAMPLE
 
         if ($serviceName) {
             if (class_exists($serviceName)) {
+                // single class service
                 return new ObjectType($serviceName);
             }
 

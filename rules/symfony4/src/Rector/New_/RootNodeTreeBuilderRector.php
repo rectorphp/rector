@@ -77,6 +77,8 @@ CODE_SAMPLE
         if (! $rootNameNode instanceof String_) {
             return null;
         }
+
+        // switch arguments
         [$node->args, $rootMethodCallNode->args] = [$rootMethodCallNode->args, $node->args];
 
         $rootMethodCallNode->name = new Identifier('getRootNode');

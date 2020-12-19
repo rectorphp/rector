@@ -19,8 +19,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\StandaloneLineInMultilineArrayFixer;
+use Symplify\CodingStandard\Fixer\Commenting\RemoveCommentedCodeFixer;
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
-use Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
@@ -88,12 +88,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         BlankLineAfterOpeningTagFixer::class,
         Psr4Fixer::class,
 
+        // buggy - fixed on master
+        RemoveCommentedCodeFixer::class,
+
         PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
-        CommentedOutCodeSniff::class . '.Found' => [
-            __DIR__ . '/rules/php72/src/Rector/Assign/ListEachRector.php',
-            __DIR__ . '/rules/dead-code/src/Rector/FunctionLike/RemoveOverriddenValuesRector.php',
-            __DIR__ . '/rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php',
-        ],
         PhpUnitStrictFixer::class => [
             __DIR__ . '/packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
