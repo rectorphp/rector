@@ -14,7 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'A' => 'B',
-            ]
+            ],
         ]]);
 
     $parameters = $containerConfigurator->parameters();
