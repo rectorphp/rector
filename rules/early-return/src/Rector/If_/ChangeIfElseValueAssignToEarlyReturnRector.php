@@ -106,7 +106,7 @@ CODE_SAMPLE
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->stmts);
 
         $return = new Return_($assign->expr);
-        $this->copyCommentIfExists($assign, $return);
+        $this->mirrorComments($return, $assign);
         $node->stmts[$lastIfStmtKey] = $return;
 
         /** @var Assign $assign */
