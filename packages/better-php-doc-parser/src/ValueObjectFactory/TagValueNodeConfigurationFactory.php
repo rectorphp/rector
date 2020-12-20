@@ -42,6 +42,12 @@ final class TagValueNodeConfigurationFactory
      */
     public const CLOSING_BRACKET_REGEX = '#\)$#';
 
+    /**
+     * @var string
+     * @see https://regex101.com/r/0KlSQv/1
+     */
+    public const ARRAY_COLON_SEPARATOR_REGEX = '#{([^{}]+)[:]([^{}]+)}#';
+
     public function createFromOriginalContent(
         ?string $originalContent,
         PhpDocTagValueNode $phpDocTagValueNode
@@ -70,7 +76,7 @@ final class TagValueNodeConfigurationFactory
 
         $isSilentKeyExplicit = (bool) Strings::contains($originalContent, sprintf('%s=', $silentKey));
 
-        $arrayEqualSign = $this->resolveArrayEqualSignByPhpNodeClass($phpDocTagValueNode);
+        $arrayEqualSign = $this->resolveArraySeparatorSign($originalContent, $phpDocTagValueNode);
 
         return new TagValueNodeConfiguration(
             $originalContent,
@@ -108,6 +114,16 @@ final class TagValueNodeConfigurationFactory
         $quotedArrayPattern = sprintf('#%s=\{"(.*)"\}|\{"(.*)"\}#', $escapedKey);
 
         return (bool) Strings::match($originalContent, $quotedArrayPattern);
+    }
+
+    private function resolveArraySeparatorSign(string $originalContent, PhpDocTagValueNode $phpDocTagValueNode): string
+    {
+        $hasArrayColonSeparator = (bool) Strings::match($originalContent, self::ARRAY_COLON_SEPARATOR_REGEX);
+
+        if ($hasArrayColonSeparator) {
+            return ':';
+        }
+        return $this->resolveArrayEqualSignByPhpNodeClass($phpDocTagValueNode);
     }
 
     /**
