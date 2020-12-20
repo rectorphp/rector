@@ -12,7 +12,7 @@ use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\ParamRename;
 use Rector\Naming\VariableRenamer;
 
-abstract class AbstractParamRenamer implements RenamerInterface
+final class ParamRenamer implements RenamerInterface
 {
     /**
      * @var VariableRenamer

@@ -61,6 +61,10 @@ CODE_SAMPLE
 
         // special case for fluent methods
         foreach ($this->nodesToRemoveCollector->getNodesToRemove() as $key => $nodeToRemove) {
+            if (! $node instanceof MethodCall) {
+                continue;
+            }
+
             if (! $nodeToRemove instanceof MethodCall) {
                 continue;
             }
