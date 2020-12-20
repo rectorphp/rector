@@ -351,24 +351,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @param string[] $allowedTypes
-     */
-    protected function isAllowedType(string $currentType, array $allowedTypes): bool
-    {
-        foreach ($allowedTypes as $allowedType) {
-            if (is_a($currentType, $allowedType, true)) {
-                return true;
-            }
-
-            if (fnmatch($allowedType, $currentType, FNM_NOESCAPE)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @param Arg[] $newArgs
      * @param Arg[] $appendingArgs
      * @return Arg[]
