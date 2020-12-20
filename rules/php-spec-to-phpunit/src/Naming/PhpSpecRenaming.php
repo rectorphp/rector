@@ -77,13 +77,16 @@ final class PhpSpecRenaming
 
     public function renameNamespace(Class_ $class): void
     {
-        /** @var Namespace_ $namespace */
+        /** @var Namespace_|null $namespace */
         $namespace = $class->getAttribute(AttributeKey::NAMESPACE_NODE);
-        if ($namespace->name === null) {
+        if ($namespace === null) {
             return;
         }
 
         $namespaceName = $this->nodeNameResolver->getName($namespace);
+        if ($namespaceName === null) {
+            return;
+        }
 
         $newNamespaceName = StaticRectorStrings::removePrefixes($namespaceName, ['spec\\']);
 
@@ -92,13 +95,14 @@ final class PhpSpecRenaming
 
     public function renameClass(Class_ $class): void
     {
+        $classShortName = $this->classNaming->getShortName($class);
         // anonymous class?
-        if ($class->name === null) {
+        if ($classShortName === '') {
             throw new ShouldNotHappenException();
         }
 
         // 2. change class name
-        $newClassName = StaticRectorStrings::removeSuffixes($class->name->toString(), [self::SPEC]);
+        $newClassName = StaticRectorStrings::removeSuffixes($classShortName, [self::SPEC]);
         $newTestClassName = $newClassName . 'Test';
 
         $class->name = new Identifier($newTestClassName);

@@ -230,17 +230,11 @@ CODE_SAMPLE
 
     private function isInsideLoopStmts(Node $node): bool
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        while ($parent) {
-            if ($parent instanceof For_ || $parent instanceof While_ || $parent instanceof Foreach_ || $parent instanceof Do_) {
-                return true;
-            }
-
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        return false;
+        $loopNode = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $node,
+            [For_::class, While_::class, Foreach_::class, Do_::class]
+        );
+        return (bool) $loopNode;
     }
 
     private function mayBeArrayDimFetch(Node $node): Node

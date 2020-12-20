@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generic\ValueObject\NormalToFluent;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -179,8 +180,13 @@ CODE_SAMPLE
             ++$i;
         }
 
+        $stmt = $classMethod->stmts[$fluentMethodCallIndex];
+        if (! $stmt instanceof Expression) {
+            throw new ShouldNotHappenException();
+        }
+
         /** @var MethodCall $fluentMethodCall */
-        $fluentMethodCall = $classMethod->stmts[$fluentMethodCallIndex]->expr;
+        $fluentMethodCall = $stmt->expr;
 
         // they are added in reversed direction
         $methodCallsToAdd = array_reverse($methodCallsToAdd);

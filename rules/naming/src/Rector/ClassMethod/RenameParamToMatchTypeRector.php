@@ -121,8 +121,8 @@ CODE_SAMPLE
             if ($paramRename === null) {
                 continue;
             }
-            $matchTypeParamRenamerRename = $this->matchTypeParamRenamer->rename($paramRename);
 
+            $matchTypeParamRenamerRename = $this->matchTypeParamRenamer->rename($paramRename);
             if ($matchTypeParamRenamerRename === null) {
                 continue;
             }

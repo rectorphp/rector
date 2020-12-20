@@ -117,21 +117,21 @@ CODE_SAMPLE
 
     private function isFoundInParentNode(Variable $variable): bool
     {
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parentNode) {
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
-                break;
-            }
-        }
+        /** @var ClassMethod|Function_|null $classMethodOrFunction */
+        $classMethodOrFunction = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $variable,
+            [ClassMethod::class, Function_::class]
+        );
 
-        if ($parentNode === null) {
+        if ($classMethodOrFunction === null) {
             return false;
         }
 
-        $params = $parentNode->getParams();
+        /** @var Param[] $params */
+        $params = (array) $classMethodOrFunction->getParams();
+
         foreach ($params as $param) {
-            if ($param->var->name === $variable->name) {
+            if ($this->areNamesEqual($param->var, $variable)) {
                 return true;
             }
         }

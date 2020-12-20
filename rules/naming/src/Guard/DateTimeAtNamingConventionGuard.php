@@ -7,13 +7,13 @@ namespace Rector\Naming\Guard;
 use DateTimeInterface;
 use Nette\Utils\Strings;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
-final class DateTimeAtNamingConventionGuard implements GuardInterface
+final class DateTimeAtNamingConventionGuard implements ConflictingGuardInterface
 {
     /**
      * @var string

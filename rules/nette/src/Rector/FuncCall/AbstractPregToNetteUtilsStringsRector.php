@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\FuncCall;
 
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Rector\AbstractRector;
 
 /**
@@ -17,7 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 abstract class AbstractPregToNetteUtilsStringsRector extends AbstractRector
 {
     /**
-     * @return FuncCall|StaticCall|Assign|null
+     * @param array<string, string> $functionRenameMap
      */
     protected function matchFuncCallRenameToMethod(FuncCall $funcCall, array $functionRenameMap): ?string
     {

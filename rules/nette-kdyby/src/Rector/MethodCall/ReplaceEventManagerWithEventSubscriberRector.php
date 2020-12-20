@@ -115,11 +115,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, 'Kdyby\Events\EventManager')) {
-            return null;
-        }
-
-        if (! $this->isName($node->name, 'dispatchEvent')) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -135,22 +131,7 @@ CODE_SAMPLE
             $classAndStaticProperty
         );
 
-        $args = [];
-        if ($oldArgs[1]->value instanceof New_) {
-            /** @var New_ $new */
-            $new = $oldArgs[1]->value;
-
-            $array = $new->args[0]->value;
-            if ($array instanceof Array_) {
-                foreach ($array->items as $arrayItem) {
-                    if (! $arrayItem instanceof ArrayItem) {
-                        continue;
-                    }
-
-                    $args[] = new Arg($arrayItem->value);
-                }
-            }
-        }
+        $args = $this->createNewArgs($oldArgs);
 
         $class = new New_(new FullyQualified($eventClassName), $args);
         $node->args[] = new Arg($class);
@@ -172,5 +153,42 @@ CODE_SAMPLE
         $this->printNodesToFilePath([$eventClassInNamespace], $eventFileLocation);
 
         return $node;
+    }
+
+    /**
+     * @param Arg[] $oldArgs
+     * @return Arg[]
+     */
+    private function createNewArgs(array $oldArgs): array
+    {
+        $args = [];
+
+        if ($oldArgs[1]->value instanceof New_) {
+            /** @var New_ $new */
+            $new = $oldArgs[1]->value;
+
+            $array = $new->args[0]->value;
+            if (! $array instanceof Array_) {
+                return [];
+            }
+            foreach ($array->items as $arrayItem) {
+                if (! $arrayItem instanceof ArrayItem) {
+                    continue;
+                }
+
+                $args[] = new Arg($arrayItem->value);
+            }
+        }
+
+        return $args;
+    }
+
+    private function shouldSkip(MethodCall $node): bool
+    {
+        if (! $this->isObjectType($node->var, 'Kdyby\Events\EventManager')) {
+            return true;
+        }
+
+        return ! $this->isName($node->name, 'dispatchEvent');
     }
 }
