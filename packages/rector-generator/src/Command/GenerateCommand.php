@@ -273,7 +273,9 @@ final class GenerateCommand extends Command
 
         $classes = [];
         foreach ($nodeTypes as $nodeType) {
-            $classes[] = 'PhpParser\Node\\' . $nodeType;
+            /** @var class-string $class */
+            $class = 'PhpParser\Node\\' . $nodeType;;
+            $classes[] = $class;
         }
 
         return $classes;
