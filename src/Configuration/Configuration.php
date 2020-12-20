@@ -153,7 +153,7 @@ final class Configuration
         return $this->isDryRun;
     }
 
-    public function showProgressBar(): bool
+    public function shouldShowProgressBar(): bool
     {
         if ($this->isCacheDebug) {
             return false;

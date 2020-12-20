@@ -43,10 +43,10 @@ final class ClassInsertManipulator
      */
     public function addAsFirstMethod(Class_ $class, Stmt $stmt): void
     {
-        if ($this->tryInsertBeforeFirstMethod($class, $stmt)) {
+        if ($this->isSuccessToInsertBeforeFirstMethod($class, $stmt)) {
             return;
         }
-        if ($this->tryInsertAfterLastProperty($class, $stmt)) {
+        if ($this->isSuccessToInsertAfterLastProperty($class, $stmt)) {
             return;
         }
 
@@ -109,7 +109,7 @@ final class ClassInsertManipulator
         return $nodes;
     }
 
-    private function tryInsertBeforeFirstMethod(Class_ $class, Stmt $stmt): bool
+    private function isSuccessToInsertBeforeFirstMethod(Class_ $class, Stmt $stmt): bool
     {
         foreach ($class->stmts as $key => $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
@@ -123,7 +123,7 @@ final class ClassInsertManipulator
         return false;
     }
 
-    private function tryInsertAfterLastProperty(Class_ $class, Stmt $stmt): bool
+    private function isSuccessToInsertAfterLastProperty(Class_ $class, Stmt $stmt): bool
     {
         $previousElement = null;
         foreach ($class->stmts as $key => $classStmt) {

@@ -19,7 +19,6 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodPropertyFetchManipulator;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -55,9 +54,6 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
-        if (! is_string($propertyName)) {
-            throw new ShouldNotHappenException();
-        }
 
         $param = $this->classMethodPropertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
         if ($param === null) {

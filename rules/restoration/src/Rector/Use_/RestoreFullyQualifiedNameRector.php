@@ -92,11 +92,7 @@ CODE_SAMPLE
             return $this->refactorParam($node);
         }
 
-        if ($node instanceof ClassMethod) {
-            return $this->refactorClassMethod($node);
-        }
-
-        return null;
+        return $this->refactorClassMethod($node);
     }
 
     private function refactoryUse(Use_ $use): Use_

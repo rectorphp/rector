@@ -130,12 +130,12 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
     private function removeSelfTypeMethod(Class_ $class): Class_
     {
         foreach ($class->getMethods() as $classMethod) {
-            if (count((array) $classMethod->stmts) !== 1) {
+            $classMethodStmts = (array) $classMethod->stmts;
+            if (count($classMethodStmts) !== 1) {
                 continue;
             }
 
-            $innerClassMethodStmt = $classMethod->stmts[0] instanceof Expression ? $classMethod->stmts[0]->expr : $classMethod->stmts[0];
-
+            $innerClassMethodStmt = $this->resolveFirstNonExpressionStmt($classMethodStmts);
             if (! $innerClassMethodStmt instanceof MethodCall) {
                 continue;
             }
@@ -154,5 +154,19 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
         }
 
         return $class;
+    }
+
+    private function resolveFirstNonExpressionStmt(array $stmts): ?Node
+    {
+        if (! isset($stmts[0])) {
+            return null;
+        }
+
+        $firstStmt = $stmts[0];
+        if ($firstStmt instanceof Expression) {
+            return $firstStmt->expr;
+        }
+
+        return $firstStmt;
     }
 }

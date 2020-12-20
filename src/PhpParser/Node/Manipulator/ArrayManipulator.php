@@ -25,6 +25,10 @@ final class ArrayManipulator
     public function isArrayOnlyScalarValues(Array_ $array): bool
     {
         foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             if ($arrayItem->value instanceof Array_) {
                 if (! $this->isArrayOnlyScalarValues($arrayItem->value)) {
                     return false;

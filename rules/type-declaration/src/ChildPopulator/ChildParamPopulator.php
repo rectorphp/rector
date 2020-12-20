@@ -83,9 +83,6 @@ final class ChildParamPopulator extends AbstractChildPopulator
         Type $paramType
     ): void {
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        if ($methodName === null) {
-            return;
-        }
 
         $currentClassMethod = $classLike->getMethod($methodName);
         if ($currentClassMethod === null) {

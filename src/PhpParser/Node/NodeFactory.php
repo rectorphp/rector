@@ -248,7 +248,7 @@ final class NodeFactory
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($property);
         }
 
         $phpDocInfo->addBareTag('inject');
@@ -557,7 +557,8 @@ final class NodeFactory
             return;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
 

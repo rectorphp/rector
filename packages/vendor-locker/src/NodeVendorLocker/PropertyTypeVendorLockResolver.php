@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionProperty;
 
@@ -27,11 +26,8 @@ final class PropertyTypeVendorLockResolver extends AbstractNodeVendorLockResolve
             return false;
         }
 
-        /** @var string|null $propertyName */
+        /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
-        if (! is_string($propertyName)) {
-            throw new ShouldNotHappenException();
-        }
 
         if ($this->isParentClassLocked($classLike, $propertyName)) {
             return true;

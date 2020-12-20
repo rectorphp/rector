@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanExtensions\Tests\Rule\ConfigurableRectorRule\Fixture;
 
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 
-final class NotImplementsAndHasConfiguredCodeSampleRector
+final class NotImplementsAndHasConfiguredCodeSampleRector implements RectorInterface
 {
     /**
      * @var string

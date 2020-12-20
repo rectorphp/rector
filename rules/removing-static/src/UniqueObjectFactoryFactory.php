@@ -160,10 +160,6 @@ final class UniqueObjectFactoryFactory
 
         foreach ($properties as $property) {
             $propertyName = $this->nodeNameResolver->getName($property);
-            if (! is_string($propertyName)) {
-                throw new ShouldNotHappenException();
-            }
-
             $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
             $new->args[] = new Arg($propertyFetch);
         }

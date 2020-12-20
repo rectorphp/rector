@@ -1,3 +1,6 @@
+includes:
+    - ../../../../../../vendor/symplify/phpstan-rules/config/services/services.neon
+
 services:
     -
         class: Rector\PHPStanExtensions\Rule\ConfigurableRectorRule

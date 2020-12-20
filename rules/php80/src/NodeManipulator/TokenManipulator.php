@@ -90,6 +90,10 @@ final class TokenManipulator
 
         // replace "$token[1]"; with "$token->value"
         $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node): ?PropertyFetch {
+            if (! $node instanceof ArrayDimFetch) {
+                return null;
+            }
+
             if (! $this->isArrayDimFetchWithDimIntegerValue($node, 1)) {
                 return null;
             }

@@ -162,11 +162,7 @@ CODE_SAMPLE
         }
 
         $parentClassName = $staticCall->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($className === $parentClassName) {
-            return true;
-        }
-
-        return $className === null;
+        return $className === $parentClassName;
     }
 
     private function isInstantiable(string $className): bool

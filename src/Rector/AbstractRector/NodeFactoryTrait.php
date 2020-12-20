@@ -159,13 +159,17 @@ trait NodeFactoryTrait
      */
     private function wrapToArg(array $args): array
     {
-        foreach ($args as $key => $arg) {
+        $sureArgs = [];
+
+        foreach ($args as $arg) {
             if ($arg instanceof Arg) {
+                $sureArgs[] = $arg;
                 continue;
             }
 
-            $args[$key] = new Arg($arg);
+            $sureArgs[] = new Arg($arg);
         }
-        return $args;
+
+        return $sureArgs;
     }
 }

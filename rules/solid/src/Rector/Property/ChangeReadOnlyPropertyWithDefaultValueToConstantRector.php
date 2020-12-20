@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -166,6 +168,7 @@ CODE_SAMPLE
                 return null;
             }
 
+            /** @var PropertyFetch|StaticPropertyFetch $node */
             if (! $this->isName($node->name, $propertyName)) {
                 return null;
             }

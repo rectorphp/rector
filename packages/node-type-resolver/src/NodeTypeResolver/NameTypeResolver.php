@@ -37,10 +37,6 @@ final class NameTypeResolver implements NodeTypeResolverInterface
         }
 
         $fullyQualifiedName = $this->resolveFullyQualifiedName($node);
-        if ($fullyQualifiedName === null) {
-            return new MixedType();
-        }
-
         return new ObjectType($fullyQualifiedName);
     }
 

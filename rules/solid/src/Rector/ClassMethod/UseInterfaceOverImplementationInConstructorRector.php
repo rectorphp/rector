@@ -103,7 +103,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->classHasWiderPublicApiThanInterface($typeName, $interfaceNames[0])) {
+            if ($this->hasClassWiderPublicApiThanInterface($typeName, $interfaceNames[0])) {
                 continue;
             }
 
@@ -166,7 +166,7 @@ CODE_SAMPLE
         return array_values($interfaceNames);
     }
 
-    private function classHasWiderPublicApiThanInterface(string $className, string $interfaceName): bool
+    private function hasClassWiderPublicApiThanInterface(string $className, string $interfaceName): bool
     {
         $classMethods = $this->getPublicMethods($className);
         $interfaceMethods = $this->getPublicMethods($interfaceName);

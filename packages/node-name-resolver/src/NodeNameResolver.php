@@ -7,15 +7,13 @@ namespace Rector\NodeNameResolver;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -133,10 +131,6 @@ final class NodeNameResolver
         }
 
         // more complex
-        if ($node instanceof Interface_ || $node instanceof Trait_) {
-            return $this->resolveNamespacedNameAwareNode($node);
-        }
-
         if (! property_exists($node, 'name')) {
             return null;
         }
@@ -212,6 +206,18 @@ final class NodeNameResolver
     }
 
     /**
+     * @param string[] $names
+     */
+    public function isFuncCallNames(Node $node, array $names): bool
+    {
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->isNames($node, $names);
+    }
+
+    /**
      * @param MethodCall|StaticCall $node
      */
     private function reportInvalidNodeForName(Node $node): void
@@ -246,22 +252,6 @@ final class NodeNameResolver
         }
 
         throw new ShouldNotHappenException($message);
-    }
-
-    /**
-     * @param Interface_|Trait_ $classLike
-     */
-    private function resolveNamespacedNameAwareNode(ClassLike $classLike): ?string
-    {
-        if (property_exists($classLike, 'namespacedName')) {
-            return $classLike->namespacedName->toString();
-        }
-
-        if ($classLike->name === null) {
-            return null;
-        }
-
-        return $this->getName($classLike->name);
     }
 
     /**

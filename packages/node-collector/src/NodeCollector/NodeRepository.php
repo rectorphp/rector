@@ -430,10 +430,6 @@ final class NodeRepository
         foreach ($classLike->getTraitUses() as $traitUse) {
             foreach ($traitUse->traits as $trait) {
                 $traitName = $this->nodeNameResolver->getName($trait);
-                if ($traitName === null) {
-                    continue;
-                }
-
                 $foundTrait = $this->parsedNodeCollector->findTrait($traitName);
                 if ($foundTrait !== null) {
                     $traits[] = $foundTrait;

@@ -60,9 +60,6 @@ final class PropertyUsageAnalyzer
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
-        if ($propertyName === null) {
-            return false;
-        }
 
         $childrenClassNames = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
         foreach ($childrenClassNames as $childClassName) {

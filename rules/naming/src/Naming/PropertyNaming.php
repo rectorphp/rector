@@ -300,11 +300,6 @@ final class PropertyNaming
      */
     private function getPrefixedClassMethods(Property $property): array
     {
-        $name = $this->nodeNameResolver->getName($property);
-        if ($name === null) {
-            return [];
-        }
-
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
         if ($classLike === null) {
             return [];
@@ -326,9 +321,6 @@ final class PropertyNaming
         Property $property
     ): array {
         $currentName = $this->nodeNameResolver->getName($property);
-        if ($currentName === null) {
-            return [];
-        }
 
         return array_filter($prefixedClassMethods, function (ClassMethod $classMethod) use ($currentName): bool {
             $stmts = $classMethod->stmts;

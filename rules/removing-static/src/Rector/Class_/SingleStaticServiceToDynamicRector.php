@@ -157,11 +157,7 @@ CODE_SAMPLE
             return $this->refactorProperty($node);
         }
 
-        if ($node instanceof StaticPropertyFetch) {
-            return $this->refactorStaticPropertyFetch($node);
-        }
-
-        return null;
+        return $this->refactorStaticPropertyFetch($node);
     }
 
     /**

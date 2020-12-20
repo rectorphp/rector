@@ -6,7 +6,6 @@ namespace Rector\Transform\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -77,10 +76,6 @@ CODE_SAMPLE
         foreach ($this->methodCallToPropertyFetchCollection as $methodName => $propertyName) {
             if (! $this->isName($node->name, $methodName)) {
                 continue;
-            }
-
-            if ($propertyName === null) {
-                return new Variable('this');
             }
 
             return $this->createPropertyFetch('this', $propertyName);

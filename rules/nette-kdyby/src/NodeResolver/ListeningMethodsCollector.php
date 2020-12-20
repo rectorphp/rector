@@ -80,6 +80,10 @@ final class ListeningMethodsCollector
                     return null;
                 }
 
+                if (! $node instanceof ArrayItem) {
+                    return;
+                }
+
                 $eventClass = $this->valueResolver->getValue($node->key);
 
                 if ($type === self::EVENT_TYPE_CONTRIBUTTE) {

@@ -36,9 +36,6 @@ final class ChildReturnPopulator extends AbstractChildPopulator
     public function populateChildren(ClassMethod $classMethod, Type $returnType): void
     {
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        if ($methodName === null) {
-            throw new ShouldNotHappenException();
-        }
 
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($className)) {

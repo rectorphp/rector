@@ -76,6 +76,16 @@ final class PhpDocInfoFactory
         $this->phpDocRemover = $phpDocRemover;
     }
 
+    public function createFromNodeOrEmpty(Node $node): PhpDocInfo
+    {
+        $phpDocInfo = $this->createFromNode($node);
+        if ($phpDocInfo !== null) {
+            return $phpDocInfo;
+        }
+
+        return $this->createEmpty($node);
+    }
+
     public function createFromNode(Node $node): ?PhpDocInfo
     {
         /** needed for @see PhpDocNodeFactoryInterface */

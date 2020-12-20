@@ -143,7 +143,7 @@ CODE_SAMPLE
             $newNamespace->stmts[] = $classLike;
 
             // 1. is the class that will be kept in original file?
-            if ($this->fileInfoDeletionAnalyzer->matchesClassLikeAndFileInfo($classLike)) {
+            if ($this->fileInfoDeletionAnalyzer->isClassLikeAndFileInfoMatch($classLike)) {
                 $nodeToReturn = $newNamespace;
                 continue;
             }
@@ -164,7 +164,7 @@ CODE_SAMPLE
 
         foreach ($classLikes as $classLike) {
             // 1. is the class that will be kept in original file?
-            if ($this->fileInfoDeletionAnalyzer->matchesClassLikeAndFileInfo($classLike)) {
+            if ($this->fileInfoDeletionAnalyzer->isClassLikeAndFileInfoMatch($classLike)) {
                 $nodeToReturn = $fileWithoutNamespace;
                 continue;
             }

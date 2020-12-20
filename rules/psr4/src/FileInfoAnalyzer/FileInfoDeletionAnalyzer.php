@@ -33,7 +33,7 @@ final class FileInfoDeletionAnalyzer
         $this->classNaming = $classNaming;
     }
 
-    public function matchesClassLikeAndFileInfo(ClassLike $classLike): bool
+    public function isClassLikeAndFileInfoMatch(ClassLike $classLike): bool
     {
         $className = $this->nodeNameResolver->getName($classLike);
         if ($className === null) {

@@ -42,7 +42,7 @@ final class ClassMethodReturnTypeOverrideGuard
         }
 
         // 2. skip chaotic contract class methods
-        return $this->skipChaoticClassMethods($classMethod);
+        return $this->shouldSkipChaoticClassMethods($classMethod);
     }
 
     public function shouldSkipClassMethodOldTypeWithNewType(Type $oldType, Type $newType): bool
@@ -58,7 +58,7 @@ final class ClassMethodReturnTypeOverrideGuard
         return $this->isArrayMutualType($newType, $oldType);
     }
 
-    private function skipChaoticClassMethods(ClassMethod $classMethod): bool
+    private function shouldSkipChaoticClassMethods(ClassMethod $classMethod): bool
     {
         /** @var string|null $className */
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);

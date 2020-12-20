@@ -78,6 +78,9 @@ CODE_SAMPLE
     {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
 
         /** @var Type[] $paramTypes */
         $paramTypes = $phpDocInfo->getParamTypesByName();
@@ -111,9 +114,7 @@ CODE_SAMPLE
      */
     private function getTypes(Type $type): array
     {
-        return ! $type instanceof UnionType
-            ? [$type]
-            : $type->getTypes();
+        return $type instanceof UnionType ? $type->getTypes() : [$type];
     }
 
     /**
@@ -145,10 +146,9 @@ CODE_SAMPLE
             }
 
             foreach ($types as $type) {
-                $className = $type instanceof ShortenedObjectType
-                    ? $type->getFullyQualifiedName()
-                    : $type->getClassName();
+                $className = $type instanceof ShortenedObjectType ? $type->getFullyQualifiedName() : $type->getClassName();
 
+                // @todo refactor to types
                 if (! is_a($className, $param->type->toString(), true) || $className === $param->type->toString()) {
                     continue 2;
                 }
