@@ -9,7 +9,24 @@ How can we **remove repeated work** and let us focus only on `refactor()` method
 It creates a bare structured Rule.
 Don't worry, also generates a test case, which is required to contribute.
 
-## How to Generate Rector rule in 3 steps?
+## How to Generate Rector rule?
+
+There are two possibilities to Generate a Rector rule.
+
+### Generate using Interactive Mode
+
+**Important**: using this approach will generate Rector rule with placeholder Code Samples, which should be changed
+by hand to reflect what the rule does
+
+1. Run Generate command in Interactive Mode
+
+    ```bash
+   vendor/bin/rector generate --interactive
+   ```
+
+2. Provide an answer to questions asked by the command
+
+### Generate using configuration file
 
 1. Initialize `rector-recipe.php` config
 
