@@ -11,6 +11,20 @@ use Rector\Core\Util\StaticRectorStrings;
 final class StaticRectorStringsTest extends TestCase
 {
     /**
+     * @dataProvider provideDataForDashesToCamelCase()
+     */
+    public function testDashesToCamelCase(string $content, string $expected): void
+    {
+        $this->assertSame($expected, StaticRectorStrings::dashesToCamelCase($content));
+    }
+
+    public function provideDataForDashesToCamelCase(): Iterator
+    {
+        yield ['simple-test', 'SimpleTest'];
+        yield ['easy', 'Easy'];
+    }
+
+    /**
      * @dataProvider provideDataForCamelCaseToUnderscore()
      */
     public function testCamelCaseToUnderscore(string $content, string $expected): void
