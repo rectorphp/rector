@@ -204,7 +204,7 @@ final class GenerateCommand extends Command
 
     private function getRectorRecipe(InputInterface $input): RectorRecipe
     {
-        if (!$input->getOption('interactive')) {
+        if (! $input->getOption('interactive')) {
             return $this->rectorRecipeProvider->provide();
         }
 
@@ -233,7 +233,10 @@ final class GenerateCommand extends Command
 
     private function askForPackageName(): string
     {
-        $question = new Question(sprintf('Package name for which Rector should be created (e.g. <fg=yellow>%s</>)', 'Naming'));
+        $question = new Question(sprintf(
+            'Package name for which Rector should be created (e.g. <fg=yellow>%s</>)',
+            'Naming'
+        ));
         $question->setAutocompleterValues($this->packageNameProvider->provide());
 
         $packageName = $this->symfonyStyle->askQuestion($question);
