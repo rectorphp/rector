@@ -14,7 +14,7 @@ use Rector\RectorGenerator\Guard\OverrideGuard;
 use Rector\RectorGenerator\Provider\NodeTypesProvider;
 use Rector\RectorGenerator\Provider\PackageNamesProvider;
 use Rector\RectorGenerator\Provider\RectorRecipeProvider;
-use Rector\RectorGenerator\Provider\SetListsProvider;
+use Rector\RectorGenerator\Provider\SetsListProvider;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symfony\Component\Console\Command\Command;
@@ -80,9 +80,9 @@ final class GenerateCommand extends Command
     private $nodeTypesProvider;
 
     /**
-     * @var SetListsProvider
+     * @var SetsListProvider
      */
-    private $setListsProvider;
+    private $setsListProvider;
 
     public function __construct(
         ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
@@ -95,7 +95,7 @@ final class GenerateCommand extends Command
         RectorRecipeProvider $rectorRecipeProvider,
         PackageNamesProvider $packageNamesProvider,
         NodeTypesProvider $nodeTypesProvider,
-        SetListsProvider $setListsProvider
+        SetsListProvider $setsListProvider
     ) {
         parent::__construct();
 
@@ -109,7 +109,7 @@ final class GenerateCommand extends Command
         $this->rectorRecipeProvider = $rectorRecipeProvider;
         $this->packageNamesProvider = $packageNamesProvider;
         $this->nodeTypesProvider = $nodeTypesProvider;
-        $this->setListsProvider = $setListsProvider;
+        $this->setsListProvider = $setsListProvider;
     }
 
     protected function configure(): void
@@ -337,7 +337,7 @@ CODE_SAMPLE;
     private function askForSet(): ?string
     {
         $question = new Question(sprintf('Set to which Rector should be added (e.g. <fg=yellow>%s</>)', 'SYMFONY_52'));
-        $question->setAutocompleterValues($this->setListsProvider->provide());
+        $question->setAutocompleterValues($this->setsListProvider->provide());
 
         $setName = $this->symfonyStyle->askQuestion($question);
         if ($setName === null) {
