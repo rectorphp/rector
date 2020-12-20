@@ -47,7 +47,7 @@ final class AnnotationToAttributeConverter
         // 0. has 0 nodes, nothing to change
         /** @var PhpAttributableTagNodeInterface[] $phpAttributableTagNodes */
         $phpAttributableTagNodes = $phpDocInfo->findAllByType(PhpAttributableTagNodeInterface::class);
-        if ($phpAttributableTagNodes === [] && ! $hasNewAttrGroups) {
+        if ($phpAttributableTagNodes === []) {
             return null;
         }
 

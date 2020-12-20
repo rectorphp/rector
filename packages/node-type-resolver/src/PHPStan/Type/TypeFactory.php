@@ -112,7 +112,6 @@ final class TypeFactory
 
     /**
      * @param Type[] $types
-     * @return MixedType|UnionType
      */
     private function createUnionOrSingleType(array $types): Type
     {

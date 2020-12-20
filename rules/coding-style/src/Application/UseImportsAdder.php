@@ -148,10 +148,6 @@ final class UseImportsAdder
 
     private function isCurrentNamespace(string $namespaceName, ObjectType $objectType): bool
     {
-        if ($namespaceName === null) {
-            return false;
-        }
-
         $afterCurrentNamespace = Strings::after($objectType->getClassName(), $namespaceName . '\\');
         if (! $afterCurrentNamespace) {
             return false;

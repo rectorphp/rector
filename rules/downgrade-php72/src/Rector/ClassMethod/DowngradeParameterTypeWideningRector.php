@@ -227,12 +227,8 @@ CODE_SAMPLE
         int $position,
         ClassMethod $classMethod
     ): void {
-        $methodName = $this->getName($classMethod);
-        if ($methodName === null) {
-            return;
-        }
-
-        $currentClassMethod = $classLike->getMethod($methodName);
+        $classMethodName = $this->getName($classMethod);
+        $currentClassMethod = $classLike->getMethod($classMethodName);
         if ($currentClassMethod === null) {
             return;
         }

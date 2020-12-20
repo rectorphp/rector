@@ -38,9 +38,6 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
         }
 
         $paramName = $this->nodeNameResolver->getName($param);
-        if (! is_string($paramName)) {
-            throw new ShouldNotHappenException();
-        }
 
         /** @var ClassMethod $classMethod */
         $classMethod = $param->getAttribute(AttributeKey::PARENT_NODE);
