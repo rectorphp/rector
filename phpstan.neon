@@ -490,6 +490,8 @@ parameters:
             message: '#Unreachable statement \- code above always terminates#'
             paths:
                 - src/Rector/AbstractRector/NodeTypeResolverTrait.php
+                # false positive
+                - rules/php72/src/Rector/ConstFetch/BarewordStringRector.php
 
 
         -
@@ -588,3 +590,4 @@ parameters:
             message: '#Comparison operation "<" between 0 and 2 is always true#'
             paths:
                 - rules/php70/src/Rector/FuncCall/MultiDirnameRector.php
+        - '#PHPDoc tag @param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'

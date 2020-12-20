@@ -25,15 +25,17 @@ final class DataProviderClassMethodFactory
 
         foreach ($dataProviderClassMethodRecipe->getArgs() as $arg) {
             $value = $arg->value;
-            if ($value instanceof Array_) {
-                foreach ($value->items as $arrayItem) {
-                    if (! $arrayItem instanceof ArrayItem) {
-                        continue;
-                    }
+            if (! $value instanceof Array_) {
+                continue;
+            }
 
-                    $returnStatement = new Yield_(new Array_([new ArrayItem($arrayItem->value)]));
-                    $classMethod->stmts[] = new Expression($returnStatement);
+            foreach ($value->items as $arrayItem) {
+                if (! $arrayItem instanceof ArrayItem) {
+                    continue;
                 }
+
+                $returnStatement = new Yield_(new Array_([new ArrayItem($arrayItem->value)]));
+                $classMethod->stmts[] = new Expression($returnStatement);
             }
         }
 

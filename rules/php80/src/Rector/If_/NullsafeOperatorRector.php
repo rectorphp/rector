@@ -305,6 +305,7 @@ CODE_SAMPLE
 
         /** @var Expression $start */
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+
         /** @var If_ $start */
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);
 
