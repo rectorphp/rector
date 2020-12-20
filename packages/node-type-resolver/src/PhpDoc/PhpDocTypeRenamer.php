@@ -60,7 +60,7 @@ final class PhpDocTypeRenamer
 
             /** @var IdentifierTypeNode $node */
             $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $phpParserNode);
-            if ($staticType instanceof ObjectType) {
+            if (! $staticType instanceof ObjectType) {
                 return $node;
             }
 

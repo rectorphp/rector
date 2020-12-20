@@ -605,3 +605,5 @@ parameters:
         -
             message: '#Call to function is_string\(\) with float will always evaluate to false#'
             path: src/PhpParser/Printer/BetterStandardPrinter.php
+
+        - '#Parameter \#1 \$node of method Rector\\Php80\\Rector\\If_\\NullsafeOperatorRector\:\:getStartNode\(\) expects PhpParser\\Node, PhpParser\\Node\|null given#'

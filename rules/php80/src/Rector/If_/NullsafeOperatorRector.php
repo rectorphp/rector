@@ -273,10 +273,10 @@ CODE_SAMPLE
             $start = $prevIf;
             while ($prevIf instanceof Expression) {
                 $expr = $this->nullsafeManipulator->processNullSafeExpr($prevIf->expr->expr);
+
                 /** @var If_ $prevIf */
                 $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
 
-                /** @var Expression|Identifier $prevIf */
                 $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
 
                 if (! $prevIf instanceof Expression) {
@@ -298,10 +298,10 @@ CODE_SAMPLE
         return $expr;
     }
 
-    private function getStartNode(Identifier $identifier): ?Node
+    private function getStartNode(Node $node): ?Node
     {
         /** @var If_ $start */
-        $start = $identifier->getAttribute(AttributeKey::NEXT_NODE);
+        $start = $node->getAttribute(AttributeKey::NEXT_NODE);
 
         /** @var Expression $start */
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);

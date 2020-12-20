@@ -170,7 +170,7 @@ final class ClassManipulator
      * @param Class_|Interface_ $classLike
      * @return string[]
      */
-    public function getClassLikeNodeParentInterfaceNames(ClassLike $classLike)
+    public function getClassLikeNodeParentInterfaceNames(ClassLike $classLike): array
     {
         if ($classLike instanceof Class_) {
             return $this->nodeNameResolver->getNames($classLike->implements);

@@ -88,7 +88,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         BlankLineAfterOpeningTagFixer::class,
         Psr4Fixer::class,
 
-        // buggy - fixed on master
+        // buggy - fix on master
         RemoveCommentedCodeFixer::class,
 
         PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],

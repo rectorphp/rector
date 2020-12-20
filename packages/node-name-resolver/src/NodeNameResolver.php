@@ -7,6 +7,7 @@ namespace Rector\NodeNameResolver;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
@@ -202,6 +203,18 @@ final class NodeNameResolver
         }
 
         return $this->isName($node->name, $name);
+    }
+
+    /**
+     * @param string[] $names
+     */
+    public function isFuncCallNames(Node $node, array $names): bool
+    {
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->isNames($node, $names);
     }
 
     /**
