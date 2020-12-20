@@ -228,7 +228,7 @@ final class GenerateCommand extends Command
 
         $set = $this->askForSet();
         if ($set !== null) {
-            $rectorRecipe->setSet($this->askForSet());
+            $rectorRecipe->setSet($set);
         }
 
         return $rectorRecipe;
@@ -249,10 +249,11 @@ final class GenerateCommand extends Command
 
     private function askForRectorName(): string
     {
-        $rectorName = $this->symfonyStyle->ask(sprintf(
+        $question = sprintf(
             'Class name of the Rector to create (e.g. <fg=yellow>%s</>)',
             'RenameMethodCallRector',
-        ));
+        );
+        $rectorName = $this->symfonyStyle->ask($question);
 
         return $rectorName ?? $this->askForRectorName();
     }
@@ -325,10 +326,11 @@ CODE_SAMPLE;
         $resources = [];
 
         while (true) {
-            $resource = $this->symfonyStyle->ask(sprintf(
+            $question = sprintf(
                 'Link to resource that explains why the change is needed (e.g. <fg=yellow>%s</>)',
                 'https://github.com/symfony/symfony/blob/704c648ba53be38ef2b0105c97c6497744fef8d8/UPGRADE-6.0.md',
-            ));
+            );
+            $resource = $this->symfonyStyle->ask($question);
 
             if ($resource === null) {
                 break;
