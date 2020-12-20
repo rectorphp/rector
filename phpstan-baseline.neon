@@ -241,11 +241,6 @@ parameters:
 			path: packages/caching/src/Detector/ChangedFilesDetector.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
-			count: 1
-			path: packages/node-collector/src/NodeCollector/NodeRepository.php
-
-		-
 			message: "#^Use value object over multi array assign$#"
 			count: 1
 			path: packages/node-collector/src/NodeCollector/ParsedClassConstFetchNodeCollector.php
@@ -261,19 +256,9 @@ parameters:
 			path: packages/node-type-resolver/src/PHPStan/Scope/PHPStanNodeScopeResolver.php
 
 		-
-			message: "#^Method Rector\\\\NodeTypeResolver\\\\PHPStan\\\\Type\\\\TypeFactory\\:\\:createUnionOrSingleType\\(\\) should return PHPStan\\\\Type\\\\MixedType\\|PHPStan\\\\Type\\\\UnionType but returns PHPStan\\\\Type\\\\Type\\.$#"
-			count: 1
-			path: packages/node-type-resolver/src/PHPStan/Type/TypeFactory.php
-
-		-
 			message: "#^Parameter 1 should use \"PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode\" type as the only type passed to this method$#"
 			count: 1
 			path: packages/node-type-resolver/src/PhpDoc/PhpDocTypeRenamer.php
-
-		-
-			message: "#^Negated boolean expression is always true\\.$#"
-			count: 1
-			path: packages/php-attribute/src/AnnotationToAttributeConverter.php
 
 		-
 			message: "#^Result of \\|\\| is always true\\.$#"
@@ -283,6 +268,11 @@ parameters:
 		-
 			message: "#^Access to an undefined property PhpParser\\\\Node\\\\FunctionLike\\|PhpParser\\\\Node\\\\Stmt\\\\ClassLike\\:\\:\\$stmts\\.$#"
 			count: 2
+			path: src/Rector/AbstractRector.php
+
+		-
+			message: "#^Method Rector\\\\Core\\\\Rector\\\\AbstractRector\\:\\:getPhpDocTagValueNode\\(\\) should return PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\PhpDocTagValueNode\\|null but return statement is missing\\.$#"
+			count: 1
 			path: src/Rector/AbstractRector.php
 
 		-
@@ -399,11 +389,6 @@ parameters:
 			message: "#^Strict comparison using \\=\\=\\= between PhpParser\\\\Node\\\\Expr and null will always evaluate to false\\.$#"
 			count: 1
 			path: rules/code-quality/src/Rector/Ternary/UnnecessaryTernaryExpressionRector.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
-			count: 1
-			path: rules/coding-style/src/Application/UseImportsAdder.php
 
 		-
 			message: "#^Parameter \\#1 \\$phpDocChildNode of method Rector\\\\CodingStyle\\\\ClassNameImport\\\\ShortNameResolver\\:\\:resolveShortTagNameFromPhpDocChildNode\\(\\) expects PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\PhpDocChildNode, PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\PhpDocChildNode\\|Rector\\\\BetterPhpDocParser\\\\Contract\\\\PhpDocNode\\\\AttributeAwareNodeInterface given\\.$#"
@@ -576,11 +561,6 @@ parameters:
 			path: rules/downgrade-php71/src/Rector/String_/DowngradeNegativeStringOffsetToStrlenRector.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
-			count: 1
-			path: rules/downgrade-php72/src/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php
-
-		-
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: rules/downgrade/src/Rector/LNumber/ChangePhpVersionInPlatformCheckRector.php
@@ -614,11 +594,6 @@ parameters:
 			message: "#^Offset 0 does not exist on array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null\\.$#"
 			count: 2
 			path: rules/legacy/src/NodeAnalyzer/SingletonClassMethodAnalyzer.php
-
-		-
-			message: "#^Access to an undefined property PhpParser\\\\Node\\:\\:\\$name\\.$#"
-			count: 1
-			path: rules/mockista-to-mockery/src/Rector/ClassMethod/MockistaMockToMockeryMockRector.php
 
 		-
 			message: "#^Access to an undefined property PhpParser\\\\Node\\:\\:\\$var\\.$#"
@@ -819,4 +794,59 @@ parameters:
 			message: "#^Use `\\$class\\-\\>namespaceName` instead of `\\$class\\-\\>name` that only returns short class name$#"
 			count: 1
 			path: rules/symfony-code-quality/src/Rector/Class_/EventListenerToEventSubscriberRector.php
+
+		-
+			message: "#^Content of method \"autowireNameResolverTrait\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
+
+		-
+			message: "#^Content of method \"isLocalMethodCallNamed\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
+
+		-
+			message: "#^Content of method \"isLocalMethodCallsNamed\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
+
+		-
+			message: "#^Content of method \"isFuncCallName\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
+
+		-
+			message: "#^Content of method \"isClassConstReference\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
+
+		-
+			message: "#^Content of method \"isStaticCallNamed\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
+
+		-
+			message: "#^Content of method \"isStaticCallsNamed\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
+
+		-
+			message: "#^Content of method \"isMethodCall\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
+
+		-
+			message: "#^Content of method \"isVariableName\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
+
+		-
+			message: "#^Content of method \"isInClassNamed\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
+
+		-
+			message: "#^Content of method \"isInClassesNamed\\(\\)\" is duplicated with method in \"Rector\\\\Core\\\\Rector\\\\AbstractRector\\\\NameResolverTrait\" class\\. Use unique content or abstract service instead$#"
+			count: 1
+			path: packages/post-rector/src/Rector/AbstractPostRector.php
 

@@ -266,11 +266,8 @@ final class BreakingVariableRenameGuard
             return false;
         }
 
+        /** @var string $currentName */
         $currentName = $this->nodeNameResolver->getName($param);
-        if ($currentName === null) {
-            return false;
-        }
-
         return (bool) Strings::match($currentName, self::AT_NAMING_REGEX . '');
     }
 }
