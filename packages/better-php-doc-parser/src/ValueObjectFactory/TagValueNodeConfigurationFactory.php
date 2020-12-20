@@ -126,6 +126,17 @@ final class TagValueNodeConfigurationFactory
         return $this->resolveArrayEqualSignByPhpNodeClass($phpDocTagValueNode);
     }
 
+    private function createQuotedKeyPattern(?string $silentKey, string $key, string $escapedKey): string
+    {
+        if ($silentKey === $key) {
+            // @see https://regex101.com/r/VgvK8C/4/
+            return sprintf('#(%s=")|\("#', $escapedKey);
+        }
+
+        // @see https://regex101.com/r/VgvK8C/3/
+        return sprintf('#%s="#', $escapedKey);
+    }
+
     /**
      * Before:
      * (options={"key":"value"})
@@ -153,16 +164,5 @@ final class TagValueNodeConfigurationFactory
         }
 
         return ':';
-    }
-
-    private function createQuotedKeyPattern(?string $silentKey, string $key, string $escapedKey): string
-    {
-        if ($silentKey === $key) {
-            // @see https://regex101.com/r/VgvK8C/4/
-            return sprintf('#(%s=")|\("#', $escapedKey);
-        }
-
-        // @see https://regex101.com/r/VgvK8C/3/
-        return sprintf('#%s="#', $escapedKey);
     }
 }
