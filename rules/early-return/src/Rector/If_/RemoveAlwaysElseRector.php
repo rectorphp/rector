@@ -87,7 +87,7 @@ CODE_SAMPLE
             $firstElseIf = array_shift($node->elseifs);
             $node->cond = $firstElseIf->cond;
             $node->stmts = $firstElseIf->stmts;
-            $this->mirrorComments($firstElseIf, $node);
+            $this->mirrorComments($node, $firstElseIf);
 
             return $node;
         }
