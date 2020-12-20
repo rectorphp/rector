@@ -110,9 +110,7 @@ CODE_SAMPLE
             'stmts' => $node->stmts,
         ]);
 
-        /** @var Comment[] $comments */
-        $comments = $node->getAttribute(AttributeKey::COMMENTS);
-        $foreach->setAttribute(AttributeKey::COMMENTS, $comments);
+        $this->mirrorComments($foreach, $node);
 
         // is key included? add it to foreach
         if ($listNode->items !== []) {

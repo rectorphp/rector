@@ -128,7 +128,7 @@ CODE_SAMPLE
         $conditions = $this->getBooleanAndConditions($expr);
         $ifs = $this->createInvertedIfNodesFromConditions($node, $conditions);
 
-        $this->keepCommentIfExists($node, $ifs);
+        $this->mirrorComments($ifs[0], $node);
 
         $this->addNodesAfterNode($ifs, $node);
         $this->addNodeAfterNode($ifReturn, $node);
@@ -231,15 +231,6 @@ CODE_SAMPLE
         }
 
         return $ifs;
-    }
-
-    /**
-     * @param If_[] $ifs
-     */
-    private function keepCommentIfExists(If_ $if, array $ifs): void
-    {
-        $nodeComments = $if->getAttribute(AttributeKey::COMMENTS);
-        $ifs[0]->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 
     private function getIfNextReturn(If_ $if): ?Return_

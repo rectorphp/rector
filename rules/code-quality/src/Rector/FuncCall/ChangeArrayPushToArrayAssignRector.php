@@ -84,7 +84,7 @@ CODE_SAMPLE
 
             // keep comments of first line
             if ($position === 1) {
-                $assignExpression->setAttribute(AttributeKey::COMMENTS, $node->getComments());
+                $this->mirrorComments($assignExpression, $node);
             }
 
             $this->addNodeAfterNode($assignExpression, $node);

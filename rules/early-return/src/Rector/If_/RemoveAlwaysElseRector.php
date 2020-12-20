@@ -87,8 +87,7 @@ CODE_SAMPLE
             $firstElseIf = array_shift($node->elseifs);
             $node->cond = $firstElseIf->cond;
             $node->stmts = $firstElseIf->stmts;
-
-            $this->copyCommentIfExists($firstElseIf, $node);
+            $this->mirrorComments($node, $firstElseIf);
 
             return $node;
         }
@@ -112,9 +111,4 @@ CODE_SAMPLE
             || ($lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_));
     }
 
-    private function copyCommentIfExists(ElseIf_ $elseIf, If_ $if): void
-    {
-        $nodeComments = $elseIf->getAttribute(AttributeKey::COMMENTS);
-        $if->setAttribute(AttributeKey::COMMENTS, $nodeComments);
-    }
 }
