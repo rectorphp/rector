@@ -146,7 +146,8 @@ services:
 parameters:
     level: max
 
-    maximumNumberOfProcesses: 6
+    parallel:
+        maximumNumberOfProcesses: 6
 
     paths:
         - bin
