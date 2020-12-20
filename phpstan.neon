@@ -146,6 +146,8 @@ services:
 parameters:
     level: max
 
+    maximumNumberOfProcesses: 6
+
     paths:
         - bin
         - src
