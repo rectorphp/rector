@@ -34,9 +34,10 @@ final class ConfigurableRectorRuleTest extends AbstractServiceAwareRuleTestCase
             ConfigurableRectorRule::ERROR_NOT_IMPLEMENTS_INTERFACE,
             ConfigurableRectorInterface::class
         );
+
         yield [
             __DIR__ . '/Fixture/NotImplementsAndHasConfiguredCodeSampleRector.php',
-            [[$notImplementErrorMessage, 12]],
+            [[$notImplementErrorMessage, 13]],
         ];
 
         yield [__DIR__ . '/Fixture/NotImplementsAndHasNoConfiguredCodeSampleRector.php', []];

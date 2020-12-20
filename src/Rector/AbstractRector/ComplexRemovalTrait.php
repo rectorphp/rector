@@ -136,10 +136,6 @@ trait ComplexRemovalTrait
         }
 
         $classMethodName = $this->getName($classMethodNode);
-        if ($classMethodName === null) {
-            return false;
-        }
-
         return in_array($classMethodName, $classMethodNamesToSkip, true);
     }
 
@@ -180,6 +176,7 @@ trait ComplexRemovalTrait
         }
 
         $constructClassMethodStmts = $constructClassMethod->stmts;
+
         foreach ($constructClassMethod->getParams() as $param) {
             $variable = $this->betterNodeFinder->findFirst($constructClassMethodStmts, function (Node $node) use (
                 $param

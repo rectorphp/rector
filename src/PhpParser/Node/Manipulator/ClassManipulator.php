@@ -168,7 +168,7 @@ final class ClassManipulator
 
     /**
      * @param Class_|Interface_ $classLike
-     * @return string[]|mixed
+     * @return string[]
      */
     public function getClassLikeNodeParentInterfaceNames(ClassLike $classLike)
     {
@@ -176,11 +176,7 @@ final class ClassManipulator
             return $this->nodeNameResolver->getNames($classLike->implements);
         }
 
-        if ($classLike instanceof Interface_) {
-            return $this->nodeNameResolver->getNames($classLike->extends);
-        }
-
-        return [];
+        return $this->nodeNameResolver->getNames($classLike->extends);
     }
 
     public function removeInterface(Class_ $class, string $desiredInterface): void

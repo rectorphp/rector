@@ -167,16 +167,15 @@ CODE_SAMPLE
 
     private function processMarkTruthy(Node $node, FuncCall $funcCall, Expr $expr): ?Expr
     {
-        if ($this->isConditional($node) && $node->cond === $funcCall) {
+        if (! $node instanceof If_ && ! $node instanceof ElseIf_) {
+            return null;
+        }
+
+        if ($node->cond === $funcCall) {
             $node->cond = new NotIdentical($expr, new Array_([]));
             return $node->cond;
         }
 
         return null;
-    }
-
-    private function isConditional(?Node $node): bool
-    {
-        return $node instanceof If_ || $node instanceof ElseIf_;
     }
 }

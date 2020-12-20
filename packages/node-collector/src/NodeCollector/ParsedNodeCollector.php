@@ -333,11 +333,12 @@ final class ParsedNodeCollector
             return true;
         }
 
-        if ($class->name === null) {
+        $className = $this->nodeNameResolver->getName($class);
+        if ($className === null) {
             return true;
         }
 
         // PHPStan polution
-        return Strings::startsWith($class->name->toString(), 'AnonymousClass');
+        return Strings::startsWith($className, 'AnonymousClass');
     }
 }

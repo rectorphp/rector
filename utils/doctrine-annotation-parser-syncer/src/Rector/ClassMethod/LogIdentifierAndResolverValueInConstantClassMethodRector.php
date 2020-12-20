@@ -46,7 +46,12 @@ final class LogIdentifierAndResolverValueInConstantClassMethodRector extends Abs
         }
 
         // 1. store original value right in the start
+        if (! isset($node->stmts[0])) {
+            return null;
+        }
+
         $firstStmt = $node->stmts[0];
+
         unset($node->stmts[0]);
         $assignExpression = $this->createAssignOriginalIdentifierExpression();
         $node->stmts = array_merge([$firstStmt], [$assignExpression], (array) $node->stmts);

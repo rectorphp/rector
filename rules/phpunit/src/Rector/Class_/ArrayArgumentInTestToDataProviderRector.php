@@ -7,6 +7,7 @@ namespace Rector\PHPUnit\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -317,6 +318,10 @@ CODE_SAMPLE
     private function isNestedArray(Array_ $array): bool
     {
         foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             if ($arrayItem->value instanceof Array_) {
                 return true;
             }
@@ -334,7 +339,10 @@ CODE_SAMPLE
         $i = 1;
 
         foreach ($array->items as $arrayItem) {
-            /** @var Array_ $nestedArray */
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             $nestedArray = $arrayItem->value;
             foreach ($nestedArray->items as $nestedArrayItem) {
                 $variable = new Variable($variableName . ($i === 1 ? '' : $i));
