@@ -243,11 +243,6 @@ parameters:
 		-
 			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
 			count: 1
-			path: packages/family-tree/src/NodeAnalyzer/PropertyUsageAnalyzer.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
-			count: 1
 			path: packages/node-collector/src/NodeCollector/NodeRepository.php
 
 		-
@@ -272,11 +267,6 @@ parameters:
 
 		-
 			message: "#^Parameter 1 should use \"PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode\" type as the only type passed to this method$#"
-			count: 1
-			path: packages/node-type-resolver/src/PhpDoc/PhpDocTypeRenamer.php
-
-		-
-			message: "#^Call to an undefined method PHPStan\\\\Type\\\\Type\\:\\:getClassName\\(\\)\\.$#"
 			count: 1
 			path: packages/node-type-resolver/src/PhpDoc/PhpDocTypeRenamer.php
 
@@ -546,11 +536,6 @@ parameters:
 			path: rules/defluent/src/ValueObject/AssignAndRootExpr.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
-			count: 1
-			path: rules/doctrine-code-quality/src/NodeAnalyzer/ConstructorAssignPropertyAnalyzer.php
-
-		-
 			message: "#^Offset 0 does not exist on array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null\\.$#"
 			count: 1
 			path: rules/doctrine-code-quality/src/NodeAnalyzer/SetterClassMethodAnalyzer.php
@@ -674,16 +659,6 @@ parameters:
 			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
 			count: 1
 			path: rules/naming/src/Naming/ExpectedNameResolver.php
-
-		-
-			message: "#^Content of method \"endsWith\\(\\)\" is duplicated with method in \"Rector\\\\Naming\\\\ExpectedNameResolver\\\\AbstractExpectedNameResolver\" class\\. Use unique content or abstract service instead$#"
-			count: 1
-			path: rules/naming/src/Naming/ExpectedNameResolver.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
-			count: 2
-			path: rules/naming/src/Naming/PropertyNaming.php
 
 		-
 			message: "#^Property with protected modifier is not allowed\\. Use interface contract method instead$#"
