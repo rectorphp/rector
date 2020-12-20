@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Tests\ValueObjectFactory;
 
+use Iterator;
 use PHPUnit\Framework\TestCase;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
-use Iterator;
 
 final class TagValueNodeConfigurationFactoryTest extends TestCase
 {

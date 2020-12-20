@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -110,5 +109,4 @@ CODE_SAMPLE
             || $lastStmt instanceof Continue_
             || ($lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_));
     }
-
 }
