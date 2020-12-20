@@ -73,13 +73,20 @@ final class GetClassToInstanceOfRector extends AbstractRector
             return null;
         }
 
-        /** @var ClassConstFetch $classReferenceNode */
-        $classReferenceNode = $twoNodeMatch->getFirstExpr();
-        /** @var FuncCall $funcCallNode */
-        $funcCallNode = $twoNodeMatch->getSecondExpr();
+        /** @var ClassConstFetch|String_ $firstExpr */
+        $firstExpr = $twoNodeMatch->getFirstExpr();
 
-        $varNode = $funcCallNode->args[0]->value;
-        $className = $this->matchClassName($classReferenceNode);
+        /** @var FuncCall $funcCall */
+        $funcCall = $twoNodeMatch->getSecondExpr();
+
+        $varNode = $funcCall->args[0]->value;
+
+        if ($firstExpr instanceof String_) {
+            $className = $this->getValue($firstExpr);
+        } else {
+            $className = $this->getName($firstExpr->class);
+        }
+
         if ($className === null) {
             return null;
         }
@@ -109,18 +116,5 @@ final class GetClassToInstanceOfRector extends AbstractRector
         }
 
         return $this->isName($node, 'get_class');
-    }
-
-    private function matchClassName(Node $node): ?string
-    {
-        if ($node instanceof ClassConstFetch) {
-            return $this->getName($node->class);
-        }
-
-        if ($node instanceof String_) {
-            return $node->value;
-        }
-
-        return null;
     }
 }

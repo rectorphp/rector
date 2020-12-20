@@ -144,7 +144,7 @@ final class ValueResolver
             }
 
             throw new ConstExprEvaluationException(sprintf(
-                'Expression of type %s cannot be evaluated',
+                'Expression of type "%s" cannot be evaluated',
                 $expr->getType()
             ));
         });

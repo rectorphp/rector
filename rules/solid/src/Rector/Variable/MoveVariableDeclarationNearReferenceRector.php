@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,6 +33,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MoveVariableDeclarationNearReferenceRector extends AbstractRector
 {
+    /**
+     * @var ScopeAwareNodeFinder
+     */
+    private $scopeAwareNodeFinder;
+
+    public function __construct(ScopeAwareNodeFinder $scopeAwareNodeFinder)
+    {
+        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -74,7 +85,6 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Expression */
         $expression = $parent->getAttribute(AttributeKey::PARENT_NODE);
         if (! $expression instanceof Expression) {
             return null;
@@ -142,19 +152,12 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isInsideCondition(Node $node): bool
+    private function isInsideCondition(Expression $expression): bool
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        while ($parent) {
-            if ($parent instanceof If_ || $parent instanceof Else_ || $parent instanceof ElseIf_) {
-                return true;
-            }
-
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        return false;
+        return (bool) $this->scopeAwareNodeFinder->findParentType(
+            $expression,
+            [If_::class, Else_::class, ElseIf_::class]
+        );
     }
 
     private function hasPropertyInExpr(Expression $expression, Expr $expr): bool
@@ -199,12 +202,8 @@ CODE_SAMPLE
         return false;
     }
 
-    private function getUsageInNextStmts(Expression $expression, Node $node): ?Variable
+    private function getUsageInNextStmts(Expression $expression, Variable $variable): ?Variable
     {
-        if (! $node instanceof Variable) {
-            return null;
-        }
-
         /** @var Node|null $next */
         $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
         if (! $next instanceof Node) {
@@ -215,18 +214,18 @@ CODE_SAMPLE
             return null;
         }
 
-        $countFound = $this->getCountFound($next, $node);
+        $countFound = $this->getCountFound($next, $variable);
         if ($countFound === 0 || $countFound >= 2) {
             return null;
         }
 
-        $variable = $this->getSameVarName([$next], $node);
+        $nextVariable = $this->getSameVarName([$next], $variable);
 
-        if ($variable instanceof Variable) {
-            return $variable;
+        if ($nextVariable instanceof Variable) {
+            return $nextVariable;
         }
 
-        return $this->getSameVarNameInNexts($next, $node);
+        return $this->getSameVarNameInNexts($next, $variable);
     }
 
     private function isInsideLoopStmts(Node $node): bool

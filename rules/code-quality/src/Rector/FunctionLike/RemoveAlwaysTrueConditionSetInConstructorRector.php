@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -168,8 +167,10 @@ CODE_SAMPLE
 
     private function resolvePropertyFetchType(PropertyFetch $propertyFetch): Type
     {
-        /** @var Class_ $classLike */
         $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return new MixedType();
+        }
 
         $propertyName = $this->getName($propertyFetch);
         if ($propertyName === null) {
@@ -205,11 +206,11 @@ CODE_SAMPLE
         return $this->typeFactory->createMixedPassedOrUnionTypeAndKeepConstant($resolvedTypes);
     }
 
-    private function resolvePropertyTypeAfterConstructor(ClassLike $classLike, string $propertyName): Type
+    private function resolvePropertyTypeAfterConstructor(Class_ $class, string $propertyName): Type
     {
         $propertyTypeFromConstructor = null;
 
-        $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod !== null) {
             $propertyTypeFromConstructor = $this->resolveAssignedTypeInStmtsByPropertyName(
                 (array) $constructClassMethod->stmts,

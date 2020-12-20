@@ -154,13 +154,13 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isProbablyMysql(Node $node): bool
+    private function isProbablyMysql(Expr $expr): bool
     {
-        if ($this->isObjectType($node, 'mysqli')) {
+        if ($this->isObjectType($expr, 'mysqli')) {
             return true;
         }
 
-        $staticType = $this->getStaticType($node);
+        $staticType = $this->getStaticType($expr);
         $resourceType = new ResourceType();
 
         if ($staticType->equals($resourceType)) {
@@ -170,10 +170,10 @@ CODE_SAMPLE
         if ($this->isUnionTypeWithResourceSubType($staticType, $resourceType)) {
             return true;
         }
-        if (! $node instanceof Variable) {
+        if (! $expr instanceof Variable) {
             return false;
         }
-        return $this->isName($node, 'connection');
+        return $this->isName($expr, 'connection');
     }
 
     private function findConnectionVariable(FuncCall $funcCall): ?Expr

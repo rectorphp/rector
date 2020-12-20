@@ -191,9 +191,9 @@ CODE_SAMPLE
         return $classMethod;
     }
 
-    private function hasNodeTagValueNode(Node $node, string $tagValueNodeClass): bool
+    private function hasNodeTagValueNode(Property $property, string $tagValueNodeClass): bool
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return false;
         }

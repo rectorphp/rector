@@ -117,15 +117,15 @@ CODE_SAMPLE
         return $stmt instanceof FunctionLike;
     }
 
-    private function isUnreachable(Node $node): bool
+    private function isUnreachable(Stmt $stmt): bool
     {
-        $isUnreachable = $node->getAttribute(AttributeKey::IS_UNREACHABLE);
+        $isUnreachable = $stmt->getAttribute(AttributeKey::IS_UNREACHABLE);
         if ($isUnreachable === true) {
             return true;
         }
 
         // traverse up for unreachable node in the same scope
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        $previousNode = $stmt->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
 
         while ($previousNode instanceof Node && ! $this->isBreakingScopeNode($previousNode)) {
             $isUnreachable = $previousNode->getAttribute(AttributeKey::IS_UNREACHABLE);
@@ -142,9 +142,9 @@ CODE_SAMPLE
     /**
      * Keep content after markTestSkipped(), intentional temporary
      */
-    private function isAfterMarkTestSkippedMethodCall(Node $node): bool
+    private function isAfterMarkTestSkippedMethodCall(Stmt $stmt): bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPrevious($node, function (Node $node): bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($stmt, function (Node $node): bool {
             if (! $node instanceof MethodCall) {
                 return false;
             }

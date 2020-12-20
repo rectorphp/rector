@@ -96,13 +96,13 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkipForDifferentScope(Assign $assign, Node $anotherNode): bool
+    private function shouldSkipForDifferentScope(Assign $assign, Expression $expression): bool
     {
-        if (! $this->areInSameClassMethod($assign, $anotherNode)) {
+        if (! $this->areInSameClassMethod($assign, $expression)) {
             return true;
         }
 
-        return ! $this->scopeNestingComparator->areScopeNestingEqual($assign, $anotherNode);
+        return ! $this->scopeNestingComparator->areScopeNestingEqual($assign, $expression);
     }
 
     private function isSelfReferencing(Assign $assign): bool
@@ -112,10 +112,10 @@ CODE_SAMPLE
         });
     }
 
-    private function areInSameClassMethod(Node $node, Node $previousExpression): bool
+    private function areInSameClassMethod(Assign $assign, Expression $previousExpression): bool
     {
         return $this->areNodesEqual(
-            $node->getAttribute(AttributeKey::METHOD_NODE),
+            $assign->getAttribute(AttributeKey::METHOD_NODE),
             $previousExpression->getAttribute(AttributeKey::METHOD_NODE)
         );
     }

@@ -60,16 +60,13 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         return $this->createPropertyFetch('this', $propertyName);
     }
 
-    /**
-     * @param MethodCall $methodCallNode
-     */
-    private function getServiceTypeFromMethodCallArgument(Node $methodCallNode): ?Type
+    private function getServiceTypeFromMethodCallArgument(MethodCall $methodCall): ?Type
     {
-        if (! isset($methodCallNode->args[0])) {
+        if (! isset($methodCall->args[0])) {
             return new MixedType();
         }
 
-        $argument = $methodCallNode->args[0]->value;
+        $argument = $methodCall->args[0]->value;
         $serviceMap = $this->applicationServiceMapProvider->provide();
 
         if ($argument instanceof String_) {

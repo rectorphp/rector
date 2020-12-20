@@ -187,25 +187,21 @@ CODE_SAMPLE
         $this->removeNode($constructClassMethod);
     }
 
-    private function matchCommandNameNodeInConstruct(Expr $expr): ?Node
+    private function matchCommandNameNodeInConstruct(StaticCall $staticCall): ?Expr
     {
-        if (! $expr instanceof MethodCall && ! $expr instanceof StaticCall) {
+        if (! $this->isName($staticCall->name, MethodName::CONSTRUCT)) {
             return null;
         }
 
-        if (! $this->isName($expr->name, MethodName::CONSTRUCT)) {
+        if (count((array) $staticCall->args) < 1) {
             return null;
         }
 
-        if (count((array) $expr->args) < 1) {
-            return null;
-        }
-
-        $staticType = $this->getStaticType($expr->args[0]->value);
+        $staticType = $this->getStaticType($staticCall->args[0]->value);
         if (! $staticType instanceof StringType) {
             return null;
         }
 
-        return $expr->args[0]->value;
+        return $staticCall->args[0]->value;
     }
 }

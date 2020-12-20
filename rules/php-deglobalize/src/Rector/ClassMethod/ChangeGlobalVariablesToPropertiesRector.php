@@ -98,11 +98,11 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function collectGlobalVariableNamesAndRefactorToPropertyFetch(Node $node): void
+    private function collectGlobalVariableNamesAndRefactorToPropertyFetch(ClassMethod $classMethod): void
     {
         $this->globalVariableNames = [];
 
-        $this->traverseNodesWithCallable($node, function (Node $node): ?PropertyFetch {
+        $this->traverseNodesWithCallable($classMethod, function (Node $node): ?PropertyFetch {
             if ($node instanceof Global_) {
                 $this->refactorGlobal($node);
                 return null;

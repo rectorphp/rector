@@ -351,21 +351,21 @@ CODE_SAMPLE
     /**
      * Matches: "implode('","', $items)"
      */
-    private function isImplodeToJson(Node $node): bool
+    private function isImplodeToJson(Expr $expr): bool
     {
-        if (! $node instanceof FuncCall) {
+        if (! $expr instanceof FuncCall) {
             return false;
         }
 
-        if (! $this->isName($node, 'implode')) {
+        if (! $this->isName($expr, 'implode')) {
             return false;
         }
 
-        if (! isset($node->args[1])) {
+        if (! isset($expr->args[1])) {
             return false;
         }
 
-        $firstArgumentValue = $node->args[0]->value;
+        $firstArgumentValue = $expr->args[0]->value;
         if ($firstArgumentValue instanceof String_ && $firstArgumentValue->value !== '","') {
             return false;
         }

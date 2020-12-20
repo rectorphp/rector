@@ -73,12 +73,12 @@ CODE_SAMPLE
         return $this->traverseBinaryOpAndRemoveDuplicatedInstanceOfs($node);
     }
 
-    private function resolveDuplicatedInstancesOf(Node $node): void
+    private function resolveDuplicatedInstancesOf(BinaryOp $binaryOp): void
     {
         $this->duplicatedInstanceOfs = [];
 
         /** @var Instanceof_[] $instanceOfs */
-        $instanceOfs = $this->betterNodeFinder->findInstanceOf([$node], Instanceof_::class);
+        $instanceOfs = $this->betterNodeFinder->findInstanceOf([$binaryOp], Instanceof_::class);
 
         $instanceOfsByClass = [];
         foreach ($instanceOfs as $instanceOf) {

@@ -242,7 +242,7 @@ final class NodeNameResolver
             }
 
             $message .= PHP_EOL . PHP_EOL;
-            $message .= sprintf('Look at %s', $fileAndLine);
+            $message .= sprintf('Look at "%s"', $fileAndLine);
         }
 
         throw new ShouldNotHappenException($message);

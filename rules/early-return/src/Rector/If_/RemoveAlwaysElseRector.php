@@ -101,12 +101,14 @@ CODE_SAMPLE
         return null;
     }
 
-    private function doesLastStatementBreakFlow(Node $node): bool
+    private function doesLastStatementBreakFlow(If_ $if): bool
     {
-        $lastStmt = end($node->stmts);
+        $lastStmt = end($if->stmts);
+
         return ! ($lastStmt instanceof Return_
             || $lastStmt instanceof Throw_
             || $lastStmt instanceof Continue_
             || ($lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_));
     }
+
 }

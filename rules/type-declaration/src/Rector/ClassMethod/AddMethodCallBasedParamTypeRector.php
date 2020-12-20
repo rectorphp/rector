@@ -137,17 +137,17 @@ CODE_SAMPLE
         return $staticTypeByArgumentPosition;
     }
 
-    private function skipArgumentStaticType(Node $node, Type $argumentStaticType, int $position): bool
+    private function skipArgumentStaticType(ClassMethod $classMethod, Type $argumentStaticType, int $position): bool
     {
         if ($argumentStaticType instanceof MixedType) {
             return true;
         }
 
-        if (! isset($node->params[$position])) {
+        if (! isset($classMethod->params[$position])) {
             return true;
         }
 
-        $parameter = $node->params[$position];
+        $parameter = $classMethod->params[$position];
         if ($parameter->type === null) {
             return false;
         }

@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
@@ -107,17 +107,17 @@ CODE_SAMPLE
         $this->previousPreviousStmtVariableName = null;
     }
 
-    private function resolveCurrentStmtVariableName(Node $node): ?string
+    private function resolveCurrentStmtVariableName(Stmt $stmt): ?string
     {
-        $node = $this->unwrapExpression($node);
+        $stmt = $this->unwrapExpression($stmt);
 
-        if ($node instanceof Assign || $node instanceof MethodCall) {
-            if ($this->shouldSkipLeftVariable($node)) {
+        if ($stmt instanceof Assign || $stmt instanceof MethodCall) {
+            if ($this->shouldSkipLeftVariable($stmt)) {
                 return null;
             }
 
-            if (! $node->var instanceof MethodCall && ! $node->var instanceof StaticCall) {
-                return $this->getName($node->var);
+            if (! $stmt->var instanceof MethodCall && ! $stmt->var instanceof StaticCall) {
+                return $this->getName($stmt->var);
             }
         }
 
@@ -135,15 +135,6 @@ CODE_SAMPLE
 
         // this is already empty line before
         return ! $this->isPreceededByEmptyLine($node, $key);
-    }
-
-    private function unwrapExpression(Node $node): Node
-    {
-        if ($node instanceof Expression) {
-            return $node->expr;
-        }
-
-        return $node;
     }
 
     /**
