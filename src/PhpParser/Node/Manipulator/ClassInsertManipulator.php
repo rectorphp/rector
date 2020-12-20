@@ -18,6 +18,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassInsertManipulator
 {
     /**
+     * @var string[]
+     */
+    private const BEFORE_TRAIT_TYPES = [TraitUse::class, Property::class, ClassMethod::class];
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -90,12 +95,7 @@ final class ClassInsertManipulator
     public function addAsFirstTrait(Class_ $class, string $traitName): void
     {
         $traitUse = new TraitUse([new FullyQualified($traitName)]);
-
-        $this->addStatementToClassBeforeTypes(
-            $class,
-            $traitUse,
-            [TraitUse::class, Property::class, ClassMethod::class]
-        );
+        $this->addTraitUse($class, $traitUse);
     }
 
     /**
@@ -166,23 +166,20 @@ final class ClassInsertManipulator
         return false;
     }
 
-    /**
-     * @param string[] $types
-     */
-    private function addStatementToClassBeforeTypes(Class_ $class, Stmt $stmt, array $types): void
+    private function addTraitUse(Class_ $class, TraitUse $traitUse): void
     {
-        foreach ($types as $type) {
+        foreach (self::BEFORE_TRAIT_TYPES as $type) {
             foreach ($class->stmts as $key => $classStmt) {
                 if (! $classStmt instanceof $type) {
                     continue;
                 }
 
-                $class->stmts = $this->insertBefore($class->stmts, $stmt, $key);
+                $class->stmts = $this->insertBefore($class->stmts, $traitUse, $key);
 
                 return;
             }
         }
 
-        $class->stmts[] = $stmt;
+        $class->stmts[] = $traitUse;
     }
 }

@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -250,12 +249,12 @@ CODE_SAMPLE
         Class_ $class,
         ClassMethod $classMethod,
         string $name,
-        ObjectType $objectType
+        FullyQualifiedObjectType $fullyQualifiedObjectType
     ): void {
         $assign = $this->nodeFactory->createPropertyAssignment($name);
         $classMethod->stmts[] = new Expression($assign);
 
-        $this->addConstructorDependencyToClass($class, $objectType, $name);
+        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $name);
     }
 
     private function createEntityManagerParam(): Param

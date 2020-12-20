@@ -252,7 +252,7 @@ CODE_SAMPLE
 
         foreach ($presenterClasses as $presenterClass) {
             foreach ($presenterClass->getMethods() as $classMethod) {
-                if ($this->shouldSkipClassStmt($classMethod)) {
+                if ($this->shouldSkipClassMethod($classMethod)) {
                     continue;
                 }
 
@@ -294,28 +294,24 @@ CODE_SAMPLE
         return is_a($staticCallReturnType, 'Nette\Application\IRouter', true);
     }
 
-    private function shouldSkipClassStmt(Node $node): bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        if (! $node instanceof ClassMethod) {
-            return true;
-        }
-
         // not an action method
-        if (! $node->isPublic()) {
+        if (! $classMethod->isPublic()) {
             return true;
         }
 
-        if (! $this->isName($node, '#^(render|action)#')) {
+        if (! $this->isName($classMethod, '#^(render|action)#')) {
             return true;
         }
-        $hasRouteAnnotation = $node->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION);
+        $hasRouteAnnotation = $classMethod->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION);
 
         if ($hasRouteAnnotation) {
             return true;
         }
 
         // already has Route tag
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return false;
         }

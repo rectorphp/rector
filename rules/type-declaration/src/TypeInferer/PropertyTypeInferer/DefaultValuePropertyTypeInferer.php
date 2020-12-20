@@ -8,12 +8,10 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 
 /**
  * Special case of type inferer - it is always added in the end of the resolved types
  */
-//implements PropertyTypeInfererInterface
 final class DefaultValuePropertyTypeInferer
 {
     /**

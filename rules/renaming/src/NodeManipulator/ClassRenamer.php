@@ -249,16 +249,16 @@ final class ClassRenamer
      * - implements SomeInterface
      * - implements SomeClass
      */
-    private function isClassToInterfaceValidChange(Node $node, string $newName): bool
+    private function isClassToInterfaceValidChange(Name $name, string $newName): bool
     {
         // ensure new is not with interface
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof New_ && interface_exists($newName)) {
             return false;
         }
 
         if ($parentNode instanceof Class_) {
-            return $this->isValidClassNameChange($node, $newName, $parentNode);
+            return $this->isValidClassNameChange($name, $newName, $parentNode);
         }
 
         // prevent to change to import, that already exists
@@ -336,12 +336,12 @@ final class ClassRenamer
         });
     }
 
-    private function isValidClassNameChange(Node $node, string $newName, Class_ $class): bool
+    private function isValidClassNameChange(Name $name, string $newName, Class_ $class): bool
     {
-        if ($class->extends === $node && interface_exists($newName)) {
+        if ($class->extends === $name && interface_exists($newName)) {
             return false;
         }
-        return ! (in_array($node, $class->implements, true) && class_exists($newName));
+        return ! (in_array($name, $class->implements, true) && class_exists($newName));
     }
 
     private function isValidUseImportChange(string $newName, UseUse $useUse): bool

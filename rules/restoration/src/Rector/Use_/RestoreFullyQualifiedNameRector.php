@@ -150,10 +150,10 @@ CODE_SAMPLE
         return $classMethod;
     }
 
-    private function refactorReturnTagValueNode(Node $node): void
+    private function refactorReturnTagValueNode(ClassMethod $classMethod): void
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }

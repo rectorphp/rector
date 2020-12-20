@@ -168,10 +168,10 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isVariableNameAlreadyDefined(Node $node, string $variableName): bool
+    private function isVariableNameAlreadyDefined(If_ $if, string $variableName): bool
     {
         /** @var Scope $scope */
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $scope = $if->getAttribute(AttributeKey::SCOPE);
 
         return $scope->hasVariableType($variableName)
             ->yes();

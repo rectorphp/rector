@@ -133,13 +133,9 @@ CODE_SAMPLE
         return $this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode);
     }
 
-    private function isReturnWithVarAnnotation(Node $node): bool
+    private function isReturnWithVarAnnotation(Return_ $return): bool
     {
-        if (! $node instanceof Return_) {
-            return false;
-        }
-
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $return->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return false;
         }

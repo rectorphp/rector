@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Rector\AbstractRector;
 use Rector\NetteKdyby\DataProvider\EventAndListenerTreeProvider;
 use Rector\NetteKdyby\Naming\EventClassNaming;
 use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
@@ -21,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRectorTest
  */
-final class ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector extends AbstractRector
+final class ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector extends AbstractKdybyEventSubscriberRector
 {
     /**
      * @var EventClassNaming
@@ -129,20 +128,6 @@ CODE_SAMPLE
         }
 
         return $node;
-    }
-
-    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
-    {
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
-            return true;
-        }
-
-        if (! $this->isObjectType($classLike, 'Kdyby\Events\Subscriber')) {
-            return true;
-        }
-
-        return ! $this->isName($classMethod, 'getSubscribedEvents');
     }
 
     private function replaceEventPropertyReferenceWithEventClassReference(ClassMethod $classMethod): void

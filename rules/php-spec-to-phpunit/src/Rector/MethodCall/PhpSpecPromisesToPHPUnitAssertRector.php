@@ -157,7 +157,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             return null;
         }
 
-        $this->prepare($node);
+        $this->prepareMethodCall($node);
 
         if ($this->isName($node->name, 'beConstructed*')) {
             return $this->processBeConstructed($node);
@@ -232,17 +232,17 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         return $parentMethodCall;
     }
 
-    private function prepare(Node $node): void
+    private function prepareMethodCall(MethodCall $methodCall): void
     {
         if ($this->isPrepared) {
             return;
         }
 
         /** @var Class_ $classLike */
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
 
         $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($classLike);
-        $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($node);
+        $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($methodCall);
         $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($classLike);
 
         $this->isPrepared = true;

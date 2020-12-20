@@ -146,9 +146,11 @@ CODE_SAMPLE
         return $this->isObjectType($classLike, 'PHP_CodeSniffer\Sniffs\Sniff');
     }
 
-    private function replacePropertyFetchWithClassConstFetch(Node $node, PropertyProperty $propertyProperty): void
-    {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+    private function replacePropertyFetchWithClassConstFetch(
+        Property $property,
+        PropertyProperty $propertyProperty
+    ): void {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
         if ($classLike === null) {
             throw new ShouldNotHappenException();
         }

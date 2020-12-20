@@ -7,6 +7,7 @@ namespace Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\Parser\FileInfoParser;
+use Rector\Utils\DoctrineAnnotationParserSyncer\ClassSyncerNodeTraverser;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\ClassSyncerInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -29,16 +30,36 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
     private $fileInfoParser;
 
     /**
+     * @var ClassSyncerNodeTraverser
+     */
+    private $classSyncerNodeTraverser;
+
+    /**
      * @required
      */
     public function autowireAbstractClassSyncer(
         BetterStandardPrinter $betterStandardPrinter,
         FileInfoParser $fileInfoParser,
-        SmartFileSystem $smartFileSystem
+        SmartFileSystem $smartFileSystem,
+        ClassSyncerNodeTraverser $classSyncerNodeTraverser
     ): void {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->fileInfoParser = $fileInfoParser;
         $this->smartFileSystem = $smartFileSystem;
+        $this->classSyncerNodeTraverser = $classSyncerNodeTraverser;
+    }
+
+    public function sync(bool $isDryRun): bool
+    {
+        $fileNodes = $this->getFileNodes();
+        $changedNodes = $this->classSyncerNodeTraverser->traverse($fileNodes);
+
+        if ($isDryRun) {
+            return ! $this->hasContentChanged($fileNodes);
+        }
+
+        $this->printNodesToPath($changedNodes);
+        return true;
     }
 
     /**

@@ -207,9 +207,9 @@ CODE_SAMPLE
     /**
      * @param Identical|Equal $binaryOp
      */
-    private function createInArrayFunction(Node $node, BinaryOp $binaryOp, Foreach_ $foreach): FuncCall
+    private function createInArrayFunction(Expr $expr, BinaryOp $binaryOp, Foreach_ $foreach): FuncCall
     {
-        $arguments = $this->createArgs([$node, $foreach->expr]);
+        $arguments = $this->createArgs([$expr, $foreach->expr]);
 
         if ($binaryOp instanceof Identical) {
             $arguments[] = $this->createArg($this->createTrue());

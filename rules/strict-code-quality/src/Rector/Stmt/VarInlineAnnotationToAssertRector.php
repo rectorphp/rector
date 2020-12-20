@@ -134,25 +134,25 @@ CODE_SAMPLE
         });
     }
 
-    private function isVariableJustCreated(Node $node, string $docVariableName): bool
+    private function isVariableJustCreated(Stmt $stmt, string $docVariableName): bool
     {
-        if (! $node instanceof Expression) {
+        if (! $stmt instanceof Expression) {
             return false;
         }
 
-        if (! $node->expr instanceof Assign) {
+        if (! $stmt->expr instanceof Assign) {
             return false;
         }
 
-        $assign = $node->expr;
+        $assign = $stmt->expr;
 
         // the variable is on the left side = just created
         return $this->isVariableName($assign->var, $docVariableName);
     }
 
-    private function refactorFreshlyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
+    private function refactorFreshlyCreatedNode(Stmt $stmt, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
     {
-        $node->setAttribute(AttributeKey::COMMENTS, null);
+        $stmt->setAttribute(AttributeKey::COMMENTS, null);
         $type = $phpDocInfo->getVarType();
 
         $assertFuncCall = $this->createFuncCallBasedOnType($type, $variable);
@@ -162,12 +162,12 @@ CODE_SAMPLE
 
         $phpDocInfo->removeByType(VarTagValueNode::class);
 
-        $this->addNodeBeforeNode($assertFuncCall, $node);
+        $this->addNodeBeforeNode($assertFuncCall, $stmt);
 
-        return $node;
+        return $stmt;
     }
 
-    private function refactorAlreadyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
+    private function refactorAlreadyCreatedNode(Stmt $stmt, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
     {
         $varTagValue = $phpDocInfo->getVarTagValueNode();
         if ($varTagValue === null) {
@@ -184,9 +184,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->addNodeAfterNode($assertFuncCall, $node);
+        $this->addNodeAfterNode($assertFuncCall, $stmt);
 
-        return $node;
+        return $stmt;
     }
 
     private function createFuncCallBasedOnType(Type $type, Variable $variable): ?FuncCall

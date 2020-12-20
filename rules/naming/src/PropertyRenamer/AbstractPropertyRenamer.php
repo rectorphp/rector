@@ -113,32 +113,29 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
         return $renameValueObject->getProperty();
     }
 
-    private function areNamesDifferent(RenameValueObjectInterface $renameValueObject): bool
+    private function areNamesDifferent(PropertyRename $propertyRename): bool
     {
-        return $renameValueObject->getCurrentName() === $renameValueObject->getExpectedName();
+        return $propertyRename->getCurrentName() === $propertyRename->getExpectedName();
     }
 
-    /**
-     * @param PropertyRename $renameValueObject
-     */
-    private function renamePropertyFetchesInClass(RenameValueObjectInterface $renameValueObject): void
+    private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
     {
         // 1. replace property fetch rename in whole class
         $this->callableNodeTraverser->traverseNodesWithCallable(
-            [$renameValueObject->getClassLike()],
-            function (Node $node) use ($renameValueObject): ?Node {
-                if ($this->nodeNameResolver->isLocalPropertyFetchNamed($node, $renameValueObject->getCurrentName())) {
+            [$propertyRename->getClassLike()],
+            function (Node $node) use ($propertyRename): ?Node {
+                if ($this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyRename->getCurrentName())) {
                     /** @var PropertyFetch $node */
-                    $node->name = new Identifier($renameValueObject->getExpectedName());
+                    $node->name = new Identifier($propertyRename->getExpectedName());
                     return $node;
                 }
 
                 if ($this->nodeNameResolver->isLocalStaticPropertyFetchNamed(
                     $node,
-                    $renameValueObject->getCurrentName()
+                    $propertyRename->getCurrentName()
                 )) {
                     /** @var StaticPropertyFetch $node */
-                    $node->name = new VarLikeIdentifier($renameValueObject->getExpectedName());
+                    $node->name = new VarLikeIdentifier($propertyRename->getExpectedName());
                     return $node;
                 }
 

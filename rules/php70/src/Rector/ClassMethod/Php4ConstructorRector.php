@@ -144,37 +144,33 @@ CODE_SAMPLE
         }
     }
 
-    private function processParentPhp4ConstructCall(Node $node): void
+    private function processParentPhp4ConstructCall(StaticCall $staticCall): void
     {
-        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-
-        if (! $node instanceof StaticCall) {
-            return;
-        }
+        $parentClassName = $staticCall->getAttribute(AttributeKey::PARENT_CLASS_NAME);
 
         // no parent class
         if (! is_string($parentClassName)) {
             return;
         }
 
-        if (! $node->class instanceof Name) {
+        if (! $staticCall->class instanceof Name) {
             return;
         }
 
         // rename ParentClass
-        if ($this->isName($node->class, $parentClassName)) {
-            $node->class = new Name('parent');
+        if ($this->isName($staticCall->class, $parentClassName)) {
+            $staticCall->class = new Name('parent');
         }
 
-        if (! $this->isName($node->class, 'parent')) {
+        if (! $this->isName($staticCall->class, 'parent')) {
             return;
         }
 
         // it's not a parent PHP 4 constructor call
-        if (! $this->isName($node->name, $parentClassName)) {
+        if (! $this->isName($staticCall->name, $parentClassName)) {
             return;
         }
 
-        $node->name = new Identifier(MethodName::CONSTRUCT);
+        $staticCall->name = new Identifier(MethodName::CONSTRUCT);
     }
 }

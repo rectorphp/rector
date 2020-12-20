@@ -7,12 +7,10 @@ namespace Rector\Defluent\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Defluent\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
+use Rector\Defluent\NodeFactory\VariableFromNewFactory;
 use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
-use Rector\NetteKdyby\Naming\VariableNaming;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -24,21 +22,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends AbstractFluentChainMethodCallRector
 {
     /**
-     * @var VariableNaming
-     */
-    private $variableNaming;
-
-    /**
      * @var NewFluentChainMethodCallNodeAnalyzer
      */
     private $newFluentChainMethodCallNodeAnalyzer;
 
+    /**
+     * @var VariableFromNewFactory
+     */
+    private $variableFromNewFactory;
+
     public function __construct(
-        VariableNaming $variableNaming,
-        NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer
+        NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
+        VariableFromNewFactory $variableFromNewFactory
     ) {
-        $this->variableNaming = $variableNaming;
         $this->newFluentChainMethodCallNodeAnalyzer = $newFluentChainMethodCallNodeAnalyzer;
+        $this->variableFromNewFactory = $variableFromNewFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -113,19 +111,9 @@ CODE_SAMPLE
         $this->addNodesBeforeNode($newStmts, $node);
 
         // change new arg to root variable
-        $newVariable = $this->crateVariableFromNew($new);
+        $newVariable = $this->variableFromNewFactory->create($new);
         $rootMethodCall->args = [new Arg($newVariable)];
 
         return $rootMethodCall;
-    }
-
-    private function crateVariableFromNew(New_ $new): Variable
-    {
-        $variableName = $this->variableNaming->resolveFromNode($new);
-        if ($variableName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        return new Variable($variableName);
     }
 }

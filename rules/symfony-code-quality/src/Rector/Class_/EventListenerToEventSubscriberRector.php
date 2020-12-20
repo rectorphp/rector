@@ -363,6 +363,10 @@ CODE_SAMPLE
 
         foreach ($methodNamesWithPriorities as $methodNamesWithPriority) {
             foreach ($methodNamesWithPriority->getTags() as $tag) {
+                if (! $tag instanceof EventListenerTag) {
+                    continue;
+                }
+
                 if ($this->shouldSkip($eventName, $tag, $alreadyUsedTags)) {
                     continue;
                 }
@@ -392,17 +396,13 @@ CODE_SAMPLE
     /**
      * @param TagInterface[] $alreadyUsedTags
      */
-    private function shouldSkip(string $eventName, TagInterface $tag, array $alreadyUsedTags): bool
+    private function shouldSkip(string $eventName, EventListenerTag $eventListenerTag, array $alreadyUsedTags): bool
     {
-        if (! $tag instanceof EventListenerTag) {
+        if ($eventName !== $eventListenerTag->getEvent()) {
             return true;
         }
 
-        if ($eventName !== $tag->getEvent()) {
-            return true;
-        }
-
-        return in_array($tag, $alreadyUsedTags, true);
+        return in_array($eventListenerTag, $alreadyUsedTags, true);
     }
 
     private function createEventItem(EventListenerTag $eventListenerTag): ArrayItem

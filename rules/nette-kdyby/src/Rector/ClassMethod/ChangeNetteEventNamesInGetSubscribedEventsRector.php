@@ -12,11 +12,9 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\NotImplementedException;
-use Rector\Core\Rector\AbstractRector;
 use Rector\NetteKdyby\NodeManipulator\GetSubscribedEventsArrayManipulator;
 use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
 use Rector\NetteKdyby\NodeResolver\ListeningMethodsCollector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\NetteKdyby\Tests\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector\ChangeNetteEventNamesInGetSubscribedEventsRectorTest
  */
-final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractRector
+final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractKdybyEventSubscriberRector
 {
     /**
      * @var GetSubscribedEventsArrayManipulator
@@ -135,20 +133,6 @@ CODE_SAMPLE
         $this->listeningClassMethodArgumentManipulator->change($listeningClassMethods);
 
         return $node;
-    }
-
-    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
-    {
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
-            return true;
-        }
-
-        if (! $this->isObjectType($classLike, 'Kdyby\Events\Subscriber')) {
-            return true;
-        }
-
-        return ! $this->isName($classMethod, 'getSubscribedEvents');
     }
 
     private function refactorEventNames(ClassMethod $classMethod): void

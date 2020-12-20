@@ -77,8 +77,6 @@ CODE_SAMPLE
         if (! $rootNameNode instanceof String_) {
             return null;
         }
-
-        // switch arguments
         [$node->args, $rootMethodCallNode->args] = [$rootMethodCallNode->args, $node->args];
 
         $rootMethodCallNode->name = new Identifier('getRootNode');
@@ -86,9 +84,9 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function getRootMethodCallNode(Node $node): ?Node
+    private function getRootMethodCallNode(New_ $new): ?Node
     {
-        $expression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $expression = $new->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if ($expression === null) {
             return null;
         }
@@ -110,6 +108,7 @@ CODE_SAMPLE
             if (! $this->isName($node->name, 'root')) {
                 return false;
             }
+
             return isset($node->args[0]);
         });
     }

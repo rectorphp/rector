@@ -247,7 +247,7 @@ final class PHPStanNodeScopeResolver
             return;
         }
         $message = sprintf(
-            '[debug] %d dependencies for %s file',
+            '[debug] %d dependencies for "%s" file',
             count($dependentFiles),
             $smartFileInfo->getRealPath()
         );
