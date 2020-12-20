@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\RectorGenerator\Provider;
 
+use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
 final class NodeTypesProvider
@@ -35,9 +36,9 @@ final class NodeTypesProvider
 
         $names = [];
         foreach ($filesList as $splFileInfo) {
-            $name = str_replace(array('.php', '/'), array('', '\\'), $splFileInfo->getRelativePathname());
+            $name = str_replace(['.php', '/'], ['', '\\'], $splFileInfo->getRelativePathname());
 
-            $reflection = new \ReflectionClass(self::PHP_PARSER_NAMESPACE . $name);
+            $reflection = new ReflectionClass(self::PHP_PARSER_NAMESPACE . $name);
             if ($reflection->isAbstract() || $reflection->isInterface()) {
                 continue;
             }
