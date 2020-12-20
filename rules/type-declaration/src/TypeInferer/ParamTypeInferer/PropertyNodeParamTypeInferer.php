@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
