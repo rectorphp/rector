@@ -98,6 +98,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($phpDocInfo === null) {
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
+        }
+
         $phpDocInfo->changeVarType($type);
 
         return $node;

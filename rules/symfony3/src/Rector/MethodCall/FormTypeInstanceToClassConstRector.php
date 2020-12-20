@@ -197,7 +197,7 @@ CODE_SAMPLE
         int $optionsPosition,
         string $className,
         array $argNodes
-    ): ?Node {
+    ): ?MethodCall {
         $namesToArgs = $this->resolveNamesToArgs($className, $argNodes);
 
         // set default data in between

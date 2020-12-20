@@ -74,12 +74,8 @@ final class TemplateGuesser
             throw new ShouldNotHappenException();
         }
 
-        $method = $this->nodeNameResolver->getName($classMethod);
-        if ($method === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $this->resolve($namespace, $class, $method);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        return $this->resolve($namespace, $class, $methodName);
     }
 
     /**

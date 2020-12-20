@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\Php72\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -87,7 +89,12 @@ CODE_SAMPLE
             $this->addNodeAfterNode($nextFuncCall, $node);
 
             $currentFuncCall = $this->createFuncCall('current', $eachFuncCall->args);
-            return new Assign($listNode->items[1]->value, $currentFuncCall);
+
+            $secondArrayItem = $listNode->items[1];
+            if (! $secondArrayItem instanceof ArrayItem) {
+                throw new ShouldNotHappenException();
+            }
+            return new Assign($secondArrayItem->value, $currentFuncCall);
         }
 
         // both: list($key, $value) = each($values);
@@ -96,14 +103,26 @@ CODE_SAMPLE
         // $value = current($values);
         // next($values);
         $currentFuncCall = $this->createFuncCall('current', $eachFuncCall->args);
-        $assign = new Assign($listNode->items[1]->value, $currentFuncCall);
+
+        $secondArrayItem = $listNode->items[1];
+        if (! $secondArrayItem instanceof ArrayItem) {
+            throw new ShouldNotHappenException();
+        }
+
+        $assign = new Assign($secondArrayItem->value, $currentFuncCall);
         $this->addNodeAfterNode($assign, $node);
 
         $nextFuncCall = $this->createFuncCall('next', $eachFuncCall->args);
         $this->addNodeAfterNode($nextFuncCall, $node);
 
         $keyFuncCall = $this->createFuncCall('key', $eachFuncCall->args);
-        return new Assign($listNode->items[0]->value, $keyFuncCall);
+
+        $firstArrayItem = $listNode->items[0];
+        if (! $firstArrayItem instanceof ArrayItem) {
+            throw new ShouldNotHappenException();
+        }
+
+        return new Assign($firstArrayItem->value, $keyFuncCall);
     }
 
     private function shouldSkip(Assign $assign): bool

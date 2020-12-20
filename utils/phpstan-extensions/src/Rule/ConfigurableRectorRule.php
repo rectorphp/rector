@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanExtensions\Rule;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -13,6 +12,8 @@ use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Symplify\PHPStanRules\Naming\SimpleNameResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 
 /**
@@ -30,6 +31,16 @@ final class ConfigurableRectorRule implements Rule
      */
     public const ERROR_NOT_IMPLEMENTS_INTERFACE = 'Configurable code sample is used but "%s" interface is not implemented';
 
+    /**
+     * @var SimpleNameResolver
+     */
+    private $simpleNameResolver;
+
+    public function __construct(SimpleNameResolver $simpleNameResolver)
+    {
+        $this->simpleNameResolver = $simpleNameResolver;
+    }
+
     public function getNodeType(): string
     {
         return Class_::class;
@@ -41,7 +52,12 @@ final class ConfigurableRectorRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (! $this->hasRectorInClassName($node)) {
+        $className = $this->simpleNameResolver->getName($node);
+        if ($className === null) {
+            return [];
+        }
+
+        if (! is_a($className, RectorInterface::class, true)) {
             return [];
         }
 
@@ -49,7 +65,7 @@ final class ConfigurableRectorRule implements Rule
             return [];
         }
 
-        if (! $this->implementsConfigurableInterface($node)) {
+        if (! is_a($className, ConfigurableRectorInterface::class, true)) {
             if ($this->hasConfiguredCodeSample($node)) {
                 $errorMessage = sprintf(self::ERROR_NOT_IMPLEMENTS_INTERFACE, ConfigurableRectorInterface::class);
                 return [$errorMessage];
@@ -63,25 +79,6 @@ final class ConfigurableRectorRule implements Rule
         }
 
         return [self::ERROR_NO_CONFIGURED_CODE_SAMPLE];
-    }
-
-    private function hasRectorInClassName(Class_ $class): bool
-    {
-        if (! property_exists($class, 'namespacedName') || $class->namespacedName === null) {
-            return false;
-        }
-
-        return Strings::endsWith((string) $class->namespacedName, 'Rector');
-    }
-
-    private function implementsConfigurableInterface(Class_ $class): bool
-    {
-        if (! property_exists($class, 'namespacedName') || $class->namespacedName === null) {
-            return false;
-        }
-
-        $fullyQualifiedClassName = (string) $class->namespacedName;
-        return is_a($fullyQualifiedClassName, ConfigurableRectorInterface::class, true);
     }
 
     private function hasConfiguredCodeSample(Class_ $class): bool

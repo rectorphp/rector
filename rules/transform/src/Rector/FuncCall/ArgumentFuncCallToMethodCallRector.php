@@ -187,19 +187,16 @@ CODE_SAMPLE
         $propertyFetchNode = $this->createPropertyFetch('this', $expectedName->getName());
 
         if ($funcCall->args === []) {
-            if ($argumentFuncCallToMethodCall->getMethodIfNoArgs()) {
-                return new MethodCall($propertyFetchNode, $argumentFuncCallToMethodCall->getMethodIfNoArgs());
-            }
-
-            return $propertyFetchNode;
+            return $this->refactorEmptyFuncCallArgs($argumentFuncCallToMethodCall, $propertyFetchNode);
         }
 
         if ($this->isFunctionToMethodCallWithArgs($funcCall, $argumentFuncCallToMethodCall)) {
-            return new MethodCall(
-                $propertyFetchNode,
-                $argumentFuncCallToMethodCall->getMethodIfArgs(),
-                $funcCall->args
-            );
+            $methodName = $argumentFuncCallToMethodCall->getMethodIfArgs();
+            if (! is_string($methodName)) {
+                throw new ShouldNotHappenException();
+            }
+
+            return new MethodCall($propertyFetchNode, $methodName, $funcCall->args);
         }
 
         return null;
@@ -259,5 +256,24 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    /**
+     * @return PropertyFetch|MethodCall
+     */
+    private function refactorEmptyFuncCallArgs(
+        ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall,
+        PropertyFetch $propertyFetchNode
+    ): Node {
+        if ($argumentFuncCallToMethodCall->getMethodIfNoArgs()) {
+            $methodName = $argumentFuncCallToMethodCall->getMethodIfNoArgs();
+            if (! is_string($methodName)) {
+                throw new ShouldNotHappenException();
+            }
+
+            return new MethodCall($propertyFetchNode, $methodName);
+        }
+
+        return $propertyFetchNode;
     }
 }

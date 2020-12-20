@@ -25,11 +25,12 @@ final class ClassMethodAndPropertyAnalyzer
         ClassMethod $classMethod,
         string $propertyName
     ): bool {
-        if (count((array) $classMethod->stmts) !== 1) {
+        $stmts = (array) $classMethod->stmts;
+        if (count($stmts) !== 1) {
             return false;
         }
 
-        $onlyClassMethodStmt = $classMethod->stmts[0];
+        $onlyClassMethodStmt = $stmts[0] ?? null;
         if (! $onlyClassMethodStmt instanceof Return_) {
             return false;
         }

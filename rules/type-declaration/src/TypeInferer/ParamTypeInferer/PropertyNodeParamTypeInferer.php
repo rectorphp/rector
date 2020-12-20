@@ -51,6 +51,10 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
             $paramName,
             &$propertyStaticTypes
         ) {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
             if (! $this->propertyFetchManipulator->isVariableAssignToThisPropertyFetch($node, $paramName)) {
                 return null;
             }

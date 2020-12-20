@@ -112,11 +112,7 @@ CODE_SAMPLE
             return $this->addAbstractControllerParentClassIfMissing($node);
         }
 
-        if ($node instanceof ClassMethod) {
-            return $this->replaceTemplateAnnotation($node);
-        }
-
-        return null;
+        return $this->replaceTemplateAnnotation($node);
     }
 
     private function addAbstractControllerParentClassIfMissing(Class_ $class): ?Class_

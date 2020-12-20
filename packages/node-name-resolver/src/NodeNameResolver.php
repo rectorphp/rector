@@ -133,9 +133,9 @@ final class NodeNameResolver
         }
 
         // more complex
-        if ($node instanceof Interface_ || $node instanceof Trait_) {
-            return $this->resolveNamespacedNameAwareNode($node);
-        }
+//        if ($node instanceof Interface_ || $node instanceof Trait_) {
+//            return $this->resolveNamespacedNameAwareNode($node);
+//        }
 
         if (! property_exists($node, 'name')) {
             return null;
@@ -247,22 +247,21 @@ final class NodeNameResolver
 
         throw new ShouldNotHappenException($message);
     }
-
-    /**
-     * @param Interface_|Trait_ $classLike
-     */
-    private function resolveNamespacedNameAwareNode(ClassLike $classLike): ?string
-    {
-        if (property_exists($classLike, 'namespacedName')) {
-            return $classLike->namespacedName->toString();
-        }
-
-        if ($classLike->name === null) {
-            return null;
-        }
-
-        return $this->getName($classLike->name);
-    }
+//    /**
+//     * @param Interface_|Trait_ $backtrace
+//     */
+//    private function resolveNamespacedNameAwareNode(ClassLike $classLike): ?string
+//    {
+//        if (property_exists($classLike, 'namespacedName')) {
+//            return $classLike->namespacedName->toString();
+//        }
+//
+//        if ($classLike->name === null) {
+//            return null;
+//        }
+//
+//        return $this->getName($classLike->name);
+//    }
 
     /**
      * @param mixed[] $backtrace

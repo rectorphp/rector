@@ -240,6 +240,7 @@ CODE_SAMPLE
         $class->implements[] = new FullyQualified(self::EVENT_SUBSCRIBER_INTERFACE);
 
         $classShortName = (string) $class->name;
+
         // remove suffix
         $classShortName = Strings::replace($classShortName, self::LISTENER_MATCH_REGEX, '$1');
 
@@ -389,7 +390,7 @@ CODE_SAMPLE
         }
 
         $returnType = new ArrayType(new MixedType(), new MixedType(true));
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->changeReturnType($returnType);
     }
 

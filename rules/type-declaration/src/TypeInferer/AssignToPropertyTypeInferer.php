@@ -105,7 +105,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
     private function shouldAddNullType(ClassLike $classLike, string $propertyName, array $assignedExprTypes): bool
     {
         $hasPropertyDefaultValue = $this->propertyDefaultAssignDetector->detect($classLike, $propertyName);
-        $isAssignedInConstructor = $this->constructorAssignDetector->detect($classLike, $propertyName);
+        $isAssignedInConstructor = $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
         $shouldAddNullType = $this->nullTypeAssignDetector->detect($classLike, $propertyName);
 
         if (($assignedExprTypes === []) && ($isAssignedInConstructor || $hasPropertyDefaultValue)) {

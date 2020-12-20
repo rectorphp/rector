@@ -50,6 +50,10 @@ final class SelfContainerMethodCallCollector
             &$serviceTypes,
             $skipSetUpMethod
         ) {
+            if (! $node instanceof MethodCall) {
+                return false;
+            }
+
             if (! $this->kernelTestCaseNodeAnalyzer->isOnContainerGetMethodCall($node)) {
                 return null;
             }

@@ -162,11 +162,12 @@ CODE_SAMPLE
             return;
         }
 
-        if (count((array) $constructClassMethod->stmts) !== 1) {
+        $stmts = (array) $constructClassMethod->stmts;
+        if (count($stmts) !== 1) {
             return;
         }
 
-        $onlyNode = $constructClassMethod->stmts[0];
+        $onlyNode = $stmts[0];
         if ($onlyNode instanceof Expression) {
             $onlyNode = $onlyNode->expr;
         }

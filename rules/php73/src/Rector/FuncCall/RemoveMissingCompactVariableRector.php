@@ -6,6 +6,7 @@ namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
@@ -91,6 +92,10 @@ CODE_SAMPLE
             }
 
             foreach ($arg->value->items as $arrayKey => $item) {
+                if (! $item instanceof ArrayItem) {
+                    continue;
+                }
+
                 $value = $this->getValue($item->value);
                 if ($scope->hasVariableType($value)->yes()) {
                     continue;

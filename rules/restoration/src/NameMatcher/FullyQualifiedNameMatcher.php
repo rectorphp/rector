@@ -51,10 +51,6 @@ final class FullyQualifiedNameMatcher
             }
 
             $resolvedName = $this->nodeNameResolver->getName($name);
-            if ($resolvedName === null) {
-                return null;
-            }
-
             if (ClassExistenceStaticHelper::doesClassLikeExist($resolvedName)) {
                 return null;
             }

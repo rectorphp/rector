@@ -68,10 +68,6 @@ CODE_SAMPLE
             return new Variable(new PropertyFetch($nodeName->var, $nodeName->name));
         }
 
-        if ($nodeName instanceof Variable) {
-            return new Variable(new Variable($nodeName->name));
-        }
-
-        return null;
+        return new Variable(new Variable($nodeName->name));
     }
 }

@@ -62,10 +62,6 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
 
         foreach ($node->implements as $key => $implement) {
             $implementedInterfaceName = $this->getName($implement);
-            if ($implementedInterfaceName === null) {
-                return null;
-            }
-
             if (! Strings::match($implementedInterfaceName, $this->interfacePattern)) {
                 continue;
             }

@@ -183,7 +183,11 @@ final class IfManipulator
 
     public function isIfAndElseWithSameVariableAssignAsLastStmts(If_ $if, Expr $desiredExpr): bool
     {
-        if (! $this->isIfWithElse($if)) {
+        if ($if->else === null) {
+            return false;
+        }
+
+        if ((bool) $if->elseifs) {
             return false;
         }
 
@@ -371,15 +375,6 @@ final class IfManipulator
         }
 
         return is_a($stmts[0], $desiredType);
-    }
-
-    private function isIfWithElse(If_ $if): bool
-    {
-        if ($if->else === null) {
-            return false;
-        }
-
-        return ! (bool) $if->elseifs;
     }
 
     private function isIfWithoutElseAndElseIfs(If_ $if): bool

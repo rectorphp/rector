@@ -70,9 +70,6 @@ CODE_SAMPLE
         }
 
         $classShortName = $this->classNaming->getShortName($className);
-        if ($classShortName === null) {
-            return null;
-        }
 
         $smartFileInfo = $node->getAttribute(SmartFileInfo::class);
         if ($smartFileInfo === null) {

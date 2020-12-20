@@ -89,18 +89,17 @@ CODE_SAMPLE
     {
         if ($node instanceof ClassMethod) {
             $this->requestVariableAndParamName = $this->resolveUniqueName($node, 'request');
+
+            if ($this->isActionWithGetRequestInBody($node)) {
+                $fullyQualified = new FullyQualified(self::REQUEST_CLASS);
+                $node->params[] = new Param(new Variable($this->requestVariableAndParamName), null, $fullyQualified);
+
+                return $node;
+            }
         }
 
         if ($this->isGetRequestInAction($node)) {
             return new Variable($this->requestVariableAndParamName);
-        }
-
-        if ($this->isActionWithGetRequestInBody($node)) {
-            $node->params[] = new Param(new Variable($this->requestVariableAndParamName), null, new FullyQualified(
-                self::REQUEST_CLASS
-            ));
-
-            return $node;
         }
 
         return null;
@@ -150,17 +149,18 @@ CODE_SAMPLE
         return $this->controllerMethodAnalyzer->isAction($classMethod);
     }
 
-    private function isActionWithGetRequestInBody(Node $node): bool
+    private function isActionWithGetRequestInBody(ClassMethod $classMethod): bool
     {
-        if (! $this->controllerMethodAnalyzer->isAction($node)) {
+        if (! $this->controllerMethodAnalyzer->isAction($classMethod)) {
             return false;
         }
-        $containsGetRequestMethod = $this->containsGetRequestMethod($node);
+
+        $containsGetRequestMethod = $this->containsGetRequestMethod($classMethod);
         if ($containsGetRequestMethod) {
             return true;
         }
         /** @var MethodCall[] $getMethodCalls */
-        $getMethodCalls = $this->betterNodeFinder->find($node, function (Node $node): bool {
+        $getMethodCalls = $this->betterNodeFinder->find($classMethod, function (Node $node): bool {
             return $this->isLocalMethodCallNamed($node, 'get');
         });
 
@@ -193,9 +193,9 @@ CODE_SAMPLE
         return $stringValue->value === 'request';
     }
 
-    private function containsGetRequestMethod(Node $node): bool
+    private function containsGetRequestMethod(ClassMethod $classMethod): bool
     {
-        return (bool) $this->betterNodeFinder->find($node, function (Node $node): bool {
+        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node): bool {
             return $this->isLocalMethodCallNamed($node, 'getRequest');
         });
     }

@@ -135,8 +135,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
                 continue;
             }
 
-            $innerClassMethodStmt = $classMethod->stmts[0] instanceof Expression ? $classMethod->stmts[0]->expr : $classMethod->stmts[0];
-
+            $innerClassMethodStmt = $this->resolveFirstNonExpressionStmt($classMethodStmts);
             if (! $innerClassMethodStmt instanceof MethodCall) {
                 continue;
             }
@@ -170,5 +169,4 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
 
         return $firstStmt;
     }
->>>>>>> 8f0248a03... fixup! static fixes
 }

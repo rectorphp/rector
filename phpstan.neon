@@ -161,7 +161,7 @@ parameters:
     scanDirectories:
         - stubs
 
-#    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
 
     checkGenericClassInNonGenericObjectType: false
 
@@ -490,3 +490,101 @@ parameters:
             message: '#Unreachable statement \- code above always terminates#'
             paths:
                 - src/Rector/AbstractRector/NodeTypeResolverTrait.php
+
+
+        -
+            message: '#Do not use setter on a service#'
+            paths:
+                - packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php
+                - src/Configuration/Configuration.php
+
+        - '#Unable to resolve the template type ExpectedType in call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)#'
+        # class-string vs string
+        - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
+
+        -
+            message: '#Method "renamePhpDocType\(\)" returns bool type, so the name should start with is/has/was#'
+            paths:
+                 - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockClassRenamer.php
+
+        -
+            message: '#Use "\$class\-\>namespaceName" instead of "\$class\-\>name" that only returns short class name#'
+            paths:
+                - packages/node-name-resolver/src/NodeNameResolver/ClassNameResolver.php
+
+        -
+            message: '#Cannot cast array<string\>\|bool\|string\|null to string#'
+            paths:
+                - utils/node-documentation-generator/src/Command/DumpNodesCommand.php
+                - src/Configuration/Configuration.php
+                - src/Console/Command/ProcessCommand.php
+
+        - '#Method (.*?) should return array<PhpParser\\Node\\(.*?)\> but returns array<PhpParser\\Node\>#'
+        - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'
+
+        -
+            message: '#Strict comparison using \=\=\= between PhpParser\\Node and null will always evaluate to false#'
+            paths:
+                # looping
+                -  src/PhpParser/Node/BetterNodeFinder.php
+
+        # intersection
+        - '#Property Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\:\:\$returnTypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
+        - '#Property Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\:\:\$propertyTypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PropertyTypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
+
+        - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
+
+        # @todo resolve later
+        - '#Configurable rules must have configure code sample#'
+        - '#Configurable code sample is used but "Rector\\Core\\Contract\\Rector\\ConfigurableRectorInterface" interface is not implemented#'
+
+        # @todo bug in symplify, fix later
+        - '#Parameter 2 should use "PhpParser\\Node\\Stmt\\Namespace_" type as the only type passed to this method#'
+
+        -
+            message: '#Class cognitive complexity is 41, keep it under 40#'
+            paths:
+                - rules/phpunit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php
+
+        # @todo loop magic, resolve later
+        -
+             message: '#Access to an undefined property PhpParser\\Node\:\:\$expr#'
+             paths:
+                - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
+        -
+            message: '#Call to an undefined method PHPStan\\Type\\Type\:\:getClassName\(\)#'
+            paths:
+                -  rules/strict-code-quality/src/Rector/ClassMethod/ParamTypeToAssertTypeRector.php
+
+        ###################################################
+
+        # is fixed in never simplify
+        -
+            message: '#Do not use setter on a service#'
+            paths:
+                - src/Configuration/RenamedClassesDataCollector.php
+        - '#Method "mustMatchGitDiff\(\)" returns bool type, so the name should start with is/has/was#'
+
+        -
+            message: '#Class cognitive complexity is 43, keep it under 40#'
+            paths:
+                - rules/phpunit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php
+
+        - '#should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
+
+        - '#Method "evaluateBinaryToVersionCompareCondition\(\)" returns bool type, so the name should start with is/has/was#'
+
+        # soo many false positive naming - fix later with Recto rule
+        - '#Method "(.*?)\(\)" returns bool type, so the name should start with is/has/was#'
+
+
+        # false positives
+        -
+             message: '#Unreachable statement \- code above always terminates#'
+             paths:
+                 - rules/php70/src/Rector/FuncCall/MultiDirnameRector.php
+
+        -
+            message: '#Comparison operation "<" between 0 and 2 is always true#'
+            paths:
+                - rules/php70/src/Rector/FuncCall/MultiDirnameRector.php

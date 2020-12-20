@@ -344,7 +344,15 @@ CODE_SAMPLE
             }
 
             $nestedArray = $arrayItem->value;
+            if (! $nestedArray instanceof Array_) {
+                continue;
+            }
+
             foreach ($nestedArray->items as $nestedArrayItem) {
+                if (! $nestedArrayItem instanceof ArrayItem) {
+                    continue;
+                }
+
                 $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
                 $itemsStaticType = $this->getStaticType($nestedArrayItem->value);
@@ -360,10 +368,11 @@ CODE_SAMPLE
         $staticTypes = [];
         if (! $isNestedArray) {
             foreach ($array->items as $arrayItem) {
-                $arrayItemStaticType = $this->getStaticType($arrayItem->value);
-                if ($arrayItemStaticType) {
-                    $staticTypes[] = $arrayItemStaticType;
+                if (! $arrayItem instanceof ArrayItem) {
+                    continue;
                 }
+
+                $staticTypes[] = $this->getStaticType($arrayItem->value);
             }
         }
 
@@ -382,6 +391,10 @@ CODE_SAMPLE
         $paramAndArgs = [];
 
         foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
             $paramAndArgs[] = new ParamAndArg($variable, $itemsStaticType);

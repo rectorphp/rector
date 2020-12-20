@@ -88,7 +88,7 @@ final class MethodCallManipulator
         return $this->uniquateObjects($methodCalls);
     }
 
-    public function findAssignToVariable(Variable $variable): ?Node
+    public function findAssignToVariable(Variable $variable): ?Assign
     {
         /** @var Node|null $parentNode */
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
@@ -103,7 +103,7 @@ final class MethodCallManipulator
 
         do {
             $assign = $this->findAssignToVariableName($parentNode, $variableName);
-            if ($assign !== null) {
+            if ($assign instanceof Assign) {
                 return $assign;
             }
 

@@ -141,7 +141,7 @@ final class AssignManipulator
      */
     public function resolveAssignsToLocalPropertyFetches(FunctionLike $functionLike): array
     {
-        return $this->betterNodeFinder->find($functionLike->getStmts(), function (Node $node): bool {
+        return $this->betterNodeFinder->find((array) $functionLike->getStmts(), function (Node $node): bool {
             if (! $this->propertyFetchAnalyzer->isLocalPropertyFetch($node)) {
                 return false;
             }

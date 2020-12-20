@@ -61,6 +61,10 @@ CODE_SAMPLE
 
         // special case for fluent methods
         foreach ($this->nodesToRemoveCollector->getNodesToRemove() as $key => $nodeToRemove) {
+            if (! $nodeToRemove instanceof MethodCall) {
+                continue;
+            }
+
             // replace chain method call by non-chain method call
             if (! $this->isChainMethodCallNodeToBeRemoved($node, $nodeToRemove)) {
                 continue;
@@ -68,7 +72,6 @@ CODE_SAMPLE
 
             $this->nodesToRemoveCollector->unset($key);
 
-            /** @var MethodCall $node */
             $methodName = $this->getName($node->name);
 
             /** @var MethodCall $nestedMethodCall */

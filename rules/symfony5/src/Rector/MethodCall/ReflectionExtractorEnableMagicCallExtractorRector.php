@@ -132,9 +132,9 @@ CODE_SAMPLE
         $contextOptions = $methodCall->args[2]->value;
 
         $contextOptionValue = null;
-        /** @var ArrayItem $arrayItem */
+
         foreach ($contextOptions->items as $index => $arrayItem) {
-            if ($arrayItem === null) {
+            if (! $arrayItem instanceof ArrayItem) {
                 continue;
             }
 

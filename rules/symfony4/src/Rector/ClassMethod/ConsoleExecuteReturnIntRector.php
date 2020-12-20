@@ -152,7 +152,7 @@ CODE_SAMPLE
         }
 
         if ($return->expr instanceof Ternary) {
-            $hasChanged = $this->refactorTernaryReturn($return->expr);
+            $hasChanged = $this->isSuccessfulRefactorTernaryReturn($return->expr);
             if ($hasChanged) {
                 return;
             }
@@ -165,7 +165,7 @@ CODE_SAMPLE
         }
     }
 
-    private function refactorTernaryReturn(Ternary $ternary): bool
+    private function isSuccessfulRefactorTernaryReturn(Ternary $ternary): bool
     {
         $hasChanged = false;
         if ($ternary->if && $this->isNull($ternary->if)) {

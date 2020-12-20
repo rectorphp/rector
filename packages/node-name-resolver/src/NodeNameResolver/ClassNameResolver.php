@@ -6,6 +6,7 @@ namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -26,7 +27,7 @@ final class ClassNameResolver implements NodeNameResolverInterface
 
     public function getNode(): string
     {
-        return Class_::class;
+        return ClassLike::class;
     }
 
     /**

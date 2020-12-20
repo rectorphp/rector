@@ -167,7 +167,7 @@ trait NodeFactoryTrait
                 continue;
             }
 
-            $sureArgs = new Arg($arg);
+            $sureArgs[] = new Arg($arg);
         }
 
         return $sureArgs;

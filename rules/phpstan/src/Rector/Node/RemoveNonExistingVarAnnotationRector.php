@@ -107,7 +107,7 @@ CODE_SAMPLE
         }
 
         $variableName = $attributeAwareVarTagValueNode->variableName;
-        if ($variableName === null) {
+        if ($variableName === '') {
             return null;
         }
 
