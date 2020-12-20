@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -85,7 +86,12 @@ CODE_SAMPLE
             $possibleContents[] = $this->print($elseif->stmts);
         }
 
-        $possibleContents[] = $this->print($if->else->stmts);
+        $else = $if->else;
+        if ($else === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $possibleContents[] = $this->print($else->stmts);
 
         $uniqueContents = array_unique($possibleContents);
 

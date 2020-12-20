@@ -1,5 +1,5 @@
 includes:
-    - phpstan-baseline.neon
+#    - phpstan-baseline.neon
 
     - utils/phpstan-extensions/config/phpstan-extensions.neon
     # allows symplify error formatter
@@ -610,3 +610,27 @@ parameters:
             path: src/PhpParser/Printer/BetterStandardPrinter.php
 
         - '#Parameter \#1 \$node of method Rector\\Php80\\Rector\\If_\\NullsafeOperatorRector\:\:getStartNode\(\) expects PhpParser\\Node, PhpParser\\Node\|null given#'
+
+        # @todo resolve in symplify
+        - '#Content of method "(.*?)\(\)" is duplicated with method in "(.*?)Trait" class\. Use unique content or abstract service instead#'
+
+        # known values from other methods
+        -
+            message: '#Negated boolean expression is always true#'
+            path: rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
+
+        -
+            message: '#Call to function in_array\(\) with arguments string, array\(\) and true will always evaluate to false#'
+            path: rules/php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php
+
+        -
+            message: '#Parameter \#1 \$left of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
+            path: rules/php70/src/Rector/If_/IfToSpaceshipRector.php
+
+        - '#PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable given#'
+
+        # unable to test, because the method is final
+        - '#Class "Rector\\Nette\\Rector\\Class_\\MoveFinalGetUserToCheckRequirementsClassMethodRector" is missing @see annotation with test case class reference#'
+
+        # type juggling
+        - '#AttributeAwareNodeInterface#'

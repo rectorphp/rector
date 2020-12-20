@@ -152,10 +152,6 @@ CODE_SAMPLE
             $eventClassName = $this->eventClassNaming->createEventClassNameFromClassPropertyReference(
                 $eventPropertyReferenceName
             );
-            if ($eventClassName === null) {
-                return null;
-            }
-
             $node->key = $this->createClassConstantReference($eventClassName);
         });
     }

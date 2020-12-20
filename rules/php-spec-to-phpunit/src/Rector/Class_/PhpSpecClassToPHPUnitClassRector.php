@@ -156,6 +156,9 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
         return $class;
     }
 
+    /**
+     * @param StCmt[] $stmts
+     */
     private function resolveFirstNonExpressionStmt(array $stmts): ?Node
     {
         if (! isset($stmts[0])) {

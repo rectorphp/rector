@@ -134,7 +134,10 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
                     $node,
                     $propertyRename->getCurrentName()
                 )) {
-                    /** @var StaticPropertyFetch $node */
+                    if (! $node instanceof StaticPropertyFetch) {
+                        return null;
+                    }
+
                     $node->name = new VarLikeIdentifier($propertyRename->getExpectedName());
                     return $node;
                 }

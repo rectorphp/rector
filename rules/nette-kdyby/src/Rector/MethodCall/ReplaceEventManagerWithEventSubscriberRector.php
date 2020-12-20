@@ -7,6 +7,7 @@ namespace Rector\NetteKdyby\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
@@ -142,6 +143,10 @@ CODE_SAMPLE
             $array = $new->args[0]->value;
             if ($array instanceof Array_) {
                 foreach ($array->items as $arrayItem) {
+                    if (! $arrayItem instanceof ArrayItem) {
+                        continue;
+                    }
+
                     $args[] = new Arg($arrayItem->value);
                 }
             }

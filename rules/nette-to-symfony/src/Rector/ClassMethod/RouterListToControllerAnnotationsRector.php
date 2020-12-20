@@ -184,7 +184,7 @@ CODE_SAMPLE
     {
         // look for <...>[] = IRoute<Type>
 
-        return $this->betterNodeFinder->find($classMethod->stmts, function (Node $node): bool {
+        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node): bool {
             if (! $node instanceof Assign) {
                 return false;
             }

@@ -119,7 +119,6 @@ CODE_SAMPLE
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         while ($parentNode) {
-            /** @var ClassMethod|Function_ $parentNode */
             $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
                 break;

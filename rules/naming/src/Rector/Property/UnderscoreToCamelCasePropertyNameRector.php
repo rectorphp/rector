@@ -88,12 +88,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $nodeName = $this->getName($node);
-        if ($nodeName === null) {
-            return null;
-        }
-
-        if (! Strings::contains($nodeName, '_')) {
+        $propertyName = $this->getName($node);
+        if (! Strings::contains($propertyName, '_')) {
             return null;
         }
 

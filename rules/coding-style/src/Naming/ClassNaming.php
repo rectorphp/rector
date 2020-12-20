@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Naming;
 use Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticRectorStrings;
@@ -42,10 +43,18 @@ final class ClassNaming
     }
 
     /**
-     * @param string|Name|Identifier $name
+     * @param string|Name|Identifier|ClassLike $name
      */
     public function getShortName($name): string
     {
+        if ($name instanceof ClassLike) {
+            if ($name->name === null) {
+                return '';
+            }
+
+            return $this->getShortName($name->name);
+        }
+
         if ($name instanceof Name || $name instanceof Identifier) {
             $name = $this->nodeNameResolver->getName($name);
             if ($name === null) {

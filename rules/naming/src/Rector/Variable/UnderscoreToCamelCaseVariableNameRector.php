@@ -113,10 +113,9 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Param $parentNode */
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Param) {
-            return $this->renameParam($parentNode);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Param) {
+            return $this->renameParam($parent);
         }
 
         $node->name = $camelCaseName;

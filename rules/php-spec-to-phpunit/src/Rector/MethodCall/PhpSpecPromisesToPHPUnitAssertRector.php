@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\FuncCall;
@@ -208,6 +209,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         if (isset($methodCall->args[1]) && $methodCall->args[1]->value instanceof Array_) {
             /** @var Array_ $array */
             $array = $methodCall->args[1]->value;
+
             if (isset($array->items[0])) {
                 $thisObjectPropertyMethodCall->args[] = new Arg($array->items[0]->value);
             }
@@ -356,6 +358,10 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         /** @var Array_ $array */
         $array = $methodCall->args[1]->value;
         foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             $staticCall->args[] = new Arg($arrayItem->value);
         }
     }
