@@ -29,6 +29,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class GenerateCommand extends Command
 {
+    private const INTERACTIVE_MODE_NAME = 'interactive';
+
     /**
      * @var SymfonyStyle
      */
@@ -117,7 +119,7 @@ final class GenerateCommand extends Command
         $this->setAliases(['c', 'create', 'g']);
         $this->setDescription('[DEV] Create a new Rector, in a proper location, with new tests');
         $this->addOption(
-            'interactive',
+            self::INTERACTIVE_MODE_NAME,
             'i',
             InputOption::VALUE_NONE,
             'Turns on Interactive Mode - Rector will be generated based on responses to questions instead of using rector-recipe.php',
@@ -204,7 +206,8 @@ final class GenerateCommand extends Command
 
     private function getRectorRecipe(InputInterface $input): RectorRecipe
     {
-        if (! $input->getOption('interactive')) {
+        $isInteractive = $input->getOption(self::INTERACTIVE_MODE_NAME);
+        if (! $isInteractive) {
             return $this->rectorRecipeProvider->provide();
         }
 
@@ -224,7 +227,7 @@ final class GenerateCommand extends Command
         $rectorRecipe->setResources($this->askForResources());
 
         $set = $this->askForSet();
-        if ($set) {
+        if ($set !== null) {
             $rectorRecipe->setSet($this->askForSet());
         }
 
@@ -255,7 +258,7 @@ final class GenerateCommand extends Command
     }
 
     /**
-     * @return array<int, string>
+     * @return array<int, class-string>
      */
     private function askForNodeTypes(): array
     {
@@ -314,6 +317,9 @@ class SomeClass
 CODE_SAMPLE;
     }
 
+    /**
+     * @return array<string>
+     */
     private function askForResources(): array
     {
         $resources = [];

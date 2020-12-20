@@ -14,8 +14,8 @@ final class SetsListProvider
      */
     public function provide(): array
     {
-        $constants = (new ReflectionClass(SetList::class))
-            ->getConstants();
+        $setListReflection = new ReflectionClass(SetList::class);
+        $constants = $setListReflection->getConstants();
 
         return array_keys($constants);
     }
