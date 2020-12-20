@@ -224,6 +224,25 @@ CODE_SAMPLE
         );
     }
 
+    /**
+     * @return PropertyFetch|MethodCall
+     */
+    private function refactorEmptyFuncCallArgs(
+        ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall,
+        PropertyFetch $propertyFetch
+    ): Node {
+        if ($argumentFuncCallToMethodCall->getMethodIfNoArgs()) {
+            $methodName = $argumentFuncCallToMethodCall->getMethodIfNoArgs();
+            if (! is_string($methodName)) {
+                throw new ShouldNotHappenException();
+            }
+
+            return new MethodCall($propertyFetch, $methodName);
+        }
+
+        return $propertyFetch;
+    }
+
     private function isFunctionToMethodCallWithArgs(
         FuncCall $funcCall,
         ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall
@@ -256,24 +275,5 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    /**
-     * @return PropertyFetch|MethodCall
-     */
-    private function refactorEmptyFuncCallArgs(
-        ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall,
-        PropertyFetch $propertyFetchNode
-    ): Node {
-        if ($argumentFuncCallToMethodCall->getMethodIfNoArgs()) {
-            $methodName = $argumentFuncCallToMethodCall->getMethodIfNoArgs();
-            if (! is_string($methodName)) {
-                throw new ShouldNotHappenException();
-            }
-
-            return new MethodCall($propertyFetchNode, $methodName);
-        }
-
-        return $propertyFetchNode;
     }
 }
