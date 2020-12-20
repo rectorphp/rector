@@ -238,8 +238,7 @@ CODE_SAMPLE
      */
     private function keepCommentIfExists(If_ $if, array $ifs): void
     {
-        $nodeComments = $if->getAttribute(AttributeKey::COMMENTS);
-        $ifs[0]->setAttribute(AttributeKey::COMMENTS, $nodeComments);
+        $this->mirrorComments($ifs[0], $if);
     }
 
     private function getIfNextReturn(If_ $if): ?Return_

@@ -117,7 +117,7 @@ CODE_SAMPLE
         $elseStmts = $node->else->stmts;
 
         $return = new Return_($assign->expr);
-        $this->copyCommentIfExists($assign, $return);
+        $this->mirrorComments($return, $assign);
         $elseStmts[$lastElseStmtKey] = $return;
 
         $node->else = null;
@@ -126,11 +126,5 @@ CODE_SAMPLE
         $this->removeNode($nextNode);
 
         return $node;
-    }
-
-    private function copyCommentIfExists(Node $from, Node $to): void
-    {
-        $nodeComments = $from->getAttribute(AttributeKey::COMMENTS);
-        $to->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 }

@@ -75,11 +75,10 @@ CODE_SAMPLE
 
         $left = $node->expr->left;
         $ifNegations = $this->createMultipleIfsNegation($left, $node, []);
-        $nodeComments = $node->getAttribute(AttributeKey::COMMENTS);
 
         foreach ($ifNegations as $key => $ifNegation) {
             if ($key === 0) {
-                $ifNegation->setAttribute(AttributeKey::COMMENTS, $nodeComments);
+                $this->mirrorComments($ifNegation, $node);
             }
 
             $this->addNodeBeforeNode($ifNegation, $node);
