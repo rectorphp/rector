@@ -161,7 +161,7 @@ trait NodeFactoryTrait
     {
         $sureArgs = [];
 
-        foreach ($args as $key => $arg) {
+        foreach ($args as $arg) {
             if ($arg instanceof Arg) {
                 $sureArgs[] = $arg;
                 continue;
