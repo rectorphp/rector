@@ -1,4 +1,6 @@
 includes:
+    - phpstan-baseline.neon
+
     - utils/phpstan-extensions/config/phpstan-extensions.neon
     # allows symplify error formatter
     - vendor/symplify/phpstan-extensions/config/config.neon
@@ -591,3 +593,10 @@ parameters:
             paths:
                 - rules/php70/src/Rector/FuncCall/MultiDirnameRector.php
         - '#PHPDoc tag @param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
+
+        # intersection mess
+        - '#Parameter \#1 \$phpDocTagNodes of method Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory\:\:createFromTagValueNodes\(\) expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\>, array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|Rector\\BetterPhpDocParser\\Contract\\PhpDocNode\\AttributeAwareNodeInterface\> given#'
+
+        # false postives
+        - '#Parameter \#2 \$right of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
+        - '#Parameter \#1 \$stmts of class Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace constructor expects array<PhpParser\\Node\\Stmt\>, array<PhpParser\\Node\> given#'

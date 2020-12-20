@@ -26,11 +26,8 @@ final class PropertyTypeVendorLockResolver extends AbstractNodeVendorLockResolve
             return false;
         }
 
-        /** @var string|null $propertyName */
+        /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
-        if (! is_string($propertyName)) {
-            throw new ShouldNotHappenException();
-        }
 
         if ($this->isParentClassLocked($classLike, $propertyName)) {
             return true;

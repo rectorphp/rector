@@ -239,7 +239,7 @@ CODE_SAMPLE
     {
         $class->implements[] = new FullyQualified(self::EVENT_SUBSCRIBER_INTERFACE);
 
-        $classShortName = (string) $class->name;
+        $classShortName = $this->getShortName($class->name);
 
         // remove suffix
         $classShortName = Strings::replace($classShortName, self::LISTENER_MATCH_REGEX, '$1');

@@ -54,9 +54,6 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
-        if (! is_string($propertyName)) {
-            throw new ShouldNotHappenException();
-        }
 
         $param = $this->classMethodPropertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
         if ($param === null) {

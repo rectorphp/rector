@@ -35,9 +35,6 @@ final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer impleme
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
-        if (! is_string($propertyName)) {
-            throw new ShouldNotHappenException();
-        }
 
         return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $classLike);
     }

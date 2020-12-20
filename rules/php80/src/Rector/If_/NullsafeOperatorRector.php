@@ -298,10 +298,10 @@ CODE_SAMPLE
         return $expr;
     }
 
-    private function getStartNode(Node $node): ?Node
+    private function getStartNode(Identifier $identifier): ?Node
     {
         /** @var If_ $start */
-        $start = $node->getAttribute(AttributeKey::NEXT_NODE);
+        $start = $identifier->getAttribute(AttributeKey::NEXT_NODE);
 
         /** @var Expression $start */
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);
