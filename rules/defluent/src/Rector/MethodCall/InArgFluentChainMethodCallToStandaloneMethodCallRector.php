@@ -9,12 +9,10 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Defluent\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
 use Rector\Defluent\NodeFactory\VariableFromNewFactory;
 use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
 use Rector\Defluent\ValueObject\FluentCallsKind;
-use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -27,25 +25,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends AbstractFluentChainMethodCallRector
 {
     /**
-     * @var VariableNaming
-     */
-    private $variableNaming;
-
-    /**
      * @var NewFluentChainMethodCallNodeAnalyzer
      */
     private $newFluentChainMethodCallNodeAnalyzer;
+
     /**
      * @var VariableFromNewFactory
      */
     private $variableFromNewFactory;
 
     public function __construct(
-        VariableNaming $variableNaming,
         NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
         VariableFromNewFactory $variableFromNewFactory
     ) {
-        $this->variableNaming = $variableNaming;
         $this->newFluentChainMethodCallNodeAnalyzer = $newFluentChainMethodCallNodeAnalyzer;
         $this->variableFromNewFactory = $variableFromNewFactory;
     }
