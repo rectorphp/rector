@@ -353,17 +353,17 @@ final class BetterStandardPrinter extends Standard
         return "'" . Strings::replace($string, self::QUOTED_SLASH_REGEX, '\\\\$0') . "'";
     }
 
-//    /**
-//     * Emulates 1_000 in PHP 7.3- version
-//     */
-//    protected function pScalar_DNumber(DNumber $dNumber): string
-//    {
-//        if (is_string($dNumber->value)) {
-//            return $dNumber->value;
-//        }
-//
-//        return parent::pScalar_DNumber($dNumber);
-//    }
+    /**
+     * Emulates 1_000 in PHP 7.3- version
+     */
+    protected function pScalar_DNumber(DNumber $dNumber): string
+    {
+        if (is_string($dNumber->value)) {
+            return $dNumber->value;
+        }
+
+        return parent::pScalar_DNumber($dNumber);
+    }
 
     /**
      * Add space:

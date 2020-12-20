@@ -600,3 +600,8 @@ parameters:
         # false postives
         - '#Parameter \#2 \$right of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Parameter \#1 \$stmts of class Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace constructor expects array<PhpParser\\Node\\Stmt\>, array<PhpParser\\Node\> given#'
+
+
+        -
+            message: '#Call to function is_string\(\) with float will always evaluate to false#'
+            path: src/PhpParser/Printer/BetterStandardPrinter.php
