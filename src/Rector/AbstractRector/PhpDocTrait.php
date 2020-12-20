@@ -58,7 +58,7 @@ trait PhpDocTrait
 
     protected function getPhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): ?PhpDocTagValueNode
     {
-        $this->phpDocInfoManipulator->getPhpDocTagValueNode($node, $phpDocTagNodeClass);
+        return $this->phpDocInfoManipulator->getPhpDocTagValueNode($node, $phpDocTagNodeClass);
     }
 
     protected function hasPhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): bool
