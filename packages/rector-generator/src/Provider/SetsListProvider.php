@@ -7,7 +7,7 @@ namespace Rector\RectorGenerator\Provider;
 use Rector\Set\ValueObject\SetList;
 use ReflectionClass;
 
-final class SetListsProvider
+final class SetsListProvider
 {
     /**
      * @return array<int, string>
