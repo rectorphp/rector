@@ -24,7 +24,7 @@ final class NodeTypesProvider
     }
 
     /**
-     * @return array<int, string>
+     * @return array<string, string>
      */
     public function provide(): array
     {
