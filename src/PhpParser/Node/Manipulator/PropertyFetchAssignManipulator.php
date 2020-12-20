@@ -41,7 +41,7 @@ final class PropertyFetchAssignManipulator
             &$propertyNames
         ) {
             if (! $node instanceof Assign) {
-                return false;
+                return null;
             }
 
             if (! $this->isVariableAssignToThisPropertyFetch($node, $paramName)) {

@@ -65,25 +65,30 @@ final class ConfigurableRectorRule implements Rule
             return [];
         }
 
-        if (! is_a($className, ConfigurableRectorInterface::class, true)) {
+        if ($this->hasConfigurableInterface($className)) {
             if ($this->hasConfiguredCodeSample($node)) {
-                $errorMessage = sprintf(self::ERROR_NOT_IMPLEMENTS_INTERFACE, ConfigurableRectorInterface::class);
-                return [$errorMessage];
+                return [];
             }
 
-            return [];
+            return [self::ERROR_NO_CONFIGURED_CODE_SAMPLE];
         }
 
         if ($this->hasConfiguredCodeSample($node)) {
-            return [];
+            if ($this->hasConfigurableInterface($className)) {
+                return [];
+            }
+
+            $errorMessage = sprintf(self::ERROR_NOT_IMPLEMENTS_INTERFACE, ConfigurableRectorInterface::class);
+            return [$errorMessage];
         }
 
-        return [self::ERROR_NO_CONFIGURED_CODE_SAMPLE];
+        return [];
     }
 
     private function hasConfiguredCodeSample(Class_ $class): bool
     {
         $classMethod = $class->getMethod('getRuleDefinition');
+
         if ($classMethod === null) {
             return false;
         }
@@ -111,5 +116,10 @@ final class ConfigurableRectorRule implements Rule
         });
 
         return $nodes !== [];
+    }
+
+    private function hasConfigurableInterface(string $className): bool
+    {
+        return is_a($className, ConfigurableRectorInterface::class, true);
     }
 }

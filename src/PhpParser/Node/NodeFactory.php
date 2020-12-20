@@ -557,10 +557,7 @@ final class NodeFactory
             return;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($property);
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
