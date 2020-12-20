@@ -7,7 +7,7 @@ namespace Rector\RectorGenerator\Provider;
 use Rector\Core\Util\StaticRectorStrings;
 use Symfony\Component\Finder\Finder;
 
-final class PackageNameProvider
+final class PackageNamesProvider
 {
     /**
      * @var Finder

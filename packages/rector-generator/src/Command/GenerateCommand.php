@@ -12,9 +12,9 @@ use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\Generator\FileGenerator;
 use Rector\RectorGenerator\Guard\OverrideGuard;
 use Rector\RectorGenerator\Provider\NodeTypesProvider;
-use Rector\RectorGenerator\Provider\PackageNameProvider;
+use Rector\RectorGenerator\Provider\PackageNamesProvider;
 use Rector\RectorGenerator\Provider\RectorRecipeProvider;
-use Rector\RectorGenerator\Provider\SetListProvider;
+use Rector\RectorGenerator\Provider\SetListsProvider;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symfony\Component\Console\Command\Command;
@@ -70,9 +70,9 @@ final class GenerateCommand extends Command
     private $rectorRecipeProvider;
 
     /**
-     * @var PackageNameProvider
+     * @var PackageNamesProvider
      */
-    private $packageNameProvider;
+    private $packageNamesProvider;
 
     /**
      * @var NodeTypesProvider
@@ -80,9 +80,9 @@ final class GenerateCommand extends Command
     private $nodeTypesProvider;
 
     /**
-     * @var SetListProvider
+     * @var SetListsProvider
      */
-    private $setListProvider;
+    private $setListsProvider;
 
     public function __construct(
         ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
@@ -93,9 +93,9 @@ final class GenerateCommand extends Command
         TemplateFinder $templateFinder,
         TemplateVariablesFactory $templateVariablesFactory,
         RectorRecipeProvider $rectorRecipeProvider,
-        PackageNameProvider $packageNameProvider,
+        PackageNamesProvider $packageNamesProvider,
         NodeTypesProvider $nodeTypesProvider,
-        SetListProvider $setListProvider
+        SetListsProvider $setListsProvider
     ) {
         parent::__construct();
 
@@ -107,9 +107,9 @@ final class GenerateCommand extends Command
         $this->overrideGuard = $overrideGuard;
         $this->fileGenerator = $fileGenerator;
         $this->rectorRecipeProvider = $rectorRecipeProvider;
-        $this->packageNameProvider = $packageNameProvider;
+        $this->packageNamesProvider = $packageNamesProvider;
         $this->nodeTypesProvider = $nodeTypesProvider;
-        $this->setListProvider = $setListProvider;
+        $this->setListsProvider = $setListsProvider;
     }
 
     protected function configure(): void
@@ -237,7 +237,7 @@ final class GenerateCommand extends Command
             'Package name for which Rector should be created (e.g. <fg=yellow>%s</>)',
             'Naming'
         ));
-        $question->setAutocompleterValues($this->packageNameProvider->provide());
+        $question->setAutocompleterValues($this->packageNamesProvider->provide());
 
         $packageName = $this->symfonyStyle->askQuestion($question);
 
@@ -269,8 +269,7 @@ final class GenerateCommand extends Command
 
         $classes = [];
         foreach ($nodeTypes as $nodeType) {
-            $name = 'PhpParser\Node\\' . str_replace('/', '\\', $nodeType);
-            $classes[] = $name;
+            $classes[] = 'PhpParser\Node\\' . $nodeType;
         }
 
         return $classes;
@@ -338,7 +337,7 @@ CODE_SAMPLE;
     private function askForSet(): ?string
     {
         $question = new Question(sprintf('Set to which Rector should be added (e.g. <fg=yellow>%s</>)', 'SYMFONY_52'));
-        $question->setAutocompleterValues($this->setListProvider->provide());
+        $question->setAutocompleterValues($this->setListsProvider->provide());
 
         $setName = $this->symfonyStyle->askQuestion($question);
         if ($setName === null) {
