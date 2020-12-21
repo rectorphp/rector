@@ -41,7 +41,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/cakephp')
             ->in(__DIR__ . '/../../../../rules/carbon')
             ->in(__DIR__ . '/../../../../rules/code-quality')
-            ->in(__DIR__ . '/../../../../rules/coding-style');
+            ->in(__DIR__ . '/../../../../rules/coding-style')
+            ->in(__DIR__ . '/../../../../rules/dead-code');
 
         return $this->finderSanitizer->sanitize($finder);
     }

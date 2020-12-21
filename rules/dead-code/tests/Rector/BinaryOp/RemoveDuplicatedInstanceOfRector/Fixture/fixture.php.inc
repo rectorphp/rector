@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {
@@ -17,7 +17,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveDoubleAssignRector\Fixture;
 
-class Example
+class SkipDoubleCatch
 {
     public function action()
     {

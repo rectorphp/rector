@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedAssignVariableRector\Fixture;
 
-final class SkipAssignExpressionUseValue
+final class SkipAssignExpressionUseVariable
 {
     public function run()
     {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector\AnonymousClassWithoutParent;
+namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector\Fixture;
 
-class SomeClass
+class AnonymousClassWithoutParent
 {
     public function foo()
     {
@@ -19,9 +19,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector\AnonymousClassWithoutParent;
+namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector\Fixture;
 
-class SomeClass
+class AnonymousClassWithoutParent
 {
     public function foo()
     {

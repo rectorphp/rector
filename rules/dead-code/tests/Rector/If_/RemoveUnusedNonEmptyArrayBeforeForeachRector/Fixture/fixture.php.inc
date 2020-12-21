@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -27,7 +27,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedAssignVariableRector\Fixture;
 
-class AssignHereDoc
+class AssignStringLong
 {
     public function run()
     {
@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedAssignVariableRector\Fixture;
 
-class AssignHereDoc
+class AssignStringLong
 {
     public function run()
     {

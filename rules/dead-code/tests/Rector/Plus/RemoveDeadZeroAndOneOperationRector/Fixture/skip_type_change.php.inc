@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Plus\RemoveDeadZeroAndOneOperationRector\Fixture;
 
-class SkipTypeChnge
+class SkipTypeChange
 {
     public function runBinary()
     {
