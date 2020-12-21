@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector\Fixture;
 
-class ReturnTypeOnClassMethod
+class Fixture
 {
     public function run(): ?string
     {
@@ -20,7 +20,7 @@ class ReturnTypeOnClassMethod
 
 namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector\Fixture;
 
-class ReturnTypeOnClassMethod
+class Fixture
 {
     /**
      * @return string|null
