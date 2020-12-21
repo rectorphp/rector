@@ -56,7 +56,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/downgrade-php73')
             ->in(__DIR__ . '/../../../../rules/downgrade-php74')
             ->in(__DIR__ . '/../../../../rules/downgrade-php80')
-            ->in(__DIR__ . '/../../../../rules/phpstan');
+            ->in(__DIR__ . '/../../../../rules/phpstan')
+            ->in(__DIR__ . '/../../../../rules/phpunit');
 
         return $this->finderSanitizer->sanitize($finder);
     }
