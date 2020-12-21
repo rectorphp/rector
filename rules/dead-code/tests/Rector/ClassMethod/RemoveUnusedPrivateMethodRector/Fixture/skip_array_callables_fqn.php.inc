@@ -8,7 +8,7 @@ final class SkipArrayCallablesFqn
     {
         $array  = [3, 2, 1];
 
-        usort($array, [SkipArrayCallalbesFqn::class, 'sort']);
+        usort($array, [SkipArrayCallalblesFqn::class, 'sort']);
 
         return $array;
     }
