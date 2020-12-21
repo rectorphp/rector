@@ -2,18 +2,20 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-final class StockRepository
+use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source;
+
+final class ManyImports
 {
-    public function filter(Stock\Query $query)
+    public function filter(Query $query)
     {
-        /** @var Stock\Query $query */
+        /** @var Source\Stock\Query $query */
         $query = 5;
 
-        if (!($query instanceof Stock\Querying\Query)) {
+        if (!($query instanceof Source\Stock\Querying\Query)) {
             throw new \InvalidArgumentException('Wrong query provided');
         }
 
-        /** @var Querying\Query $query */
+        /** @var Source\Stock\Querying\Query $query */
         $builder = $this->createBuilder();
         $query->build($builder);
     }
@@ -34,20 +36,22 @@ final class StockRepository
 
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Stock\Query;
 use InvalidArgumentException;
-final class StockRepository
+use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Connection;
+use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source;
+
+final class ManyImports
 {
     public function filter(Query $query)
     {
-        /** @var Query $query */
+        /** @var Source\Stock\Query $query */
         $query = 5;
 
-        if (!($query instanceof Stock\Querying\Query)) {
+        if (!($query instanceof Source\Stock\Querying\Query)) {
             throw new InvalidArgumentException('Wrong query provided');
         }
 
-        /** @var Querying\Query $query */
+        /** @var Source\Stock\Querying\Query $query */
         $builder = $this->createBuilder();
         $query->build($builder);
     }
