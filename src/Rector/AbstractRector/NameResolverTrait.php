@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -66,7 +67,7 @@ trait NameResolverTrait
     }
 
     /**
-     * @param string|Name|Identifier $name
+     * @param string|Name|Identifier|ClassLike $name
      */
     protected function getShortName($name): string
     {

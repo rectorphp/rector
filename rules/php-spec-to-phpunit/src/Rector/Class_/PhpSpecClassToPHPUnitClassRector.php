@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -156,6 +157,9 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
         return $class;
     }
 
+    /**
+     * @param Stmt[] $stmts
+     */
     private function resolveFirstNonExpressionStmt(array $stmts): ?Node
     {
         if (! isset($stmts[0])) {

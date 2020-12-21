@@ -84,6 +84,10 @@ final class ListeningMethodsCollector
                     return;
                 }
 
+                if ($node->key === null) {
+                    return;
+                }
+
                 $eventClass = $this->valueResolver->getValue($node->key);
 
                 if ($type === self::EVENT_TYPE_CONTRIBUTTE) {
@@ -180,10 +184,6 @@ final class ListeningMethodsCollector
                 $dispatchingClass,
                 $property
             );
-        }
-
-        if ($eventClass === null) {
-            return null;
         }
 
         if ($classMethod === null) {

@@ -186,7 +186,11 @@ CODE_SAMPLE
             return $this->isObjectType($node->expr, 'mysqli');
         });
 
-        return $connectionAssign !== null ? $connectionAssign->var : null;
+        if (! $connectionAssign instanceof Assign) {
+            return null;
+        }
+
+        return $connectionAssign->var;
     }
 
     private function removeExistingConnectionParameter(FuncCall $funcCall): void

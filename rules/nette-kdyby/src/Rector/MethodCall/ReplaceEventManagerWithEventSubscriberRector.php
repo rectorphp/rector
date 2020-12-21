@@ -7,6 +7,7 @@ namespace Rector\NetteKdyby\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
@@ -114,11 +115,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, 'Kdyby\Events\EventManager')) {
-            return null;
-        }
-
-        if (! $this->isName($node->name, 'dispatchEvent')) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -134,21 +131,10 @@ CODE_SAMPLE
             $classAndStaticProperty
         );
 
-        $args = [];
-        if ($oldArgs[1]->value instanceof New_) {
-            /** @var New_ $new */
-            $new = $oldArgs[1]->value;
+        $args = $this->createNewArgs($oldArgs);
 
-            $array = $new->args[0]->value;
-            if ($array instanceof Array_) {
-                foreach ($array->items as $arrayItem) {
-                    $args[] = new Arg($arrayItem->value);
-                }
-            }
-        }
-
-        $class = new New_(new FullyQualified($eventClassName), $args);
-        $node->args[] = new Arg($class);
+        $new = new New_(new FullyQualified($eventClassName), $args);
+        $node->args[] = new Arg($new);
 
         // 3. create new event class with args
         $eventClassInNamespace = $this->eventValueObjectClassFactory->create($eventClassName, $args);
@@ -167,5 +153,42 @@ CODE_SAMPLE
         $this->printNodesToFilePath([$eventClassInNamespace], $eventFileLocation);
 
         return $node;
+    }
+
+    private function shouldSkip(MethodCall $methodCall): bool
+    {
+        if (! $this->isObjectType($methodCall->var, 'Kdyby\Events\EventManager')) {
+            return true;
+        }
+
+        return ! $this->isName($methodCall->name, 'dispatchEvent');
+    }
+
+    /**
+     * @param Arg[] $oldArgs
+     * @return Arg[]
+     */
+    private function createNewArgs(array $oldArgs): array
+    {
+        $args = [];
+
+        if ($oldArgs[1]->value instanceof New_) {
+            /** @var New_ $new */
+            $new = $oldArgs[1]->value;
+
+            $array = $new->args[0]->value;
+            if (! $array instanceof Array_) {
+                return [];
+            }
+            foreach ($array->items as $arrayItem) {
+                if (! $arrayItem instanceof ArrayItem) {
+                    continue;
+                }
+
+                $args[] = new Arg($arrayItem->value);
+            }
+        }
+
+        return $args;
     }
 }

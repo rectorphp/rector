@@ -49,9 +49,7 @@ final class DocAliasResolver
             /** @var PhpDocInfo $phpDocInfo */
             $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-            if ($phpDocInfo->getVarType()) {
-                $possibleDocAliases = $this->collectVarType($phpDocInfo, $possibleDocAliases);
-            }
+            $possibleDocAliases = $this->collectVarType($phpDocInfo, $possibleDocAliases);
 
             // e.g. "use Dotrine\ORM\Mapping as ORM" etc.
             $matches = Strings::matchAll($docComment->getText(), self::DOC_ALIAS_REGEX);

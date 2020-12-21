@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -34,53 +35,75 @@ final class ModifiedVariableNamesCollector
     /**
      * @return string[]
      */
-    public function collectModifiedVariableNames(Node $node): array
+    public function collectModifiedVariableNames(Stmt $stmt): array
+    {
+        $argNames = $this->collectFromArgs($stmt);
+        $assignNames = $this->collectFromAssigns($stmt);
+
+        return array_merge($argNames, $assignNames);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function collectFromArgs(Stmt $stmt): array
+    {
+        $variableNames = [];
+
+        $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
+            &$variableNames
+        ) {
+            if (! $node instanceof Arg) {
+                return null;
+            }
+
+            if (! $this->isVariableChangedInReference($node)) {
+                return null;
+            }
+
+            $variableName = $this->nodeNameResolver->getName($node->value);
+            if ($variableName === null) {
+                return null;
+            }
+
+            $variableNames[] = $variableName;
+        });
+
+        return $variableNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function collectFromAssigns(Stmt $stmt): array
     {
         $modifiedVariableNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
+        $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
             &$modifiedVariableNames
         ) {
-            if ($this->isVariableOverriddenInAssign($node)) {
-                /** @var Assign $node */
-                $variableName = $this->nodeNameResolver->getName($node->var);
-                if ($variableName === null) {
-                    return null;
-                }
-
-                $modifiedVariableNames[] = $variableName;
+            if (! $node instanceof Assign) {
+                return null;
             }
 
-            if ($this->isVariableChangedInReference($node)) {
-                /** @var Arg $node */
-                $variableName = $this->nodeNameResolver->getName($node->value);
-                if ($variableName === null) {
-                    return null;
-                }
-
-                $modifiedVariableNames[] = $variableName;
+            if (! $node->var instanceof Variable) {
+                return null;
             }
+
+            $variableName = $this->nodeNameResolver->getName($node->var);
+            if ($variableName === null) {
+                return null;
+            }
+
+            $modifiedVariableNames[] = $variableName;
         });
 
         return $modifiedVariableNames;
     }
 
-    private function isVariableOverriddenInAssign(Node $node): bool
+    private function isVariableChangedInReference(Arg $arg): bool
     {
-        if (! $node instanceof Assign) {
-            return false;
-        }
-
-        return $node->var instanceof Variable;
-    }
-
-    private function isVariableChangedInReference(Node $node): bool
-    {
-        if (! $node instanceof Arg) {
-            return false;
-        }
-
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $arg->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof FuncCall) {
             return false;
         }

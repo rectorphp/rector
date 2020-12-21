@@ -266,7 +266,7 @@ CODE_SAMPLE
             'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait'
         );
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         $phpDocInfo->addTagValueNodeWithShortName(new EntityTagValueNode([]));
 
         foreach ($translatedPropertyToPhpDocInfos as $translatedPropertyName => $translatedPhpDocInfo) {

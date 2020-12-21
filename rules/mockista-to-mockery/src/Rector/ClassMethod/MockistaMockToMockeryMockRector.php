@@ -245,6 +245,7 @@ CODE_SAMPLE
             return false;
         }
 
+        /** @var MethodCall|PropertyFetch $node */
         if (! $node->var instanceof Variable) {
             return false;
         }

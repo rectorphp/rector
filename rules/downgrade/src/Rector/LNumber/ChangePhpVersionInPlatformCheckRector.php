@@ -101,11 +101,7 @@ CODE_SAMPLE
             return $this->refactorLNumber($node);
         }
 
-        if ($node instanceof String_) {
-            return $this->refactorString($node);
-        }
-
-        return null;
+        return $this->refactorString($node);
     }
 
     /**

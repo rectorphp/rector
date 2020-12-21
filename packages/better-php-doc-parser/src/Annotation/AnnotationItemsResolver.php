@@ -29,16 +29,12 @@ final class AnnotationItemsResolver
             return $annotationOrItems;
         }
 
-        if (is_object($annotationOrItems)) {
-            // special case for private property annotations
-            if ($this->annotationVisibilityDetector->isPrivate($annotationOrItems)) {
-                return $this->resolvePrivatePropertyValues($annotationOrItems);
-            }
-
-            return get_object_vars($annotationOrItems);
+        // special case for private property annotations
+        if ($this->annotationVisibilityDetector->isPrivate($annotationOrItems)) {
+            return $this->resolvePrivatePropertyValues($annotationOrItems);
         }
 
-        return [];
+        return get_object_vars($annotationOrItems);
     }
 
     /**

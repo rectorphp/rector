@@ -127,7 +127,7 @@ CODE_SAMPLE
         // traverse up for unreachable node in the same scope
         $previousNode = $stmt->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
 
-        while ($previousNode instanceof Node && ! $this->isBreakingScopeNode($previousNode)) {
+        while ($previousNode instanceof Stmt && ! $this->isBreakingScopeNode($previousNode)) {
             $isUnreachable = $previousNode->getAttribute(AttributeKey::IS_UNREACHABLE);
             if ($isUnreachable === true) {
                 return true;
@@ -164,20 +164,20 @@ CODE_SAMPLE
     /**
      * Check nodes that breaks scope while traversing up
      */
-    private function isBreakingScopeNode(Node $node): bool
+    private function isBreakingScopeNode(Stmt $stmt): bool
     {
-        if ($node instanceof ClassLike) {
+        if ($stmt instanceof ClassLike) {
             return true;
         }
 
-        if ($node instanceof ClassMethod) {
+        if ($stmt instanceof ClassMethod) {
             return true;
         }
 
-        if ($node instanceof Namespace_) {
+        if ($stmt instanceof Namespace_) {
             return true;
         }
 
-        return $node instanceof Else_;
+        return $stmt instanceof Else_;
     }
 }

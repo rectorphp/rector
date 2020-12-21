@@ -119,11 +119,7 @@ CODE_SAMPLE
             return $this->refactorProperty($node);
         }
 
-        if ($node instanceof ClassMethod) {
-            return $this->refactorClassMethod($node);
-        }
-
-        return null;
+        return $this->refactorClassMethod($node);
     }
 
     private function refactorProperty(Property $property): ?Property

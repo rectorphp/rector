@@ -11,7 +11,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
 use Rector\Naming\Contract\RenameGuard\RenameGuardInterface;
 use Rector\Naming\Contract\RenamerInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
@@ -31,7 +31,7 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
     protected $propertyRenameGuard;
 
     /**
-     * @var GuardInterface
+     * @var ConflictingGuardInterface
      */
     protected $conflictingPropertyNameGuard;
 
@@ -92,7 +92,7 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
      */
     public function rename(RenameValueObjectInterface $renameValueObject): ?Node
     {
-        if ($this->areNamesDifferent($renameValueObject)) {
+        if (! $this->areNamesDifferent($renameValueObject)) {
             return null;
         }
 
@@ -115,17 +115,19 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
 
     private function areNamesDifferent(PropertyRename $propertyRename): bool
     {
-        return $propertyRename->getCurrentName() === $propertyRename->getExpectedName();
+        return $propertyRename->getCurrentName() !== $propertyRename->getExpectedName();
     }
 
     private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
     {
         // 1. replace property fetch rename in whole class
         $this->callableNodeTraverser->traverseNodesWithCallable(
-            [$propertyRename->getClassLike()],
+            $propertyRename->getClassLike(),
             function (Node $node) use ($propertyRename): ?Node {
-                if ($this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyRename->getCurrentName())) {
-                    /** @var PropertyFetch $node */
+                if ($this->nodeNameResolver->isLocalPropertyFetchNamed(
+                    $node,
+                    $propertyRename->getCurrentName()
+                ) && $node instanceof PropertyFetch) {
                     $node->name = new Identifier($propertyRename->getExpectedName());
                     return $node;
                 }
@@ -134,7 +136,10 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
                     $node,
                     $propertyRename->getCurrentName()
                 )) {
-                    /** @var StaticPropertyFetch $node */
+                    if (! $node instanceof StaticPropertyFetch) {
+                        return null;
+                    }
+
                     $node->name = new VarLikeIdentifier($propertyRename->getExpectedName());
                     return $node;
                 }

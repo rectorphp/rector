@@ -60,11 +60,7 @@ CODE_SAMPLE
             return $this->processForString($node);
         }
 
-        if ($node instanceof FuncCall) {
-            return $this->processForFuncCall($node);
-        }
-
-        return null;
+        return $this->processForFuncCall($node);
     }
 
     private function processForString(String_ $string): ?String_

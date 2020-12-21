@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\Foreach_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\ObjectType;
@@ -97,6 +98,10 @@ CODE_SAMPLE
     private function refactorArrayForeachValue(Array_ $array, Foreach_ $foreach): Array_
     {
         foreach ($array->items as $key => $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             $value = $arrayItem->value;
             if (! $value instanceof Variable) {
                 return $array;

@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
@@ -130,12 +131,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]
+     * @param Stmt[] $stmts
+     * @return Stmt[]
      */
-    private function refactorStmts(array $nodes): array
+    private function refactorStmts(array $stmts): array
     {
-        $this->traverseNodesWithCallable($nodes, function (Node $node): ?Node {
+        $this->traverseNodesWithCallable($stmts, function (Node $node): ?Node {
             if (! $this->isInstancesOf($node, [Name::class, Identifier::class, Property::class, FunctionLike::class])) {
                 return null;
             }
@@ -152,7 +153,7 @@ CODE_SAMPLE
             return null;
         });
 
-        return $nodes;
+        return $stmts;
     }
 
     /**

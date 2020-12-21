@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\Catch_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -120,6 +121,10 @@ CODE_SAMPLE
             $oldVariableName,
             $newVariableName
         ): void {
+            if (! $node instanceof Variable) {
+                return;
+            }
+
             if (! $this->isVariableName($node, $oldVariableName)) {
                 return;
             }

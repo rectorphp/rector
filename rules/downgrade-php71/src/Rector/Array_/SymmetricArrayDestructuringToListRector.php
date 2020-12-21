@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp71\Rector\Array_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -56,8 +57,12 @@ final class SymmetricArrayDestructuringToListRector extends AbstractRector
     private function processToList(Array_ $array): FuncCall
     {
         $args = [];
-        foreach ($array->items as $item) {
-            $args[] = new Arg($item->value);
+        foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
+            $args[] = new Arg($arrayItem->value);
         }
 
         return new FuncCall(new Name('list'), $args);

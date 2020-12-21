@@ -86,10 +86,6 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $fullyQualifiedName = $this->resolveFullyQualifiedName($node);
-        if ($fullyQualifiedName === null) {
-            return null;
-        }
-
         if (! $this->reflectionProvider->hasClass($fullyQualifiedName)) {
             return null;
         }

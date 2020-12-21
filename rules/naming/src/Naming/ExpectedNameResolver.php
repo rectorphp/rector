@@ -133,10 +133,6 @@ final class ExpectedNameResolver
         }
 
         $className = $this->nodeNameResolver->getName($new->class);
-        if ($className === null) {
-            return null;
-        }
-
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($className);
 
         $expectedName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);

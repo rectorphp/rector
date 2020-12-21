@@ -130,11 +130,12 @@ CODE_SAMPLE
 
     private function matchGetterClassMethodReturnedExpr(ClassMethod $classMethod): ?Expr
     {
-        if (count((array) $classMethod->stmts) !== 1) {
+        $stmts = (array) $classMethod->stmts;
+        if (count($stmts) !== 1) {
             return null;
         }
 
-        $onlyStmt = $classMethod->stmts[0];
+        $onlyStmt = $stmts[0] ?? null;
         if (! $onlyStmt instanceof Return_) {
             return null;
         }

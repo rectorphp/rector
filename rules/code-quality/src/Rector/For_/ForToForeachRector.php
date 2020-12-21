@@ -10,6 +10,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\FuncCall;
@@ -222,6 +223,10 @@ CODE_SAMPLE
             return $this->isSmallerOrGreater($condExprs, $this->keyValueName, $this->countValueName);
         }
 
+        if (! $condExprs[0] instanceof BinaryOp) {
+            return false;
+        }
+
         // count($values)
         if ($this->isFuncCallName($condExprs[0]->right, self::COUNT)) {
             /** @var FuncCall $countFuncCall */
@@ -272,9 +277,15 @@ CODE_SAMPLE
                 if (! $node instanceof Assign) {
                     return false;
                 }
+
                 if (! $node->var instanceof ArrayDimFetch) {
                     return false;
                 }
+
+                if ($this->keyValueName === null) {
+                    throw new ShouldNotHappenException();
+                }
+
                 return $this->isVariableName($node->var->dim, $this->keyValueName);
             }
         );
@@ -341,6 +352,10 @@ CODE_SAMPLE
             }
 
             // is dim same as key value name, ...[$i]
+            if ($this->keyValueName === null) {
+                throw new ShouldNotHappenException();
+            }
+
             if (! $this->isVariableName($node->dim, $this->keyValueName)) {
                 return null;
             }
