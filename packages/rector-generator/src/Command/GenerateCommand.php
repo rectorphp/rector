@@ -17,6 +17,7 @@ use Rector\RectorGenerator\Provider\RectorRecipeProvider;
 use Rector\RectorGenerator\Provider\SetsListProvider;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -172,7 +173,7 @@ final class GenerateCommand extends Command
     private function resolveTestCaseDirectoryPath(array $generatedFilePaths): string
     {
         foreach ($generatedFilePaths as $generatedFilePath) {
-            if (! Strings::endsWith($generatedFilePath, 'Test.php')) {
+            if (! $this->isGeneratedFilePathTestCase($generatedFilePath)) {
                 continue;
             }
 
@@ -181,6 +182,16 @@ final class GenerateCommand extends Command
         }
 
         throw new ShouldNotHappenException();
+    }
+
+    private function isGeneratedFilePathTestCase(string $generatedFilePath): bool
+    {
+        if (Strings::endsWith($generatedFilePath, 'Test.php')) {
+            return true;
+        }
+
+
+        return Strings::endsWith($generatedFilePath, 'Test.php.inc') && StaticPHPUnitEnvironment::isPHPUnitRun();
     }
 
     /**
