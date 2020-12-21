@@ -20,13 +20,8 @@
         "nette/robot-loader": "^3.2",
         "nette/utils": "^3.2",
         "nikic/php-parser": "^4.10.4",
-<<<<<<< HEAD
         "phpstan/phpdoc-parser": "^0.4.10",
         "phpstan/phpstan": "^0.12.64",
-=======
-        "phpstan/phpdoc-parser": "^0.4.9",
-        "phpstan/phpstan": "^0.12.63",
->>>>>>> 2ae257c07... simplify phar autoload
         "phpstan/phpstan-phpunit": "^0.12.17",
         "psr/simple-cache": "^1.0",
         "sebastian/diff": "^4.0",
@@ -56,12 +51,22 @@
         "phpstan/phpstan-nette": "^0.12.12",
         "phpunit/phpunit": "^9.5",
         "sebastian/diff": "^4.0.4",
+<<<<<<< HEAD
         "symplify/changelog-linker": "^9.0.17",
         "symplify/coding-standard": "^9.0.17",
         "symplify/easy-coding-standard": "^9.0.17",
         "symplify/easy-testing": "^9.0.17",
         "symplify/phpstan-extensions": "^9.0.17",
         "symplify/phpstan-rules": "^9.0.17",
+=======
+        "phpdocumentor/reflection-docblock": "5.2 as 4.3.4",
+        "symplify/changelog-linker": "^9.0.14",
+        "symplify/coding-standard": "^9.0.14",
+        "symplify/easy-coding-standard": "^9.0.14",
+        "symplify/easy-testing": "^9.0.14",
+        "symplify/phpstan-extensions": "^9.0.14",
+        "symplify/phpstan-rules": "^9.0.14",
+>>>>>>> 0800a9a03... [Downgrade] Drop platform check, the config is good enough
         "tracy/tracy": "^2.7"
     },
     "replace": {
