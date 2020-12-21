@@ -1,6 +1,8 @@
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector;
+namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Fixture;
+
+use Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source;
 
 function modalToGetSet2()
 {
@@ -17,7 +19,9 @@ function modalToGetSet2()
 -----
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector;
+namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Fixture;
+
+use Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source;
 
 function modalToGetSet2()
 {

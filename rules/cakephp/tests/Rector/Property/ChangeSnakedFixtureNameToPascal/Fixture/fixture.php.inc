@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\FixtureImport\SnakeToPascalRector;
+namespace Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToPascal\Fixture;
 
-class ClassImportingFixturesWithSnakeCasedName
+class Fixture
 {
     protected $fixtures = [
         'app.users',
@@ -16,9 +16,9 @@ class ClassImportingFixturesWithSnakeCasedName
 -----
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\FixtureImport\SnakeToPascalRector;
+namespace Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToPascal\Fixture;
 
-class ClassImportingFixturesWithSnakeCasedName
+class Fixture
 {
     protected $fixtures = [
         'app.Users',
