@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\PSR4\Tests\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Source;
+namespace Rector\PSR4\Tests\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Fixture;
 
-class SomeClassTest
+class NormalizeFile
 {
     public function test()
     {
@@ -16,7 +16,7 @@ class SomeClassTest
 
 namespace Rector\PSR4\Tests\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Fixture;
 
-class SomeClassTest
+class NormalizeFile
 {
     public function test()
     {
