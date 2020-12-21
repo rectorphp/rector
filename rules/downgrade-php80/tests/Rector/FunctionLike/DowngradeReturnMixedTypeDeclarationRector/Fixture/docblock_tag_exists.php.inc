@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector\Fixture;
 
-class DocBlockTagExists {
+class DocblockTagExists {
     /**
      * This property is the best one
      * @return mixed
@@ -23,7 +23,7 @@ class DocBlockTagExists {
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector\Fixture;
 
-class DocBlockTagExists {
+class DocblockTagExists {
     /**
      * This property is the best one
      * @return mixed
