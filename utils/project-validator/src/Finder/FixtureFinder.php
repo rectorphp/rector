@@ -47,7 +47,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/dead-doc-block')
             ->in(__DIR__ . '/../../../../rules/defluent')
             ->in(__DIR__ . '/../../../../rules/doctrine')
-            ->in(__DIR__ . '/../../../../rules/doctrine-code-quality');
+            ->in(__DIR__ . '/../../../../rules/doctrine-code-quality')
+            ->in(__DIR__ . '/../../../../rules/doctrine-gedmo-to-knplabs');
 
         return $this->finderSanitizer->sanitize($finder);
     }
