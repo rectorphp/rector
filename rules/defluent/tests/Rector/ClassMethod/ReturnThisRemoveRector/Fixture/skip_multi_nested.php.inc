@@ -2,7 +2,7 @@
 
 namespace Rector\Defluent\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
 
-class SomeMultiNested
+class SkipMultiNested
 {
     public function someFunction()
     {
