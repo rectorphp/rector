@@ -45,7 +45,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/coding-style')
             ->in(__DIR__ . '/../../../../rules/dead-code')
             ->in(__DIR__ . '/../../../../rules/dead-doc-block')
-            ->in(__DIR__ . '/../../../../rules/defluent');
+            ->in(__DIR__ . '/../../../../rules/defluent')
+            ->in(__DIR__ . '/../../../../rules/doctrine');
 
         return $this->finderSanitizer->sanitize($finder);
     }
