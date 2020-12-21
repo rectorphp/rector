@@ -34,6 +34,8 @@ final class FixtureFinder
             ->notPath('#bootstrap_names\.php\.inc#')
             ->notPath('#keep_anonymous_classes\.php\.inc#')
             ->notPath('#trait_name\.php\.inc#')
+            ->notPath('#normalize_file\.php\.inc#')
+            ->notPath('#wrong_namespace\.php\.inc#')
             ->notName('#_\.php\.inc$#')
             ->in(__DIR__ . '/../../../../tests')
             ->in(__DIR__ . '/../../../../packages')
