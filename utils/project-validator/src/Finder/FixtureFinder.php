@@ -51,7 +51,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/doctrine-gedmo-to-knplabs')
             ->in(__DIR__ . '/../../../../rules/downgrade')
             ->in(__DIR__ . '/../../../../rules/downgrade-php70')
-            ->in(__DIR__ . '/../../../../rules/downgrade-php71');
+            ->in(__DIR__ . '/../../../../rules/downgrade-php71')
+            ->in(__DIR__ . '/../../../../rules/downgrade-php72');
 
         return $this->finderSanitizer->sanitize($finder);
     }
