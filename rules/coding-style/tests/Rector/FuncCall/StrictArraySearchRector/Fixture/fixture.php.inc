@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\StrictArraySearchRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -15,7 +15,7 @@ class SomeClass
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\StrictArraySearchRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

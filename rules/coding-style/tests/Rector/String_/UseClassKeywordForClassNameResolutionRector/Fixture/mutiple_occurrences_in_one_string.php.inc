@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
-class MultipleOccurrencesClass
+class MutipleOccurrencesInOneString
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class MultipleOccurrencesClass
 
 namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
-class MultipleOccurrencesClass
+class MutipleOccurrencesInOneString
 {
     public function run()
     {

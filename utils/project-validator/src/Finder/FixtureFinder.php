@@ -31,20 +31,17 @@ final class FixtureFinder
             ->notName('#empty_file\.php\.inc$#')
             ->path('#/Fixture/#')
             ->notPath('#/blade-template/#')
-            ->notPath('#/RenameNamespaceRector/#')
-            ->notPath('#/TemplateAnnotationToThisRenderRector/#')
             ->notPath('#bootstrap_names\.php\.inc#')
             ->notPath('#trait_name\.php\.inc#')
             ->notName('#_\.php\.inc$#')
-            ->notPath('#/ParamTypeDeclarationRector/#')
-            ->notPath('#/ReturnTypeDeclarationRector/#')
             ->in(__DIR__ . '/../../../../tests')
             ->in(__DIR__ . '/../../../../packages')
             ->in(__DIR__ . '/../../../../rules/architecture')
             ->in(__DIR__ . '/../../../../rules/autodiscovery')
             ->in(__DIR__ . '/../../../../rules/cakephp')
             ->in(__DIR__ . '/../../../../rules/carbon')
-            ->in(__DIR__ . '/../../../../rules/code-quality');
+            ->in(__DIR__ . '/../../../../rules/code-quality')
+            ->in(__DIR__ . '/../../../../rules/coding-style');
 
         return $this->finderSanitizer->sanitize($finder);
     }

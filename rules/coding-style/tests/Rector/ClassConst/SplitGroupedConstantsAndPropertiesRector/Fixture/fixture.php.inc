@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     const HI = true, AHOJ = 'true';
 
@@ -18,7 +18,7 @@ class SomeClass
 
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     const HI = true;
     const AHOJ = 'true';

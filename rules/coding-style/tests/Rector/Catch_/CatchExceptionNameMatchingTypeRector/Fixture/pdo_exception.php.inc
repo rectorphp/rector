@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Catch_\CatchExceptionNameMatchingTypeRector\Fixture;
 
-class PdoClass
+class PdoException
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class PdoClass
 
 namespace Rector\CodingStyle\Tests\Rector\Catch_\CatchExceptionNameMatchingTypeRector\Fixture;
 
-class PdoClass
+class PdoException
 {
     public function run()
     {
