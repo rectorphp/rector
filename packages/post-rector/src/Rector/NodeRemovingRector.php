@@ -113,21 +113,19 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isChainMethodCallNodeToBeRemoved(Node $node, Node $nodeToRemove): bool
-    {
-        if (! $nodeToRemove instanceof MethodCall) {
+    private function isChainMethodCallNodeToBeRemoved(
+        MethodCall $mainMethodCall,
+        MethodCall $toBeRemovedMethodCall
+    ): bool {
+        if (! $mainMethodCall instanceof MethodCall || ! $mainMethodCall->var instanceof MethodCall) {
             return false;
         }
 
-        if (! $node instanceof MethodCall || ! $node->var instanceof MethodCall) {
+        if ($toBeRemovedMethodCall !== $mainMethodCall->var) {
             return false;
         }
 
-        if ($nodeToRemove !== $node->var) {
-            return false;
-        }
-
-        $methodName = $this->getName($node->name);
+        $methodName = $this->getName($mainMethodCall->name);
 
         return $methodName !== null;
     }

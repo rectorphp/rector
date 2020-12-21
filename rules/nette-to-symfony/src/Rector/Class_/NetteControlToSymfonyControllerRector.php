@@ -120,6 +120,20 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function shouldSkipClass(Class_ $class): bool
+    {
+        if ($this->isAnonymousClass($class)) {
+            return true;
+        }
+
+        // skip presenter
+        if ($this->isName($class, '*Presenter')) {
+            return true;
+        }
+
+        return ! $this->isObjectType($class, 'Nette\Application\UI\Control');
+    }
+
     private function removeSuffix(string $content, string $suffix): string
     {
         if (! Strings::endsWith($content, $suffix)) {
@@ -186,19 +200,5 @@ CODE_SAMPLE
 
             return $node;
         });
-    }
-
-    private function shouldSkipClass(Class_ $class): bool
-    {
-        if ($this->isAnonymousClass($class)) {
-            return true;
-        }
-
-        // skip presenter
-        if ($this->isName($class, '*Presenter')) {
-            return true;
-        }
-
-        return ! $this->isObjectType($class, 'Nette\Application\UI\Control');
     }
 }

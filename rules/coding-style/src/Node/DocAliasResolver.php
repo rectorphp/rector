@@ -6,7 +6,6 @@ namespace Rector\CodingStyle\Node;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -50,9 +49,7 @@ final class DocAliasResolver
             /** @var PhpDocInfo $phpDocInfo */
             $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-            if (! $phpDocInfo->getVarType() instanceof MixedType) {
-                $possibleDocAliases = $this->collectVarType($phpDocInfo, $possibleDocAliases);
-            }
+            $possibleDocAliases = $this->collectVarType($phpDocInfo, $possibleDocAliases);
 
             // e.g. "use Dotrine\ORM\Mapping as ORM" etc.
             $matches = Strings::matchAll($docComment->getText(), self::DOC_ALIAS_REGEX);

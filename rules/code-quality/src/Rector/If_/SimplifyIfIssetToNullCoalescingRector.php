@@ -78,10 +78,26 @@ CODE_SAMPLE
         $valueNode = $issetNode->vars[0];
 
         // various scenarios
+        $ifFirstStmt = $node->stmts[0];
+        if (! $ifFirstStmt instanceof Expression) {
+            return null;
+        }
+
+        $else = $node->else;
+        if (! $else instanceof Else_) {
+            return null;
+        }
+
+        $elseFirstStmt = $else->stmts[0];
+        if (! $elseFirstStmt instanceof Expression) {
+            return null;
+        }
+
         /** @var Assign $firstAssign */
-        $firstAssign = $node->stmts[0]->expr;
+        $firstAssign = $ifFirstStmt->expr;
+
         /** @var Assign $secondAssign */
-        $secondAssign = $node->else->stmts[0]->expr;
+        $secondAssign = $elseFirstStmt->expr;
 
         // 1. array_merge
         if (! $firstAssign->expr instanceof FuncCall) {
@@ -143,6 +159,10 @@ CODE_SAMPLE
 
         $firstElseStmt = $if->else->stmts[0];
         if (! $firstElseStmt instanceof Expression) {
+            return false;
+        }
+
+        if (! $firstElseStmt->expr instanceof Assign) {
             return false;
         }
 

@@ -242,6 +242,10 @@ CODE_SAMPLE
                 return null;
             }
 
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
             $resolvedTypes[] = $this->getStaticType($node->expr);
             return null;
         });

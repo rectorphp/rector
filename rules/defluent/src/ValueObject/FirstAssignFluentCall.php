@@ -5,26 +5,12 @@ declare(strict_types=1);
 namespace Rector\Defluent\ValueObject;
 
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
 use Rector\Defluent\Contract\ValueObject\RootExprAwareInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class FirstAssignFluentCall extends AbstractRootExpr implements RootExprAwareInterface, FirstCallFactoryAwareInterface
 {
-    /**
-     * @var bool
-     */
-    private $isFirstCallFactory = false;
-
-    /**
-     * @var Expr
-     */
-    private $rootExpr;
-
     /**
      * @var FluentMethodCalls
      */
@@ -78,38 +64,5 @@ final class FirstAssignFluentCall extends AbstractRootExpr implements RootExprAw
     public function getFluentMethodCalls(): array
     {
         return $this->fluentMethodCalls->getFluentMethodCalls();
-    }
-
-    private function getFirstAssign(): ?Assign
-    {
-        $currentStmt = $this->assignExpr->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (! $currentStmt instanceof Expression) {
-            return null;
-        }
-
-        if ($currentStmt->expr instanceof Assign) {
-            return $currentStmt->expr;
-        }
-
-        return null;
-    }
-
-    private function createFactoryAssign(): Assign
-    {
-        /** @var Assign $firstAssign */
-        $firstAssign = $this->getFirstAssign();
-        $currentMethodCall = $firstAssign->expr;
-
-        if (! $currentMethodCall instanceof MethodCall) {
-            throw new ShouldNotHappenException();
-        }
-
-        $currentMethodCall = $this->fluentMethodCalls->getLastMethodCall();
-
-        // ensure var and expr are different
-        $assignVar = $firstAssign->var;
-        $assignExpr = $currentMethodCall;
-
-        return $this->createAssign($assignVar, $assignExpr);
     }
 }

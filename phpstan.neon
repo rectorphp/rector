@@ -1,6 +1,4 @@
 includes:
-#    - phpstan-baseline.neon
-
     - utils/phpstan-extensions/config/phpstan-extensions.neon
     # allows symplify error formatter
     - vendor/symplify/phpstan-extensions/config/config.neon
@@ -638,4 +636,55 @@ parameters:
 
         -
              message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'
-             path: rules/coding-style/src/Naming/NameRenamer.php
+             paths:
+                  - rules/coding-style/src/Naming/NameRenamer.php
+                  - packages/node-name-resolver/src/NodeNameResolver/ClassNameResolver.php
+
+        -
+            message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+            paths:
+                - rules/defluent/src/ValueObject/*
+
+        - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
+        - '#AttributeAwarePhpDocNode#'
+
+        # doc types
+        -
+            message: '#Access to an undefined property PhpParser\\Node\:\:\$args#'
+            paths:
+                - rules/naming/src/Rector/Assign/RenameVariableToMatchMethodCallReturnTypeRector.php
+        - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
+        - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\If_\\SimplifyIfIssetToNullCoalescingRector\:\:shouldSkip\(\)" is 10, keep it under 9#'
+        - '#Instanceof between PhpParser\\Node\\Stmt and Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace will always evaluate to false#'
+
+        -
+             message: '#Use value object over multi array assign#'
+             paths:
+                - packages/node-collector/src/NodeCollector/ParsedClassConstFetchNodeCollector.php
+
+        # @todo improvate later
+        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$description#'
+
+        -
+            message: '#Unreachable statement \- code above always terminates#'
+            path: 'bin/rector.php'
+
+        -
+            message: '#Do not use setter on a service#'
+            paths:
+                - packages/better-php-doc-parser/src/PhpDocNodeFactory/ParamPhpDocNodeFactory.php
+
+
+        -
+            message: '#Class cognitive complexity is 42, keep it under 40#'
+            paths:
+                - rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
+
+        # @todo fix later
+        -
+            message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+            paths:
+                - rules/naming/src/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php
+                - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php
+
+        - '#Cannot call method getParentNode\(\) on Rector\\DeadCode\\ValueObject\\VariableNodeUse\|null#'

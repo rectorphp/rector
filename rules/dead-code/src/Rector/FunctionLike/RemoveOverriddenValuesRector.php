@@ -184,13 +184,8 @@ CODE_SAMPLE
 
                 if ($this->isAssignNodeUsed($previousNode, $nodeByTypeAndPosition)) {
                     // continue
-
-                // instant override → remove
+                    // instant override → remove
                 } elseif ($this->shouldRemoveAssignNode($previousNode, $nodeByTypeAndPosition)) {
-                    if ($previousNode === null) {
-                        continue;
-                    }
-
                     /** @var VariableNodeUse $previousNode */
                     $nodesToRemove[] = $previousNode->getParentNode();
                 }
@@ -236,5 +231,21 @@ CODE_SAMPLE
         });
 
         return ! $isVariableAssigned;
+    }
+
+    private function isAssignNodeUsed(
+        ?VariableNodeUse $previousNode,
+        VariableNodeUse $nodeByTypeAndPosition
+    ): bool {
+        // this node was just used, skip to next one
+        if ($previousNode === null) {
+            return false;
+        }
+
+        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN)) {
+            return false;
+        }
+
+        return $nodeByTypeAndPosition->isType(VariableNodeUse::TYPE_USE);
     }
 }

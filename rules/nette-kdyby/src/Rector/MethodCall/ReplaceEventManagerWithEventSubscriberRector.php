@@ -133,8 +133,8 @@ CODE_SAMPLE
 
         $args = $this->createNewArgs($oldArgs);
 
-        $class = new New_(new FullyQualified($eventClassName), $args);
-        $node->args[] = new Arg($class);
+        $new = new New_(new FullyQualified($eventClassName), $args);
+        $node->args[] = new Arg($new);
 
         // 3. create new event class with args
         $eventClassInNamespace = $this->eventValueObjectClassFactory->create($eventClassName, $args);
@@ -153,6 +153,15 @@ CODE_SAMPLE
         $this->printNodesToFilePath([$eventClassInNamespace], $eventFileLocation);
 
         return $node;
+    }
+
+    private function shouldSkip(MethodCall $node): bool
+    {
+        if (! $this->isObjectType($node->var, 'Kdyby\Events\EventManager')) {
+            return true;
+        }
+
+        return ! $this->isName($node->name, 'dispatchEvent');
     }
 
     /**
@@ -181,14 +190,5 @@ CODE_SAMPLE
         }
 
         return $args;
-    }
-
-    private function shouldSkip(MethodCall $node): bool
-    {
-        if (! $this->isObjectType($node->var, 'Kdyby\Events\EventManager')) {
-            return true;
-        }
-
-        return ! $this->isName($node->name, 'dispatchEvent');
     }
 }

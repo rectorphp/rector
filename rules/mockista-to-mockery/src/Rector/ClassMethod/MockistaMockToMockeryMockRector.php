@@ -241,14 +241,11 @@ CODE_SAMPLE
 
     private function isMethodCallOrPropertyFetchOnMockVariable(Node $node): bool
     {
-        if (! $node instanceof PropertyFetch && ! $node instanceof MethodCall) {
+        if (! $node instanceof MethodCall && ! $this->isPropertyFetchDisguisedAsMethodCall($node)) {
             return false;
         }
 
-        if (! $this->isPropertyFetchDisguisedAsMethodCall($node)) {
-            return false;
-        }
-
+        /** @var MethodCall|PropertyFetch $node */
         if (! $node->var instanceof Variable) {
             return false;
         }

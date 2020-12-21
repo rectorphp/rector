@@ -72,25 +72,6 @@ final class ModifiedVariableNamesCollector
         return $variableNames;
     }
 
-    private function isVariableOverriddenInAssign(Assign $assign): bool
-    {
-        return $assign->var instanceof Variable;
-    }
-
-    private function isVariableChangedInReference(Node $node): bool
-    {
-        if (! $node instanceof Arg) {
-            return false;
-        }
-
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isNames($parentNode, ['array_shift', 'array_pop']);
-    }
-
     /**
      * @return string[]
      */
@@ -105,11 +86,10 @@ final class ModifiedVariableNamesCollector
                 return null;
             }
 
-            if (! $assign->var instanceof Variable) {
+            if (! $node->var instanceof Variable) {
                 return null;
             }
 
-            /** @var Assign $node */
             $variableName = $this->nodeNameResolver->getName($node->var);
             if ($variableName === null) {
                 return null;
@@ -119,5 +99,15 @@ final class ModifiedVariableNamesCollector
         });
 
         return $modifiedVariableNames;
+    }
+
+    private function isVariableChangedInReference(Arg $arg): bool
+    {
+        $parentNode = $arg->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isNames($parentNode, ['array_shift', 'array_pop']);
     }
 }
