@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\SimplifyForeachToCoalescingRector\Fixture;
 
-final class SkipNonValueReturnForeach
+final class SkipNonValueReturn
 {
     public function run(array $oldToNewFunctions, $currentFunction)
     {

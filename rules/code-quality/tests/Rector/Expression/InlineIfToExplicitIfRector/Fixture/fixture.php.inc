@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Expression\InlineIfToExplicitIfRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -18,7 +18,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\Expression\InlineIfToExplicitIfRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

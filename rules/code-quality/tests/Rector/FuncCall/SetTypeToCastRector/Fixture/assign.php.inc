@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
 
-class Assin
+class Assign
 {
     public function run($foo)
     {

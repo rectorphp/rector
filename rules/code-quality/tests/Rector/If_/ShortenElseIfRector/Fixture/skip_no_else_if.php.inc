@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class SkipNoElseIfClass
+class SkipNoElseIf
 {
     /**
      * @var bool

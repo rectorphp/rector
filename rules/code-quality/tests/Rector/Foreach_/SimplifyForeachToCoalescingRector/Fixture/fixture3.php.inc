@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\SimplifyForeachToCoalescingRector\Fixture;
 
-class SimpleIdenticalForeach
+class Fixture3
 {
     public function run()
     {
@@ -30,7 +30,7 @@ class SimpleIdenticalForeach
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\SimplifyForeachToCoalescingRector\Fixture;
 
-class SimpleIdenticalForeach
+class Fixture3
 {
     public function run()
     {

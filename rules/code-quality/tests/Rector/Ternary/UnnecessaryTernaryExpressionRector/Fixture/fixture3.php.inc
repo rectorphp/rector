@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\Fixture;
 
-class EdgeCases
+class Fixture3
 {
     public function exists(): bool
     {
@@ -35,7 +35,7 @@ class EdgeCases
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\Fixture;
 
-class EdgeCases
+class Fixture3
 {
     public function exists(): bool
     {

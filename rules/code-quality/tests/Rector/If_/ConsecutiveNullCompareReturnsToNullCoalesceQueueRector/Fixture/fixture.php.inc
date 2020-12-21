@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var int|null
@@ -45,9 +45,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var int|null

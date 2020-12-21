@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Fixture;
 
-class NoError
+class Fixture2
 {
     private $noError = 'noError';
 

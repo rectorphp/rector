@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\RemoveSoleValueSprintfRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\RemoveSoleValueSprintfRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

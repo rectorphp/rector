@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class SimpleClass
+class Simple
 {
     /**
      * @var bool
@@ -35,9 +35,9 @@ class SimpleClass
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class SimpleClass
+class Simple
 {
     /**
      * @var bool

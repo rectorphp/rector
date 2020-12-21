@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForRepeatedCountToOwnVariableRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($items)
     {
@@ -18,7 +18,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForRepeatedCountToOwnVariableRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($items)
     {
