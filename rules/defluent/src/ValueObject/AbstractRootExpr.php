@@ -81,25 +81,6 @@ abstract class AbstractRootExpr implements RootExprAwareInterface, FirstCallFact
         return $this->createAssign($assignVar, $assignExpr);
     }
 
-//    private function createFactoryAssign(): Assign
-//    {
-//        /** @var Assign */
-//        $firstAssign = $this->getFirstAssign();
-//        $currentMethodCall = $firstAssign->expr;
-//
-//        if (! $currentMethodCall instanceof MethodCall) {
-//            throw new ShouldNotHappenException();
-//        }
-//
-//        $currentMethodCall = $this->fluentMethodCalls->getLastMethodCall();
-//
-//        // ensure var and expr are different
-//        $assignVar = $firstAssign->var;
-//        $assignExpr = $currentMethodCall;
-//
-//        return $this->createAssign($assignVar, $assignExpr);
-//    }
-
     private function resolveLastMethodCall(MethodCall $currentMethodCall): MethodCall
     {
         while ($currentMethodCall->var instanceof MethodCall) {
