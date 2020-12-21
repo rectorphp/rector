@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class DifferentPositionsClass
+class DifferentPositions
 {
     public function run()
     {
@@ -25,7 +25,7 @@ class DifferentPositionsClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class DifferentPositionsClass
+class DifferentPositions
 {
     public function run()
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Coalesce\DowngradeNullCoalescingOperatorRector\Fixture;
 
-class FixtureClass
+class Fixture
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class FixtureClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\Coalesce\DowngradeNullCoalescingOperatorRector\Fixture;
 
-class FixtureClass
+class Fixture
 {
     public function run()
     {

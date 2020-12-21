@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class MultipleUnpacksClass
+class MultipleUnpacks
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class MultipleUnpacksClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class MultipleUnpacksClass
+class MultipleUnpacks
 {
     public function run()
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class WithArrayItemClass
+class WithArrayItem
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class WithArrayItemClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class WithArrayItemClass
+class WithArrayItem
 {
     public function run()
     {

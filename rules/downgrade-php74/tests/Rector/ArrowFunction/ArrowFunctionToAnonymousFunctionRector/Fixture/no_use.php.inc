@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector\Fixture;
 
-class WithNoUseClass
+class NoUse
 {
     public function duplicate()
     {
@@ -17,7 +17,7 @@ class WithNoUseClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector\Fixture;
 
-class WithNoUseClass
+class NoUse
 {
     public function duplicate()
     {

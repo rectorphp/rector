@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class DocBlockWithVarType {
+class DocblockWithVarType {
     /**
      * This property is amazing
      * @var string[]
@@ -46,7 +46,7 @@ class DocBlockWithVarType {
 
 namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class DocBlockWithVarType {
+class DocblockWithVarType {
     /**
      * This property is amazing
      * @var string[]

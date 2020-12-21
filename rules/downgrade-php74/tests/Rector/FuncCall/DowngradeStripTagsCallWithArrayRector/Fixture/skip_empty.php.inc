@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\Fixture;
 
-class SkipEmptyClass
+class SkipEmpty
 {
     public function run($string)
     {
