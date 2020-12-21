@@ -11,7 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class GenerateCommandInteractiveMode extends AbstractKernelTestCase
+final class GenerateCommandInteractiveModeTest extends AbstractKernelTestCase
 {
     /**
      * @var CommandTester
@@ -27,6 +27,7 @@ final class GenerateCommandInteractiveMode extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
+        /** @var GenerateCommand $generateCommand */
         $generateCommand = self::$container->get(GenerateCommand::class);
         $this->commandTester = new CommandTester($generateCommand);
         $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
