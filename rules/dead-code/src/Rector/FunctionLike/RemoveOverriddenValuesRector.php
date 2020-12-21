@@ -197,6 +197,22 @@ CODE_SAMPLE
         return $nodesToRemove;
     }
 
+    private function isAssignNodeUsed(
+        ?VariableNodeUse $previousNode,
+        VariableNodeUse $nodeByTypeAndPosition
+    ): bool {
+        // this node was just used, skip to next one
+        if ($previousNode === null) {
+            return false;
+        }
+
+        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN)) {
+            return false;
+        }
+
+        return $nodeByTypeAndPosition->isType(VariableNodeUse::TYPE_USE);
+    }
+
     private function shouldRemoveAssignNode(
         ?VariableNodeUse $previousNode,
         VariableNodeUse $nodeByTypeAndPosition
@@ -231,21 +247,5 @@ CODE_SAMPLE
         });
 
         return ! $isVariableAssigned;
-    }
-
-    private function isAssignNodeUsed(
-        ?VariableNodeUse $previousNode,
-        VariableNodeUse $nodeByTypeAndPosition
-    ): bool {
-        // this node was just used, skip to next one
-        if ($previousNode === null) {
-            return false;
-        }
-
-        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN)) {
-            return false;
-        }
-
-        return $nodeByTypeAndPosition->isType(VariableNodeUse::TYPE_USE);
     }
 }

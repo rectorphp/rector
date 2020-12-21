@@ -124,11 +124,12 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
         $this->callableNodeTraverser->traverseNodesWithCallable(
             $propertyRename->getClassLike(),
             function (Node $node) use ($propertyRename): ?Node {
-                if ($this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyRename->getCurrentName())) {
-                    if ($node instanceof PropertyFetch) {
-                        $node->name = new Identifier($propertyRename->getExpectedName());
-                        return $node;
-                    }
+                if ($this->nodeNameResolver->isLocalPropertyFetchNamed(
+                    $node,
+                    $propertyRename->getCurrentName()
+                ) && $node instanceof PropertyFetch) {
+                    $node->name = new Identifier($propertyRename->getExpectedName());
+                    return $node;
                 }
 
                 if ($this->nodeNameResolver->isLocalStaticPropertyFetchNamed(

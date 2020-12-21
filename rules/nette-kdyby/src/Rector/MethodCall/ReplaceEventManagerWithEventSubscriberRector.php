@@ -155,13 +155,13 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkip(MethodCall $node): bool
+    private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($node->var, 'Kdyby\Events\EventManager')) {
+        if (! $this->isObjectType($methodCall->var, 'Kdyby\Events\EventManager')) {
             return true;
         }
 
-        return ! $this->isName($node->name, 'dispatchEvent');
+        return ! $this->isName($methodCall->name, 'dispatchEvent');
     }
 
     /**

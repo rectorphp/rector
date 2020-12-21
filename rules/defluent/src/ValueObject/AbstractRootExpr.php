@@ -16,14 +16,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 abstract class AbstractRootExpr implements RootExprAwareInterface, FirstCallFactoryAwareInterface
 {
     /**
-     * @var Expr
-     */
-    protected $rootExpr;
-
-    /**
      * @var bool
      */
     protected $isFirstCallFactory = false;
+
+    /**
+     * @var Expr
+     */
+    protected $rootExpr;
 
     /**
      * @var Expr
