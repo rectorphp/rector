@@ -92,7 +92,6 @@ final class GenerateCommand extends Command
         ConfigFilesystem $configFilesystem,
         FileGenerator $fileGenerator,
         OverrideGuard $overrideGuard,
-        SymfonyStyle $symfonyStyle,
         TemplateFinder $templateFinder,
         TemplateVariablesFactory $templateVariablesFactory,
         RectorRecipeProvider $rectorRecipeProvider,
@@ -102,7 +101,6 @@ final class GenerateCommand extends Command
     ) {
         parent::__construct();
 
-        $this->symfonyStyle = $symfonyStyle;
         $this->templateVariablesFactory = $templateVariablesFactory;
         $this->composerPackageAutoloadUpdater = $composerPackageAutoloadUpdater;
         $this->templateFinder = $templateFinder;
@@ -129,6 +127,7 @@ final class GenerateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->symfonyStyle = new SymfonyStyle($input, $output);
         $rectorRecipe = $this->getRectorRecipe($input);
 
         $templateVariables = $this->templateVariablesFactory->createFromRectorRecipe($rectorRecipe);
