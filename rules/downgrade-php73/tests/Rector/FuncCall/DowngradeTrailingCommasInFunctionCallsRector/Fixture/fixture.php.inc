@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector\Fixture;
 
-class FixtureClass
+class Fixture
 {
     public function run()
     {
@@ -22,7 +22,7 @@ class FixtureClass
 
 namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector\Fixture;
 
-class FixtureClass
+class Fixture
 {
     public function run()
     {
