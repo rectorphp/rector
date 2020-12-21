@@ -94,9 +94,6 @@ trait NodeCommandersTrait
         $this->nodeRemover = $nodeRemover;
     }
 
-    /**
-     * @param FullyQualifiedObjectType|AliasedObjectType $objectType
-     */
     protected function addUseType(ObjectType $objectType, Node $positionNode): void
     {
         assert($objectType instanceof FullyQualifiedObjectType || $objectType instanceof AliasedObjectType);

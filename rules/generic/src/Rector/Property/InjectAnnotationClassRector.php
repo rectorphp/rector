@@ -215,10 +215,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $name = $this->getName($property);
-        if ($name === null) {
-            return null;
-        }
+        $propertyName = $this->getName($property);
 
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -230,7 +227,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $this->addConstructorDependencyToClass($classLike, $type, $name);
+        $this->addConstructorDependencyToClass($classLike, $type, $propertyName);
 
         return $property;
     }

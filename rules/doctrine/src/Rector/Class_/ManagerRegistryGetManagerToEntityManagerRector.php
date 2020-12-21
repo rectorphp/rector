@@ -267,7 +267,11 @@ CODE_SAMPLE
     private function removeRegistryDependencyAssign(Class_ $class, ClassMethod $classMethod, Param $registryParam): void
     {
         foreach ((array) $classMethod->stmts as $constructorMethodStmt) {
-            if (! $constructorMethodStmt instanceof Expression && ! $constructorMethodStmt->expr instanceof Assign) {
+            if (! $constructorMethodStmt instanceof Expression) {
+                continue;
+            }
+
+            if (! $constructorMethodStmt->expr instanceof Assign) {
                 continue;
             }
 

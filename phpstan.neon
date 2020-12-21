@@ -634,3 +634,8 @@ parameters:
 
         # type juggling
         - '#AttributeAwareNodeInterface#'
+        - '#Method Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetIdToUuidValueRector\:\:getSetUuidMethodCallOnSameVariable\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\|null#'
+
+        -
+             message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'
+             path: rules/coding-style/src/Naming/NameRenamer.php

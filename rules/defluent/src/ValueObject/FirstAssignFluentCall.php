@@ -13,17 +13,12 @@ use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
 use Rector\Defluent\Contract\ValueObject\RootExprAwareInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class FirstAssignFluentCall implements RootExprAwareInterface, FirstCallFactoryAwareInterface
+final class FirstAssignFluentCall extends AbstractRootExpr implements RootExprAwareInterface, FirstCallFactoryAwareInterface
 {
     /**
      * @var bool
      */
     private $isFirstCallFactory = false;
-
-    /**
-     * @var Expr
-     */
-    private $assignExpr;
 
     /**
      * @var Expr
@@ -55,15 +50,6 @@ final class FirstAssignFluentCall implements RootExprAwareInterface, FirstCallFa
     public function getRootExpr(): Expr
     {
         return $this->rootExpr;
-    }
-
-    public function createFirstAssign(): Assign
-    {
-        if ($this->isFirstCallFactory && $this->getFirstAssign() !== null) {
-            return $this->createFactoryAssign();
-        }
-
-        return $this->createAssign($this->assignExpr, $this->rootExpr);
     }
 
     public function getCallerExpr(): Expr
@@ -125,14 +111,5 @@ final class FirstAssignFluentCall implements RootExprAwareInterface, FirstCallFa
         $assignExpr = $currentMethodCall;
 
         return $this->createAssign($assignVar, $assignExpr);
-    }
-
-    private function createAssign(Expr $assignVar, Expr $assignExpr): Assign
-    {
-        if ($assignVar === $assignExpr) {
-            throw new ShouldNotHappenException();
-        }
-
-        return new Assign($assignVar, $assignExpr);
     }
 }

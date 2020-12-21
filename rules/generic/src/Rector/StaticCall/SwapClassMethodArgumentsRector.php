@@ -122,11 +122,7 @@ CODE_SAMPLE
             return $this->isName($node->name, $methodName);
         }
 
-        if ($node instanceof ClassMethod) {
-            return $this->isName($node->name, $methodName);
-        }
-
-        return false;
+        return $this->isName($node->name, $methodName);
     }
 
     /**

@@ -129,7 +129,7 @@ CODE_SAMPLE
         return $expr->name->toString() === 'PHP_VERSION';
     }
 
-    private function getNewNodeForArg(Expr $expr): Node
+    private function getNewNodeForArg(Expr $expr): Expr
     {
         if ($this->isPhpVersionConstant($expr)) {
             return new ConstFetch(new Name('PHP_VERSION_ID'));

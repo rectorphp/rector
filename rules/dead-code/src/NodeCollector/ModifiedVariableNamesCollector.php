@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -34,44 +35,46 @@ final class ModifiedVariableNamesCollector
     /**
      * @return string[]
      */
-    public function collectModifiedVariableNames(Node $node): array
+    public function collectModifiedVariableNames(Stmt $stmt): array
     {
-        $modifiedVariableNames = [];
+        $argNames = $this->collectFromArgs($stmt);
+        $assignNames = $this->collectFromAssigns($stmt);
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
-            &$modifiedVariableNames
-        ) {
-            if ($this->isVariableOverriddenInAssign($node)) {
-                /** @var Assign $node */
-                $variableName = $this->nodeNameResolver->getName($node->var);
-                if ($variableName === null) {
-                    return null;
-                }
-
-                $modifiedVariableNames[] = $variableName;
-            }
-
-            if ($this->isVariableChangedInReference($node)) {
-                /** @var Arg $node */
-                $variableName = $this->nodeNameResolver->getName($node->value);
-                if ($variableName === null) {
-                    return null;
-                }
-
-                $modifiedVariableNames[] = $variableName;
-            }
-        });
-
-        return $modifiedVariableNames;
+        return array_merge($argNames, $assignNames);
     }
 
-    private function isVariableOverriddenInAssign(Node $node): bool
+    /**
+     * @return string[]
+     */
+    private function collectFromArgs(Stmt $stmt): array
     {
-        if (! $node instanceof Assign) {
-            return false;
-        }
+        $variableNames = [];
 
-        return $node->var instanceof Variable;
+        $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
+            &$variableNames
+        ) {
+            if (! $node instanceof Arg) {
+                return null;
+            }
+
+            if (! $this->isVariableChangedInReference($node)) {
+                return null;
+            }
+
+            $variableName = $this->nodeNameResolver->getName($node->value);
+            if ($variableName === null) {
+                return null;
+            }
+
+            $variableNames[] = $variableName;
+        });
+
+        return $variableNames;
+    }
+
+    private function isVariableOverriddenInAssign(Assign $assign): bool
+    {
+        return $assign->var instanceof Variable;
     }
 
     private function isVariableChangedInReference(Node $node): bool
@@ -86,5 +89,35 @@ final class ModifiedVariableNamesCollector
         }
 
         return $this->nodeNameResolver->isNames($parentNode, ['array_shift', 'array_pop']);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function collectFromAssigns(Stmt $stmt): array
+    {
+        $modifiedVariableNames = [];
+
+        $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
+            &$modifiedVariableNames
+        ) {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
+            if (! $assign->var instanceof Variable) {
+                return null;
+            }
+
+            /** @var Assign $node */
+            $variableName = $this->nodeNameResolver->getName($node->var);
+            if ($variableName === null) {
+                return null;
+            }
+
+            $modifiedVariableNames[] = $variableName;
+        });
+
+        return $modifiedVariableNames;
     }
 }

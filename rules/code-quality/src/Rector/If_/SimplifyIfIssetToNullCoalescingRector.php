@@ -128,10 +128,25 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->areNodesEqual($if->cond->vars[0], $if->stmts[0]->expr->var)) {
+        $ifStmt = $if->stmts[0];
+        if (! $ifStmt instanceof Expression) {
             return true;
         }
-        return ! $this->areNodesEqual($if->cond->vars[0], $if->else->stmts[0]->expr->var);
+
+        if (! $ifStmt->expr instanceof Assign) {
+            return true;
+        }
+
+        if (! $this->areNodesEqual($if->cond->vars[0], $ifStmt->expr->var)) {
+            return true;
+        }
+
+        $firstElseStmt = $if->else->stmts[0];
+        if (! $firstElseStmt instanceof Expression) {
+            return false;
+        }
+
+        return ! $this->areNodesEqual($if->cond->vars[0], $firstElseStmt->expr->var);
     }
 
     /**

@@ -155,7 +155,7 @@ CODE_SAMPLE
         return $this->isUuidType($methodCall->args[0]->value);
     }
 
-    private function getSetUuidMethodCallOnSameVariable(MethodCall $methodCall): ?Node
+    private function getSetUuidMethodCallOnSameVariable(MethodCall $methodCall): ?MethodCall
     {
         $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Expression) {
@@ -171,7 +171,7 @@ CODE_SAMPLE
         /** @var ObjectType $variableType */
         $variableType = $this->getStaticType($methodCall->var);
 
-        return $this->betterNodeFinder->findFirst($parentNode, function (Node $node) use (
+        $methodCall = $this->betterNodeFinder->findFirst($parentNode, function (Node $node) use (
             $variableName,
             $variableType
         ): bool {
@@ -186,8 +186,15 @@ CODE_SAMPLE
             if (! $this->isObjectType($node->var, $variableType)) {
                 return false;
             }
+
             return $this->isName($node->name, 'setUuid');
         });
+
+        if ($methodCall instanceof MethodCall) {
+            return $methodCall;
+        }
+
+        return null;
     }
 
     private function createUuidStringNode(): String_

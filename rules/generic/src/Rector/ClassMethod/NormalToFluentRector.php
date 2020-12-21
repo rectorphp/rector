@@ -6,7 +6,6 @@ namespace Rector\Generic\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -82,6 +81,7 @@ CODE_SAMPLE
 
         // iterate from bottom to up, so we can merge
         for ($i = $classMethodStatementCount - 1; $i >= 0; --$i) {
+            /** @var Expression $stmt */
             $stmt = $node->stmts[$i];
             if ($this->shouldSkipPreviousStmt($node, $i, $stmt)) {
                 continue;
@@ -121,7 +121,7 @@ CODE_SAMPLE
         $this->callsToFluent = $callsToFluent;
     }
 
-    private function shouldSkipPreviousStmt(ClassMethod $classMethod, int $i, Stmt $stmt): bool
+    private function shouldSkipPreviousStmt(ClassMethod $classMethod, int $i, Expression $expression): bool
     {
         // we look only for 2+ stmts
         if (! isset($classMethod->stmts[$i - 1])) {
@@ -129,7 +129,7 @@ CODE_SAMPLE
         }
 
         // we look for 2 methods calls in a row
-        if (! $stmt instanceof Expression) {
+        if (! $expression instanceof Expression) {
             return true;
         }
 
@@ -138,22 +138,22 @@ CODE_SAMPLE
         return ! $prevStmt instanceof Expression;
     }
 
-    private function isBothMethodCallMatch(Stmt $firstStmt, Expression $expression): bool
+    private function isBothMethodCallMatch(Expression $firstExpression, Expression $secondExpression): bool
     {
-        if (! $firstStmt->expr instanceof MethodCall) {
+        if (! $firstExpression->expr instanceof MethodCall) {
             return false;
         }
 
-        if (! $expression->expr instanceof MethodCall) {
+        if (! $secondExpression->expr instanceof MethodCall) {
             return false;
         }
 
-        $firstMethodCallMatch = $this->matchMethodCall($firstStmt->expr);
+        $firstMethodCallMatch = $this->matchMethodCall($firstExpression->expr);
         if ($firstMethodCallMatch === null) {
             return false;
         }
 
-        $secondMethodCallMatch = $this->matchMethodCall($expression->expr);
+        $secondMethodCallMatch = $this->matchMethodCall($secondExpression->expr);
         if ($secondMethodCallMatch === null) {
             return false;
         }
