@@ -130,8 +130,6 @@ final class BetterStandardPrinter extends Standard
         $this->detectTabOrSpaceIndentCharacter($newStmts);
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
-        $content = $this->contentPatcher->cleanUpDuplicateContent($content);
-
         $contentOriginal = $this->print($origStmts);
 
         $content = $this->contentPatcher->rollbackValidAnnotation(
