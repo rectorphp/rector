@@ -12,9 +12,6 @@ use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\PhpScoper\WhitelistedStubsProvider;
 
-require_once __DIR__ . '/utils/compiler/src/PhpScoper/StaticEasyPrefixer.php';
-require_once __DIR__ . '/utils/compiler/src/PhpScoper/WhitelistedStubsProvider.php';
-
 $whitelistedStubsProvider = new WhitelistedStubsProvider();
 
 // see https://github.com/humbug/php-scoper

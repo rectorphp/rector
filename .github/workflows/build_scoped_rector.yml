@@ -5,10 +5,13 @@ on:
     push:
         branches:
             - master
-    pull_request: null
+
     release:
         types:
             - published
+
+    # @todo remove after merge, this line is just for testing
+    pull_request: null
 
 jobs:
     build_scoped_rector:
@@ -33,16 +36,27 @@ jobs:
 
             # 1. prepare dependencies
             # replace phpstan.phar with phpstan-src, see https://github.com/phpstan/phpstan-src
-            -   run: composer remove phpstan/phpstan --no-update
-            -   run: composer config repositories.repo-name vcs https://github.com/phpstan/phpstan-src.git
+            -   run: |
+                    composer remove phpstan/phpstan --no-update
+                    composer config repositories.repo-name vcs https://github.com/phpstan/phpstan-src.git
 
-            -   run: composer require phpstan/phpstan-src:@dev --no-update
-            # mimics PHPStan https://github.com/phpstan/phpstan-src/blob/d3be969b13654394d0186b9597449d44477f0012/composer.json#L17
-            -   run: composer require jetbrains/phpstorm-stubs:dev-master#05d145c0bbafcf9a551fdd8824adb2a7e259fdaf --no-update
-            -   run: composer update --no-progress --ansi
+                    # @todo resolve specific last version somehow automated
+                    composer require phpstan/phpstan-src:dev-master#3a08cb0 --no-update
+
+                    # phpdocumentor/reflection-docblock 4.3.4 is blocker on PHP 8, so we have to ignore php version
+                    composer require "phpdocumentor/reflection-docblock:dev-master#5.2 as 4.3.4" --no-update
+
+                    # mimics PHPStan https://github.com/phpstan/phpstan-src/blob/3a08cb018572938ca6b90f861c5fbca17baeab4c/composer.json#L17
+                    composer require jetbrains/phpstorm-stubs:dev-master#b2402e4a525593f68ff46303dcc6bc625437276a --no-update
+
+            # phpdocumentor/reflection-docblock 4.3.4 is blocker on PHP 8, so we have to ignore php version
+            -   run: composer update --no-progress --ansi --ignore-platform-req php
 
             # downgrade PHPStan code to PHP 7.2
             -   run: bin/rector process vendor/phpstan/phpstan-src/src --config ci/downgrade-phpstan-php74-rector.php --ansi
+
+            # Avoid Composer v2 platform checks (composer.json requires PHP 7.4+, but below we are running 7.3)
+            -   run: composer config platform-check false
 
 #            -   run: mkdir nested-rector
             # @see https://unix.stackexchange.com/a/554912/74260
@@ -58,7 +72,6 @@ jobs:
                 # to make paths in scoper.inc.php work, as the are relative
                 run: cd nested-rector && php ../php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir ../rector-scoped --config scoper.inc.php --force --ansi -vvv
 
-            -   run: bin/rector process rector-scoped/vendor/composer/platform_check.php --config ci/downgrade-php71-rector-scoped.php
 
             -   run: composer dump-autoload --working-dir rector-scoped --ansi --optimize --classmap-authoritative
 
@@ -71,9 +84,9 @@ jobs:
             -   run: chmod 777 rector-scoped/bin/rector
 
             # 4. get tag - see https://github.com/WyriHaximus/github-action-get-previous-tag
-            -
-                id: previous_tag
-                uses: "WyriHaximus/github-action-get-previous-tag@master"
+            #-
+            #    id: previous_tag
+            #    uses: "WyriHaximus/github-action-get-previous-tag@master"
 
             # 5. publish it to remote repository
             -
@@ -85,6 +98,7 @@ jobs:
                     package-directory: 'rector-scoped'
                     split-repository-organization: 'rectorphp'
                     split-repository-name: 'rector-prefixed'
-                    tag: ${{ steps.previous_tag.outputs.tag }}
+                    # @todo put into standalone action with only tagging
+                    # tag: ${{ steps.previous_tag.outputs.tag }}
                     user-name: "kaizen-ci"
                     user-email: "info@kaizen-ci.org"

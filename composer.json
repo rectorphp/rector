@@ -56,6 +56,7 @@
         "phpstan/phpstan-nette": "^0.12.12",
         "phpunit/phpunit": "^9.5",
         "sebastian/diff": "^4.0.4",
+        "phpdocumentor/reflection-docblock": "5.2 as 4.3.4",
         "symplify/changelog-linker": "^9.0.14",
         "symplify/coding-standard": "^9.0.14",
         "symplify/easy-coding-standard": "^9.0.14",
