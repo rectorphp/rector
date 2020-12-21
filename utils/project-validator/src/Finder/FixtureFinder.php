@@ -39,7 +39,8 @@ final class FixtureFinder
             ->notPath('#/ParamTypeDeclarationRector/#')
             ->notPath('#/ReturnTypeDeclarationRector/#')
             ->in(__DIR__ . '/../../../../tests')
-            ->in(__DIR__ . '/../../../../packages');
+            ->in(__DIR__ . '/../../../../packages')
+            ->in(__DIR__ . '/../../../../rules/architecture');
 
         return $this->finderSanitizer->sanitize($finder);
     }
