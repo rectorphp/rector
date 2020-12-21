@@ -93,18 +93,6 @@ final class ContentPatcher
     public const INVALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX = '#\*\s+@(var|return)([^\s].*|\s[^"\s]*|([^"]*[^"]))$#msU';
 
     /**
-     * @see https://regex101.com/r/4mBd0y/2
-     * @var string
-     */
-    private const CODE_MAY_DUPLICATE_REGEX = '#(if\s{0,}\(%s\(.*\{\s{0,}.*\s{0,}\}){2}#';
-
-    /**
-     * @see https://regex101.com/r/k48bUj/1
-     * @var string
-     */
-    private const CODE_MAY_DUPLICATE_NO_BRACKET_REGEX = '#(if\s{0,}\(%s\(.*\s{1,}.*\s{0,}){2}#';
-
-    /**
      * @see https://regex101.com/r/Ef83BV/1
      * @var string
      */
@@ -133,41 +121,6 @@ final class ContentPatcher
      * @see https://regex101.com/r/5DdLjE/1
      */
     private const ROUTE_LOCALIZATION_REPLACE_REGEX = '#[:=]#';
-
-    /**
-     * @var string[]
-     */
-    private const MAY_DUPLICATE_FUNC_CALLS = ['interface_exists', 'trait_exists'];
-
-    /**
-     * @see https://github.com/rectorphp/rector/issues/4499
-     */
-    public function cleanUpDuplicateContent(string $content): string
-    {
-        foreach (self::MAY_DUPLICATE_FUNC_CALLS as $mayDuplicateFuncCall) {
-            $matches = Strings::match($content, sprintf(self::CODE_MAY_DUPLICATE_REGEX, $mayDuplicateFuncCall));
-
-            if ($matches === null) {
-                $matches = Strings::match(
-                    $content,
-                    sprintf(self::CODE_MAY_DUPLICATE_NO_BRACKET_REGEX, $mayDuplicateFuncCall)
-                );
-            }
-
-            if ($matches === null) {
-                continue;
-            }
-
-            $firstMatch = Strings::replace($matches[0], self::SPACE_REGEX, '');
-            $secondMatch = Strings::replace($matches[1], self::SPACE_REGEX, '');
-
-            if ($firstMatch === str_repeat($secondMatch, 2)) {
-                $content = str_replace($matches[0], $matches[1], $content);
-            }
-        }
-
-        return $content;
-    }
 
     /**
      * @see https://github.com/rectorphp/rector/issues/3388
