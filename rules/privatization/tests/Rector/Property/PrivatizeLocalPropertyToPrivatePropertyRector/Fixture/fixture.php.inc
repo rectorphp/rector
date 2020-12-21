@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public $value;
 
@@ -18,7 +18,7 @@ class SomeClass
 
 namespace Rector\Privatization\Tests\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     private $value;
 

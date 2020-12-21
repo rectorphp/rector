@@ -59,7 +59,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/phpstan')
             ->in(__DIR__ . '/../../../../rules/phpunit')
             ->in(__DIR__ . '/../../../../rules/phpunit-symfony')
-            ->in(__DIR__ . '/../../../../rules/polyfill');
+            ->in(__DIR__ . '/../../../../rules/polyfill')
+            ->in(__DIR__ . '/../../../../rules/privatization');
 
         return $this->finderSanitizer->sanitize($finder);
     }

@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
-class SkipMulti
+class SkipMultiOvercomplex
 {
     const LOCAL_ONLY = true, AND_ALSO = false;
 }
