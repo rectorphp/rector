@@ -2,7 +2,7 @@
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClassMarkTruthyCheck
+class FixtureMarkAsTruthyCheck
 {
     public function run()
     {
@@ -23,7 +23,7 @@ class SomeClassMarkTruthyCheck
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClassMarkTruthyCheck
+class FixtureMarkAsTruthyCheck
 {
     public function run()
     {

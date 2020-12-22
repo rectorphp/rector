@@ -2,7 +2,7 @@
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClassFromParameter
+class FixtureFromParameter
 {
     public function run(array $array)
     {
@@ -19,7 +19,7 @@ class SomeClassFromParameter
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClassFromParameter
+class FixtureFromParameter
 {
     public function run(array $array)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClassMarkTruthyNegationCheckInsideConditional
+class FixtureMarkAsTruthyNegationCheckInsideConditional
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class SomeClassMarkTruthyNegationCheckInsideConditional
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClassMarkTruthyNegationCheckInsideConditional
+class FixtureMarkAsTruthyNegationCheckInsideConditional
 {
     public function run()
     {
