@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
@@ -96,10 +97,13 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var Identifier $name */
+            /** @var Identifier|Variable $name */
             $name = $issetVar->name;
-            $property = $name->toString();
+            if (! $name instanceof Identifier) {
+                continue;
+            }
 
+            $property = $name->toString();
             if ($type instanceof ObjectType) {
                 /** @var string $className */
                 $className = $type->getClassName();
