@@ -101,6 +101,7 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/php56')
             ->in(__DIR__ . '/../../../../rules/php70')
             ->in(__DIR__ . '/../../../../rules/php71')
+            ->in(__DIR__ . '/../../../../rules/php72')
             ->in(__DIR__ . '/../../../../rules/phpstan')
             ->in(__DIR__ . '/../../../../rules/phpunit')
             ->in(__DIR__ . '/../../../../rules/phpunit-symfony')

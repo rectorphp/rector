@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
 
-class ClassWithCreateFunctionWithReference
+class Reference
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class ClassWithCreateFunctionWithReference
 
 namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
 
-class ClassWithCreateFunctionWithReference
+class Reference
 {
     public function run()
     {

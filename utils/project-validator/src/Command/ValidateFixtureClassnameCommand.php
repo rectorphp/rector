@@ -68,6 +68,7 @@ final class ValidateFixtureClassnameCommand extends Command
         'substr',
         'abstract',
         'exception',
+        'concat',
     ];
 
     /**
