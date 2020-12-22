@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-final class DonotRemoveClassDocblockArray
+final class DoNotRemoveClassDocblockArray
 {
     /**
      * @var \DateTime[]|null
@@ -16,7 +16,7 @@ final class DonotRemoveClassDocblockArray
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-final class DonotRemoveClassDocblockArray
+final class DoNotRemoveClassDocblockArray
 {
     /**
      * @var \DateTime[]|null
