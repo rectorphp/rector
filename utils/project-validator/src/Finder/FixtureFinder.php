@@ -31,6 +31,7 @@ final class FixtureFinder
             ->notName('#empty_file\.php\.inc$#')
             ->path('#/Fixture/#')
             ->notPath('#/blade-template/#')
+            ->notPath('#/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Fixture/fixture3\.php\.inc$#')
             ->notPath('#bootstrap_names\.php\.inc#')
             ->notPath('#keep_anonymous_classes\.php\.inc#')
             ->notPath('#trait_name\.php\.inc#')
