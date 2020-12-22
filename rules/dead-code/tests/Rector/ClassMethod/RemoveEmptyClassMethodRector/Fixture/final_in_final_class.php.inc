@@ -8,6 +8,8 @@ final class FinalInFinalClass
     {
     }
 }
+
+?>
 -----
 <?php
 
