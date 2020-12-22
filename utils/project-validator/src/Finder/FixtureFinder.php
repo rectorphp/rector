@@ -85,6 +85,7 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/order')
             ->in(__DIR__ . '/../../../../rules/performance')
             ->in(__DIR__ . '/../../../../rules/phalcon')
+            ->in(__DIR__ . '/../../../../rules/php-deglobalize')
             ->in(__DIR__ . '/../../../../rules/phpstan')
             ->in(__DIR__ . '/../../../../rules/phpunit')
             ->in(__DIR__ . '/../../../../rules/phpunit-symfony')
