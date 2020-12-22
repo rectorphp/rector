@@ -38,6 +38,7 @@ final class FixtureFinder
             ->notPath('#/ReturnTypeDeclarationRector/#')
             ->notPath('#/PhpSpecToPHPUnitRector/#')
             ->notPath('#/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Fixture/fixture3\.php\.inc$#')
+            ->notPath('#/SwapClassMethodArgumentsRector/Fixture/fixture\.php\.inc$#')
             ->notPath('#bootstrap_names\.php\.inc#')
             ->notPath('#keep_anonymous_classes\.php\.inc#')
             ->notPath('#skip_different_order\.php\.inc#')

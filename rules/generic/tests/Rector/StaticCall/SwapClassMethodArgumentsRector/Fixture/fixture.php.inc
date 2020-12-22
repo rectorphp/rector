@@ -2,7 +2,7 @@
 
 namespace Rector\Generic\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public static function run($first, $second)
     {
@@ -16,7 +16,7 @@ class Fixture
 
 namespace Rector\Generic\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture;
 
-class Fixture
+class SomeClass
 {
     public static function run($second, $first)
     {
