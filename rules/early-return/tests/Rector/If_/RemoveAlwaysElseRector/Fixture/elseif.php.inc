@@ -2,7 +2,7 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SomeClass
+class ElseIf_
 {
     public function run()
     {
@@ -24,7 +24,7 @@ class SomeClass
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SomeClass
+class ElseIf_
 {
     public function run()
     {
