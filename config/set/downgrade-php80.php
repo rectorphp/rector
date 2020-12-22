@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
 use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector;
 use Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector;
@@ -25,9 +24,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeParamMixedTypeDeclarationRector::class);
     $services->set(DowngradeReturnMixedTypeDeclarationRector::class);
     $services->set(DowngradeReturnStaticTypeDeclarationRector::class);
-    $services->set(ChangePhpVersionInPlatformCheckRector::class)->call('configure', [[
-        ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70400,
-    ]]);
     $services->set(DowngradePropertyPromotionToConstructorPropertyAssignRector::class);
     $services->set(DowngradeNonCapturingCatchesRector::class);
     $services->set(DowngradeMatchToSwitchRector::class);

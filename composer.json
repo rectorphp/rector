@@ -162,8 +162,7 @@
             "Rector\\Twig\\": "rules/twig/src",
             "Rector\\TypeDeclaration\\": "rules/type-declaration/src",
             "Rector\\VendorLocker\\": "packages/vendor-locker/src",
-            "Rector\\Carbon\\": "rules/carbon/src",
-            "Rector\\Downgrade\\": "rules/downgrade/src"
+            "Rector\\Carbon\\": "rules/carbon/src"
         }
     },
     "autoload-dev": {
@@ -289,8 +288,7 @@
             "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/phpstan-attribute-type-syncer/src",
             "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/phpstan-static-type-mapper-checker/src",
             "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
-            "Rector\\Carbon\\Tests\\": "rules/carbon/tests",
-            "Rector\\Downgrade\\Tests\\": "rules/downgrade/tests"
+            "Rector\\Carbon\\Tests\\": "rules/carbon/tests"
         }
     },
     "scripts": {

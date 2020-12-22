@@ -1967,7 +1967,7 @@ return new Function_('some_function');
 ↓
 
 ```php
-function some_function(): void
+function some_function()
 {
 }
 ```
@@ -2428,7 +2428,7 @@ return new TryCatch($tryStmts, [$catch]);
 ```php
 try {
     echo 'one';
-} catch (\CatchedType) {
+} catch (CatchedType) {
     echo 'two';
 }
 ```
