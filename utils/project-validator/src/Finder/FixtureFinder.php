@@ -77,6 +77,7 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/mysql-to-mysqli')
             ->in(__DIR__ . '/../../../../rules/naming')
             ->in(__DIR__ . '/../../../../rules/nette')
+            ->in(__DIR__ . '/../../../../rules/nette-code-quality')
             ->in(__DIR__ . '/../../../../rules/phpstan')
             ->in(__DIR__ . '/../../../../rules/phpunit')
             ->in(__DIR__ . '/../../../../rules/phpunit-symfony')
