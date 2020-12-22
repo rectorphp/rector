@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {
@@ -18,9 +18,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {

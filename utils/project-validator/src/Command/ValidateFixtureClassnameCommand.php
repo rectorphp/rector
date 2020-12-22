@@ -60,6 +60,10 @@ final class ValidateFixtureClassnameCommand extends Command
         'array',
         'callable',
         'scalar',
+        'throw',
+        'boolean',
+        'elseif',
+        'exit',
     ];
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class EqualsClass
+class Equals
 {
     public function canDrive(Car $car)
     {
@@ -20,7 +20,7 @@ class EqualsClass
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class EqualsClass
+class Equals
 {
     public function canDrive(Car $car)
     {
