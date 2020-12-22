@@ -81,7 +81,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/symfony3')
             ->in(__DIR__ . '/../../../../rules/symfony4')
             ->in(__DIR__ . '/../../../../rules/symfony5')
-            ->in(__DIR__ . '/../../../../rules/transform');
+            ->in(__DIR__ . '/../../../../rules/transform')
+            ->in(__DIR__ . '/../../../../rules/twig');
 
         return $this->finderSanitizer->sanitize($finder);
     }
