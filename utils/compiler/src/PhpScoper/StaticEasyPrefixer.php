@@ -12,11 +12,10 @@ final class StaticEasyPrefixer
      * @var string[]
      */
     public const EXCLUDED_CLASSES = [
-        'Symfony\Component\EventDispatcher\EventSubscriberInterface',
         'Symfony\Component\Console\Style\SymfonyStyle',
         // part of public interface of configs.php
         'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
-        // this is not prefixed by php-scoper by default, probably some bug
+        // this is not prefixed on few places by php-scoper by default, probably some bug
         'Doctrine\Inflector\Inflector',
     ];
 
@@ -24,10 +23,11 @@ final class StaticEasyPrefixer
      * @var string[]
      */
     private const EXCLUDED_NAMESPACES = [
-        'Hoa\*',
+        // naturally
+        'Rector\*',
+        // we use this API a lot
         'PhpParser\*',
         'PHPStan\*',
-        'Rector\*',
         'Symplify\*',
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',
@@ -53,21 +53,6 @@ final class StaticEasyPrefixer
         }
 
         return $prefix . '\\' . $class;
-    }
-
-    public static function unPrefixQuotedValues(string $prefix, string $content): string
-    {
-        $match = sprintf('\'%s\\\\r\\\\n\'', $prefix);
-        $content = Strings::replace($content, '#' . $match . '#', '\'\\\\r\\\\n\'');
-
-        $match = sprintf('\'%s\\\\', $prefix);
-
-        return Strings::replace($content, '#' . $match . '#', "'");
-    }
-
-    public static function unPreSlashQuotedValues(string $content): string
-    {
-        return Strings::replace($content, self::QUOTED_VALUE_REGEX, "'$1");
     }
 
     /**

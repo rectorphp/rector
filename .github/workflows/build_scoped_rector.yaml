@@ -1,0 +1,50 @@
+name: Build Scoped Rector
+
+# builds the content of https://github.com/rectorphp/rector-prefixed
+on:
+    push:
+        branches:
+            - master
+
+    release:
+        types:
+            - published
+
+    # @todo remove after merge, this line is just for testing
+    pull_request: null
+
+jobs:
+    build_scoped_rector_bash:
+        runs-on: ubuntu-latest
+        steps:
+            -
+                uses: actions/checkout@v2
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.3
+                # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+            # 1. prepare dependencies
+            -   run: sh build-rector-scoped.sh
+
+            # add .github/workflows to be pushed along with new code
+            -   run: cp -R scoped rector-scoped
+
+            # 5. publish it to remote repository
+            -
+                # Uses an action in the root directory
+                uses: symplify/github-action-monorepo-split@master
+                env:
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                with:
+                    package-directory: 'rector-scoped'
+                    split-repository-organization: 'rectorphp'
+                    split-repository-name: 'rector-prefixed'
+                    # @todo put into standalone action with only tagging
+                    # tag: ${{ steps.previous_tag.outputs.tag }}
+                    user-name: "kaizen-ci"
+                    user-email: "info@kaizen-ci.org"
