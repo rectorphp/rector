@@ -1,8 +1,8 @@
 <?php
 
-namespace Old\Long\AnyNamespace;
+namespace Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector\Fixture;
 
-class SomeClass5
+class Fixture5
 {
     public function someClass()
     {
@@ -14,9 +14,9 @@ class SomeClass5
 -----
 <?php
 
-namespace Short\AnyNamespace;
+namespace Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector\Fixture;
 
-class SomeClass5
+class Fixture5
 {
     public function someClass()
     {

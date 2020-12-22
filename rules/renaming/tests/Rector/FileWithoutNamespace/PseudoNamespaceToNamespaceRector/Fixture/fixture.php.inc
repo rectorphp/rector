@@ -1,6 +1,6 @@
 <?php
 
-namespace OldNamespace\SubNamespace;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 class SomeTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +14,7 @@ class SomeTest extends \PHPUnit_Framework_TestCase
 -----
 <?php
 
-namespace OldNamespace\SubNamespace;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 class SomeTest extends \PHPUnit\Framework\TestCase
 {
