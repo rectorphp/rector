@@ -289,8 +289,7 @@
             "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/phpstan-attribute-type-syncer/src",
             "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/phpstan-static-type-mapper-checker/src",
             "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
-            "Rector\\Carbon\\Tests\\": "rules/carbon/tests",
-            "Rector\\Downgrade\\Tests\\": "rules/downgrade/tests"
+            "Rector\\Carbon\\Tests\\": "rules/carbon/tests"
         }
     },
     "scripts": {
