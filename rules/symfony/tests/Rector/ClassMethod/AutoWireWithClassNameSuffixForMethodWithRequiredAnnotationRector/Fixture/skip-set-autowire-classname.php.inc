@@ -5,7 +5,7 @@ namespace Rector\Symfony\Tests\Rector\ClassMethod\AutoWireWithClassNameSuffixFor
 final class SkipSetAutowireClassname
 {
     /** @required */
-    public function autowireSomeClass2()
+    public function autowireSkipSetAutowireClassname()
     {
     }
 }

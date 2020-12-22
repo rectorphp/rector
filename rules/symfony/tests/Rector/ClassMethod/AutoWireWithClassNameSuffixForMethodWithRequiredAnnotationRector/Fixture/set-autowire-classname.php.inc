@@ -19,7 +19,7 @@ namespace Rector\Symfony\Tests\Rector\ClassMethod\AutoWireWithClassNameSuffixFor
 final class SetAutowireClassname
 {
     /** @required */
-    public function autowireSomeClass()
+    public function autowireSetAutowireClassname()
     {
     }
 }
