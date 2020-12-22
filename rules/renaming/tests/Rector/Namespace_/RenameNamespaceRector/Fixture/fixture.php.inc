@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector\Fixture;
+namespace OldNamespace\SubNamespace;
 
 use OldNamespace;
 use OldNamespace\AnotherSubNamespace;
@@ -19,7 +19,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector\Fixture;
+namespace NewNamespace\SubNamespace;
 
 use NewNamespace;
 use NewNamespace\AnotherSubNamespace;

@@ -1,6 +1,6 @@
 <?php
 
-class RenameClassWithoutNamespace
+class MyOldClass
 {
     /**
      * @return MyOldClass
@@ -15,7 +15,7 @@ class RenameClassWithoutNamespace
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace MyNamespace;
 
 class MyNewClass
 {

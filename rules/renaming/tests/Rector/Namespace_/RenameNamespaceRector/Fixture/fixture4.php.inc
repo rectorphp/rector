@@ -1,6 +1,6 @@
 <?php
 
-class Fixture4
+class SomeClass4
 {
     public function someClass()
     {
@@ -12,7 +12,7 @@ class Fixture4
 -----
 <?php
 
-class Fixture4
+class SomeClass4
 {
     public function someClass()
     {
