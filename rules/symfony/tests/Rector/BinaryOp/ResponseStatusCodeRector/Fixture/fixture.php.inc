@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector\Fixture;
 
-class SomeController
+class Fixture
 {
     public function index()
     {
@@ -26,7 +26,7 @@ class SomeController
 
 namespace Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector\Fixture;
 
-class SomeController
+class Fixture
 {
     public function index()
     {

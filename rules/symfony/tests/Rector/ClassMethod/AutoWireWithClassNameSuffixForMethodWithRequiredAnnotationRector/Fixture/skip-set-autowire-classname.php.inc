@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\ClassMethod\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector\Fixture;
 
-final class SomeClass2
+final class SkipSetAutowireClassname
 {
     /** @required */
     public function autowireSomeClass2()

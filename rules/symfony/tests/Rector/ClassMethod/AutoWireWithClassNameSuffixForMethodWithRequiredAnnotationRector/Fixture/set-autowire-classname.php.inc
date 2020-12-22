@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\ClassMethod\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector\Fixture;
 
-final class SomeClass
+final class SetAutowireClassname
 {
     /** @required */
     public function foo()
@@ -16,7 +16,7 @@ final class SomeClass
 
 namespace Rector\Symfony\Tests\Rector\ClassMethod\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector\Fixture;
 
-final class SomeClass
+final class SetAutowireClassname
 {
     /** @required */
     public function autowireSomeClass()
