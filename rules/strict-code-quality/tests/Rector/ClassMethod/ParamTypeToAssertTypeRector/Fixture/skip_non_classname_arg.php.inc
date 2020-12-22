@@ -2,7 +2,7 @@
 
 namespace Rector\StrictCodeQuality\Tests\Rector\ClassMethod\ParamTypeToAssertTypeRector\Fixture;
 
-class SkipSomeClassNonClassNameArg
+class SkipNonClassnameArg
 {
     /**
      * @param string[] $arg

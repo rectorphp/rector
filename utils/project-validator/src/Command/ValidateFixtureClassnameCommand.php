@@ -59,6 +59,7 @@ final class ValidateFixtureClassnameCommand extends Command
         'array_item',
         'array',
         'callable',
+        'scalar',
     ];
 
     /**
