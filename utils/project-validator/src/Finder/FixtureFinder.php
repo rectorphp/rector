@@ -68,7 +68,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/privatization')
             ->in(__DIR__ . '/../../../../rules/psr4')
             ->in(__DIR__ . '/../../../../rules/removing-static')
-            ->in(__DIR__ . '/../../../../rules/renaming');
+            ->in(__DIR__ . '/../../../../rules/renaming')
+            ->in(__DIR__ . '/../../../../rules/restoration');
 
         return $this->finderSanitizer->sanitize($finder);
     }
