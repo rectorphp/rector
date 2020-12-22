@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony3\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\Fixture;
 
-class SomeController
+class Fixture
 {
     public function someMethod()
     {
@@ -30,7 +30,7 @@ class SomeController
 
 namespace Rector\Symfony3\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\Fixture;
 
-class SomeController
+class Fixture
 {
     public function someMethod()
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony3\Tests\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector\Fixture;
 
-final class SomeSubscriber
+final class Fixture
 {
     public static function subscribeTo()
     {
@@ -19,7 +19,7 @@ final class SomeSubscriber
 
 namespace Rector\Symfony3\Tests\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector\Fixture;
 
-final class SomeSubscriber
+final class Fixture
 {
     public static function subscribeTo()
     {
