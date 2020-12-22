@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\MysqlToMysqli\Tests\Fixture;
 
-final class SetFixture
+final class Setfixture
 {
     public function run()
     {
@@ -111,7 +111,7 @@ declare(strict_types=1);
 
 namespace Rector\MysqlToMysqli\Tests\Fixture;
 
-final class SetFixture
+final class Setfixture
 {
     public function run()
     {

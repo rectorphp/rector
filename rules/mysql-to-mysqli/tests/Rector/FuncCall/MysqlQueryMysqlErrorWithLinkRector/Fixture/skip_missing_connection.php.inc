@@ -2,7 +2,7 @@
 
 namespace Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector\Fixture;
 
-class SkipMissingConnect
+class SkipMissingConnection
 {
     public function run()
     {

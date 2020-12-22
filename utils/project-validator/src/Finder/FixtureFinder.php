@@ -74,6 +74,7 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/magic-disclosure')
             ->in(__DIR__ . '/../../../../rules/mockery-to-prophecy')
             ->in(__DIR__ . '/../../../../rules/mockista-to-mockery')
+            ->in(__DIR__ . '/../../../../rules/mysql-to-mysqli')
             ->in(__DIR__ . '/../../../../rules/phpstan')
             ->in(__DIR__ . '/../../../../rules/phpunit')
             ->in(__DIR__ . '/../../../../rules/phpunit-symfony')
