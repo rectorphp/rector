@@ -64,6 +64,7 @@ final class ValidateFixtureClassnameCommand extends Command
         'boolean',
         'elseif',
         'exit',
+        'function',
     ];
 
     /**
