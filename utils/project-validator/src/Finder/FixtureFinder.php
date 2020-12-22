@@ -33,6 +33,7 @@ final class FixtureFinder
             ->notPath('#/blade-template/#')
             ->notPath('#/Name/RenameClassRector/#')
             ->notPath('#/Namespace_/RenameNamespaceRector/#')
+            ->notPath('#/TemplateAnnotationToThisRenderRector/#')
             ->notPath('#/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Fixture/fixture3\.php\.inc$#')
             ->notPath('#bootstrap_names\.php\.inc#')
             ->notPath('#keep_anonymous_classes\.php\.inc#')
@@ -69,7 +70,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/psr4')
             ->in(__DIR__ . '/../../../../rules/removing-static')
             ->in(__DIR__ . '/../../../../rules/renaming')
-            ->in(__DIR__ . '/../../../../rules/restoration');
+            ->in(__DIR__ . '/../../../../rules/restoration')
+            ->in(__DIR__ . '/../../../../rules/sensio');
 
         return $this->finderSanitizer->sanitize($finder);
     }
