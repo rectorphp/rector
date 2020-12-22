@@ -70,6 +70,7 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/generic')
             ->in(__DIR__ . '/../../../../rules/jms')
             ->in(__DIR__ . '/../../../../rules/laravel')
+            ->in(__DIR__ . '/../../../../rules/legacy')
             ->in(__DIR__ . '/../../../../rules/phpstan')
             ->in(__DIR__ . '/../../../../rules/phpunit')
             ->in(__DIR__ . '/../../../../rules/phpunit-symfony')
