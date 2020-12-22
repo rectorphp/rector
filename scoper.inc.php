@@ -2,196 +2,85 @@
 
 declare(strict_types=1);
 
-// this file will need update sometimes: https://github.com/phpstan/phpstan-src/commits/master/compiler/build/scoper.inc.php
-// automate in the future, if needed - @see https://github.com/rectorphp/rector/pull/2575#issuecomment-571133000
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Nette\Neon\Neon;
-use Nette\Utils\Strings;
-use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
-use Rector\Compiler\PhpScoper\WhitelistedStubsProvider;
-
-$whitelistedStubsProvider = new WhitelistedStubsProvider();
-
-// see https://github.com/humbug/php-scoper
+use Isolated\Symfony\Component\Finder\Finder;
 
 return [
-    'files-whitelist' => $whitelistedStubsProvider->provide(),
-    'whitelist' => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
+    // The prefix configuration. If a non null value will be used, a random prefix will be generated.
+    'prefix' => null,
+
+    // By default when running php-scoper add-prefix, it will prefix all relevant code found in the current working
+    // directory. You can however define which files should be scoped by defining a collection of Finders in the
+    // following configuration key.
+    //
+    // For more see: https://github.com/humbug/php-scoper#finders-and-paths
+    'finders' => [
+        Finder::create()->files()->in('src'),
+        Finder::create()
+            ->files()
+            ->ignoreVCS(true)
+            ->notName('/LICENSE|.*\\.md|.*\\.dist|Makefile|composer\\.json|composer\\.lock/')
+            ->exclude([
+                'doc',
+                'test',
+                'test_old',
+                'tests',
+                'Tests',
+                'vendor-bin',
+            ])
+            ->in('vendor'),
+        Finder::create()->append([
+            'composer.json',
+        ]),
+    ],
+
+    // Whitelists a list of files. Unlike the other whitelist related features, this one is about completely leaving
+    // a file untouched.
+    // Paths are relative to the configuration file unless if they are already absolute
+    'files-whitelist' => [
+        'src/a-whitelisted-file.php',
+    ],
+
+    // When scoping PHP files, there will be scenarios where some of the code being scoped indirectly references the
+    // original namespace. These will include, for example, strings or string manipulations. PHP-Scoper has limited
+    // support for prefixing such strings. To circumvent that, you can define patchers to manipulate the file to your
+    // heart contents.
+    //
+    // For more see: https://github.com/humbug/php-scoper#patchers
     'patchers' => [
-        // [BEWARE] $filePath is absolute!
-        // related to Composer 2 naming
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/composer/autoload_real.php')) {
-                return $content;
-            }
+        function (string $filePath, string $prefix, string $contents): string {
+            // Change the contents here.
 
-            $content = str_replace(
-                "'Composer\\\\Autoload\\\\ClassLoader",
-                "'" . $prefix . '\\\\Composer\\\\Autoload\\\\ClassLoader',
-                $content
-            );
-
-            return $content;
-        },
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/nette/di/src/DI/Compiler.php')) {
-                return $content;
-            }
-
-            return str_replace(
-                '|Nette\\\\DI\\\\Statement',
-                sprintf('|\\\\%s\\\\Nette\\\\DI\\\\Statement', $prefix),
-                $content
-            );
-        },
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/nette/di/src/DI/Config/DefinitionSchema.php')) {
-                return $content;
-            }
-
-            $content = str_replace(sprintf('\'%s\\\\callable', $prefix), "'callable", $content);
-
-            return str_replace(
-                '|Nette\\\\DI\\\\Definitions\\\\Statement',
-                sprintf('|%s\\\\Nette\\\\DI\\\\Definitions\\\\Statement', $prefix),
-                $content
-            );
-        },
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/nette/di/src/DI/Extensions/ExtensionsExtension.php')) {
-                return $content;
-            }
-
-            $content = str_replace(sprintf('\'%s\\\\string', $prefix), "'string", $content);
-            return str_replace(
-                '|Nette\\\\DI\\\\Definitions\\\\Statement',
-                sprintf('|%s\\\\Nette\\\\DI\\\\Definitions\\\\Statement', $prefix),
-                $content
-            );
-        },
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/phpstan/phpstan-src/src/Testing/TestCase.php')) {
-                return $content;
-            }
-
-            return str_replace(
-                sprintf('\\%s\\PHPUnit\\Framework\\TestCase', $prefix),
-                '\\PHPUnit\\Framework\\TestCase',
-                $content
-            );
-        },
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/phpstan/phpstan-src/src/Testing/LevelsTestCase.php')) {
-                return $content;
-            }
-
-            return str_replace(
-                [
-                    sprintf('\\%s\\PHPUnit\\Framework\\AssertionFailedError', $prefix),
-                    sprintf('\\%s\\PHPUnit\\Framework\\TestCase', $prefix),
-                ],
-                ['\\PHPUnit\\Framework\\AssertionFailedError', '\\PHPUnit\\Framework\\TestCase'],
-                $content
-            );
-        },
-
-        // unprefix excluded classes
-        // fixes https://github.com/humbug/box/issues/470
-        function (string $filePath, string $prefix, string $content): string {
-            foreach (StaticEasyPrefixer::EXCLUDED_CLASSES as $excludedClass) {
-                $prefixedClassPattern = '#' . $prefix . '\\\\' . preg_quote($excludedClass, '#') . '#';
-                $content = Strings::replace($content, $prefixedClassPattern, $excludedClass);
-            }
-
-            return $content;
-        },
-
-        // mimics https://github.com/phpstan/phpstan-src/commit/5a6a22e5c4d38402c8cc888d8732360941c33d43#diff-463a36e4a5687fb2366b5ee56cdad92d
-        function (string $filePath, string $prefix, string $content): string {
-            // only *.neon files
-            if (! Strings::endsWith($filePath, '.neon')) {
-                return $content;
-            }
-
-            if ($content === '') {
-                return $content;
-            }
-
-            $neon = Neon::decode($content);
-            $updatedNeon = $neon;
-
-            if (array_key_exists('services', $neon)) {
-                foreach ($neon['services'] as $key => $service) {
-                    if (array_key_exists('class', $service) && is_string($service['class'])) {
-                        $service['class'] = StaticEasyPrefixer::prefixClass($service['class'], $prefix);
-                    }
-
-                    if (array_key_exists('factory', $service) && is_string($service['factory'])) {
-                        $service['factory'] = StaticEasyPrefixer::prefixClass($service['factory'], $prefix);
-                    }
-
-                    if (array_key_exists('autowired', $service) && is_array($service['autowired'])) {
-                        foreach ($service['autowired'] as $i => $autowiredName) {
-                            $service['autowired'][$i] = StaticEasyPrefixer::prefixClass($autowiredName, $prefix);
-                        }
-                    }
-
-                    $updatedNeon['services'][$key] = $service;
-                }
-            }
-
-            $updatedContent = Neon::encode($updatedNeon, Neon::BLOCK);
-
-            // default indent is tab, we have spaces
-            return Strings::replace($updatedContent, '#\t#', '    ');
-        },
-
-        // mimics https://github.com/phpstan/phpstan-src/commit/fd8f0a852207a1724ae4a262f47d9a449de70da4#diff-463a36e4a5687fb2366b5ee56cdad92d
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::match($filePath, '#phpstan-src\/(config|src|rules|packages)\/#')) {
-                return $content;
-            }
-
-            $content = StaticEasyPrefixer::unPrefixQuotedValues($prefix, $content);
-
-            return StaticEasyPrefixer::unPreSlashQuotedValues($content);
-        },
-
-        // mimics
-        // https://github.com/phpstan/phpstan-src/commit/9c2eb91b630bdfee2c1bb642a4c81ebfa0f1ca9a#diff-87f75ce3f908a819a9a2c77ffeffcc38
-        // https://github.com/phpstan/phpstan-src/commit/7048109ab17aa16102dc0fd21190782e6d6d5e7e#diff-87f75ce3f908a819a9a2c77ffeffcc38
-        function (string $filePath, string $prefix, string $content): string {
-            if (! in_array($filePath, [
-                'vendor/phpstan/phpstan-src/src/Type/TypehintHelper.php',
-                'vendor/ondrejmirtes/better-reflection/src/Reflection/Adapter/ReflectionUnionType.php',
-            ], true)) {
-                return $content;
-            }
-
-            return str_replace(sprintf('%s\\ReflectionUnionType', $prefix), 'ReflectionUnionType', $content);
-        },
-
-        // mimics: https://github.com/phpstan/phpstan-src/commit/6bb92ed7b92b186bb1eb5111bc49ec7679ed780f#diff-87f75ce3f908a819a9a2c77ffeffcc38
-        function (string $filePath, string $prefix, string $content): string {
-            return str_replace('private static final', 'private static', $content);
-        },
-
-        // mimics: https://github.com/phpstan/phpstan-src/commit/1c63a785e5fce8d031b04f52c61904bd57b51e27#diff-87f75ce3f908a819a9a2c77ffeffcc38
-        function (string $filePath, string $prefix, string $content): string {
-            if (! in_array($filePath, [
-                'vendor/phpstan/phpstan-src/src/Testing/TestCaseSourceLocatorFactory.php',
-                'vendor/phpstan/phpstan-src/src/Testing/TestCase.php',
-            ], true)) {
-                return $content;
-            }
-
-            return str_replace(
-                sprintf('%s\\Composer\\Autoload\\ClassLoader', $prefix),
-                'Composer\\Autoload\\ClassLoader',
-                $content
-            );
+            return $contents;
         },
     ],
+
+    // PHP-Scoper's goal is to make sure that all code for a project lies in a distinct PHP namespace. However, you
+    // may want to share a common API between the bundled code of your PHAR and the consumer code. For example if
+    // you have a PHPUnit PHAR with isolated code, you still want the PHAR to be able to understand the
+    // PHPUnit\Framework\TestCase class.
+    //
+    // A way to achieve this is by specifying a list of classes to not prefix with the following configuration key. Note
+    // that this does not work with functions or constants neither with classes belonging to the global namespace.
+    //
+    // Fore more see https://github.com/humbug/php-scoper#whitelist
+    'whitelist' => [
+        // 'PHPUnit\Framework\TestCase',   // A specific class
+        // 'PHPUnit\Framework\*',          // The whole namespace
+        // '*',                            // Everything
+    ],
+
+    // If `true` then the user defined constants belonging to the global namespace will not be prefixed.
+    //
+    // For more see https://github.com/humbug/php-scoper#constants--constants--functions-from-the-global-namespace
+    'whitelist-global-constants' => true,
+
+    // If `true` then the user defined classes belonging to the global namespace will not be prefixed.
+    //
+    // For more see https://github.com/humbug/php-scoper#constants--constants--functions-from-the-global-namespace
+    'whitelist-global-classes' => true,
+
+    // If `true` then the user defined functions belonging to the global namespace will not be prefixed.
+    //
+    // For more see https://github.com/humbug/php-scoper#constants--constants--functions-from-the-global-namespace
+    'whitelist-global-functions' => true,
 ];
