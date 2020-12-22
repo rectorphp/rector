@@ -71,7 +71,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/removing-static')
             ->in(__DIR__ . '/../../../../rules/renaming')
             ->in(__DIR__ . '/../../../../rules/restoration')
-            ->in(__DIR__ . '/../../../../rules/sensio');
+            ->in(__DIR__ . '/../../../../rules/sensio')
+            ->in(__DIR__ . '/../../../../rules/solid');
 
         return $this->finderSanitizer->sanitize($finder);
     }
