@@ -45,17 +45,17 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
             AddReturnTypeDeclarationRector::class => [
                 AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => [
                     new AddReturnTypeDeclaration(
-                        'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\SomeClass',
+                        'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\Fixture',
                         'parse',
                         $arrayType
                     ),
                     new AddReturnTypeDeclaration(
-                        'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\SomeClass',
+                        'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\Fixture',
                         'resolve',
                         new ObjectType('SomeType')
                     ),
                     new AddReturnTypeDeclaration(
-                        'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\SomeClass',
+                        'Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\Fixture',
                         'nullable',
                         $nullableObjectUnionType
                     ),

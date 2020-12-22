@@ -34,9 +34,13 @@ final class FixtureFinder
             ->notPath('#/Name/RenameClassRector/#')
             ->notPath('#/Namespace_/RenameNamespaceRector/#')
             ->notPath('#/TemplateAnnotationToThisRenderRector/#')
+            ->notPath('#/ParamTypeDeclarationRector/#')
+            ->notPath('#/ReturnTypeDeclarationRector/#')
             ->notPath('#/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Fixture/fixture3\.php\.inc$#')
             ->notPath('#bootstrap_names\.php\.inc#')
             ->notPath('#keep_anonymous_classes\.php\.inc#')
+            ->notPath('#skip_different_order\.php\.inc#')
+            ->notPath('#extended_parent\.php\.inc#')
             ->notPath('#trait_name\.php\.inc#')
             ->notPath('#normalize_file\.php\.inc#')
             ->notPath('#wrong_namespace\.php\.inc#')
@@ -82,7 +86,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/symfony4')
             ->in(__DIR__ . '/../../../../rules/symfony5')
             ->in(__DIR__ . '/../../../../rules/transform')
-            ->in(__DIR__ . '/../../../../rules/twig');
+            ->in(__DIR__ . '/../../../../rules/twig')
+            ->in(__DIR__ . '/../../../../rules/type-declaration');
 
         return $this->finderSanitizer->sanitize($finder);
     }
