@@ -74,7 +74,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/sensio')
             ->in(__DIR__ . '/../../../../rules/solid')
             ->in(__DIR__ . '/../../../../rules/strict-code-quality')
-            ->in(__DIR__ . '/../../../../rules/symfony');
+            ->in(__DIR__ . '/../../../../rules/symfony')
+            ->in(__DIR__ . '/../../../../rules/symfony-code-quality');
 
         return $this->finderSanitizer->sanitize($finder);
     }
