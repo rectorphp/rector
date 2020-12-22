@@ -67,6 +67,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->if === null) {
+            return null;
+        }
+
         $node->cond = $node->cond->expr;
         $if = $node->if;
         $node->if = $node->else;
