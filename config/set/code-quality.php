@@ -63,6 +63,7 @@ use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
+use Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
@@ -167,4 +168,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NewStaticToNewSelfRector::class);
     $services->set(DateTimeToDateTimeInterfaceRector::class);
     $services->set(UnwrapSprintfOneArgumentRector::class);
+    $services->set(SwitchNegatedTernaryRector::class);
 };
