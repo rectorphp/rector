@@ -2,7 +2,7 @@
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClassFromLocalVar
+class FixtureFromLocalVar
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class SomeClassFromLocalVar
 
 namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class SomeClassFromLocalVar
+class FixtureFromLocalVar
 {
     public function run()
     {

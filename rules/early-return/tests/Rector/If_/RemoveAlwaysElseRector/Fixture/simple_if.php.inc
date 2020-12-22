@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElse\SimpleIf;
+namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SomeClass
+class SimpleIf
 {
     public function run()
     {

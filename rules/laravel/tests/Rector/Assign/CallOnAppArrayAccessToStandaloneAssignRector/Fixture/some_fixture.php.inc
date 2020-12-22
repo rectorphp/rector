@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Laravel\Tests\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector\Fixture;
 
-class SomeClass
+class SomeFixture
 {
     /**
      * @var \Illuminate\Contracts\Foundation\Application
@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace Rector\Laravel\Tests\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector\Fixture;
 
-class SomeClass
+class SomeFixture
 {
     /**
      * @var \Illuminate\Contracts\Foundation\Application

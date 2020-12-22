@@ -2,7 +2,7 @@
 
 namespace Rector\Php73\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -18,7 +18,7 @@ class SomeClass
 
 namespace Rector\Php73\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

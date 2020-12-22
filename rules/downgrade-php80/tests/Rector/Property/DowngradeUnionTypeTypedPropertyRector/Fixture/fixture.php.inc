@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\Property\DowngradeUnionTypeTypedPropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public int|string $value;
 }
@@ -13,7 +13,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp80\Tests\Rector\Property\DowngradeUnionTypeTypedPropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var int|string

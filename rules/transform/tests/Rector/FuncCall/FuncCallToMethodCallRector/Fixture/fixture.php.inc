@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     public function run()
     {
@@ -16,7 +16,7 @@ final class SomeClass
 
 namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     private \Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\SomeTranslator $someTranslator;
     public function __construct(\Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\SomeTranslator $someTranslator)

@@ -19,7 +19,7 @@ final class UpdateFileNameByClassNameFileSystemRectorTest extends AbstractRector
         $this->doTestFileInfo($smartFileInfo);
 
         $path = $this->originalTempFileInfo->getPath();
-        $this->assertFileExists($path . '/CorrectClassName.php');
+        $this->assertFileExists($path . '/DifferentClassName.php');
     }
 
     public function provideData(): Iterator

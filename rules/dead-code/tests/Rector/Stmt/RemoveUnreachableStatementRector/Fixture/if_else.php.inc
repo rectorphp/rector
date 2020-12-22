@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector\IfElse;
+namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector\Fixture;
 
 class IfElse
 {
@@ -25,7 +25,7 @@ class IfElse
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector\IfElse;
+namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector\Fixture;
 
 class IfElse
 {

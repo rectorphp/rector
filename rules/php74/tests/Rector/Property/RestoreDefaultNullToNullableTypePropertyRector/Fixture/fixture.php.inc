@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public ?string $name;
 }
@@ -13,7 +13,7 @@ class SomeClass
 
 namespace Rector\Php74\Tests\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public ?string $name = null;
 }

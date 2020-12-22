@@ -2,11 +2,11 @@
 
 namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
-class MultipleOccurrencesClass
+class MutipleOccurrencesInOneString
 {
     public function run()
     {
-        return 'Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\MultipleOccurrencesClass::staticCall() && Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\MultipleOccurrencesClass::staticCall()';
+        return 'Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\MutipleOccurrencesInOneString::staticCall() && Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\MutipleOccurrencesInOneString::staticCall()';
     }
 }
 
@@ -16,11 +16,11 @@ class MultipleOccurrencesClass
 
 namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
-class MultipleOccurrencesClass
+class MutipleOccurrencesInOneString
 {
     public function run()
     {
-        return \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\MultipleOccurrencesClass::class . '::staticCall() && ' . \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\MultipleOccurrencesClass::class . '::staticCall()';
+        return \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\MutipleOccurrencesInOneString::class . '::staticCall() && ' . \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\MutipleOccurrencesInOneString::class . '::staticCall()';
     }
 }
 

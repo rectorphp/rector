@@ -2,11 +2,11 @@
 
 namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
-        return '<?php if (Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\SomeClass::staticCall()) { ?>';
+        return '<?php if (Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\Fixture::staticCall()) { ?>';
     }
 }
 
@@ -16,11 +16,11 @@ class SomeClass
 
 namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
-        return '<?php if (' . \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\SomeClass::class . '::staticCall()) { ?>';
+        return '<?php if (' . \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\Fixture::class . '::staticCall()) { ?>';
     }
 }
 

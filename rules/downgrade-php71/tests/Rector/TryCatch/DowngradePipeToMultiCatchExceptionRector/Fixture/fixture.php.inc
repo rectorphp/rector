@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp71\Tests\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector;
+namespace Rector\DowngradePhp71\Tests\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector\Fixture;
 
 function pipedExceptionCatch()
 {
@@ -33,7 +33,7 @@ function pipedExceptionCatch()
 -----
 <?php
 
-namespace Rector\DowngradePhp71\Tests\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector;
+namespace Rector\DowngradePhp71\Tests\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector\Fixture;
 
 function pipedExceptionCatch()
 {

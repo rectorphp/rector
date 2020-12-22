@@ -2,7 +2,7 @@
 
 namespace Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public static function run()
     {
@@ -20,7 +20,7 @@ class SomeClass
 
 namespace Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

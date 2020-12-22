@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector\Fixture;
 
-class ProcessNullValueElseNull
+class ProcessNullValueWithElseNull
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class ProcessNullValueElseNull
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector\Fixture;
 
-class ProcessNullValueElseNull
+class ProcessNullValueWithElseNull
 {
     public function run()
     {

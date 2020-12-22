@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\Expression\DowngradeMatchToSwitchRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp80\Tests\Rector\Expression\DowngradeMatchToSwitchRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

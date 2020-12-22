@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Function_\ReservedFnFunctionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\Php74\Tests\Rector\Function_\ReservedFnFunctionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

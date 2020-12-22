@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function someFunction(object $someObject)
     {
@@ -15,7 +15,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @param object $someObject

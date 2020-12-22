@@ -7,7 +7,6 @@ class PHPUnit_Abc
         return 1;
     }
 }
-
 ?>
 -----
 <?php
@@ -21,5 +20,4 @@ class Abc
         return 1;
     }
 }
-
 ?>

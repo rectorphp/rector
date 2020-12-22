@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Fixture;
 
-final class SkipArrayCallalbesSelf
+final class SkipArrayCallablesSelf
 {
     public function run()
     {

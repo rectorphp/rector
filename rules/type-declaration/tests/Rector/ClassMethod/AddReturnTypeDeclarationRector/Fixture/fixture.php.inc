@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function parse()
     {
@@ -23,7 +23,7 @@ class SomeClass
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function parse(): array
     {

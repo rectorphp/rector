@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeParamDeclarationRector\Fixture;
 
-class FunctionParam
+class Fixture
 {
     public function run(string $value)
     {
@@ -15,7 +15,7 @@ class FunctionParam
 
 namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeParamDeclarationRector\Fixture;
 
-class FunctionParam
+class Fixture
 {
     /**
      * @param string $value

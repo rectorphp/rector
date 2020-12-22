@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class WithArrayKeysEndByRefClass
+class WithArrayKeysEndByRef
 {
     public function run($string)
     {
@@ -20,7 +20,7 @@ class WithArrayKeysEndByRefClass
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class WithArrayKeysEndByRefClass
+class WithArrayKeysEndByRef
 {
     public function run($string)
     {

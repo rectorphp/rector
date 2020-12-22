@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Fixture;
 
 class InstantClassCall
 {
@@ -21,7 +21,7 @@ class CallerClassInstantClassCall
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Fixture;
 
 class InstantClassCall
 {

@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

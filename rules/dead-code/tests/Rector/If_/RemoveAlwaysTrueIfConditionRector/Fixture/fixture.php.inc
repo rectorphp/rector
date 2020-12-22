@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\If_\RemoveAlwaysTrueIfConditionRector\Fixture;
 
-class RemoveIf
+class Fixture
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class RemoveIf
 
 namespace Rector\DeadCode\Tests\Rector\If_\RemoveAlwaysTrueIfConditionRector\Fixture;
 
-class RemoveIf
+class Fixture
 {
     public function run()
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     function myMethod()
     {
@@ -19,7 +19,7 @@ class SomeClass
 
 namespace Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     function myMethod()
     {

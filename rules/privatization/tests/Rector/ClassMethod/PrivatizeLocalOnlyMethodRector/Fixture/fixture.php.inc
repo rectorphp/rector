@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @api
@@ -23,7 +23,7 @@ class SomeClass
 
 namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @api

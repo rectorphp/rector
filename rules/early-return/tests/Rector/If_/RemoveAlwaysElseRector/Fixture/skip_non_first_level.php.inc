@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
 use PhpParser\Node\Expr\BinaryOp\Equal;
 

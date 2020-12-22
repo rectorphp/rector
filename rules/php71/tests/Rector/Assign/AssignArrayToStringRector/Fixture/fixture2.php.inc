@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
-class WithSomeStaticString
+class Fixture2
 {
     static $someStaticString = '';
 
@@ -22,7 +22,7 @@ class WithSomeStaticString
 
 namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
-class WithSomeStaticString
+class Fixture2
 {
     static $someStaticString = [];
 

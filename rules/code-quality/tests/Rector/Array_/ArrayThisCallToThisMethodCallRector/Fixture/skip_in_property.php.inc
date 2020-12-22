@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRector\Fixture;
 
 class SkipInProperty
 {

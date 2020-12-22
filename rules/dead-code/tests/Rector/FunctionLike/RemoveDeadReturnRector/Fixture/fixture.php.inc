@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveDeadReturnRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -33,7 +33,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveDeadReturnRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

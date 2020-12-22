@@ -2,7 +2,7 @@
 
 namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function get()
     {
@@ -17,7 +17,7 @@ class SomeClass
 
 namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function get()
     {

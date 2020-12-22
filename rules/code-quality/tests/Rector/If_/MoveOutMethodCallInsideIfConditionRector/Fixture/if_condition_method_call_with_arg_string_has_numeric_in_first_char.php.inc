@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
-class IfConditionMethodCallWithArgHasNumericStringInFirstArg
+class IfConditionMethodCallWithArgStringHasNumericInFirstChar
 {
     public function run()
     {
@@ -24,7 +24,7 @@ class IfConditionMethodCallWithArgHasNumericStringInFirstArg
 
 namespace Rector\CodeQuality\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
-class IfConditionMethodCallWithArgHasNumericStringInFirstArg
+class IfConditionMethodCallWithArgStringHasNumericInFirstChar
 {
     public function run()
     {

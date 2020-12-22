@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Property\ArrayPropertyDefaultValueRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Class_\AddArrayDefaultToArrayPropertyRector\Fixture;
 
 class StaticProperty
 {
@@ -15,7 +15,7 @@ class StaticProperty
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Property\ArrayPropertyDefaultValueRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Class_\AddArrayDefaultToArrayPropertyRector\Fixture;
 
 class StaticProperty
 {
