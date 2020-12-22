@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class SomeSessionController
+class Session
 {
     public function action()
     {
@@ -18,7 +18,7 @@ class SomeSessionController
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class SomeSessionController
+class Session
 {
     private \Illuminate\Session\SessionManager $sessionManager;
     public function __construct(\Illuminate\Session\SessionManager $sessionManager)
