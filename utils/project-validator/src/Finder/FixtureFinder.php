@@ -67,6 +67,7 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/downgrade-php74')
             ->in(__DIR__ . '/../../../../rules/downgrade-php80')
             ->in(__DIR__ . '/../../../../rules/early-return')
+            ->in(__DIR__ . '/../../../../rules/generic')
             ->in(__DIR__ . '/../../../../rules/phpstan')
             ->in(__DIR__ . '/../../../../rules/phpunit')
             ->in(__DIR__ . '/../../../../rules/phpunit-symfony')

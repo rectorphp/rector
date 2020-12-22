@@ -2,7 +2,7 @@
 
 namespace Rector\Generic\Tests\Rector\String_\StringToClassConstantRector\Fixture;
 
-final class SomeSubscriber
+final class Fixture
 {
     public static function getSubscribedEvents()
     {
@@ -19,7 +19,7 @@ final class SomeSubscriber
 
 namespace Rector\Generic\Tests\Rector\String_\StringToClassConstantRector\Fixture;
 
-final class SomeSubscriber
+final class Fixture
 {
     public static function getSubscribedEvents()
     {

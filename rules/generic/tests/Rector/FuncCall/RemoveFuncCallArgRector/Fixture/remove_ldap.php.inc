@@ -2,7 +2,7 @@
 
 namespace Rector\Generic\Tests\Rector\FuncCall\RemoveFuncCallArgRector\Fixture;
 
-class SomeClass
+class RemoveLdap
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class SomeClass
 
 namespace Rector\Generic\Tests\Rector\FuncCall\RemoveFuncCallArgRector\Fixture;
 
-class SomeClass
+class RemoveLdap
 {
     public function run()
     {
