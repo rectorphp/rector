@@ -53,7 +53,7 @@ final class BetterNodeFinder
      */
     public function findFirstParentInstanceOf(Node $node, $type): ?Node
     {
-        $types = ! is_array($type) ? [$type] : $type;
+        $types = is_array($type) ? $type : [$type];
         Assert::allIsAOf($types, Node::class);
 
         /** @var Node|null $parentNode */

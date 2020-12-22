@@ -225,9 +225,9 @@ CODE_SAMPLE
         Node $nextNode,
         bool $isStartIf
     ): ?Node {
-        $assignNullSafe = ! $isStartIf
-            ? $this->nullsafeManipulator->processNullSafeExpr($assign->expr)
-            : $assign->expr;
+        $assignNullSafe = $isStartIf
+            ? $assign->expr
+            : $this->nullsafeManipulator->processNullSafeExpr($assign->expr);
         $nullSafe = $this->nullsafeManipulator->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
 
         $prevAssign = $expression->getAttribute(AttributeKey::PREVIOUS_NODE);
