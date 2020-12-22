@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     private const PRIVATE_CONST = 'private';
     protected const PROTECTED_CONST = 'protected';
@@ -15,7 +15,7 @@ final class SomeClass
 
 namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     public const PUBLIC_CONST = 'public';
     protected const PROTECTED_CONST = 'protected';
