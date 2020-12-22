@@ -162,8 +162,7 @@
             "Rector\\Twig\\": "rules/twig/src",
             "Rector\\TypeDeclaration\\": "rules/type-declaration/src",
             "Rector\\VendorLocker\\": "packages/vendor-locker/src",
-            "Rector\\Carbon\\": "rules/carbon/src",
-            "Rector\\Downgrade\\": "rules/downgrade/src"
+            "Rector\\Carbon\\": "rules/carbon/src"
         }
     },
     "autoload-dev": {
