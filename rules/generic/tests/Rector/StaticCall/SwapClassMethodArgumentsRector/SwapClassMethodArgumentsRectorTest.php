@@ -6,7 +6,7 @@ namespace Rector\Generic\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector;
 
 use Iterator;
 use Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector;
-use Rector\Generic\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture\SomeClass;
+use Rector\Generic\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture\Fixture;
 use Rector\Generic\ValueObject\SwapClassMethodArguments;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -34,7 +34,7 @@ final class SwapClassMethodArgumentsRectorTest extends AbstractRectorTestCase
         return [
             SwapClassMethodArgumentsRector::class => [
                 SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => [
-                    new SwapClassMethodArguments(SomeClass::class, 'run', [1, 0]),
+                    new SwapClassMethodArguments(Fixture::class, 'run', [1, 0]),
                 ],
             ],
         ];

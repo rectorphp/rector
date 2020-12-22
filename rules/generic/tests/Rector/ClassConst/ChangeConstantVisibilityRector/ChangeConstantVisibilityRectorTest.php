@@ -38,7 +38,7 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
                     new ClassConstantVisibilityChange(ParentObject::class, 'TO_BE_PROTECTED_CONSTANT', 'protected'),
                     new ClassConstantVisibilityChange(ParentObject::class, 'TO_BE_PRIVATE_CONSTANT', 'private'),
                     new ClassConstantVisibilityChange(
-                        'Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\AnotherClassWithInvalidConstants',
+                        'Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\Fixture2',
                         'TO_BE_PRIVATE_CONSTANT',
                         'private'
                     ),
