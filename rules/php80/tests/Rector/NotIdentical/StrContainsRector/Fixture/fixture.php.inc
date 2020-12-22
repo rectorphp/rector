@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\NotIdentical\StrContainsRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\Php80\Tests\Rector\NotIdentical\StrContainsRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

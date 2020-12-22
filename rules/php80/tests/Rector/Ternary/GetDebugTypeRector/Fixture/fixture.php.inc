@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\Ternary\GetDebugTypeRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\Php80\Tests\Rector\Ternary\GetDebugTypeRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {
