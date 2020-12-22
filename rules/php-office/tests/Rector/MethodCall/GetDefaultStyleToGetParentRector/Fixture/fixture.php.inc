@@ -2,7 +2,7 @@
 
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\GetDefaultStyleToGetParentRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class SomeClass
 
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\GetDefaultStyleToGetParentRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
