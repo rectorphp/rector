@@ -81,6 +81,7 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/nette-kdyby')
             ->in(__DIR__ . '/../../../../rules/nette-tester-to-phpunit')
             ->in(__DIR__ . '/../../../../rules/nette-to-symfony')
+            ->in(__DIR__ . '/../../../../rules/nette-utils-code-quality')
             ->in(__DIR__ . '/../../../../rules/phpstan')
             ->in(__DIR__ . '/../../../../rules/phpunit')
             ->in(__DIR__ . '/../../../../rules/phpunit-symfony')
