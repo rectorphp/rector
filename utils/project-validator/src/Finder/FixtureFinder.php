@@ -76,7 +76,8 @@ final class FixtureFinder
             ->in(__DIR__ . '/../../../../rules/strict-code-quality')
             ->in(__DIR__ . '/../../../../rules/symfony')
             ->in(__DIR__ . '/../../../../rules/symfony-code-quality')
-            ->in(__DIR__ . '/../../../../rules/symfony-php-config');
+            ->in(__DIR__ . '/../../../../rules/symfony-php-config')
+            ->in(__DIR__ . '/../../../../rules/symfony2');
 
         return $this->finderSanitizer->sanitize($finder);
     }
