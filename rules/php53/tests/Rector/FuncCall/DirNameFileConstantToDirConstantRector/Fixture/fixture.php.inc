@@ -2,7 +2,7 @@
 
 namespace Rector\Php53\Tests\Rector\FuncCall\DirNameFileConstantToDirConstantRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\Php53\Tests\Rector\FuncCall\DirNameFileConstantToDirConstantRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
