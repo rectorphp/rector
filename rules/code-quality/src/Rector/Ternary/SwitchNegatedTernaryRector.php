@@ -74,6 +74,7 @@ CODE_SAMPLE
         $node->cond = $node->cond->expr;
         $if = $node->if;
         $node->if = $node->else;
+
         $node->else = $if;
 
         return $node;
