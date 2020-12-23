@@ -12,7 +12,7 @@ class Fixture
                 break;
 
             default:
-                $this->syntaxError('SELECT, UPDATE or DELETE');
+                $statement = $this->syntaxError('SELECT, UPDATE or DELETE');
                 break;
         }
     }
