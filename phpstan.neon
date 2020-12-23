@@ -690,6 +690,6 @@ parameters:
         - '#Cannot call method getParentNode\(\) on Rector\\DeadCode\\ValueObject\\VariableNodeUse\|null#'
 
         # @todo resolve later
-        - '#Content of method "endsWith\(\)" is duplicated with method in "Rector\\Naming\\ExpectedNameResolver\\AbstractExpectedNameResolver" class\. Use unique content or abstract service instead#'
+        - '#Content of method "endsWith\(\)" is duplicated with method in "Rector\\(.*?)" class\. Use unique content or abstract service instead#'
 
         - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is \d+, keep it under 9#'
