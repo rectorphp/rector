@@ -30,8 +30,8 @@ final class FormatPerservingPrinterTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->formatPerservingPrinter = self::$container->get(FormatPerservingPrinter::class);
-        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
+        $this->formatPerservingPrinter = $this->getService(FormatPerservingPrinter::class);
+        $this->smartFileSystem = $this->getService(SmartFileSystem::class);
     }
 
     protected function tearDown(): void

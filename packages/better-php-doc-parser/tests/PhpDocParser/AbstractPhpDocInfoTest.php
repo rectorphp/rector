@@ -39,10 +39,10 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->fileInfoParser = self::$container->get(FileInfoParser::class);
+        $this->fileInfoParser = $this->getService(FileInfoParser::class);
 
-        $this->betterNodeFinder = self::$container->get(BetterNodeFinder::class);
-        $this->phpDocInfoPrinter = self::$container->get(PhpDocInfoPrinter::class);
+        $this->betterNodeFinder = $this->getService(BetterNodeFinder::class);
+        $this->phpDocInfoPrinter = $this->getService(PhpDocInfoPrinter::class);
     }
 
     /**

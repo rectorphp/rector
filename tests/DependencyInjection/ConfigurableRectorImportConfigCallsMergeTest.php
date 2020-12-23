@@ -37,7 +37,7 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractKernelT
         array $expectedConfiguration
     ): void {
         $this->bootKernelWithConfigs(RectorKernel::class, [$config]);
-        $this->renameClassRector = self::$container->get(RenameClassRector::class);
+        $this->renameClassRector = $this->getService(RenameClassRector::class);
 
         $oldToNewClasses = $this->privatesAccessor->getPrivateProperty($this->renameClassRector, 'oldToNewClasses');
 

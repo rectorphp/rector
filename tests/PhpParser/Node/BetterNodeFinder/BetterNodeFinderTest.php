@@ -30,10 +30,10 @@ final class BetterNodeFinderTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->betterNodeFinder = self::$container->get(BetterNodeFinder::class);
+        $this->betterNodeFinder = $this->getService(BetterNodeFinder::class);
 
         /** @var SimplePhpParser $simplePhpParser */
-        $simplePhpParser = self::$container->get(SimplePhpParser::class);
+        $simplePhpParser = $this->getService(SimplePhpParser::class);
         $this->nodes = $simplePhpParser->parseFile(__DIR__ . '/Source/SomeFile.php.inc');
     }
 

@@ -46,7 +46,7 @@ final class KernelTestCaseNodeAnalyzer
 
     /**
      * Matches:
-     * self::$container->get()
+     * $this->getService()
      */
     private function isSelfContainerGetMethodCall(Node $node): bool
     {

@@ -47,9 +47,9 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->phpDocInfoPrinter = self::$container->get(PhpDocInfoPrinter::class);
-        $this->docBlockManipulator = self::$container->get(DocBlockManipulator::class);
-        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
+        $this->phpDocInfoPrinter = $this->getService(PhpDocInfoPrinter::class);
+        $this->docBlockManipulator = $this->getService(DocBlockManipulator::class);
+        $this->smartFileSystem = $this->getService(SmartFileSystem::class);
 
         $this->phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/Source/doc.txt');
     }
@@ -86,7 +86,7 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
 
     private function createPhpDocInfoFromFile(string $path): PhpDocInfo
     {
-        $phpDocInfoFactory = self::$container->get(PhpDocInfoFactory::class);
+        $phpDocInfoFactory = $this->getService(PhpDocInfoFactory::class);
         $phpDocContent = $this->smartFileSystem->readFile($path);
 
         $this->node = new Nop();

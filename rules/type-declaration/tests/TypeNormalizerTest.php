@@ -31,8 +31,8 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->typeNormalizer = self::$container->get(TypeNormalizer::class);
-        $this->staticTypeMapper = self::$container->get(StaticTypeMapper::class);
+        $this->typeNormalizer = $this->getService(TypeNormalizer::class);
+        $this->staticTypeMapper = $this->getService(StaticTypeMapper::class);
     }
 
     /**

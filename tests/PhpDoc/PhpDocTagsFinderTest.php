@@ -31,11 +31,11 @@ final class PhpDocTagsFinderTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->phpDocTagsFinder = self::$container->get(PhpDocTagsFinder::class);
-        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
+        $this->phpDocTagsFinder = $this->getService(PhpDocTagsFinder::class);
+        $this->smartFileSystem = $this->getService(SmartFileSystem::class);
 
         // required for parser
-        $this->currentNodeProvider = self::$container->get(CurrentNodeProvider::class);
+        $this->currentNodeProvider = $this->getService(CurrentNodeProvider::class);
         $this->currentNodeProvider->setNode(new Nop());
     }
 

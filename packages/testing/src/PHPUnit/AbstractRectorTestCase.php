@@ -144,7 +144,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
                 $this->bootKernelWithConfigs(RectorKernel::class, $configs);
             }
 
-            $enabledRectorsProvider = self::$container->get(EnabledRectorsProvider::class);
+            $enabledRectorsProvider = $this->getService(EnabledRectorsProvider::class);
             $enabledRectorsProvider->reset();
             $this->configureEnabledRectors($enabledRectorsProvider);
         }
@@ -160,7 +160,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->fileProcessor = static::$container->get(FileProcessor::class);
         $this->nonPhpFileProcessor = static::$container->get(NonPhpFileProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
-        $this->removedAndAddedFilesCollector = self::$container->get(RemovedAndAddedFilesCollector::class);
+        $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
 
         // needed for PHPStan, because the analyzed file is just create in /temp
@@ -240,7 +240,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     protected function setParameter(string $name, $value): void
     {
-        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider = $this->getService(ParameterProvider::class);
 
         if ($name !== Option::PHP_VERSION_FEATURES) {
             $oldParameterValue = $parameterProvider->provideParameter($name);
@@ -397,7 +397,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             return;
         }
 
-        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider = $this->getService(ParameterProvider::class);
 
         foreach ($this->oldParameterValues as $name => $oldParameterValue) {
             $parameterProvider->changeParameter($name, $oldParameterValue);
@@ -462,7 +462,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             // mimic post-rectors
             $changedContent = $this->fileProcessor->printToString($originalFileInfo);
 
-            $removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
+            $removedAndAddedFilesProcessor = $this->getService(RemovedAndAddedFilesProcessor::class);
             $removedAndAddedFilesProcessor->run();
         } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
             $changedContent = $this->nonPhpFileProcessor->processFileInfo($originalFileInfo);

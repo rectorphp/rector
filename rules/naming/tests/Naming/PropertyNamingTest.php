@@ -21,7 +21,7 @@ final class PropertyNamingTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->propertyNaming = self::$container->get(PropertyNaming::class);
+        $this->propertyNaming = $this->getService(PropertyNaming::class);
     }
 
     /**

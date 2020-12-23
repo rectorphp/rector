@@ -31,7 +31,7 @@ final class StaticTypeMapperTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->staticTypeMapper = self::$container->get(StaticTypeMapper::class);
+        $this->staticTypeMapper = $this->getService(StaticTypeMapper::class);
     }
 
     /**

@@ -24,7 +24,7 @@ final class NodeFactoryTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->nodeFactory = self::$container->get(NodeFactory::class);
+        $this->nodeFactory = $this->getService(NodeFactory::class);
     }
 
     /**
