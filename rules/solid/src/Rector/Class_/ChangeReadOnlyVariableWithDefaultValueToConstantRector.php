@@ -150,18 +150,6 @@ CODE_SAMPLE
         return $readOnlyVariables;
     }
 
-    private function isFoundByRefParam(ClassMethod $classMethod): bool
-    {
-        $params = $classMethod->getParams();
-        foreach ($params as $param) {
-            if ($param->byRef) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @param Assign[] $assigns
      * @return Assign[]
@@ -215,6 +203,18 @@ CODE_SAMPLE
 
             $this->replaceVariableWithClassConstFetch($classMethod, $variableName, $classConst);
         }
+    }
+
+    private function isFoundByRefParam(ClassMethod $classMethod): bool
+    {
+        $params = $classMethod->getParams();
+        foreach ($params as $param) {
+            if ($param->byRef) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function createPrivateClassConst(Variable $variable, Expr $expr): ClassConst
