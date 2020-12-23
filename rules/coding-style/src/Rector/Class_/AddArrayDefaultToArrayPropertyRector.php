@@ -36,6 +36,7 @@ final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
      * @var PropertyFetchManipulator
      */
     private $propertyFetchManipulator;
+
     /**
      * @var IterableTypeAnalyzer
      */
@@ -243,6 +244,20 @@ CODE_SAMPLE
         });
     }
 
+    private function resolveVarType(PropertyProperty $propertyProperty): ?Type
+    {
+        /** @var Property $property */
+        $property = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
+
+        // we need docblock
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $propertyPhpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
+
+        return $propertyPhpDocInfo->getVarType();
+    }
+
     /**
      * @param string[] $propertyNames
      */
@@ -261,19 +276,5 @@ CODE_SAMPLE
             return false;
         }
         return $this->isNull($expr->left);
-    }
-
-    private function resolveVarType(PropertyProperty $propertyProperty): ?Type
-    {
-        /** @var Property $property */
-        $property = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
-
-        // we need docblock
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $propertyPhpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
-
-        return $propertyPhpDocInfo->getVarType();
     }
 }
