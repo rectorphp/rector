@@ -21,7 +21,7 @@ final class FileHashComputerTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->fileHashComputer = self::$container->get(FileHashComputer::class);
+        $this->fileHashComputer = $this->getService(FileHashComputer::class);
     }
 
     /**

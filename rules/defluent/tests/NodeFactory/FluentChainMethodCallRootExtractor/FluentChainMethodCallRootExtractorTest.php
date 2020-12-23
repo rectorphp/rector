@@ -28,8 +28,8 @@ final class FluentChainMethodCallRootExtractorTest extends AbstractKernelTestCas
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->fluentChainMethodCallRootExtractor = self::$container->get(FluentChainMethodCallRootExtractor::class);
-        $this->testingParser = self::$container->get(TestingParser::class);
+        $this->fluentChainMethodCallRootExtractor = $this->getService(FluentChainMethodCallRootExtractor::class);
+        $this->testingParser = $this->getService(TestingParser::class);
     }
 
     public function test(): void

@@ -25,7 +25,7 @@ final class TestClassResolverTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->testClassResolver = self::$container->get(TestClassResolver::class);
+        $this->testClassResolver = $this->getService(TestClassResolver::class);
     }
 
     /**

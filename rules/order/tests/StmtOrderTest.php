@@ -38,8 +38,8 @@ final class StmtOrderTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->stmtOrder = self::$container->get(StmtOrder::class);
-        $this->nodeNameResolver = self::$container->get(NodeNameResolver::class);
+        $this->stmtOrder = $this->getService(StmtOrder::class);
+        $this->nodeNameResolver = $this->getService(NodeNameResolver::class);
     }
 
     public function dataProvider(): Iterator

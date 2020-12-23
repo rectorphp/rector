@@ -109,7 +109,7 @@ final class SomeTestCase extends KernelTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->entityFactory = self::$container->get(EntityFactory::class);
+        $this->entityFactory = $this->getService(EntityFactory::class);
     }
 
     public function test()

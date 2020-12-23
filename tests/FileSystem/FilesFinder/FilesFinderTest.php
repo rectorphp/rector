@@ -26,8 +26,8 @@ final class FilesFinderTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->filesFinder = self::$container->get(FilesFinder::class);
-        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
+        $this->filesFinder = $this->getService(FilesFinder::class);
+        $this->smartFileSystem = $this->getService(SmartFileSystem::class);
     }
 
     /**
