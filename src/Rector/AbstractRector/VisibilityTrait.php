@@ -106,4 +106,12 @@ trait VisibilityTrait
     {
         $this->visibilityManipulator->makeNonFinal($node);
     }
+
+    /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function removeOriginalVisibilityFromFlags(Node $node): void
+    {
+        $this->visibilityManipulator->removeOriginalVisibilityFromFlags($node);
+    }
 }

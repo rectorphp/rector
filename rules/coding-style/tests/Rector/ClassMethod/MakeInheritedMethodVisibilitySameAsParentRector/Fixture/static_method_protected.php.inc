@@ -2,9 +2,9 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\Fixture;
 
-final class StaticMethod extends _Parent
+final class StaticMethodProtected extends _Parent
 {
-	static function X()
+	  static function X()
     {
     }
 }
@@ -21,9 +21,9 @@ abstract class _Parent {
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\Fixture;
 
-final class StaticMethod extends _Parent
+final class StaticMethodProtected extends _Parent
 {
-	protected static function X()
+	  protected static function X()
     {
     }
 }
