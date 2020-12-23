@@ -17,7 +17,7 @@ use Rector\Generic\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector\Source\
 
 class ClassThatInherits2 extends ParentObject
 {
-    public function toBePublicStaticMethod() {
+    public static function toBePublicStaticMethod() {
 
     }
 }
