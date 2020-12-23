@@ -12,28 +12,31 @@ final class CondAndExpr
      * @var string
      */
     public const TYPE_NORMAL = 'normal';
+
     /**
      * @var string
      */
     public const TYPE_ASSIGN = 'assign';
+
     /**
      * @var string
      */
     public const TYPE_RETURN = 'return';
 
     /**
-     * @var Expr|null
+     * @var string
      */
-    private $condExpr;
+    private $kind;
 
     /**
      * @var Expr
      */
     private $expr;
+
     /**
-     * @var string
+     * @var Expr|null
      */
-    private $kind;
+    private $condExpr;
 
     public function __construct(?Expr $condExpr, Expr $expr, string $kind)
     {

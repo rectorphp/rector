@@ -28,11 +28,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeSwitchToMatchRector extends AbstractRector
 {
     /**
-     * @var Expr|null
-     */
-    private $assignExpr;
-
-    /**
      * @var SwitchExprsResolver
      */
     private $switchExprsResolver;
@@ -41,6 +36,11 @@ final class ChangeSwitchToMatchRector extends AbstractRector
      * @var SwitchAnalyzer
      */
     private $switchAnalyzer;
+
+    /**
+     * @var Expr|null
+     */
+    private $assignExpr;
 
     public function __construct(SwitchExprsResolver $switchExprsResolver, SwitchAnalyzer $switchAnalyzer)
     {
@@ -141,6 +141,15 @@ CODE_SAMPLE
         return $match;
     }
 
+    private function shouldSkipSwitch(Switch_ $switch): bool
+    {
+        if (! $this->switchAnalyzer->hasEachCaseBreak($switch)) {
+            return true;
+        }
+
+        return ! $this->switchAnalyzer->hasEachCaseSingleStmt($switch);
+    }
+
     /**
      * @param CondAndExpr[] $condAndExprs
      */
@@ -187,15 +196,6 @@ CODE_SAMPLE
         }
 
         return $matchArms;
-    }
-
-    private function shouldSkipSwitch(Switch_ $switch): bool
-    {
-        if (! $this->switchAnalyzer->hasEachCaseBreak($switch)) {
-            return true;
-        }
-
-        return ! $this->switchAnalyzer->hasEachCaseSingleStmt($switch);
     }
 
     /**
