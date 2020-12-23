@@ -108,8 +108,18 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->var->name = $newVariableName;
+        $newVariable = new Variable($newVariableName);
+        $isFoundInPrevious = (bool) $this->betterNodeFinder->findFirstPrevious($node, function (Node $n) use (
+            $newVariable
+        ): bool {
+            return $this->areNodesEqual($n, $newVariable);
+        });
 
+        if ($isFoundInPrevious) {
+            return null;
+        }
+
+        $node->var->name = $newVariableName;
         $this->renameVariableInStmts($node, $oldVariableName, $newVariableName);
 
         return $node;
