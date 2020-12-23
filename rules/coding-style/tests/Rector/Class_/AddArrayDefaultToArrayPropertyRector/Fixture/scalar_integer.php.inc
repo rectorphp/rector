@@ -2,22 +2,12 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Class_\AddArrayDefaultToArrayPropertyRector\Fixture;
 
-class Fixture2
+class ScalarInteger
 {
     /**
      * @var int[]
      */
     private $items;
-
-    /**
-     * @var array|SomeEntity[]
-     */
-    public $entities;
-
-    /**
-     * @var Bar[]|Foo[]
-     */
-    private $combined;
 
     public function run()
     {
@@ -32,22 +22,12 @@ class Fixture2
 
 namespace Rector\CodingStyle\Tests\Rector\Class_\AddArrayDefaultToArrayPropertyRector\Fixture;
 
-class Fixture2
+class ScalarInteger
 {
     /**
      * @var int[]
      */
     private $items = [];
-
-    /**
-     * @var array|SomeEntity[]
-     */
-    public $entities = [];
-
-    /**
-     * @var Bar[]|Foo[]
-     */
-    private $combined = [];
 
     public function run()
     {

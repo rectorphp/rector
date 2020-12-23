@@ -20,7 +20,6 @@ final class PropertyNamingTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-
         $this->propertyNaming = $this->getService(PropertyNaming::class);
     }
 

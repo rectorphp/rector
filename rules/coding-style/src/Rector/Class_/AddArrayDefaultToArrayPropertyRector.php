@@ -15,8 +15,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\IterableType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\CodingStyle\TypeAnalyzer\IterableTypeAnalyzer;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -36,9 +37,17 @@ final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
      */
     private $propertyFetchManipulator;
 
-    public function __construct(PropertyFetchManipulator $propertyFetchManipulator)
-    {
+    /**
+     * @var IterableTypeAnalyzer
+     */
+    private $iterableTypeAnalyzer;
+
+    public function __construct(
+        PropertyFetchManipulator $propertyFetchManipulator,
+        IterableTypeAnalyzer $iterableTypeAnalyzer
+    ) {
         $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->iterableTypeAnalyzer = $iterableTypeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -125,17 +134,12 @@ CODE_SAMPLE
                 return null;
             }
 
-            /** @var Property $property */
-            $property = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-            // we need docblock
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
+            $varType = $this->resolveVarType($node);
+            if ($varType === null) {
                 return null;
             }
 
-            $varType = $propertyPhpDocInfo->getVarType();
-            if (! $varType instanceof ArrayType && ! $varType instanceof IterableType) {
+            if (! $this->iterableTypeAnalyzer->detect($varType)) {
                 return null;
             }
 
@@ -238,6 +242,20 @@ CODE_SAMPLE
 
             return $node;
         });
+    }
+
+    private function resolveVarType(PropertyProperty $propertyProperty): ?Type
+    {
+        /** @var Property $property */
+        $property = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
+
+        // we need docblock
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $propertyPhpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
+
+        return $propertyPhpDocInfo->getVarType();
     }
 
     /**
