@@ -137,10 +137,13 @@ CODE_SAMPLE
         $readOnlyVariables = [];
 
         foreach ($class->getMethods() as $classMethod) {
+            if ($this->isFoundByRefParam($classMethod)) {
+                return [];
+            }
+
             $readOnlyVariableAssignScalarVariables = $this->classMethodAssignManipulator->collectReadyOnlyAssignScalarVariables(
                 $classMethod
             );
-
             $readOnlyVariables = array_merge($readOnlyVariables, $readOnlyVariableAssignScalarVariables);
         }
 
@@ -200,6 +203,18 @@ CODE_SAMPLE
 
             $this->replaceVariableWithClassConstFetch($classMethod, $variableName, $classConst);
         }
+    }
+
+    private function isFoundByRefParam(ClassMethod $classMethod): bool
+    {
+        $params = $classMethod->getParams();
+        foreach ($params as $param) {
+            if ($param->byRef) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function createPrivateClassConst(Variable $variable, Expr $expr): ClassConst
