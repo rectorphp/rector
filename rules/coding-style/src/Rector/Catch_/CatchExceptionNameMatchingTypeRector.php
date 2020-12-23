@@ -108,8 +108,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->var->name = $newVariableName;
+        $newVariable = new Variable($newVariableName);
+        if ($this->isNodeFoundInPrevious($node, $newVariable)) {
+            return null;
+        }
 
+        $node->var->name = $newVariableName;
         $this->renameVariableInStmts($node, $oldVariableName, $newVariableName);
 
         return $node;

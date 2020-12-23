@@ -7,6 +7,7 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
@@ -77,5 +78,31 @@ trait BetterStandardPrinterTrait
     protected function areNodesEqual($firstNode, $secondNode): bool
     {
         return $this->betterStandardPrinter->areNodesEqual($firstNode, $secondNode);
+    }
+
+    /**
+     * Check if node found in previous node
+     */
+    protected function isNodeFoundInPrevious(Node $node, Node $find): bool
+    {
+        $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        while ($previous) {
+            $isFound = (bool) $this->betterNodeFinder->findFirst($previous, function (Node $n) use ($find): bool {
+                return $this->betterStandardPrinter->areNodesEqual($n, $find);
+            });
+
+            if ($isFound) {
+                return true;
+            }
+
+            $previous = $previous->getAttribute(AttributeKey::PREVIOUS_NODE);
+        }
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Node) {
+            return false;
+        }
+
+        return $this->isNodeFoundInPrevious($parent, $find);
     }
 }
