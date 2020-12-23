@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\PHPStanStaticTypeMapperChecker\Finder;
+namespace Rector\Utils\PHPStanTypeMapperChecker\Finder;
 
 use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
@@ -16,7 +16,7 @@ final class PHPStanTypeClassFinder
     private const ACCESSORY_SEPARATED_REGEX = '#\bAccessory\b#';
 
     /**
-     * @return class-string[]
+     * @return string[]
      */
     public function find(): array
     {

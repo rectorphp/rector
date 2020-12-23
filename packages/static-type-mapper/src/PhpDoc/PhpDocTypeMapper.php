@@ -6,11 +6,14 @@ namespace Rector\StaticTypeMapper\PhpDoc;
 
 use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
+use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\NotImplementedException;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 
+/**
+ * @see \Rector\StaticTypeMapper\Tests\PhpDoc\PhpDocTypeMapperTest
+ */
 final class PhpDocTypeMapper
 {
     /**
@@ -19,11 +22,17 @@ final class PhpDocTypeMapper
     private $phpDocTypeMappers = [];
 
     /**
+     * @var TypeNodeResolver
+     */
+    private $typeNodeResolver;
+
+    /**
      * @param PhpDocTypeMapperInterface[] $phpDocTypeMappers
      */
-    public function __construct(array $phpDocTypeMappers)
+    public function __construct(array $phpDocTypeMappers, TypeNodeResolver $typeNodeResolver)
     {
         $this->phpDocTypeMappers = $phpDocTypeMappers;
+        $this->typeNodeResolver = $typeNodeResolver;
     }
 
     public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
@@ -36,6 +45,8 @@ final class PhpDocTypeMapper
             return $phpDocTypeMapper->mapToPHPStanType($typeNode, $node, $nameScope);
         }
 
-        throw new NotImplementedException(__METHOD__ . ' for ' . get_class($typeNode));
+        // fallback to PHPStan resolver
+
+        return $this->typeNodeResolver->resolve($typeNode, $nameScope);
     }
 }

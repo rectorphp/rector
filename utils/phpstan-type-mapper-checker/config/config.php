@@ -12,5 +12,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire()
         ->autoconfigure();
 
-    $services->load('Rector\Utils\PHPStanStaticTypeMapperChecker\\', __DIR__ . '/../src');
+    $services->load('Rector\Utils\PHPStanTypeMapperChecker\\', __DIR__ . '/../src');
 };

@@ -688,3 +688,6 @@ parameters:
                 - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php
 
         - '#Cannot call method getParentNode\(\) on Rector\\DeadCode\\ValueObject\\VariableNodeUse\|null#'
+
+        # @todo resolve later
+        - '#Content of method "endsWith\(\)" is duplicated with method in "Rector\\Naming\\ExpectedNameResolver\\AbstractExpectedNameResolver" class\. Use unique content or abstract service instead#'
