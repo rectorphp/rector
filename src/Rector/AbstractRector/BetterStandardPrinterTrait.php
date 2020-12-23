@@ -7,7 +7,6 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
