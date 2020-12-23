@@ -266,16 +266,16 @@ final class BetterNodeFinder
 
         // move to previous expression
         $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if ($previousStatement === null) {
-            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parent === null) {
-                return null;
-            }
-
-            return $this->findFirstPrevious($parent, $filter);
+        if ($previousStatement !== null) {
+            return $this->findFirstPrevious($previousStatement, $filter);
         }
 
-        return $this->findFirstPrevious($previousStatement, $filter);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent === null) {
+            return null;
+        }
+
+        return $this->findFirstPrevious($parent, $filter);
     }
 
     /**
