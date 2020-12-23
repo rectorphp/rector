@@ -88,10 +88,7 @@ CODE_SAMPLE
         return $varAssign;
     }
 
-    /**
-     * @param MethodCall|StaticCall|FuncCall|New_ $expr
-     */
-    private function isExprCallOrNew(Expr $expr)
+    private function isExprCallOrNew(Expr $expr): bool
     {
         if ($expr instanceof MethodCall) {
             return true;
