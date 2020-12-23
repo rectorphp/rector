@@ -167,6 +167,10 @@ CODE_SAMPLE
 
     private function isInstantiable(string $className): bool
     {
+        if (! class_exists($className)) {
+            return false;
+        }
+
         $reflectionClass = new ReflectionClass($className);
         $classConstructorReflection = $reflectionClass->getConstructor();
 
