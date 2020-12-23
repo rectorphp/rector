@@ -141,6 +141,13 @@ CODE_SAMPLE
                 $classMethod
             );
 
+            $params = $classMethod->getParams();
+            foreach ($params as $param) {
+                if ($param->byRef) {
+                    return [];
+                }
+            }
+
             $readOnlyVariables = array_merge($readOnlyVariables, $readOnlyVariableAssignScalarVariables);
         }
 
