@@ -79,30 +79,4 @@ trait BetterStandardPrinterTrait
     {
         return $this->betterStandardPrinter->areNodesEqual($firstNode, $secondNode);
     }
-
-    /**
-     * Check if node found in previous node
-     */
-    protected function isNodeFoundInPrevious(Node $node, Node $find): bool
-    {
-        $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        while ($previous) {
-            $isFound = (bool) $this->betterNodeFinder->findFirst($previous, function (Node $n) use ($find): bool {
-                return $this->betterStandardPrinter->areNodesEqual($n, $find);
-            });
-
-            if ($isFound) {
-                return true;
-            }
-
-            $previous = $previous->getAttribute(AttributeKey::PREVIOUS_NODE);
-        }
-
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Node) {
-            return false;
-        }
-
-        return $this->isNodeFoundInPrevious($parent, $find);
-    }
 }

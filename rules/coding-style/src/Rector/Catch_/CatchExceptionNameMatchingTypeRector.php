@@ -109,7 +109,13 @@ CODE_SAMPLE
         }
 
         $newVariable = new Variable($newVariableName);
-        if ($this->isNodeFoundInPrevious($node, $newVariable)) {
+        $isFoundInPrevious = (bool) $this->betterNodeFinder->findFirstPrevious($node, function (Node $n) use (
+            $newVariable
+        ): bool {
+            return $this->areNodesEqual($n, $newVariable);
+        });
+
+        if ($isFoundInPrevious) {
             return null;
         }
 

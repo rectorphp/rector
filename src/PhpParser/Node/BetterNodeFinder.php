@@ -264,10 +264,15 @@ final class BetterNodeFinder
             return $foundNode;
         }
 
-        // move to next expression
+        // move to previous expression
         $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
         if ($previousStatement === null) {
-            return null;
+            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parent === null) {
+                return null;
+            }
+
+            return $this->findFirstPrevious($parent, $filter);
         }
 
         return $this->findFirstPrevious($previousStatement, $filter);
