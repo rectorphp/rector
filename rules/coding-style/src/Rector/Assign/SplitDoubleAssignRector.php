@@ -5,7 +5,13 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -65,8 +71,34 @@ CODE_SAMPLE
 
         $newAssign = new Assign($node->var, $node->expr->expr);
 
-        $this->addNodeAfterNode($node->expr, $node);
+        if (! $this->isExprCallOrNew($node->expr->expr)) {
+            $this->addNodeAfterNode($node->expr, $node);
+            return $newAssign;
+        }
 
-        return $newAssign;
+        $varAssign = new Assign($node->expr->var, $node->var);
+        $this->addNodeBeforeNode(new Expression($newAssign), $node);
+
+        return $varAssign;
+    }
+
+    /**
+     * @param MethodCall|StaticCall|FuncCall|New_ $expr
+     */
+    private function isExprCallOrNew(Expr $expr)
+    {
+        if ($expr instanceof MethodCall) {
+            return true;
+        }
+
+        if ($expr instanceof StaticCall) {
+            return true;
+        }
+
+        if ($expr instanceof FuncCall) {
+            return true;
+        }
+
+        return $expr instanceof New_;
     }
 }
