@@ -137,21 +137,29 @@ CODE_SAMPLE
         $readOnlyVariables = [];
 
         foreach ($class->getMethods() as $classMethod) {
+            if ($this->isFoundByRefParam($classMethod)) {
+                return [];
+            }
+
             $readOnlyVariableAssignScalarVariables = $this->classMethodAssignManipulator->collectReadyOnlyAssignScalarVariables(
                 $classMethod
             );
-
-            $params = $classMethod->getParams();
-            foreach ($params as $param) {
-                if ($param->byRef) {
-                    return [];
-                }
-            }
-
             $readOnlyVariables = array_merge($readOnlyVariables, $readOnlyVariableAssignScalarVariables);
         }
 
         return $readOnlyVariables;
+    }
+
+    private function isFoundByRefParam(ClassMethod $classMethod): bool
+    {
+        $params = $classMethod->getParams();
+        foreach ($params as $param) {
+            if ($param->byRef) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -4,14 +4,14 @@ namespace Rector\SOLID\Tests\Rector\Class_\ChangeReadOnlyVariableWithDefaultValu
 
 class SkipByRefParam
 {
-    public function byRef(array & $data)
-    {
-    }
-
     public function run()
     {
         $toInsert = [];
 		$this->byRef($toInsert);
+    }
+
+    public function byRef(array & $data)
+    {
     }
 }
 
