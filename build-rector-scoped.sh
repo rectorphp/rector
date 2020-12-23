@@ -31,7 +31,6 @@ SCOPED_DIRECTORY="rector-scoped"
 # ---------------------------
 
 
-
 note "Coping root files to $NESTED_DIRECTORY directory"
 rsync -av * "$NESTED_DIRECTORY" --quiet
 
@@ -69,3 +68,7 @@ vendor/bin/package-scoper scope-composer-json "$SCOPED_DIRECTORY/composer.json" 
 
 # clean up
 rm -rf "$NESTED_DIRECTORY"
+
+
+# copy metafiles needed for release
+cp -R scoped rector-scoped
