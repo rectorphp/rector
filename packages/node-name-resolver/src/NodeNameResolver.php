@@ -143,18 +143,6 @@ final class NodeNameResolver
         return (string) $node->name;
     }
 
-    private function isCallOrIdentifier(Node $node): bool
-    {
-        if ($node instanceof MethodCall) {
-            return true;
-        }
-        if ($node instanceof StaticCall) {
-            return true;
-        }
-
-        return $node instanceof Identifier;
-    }
-
     public function areNamesEqual(Node $firstNode, Node $secondNode): bool
     {
         return $this->getName($firstNode) === $this->getName($secondNode);
@@ -227,6 +215,18 @@ final class NodeNameResolver
         }
 
         return $this->isNames($node, $names);
+    }
+
+    private function isCallOrIdentifier(Node $node): bool
+    {
+        if ($node instanceof MethodCall) {
+            return true;
+        }
+        if ($node instanceof StaticCall) {
+            return true;
+        }
+
+        return $node instanceof Identifier;
     }
 
     /**
