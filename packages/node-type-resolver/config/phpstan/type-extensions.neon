@@ -1,4 +1,0 @@
-services:
-    -
-        class: Rector\PHPStanExtensions\ReturnTypeExtension\ComponentModelDynamicReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

@@ -22,14 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 final class ConfigurableRectorRule implements Rule
 {
     /**
+     * @todo implement in symplify + add test :)
      * @var string
      */
     public const ERROR_NO_CONFIGURED_CODE_SAMPLE = 'Configurable rules must have configure code sample';
-
-    /**
-     * @var string
-     */
-    public const ERROR_NOT_IMPLEMENTS_INTERFACE = 'Configurable code sample is used but "%s" interface is not implemented';
 
     /**
      * @var SimpleNameResolver

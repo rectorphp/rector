@@ -38,7 +38,6 @@ final class PHPStanServicesFactory
         $additionalConfigFiles[] = $parameterProvider->provideStringParameter(Option::PHPSTAN_FOR_RECTOR_PATH);
         $additionalConfigFiles[] = getcwd() . '/vendor/phpstan/phpstan-phpunit/extension.neon';
 
-        $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/type-extensions.neon';
         // enable type inferring from constructor
         $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/better-infer.neon';
 

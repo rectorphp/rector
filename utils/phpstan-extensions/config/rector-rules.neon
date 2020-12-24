@@ -7,6 +7,13 @@ services:
         class: Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule
         tags: [phpstan.rules.rule]
 
+#    -
+#        class: Rector\PHPStanExtensions\Rule\ConfigurableRectorRule
+#        tags: [phpstan.rules.rule]
+
     -
-        class: Rector\PHPStanExtensions\Rule\ConfigurableRectorRule
+        class: Symplify\PHPStanRules\Rules\IfNewTypeThenImplementInterfaceRule
         tags: [phpstan.rules.rule]
+        arguments:
+            interfacesByNewTypes:
+                Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample: Rector\Core\Contract\Rector\ConfigurableRectorInterface
