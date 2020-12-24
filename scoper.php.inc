@@ -7,17 +7,30 @@ declare(strict_types=1);
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Nette\Utils\Strings;
+use PhpCsFixer\Finder;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 
 
+// [BEWARE] this path is relative to the root and location of this file
 $filePathsToSkip = [
     // @see https://github.com/rectorphp/rector/issues/2852#issuecomment-586315588
     'vendor/symfony/deprecation-contracts/function.php'
 ];
 
-// see https://github.com/humbug/php-scoper
+// remove phpstan, because it is already prefixed in its own scope
+$finder = new Finder();
+$phpstanPhpFileInfos = $finder->files()
+    ->name('*.php')
+    ->in(__DIR__ . '/rector-nested/vendor/phpstan/phpstan-extracted')
+    ->getIterator();
 
+foreach ($phpstanPhpFileInfos as $phpstanPhpFileInfo) {
+    $filePathsToSkip[] = $phpstanPhpFileInfo->getRealPath();
+}
+
+
+// see https://github.com/humbug/php-scoper
 return [
     ScoperOption::FILES_WHITELIST => $filePathsToSkip,
     ScoperOption::WHITELIST => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),

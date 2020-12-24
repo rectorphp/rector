@@ -122,11 +122,7 @@ final class AutoloadIncluder
         $this->loadIfExistsAndNotLoadedYet($fileToAutoload);
     }
 
-<<<<<<< HEAD
-    private function loadIfExistsAndNotLoadedYet(string $filePath): void
-=======
     public function loadIfExistsAndNotLoadedYet(string $filePath): void
->>>>>>> 4dbb8d1be... [CI] enable scoped rector builder
     {
         if (! file_exists($filePath)) {
             return;
