@@ -69,15 +69,6 @@ final class ConfigurableRectorRule implements Rule
             return [self::ERROR_NO_CONFIGURED_CODE_SAMPLE];
         }
 
-        if ($this->hasConfiguredCodeSample($node)) {
-            if ($this->hasConfigurableInterface($className)) {
-                return [];
-            }
-
-            $errorMessage = sprintf(self::ERROR_NOT_IMPLEMENTS_INTERFACE, ConfigurableRectorInterface::class);
-            return [$errorMessage];
-        }
-
         return [];
     }
 
