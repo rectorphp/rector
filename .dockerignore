@@ -10,6 +10,7 @@ rector.php
 phpunit.xml
 ecs.php
 changelog-linker.php
+phpstan-for-rector.neon
 
 LICENSE
 
@@ -25,5 +26,3 @@ docker-compose.dist.yml
 
 /vendor
 /docs
-
-.travis.yml export-ignore
