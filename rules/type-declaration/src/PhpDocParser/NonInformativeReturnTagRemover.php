@@ -26,10 +26,10 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Rector\PHPStan\Type\ParentStaticType;
-use Rector\PHPStan\Type\SelfObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class NonInformativeReturnTagRemover
 {

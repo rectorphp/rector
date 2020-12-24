@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStan\Type;
+namespace Rector\StaticTypeMapper\ValueObject\Type;
 
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;

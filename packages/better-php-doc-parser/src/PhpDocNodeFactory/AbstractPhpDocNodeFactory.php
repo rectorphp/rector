@@ -13,7 +13,7 @@ use Rector\BetterPhpDocParser\AnnotationReader\NodeAnnotationReader;
 use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
 use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 abstract class AbstractPhpDocNodeFactory

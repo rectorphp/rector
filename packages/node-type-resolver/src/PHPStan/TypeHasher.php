@@ -12,9 +12,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use Rector\PHPStan\Type\AliasedObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class TypeHasher
 {

@@ -15,7 +15,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
-use Rector\PHPStan\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 
 /**

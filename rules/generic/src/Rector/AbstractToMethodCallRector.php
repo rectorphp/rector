@@ -16,7 +16,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generic\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 abstract class AbstractToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

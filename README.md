@@ -182,6 +182,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // Run Rector only on changed files
     $parameters->set(Option::ENABLE_CACHE, true);
+
+    // Path to phpstan with extensions, that PHPSTan in Rector uses to determine types
+    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan-for-config.neon');
 };
 ```
 

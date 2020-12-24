@@ -11,9 +11,9 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class NameNodeMapper implements PhpParserNodeMapperInterface
 {

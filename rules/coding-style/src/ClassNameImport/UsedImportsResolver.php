@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class UsedImportsResolver
 {

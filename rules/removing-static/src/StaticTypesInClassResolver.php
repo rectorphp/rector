@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class StaticTypesInClassResolver
 {

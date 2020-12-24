@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\AliasedObjectType;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UseNodesToAddCollector implements NodeCollectorInterface

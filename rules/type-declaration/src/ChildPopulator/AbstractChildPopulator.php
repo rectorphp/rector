@@ -12,8 +12,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
-use Rector\PHPStan\Type\SelfObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 
 abstract class AbstractChildPopulator
 {

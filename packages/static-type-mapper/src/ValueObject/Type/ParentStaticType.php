@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStan\Type;
+namespace Rector\StaticTypeMapper\ValueObject\Type;
 
 use PHPStan\Type\StaticType;
 

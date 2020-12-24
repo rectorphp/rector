@@ -8,7 +8,7 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use ReflectionMethod;
 
 final class ClassMethodReflectionFactory

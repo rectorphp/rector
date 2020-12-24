@@ -11,7 +11,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 
 final class DocAliasResolver
 {

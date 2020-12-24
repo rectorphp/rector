@@ -18,9 +18,9 @@ use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\SelfObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 /**
  * @deprecated

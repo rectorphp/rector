@@ -11,7 +11,6 @@ rector-recipe.php
 
 # testing
 abz
-/rector-temp-phpstan*.neon
 
 php-scoper.phar
 box.phar

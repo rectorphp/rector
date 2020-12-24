@@ -6,7 +6,7 @@ namespace Rector\NetteToSymfony\Analyzer;
 
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Type\TypeWithClassName;
-use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 final class NetteControlFactoryInterfaceAnalyzer

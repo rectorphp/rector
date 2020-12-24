@@ -20,7 +20,7 @@ use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 /**
  * @see \Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor\FluentChainMethodCallRootExtractorTest

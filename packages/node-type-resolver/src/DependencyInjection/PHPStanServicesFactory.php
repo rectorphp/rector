@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
-use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
@@ -16,7 +15,8 @@ use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProv
 use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
-use Symplify\SmartFileSystem\SmartFileSystem;
+use Rector\Core\Configuration\Option;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 /**
  * Factory so Symfony app can use services from PHPStan container
@@ -25,62 +25,27 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class PHPStanServicesFactory
 {
     /**
-     * @see https://regex101.com/r/CWADBe/2
-     * @var string
-     */
-    private const BLEEDING_EDGE_REGEX = '#\n\s+-(.*?)bleedingEdge\.neon[\'|"]?#';
-
-    /**
      * @var Container
      */
     private $container;
 
-    public function __construct()
+    public function __construct(ParameterProvider $parameterProvider)
     {
-        $currentWorkingDirectory = getcwd();
-        $smartFileSystem = new SmartFileSystem();
+        $containerFactory = new ContainerFactory(getcwd());
 
-        $containerFactory = new ContainerFactory($currentWorkingDirectory);
         $additionalConfigFiles = [];
 
-        // possible path collision for Docker
-        $additionalConfigFiles = $this->appendPhpstanPHPUnitExtensionIfExists(
-            $currentWorkingDirectory,
-            $additionalConfigFiles
-        );
-
-        $temporaryPHPStanNeon = null;
-
-        $currentProjectConfigFile = $currentWorkingDirectory . '/phpstan.neon';
-
-        if (file_exists($currentProjectConfigFile)) {
-            $phpstanNeonContent = $smartFileSystem->readFile($currentProjectConfigFile);
-
-            // bleeding edge clean out, see https://github.com/rectorphp/rector/issues/2431
-            if (Strings::match($phpstanNeonContent, self::BLEEDING_EDGE_REGEX)) {
-                // Note: We need a unique file per process if rector runs in parallel
-                $pid = getmypid();
-                $temporaryPHPStanNeon = $currentWorkingDirectory . '/rector-temp-phpstan' . $pid . '.neon';
-                $clearedPhpstanNeonContent = Strings::replace($phpstanNeonContent, self::BLEEDING_EDGE_REGEX, '');
-                $smartFileSystem->dumpFile($temporaryPHPStanNeon, $clearedPhpstanNeonContent);
-
-                $additionalConfigFiles[] = $temporaryPHPStanNeon;
-            } else {
-                $additionalConfigFiles[] = $currentProjectConfigFile;
-            }
-        }
-
-        $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/type-extensions.neon';
+        $additionalConfigFiles[] = $parameterProvider->provideStringParameter(Option::PHPSTAN_FOR_RECTOR_PATH);
+        $additionalConfigFiles[] = getcwd() . '/vendor/phpstan/phpstan-phpunit/extension.neon';
 
         // enable type inferring from constructor
         $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/better-infer.neon';
 
-        $this->container = $containerFactory->create(sys_get_temp_dir(), $additionalConfigFiles, []);
+        // symplify phpstan extensions
+        $additionalConfigFiles[] = getcwd() . '/vendor/symplify/phpstan-extensions/config/config.neon';
 
-        // clear bleeding edge fallback
-        if ($temporaryPHPStanNeon !== null) {
-            $smartFileSystem->remove($temporaryPHPStanNeon);
-        }
+        $existingAdditionalConfigFiles = array_filter($additionalConfigFiles, 'file_exists');
+        $this->container = $containerFactory->create(sys_get_temp_dir(), $existingAdditionalConfigFiles, []);
     }
 
     /**
@@ -153,20 +118,5 @@ final class PHPStanServicesFactory
     public function createTypeNodeResolver(): TypeNodeResolver
     {
         return $this->container->getByType(TypeNodeResolver::class);
-    }
-
-    /**
-     * @param string[] $additionalConfigFiles
-     * @return mixed[]
-     */
-    private function appendPhpstanPHPUnitExtensionIfExists(
-        string $currentWorkingDirectory,
-        array $additionalConfigFiles
-    ): array {
-        $phpstanPhpunitExtensionConfig = $currentWorkingDirectory . '/vendor/phpstan/phpstan-phpunit/extension.neon';
-        if (file_exists($phpstanPhpunitExtensionConfig) && class_exists('PHPUnit\\Framework\\TestCase')) {
-            $additionalConfigFiles[] = $phpstanPhpunitExtensionConfig;
-        }
-        return $additionalConfigFiles;
     }
 }

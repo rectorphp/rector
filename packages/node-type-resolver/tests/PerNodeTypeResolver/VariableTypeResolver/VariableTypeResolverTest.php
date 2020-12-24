@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\ThisClass;
 use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
-use Rector\PHPStan\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\VariableTypeResolver
