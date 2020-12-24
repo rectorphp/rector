@@ -31,9 +31,6 @@ jobs:
             # 1. prepare dependencies
             -   run: sh build-rector-scoped.sh
 
-            # add .github/workflows to be pushed along with new code
-            -   run: cp -R scoped rector-scoped
-
             # 5. publish it to remote repository
             -
                 # Uses an action in the root directory
