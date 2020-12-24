@@ -96,8 +96,13 @@ final class InlineCodeParser
         if ($content instanceof Concat) {
             return $this->stringify($content->left) . $this->stringify($content->right);
         }
-
-        if ($content instanceof Variable || $content instanceof PropertyFetch || $content instanceof StaticPropertyFetch) {
+        if ($content instanceof Variable) {
+            return $this->betterStandardPrinter->print($content);
+        }
+        if ($content instanceof PropertyFetch) {
+            return $this->betterStandardPrinter->print($content);
+        }
+        if ($content instanceof StaticPropertyFetch) {
             return $this->betterStandardPrinter->print($content);
         }
 

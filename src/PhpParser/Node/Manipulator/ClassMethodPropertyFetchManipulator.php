@@ -56,8 +56,10 @@ final class ClassMethodPropertyFetchManipulator
             if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
                 return null;
             }
-
-            if ($node->expr instanceof MethodCall || $node->expr instanceof StaticCall) {
+            if ($node->expr instanceof MethodCall) {
+                return null;
+            }
+            if ($node->expr instanceof StaticCall) {
                 return null;
             }
 

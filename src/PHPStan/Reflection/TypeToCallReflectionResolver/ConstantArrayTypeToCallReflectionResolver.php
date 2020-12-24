@@ -45,8 +45,10 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
         if ($constantArrayTypeAndMethod === null) {
             return null;
         }
-
-        if ($constantArrayTypeAndMethod->isUnknown() || ! $constantArrayTypeAndMethod->getCertainty()->yes()) {
+        if ($constantArrayTypeAndMethod->isUnknown()) {
+            return null;
+        }
+        if (! $constantArrayTypeAndMethod->getCertainty()->yes()) {
             return null;
         }
 

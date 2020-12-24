@@ -16,10 +16,12 @@ final class CallableNodeTraverser
      */
     public function traverseNodesWithCallable($nodes, callable $callable): void
     {
-        if ($nodes === [] || $nodes === null) {
+        if ($nodes === []) {
             return;
         }
-
+        if ($nodes === null) {
+            return;
+        }
         if (! is_array($nodes)) {
             $nodes = [$nodes];
         }

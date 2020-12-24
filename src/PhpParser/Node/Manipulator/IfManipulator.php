@@ -101,13 +101,18 @@ final class IfManipulator
         if ($if->stmts === []) {
             return null;
         }
-
-        if (! $if->cond instanceof NotIdentical || ! $this->isNotIdenticalNullCompare($if->cond)) {
+        if (! $if->cond instanceof NotIdentical) {
+            return null;
+        }
+        if (! $this->isNotIdenticalNullCompare($if->cond)) {
             return null;
         }
 
         $insideIfNode = $if->stmts[0];
-        if (! $insideIfNode instanceof Expression || ! $insideIfNode->expr instanceof Assign) {
+        if (! $insideIfNode instanceof Expression) {
+            return null;
+        }
+        if (! $insideIfNode->expr instanceof Assign) {
             return null;
         }
 
