@@ -109,20 +109,6 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Return_ $return, array $ifs): array
-    {
-        $left = $booleanOr->left;
-        if (! $left instanceof BooleanOr) {
-            return [$this->createIf($left, $return)];
-        }
-
-        return $this->createMultipleIfs($left, $return, $ifs);
-    }
-
-    /**
-     * @param If_[] $ifs
-     * @return If_[]
-     */
     private function createMultipleIfs(Expr $expr, Return_ $return, array $ifs): array
     {
         while ($expr instanceof BooleanOr) {
@@ -132,6 +118,20 @@ CODE_SAMPLE
             $expr = $expr->right;
         }
         return $ifs + [$this->createIf($expr, $return)];
+    }
+
+    /**
+     * @param If_[] $ifs
+     * @return If_[]
+     */
+    private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Return_ $return, array $ifs): array
+    {
+        $left = $booleanOr->left;
+        if (! $left instanceof BooleanOr) {
+            return [$this->createIf($left, $return)];
+        }
+
+        return $this->createMultipleIfs($left, $return, $ifs);
     }
 
     private function createIf(Expr $expr, Return_ $return): If_
