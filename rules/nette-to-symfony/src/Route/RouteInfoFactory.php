@@ -80,11 +80,11 @@ final class RouteInfoFactory
 
     private function hasNoArg(New_ $new): bool
     {
-        if (! isset($node->args[0])) {
+        if (! isset($new->args[0])) {
             return true;
         }
 
-        return ! isset($node->args[1]);
+        return ! isset($new->args[1]);
     }
 
     /**

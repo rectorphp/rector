@@ -87,7 +87,7 @@ final class FluentChainMethodCallNodeAnalyzer
 
     private function isCall(Expr $expr): bool
     {
-        if ($expr instanceof FuncCall) {
+        if ($expr instanceof MethodCall) {
             return true;
         }
 

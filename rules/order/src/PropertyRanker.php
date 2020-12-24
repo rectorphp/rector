@@ -36,11 +36,7 @@ final class PropertyRanker
             return 5;
         }
 
-        if ($varType instanceof ArrayType) {
-            return 10;
-        }
-
-        if ($varType instanceof IterableType) {
+        if ($this->isTen($varType)) {
             return 10;
         }
 
