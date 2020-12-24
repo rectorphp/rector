@@ -2,15 +2,21 @@
 
 declare(strict_types=1);
 
-// automate in the future, if needed - @see https://github.com/rectorphp/rector/pull/2575#issuecomment-571133000
-
-require_once __DIR__ . '/vendor/autoload.php';
-
 use Nette\Utils\Strings;
-use PhpCsFixer\Finder;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
+use Symfony\Component\Finder\Finder;
 
+$vendorAutoloadPath = __DIR__ . '/vendor/autoload.php';
+$vendorAutoloadPath2 = __DIR__ . '/../vendor/autoload.php';
+
+var_dump($vendorAutoloadPath);
+var_dump(file_exists($vendorAutoloadPath));
+
+var_dump($vendorAutoloadPath2);
+var_dump(file_exists($vendorAutoloadPath2));
+
+require $vendorAutoloadPath;
 
 // [BEWARE] this path is relative to the root and location of this file
 $filePathsToSkip = [
