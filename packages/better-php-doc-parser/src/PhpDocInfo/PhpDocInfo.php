@@ -30,9 +30,9 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest

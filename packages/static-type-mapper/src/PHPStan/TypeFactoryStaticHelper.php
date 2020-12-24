@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStan;
+namespace Rector\StaticTypeMapper\PHPStan;
 
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;

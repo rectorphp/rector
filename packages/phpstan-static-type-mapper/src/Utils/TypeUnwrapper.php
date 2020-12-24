@@ -8,7 +8,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use Rector\PHPStan\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\PHPStan\TypeFactoryStaticHelper;
 
 final class TypeUnwrapper
 {

@@ -12,8 +12,8 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
-use Rector\PHPStan\Type\AliasedObjectType;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class UseImportsAdder
 {

@@ -1,12 +1,12 @@
 services:
     -
-        class: Rector\NodeTypeResolver\PHPStan\TypeExtension\StaticContainerGetDynamicMethodReturnTypeExtension
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\StaticContainerGetDynamicMethodReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
     -
-        class: Rector\NodeTypeResolver\PHPStan\TypeExtension\KernelGetContainerAfterBootReturnTypeExtension
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\KernelGetContainerAfterBootReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
     -
-        class: Rector\Core\PHPStan\Type\ComponentModelDynamicReturnTypeExtension
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\ComponentModelDynamicReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

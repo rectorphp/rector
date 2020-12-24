@@ -10,9 +10,9 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 

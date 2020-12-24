@@ -6,8 +6,8 @@ namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
 use PhpParser\Node;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 /**
  * This prevents importing:

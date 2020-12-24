@@ -10,7 +10,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class ClassNameImportSkipper
 {

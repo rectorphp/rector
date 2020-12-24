@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 /**
  * Prevents adding:

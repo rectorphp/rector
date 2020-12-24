@@ -20,7 +20,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\Nette\TemplatePropertyAssignCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

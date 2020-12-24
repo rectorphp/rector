@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PHPStan\TypeExtension;
+namespace Rector\PHPStanExtensions\ReturnTypeExtension;
 
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;

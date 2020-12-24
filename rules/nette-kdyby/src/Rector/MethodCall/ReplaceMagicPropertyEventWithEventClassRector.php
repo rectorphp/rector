@@ -15,7 +15,7 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NetteKdyby\DataProvider\EventAndListenerTreeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

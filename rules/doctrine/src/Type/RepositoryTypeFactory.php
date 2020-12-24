@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PHPStan\Type\Generic\GenericObjectType;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class RepositoryTypeFactory
 {

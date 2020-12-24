@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\ClassThatExtendsHtml;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\Html;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\SomeChild;
-use Rector\PHPStan\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\PHPStan\TypeFactoryStaticHelper;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\PropertyTypeResolver

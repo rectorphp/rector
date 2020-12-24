@@ -17,13 +17,13 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\AliasedObjectType;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\PostRector\Collector\NodesToReplaceCollector;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

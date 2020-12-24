@@ -397,8 +397,6 @@ parameters:
                 - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php # 108
                 - rules/coding-style/src/Rector/ClassMethod/YieldClassMethodToArrayClassMethodRector.php # 47
                 - rules/php70/src/EregToPcreTransformer.php # 66
-                - rules/phpstan/src/Type/AliasedObjectType.php # 24
-                - rules/phpstan/src/Type/ShortenedObjectType.php # 18
                 - rules/restoration/src/Rector/Class_/RemoveUselessJustForSakeInterfaceRector.php # 42
                 - rules/type-declaration/src/Rector/FunctionLike/ReturnTypeDeclarationRector.php # 82
                 - src/PhpParser/Builder/UseBuilder.php # 17

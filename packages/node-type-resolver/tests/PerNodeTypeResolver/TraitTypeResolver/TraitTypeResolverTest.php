@@ -10,7 +10,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\AnotherTrait;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\TraitWithTrait;
-use Rector\PHPStan\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\PHPStan\TypeFactoryStaticHelper;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\TraitTypeResolver

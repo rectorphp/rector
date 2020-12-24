@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PHPStan\TypeExtension;
+namespace Rector\PHPStanExtensions\ReturnTypeExtension;
 
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
@@ -14,7 +14,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Psr\Container\ContainerInterface;
 
-final class StaticContainerGetDynamicMethodReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class ContainerGetDynamicMethodReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     public function getClass(): string
     {

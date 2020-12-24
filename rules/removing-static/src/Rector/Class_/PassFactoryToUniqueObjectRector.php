@@ -13,11 +13,11 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\RemovingStatic\Printer\FactoryClassPrinter;
 use Rector\RemovingStatic\StaticTypesInClassResolver;
 use Rector\RemovingStatic\UniqueObjectFactoryFactory;
 use Rector\RemovingStatic\UniqueObjectOrServiceDetector;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 

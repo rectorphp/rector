@@ -10,8 +10,8 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
-use Rector\PHPStan\Type\ParentStaticType;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 
 final class ParentStaticTypeMapper implements TypeMapperInterface
 {
