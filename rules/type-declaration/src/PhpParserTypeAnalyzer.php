@@ -69,7 +69,9 @@ final class PhpParserTypeAnalyzer
             return $node->toString();
         }
 
-        return $node->type->toString();
+        /** @var NullableType $type */
+        $type = $node;
+        return $type->type->toString();
     }
 
     private function isTraversableOrIterableSubtype(string $possibleSubtype, string $possibleParentType): bool

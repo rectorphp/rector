@@ -159,10 +159,10 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isInsideCondition(Node $node): bool
+    private function isInsideCondition(Expression $expression): bool
     {
         return (bool) $this->scopeAwareNodeFinder->findParentType(
-            $node,
+            $expression,
             [If_::class, Else_::class, ElseIf_::class]
         );
     }
