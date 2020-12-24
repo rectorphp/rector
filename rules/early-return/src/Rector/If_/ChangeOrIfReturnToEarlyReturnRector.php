@@ -105,6 +105,10 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param If_[] $ifs
+     * @return If_[]
+     */
     private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Return_ $return, array $ifs): array
     {
         $left = $booleanOr->left;
@@ -115,6 +119,10 @@ CODE_SAMPLE
         return $this->createMultipleIfs($left, $return, $ifs);
     }
 
+    /**
+     * @param If_[] $ifs
+     * @return If_[]
+     */
     private function createMultipleIfs(Expr $expr, Return_ $return, array $ifs): array
     {
         while ($expr instanceof BooleanOr) {
