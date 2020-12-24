@@ -56,7 +56,7 @@ final class PropertyNaming
      * @see https://regex101.com/r/hnU5pm/2/
      * @var string
      */
-    private const GET_PREFIX_REGEX = '#^get([A-Z].+)#';
+    private const GET_PREFIX_REGEX = '#^get(?<root_name>[A-Z].+)#';
 
     /**
      * @var TypeUnwrapper
@@ -97,7 +97,7 @@ final class PropertyNaming
             return null;
         }
 
-        $originalName = lcfirst($matches[1]);
+        $originalName = lcfirst($matches['root_name']);
 
         return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
