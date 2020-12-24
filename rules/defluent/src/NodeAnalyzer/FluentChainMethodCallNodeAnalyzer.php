@@ -57,10 +57,7 @@ final class FluentChainMethodCallNodeAnalyzer
      */
     public function isFluentClassMethodOfMethodCall(MethodCall $methodCall): bool
     {
-        if ($methodCall->var instanceof MethodCall) {
-            return false;
-        }
-        if ($methodCall->var instanceof StaticCall) {
+        if ($this->isCall($methodCall->var)) {
             return false;
         }
         $calleeStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
@@ -86,6 +83,15 @@ final class FluentChainMethodCallNodeAnalyzer
         }
 
         return true;
+    }
+
+    private function isCall(Expr $expr): bool
+    {
+        if ($expr instanceof FuncCall) {
+            return true;
+        }
+
+        return $expr instanceof StaticCall;
     }
 
     public function isLastChainMethodCall(MethodCall $methodCall): bool

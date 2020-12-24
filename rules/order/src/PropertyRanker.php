@@ -19,6 +19,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use PHPStan\Type\Type;
 
 final class PropertyRanker
 {
@@ -31,21 +32,14 @@ final class PropertyRanker
         }
 
         $varType = $phpDocInfo->getVarType();
-        if ($varType instanceof StringType) {
+        if ($this->isFive($varType)) {
             return 5;
         }
-        if ($varType instanceof IntegerType) {
-            return 5;
-        }
-        if ($varType instanceof BooleanType) {
-            return 5;
-        }
-        if ($varType instanceof FloatType) {
-            return 5;
-        }
+
         if ($varType instanceof ArrayType) {
             return 10;
         }
+
         if ($varType instanceof IterableType) {
             return 10;
         }
@@ -71,5 +65,31 @@ final class PropertyRanker
         }
 
         throw new NotImplementedException(get_class($varType));
+    }
+
+    private function isFive(Type $type): bool
+    {
+        if ($type instanceof StringType) {
+            return true;
+        }
+
+        if ($type instanceof IntegerType) {
+            return true;
+        }
+
+        if ($type instanceof BooleanType) {
+            return true;
+        }
+
+        return $type instanceof FloatType;
+    }
+
+    private function isTen(Type $type): bool
+    {
+        if ($type instanceof ArrayType) {
+            return 10;
+        }
+
+        return $type instanceof IterableType;
     }
 }

@@ -145,13 +145,8 @@ final class VariableNaming
         if ($node instanceof PropertyFetch) {
             return $this->resolveFromPropertyFetch($node);
         }
-        if ($node instanceof MethodCall) {
-            return $this->resolveFromMethodCall($node);
-        }
-        if ($node instanceof NullsafeMethodCall) {
-            return $this->resolveFromMethodCall($node);
-        }
-        if ($node instanceof StaticCall) {
+
+        if ($this->isCall($node)) {
             return $this->resolveFromMethodCall($node);
         }
 
@@ -177,6 +172,19 @@ final class VariableNaming
         }
 
         return null;
+    }
+
+    private function isCall(Node $node): bool
+    {
+        if ($node instanceof MethodCall) {
+            return true;
+        }
+
+        if ($node instanceof NullsafeMethodCall) {
+            return true;
+        }
+
+        return $node instanceof StaticCall;
     }
 
     private function resolveBareFuncCallArgumentName(FuncCall $funcCall, string $fallbackName, string $suffix): string

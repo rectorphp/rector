@@ -19,12 +19,10 @@ final class PhpParserTypeAnalyzer
     public function isSubtypeOf(Node $possibleSubtype, Node $possibleParentType): bool
     {
         // skip until PHP 8 is out
-        if ($possibleSubtype instanceof UnionType) {
+        if ($this->isUnionType($possibleSubtype, $possibleParentType)) {
             return false;
         }
-        if ($possibleParentType instanceof UnionType) {
-            return false;
-        }
+
         // possible - https://3v4l.org/ZuJCh
         if ($possibleSubtype instanceof NullableType && ! $possibleParentType instanceof NullableType) {
             return $this->isSubtypeOf($possibleSubtype->type, $possibleParentType);
@@ -54,6 +52,15 @@ final class PhpParserTypeAnalyzer
             return false;
         }
         return $possibleParentType === 'object';
+    }
+
+    private function isUnionType(Node $possibleSubtype, Node $possibleParentType): bool
+    {
+        if ($possibleSubtype instanceof UnionType) {
+            return true;
+        }
+
+        return $possibleParentType instanceof UnionType;
     }
 
     /**

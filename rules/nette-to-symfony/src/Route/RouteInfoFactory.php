@@ -45,10 +45,7 @@ final class RouteInfoFactory
     public function createFromNode(Node $node): ?RouteInfo
     {
         if ($node instanceof New_) {
-            if (! isset($node->args[0])) {
-                return null;
-            }
-            if (! isset($node->args[1])) {
+            if ($this->hasNoArg($node)) {
                 return null;
             }
             return $this->createRouteInfoFromArgs($node);
@@ -79,6 +76,15 @@ final class RouteInfoFactory
         }
 
         return null;
+    }
+
+    private function hasNoArg(New_ $new): bool
+    {
+        if (! isset($node->args[0])) {
+            return true;
+        }
+
+        return ! isset($node->args[1]);
     }
 
     /**

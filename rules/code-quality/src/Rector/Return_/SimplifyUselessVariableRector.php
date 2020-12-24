@@ -79,11 +79,8 @@ CODE_SAMPLE
         /** @var AssignOp|Assign $previousNode */
         $previousNode = $previousNode->expr;
         $previousVariableNode = $previousNode->var;
-        // has some comment
-        if ($previousVariableNode->getComments() !== []) {
-            return null;
-        }
-        if ($previousVariableNode->getDocComment() !== null) {
+
+        if ($this->hasSomeComment($previousVariableNode)) {
             return null;
         }
 
@@ -107,6 +104,15 @@ CODE_SAMPLE
         $this->removeNode($previousNode);
 
         return $node;
+    }
+
+    private function hasSomeComment(Node $node): bool
+    {
+        if ($node->getComments() !== []) {
+            return true;
+        }
+
+        return $node->getDocComment() !== null;
     }
 
     private function shouldSkip(Return_ $return): bool

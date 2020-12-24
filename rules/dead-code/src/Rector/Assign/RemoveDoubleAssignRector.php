@@ -77,13 +77,8 @@ CODE_SAMPLE
         if (! $this->areNodesEqual($previousStatement->expr->var, $node->var)) {
             return null;
         }
-        if ($node->expr instanceof FuncCall) {
-            return null;
-        }
-        if ($node->expr instanceof StaticCall) {
-            return null;
-        }
-        if ($node->expr instanceof MethodCall) {
+
+        if ($this->isCall($node->expr)) {
             return null;
         }
 
@@ -99,6 +94,19 @@ CODE_SAMPLE
         $this->removeNode($previousStatement);
 
         return $node;
+    }
+
+    private function isCall(Expr $expr): bool
+    {
+        if ($expr instanceof FuncCall) {
+            return true;
+        }
+
+        if ($expr instanceof StaticCall) {
+            return true;
+        }
+
+        return $expr instanceof MethodCall;
     }
 
     private function shouldSkipForDifferentScope(Assign $assign, Expression $expression): bool

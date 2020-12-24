@@ -90,12 +90,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentExpression = $expression->getAttribute(AttributeKey::PARENT_NODE);
-        if ($this->isUsedAsArrayKey($parentExpression, $node)) {
-            return null;
-        }
-
-        if ($this->isInsideCondition($expression)) {
+        if ($this->isUsedAsArraykeyOrInsideIfCondition($expression, $node)) {
             return null;
         }
 
@@ -124,6 +119,16 @@ CODE_SAMPLE
         $this->removeNode($expression);
 
         return $node;
+    }
+
+    private function isUsedAsArraykeyOrInsideIfCondition(Node $node, Variable $variable): bool
+    {
+        $parentExpression = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($this->isUsedAsArrayKey($parentExpression, $variable)) {
+            return true;
+        }
+
+        return $this->isInsideCondition($node);
     }
 
     private function isUsedAsArrayKey(?Node $node, Variable $variable): bool

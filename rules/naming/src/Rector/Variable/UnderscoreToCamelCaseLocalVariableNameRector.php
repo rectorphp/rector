@@ -92,13 +92,7 @@ CODE_SAMPLE
         }
 
         $camelCaseName = StaticRectorStrings::underscoreToCamelCase($nodeName);
-        if ($camelCaseName === 'this') {
-            return null;
-        }
-        if ($camelCaseName === '') {
-            return null;
-        }
-        if (is_numeric($camelCaseName[0])) {
+        if ($this->isReserved($camelCaseName)) {
             return null;
         }
 
@@ -119,6 +113,19 @@ CODE_SAMPLE
         $node->name = $camelCaseName;
 
         return $node;
+    }
+
+    private function isReserved(string $string): bool
+    {
+        if ($string === 'this') {
+            return true;
+        }
+
+        if ($string === '') {
+            return true;
+        }
+
+        return is_numeric($string[0]);
     }
 
     private function isFoundInParentNode(Variable $variable): bool
