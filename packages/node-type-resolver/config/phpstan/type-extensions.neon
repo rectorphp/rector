@@ -1,16 +1,4 @@
 services:
     -
-        class: Rector\PHPStanExtensions\ReturnTypeExtension\ContainerGetDynamicMethodReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-
-    -
-        class: Symplify\PHPStanExtensions\ReturnTypeExtension\KernelGetContainerAfterBootReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-
-#    -
-#        class: Rector\PHPStanExtensions\ReturnTypeExtension\KernelGetContainerAfterBootReturnTypeExtension
-#        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-
-    -
         class: Rector\PHPStanExtensions\ReturnTypeExtension\ComponentModelDynamicReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
