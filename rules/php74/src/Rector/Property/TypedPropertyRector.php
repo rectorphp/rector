@@ -183,6 +183,9 @@ CODE_SAMPLE
         }
 
         $typeName = $this->getName($node);
+        if ($typeName === 'null') {
+            return true;
+        }
         if ($typeName === null) {
             return false;
         }
