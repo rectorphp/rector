@@ -80,10 +80,10 @@ CODE_SAMPLE
         $previousNode = $previousNode->expr;
         $previousVariableNode = $previousNode->var;
         // has some comment
-        if ($previousVariableNode->getComments()) {
+        if ($previousVariableNode->getComments() !== []) {
             return null;
         }
-        if ($previousVariableNode->getDocComment()) {
+        if ($previousVariableNode->getDocComment() !== null) {
             return null;
         }
 
