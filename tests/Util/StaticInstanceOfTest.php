@@ -14,8 +14,9 @@ final class StaticInstanceOfTest extends TestCase
 {
     /**
      * @dataProvider provideIsOneOf()
+     * @param class-string[] $array
      */
-    public function testIsOneOf(object $object, array $array, $expected): void
+    public function testIsOneOf(object $object, array $array, bool $expected): void
     {
         $this->assertSame($expected, StaticInstanceOf::isOneOf($object, $array));
     }
