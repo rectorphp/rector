@@ -19,10 +19,12 @@ final class PhpParserTypeAnalyzer
     public function isSubtypeOf(Node $possibleSubtype, Node $possibleParentType): bool
     {
         // skip until PHP 8 is out
-        if ($possibleSubtype instanceof UnionType || $possibleParentType instanceof UnionType) {
+        if ($possibleSubtype instanceof UnionType) {
             return false;
         }
-
+        if ($possibleParentType instanceof UnionType) {
+            return false;
+        }
         // possible - https://3v4l.org/ZuJCh
         if ($possibleSubtype instanceof NullableType && ! $possibleParentType instanceof NullableType) {
             return $this->isSubtypeOf($possibleSubtype->type, $possibleParentType);

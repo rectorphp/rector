@@ -109,7 +109,10 @@ CODE_SAMPLE
         $methodName = $this->getName($node->name);
 
         $className = $this->resolveStaticCallClassName($node);
-        if ($methodName === null || $className === null) {
+        if ($methodName === null) {
+            return null;
+        }
+        if ($className === null) {
             return null;
         }
 

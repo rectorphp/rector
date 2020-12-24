@@ -145,8 +145,13 @@ final class VariableNaming
         if ($node instanceof PropertyFetch) {
             return $this->resolveFromPropertyFetch($node);
         }
-
-        if ($node instanceof MethodCall || $node instanceof NullsafeMethodCall || $node instanceof StaticCall) {
+        if ($node instanceof MethodCall) {
+            return $this->resolveFromMethodCall($node);
+        }
+        if ($node instanceof NullsafeMethodCall) {
+            return $this->resolveFromMethodCall($node);
+        }
+        if ($node instanceof StaticCall) {
             return $this->resolveFromMethodCall($node);
         }
 

@@ -153,7 +153,10 @@ CODE_SAMPLE
         }
 
         $expectedName = $this->expectedNameResolver->resolveForCall($call);
-        if ($expectedName === null || $this->isName($node->var, $expectedName)) {
+        if ($expectedName === null) {
+            return null;
+        }
+        if ($this->isName($node->var, $expectedName)) {
             return null;
         }
 

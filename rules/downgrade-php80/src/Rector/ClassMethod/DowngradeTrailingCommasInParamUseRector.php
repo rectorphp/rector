@@ -90,10 +90,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof MethodCall || $node instanceof FuncCall || $node instanceof StaticCall || $node instanceof New_) {
+        if ($node instanceof MethodCall) {
             return $this->processArgs($node);
         }
-
+        if ($node instanceof FuncCall) {
+            return $this->processArgs($node);
+        }
+        if ($node instanceof StaticCall) {
+            return $this->processArgs($node);
+        }
+        if ($node instanceof New_) {
+            return $this->processArgs($node);
+        }
         if ($node instanceof Closure) {
             $node = $this->processUses($node);
         }

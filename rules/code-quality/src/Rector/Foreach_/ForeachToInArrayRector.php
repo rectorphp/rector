@@ -148,7 +148,10 @@ CODE_SAMPLE
         }
 
         $nextNode = $foreach->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextNode === null || ! $nextNode instanceof Return_) {
+        if ($nextNode === null) {
+            return true;
+        }
+        if (! $nextNode instanceof Return_) {
             return true;
         }
 

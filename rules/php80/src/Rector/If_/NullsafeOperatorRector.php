@@ -247,10 +247,12 @@ CODE_SAMPLE
 
     private function processAssignMayInNextNode(Node $nextNode): ?Node
     {
-        if (! $nextNode instanceof Expression || ! $nextNode->expr instanceof Assign) {
+        if (! $nextNode instanceof Expression) {
             return null;
         }
-
+        if (! $nextNode->expr instanceof Assign) {
+            return null;
+        }
         $mayNextIf = $nextNode->getAttribute(AttributeKey::NEXT_NODE);
         if (! $mayNextIf instanceof If_) {
             return null;

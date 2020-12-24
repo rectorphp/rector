@@ -82,8 +82,10 @@ CODE_SAMPLE
 
         $ifAssignVar = $this->resolveOnlyStmtAssignVar($node->stmts);
         $elseAssignVar = $this->resolveOnlyStmtAssignVar($node->else->stmts);
-
-        if ($ifAssignVar === null || $elseAssignVar === null) {
+        if ($ifAssignVar === null) {
+            return null;
+        }
+        if ($elseAssignVar === null) {
             return null;
         }
 
@@ -93,7 +95,10 @@ CODE_SAMPLE
 
         $ternaryIf = $this->resolveOnlyStmtAssignExpr($node->stmts);
         $ternaryElse = $this->resolveOnlyStmtAssignExpr($node->else->stmts);
-        if ($ternaryIf === null || $ternaryElse === null) {
+        if ($ternaryIf === null) {
+            return null;
+        }
+        if ($ternaryElse === null) {
             return null;
         }
 

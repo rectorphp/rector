@@ -135,10 +135,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === null || $node->stmts === []) {
+        if ($node->stmts === null) {
             return null;
         }
-
+        if ($node->stmts === []) {
+            return null;
+        }
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
 
         $routeListObjectType = new ObjectType(RouteList::class);

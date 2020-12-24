@@ -31,11 +31,22 @@ final class PropertyRanker
         }
 
         $varType = $phpDocInfo->getVarType();
-        if ($varType instanceof StringType || $varType instanceof IntegerType || $varType instanceof BooleanType || $varType instanceof FloatType) {
+        if ($varType instanceof StringType) {
             return 5;
         }
-
-        if ($varType instanceof ArrayType || $varType instanceof IterableType) {
+        if ($varType instanceof IntegerType) {
+            return 5;
+        }
+        if ($varType instanceof BooleanType) {
+            return 5;
+        }
+        if ($varType instanceof FloatType) {
+            return 5;
+        }
+        if ($varType instanceof ArrayType) {
+            return 10;
+        }
+        if ($varType instanceof IterableType) {
             return 10;
         }
 

@@ -54,8 +54,10 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
         if (! $this->isNames($node->name, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
             return null;
         }
-
-        if (count((array) $node->args) <= 2 || $node->args[2]->value instanceof ConstFetch) {
+        if (count((array) $node->args) <= 2) {
+            return null;
+        }
+        if ($node->args[2]->value instanceof ConstFetch) {
             return null;
         }
 

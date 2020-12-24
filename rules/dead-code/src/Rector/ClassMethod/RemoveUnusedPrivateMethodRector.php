@@ -85,9 +85,11 @@ CODE_SAMPLE
         if ($classLike === null) {
             return true;
         }
-
         // unreliable to detect trait, interface doesn't make sense
-        if ($classLike instanceof Trait_ || $classLike instanceof Interface_) {
+        if ($classLike instanceof Trait_) {
+            return true;
+        }
+        if ($classLike instanceof Interface_) {
             return true;
         }
 

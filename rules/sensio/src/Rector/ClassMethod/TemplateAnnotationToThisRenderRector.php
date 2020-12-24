@@ -192,10 +192,12 @@ CODE_SAMPLE
     {
         $returns = [];
         $this->traverseNodesWithCallable($stmts, function (Node $node) use (&$returns): ?int {
-            if ($node instanceof Closure || $node instanceof Function_) {
+            if ($node instanceof Closure) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-
+            if ($node instanceof Function_) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
             if (! $node instanceof Return_) {
                 return null;
             }

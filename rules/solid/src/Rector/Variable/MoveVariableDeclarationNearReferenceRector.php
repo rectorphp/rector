@@ -102,8 +102,10 @@ CODE_SAMPLE
         if ($this->hasPropertyInExpr($expression, $parent->expr)) {
             return null;
         }
-
-        if ($this->hasReAssign($expression, $parent->var) || $this->hasReAssign($expression, $parent->expr)) {
+        if ($this->hasReAssign($expression, $parent->var)) {
+            return null;
+        }
+        if ($this->hasReAssign($expression, $parent->expr)) {
             return null;
         }
 
@@ -215,7 +217,10 @@ CODE_SAMPLE
         }
 
         $countFound = $this->getCountFound($next, $variable);
-        if ($countFound === 0 || $countFound >= 2) {
+        if ($countFound === 0) {
+            return null;
+        }
+        if ($countFound >= 2) {
             return null;
         }
 

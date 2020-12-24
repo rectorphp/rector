@@ -107,8 +107,10 @@ CODE_SAMPLE
 
             return new Variable($variableName);
         });
-
-        if ($countInCond === null || $variableName === null) {
+        if ($countInCond === null) {
+            return null;
+        }
+        if ($variableName === null) {
             return null;
         }
 

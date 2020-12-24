@@ -100,9 +100,11 @@ CODE_SAMPLE
 
         $varNode = $node->args[0]->value;
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
         // result of function or probably used
-        if ($parentNode instanceof Expr || $parentNode instanceof Arg) {
+        if ($parentNode instanceof Expr) {
+            return null;
+        }
+        if ($parentNode instanceof Arg) {
             return null;
         }
 

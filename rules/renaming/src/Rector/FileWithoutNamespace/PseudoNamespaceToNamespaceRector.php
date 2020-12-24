@@ -145,8 +145,10 @@ CODE_SAMPLE
             foreach ($this->pseudoNamespacesToNamespaces as $namespacePrefixWithExcludedClasses) {
                 $this->phpDocTypeRenamer->changeUnderscoreType($node, $namespacePrefixWithExcludedClasses);
             }
-
-            if ($node instanceof Name || $node instanceof Identifier) {
+            if ($node instanceof Name) {
+                return $this->processNameOrIdentifier($node);
+            }
+            if ($node instanceof Identifier) {
                 return $this->processNameOrIdentifier($node);
             }
 

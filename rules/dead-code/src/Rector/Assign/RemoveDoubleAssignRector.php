@@ -77,8 +77,13 @@ CODE_SAMPLE
         if (! $this->areNodesEqual($previousStatement->expr->var, $node->var)) {
             return null;
         }
-
-        if ($node->expr instanceof FuncCall || $node->expr instanceof StaticCall || $node->expr instanceof MethodCall) {
+        if ($node->expr instanceof FuncCall) {
+            return null;
+        }
+        if ($node->expr instanceof StaticCall) {
+            return null;
+        }
+        if ($node->expr instanceof MethodCall) {
             return null;
         }
 

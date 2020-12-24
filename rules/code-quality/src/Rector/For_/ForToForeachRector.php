@@ -141,8 +141,10 @@ CODE_SAMPLE
         if (! $this->isLoopMatch((array) $node->loop)) {
             return null;
         }
-
-        if ($this->iteratedExpr === null || $this->keyValueName === null) {
+        if ($this->iteratedExpr === null) {
+            return null;
+        }
+        if ($this->keyValueName === null) {
             return null;
         }
 
@@ -251,8 +253,10 @@ CODE_SAMPLE
         if ($this->keyValueName === null) {
             return false;
         }
-
-        if ($loopExprs[0] instanceof PreInc || $loopExprs[0] instanceof PostInc) {
+        if ($loopExprs[0] instanceof PreInc) {
+            return $this->isName($loopExprs[0]->var, $this->keyValueName);
+        }
+        if ($loopExprs[0] instanceof PostInc) {
             return $this->isName($loopExprs[0]->var, $this->keyValueName);
         }
 

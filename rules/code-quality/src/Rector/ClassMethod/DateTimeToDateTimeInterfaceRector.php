@@ -170,7 +170,10 @@ CODE_SAMPLE
     private function refactorMethodCall(Param $param, MethodCall $methodCall): void
     {
         $paramName = $this->getName($param->var);
-        if ($paramName === null || $this->shouldSkipMethodCallRefactor($paramName, $methodCall)) {
+        if ($paramName === null) {
+            return;
+        }
+        if ($this->shouldSkipMethodCallRefactor($paramName, $methodCall)) {
             return;
         }
 

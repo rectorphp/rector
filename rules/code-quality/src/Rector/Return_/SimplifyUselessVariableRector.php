@@ -79,9 +79,11 @@ CODE_SAMPLE
         /** @var AssignOp|Assign $previousNode */
         $previousNode = $previousNode->expr;
         $previousVariableNode = $previousNode->var;
-
         // has some comment
-        if ($previousVariableNode->getComments() || $previousVariableNode->getDocComment()) {
+        if ($previousVariableNode->getComments()) {
+            return null;
+        }
+        if ($previousVariableNode->getDocComment()) {
             return null;
         }
 
@@ -116,7 +118,10 @@ CODE_SAMPLE
         $variableNode = $return->expr;
 
         $previousExpression = $return->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousExpression === null || ! $previousExpression instanceof Expression) {
+        if ($previousExpression === null) {
+            return true;
+        }
+        if (! $previousExpression instanceof Expression) {
             return true;
         }
 
