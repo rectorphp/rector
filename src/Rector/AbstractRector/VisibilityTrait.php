@@ -38,9 +38,12 @@ trait VisibilityTrait
         $this->visibilityManipulator->changeNodeVisibility($node, $visibility);
     }
 
-    public function makeFinal(Class_ $class): void
+    /**
+     * @param ClassMethod|Class_ $node
+     */
+    public function makeFinal(Node $node): void
     {
-        $this->visibilityManipulator->makeFinal($class);
+        $this->visibilityManipulator->makeFinal($node);
     }
 
     /**

@@ -19,7 +19,6 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use PHPStan\Type\Type;
 
 final class PropertyRanker
 {
@@ -27,10 +26,10 @@ final class PropertyRanker
      * @var string[]
      */
     private const TYPE_TO_RANK = [
-        StringType::class  => 5,
+        StringType::class => 5,
         IntegerType::class => 5,
         BooleanType::class => 5,
-        FloatType::class   => 5,
+        FloatType::class => 5,
         ArrayType::class => 10,
         IterableType::class => 10,
         TypeWithClassName::class => 15,
