@@ -65,7 +65,7 @@ final class PhpParserTypeAnalyzer
 
     private function unwrapNullableAndToString(Node $node): string
     {
-        if (! $node instanceof NullableType) {
+        if (! $node instanceof NullableType && method_exists($node, 'toString')) {
             return $node->toString();
         }
 

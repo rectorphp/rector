@@ -121,7 +121,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isUsedAsArraykeyOrInsideIfCondition(Node $node, Variable $variable): bool
+    private function isUsedAsArraykeyOrInsideIfCondition(Expression $node, Variable $variable): bool
     {
         $parentExpression = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($this->isUsedAsArrayKey($parentExpression, $variable)) {

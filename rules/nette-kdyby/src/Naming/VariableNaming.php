@@ -257,8 +257,16 @@ final class VariableNaming
         return $varName . ucfirst($propertyName);
     }
 
-    private function resolveFromMethodCall(Expr $expr): ?string
+    private function resolveFromMethodCall(?Node $expr): ?string
     {
+        if ($expr === null) {
+            return null;
+        }
+
+        if (! property_exists($expr, 'name')) {
+            return null;
+        }
+
         if ($expr->name instanceof MethodCall) {
             return $this->resolveFromMethodCall($expr->name);
         }
