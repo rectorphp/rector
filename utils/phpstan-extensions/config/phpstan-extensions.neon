@@ -1,6 +1,3 @@
-includes:
-    - rector-rules.neon
-
 services:
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 

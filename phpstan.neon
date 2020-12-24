@@ -1,5 +1,7 @@
 includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
+    - utils/phpstan-extensions/config/rector-rules.neon
+
     # allows symplify error formatter
     - vendor/symplify/phpstan-extensions/config/config.neon
 
