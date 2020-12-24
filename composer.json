@@ -174,8 +174,7 @@
             "rules/cakephp/tests/Rector/Namespace_/AppUsesStaticCallToUseStatementRector/Source",
             "rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source",
             "rules/renaming/tests/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source",
-            "rules/symfony4/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source",
-            "tests/Source"
+            "rules/symfony4/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source"
         ],
         "files": [
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",
