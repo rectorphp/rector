@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -60,7 +61,11 @@ CODE_SAMPLE
                                 ,
                                 [
                                     self::CLASS_CONSTANT_VISIBILITY_CHANGES => [
-                                        new ClassConstantVisibilityChange('ParentObject', 'SOME_CONSTANT', 'protected'),
+                                        new ClassConstantVisibilityChange(
+                                            'ParentObject',
+                                            'SOME_CONSTANT',
+                                            Visibility::PROTECTED
+                                        ),
                                     ],
                                 ]
                             ),

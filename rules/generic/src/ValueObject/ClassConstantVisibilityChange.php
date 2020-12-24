@@ -17,11 +17,11 @@ final class ClassConstantVisibilityChange
     private $constant;
 
     /**
-     * @var string
+     * @var int
      */
     private $visibility;
 
-    public function __construct(string $class, string $constant, string $visibility)
+    public function __construct(string $class, string $constant, int $visibility)
     {
         $this->class = $class;
         $this->constant = $constant;
@@ -38,7 +38,7 @@ final class ClassConstantVisibilityChange
         return $this->constant;
     }
 
-    public function getVisibility(): string
+    public function getVisibility(): int
     {
         return $this->visibility;
     }

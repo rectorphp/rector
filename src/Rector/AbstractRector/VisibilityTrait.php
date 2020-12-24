@@ -33,7 +33,7 @@ trait VisibilityTrait
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function changeNodeVisibility(Node $node, string $visibility): void
+    public function changeNodeVisibility(Node $node, int $visibility): void
     {
         $this->visibilityManipulator->changeNodeVisibility($node, $visibility);
     }

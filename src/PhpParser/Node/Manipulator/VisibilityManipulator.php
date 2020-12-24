@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\InvalidNodeTypeException;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\ValueObject\Visibility;
 
 final class VisibilityManipulator
 {
@@ -20,31 +21,21 @@ final class VisibilityManipulator
     private const ALLOWED_NODE_TYPES = [ClassMethod::class, Property::class, ClassConst::class, Class_::class];
 
     /**
-     * @var string
+     * @var int[]
      */
-    private const STATIC = 'static';
-
-    /**
-     * @var string
-     */
-    private const FINAL = 'final';
-
-    /**
-     * @var string
-     */
-    private const ABSTRACT = 'abstract';
-
-    /**
-     * @var string[]
-     */
-    private const ALLOWED_VISIBILITIES = ['public', 'protected', 'private', 'static'];
+    private const ALLOWED_VISIBILITIES = [
+        Visibility::PUBLIC,
+        Visibility::PROTECTED,
+        Visibility::PRIVATE,
+        Visibility::STATIC,
+    ];
 
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
     public function makeStatic(Node $node): void
     {
-        $this->addVisibilityFlag($node, self::STATIC);
+        $this->addVisibilityFlag($node, Visibility::STATIC);
     }
 
     /**
@@ -52,7 +43,7 @@ final class VisibilityManipulator
      */
     public function makeAbstract(Node $node): void
     {
-        $this->addVisibilityFlag($node, self::ABSTRACT);
+        $this->addVisibilityFlag($node, Visibility::ABSTRACT);
     }
 
     /**
@@ -72,7 +63,7 @@ final class VisibilityManipulator
      */
     public function makeFinal(Node $node): void
     {
-        $this->addVisibilityFlag($node, self::FINAL);
+        $this->addVisibilityFlag($node, Visibility::FINAL);
     }
 
     /**
@@ -117,15 +108,15 @@ final class VisibilityManipulator
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function changeNodeVisibility(Node $node, string $visibility): void
+    public function changeNodeVisibility(Node $node, int $visibility): void
     {
-        if ($visibility === 'public') {
+        if ($visibility === Visibility::PUBLIC) {
             $this->makePublic($node);
-        } elseif ($visibility === 'protected') {
+        } elseif ($visibility === Visibility::PROTECTED) {
             $this->makeProtected($node);
-        } elseif ($visibility === 'private') {
+        } elseif ($visibility === Visibility::PRIVATE) {
             $this->makePrivate($node);
-        } elseif ($visibility === 'static') {
+        } elseif ($visibility === Visibility::STATIC) {
             $this->makeStatic($node);
         } else {
             throw new ShouldNotHappenException(sprintf(
@@ -140,7 +131,7 @@ final class VisibilityManipulator
      */
     public function makePublic(Node $node): void
     {
-        $this->replaceVisibilityFlag($node, 'public');
+        $this->replaceVisibilityFlag($node, Visibility::PUBLIC);
     }
 
     /**
@@ -148,7 +139,7 @@ final class VisibilityManipulator
      */
     public function makeProtected(Node $node): void
     {
-        $this->replaceVisibilityFlag($node, 'protected');
+        $this->replaceVisibilityFlag($node, Visibility::PROTECTED);
     }
 
     /**
@@ -156,37 +147,37 @@ final class VisibilityManipulator
      */
     public function makePrivate(Node $node): void
     {
-        $this->replaceVisibilityFlag($node, 'private');
+        $this->replaceVisibilityFlag($node, Visibility::PRIVATE);
     }
 
     /**
      * @param Class_|ClassMethod|Property|ClassConst $node
      */
-    private function addVisibilityFlag(Node $node, string $visibility): void
+    private function addVisibilityFlag(Node $node, int $visibility): void
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
 
-        if ($visibility === 'public') {
+        if ($visibility === Visibility::PUBLIC) {
             $node->flags |= Class_::MODIFIER_PUBLIC;
         }
 
-        if ($visibility === 'protected') {
+        if ($visibility === Visibility::PROTECTED) {
             $node->flags |= Class_::MODIFIER_PROTECTED;
         }
 
-        if ($visibility === 'private') {
+        if ($visibility === Visibility::PRIVATE) {
             $node->flags |= Class_::MODIFIER_PRIVATE;
         }
 
-        if ($visibility === self::STATIC) {
+        if ($visibility === Visibility::STATIC) {
             $node->flags |= Class_::MODIFIER_STATIC;
         }
 
-        if ($visibility === self::ABSTRACT) {
+        if ($visibility === Visibility::ABSTRACT) {
             $node->flags |= Class_::MODIFIER_ABSTRACT;
         }
 
-        if ($visibility === self::FINAL) {
+        if ($visibility === Visibility::FINAL) {
             $node->flags |= Class_::MODIFIER_FINAL;
         }
     }
@@ -210,16 +201,14 @@ final class VisibilityManipulator
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
-    private function replaceVisibilityFlag(Node $node, string $visibility): void
+    private function replaceVisibilityFlag(Node $node, int $visibility): void
     {
-        $visibility = strtolower($visibility);
-
         $isStatic = $node instanceof ClassMethod && $node->isStatic();
         if ($isStatic) {
             $this->removeOriginalVisibilityFromFlags($node);
         }
 
-        if ($visibility !== self::STATIC && $visibility !== self::ABSTRACT && $visibility !== self::FINAL) {
+        if ($visibility !== Visibility::STATIC && $visibility !== Visibility::ABSTRACT && $visibility !== Visibility::FINAL) {
             $this->removeOriginalVisibilityFromFlags($node);
         }
 
