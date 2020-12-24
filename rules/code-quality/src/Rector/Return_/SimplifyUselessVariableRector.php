@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
@@ -106,13 +107,13 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function hasSomeComment(Node $node): bool
+    private function hasSomeComment(Expr $expr): bool
     {
-        if ($node->getComments() !== []) {
+        if ($expr->getComments() !== []) {
             return true;
         }
 
-        return $node->getDocComment() !== null;
+        return $expr->getDocComment() !== null;
     }
 
     private function shouldSkip(Return_ $return): bool

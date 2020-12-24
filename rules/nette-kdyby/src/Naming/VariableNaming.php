@@ -174,7 +174,7 @@ final class VariableNaming
         return null;
     }
 
-    private function isCall(Node $node): bool
+    private function isCall(?Node $node): bool
     {
         if ($node instanceof MethodCall) {
             return true;
@@ -257,9 +257,6 @@ final class VariableNaming
         return $varName . ucfirst($propertyName);
     }
 
-    /**
-     * @param MethodCall|NullsafeMethodCall|StaticCall $expr
-     */
     private function resolveFromMethodCall(Expr $expr): ?string
     {
         if ($expr->name instanceof MethodCall) {

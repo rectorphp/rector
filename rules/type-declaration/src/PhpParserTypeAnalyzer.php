@@ -63,9 +63,6 @@ final class PhpParserTypeAnalyzer
         return $possibleParentType instanceof UnionType;
     }
 
-    /**
-     * @param Name|NullableType|Identifier $node
-     */
     private function unwrapNullableAndToString(Node $node): string
     {
         if (! $node instanceof NullableType) {
