@@ -7,16 +7,7 @@ use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 use Symfony\Component\Finder\Finder;
 
-$vendorAutoloadPath = __DIR__ . '/vendor/autoload.php';
-$vendorAutoloadPath2 = __DIR__ . '/../vendor/autoload.php';
-
-var_dump($vendorAutoloadPath);
-var_dump(file_exists($vendorAutoloadPath));
-
-var_dump($vendorAutoloadPath2);
-var_dump(file_exists($vendorAutoloadPath2));
-
-require $vendorAutoloadPath;
+require_once __DIR__ . '/vendor/autoload.php';
 
 // [BEWARE] this path is relative to the root and location of this file
 $filePathsToSkip = [
@@ -28,7 +19,8 @@ $filePathsToSkip = [
 $finder = new Finder();
 $phpstanPhpFileInfos = $finder->files()
     ->name('*.php')
-    ->in(__DIR__ . '/rector-nested/vendor/phpstan/phpstan-extracted')
+    // the working dir is already "rector-nested"
+    ->in(__DIR__ . '/vendor/phpstan/phpstan-extracted')
     ->getIterator();
 
 foreach ($phpstanPhpFileInfos as $phpstanPhpFileInfo) {

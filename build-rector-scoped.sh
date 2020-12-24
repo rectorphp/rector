@@ -55,9 +55,8 @@ composer config platform-check false
 # @todo temporary only no net + is already locally insatlled
 note "Running scoper to $SCOPED_DIRECTORY"
 wget https://github.com/humbug/php-scoper/releases/download/0.14.0/php-scoper.phar -N
-cd "$NESTED_DIRECTORY" && php ../php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir "../$SCOPED_DIRECTORY" --config ../scoper.php.inc --force --ansi -vvv
 
-cd ..
+php php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir "../$SCOPED_DIRECTORY" --config scoper.php.inc --force --ansi --working-dir "$NESTED_DIRECTORY"
 
 note "Dumping Composer Autoload"
 composer dump-autoload --working-dir "$SCOPED_DIRECTORY" --ansi --optimize --classmap-authoritative --no-dev
