@@ -10,8 +10,8 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\InvalidNodeTypeException;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\Visibility;
+use Webmozart\Assert\Assert;
 
 final class VisibilityManipulator
 {
@@ -110,20 +110,16 @@ final class VisibilityManipulator
      */
     public function changeNodeVisibility(Node $node, int $visibility): void
     {
-        if ($visibility === Visibility::PUBLIC) {
-            $this->makePublic($node);
-        } elseif ($visibility === Visibility::PROTECTED) {
-            $this->makeProtected($node);
-        } elseif ($visibility === Visibility::PRIVATE) {
-            $this->makePrivate($node);
-        } elseif ($visibility === Visibility::STATIC) {
-            $this->makeStatic($node);
-        } else {
-            throw new ShouldNotHappenException(sprintf(
-                'Visibility "%s" is not valid. Use one of: ',
-                implode('", "', self::ALLOWED_VISIBILITIES)
-            ));
-        }
+        Assert::oneOf($visibility, [
+            Visibility::PUBLIC,
+            Visibility::PROTECTED,
+            Visibility::PRIVATE,
+            Visibility::STATIC,
+            Visibility::ABSTRACT,
+            Visibility::FINAL,
+        ]);
+
+        $this->replaceVisibilityFlag($node, $visibility);
     }
 
     /**
