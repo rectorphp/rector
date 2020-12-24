@@ -122,8 +122,10 @@ CODE_SAMPLE
         $this->reset();
 
         $this->matchOnEqualFirstValueAndSecondValue($node);
-
-        if ($this->firstValue === null || $this->secondValue === null) {
+        if ($this->firstValue === null) {
+            return null;
+        }
+        if ($this->secondValue === null) {
             return null;
         }
 
@@ -174,10 +176,12 @@ CODE_SAMPLE
 
     private function areVariablesEqual(BinaryOp $binaryOp, ?Expr $firstValue, ?Expr $secondValue): bool
     {
-        if ($firstValue === null || $secondValue === null) {
+        if ($firstValue === null) {
             return false;
         }
-
+        if ($secondValue === null) {
+            return false;
+        }
         if ($this->areNodesEqual($binaryOp->left, $firstValue) && $this->areNodesEqual(
             $binaryOp->right,
             $secondValue

@@ -139,15 +139,19 @@ CODE_SAMPLE
 
     private function processBinaryOp(Node $node): ?Expr
     {
-        if ($node instanceof Plus || $node instanceof Minus) {
+        if ($node instanceof Plus) {
             return $this->processBinaryPlusAndMinus($node);
         }
-
+        if ($node instanceof Minus) {
+            return $this->processBinaryPlusAndMinus($node);
+        }
         // *, /
-        if ($node instanceof Mul || $node instanceof Div) {
+        if ($node instanceof Mul) {
             return $this->processBinaryMulAndDiv($node);
         }
-
+        if ($node instanceof Div) {
+            return $this->processBinaryMulAndDiv($node);
+        }
         return null;
     }
 

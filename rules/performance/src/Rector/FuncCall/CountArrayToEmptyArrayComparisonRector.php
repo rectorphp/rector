@@ -100,10 +100,12 @@ CODE_SAMPLE
 
     private function processMarkTruthyNegation(BooleanNot $booleanNot): ?Identical
     {
-        if (! $booleanNot->expr instanceof FuncCall || $this->getName($booleanNot->expr) !== 'count') {
+        if (! $booleanNot->expr instanceof FuncCall) {
             return null;
         }
-
+        if ($this->getName($booleanNot->expr) !== 'count') {
+            return null;
+        }
         /** @var Expr $expr */
         $expr = $booleanNot->expr->args[0]->value;
 

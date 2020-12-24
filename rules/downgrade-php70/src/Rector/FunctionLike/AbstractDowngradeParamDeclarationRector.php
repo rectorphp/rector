@@ -34,10 +34,12 @@ abstract class AbstractDowngradeParamDeclarationRector extends AbstractRector im
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->params === null || $node->params === []) {
+        if ($node->params === null) {
             return null;
         }
-
+        if ($node->params === []) {
+            return null;
+        }
         foreach ($node->params as $param) {
             $this->refactorParam($param, $node);
         }

@@ -63,10 +63,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->isFinal() || $node->isAbstract() || $this->isAnonymousClass($node)) {
+        if ($node->isFinal()) {
             return null;
         }
-
+        if ($node->isAbstract()) {
+            return null;
+        }
+        if ($this->isAnonymousClass($node)) {
+            return null;
+        }
         if ($this->isDoctrineEntityClass($node)) {
             return null;
         }

@@ -72,8 +72,10 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         if (! $condition instanceof BinaryOp) {
             return $this->processNonBinaryCondition($ifExpression, $elseExpression, $condition);
         }
-
-        if ($this->isNull($ifExpression) || $this->isNull($elseExpression)) {
+        if ($this->isNull($ifExpression)) {
+            return null;
+        }
+        if ($this->isNull($elseExpression)) {
             return null;
         }
 

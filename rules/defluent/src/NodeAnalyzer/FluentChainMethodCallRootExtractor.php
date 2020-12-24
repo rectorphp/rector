@@ -84,10 +84,12 @@ final class FluentChainMethodCallRootExtractor
         }
 
         foreach ($methodCalls as $methodCall) {
-            if ($methodCall->var instanceof Variable || $methodCall->var instanceof PropertyFetch) {
+            if ($methodCall->var instanceof Variable) {
                 return $this->createAssignAndRootExprForVariableOrPropertyFetch($methodCall);
             }
-
+            if ($methodCall->var instanceof PropertyFetch) {
+                return $this->createAssignAndRootExprForVariableOrPropertyFetch($methodCall);
+            }
             if ($methodCall->var instanceof New_) {
                 // direct = no parent
                 if ($kind === FluentCallsKind::IN_ARGS) {

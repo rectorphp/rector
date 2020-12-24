@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -57,10 +58,9 @@ final class FluentChainMethodCallNodeAnalyzer
      */
     public function isFluentClassMethodOfMethodCall(MethodCall $methodCall): bool
     {
-        if ($methodCall->var instanceof MethodCall || $methodCall->var instanceof StaticCall) {
+        if ($this->isCall($methodCall->var)) {
             return false;
         }
-
         $calleeStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
 
         // we're not sure
@@ -216,5 +216,14 @@ final class FluentChainMethodCallNodeAnalyzer
         }
 
         return null;
+    }
+
+    private function isCall(Expr $expr): bool
+    {
+        if ($expr instanceof MethodCall) {
+            return true;
+        }
+
+        return $expr instanceof StaticCall;
     }
 }

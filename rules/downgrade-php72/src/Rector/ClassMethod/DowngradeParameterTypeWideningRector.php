@@ -103,10 +103,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->params === null || $node->params === []) {
+        if ($node->params === null) {
             return null;
         }
-
+        if ($node->params === []) {
+            return null;
+        }
         foreach ($node->params as $position => $param) {
             $this->refactorParamForAncestorsAndSiblings($param, $node, (int) $position);
         }
@@ -193,6 +195,7 @@ CODE_SAMPLE
             $refactorableAncestorClassNames
         ));
     }
+
     /**
      * Obtain the list of the implemented interfaces with a different signature
      * @return Interface_[]
@@ -289,6 +292,7 @@ CODE_SAMPLE
 
         return false;
     }
+
     /**
      * Add the current param type in the PHPDoc
      */

@@ -186,8 +186,10 @@ CODE_SAMPLE
         )) {
             return true;
         }
-
-        if ($parentNode instanceof Unset_ || $parentNode instanceof UnsetCast) {
+        if ($parentNode instanceof Unset_) {
+            return true;
+        }
+        if ($parentNode instanceof UnsetCast) {
             return true;
         }
 
@@ -229,7 +231,10 @@ CODE_SAMPLE
     {
         if ($parentNode instanceof Node) {
             $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof List_ || $parentParentNode instanceof Array_) {
+            if ($parentParentNode instanceof List_) {
+                return true;
+            }
+            if ($parentParentNode instanceof Array_) {
                 return true;
             }
         }

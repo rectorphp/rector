@@ -182,8 +182,11 @@ final class NodeAnnotationReader
 
         /** @var string|null $className */
         $className = $property->getAttribute(AttributeKey::CLASS_NAME);
-
-        if ($className === null || ! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+        if ($className === null) {
+            // probably fresh node
+            return null;
+        }
+        if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
             // probably fresh node
             return null;
         }

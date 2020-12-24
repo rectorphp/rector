@@ -112,8 +112,10 @@ CODE_SAMPLE
         if ($namespace !== null) {
             return true;
         }
-
-        if ($classMethod->isAbstract() || $classMethod->isStatic()) {
+        if ($classMethod->isAbstract()) {
+            return true;
+        }
+        if ($classMethod->isStatic()) {
             return true;
         }
 

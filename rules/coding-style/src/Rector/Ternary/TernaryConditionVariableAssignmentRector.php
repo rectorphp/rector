@@ -57,15 +57,19 @@ CODE_SAMPLE
     {
         $nodeIf = $node->if;
         $nodeElse = $node->else;
-
-        if (! $nodeIf instanceof Assign || ! $nodeElse instanceof Assign) {
+        if (! $nodeIf instanceof Assign) {
+            return null;
+        }
+        if (! $nodeElse instanceof Assign) {
             return null;
         }
 
         $nodeIfVar = $nodeIf->var;
         $nodeElseVar = $nodeElse->var;
-
-        if (! $nodeIfVar instanceof Variable || ! $nodeElseVar instanceof Variable) {
+        if (! $nodeIfVar instanceof Variable) {
+            return null;
+        }
+        if (! $nodeElseVar instanceof Variable) {
             return null;
         }
 

@@ -141,7 +141,10 @@ CODE_SAMPLE
         }
 
         $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Isset_ || $parent instanceof Unset_) {
+        if ($parent instanceof Isset_) {
+            return ! $arrayDimFetch->dim instanceof Variable;
+        }
+        if ($parent instanceof Unset_) {
             return ! $arrayDimFetch->dim instanceof Variable;
         }
 

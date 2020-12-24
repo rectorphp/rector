@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -78,7 +79,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->expr instanceof FuncCall || $node->expr instanceof StaticCall || $node->expr instanceof MethodCall) {
+        if ($this->isCall($node->expr)) {
             return null;
         }
 
@@ -94,6 +95,19 @@ CODE_SAMPLE
         $this->removeNode($previousStatement);
 
         return $node;
+    }
+
+    private function isCall(Expr $expr): bool
+    {
+        if ($expr instanceof FuncCall) {
+            return true;
+        }
+
+        if ($expr instanceof StaticCall) {
+            return true;
+        }
+
+        return $expr instanceof MethodCall;
     }
 
     private function shouldSkipForDifferentScope(Assign $assign, Expression $expression): bool

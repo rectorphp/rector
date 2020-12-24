@@ -110,9 +110,11 @@ CODE_SAMPLE
             $this->removeByName($node, $argumentRemover->getPosition(), $match['name']);
             return;
         }
-
         // only argument specific value can be removed
-        if ($node instanceof ClassMethod || ! isset($node->args[$argumentRemover->getPosition()])) {
+        if ($node instanceof ClassMethod) {
+            return;
+        }
+        if (! isset($node->args[$argumentRemover->getPosition()])) {
             return;
         }
 

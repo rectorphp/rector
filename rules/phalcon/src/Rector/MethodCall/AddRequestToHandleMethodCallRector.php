@@ -72,8 +72,10 @@ CODE_SAMPLE
         if (! $this->isName($node->name, 'handle')) {
             return null;
         }
-
-        if ($node->args === null || $node->args !== []) {
+        if ($node->args === null) {
+            return null;
+        }
+        if ($node->args !== []) {
             return null;
         }
 

@@ -34,7 +34,10 @@ final class NullsafeManipulator
         }
 
         $parentIdentifier = $nextExprIdentifier->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentIdentifier instanceof MethodCall || $parentIdentifier instanceof NullsafeMethodCall) {
+        if ($parentIdentifier instanceof MethodCall) {
+            return new NullsafeMethodCall($expr, $nextExprIdentifier);
+        }
+        if ($parentIdentifier instanceof NullsafeMethodCall) {
             return new NullsafeMethodCall($expr, $nextExprIdentifier);
         }
 

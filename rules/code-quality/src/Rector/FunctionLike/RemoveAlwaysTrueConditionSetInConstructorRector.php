@@ -107,10 +107,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === null || $node->stmts === []) {
+        if ($node->stmts === null) {
             return null;
         }
-
+        if ($node->stmts === []) {
+            return null;
+        }
         $haveNodeChanged = false;
         foreach ((array) $node->stmts as $key => $stmt) {
             if ($stmt instanceof Expression) {

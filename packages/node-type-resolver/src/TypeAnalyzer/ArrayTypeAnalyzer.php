@@ -108,7 +108,10 @@ final class ArrayTypeAnalyzer
 
         /** @var Class_|Trait_|Interface_|null $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike instanceof Interface_ || $classLike === null) {
+        if ($classLike instanceof Interface_) {
+            return false;
+        }
+        if ($classLike === null) {
             return false;
         }
 

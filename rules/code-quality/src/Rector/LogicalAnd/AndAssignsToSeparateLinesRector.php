@@ -62,10 +62,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->left instanceof Assign || ! $node->right instanceof Assign) {
+        if (! $node->left instanceof Assign) {
             return null;
         }
-
+        if (! $node->right instanceof Assign) {
+            return null;
+        }
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Expression) {
             return null;

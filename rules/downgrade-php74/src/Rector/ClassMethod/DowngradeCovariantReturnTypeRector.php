@@ -131,7 +131,10 @@ CODE_SAMPLE
         }
 
         $nodeReturnType = $classMethod->returnType;
-        if ($nodeReturnType === null || $nodeReturnType instanceof UnionType) {
+        if ($nodeReturnType === null) {
+            return null;
+        }
+        if ($nodeReturnType instanceof UnionType) {
             return null;
         }
         $nodeReturnTypeName = $this->getName(

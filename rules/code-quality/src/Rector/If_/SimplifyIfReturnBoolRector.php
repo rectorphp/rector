@@ -134,7 +134,10 @@ CODE_SAMPLE
         }
 
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof Return_ || $nextNode->expr === null) {
+        if (! $nextNode instanceof Return_) {
+            return true;
+        }
+        if ($nextNode->expr === null) {
             return true;
         }
 

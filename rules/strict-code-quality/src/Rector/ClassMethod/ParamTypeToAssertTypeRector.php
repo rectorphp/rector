@@ -87,8 +87,10 @@ CODE_SAMPLE
 
         /** @var Param[] $params */
         $params = $node->getParams();
-
-        if ($paramTypes === [] || $params === []) {
+        if ($paramTypes === []) {
+            return null;
+        }
+        if ($params === []) {
             return null;
         }
 

@@ -67,10 +67,12 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // only array with no explicit key assign, e.g. "$value[] = 5";
-        if (! $node->var instanceof ArrayDimFetch || $node->var->dim !== null) {
+        if (! $node->var instanceof ArrayDimFetch) {
             return null;
         }
-
+        if ($node->var->dim !== null) {
+            return null;
+        }
         $arrayDimFetchNode = $node->var;
 
         /** @var Variable|PropertyFetch|StaticPropertyFetch|Expr $variableNode */

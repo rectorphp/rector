@@ -61,8 +61,13 @@ final class LivingCodeManipulator
         if (! $expr instanceof Expr) {
             return [];
         }
-
-        if ($expr instanceof Closure || $expr instanceof Scalar || $expr instanceof ConstFetch) {
+        if ($expr instanceof Closure) {
+            return [];
+        }
+        if ($expr instanceof Scalar) {
+            return [];
+        }
+        if ($expr instanceof ConstFetch) {
             return [];
         }
 
@@ -87,8 +92,13 @@ final class LivingCodeManipulator
                 $this->keepLivingCodeFromExpr($expr->dim)
             );
         }
-
-        if ($expr instanceof ClassConstFetch || $expr instanceof StaticPropertyFetch) {
+        if ($expr instanceof ClassConstFetch) {
+            return array_merge(
+                $this->keepLivingCodeFromExpr($expr->class),
+                $this->keepLivingCodeFromExpr($expr->name)
+            );
+        }
+        if ($expr instanceof StaticPropertyFetch) {
             return array_merge(
                 $this->keepLivingCodeFromExpr($expr->class),
                 $this->keepLivingCodeFromExpr($expr->name)

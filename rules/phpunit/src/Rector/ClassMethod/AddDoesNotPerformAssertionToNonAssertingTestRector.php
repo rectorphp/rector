@@ -287,7 +287,10 @@ CODE_SAMPLE
         }
 
         $fileName = $reflectionMethod->getFileName();
-        if (! $fileName || ! file_exists($fileName)) {
+        if (! $fileName) {
+            return null;
+        }
+        if (! file_exists($fileName)) {
             return null;
         }
 

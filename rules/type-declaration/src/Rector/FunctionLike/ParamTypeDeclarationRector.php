@@ -119,8 +119,10 @@ CODE_SAMPLE
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return null;
         }
-
-        if ($node->params === null || $node->params === []) {
+        if ($node->params === null) {
+            return null;
+        }
+        if ($node->params === []) {
             return null;
         }
 

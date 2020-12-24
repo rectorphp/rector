@@ -289,10 +289,15 @@ final class ClassMethodAssignManipulator
 
     private function isExplicitlyReferenced(Node $node): bool
     {
-        if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
+        if ($node instanceof Arg) {
             return $node->byRef;
         }
-
+        if ($node instanceof ClosureUse) {
+            return $node->byRef;
+        }
+        if ($node instanceof Param) {
+            return $node->byRef;
+        }
         return false;
     }
 

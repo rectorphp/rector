@@ -64,7 +64,10 @@ final class SelfContainerMethodCallCollector
 
             /** @var MethodCall $node */
             $serviceType = $this->valueResolver->getValue($node->args[0]->value);
-            if ($serviceType === null || ! is_string($serviceType)) {
+            if ($serviceType === null) {
+                return null;
+            }
+            if (! is_string($serviceType)) {
                 return null;
             }
 

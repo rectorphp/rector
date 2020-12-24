@@ -127,8 +127,10 @@ CODE_SAMPLE
             }
 
             $innerNode = $node->stmts[0] instanceof Expression ? $node->stmts[0]->expr : $node->stmts[0];
-
-            if ($innerNode instanceof Assign || $innerNode instanceof Return_) {
+            if ($innerNode instanceof Assign) {
+                return $innerNode;
+            }
+            if ($innerNode instanceof Return_) {
                 return $innerNode;
             }
 

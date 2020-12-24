@@ -146,7 +146,7 @@ final class VariableNaming
             return $this->resolveFromPropertyFetch($node);
         }
 
-        if ($node instanceof MethodCall || $node instanceof NullsafeMethodCall || $node instanceof StaticCall) {
+        if ($this->isCall($node)) {
             return $this->resolveFromMethodCall($node);
         }
 
@@ -244,16 +244,34 @@ final class VariableNaming
         return $varName . ucfirst($propertyName);
     }
 
-    /**
-     * @param MethodCall|NullsafeMethodCall|StaticCall $expr
-     */
-    private function resolveFromMethodCall(Expr $expr): ?string
+    private function isCall(?Node $node): bool
     {
-        if ($expr->name instanceof MethodCall) {
-            return $this->resolveFromMethodCall($expr->name);
+        if ($node instanceof MethodCall) {
+            return true;
         }
 
-        $methodName = $this->nodeNameResolver->getName($expr->name);
+        if ($node instanceof NullsafeMethodCall) {
+            return true;
+        }
+
+        return $node instanceof StaticCall;
+    }
+
+    private function resolveFromMethodCall(?Node $node): ?string
+    {
+        if ($node === null) {
+            return null;
+        }
+
+        if (! property_exists($node, 'name')) {
+            return null;
+        }
+
+        if ($node->name instanceof MethodCall) {
+            return $this->resolveFromMethodCall($node->name);
+        }
+
+        $methodName = $this->nodeNameResolver->getName($node->name);
         if (! is_string($methodName)) {
             return null;
         }

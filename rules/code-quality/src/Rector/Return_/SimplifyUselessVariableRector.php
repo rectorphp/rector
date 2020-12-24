@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
@@ -80,8 +81,7 @@ CODE_SAMPLE
         $previousNode = $previousNode->expr;
         $previousVariableNode = $previousNode->var;
 
-        // has some comment
-        if ($previousVariableNode->getComments() || $previousVariableNode->getDocComment()) {
+        if ($this->hasSomeComment($previousVariableNode)) {
             return null;
         }
 
@@ -116,7 +116,10 @@ CODE_SAMPLE
         $variableNode = $return->expr;
 
         $previousExpression = $return->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousExpression === null || ! $previousExpression instanceof Expression) {
+        if ($previousExpression === null) {
+            return true;
+        }
+        if (! $previousExpression instanceof Expression) {
             return true;
         }
 
@@ -131,6 +134,15 @@ CODE_SAMPLE
             return true;
         }
         return $this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode);
+    }
+
+    private function hasSomeComment(Expr $expr): bool
+    {
+        if ($expr->getComments() !== []) {
+            return true;
+        }
+
+        return $expr->getDocComment() !== null;
     }
 
     private function isReturnWithVarAnnotation(Return_ $return): bool

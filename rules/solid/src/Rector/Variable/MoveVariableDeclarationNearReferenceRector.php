@@ -90,20 +90,17 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentExpression = $expression->getAttribute(AttributeKey::PARENT_NODE);
-        if ($this->isUsedAsArrayKey($parentExpression, $node)) {
-            return null;
-        }
-
-        if ($this->isInsideCondition($expression)) {
+        if ($this->isUsedAsArraykeyOrInsideIfCondition($expression, $node)) {
             return null;
         }
 
         if ($this->hasPropertyInExpr($expression, $parent->expr)) {
             return null;
         }
-
-        if ($this->hasReAssign($expression, $parent->var) || $this->hasReAssign($expression, $parent->expr)) {
+        if ($this->hasReAssign($expression, $parent->var)) {
+            return null;
+        }
+        if ($this->hasReAssign($expression, $parent->expr)) {
             return null;
         }
 
@@ -124,40 +121,14 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isUsedAsArrayKey(?Node $node, Variable $variable): bool
+    private function isUsedAsArraykeyOrInsideIfCondition(Expression $expression, Variable $variable): bool
     {
-        if (! $node instanceof Node) {
-            return false;
+        $parentExpression = $expression->getAttribute(AttributeKey::PARENT_NODE);
+        if ($this->isUsedAsArrayKey($parentExpression, $variable)) {
+            return true;
         }
 
-        $arrayDimFetches = $this->betterNodeFinder->findInstanceOf($node, ArrayDimFetch::class);
-
-        foreach ($arrayDimFetches as $arrayDimFetch) {
-            /** @var Node|null $dim */
-            $dim = $arrayDimFetch->dim;
-            if (! $dim instanceof Node) {
-                continue;
-            }
-
-            $isFoundInKey = (bool) $this->betterNodeFinder->findFirst($dim, function (Node $node) use (
-                $variable
-            ): bool {
-                return $this->areNodesEqual($node, $variable);
-            });
-            if ($isFoundInKey) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function isInsideCondition(Expression $expression): bool
-    {
-        return (bool) $this->scopeAwareNodeFinder->findParentType(
-            $expression,
-            [If_::class, Else_::class, ElseIf_::class]
-        );
+        return $this->isInsideCondition($expression);
     }
 
     private function hasPropertyInExpr(Expression $expression, Expr $expr): bool
@@ -215,7 +186,10 @@ CODE_SAMPLE
         }
 
         $countFound = $this->getCountFound($next, $variable);
-        if ($countFound === 0 || $countFound >= 2) {
+        if ($countFound === 0) {
+            return null;
+        }
+        if ($countFound >= 2) {
             return null;
         }
 
@@ -235,6 +209,42 @@ CODE_SAMPLE
             [For_::class, While_::class, Foreach_::class, Do_::class]
         );
         return (bool) $loopNode;
+    }
+
+    private function isUsedAsArrayKey(?Node $node, Variable $variable): bool
+    {
+        if (! $node instanceof Node) {
+            return false;
+        }
+
+        $arrayDimFetches = $this->betterNodeFinder->findInstanceOf($node, ArrayDimFetch::class);
+
+        foreach ($arrayDimFetches as $arrayDimFetch) {
+            /** @var Node|null $dim */
+            $dim = $arrayDimFetch->dim;
+            if (! $dim instanceof Node) {
+                continue;
+            }
+
+            $isFoundInKey = (bool) $this->betterNodeFinder->findFirst($dim, function (Node $node) use (
+                $variable
+            ): bool {
+                return $this->areNodesEqual($node, $variable);
+            });
+            if ($isFoundInKey) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isInsideCondition(Expression $expression): bool
+    {
+        return (bool) $this->scopeAwareNodeFinder->findParentType(
+            $expression,
+            [If_::class, Else_::class, ElseIf_::class]
+        );
     }
 
     private function mayBeArrayDimFetch(Node $node): Node

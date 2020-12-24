@@ -115,7 +115,7 @@ final class NodeNameResolver
     public function getName(Node $node): ?string
     {
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            if ($node->name instanceof MethodCall || $node->name instanceof StaticCall || $node->name instanceof Identifier) {
+            if ($this->isCallOrIdentifier($node->name)) {
                 return null;
             }
 
@@ -215,6 +215,18 @@ final class NodeNameResolver
         }
 
         return $this->isNames($node, $names);
+    }
+
+    private function isCallOrIdentifier(Node $node): bool
+    {
+        if ($node instanceof MethodCall) {
+            return true;
+        }
+        if ($node instanceof StaticCall) {
+            return true;
+        }
+
+        return $node instanceof Identifier;
     }
 
     /**

@@ -102,7 +102,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $functionName = $this->getName($node);
-        if (! $functionName || ! array_key_exists($functionName, $this->functionsToConstants)) {
+        if (! $functionName) {
+            return null;
+        }
+        if (! array_key_exists($functionName, $this->functionsToConstants)) {
             return null;
         }
 
