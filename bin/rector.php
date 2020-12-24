@@ -124,18 +124,18 @@ final class AutoloadIncluder
         $this->loadIfExistsAndNotLoadedYet($fileToAutoload);
     }
 
-    private function loadIfExistsAndNotLoadedYet(string $file): void
+    private function loadIfExistsAndNotLoadedYet(string $filePath): void
     {
-        if (! file_exists($file)) {
+        if (! file_exists($filePath)) {
             return;
         }
 
-        if (in_array($file, $this->alreadyLoadedAutoloadFiles, true)) {
+        if (in_array($filePath, $this->alreadyLoadedAutoloadFiles, true)) {
             return;
         }
 
-        $this->alreadyLoadedAutoloadFiles[] = realpath($file);
+        $this->alreadyLoadedAutoloadFiles[] = realpath($filePath);
 
-        require_once $file;
+        require_once $filePath;
     }
 }

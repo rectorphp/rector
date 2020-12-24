@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 
+use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
@@ -182,7 +183,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new ChangeMethodVisibility(
                     'Symfony\Component\Form\AbstractTypeExtension',
                     'getExtendedTypes',
-                    'static'
+                    Visibility::STATIC
                 ),
             ]),
         ]]);

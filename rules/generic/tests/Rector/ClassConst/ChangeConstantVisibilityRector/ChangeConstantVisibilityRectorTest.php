@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector;
 
 use Iterator;
+use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
 use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
@@ -34,13 +35,21 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
         return [
             ChangeConstantVisibilityRector::class => [
                 ChangeConstantVisibilityRector::CLASS_CONSTANT_VISIBILITY_CHANGES => [
-                    new ClassConstantVisibilityChange(ParentObject::class, 'TO_BE_PUBLIC_CONSTANT', 'public'),
-                    new ClassConstantVisibilityChange(ParentObject::class, 'TO_BE_PROTECTED_CONSTANT', 'protected'),
-                    new ClassConstantVisibilityChange(ParentObject::class, 'TO_BE_PRIVATE_CONSTANT', 'private'),
+                    new ClassConstantVisibilityChange(ParentObject::class, 'TO_BE_PUBLIC_CONSTANT', Visibility::PUBLIC),
+                    new ClassConstantVisibilityChange(
+                        ParentObject::class,
+                        'TO_BE_PROTECTED_CONSTANT',
+                        Visibility::PROTECTED
+                    ),
+                    new ClassConstantVisibilityChange(
+                        ParentObject::class,
+                        'TO_BE_PRIVATE_CONSTANT',
+                        Visibility::PRIVATE
+                    ),
                     new ClassConstantVisibilityChange(
                         'Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\Fixture2',
                         'TO_BE_PRIVATE_CONSTANT',
-                        'private'
+                        Visibility::PRIVATE
                     ),
                 ],
             ],

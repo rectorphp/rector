@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\Visibility;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,10 +21,10 @@ final class ChangePropertyVisibilityRector extends AbstractRector implements Con
     /**
      * @var string
      */
-    public const PROPERTY_TO_VISIBILITY_BY_CLASS = 'propertyToVisibilityByClass';
+    public const PROPERTY_TO_VISIBILITY_BY_CLASS = 'property_to_visibility_by_class';
 
     /**
-     * @var string[][] { class => [ property name => visibility ] }
+     * @var array<string, array<string, int>>
      */
     private $propertyToVisibilityByClass = [];
 
@@ -60,7 +61,7 @@ CODE_SAMPLE
                                 [
                                     self::PROPERTY_TO_VISIBILITY_BY_CLASS => [
                                         'FrameworkClass' => [
-                                            'someProperty' => 'protected',
+                                            'someProperty' => Visibility::PROTECTED,
                                         ],
                                     ],
                                 ]
