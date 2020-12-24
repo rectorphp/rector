@@ -12,8 +12,8 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
-use Rector\StaticTypeMapper\PHPStan\NameScopeFactory;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class PhpDocTypeMapperTest extends AbstractKernelTestCase

@@ -18,8 +18,8 @@ use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
+use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
-use Rector\StaticTypeMapper\PHPStan\NameScopeFactory;
 
 /**
  * Maps PhpParser <=> PHPStan <=> PHPStan doc <=> string type nodes between all possible formats

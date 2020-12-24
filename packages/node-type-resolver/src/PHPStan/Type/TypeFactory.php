@@ -18,7 +18,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\StaticTypeMapper\PHPStan\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
