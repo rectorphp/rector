@@ -38,7 +38,7 @@ final class TemplateGuesser
      * @var string
      * @see https://regex101.com/r/YUrmAD/1
      */
-    private const CONTROLLER_NAME_MATCH_REGEX = '#Controller\\\(.+)Controller$#';
+    private const CONTROLLER_NAME_MATCH_REGEX = '#Controller\\\(?<class_name_without_suffix>.+)Controller$#';
 
     /**
      * @var string
@@ -119,7 +119,11 @@ final class TemplateGuesser
             return '';
         }
 
-        $controller = Strings::replace($match[1], self::SMALL_LETTER_BIG_LETTER_REGEX, '\\1_\\2');
+        $controller = Strings::replace(
+            $match['class_name_without_suffix'],
+            self::SMALL_LETTER_BIG_LETTER_REGEX,
+            '\\1_\\2'
+        );
         return str_replace('\\', '/', $controller);
     }
 }

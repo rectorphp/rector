@@ -697,20 +697,9 @@ parameters:
             message: '#".*" regex need to use string named capture group instead of numeric#'
             paths:
                 - packages/better-php-doc-parser/src/PhpDocParser/BetterPhpDocParser.php #268
-                - rules/naming/src/Naming/PropertyNaming.php #95
-                - rules/naming/src/RectorNamingInflector.php #30
                 - rules/php70/src/EregToPcreTransformer.php #277
-                - rules/sensio/src/Helper/TemplateGuesser.php #117
-
-        -
-            message: '#Use "\$this\-\><method\>\(\)" instead of "self\:\:<method\>\(\)" to call local method#'
-            paths:
-                - src/PhpParser/Printer/BetterStandardPrinter.php #237
-                - src/PhpParser/Printer/BetterStandardPrinter.php #244
 
         - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'
-        # bug in simplify
-#        - '#Parameter 1 should use PhpParser\\Node\\Expr\\MethodCall type as already checked#'
 
         -
              message: '#Class cognitive complexity is \d+, keep it under 40#'
