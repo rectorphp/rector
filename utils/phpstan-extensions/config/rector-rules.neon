@@ -7,13 +7,17 @@ services:
         class: Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule
         tags: [phpstan.rules.rule]
 
-#    -
-#        class: Rector\PHPStanExtensions\Rule\ConfigurableRectorRule
-#        tags: [phpstan.rules.rule]
-
     -
         class: Symplify\PHPStanRules\Rules\IfNewTypeThenImplementInterfaceRule
         tags: [phpstan.rules.rule]
         arguments:
             interfacesByNewTypes:
                 Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample: Rector\Core\Contract\Rector\ConfigurableRectorInterface
+
+    # open in Sypmlify 9.0.20 version
+#    -
+#        class: Symplify\PHPStanRules\Rules\IfImplementsInterfaceThenNewTypeRule
+#        tags: [phpstan.rules.rule]
+#        arguments:
+#            interfacesByNewTypes:
+#                Rector\Core\Contract\Rector\ConfigurableRectorInterface: Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample
