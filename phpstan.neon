@@ -708,3 +708,5 @@ parameters:
             paths:
                 - src/PhpParser/Printer/BetterStandardPrinter.php #237
                 - src/PhpParser/Printer/BetterStandardPrinter.php #244
+
+        - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'

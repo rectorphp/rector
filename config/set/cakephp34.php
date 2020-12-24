@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
+use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
@@ -223,8 +224,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => ValueObjectInliner::inline([
-                new ChangeMethodVisibility('Cake\Mailer\MailerAwareTrait', 'getMailer', 'protected'),
-                new ChangeMethodVisibility('Cake\View\CellTrait', 'cell', 'protected'),
+                new ChangeMethodVisibility('Cake\Mailer\MailerAwareTrait', 'getMailer', Visibility::PROTECTED),
+                new ChangeMethodVisibility('Cake\View\CellTrait', 'cell', Visibility::PROTECTED),
             ]),
         ]]);
 

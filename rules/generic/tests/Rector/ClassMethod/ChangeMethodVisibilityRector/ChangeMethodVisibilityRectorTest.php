@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector;
 
 use Iterator;
+use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector\Source\ParentObject;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
@@ -34,10 +35,10 @@ final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
         return [
             ChangeMethodVisibilityRector::class => [
                 ChangeMethodVisibilityRector::METHOD_VISIBILITIES => [
-                    new ChangeMethodVisibility(ParentObject::class, 'toBePublicMethod', 'public'),
-                    new ChangeMethodVisibility(ParentObject::class, 'toBeProtectedMethod', 'protected'),
-                    new ChangeMethodVisibility(ParentObject::class, 'toBePrivateMethod', 'private'),
-                    new ChangeMethodVisibility(ParentObject::class, 'toBePublicStaticMethod', 'public'),
+                    new ChangeMethodVisibility(ParentObject::class, 'toBePublicMethod', Visibility::PUBLIC),
+                    new ChangeMethodVisibility(ParentObject::class, 'toBeProtectedMethod', Visibility::PROTECTED),
+                    new ChangeMethodVisibility(ParentObject::class, 'toBePrivateMethod', Visibility::PRIVATE),
+                    new ChangeMethodVisibility(ParentObject::class, 'toBePublicStaticMethod', Visibility::PUBLIC),
                 ],
             ],
         ];

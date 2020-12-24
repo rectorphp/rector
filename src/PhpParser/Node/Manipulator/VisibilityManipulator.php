@@ -156,30 +156,7 @@ final class VisibilityManipulator
     private function addVisibilityFlag(Node $node, int $visibility): void
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
-
-        if ($visibility === Visibility::PUBLIC) {
-            $node->flags |= Class_::MODIFIER_PUBLIC;
-        }
-
-        if ($visibility === Visibility::PROTECTED) {
-            $node->flags |= Class_::MODIFIER_PROTECTED;
-        }
-
-        if ($visibility === Visibility::PRIVATE) {
-            $node->flags |= Class_::MODIFIER_PRIVATE;
-        }
-
-        if ($visibility === Visibility::STATIC) {
-            $node->flags |= Class_::MODIFIER_STATIC;
-        }
-
-        if ($visibility === Visibility::ABSTRACT) {
-            $node->flags |= Class_::MODIFIER_ABSTRACT;
-        }
-
-        if ($visibility === Visibility::FINAL) {
-            $node->flags |= Class_::MODIFIER_FINAL;
-        }
+        $node->flags |= $visibility;
     }
 
     private function ensureIsClassMethodOrProperty(Node $node, string $location): void

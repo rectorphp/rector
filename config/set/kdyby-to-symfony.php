@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;
@@ -17,7 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => ValueObjectInliner::inline([
-                new ChangeMethodVisibility('Kdyby\Events\Subscriber', 'getSubscribedEvents', 'static'),
+                new ChangeMethodVisibility('Kdyby\Events\Subscriber', 'getSubscribedEvents', Visibility::STATIC),
             ]),
         ]]);
 
