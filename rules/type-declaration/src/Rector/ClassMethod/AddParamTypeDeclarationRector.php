@@ -73,7 +73,8 @@ class SomeClass
 }
 CODE_SAMPLE
             ,
-                $configuration),
+                $configuration
+            ),
         ]);
     }
 

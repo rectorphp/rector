@@ -324,8 +324,7 @@
         "rector": "bin/rector process --config rector-ci.php --ansi"
     },
     "config": {
-        "sort-packages": true,
-        "process-timeout": 0
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true
