@@ -86,15 +86,6 @@ final class FluentChainMethodCallNodeAnalyzer
         return true;
     }
 
-    private function isCall(Expr $expr): bool
-    {
-        if ($expr instanceof MethodCall) {
-            return true;
-        }
-
-        return $expr instanceof StaticCall;
-    }
-
     public function isLastChainMethodCall(MethodCall $methodCall): bool
     {
         // is chain method call
@@ -225,5 +216,14 @@ final class FluentChainMethodCallNodeAnalyzer
         }
 
         return null;
+    }
+
+    private function isCall(Expr $expr): bool
+    {
+        if ($expr instanceof MethodCall) {
+            return true;
+        }
+
+        return $expr instanceof StaticCall;
     }
 }

@@ -107,15 +107,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function hasSomeComment(Expr $expr): bool
-    {
-        if ($expr->getComments() !== []) {
-            return true;
-        }
-
-        return $expr->getDocComment() !== null;
-    }
-
     private function shouldSkip(Return_ $return): bool
     {
         if (! $return->expr instanceof Variable) {
@@ -143,6 +134,15 @@ CODE_SAMPLE
             return true;
         }
         return $this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode);
+    }
+
+    private function hasSomeComment(Expr $expr): bool
+    {
+        if ($expr->getComments() !== []) {
+            return true;
+        }
+
+        return $expr->getDocComment() !== null;
     }
 
     private function isReturnWithVarAnnotation(Return_ $return): bool
