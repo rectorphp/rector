@@ -30,10 +30,12 @@ final class ArrayItemStaticHelper
     public static function resolveAnnotationItemsOrder(string $content, ?string $silentKey = null): array
     {
         // empty
-        if ($content === '' || $content === '()') {
+        if ($content === '') {
             return [];
         }
-
+        if ($content === '()') {
+            return [];
+        }
         $itemsOrder = [];
 
         $matches = Strings::matchAll($content, self::ITEM_EQUALS_REGEX);

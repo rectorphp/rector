@@ -117,10 +117,12 @@ CODE_SAMPLE
         MethodCall $mainMethodCall,
         MethodCall $toBeRemovedMethodCall
     ): bool {
-        if (! $mainMethodCall instanceof MethodCall || ! $mainMethodCall->var instanceof MethodCall) {
+        if (! $mainMethodCall instanceof MethodCall) {
             return false;
         }
-
+        if (! $mainMethodCall->var instanceof MethodCall) {
+            return false;
+        }
         if ($toBeRemovedMethodCall !== $mainMethodCall->var) {
             return false;
         }

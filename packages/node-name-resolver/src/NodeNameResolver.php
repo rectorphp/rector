@@ -115,10 +115,15 @@ final class NodeNameResolver
     public function getName(Node $node): ?string
     {
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            if ($node->name instanceof MethodCall || $node->name instanceof StaticCall || $node->name instanceof Identifier) {
+            if ($node->name instanceof MethodCall) {
                 return null;
             }
-
+            if ($node->name instanceof StaticCall) {
+                return null;
+            }
+            if ($node->name instanceof Identifier) {
+                return null;
+            }
             $this->reportInvalidNodeForName($node);
         }
 

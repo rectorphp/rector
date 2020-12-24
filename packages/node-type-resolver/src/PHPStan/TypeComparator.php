@@ -119,10 +119,12 @@ final class TypeComparator
      */
     private function areArrayTypeWithSingleObjectChildToParent(Type $firstType, Type $secondType): bool
     {
-        if (! $firstType instanceof ArrayType || ! $secondType instanceof ArrayType) {
+        if (! $firstType instanceof ArrayType) {
             return false;
         }
-
+        if (! $secondType instanceof ArrayType) {
+            return false;
+        }
         $firstArrayItemType = $firstType->getItemType();
         $secondArrayItemType = $secondType->getItemType();
 

@@ -169,14 +169,19 @@ final class NodeTypeResolver
         if ($node instanceof Arg) {
             $node = $node->value;
         }
-
-        if ($node instanceof Param || $node instanceof Scalar) {
+        if ($node instanceof Param) {
+            return $this->resolve($node);
+        }
+        if ($node instanceof Scalar) {
             return $this->resolve($node);
         }
 
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $node instanceof Expr || $nodeScope === null) {
+        if (! $node instanceof Expr) {
+            return new MixedType();
+        }
+        if ($nodeScope === null) {
             return new MixedType();
         }
 
@@ -354,7 +359,10 @@ final class NodeTypeResolver
 
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope === null || ! $node instanceof Expr) {
+        if ($nodeScope === null) {
+            return new MixedType();
+        }
+        if (! $node instanceof Expr) {
             return new MixedType();
         }
 

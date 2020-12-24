@@ -53,9 +53,11 @@ final class MovedFileWithNodesFactory
     ): ?MovedFileWithNodes {
         /** @var Namespace_|null $currentNamespace */
         $currentNamespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
-
         // file without namespace → skip
-        if ($currentNamespace === null || $currentNamespace->name === null) {
+        if ($currentNamespace === null) {
+            return null;
+        }
+        if ($currentNamespace->name === null) {
             return null;
         }
 
