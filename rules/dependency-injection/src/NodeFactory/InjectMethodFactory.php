@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\NodeFactory;
+namespace Rector\DependencyInjection\NodeFactory;
 
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;

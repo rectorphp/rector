@@ -15,9 +15,9 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\DependencyInjection\NodeFactory\InjectMethodFactory;
+use Rector\DependencyInjection\NodeRemover\ClassMethodNodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\SOLID\NodeFactory\InjectMethodFactory;
-use Rector\SOLID\NodeRemover\ClassMethodNodeRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 

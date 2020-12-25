@@ -11,9 +11,9 @@ use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeFinder\ParentClassConstantNodeFinder;
 use Rector\Privatization\Reflection\ParentConstantReflectionResolver;
-use Rector\SOLID\NodeFinder\ParentClassConstantNodeFinder;
-use Rector\SOLID\ValueObject\ConstantVisibility;
+use Rector\Privatization\ValueObject\ConstantVisibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 

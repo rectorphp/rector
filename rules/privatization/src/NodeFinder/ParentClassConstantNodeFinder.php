@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\NodeFinder;
+namespace Rector\Privatization\NodeFinder;
 
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\NodeRemover;
+namespace Rector\DependencyInjection\NodeRemover;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
