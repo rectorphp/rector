@@ -275,7 +275,6 @@ final class TokenManipulator
                 return null;
             }
 
-            /** @var FuncCall $node */
             if (! $this->betterStandardPrinter->areNodesEqual($possibleTokenArray->var, $singleTokenExpr)) {
                 return null;
             }
