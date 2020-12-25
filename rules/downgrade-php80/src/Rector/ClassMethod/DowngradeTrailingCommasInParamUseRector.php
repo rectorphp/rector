@@ -91,7 +91,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node, [MethodCall::class, FuncCall::class, StaticCall::class, New_::class, Closure::class])) {
-            $node = $this->processUses($node);
+            return $this->processArgs($node);
         }
 
         return $this->processParams($node);
