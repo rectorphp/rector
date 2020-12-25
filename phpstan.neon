@@ -403,8 +403,6 @@ parameters:
 
         # nodes/stmts
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
-        # finder type
-        - '#Method Rector\\SOLID\\Rector\\Assign\\MoveVariableDeclarationNearReferenceRector\:\:findFirstVariableUsageInScope\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'
 
         - '#Class with base "Application" name is already used in "(.*?)\\Symfony\\Component\\Console\\Application", "Symfony\\Component\\Console\\Application", "Rector\\Core\\Console\\Application"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
@@ -419,7 +417,7 @@ parameters:
                 - rules/php70/src/EregToPcreTransformer.php
                 - packages/node-collector/src/NodeCollector/NodeRepository.php
                 - packages/node-type-resolver/src/NodeTypeResolver.php
-                - rules/solid/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
+                - rules/code-quality-strict/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
                 - src/Rector/AbstractRector.php
                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
                 - rules/code-quality/src/Rector/For_/ForToForeachRector.php
@@ -714,3 +712,5 @@ parameters:
             message: '#Use explicit names over dynamic ones#'
             paths:
                 - utils/compiler/tests/PatchersCallbackTest.php
+
+        - '#Parameter \#3 \$type of method Rector\\CodeQualityStrict\\Rector\\ClassMethod\\ParamTypeToAssertTypeRector\:\:getToBeProcessedTypes\(\) expects PHPStan\\Type\\ObjectType\|PHPStan\\Type\\UnionType, PHPStan\\Type\\Type given#'

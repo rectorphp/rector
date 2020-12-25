@@ -564,11 +564,6 @@ final class SetList
     /**
      * @var string
      */
-    public const SOLID = __DIR__ . '/../../../../config/set/solid.php';
-
-    /**
-     * @var string
-     */
     public const SWIFTMAILER_60 = __DIR__ . '/../../../../config/set/swiftmailer60.php';
 
     /**

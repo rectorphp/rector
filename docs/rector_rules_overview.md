@@ -1225,7 +1225,7 @@ Change OR, AND to ||, && with more common understanding
 
 Move out method call inside If condition
 
-- class: `Rector\CodeQuality\Rector\If_\MoveOutMethodCallInsideIfConditionRector`
+- class: `Rector\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector`
 
 ```diff
 -if ($obj->run($arg) === 1) {
@@ -14530,7 +14530,7 @@ Classes that have no children nor are used, should have abstract
 
 Move variable declaration near its reference
 
-- class: `Rector\SOLID\Rector\Variable\MoveVariableDeclarationNearReferenceRector`
+- class: `Rector\CodeQualityStrict\Rector\Variable\MoveVariableDeclarationNearReferenceRector`
 
 ```diff
 -$var = 1;
@@ -14725,7 +14725,7 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
 
 Turn `@param` type to `assert` type
 
-- class: `Rector\StrictCodeQuality\Rector\ClassMethod\ParamTypeToAssertTypeRector`
+- class: `Rector\CodeQualityStrict\Rector\ClassMethod\ParamTypeToAssertTypeRector`
 
 ```diff
  class SomeClass
@@ -14747,7 +14747,7 @@ Turn `@param` type to `assert` type
 
 Turn `@var` inline checks above code to `assert()` of the type
 
-- class: `Rector\StrictCodeQuality\Rector\Stmt\VarInlineAnnotationToAssertRector`
+- class: `Rector\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector`
 
 ```diff
  class SomeClass
