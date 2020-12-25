@@ -68,9 +68,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Name[] $names */
         $names = $this->findNames($node);
-
         if ($names === []) {
             return null;
         }
