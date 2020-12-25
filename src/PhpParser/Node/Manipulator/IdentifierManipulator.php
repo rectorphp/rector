@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\NodeChanger\NodeMissingIdentifierException;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 /**
@@ -88,7 +89,7 @@ final class IdentifierManipulator
 
     private function resolveOldMethodName(Node $node): ?string
     {
-        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node, [StaticCall::class, MethodCall::class])) {
+        if (StaticInstanceOf::isOneOf($node, [StaticCall::class, MethodCall::class])) {
             return $this->nodeNameResolver->getName($node->name);
         }
 

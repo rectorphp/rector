@@ -12,6 +12,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ClassMethodPropertyFetchManipulator
@@ -57,7 +58,7 @@ final class ClassMethodPropertyFetchManipulator
                 return null;
             }
 
-            if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node->expr, [MethodCall::class, StaticCall::class])) {
+            if (StaticInstanceOf::isOneOf($node->expr, [MethodCall::class, StaticCall::class])) {
                 return null;
             }
 

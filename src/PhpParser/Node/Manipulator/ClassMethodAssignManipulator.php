@@ -27,6 +27,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -289,7 +290,7 @@ final class ClassMethodAssignManipulator
 
     private function isExplicitlyReferenced(Node $node): bool
     {
-        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node, [Arg::class, ClosureUse::class, Param::class])) {
+        if (StaticInstanceOf::isOneOf($node, [Arg::class, ClosureUse::class, Param::class])) {
             return $node->byRef;
         }
 
