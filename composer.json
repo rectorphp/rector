@@ -220,7 +220,6 @@
             "Rector\\FileSystemRector\\Tests\\": "packages/file-system-rector/tests",
             "Rector\\Generic\\Tests\\": "rules/generic/tests",
             "Rector\\JMS\\Tests\\": "rules/jms/tests",
-            "Rector\\Compiler\\Tests\\": "utils/compiler/tests",
             "Rector\\Laravel\\Tests\\": "rules/laravel/tests",
             "Rector\\Legacy\\Tests\\": "rules/legacy/tests",
             "Rector\\Defluent\\Tests\\": "rules/defluent/tests",
