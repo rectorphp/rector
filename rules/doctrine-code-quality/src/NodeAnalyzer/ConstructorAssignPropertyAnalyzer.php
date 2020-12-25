@@ -43,7 +43,6 @@ final class ConstructorAssignPropertyAnalyzer
             return null;
         }
 
-        /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
 
         return $this->betterNodeFinder->findFirst((array) $constructClassMethod->stmts, function (Node $node) use (

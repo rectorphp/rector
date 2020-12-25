@@ -299,9 +299,7 @@ final class NodeRepository
             return [];
         }
 
-        /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
-
         return $this->parsedPropertyFetchNodeCollector->findPropertyFetchesByTypeAndName($className, $propertyName);
     }
 

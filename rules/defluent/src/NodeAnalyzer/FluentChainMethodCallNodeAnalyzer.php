@@ -172,8 +172,7 @@ final class FluentChainMethodCallNodeAnalyzer
         $methods = array_reverse($methods);
 
         foreach ($methods as $method) {
-            $activeMethodName = $this->nodeNameResolver->getName($node->name);
-            if ($activeMethodName !== $method) {
+            if (! $this->nodeNameResolver->isName($node->name, $method)) {
                 return false;
             }
 
