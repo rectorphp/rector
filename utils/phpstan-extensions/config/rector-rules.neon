@@ -7,12 +7,12 @@ services:
         class: Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule
         tags: [phpstan.rules.rule]
 
-#    -
-#        class: Symplify\PHPStanRules\Rules\ForbiddenNullableParameterRule
-#        tags: [phpstan.rules.rule]
-#        arguments:
-#            forbidddenTypes:
-#                - PhpParser\Node
+    -
+        class: Symplify\PHPStanRules\Rules\ForbiddenNullableParameterRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            forbidddenTypes:
+                - PhpParser\Node
 
     -
         class: Symplify\PHPStanRules\Rules\IfNewTypeThenImplementInterfaceRule
