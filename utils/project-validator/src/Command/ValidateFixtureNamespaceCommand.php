@@ -44,10 +44,12 @@ final class ValidateFixtureNamespaceCommand extends Command
      * @var SmartFileSystem
      */
     private $smartFileSystem;
+
     /**
      * @var FixtureFinder
      */
     private $fixtureFinder;
+
     /**
      * @var NamespaceMatcher
      */

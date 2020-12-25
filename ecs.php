@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff;
 use PhpCsFixer\Fixer\Basic\Psr4Fixer;
+use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
@@ -28,6 +29,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(StandaloneLineInMultilineArrayFixer::class);
     $services->set(ArrayOpenerAndCloserNewlineFixer::class);
+
+    $services->set(ClassAttributesSeparationFixer::class);
 
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
         ->call('configure', [[

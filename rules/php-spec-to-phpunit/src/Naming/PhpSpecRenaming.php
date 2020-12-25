@@ -35,6 +35,7 @@ final class PhpSpecRenaming
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
+
     /**
      * @var ClassNaming
      */

@@ -32,6 +32,7 @@ final class MakeIsserClassMethodNameStartWithIsRector extends AbstractRector
      * @var MethodNameResolver
      */
     private $methodNameResolver;
+
     /**
      * @var MethodCallRenamer
      */
