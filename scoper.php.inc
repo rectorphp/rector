@@ -56,6 +56,10 @@ return [
             foreach (StaticEasyPrefixer::EXCLUDED_CLASSES as $excludedClass) {
                 $prefixedClassPattern = '#' . $prefix . '\\\\' . preg_quote($excludedClass, '#') . '#';
                 $content = Strings::replace($content, $prefixedClassPattern, $excludedClass);
+
+                // handle also duplicated slashes
+                $prefixedClassPattern = Strings::replace($prefixedClassPattern, '#\\\\#', '\\\\\\\\');
+                $content = Strings::replace($content, $prefixedClassPattern, $excludedClass);
             }
 
             return $content;
