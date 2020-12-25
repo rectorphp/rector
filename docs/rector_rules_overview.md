@@ -14487,7 +14487,7 @@ Change variable with read only status with default value to constant
 
 Finalize every class that has no children
 
-- class: `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`
+- class: `Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector`
 
 ```diff
 -class FirstClass
@@ -14511,7 +14511,7 @@ Finalize every class that has no children
 
 Classes that have no children nor are used, should have abstract
 
-- class: `Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector`
+- class: `Rector\Privatization\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector`
 
 ```diff
  class SomeClass extends PossibleAbstractClass

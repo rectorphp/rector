@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Tests\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
+namespace Rector\Privatization\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 
 use Iterator;
-use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
+use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class MakeUnusedClassesWithChildrenAbstractRectorTest extends AbstractRectorTestCase
+final class FinalizeClassesWithoutChildrenRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class MakeUnusedClassesWithChildrenAbstractRectorTest extends AbstractRect
 
     protected function getRectorClass(): string
     {
-        return MakeUnusedClassesWithChildrenAbstractRector::class;
+        return FinalizeClassesWithoutChildrenRector::class;
     }
 }

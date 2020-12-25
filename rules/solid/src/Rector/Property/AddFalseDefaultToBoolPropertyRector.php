@@ -70,18 +70,23 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
-        }
-
-        if (! $phpDocInfo->getVarType() instanceof BooleanType) {
+        if (! $this->isBoolDocType($node)) {
             return null;
         }
 
         $onlyProperty->default = $this->createFalse();
 
         return $node;
+    }
+
+    private function isBoolDocType(Property $property): bool
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return false;
+        }
+
+        return $phpDocInfo->getVarType() instanceof BooleanType;
     }
 }

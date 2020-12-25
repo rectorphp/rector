@@ -32,7 +32,6 @@ use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\PostRector\Collector\NodesToAddCollector;
-use Webmozart\Assert\Assert;
 
 final class LivingCodeManipulator
 {
