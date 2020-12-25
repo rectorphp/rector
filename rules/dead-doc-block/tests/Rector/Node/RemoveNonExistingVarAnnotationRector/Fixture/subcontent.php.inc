@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
+namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
 class Subcontent
 {
@@ -17,7 +17,7 @@ class Subcontent
 -----
 <?php
 
-namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
+namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
 class Subcontent
 {

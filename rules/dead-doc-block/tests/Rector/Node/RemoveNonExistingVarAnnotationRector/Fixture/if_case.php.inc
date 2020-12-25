@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
+namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
 class IfCase
 {
@@ -20,7 +20,7 @@ class IfCase
 -----
 <?php
 
-namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
+namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
 class IfCase
 {
