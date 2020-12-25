@@ -16,6 +16,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
@@ -84,14 +85,9 @@ final class StaticTypeMapper
 
     public function mapPHPStanPhpDocTypeToPHPStanType(PhpDocTagValueNode $phpDocTagValueNode, Node $node): Type
     {
-        if (\Rector\Core\Util\StaticInstanceOf::isOneOf(
+        if (StaticInstanceOf::isOneOf(
             $phpDocTagValueNode,
-            [
-                ReturnTagValueNode::class,
-                ParamTagValueNode::class,
-                VarTagValueNode::class,
-                ThrowsTagValueNode::class
-            ]
+            [ReturnTagValueNode::class, ParamTagValueNode::class, VarTagValueNode::class, ThrowsTagValueNode::class]
         )) {
             return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
         }
