@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Privatization\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector;
 use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Privatization\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
+use Rector\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector;
 use Rector\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector;
 use Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
@@ -23,6 +24,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeGlobalVariablesToPropertiesRector::class);
     $services->set(ChangeReadOnlyPropertyWithDefaultValueToConstantRector::class);
     $services->set(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
+    $services->set(RepeatedLiteralToClassConstantRector::class);
 
     $services->set(PrivatizeLocalOnlyMethodRector::class);
     $services->set(PrivatizeLocalGetterToPropertyRector::class);
