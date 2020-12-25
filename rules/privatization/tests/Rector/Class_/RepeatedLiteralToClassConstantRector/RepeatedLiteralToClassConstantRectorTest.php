@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Tests\Rector\Class_\RepeatedLiteralToClassConstantRector;
+namespace Rector\Privatization\Tests\Rector\Class_\RepeatedLiteralToClassConstantRector;
 
 use Iterator;
-use Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector;
+use Rector\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
