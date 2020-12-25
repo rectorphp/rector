@@ -3,7 +3,7 @@ name: Code Analysis
 on: [pull_request, push]
 
 jobs:
-    bare_run:
+    code_analysis:
         runs-on: ubuntu-latest
 
         strategy:
@@ -16,7 +16,9 @@ jobs:
                         run: php bin/rector --ansi
                     -
                         name: Finalize Rule
-                        run: php bin/rector process tests/fixture-finalize --config ci/rector-finalize.php --ansi
+                        run: |
+                            composer require doctrine/orm
+                            php bin/rector process tests/fixture-finalize --config ci/rector-finalize.php --ansi
 
         name: ${{ matrix.actions.name }}
 
