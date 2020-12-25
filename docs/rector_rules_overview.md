@@ -14405,7 +14405,7 @@ Rename file to respect class name
 
 Add false default to bool properties, to prevent null compare errors
 
-- class: `Rector\SOLID\Rector\Property\AddFalseDefaultToBoolPropertyRector`
+- class: `Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector`
 
 ```diff
  class SomeClass

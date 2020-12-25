@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Rector\Property;
+namespace Rector\CodingStyle\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\SOLID\Tests\Rector\Property\AddFalseDefaultToBoolPropertyRector\AddFalseDefaultToBoolPropertyRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\Property\AddFalseDefaultToBoolPropertyRector\AddFalseDefaultToBoolPropertyRectorTest
  */
 final class AddFalseDefaultToBoolPropertyRector extends AbstractRector
 {

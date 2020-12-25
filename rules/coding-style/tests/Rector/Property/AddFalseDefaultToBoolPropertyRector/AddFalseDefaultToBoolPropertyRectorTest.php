@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Tests\Rector\Property\AddFalseDefaultToBoolPropertyRector;
+namespace Rector\CodingStyle\Tests\Rector\Property\AddFalseDefaultToBoolPropertyRector;
 
 use Iterator;
-use Rector\SOLID\Rector\Property\AddFalseDefaultToBoolPropertyRector;
+use Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
