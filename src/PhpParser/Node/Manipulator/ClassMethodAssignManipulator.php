@@ -290,6 +290,10 @@ final class ClassMethodAssignManipulator
 
     private function isExplicitlyReferenced(Node $node): bool
     {
+        if (! property_exists($node, 'byRef')) {
+            return false;
+        }
+
         if (StaticInstanceOf::isOneOf($node, [Arg::class, ClosureUse::class, Param::class])) {
             return $node->byRef;
         }

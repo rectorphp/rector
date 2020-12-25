@@ -141,6 +141,7 @@ CODE_SAMPLE
     private function processBinaryOp(Node $node): ?Expr
     {
         if (StaticInstanceOf::isOneOf($node, [Plus::class, Minus::class])) {
+            \Webmozart\Assert\Assert::isAnyOf($node, [Plus::class, Minus::class]);
             return $this->processBinaryPlusAndMinus($node);
         }
 

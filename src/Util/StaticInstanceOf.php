@@ -12,8 +12,12 @@ final class StaticInstanceOf
     /**
      * @param class-string[] $array
      */
-    public static function isOneOf(object $object, array $array): bool
+    public static function isOneOf(?object $object, array $array): bool
     {
+        if ($object === null) {
+            return false;
+        }
+
         foreach ($array as $classLike) {
             if (is_a($object, $classLike, true)) {
                 return true;

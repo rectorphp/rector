@@ -89,6 +89,7 @@ final class LivingCodeManipulator
             );
         }
         if (StaticInstanceOf::isOneOf($expr, [ClassConstFetch::class, StaticPropertyFetch::class])) {
+            \Webmozart\Assert\Assert::isAnyOf($expr, [ClassConstFetch::class, StaticPropertyFetch::class]);
             return array_merge(
                 $this->keepLivingCodeFromExpr($expr->class),
                 $this->keepLivingCodeFromExpr($expr->name)

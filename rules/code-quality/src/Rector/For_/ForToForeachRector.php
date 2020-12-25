@@ -255,8 +255,10 @@ CODE_SAMPLE
             return false;
         }
 
-        if (StaticInstanceOf::isOneOf($loopExprs[0], [PreInc::class, PostInc::class])) {
-            return $this->isName($loopExprs[0]->var, $this->keyValueName);
+        /** @var PreInc|PostInc */
+        $prePostInc = $loopExprs[0];
+        if (StaticInstanceOf::isOneOf($prePostInc, [PreInc::class, PostInc::class])) {
+            return $this->isName($prePostInc->var, $this->keyValueName);
         }
 
         return false;
