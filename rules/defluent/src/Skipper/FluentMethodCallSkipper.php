@@ -55,6 +55,7 @@ final class FluentMethodCallSkipper
      * @var GetterMethodCallAnalyzer
      */
     private $getterMethodCallAnalyzer;
+
     /**
      * @var StringMatcher
      */

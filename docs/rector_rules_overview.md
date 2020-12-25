@@ -12854,7 +12854,7 @@ Change docs types to union types, where possible (properties are covered by Type
 
 Change global `$variables` to private properties
 
-- class: `Rector\PhpDeglobalize\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector`
+- class: `Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector`
 
 ```diff
  class SomeClass
@@ -14405,7 +14405,7 @@ Rename file to respect class name
 
 Add false default to bool properties, to prevent null compare errors
 
-- class: `Rector\SOLID\Rector\Property\AddFalseDefaultToBoolPropertyRector`
+- class: `Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector`
 
 ```diff
  class SomeClass
@@ -14424,7 +14424,7 @@ Add false default to bool properties, to prevent null compare errors
 
 Change property with read only status with default value to constant
 
-- class: `Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
+- class: `Rector\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
 
 ```diff
  class SomeClass
@@ -14454,7 +14454,7 @@ Change property with read only status with default value to constant
 
 Change variable with read only status with default value to constant
 
-- class: `Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector`
+- class: `Rector\Privatization\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector`
 
 ```diff
  class SomeClass
@@ -14605,7 +14605,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Replace repeated strings with constant
 
-- class: `Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector`
+- class: `Rector\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector`
 
 ```diff
  class SomeClass

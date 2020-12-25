@@ -18,6 +18,7 @@ final class CountableAnalyzer
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
+
     /**
      * @var NodeNameResolver
      */

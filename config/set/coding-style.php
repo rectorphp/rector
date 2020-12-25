@@ -25,6 +25,7 @@ use Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector;
 use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
 use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
+use Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
@@ -58,6 +59,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NewlineBeforeNewAssignSetRector::class);
     $services->set(ManualJsonStringToJsonEncodeArrayRector::class);
     $services->set(AddArrayDefaultToArrayPropertyRector::class);
+    $services->set(AddFalseDefaultToBoolPropertyRector::class);
     $services->set(MakeInheritedMethodVisibilitySameAsParentRector::class);
     $services->set(CallUserFuncCallToVariadicRector::class);
     $services->set(VersionCompareFuncCallToConstantRector::class);

@@ -33,6 +33,7 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
      * @var FunctionLikeReturnTypeResolver
      */
     private $functionLikeReturnTypeResolver;
+
     /**
      * @var ClassMethodAndPropertyAnalyzer
      */

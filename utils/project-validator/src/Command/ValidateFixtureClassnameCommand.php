@@ -93,14 +93,17 @@ final class ValidateFixtureClassnameCommand extends Command
      * @var SmartFileSystem
      */
     private $smartFileSystem;
+
     /**
      * @var FixtureFinder
      */
     private $fixtureFinder;
+
     /**
      * @var NamespaceMatcher
      */
     private $namespaceMather;
+
     /**
      * @var ExpectedNameResolver
      */

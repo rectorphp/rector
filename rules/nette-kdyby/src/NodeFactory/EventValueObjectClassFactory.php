@@ -42,6 +42,7 @@ final class EventValueObjectClassFactory
      * @var NodeFactory
      */
     private $nodeFactory;
+
     /**
      * @var NodeNameResolver
      */
