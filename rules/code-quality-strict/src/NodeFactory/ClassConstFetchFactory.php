@@ -8,7 +8,9 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class ClassConstFetchFactory
@@ -28,6 +30,10 @@ final class ClassConstFetchFactory
 
         if ($type instanceof UnionType) {
             foreach ($type->getTypes() as $unionedType) {
+                if (! $unionedType instanceof TypeWithClassName) {
+                    throw new ShouldNotHappenException();
+                }
+
                 $classConstTypes[] = new ClassConstFetch(new FullyQualified($unionedType->getClassName()), 'class');
             }
         }

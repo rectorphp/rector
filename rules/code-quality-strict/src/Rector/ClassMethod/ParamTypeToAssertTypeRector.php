@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Rector\CodeQualityStrict\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodeQualityStrict\NodeFactory\ClassConstFetchFactory;
+use Rector\CodeQualityStrict\TypeAnalyzer\SubTypeAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -31,9 +30,15 @@ final class ParamTypeToAssertTypeRector extends AbstractRector
      */
     private $classConstFetchFactory;
 
-    public function __construct(ClassConstFetchFactory $classConstFetchFactory)
+    /**
+     * @var SubTypeAnalyzer
+     */
+    private $subTypeAnalyzer;
+
+    public function __construct(ClassConstFetchFactory $classConstFetchFactory, SubTypeAnalyzer $subTypeAnalyzer)
     {
         $this->classConstFetchFactory = $classConstFetchFactory;
+        $this->subTypeAnalyzer = $subTypeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -105,6 +110,7 @@ CODE_SAMPLE
                 continue;
             }
 
+            /** @var ObjectType|UnionType $docParamType */
             $assertionTypes = $this->getToBeProcessedTypes($params, $key, $docParamType);
             if ($assertionTypes === null) {
                 continue;
@@ -138,12 +144,14 @@ CODE_SAMPLE
 
     /**
      * @param Param[] $params
+     * @param ObjectType|UnionType $type
      * @return ObjectType|UnionType
      */
     private function getToBeProcessedTypes(array $params, string $key, Type $type): ?Type
     {
         foreach ($params as $param) {
-            if (! $this->isName($param->var, ltrim($key, '$'))) {
+            $paramName = ltrim($key, '$');
+            if (! $this->isName($param->var, $paramName)) {
                 continue;
             }
 
@@ -157,7 +165,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->isObjectSubType($paramType, $type)) {
+            if ($this->subTypeAnalyzer->isObjectSubType($paramType, $type)) {
                 continue;
             }
 
@@ -168,7 +176,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, ObjectType> $toBeProcessedTypes
+     * @param array<string, ObjectType|UnionType> $toBeProcessedTypes
      */
     private function processAddTypeAssert(ClassMethod $classMethod, array $toBeProcessedTypes): ClassMethod
     {
@@ -179,10 +187,10 @@ CODE_SAMPLE
             $arguments = [new Variable($variableName)];
 
             if (count($classConstFetches) > 1) {
-                $arguments[] = [$classConstFetches];
+                $arguments[] = $classConstFetches;
                 $methodName = 'isAnyOf';
             } else {
-                $arguments[] = new Arg($classConstFetches[0]);
+                $arguments[] = $classConstFetches[0];
                 $methodName = 'isAOf';
             }
 
@@ -211,23 +219,5 @@ CODE_SAMPLE
         }
 
         return $classMethod;
-    }
-
-    private function isObjectSubType(Type $checkedType, Type $mainType): bool
-    {
-        if (! $checkedType instanceof TypeWithClassName) {
-            return false;
-        }
-
-        if (! $mainType instanceof TypeWithClassName) {
-            return false;
-        }
-
-        if (is_a($checkedType->getClassName(), $mainType->getClassName(), true)) {
-            return true;
-        }
-
-        // child of every object
-        return $mainType->getClassName() === 'stdClass';
     }
 }
