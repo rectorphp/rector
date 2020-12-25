@@ -419,7 +419,7 @@ parameters:
                 - rules/php70/src/EregToPcreTransformer.php
                 - packages/node-collector/src/NodeCollector/NodeRepository.php
                 - packages/node-type-resolver/src/NodeTypeResolver.php
-                - rules/code-quality/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
+                - rules/code-quality-string/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
                 - src/Rector/AbstractRector.php
                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
                 - rules/code-quality/src/Rector/For_/ForToForeachRector.php

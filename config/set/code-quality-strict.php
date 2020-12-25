@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\Variable\MoveVariableDeclarationNearReferenceRector;
 use Rector\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector;
+use Rector\CodeQualityStrict\Rector\Variable\MoveVariableDeclarationNearReferenceRector;
 use Rector\Performance\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

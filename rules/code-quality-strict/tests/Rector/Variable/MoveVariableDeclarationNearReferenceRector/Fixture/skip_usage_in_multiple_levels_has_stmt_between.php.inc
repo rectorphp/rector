@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
+namespace Rector\CodeQualityStrict\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
 
-class SkipUsageInMultipleLevels
+class SkipUsageInMultipleLevelsHasStmtBetween
 {
     function myMethod()
     {
@@ -15,6 +15,8 @@ class SkipUsageInMultipleLevels
                 }
             }
         }
+
+        echo 'STATEMENT HERE';
 
         echo $varused;
     }

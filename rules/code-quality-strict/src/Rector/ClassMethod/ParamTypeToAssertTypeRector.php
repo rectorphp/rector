@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
@@ -15,12 +16,12 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -84,50 +85,41 @@ CODE_SAMPLE
 
         /** @var Type[] $paramTypes */
         $paramTypes = $phpDocInfo->getParamTypesByName();
-
-        /** @var Param[] $params */
-        $params = $node->getParams();
         if ($paramTypes === []) {
             return null;
         }
+
+        $params = $node->getParams();
         if ($params === []) {
             return null;
         }
 
         $toBeProcessedTypes = [];
         foreach ($paramTypes as $key => $paramType) {
-            if (! $paramType instanceof FullyQualifiedObjectType && ! $paramType instanceof UnionType && ! $paramType instanceof ShortenedObjectType) {
+            if (! $this->isExclusivelyObjectType($paramType)) {
                 continue;
             }
 
-            $types = $this->getTypes($paramType);
-            if ($this->isNotClassTypes($types)) {
-                continue;
-            }
-
-            $toBeProcessedTypes = $this->getToBeProcessedTypes($params, $key, $types, $toBeProcessedTypes);
+            $toBeProcessedTypes[$key] = $this->getToBeProcessedTypes($params, $key, $paramType);
         }
 
         return $this->processAddTypeAssert($node, $toBeProcessedTypes);
     }
 
-    /**
-     * @return Type[]
-     */
-    private function getTypes(Type $type): array
+    private function isExclusivelyObjectType(Type $type): bool
     {
-        return $type instanceof UnionType ? $type->getTypes() : [$type];
-    }
+        if ($type instanceof ObjectType) {
+            return true;
+        }
 
-    /**
-     * @param Type[] $types
-     */
-    private function isNotClassTypes(array $types): bool
-    {
-        foreach ($types as $type) {
-            if (! $type instanceof FullyQualifiedObjectType && ! $type instanceof ShortenedObjectType) {
-                return true;
+        if ($type instanceof UnionType) {
+            foreach ($type->getTypes() as $unionedType) {
+                if (! $this->isExclusivelyObjectType($unionedType)) {
+                    return false;
+                }
             }
+
+            return true;
         }
 
         return false;
@@ -135,53 +127,55 @@ CODE_SAMPLE
 
     /**
      * @param Param[] $params
-     * @param Type[] $types
-     * @param array<string, array<int, string>> $toBeProcessedTypes
+     * @param ObjectType|UnionType<ObjectType> $types
      * @return array<string, array<int, string>>
      */
-    private function getToBeProcessedTypes(array $params, string $key, array $types, array $toBeProcessedTypes): array
+    private function getToBeProcessedTypes(array $params, string $key, Type $types): array
     {
+        $assertionTypes = [];
+
         foreach ($params as $param) {
-            $paramVarName = $this->getName($param->var);
-            if (! $param->type instanceof FullyQualified || $key !== '$' . $paramVarName) {
+            if (! $this->isName($param->var, '$' . $key)) {
                 continue;
             }
+
+            if (! $param->type instanceof FullyQualified) {
+                continue;
+            }
+
+            dump($types);
+            die;
 
             foreach ($types as $type) {
                 $className = $type instanceof ShortenedObjectType ? $type->getFullyQualifiedName() : $type->getClassName();
 
                 // @todo refactor to types
-                if (! is_a($className, $param->type->toString(), true) || $className === $param->type->toString()) {
+                if (! is_a($className, $param->type->toString(), true) || $this->isName($param->type, $className)) {
                     continue 2;
                 }
 
-                $toBeProcessedTypes[$paramVarName][] = '\\' . $className;
+                $assertionTypes[] = '\\' . $className;
             }
         }
 
-        return $toBeProcessedTypes;
+        return $assertionTypes;
     }
 
     /**
-     * @param array<string, array<int, string>> $toBeProcessedTypes
+     * @param array<string, ObjectType[]> $toBeProcessedTypes
      */
     private function processAddTypeAssert(ClassMethod $classMethod, array $toBeProcessedTypes): ClassMethod
     {
         $assertStatements = [];
-        foreach ($toBeProcessedTypes as $key => $toBeProcessedType) {
-            $types = [];
-            foreach ($toBeProcessedType as $keyType => $type) {
-                $toBeProcessedType[$keyType] = sprintf('%s::class', $type);
-                $types[] = new ArrayItem(new ConstFetch(new Name($toBeProcessedType[$keyType])));
-            }
+        foreach ($toBeProcessedTypes as $variableName => $requiredObjectTypes) {
+            $classConstFetches = $this->createClassConstFetches($requiredObjectTypes);
 
-            if (count($types) > 1) {
-                $args = [new Arg(new Variable($key)), new Arg(new Array_($types))];
+            if (count($classConstFetches) > 1) {
+                $args = [new Arg(new Variable($variableName)), new Arg(new Array_($classConstFetches))];
                 $staticCall = $this->createStaticCall('Webmozart\Assert\Assert', 'isAnyOf', $args);
                 $assertStatements[] = new Expression($staticCall);
             } else {
-                $args = [new Arg(new Variable($key)), new Arg(new ConstFetch(new Name($toBeProcessedType[0])))];
-
+                $args = [new Arg(new Variable($variableName)), new Arg($classConstFetches[0])];
                 $staticCall = $this->createStaticCall('Webmozart\Assert\Assert', 'isAOf', $args);
                 $assertStatements[] = new Expression($staticCall);
             }
@@ -206,5 +200,19 @@ CODE_SAMPLE
         }
 
         return $classMethod;
+    }
+
+    /**
+     * @param ObjectType[] $objectTypes
+     * @return ClassConstFetch[]
+     */
+    private function createClassConstFetches(array $objectTypes): array
+    {
+        $classConstTypes = [];
+        foreach ($objectTypes as $objectType) {
+            $classConstTypes[] = $this->createClassConstFetch($objectType->getClassName(), 'class');
+        }
+
+        return $classConstTypes;
     }
 }
