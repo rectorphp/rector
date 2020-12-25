@@ -50,21 +50,6 @@ return [
             return $content;
         },
 
-        // un-prefix excluded classes
-        // fixes https://github.com/humbug/box/issues/470
-//        function (string $filePath, string $prefix, string $content): string {
-//            foreach (StaticEasyPrefixer::EXCLUDED_CLASSES as $excludedClass) {
-//                $prefixedClassPattern = '#' . $prefix . '\\\\' . preg_quote($excludedClass, '#') . '#';
-//                $content = Strings::replace($content, $prefixedClassPattern, $excludedClass);
-//
-//                // handle also duplicated slashes
-//                $prefixedClassPattern = Strings::replace($prefixedClassPattern, '#\\\\#', '\\\\\\\\');
-//                $content = Strings::replace($content, $prefixedClassPattern, $excludedClass);
-//            }
-//
-//            return $content;
-//        },
-
         // fatal error on PHP 8
         function (string $filePath, string $prefix, string $content): string {
             return str_replace('private static final', 'private static', $content);

@@ -7,11 +7,11 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
+// @todo complete later..., maybe decoupled to symplify?
+// @todo normal commadn with arugment?
 // cleans all useless files
 $smartFinder = new SmartFinder(new FinderSanitizer(), new FileSystemFilter());
 $sartFileSystem = new SmartFileSystem();
-
-// @todo normal commadn with arugment?
 
 $fileInfos = $smartFinder->find([
     __DIR__ . '/../../../packages',

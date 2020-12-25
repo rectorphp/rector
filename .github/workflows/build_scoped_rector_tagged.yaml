@@ -1,5 +1,5 @@
 # builds the content of https://github.com/rectorphp/rector-prefixed
-name: Build Scoped Rector
+name: Build Scoped Rector Tagged
 
 on:
     push:
@@ -8,11 +8,15 @@ on:
             - '*'
 
 jobs:
-    build_scoped_rector:
+    build_scoped_rector_tagged:
         runs-on: ubuntu-latest
         steps:
             -
                 uses: actions/checkout@v2
+                # this is required for "WyriHaximus/github-action-get-previous-tag" workflow
+                # see https://github.com/actions/checkout#fetch-all-history-for-all-tags-and-branches
+                with:
+                    fetch-depth: 0
 
             -
                 uses: shivammathur/setup-php@v2
@@ -25,9 +29,13 @@ jobs:
             # 1. prepare dependencies
             -   run: sh build-rector-scoped.sh
 
-            # 2. publish it to remote repository
+            # 2. get tag - see https://github.com/WyriHaximus/github-action-get-previous-tag
             -
-                # Uses an action in the root directory
+                id: previous_tag
+                uses: "WyriHaximus/github-action-get-previous-tag@master"
+
+            # 3. publish it
+            -
                 uses: symplify/github-action-monorepo-split@master
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -35,5 +43,6 @@ jobs:
                     package-directory: 'rector-scoped'
                     split-repository-organization: 'rectorphp'
                     split-repository-name: 'rector-prefixed'
+                    tag: ${{ steps.previous_tag.outputs.tag }}
                     user-name: "kaizen-ci"
                     user-email: "info@kaizen-ci.org"
