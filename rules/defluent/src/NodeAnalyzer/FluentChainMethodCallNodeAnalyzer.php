@@ -220,10 +220,6 @@ final class FluentChainMethodCallNodeAnalyzer
 
     private function isCall(Expr $expr): bool
     {
-        if ($expr instanceof MethodCall) {
-            return true;
-        }
-
-        return $expr instanceof StaticCall;
+        return \Rector\Core\Util\StaticInstanceOf::isOneOf($expr, [MethodCall::class, StaticCall::class]);
     }
 }

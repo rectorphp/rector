@@ -88,12 +88,10 @@ final class IdentifierManipulator
 
     private function resolveOldMethodName(Node $node): ?string
     {
-        if ($node instanceof StaticCall) {
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node, [StaticCall::class, MethodCall::class])) {
             return $this->nodeNameResolver->getName($node->name);
         }
-        if ($node instanceof MethodCall) {
-            return $this->nodeNameResolver->getName($node->name);
-        }
+
         return $this->nodeNameResolver->getName($node);
     }
 }

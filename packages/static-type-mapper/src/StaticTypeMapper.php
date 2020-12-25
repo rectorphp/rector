@@ -84,18 +84,18 @@ final class StaticTypeMapper
 
     public function mapPHPStanPhpDocTypeToPHPStanType(PhpDocTagValueNode $phpDocTagValueNode, Node $node): Type
     {
-        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf(
+            $phpDocTagValueNode,
+            [
+                ReturnTagValueNode::class,
+                ParamTagValueNode::class,
+                VarTagValueNode::class,
+                ThrowsTagValueNode::class
+            ]
+        )) {
             return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
         }
-        if ($phpDocTagValueNode instanceof ParamTagValueNode) {
-            return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
-        }
-        if ($phpDocTagValueNode instanceof VarTagValueNode) {
-            return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
-        }
-        if ($phpDocTagValueNode instanceof ThrowsTagValueNode) {
-            return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
-        }
+
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpDocTagValueNode));
     }
 

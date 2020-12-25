@@ -289,15 +289,10 @@ final class ClassMethodAssignManipulator
 
     private function isExplicitlyReferenced(Node $node): bool
     {
-        if ($node instanceof Arg) {
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node, [Arg::class, ClosureUse::class, Param::class])) {
             return $node->byRef;
         }
-        if ($node instanceof ClosureUse) {
-            return $node->byRef;
-        }
-        if ($node instanceof Param) {
-            return $node->byRef;
-        }
+
         return false;
     }
 

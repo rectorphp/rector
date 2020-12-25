@@ -102,10 +102,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Assign) {
-            if ($node->var instanceof PropertyFetch) {
-                return $this->processMagicSet($node);
-            }
-            if ($node->var instanceof StaticPropertyFetch) {
+            if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node->var, [PropertyFetch::class, StaticPropertyFetch::class])) {
                 return $this->processMagicSet($node);
             }
             return null;

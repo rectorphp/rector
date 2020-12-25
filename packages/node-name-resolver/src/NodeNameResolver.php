@@ -219,14 +219,7 @@ final class NodeNameResolver
 
     private function isCallOrIdentifier(Node $node): bool
     {
-        if ($node instanceof MethodCall) {
-            return true;
-        }
-        if ($node instanceof StaticCall) {
-            return true;
-        }
-
-        return $node instanceof Identifier;
+        return \Rector\Core\Util\StaticInstanceOf::isOneOf($node, [MethodCall::class, StaticCall::class, Identifier::class]);
     }
 
     /**

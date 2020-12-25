@@ -139,12 +139,10 @@ CODE_SAMPLE
 
     private function processBinaryOp(Node $node): ?Expr
     {
-        if ($node instanceof Plus) {
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node, [Plus::class, Minus::class])) {
             return $this->processBinaryPlusAndMinus($node);
         }
-        if ($node instanceof Minus) {
-            return $this->processBinaryPlusAndMinus($node);
-        }
+
         // *, /
         if ($node instanceof Mul) {
             return $this->processBinaryMulAndDiv($node);

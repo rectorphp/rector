@@ -102,12 +102,10 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
     private function resolveNearestExpressionPosition(Node $node): string
     {
-        if ($node instanceof Expression) {
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node, [Expression::class, Stmt::class])) {
             return spl_object_hash($node);
         }
-        if ($node instanceof Stmt) {
-            return spl_object_hash($node);
-        }
+
         /** @var Expression|null $foundNode */
         $foundNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($node, Expression::class);
         if ($foundNode === null) {

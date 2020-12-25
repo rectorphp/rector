@@ -246,15 +246,11 @@ final class VariableNaming
 
     private function isCall(?Node $node): bool
     {
-        if ($node instanceof MethodCall) {
-            return true;
+        if ($node === null) {
+            return false;
         }
 
-        if ($node instanceof NullsafeMethodCall) {
-            return true;
-        }
-
-        return $node instanceof StaticCall;
+        return \Rector\Core\Util\StaticInstanceOf::isOneOf($node, [MethodCall::class, NullsafeMethodCall::class, StaticCall::class]);
     }
 
     private function resolveFromMethodCall(?Node $node): ?string

@@ -90,19 +90,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof MethodCall) {
-            return $this->processArgs($node);
-        }
-        if ($node instanceof FuncCall) {
-            return $this->processArgs($node);
-        }
-        if ($node instanceof StaticCall) {
-            return $this->processArgs($node);
-        }
-        if ($node instanceof New_) {
-            return $this->processArgs($node);
-        }
-        if ($node instanceof Closure) {
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($ndoe, [MethodCall::class, FuncCall::class, StaticCall::class, New_::class, Closure::class])) {
             $node = $this->processUses($node);
         }
 

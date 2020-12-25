@@ -100,11 +100,9 @@ CODE_SAMPLE
 
         $varNode = $node->args[0]->value;
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
         // result of function or probably used
-        if ($parentNode instanceof Expr) {
-            return null;
-        }
-        if ($parentNode instanceof Arg) {
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($parentNode, [Expr::class, Arg::class])) {
             return null;
         }
 

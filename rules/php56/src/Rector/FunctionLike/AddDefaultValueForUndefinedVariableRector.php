@@ -186,10 +186,7 @@ CODE_SAMPLE
         )) {
             return true;
         }
-        if ($parentNode instanceof Unset_) {
-            return true;
-        }
-        if ($parentNode instanceof UnsetCast) {
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($parentNode, [Unset_::class, UnsetCast::class])) {
             return true;
         }
 
@@ -231,10 +228,7 @@ CODE_SAMPLE
     {
         if ($parentNode instanceof Node) {
             $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof List_) {
-                return true;
-            }
-            if ($parentParentNode instanceof Array_) {
+            if (\Rector\Core\Util\StaticInstanceOf::isOneOf($parentParentNode, List_::class, Array_::class)) {
                 return true;
             }
         }

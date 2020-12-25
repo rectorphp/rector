@@ -169,10 +169,8 @@ final class NodeTypeResolver
         if ($node instanceof Arg) {
             $node = $node->value;
         }
-        if ($node instanceof Param) {
-            return $this->resolve($node);
-        }
-        if ($node instanceof Scalar) {
+
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node, [Param::class, Scalar::class])) {
             return $this->resolve($node);
         }
 

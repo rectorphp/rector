@@ -57,10 +57,7 @@ final class ParsedPropertyFetchNodeCollector
 
         $propertyType = $this->resolvePropertyCallerType($node);
         // make sure name is valid
-        if ($node->name instanceof StaticCall) {
-            return;
-        }
-        if ($node->name instanceof MethodCall) {
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($node->name, [StaticCall::class, MethodCall::class])) {
             return;
         }
 

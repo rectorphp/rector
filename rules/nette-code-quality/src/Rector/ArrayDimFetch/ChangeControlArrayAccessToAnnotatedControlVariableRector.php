@@ -141,10 +141,7 @@ CODE_SAMPLE
         }
 
         $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Isset_) {
-            return ! $arrayDimFetch->dim instanceof Variable;
-        }
-        if ($parent instanceof Unset_) {
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($parent, [Isset_::class, Unset_::class])) {
             return ! $arrayDimFetch->dim instanceof Variable;
         }
 

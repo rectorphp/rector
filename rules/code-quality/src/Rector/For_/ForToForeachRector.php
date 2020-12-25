@@ -253,10 +253,8 @@ CODE_SAMPLE
         if ($this->keyValueName === null) {
             return false;
         }
-        if ($loopExprs[0] instanceof PreInc) {
-            return $this->isName($loopExprs[0]->var, $this->keyValueName);
-        }
-        if ($loopExprs[0] instanceof PostInc) {
+
+        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($loopExprs[0], [PreInc::class, PostInc::class])) {
             return $this->isName($loopExprs[0]->var, $this->keyValueName);
         }
 
