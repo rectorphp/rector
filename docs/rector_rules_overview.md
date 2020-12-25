@@ -14487,7 +14487,7 @@ Change variable with read only status with default value to constant
 
 Finalize every class that has no children
 
-- class: `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`
+- class: `Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector`
 
 ```diff
 -class FirstClass

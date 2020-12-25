@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector;
-use Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 use Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector;
 use Rector\SOLID\Rector\Property\AddFalseDefaultToBoolPropertyRector;
