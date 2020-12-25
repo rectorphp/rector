@@ -75,6 +75,7 @@ final class UnusedClassResolver
             $this->getClassConstantFetchNames()
         );
 
+        /** @var string[] $cachedUsedClassNames */
         $cachedUsedClassNames = $this->sortAndUniqueArray($cachedUsedClassNames);
 
         $this->cachedUsedClassNames = $cachedUsedClassNames;
