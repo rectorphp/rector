@@ -24,6 +24,7 @@ use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -253,11 +254,11 @@ CODE_SAMPLE
         if ($this->keyValueName === null) {
             return false;
         }
-        if ($loopExprs[0] instanceof PreInc) {
-            return $this->isName($loopExprs[0]->var, $this->keyValueName);
-        }
-        if ($loopExprs[0] instanceof PostInc) {
-            return $this->isName($loopExprs[0]->var, $this->keyValueName);
+
+        /** @var PreInc|PostInc $prePostInc */
+        $prePostInc = $loopExprs[0];
+        if (StaticInstanceOf::isOneOf($prePostInc, [PreInc::class, PostInc::class])) {
+            return $this->isName($prePostInc->var, $this->keyValueName);
         }
 
         return false;

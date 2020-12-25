@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -85,11 +86,9 @@ CODE_SAMPLE
         if ($classLike === null) {
             return true;
         }
+
         // unreliable to detect trait, interface doesn't make sense
-        if ($classLike instanceof Trait_) {
-            return true;
-        }
-        if ($classLike instanceof Interface_) {
+        if (StaticInstanceOf::isOneOf($classLike, [Trait_::class, Interface_::class])) {
             return true;
         }
 

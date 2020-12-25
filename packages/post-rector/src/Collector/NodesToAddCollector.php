@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 
@@ -102,12 +103,10 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
     private function resolveNearestExpressionPosition(Node $node): string
     {
-        if ($node instanceof Expression) {
+        if (StaticInstanceOf::isOneOf($node, [Expression::class, Stmt::class])) {
             return spl_object_hash($node);
         }
-        if ($node instanceof Stmt) {
-            return spl_object_hash($node);
-        }
+
         /** @var Expression|null $foundNode */
         $foundNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($node, Expression::class);
         if ($foundNode === null) {

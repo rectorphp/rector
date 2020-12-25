@@ -17,6 +17,7 @@ use PhpParser\Node\Name;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
@@ -219,14 +220,7 @@ final class NodeNameResolver
 
     private function isCallOrIdentifier(Node $node): bool
     {
-        if ($node instanceof MethodCall) {
-            return true;
-        }
-        if ($node instanceof StaticCall) {
-            return true;
-        }
-
-        return $node instanceof Identifier;
+        return StaticInstanceOf::isOneOf($node, [MethodCall::class, StaticCall::class, Identifier::class]);
     }
 
     /**

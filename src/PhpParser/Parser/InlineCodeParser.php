@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Parser;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 
 final class InlineCodeParser
@@ -96,13 +97,8 @@ final class InlineCodeParser
         if ($content instanceof Concat) {
             return $this->stringify($content->left) . $this->stringify($content->right);
         }
-        if ($content instanceof Variable) {
-            return $this->betterStandardPrinter->print($content);
-        }
-        if ($content instanceof PropertyFetch) {
-            return $this->betterStandardPrinter->print($content);
-        }
-        if ($content instanceof StaticPropertyFetch) {
+
+        if (StaticInstanceOf::isOneOf($content, [Variable::class, PropertyFetch::class, StaticPropertyFetch::class])) {
             return $this->betterStandardPrinter->print($content);
         }
 

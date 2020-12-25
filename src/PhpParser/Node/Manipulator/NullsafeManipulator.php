@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NullsafeManipulator
@@ -34,10 +35,8 @@ final class NullsafeManipulator
         }
 
         $parentIdentifier = $nextExprIdentifier->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentIdentifier instanceof MethodCall) {
-            return new NullsafeMethodCall($expr, $nextExprIdentifier);
-        }
-        if ($parentIdentifier instanceof NullsafeMethodCall) {
+
+        if (StaticInstanceOf::isOneOf($parentIdentifier, [MethodCall::class, NullsafeMethodCall::class])) {
             return new NullsafeMethodCall($expr, $nextExprIdentifier);
         }
 

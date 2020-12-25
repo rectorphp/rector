@@ -25,6 +25,7 @@ use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -186,10 +187,7 @@ CODE_SAMPLE
         )) {
             return true;
         }
-        if ($parentNode instanceof Unset_) {
-            return true;
-        }
-        if ($parentNode instanceof UnsetCast) {
+        if (StaticInstanceOf::isOneOf($parentNode, [Unset_::class, UnsetCast::class])) {
             return true;
         }
 
@@ -231,10 +229,7 @@ CODE_SAMPLE
     {
         if ($parentNode instanceof Node) {
             $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof List_) {
-                return true;
-            }
-            if ($parentParentNode instanceof Array_) {
+            if (StaticInstanceOf::isOneOf($parentParentNode, [List_::class, Array_::class])) {
                 return true;
             }
         }

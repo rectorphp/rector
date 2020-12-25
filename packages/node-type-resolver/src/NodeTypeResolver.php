@@ -31,6 +31,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassLikeTypeCorrector;
@@ -169,10 +170,8 @@ final class NodeTypeResolver
         if ($node instanceof Arg) {
             $node = $node->value;
         }
-        if ($node instanceof Param) {
-            return $this->resolve($node);
-        }
-        if ($node instanceof Scalar) {
+
+        if (StaticInstanceOf::isOneOf($node, [Param::class, Scalar::class])) {
             return $this->resolve($node);
         }
 

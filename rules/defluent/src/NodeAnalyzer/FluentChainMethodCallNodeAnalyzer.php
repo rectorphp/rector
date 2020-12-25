@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -220,10 +221,6 @@ final class FluentChainMethodCallNodeAnalyzer
 
     private function isCall(Expr $expr): bool
     {
-        if ($expr instanceof MethodCall) {
-            return true;
-        }
-
-        return $expr instanceof StaticCall;
+        return StaticInstanceOf::isOneOf($expr, [MethodCall::class, StaticCall::class]);
     }
 }

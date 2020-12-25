@@ -16,9 +16,11 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\DowngradePhp80\Tests\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector\DowngradeTrailingCommasInParamUseRectorTest
@@ -90,22 +92,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof MethodCall) {
+        if (StaticInstanceOf::isOneOf($node, [MethodCall::class, FuncCall::class, StaticCall::class, New_::class])) {
+            /** @var  MethodCall|FuncCall|StaticCall|New_ $node */
             return $this->processArgs($node);
         }
-        if ($node instanceof FuncCall) {
-            return $this->processArgs($node);
-        }
-        if ($node instanceof StaticCall) {
-            return $this->processArgs($node);
-        }
-        if ($node instanceof New_) {
-            return $this->processArgs($node);
-        }
+
         if ($node instanceof Closure) {
             $node = $this->processUses($node);
         }
 
+        /** @var ClassMethod|Function_ $node */
         return $this->processParams($node);
     }
 
