@@ -538,7 +538,6 @@ parameters:
             paths:
                 - packages/better-php-doc-parser/src/PhpDocNodeFactory/ParamPhpDocNodeFactory.php
 
-
         -
             message: '#Class cognitive complexity is 42, keep it under 40#'
             paths:
@@ -563,6 +562,16 @@ parameters:
             paths:
                 - packages/better-php-doc-parser/src/PhpDocParser/BetterPhpDocParser.php #268
                 - rules/php70/src/EregToPcreTransformer.php #277
+
+        - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'
+
+        -
+             message: '#Class cognitive complexity is \d+, keep it under 40#'
+             paths:
+                  - src/Rector/AbstractRector.php
+                  - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
+                  - rules/code-quality/src/Rector/For_/ForToForeachRector.php
+                  - rules/coding-style/src/Rector/Use_/RemoveUnusedAliasRector.php
 
         - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'
 

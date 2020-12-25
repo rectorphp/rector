@@ -1,0 +1,48 @@
+# builds the content of https://github.com/rectorphp/rector-prefixed
+name: Build Scoped Rector Tagged
+
+on:
+    push:
+        # see https://github.community/t/how-to-run-github-actions-workflow-only-for-new-tags/16075/10?u=tomasvotruba
+        tags:
+            - '*'
+
+jobs:
+    build_scoped_rector_tagged:
+        runs-on: ubuntu-latest
+        steps:
+            -
+                uses: actions/checkout@v2
+                # this is required for "WyriHaximus/github-action-get-previous-tag" workflow
+                # see https://github.com/actions/checkout#fetch-all-history-for-all-tags-and-branches
+                with:
+                    fetch-depth: 0
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.0
+                # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+            # 1. prepare dependencies
+            -   run: sh build-rector-scoped.sh
+
+            # 2. get tag - see https://github.com/WyriHaximus/github-action-get-previous-tag
+            -
+                id: previous_tag
+                uses: "WyriHaximus/github-action-get-previous-tag@master"
+
+            # 3. publish it
+            -
+                uses: symplify/github-action-monorepo-split@master
+                env:
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                with:
+                    package-directory: 'rector-scoped'
+                    split-repository-organization: 'rectorphp'
+                    split-repository-name: 'rector-prefixed'
+                    tag: ${{ steps.previous_tag.outputs.tag }}
+                    user-name: "kaizen-ci"
+                    user-email: "info@kaizen-ci.org"

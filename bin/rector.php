@@ -27,10 +27,14 @@ define('__RECTOR_RUNNING__', true);
 
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder();
-$autoloadIncluder->includeCwdVendorAutoloadIfExists();
-$autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
+
+$autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
+$autoloadIncluder->loadIfExistsAndNotLoadedYet(getcwd() . '/vendor/autoload.php');
+
+$autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
+$autoloadIncluder->autoloadPhpStanExtracted();
 
 $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
 $symfonyStyle = $symfonyStyleFactory->create();
@@ -81,11 +85,6 @@ final class AutoloadIncluder
      */
     private $alreadyLoadedAutoloadFiles = [];
 
-    public function includeCwdVendorAutoloadIfExists(): void
-    {
-        $this->loadIfExistsAndNotLoadedYet(getcwd() . '/vendor/autoload.php');
-    }
-
     public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
     {
         // Rector's vendor is already loaded
@@ -106,6 +105,14 @@ final class AutoloadIncluder
         $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../../autoload.php');
     }
 
+    /**
+     * This autoloads extracted PHPStan autoload
+     */
+    public function autoloadPhpStanExtracted(): void
+    {
+        $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/phpstan/phpstan-extracted/vendor/autoload.php');
+    }
+
     public function autoloadFromCommandLine(): void
     {
         $cliArgs = $_SERVER['argv'];
@@ -124,7 +131,7 @@ final class AutoloadIncluder
         $this->loadIfExistsAndNotLoadedYet($fileToAutoload);
     }
 
-    private function loadIfExistsAndNotLoadedYet(string $filePath): void
+    public function loadIfExistsAndNotLoadedYet(string $filePath): void
     {
         if (! file_exists($filePath)) {
             return;

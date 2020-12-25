@@ -139,6 +139,7 @@
             "Rector\\PhpAttribute\\": "packages/php-attribute/src",
             "Rector\\PhpSpecToPHPUnit\\": "rules/php-spec-to-phpunit/src",
             "Rector\\Polyfill\\": "rules/polyfill/src",
+            "Rector\\Compiler\\": "utils/compiler/src",
             "Rector\\PostRector\\": "packages/post-rector/src",
             "Rector\\Privatization\\": "rules/privatization/src",
             "Rector\\RectorGenerator\\": "packages/rector-generator/src",

@@ -1,0 +1,38 @@
+# builds the content of https://github.com/rectorphp/rector-prefixed
+name: Build Scoped Rector
+
+on:
+    push:
+        # see https://github.community/t/how-to-run-github-actions-workflow-only-for-new-tags/16075/10?u=tomasvotruba
+        tags:
+            - '*'
+
+jobs:
+    build_scoped_rector:
+        runs-on: ubuntu-latest
+        steps:
+            -
+                uses: actions/checkout@v2
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.0
+                # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+            # 1. prepare dependencies
+            -   run: sh build-rector-scoped.sh
+
+            # 2. publish it to remote repository
+            -
+                uses: symplify/github-action-monorepo-split@master
+                env:
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                with:
+                    package-directory: 'rector-scoped'
+                    split-repository-organization: 'rectorphp'
+                    split-repository-name: 'rector-prefixed'
+                    user-name: "kaizen-ci"
+                    user-email: "info@kaizen-ci.org"
