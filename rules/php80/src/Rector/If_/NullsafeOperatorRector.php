@@ -298,23 +298,19 @@ CODE_SAMPLE
         /** @var Expr $expr */
         $expr = $expr->var->getAttribute(AttributeKey::PARENT_NODE);
         $expr = $this->getNullSafeAfterStartUntilBeforeEnd($start, $expr);
-        $expr = $this->nullsafeManipulator->processNullSafeExprResult($expr, $nextNode->expr->name);
 
-        return $expr;
+        return $this->nullsafeManipulator->processNullSafeExprResult($expr, $nextNode->expr->name);
     }
 
-    private function getPreviousIf(Node $node): ?If_
+    private function getPreviousIf(Node $node): ?Node
     {
         /** @var If_ $start */
         $start = $node->getAttribute(AttributeKey::NEXT_NODE);
-
         /** @var Expression $start */
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);
-
-        /** @var If_ $start */
-        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
-
         /** @var Expression $start */
+        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
         return $start->getAttribute(AttributeKey::NEXT_NODE);
     }
 
