@@ -60,8 +60,8 @@ final class FluentChainMethodCallRootExtractorTest extends AbstractKernelTestCas
 
         $this->assertFalse($assignAndRootExpr->isFirstCallFactory());
 
-        $silentVariable = $assignAndRootExpr->getSilentVariable();
         /** @var Variable $silentVariable */
+        $silentVariable = $assignAndRootExpr->getSilentVariable();
         $this->assertInstanceOf(Variable::class, $silentVariable);
 
         $this->assertIsString($silentVariable->name);

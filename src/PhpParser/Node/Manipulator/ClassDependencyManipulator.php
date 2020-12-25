@@ -78,9 +78,9 @@ final class ClassDependencyManipulator
         ?Type $type,
         Assign $assign
     ): void {
+        /** @var ClassMethod|null $constructorMethod */
         $constructorMethod = $class->getMethod(MethodName::CONSTRUCT);
 
-        /** @var ClassMethod|null $constructorMethod */
         if ($constructorMethod !== null) {
             $this->classMethodAssignManipulator->addParameterAndAssignToMethod(
                 $constructorMethod,

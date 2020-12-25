@@ -329,7 +329,6 @@ CODE_SAMPLE
         /** @var string $presenterPart */
         $presenterPart = Strings::after($presenterName, '\\', -1);
 
-        /** @var string $presenterPart */
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
         $presenterPart = StaticRectorStrings::camelCaseToDashes($presenterPart);
 

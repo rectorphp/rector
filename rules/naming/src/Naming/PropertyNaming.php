@@ -240,7 +240,6 @@ final class PropertyNaming
         if (in_array($shortClassName, ['Factory', 'Repository'], true)) {
             /** @var string $namespaceAbove */
             $namespaceAbove = Strings::after($className, '\\', -2);
-            /** @var string $namespaceAbove */
             $namespaceAbove = Strings::before($namespaceAbove, '\\');
 
             return lcfirst($namespaceAbove) . $shortClassName;
