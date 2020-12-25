@@ -178,6 +178,10 @@ CODE_SAMPLE
     private function shouldSkipVariable(Variable $variable): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode === null) {
+            return true;
+        }
+
         if ($parentNode instanceof Global_) {
             return true;
         }
@@ -225,15 +229,9 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isListAssign(?Node $parentNode): bool
+    private function isListAssign(Node $node): bool
     {
-        if ($parentNode instanceof Node) {
-            $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if (StaticInstanceOf::isOneOf($parentParentNode, [List_::class, Array_::class])) {
-                return true;
-            }
-        }
-
-        return false;
+        $parentParentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        return StaticInstanceOf::isOneOf($parentParentNode, [List_::class, Array_::class]);
     }
 }

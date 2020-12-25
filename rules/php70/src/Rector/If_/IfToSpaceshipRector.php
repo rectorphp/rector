@@ -174,14 +174,8 @@ CODE_SAMPLE
         }
     }
 
-    private function areVariablesEqual(BinaryOp $binaryOp, ?Expr $firstValue, ?Expr $secondValue): bool
+    private function areVariablesEqual(BinaryOp $binaryOp, Expr $firstValue, Expr $secondValue): bool
     {
-        if ($firstValue === null) {
-            return false;
-        }
-        if ($secondValue === null) {
-            return false;
-        }
         if ($this->areNodesEqual($binaryOp->left, $firstValue) && $this->areNodesEqual(
             $binaryOp->right,
             $secondValue
