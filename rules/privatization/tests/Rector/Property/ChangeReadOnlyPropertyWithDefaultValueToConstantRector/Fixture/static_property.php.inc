@@ -1,20 +1,20 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\Fixture;
 
-class Fixture
+class StaticProperty
 {
     /**
      * @var string[]
      */
-    private $magicMethods = [
+    private static $magicMethods = [
         '__toString',
         '__wakeup',
     ];
 
     public function run()
     {
-        foreach ($this->magicMethods as $magicMethod) {
+        foreach (self::$magicMethods as $magicMethod) {
             echo $magicMethod;
         }
     }
@@ -24,9 +24,9 @@ class Fixture
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\Fixture;
 
-class Fixture
+class StaticProperty
 {
     /**
      * @var string[]

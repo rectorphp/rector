@@ -14424,7 +14424,7 @@ Add false default to bool properties, to prevent null compare errors
 
 Change property with read only status with default value to constant
 
-- class: `Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
+- class: `Rector\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
 
 ```diff
  class SomeClass
