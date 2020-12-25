@@ -14,7 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeReadOnlyPropertyWithDefaultValueToConstantRector::class);
     $services->set(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
-    $services->set(AddFalseDefaultToBoolPropertyRector::class);
     $services->set(RepeatedLiteralToClassConstantRector::class);
+    $services->set(AddFalseDefaultToBoolPropertyRector::class);
     $services->set(MoveVariableDeclarationNearReferenceRector::class);
 };
