@@ -113,13 +113,13 @@ final class AddFinal
 Run PHPUnit with the test file to confirm:
 
 ```bash
-vendor/bin/phpunit rules/solid/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php
+vendor/bin/phpunit rules/privatization/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php
 ```
 
 To run only the single test fixture, add `--filter test#X`, where X is the fixture's order number.
 
 ```bash
-vendor/bin/phpunit rules/solid/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php --filter test#4
+vendor/bin/phpunit rules/privatization/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php --filter test#4
 ```
 
 If PHPUnit fails, you've successfully added a test case! :)
