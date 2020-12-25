@@ -131,7 +131,7 @@ CODE_SAMPLE
     {
         $newItems = [];
         $accumulatedItems = [];
-        /** @var Scope */
+        /** @var Scope $nodeScope */
         $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
         foreach ($array->items as $position => $item) {
             if ($item !== null && $item->unpack) {
@@ -169,7 +169,7 @@ CODE_SAMPLE
      */
     private function createArrayMerge(Array_ $array, array $items): FuncCall
     {
-        /** @var Scope */
+        /** @var Scope $nodeScope */
         $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
         return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item) use ($nodeScope): Arg {
             if ($item !== null && $item->unpack) {
@@ -191,7 +191,7 @@ CODE_SAMPLE
      */
     private function createVariableFromNonVariable(Array_ $array, ArrayItem $arrayItem, $position): Variable
     {
-        /** @var Scope */
+        /** @var Scope $nodeScope */
         $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
         // The variable name will be item0Unpacked, item1Unpacked, etc,
         // depending on their position.
@@ -219,7 +219,7 @@ CODE_SAMPLE
     private function createArgFromSpreadArrayItem(Scope $nodeScope, ArrayItem $arrayItem): Arg
     {
         // By now every item is a variable
-        /** @var Variable */
+        /** @var Variable $variable */
         $variable = $arrayItem->value;
         $variableName = $this->getName($variable) ?? '';
         // If the variable is not in scope, it's one we just added.
