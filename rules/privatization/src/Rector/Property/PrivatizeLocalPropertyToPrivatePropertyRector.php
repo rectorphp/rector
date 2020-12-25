@@ -117,6 +117,10 @@ CODE_SAMPLE
     private function shouldSkip(Property $property): bool
     {
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
+            return true;
+        }
+
         if ($this->shouldSkipClass($classLike)) {
             return true;
         }
@@ -149,7 +153,7 @@ CODE_SAMPLE
         return false;
     }
 
-    private function shouldSkipClass(?ClassLike $classLike): bool
+    private function shouldSkipClass(ClassLike $classLike): bool
     {
         if (! $classLike instanceof Class_) {
             return true;
@@ -159,11 +163,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isObjectType($classLike, 'PHPUnit\Framework\TestCase')) {
-            return true;
-        }
-
-        return $this->isObjectType($classLike, 'PHP_CodeSniffer\Sniffs\Sniff');
+        return $this->isObjectTypes($classLike, ['PHPUnit\Framework\TestCase', 'PHP_CodeSniffer\Sniffs\Sniff']);
     }
 
     private function shouldSkipProperty(Property $property): bool

@@ -100,13 +100,17 @@ CODE_SAMPLE
         // Get all the params passed by reference
         /** @var Assign */
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
         /** @var Variable */
         $exprVariable = $parentNode->expr;
+
         // Count number of params by ref on the right side, to remove them later on
         $rightSideRemovableParamsCount = $this->countRightSideMostParamsByRefOrEmpty($node->items);
+
         // Add new nodes to do the assignment by reference
         $newNodes = $this->createAssignRefArrayFromListReferences($node->items, $exprVariable, []);
         $this->addNodesAfterNode($newNodes, $node);
+
         // Remove the stale params right-most-side
         return $this->removeStaleParams($node, $rightSideRemovableParamsCount);
     }
