@@ -143,7 +143,6 @@ CODE_SAMPLE
     {
         if (StaticInstanceOf::isOneOf($node, [Plus::class, Minus::class])) {
             /** @var Plus|Minus $node */
-            $node = $node;
             return $this->processBinaryPlusAndMinus($node);
         }
 

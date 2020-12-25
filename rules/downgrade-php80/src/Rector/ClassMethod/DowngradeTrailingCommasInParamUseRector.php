@@ -94,7 +94,6 @@ CODE_SAMPLE
     {
         if (StaticInstanceOf::isOneOf($node, [MethodCall::class, FuncCall::class, StaticCall::class, New_::class])) {
             /** @var  MethodCall|FuncCall|StaticCall|New_ $node */
-            $node = $node;
             return $this->processArgs($node);
         }
 
@@ -103,7 +102,6 @@ CODE_SAMPLE
         }
 
         /** @var ClassMethod|Function_ $node */
-        $node = $node;
         return $this->processParams($node);
     }
 
