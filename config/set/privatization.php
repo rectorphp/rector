@@ -3,10 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
-<<<<<<< HEAD
 use Rector\Privatization\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
-=======
->>>>>>> cdd6a9433... move
 use Rector\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector;
@@ -18,10 +15,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-<<<<<<< HEAD
     $services->set(MakeUnusedClassesWithChildrenAbstractRector::class);
-=======
->>>>>>> cdd6a9433... move
     $services->set(FinalizeClassesWithoutChildrenRector::class);
     $services->set(PrivatizeLocalOnlyMethodRector::class);
     $services->set(PrivatizeLocalGetterToPropertyRector::class);
