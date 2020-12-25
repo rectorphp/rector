@@ -291,7 +291,12 @@ CODE_SAMPLE
                     throw new ShouldNotHappenException();
                 }
 
-                return $this->isVariableName($node->var->dim, $this->keyValueName);
+                $arrayDimFetch = $node->var;
+                if ($arrayDimFetch->dim === null) {
+                    return false;
+                }
+
+                return $this->isVariableName($arrayDimFetch->dim, $this->keyValueName);
             }
         );
     }
@@ -359,6 +364,10 @@ CODE_SAMPLE
             // is dim same as key value name, ...[$i]
             if ($this->keyValueName === null) {
                 throw new ShouldNotHappenException();
+            }
+
+            if ($node->dim === null) {
+                return null;
             }
 
             if (! $this->isVariableName($node->dim, $this->keyValueName)) {
