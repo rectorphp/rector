@@ -34,6 +34,7 @@ $autoloadIncluder->loadIfExistsAndNotLoadedYet(getcwd() . '/vendor/autoload.php'
 
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
+$autoloadIncluder->autoloadPhpStanExtracted();
 
 $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
 $symfonyStyle = $symfonyStyleFactory->create();
@@ -102,6 +103,14 @@ final class AutoloadIncluder
     public function autoloadProjectAutoloaderFile(): void
     {
         $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../../autoload.php');
+    }
+
+    /**
+     * This autoloads extracted PHPStan autoload
+     */
+    public function autoloadPhpStanExtracted(): void
+    {
+        $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/phpstan/phpstan-extracted/vendor/autoload.php');
     }
 
     public function autoloadFromCommandLine(): void
