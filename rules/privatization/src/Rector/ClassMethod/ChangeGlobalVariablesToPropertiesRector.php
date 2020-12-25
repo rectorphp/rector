@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpDeglobalize\Rector\ClassMethod;
+namespace Rector\Privatization\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/DWC4P
  *
  * @see https://stackoverflow.com/a/12446305/1348344
- * @see \Rector\PhpDeglobalize\Tests\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\ChangeGlobalVariablesToPropertiesRectorTest
+ * @see \Rector\Privatization\Tests\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\ChangeGlobalVariablesToPropertiesRectorTest
  */
 final class ChangeGlobalVariablesToPropertiesRector extends AbstractRector
 {

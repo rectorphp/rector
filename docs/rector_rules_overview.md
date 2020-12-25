@@ -12854,7 +12854,7 @@ Change docs types to union types, where possible (properties are covered by Type
 
 Change global `$variables` to private properties
 
-- class: `Rector\PhpDeglobalize\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector`
+- class: `Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector`
 
 ```diff
  class SomeClass

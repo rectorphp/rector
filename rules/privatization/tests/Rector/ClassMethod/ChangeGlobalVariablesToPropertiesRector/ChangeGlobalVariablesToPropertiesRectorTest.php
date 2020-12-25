@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpDeglobalize\Tests\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;
+namespace Rector\Privatization\Tests\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;
 
 use Iterator;
-use Rector\PhpDeglobalize\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;
+use Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
