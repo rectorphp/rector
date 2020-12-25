@@ -228,7 +228,7 @@ CODE_SAMPLE
     {
         if ($parentNode instanceof Node) {
             $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if (\Rector\Core\Util\StaticInstanceOf::isOneOf($parentParentNode, List_::class, Array_::class)) {
+            if (\Rector\Core\Util\StaticInstanceOf::isOneOf($parentParentNode, [List_::class, Array_::class])) {
                 return true;
             }
         }
