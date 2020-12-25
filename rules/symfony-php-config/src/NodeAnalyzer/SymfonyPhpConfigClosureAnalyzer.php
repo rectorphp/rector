@@ -21,7 +21,7 @@ final class SymfonyPhpConfigClosureAnalyzer
 
     public function isPhpConfigClosure(Closure $closure): bool
     {
-        if (count((array) $closure->params) !== 1) {
+        if (count($closure->params) !== 1) {
             return false;
         }
 

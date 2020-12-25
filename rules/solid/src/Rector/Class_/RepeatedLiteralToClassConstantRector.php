@@ -154,7 +154,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $stringsByValue[(string) $string->value][] = $string;
+            $stringsByValue[$string->value][] = $string;
         }
 
         $stringsToReplace = [];
@@ -164,7 +164,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $stringsToReplace[] = (string) $value;
+            $stringsToReplace[] = $value;
         }
 
         return $stringsToReplace;
@@ -205,7 +205,7 @@ CODE_SAMPLE
 
     private function shouldSkipString(String_ $string): bool
     {
-        $value = (string) $string->value;
+        $value = $string->value;
 
         // value is too short
         if (strlen($value) < 2) {
@@ -232,7 +232,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return $matches[self::VALUE] !== (string) $string->value;
+        return $matches[self::VALUE] !== $string->value;
     }
 
     private function createConstName(string $value): string

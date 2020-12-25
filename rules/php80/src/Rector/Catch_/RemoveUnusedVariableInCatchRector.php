@@ -67,7 +67,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isVariableUsed((array) $node->stmts, $caughtVar)) {
+        if ($this->isVariableUsed($node->stmts, $caughtVar)) {
             return null;
         }
 

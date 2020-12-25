@@ -211,7 +211,7 @@ final class NonInformativeReturnTagRemover
             return null;
         }
 
-        if (count((array) $returnTagValueNode->type->types) !== 2) {
+        if (count($returnTagValueNode->type->types) !== 2) {
             return null;
         }
 

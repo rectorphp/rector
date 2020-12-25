@@ -92,7 +92,7 @@ CODE_SAMPLE
         }
 
         if ($node->else !== null) {
-            $this->addNodesAfterNode((array) $node->else->stmts, $node);
+            $this->addNodesAfterNode($node->else->stmts, $node);
             $node->else = null;
             return $node;
         }

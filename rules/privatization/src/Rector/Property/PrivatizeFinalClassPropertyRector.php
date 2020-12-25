@@ -80,7 +80,7 @@ CODE_SAMPLE
 
     private function shouldSkipProperty(Property $property): bool
     {
-        if (count((array) $property->props) !== 1) {
+        if (count($property->props) !== 1) {
             return true;
         }
 

@@ -74,7 +74,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $node->args) === 3) {
+        if (count($node->args) === 3) {
             return null;
         }
 
@@ -82,7 +82,7 @@ CODE_SAMPLE
         $assign = $this->createGuardAssign($guardVariable);
         $this->addNodeBeforeNode($assign, $node);
 
-        $node->args = array_merge([new Arg($guardVariable)], (array) $node->args);
+        $node->args = array_merge([new Arg($guardVariable)], $node->args);
 
         return $node;
     }

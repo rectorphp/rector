@@ -46,7 +46,7 @@ final class FullyQualifiedNameMatcher
         }
 
         if ($name instanceof Name) {
-            if (count((array) $name->parts) !== 1) {
+            if (count($name->parts) !== 1) {
                 return null;
             }
 

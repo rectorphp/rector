@@ -107,7 +107,7 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ((array) $classMethod->stmts as $key => $stmt) {
+        foreach ($classMethod->stmts as $key => $stmt) {
             if ($stmt instanceof Return_ && $stmt->expr !== null) {
                 if ($isArrayWrap && ! $stmt->expr instanceof Array_) {
                     $stmt->expr = new Array_([new ArrayItem($stmt->expr)]);

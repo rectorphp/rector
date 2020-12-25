@@ -251,7 +251,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return count((array) $funcCall->args) >= 1;
+        return count($funcCall->args) >= 1;
     }
 
     /**

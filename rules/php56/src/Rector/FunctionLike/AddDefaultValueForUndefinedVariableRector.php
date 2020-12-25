@@ -158,7 +158,7 @@ CODE_SAMPLE
 
     private function collectDefinedVariablesFromForeach(Foreach_ $foreach): void
     {
-        $this->traverseNodesWithCallable((array) $foreach->stmts, function (Node $node): void {
+        $this->traverseNodesWithCallable($foreach->stmts, function (Node $node): void {
             if ($node instanceof Assign || $node instanceof AssignRef) {
                 if (! $node->var instanceof Variable) {
                     return;

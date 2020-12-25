@@ -190,7 +190,7 @@ final class BreakingVariableRenameGuard
             return false;
         }
 
-        return $this->betterNodeFinder->hasVariableOfName((array) $functionLike->uses, $expectedName);
+        return $this->betterNodeFinder->hasVariableOfName($functionLike->uses, $expectedName);
     }
 
     private function isUsedInForeachKeyValueVar(Variable $variable, string $currentName): bool

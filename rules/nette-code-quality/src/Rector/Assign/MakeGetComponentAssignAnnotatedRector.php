@@ -194,7 +194,7 @@ CODE_SAMPLE
             return new MixedType();
         }
 
-        if (count((array) $methodCall->args) !== 1) {
+        if (count($methodCall->args) !== 1) {
             return new MixedType();
         }
 

@@ -82,7 +82,7 @@ CODE_SAMPLE
             $commandName
         );
 
-        $node->stmts = array_merge([$defaultNameProperty], (array) $node->stmts);
+        $node->stmts = array_merge([$defaultNameProperty], $node->stmts);
 
         return $node;
     }
@@ -103,7 +103,7 @@ CODE_SAMPLE
     {
         $commandName = null;
 
-        $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (&$commandName) {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandName) {
             if (! $node instanceof StaticCall) {
                 return null;
             }
@@ -126,7 +126,7 @@ CODE_SAMPLE
     {
         $commandName = null;
 
-        $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (&$commandName) {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandName) {
             if (! $node instanceof MethodCall) {
                 return null;
             }
@@ -194,7 +194,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $staticCall->args) < 1) {
+        if (count($staticCall->args) < 1) {
             return null;
         }
 

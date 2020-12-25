@@ -37,7 +37,7 @@ final class NewFluentChainMethodCallNodeAnalyzer
      */
     public function matchNewInFluentSetterMethodCall(MethodCall $methodCall): ?New_
     {
-        if (count((array) $methodCall->args) !== 1) {
+        if (count($methodCall->args) !== 1) {
             return null;
         }
 

@@ -116,7 +116,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count((array) $methodCall->args) < 3) {
+        if (count($methodCall->args) < 3) {
             return true;
         }
 

@@ -192,7 +192,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (count((array) $if->else->stmts) !== 1) {
+        if (count($if->else->stmts) !== 1) {
             return false;
         }
 
@@ -203,7 +203,7 @@ CODE_SAMPLE
 
     private function isIfWithSingleReturnExpr(If_ $if): bool
     {
-        if (count((array) $if->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return false;
         }
 

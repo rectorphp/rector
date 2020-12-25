@@ -46,7 +46,7 @@ final class PromotedPropertyResolver
 
         $propertyPromotionCandidates = [];
         foreach ($class->getProperties() as $property) {
-            if (count((array) $property->props) !== 1) {
+            if (count($property->props) !== 1) {
                 continue;
             }
 

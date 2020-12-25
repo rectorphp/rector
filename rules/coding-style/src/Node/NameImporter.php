@@ -194,7 +194,7 @@ final class NameImporter
             return false;
         }
 
-        return count((array) $name->parts) === 1;
+        return count($name->parts) === 1;
     }
 
     private function isNonExistingClassLikeAndFunctionFullyQualifiedName(Name $name): bool

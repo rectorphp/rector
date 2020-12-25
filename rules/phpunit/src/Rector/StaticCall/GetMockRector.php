@@ -53,7 +53,7 @@ final class GetMockRector extends AbstractPHPUnitRector
         }
 
         // narrow args to one
-        if (count((array) $node->args) > 1) {
+        if (count($node->args) > 1) {
             $node->args = [$node->args[0]];
         }
 

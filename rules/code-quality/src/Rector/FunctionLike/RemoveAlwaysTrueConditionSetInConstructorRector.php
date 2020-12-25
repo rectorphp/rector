@@ -114,7 +114,7 @@ CODE_SAMPLE
             return null;
         }
         $haveNodeChanged = false;
-        foreach ((array) $node->stmts as $key => $stmt) {
+        foreach ($node->stmts as $key => $stmt) {
             if ($stmt instanceof Expression) {
                 $stmt = $stmt->expr;
             }
@@ -124,14 +124,14 @@ CODE_SAMPLE
             }
 
             /** @var If_ $stmt */
-            if (count((array) $stmt->stmts) === 1) {
+            if (count($stmt->stmts) === 1) {
                 $node->stmts[$key] = $stmt->stmts[0];
                 continue;
             }
 
             $haveNodeChanged = true;
             // move all nodes one level up
-            array_splice($node->stmts, $key, count((array) $stmt->stmts) - 1, $stmt->stmts);
+            array_splice($node->stmts, $key, count($stmt->stmts) - 1, $stmt->stmts);
         }
 
         if ($haveNodeChanged) {
@@ -148,7 +148,7 @@ CODE_SAMPLE
         }
 
         // just one if
-        if (count((array) $node->elseifs) !== 0) {
+        if (count($node->elseifs) !== 0) {
             return false;
         }
 

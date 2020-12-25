@@ -149,7 +149,7 @@ CODE_SAMPLE
         int $argumentPosition,
         ArrayToFluentCall $arrayToFluentCall
     ): ?MethodCall {
-        if (count((array) $methodCall->args) !== $argumentPosition) {
+        if (count($methodCall->args) !== $argumentPosition) {
             return null;
         }
 

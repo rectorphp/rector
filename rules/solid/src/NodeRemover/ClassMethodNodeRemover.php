@@ -45,7 +45,7 @@ final class ClassMethodNodeRemover
 
     public function removeClassMethodIfUseless(ClassMethod $classMethod): void
     {
-        if ((array) $classMethod->params !== []) {
+        if ($classMethod->params !== []) {
             return;
         }
 

@@ -143,7 +143,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count((array) $foreach->stmts) > 1) {
+        if (count($foreach->stmts) > 1) {
             return true;
         }
 

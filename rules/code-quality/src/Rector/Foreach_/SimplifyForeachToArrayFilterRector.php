@@ -70,11 +70,11 @@ CODE_SAMPLE
 
         /** @var FuncCall $funcCallNode */
         $funcCallNode = $ifNode->cond;
-        if (count((array) $ifNode->stmts) !== 1) {
+        if (count($ifNode->stmts) !== 1) {
             return null;
         }
 
-        if (count((array) $funcCallNode->args) !== 1) {
+        if (count($funcCallNode->args) !== 1) {
             return null;
         }
 
@@ -109,7 +109,7 @@ CODE_SAMPLE
 
     private function shouldSkip(Foreach_ $foreach): bool
     {
-        if (count((array) $foreach->stmts) !== 1) {
+        if (count($foreach->stmts) !== 1) {
             return true;
         }
 

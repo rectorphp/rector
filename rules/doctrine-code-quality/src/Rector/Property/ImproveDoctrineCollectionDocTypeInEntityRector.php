@@ -173,7 +173,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $classMethod->params) !== 1) {
+        if (count($classMethod->params) !== 1) {
             return null;
         }
 

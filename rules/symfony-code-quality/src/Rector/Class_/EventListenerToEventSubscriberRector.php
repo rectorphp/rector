@@ -190,7 +190,7 @@ CODE_SAMPLE
 
     private function isAlreadyEventSubscriber(Class_ $class): bool
     {
-        foreach ((array) $class->implements as $implement) {
+        foreach ($class->implements as $implement) {
             if ($this->isName($implement, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
                 return true;
             }

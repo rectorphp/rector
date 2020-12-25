@@ -40,7 +40,7 @@ final class SetUpClassMethodNodeManipulator
 
         if ($setUpClassMethod === null) {
             $setUpClassMethod = $this->setUpClassMethodFactory->createSetUpMethod($stmts);
-            $class->stmts = array_merge([$setUpClassMethod], (array) $class->stmts);
+            $class->stmts = array_merge([$setUpClassMethod], $class->stmts);
         } else {
             $setUpClassMethod->stmts = array_merge((array) $setUpClassMethod->stmts, $stmts);
         }

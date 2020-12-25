@@ -141,7 +141,7 @@ CODE_SAMPLE
         }
 
         /** @var Param[] $params */
-        $params = (array) $classMethodOrFunction->getParams();
+        $params = $classMethodOrFunction->getParams();
 
         foreach ($params as $param) {
             if ($this->areNamesEqual($param->var, $variable)) {

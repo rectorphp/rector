@@ -83,12 +83,12 @@ final class MultiDirnameRector extends AbstractRector
             return null;
         }
 
-        if (count((array) $funcCall->args) >= 3) {
+        if (count($funcCall->args) >= 3) {
             return null;
         }
 
         // dirname($path, <LEVEL>);
-        if (count((array) $funcCall->args) === 2) {
+        if (count($funcCall->args) === 2) {
             if (! $funcCall->args[1]->value instanceof LNumber) {
                 return null;
             }

@@ -105,7 +105,7 @@ CODE_SAMPLE
 
         if ($node instanceof Namespace_) {
             $node->name = new Name($expectedNamespace);
-            $this->makeNamesFullyQualified((array) $node->stmts);
+            $this->makeNamesFullyQualified($node->stmts);
         }
 
         return $node;
@@ -125,10 +125,10 @@ CODE_SAMPLE
             }
         }
 
-        $namespace = new Namespace_(new Name($expectedNamespace), (array) $nodes);
+        $namespace = new Namespace_(new Name($expectedNamespace), $nodes);
         $nodesWithStrictTypesThenNamespace[] = $namespace;
 
-        $this->makeNamesFullyQualified((array) $nodes);
+        $this->makeNamesFullyQualified($nodes);
 
         // @todo update to a new class node, like FileWithNamespace
         return new FileWithoutNamespace($nodesWithStrictTypesThenNamespace);

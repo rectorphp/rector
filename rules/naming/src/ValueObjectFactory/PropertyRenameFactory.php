@@ -28,7 +28,7 @@ final class PropertyRenameFactory
 
     public function create(Property $property, ExpectedNameResolverInterface $expectedNameResolver): ?PropertyRename
     {
-        if (count((array) $property->props) !== 1) {
+        if (count($property->props) !== 1) {
             return null;
         }
 

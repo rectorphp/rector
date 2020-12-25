@@ -120,7 +120,7 @@ CODE_SAMPLE
         MethodCall $methodCall,
         ModalToGetSet $modalToGetSet
     ): string {
-        if (count((array) $methodCall->args) >= $modalToGetSet->getMinimalSetterArgumentCount()) {
+        if (count($methodCall->args) >= $modalToGetSet->getMinimalSetterArgumentCount()) {
             return $modalToGetSet->getSetMethod();
         }
 

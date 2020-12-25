@@ -140,7 +140,7 @@ CODE_SAMPLE
         /** @var List_ $listNode */
         $listNode = $assign->var;
 
-        if (count((array) $listNode->items) !== 2) {
+        if (count($listNode->items) !== 2) {
             return true;
         }
         // empty list → cannot handle

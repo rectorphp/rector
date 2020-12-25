@@ -120,7 +120,7 @@ CODE_SAMPLE
         $oldFileLoaderClass = self::FILE_LOADERS_BY_TYPE[$this->from];
         $newFileLoaderClass = self::FILE_LOADERS_BY_TYPE[$this->to];
 
-        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (
             $oldFileLoaderClass,
             $newFileLoaderClass
         ) {
