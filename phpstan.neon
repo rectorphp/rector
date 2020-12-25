@@ -463,9 +463,6 @@ parameters:
                 - packages/better-php-doc-parser/tests/PhpDocParser/AbstractPhpDocInfoTest.php
                 - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php
 
-        # bug in simplify - @todo fix
-        - '#Parameter 2 should use "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace" type as the only type passed to this method#'
-
         # false positives checked in another method
         -
             message: '#If condition is always false#'
@@ -537,13 +534,6 @@ parameters:
 
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
 
-        # @todo resolve later
-        - '#Configurable rules must have configure code sample#'
-        - '#Configurable code sample is used but "Rector\\Core\\Contract\\Rector\\ConfigurableRectorInterface" interface is not implemented#'
-
-        # @todo bug in symplify, fix later
-        - '#Parameter 2 should use "PhpParser\\Node\\Stmt\\Namespace_" type as the only type passed to this method#'
-
         -
             message: '#Class cognitive complexity is 41, keep it under 40#'
             paths:
@@ -554,10 +544,6 @@ parameters:
              message: '#Access to an undefined property PhpParser\\Node\:\:\$expr#'
              paths:
                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
-        -
-            message: '#Call to an undefined method PHPStan\\Type\\Type\:\:getClassName\(\)#'
-            paths:
-                -  rules/strict-code-quality/src/Rector/ClassMethod/ParamTypeToAssertTypeRector.php
 
         ###################################################
 

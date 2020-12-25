@@ -2,36 +2,90 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\TestCase;
+use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
+use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
+use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
+use Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $configuration = ValueObjectInliner::inline([
+        new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
+    ]);
+    $services->set(InferParamFromClassMethodReturnRector::class)
+        ->call('configure', [[
+            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
+        ]]);
+
+    $services->set(PreferThisOrSelfMethodCallRector::class)
+        ->call('configure', [[
+            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
+                TestCase::class => PreferThisOrSelfMethodCallRector::PREFER_THIS,
+            ],
+        ]]);
+
+    $services->set(AutoInPhpSymfonyConfigRector::class);
+
     $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::SETS, [
+        SetList::CODING_STYLE,
+        SetList::CODE_QUALITY,
+        SetList::CODE_QUALITY_STRICT,
+        SetList::DEAD_CODE,
+        SetList::DEAD_DOC_BLOCK,
+        SetList::NETTE_UTILS_CODE_QUALITY,
+        SetList::PRIVATIZATION,
+        SetList::NAMING,
+        SetList::DEFLUENT,
+        SetList::TYPE_DECLARATION,
+        SetList::PHPUNIT_CODE_QUALITY,
+        Setlist::SYMFONY_AUTOWIRE,
+        Setlist::PHP_71,
+        Setlist::PHP_72,
+        Setlist::PHP_73,
+        Setlist::EARLY_RETURN,
+    ]);
 
     $parameters->set(Option::PATHS, [
         __DIR__ . '/src',
-        __DIR__ . '/tests',
         __DIR__ . '/rules',
-        __DIR__ . '/utils',
         __DIR__ . '/packages',
-        __DIR__ . '/bin/rector',
-    ]);
-
-    $parameters->set(Option::SETS, [SetList::PHP_73]);
-
-    $parameters->set(Option::SKIP, [
-        '*/Source/*',
-        '*/Fixture/*',
-        '*/Expected/*',
-        __DIR__ . '/packages/doctrine-annotation-generated/src/*',
-        __DIR__ . '/packages/rector-generator/templates/*',
-        '*.php.inc',
+        __DIR__ . '/tests',
+        __DIR__ . '/utils',
+        __DIR__ . '/config/set',
     ]);
 
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
-    # so Rector code is still PHP 7.2 compatible
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
+    $parameters->set(Option::SKIP, [
+        StringClassNameToClassConstantRector::class,
+        SplitStringClassConstantToClassConstFetchRector::class,
+        // false positives on constants used in rector.php
+        RemoveUnusedClassConstantRector::class,
+
+        // test paths
+        '*/Fixture/*',
+        '*/Source/*',
+        '*/Expected/*',
+
+        __DIR__ . '/packages/doctrine-annotation-generated/src',
+        // template files
+        __DIR__ . '/packages/rector-generator/templates',
+        __DIR__ . '/packages/rector-generator/src/ValueObject/RectorRecipe.php',
+    ]);
+
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
+    $parameters->set(Option::ENABLE_CACHE, true);
 };
