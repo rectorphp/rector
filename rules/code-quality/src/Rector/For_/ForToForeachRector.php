@@ -24,6 +24,7 @@ use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -254,7 +255,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($loopExprs[0], [PreInc::class, PostInc::class])) {
+        if (StaticInstanceOf::isOneOf($loopExprs[0], [PreInc::class, PostInc::class])) {
             return $this->isName($loopExprs[0]->var, $this->keyValueName);
         }
 

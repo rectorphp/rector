@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\Naming\ArrayDimFetchRenamer;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -141,7 +142,7 @@ CODE_SAMPLE
         }
 
         $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($parent, [Isset_::class, Unset_::class])) {
+        if (StaticInstanceOf::isOneOf($parent, [Isset_::class, Unset_::class])) {
             return ! $arrayDimFetch->dim instanceof Variable;
         }
 

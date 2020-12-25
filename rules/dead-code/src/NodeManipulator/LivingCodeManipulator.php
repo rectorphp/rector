@@ -30,6 +30,7 @@ use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\PostRector\Collector\NodesToAddCollector;
 
 final class LivingCodeManipulator
@@ -62,7 +63,7 @@ final class LivingCodeManipulator
             return [];
         }
 
-        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($expr, [Closure::class, Scalar::class, ConstFetch::class])) {
+        if (StaticInstanceOf::isOneOf($expr, [Closure::class, Scalar::class, ConstFetch::class])) {
             return [];
         }
 
@@ -87,7 +88,7 @@ final class LivingCodeManipulator
                 $this->keepLivingCodeFromExpr($expr->dim)
             );
         }
-        if (\Rector\Core\Util\StaticInstanceOf::isOneOf($expr, [ClassConstFetch::class, StaticPropertyFetch::class])) {
+        if (StaticInstanceOf::isOneOf($expr, [ClassConstFetch::class, StaticPropertyFetch::class])) {
             return array_merge(
                 $this->keepLivingCodeFromExpr($expr->class),
                 $this->keepLivingCodeFromExpr($expr->name)
