@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStan\Tests\Rector\Cast\RecastingRemovalRector;
+namespace Rector\DeadCode\Tests\Rector\Cast\RecastingRemovalRector;
 
 use Iterator;
-use Rector\PHPStan\Rector\Cast\RecastingRemovalRector;
+use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

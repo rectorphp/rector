@@ -9897,7 +9897,7 @@ Change various `@var` annotation formats to one PHPStorm understands
 
 Removes recasting of the same type
 
-- class: `Rector\PHPStan\Rector\Cast\RecastingRemovalRector`
+- class: `Rector\DeadCode\Rector\Cast\RecastingRemovalRector`
 
 ```diff
  $string = '';
