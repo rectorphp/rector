@@ -164,18 +164,15 @@ final class PhpDocInfo
     {
         $name = StaticAnnotationNaming::normalizeName($name);
 
-        /** @var AttributeAwareNodeInterface[]|PhpDocTagNode[] $tags */
+        /** @var PhpDocTagNode[]|AttributeAwareNodeInterface[] $tags */
         $tags = $this->phpDocNode->getTags();
 
         $tags = array_filter($tags, function (PhpDocTagNode $tag) use ($name): bool {
             return $tag->name === $name;
         });
-
-        // @todo add dynamic function type resolver to PHPStan, the same type on input is on output
         $tags = array_values($tags);
 
-        /** @var PhpDocTagNode[]|AttributeAwareNodeInterface[] $tags */
-        return $tags;
+        return array_values($tags);
     }
 
     public function getParamType(string $name): Type

@@ -9882,7 +9882,7 @@ Remove `setTempDir()` on PHPExcel_Writer_Excel5
 
 Change various `@var` annotation formats to one PHPStorm understands
 
-- class: `Rector\PHPStan\Rector\Assign\PHPStormVarAnnotationRector`
+- class: `Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector`
 
 ```diff
 -$config = 5;

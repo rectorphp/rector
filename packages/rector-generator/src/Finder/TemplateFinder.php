@@ -43,9 +43,9 @@ final class TemplateFinder
             $filePaths[] = __DIR__ . '/../../templates/rules/__package__/tests/Rector/__Category__/__Name__/Source/extra_file.php.inc';
         }
 
+        /** @var string[] $filePaths */
         $filePaths = $this->addRuleAndTestCase($rectorRecipe, $filePaths);
 
-        /** @var string[] $filePaths */
         $filePaths[] = $this->resolveFixtureFilePath();
 
         $this->ensureFilePathsExists($filePaths);

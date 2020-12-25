@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
 use Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector;
 use Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
@@ -21,6 +20,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
     $services->set(AddFalseDefaultToBoolPropertyRector::class);
     $services->set(RepeatedLiteralToClassConstantRector::class);
-    $services->set(UseMessageVariableForSprintfInSymfonyStyleRector::class);
     $services->set(MoveVariableDeclarationNearReferenceRector::class);
 };

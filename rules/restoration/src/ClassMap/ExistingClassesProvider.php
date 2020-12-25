@@ -33,9 +33,9 @@ final class ExistingClassesProvider
         if ($this->existingClasses === []) {
             $psr4Paths = $this->getPsr4PathFromComposerJson();
 
+            /** @var string[] $existingClasses */
             $existingClasses = $this->findClassesInDirectories($psr4Paths);
 
-            /** @var string[] $existingClasses */
             $existingClasses = array_merge($existingClasses, get_declared_classes());
 
             $this->existingClasses = $existingClasses;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStan\Rector\Assign;
+namespace Rector\CodingStyle\Rector\Assign;
 
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/shopsys/shopsys/pull/524
- * @see \Rector\PHPStan\Tests\Rector\Assign\PHPStormVarAnnotationRector\PHPStormVarAnnotationRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\Assign\PHPStormVarAnnotationRector\PHPStormVarAnnotationRectorTest
  */
 final class PHPStormVarAnnotationRector extends AbstractRector
 {

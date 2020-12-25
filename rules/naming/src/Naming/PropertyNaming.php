@@ -238,10 +238,8 @@ final class PropertyNaming
     private function prolongIfTooShort(string $shortClassName, string $className): string
     {
         if (in_array($shortClassName, ['Factory', 'Repository'], true)) {
-            /** @var string $namespaceAbove */
-            $namespaceAbove = Strings::after($className, '\\', -2);
-            /** @var string $namespaceAbove */
-            $namespaceAbove = Strings::before($namespaceAbove, '\\');
+            $namespaceAbove = (string) Strings::after($className, '\\', -2);
+            $namespaceAbove = (string) Strings::before($namespaceAbove, '\\');
 
             return lcfirst($namespaceAbove) . $shortClassName;
         }

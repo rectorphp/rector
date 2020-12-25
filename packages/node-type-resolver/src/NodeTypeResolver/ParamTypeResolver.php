@@ -109,7 +109,6 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        /** @var string $paramName */
         $paramName = $this->nodeNameResolver->getName($param);
         $paramStaticType = new MixedType();
 
@@ -141,7 +140,6 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        /** @var string $paramName */
         $paramName = $this->nodeNameResolver->getName($param);
         return $phpDocInfo->getParamType($paramName);
     }

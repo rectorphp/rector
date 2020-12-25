@@ -67,6 +67,7 @@ final class UnusedClassResolver
             return $this->cachedUsedClassNames;
         }
 
+        /** @var string[] $cachedUsedClassNames */
         $cachedUsedClassNames = array_merge(
             $this->getParamNodesClassNames(),
             $this->getNewNodesClassNames(),
@@ -76,7 +77,6 @@ final class UnusedClassResolver
 
         $cachedUsedClassNames = $this->sortAndUniqueArray($cachedUsedClassNames);
 
-        /** @var string[] $cachedUsedClassNames */
         $this->cachedUsedClassNames = $cachedUsedClassNames;
 
         return $this->cachedUsedClassNames;

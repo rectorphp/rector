@@ -268,51 +268,60 @@ CODE_SAMPLE
     private function getNullSafeOnPrevAssignIsIf(If_ $if, Node $nextNode, ?Expr $expr): ?Expr
     {
         $prevIf = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($prevIf instanceof Expression && $this->ifManipulator->isIfCondUsingAssignIdenticalVariable(
-            $if,
-            $prevIf->expr
-        )) {
-            $start = $prevIf;
-            while ($prevIf instanceof Expression) {
-                $expr = $this->nullsafeManipulator->processNullSafeExpr($prevIf->expr->expr);
-
-                /** @var If_ $prevIf */
-                $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
-
-                $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
-
-                if (! $prevIf instanceof Expression) {
-                    $start = $this->getStartNode($prevIf);
-                    break;
-                }
-            }
-
-            if (! $expr instanceof NullsafeMethodCall && ! $expr instanceof NullsafePropertyFetch) {
-                return $expr;
-            }
-
-            /** @var Expr $expr */
-            $expr = $expr->var->getAttribute(AttributeKey::PARENT_NODE);
-            $expr = $this->getNullSafeAfterStartUntilBeforeEnd($start, $expr);
-            $expr = $this->nullsafeManipulator->processNullSafeExprResult($expr, $nextNode->expr->name);
+        if (! $prevIf instanceof Expression) {
+            return $expr;
         }
 
-        return $expr;
+        if (! $this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $prevIf->expr)) {
+            return $expr;
+        }
+
+        $start = $prevIf;
+
+        while ($prevIf instanceof Expression) {
+            $expressionNode = $prevIf->expr;
+            if (! $expressionNode instanceof Assign) {
+                return null;
+            }
+
+            $expr = $this->nullsafeManipulator->processNullSafeExpr($expressionNode->expr);
+
+            /** @var Node $prevPrevIf */
+            $prevPrevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
+            /** @var Node $prevPrevPrevIf */
+            $prevPrevPrevIf = $prevPrevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
+
+            if (! $prevPrevPrevIf instanceof Expression && $prevPrevPrevIf !== null) {
+                $start = $this->getPreviousIf($prevPrevPrevIf);
+                break;
+            }
+
+            $prevIf = $prevPrevPrevIf;
+        }
+
+        if (! $expr instanceof NullsafeMethodCall && ! $expr instanceof NullsafePropertyFetch) {
+            return $expr;
+        }
+
+        /** @var Expr $expr */
+        $expr = $expr->var->getAttribute(AttributeKey::PARENT_NODE);
+        $expr = $this->getNullSafeAfterStartUntilBeforeEnd($start, $expr);
+
+        return $this->nullsafeManipulator->processNullSafeExprResult($expr, $nextNode->expr->name);
     }
 
-    private function getStartNode(Node $node): ?Node
+    private function getPreviousIf(Node $node): ?Node
     {
-        /** @var If_ $start */
-        $start = $node->getAttribute(AttributeKey::NEXT_NODE);
+        /** @var If_ $if */
+        $if = $node->getAttribute(AttributeKey::NEXT_NODE);
 
-        /** @var Expression $start */
-        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+        /** @var Expression $expression */
+        $expression = $if->getAttribute(AttributeKey::NEXT_NODE);
 
-        /** @var If_ $start */
-        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+        /** @var Expression $nextExpression */
+        $nextExpression = $expression->getAttribute(AttributeKey::NEXT_NODE);
 
-        /** @var Expression $start */
-        return $start->getAttribute(AttributeKey::NEXT_NODE);
+        return $nextExpression->getAttribute(AttributeKey::NEXT_NODE);
     }
 
     private function getNullSafeAfterStartUntilBeforeEnd(?Node $node, ?Expr $expr): ?Expr

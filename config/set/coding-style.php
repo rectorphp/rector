@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector;
+use Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector;
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
@@ -21,6 +22,7 @@ use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
 use Rector\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector;
+use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
 use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
@@ -35,6 +37,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
+    $services->set(PHPStormVarAnnotationRector::class);
     $services->set(NullableCompareToNullRector::class);
     $services->set(BinarySwitchToIfElseRector::class);
     $services->set(ConsistentImplodeRector::class);
@@ -58,6 +61,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MakeInheritedMethodVisibilitySameAsParentRector::class);
     $services->set(CallUserFuncCallToVariadicRector::class);
     $services->set(VersionCompareFuncCallToConstantRector::class);
+    $services->set(UseMessageVariableForSprintfInSymfonyStyleRector::class);
 
     $services->set(FunctionCallToConstantRector::class)
         ->call('configure', [[

@@ -409,11 +409,6 @@ final class SetList
     /**
      * @var string
      */
-    public const PHPSTAN = __DIR__ . '/../../../../config/set/phpstan.php';
-
-    /**
-     * @var string
-     */
     public const PHPUNIT80_DMS = __DIR__ . '/../../../../config/set/phpunit80-dms.php';
 
     /**

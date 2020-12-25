@@ -49,7 +49,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::SOLID,
         SetList::PRIVATIZATION,
         SetList::NAMING,
-        SetList::ORDER,
         SetList::DEFLUENT,
         SetList::TYPE_DECLARATION,
         SetList::PHPUNIT_CODE_QUALITY,
