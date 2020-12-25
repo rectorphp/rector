@@ -102,6 +102,8 @@ CODE_SAMPLE
             $node = $this->processUses($node);
         }
 
+        /** @var ClassMethod|Function_ $node */
+        $node = $node;
         return $this->processParams($node);
     }
 
