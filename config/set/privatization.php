@@ -9,6 +9,7 @@ use Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRec
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector;
 use Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector;
+use Rector\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector;
 use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -19,6 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MakeUnusedClassesWithChildrenAbstractRector::class);
     $services->set(FinalizeClassesWithoutChildrenRector::class);
     $services->set(ChangeGlobalVariablesToPropertiesRector::class);
+    $services->set(ChangeReadOnlyPropertyWithDefaultValueToConstantRector::class);
 
     $services->set(PrivatizeLocalOnlyMethodRector::class);
     $services->set(PrivatizeLocalGetterToPropertyRector::class);
