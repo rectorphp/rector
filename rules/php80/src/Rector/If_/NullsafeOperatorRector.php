@@ -278,14 +278,19 @@ CODE_SAMPLE
 
         $start = $prevIf;
         while ($prevIf instanceof Expression) {
-            $expr = $this->nullsafeManipulator->processNullSafeExpr($prevIf->expr->expr);
+            $expressionNode = $prevIf->expr;
+            if (! $expressionNode instanceof Assign) {
+                return null;
+            }
 
-            /** @var If_ $prevIf */
+            $expr = $this->nullsafeManipulator->processNullSafeExpr($expressionNode->expr);
+
+            /** @var Node $prevIf */
+            $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
+            /** @var Node $prevIf */
             $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
 
-            $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
-
-            if (! $prevIf instanceof Expression) {
+            if (! $prevIf instanceof Expression && $prevIf !== null) {
                 $start = $this->getPreviousIf($prevIf);
                 break;
             }
@@ -310,7 +315,7 @@ CODE_SAMPLE
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);
         /** @var Expression $start */
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);
-        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+
         return $start->getAttribute(AttributeKey::NEXT_NODE);
     }
 

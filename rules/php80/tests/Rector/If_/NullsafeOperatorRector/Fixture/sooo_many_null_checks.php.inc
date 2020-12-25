@@ -12,12 +12,12 @@ class SoooManyNullChecks
         }
 
         $o3 = $o2->mayFail2();
-        if ($o3 === null) {
+        if (null === $o3) {
             return null;
         }
 
         $o4 = $o3->mayFail3();
-        if ($o4 === null) {
+        if (null === $o4) {
             return null;
         }
 
