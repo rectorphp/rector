@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
+namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
 
-use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\ClassWithParent;
+use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\ClassWithParent;
 
 abstract class AbstractParentClassWithParents
 {
@@ -37,9 +37,9 @@ class SecondChildClassWithParent extends AbstractParentClassWithParents
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
+namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
 
-use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\ClassWithParent;
+use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\ClassWithParent;
 
 abstract class AbstractParentClassWithParents
 {
@@ -48,7 +48,7 @@ abstract class AbstractParentClassWithParents
      */
     private $implement;
 
-    public function injectAbstractParentClassWithParents(\Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\ClassWithParent $classWithParent)
+    public function injectAbstractParentClassWithParents(\Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\ClassWithParent $classWithParent)
     {
         $this->classWithParent = $classWithParent;
     }

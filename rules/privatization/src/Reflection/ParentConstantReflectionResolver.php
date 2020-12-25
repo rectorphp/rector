@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Reflection;
+namespace Rector\Privatization\Reflection;
 
 use ReflectionClass;
 use ReflectionClassConstant;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Guard;
+namespace Rector\ReadWrite\Guard;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;

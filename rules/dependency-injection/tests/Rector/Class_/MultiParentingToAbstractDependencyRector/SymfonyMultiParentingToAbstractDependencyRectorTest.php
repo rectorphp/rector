@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector;
+namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector;
 
 use Iterator;
-use Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector;
+use Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class MultiParentingToAbstractDependencyRectorTest extends AbstractRectorTestCase
+final class SymfonyMultiParentingToAbstractDependencyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -21,7 +21,7 @@ final class MultiParentingToAbstractDependencyRectorTest extends AbstractRectorT
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureSymfony');
     }
 
     /**
@@ -31,7 +31,7 @@ final class MultiParentingToAbstractDependencyRectorTest extends AbstractRectorT
     {
         return [
             MultiParentingToAbstractDependencyRector::class => [
-                MultiParentingToAbstractDependencyRector::FRAMEWORK => 'nette',
+                MultiParentingToAbstractDependencyRector::FRAMEWORK => 'symfony',
             ],
         ];
     }

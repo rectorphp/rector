@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
+namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
 
-use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\FirstImplementer;
-use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\ImplementInterface;
-use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SecondImplementer;
+use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\FirstImplementer;
+use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\ImplementInterface;
+use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SecondImplementer;
 
 abstract class AbstractParentClassSkipDifferentImplementations
 {

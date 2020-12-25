@@ -12,10 +12,10 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpAttribute\ValueObject\TagName;
-use Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector;
 
 final class InjectMethodFactory
 {

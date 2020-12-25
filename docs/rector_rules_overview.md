@@ -14548,10 +14548,10 @@ Move dependency passed to all children to parent as `@inject/@required` dependen
 
 :wrench: **configure it!**
 
-- class: `Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector`
+- class: `Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector`
 
 ```php
-use Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector;
+use Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

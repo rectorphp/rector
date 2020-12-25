@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
+namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
 
-use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
+use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
 
 abstract class AbstractParentClassSkipEmptyConstructor
 {

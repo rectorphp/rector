@@ -16,7 +16,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use Rector\Core\Exception\Node\MissingParentNodeException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\SOLID\Guard\VariableToConstantGuard;
+use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Webmozart\Assert\Assert;
 
 final class ReadWritePropertyAnalyzer

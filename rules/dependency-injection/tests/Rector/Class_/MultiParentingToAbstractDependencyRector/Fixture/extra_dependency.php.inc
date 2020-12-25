@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
+namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
 
-use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\AnotherDependency;
-use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
+use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\AnotherDependency;
+use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
 
 abstract class AbstractParentClassWithExtraDependency
 {
@@ -44,10 +44,10 @@ class SecondChildWithExtraDependency extends AbstractParentClassWithExtraDepende
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
+namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
 
-use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\AnotherDependency;
-use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
+use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\AnotherDependency;
+use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
 
 abstract class AbstractParentClassWithExtraDependency
 {
@@ -56,7 +56,7 @@ abstract class AbstractParentClassWithExtraDependency
      */
     private $someDependency;
 
-    public function injectAbstractParentClassWithExtraDependency(\Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency $someDependency)
+    public function injectAbstractParentClassWithExtraDependency(\Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency $someDependency)
     {
         $this->someDependency = $someDependency;
     }
