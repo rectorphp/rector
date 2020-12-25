@@ -43,7 +43,7 @@ final class PhpVersionProvider
         /** @var int|null $phpVersionFeatures */
         $phpVersionFeatures = $this->parameterProvider->provideParameter(Option::PHP_VERSION_FEATURES);
         if ($phpVersionFeatures !== null) {
-            return (int) $phpVersionFeatures;
+            return $phpVersionFeatures;
         }
 
         // for tests

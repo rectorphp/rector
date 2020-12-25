@@ -72,7 +72,7 @@ final class IfManipulator
      */
     public function matchIfNotNullReturnValue(If_ $if): ?Expr
     {
-        $stmts = (array) $if->stmts;
+        $stmts = $if->stmts;
         if (count($stmts) !== 1) {
             return null;
         }
@@ -132,7 +132,7 @@ final class IfManipulator
      */
     public function matchIfValueReturnValue(If_ $if): ?Expr
     {
-        $stmts = (array) $if->stmts;
+        $stmts = $if->stmts;
 
         if (count($stmts) !== 1) {
             return null;
@@ -239,7 +239,7 @@ final class IfManipulator
      */
     public function collectNestedIfsWithNonBreaking(Foreach_ $foreach): array
     {
-        if (count((array) $foreach->stmts) !== 1) {
+        if (count($foreach->stmts) !== 1) {
             return [];
         }
 
@@ -308,7 +308,7 @@ final class IfManipulator
 
     public function isIfWithOnlyOneStmt(If_ $if): bool
     {
-        return count((array) $if->stmts) === 1;
+        return count($if->stmts) === 1;
     }
 
     public function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
@@ -374,7 +374,7 @@ final class IfManipulator
 
     private function hasOnlyStmtOfType(If_ $if, string $desiredType): bool
     {
-        $stmts = (array) $if->stmts;
+        $stmts = $if->stmts;
         if (count($stmts) !== 1) {
             return false;
         }

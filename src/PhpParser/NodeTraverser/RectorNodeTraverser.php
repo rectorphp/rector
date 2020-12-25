@@ -121,7 +121,7 @@ final class RectorNodeTraverser extends NodeTraverser
 
     public function getPhpRectorCount(): int
     {
-        return count((array) $this->visitors);
+        return count($this->visitors);
     }
 
     public function hasZeroCacheRectors(): bool

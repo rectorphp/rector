@@ -234,14 +234,14 @@ final class BetterStandardPrinter extends Standard
 
     public function pFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace): string
     {
-        $content = $this->pStmts((array) $fileWithoutNamespace->stmts, false);
+        $content = $this->pStmts($fileWithoutNamespace->stmts, false);
 
         return ltrim($content);
     }
 
     public function pFileNode(FileNode $fileNode): string
     {
-        return $this->pStmts((array) $fileNode->stmts);
+        return $this->pStmts($fileNode->stmts);
     }
 
     /**
