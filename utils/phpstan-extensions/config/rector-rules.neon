@@ -15,9 +15,9 @@ services:
                 Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample: Rector\Core\Contract\Rector\ConfigurableRectorInterface
 
     # open in Sypmlify 9.0.20 version
-#    -
-#        class: Symplify\PHPStanRules\Rules\IfImplementsInterfaceThenNewTypeRule
-#        tags: [phpstan.rules.rule]
-#        arguments:
-#            interfacesByNewTypes:
-#                Rector\Core\Contract\Rector\ConfigurableRectorInterface: Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample
+    -
+        class: Symplify\PHPStanRules\Rules\IfImplementsInterfaceThenNewTypeRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            newTypesByInterface:
+                Rector\Core\Contract\Rector\ConfigurableRectorInterface: Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample
