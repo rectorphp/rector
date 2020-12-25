@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Rector\Variable;
+namespace Rector\CodeQuality\Rector\Variable;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\SOLID\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\MoveVariableDeclarationNearReferenceRectorTest
+ * @see \Rector\CodeQuality\Tests\Rector\Variable\MoveVariableDeclarationNearReferenceRector\MoveVariableDeclarationNearReferenceRectorTest
  */
 final class MoveVariableDeclarationNearReferenceRector extends AbstractRector
 {

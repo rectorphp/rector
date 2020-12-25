@@ -14530,7 +14530,7 @@ Classes that have no children nor are used, should have abstract
 
 Move variable declaration near its reference
 
-- class: `Rector\SOLID\Rector\Variable\MoveVariableDeclarationNearReferenceRector`
+- class: `Rector\CodeQuality\Rector\Variable\MoveVariableDeclarationNearReferenceRector`
 
 ```diff
 -$var = 1;
