@@ -308,6 +308,7 @@ CODE_SAMPLE
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);
         /** @var If_ $start */
         $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+
         return $start->getAttribute(AttributeKey::NEXT_NODE);
     }
 
