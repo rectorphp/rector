@@ -277,6 +277,7 @@ CODE_SAMPLE
         }
 
         $start = $prevIf;
+
         while ($prevIf instanceof Expression) {
             $expressionNode = $prevIf->expr;
             if (! $expressionNode instanceof Assign) {
@@ -285,15 +286,17 @@ CODE_SAMPLE
 
             $expr = $this->nullsafeManipulator->processNullSafeExpr($expressionNode->expr);
 
-            /** @var Node $prevIf */
-            $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
-            /** @var Node $prevIf */
-            $prevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
+            /** @var Node $prevPrevIf */
+            $prevPrevIf = $prevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
+            /** @var Node $prevPrevPrevIf */
+            $prevPrevPrevIf = $prevPrevIf->getAttribute(AttributeKey::PREVIOUS_NODE);
 
-            if (! $prevIf instanceof Expression && $prevIf !== null) {
-                $start = $this->getPreviousIf($prevIf);
+            if (! $prevPrevPrevIf instanceof Expression && $prevPrevPrevIf !== null) {
+                $start = $this->getPreviousIf($prevPrevPrevIf);
                 break;
             }
+
+            $prevIf = $prevPrevPrevIf;
         }
 
         if (! $expr instanceof NullsafeMethodCall && ! $expr instanceof NullsafePropertyFetch) {
@@ -309,14 +312,16 @@ CODE_SAMPLE
 
     private function getPreviousIf(Node $node): ?Node
     {
-        /** @var If_ $start */
-        $start = $node->getAttribute(AttributeKey::NEXT_NODE);
-        /** @var Expression $start */
-        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
-        /** @var Expression $start */
-        $start = $start->getAttribute(AttributeKey::NEXT_NODE);
+        /** @var If_ $if */
+        $if = $node->getAttribute(AttributeKey::NEXT_NODE);
 
-        return $start->getAttribute(AttributeKey::NEXT_NODE);
+        /** @var Expression $expression */
+        $expression = $if->getAttribute(AttributeKey::NEXT_NODE);
+
+        /** @var Expression $nextExpression */
+        $nextExpression = $expression->getAttribute(AttributeKey::NEXT_NODE);
+
+        return $nextExpression->getAttribute(AttributeKey::NEXT_NODE);
     }
 
     private function getNullSafeAfterStartUntilBeforeEnd(?Node $node, ?Expr $expr): ?Expr
