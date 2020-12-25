@@ -14511,7 +14511,7 @@ Finalize every class that has no children
 
 Classes that have no children nor are used, should have abstract
 
-- class: `Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector`
+- class: `Rector\Privatization\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector`
 
 ```diff
  class SomeClass extends PossibleAbstractClass

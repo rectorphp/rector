@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Tests\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
+namespace Rector\Privatization\Tests\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 
 use Iterator;
-use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
+use Rector\Privatization\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
