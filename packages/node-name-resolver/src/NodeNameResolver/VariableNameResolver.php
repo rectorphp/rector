@@ -40,6 +40,6 @@ final class VariableNameResolver implements NodeNameResolverInterface
             return null;
         }
 
-        return (string) $node->name;
+        return $node->name;
     }
 }

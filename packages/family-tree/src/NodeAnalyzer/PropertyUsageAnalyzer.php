@@ -69,7 +69,7 @@ final class PropertyUsageAnalyzer
             }
 
             $isPropertyFetched = (bool) $this->betterNodeFinder->findFirst(
-                (array) $childClass->stmts,
+                $childClass->stmts,
                 function (Node $node) use ($propertyName): bool {
                     return $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyName);
                 }

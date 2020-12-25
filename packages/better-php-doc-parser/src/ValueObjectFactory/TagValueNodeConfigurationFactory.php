@@ -74,7 +74,7 @@ final class TagValueNodeConfigurationFactory
             );
         }
 
-        $isSilentKeyExplicit = (bool) Strings::contains($originalContent, sprintf('%s=', $silentKey));
+        $isSilentKeyExplicit = Strings::contains($originalContent, sprintf('%s=', $silentKey));
 
         $arrayEqualSign = $this->resolveArraySeparatorSign($originalContent, $phpDocTagValueNode);
 
