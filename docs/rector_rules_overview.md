@@ -9915,7 +9915,7 @@ Removes recasting of the same type
 
 Removes non-existing `@var` annotations above the code
 
-- class: `Rector\PHPStan\Rector\Node\RemoveNonExistingVarAnnotationRector`
+- class: `Rector\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector`
 
 ```diff
  class SomeClass

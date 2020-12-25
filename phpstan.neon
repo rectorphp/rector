@@ -454,9 +454,9 @@ parameters:
                 - src/PhpParser/NodeTransformer.php
                 # playing around with doc block format
                 - rules/phpstan/src/Rector/Assign/PHPStormVarAnnotationRector.php
-                - rules/phpstan/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php
                 - rules/code-quality/src/Rector/Return_/SimplifyUselessVariableRector.php
                 - rules/dead-code/src/Rector/Expression/RemoveDeadStmtRector.php
+                - rules/dead-doc-block/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php
                 - rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecMocksToPHPUnitMocksRector.php
                 - packages/better-php-doc-parser/src/Comment/CommentsMerger.php
                 - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php

@@ -60,7 +60,6 @@ final class IsArrayAndDualCheckToAble
         }
         $nodeNameResolverGetName = $this->nodeNameResolver->getName($funcCallNode);
 
-        /** @var FuncCall $funcCallNode */
         if ($nodeNameResolverGetName !== 'is_array') {
             return null;
         }

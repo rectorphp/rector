@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
+namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
 class NonCommentMultilineNext
 {
@@ -18,7 +18,7 @@ class NonCommentMultilineNext
 -----
 <?php
 
-namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
+namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
 class NonCommentMultilineNext
 {

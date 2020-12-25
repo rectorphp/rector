@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector;
+namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector;
 
 use Iterator;
-use Rector\PHPStan\Rector\Node\RemoveNonExistingVarAnnotationRector;
+use Rector\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
