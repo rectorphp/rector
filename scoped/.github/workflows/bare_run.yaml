@@ -1,4 +1,4 @@
-name: Bare Run
+name: Code Analysis
 
 on: [pull_request, push]
 
@@ -10,12 +10,23 @@ jobs:
             fail-fast: false
             matrix:
                 php: ['7.3', '7.4', '8.0']
+                actions:
+                    -
+                        name: Bare Run
+                        run: php bin/rector --ansi
+                    -
+                        name: Finalize Rule
+                        run: php bin/rector process tests/fixture-finalize --config ci/rector-finalize.php --ansi
+
+        name: ${{ matrix.actions.name }}
 
         steps:
             -   uses: actions/checkout@v2
-            -   uses: shivammathur/setup-php@v2
+
+            -
+                uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
                     coverage: none
 
-            -   run: php bin/rector
+            -   run: ${{ matrix.actions.run }}

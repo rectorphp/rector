@@ -33,12 +33,6 @@ final class StaticEasyPrefixer
         'Doctrine\ORM\Mapping\*',
     ];
 
-    /**
-     * @var string
-     * @see https://regex101.com/r/P8sXfr/1
-     */
-    private const QUOTED_VALUE_REGEX = '#\'\\\\(\w|@)#';
-
     public static function prefixClass(string $class, string $prefix): string
     {
         foreach (self::EXCLUDED_NAMESPACES as $excludedNamespace) {
