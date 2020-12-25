@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadDocBlock\Rector\Node;
 
 use Nette\Utils\Strings;
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
@@ -119,7 +120,7 @@ CODE_SAMPLE
         }
 
         $comments = $node->getComments();
-        if (isset($comments[1]) && $comments[1] instanceof \PhpParser\Comment) {
+        if (isset($comments[1]) && $comments[1] instanceof Comment) {
             return null;
         }
 
