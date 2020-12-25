@@ -86,9 +86,13 @@ CODE_SAMPLE
         ];
     }
 
+    /**
+     * @param ClassMethod|Function_|Closure|FuncCall|MethodCall|StaticCall|New_ $node
+     */
     public function refactor(Node $node): ?Node
     {
         if (StaticInstanceOf::isOneOf($node, [MethodCall::class, FuncCall::class, StaticCall::class, New_::class])) {
+            \Webmozart\Assert\Assert::isAnyOf($node, [MethodCall::class, FuncCall::class, StaticCall::class, New_::class]);
             return $this->processArgs($node);
         }
 
