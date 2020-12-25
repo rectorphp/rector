@@ -83,7 +83,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
     {
         // remove params and turn them to instances
         $assigns = [];
-        foreach ((array) $classMethod->params as $param) {
+        foreach ($classMethod->params as $param) {
             if (! $param->type instanceof Name) {
                 throw new ShouldNotHappenException();
             }

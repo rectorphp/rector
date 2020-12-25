@@ -123,7 +123,7 @@ final class EventAndListenerTreeProvider
 
             $eventClassInNamespace = $this->eventValueObjectClassFactory->create(
                 $eventClassName,
-                (array) $methodCall->args
+                $methodCall->args
             );
 
             $dispatchMethodCall = $this->dispatchMethodCallFactory->createFromEventClassName($eventClassName);

@@ -143,7 +143,7 @@ CODE_SAMPLE
     private function resolvePropertyByVisibilityByPosition(ClassLike $classLike): array
     {
         $propertyByVisibilityByPosition = [];
-        foreach ((array) $classLike->stmts as $position => $classStmt) {
+        foreach ($classLike->stmts as $position => $classStmt) {
             if (! $classStmt instanceof Property) {
                 continue;
             }

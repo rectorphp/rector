@@ -68,7 +68,7 @@ final class SingletonClassMethodAnalyzer
 
         $staticPropertyFetch = $this->matchStaticPropertyFetchInIfCond($firstStmt->cond);
 
-        if (count((array) $firstStmt->stmts) !== 1) {
+        if (count($firstStmt->stmts) !== 1) {
             return null;
         }
 

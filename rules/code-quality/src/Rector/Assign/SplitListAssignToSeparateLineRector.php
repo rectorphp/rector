@@ -91,7 +91,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count((array) $assign->var->items) !== count((array) $assign->expr->items)) {
+        if (count($assign->var->items) !== count($assign->expr->items)) {
             return true;
         }
 

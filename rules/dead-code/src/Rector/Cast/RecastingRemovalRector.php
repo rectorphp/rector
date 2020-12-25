@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStan\Rector\Cast;
+namespace Rector\DeadCode\Rector\Cast;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast;
@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\PHPStan\Tests\Rector\Cast\RecastingRemovalRector\RecastingRemovalRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\Cast\RecastingRemovalRector\RecastingRemovalRectorTest
  */
 final class RecastingRemovalRector extends AbstractRector
 {

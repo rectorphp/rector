@@ -74,7 +74,7 @@ final class ClassMethodPropertyFetchManipulator
         }
 
         /** @var Param $param */
-        foreach ((array) $classMethod->params as $param) {
+        foreach ($classMethod->params as $param) {
             if (! $this->nodeNameResolver->isName($param, $assignedParamName)) {
                 continue;
             }

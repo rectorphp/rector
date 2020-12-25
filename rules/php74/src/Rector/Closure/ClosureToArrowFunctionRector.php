@@ -68,7 +68,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $node->stmts) !== 1) {
+        if (count($node->stmts) !== 1) {
             return null;
         }
 
@@ -132,7 +132,7 @@ CODE_SAMPLE
         $referencedValues = [];
 
         /** @var ClosureUse $use */
-        foreach ((array) $closure->uses as $use) {
+        foreach ($closure->uses as $use) {
             if ($use->byRef) {
                 $referencedValues[] = $use->var;
             }

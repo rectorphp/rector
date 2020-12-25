@@ -419,7 +419,7 @@ final class NodeTypeResolver
             $types[] = new FullyQualifiedObjectType($parentClass);
         }
 
-        foreach ((array) $class->implements as $implement) {
+        foreach ($class->implements as $implement) {
             $parentClass = (string) $implement;
             $types[] = new FullyQualifiedObjectType($parentClass);
         }

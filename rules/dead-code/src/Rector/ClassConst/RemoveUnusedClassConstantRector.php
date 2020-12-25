@@ -110,7 +110,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count((array) $classConst->consts) !== 1) {
+        if (count($classConst->consts) !== 1) {
             return true;
         }
 

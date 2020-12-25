@@ -63,10 +63,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $node->args) !== 1) {
+        if (count($node->args) !== 1) {
             return null;
         }
 
-        return $this->createStaticCall('Illuminate\Support\Facades\App', 'get', (array) $node->args);
+        return $this->createStaticCall('Illuminate\Support\Facades\App', 'get', $node->args);
     }
 }

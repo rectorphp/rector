@@ -184,7 +184,7 @@ CODE_SAMPLE
             return;
         }
 
-        if (count((array) $classMethodNode->params) !== 1) {
+        if (count($classMethodNode->params) !== 1) {
             return;
         }
 

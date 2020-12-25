@@ -186,7 +186,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (count((array) $methodCall->args) !== 1) {
+        if (count($methodCall->args) !== 1) {
             return false;
         }
 

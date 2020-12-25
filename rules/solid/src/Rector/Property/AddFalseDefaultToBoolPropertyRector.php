@@ -61,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (count((array) $node->props) !== 1) {
+        if (count($node->props) !== 1) {
             return null;
         }
 

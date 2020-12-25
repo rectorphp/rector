@@ -119,7 +119,7 @@ final class ClassDependencyManipulator
 
             $classMethod->stmts = array_merge((array) $classMethod->stmts, $stmts);
 
-            $class->stmts = array_merge((array) $class->stmts, [$classMethod]);
+            $class->stmts = array_merge($class->stmts, [$classMethod]);
             return;
         }
 

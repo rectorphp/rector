@@ -154,7 +154,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return (bool) $this->betterNodeFinder->findFirst((array) $class->stmts, function (Node $node) use (
+        return (bool) $this->betterNodeFinder->findFirst($class->stmts, function (Node $node) use (
             $uuidPropertyName
         ): bool {
             if (! $node instanceof Assign) {

@@ -116,7 +116,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $elseStmts = (array) $else->stmts;
+        $elseStmts = $else->stmts;
 
         /** @var Assign $assign */
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($elseStmts);

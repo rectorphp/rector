@@ -95,7 +95,7 @@ CODE_SAMPLE
         /** @var Match_ $match */
         $match = $assign->expr;
 
-        $switchCases = $this->createSwitchCasesFromMatchArms((array) $match->arms, $assign->var);
+        $switchCases = $this->createSwitchCasesFromMatchArms($match->arms, $assign->var);
         return new Switch_($match->cond, $switchCases);
     }
 

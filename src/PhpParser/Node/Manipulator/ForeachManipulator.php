@@ -12,7 +12,7 @@ final class ForeachManipulator
 {
     public function matchOnlyStmt(Foreach_ $foreach, callable $callable): ?Node
     {
-        $stmts = (array) $foreach->stmts;
+        $stmts = $foreach->stmts;
 
         if (count($stmts) !== 1) {
             return null;

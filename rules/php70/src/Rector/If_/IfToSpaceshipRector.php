@@ -196,7 +196,7 @@ CODE_SAMPLE
 
     private function matchOnEqual(If_ $if): void
     {
-        if (count((array) $if->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return;
         }
 
@@ -213,7 +213,7 @@ CODE_SAMPLE
 
     private function processElse(Else_ $else): void
     {
-        if (count((array) $else->stmts) !== 1) {
+        if (count($else->stmts) !== 1) {
             return;
         }
 

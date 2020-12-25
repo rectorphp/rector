@@ -295,7 +295,7 @@ final class ClassRenamer
             return;
         }
 
-        foreach ((array) $classLike->implements as $key => $implementName) {
+        foreach ($classLike->implements as $key => $implementName) {
             if (! $implementName instanceof Name) {
                 continue;
             }

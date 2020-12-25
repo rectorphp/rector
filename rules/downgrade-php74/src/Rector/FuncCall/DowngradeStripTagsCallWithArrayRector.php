@@ -143,7 +143,7 @@ CODE_SAMPLE
         }
 
         // If param not provided, do nothing
-        if (count((array) $funcCall->args) < 2) {
+        if (count($funcCall->args) < 2) {
             return false;
         }
 

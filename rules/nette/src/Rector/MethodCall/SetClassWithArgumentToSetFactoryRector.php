@@ -71,7 +71,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $node->args) !== 2) {
+        if (count($node->args) !== 2) {
             return null;
         }
 

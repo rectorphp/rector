@@ -128,7 +128,7 @@ CODE_SAMPLE
 
         // remove property setter/getter
 
-        foreach ((array) $node->getMethods() as $classMethod) {
+        foreach ($node->getMethods() as $classMethod) {
             if (! $this->isNames($classMethod, ['getSlug', 'setSlug'])) {
                 continue;
             }

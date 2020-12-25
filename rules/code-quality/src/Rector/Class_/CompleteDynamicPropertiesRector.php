@@ -116,7 +116,7 @@ CODE_SAMPLE
             $propertiesToComplete
         );
 
-        $node->stmts = array_merge($newProperties, (array) $node->stmts);
+        $node->stmts = array_merge($newProperties, $node->stmts);
 
         return $node;
     }

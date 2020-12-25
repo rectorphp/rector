@@ -132,13 +132,13 @@ CODE_SAMPLE
     {
         $this->reset();
 
-        $this->matchInit((array) $node->init);
+        $this->matchInit($node->init);
 
-        if (! $this->isConditionMatch((array) $node->cond)) {
+        if (! $this->isConditionMatch($node->cond)) {
             return null;
         }
 
-        if (! $this->isLoopMatch((array) $node->loop)) {
+        if (! $this->isLoopMatch($node->loop)) {
             return null;
         }
         if ($this->iteratedExpr === null) {

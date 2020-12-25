@@ -209,7 +209,7 @@ CODE_SAMPLE
                     return $beforeIf;
                 }
 
-                $beforeIf->stmts[count((array) $beforeIf->stmts) - 1] = new Expression($nullSafe);
+                $beforeIf->stmts[count($beforeIf->stmts) - 1] = new Expression($nullSafe);
                 return $beforeIf;
             }
 

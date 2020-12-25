@@ -96,7 +96,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $argsCount = count((array) $funcCall->args);
+        $argsCount = count($funcCall->args);
         if ($argsCount <= 2) {
             return true;
         }

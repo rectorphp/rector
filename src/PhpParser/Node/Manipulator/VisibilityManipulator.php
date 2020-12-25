@@ -21,16 +21,6 @@ final class VisibilityManipulator
     private const ALLOWED_NODE_TYPES = [ClassMethod::class, Property::class, ClassConst::class, Class_::class];
 
     /**
-     * @var int[]
-     */
-    private const ALLOWED_VISIBILITIES = [
-        Visibility::PUBLIC,
-        Visibility::PROTECTED,
-        Visibility::PRIVATE,
-        Visibility::STATIC,
-    ];
-
-    /**
      * @param ClassMethod|Property|ClassConst $node
      */
     public function makeStatic(Node $node): void

@@ -324,7 +324,7 @@ CODE_SAMPLE
     {
         // traverse and replace placeholder by original nodes
         $this->traverseNodesWithCallable($array, function (Node $node) use ($placeholderNodes): ?Expr {
-            if ($node instanceof Array_ && count((array) $node->items) === 1) {
+            if ($node instanceof Array_ && count($node->items) === 1) {
                 $onlyItem = $node->items[0];
                 if ($onlyItem === null) {
                     throw new ShouldNotHappenException();

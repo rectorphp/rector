@@ -56,7 +56,7 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ((array) $node->implements === []) {
+        if ($node->implements === []) {
             return null;
         }
 

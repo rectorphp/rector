@@ -134,7 +134,7 @@ CODE_SAMPLE
     private function shouldSkipArray(Array_ $array): bool
     {
         // callback is exactly "[$two, 'items']"
-        if (count((array) $array->items) !== 2) {
+        if (count($array->items) !== 2) {
             return true;
         }
 

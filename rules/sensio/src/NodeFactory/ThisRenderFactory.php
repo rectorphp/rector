@@ -115,7 +115,7 @@ final class ThisRenderFactory
             return null;
         }
 
-        if ($return->expr instanceof Array_ && count((array) $return->expr->items)) {
+        if ($return->expr instanceof Array_ && count($return->expr->items)) {
             return $return->expr;
         }
 

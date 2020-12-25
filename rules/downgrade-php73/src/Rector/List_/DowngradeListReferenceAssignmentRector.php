@@ -120,7 +120,7 @@ CODE_SAMPLE
      */
     public function removeStaleParams(Node $node, int $rightSideRemovableParamsCount): ?Node
     {
-        $nodeItemsCount = count((array) $node->items);
+        $nodeItemsCount = count($node->items);
         if ($rightSideRemovableParamsCount === $nodeItemsCount) {
             // Remove the parent Assign node
             /** @var Assign */

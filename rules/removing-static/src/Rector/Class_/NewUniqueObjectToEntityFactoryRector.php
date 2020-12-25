@@ -209,7 +209,7 @@ CODE_SAMPLE
             }
         }
 
-        $this->classesUsingTypes = (array) array_unique($this->classesUsingTypes);
+        $this->classesUsingTypes = array_unique($this->classesUsingTypes);
 
         return $this->classesUsingTypes;
     }

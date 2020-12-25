@@ -102,7 +102,7 @@ CODE_SAMPLE
         $this->newNamespace = null;
 
         if ($node instanceof FileWithoutNamespace) {
-            $stmts = $this->refactorStmts((array) $node->stmts);
+            $stmts = $this->refactorStmts($node->stmts);
             $node->stmts = $stmts;
 
             // add a new namespace?
