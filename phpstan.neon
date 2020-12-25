@@ -453,7 +453,7 @@ parameters:
                 - src/Rector/AbstractRector.php
                 - src/PhpParser/NodeTransformer.php
                 # playing around with doc block format
-                - rules/phpstan/src/Rector/Assign/PHPStormVarAnnotationRector.php
+                - rules/coding-style/src/Rector/Assign/PHPStormVarAnnotationRector.php
                 - rules/code-quality/src/Rector/Return_/SimplifyUselessVariableRector.php
                 - rules/dead-code/src/Rector/Expression/RemoveDeadStmtRector.php
                 - rules/dead-doc-block/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php
