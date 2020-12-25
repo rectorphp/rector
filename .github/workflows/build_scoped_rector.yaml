@@ -10,9 +10,6 @@ on:
         types:
             - published
 
-    # @todo remove after merge, this line is just for testing
-    pull_request: null
-
 jobs:
     build_scoped_rector_bash:
         runs-on: ubuntu-latest
