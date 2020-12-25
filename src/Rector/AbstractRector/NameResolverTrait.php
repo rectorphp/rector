@@ -192,7 +192,7 @@ trait NameResolverTrait
         return $this->isName($node->name, $methodName);
     }
 
-    protected function isVariableName(?Node $node, string $name): bool
+    protected function isVariableName(Node $node, string $name): bool
     {
         if (! $node instanceof Variable) {
             return false;
