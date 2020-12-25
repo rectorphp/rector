@@ -3,7 +3,6 @@
 namespace Rector\CodeQualityStrict\Tests\Rector\ClassMethod\ParamTypeToAssertTypeRector\Fixture;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
 
 class SkipSomeClassInvalidType
 {
