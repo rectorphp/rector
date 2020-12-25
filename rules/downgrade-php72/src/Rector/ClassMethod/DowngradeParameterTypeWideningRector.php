@@ -150,7 +150,7 @@ CODE_SAMPLE
         // - all ancestors + their descendant classes
         // - all implemented interfaces + their implementing classes
         foreach ($ancestorAndInterfaceClassNames as $ancestorClassOrInterface) {
-            /** @var string */
+            /** @var string $parentClassName */
             $parentClassName = $ancestorClassOrInterface->getAttribute(AttributeKey::CLASS_NAME);
             $classMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
             /**
@@ -302,7 +302,7 @@ CODE_SAMPLE
             return;
         }
 
-        /** @var PhpDocInfo|null */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
