@@ -93,7 +93,8 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (StaticInstanceOf::isOneOf($node, [MethodCall::class, FuncCall::class, StaticCall::class, New_::class])) {
-            Assert::isAnyOf($node, [MethodCall::class, FuncCall::class, StaticCall::class, New_::class]);
+            /** @var  MethodCall|FuncCall|StaticCall|New_ $node */
+            $node = $node;
             return $this->processArgs($node);
         }
 

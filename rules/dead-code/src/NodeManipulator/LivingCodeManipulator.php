@@ -90,7 +90,8 @@ final class LivingCodeManipulator
             );
         }
         if (StaticInstanceOf::isOneOf($expr, [ClassConstFetch::class, StaticPropertyFetch::class])) {
-            Assert::isAnyOf($expr, [ClassConstFetch::class, StaticPropertyFetch::class]);
+            /** @var ClassConstFetch|StaticPropertyFetch $expr */
+            $expr = $expr;
             return array_merge(
                 $this->keepLivingCodeFromExpr($expr->class),
                 $this->keepLivingCodeFromExpr($expr->name)

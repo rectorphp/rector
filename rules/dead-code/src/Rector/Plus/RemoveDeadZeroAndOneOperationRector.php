@@ -142,7 +142,8 @@ CODE_SAMPLE
     private function processBinaryOp(Node $node): ?Expr
     {
         if (StaticInstanceOf::isOneOf($node, [Plus::class, Minus::class])) {
-            Assert::isAnyOf($node, [Plus::class, Minus::class]);
+            /** @var Plus|Minus $node */
+            $node = $node;
             return $this->processBinaryPlusAndMinus($node);
         }
 
