@@ -21,6 +21,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticInstanceOf;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see https://3v4l.org/I0BGs
@@ -141,7 +142,7 @@ CODE_SAMPLE
     private function processBinaryOp(Node $node): ?Expr
     {
         if (StaticInstanceOf::isOneOf($node, [Plus::class, Minus::class])) {
-            \Webmozart\Assert\Assert::isAnyOf($node, [Plus::class, Minus::class]);
+            Assert::isAnyOf($node, [Plus::class, Minus::class]);
             return $this->processBinaryPlusAndMinus($node);
         }
 

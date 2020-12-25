@@ -32,6 +32,7 @@ use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\PostRector\Collector\NodesToAddCollector;
+use Webmozart\Assert\Assert;
 
 final class LivingCodeManipulator
 {
@@ -89,7 +90,7 @@ final class LivingCodeManipulator
             );
         }
         if (StaticInstanceOf::isOneOf($expr, [ClassConstFetch::class, StaticPropertyFetch::class])) {
-            \Webmozart\Assert\Assert::isAnyOf($expr, [ClassConstFetch::class, StaticPropertyFetch::class]);
+            Assert::isAnyOf($expr, [ClassConstFetch::class, StaticPropertyFetch::class]);
             return array_merge(
                 $this->keepLivingCodeFromExpr($expr->class),
                 $this->keepLivingCodeFromExpr($expr->name)
