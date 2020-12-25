@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector;
 use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 use Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector;
@@ -14,7 +13,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(FinalizeClassesWithoutChildrenRector::class);
     $services->set(MakeUnusedClassesWithChildrenAbstractRector::class);
     $services->set(ChangeReadOnlyPropertyWithDefaultValueToConstantRector::class);
     $services->set(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
