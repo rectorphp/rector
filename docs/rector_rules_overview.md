@@ -14454,7 +14454,7 @@ Change property with read only status with default value to constant
 
 Change variable with read only status with default value to constant
 
-- class: `Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector`
+- class: `Rector\Privatization\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector`
 
 ```diff
  class SomeClass
@@ -14605,7 +14605,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Replace repeated strings with constant
 
-- class: `Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector`
+- class: `Rector\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector`
 
 ```diff
  class SomeClass
