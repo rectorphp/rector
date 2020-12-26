@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Tests\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector;
+namespace Rector\DowngradePhp80\Tests\Rector\Class_\DowngradePropertyPromotionRector;
 
 use Iterator;
-use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector;
+use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradePropertyPromotionToConstructorPropertyAssignRectorTest extends AbstractRectorTestCase
+final class DowngradePropertyPromotionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP 8.0
@@ -27,6 +27,6 @@ final class DowngradePropertyPromotionToConstructorPropertyAssignRectorTest exte
 
     protected function getRectorClass(): string
     {
-        return DowngradePropertyPromotionToConstructorPropertyAssignRector::class;
+        return DowngradePropertyPromotionRector::class;
     }
 }

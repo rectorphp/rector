@@ -19,9 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/constructor_promotion
  *
- * @see \Rector\DowngradePhp80\Tests\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector\DowngradePropertyPromotionToConstructorPropertyAssignRectorTest
+ * @see \Rector\DowngradePhp80\Tests\Rector\Class_\DowngradePropertyPromotionRector\DowngradePropertyPromotionRectorTest
  */
-final class DowngradePropertyPromotionToConstructorPropertyAssignRector extends AbstractRector
+final class DowngradePropertyPromotionRector extends AbstractRector
 {
     /**
      * @var ClassInsertManipulator

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
-use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionToConstructorPropertyAssignRector;
+use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector;
 use Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector;
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
@@ -24,7 +24,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeParamMixedTypeDeclarationRector::class);
     $services->set(DowngradeReturnMixedTypeDeclarationRector::class);
     $services->set(DowngradeReturnStaticTypeDeclarationRector::class);
-    $services->set(DowngradePropertyPromotionToConstructorPropertyAssignRector::class);
+    $services->set(DowngradePropertyPromotionRector::class);
     $services->set(DowngradeNonCapturingCatchesRector::class);
     $services->set(DowngradeMatchToSwitchRector::class);
     $services->set(DowngradeClassOnObjectToGetClassRector::class);
