@@ -40,19 +40,19 @@ return [
         // [BEWARE] $filePath is absolute!
 
         // related to Composer 2 naming - @todo why exactly is this needed?
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/composer/autoload_real.php')) {
-                return $content;
-            }
-
-            $content = str_replace(
-                "'Composer\\\\Autoload\\\\ClassLoader",
-                "'" . $prefix . '\\\\Composer\\\\Autoload\\\\ClassLoader',
-                $content
-            );
-
-            return $content;
-        },
+//        function (string $filePath, string $prefix, string $content): string {
+////            if (! Strings::endsWith($filePath, 'vendor/composer/autoload_real.php')) {
+////                return $content;
+////            }
+//
+//            $content = str_replace(
+//                "'Composer\\\\Autoload\\\\ClassLoader",
+//                "'" . $prefix . '\\\\Composer\\\\Autoload\\\\ClassLoader',
+//                $content
+//            );
+//
+//            return $content;
+//        },
 
         // fatal error on PHP 8
         function (string $filePath, string $prefix, string $content): string {
