@@ -68,6 +68,6 @@ jobs:
                     coverage: none
                     tools: composer:v2
 
-            -   run: composer install --no-progress --ansi
+            -   uses: "ramsey/composer-install@v1"
 
             -   run: ${{ matrix.actions.run }}
