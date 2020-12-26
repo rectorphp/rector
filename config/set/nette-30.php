@@ -10,8 +10,8 @@ use Rector\Nette\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRec
 use Rector\Nette\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector;
 use Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector;
-use Rector\Nette\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector;
 use Rector\Nette\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector;
+use Rector\Nette\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector;
 use Rector\Nette\Rector\MethodCall\RequestGetCookieDefaultArgumentToCoalesceRector;
 use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;

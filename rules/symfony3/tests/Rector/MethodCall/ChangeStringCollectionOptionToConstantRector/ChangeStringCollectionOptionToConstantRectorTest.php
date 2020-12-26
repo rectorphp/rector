@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector;
+namespace Rector\Symfony3\Tests\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
 
 use Iterator;
-use Rector\Symfony3\Rector\MethodCall\ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector;
+use Rector\Symfony3\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ChangeCollectionTypeOptionTypeFromStringToClassReferenceRectorTest extends AbstractRectorTestCase
+final class ChangeStringCollectionOptionToConstantRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class ChangeCollectionTypeOptionTypeFromStringToClassReferenceRectorTest e
 
     protected function getRectorClass(): string
     {
-        return ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector::class;
+        return ChangeStringCollectionOptionToConstantRector::class;
     }
 }
