@@ -1,18 +1,15 @@
-name: Composer Dependency
-
 on: [pull_request, push]
 
 jobs:
-    run_as_composer_dependency:
+    finalize_classes:
         runs-on: ubuntu-latest
 
         strategy:
             fail-fast: false
             matrix:
                 php_version: ['7.3', '7.4', '8.0']
-                symfony_version: ['2.8', '3.4', '4.4', '5.2']
 
-        name: "PHP ${{ matrix.php_version }} and Symfony ${{ matrix.symfony_version }}"
+        name: "Finalize classes on PHP ${{ matrix.php_version }}"
 
         steps:
             -   uses: actions/checkout@v2
@@ -31,5 +28,5 @@ jobs:
                     cd standalone
                     # run
                     composer require rector/rector-prefixed:dev-master --dev --ansi
-                    composer require symfony/console ${{ matrix.symfony_version }}
-                    vendor/bin/rector --debug --ansi
+                    composer require doctrine/orm
+                    vendor/bin/rector process ../tests/fixture-finalize --config ../ci/rector-finalize.php --ansi
