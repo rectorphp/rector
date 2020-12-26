@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\MysqlToMysqli\Tests\Fixture;
 
-final class BadArgumentSwapFixture
+final class Badargumentswapfixture
 {
     public function run()
     {
@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace Rector\MysqlToMysqli\Tests\Fixture;
 
-final class BadArgumentSwapFixture
+final class Badargumentswapfixture
 {
     public function run()
     {
