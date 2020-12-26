@@ -47,7 +47,7 @@ final class ValidateFileLengthCommand extends Command
             __DIR__ . '/../../../../packages',
             __DIR__ . '/../../../../rules',
             __DIR__ . '/../../../../src',
-            __DIR__ . '/../../../../tests'
+            __DIR__ . '/../../../../tests',
         ], '*');
 
         $hasError = false;
@@ -72,7 +72,11 @@ final class ValidateFileLengthCommand extends Command
             return ShellCode::ERROR;
         }
 
-        $message = sprintf('All files fits max file length of %d chars', self::MAX_FILE_LENGTH);
+        $message = sprintf(
+            'Checked %d files - all fit max file length of %d chars',
+            count($fileInfos),
+            self::MAX_FILE_LENGTH
+        );
         $this->symfonyStyle->success($message);
 
         return ShellCode::SUCCESS;
