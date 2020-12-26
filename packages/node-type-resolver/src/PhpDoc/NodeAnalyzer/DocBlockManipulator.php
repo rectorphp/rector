@@ -138,6 +138,7 @@ final class DocBlockManipulator
         }
 
         // this is needed to remove duplicated // commentsAsText
+        $node->setAttribute(AttributeKey::COMMENTS, null);
         $node->setDocComment(new Doc($phpDoc));
     }
 

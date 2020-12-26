@@ -119,12 +119,13 @@ CODE_SAMPLE
             return null;
         }
 
+        $phpDocInfo->removeByType(VarTagValueNode::class);
+
         $comments = $node->getComments();
         if (isset($comments[1]) && $comments[1] instanceof Comment) {
-            return null;
+
         }
 
-        $phpDocInfo->removeByType(VarTagValueNode::class);
         return $node;
     }
 
