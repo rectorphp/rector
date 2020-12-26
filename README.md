@@ -24,13 +24,9 @@ It's a tool that [we develop](https://getrector.org/) and share for free, so any
 
 <br>
 
-- **[Try Rector Online](https://getrector.org/demo)**
-
 ## Show Case: Complete 2700 `@var` annotations in 2 mins
 
 ![Rector-showcase](docs/images/rector-showcase-var.gif)
-
-[How does this work?](https://tomasvotruba.com/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/)
 
 <br>
 
@@ -53,6 +49,7 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 
 ### What Can Rector Do for You?
 
+- [Complete 2800 `@var` types in 2 minutes](https://tomasvotruba.com/blog/2019/07/29/how-we-completed-thousands-of-missing-var-annotations-in-a-day/)
 - [Upgrade 30 000 unit tests from PHPUnit 6 to 9 in 2 weeks](https://twitter.com/LBajsarowicz/status/1272947900016967683)
 - [Complete PHP 7.4 property type declarations](https://tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
 - [Migrate your project from Nette to Symfony](https://tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
@@ -63,7 +60,7 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 
 ## Documentation
 
-- [Explore 600+ Rector Rules](/docs/rector_rules_overview.md)
+- [Explore 630+ Rector Rules](/docs/rector_rules_overview.md)
 - [How Does Rector Work?](/docs/how_it_works.md)
 - [PHP Parser Nodes Overview](/docs/nodes_overview.md)
 
@@ -74,13 +71,16 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
 - [How To Work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
 - [How run Rector in Docker](/docs/how_to_run_rector_in_docker.md)
-- [Add Checkstyle with your CI](/docs/checkstyle.md)
 
 ### Contributing
 
 - [How to Add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
 - [How to Create New Rector Rule](/docs/create_own_rule.md)
 - [How to Generate New Rector Rule with Recipe](/docs/rector_recipe.md)
+
+## CI
+
+- [Add Checkstyle with your CI](/docs/checkstyle.md)
 
 ## Install
 
