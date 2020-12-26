@@ -123,7 +123,8 @@ CODE_SAMPLE
 
         $comments = $node->getComments();
         if (isset($comments[1]) && $comments[1] instanceof Comment) {
-
+            $node->setAttribute(AttributeKey::COMMENTS, null);
+            $node->setDocComment(new \PhpParser\Comment\Doc($comments[1]->getText()));
         }
 
         return $node;
