@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector\Fixture;
+namespace Rector\Nette\Tests\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector\Fixture;
 
 use Nette\DI\CompilerExtension;
 
@@ -20,7 +20,7 @@ final class SomeExtension extends CompilerExtension
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector\Fixture;
+namespace Rector\Nette\Tests\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector\Fixture;
 
 use Nette\DI\CompilerExtension;
 

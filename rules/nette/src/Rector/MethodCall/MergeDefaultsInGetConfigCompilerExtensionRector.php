@@ -12,9 +12,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Nette\Tests\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRectorTest
+ * @see \Rector\Nette\Tests\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector\MergeDefaultsInGetConfigCompilerExtensionRectorTest
  */
-final class GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector extends AbstractRector
+final class MergeDefaultsInGetConfigCompilerExtensionRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
+namespace Rector\Nette\Tests\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector;
 
 use Iterator;
-use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
+use Rector\Nette\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRectorTest extends AbstractRectorTestCase
+final class MergeDefaultsInGetConfigCompilerExtensionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRectorTe
 
     protected function getRectorClass(): string
     {
-        return GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector::class;
+        return MergeDefaultsInGetConfigCompilerExtensionRector::class;
     }
 }
