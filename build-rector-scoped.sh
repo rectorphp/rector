@@ -1,7 +1,5 @@
 #!/bin/sh -l
 
-# local-prefix test
-
 # show errors
 set -e
 
@@ -20,22 +18,19 @@ note()
 }
 
 
-note "Starts"
-
 # configure here
 NESTED_DIRECTORY="rector-nested"
 SCOPED_DIRECTORY="rector-scoped"
 
-
-
 # ---------------------------
 
+note "Starts"
 
 note "Coping root files to $NESTED_DIRECTORY directory"
 rsync -av * "$NESTED_DIRECTORY" --quiet
 
 note "Running composer update without dev"
-composer update --no-dev --no-progress --ansi --working-dir "$NESTED_DIRECTORY" # --ignore-platform-req php
+composer update --no-dev --no-progress --ansi --working-dir "$NESTED_DIRECTORY"
 
 # Unpacking PHPStan
 note "Unpacking PHPStan"
@@ -50,21 +45,21 @@ note "Disabling platform check"
 composer config platform-check false
 
 # 2. scope it
-# @todo temporary only no net + is already locally insatlled
 note "Running scoper to $SCOPED_DIRECTORY"
 wget https://github.com/humbug/php-scoper/releases/download/0.14.0/php-scoper.phar -N --no-verbose
 
 php php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir "../$SCOPED_DIRECTORY" --config scoper.php.inc --force --ansi --working-dir "$NESTED_DIRECTORY"
 
-# keep only one PHPStan
+# keep only one PHPStan version
 rm -rf "$SCOPED_DIRECTORY/vendor/phpstan/phpstan"
 
 note "Dumping Composer Autoload"
 composer dump-autoload --working-dir "$SCOPED_DIRECTORY" --ansi --optimize --classmap-authoritative --no-dev
 
 note "Scoping composer.json"
-composer require symplify/package-scoper
+composer require symplify/package-scoper --dev
 vendor/bin/package-scoper scope-composer-json "$SCOPED_DIRECTORY/composer.json" --ansi
+
 
 # clean up
 rm -rf "$NESTED_DIRECTORY"
@@ -72,3 +67,5 @@ rm -rf "$NESTED_DIRECTORY"
 
 # copy metafiles needed for release
 cp -R scoped/. "$SCOPED_DIRECTORY"
+
+note "Finished"
