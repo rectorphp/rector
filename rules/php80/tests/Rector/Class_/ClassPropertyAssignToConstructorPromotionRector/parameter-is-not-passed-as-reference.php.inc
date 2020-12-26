@@ -21,7 +21,8 @@ namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromo
 class X {
         
     function __construct(public string $x) {
-        $this->x = 'preprended-' . $this->x;
+        $this->x = 'preprended-' . $x;
+        $this->x = $x;
     }
     
 }
