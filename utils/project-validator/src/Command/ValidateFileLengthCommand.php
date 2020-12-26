@@ -4,36 +4,42 @@ declare(strict_types=1);
 
 namespace Rector\Utils\ProjectValidator\Command;
 
+use Rector\Utils\ProjectValidator\Finder\ProjectFilesFinder;
+use Rector\Utils\ProjectValidator\TooLongFilesResolver;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\SmartFileSystem\Finder\SmartFinder;
 
 final class ValidateFileLengthCommand extends Command
 {
-    /**
-     * In windows the max-path length is 260 chars. we give a bit room for the path up to the rector project
-     */
-    private const MAX_FILE_LENGTH = 200;
-
-    /**
-     * @var SmartFinder
-     */
-    private $smartFinder;
-
     /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
 
-    public function __construct(SmartFinder $smartFinder, SymfonyStyle $symfonyStyle)
-    {
-        $this->smartFinder = $smartFinder;
+    /**
+     * @var ProjectFilesFinder
+     */
+    private $projectFilesFinder;
+
+    /**
+     * @var TooLongFilesResolver
+     */
+    private $tooLongFilesResolver;
+
+    public function __construct(
+        ProjectFilesFinder $projectFilesFinder,
+        SymfonyStyle $symfonyStyle,
+        TooLongFilesResolver $tooLongFilesResolver
+    ) {
         $this->symfonyStyle = $symfonyStyle;
 
         parent::__construct();
+
+        $this->projectFilesFinder = $projectFilesFinder;
+        $this->tooLongFilesResolver = $tooLongFilesResolver;
     }
 
     protected function configure(): void
@@ -43,42 +49,27 @@ final class ValidateFileLengthCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $fileInfos = $this->smartFinder->find([
-            __DIR__ . '/../../../../packages',
-            __DIR__ . '/../../../../rules',
-            __DIR__ . '/../../../../src',
-            __DIR__ . '/../../../../tests',
-        ], '*');
+        $fileInfos = $this->projectFilesFinder->find();
+        $tooLongFileInfos = $this->tooLongFilesResolver->resolve($fileInfos);
 
-        $hasError = false;
-        foreach ($fileInfos as $fileInfo) {
-            $filePathLength = strlen($fileInfo->getRealPath());
-            if ($filePathLength < self::MAX_FILE_LENGTH) {
-                continue;
-            }
+        if ($tooLongFileInfos === []) {
+            $message = sprintf('Checked %d files - all fit max file length', count($fileInfos));
+            $this->symfonyStyle->success($message);
 
+            return ShellCode::SUCCESS;
+        }
+
+        foreach ($tooLongFileInfos as $tooLongFileInfo) {
             $message = sprintf(
                 'Paths for file "%s" has %d chars, but must be shorter than %d.',
-                $fileInfo->getRealPath(),
-                $filePathLength,
-                self::MAX_FILE_LENGTH
+                $tooLongFileInfo->getRealPath(),
+                strlen($tooLongFileInfo->getRealPath()),
+                TooLongFilesResolver::MAX_FILE_LENGTH
             );
 
             $this->symfonyStyle->warning($message);
-            $hasError = true;
         }
 
-        if ($hasError) {
-            return ShellCode::ERROR;
-        }
-
-        $message = sprintf(
-            'Checked %d files - all fit max file length of %d chars',
-            count($fileInfos),
-            self::MAX_FILE_LENGTH
-        );
-        $this->symfonyStyle->success($message);
-
-        return ShellCode::SUCCESS;
+        return ShellCode::ERROR;
     }
 }
