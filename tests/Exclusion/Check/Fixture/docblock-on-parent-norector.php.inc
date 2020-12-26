@@ -2,7 +2,6 @@
 
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
-
 final class DocblockOnParentNorector
 {
     public function foo()
@@ -19,5 +18,3 @@ final class DocblockOnParentNorector
         round(/** @noRector \Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector */ 4 + 0);
     }
 }
-
-?>

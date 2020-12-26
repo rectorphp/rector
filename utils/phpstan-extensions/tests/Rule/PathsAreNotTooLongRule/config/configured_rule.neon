@@ -1,0 +1,6 @@
+services:
+    -
+         class: Rector\PHPStanExtensions\Rule\PathsAreNotTooLongRule
+         tags: [phpstan.rules.rule]
+         arguments:
+             maxFileLength: 150

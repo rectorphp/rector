@@ -2,7 +2,6 @@
 
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
-
 final class DocblockOnSelfNoRector
 {
     /**
@@ -27,5 +26,3 @@ final class DocblockOnSelfNoRector
 
     }
 }
-
-?>

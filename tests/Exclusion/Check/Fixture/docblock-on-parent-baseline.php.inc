@@ -2,7 +2,6 @@
 
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
-
 final class DocblockOnParentBaseline
 {
     public function foo()
@@ -17,7 +16,6 @@ final class DocblockOnParentBaseline
 <?php
 
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
-
 
 final class DocblockOnParentBaseline
 {

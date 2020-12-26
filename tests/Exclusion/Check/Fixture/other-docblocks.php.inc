@@ -2,7 +2,6 @@
 
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
-
 final class OtherDocblocks
 {
     public function foo()
@@ -26,7 +25,6 @@ final class OtherDocblocks
 <?php
 
 namespace Rector\Core\Tests\Exclusion\Check\Fixture;
-
 
 final class OtherDocblocks
 {
