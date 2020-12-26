@@ -2,10 +2,14 @@
 
 namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
-class SkipIfConditionMethodCallWithArgWithVariableExistsInParam
+use stdClass;
+
+class SkipConditionWithVariableArg
 {
     public function run($arg, $objCondition)
     {
+        $objCondition = new stdClass;
+
         $obj = new self();
         if ($obj->condition($arg + 1) === 1) {
 
@@ -17,5 +21,3 @@ class SkipIfConditionMethodCallWithArgWithVariableExistsInParam
         return 1;
     }
 }
-
-?>

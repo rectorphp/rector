@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\ClassMethod\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRectorTest
+ * @see \Rector\Symfony\Tests\Rector\ClassMethod\NormalizeAutowireMethodNamingRector\NormalizeAutowireMethodNamingRectorTest
  */
 final class NormalizeAutowireMethodNamingRector extends AbstractRector
 {
