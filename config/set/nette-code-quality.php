@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Nette\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector;
-use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector;
+use Rector\NetteCodeQuality\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector;
 use Rector\NetteCodeQuality\Rector\Assign\ArrayAccessGetControlToGetComponentMethodCallRector;
 use Rector\NetteCodeQuality\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector;
 use Rector\NetteCodeQuality\Rector\Assign\MakeGetComponentAssignAnnotatedRector;
@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MakeGetComponentAssignAnnotatedRector::class);
 
-    $services->set(ChangeControlArrayAccessToAnnotatedControlVariableRector::class);
+    $services->set(AnnotateMagicalControlArrayAccessRector::class);
 
     $services->set(ArrayAccessSetControlToAddComponentMethodCallRector::class);
 

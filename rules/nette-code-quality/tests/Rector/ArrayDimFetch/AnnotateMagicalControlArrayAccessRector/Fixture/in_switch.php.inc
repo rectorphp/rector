@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector\Fixture;
+namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\Fixture;
 
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
@@ -32,7 +32,7 @@ final class InSwitchPresenter extends Presenter
 -----
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector\Fixture;
+namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\Fixture;
 
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;

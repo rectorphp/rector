@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector;
+namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector;
 
 use Iterator;
-use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector;
+use Rector\NetteCodeQuality\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ChangeControlArrayAccessToAnnotatedControlVariableRectorTest extends AbstractRectorTestCase
+final class AnnotateMagicalControlArrayAccessRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class ChangeControlArrayAccessToAnnotatedControlVariableRectorTest extends
 
     protected function getRectorClass(): string
     {
-        return ChangeControlArrayAccessToAnnotatedControlVariableRector::class;
+        return AnnotateMagicalControlArrayAccessRector::class;
     }
 }
