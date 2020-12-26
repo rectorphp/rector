@@ -1,3 +1,5 @@
+name: Finalize Classes
+
 on: [pull_request, push]
 
 jobs:
@@ -9,10 +11,11 @@ jobs:
             matrix:
                 php_version: ['7.3', '7.4', '8.0']
 
-        name: "Finalize classes on PHP ${{ matrix.php_version }}"
+        name: "PHP ${{ matrix.php_version }}"
 
         steps:
             -   uses: actions/checkout@v2
+
             -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php_version }}
@@ -29,4 +32,8 @@ jobs:
                     # run
                     composer require rector/rector-prefixed:dev-master --dev --ansi
                     composer require doctrine/orm
+
+            -
+                run: |
+                    cd standalone
                     vendor/bin/rector process ../tests/fixture-finalize --config ../ci/rector-finalize.php --ansi

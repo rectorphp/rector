@@ -10,12 +10,27 @@ jobs:
             fail-fast: false
             matrix:
                 php_version: ['7.3', '7.4', '8.0']
-                symfony_version: ['2.8', '3.4', '4.4', '5.2']
+                symfony_version: ['5.2']
+                # see https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#example-including-additional-values-into-combinations
+                include:
+                    -
+                        php_version: '7.3'
+                        symfony_version: '2.8'
+                    -
+                        php_version: '7.3'
+                        symfony_version: '3.4'
+                    -
+                        php_version: '7.3'
+                        symfony_version: '4.4'
+                    -
+                        php_version: '7.4'
+                        symfony_version: '4.4'
 
         name: "PHP ${{ matrix.php_version }} and Symfony ${{ matrix.symfony_version }}"
 
         steps:
             -   uses: actions/checkout@v2
+
             -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php_version }}

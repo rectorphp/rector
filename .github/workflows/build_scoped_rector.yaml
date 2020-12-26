@@ -7,9 +7,6 @@ on:
         tags:
             - '*'
 
-    # @todo remove before merge, only for testing
-    pull_request: null
-
 jobs:
     build_scoped_rector:
         runs-on: ubuntu-latest
