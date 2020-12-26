@@ -39,13 +39,18 @@ final class ClassMethodVisibilityGuard
     }
 
     /**
-     * @return class-string[]
+     * @return string[]
      */
     private function getParentClasses(Class_ $class): array
     {
         /** @var string $className */
         $className = $this->nodeNameResolver->getName($class);
 
-        return (array) class_parents($className);
+        $classParents = class_parents($className);
+        if ($classParents === false) {
+            return [];
+        }
+
+        return $classParents;
     }
 }

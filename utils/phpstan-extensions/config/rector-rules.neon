@@ -1,10 +1,10 @@
 services:
-    -
-        class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
-        tags: [phpstan.rules.rule]
+#    -
+#        class: Rector\PHPStanExtensions\Rule\PathsAreNotTooLongRule
+#        tags: [phpstan.rules.rule]
 
     -
-        class: Rector\PHPStanExtensions\Rule\PathsAreNotTooLongRule
+        class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
         tags: [phpstan.rules.rule]
 
     -

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\Issues\Issue4691\DoNotChangeExplicitQuotedStringComment\Fixture;
 
-final class DemoFile
+final class SkipExplicitFormat
 {
 	/**
 	 * @var boolean|"frozen"|array

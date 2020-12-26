@@ -7,6 +7,7 @@ namespace Rector\Php80\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -68,6 +69,10 @@ CODE_SAMPLE
 
         if (! $this->isFuncCallName($node, 'get_class')) {
             return null;
+        }
+
+        if (! isset($node->args[0])) {
+            return new ClassConstFetch(new Name('self'), 'class');
         }
 
         $object = $node->args[0]->value;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Common\Collections;
+namespace Rector\Core\Tests\Issues\Issue4499\DoNotDuplicateCode\Fixture;
 
-if (interface_exists('Doctrine\Common\Collections\Collection')) {
+if (interface_exists('Rector\Core\Tests\Issues\Issue4499\DoNotDuplicateCode\Fixture\Collection')) {
     return;
 }
 
@@ -12,5 +12,3 @@ interface Collection
 {
 
 }
-
-?>

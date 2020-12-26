@@ -1,9 +1,8 @@
 <?php
 
-namespace Rector\Core\Tests\Rector\Exclusion\Check\DocBlockOnParentNoRector;
+namespace Rector\Core\Tests\Exclusion\Check\Fixture;
 
-
-final class SomeController
+final class DocblockOnParentNorector
 {
     public function foo()
     {
@@ -19,5 +18,3 @@ final class SomeController
         round(/** @noRector \Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector */ 4 + 0);
     }
 }
-
-?>
