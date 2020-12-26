@@ -29,7 +29,7 @@ foreach ($phpstanPhpFileInfos as $phpstanPhpFileInfo) {
 }
 
 $dateTime = DateTime::from('now');
-$timestamp = $dateTime->format('YMD');
+$timestamp = $dateTime->format('Ymd');
 
 // see https://github.com/humbug/php-scoper
 return [
