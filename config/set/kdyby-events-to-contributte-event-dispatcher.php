@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\NetteKdyby\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector;
-use Rector\NetteKdyby\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector;
+use Rector\NetteKdyby\Rector\ClassMethod\ReplaceMagicPropertyWithEventClassRector;
 use Rector\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector;
 use Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ReplaceMagicPropertyEventWithEventClassRector::class);
 
-    $services->set(ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector::class);
+    $services->set(ReplaceMagicPropertyWithEventClassRector::class);
 
     $services->set(ReplaceEventManagerWithEventSubscriberRector::class);
 
