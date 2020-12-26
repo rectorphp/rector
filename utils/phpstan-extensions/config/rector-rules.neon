@@ -3,7 +3,7 @@ services:
         class: Rector\PHPStanExtensions\Rule\PathsAreNotTooLongRule
         tags: [phpstan.rules.rule]
         arguments:
-            maxFileLength: 100
+            maxFileLength: 200
 
     -
         class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
