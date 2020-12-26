@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
@@ -27,9 +28,12 @@ foreach ($phpstanPhpFileInfos as $phpstanPhpFileInfo) {
     $filePathsToSkip[] = $phpstanPhpFileInfo->getRealPath();
 }
 
+$dateTime = DateTime::from('now');
+$timestamp = $dateTime->format('YMD');
 
 // see https://github.com/humbug/php-scoper
 return [
+    ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
     ScoperOption::FILES_WHITELIST => $filePathsToSkip,
     ScoperOption::WHITELIST => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
     ScoperOption::PATCHERS => [

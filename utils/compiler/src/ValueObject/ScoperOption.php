@@ -28,4 +28,9 @@ final class ScoperOption
      * @var string
      */
     public const FILES_WHITELIST = 'files-whitelist';
+
+    /**
+     * @var string
+     */
+    public const PREFIX = 'prefix';
 }
