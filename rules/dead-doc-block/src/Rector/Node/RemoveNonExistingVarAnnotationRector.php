@@ -120,14 +120,16 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo->removeByType(VarTagValueNode::class);
-
         $comments = $node->getComments();
         if (isset($comments[1]) && $comments[1] instanceof Comment) {
             $node->setAttribute(AttributeKey::COMMENTS, null);
             $node->setDocComment(new Doc($comments[1]->getText()));
+            $node->setAttribute(AttributeKey::PHP_DOC_INFO, null);
+
+            return $node;
         }
 
+        $phpDocInfo->removeByType(VarTagValueNode::class);
         return $node;
     }
 
