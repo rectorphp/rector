@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Nette\Utils\DateTime;
-use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 use Symfony\Component\Finder\Finder;
@@ -29,7 +28,7 @@ foreach ($phpstanPhpFileInfos as $phpstanPhpFileInfo) {
 }
 
 $dateTime = DateTime::from('now');
-$timestamp = $dateTime->format('YMD');
+$timestamp = $dateTime->format('Ymd');
 
 // see https://github.com/humbug/php-scoper
 return [
@@ -38,21 +37,6 @@ return [
     ScoperOption::WHITELIST => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
     ScoperOption::PATCHERS => [
         // [BEWARE] $filePath is absolute!
-
-        // related to Composer 2 naming - @todo why exactly is this needed?
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/composer/autoload_real.php')) {
-                return $content;
-            }
-
-            $content = str_replace(
-                "'Composer\\\\Autoload\\\\ClassLoader",
-                "'" . $prefix . '\\\\Composer\\\\Autoload\\\\ClassLoader',
-                $content
-            );
-
-            return $content;
-        },
 
         // fatal error on PHP 8
         function (string $filePath, string $prefix, string $content): string {
