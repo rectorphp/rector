@@ -109,7 +109,8 @@ CODE_SAMPLE
             $oldName = $this->getName($param->var);
 
             // property name has higher priority
-            $param->var->name = $property->props[0]->name;
+            $propertyName = $this->getName($property);
+            $param->var->name = $propertyName;
             $param->flags = $property->flags;
 
             // rename also following calls
