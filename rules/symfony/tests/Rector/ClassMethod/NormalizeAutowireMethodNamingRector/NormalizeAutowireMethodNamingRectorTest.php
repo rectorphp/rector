@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\NormalizeAutowireMethodNamingRector;
 
 use Iterator;
-use Rector\Symfony\Rector\ClassMethod\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector;
+use Rector\Symfony\Rector\ClassMethod\NormalizeAutowireMethodNamingRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRectorTest extends AbstractRectorTestCase
+final class NormalizeAutowireMethodNamingRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRectorTest
 
     protected function getRectorClass(): string
     {
-        return AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector::class;
+        return NormalizeAutowireMethodNamingRector::class;
     }
 }

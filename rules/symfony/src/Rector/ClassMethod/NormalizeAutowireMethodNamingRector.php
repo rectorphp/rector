@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRectorTest
  */
-final class AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector extends AbstractRector
+final class NormalizeAutowireMethodNamingRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {

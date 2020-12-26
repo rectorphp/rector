@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\NormalizeAutowireMethodNamingRector\Fixture;
 
 final class SkipSetAutowireClassname
 {
