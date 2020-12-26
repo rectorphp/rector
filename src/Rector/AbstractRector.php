@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\Rector;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Comment;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -292,6 +294,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     {
         $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $oldNode->getAttribute(AttributeKey::PHP_DOC_INFO));
         $newNode->setAttribute(self::COMMENTS, $oldNode->getAttribute(self::COMMENTS));
+    }
+
+    protected function rollbackComments(Node $node, Comment $comment): void
+    {
+        $node->setAttribute(AttributeKey::COMMENTS, null);
+        $node->setDocComment(new Doc($comment->getText()));
+        $node->setAttribute(AttributeKey::PHP_DOC_INFO, null);
     }
 
     /**
