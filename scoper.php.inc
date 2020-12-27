@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Nette\Utils\DateTime;
+use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 use Symfony\Component\Finder\Finder;
@@ -38,9 +39,18 @@ return [
     ScoperOption::PATCHERS => [
         // [BEWARE] $filePath is absolute!
 
-        // fatal error on PHP 8
+        // scoper missed PSR-4 autodiscovery in Symfony
         function (string $filePath, string $prefix, string $content): string {
-            return str_replace('private static final', 'private static', $content);
-        },
+            if (!Strings::endsWith($filePath, 'config.php') && !Strings::endsWith($filePath, 'services.php')) {
+                return $content;
+            }
+
+            // skip "Rector\\" namespace
+            if (Strings::contains($content, '$services->load(\'Rector')) {
+                return $content;
+            }
+
+            return Strings::replace($content, '#services\->load\(\'#', 'services->load(\'' . $prefix . '\\');
+        }
     ],
 ];

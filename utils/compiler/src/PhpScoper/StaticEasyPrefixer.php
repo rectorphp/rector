@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\PhpScoper;
 
-use Nette\Utils\Strings;
-
 final class StaticEasyPrefixer
 {
     /**
@@ -32,22 +30,6 @@ final class StaticEasyPrefixer
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',
     ];
-
-    public static function prefixClass(string $class, string $prefix): string
-    {
-        foreach (self::EXCLUDED_NAMESPACES as $excludedNamespace) {
-            $excludedNamespace = Strings::substring($excludedNamespace, 0, -2) . '\\';
-            if (Strings::startsWith($class, $excludedNamespace)) {
-                return $class;
-            }
-        }
-
-        if (Strings::startsWith($class, '@')) {
-            return $class;
-        }
-
-        return $prefix . '\\' . $class;
-    }
 
     /**
      * @return string[]
