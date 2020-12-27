@@ -21,7 +21,8 @@ jobs:
             -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    coverage: xdebug #, pcov
+                    # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
+                    coverage: pcov
 
             -   run: composer update --prefer-lowest --no-progress --ansi
                 if: "matrix.dependencies == 'lowest'"
