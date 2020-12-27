@@ -6,7 +6,6 @@ namespace Rector\DeadDocBlock\Rector\Node;
 
 use Nette\Utils\Strings;
 use PhpParser\Comment;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
@@ -122,10 +121,7 @@ CODE_SAMPLE
 
         $comments = $node->getComments();
         if (isset($comments[1]) && $comments[1] instanceof Comment) {
-            $node->setAttribute(AttributeKey::COMMENTS, null);
-            $node->setDocComment(new Doc($comments[1]->getText()));
-            $node->setAttribute(AttributeKey::PHP_DOC_INFO, null);
-
+            $this->rollbackComments($node, $comments[1]);
             return $node;
         }
 
