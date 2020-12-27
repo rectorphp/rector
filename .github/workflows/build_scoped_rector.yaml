@@ -3,7 +3,8 @@ name: Build Scoped Rector
 
 on:
     push:
-        branches: master
+        branches:
+            - master
 
 jobs:
     build_scoped_rector:

@@ -6,7 +6,6 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
-use Symfony\Component\Finder\Finder;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -17,16 +16,6 @@ $filePathsToSkip = [
 ];
 
 // remove phpstan, because it is already prefixed in its own scope
-$finder = new Finder();
-$phpstanPhpFileInfos = $finder->files()
-    ->name('*.php')
-    // the working dir is already "rector-nested"
-    ->in(__DIR__ . '/vendor/phpstan/phpstan-extracted')
-    ->getIterator();
-
-foreach ($phpstanPhpFileInfos as $phpstanPhpFileInfo) {
-    $filePathsToSkip[] = $phpstanPhpFileInfo->getRealPath();
-}
 
 $dateTime = DateTime::from('now');
 $timestamp = $dateTime->format('Ymd');
@@ -41,7 +30,8 @@ return [
 
         // scoper missed PSR-4 autodiscovery in Symfony
         function (string $filePath, string $prefix, string $content): string {
-            if (!Strings::endsWith($filePath, 'config.php') && !Strings::endsWith($filePath, 'services.php')) {
+            // scoper missed PSR-4 autodiscovery in Symfony
+            if (! Strings::endsWith($filePath, 'config.php') && ! Strings::endsWith($filePath, 'services.php')) {
                 return $content;
             }
 
@@ -51,6 +41,6 @@ return [
             }
 
             return Strings::replace($content, '#services\->load\(\'#', 'services->load(\'' . $prefix . '\\');
-        }
+        },
     ],
 ];

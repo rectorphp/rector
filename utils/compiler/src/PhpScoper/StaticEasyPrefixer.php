@@ -25,8 +25,10 @@ final class StaticEasyPrefixer
         'Rector\*',
         // we use this API a lot
         'PhpParser\*',
+
+        // phpstan needs to be here, as phpstan-extracted/vendor autoload is statically generated and namespaces cannot be changed
         'PHPStan\*',
-        // 'Symplify\*',
+
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',
     ];
