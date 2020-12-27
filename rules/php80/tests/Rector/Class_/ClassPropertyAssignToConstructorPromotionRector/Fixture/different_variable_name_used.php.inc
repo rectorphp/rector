@@ -14,9 +14,6 @@ class DifferentVariableNameUsed
      */
     public function __construct($id)
     {
-        if (! $this->isExists($id)) {
-        }
-
         $this->ID = $id;
     }
 }
@@ -29,13 +26,13 @@ namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromo
 
 class DifferentVariableNameUsed
 {
-    public function __construct(/**
-     * @var int
-     */
-    private $ID)
+    public function __construct(
+        /**
+         * @var int
+         */
+        private $ID
+    )
     {
-        if (! $this->isExists($ID)) {
-        }
     }
 }
 
