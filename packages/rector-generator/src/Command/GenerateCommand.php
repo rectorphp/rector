@@ -203,6 +203,6 @@ final class GenerateCommand extends Command
             return $this->rectorRecipeProvider->provide();
         }
 
-        return $this->rectorRecipeInteractiveProvider->provide();
+        return $this->rectorRecipeInteractiveProvider->provide($this->symfonyStyle);
     }
 }

@@ -33,19 +33,18 @@ final class RectorRecipeInteractiveProvider
     private $setsListProvider;
 
     public function __construct(
-        SymfonyStyle $symfonyStyle,
         PackageNamesProvider $packageNamesProvider,
         NodeTypesProvider $nodeTypesProvider,
         SetsListProvider $setsListProvider
     ) {
-        $this->symfonyStyle = $symfonyStyle;
         $this->packageNamesProvider = $packageNamesProvider;
         $this->nodeTypesProvider = $nodeTypesProvider;
         $this->setsListProvider = $setsListProvider;
     }
 
-    public function provide(): RectorRecipe
+    public function provide(SymfonyStyle $symfonyStyle): RectorRecipe
     {
+        $this->symfonyStyle = $symfonyStyle;
         $rectorRecipe = new RectorRecipe(
             $this->askForPackageName(),
             $this->askForRectorName(),
