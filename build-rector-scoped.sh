@@ -58,7 +58,7 @@ note "Dumping Composer Autoload"
 composer dump-autoload --working-dir "$SCOPED_DIRECTORY" --ansi --optimize --classmap-authoritative --no-dev
 
 # create unique prefix in phpstan-extracted to exist along real phpstan/phpstan package
-compose update
+composer install
 php ci/change_phpstan_prefix.php
 
 # clean up
@@ -68,7 +68,6 @@ rm -rf "$NESTED_DIRECTORY"
 note "Copy metafiles like composer.json, .github etc to repository"
 rm -f "$SCOPED_DIRECTORY/composer.json"
 cp -R scoped/. "$SCOPED_DIRECTORY"
-
 
 # make bin/rector runnable without "php"
 chmod 777 "$SCOPED_DIRECTORY/bin/rector"

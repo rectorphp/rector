@@ -26,9 +26,8 @@ final class StaticEasyPrefixer
         // we use this API a lot
         'PhpParser\*',
 
-        // 'PHPStan\*', - use the minimal scope as possible
-        'PHPStan\PhpDocParser\Ast\*',
-        'PHPStan\Type\*',
+        // phpstan needs to be here, as phpstan-extracted/vendor autoload is statically generated and namespaces cannot be changed
+        'PHPStan\*',
 
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',

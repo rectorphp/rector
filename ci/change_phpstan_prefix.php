@@ -28,10 +28,6 @@ foreach (iterator_to_array($fileInfos) as $fileInfo) {
         return $match[0] . '__unique_rector';
     });
 
-    // replace humbug prefix to scope phpstan dependencies locally
-    // @see https://regex101.com/r/6pFuUY/1
-    $fileContent = Strings::replace($fileContent, '#(_HumbugBox\w+)#ms', '$1__UniqueRector');
-
     // no change
     if ($fileContent === $originalFileContent) {
         continue;
