@@ -23,6 +23,7 @@ jobs:
             -
                 run: |
                     wget https://phar.phpunit.de/phpcov.phar
+                    chmod +x ./phpcov.phar
 
                     vendor/bin/phpunit --coverage-clover build/logs/rules.xml --testsuite rules
                     vendor/bin/phpunit --coverage-clover build/logs/packages.xml --testsuite packages
