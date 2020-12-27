@@ -22,9 +22,17 @@ jobs:
             # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
             -
                 run: |
-                    vendor/bin/phpunit --coverage-clover build/logs/clover.xml --testsuite main
+                    wget https://phar.phpunit.de/phpcov.phar
+
+                    vendor/bin/phpunit --coverage-clover build/logs/rules.xml --testsuite rules
+                    vendor/bin/phpunit --coverage-clover build/logs/packages.xml --testsuite packages
+                    vendor/bin/phpunit --coverage-clover build/logs/tests.xml --testsuite tests
+                    vendor/bin/phpunit --coverage-clover build/logs/utils.xml --testsuite utils
+
+                    phpcov merge --clover clover.xml build/logs
+
                     # Coveralls.io
                     composer require --dev php-coveralls/php-coveralls:^2.4
-                    vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
+                    vendor/bin/php-coveralls --coverage_clover=clover.xml -v
                 env:
                     COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

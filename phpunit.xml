@@ -22,14 +22,23 @@
 	</filter>
 
     <testsuites>
-        <testsuite name="main">
+        <testsuite name="rules">
             <directory>rules/*/tests</directory>
+            <exclude>rules/nette-tester-to-phpunit/tests/Rector/RenameTesterTestToPHPUnitToTestFileRector/Source/*</exclude>
+        </testsuite>
+
+        <testsuite name="packages">
             <directory>packages/*/tests</directory>
-            <directory>tests</directory>
-            <directory>utils/*/tests</directory>
             <exclude>packages/rector-generator/templates/*</exclude>
             <exclude>packages/rector-generator/tests/RectorGenerator/Fixture/expected</exclude>
-            <exclude>rules/nette-tester-to-phpunit/tests/Rector/RenameTesterTestToPHPUnitToTestFileRector/Source/*</exclude>
+        </testsuite>
+
+        <testsuite name="tests">
+            <directory>tests</directory>
+        </testsuite>
+
+        <testsuite name="utils">
+            <directory>utils/*/tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
