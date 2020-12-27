@@ -51,21 +51,25 @@ wget https://github.com/humbug/php-scoper/releases/download/0.14.0/php-scoper.ph
 php php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir "../$SCOPED_DIRECTORY" --config scoper.php.inc --force --ansi --working-dir "$NESTED_DIRECTORY"
 
 # keep only one PHPStan version
+note "Remove package phpstan version"
 rm -rf "$SCOPED_DIRECTORY/vendor/phpstan/phpstan"
 
 note "Dumping Composer Autoload"
 composer dump-autoload --working-dir "$SCOPED_DIRECTORY" --ansi --optimize --classmap-authoritative --no-dev
 
-note "Scoping composer.json"
-composer require symplify/package-scoper --dev
-vendor/bin/package-scoper scope-composer-json "$SCOPED_DIRECTORY/composer.json" --ansi
-
 
 # clean up
 rm -rf "$NESTED_DIRECTORY"
 
-
 # copy metafiles needed for release
+note "Copy metafiles like composer.json, .github etc to repository"
+rm -f "$SCOPED_DIRECTORY/composer.json"
 cp -R scoped/. "$SCOPED_DIRECTORY"
+
+
+# make bin/rector runnable without "php"
+chmod 777 "$SCOPED_DIRECTORY/bin/rector"
+chmod 777 "$SCOPED_DIRECTORY/bin/rector.php"
+
 
 note "Finished"
