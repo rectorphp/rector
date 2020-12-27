@@ -15,7 +15,15 @@
 				<directory suffix=".php">./packages/*/tests</directory>
 				<directory suffix=".php">./rules/*/tests</directory>
                 <directory suffix=".php">./packages/rector-generator/templates</directory>
-                <file>packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareDeprecatedTagValueNode.php</file>
+                <directory suffix=".php">./bin</directory>
+                <directory suffix=".php">./ci</directory>
+                <directory suffix=".php">./config</directory>
+                <directory suffix=".php">./docs</directory>
+                <directory suffix=".php">./scoped</directory>
+                <directory suffix=".php">./stubs</directory>
+                <directory suffix=".php">./templates</directory>
+                <directory suffix=".php">./tests</directory>
+                <directory suffix=".php">./vendor</directory>
 			</exclude>
 		</whitelist>
 	</filter>
