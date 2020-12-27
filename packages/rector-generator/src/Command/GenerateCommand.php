@@ -17,6 +17,7 @@ use Rector\RectorGenerator\Provider\RectorRecipeProvider;
 use Rector\RectorGenerator\Provider\SetsListProvider;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
+use Rector\Set\ValueObject\SetList;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -364,6 +365,6 @@ CODE_SAMPLE;
             return null;
         }
 
-        return constant('\Rector\Set\ValueObject\SetList::' . $setName);
+        return constant(SetList::class . $setName);
     }
 }
