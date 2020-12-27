@@ -24,7 +24,7 @@
                 <directory suffix=".php">./templates</directory>
                 <directory suffix=".php">./tests</directory>
                 <directory suffix=".php">./vendor</directory>
-                <file>./phpstorm.meta.php</file>
+                <file>/phpstorm.meta.php</file>
 			</exclude>
 		</whitelist>
 	</filter>
