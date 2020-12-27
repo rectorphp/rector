@@ -17,6 +17,7 @@
 				<directory suffix=".php">./packages/*/tests</directory>
 				<directory suffix=".php">./rules/*/tests</directory>
                 <directory suffix=".php">./packages/rector-generator/templates</directory>
+                <file>packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareDeprecatedTagValueNode.php</file>
 			</exclude>
 		</whitelist>
 	</filter>
@@ -31,7 +32,6 @@
             <directory>packages/*/tests</directory>
             <exclude>packages/rector-generator/templates/*</exclude>
             <exclude>packages/rector-generator/tests/RectorGenerator/Fixture/expected</exclude>
-            <exclude>packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareDeprecatedTagValueNode.php</exclude>
         </testsuite>
 
         <testsuite name="tests">
