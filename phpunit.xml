@@ -31,6 +31,7 @@
             <directory>packages/*/tests</directory>
             <exclude>packages/rector-generator/templates/*</exclude>
             <exclude>packages/rector-generator/tests/RectorGenerator/Fixture/expected</exclude>
+            <exclude>packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareDeprecatedTagValueNode.php</exclude>
         </testsuite>
 
         <testsuite name="tests">
