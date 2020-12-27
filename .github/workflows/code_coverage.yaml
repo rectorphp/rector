@@ -29,7 +29,7 @@ jobs:
                     vendor/bin/phpunit --coverage-clover build/logs/tests.xml --testsuite tests
                     vendor/bin/phpunit --coverage-clover build/logs/utils.xml --testsuite utils
 
-                    phpcov.phar merge --clover clover.xml build/logs
+                    ./phpcov.phar merge --clover clover.xml build/logs
 
                     # Coveralls.io
                     composer require --dev php-coveralls/php-coveralls:^2.4
