@@ -25,9 +25,16 @@ jobs:
                     wget https://phar.phpunit.de/phpcov.phar
                     chmod +x ./phpcov.phar
 
+                    echo "testing rules"
                     vendor/bin/phpunit --coverage-php build/logs/rules.cov --testsuite rules
+
+                    echo "testing packages"
                     vendor/bin/phpunit --coverage-php build/logs/packages.cov --testsuite packages
+
+                    echo "testing tests"
                     vendor/bin/phpunit --coverage-php build/logs/tests.cov --testsuite tests
+
+                    echo "testing utils"
                     vendor/bin/phpunit --coverage-php build/logs/utils.cov --testsuite utils
 
                     ./phpcov.phar merge --clover clover.xml build/logs
