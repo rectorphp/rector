@@ -12,6 +12,7 @@
 		<whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="true">
 			<directory suffix=".php">./</directory>
 			<exclude>
+                <directory suffix="meta.php">./</directory>
 				<directory suffix=".php">./packages/*/tests</directory>
 				<directory suffix=".php">./rules/*/tests</directory>
                 <directory suffix=".php">./packages/rector-generator/templates</directory>
