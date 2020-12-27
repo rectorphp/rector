@@ -10,21 +10,12 @@ use Symfony\Component\Finder\Finder;
 final class PackageNamesProvider
 {
     /**
-     * @var Finder
-     */
-    private $finder;
-
-    public function __construct()
-    {
-        $this->finder = new Finder();
-    }
-
-    /**
      * @return array<int, string>
      */
     public function provide(): array
     {
-        $directoriesList = $this->finder
+        $finder = new Finder();
+        $directoriesList = $finder
             ->directories()
             ->depth(0)
             ->in(__DIR__ . '/../../../../rules/')

@@ -14,21 +14,12 @@ final class NodeTypesProvider
     private const PHP_PARSER_NAMESPACE = '\PhpParser\Node\\';
 
     /**
-     * @var Finder
-     */
-    private $finder;
-
-    public function __construct()
-    {
-        $this->finder = new Finder();
-    }
-
-    /**
      * @return array<string, string>
      */
     public function provide(): array
     {
-        $filesList = $this->finder
+        $finder = new Finder();
+        $filesList = $finder
             ->files()
             ->in(self::PHP_PARSER_NODES_PATH)
             ->getIterator()
