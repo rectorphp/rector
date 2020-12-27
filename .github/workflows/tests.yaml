@@ -29,4 +29,11 @@ jobs:
             -   run: composer install --no-progress --ansi
                 if: "matrix.dependencies != 'lowest'"
 
-            -   run: vendor/bin/phpunit
+            -   run: |
+                    vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+                    # Coveralls.io
+                    composer require --dev php-coveralls/php-coveralls:^2.4
+                    vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
+                env:
+                    COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+                    COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
