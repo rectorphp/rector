@@ -89,11 +89,6 @@ final class SetList
     /**
      * @var string
      */
-    public const CODING_STYLE_ADVANCED = __DIR__ . '/../../../../config/set/coding-style-advanced.php';
-
-    /**
-     * @var string
-     */
     public const CONTRIBUTTE_TO_SYMFONY = __DIR__ . '/../../../../config/set/contributte-to-symfony.php';
 
     /**
