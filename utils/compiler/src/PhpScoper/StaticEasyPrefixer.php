@@ -28,7 +28,7 @@ final class StaticEasyPrefixer
         // we use this API a lot
         'PhpParser\*',
         'PHPStan\*',
-        'Symplify\*',
+        // 'Symplify\*',
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',
     ];
