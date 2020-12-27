@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Core\Tests\Exclusion\Check\Fixture;
+namespace Rector\Core\Tests\Exclusion\Fixture;
 
-final class DocblockOnParentNorector
+final class SkipDocblockOnParentNorector
 {
     public function foo()
     {

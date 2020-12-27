@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Exclusion\Check;
+namespace Rector\Core\Tests\Exclusion;
 
 use Iterator;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
@@ -10,7 +10,10 @@ use Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ExcludeByDocBlockExclusionCheckTest extends AbstractRectorTestCase
+/**
+ * @see \Rector\Core\Exclusion\ExclusionManager
+ */
+final class ExclusionManagerTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
