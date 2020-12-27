@@ -22,15 +22,14 @@ jobs:
             # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
             -
                 run: |
-                    wget https://phar.phpunit.de/phpcov.phar
-                    chmod +x ./phpcov.phar
+                    composer require --dev nimut/phpunit-merger
 
                     vendor/bin/phpunit --coverage-php build/logs/rules.cov --testsuite rules
                     vendor/bin/phpunit --coverage-php build/logs/packages.cov --testsuite packages
                     vendor/bin/phpunit --coverage-php build/logs/tests.cov --testsuite tests
                     vendor/bin/phpunit --coverage-php build/logs/utils.cov --testsuite utils
 
-                    ./phpcov.phar merge --clover clover.xml build/logs
+                    vendor/bin/phpunit-merger coverage build/logs clover.xml
 
                     # Coveralls.io
                     composer require --dev php-coveralls/php-coveralls:^2.4
