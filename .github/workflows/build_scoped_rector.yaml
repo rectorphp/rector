@@ -3,9 +3,7 @@ name: Build Scoped Rector
 
 on:
     push:
-        # see https://github.community/t/how-to-run-github-actions-workflow-only-for-new-tags/16075/10?u=tomasvotruba
-        tags:
-            - '*'
+        branches: null
 
 jobs:
     build_scoped_rector:
