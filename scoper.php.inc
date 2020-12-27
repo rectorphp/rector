@@ -6,7 +6,6 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
-use Symfony\Component\Finder\Finder;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -17,16 +16,6 @@ $filePathsToSkip = [
 ];
 
 // remove phpstan, because it is already prefixed in its own scope
-$finder = new Finder();
-$phpstanPhpFileInfos = $finder->files()
-    ->name('*.php')
-    // the working dir is already "rector-nested"
-    ->in(__DIR__ . '/vendor/phpstan/phpstan-extracted')
-    ->getIterator();
-
-foreach ($phpstanPhpFileInfos as $phpstanPhpFileInfo) {
-    $filePathsToSkip[] = $phpstanPhpFileInfo->getRealPath();
-}
 
 $dateTime = DateTime::from('now');
 $timestamp = $dateTime->format('Ymd');

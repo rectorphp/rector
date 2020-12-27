@@ -32,11 +32,6 @@ rsync -av * "$NESTED_DIRECTORY" --quiet
 note "Running composer update without dev"
 composer update --no-dev --no-progress --ansi --working-dir "$NESTED_DIRECTORY"
 
-# Unpacking PHPStan
-note "Unpacking PHPStan"
-wget https://github.com/box-project/box/releases/download/3.11.0/box.phar -N --no-verbose
-php box.phar extract "$NESTED_DIRECTORY/vendor/phpstan/phpstan/phpstan.phar" "$NESTED_DIRECTORY/vendor/phpstan/phpstan-extracted"
-
 # this will remove dependency on dev packages that are imported in phpstan.neon
 rm -f "$NESTED_DIRECTORY/phpstan-for-rector.neon"
 
@@ -50,16 +45,8 @@ wget https://github.com/humbug/php-scoper/releases/download/0.14.0/php-scoper.ph
 
 php php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir "../$SCOPED_DIRECTORY" --config scoper.php.inc --force --ansi --working-dir "$NESTED_DIRECTORY"
 
-# keep only one PHPStan version
-note "Remove package phpstan version"
-rm -rf "$SCOPED_DIRECTORY/vendor/phpstan/phpstan"
-
 note "Dumping Composer Autoload"
 composer dump-autoload --working-dir "$SCOPED_DIRECTORY" --ansi --optimize --classmap-authoritative --no-dev
-
-# create unique prefix in phpstan-extracted to exist along real phpstan/phpstan package
-composer install
-php ci/change_phpstan_prefix.php
 
 # clean up
 rm -rf "$NESTED_DIRECTORY"
