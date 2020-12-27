@@ -13,9 +13,7 @@
 			<directory suffix=".php">./</directory>
 			<exclude>
                 <directory suffix="meta.php">./</directory>
-				<directory suffix=".php">./packages/*/tests</directory>
-				<directory suffix=".php">./rules/*/tests</directory>
-                <directory suffix=".php">./packages/rector-generator/templates</directory>
+	            <directory suffix=".php">./packages/rector-generator/templates</directory>
                 <directory suffix=".php">./bin</directory>
                 <directory suffix=".php">./ci</directory>
                 <directory suffix=".php">./config</directory>
