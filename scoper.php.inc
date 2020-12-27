@@ -41,7 +41,8 @@ return [
 
         // scoper missed PSR-4 autodiscovery in Symfony
         function (string $filePath, string $prefix, string $content): string {
-            if (!Strings::endsWith($filePath, 'config.php') && !Strings::endsWith($filePath, 'services.php')) {
+            // scoper missed PSR-4 autodiscovery in Symfony
+            if (! Strings::endsWith($filePath, 'config.php') && ! Strings::endsWith($filePath, 'services.php')) {
                 return $content;
             }
 
@@ -51,6 +52,6 @@ return [
             }
 
             return Strings::replace($content, '#services\->load\(\'#', 'services->load(\'' . $prefix . '\\');
-        }
+        },
     ],
 ];

@@ -57,6 +57,9 @@ rm -rf "$SCOPED_DIRECTORY/vendor/phpstan/phpstan"
 note "Dumping Composer Autoload"
 composer dump-autoload --working-dir "$SCOPED_DIRECTORY" --ansi --optimize --classmap-authoritative --no-dev
 
+# create unique prefix in phpstan-extracted to exist along real phpstan/phpstan package
+compose update
+php ci/change_phpstan_prefix.php
 
 # clean up
 rm -rf "$NESTED_DIRECTORY"
