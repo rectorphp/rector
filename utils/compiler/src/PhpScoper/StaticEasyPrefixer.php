@@ -25,7 +25,11 @@ final class StaticEasyPrefixer
         'Rector\*',
         // we use this API a lot
         'PhpParser\*',
-        'PHPStan\*',
+
+        // 'PHPStan\*', - use the minimal scope as possible
+        'PHPStan\PhpDocParser\Ast\*',
+        'PHPStan\Type\*',
+
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',
     ];
