@@ -21,7 +21,7 @@ jobs:
             -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    coverage: none # disable xdebug, pcov
+                    coverage: xdebug #, pcov
 
             -   run: composer update --prefer-lowest --no-progress --ansi
                 if: "matrix.dependencies == 'lowest'"
