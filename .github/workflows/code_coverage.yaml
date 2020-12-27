@@ -25,10 +25,10 @@ jobs:
                     wget https://phar.phpunit.de/phpcov.phar
                     chmod +x ./phpcov.phar
 
-                    vendor/bin/phpunit --coverage-clover build/logs/rules.xml --testsuite rules
-                    vendor/bin/phpunit --coverage-clover build/logs/packages.xml --testsuite packages
-                    vendor/bin/phpunit --coverage-clover build/logs/tests.xml --testsuite tests
-                    vendor/bin/phpunit --coverage-clover build/logs/utils.xml --testsuite utils
+                    vendor/bin/phpunit --coverage-php build/logs/rules.cov --testsuite rules
+                    vendor/bin/phpunit --coverage-php build/logs/packages.cov --testsuite packages
+                    vendor/bin/phpunit ---coverage-php build/logs/tests.cov --testsuite tests
+                    vendor/bin/phpunit --coverage-php build/logs/utils.cov --testsuite utils
 
                     ./phpcov.phar merge --clover clover.xml build/logs
 
