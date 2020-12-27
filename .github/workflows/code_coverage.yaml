@@ -34,8 +34,8 @@ jobs:
                     echo "testing tests"
                     vendor/bin/phpunit --coverage-php build/logs/tests.cov --testsuite tests
 
-                    echo "testing utils"
-                    vendor/bin/phpunit --coverage-php build/logs/utils.cov --testsuite utils
+                    #echo "testing utils"
+                    #vendor/bin/phpunit --coverage-php build/logs/utils.cov --testsuite utils
 
                     ./phpcov.phar merge --clover clover.xml build/logs
 
