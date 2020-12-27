@@ -21,8 +21,7 @@ jobs:
             -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
-                    coverage: pcov
+                    coverage: none # disable xdebug, pcov
 
             -   run: composer update --prefer-lowest --no-progress --ansi
                 if: "matrix.dependencies == 'lowest'"
@@ -30,11 +29,4 @@ jobs:
             -   run: composer install --no-progress --ansi
                 if: "matrix.dependencies != 'lowest'"
 
-            -   run: |
-                    vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-                    # Coveralls.io
-                    composer require --dev php-coveralls/php-coveralls:^2.4
-                    vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
-                env:
-                    COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-                    COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            -   run: vendor/bin/phpunit
