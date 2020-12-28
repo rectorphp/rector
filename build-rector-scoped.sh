@@ -30,7 +30,7 @@ note "Coping root files to $NESTED_DIRECTORY directory"
 rsync -av * "$NESTED_DIRECTORY" --quiet
 
 # clean up
-composer require symplify/package-scoper
+composer require symplify/package-scoper:^9.0.21
 vendor/bin/package-scoper clean-dev-files "$NESTED_DIRECTORY"
 
 
