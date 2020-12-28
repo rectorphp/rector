@@ -172,7 +172,6 @@ final class GenerateCommand extends Command
             return true;
         }
 
-
         return Strings::endsWith($generatedFilePath, 'Test.php.inc') && StaticPHPUnitEnvironment::isPHPUnitRun();
     }
 
