@@ -52,6 +52,7 @@ jobs:
 
             # Rector without DEV needs phpstan.neon removed
             -   run: rm phpstan.neon
+            -   run: rm phpstan-for-rector.neon
 
             # Override the artifact with downgraded Composer too
             -   run: rm build/rector-php71.zip
