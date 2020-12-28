@@ -17,6 +17,14 @@
 # Eg: To downgrade to PHP 7.1, execute:
 # .github/workflows/scripts/downgrade_packages.sh 7.1
 ########################################################################
+
+# show errors
+set -e
+
+# script fails if trying to access to an undefined variable
+set -u
+
+########################################################################
 # Variables to modify when new PHP versions are released
 # ----------------------------------------------------------------------
 supported_target_php_versions=(7.0 7.1 7.2 7.3 7.4)
@@ -81,6 +89,14 @@ function fail {
 
 # Print array helpers (https://stackoverflow.com/a/17841619)
 function join_by { local d=$1; shift; local f=$1; shift; printf %s "$f" "${@/#/$d}"; }
+
+function note {
+    MESSAGE=$1;
+
+    printf "\n";
+    echo "[NOTE] $MESSAGE";
+    printf "\n";
+}
 ########################################################################
 
 target_php_version=$1
@@ -104,7 +120,7 @@ declare -A package_paths
 declare -A packages_by_rectorconfig
 
 # Switch to production
-composer install --no-dev
+composer install --no-dev --no-progress --ansi
 
 rootPackage=$(composer info -s -N)
 
@@ -115,7 +131,7 @@ do
     pos=$(( $counter - 1 ))
     whynot=${target_downgrade_php_whynots[$pos]}
     rector_config=${target_downgrade_php_rectorconfigs[$pos]}
-    echo Analyzing which packages do not support PHP version "$whynot"
+    note "Analyzing which packages do not support PHP version $whynot"
 
     # Obtain the list of packages for production that need a higher version that the input one.
     # Those must be downgraded
@@ -123,7 +139,7 @@ do
     if [ -n "$PACKAGES" ]; then
         for package in $PACKAGES
         do
-            echo "Enqueueing rector_config $rector_config on package $package"
+            note "Enqueueing rector_config $rector_config on package $package"
             # Composer also analyzes the root project but its path is directly the root folder
             if [ $package = "$rootPackage" ]
             then
@@ -139,13 +155,13 @@ do
             packages_by_rectorconfig[$rector_config]=$(echo "${packages_by_rectorconfig[$rector_config]} ${package}")
         done
     else
-        echo No packages to downgrade
+        note "No packages to downgrade"
     fi
     ((counter++))
 done
 
 # Switch to dev again
-composer install
+composer install --no-progress --ansi
 
 # Make sure that the number of packages, paths and sets is the same
 # otherwise something went wrong
@@ -190,7 +206,7 @@ then
     path_to_downgrade=${package_paths[$rootPackage]}
     config=ci/downgrade/rector-downgrade-rector
     config="${config}-${rector_config}.php"
-    echo "Running rector_config ${rector_config} for main package ${rootPackage} on path(s) ${path_to_downgrade}"
+    note "Running rector_config ${rector_config} for main package ${rootPackage} on path(s) ${path_to_downgrade}"
     bin/rector process $path_to_downgrade --config=$config --ansi
 
     #Downgrade all the dependencies then
@@ -198,7 +214,7 @@ then
     paths_to_downgrade=$(join_by " " ${dependency_package_paths[@]})
     config=ci/downgrade/rector-downgrade-dependency
     config="${config}-${rector_config}.php"
-    echo "Running rector_config ${rector_config} for dependency packages ${packages_to_downgrade} on paths ${paths_to_downgrade}"
+    note "Running rector_config ${rector_config} for dependency packages ${packages_to_downgrade} on paths ${paths_to_downgrade}"
     bin/rector process $paths_to_downgrade --config=$config --ansi
 
     # Success
@@ -213,7 +229,7 @@ fi
 # or let it keep iterating until next loop
 # Calculate all the dependents for all packages,
 # including only packages to be downgraded
-echo Calculating package execution order
+note "Calculating package execution order"
 declare -A package_dependents
 counter=1
 while [ $counter -le $numberPackages ]
@@ -244,7 +260,7 @@ do
     # downgraded for 2 rector_config might have dependencies downgraded for one rector_config and not the other
     key="${package_to_downgrade}_${rector_config}"
     package_dependents[$key]=$(echo "${dependents_to_downgrade[@]}")
-    echo "Dependents for package ${package_to_downgrade} and rector_config ${rector_config}: ${dependents_to_downgrade[@]}"
+    note "Dependents for package ${package_to_downgrade} and rector_config ${rector_config}: ${dependents_to_downgrade[@]}"
     ((counter++))
 done
 
@@ -253,7 +269,7 @@ done
 # hasNonDowngradedDependents=()
 declare -A circular_reference_packages_by_rector_config
 
-echo Executing Rector to downgrade $numberDowngradedPackages packages
+note "Executing Rector to downgrade $numberDowngradedPackages packages"
 downgraded_packages=()
 numberDowngradedPackages=1
 previousNumberDowngradedPackages=1
@@ -300,7 +316,7 @@ do
         # Attach the specific rector config as a file suffix
         config="${config}-${rector_config}.php"
 
-        echo "Running rector_config ${rector_config} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
+        note "Running rector_config ${rector_config} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
 
         # Execute the downgrade
         bin/rector process $path_to_downgrade --config=$config --ansi
@@ -318,7 +334,7 @@ do
         fi
 
         # Resolve all involved packages all together
-        echo "Resolving circular reference packages all together"
+        note "Resolving circular reference packages all together"
         for rector_config in "${!circular_reference_packages_by_rector_config[@]}";
         do
             circular_packages_to_downgrade=($(echo "${circular_reference_packages_by_rector_config[$rector_config]}" | tr ' ' '\n' | sort -u))
@@ -340,7 +356,7 @@ do
             # Check that possibly all packages had already been downgraded via GROUP_RECTOR_CONFIGS
             if [ ${#circular_packages_to_downgrade_for_rectorconfig[@]} -gt 0 ]; then
                 paths_to_downgrade=$(join_by " " ${circular_paths_to_downgrade_for_rectorconfig[@]})
-                echo "Running rector_config ${rector_config} for packages ${circular_packages_to_downgrade_for_rectorconfig[@]}"
+                note "Running rector_config ${rector_config} for packages ${circular_packages_to_downgrade_for_rectorconfig[@]}"
                 config="ci/downgrade/rector-downgrade-dependency-${rector_config}.php"
                 bin/rector process $paths_to_downgrade --config=$config --ansi
 
@@ -349,7 +365,7 @@ do
                     fail "Rector downgrade failed on rector_config ${rector_config} for package ${package_to_downgrade}"
                 fi
             else
-                echo "All circular packages had already been downgraded: ${circular_packages_to_downgrade[@]}"
+                note "All circular packages had already been downgraded: ${circular_packages_to_downgrade[@]}"
             fi
         done
     fi
