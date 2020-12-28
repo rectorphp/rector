@@ -31,7 +31,8 @@ return [
 
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::match($filePath, '#^(config|src|rules|packages)\/#')) {
+            // @see https://regex101.com/r/QUZ1Zj/1
+            if (! Strings::match($filePath, '#rector\/(config|src|rules|packages)\/#')) {
                 return $content;
             }
 
