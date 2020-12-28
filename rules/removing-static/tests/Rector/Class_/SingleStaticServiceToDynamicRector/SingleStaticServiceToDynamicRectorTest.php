@@ -34,7 +34,7 @@ final class SingleStaticServiceToDynamicRectorTest extends AbstractRectorTestCas
         return [
             SingleStaticServiceToDynamicRector::class => [
                 SingleStaticServiceToDynamicRector::CLASS_TYPES => [
-                    'Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Fixture\SomeClass',
+                    'Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Fixture\Fixture',
                     'Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Fixture\StaticProperties',
                     FirstStaticClass::class,
                     ClassWithStaticProperties::class,

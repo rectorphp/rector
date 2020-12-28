@@ -24,7 +24,7 @@ final class ValueResolverTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->valueResolver = self::$container->get(ValueResolver::class);
+        $this->valueResolver = $this->getService(ValueResolver::class);
     }
 
     /**

@@ -179,7 +179,7 @@ final class ClassMethodManipulator
 
     public function isPropertyPromotion(ClassMethod $classMethod): bool
     {
-        foreach ((array) $classMethod->params as $param) {
+        foreach ($classMethod->params as $param) {
             /** @var Param $param */
             if ($param->flags !== 0) {
                 return true;

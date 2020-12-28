@@ -2,7 +2,7 @@
 
 namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
 
-class SomeClassReturnBool
+class FixtureReturnBool
 {
     /**
      * @return bool
@@ -19,7 +19,7 @@ class SomeClassReturnBool
 
 namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
 
-class SomeClassReturnBool
+class FixtureReturnBool
 {
     function foo(): bool
     {

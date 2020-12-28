@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\IsAWithStringWithThirdArgumentRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function __construct(string $value, $anotherValue)
     {
@@ -19,7 +19,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\IsAWithStringWithThirdArgumentRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function __construct(string $value, $anotherValue)
     {

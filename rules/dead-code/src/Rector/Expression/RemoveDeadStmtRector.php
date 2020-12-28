@@ -63,12 +63,12 @@ CODE_SAMPLE
         return null;
     }
 
-    private function removeNodeAndKeepComments(Node $node): ?Node
+    private function removeNodeAndKeepComments(Expression $expression): ?Node
     {
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $expression->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        if ($node->getComments() !== []) {
+        if ($expression->getComments() !== []) {
             $nop = new Nop();
             $nop->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
 
@@ -77,7 +77,7 @@ CODE_SAMPLE
             return $nop;
         }
 
-        $this->removeNode($node);
+        $this->removeNode($expression);
 
         return null;
     }

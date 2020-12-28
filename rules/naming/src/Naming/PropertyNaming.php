@@ -18,9 +18,9 @@ use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\SelfObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 /**
  * @deprecated
@@ -56,7 +56,7 @@ final class PropertyNaming
      * @see https://regex101.com/r/hnU5pm/2/
      * @var string
      */
-    private const GET_PREFIX_REGEX = '#^get([A-Z].+)#';
+    private const GET_PREFIX_REGEX = '#^get(?<root_name>[A-Z].+)#';
 
     /**
      * @var TypeUnwrapper
@@ -97,7 +97,7 @@ final class PropertyNaming
             return null;
         }
 
-        $originalName = lcfirst($matches[1]);
+        $originalName = lcfirst($matches['root_name']);
 
         return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
@@ -238,10 +238,8 @@ final class PropertyNaming
     private function prolongIfTooShort(string $shortClassName, string $className): string
     {
         if (in_array($shortClassName, ['Factory', 'Repository'], true)) {
-            /** @var string $namespaceAbove */
-            $namespaceAbove = Strings::after($className, '\\', -2);
-            /** @var string $namespaceAbove */
-            $namespaceAbove = Strings::before($namespaceAbove, '\\');
+            $namespaceAbove = (string) Strings::after($className, '\\', -2);
+            $namespaceAbove = (string) Strings::before($namespaceAbove, '\\');
 
             return lcfirst($namespaceAbove) . $shortClassName;
         }
@@ -300,11 +298,6 @@ final class PropertyNaming
      */
     private function getPrefixedClassMethods(Property $property): array
     {
-        $name = $this->nodeNameResolver->getName($property);
-        if ($name === null) {
-            return [];
-        }
-
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
         if ($classLike === null) {
             return [];
@@ -326,9 +319,6 @@ final class PropertyNaming
         Property $property
     ): array {
         $currentName = $this->nodeNameResolver->getName($property);
-        if ($currentName === null) {
-            return [];
-        }
 
         return array_filter($prefixedClassMethods, function (ClassMethod $classMethod) use ($currentName): bool {
             $stmts = $classMethod->stmts;
@@ -363,8 +353,10 @@ final class PropertyNaming
         if (! Strings::startsWith($shortClassName, 'I')) {
             return false;
         }
-
-        return ctype_upper($shortClassName[1]) && ctype_lower($shortClassName[2]);
+        if (! ctype_upper($shortClassName[1])) {
+            return false;
+        }
+        return ctype_lower($shortClassName[2]);
     }
 
     private function isNumberOrUpper(string $char): bool

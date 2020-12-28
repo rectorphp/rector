@@ -272,8 +272,10 @@ CODE_SAMPLE
     {
         $fullyQualified = $this->classResolver->getClassFromMethodCall($methodCall);
         $methodName = $methodCall->name;
-
-        if (! $fullyQualified instanceof FullyQualified || ! $methodName instanceof Identifier) {
+        if (! $fullyQualified instanceof FullyQualified) {
+            return [];
+        }
+        if (! $methodName instanceof Identifier) {
             return [];
         }
 

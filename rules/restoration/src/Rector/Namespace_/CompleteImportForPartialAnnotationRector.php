@@ -80,7 +80,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         /** @var Class_|null $class */
-        $class = $this->betterNodeFinder->findFirstInstanceOf((array) $node->stmts, Class_::class);
+        $class = $this->betterNodeFinder->findFirstInstanceOf($node->stmts, Class_::class);
         if ($class === null) {
             return null;
         }
@@ -142,7 +142,7 @@ CODE_SAMPLE
         /** @var Stmt $use */
         $use = $useBuilder->getNode();
 
-        $namespace->stmts = array_merge([$use], (array) $namespace->stmts);
+        $namespace->stmts = array_merge([$use], $namespace->stmts);
 
         return $namespace;
     }

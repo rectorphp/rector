@@ -10,6 +10,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\FuncCall;
@@ -23,6 +24,7 @@ use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -131,17 +133,19 @@ CODE_SAMPLE
     {
         $this->reset();
 
-        $this->matchInit((array) $node->init);
+        $this->matchInit($node->init);
 
-        if (! $this->isConditionMatch((array) $node->cond)) {
+        if (! $this->isConditionMatch($node->cond)) {
             return null;
         }
 
-        if (! $this->isLoopMatch((array) $node->loop)) {
+        if (! $this->isLoopMatch($node->loop)) {
             return null;
         }
-
-        if ($this->iteratedExpr === null || $this->keyValueName === null) {
+        if ($this->iteratedExpr === null) {
+            return null;
+        }
+        if ($this->keyValueName === null) {
             return null;
         }
 
@@ -222,6 +226,10 @@ CODE_SAMPLE
             return $this->isSmallerOrGreater($condExprs, $this->keyValueName, $this->countValueName);
         }
 
+        if (! $condExprs[0] instanceof BinaryOp) {
+            return false;
+        }
+
         // count($values)
         if ($this->isFuncCallName($condExprs[0]->right, self::COUNT)) {
             /** @var FuncCall $countFuncCall */
@@ -247,8 +255,10 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($loopExprs[0] instanceof PreInc || $loopExprs[0] instanceof PostInc) {
-            return $this->isName($loopExprs[0]->var, $this->keyValueName);
+        /** @var PreInc|PostInc $prePostInc */
+        $prePostInc = $loopExprs[0];
+        if (StaticInstanceOf::isOneOf($prePostInc, [PreInc::class, PostInc::class])) {
+            return $this->isName($prePostInc->var, $this->keyValueName);
         }
 
         return false;
@@ -269,10 +279,24 @@ CODE_SAMPLE
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
             function (Node $node): bool {
-                return $node instanceof Assign && $node->var instanceof ArrayDimFetch && $this->isVariableName(
-                    $node->var->dim,
-                    $this->keyValueName
-                );
+                if (! $node instanceof Assign) {
+                    return false;
+                }
+
+                if (! $node->var instanceof ArrayDimFetch) {
+                    return false;
+                }
+
+                if ($this->keyValueName === null) {
+                    throw new ShouldNotHappenException();
+                }
+
+                $arrayDimFetch = $node->var;
+                if ($arrayDimFetch->dim === null) {
+                    return false;
+                }
+
+                return $this->isVariableName($arrayDimFetch->dim, $this->keyValueName);
             }
         );
     }
@@ -284,7 +308,10 @@ CODE_SAMPLE
             function (Node $node): bool {
                 /** @var Node $parent */
                 $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-                return $parent instanceof Unset_ && $node instanceof ArrayDimFetch;
+                if (! $parent instanceof Unset_) {
+                    return false;
+                }
+                return $node instanceof ArrayDimFetch;
             }
         );
     }
@@ -335,6 +362,14 @@ CODE_SAMPLE
             }
 
             // is dim same as key value name, ...[$i]
+            if ($this->keyValueName === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            if ($node->dim === null) {
+                return null;
+            }
+
             if (! $this->isVariableName($node->dim, $this->keyValueName)) {
                 return null;
             }

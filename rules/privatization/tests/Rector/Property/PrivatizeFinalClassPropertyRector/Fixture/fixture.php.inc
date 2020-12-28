@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     protected $value;
 }
@@ -13,7 +13,7 @@ final class SomeClass
 
 namespace Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     private $value;
 }

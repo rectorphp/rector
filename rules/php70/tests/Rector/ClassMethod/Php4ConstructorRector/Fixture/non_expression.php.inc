@@ -1,6 +1,6 @@
 <?php
 
-class PHP54ConstructorWithExpression
+class NonExpression
 {
     function insertRecord()
     {

@@ -143,12 +143,15 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count((array) $foreach->stmts) > 1) {
+        if (count($foreach->stmts) > 1) {
             return true;
         }
 
         $nextNode = $foreach->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextNode === null || ! $nextNode instanceof Return_) {
+        if ($nextNode === null) {
+            return true;
+        }
+        if (! $nextNode instanceof Return_) {
             return true;
         }
 
@@ -173,7 +176,10 @@ CODE_SAMPLE
     private function shouldSkipIf(If_ $if): bool
     {
         $ifCondition = $if->cond;
-        return ! $ifCondition instanceof Identical && ! $ifCondition instanceof Equal;
+        if ($ifCondition instanceof Identical) {
+            return false;
+        }
+        return ! $ifCondition instanceof Equal;
     }
 
     private function matchNodes(BinaryOp $binaryOp, Expr $expr): ?TwoNodeMatch
@@ -204,9 +210,9 @@ CODE_SAMPLE
     /**
      * @param Identical|Equal $binaryOp
      */
-    private function createInArrayFunction(Node $node, BinaryOp $binaryOp, Foreach_ $foreach): FuncCall
+    private function createInArrayFunction(Expr $expr, BinaryOp $binaryOp, Foreach_ $foreach): FuncCall
     {
-        $arguments = $this->createArgs([$node, $foreach->expr]);
+        $arguments = $this->createArgs([$expr, $foreach->expr]);
 
         if ($binaryOp instanceof Identical) {
             $arguments[] = $this->createArg($this->createTrue());

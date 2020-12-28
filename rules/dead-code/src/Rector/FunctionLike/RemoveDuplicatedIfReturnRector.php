@@ -7,6 +7,7 @@ namespace Rector\DeadCode\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
@@ -145,14 +146,14 @@ CODE_SAMPLE
     /**
      * @param string[] $modifiedVariableNames
      */
-    private function containsVariableNames(Node $node, array $modifiedVariableNames): bool
+    private function containsVariableNames(Stmt $stmt, array $modifiedVariableNames): bool
     {
         if ($modifiedVariableNames === []) {
             return false;
         }
 
         $containsVariableNames = false;
-        $this->traverseNodesWithCallable($node, function (Node $node) use (
+        $this->traverseNodesWithCallable($stmt, function (Node $node) use (
             $modifiedVariableNames,
             &$containsVariableNames
         ): ?int {

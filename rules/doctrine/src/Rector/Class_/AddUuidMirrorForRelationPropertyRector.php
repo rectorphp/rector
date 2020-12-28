@@ -185,7 +185,10 @@ CODE_SAMPLE
 
         $oneToOneTagValueNode = $propertyPhpDocInfo->getByType(OneToOneTagValueNode::class);
         // skip mappedBy oneToOne, as the column doesn't really exist
-        return $oneToOneTagValueNode !== null && $oneToOneTagValueNode->getMappedBy();
+        if ($oneToOneTagValueNode === null) {
+            return false;
+        }
+        return (bool) $oneToOneTagValueNode->getMappedBy();
     }
 
     /**

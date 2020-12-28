@@ -68,10 +68,12 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
             $propertyNames,
             &$returnType
         ): ?int {
-            if (! $node instanceof Return_ || $node->expr === null) {
+            if (! $node instanceof Return_) {
                 return null;
             }
-
+            if ($node->expr === null) {
+                return null;
+            }
             $isMatch = $this->propertyFetchManipulator->isLocalPropertyOfNames($node->expr, $propertyNames);
             if (! $isMatch) {
                 return null;

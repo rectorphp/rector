@@ -88,6 +88,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->isFinal() && ! $classLike->isFinal()) {
+            return null;
+        }
+
         if ($this->shouldSkipNonFinalNonPrivateClassMethod($classLike, $node)) {
             return null;
         }

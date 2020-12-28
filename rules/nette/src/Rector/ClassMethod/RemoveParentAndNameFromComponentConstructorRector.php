@@ -172,7 +172,7 @@ CODE_SAMPLE
         $hasStaticCallChanged = false;
 
         /** @var Arg $staticCallArg */
-        foreach ((array) $staticCall->args as $staticCallArg) {
+        foreach ($staticCall->args as $staticCallArg) {
             if (! $staticCallArg->value instanceof Variable) {
                 continue;
             }

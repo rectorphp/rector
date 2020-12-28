@@ -42,8 +42,8 @@ final class NonPhpFileClassRenamerTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->nonPhpFileClassRenamer = self::$container->get(NonPhpFileClassRenamer::class);
-        $this->parameterProvider = self::$container->get(ParameterProvider::class);
+        $this->nonPhpFileClassRenamer = $this->getService(NonPhpFileClassRenamer::class);
+        $this->parameterProvider = $this->getService(ParameterProvider::class);
     }
 
     /**

@@ -15,7 +15,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -187,19 +187,16 @@ CODE_SAMPLE
         $propertyFetchNode = $this->createPropertyFetch('this', $expectedName->getName());
 
         if ($funcCall->args === []) {
-            if ($argumentFuncCallToMethodCall->getMethodIfNoArgs()) {
-                return new MethodCall($propertyFetchNode, $argumentFuncCallToMethodCall->getMethodIfNoArgs());
-            }
-
-            return $propertyFetchNode;
+            return $this->refactorEmptyFuncCallArgs($argumentFuncCallToMethodCall, $propertyFetchNode);
         }
 
         if ($this->isFunctionToMethodCallWithArgs($funcCall, $argumentFuncCallToMethodCall)) {
-            return new MethodCall(
-                $propertyFetchNode,
-                $argumentFuncCallToMethodCall->getMethodIfArgs(),
-                $funcCall->args
-            );
+            $methodName = $argumentFuncCallToMethodCall->getMethodIfArgs();
+            if (! is_string($methodName)) {
+                throw new ShouldNotHappenException();
+            }
+
+            return new MethodCall($propertyFetchNode, $methodName, $funcCall->args);
         }
 
         return null;
@@ -227,6 +224,25 @@ CODE_SAMPLE
         );
     }
 
+    /**
+     * @return PropertyFetch|MethodCall
+     */
+    private function refactorEmptyFuncCallArgs(
+        ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall,
+        PropertyFetch $propertyFetch
+    ): Node {
+        if ($argumentFuncCallToMethodCall->getMethodIfNoArgs()) {
+            $methodName = $argumentFuncCallToMethodCall->getMethodIfNoArgs();
+            if (! is_string($methodName)) {
+                throw new ShouldNotHappenException();
+            }
+
+            return new MethodCall($propertyFetch, $methodName);
+        }
+
+        return $propertyFetch;
+    }
+
     private function isFunctionToMethodCallWithArgs(
         FuncCall $funcCall,
         ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall
@@ -235,7 +251,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return count((array) $funcCall->args) >= 1;
+        return count($funcCall->args) >= 1;
     }
 
     /**

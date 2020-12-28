@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -66,7 +67,7 @@ trait NameResolverTrait
     }
 
     /**
-     * @param string|Name|Identifier $name
+     * @param string|Name|Identifier|ClassLike $name
      */
     protected function getShortName($name): string
     {
@@ -191,7 +192,7 @@ trait NameResolverTrait
         return $this->isName($node->name, $methodName);
     }
 
-    protected function isVariableName(?Node $node, string $name): bool
+    protected function isVariableName(Node $node, string $name): bool
     {
         if (! $node instanceof Variable) {
             return false;
@@ -229,14 +230,6 @@ trait NameResolverTrait
      */
     protected function isFuncCallNames(Node $node, array $names): bool
     {
-        foreach ($names as $name) {
-            if (! $this->isFuncCallName($node, $name)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
+        return $this->nodeNameResolver->isFuncCallNames($node, $names);
     }
 }

@@ -109,7 +109,10 @@ CODE_SAMPLE
         $methodName = $this->getName($node->name);
 
         $className = $this->resolveStaticCallClassName($node);
-        if ($methodName === null || $className === null) {
+        if ($methodName === null) {
+            return null;
+        }
+        if ($className === null) {
             return null;
         }
 
@@ -138,16 +141,16 @@ CODE_SAMPLE
         return null;
     }
 
-    private function resolveStaticCallClassName(Node $node): ?string
+    private function resolveStaticCallClassName(StaticCall $staticCall): ?string
     {
-        if ($node->class instanceof PropertyFetch) {
-            $objectType = $this->getObjectType($node->class);
+        if ($staticCall->class instanceof PropertyFetch) {
+            $objectType = $this->getObjectType($staticCall->class);
             if ($objectType instanceof ObjectType) {
                 return $objectType->getClassName();
             }
         }
 
-        return $this->getName($node->class);
+        return $this->getName($staticCall->class);
     }
 
     private function shouldSkip(string $methodName, string $className, StaticCall $staticCall): bool
@@ -162,15 +165,15 @@ CODE_SAMPLE
         }
 
         $parentClassName = $staticCall->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($className === $parentClassName) {
-            return true;
-        }
-
-        return $className === null;
+        return $className === $parentClassName;
     }
 
     private function isInstantiable(string $className): bool
     {
+        if (! class_exists($className)) {
+            return false;
+        }
+
         $reflectionClass = new ReflectionClass($className);
         $classConstructorReflection = $reflectionClass->getConstructor();
 

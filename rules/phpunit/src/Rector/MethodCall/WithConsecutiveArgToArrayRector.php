@@ -117,10 +117,6 @@ CODE_SAMPLE
         }
 
         $mockMethod = $this->inferMockedMethodName($node);
-        if ($mockMethod === null) {
-            return null;
-        }
-
         $reflectionMethod = new ReflectionMethod($mockClass, $mockMethod);
         $numberOfParameters = $reflectionMethod->getNumberOfParameters();
 

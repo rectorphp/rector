@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeCollector\NodeAnalyzer;
 
-use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
@@ -30,7 +30,7 @@ final class ArrayCallableMethodReferenceAnalyzer
      */
     public function match(Array_ $array): ?ArrayCallable
     {
-        $arrayItems = (array) $array->items;
+        $arrayItems = $array->items;
         if (count($arrayItems) !== 2) {
             return null;
         }
@@ -65,31 +65,31 @@ final class ArrayCallableMethodReferenceAnalyzer
         return new ArrayCallable($className, $methodName);
     }
 
-    private function isThisVariable(Node $node): bool
+    private function isThisVariable(Expr $expr): bool
     {
         // $this
-        if ($node instanceof Variable && $this->nodeNameResolver->isName($node, 'this')) {
+        if ($expr instanceof Variable && $this->nodeNameResolver->isName($expr, 'this')) {
             return true;
         }
 
-        if ($node instanceof ClassConstFetch) {
-            if (! $this->nodeNameResolver->isName($node->name, 'class')) {
+        if ($expr instanceof ClassConstFetch) {
+            if (! $this->nodeNameResolver->isName($expr->name, 'class')) {
                 return false;
             }
 
             // self::class, static::class
-            if ($this->nodeNameResolver->isNames($node->class, ['self', 'static'])) {
+            if ($this->nodeNameResolver->isNames($expr->class, ['self', 'static'])) {
                 return true;
             }
 
             /** @var string|null $className */
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+            $className = $expr->getAttribute(AttributeKey::CLASS_NAME);
 
             if ($className === null) {
                 return false;
             }
 
-            return $this->nodeNameResolver->isName($node->class, $className);
+            return $this->nodeNameResolver->isName($expr->class, $className);
         }
 
         return false;

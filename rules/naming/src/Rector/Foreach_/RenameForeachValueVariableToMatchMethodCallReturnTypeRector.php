@@ -119,7 +119,10 @@ CODE_SAMPLE
         }
 
         $expectedName = $this->expectedNameResolver->resolveForForeach($variableAndCallAssign->getCall());
-        if ($expectedName === null || $this->isName($variableAndCallAssign->getVariable(), $expectedName)) {
+        if ($expectedName === null) {
+            return null;
+        }
+        if ($this->isName($variableAndCallAssign->getVariable(), $expectedName)) {
             return null;
         }
 

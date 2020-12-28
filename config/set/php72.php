@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\Php72\Rector\Assign\ListEachRector;
 use Rector\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector;
-use Rector\Php72\Rector\ConstFetch\BarewordStringRector;
 use Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
 use Rector\Php72\Rector\FuncCall\GetClassOnNullRector;
 use Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector;
@@ -26,8 +25,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceEachAssignmentWithKeyCurrentRector::class);
 
     $services->set(UnsetCastRector::class);
-
-    $services->set(BarewordStringRector::class);
 
     $services->set(RenameFunctionRector::class)
         ->call('configure', [[

@@ -7,6 +7,7 @@ namespace Rector\PHPUnit\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -185,7 +186,7 @@ CODE_SAMPLE
             return;
         }
 
-        if (count((array) $methodCall->args) !== 1) {
+        if (count($methodCall->args) !== 1) {
             throw new ShouldNotHappenException();
         }
 
@@ -317,6 +318,10 @@ CODE_SAMPLE
     private function isNestedArray(Array_ $array): bool
     {
         foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             if ($arrayItem->value instanceof Array_) {
                 return true;
             }
@@ -334,9 +339,20 @@ CODE_SAMPLE
         $i = 1;
 
         foreach ($array->items as $arrayItem) {
-            /** @var Array_ $nestedArray */
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             $nestedArray = $arrayItem->value;
+            if (! $nestedArray instanceof Array_) {
+                continue;
+            }
+
             foreach ($nestedArray->items as $nestedArrayItem) {
+                if (! $nestedArrayItem instanceof ArrayItem) {
+                    continue;
+                }
+
                 $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
                 $itemsStaticType = $this->getStaticType($nestedArrayItem->value);
@@ -352,10 +368,11 @@ CODE_SAMPLE
         $staticTypes = [];
         if (! $isNestedArray) {
             foreach ($array->items as $arrayItem) {
-                $arrayItemStaticType = $this->getStaticType($arrayItem->value);
-                if ($arrayItemStaticType) {
-                    $staticTypes[] = $arrayItemStaticType;
+                if (! $arrayItem instanceof ArrayItem) {
+                    continue;
                 }
+
+                $staticTypes[] = $this->getStaticType($arrayItem->value);
             }
         }
 
@@ -374,6 +391,10 @@ CODE_SAMPLE
         $paramAndArgs = [];
 
         foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
             $paramAndArgs[] = new ParamAndArg($variable, $itemsStaticType);

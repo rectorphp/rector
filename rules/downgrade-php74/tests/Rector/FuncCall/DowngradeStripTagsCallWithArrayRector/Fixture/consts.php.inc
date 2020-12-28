@@ -4,7 +4,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWith
 
 define ('SOME_DEFINE', ['a', 'p']);
 
-class ConstClass
+class Consts
 {
     const SOME_CONST = ['a', 'p'];
 
@@ -24,7 +24,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWith
 
 define ('SOME_DEFINE', ['a', 'p']);
 
-class ConstClass
+class Consts
 {
     const SOME_CONST = ['a', 'p'];
 

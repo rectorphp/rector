@@ -32,7 +32,7 @@ final class PreviousVariableAssignNodeFinder
         $currentAssign = $assign;
         $variableName = $this->nodeNameResolver->getName($assign->var);
 
-        $assign = $this->betterNodeFinder->findFirstPrevious($assign, function (Node $node) use (
+        return $this->betterNodeFinder->findFirstPrevious($assign, function (Node $node) use (
             $variableName,
             $currentAssign
         ): bool {
@@ -47,8 +47,5 @@ final class PreviousVariableAssignNodeFinder
 
             return $this->nodeNameResolver->isName($node->var, $variableName);
         });
-
-        /** @var Assign|null $assign */
-        return $assign;
     }
 }

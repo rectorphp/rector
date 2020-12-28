@@ -153,7 +153,10 @@ CODE_SAMPLE
         }
 
         $expectedName = $this->expectedNameResolver->resolveForCall($call);
-        if ($expectedName === null || $this->isName($node->var, $expectedName)) {
+        if ($expectedName === null) {
+            return null;
+        }
+        if ($this->isName($node->var, $expectedName)) {
             return null;
         }
 
@@ -178,9 +181,16 @@ CODE_SAMPLE
                     return false;
                 }
 
+                /** @var FuncCall|StaticCall|MethodCall $n */
                 $passedNode = clone $n;
+
+                /** @var FuncCall|StaticCall|MethodCall $node */
                 $usedNode = clone $node;
+
+                /** @var FuncCall|StaticCall|MethodCall $passedNode */
                 $passedNode->args = [];
+
+                /** @var FuncCall|StaticCall|MethodCall $usedNode */
                 $usedNode->args = [];
 
                 return $this->areNodesEqual($passedNode, $usedNode);

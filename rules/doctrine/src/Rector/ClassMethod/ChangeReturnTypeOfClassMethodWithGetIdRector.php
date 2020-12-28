@@ -87,9 +87,9 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function hasEntityGetIdMethodCall(Node $node): bool
+    private function hasEntityGetIdMethodCall(ClassMethod $classMethod): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $node->stmts, function (Node $node): bool {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
             if (! $node instanceof Return_) {
                 return false;
             }

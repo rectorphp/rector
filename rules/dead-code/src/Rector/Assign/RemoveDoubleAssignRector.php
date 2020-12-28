@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -14,6 +15,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -78,7 +80,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->expr instanceof FuncCall || $node->expr instanceof StaticCall || $node->expr instanceof MethodCall) {
+        if ($this->isCall($node->expr)) {
             return null;
         }
 
@@ -96,13 +98,18 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkipForDifferentScope(Assign $assign, Node $anotherNode): bool
+    private function isCall(Expr $expr): bool
     {
-        if (! $this->areInSameClassMethod($assign, $anotherNode)) {
+        return StaticInstanceOf::isOneOf($expr, [FuncCall::class, StaticCall::class, MethodCall::class]);
+    }
+
+    private function shouldSkipForDifferentScope(Assign $assign, Expression $expression): bool
+    {
+        if (! $this->areInSameClassMethod($assign, $expression)) {
             return true;
         }
 
-        return ! $this->scopeNestingComparator->areScopeNestingEqual($assign, $anotherNode);
+        return ! $this->scopeNestingComparator->areScopeNestingEqual($assign, $expression);
     }
 
     private function isSelfReferencing(Assign $assign): bool
@@ -112,10 +119,10 @@ CODE_SAMPLE
         });
     }
 
-    private function areInSameClassMethod(Node $node, Node $previousExpression): bool
+    private function areInSameClassMethod(Assign $assign, Expression $previousExpression): bool
     {
         return $this->areNodesEqual(
-            $node->getAttribute(AttributeKey::METHOD_NODE),
+            $assign->getAttribute(AttributeKey::METHOD_NODE),
             $previousExpression->getAttribute(AttributeKey::METHOD_NODE)
         );
     }

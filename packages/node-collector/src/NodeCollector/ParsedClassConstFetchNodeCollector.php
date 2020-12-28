@@ -53,7 +53,11 @@ final class ParsedClassConstFetchNodeCollector
         }
 
         $constantName = $this->nodeNameResolver->getName($node->name);
-        if ($constantName === 'class' || $constantName === null) {
+        if ($constantName === 'class') {
+            // this is not a manual constant
+            return;
+        }
+        if ($constantName === null) {
             // this is not a manual constant
             return;
         }
@@ -135,7 +139,7 @@ final class ParsedClassConstFetchNodeCollector
     {
         $reflectionClass = new ReflectionClass($className);
 
-        $constants = (array) $reflectionClass->getConstants();
+        $constants = $reflectionClass->getConstants();
 
         $currentClassConstants = array_keys($constants);
         $parentClassReflection = $reflectionClass->getParentClass();

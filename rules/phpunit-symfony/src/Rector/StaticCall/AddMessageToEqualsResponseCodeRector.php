@@ -104,21 +104,21 @@ CODE_SAMPLE
     /**
      * $this->assertX(Response::SOME_STATUS)
      */
-    private function isHttpRequestArgument(Node $node): bool
+    private function isHttpRequestArgument(Expr $expr): bool
     {
-        if (! $node instanceof ClassConstFetch) {
+        if (! $expr instanceof ClassConstFetch) {
             return false;
         }
 
-        return $this->isObjectType($node->class, 'Symfony\Component\HttpFoundation\Response');
+        return $this->isObjectType($expr->class, 'Symfony\Component\HttpFoundation\Response');
     }
 
     /**
      * @return Variable|MethodCall|Expr|null
      */
-    private function getParentOfGetStatusCode(Node $node): ?Node
+    private function getParentOfGetStatusCode(Expr $expr): ?Node
     {
-        $currentNode = $node;
+        $currentNode = $expr;
         while ($currentNode instanceof MethodCall) {
             if ($this->isName($currentNode->name, 'getStatusCode')) {
                 return $currentNode->var;

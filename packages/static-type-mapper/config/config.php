@@ -12,5 +12,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire()
         ->autoconfigure();
 
-    $services->load('Rector\StaticTypeMapper\\', __DIR__ . '/../src');
+    $services->load('Rector\StaticTypeMapper\\', __DIR__ . '/../src')
+        ->exclude([__DIR__ . '/../src/ValueObject']);
 };

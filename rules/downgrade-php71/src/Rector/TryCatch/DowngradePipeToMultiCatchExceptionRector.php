@@ -60,7 +60,7 @@ CODE_SAMPLE
     {
         $originalCatches = $node->catches;
         foreach ($node->catches as $key => $catch) {
-            if (count((array) $catch->types) === 1) {
+            if (count($catch->types) === 1) {
                 continue;
             }
 

@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class SomeBackController
+class Back
 {
     public function action()
     {
@@ -21,7 +21,7 @@ class SomeBackController
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class SomeBackController
+class Back
 {
     private \Illuminate\Routing\Redirector $redirector;
     public function __construct(\Illuminate\Routing\Redirector $redirector)

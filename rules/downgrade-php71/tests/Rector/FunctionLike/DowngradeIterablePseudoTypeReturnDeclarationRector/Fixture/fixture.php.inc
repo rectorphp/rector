@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(): iterable
     {
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @return mixed[]|\Traversable

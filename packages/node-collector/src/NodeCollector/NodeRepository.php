@@ -35,8 +35,8 @@ use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 /**
  * @rector-doc
@@ -299,9 +299,7 @@ final class NodeRepository
             return [];
         }
 
-        /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
-
         return $this->parsedPropertyFetchNodeCollector->findPropertyFetchesByTypeAndName($className, $propertyName);
     }
 
@@ -430,10 +428,6 @@ final class NodeRepository
         foreach ($classLike->getTraitUses() as $traitUse) {
             foreach ($traitUse->traits as $trait) {
                 $traitName = $this->nodeNameResolver->getName($trait);
-                if ($traitName === null) {
-                    continue;
-                }
-
                 $foundTrait = $this->parsedNodeCollector->findTrait($traitName);
                 if ($foundTrait !== null) {
                     $traits[] = $foundTrait;

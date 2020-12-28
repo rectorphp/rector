@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (count((array) $node->consts) > 1) {
+        if (count($node->consts) > 1) {
             return null;
         }
 
@@ -93,12 +93,12 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function getOrCreatePhpDocInfo(Node $node): PhpDocInfo
+    private function getOrCreatePhpDocInfo(ClassConst $classConst): PhpDocInfo
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
         }
 
         return $phpDocInfo;

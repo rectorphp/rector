@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
@@ -86,7 +87,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => ValueObjectInliner::inline([
-                new ChangeMethodVisibility('Illuminate\Foundation\Http\FormRequest', 'validationData', 'public'),
+                new ChangeMethodVisibility(
+                    'Illuminate\Foundation\Http\FormRequest',
+                    'validationData',
+                    Visibility::PUBLIC
+                ),
             ]),
         ]]);
 

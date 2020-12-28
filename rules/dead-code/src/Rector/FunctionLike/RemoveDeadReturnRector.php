@@ -71,10 +71,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === [] || $node->stmts === null) {
+        if ($node->stmts === []) {
             return null;
         }
-
+        if ($node->stmts === null) {
+            return null;
+        }
         $stmtValues = array_values($node->stmts);
         $lastStmt = end($stmtValues);
         if (! $lastStmt instanceof Return_) {

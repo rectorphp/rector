@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Printer;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\ValueObject\Application\ParsedStmtsAndTokens;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -80,7 +81,7 @@ final class FormatPerservingPrinter
     }
 
     /**
-     * @return Node[]
+     * @return Stmt[]|Node[]
      */
     private function resolveNewStmts(ParsedStmtsAndTokens $parsedStmtsAndTokens): array
     {

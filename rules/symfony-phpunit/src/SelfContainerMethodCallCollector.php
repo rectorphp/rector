@@ -49,7 +49,11 @@ final class SelfContainerMethodCallCollector
         $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             &$serviceTypes,
             $skipSetUpMethod
-        ) {
+        ): ?Node {
+            if (! $node instanceof MethodCall) {
+                return null;
+            }
+
             if (! $this->kernelTestCaseNodeAnalyzer->isOnContainerGetMethodCall($node)) {
                 return null;
             }
@@ -60,7 +64,10 @@ final class SelfContainerMethodCallCollector
 
             /** @var MethodCall $node */
             $serviceType = $this->valueResolver->getValue($node->args[0]->value);
-            if ($serviceType === null || ! is_string($serviceType)) {
+            if ($serviceType === null) {
+                return null;
+            }
+            if (! is_string($serviceType)) {
                 return null;
             }
 
@@ -69,6 +76,8 @@ final class SelfContainerMethodCallCollector
             }
 
             $serviceTypes[] = $serviceType;
+
+            return null;
         });
 
         return array_unique($serviceTypes);

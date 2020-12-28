@@ -48,7 +48,7 @@ final class StaticCallToMethodCall
         return $this->methodName;
     }
 
-    public function matchStaticCall(StaticCall $staticCall): bool
+    public function isStaticCallMatch(StaticCall $staticCall): bool
     {
         if (! $staticCall->class instanceof Name) {
             return false;

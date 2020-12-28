@@ -31,13 +31,14 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassLikeTypeCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Rector\PHPStan\TypeFactoryStaticHelper;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 final class NodeTypeResolver
@@ -170,13 +171,16 @@ final class NodeTypeResolver
             $node = $node->value;
         }
 
-        if ($node instanceof Param || $node instanceof Scalar) {
+        if (StaticInstanceOf::isOneOf($node, [Param::class, Scalar::class])) {
             return $this->resolve($node);
         }
 
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $node instanceof Expr || $nodeScope === null) {
+        if (! $node instanceof Expr) {
+            return new MixedType();
+        }
+        if ($nodeScope === null) {
             return new MixedType();
         }
 
@@ -354,7 +358,10 @@ final class NodeTypeResolver
 
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope === null || ! $node instanceof Expr) {
+        if ($nodeScope === null) {
+            return new MixedType();
+        }
+        if (! $node instanceof Expr) {
             return new MixedType();
         }
 
@@ -375,7 +382,10 @@ final class NodeTypeResolver
 
     private function isArrayExpr(Node $node): bool
     {
-        return $node instanceof Expr && $this->arrayTypeAnalyzer->isArrayType($node);
+        if (! $node instanceof Expr) {
+            return false;
+        }
+        return $this->arrayTypeAnalyzer->isArrayType($node);
     }
 
     private function resolveArrayType(Expr $expr): Type
@@ -408,7 +418,7 @@ final class NodeTypeResolver
             $types[] = new FullyQualifiedObjectType($parentClass);
         }
 
-        foreach ((array) $class->implements as $implement) {
+        foreach ($class->implements as $implement) {
             $parentClass = (string) $implement;
             $types[] = new FullyQualifiedObjectType($parentClass);
         }

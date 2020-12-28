@@ -9,10 +9,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class ThrowAnalyzer
 {
@@ -46,11 +45,7 @@ final class ThrowAnalyzer
         }
 
         $class = $this->resolveClassFromType($thrownType);
-        if ($class !== null) {
-            return [$class];
-        }
-
-        throw new NotImplementedYetException(get_class($thrownType));
+        return [$class];
     }
 
     private function resolveClassFromType(Type $thrownType): string
@@ -62,8 +57,6 @@ final class ThrowAnalyzer
         if ($thrownType instanceof TypeWithClassName) {
             return $thrownType->getClassName();
         }
-
-        dump($thrownType);
 
         throw new ShouldNotHappenException();
     }

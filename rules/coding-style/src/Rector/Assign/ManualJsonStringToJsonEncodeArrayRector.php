@@ -21,6 +21,7 @@ use Rector\CodingStyle\Node\ConcatJoiner;
 use Rector\CodingStyle\Node\ConcatManipulator;
 use Rector\CodingStyle\ValueObject\ConcatExpressionJoinData;
 use Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -280,8 +281,6 @@ CODE_SAMPLE
         }
 
         $nextExpressionNode = $nextExpression->expr;
-
-        // $value .= '...';
         if ($nextExpressionNode instanceof ConcatAssign) {
             // is assign to same variable?
             if (! $this->areNodesEqual($expr, $nextExpressionNode->var)) {
@@ -325,8 +324,13 @@ CODE_SAMPLE
     {
         // traverse and replace placeholder by original nodes
         $this->traverseNodesWithCallable($array, function (Node $node) use ($placeholderNodes): ?Expr {
-            if ($node instanceof Array_ && count((array) $node->items) === 1) {
-                $placeholderNode = $this->matchPlaceholderNode($node->items[0]->value, $placeholderNodes);
+            if ($node instanceof Array_ && count($node->items) === 1) {
+                $onlyItem = $node->items[0];
+                if ($onlyItem === null) {
+                    throw new ShouldNotHappenException();
+                }
+
+                $placeholderNode = $this->matchPlaceholderNode($onlyItem->value, $placeholderNodes);
 
                 if ($placeholderNode && $this->isImplodeToJson($placeholderNode)) {
                     /** @var FuncCall $placeholderNode */
@@ -353,21 +357,21 @@ CODE_SAMPLE
     /**
      * Matches: "implode('","', $items)"
      */
-    private function isImplodeToJson(Node $node): bool
+    private function isImplodeToJson(Expr $expr): bool
     {
-        if (! $node instanceof FuncCall) {
+        if (! $expr instanceof FuncCall) {
             return false;
         }
 
-        if (! $this->isName($node, 'implode')) {
+        if (! $this->isName($expr, 'implode')) {
             return false;
         }
 
-        if (! isset($node->args[1])) {
+        if (! isset($expr->args[1])) {
             return false;
         }
 
-        $firstArgumentValue = $node->args[0]->value;
+        $firstArgumentValue = $expr->args[0]->value;
         if ($firstArgumentValue instanceof String_ && $firstArgumentValue->value !== '","') {
             return false;
         }

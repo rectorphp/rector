@@ -154,13 +154,13 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isProbablyMysql(Node $node): bool
+    private function isProbablyMysql(Expr $expr): bool
     {
-        if ($this->isObjectType($node, 'mysqli')) {
+        if ($this->isObjectType($expr, 'mysqli')) {
             return true;
         }
 
-        $staticType = $this->getStaticType($node);
+        $staticType = $this->getStaticType($expr);
         $resourceType = new ResourceType();
 
         if ($staticType->equals($resourceType)) {
@@ -170,8 +170,10 @@ CODE_SAMPLE
         if ($this->isUnionTypeWithResourceSubType($staticType, $resourceType)) {
             return true;
         }
-
-        return $node instanceof Variable && $this->isName($node, 'connection');
+        if (! $expr instanceof Variable) {
+            return false;
+        }
+        return $this->isName($expr, 'connection');
     }
 
     private function findConnectionVariable(FuncCall $funcCall): ?Expr
@@ -184,7 +186,11 @@ CODE_SAMPLE
             return $this->isObjectType($node->expr, 'mysqli');
         });
 
-        return $connectionAssign !== null ? $connectionAssign->var : null;
+        if (! $connectionAssign instanceof Assign) {
+            return null;
+        }
+
+        return $connectionAssign->var;
     }
 
     private function removeExistingConnectionParameter(FuncCall $funcCall): void

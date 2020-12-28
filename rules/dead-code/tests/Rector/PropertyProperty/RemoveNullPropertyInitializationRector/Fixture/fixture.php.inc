@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\PropertyProperty\RemoveNullPropertyInitializationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     private $lowerCase = null;
 
@@ -27,7 +27,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\PropertyProperty\RemoveNullPropertyInitializationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     private $lowerCase;
 

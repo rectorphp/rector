@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($object)
     {
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp80\Tests\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($object)
     {

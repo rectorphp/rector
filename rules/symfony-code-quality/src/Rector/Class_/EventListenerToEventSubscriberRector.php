@@ -24,6 +24,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceDefinition;
+use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -189,7 +190,7 @@ CODE_SAMPLE
 
     private function isAlreadyEventSubscriber(Class_ $class): bool
     {
-        foreach ((array) $class->implements as $implement) {
+        foreach ($class->implements as $implement) {
             if ($this->isName($implement, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
                 return true;
             }
@@ -238,7 +239,8 @@ CODE_SAMPLE
     {
         $class->implements[] = new FullyQualified(self::EVENT_SUBSCRIBER_INTERFACE);
 
-        $classShortName = (string) $class->name;
+        $classShortName = $this->getShortName($class);
+
         // remove suffix
         $classShortName = Strings::replace($classShortName, self::LISTENER_MATCH_REGEX, '$1');
 
@@ -265,7 +267,12 @@ CODE_SAMPLE
             $eventNameExpr = $this->createEventName($eventName);
 
             if (count($methodNamesWithPriorities) === 1) {
-                $this->createSingleMethod($methodNamesWithPriorities, $eventNameExpr, $eventsToMethodsArray);
+                $this->createSingleMethod(
+                    $methodNamesWithPriorities,
+                    $eventName,
+                    $eventNameExpr,
+                    $eventsToMethodsArray
+                );
             } else {
                 $this->createMultipleMethods(
                     $methodNamesWithPriorities,
@@ -312,15 +319,24 @@ CODE_SAMPLE
      */
     private function createSingleMethod(
         array $methodNamesWithPriorities,
+        string $eventName,
         Expr $expr,
         Array_ $eventsToMethodsArray
     ): void {
 
-        /** @var EventListenerTag $eventTag */
-        $eventTag = $methodNamesWithPriorities[0]->getTags()[0];
+        /** @var EventListenerTag[]|Tag[] $eventTags */
+        $eventTags = $methodNamesWithPriorities[0]->getTags();
+        foreach ($eventTags as $eventTag) {
+            if ($eventTag instanceof EventListenerTag && $eventTag->getEvent() === $eventName) {
+                $methodName = $eventTag->getMethod();
+                $priority = $eventTag->getPriority();
+                break;
+            }
+        }
 
-        $methodName = $eventTag->getMethod();
-        $priority = $eventTag->getPriority();
+        if (! isset($methodName, $priority)) {
+            return;
+        }
 
         if ($priority !== 0) {
             $methodNameWithPriorityArray = new Array_();
@@ -348,6 +364,10 @@ CODE_SAMPLE
 
         foreach ($methodNamesWithPriorities as $methodNamesWithPriority) {
             foreach ($methodNamesWithPriority->getTags() as $tag) {
+                if (! $tag instanceof EventListenerTag) {
+                    continue;
+                }
+
                 if ($this->shouldSkip($eventName, $tag, $alreadyUsedTags)) {
                     continue;
                 }
@@ -370,24 +390,20 @@ CODE_SAMPLE
         }
 
         $returnType = new ArrayType(new MixedType(), new MixedType(true));
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->changeReturnType($returnType);
     }
 
     /**
      * @param TagInterface[] $alreadyUsedTags
      */
-    private function shouldSkip(string $eventName, TagInterface $tag, array $alreadyUsedTags): bool
+    private function shouldSkip(string $eventName, EventListenerTag $eventListenerTag, array $alreadyUsedTags): bool
     {
-        if (! $tag instanceof EventListenerTag) {
+        if ($eventName !== $eventListenerTag->getEvent()) {
             return true;
         }
 
-        if ($eventName !== $tag->getEvent()) {
-            return true;
-        }
-
-        return in_array($tag, $alreadyUsedTags, true);
+        return in_array($eventListenerTag, $alreadyUsedTags, true);
     }
 
     private function createEventItem(EventListenerTag $eventListenerTag): ArrayItem

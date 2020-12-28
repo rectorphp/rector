@@ -70,7 +70,10 @@ CODE_SAMPLE
             $insideIfNode = $node->stmts[0];
 
             $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-            if (! $nextNode instanceof Return_ || $nextNode->expr === null) {
+            if (! $nextNode instanceof Return_) {
+                return null;
+            }
+            if ($nextNode->expr === null) {
                 return null;
             }
 

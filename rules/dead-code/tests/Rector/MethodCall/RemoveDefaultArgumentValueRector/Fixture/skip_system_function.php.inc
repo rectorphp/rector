@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveDefaultArgumentValueRector\Fixture;
 
-class SystemFunction
+class SkipSystemFunction
 {
     public function run()
     {

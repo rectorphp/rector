@@ -6,7 +6,6 @@ namespace Rector\Naming\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -14,6 +13,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\MethodNameResolver;
+use Rector\Naming\NodeRenamer\MethodCallRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -33,9 +33,15 @@ final class MakeIsserClassMethodNameStartWithIsRector extends AbstractRector
      */
     private $methodNameResolver;
 
-    public function __construct(MethodNameResolver $methodNameResolver)
+    /**
+     * @var MethodCallRenamer
+     */
+    private $methodCallRenamer;
+
+    public function __construct(MethodNameResolver $methodNameResolver, MethodCallRenamer $methodCallRenamer)
     {
         $this->methodNameResolver = $methodNameResolver;
+        $this->methodCallRenamer = $methodCallRenamer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -113,7 +119,7 @@ CODE_SAMPLE
 
         $node->name = new Identifier($isserMethodName);
 
-        $this->updateClassMethodCalls($node, $isserMethodName);
+        $this->methodCallRenamer->updateClassMethodCalls($node, $isserMethodName);
 
         return $node;
     }
@@ -125,11 +131,12 @@ CODE_SAMPLE
 
     private function matchIsserClassMethodReturnedExpr(ClassMethod $classMethod): ?Expr
     {
-        if (count((array) $classMethod->stmts) !== 1) {
+        $stmts = (array) $classMethod->stmts;
+        if (count($stmts) !== 1) {
             return null;
         }
 
-        $onlyStmt = $classMethod->stmts[0];
+        $onlyStmt = $stmts[0] ?? null;
         if (! $onlyStmt instanceof Return_) {
             return null;
         }
@@ -144,14 +151,5 @@ CODE_SAMPLE
         }
 
         return $onlyStmt->expr;
-    }
-
-    private function updateClassMethodCalls(ClassMethod $classMethod, string $newClassMethodName): void
-    {
-        /** @var MethodCall[] $methodCalls */
-        $methodCalls = $this->nodeRepository->findCallsByClassMethod($classMethod);
-        foreach ($methodCalls as $methodCall) {
-            $methodCall->name = new Identifier($newClassMethodName);
-        }
     }
 }

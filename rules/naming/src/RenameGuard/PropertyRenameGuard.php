@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Naming\RenameGuard;
 
-use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
 use Rector\Naming\Contract\RenameGuard\RenameGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 
 final class PropertyRenameGuard implements RenameGuardInterface
 {
     /**
-     * @param GuardInterface[] $guards
+     * @param ConflictingGuardInterface[] $guards
      */
     public function shouldSkip(RenameValueObjectInterface $renameValueObject, array $guards): bool
     {

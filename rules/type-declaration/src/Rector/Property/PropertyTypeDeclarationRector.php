@@ -78,7 +78,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (count((array) $node->props) !== 1) {
+        if (count($node->props) !== 1) {
             return null;
         }
 
@@ -96,6 +96,10 @@ CODE_SAMPLE
         $type = $this->propertyTypeInferer->inferProperty($node);
         if ($type instanceof MixedType) {
             return null;
+        }
+
+        if ($phpDocInfo === null) {
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
         }
 
         $phpDocInfo->changeVarType($type);

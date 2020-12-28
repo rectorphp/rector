@@ -130,7 +130,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return $constructorMethodReflection->getNumberOfRequiredParameters() <= count((array) $new->args);
+        return $constructorMethodReflection->getNumberOfRequiredParameters() <= count($new->args);
     }
 
     private function getNewNodeClassConstructorMethodReflection(New_ $new): ?ReflectionMethod

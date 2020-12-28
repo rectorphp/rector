@@ -6,7 +6,9 @@ use Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRect
 use Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
+use Rector\EarlyReturn\Rector\If_\ChangeOrIfReturnToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
+use Rector\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -16,4 +18,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeIfElseValueAssignToEarlyReturnRector::class);
     $services->set(ChangeNestedIfsToEarlyReturnRector::class);
     $services->set(RemoveAlwaysElseRector::class);
+    $services->set(ReturnBinaryAndToEarlyReturnRector::class);
+    $services->set(ChangeOrIfReturnToEarlyReturnRector::class);
 };

@@ -16,6 +16,7 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\UnreachableStatementNode;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
@@ -134,6 +135,7 @@ final class PHPStanNodeScopeResolver
 
             // traversing trait inside class that is using it scope (from referenced) - the trait traversed by Rector is different (directly from parsed file)
             if ($scope->isInTrait()) {
+                /** @var ClassReflection $classReflection */
                 $classReflection = $scope->getTraitReflection();
                 $traitName = $classReflection->getName();
                 $this->traitNodeScopeCollector->addForTraitAndNode($traitName, $node, $scope);
@@ -247,7 +249,7 @@ final class PHPStanNodeScopeResolver
             return;
         }
         $message = sprintf(
-            '[debug] %d dependencies for %s file',
+            '[debug] %d dependencies for "%s" file',
             count($dependentFiles),
             $smartFileInfo->getRealPath()
         );

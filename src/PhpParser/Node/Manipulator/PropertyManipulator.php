@@ -24,8 +24,8 @@ use Rector\Doctrine\AbstractRector\DoctrineTrait;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
-use Rector\SOLID\Guard\VariableToConstantGuard;
 
 /**
  * "private $property"

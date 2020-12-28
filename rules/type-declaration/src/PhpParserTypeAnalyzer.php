@@ -19,7 +19,7 @@ final class PhpParserTypeAnalyzer
     public function isSubtypeOf(Node $possibleSubtype, Node $possibleParentType): bool
     {
         // skip until PHP 8 is out
-        if ($possibleSubtype instanceof UnionType || $possibleParentType instanceof UnionType) {
+        if ($this->isUnionType($possibleSubtype, $possibleParentType)) {
             return false;
         }
 
@@ -48,20 +48,30 @@ final class PhpParserTypeAnalyzer
         if ($possibleParentType === $possibleSubtype) {
             return true;
         }
-
-        return ctype_upper($possibleSubtype[0]) && $possibleParentType === 'object';
+        if (! ctype_upper($possibleSubtype[0])) {
+            return false;
+        }
+        return $possibleParentType === 'object';
     }
 
-    /**
-     * @param Name|NullableType|Identifier $node
-     */
+    private function isUnionType(Node $possibleSubtype, Node $possibleParentType): bool
+    {
+        if ($possibleSubtype instanceof UnionType) {
+            return true;
+        }
+
+        return $possibleParentType instanceof UnionType;
+    }
+
     private function unwrapNullableAndToString(Node $node): string
     {
-        if (! $node instanceof NullableType) {
+        if (! $node instanceof NullableType && method_exists($node, 'toString')) {
             return $node->toString();
         }
 
-        return $node->type->toString();
+        /** @var NullableType $type */
+        $type = $node;
+        return $type->type->toString();
     }
 
     private function isTraversableOrIterableSubtype(string $possibleSubtype, string $possibleParentType): bool
@@ -69,7 +79,9 @@ final class PhpParserTypeAnalyzer
         if (in_array($possibleSubtype, ['array', 'Traversable'], true) && $possibleParentType === 'iterable') {
             return true;
         }
-
-        return in_array($possibleSubtype, ['array', 'ArrayIterator'], true) && $possibleParentType === 'countable';
+        if (! in_array($possibleSubtype, ['array', 'ArrayIterator'], true)) {
+            return false;
+        }
+        return $possibleParentType === 'countable';
     }
 }

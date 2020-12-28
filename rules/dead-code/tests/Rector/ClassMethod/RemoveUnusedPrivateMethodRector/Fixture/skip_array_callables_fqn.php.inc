@@ -2,13 +2,13 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Fixture;
 
-final class SkipArrayCallalbesFqn
+final class SkipArrayCallablesFqn
 {
     public function run()
     {
         $array  = [3, 2, 1];
 
-        usort($array, [SkipArrayCallalbesFqn::class, 'sort']);
+        usort($array, [SkipArrayCallablesFqn::class, 'sort']);
 
         return $array;
     }

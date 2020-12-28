@@ -7,6 +7,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\Configuration\Option;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\Php\TypeAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -16,6 +17,10 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan-for-rector.neon');
+
     $services = $containerConfigurator->services();
 
     $services->defaults()
@@ -24,14 +29,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure();
 
     $services->load('Rector\NodeTypeResolver\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Contract', __DIR__ . '/../src/PHPStan/TypeExtension']);
+        ->exclude([__DIR__ . '/../src/Contract']);
 
     $services->set(TypeAnalyzer::class);
-
     $services->set(FilesFinder::class);
-
     $services->set(BetterStandardPrinter::class);
-
     $services->set(BetterNodeFinder::class);
 
     $services->set(ReflectionProvider::class)

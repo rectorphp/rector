@@ -144,12 +144,12 @@ CODE_SAMPLE
         return null;
     }
 
-    private function collectCallByVariable(Node $node): void
+    private function collectCallByVariable(MethodCall $methodCall): void
     {
         // bit workaround for now
-        if ($node->var instanceof Variable) {
-            $variableName = $this->getName($node->var);
-            $methodName = $this->getName($node->name);
+        if ($methodCall->var instanceof Variable) {
+            $variableName = $this->getName($methodCall->var);
+            $methodName = $this->getName($methodCall->name);
             if (! $variableName) {
                 return;
             }

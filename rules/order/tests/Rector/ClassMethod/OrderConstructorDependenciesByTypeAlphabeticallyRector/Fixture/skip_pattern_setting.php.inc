@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\Fixture;
 
-class SkipPatternSettingClass
+class SkipPatternSetting
 {
     public function __construct(
         LatteToTwigConverter $latteToTwigConverter,

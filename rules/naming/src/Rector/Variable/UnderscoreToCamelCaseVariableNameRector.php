@@ -12,7 +12,7 @@ use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\Naming\ExpectedNameResolver\UnderscoreCamelCaseExpectedNameResolver;
-use Rector\Naming\ParamRenamer\UnderscoreCamelCaseParamRenamer;
+use Rector\Naming\ParamRenamer\ParamRenamer;
 use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -39,20 +39,20 @@ final class UnderscoreToCamelCaseVariableNameRector extends AbstractRector
     private $underscoreCamelCaseExpectedNameResolver;
 
     /**
-     * @var UnderscoreCamelCaseParamRenamer
+     * @var ParamRenamer
      */
-    private $underscoreCamelCaseParamRenamer;
+    private $paramRenamer;
 
     public function __construct(
         ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
         ParamRenameFactory $paramRenameFactory,
-        UnderscoreCamelCaseParamRenamer $underscoreCamelCaseParamRenamer,
+        ParamRenamer $underscoreCamelCaseParamRenamer,
         UnderscoreCamelCaseExpectedNameResolver $underscoreCamelCaseExpectedNameResolver
     ) {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->paramRenameFactory = $paramRenameFactory;
         $this->underscoreCamelCaseExpectedNameResolver = $underscoreCamelCaseExpectedNameResolver;
-        $this->underscoreCamelCaseParamRenamer = $underscoreCamelCaseParamRenamer;
+        $this->paramRenamer = $underscoreCamelCaseParamRenamer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -109,14 +109,19 @@ CODE_SAMPLE
         }
 
         $camelCaseName = StaticRectorStrings::underscoreToCamelCase($nodeName);
-        if ($camelCaseName === 'this' || $camelCaseName === '' || is_numeric($camelCaseName[0])) {
+        if ($camelCaseName === 'this') {
+            return null;
+        }
+        if ($camelCaseName === '') {
+            return null;
+        }
+        if (is_numeric($camelCaseName[0])) {
             return null;
         }
 
-        /** @var Param $parentNode */
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Param) {
-            return $this->renameParam($parentNode);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Param) {
+            return $this->renameParam($parent);
         }
 
         $node->name = $camelCaseName;
@@ -131,7 +136,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $renamedParam = $this->underscoreCamelCaseParamRenamer->rename($paramRename);
+        $renamedParam = $this->paramRenamer->rename($paramRename);
         if ($renamedParam === null) {
             return null;
         }

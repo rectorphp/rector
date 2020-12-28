@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\VersionCompareFuncCallToConstantRector\Fixture;
 
-class SkipVersionCompareClass
+class SkipVersionCompare
 {
     public function run()
     {

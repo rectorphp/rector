@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(array $values)
     {
@@ -23,7 +23,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(array $values)
     {

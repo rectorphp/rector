@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\Property\CorrectDatetimeEntityPropertyDefaultToConstructorRector\Fixture;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,7 +19,7 @@ class MoveFullDate
 -----
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\Property\CorrectDatetimeEntityPropertyDefaultToConstructorRector\Fixture;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

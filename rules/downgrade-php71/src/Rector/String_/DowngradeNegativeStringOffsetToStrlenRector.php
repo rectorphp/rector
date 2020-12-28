@@ -60,11 +60,7 @@ CODE_SAMPLE
             return $this->processForString($node);
         }
 
-        if ($node instanceof FuncCall) {
-            return $this->processForFuncCall($node);
-        }
-
-        return null;
+        return $this->processForFuncCall($node);
     }
 
     private function processForString(String_ $string): ?String_
@@ -75,7 +71,10 @@ CODE_SAMPLE
         }
 
         $parentOfNextNode = $nextNode->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentOfNextNode instanceof ArrayDimFetch || ! $this->areNodesEqual($parentOfNextNode->dim, $nextNode)) {
+        if (! $parentOfNextNode instanceof ArrayDimFetch) {
+            return null;
+        }
+        if (! $this->areNodesEqual($parentOfNextNode->dim, $nextNode)) {
             return null;
         }
 

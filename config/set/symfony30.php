@@ -13,7 +13,7 @@ use Rector\Symfony3\Rector\ClassMethod\GetRequestRector;
 use Rector\Symfony3\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
 use Rector\Symfony3\Rector\MethodCall\CascadeValidationFormBuilderRector;
 use Rector\Symfony3\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector;
-use Rector\Symfony3\Rector\MethodCall\ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector;
+use Rector\Symfony3\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
 use Rector\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector;
 use Rector\Symfony3\Rector\MethodCall\OptionNameRector;
 use Rector\Symfony3\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
@@ -39,7 +39,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveDefaultGetBlockPrefixRector::class);
 
     # forms - collection
-    $services->set(ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector::class);
+    $services->set(ChangeStringCollectionOptionToConstantRector::class);
     $services->set(ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class);
 
     $services->set(RenameClassConstantRector::class)

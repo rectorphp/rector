@@ -19,9 +19,9 @@ final class SymplifyQuoteEscapeRector extends AbstractRector
 {
     /**
      * @var string
-     * @see https://regex101.com/r/qEkCe9/1
+     * @see https://regex101.com/r/qEkCe9/2
      */
-    private const ESCAPED_CHAR_REGEX = '#\\\\|\$#sim';
+    private const ESCAPED_CHAR_REGEX = '#\\\\|\$|\\n|\\t#sim';
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -87,9 +87,8 @@ CODE_SAMPLE
     private function processSingleQuoted(String_ $string, int $doubleQuoteCount, int $singleQuoteCount): void
     {
         if ($doubleQuoteCount === 0 && $singleQuoteCount > 0) {
-            // contains chars tha will be newly escaped
-            $matches = Strings::match($string->value, self::ESCAPED_CHAR_REGEX);
-            if ($matches) {
+            // contains chars that will be newly escaped
+            if ($this->isMatchEscapedChars($string->value)) {
                 return;
             }
 
@@ -102,9 +101,19 @@ CODE_SAMPLE
     private function processDoubleQuoted(String_ $string, int $singleQuoteCount, int $doubleQuoteCount): void
     {
         if ($singleQuoteCount === 0 && $doubleQuoteCount > 0) {
+            // contains chars that will be newly escaped
+            if ($this->isMatchEscapedChars($string->value)) {
+                return;
+            }
+
             $string->setAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
             // invoke override
             $string->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
+    }
+
+    private function isMatchEscapedChars(string $string): bool
+    {
+        return (bool) Strings::match($string, self::ESCAPED_CHAR_REGEX);
     }
 }

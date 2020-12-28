@@ -2,7 +2,7 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class MoreThanTwoConditionsClass
+class MoreThanTwoConditions
 {
     public function canDrive(Car $car): void
     {
@@ -18,7 +18,7 @@ class MoreThanTwoConditionsClass
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class MoreThanTwoConditionsClass
+class MoreThanTwoConditions
 {
     public function canDrive(Car $car): void
     {

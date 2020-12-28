@@ -129,7 +129,7 @@ CODE_SAMPLE
             return null;
         }
 
-        // 1. find self::$container->get(x)
+        // 1. find $this->getService(x)
         $serviceTypes = $this->selfContainerMethodCallCollector->collectContainerGetServiceTypes($node, false);
         if ($serviceTypes === []) {
             return null;

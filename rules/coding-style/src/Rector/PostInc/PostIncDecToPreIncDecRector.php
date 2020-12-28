@@ -77,7 +77,7 @@ CODE_SAMPLE
             return $this->processPreArray($node, $parentNode);
         }
 
-        if ($parentNode instanceof For_ && count((array) $parentNode->loop) === 1 && $this->areNodesEqual(
+        if ($parentNode instanceof For_ && count($parentNode->loop) === 1 && $this->areNodesEqual(
             $parentNode->loop[0],
             $node
         )) {
@@ -89,7 +89,10 @@ CODE_SAMPLE
 
     private function isAnExpression(?Node $node = null): bool
     {
-        return $node instanceof Node && $node instanceof Expression;
+        if (! $node instanceof Node) {
+            return false;
+        }
+        return $node instanceof Expression;
     }
 
     /**

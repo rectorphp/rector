@@ -151,7 +151,7 @@ final class RectorApplication
             }, 'printing');
         }
 
-        if ($this->configuration->showProgressBar()) {
+        if ($this->configuration->shouldShowProgressBar()) {
             $this->symfonyStyle->newLine(2);
         }
 
@@ -170,7 +170,7 @@ final class RectorApplication
             return;
         }
 
-        if (! $this->configuration->showProgressBar()) {
+        if (! $this->configuration->shouldShowProgressBar()) {
             return;
         }
 
@@ -279,7 +279,7 @@ final class RectorApplication
             $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
             $message = sprintf('[%s] %s', $phase, $relativeFilePath);
             $this->symfonyStyle->writeln($message);
-        } elseif ($this->configuration->showProgressBar()) {
+        } elseif ($this->configuration->shouldShowProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }
     }

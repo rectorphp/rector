@@ -98,7 +98,7 @@ CODE_SAMPLE
         $classParameterTypes = $this->getCallTypesByPosition($classMethodCalls);
 
         foreach ($classParameterTypes as $position => $argumentStaticType) {
-            if ($this->skipArgumentStaticType($node, $argumentStaticType, $position)) {
+            if ($this->shouldSkipArgumentStaticType($node, $argumentStaticType, $position)) {
                 continue;
             }
 
@@ -137,17 +137,20 @@ CODE_SAMPLE
         return $staticTypeByArgumentPosition;
     }
 
-    private function skipArgumentStaticType(Node $node, Type $argumentStaticType, int $position): bool
-    {
+    private function shouldSkipArgumentStaticType(
+        ClassMethod $classMethod,
+        Type $argumentStaticType,
+        int $position
+    ): bool {
         if ($argumentStaticType instanceof MixedType) {
             return true;
         }
 
-        if (! isset($node->params[$position])) {
+        if (! isset($classMethod->params[$position])) {
             return true;
         }
 
-        $parameter = $node->params[$position];
+        $parameter = $classMethod->params[$position];
         if ($parameter->type === null) {
             return false;
         }

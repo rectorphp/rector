@@ -1,8 +1,8 @@
 <?php
 
-namespace OldNamespace\SubNamespace;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
-class AnnotationsTest
+class Fixture6
 {
     /**
      * @param \PHPUnit_Framework_TestCase $test
@@ -18,9 +18,9 @@ class AnnotationsTest
 -----
 <?php
 
-namespace OldNamespace\SubNamespace;
+namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
-class AnnotationsTest
+class Fixture6
 {
     /**
      * @param \PHPUnit\Framework\TestCase $test

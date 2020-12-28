@@ -91,8 +91,10 @@ CODE_SAMPLE
         if ($arrayCallable === null) {
             return null;
         }
-
-        if ($this->isAssignedToNetteMagicOnProperty($node) || $this->isInsideProperty($node)) {
+        if ($this->isAssignedToNetteMagicOnProperty($node)) {
+            return null;
+        }
+        if ($this->isInsideProperty($node)) {
             return null;
         }
 

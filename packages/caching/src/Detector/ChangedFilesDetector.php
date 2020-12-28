@@ -116,7 +116,7 @@ final class ChangedFilesDetector
 
     private function hashFile(SmartFileInfo $smartFileInfo): string
     {
-        return hash_file('sha1', $smartFileInfo->getRealPath());
+        return (string) sha1_file($smartFileInfo->getRealPath());
     }
 
     /**

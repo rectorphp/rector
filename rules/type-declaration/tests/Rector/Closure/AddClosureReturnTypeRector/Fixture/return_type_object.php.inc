@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Function_\AddClosureReturnTypeRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector\Fixture;
 
 use PhpParser\Node\Stmt\Class_;
 
@@ -18,7 +18,7 @@ class ReturnTypeObject
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Function_\AddClosureReturnTypeRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector\Fixture;
 
 use PhpParser\Node\Stmt\Class_;
 

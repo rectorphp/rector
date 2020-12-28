@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Generic\Rector\AbstractToMethodCallRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
@@ -108,7 +109,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->staticCallsToMethodCalls as $staticCallToMethodCall) {
-            if (! $staticCallToMethodCall->matchStaticCall($node)) {
+            if (! $staticCallToMethodCall->isStaticCallMatch($node)) {
                 continue;
             }
 
@@ -122,6 +123,10 @@ CODE_SAMPLE
                 $methodName = $this->getName($node->name);
             } else {
                 $methodName = $staticCallToMethodCall->getMethodName();
+            }
+
+            if (! is_string($methodName)) {
+                throw new ShouldNotHappenException();
             }
 
             return new MethodCall($expr, $methodName, $node->args);

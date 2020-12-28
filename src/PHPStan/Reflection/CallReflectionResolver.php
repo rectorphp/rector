@@ -175,8 +175,10 @@ final class CallReflectionResolver
 
         $classType = $this->nodeTypeResolver->resolve($node instanceof MethodCall ? $node->var : $node->class);
         $methodName = $this->nodeNameResolver->getName($node->name);
-
-        if ($methodName === null || ! $classType->hasMethod($methodName)->yes()) {
+        if ($methodName === null) {
+            return null;
+        }
+        if (! $classType->hasMethod($methodName)->yes()) {
             return null;
         }
 

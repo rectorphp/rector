@@ -123,7 +123,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            $seeTagClass = ltrim($seeTag->value->value, '\\');
+            /** @var GenericTagValueNode $genericTagValueNode */
+            $genericTagValueNode = $seeTag->value;
+
+            $seeTagClass = ltrim($genericTagValueNode->value, '\\');
             if ($seeTagClass === $testCaseClassName) {
                 return true;
             }

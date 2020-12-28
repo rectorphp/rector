@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\UnwrapSprintfOneArgumentRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($var)
     {
@@ -17,7 +17,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\UnwrapSprintfOneArgumentRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($var)
     {

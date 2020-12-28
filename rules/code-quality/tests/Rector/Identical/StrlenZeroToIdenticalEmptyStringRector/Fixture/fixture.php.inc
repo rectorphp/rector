@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {
@@ -18,7 +18,7 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {

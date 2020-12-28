@@ -142,10 +142,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === null || $node->stmts === []) {
+        if ($node->stmts === null) {
             return null;
         }
-
+        if ($node->stmts === []) {
+            return null;
+        }
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
         $routeListObjectType = new ObjectType(self::ROUTE_LIST_CLASS);
         if (! $inferedReturnType->isSuperTypeOf($routeListObjectType)->yes()) {
@@ -190,7 +192,7 @@ CODE_SAMPLE
     {
         // look for <...>[] = IRoute<Type>
 
-        return $this->betterNodeFinder->find($classMethod->stmts, function (Node $node): bool {
+        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node): bool {
             if (! $node instanceof Assign) {
                 return false;
             }
@@ -258,7 +260,7 @@ CODE_SAMPLE
 
         foreach ($presenterClasses as $presenterClass) {
             foreach ($presenterClass->getMethods() as $classMethod) {
-                if ($this->shouldSkipClassStmt($classMethod)) {
+                if ($this->shouldSkipClassMethod($classMethod)) {
                     continue;
                 }
 
@@ -300,28 +302,24 @@ CODE_SAMPLE
         return is_a($staticCallReturnType, 'Nette\Application\IRouter', true);
     }
 
-    private function shouldSkipClassStmt(Node $node): bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        if (! $node instanceof ClassMethod) {
-            return true;
-        }
-
         // not an action method
-        if (! $node->isPublic()) {
+        if (! $classMethod->isPublic()) {
             return true;
         }
 
-        if (! $this->isName($node, '#^(render|action)#')) {
+        if (! $this->isName($classMethod, '#^(render|action)#')) {
             return true;
         }
-        $hasRouteAnnotation = $node->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION);
+        $hasRouteAnnotation = $classMethod->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION);
 
         if ($hasRouteAnnotation) {
             return true;
         }
 
         // already has Route tag
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return false;
         }
@@ -337,7 +335,6 @@ CODE_SAMPLE
         /** @var string $presenterPart */
         $presenterPart = Strings::after($presenterName, '\\', -1);
 
-        /** @var string $presenterPart */
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
         $presenterPart = StaticRectorStrings::camelCaseToDashes($presenterPart);
 

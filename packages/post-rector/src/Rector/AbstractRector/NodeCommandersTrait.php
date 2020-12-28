@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector\AbstractRector;
 
 use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -17,13 +17,13 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\AliasedObjectType;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\PostRector\Collector\NodesToReplaceCollector;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -94,9 +94,6 @@ trait NodeCommandersTrait
         $this->nodeRemover = $nodeRemover;
     }
 
-    /**
-     * @param FullyQualifiedObjectType|AliasedObjectType $objectType
-     */
     protected function addUseType(ObjectType $objectType, Node $positionNode): void
     {
         assert($objectType instanceof FullyQualifiedObjectType || $objectType instanceof AliasedObjectType);
@@ -187,11 +184,11 @@ trait NodeCommandersTrait
     }
 
     /**
-     * @param ClassLike|FunctionLike $nodeWithStatements
+     * @param Class_|ClassMethod|Function_ $nodeWithStatements
      */
     protected function removeNodeFromStatements(Node $nodeWithStatements, Node $nodeToRemove): void
     {
-        foreach ($nodeWithStatements->stmts as $key => $stmt) {
+        foreach ((array) $nodeWithStatements->stmts as $key => $stmt) {
             if ($nodeToRemove !== $stmt) {
                 continue;
             }

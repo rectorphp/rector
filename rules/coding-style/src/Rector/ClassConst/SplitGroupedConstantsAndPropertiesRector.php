@@ -72,7 +72,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassConst) {
-            if (count((array) $node->consts) < 2) {
+            if (count($node->consts) < 2) {
                 return null;
             }
 
@@ -89,7 +89,7 @@ CODE_SAMPLE
             return $node;
         }
 
-        if (count((array) $node->props) < 2) {
+        if (count($node->props) < 2) {
             return null;
         }
 

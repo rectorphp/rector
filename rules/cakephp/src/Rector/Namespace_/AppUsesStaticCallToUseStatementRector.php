@@ -76,7 +76,7 @@ CODE_SAMPLE
         $uses = $this->nodeFactory->createUsesFromNames($names);
 
         if ($node instanceof Namespace_) {
-            $node->stmts = array_merge($uses, (array) $node->stmts);
+            $node->stmts = array_merge($uses, $node->stmts);
             return $node;
         }
 
@@ -130,7 +130,7 @@ CODE_SAMPLE
             return $this->refactorFileWithDeclare($fileWithoutNamespace, $uses);
         }
 
-        $fileWithoutNamespace->stmts = array_merge($uses, (array) $fileWithoutNamespace->stmts);
+        $fileWithoutNamespace->stmts = array_merge($uses, $fileWithoutNamespace->stmts);
         return $fileWithoutNamespace;
     }
 

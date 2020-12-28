@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
@@ -21,8 +22,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(ChangeMethodVisibilityRector::class)->call('configure', [[
         ChangeMethodVisibilityRector::METHOD_VISIBILITIES => ValueObjectInliner::inline([
-            new ChangeMethodVisibility('Illuminate\Routing\Router', 'addRoute', 'public'),
-            new ChangeMethodVisibility('Illuminate\Contracts\Auth\Access\Gate', 'raw', 'public'),
+            new ChangeMethodVisibility('Illuminate\Routing\Router', 'addRoute', Visibility::PUBLIC),
+            new ChangeMethodVisibility('Illuminate\Contracts\Auth\Access\Gate', 'raw', Visibility::PUBLIC),
         ]),
     ]]);
     $services->set(ArgumentAdderRector::class)->call('configure', [[

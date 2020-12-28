@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector\Fixture;
 
-final class RemoveMutualCheckersCompilerPass
+final class SkipMoreNestedCase
 {
     /**
      * List of checkers with the same functionality.

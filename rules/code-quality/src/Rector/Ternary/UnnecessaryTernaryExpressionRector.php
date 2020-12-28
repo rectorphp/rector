@@ -59,12 +59,12 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
 
         $ifExpression = $ternaryExpression->if;
-        if ($ifExpression === null) {
+        if (! $this->isBool($ifExpression)) {
             return null;
         }
 
         $elseExpression = $ternaryExpression->else;
-        if (! $this->isBool($ifExpression) || ! $this->isBool($elseExpression)) {
+        if (! $this->isBool($elseExpression)) {
             return null;
         }
 
@@ -72,8 +72,10 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         if (! $condition instanceof BinaryOp) {
             return $this->processNonBinaryCondition($ifExpression, $elseExpression, $condition);
         }
-
-        if ($this->isNull($ifExpression) || $this->isNull($elseExpression)) {
+        if ($this->isNull($ifExpression)) {
+            return null;
+        }
+        if ($this->isNull($elseExpression)) {
             return null;
         }
 

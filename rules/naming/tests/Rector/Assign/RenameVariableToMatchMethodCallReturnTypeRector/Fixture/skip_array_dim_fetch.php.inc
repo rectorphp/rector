@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Fixture;
 
-class ArrayDimFetchClass
+class SkipArrayDimFetch
 {
     public function run()
     {

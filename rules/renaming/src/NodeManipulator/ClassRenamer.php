@@ -23,7 +23,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class ClassRenamer
 {
@@ -128,9 +128,6 @@ final class ClassRenamer
     private function refactorName(Name $name, array $oldToNewClasses): ?Name
     {
         $stringName = $this->nodeNameResolver->getName($name);
-        if ($stringName === null) {
-            return null;
-        }
 
         $newName = $oldToNewClasses[$stringName] ?? null;
         if (! $newName) {
@@ -249,16 +246,16 @@ final class ClassRenamer
      * - implements SomeInterface
      * - implements SomeClass
      */
-    private function isClassToInterfaceValidChange(Node $node, string $newName): bool
+    private function isClassToInterfaceValidChange(Name $name, string $newName): bool
     {
         // ensure new is not with interface
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof New_ && interface_exists($newName)) {
             return false;
         }
 
         if ($parentNode instanceof Class_) {
-            return $this->isValidClassNameChange($node, $newName, $parentNode);
+            return $this->isValidClassNameChange($name, $newName, $parentNode);
         }
 
         // prevent to change to import, that already exists
@@ -298,7 +295,7 @@ final class ClassRenamer
             return;
         }
 
-        foreach ((array) $classLike->implements as $key => $implementName) {
+        foreach ($classLike->implements as $key => $implementName) {
             if (! $implementName instanceof Name) {
                 continue;
             }
@@ -336,12 +333,12 @@ final class ClassRenamer
         });
     }
 
-    private function isValidClassNameChange(Node $node, string $newName, Class_ $class): bool
+    private function isValidClassNameChange(Name $name, string $newName, Class_ $class): bool
     {
-        if ($class->extends === $node && interface_exists($newName)) {
+        if ($class->extends === $name && interface_exists($newName)) {
             return false;
         }
-        return ! (in_array($node, $class->implements, true) && class_exists($newName));
+        return ! (in_array($name, $class->implements, true) && class_exists($newName));
     }
 
     private function isValidUseImportChange(string $newName, UseUse $useUse): bool

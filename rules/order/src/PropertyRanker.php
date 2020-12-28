@@ -22,6 +22,23 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PropertyRanker
 {
+    /**
+     * @var string[]
+     */
+    private const TYPE_TO_RANK = [
+        StringType::class => 5,
+        IntegerType::class => 5,
+        BooleanType::class => 5,
+        FloatType::class => 5,
+        ArrayType::class => 10,
+        IterableType::class => 10,
+        TypeWithClassName::class => 15,
+        IntersectionType::class => 20,
+        UnionType::class => 25,
+        MixedType::class => 30,
+        CallableType::class => 35,
+    ];
+
     public function rank(Property $property): int
     {
         /** @var PhpDocInfo|null $phpDocInfo */
@@ -31,32 +48,10 @@ final class PropertyRanker
         }
 
         $varType = $phpDocInfo->getVarType();
-        if ($varType instanceof StringType || $varType instanceof IntegerType || $varType instanceof BooleanType || $varType instanceof FloatType) {
-            return 5;
-        }
-
-        if ($varType instanceof ArrayType || $varType instanceof IterableType) {
-            return 10;
-        }
-
-        if ($varType instanceof TypeWithClassName) {
-            return 15;
-        }
-
-        if ($varType instanceof IntersectionType) {
-            return 20;
-        }
-
-        if ($varType instanceof UnionType) {
-            return 25;
-        }
-
-        if ($varType instanceof MixedType) {
-            return 30;
-        }
-
-        if ($varType instanceof CallableType) {
-            return 35;
+        foreach (self::TYPE_TO_RANK as $type => $rank) {
+            if (is_a($varType, $type, true)) {
+                return $rank;
+            }
         }
 
         throw new NotImplementedException(get_class($varType));

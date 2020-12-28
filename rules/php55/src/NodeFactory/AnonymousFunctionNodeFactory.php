@@ -51,14 +51,16 @@ final class AnonymousFunctionNodeFactory
         }
 
         $phpCode = '<?php ' . $expr->value . ';';
-        $contentNodes = $this->parser->parse($phpCode);
+        $contentNodes = (array) $this->parser->parse($phpCode);
 
         $anonymousFunction = new Closure();
-        if (! $contentNodes[0] instanceof Expression) {
+
+        $firstNode = $contentNodes[0] ?? null;
+        if (! $firstNode instanceof Expression) {
             return null;
         }
 
-        $stmt = $contentNodes[0]->expr;
+        $stmt = $firstNode->expr;
 
         $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node): Node {
             if (! $node instanceof String_) {

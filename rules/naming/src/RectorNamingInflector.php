@@ -13,7 +13,7 @@ final class RectorNamingInflector
      * @var string
      * @see https://regex101.com/r/VqVvke/3
      */
-    private const DATA_INFO_SUFFIX_REGEX = '#^(.+)(Data|Info)$#';
+    private const DATA_INFO_SUFFIX_REGEX = '#^(?<prefix>.+)(?<suffix>Data|Info)$#';
 
     /**
      * @var Inflector
@@ -32,8 +32,9 @@ final class RectorNamingInflector
             return $this->inflector->singularize($name);
         }
 
-        $singularized = $this->inflector->singularize($matches[1]);
-        $uninflectable = $matches[2];
+        $singularized = $this->inflector->singularize($matches['prefix']);
+        $uninflectable = $matches['suffix'];
+
         return $singularized . $uninflectable;
     }
 }

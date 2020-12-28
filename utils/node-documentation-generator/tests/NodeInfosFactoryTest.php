@@ -19,7 +19,7 @@ final class NodeInfosFactoryTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->nodeInfosFactory = self::$container->get(NodeInfosFactory::class);
+        $this->nodeInfosFactory = $this->getService(NodeInfosFactory::class);
     }
 
     public function test(): void

@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\Fixture;
 
-final class WithouAssign
+final class WithoutAssign
 {
     public function run()
     {
@@ -17,7 +17,7 @@ final class WithouAssign
 
 namespace Rector\CodingStyle\Tests\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\Fixture;
 
-final class WithouAssign
+final class WithoutAssign
 {
     public function run()
     {

@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\Php80\NodeResolver;
 
-use PhpParser\Node\Expr;
+use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -28,10 +30,19 @@ final class PromotedPropertyResolver
      */
     private $betterStandardPrinter;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterStandardPrinter $betterStandardPrinter)
-    {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        BetterStandardPrinter $betterStandardPrinter,
+        BetterNodeFinder $betterNodeFinder
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
@@ -46,7 +57,7 @@ final class PromotedPropertyResolver
 
         $propertyPromotionCandidates = [];
         foreach ($class->getProperties() as $property) {
-            if (count((array) $property->props) !== 1) {
+            if (count($property->props) !== 1) {
                 continue;
             }
 
@@ -66,7 +77,10 @@ final class PromotedPropertyResolver
         ClassMethod $constructClassMethod
     ): ?PropertyPromotionCandidate {
         $onlyProperty = $property->props[0];
+
         $propertyName = $this->nodeNameResolver->getName($onlyProperty);
+
+        $firstParamAsVariable = $this->resolveFirstParamUses($constructClassMethod);
 
         // match property name to assign in constructor
         foreach ((array) $constructClassMethod->stmts as $stmt) {
@@ -87,8 +101,17 @@ final class PromotedPropertyResolver
             // @todo 2. is default value
             $assignedExpr = $assign->expr;
 
+            if (! $assignedExpr instanceof Variable) {
+                continue;
+            }
+
             $matchedParam = $this->matchClassMethodParamByAssignedVariable($constructClassMethod, $assignedExpr);
             if ($matchedParam === null) {
+                continue;
+            }
+
+            // is param used above assign?
+            if ($this->isParamUsedBeforeAssign($assignedExpr, $firstParamAsVariable)) {
                 continue;
             }
 
@@ -100,10 +123,10 @@ final class PromotedPropertyResolver
 
     private function matchClassMethodParamByAssignedVariable(
         ClassMethod $classMethod,
-        Expr $assignedExpr
+        Variable $variable
     ): ?Param {
         foreach ($classMethod->params as $param) {
-            if (! $this->betterStandardPrinter->areNodesEqual($assignedExpr, $param->var)) {
+            if (! $this->betterStandardPrinter->areNodesEqual($variable, $param->var)) {
                 continue;
             }
 
@@ -111,5 +134,49 @@ final class PromotedPropertyResolver
         }
 
         return null;
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private function resolveFirstParamUses(ClassMethod $classMethod): array
+    {
+        $paramByFirstUsage = [];
+        foreach ($classMethod->params as $param) {
+            $paramName = $this->nodeNameResolver->getName($param);
+
+            $firstParamVariable = $this->betterNodeFinder->findFirst($classMethod->stmts, function (Node $node) use (
+                $paramName
+            ): bool {
+                if (! $node instanceof Variable) {
+                    return false;
+                }
+
+                return $this->nodeNameResolver->isName($node, $paramName);
+            });
+
+            if ($firstParamVariable === null) {
+                continue;
+            }
+
+            $paramByFirstUsage[$paramName] = $firstParamVariable->getStartTokenPos();
+        }
+
+        return $paramByFirstUsage;
+    }
+
+    /**
+     * @param array<string, int> $firstParamAsVariable
+     */
+    private function isParamUsedBeforeAssign(Variable $variable, array $firstParamAsVariable): bool
+    {
+        $variableName = $this->nodeNameResolver->getName($variable);
+
+        $firstVariablePosition = $firstParamAsVariable[$variableName] ?? null;
+        if ($firstVariablePosition === null) {
+            return false;
+        }
+
+        return $firstVariablePosition < $variable->getStartTokenPos();
     }
 }

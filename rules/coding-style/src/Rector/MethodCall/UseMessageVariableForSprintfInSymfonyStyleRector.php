@@ -20,7 +20,7 @@ final class UseMessageVariableForSprintfInSymfonyStyleRector extends AbstractRec
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Decouple $message property from sprintf() calls in $this->smyfonyStyle->method()',
+            'Decouple $message property from sprintf() calls in $this->symfonyStyle->method()',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

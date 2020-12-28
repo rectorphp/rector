@@ -200,8 +200,10 @@ CODE_SAMPLE
         if ($this->isMoreSpecificArrayTypeOverride($newType, $classMethod)) {
             return true;
         }
-
-        return $newType instanceof ConstantArrayType && count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
+        if (! $newType instanceof ConstantArrayType) {
+            return false;
+        }
+        return count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
     }
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool

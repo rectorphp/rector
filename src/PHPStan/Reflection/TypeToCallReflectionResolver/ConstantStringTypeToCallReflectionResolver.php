@@ -26,7 +26,7 @@ final class ConstantStringTypeToCallReflectionResolver implements TypeToCallRefl
      *
      * @var string
      */
-    private const STATIC_METHOD_REGEX = '#^([a-zA-Z_\\x7f-\\xff\\\\][a-zA-Z0-9_\\x7f-\\xff\\\\]*)::([a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)\\z#';
+    private const STATIC_METHOD_REGEX = '#^(?<class>[a-zA-Z_\\x7f-\\xff\\\\][a-zA-Z0-9_\\x7f-\\xff\\\\]*)::(?<method>[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)\\z#';
 
     /**
      * @var ReflectionProvider
@@ -63,15 +63,15 @@ final class ConstantStringTypeToCallReflectionResolver implements TypeToCallRefl
             return null;
         }
 
-        if (! $this->reflectionProvider->hasClass($matches[1])) {
+        if (! $this->reflectionProvider->hasClass($matches['class'])) {
             return null;
         }
 
-        $classReflection = $this->reflectionProvider->getClass($matches[1]);
-        if (! $classReflection->hasMethod($matches[2])) {
+        $classReflection = $this->reflectionProvider->getClass($matches['class']);
+        if (! $classReflection->hasMethod($matches['method'])) {
             return null;
         }
 
-        return $classReflection->getMethod($matches[2], $classMemberAccessAnswerer);
+        return $classReflection->getMethod($matches['method'], $classMemberAccessAnswerer);
     }
 }

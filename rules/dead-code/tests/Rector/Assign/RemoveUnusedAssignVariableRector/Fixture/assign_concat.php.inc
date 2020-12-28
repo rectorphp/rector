@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedAssignVariableRector\Fixture;
 
-class AssignConCat
+class AssignConcat
 {
     public function run()
     {
@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedAssignVariableRector\Fixture;
 
-class AssignConCat
+class AssignConcat
 {
     public function run()
     {

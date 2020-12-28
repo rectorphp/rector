@@ -59,14 +59,11 @@ abstract class AbstractMatcher implements MatcherInterface
             return new VariableAndCallForeach($variable, $call, $variableName, $functionLike);
         }
 
-        if ($node instanceof Assign) {
-            return new VariableAndCallAssign($variable, $call, $node, $variableName, $functionLike);
-        }
-
-        return null;
+        return new VariableAndCallAssign($variable, $call, $node, $variableName, $functionLike);
     }
 
     /**
+     * @param Assign|Foreach_ $node
      * @return FuncCall|StaticCall|MethodCall|null
      */
     protected function matchCall(Node $node): ?Node

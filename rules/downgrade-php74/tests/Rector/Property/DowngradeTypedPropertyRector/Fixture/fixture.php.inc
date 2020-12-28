@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     private string $property;
 }
@@ -13,7 +13,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @var string

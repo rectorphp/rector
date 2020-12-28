@@ -50,7 +50,7 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
             return null;
         }
 
-        if (count((array) $secondArgument->args) > 1) {
+        if (count($secondArgument->args) > 1) {
             return null;
         }
 

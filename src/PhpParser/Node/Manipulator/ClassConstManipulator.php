@@ -110,9 +110,11 @@ final class ClassConstManipulator
         return $this->nodeNameResolver->isName($classLike->extends, '*Enum');
     }
 
-    private function isNameMatch(Node $node, ClassConst $classConst): bool
+    private function isNameMatch(ClassConstFetch $classConstFetch, ClassConst $classConst): bool
     {
-        return $this->nodeNameResolver->getName($node) === 'self::' . $this->nodeNameResolver->getName($classConst)
-            || $this->nodeNameResolver->getName($node) === 'static::' . $this->nodeNameResolver->getName($classConst);
+        $selfConstantName = 'self::' . $this->nodeNameResolver->getName($classConst);
+        $staticConstantName = 'static::' . $this->nodeNameResolver->getName($classConst);
+
+        return $this->nodeNameResolver->isNames($classConstFetch, [$selfConstantName, $staticConstantName]);
     }
 }

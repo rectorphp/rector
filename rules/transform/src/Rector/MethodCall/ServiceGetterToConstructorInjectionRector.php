@@ -138,6 +138,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
+            return null;
+        }
+
         if (! $this->isNonAnonymousClass($classLike)) {
             return null;
         }

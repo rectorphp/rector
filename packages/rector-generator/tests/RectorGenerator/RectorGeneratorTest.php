@@ -47,11 +47,11 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->templateVariablesFactory = self::$container->get(TemplateVariablesFactory::class);
-        $this->templateFinder = self::$container->get(TemplateFinder::class);
-        $this->fileGenerator = self::$container->get(FileGenerator::class);
+        $this->templateVariablesFactory = $this->getService(TemplateVariablesFactory::class);
+        $this->templateFinder = $this->getService(TemplateFinder::class);
+        $this->fileGenerator = $this->getService(FileGenerator::class);
 
-        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
+        $this->smartFileSystem = $this->getService(SmartFileSystem::class);
     }
 
     protected function tearDown(): void

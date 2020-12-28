@@ -10,7 +10,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
@@ -78,8 +77,10 @@ CODE_SAMPLE
         if ($this->shouldSkipClass($classLike)) {
             return null;
         }
-
-        if ($node->stmts === null || count((array) $node->stmts) !== 1) {
+        if ($node->stmts === null) {
+            return null;
+        }
+        if (count($node->stmts) !== 1) {
             return null;
         }
 
@@ -118,18 +119,6 @@ CODE_SAMPLE
         return $classLike->extends === null;
     }
 
-    /**
-     * @param Node|Expression $node
-     */
-    private function unwrapExpression(Node $node): Node
-    {
-        if ($node instanceof Expression) {
-            return $node->expr;
-        }
-
-        return $node;
-    }
-
     private function isMethodReturnType(ClassMethod $classMethod, string $type): bool
     {
         if ($classMethod->returnType === null) {
@@ -157,10 +146,10 @@ CODE_SAMPLE
         return null;
     }
 
-    private function hasRequiredAnnotation(Node $node): bool
+    private function hasRequiredAnnotation(ClassMethod $classMethod): bool
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return false;
         }

@@ -1,0 +1,40 @@
+name: Along PHPStan
+
+on: [pull_request, push]
+
+jobs:
+    along_phpstan:
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php_version: ['7.3', '7.4', '8.0']
+
+        name: "PHP ${{ matrix.php_version }}"
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php_version }}
+                    coverage: none
+
+            -   run: |
+                    mkdir standalone
+                    cd standalone
+                    # wait for deploy to packagist
+                    sleep 60
+
+            -   run: |
+                    cd standalone
+                    # run
+                    composer require rector/rector-prefixed:dev-master --dev --ansi
+                    composer require phpstan/phpstan --dev --ansi
+
+            -
+                run: |
+                    cd standalone
+                    vendor/bin/rector -h --ansi
+                    vendor/bin/phpstan -h --ansi

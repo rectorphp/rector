@@ -61,6 +61,14 @@ CODE_SAMPLE
 
         // special case for fluent methods
         foreach ($this->nodesToRemoveCollector->getNodesToRemove() as $key => $nodeToRemove) {
+            if (! $node instanceof MethodCall) {
+                continue;
+            }
+
+            if (! $nodeToRemove instanceof MethodCall) {
+                continue;
+            }
+
             // replace chain method call by non-chain method call
             if (! $this->isChainMethodCallNodeToBeRemoved($node, $nodeToRemove)) {
                 continue;
@@ -68,7 +76,6 @@ CODE_SAMPLE
 
             $this->nodesToRemoveCollector->unset($key);
 
-            /** @var MethodCall $node */
             $methodName = $this->getName($node->name);
 
             /** @var MethodCall $nestedMethodCall */
@@ -106,21 +113,21 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isChainMethodCallNodeToBeRemoved(Node $node, Node $nodeToRemove): bool
-    {
-        if (! $nodeToRemove instanceof MethodCall) {
+    private function isChainMethodCallNodeToBeRemoved(
+        MethodCall $mainMethodCall,
+        MethodCall $toBeRemovedMethodCall
+    ): bool {
+        if (! $mainMethodCall instanceof MethodCall) {
+            return false;
+        }
+        if (! $mainMethodCall->var instanceof MethodCall) {
+            return false;
+        }
+        if ($toBeRemovedMethodCall !== $mainMethodCall->var) {
             return false;
         }
 
-        if (! $node instanceof MethodCall || ! $node->var instanceof MethodCall) {
-            return false;
-        }
-
-        if ($nodeToRemove !== $node->var) {
-            return false;
-        }
-
-        $methodName = $this->getName($node->name);
+        $methodName = $this->getName($mainMethodCall->name);
 
         return $methodName !== null;
     }

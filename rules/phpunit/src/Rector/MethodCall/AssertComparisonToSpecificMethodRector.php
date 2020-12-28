@@ -6,6 +6,7 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Equal;
@@ -153,17 +154,17 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         $node->args = $this->appendArgs($newArgs, $oldArguments);
     }
 
-    private function isConstantValue(Node $node): bool
+    private function isConstantValue(Expr $expr): bool
     {
-        $nodeClass = get_class($node);
+        $nodeClass = get_class($expr);
         if (in_array($nodeClass, [Array_::class, ConstFetch::class], true)) {
             return true;
         }
 
-        if (is_subclass_of($node, Scalar::class)) {
+        if (is_subclass_of($expr, Scalar::class)) {
             return true;
         }
 
-        return $this->isVariableName($node, 'exp*');
+        return $this->isVariableName($expr, 'exp*');
     }
 }

@@ -23,8 +23,8 @@ use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class ExpectedNameResolver
 {
@@ -133,10 +133,6 @@ final class ExpectedNameResolver
         }
 
         $className = $this->nodeNameResolver->getName($new->class);
-        if ($className === null) {
-            return null;
-        }
-
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($className);
 
         $expectedName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);

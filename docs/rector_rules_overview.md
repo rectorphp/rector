@@ -1,4 +1,4 @@
-# 639 Rules Overview
+# 653 Rules Overview
 
 <br>
 
@@ -12,9 +12,9 @@
 
 - [Carbon](#carbon) (2)
 
-- [CodeQuality](#codequality) (62)
+- [CodeQuality](#codequality) (63)
 
-- [CodingStyle](#codingstyle) (33)
+- [CodingStyle](#codingstyle) (34)
 
 - [DeadCode](#deadcode) (41)
 
@@ -28,17 +28,19 @@
 
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 
-- [Downgrade](#downgrade) (1)
+- [DowngradePhp70](#downgradephp70) (2)
 
-- [DowngradePhp71](#downgradephp71) (7)
+- [DowngradePhp71](#downgradephp71) (9)
 
-- [DowngradePhp72](#downgradephp72) (2)
+- [DowngradePhp72](#downgradephp72) (3)
 
-- [DowngradePhp73](#downgradephp73) (3)
+- [DowngradePhp73](#downgradephp73) (4)
 
-- [DowngradePhp74](#downgradephp74) (9)
+- [DowngradePhp74](#downgradephp74) (10)
 
-- [DowngradePhp80](#downgradephp80) (10)
+- [DowngradePhp80](#downgradephp80) (12)
+
+- [EarlyReturn](#earlyreturn) (6)
 
 - [FileSystemRector](#filesystemrector) (1)
 
@@ -102,7 +104,7 @@
 
 - [Php71](#php71) (9)
 
-- [Php72](#php72) (11)
+- [Php72](#php72) (10)
 
 - [Php73](#php73) (10)
 
@@ -128,13 +130,21 @@
 
 - [Restoration](#restoration) (9)
 
-- [SOLID](#solid) (14)
+- [SOLID](#solid) (9)
 
 - [Sensio](#sensio) (3)
 
 - [StrictCodeQuality](#strictcodequality) (2)
 
-- [Symfony](#symfony) (34)
+- [Symfony](#symfony) (7)
+
+- [Symfony2](#symfony2) (3)
+
+- [Symfony3](#symfony3) (12)
+
+- [Symfony4](#symfony4) (12)
+
+- [Symfony5](#symfony5) (4)
 
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 
@@ -305,12 +315,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
-                'ValueObjectInterfaceClassName',
-            ],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
-                'Search',
-            ],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -1219,7 +1225,7 @@ Change OR, AND to ||, && with more common understanding
 
 Move out method call inside If condition
 
-- class: `Rector\CodeQuality\Rector\If_\MoveOutMethodCallInsideIfConditionRector`
+- class: `Rector\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector`
 
 ```diff
 -if ($obj->run($arg) === 1) {
@@ -1776,6 +1782,19 @@ Change foreach with unused `$value` but only `$key,` to `array_keys()`
 
 <br>
 
+### UnwrapSprintfOneArgumentRector
+
+unwrap `sprintf()` with one argument
+
+- class: `Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector`
+
+```diff
+-echo sprintf('value');
++echo 'value';
+```
+
+<br>
+
 ### UseIdenticalOverEqualWithSameTypeRector
 
 Use ===/!== over ==/!=, it values have the same type
@@ -2192,6 +2211,27 @@ Changes negate of empty comparison of nullable value to explicit === or !== comp
 
 <br>
 
+### PostIncDecToPreIncDecRector
+
+Use ++$value or --$value  instead of `$value++` or `$value--`
+
+- class: `Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector`
+
+```diff
+ class SomeClass
+ {
+     public function run($value = 1)
+     {
+-        $value++; echo $value;
+-        $value--; echo $value;
++        ++$value; echo $value;
++        --$value; echo $value;
+     }
+ }
+```
+
+<br>
+
 ### PreferThisOrSelfMethodCallRector
 
 Changes `$this->...` and static:: to self:: or vise versa for given types
@@ -2313,7 +2353,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -2479,7 +2519,7 @@ Use ++ increment instead of `$var += 1`
      public function run()
      {
 -        $style += 1;
-+        ++$style
++        ++$style;
      }
  }
 ```
@@ -4834,39 +4874,47 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 
 <br>
 
-## Downgrade
+## DowngradePhp70
 
-### ChangePhpVersionInPlatformCheckRector
+### DowngradeTypeParamDeclarationRector
 
-Change `vendor/composer/platform_check.php` to desired minimal PHP version
+Remove the type params, add `@param` tags instead
 
-:wrench: **configure it!**
-
-- class: `Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector`
-
-```php
-use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ChangePhpVersionInPlatformCheckRector::class)
-        ->call('configure', [[
-            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70100,
-        ]]);
-};
-```
-
-↓
+- class: `Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeParamDeclarationRector`
 
 ```diff
- $issues = [];
+ class SomeClass
+ {
+-    public function run(string $input)
++    /**
++     * @param string $input
++     */
++    public function run($input)
+     {
+         // do something
+     }
+ }
+```
 
--if (!(PHP_VERSION_ID >= 70300)) {
--    $issues[] = 'Your Composer dependencies require a PHP version ">= 7.3.0". You are running ' . PHP_VERSION  .  '.';
-+if (!(PHP_VERSION_ID >= 70100)) {
-+    $issues[] = 'Your Composer dependencies require a PHP version ">= 7.1.0". You are running ' . PHP_VERSION  .  '.';
+<br>
+
+### DowngradeTypeReturnDeclarationRector
+
+Remove returning types, add a `@return` tag instead
+
+- class: `Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector`
+
+```diff
+ class SomeClass
+ {
+-    public function getResponse(): string
++    /**
++     * @return string
++     */
++    public function getResponse()
+     {
+         return 'Hello world';
+     }
  }
 ```
 
@@ -4934,6 +4982,23 @@ Remove returning iterable pseud type, add a `@return` tag instead
          // do something
      }
  }
+```
+
+<br>
+
+### DowngradeNegativeStringOffsetToStrlenRector
+
+Downgrade negative string offset to `strlen`
+
+- class: `Rector\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector`
+
+```diff
+-echo 'abcdef'[-2];
+-echo strpos('aabbcc', 'b', -3);
+-echo strpos($var, 'b', -3);
++echo 'abcdef'[strlen('abcdef') - 2];
++echo strpos('aabbcc', 'b', strlen('aabbcc') - 3);
++echo strpos($var, 'b', strlen($var) - 3);
 ```
 
 <br>
@@ -5007,7 +5072,7 @@ Downgrade single one | separated to multi catch exception
 
 ### DowngradeVoidTypeReturnDeclarationRector
 
-Remove the 'PHPStan\Type\VoidType' function type, add a `@return` tag instead
+Remove "void" return type, add a `"@return` void" tag instead
 
 - class: `Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector`
 
@@ -5022,6 +5087,19 @@ Remove the 'PHPStan\Type\VoidType' function type, add a `@return` tag instead
      {
      }
  }
+```
+
+<br>
+
+### SymmetricArrayDestructuringToListRector
+
+Downgrade Symmetric array destructuring to `list()` function
+
+- class: `Rector\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector`
+
+```diff
+-[$id1, $name1] = $data;
++list($id1, $name1) = $data;
 ```
 
 <br>
@@ -5049,9 +5127,42 @@ Remove the 'PHPStan\Type\ObjectWithoutClassType' param type, add a `@param` tag 
 
 <br>
 
+### DowngradeParameterTypeWideningRector
+
+Remove argument type declarations in the parent and in all child classes, whenever some child class removes it
+
+- class: `Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector`
+
+```diff
+ interface A
+ {
+-    public function test(array $input);
++    /**
++     * @param array $input
++     */
++    public function test($input);
+ }
+
+ class B implements A
+ {
+     public function test($input){} // type omitted for $input
+ }
+
+ class C implements A
+ {
+-    public function test(array $input){}
++    /**
++     * @param array $input
++     */
++    public function test($input);
+ }
+```
+
+<br>
+
 ### DowngradeReturnObjectTypeDeclarationRector
 
-Remove the 'PHPStan\Type\ObjectWithoutClassType' function type, add a `@return` tag instead
+Remove "object" return type, add a `"@return` object" tag instead
 
 - class: `Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector`
 
@@ -5142,6 +5253,19 @@ Remove trailing commas in function calls
          );
      }
  }
+```
+
+<br>
+
+### SetCookieOptionsArrayToArgumentsRector
+
+Convert `setcookie` option array to arguments
+
+- class: `Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector`
+
+```diff
+-setcookie('name', $value, ['expires' => 360]);
++setcookie('name', $value, 360);
 ```
 
 <br>
@@ -5272,6 +5396,21 @@ Make method return same type as parent
 +    public function covariantReturnTypes(): ParentType
      { /* … */ }
  }
+```
+
+<br>
+
+### DowngradeFreadFwriteFalsyToNegationRector
+
+Changes `fread()` or `fwrite()` compare to false to negation check
+
+- class: `Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector`
+
+```diff
+-fread($handle, $length) === false;
+-fwrite($fp, '1') === false;
++!fread($handle, $length);
++!fwrite($fp, '1');
 ```
 
 <br>
@@ -5438,6 +5577,21 @@ Downgrade catch () without variable to one
 
 <br>
 
+### DowngradeNullsafeToTernaryOperatorRector
+
+Change nullsafe operator to ternary operator rector
+
+- class: `Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector`
+
+```diff
+-$dateAsString = $booking->getStartDate()?->asDateTimeString();
+-$dateAsString = $booking->startDate?->dateTimeString;
++$dateAsString = $booking->getStartDate() ? $booking->getStartDate()->asDateTimeString() : null;
++$dateAsString = $booking->startDate ? $booking->startDate->dateTimeString : null;
+```
+
+<br>
+
 ### DowngradeParamMixedTypeDeclarationRector
 
 Remove the 'PHPStan\Type\MixedType' param type, add a `@param` tag instead
@@ -5482,7 +5636,7 @@ Change constructor property promotion to property asssign
 
 ### DowngradeReturnMixedTypeDeclarationRector
 
-Remove the 'PHPStan\Type\MixedType' function type, add a `@return` tag instead
+Remove "mixed" return type, add a `"@return` mixed" tag instead
 
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector`
 
@@ -5507,7 +5661,7 @@ Remove the 'PHPStan\Type\MixedType' function type, add a `@return` tag instead
 
 ### DowngradeReturnStaticTypeDeclarationRector
 
-Remove the 'PHPStan\Type\StaticType' function type, add a `@return` tag instead
+Remove "static" return type, add a `"@return` `$this"` tag instead
 
 - class: `Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector`
 
@@ -5522,6 +5676,36 @@ Remove the 'PHPStan\Type\StaticType' function type, add a `@return` tag instead
      {
          return new static();
      }
+ }
+```
+
+<br>
+
+### DowngradeTrailingCommasInParamUseRector
+
+Remove trailing commas in param or use list
+
+- class: `Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector`
+
+```diff
+ class SomeClass
+ {
+-    public function __construct(string $value1, string $value2,)
++    public function __construct(string $value1, string $value2)
+     {
+-        function (string $value1, string $value2,) {
++        function (string $value1, string $value2) {
+         };
+
+-        function () use ($value1, $value2,) {
++        function () use ($value1, $value2) {
+         };
+     }
+ }
+
+-function inFunction(string $value1, string $value2,)
++function inFunction(string $value1, string $value2)
+ {
  }
 ```
 
@@ -5588,6 +5772,172 @@ Removes union type property type definition, adding `@var` annotations instead.
 +    * @var string|int
 +    */
 +    private $property;
+ }
+```
+
+<br>
+
+## EarlyReturn
+
+### ChangeAndIfToEarlyReturnRector
+
+Changes if && to early return
+
+- class: `Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector`
+
+```diff
+ class SomeClass
+ {
+     public function canDrive(Car $car)
+     {
+-        if ($car->hasWheels && $car->hasFuel) {
+-            return true;
++        if (!$car->hasWheels) {
++            return false;
+         }
+
+-        return false;
++        if (!$car->hasFuel) {
++            return false;
++        }
++
++        return true;
+     }
+ }
+```
+
+<br>
+
+### ChangeIfElseValueAssignToEarlyReturnRector
+
+Change if/else value to early return
+
+- class: `Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         if ($this->hasDocBlock($tokens, $index)) {
+-            $docToken = $tokens[$this->getDocBlockIndex($tokens, $index)];
+-        } else {
+-            $docToken = null;
++            return $tokens[$this->getDocBlockIndex($tokens, $index)];
+         }
+-
+-        return $docToken;
++        return null;
+     }
+ }
+```
+
+<br>
+
+### ChangeNestedForeachIfsToEarlyContinueRector
+
+Change nested ifs to foreach with continue
+
+- class: `Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $items = [];
+
+         foreach ($values as $value) {
+-            if ($value === 5) {
+-                if ($value2 === 10) {
+-                    $items[] = 'maybe';
+-                }
++            if ($value !== 5) {
++                continue;
+             }
++            if ($value2 !== 10) {
++                continue;
++            }
++
++            $items[] = 'maybe';
+         }
+     }
+ }
+```
+
+<br>
+
+### ChangeNestedIfsToEarlyReturnRector
+
+Change nested ifs to early return
+
+- class: `Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        if ($value === 5) {
+-            if ($value2 === 10) {
+-                return 'yes';
+-            }
++        if ($value !== 5) {
++            return 'no';
++        }
++
++        if ($value2 === 10) {
++            return 'yes';
+         }
+
+         return 'no';
+     }
+ }
+```
+
+<br>
+
+### RemoveAlwaysElseRector
+
+Split if statement, when if condition always break execution flow
+
+- class: `Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector`
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+         if ($value) {
+             throw new \InvalidStateException;
+-        } else {
+-            return 10;
+         }
++
++        return 10;
+     }
+ }
+```
+
+<br>
+
+### ReturnBinaryAndToEarlyReturnRector
+
+Changes Single return of && && to early returns
+
+- class: `Rector\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector`
+
+```diff
+ class SomeClass
+ {
+     public function accept($something, $somethingelse)
+     {
+-        return $something && $somethingelse;
++        if (!$something) {
++            return false;
++        }
++        return (bool) $somethingelse;
+     }
  }
 ```
 
@@ -6001,8 +6351,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeClass' => [
                     'getNode' => 'getNodes',
                 ],
-],
-                    ]]);
+            ],
+        ]]);
 };
 ```
 
@@ -6093,8 +6443,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'FrameworkClass' => [
                     'someProperty' => 'protected',
                 ],
-],
-                    ]]);
+            ],
+        ]]);
 };
 ```
 
@@ -6229,7 +6579,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(InjectAnnotationClassRector::class)
         ->call('configure', [[
-            InjectAnnotationClassRector::ANNOTATION_CLASSES => ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject'],
+            InjectAnnotationClassRector::ANNOTATION_CLASSES => [
+                'DI\Annotation\Inject',
+                'JMS\DiExtraBundle\Annotation\Inject',
+            ],
         ]]);
 };
 ```
@@ -6312,8 +6665,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 '$methodCallRemoverArgument' => [
                     'Car' => 'something',
                 ],
-],
-                    ]]);
+            ],
+        ]]);
 };
 ```
 
@@ -6393,8 +6746,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'class' => 'MyClassFactory',
                     'method' => 'create',
                 ],
-],
-                    ]]);
+            ],
+        ]]);
 };
 ```
 
@@ -6700,6 +7053,7 @@ Replaces constant by value
 - class: `Rector\Generic\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector`
 
 ```php
+use Nette\Configurator;
 use Rector\Generic\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -6709,12 +7063,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameClassConstantsUseToStringsRector::class)
         ->call('configure', [[
             RenameClassConstantsUseToStringsRector::OLD_CONSTANTS_TO_NEW_VALUES_BY_TYPE => [
-                'Nette\Configurator' => [
+                Configurator::class => [
                     'DEVELOPMENT' => 'development',
                     'PRODUCTION' => 'production',
                 ],
-],
-                    ]]);
+            ],
+        ]]);
 };
 ```
 
@@ -7240,10 +7594,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => [
-                'pat*/*/?ame.php',
-                'somepath/?ame.php',
-            ],
+            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
         ]]);
 };
 ```
@@ -7345,8 +7696,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeContainer' => [
                     'set' => 'addService',
                 ],
-],
-                    ]]);
+            ],
+        ]]);
 };
 ```
 
@@ -7373,8 +7724,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'SomeContainer' => [
                     'get' => 'getService',
                 ],
-],
-                    ]]);
+            ],
+        ]]);
 };
 ```
 
@@ -8786,7 +9137,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class SomeFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options)
     {
         $formBuilder->add('name', TextType::class, [
             'label' => 'Your name',
@@ -9224,8 +9575,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             OrderPublicInterfaceMethodRector::METHOD_ORDER_BY_INTERFACES => [
                 'FoodRecipeInterface' => ['getDescription', 'process'],
-],
-                    ]]);
+            ],
+        ]]);
 };
 ```
 
@@ -9531,7 +9882,7 @@ Remove `setTempDir()` on PHPExcel_Writer_Excel5
 
 Change various `@var` annotation formats to one PHPStorm understands
 
-- class: `Rector\PHPStan\Rector\Assign\PHPStormVarAnnotationRector`
+- class: `Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector`
 
 ```diff
 -$config = 5;
@@ -9546,7 +9897,7 @@ Change various `@var` annotation formats to one PHPStorm understands
 
 Removes recasting of the same type
 
-- class: `Rector\PHPStan\Rector\Cast\RecastingRemovalRector`
+- class: `Rector\DeadCode\Rector\Cast\RecastingRemovalRector`
 
 ```diff
  $string = '';
@@ -9564,7 +9915,7 @@ Removes recasting of the same type
 
 Removes non-existing `@var` annotations above the code
 
-- class: `Rector\PHPStan\Rector\Node\RemoveNonExistingVarAnnotationRector`
+- class: `Rector\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector`
 
 ```diff
  class SomeClass
@@ -10562,7 +10913,7 @@ Change multiple classes in one file to standalone PSR-4 classes.
 
 ### NormalizeNamespaceByPSR4ComposerAutoloadRector
 
-Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with `Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector`
+Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with "Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector"
 
 - class: `Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector`
 
@@ -11341,7 +11692,7 @@ Changes `count()` on null to safe ternary check
 ```diff
  $values = null;
 -$count = count($values);
-+$count = is_array($values) || $values instanceof Countable ? count($values) : 0;
++$count = count((array) $values);
 ```
 
 <br>
@@ -11469,19 +11820,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ## Php72
-
-### BarewordStringRector
-
-Changes unquoted non-existing constants to strings
-
-- class: `Rector\Php72\Rector\ConstFetch\BarewordStringRector`
-
-```diff
--var_dump(VAR);
-+var_dump("VAR");
-```
-
-<br>
 
 ### CreateFunctionToAnonymousFunctionRector
 
@@ -12265,23 +12603,13 @@ Change simple property init and assign to constructor promotion
 ```diff
  class SomeClass
  {
--    public float $x;
--    public float $y;
--    public float $z;
+-    public float $someVariable;
 -
-     public function __construct(
--        float $x = 0.0,
--        float $y = 0.0,
--        float $z = 0.0
--    ) {
--        $this->x = $x;
--        $this->y = $y;
--        $this->z = $z;
--    }
-+        public float $x = 0.0,
-+        public float $y = 0.0,
-+        public float $z = 0.0,
-+    ) {}
+-    public function __construct(float $someVariable = 0.0)
++    public function __construct(private float $someVariable = 0.0)
+     {
+-        $this->someVariable = $someVariable;
+     }
  }
 ```
 
@@ -12307,7 +12635,7 @@ Changes method visibility from final private to only private
 
 ### GetDebugTypeRector
 
-Change ternary type resolve to `get_debug_type()`
+Change ternary type `resolve` to `get_debug_type()`
 
 - class: `Rector\Php80\Rector\Ternary\GetDebugTypeRector`
 
@@ -12526,7 +12854,7 @@ Change docs types to union types, where possible (properties are covered by Type
 
 Change global `$variables` to private properties
 
-- class: `Rector\PhpDeglobalize\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector`
+- class: `Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector`
 
 ```diff
  class SomeClass
@@ -13223,7 +13551,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 
@@ -14077,7 +14405,7 @@ Rename file to respect class name
 
 Add false default to bool properties, to prevent null compare errors
 
-- class: `Rector\SOLID\Rector\Property\AddFalseDefaultToBoolPropertyRector`
+- class: `Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector`
 
 ```diff
  class SomeClass
@@ -14092,129 +14420,11 @@ Add false default to bool properties, to prevent null compare errors
 
 <br>
 
-### ChangeAndIfToEarlyReturnRector
-
-Changes if && to early return
-
-- class: `Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector`
-
-```diff
- class SomeClass
- {
-     public function canDrive(Car $car)
-     {
--        if ($car->hasWheels && $car->hasFuel) {
--            return true;
-+        if (!$car->hasWheels) {
-+            return false;
-         }
-
--        return false;
-+        if (!$car->hasFuel) {
-+            return false;
-+        }
-+
-+        return true;
-     }
- }
-```
-
-<br>
-
-### ChangeIfElseValueAssignToEarlyReturnRector
-
-Change if/else value to early return
-
-- class: `Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector`
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         if ($this->hasDocBlock($tokens, $index)) {
--            $docToken = $tokens[$this->getDocBlockIndex($tokens, $index)];
--        } else {
--            $docToken = null;
-+            return $tokens[$this->getDocBlockIndex($tokens, $index)];
-         }
--
--        return $docToken;
-+        return null;
-     }
- }
-```
-
-<br>
-
-### ChangeNestedForeachIfsToEarlyContinueRector
-
-Change nested ifs to foreach with continue
-
-- class: `Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector`
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $items = [];
-
-         foreach ($values as $value) {
--            if ($value === 5) {
--                if ($value2 === 10) {
--                    $items[] = 'maybe';
--                }
-+            if ($value !== 5) {
-+                continue;
-             }
-+            if ($value2 !== 10) {
-+                continue;
-+            }
-+
-+            $items[] = 'maybe';
-         }
-     }
- }
-```
-
-<br>
-
-### ChangeNestedIfsToEarlyReturnRector
-
-Change nested ifs to early return
-
-- class: `Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector`
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        if ($value === 5) {
--            if ($value2 === 10) {
--                return 'yes';
--            }
-+        if ($value !== 5) {
-+            return 'no';
-+        }
-+
-+        if ($value2 === 10) {
-+            return 'yes';
-         }
-
-         return 'no';
-     }
- }
-```
-
-<br>
-
 ### ChangeReadOnlyPropertyWithDefaultValueToConstantRector
 
 Change property with read only status with default value to constant
 
-- class: `Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
+- class: `Rector\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
 
 ```diff
  class SomeClass
@@ -14244,7 +14454,7 @@ Change property with read only status with default value to constant
 
 Change variable with read only status with default value to constant
 
-- class: `Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector`
+- class: `Rector\Privatization\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector`
 
 ```diff
  class SomeClass
@@ -14277,7 +14487,7 @@ Change variable with read only status with default value to constant
 
 Finalize every class that has no children
 
-- class: `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`
+- class: `Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector`
 
 ```diff
 -class FirstClass
@@ -14301,7 +14511,7 @@ Finalize every class that has no children
 
 Classes that have no children nor are used, should have abstract
 
-- class: `Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector`
+- class: `Rector\Privatization\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector`
 
 ```diff
  class SomeClass extends PossibleAbstractClass
@@ -14320,7 +14530,7 @@ Classes that have no children nor are used, should have abstract
 
 Move variable declaration near its reference
 
-- class: `Rector\SOLID\Rector\Variable\MoveVariableDeclarationNearReferenceRector`
+- class: `Rector\CodeQualityStrict\Rector\Variable\MoveVariableDeclarationNearReferenceRector`
 
 ```diff
 -$var = 1;
@@ -14338,10 +14548,10 @@ Move dependency passed to all children to parent as `@inject/@required` dependen
 
 :wrench: **configure it!**
 
-- class: `Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector`
+- class: `Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector`
 
 ```php
-use Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector;
+use Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -14391,35 +14601,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### RemoveAlwaysElseRector
-
-Split if statement, when if condition always break execution flow
-
-- class: `Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector`
-
-```diff
- class SomeClass
- {
-     public function run($value)
-     {
-         if ($value) {
-             throw new \InvalidStateException;
--        } else {
--            return 10;
-         }
-+
-+        return 10;
-     }
- }
-```
-
-<br>
-
 ### RepeatedLiteralToClassConstantRector
 
 Replace repeated strings with constant
 
-- class: `Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector`
+- class: `Rector\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector`
 
 ```diff
  class SomeClass
@@ -14539,7 +14725,7 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
 
 Turn `@param` type to `assert` type
 
-- class: `Rector\StrictCodeQuality\Rector\ClassMethod\ParamTypeToAssertTypeRector`
+- class: `Rector\CodeQualityStrict\Rector\ClassMethod\ParamTypeToAssertTypeRector`
 
 ```diff
  class SomeClass
@@ -14561,7 +14747,7 @@ Turn `@param` type to `assert` type
 
 Turn `@var` inline checks above code to `assert()` of the type
 
-- class: `Rector\StrictCodeQuality\Rector\Stmt\VarInlineAnnotationToAssertRector`
+- class: `Rector\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector`
 
 ```diff
  class SomeClass
@@ -14597,25 +14783,6 @@ Removes Action suffixes from methods in Symfony Controllers
 
 <br>
 
-### AddFlashRector
-
-Turns long flash adding to short helper method in Controller in Symfony
-
-- class: `Rector\Symfony\Rector\MethodCall\AddFlashRector`
-
-```diff
- class SomeController extends Controller
- {
-     public function some(Request $request)
-     {
--        $request->getSession()->getFlashBag()->add("success", "something");
-+        $this->addFlash("success", "something");
-     }
- }
-```
-
-<br>
-
 ### AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector
 
 Use autowire + class name suffix for method with `@required` annotation
@@ -14629,93 +14796,6 @@ Use autowire + class name suffix for method with `@required` annotation
 -    public function foo()
 +    public function autowireSomeClass()
      {
-     }
- }
-```
-
-<br>
-
-### CascadeValidationFormBuilderRector
-
-Change "cascade_validation" option to specific node attribute
-
-- class: `Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector`
-
-```diff
- class SomeController
- {
-     public function someMethod()
-     {
--        $form = $this->createFormBuilder($article, ['cascade_validation' => true])
--            ->add('author', new AuthorType())
-+        $form = $this->createFormBuilder($article)
-+            ->add('author', new AuthorType(), [
-+                'constraints' => new \Symfony\Component\Validator\Constraints\Valid(),
-+            ])
-             ->getForm();
-     }
-
-     protected function createFormBuilder()
-     {
-         return new FormBuilder();
-     }
- }
-```
-
-<br>
-
-### ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector
-
-Rename `type` option to `entry_type` in CollectionType
-
-- class: `Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector`
-
-```diff
- use Symfony\Component\Form\AbstractType;
- use Symfony\Component\Form\FormBuilderInterface;
- use Symfony\Component\Form\Extension\Core\Type\CollectionType;
- use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
- class TaskType extends AbstractType
- {
-     public function buildForm(FormBuilderInterface $builder, array $options)
-     {
-         $builder->add('tags', CollectionType::class, [
--            'type' => ChoiceType::class,
--            'options' => [1, 2, 3],
-+            'entry_type' => ChoiceType::class,
-+            'entry_options' => [1, 2, 3],
-         ]);
-     }
- }
-```
-
-<br>
-
-### ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector
-
-Change type in CollectionType from alias string to class reference
-
-- class: `Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector`
-
-```diff
- use Symfony\Component\Form\AbstractType;
- use Symfony\Component\Form\FormBuilderInterface;
- use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-
- class TaskType extends AbstractType
- {
-     public function buildForm(FormBuilderInterface $builder, array $options)
-     {
-         $builder->add('tags', CollectionType::class, [
--            'type' => 'choice',
-+            'type' => \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class,
-         ]);
-
-         $builder->add('tags', 'collection', [
--            'type' => 'choice',
-+            'type' => \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class,
-         ]);
      }
  }
 ```
@@ -14770,194 +14850,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### ConsoleExceptionToErrorEventConstantRector
-
-Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
-
-- class: `Rector\Symfony\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector`
-
-```diff
--"console.exception"
-+Symfony\Component\Console\ConsoleEvents::ERROR
-```
-
-<br>
-
-```diff
--Symfony\Component\Console\ConsoleEvents::EXCEPTION
-+Symfony\Component\Console\ConsoleEvents::ERROR
-```
-
-<br>
-
-### ConsoleExecuteReturnIntRector
-
-Returns int from Command::execute command
-
-- class: `Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector`
-
-```diff
- class SomeCommand extends Command
- {
--    public function execute(InputInterface $input, OutputInterface $output)
-+    public function execute(InputInterface $input, OutputInterface $output): int
-     {
--        return null;
-+        return 0;
-     }
- }
-```
-
-<br>
-
-### ConstraintUrlOptionRector
-
-Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
-
-- class: `Rector\Symfony\Rector\ConstFetch\ConstraintUrlOptionRector`
-
-```diff
--$constraint = new Url(["checkDNS" => true]);
-+$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);
-```
-
-<br>
-
-### ContainerBuilderCompileEnvArgumentRector
-
-Turns old default value to parameter in `ContainerBuilder->build()` method in DI in Symfony
-
-- class: `Rector\Symfony\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector`
-
-```diff
- use Symfony\Component\DependencyInjection\ContainerBuilder;
-
- $containerBuilder = new ContainerBuilder();
--$containerBuilder->compile();
-+$containerBuilder->compile(true);
-```
-
-<br>
-
-### ContainerGetToConstructorInjectionRector
-
-Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
-
-:wrench: **configure it!**
-
-- class: `Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector`
-
-```php
-use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ContainerGetToConstructorInjectionRector::class)
-        ->call('configure', [[
-            ContainerGetToConstructorInjectionRector::CONTAINER_AWARE_PARENT_TYPES => [
-                'ContainerAwareParentClassName',
-                'ContainerAwareParentCommandClassName',
-                'ThisClassCallsMethodInConstructorClassName',
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
--final class SomeCommand extends ContainerAwareCommand
-+final class SomeCommand extends Command
- {
-+    public function __construct(SomeService $someService)
-+    {
-+        $this->someService = $someService;
-+    }
-+
-     public function someMethod()
-     {
-         // ...
--        $this->getContainer()->get('some_service');
--        $this->container->get('some_service');
-+        $this->someService;
-+        $this->someService;
-     }
- }
-```
-
-<br>
-
-### FormIsValidRector
-
-Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony
-
-- class: `Rector\Symfony\Rector\MethodCall\FormIsValidRector`
-
-```diff
--if ($form->isValid()) {
-+if ($form->isSubmitted() && $form->isValid()) {
- }
-```
-
-<br>
-
-### FormTypeGetParentRector
-
-Turns string Form Type references to their `CONSTANT` alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
-
-- class: `Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector`
-
-```diff
- use Symfony\Component\Form\AbstractType;
-
- class SomeType extends AbstractType
- {
-     public function getParent()
-     {
--        return 'collection';
-+        return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
-     }
- }
-```
-
-<br>
-
-```diff
- use Symfony\Component\Form\AbstractTypeExtension;
-
- class SomeExtension extends AbstractTypeExtension
- {
-     public function getExtendedType()
-     {
--        return 'collection';
-+        return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
-     }
- }
-```
-
-<br>
-
-### FormTypeInstanceToClassConstRector
-
-Changes createForm(new FormType), add(new FormType) to ones with "FormType::class"
-
-- class: `Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector`
-
-```diff
- class SomeController
- {
-     public function action()
-     {
--        $form = $this->createForm(new TeamType, $entity);
-+        $form = $this->createForm(TeamType::class, $entity);
-     }
- }
-```
-
-<br>
-
 ### GetParameterToConstructorInjectionRector
 
 Turns fetching of parameters via `getParameter()` in ContainerAware to constructor injection in Command and Controller in Symfony
@@ -14985,28 +14877,6 @@ Turns fetching of parameters via `getParameter()` in ContainerAware to construct
 
 <br>
 
-### GetRequestRector
-
-Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
-
-- class: `Rector\Symfony\Rector\ClassMethod\GetRequestRector`
-
-```diff
-+use Symfony\Component\HttpFoundation\Request;
-+
- class SomeController
- {
--    public function someAction()
-+    public function someAction(Request $request)
-     {
--        $this->getRequest()->...();
-+        $request->...();
-     }
- }
-```
-
-<br>
-
 ### GetToConstructorInjectionRector
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
@@ -15024,7 +14894,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
+                'SymfonyControllerClassName',
+                'GetTraitClassName',
+            ],
         ]]);
 };
 ```
@@ -15072,21 +14945,256 @@ Make Symfony commands lazy
 
 <br>
 
-### MakeDispatchFirstArgumentEventRector
+### ResponseStatusCodeRector
 
-Make event object a first argument of `dispatch()` method, event name as second
+Turns status code numbers to constants
 
-- class: `Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector`
+- class: `Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector`
 
 ```diff
- use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-
- class SomeClass
+ class SomeController
  {
-     public function run(EventDispatcherInterface $eventDispatcher)
+     public function index()
      {
--        $eventDispatcher->dispatch('event_name', new Event());
-+        $eventDispatcher->dispatch(new Event(), 'event_name');
+         $response = new \Symfony\Component\HttpFoundation\Response();
+-        $response->setStatusCode(200);
++        $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
+
+-        if ($response->getStatusCode() === 200) {}
++        if ($response->getStatusCode() === \Symfony\Component\HttpFoundation\Response::HTTP_OK) {}
+     }
+ }
+```
+
+<br>
+
+## Symfony2
+
+### AddFlashRector
+
+Turns long flash adding to short helper method in Controller in Symfony
+
+- class: `Rector\Symfony2\Rector\MethodCall\AddFlashRector`
+
+```diff
+ class SomeController extends Controller
+ {
+     public function some(Request $request)
+     {
+-        $request->getSession()->getFlashBag()->add("success", "something");
++        $this->addFlash("success", "something");
+     }
+ }
+```
+
+<br>
+
+### ParseFileRector
+
+session > use_strict_mode is true by default and can be removed
+
+- class: `Rector\Symfony2\Rector\StaticCall\ParseFileRector`
+
+```diff
+-session > use_strict_mode: true
++session:
+```
+
+<br>
+
+### RedirectToRouteRector
+
+Turns redirect to route to short helper method in Controller in Symfony
+
+- class: `Rector\Symfony2\Rector\MethodCall\RedirectToRouteRector`
+
+```diff
+-$this->redirect($this->generateUrl("homepage"));
++$this->redirectToRoute("homepage");
+```
+
+<br>
+
+## Symfony3
+
+### CascadeValidationFormBuilderRector
+
+Change "cascade_validation" option to specific node attribute
+
+- class: `Rector\Symfony3\Rector\MethodCall\CascadeValidationFormBuilderRector`
+
+```diff
+ class SomeController
+ {
+     public function someMethod()
+     {
+-        $form = $this->createFormBuilder($article, ['cascade_validation' => true])
+-            ->add('author', new AuthorType())
++        $form = $this->createFormBuilder($article)
++            ->add('author', new AuthorType(), [
++                'constraints' => new \Symfony\Component\Validator\Constraints\Valid(),
++            ])
+             ->getForm();
+     }
+
+     protected function createFormBuilder()
+     {
+         return new FormBuilder();
+     }
+ }
+```
+
+<br>
+
+### ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector
+
+Rename `type` option to `entry_type` in CollectionType
+
+- class: `Rector\Symfony3\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector`
+
+```diff
+ use Symfony\Component\Form\AbstractType;
+ use Symfony\Component\Form\FormBuilderInterface;
+ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
+ class TaskType extends AbstractType
+ {
+     public function buildForm(FormBuilderInterface $builder, array $options)
+     {
+         $builder->add('tags', CollectionType::class, [
+-            'type' => ChoiceType::class,
+-            'options' => [1, 2, 3],
++            'entry_type' => ChoiceType::class,
++            'entry_options' => [1, 2, 3],
+         ]);
+     }
+ }
+```
+
+<br>
+
+### ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector
+
+Change type in CollectionType from alias string to class reference
+
+- class: `Rector\Symfony3\Rector\MethodCall\ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector`
+
+```diff
+ use Symfony\Component\Form\AbstractType;
+ use Symfony\Component\Form\FormBuilderInterface;
+ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+
+ class TaskType extends AbstractType
+ {
+     public function buildForm(FormBuilderInterface $builder, array $options)
+     {
+         $builder->add('tags', CollectionType::class, [
+-            'type' => 'choice',
++            'type' => \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class,
+         ]);
+
+         $builder->add('tags', 'collection', [
+-            'type' => 'choice',
++            'type' => \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class,
+         ]);
+     }
+ }
+```
+
+<br>
+
+### ConsoleExceptionToErrorEventConstantRector
+
+Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
+
+- class: `Rector\Symfony3\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector`
+
+```diff
+-"console.exception"
++Symfony\Component\Console\ConsoleEvents::ERROR
+```
+
+<br>
+
+```diff
+-Symfony\Component\Console\ConsoleEvents::EXCEPTION
++Symfony\Component\Console\ConsoleEvents::ERROR
+```
+
+<br>
+
+### FormTypeGetParentRector
+
+Turns string Form Type references to their `CONSTANT` alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
+
+- class: `Rector\Symfony3\Rector\ClassMethod\FormTypeGetParentRector`
+
+```diff
+ use Symfony\Component\Form\AbstractType;
+
+ class SomeType extends AbstractType
+ {
+     public function getParent()
+     {
+-        return 'collection';
++        return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
+     }
+ }
+```
+
+<br>
+
+```diff
+ use Symfony\Component\Form\AbstractTypeExtension;
+
+ class SomeExtension extends AbstractTypeExtension
+ {
+     public function getExtendedType()
+     {
+-        return 'collection';
++        return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
+     }
+ }
+```
+
+<br>
+
+### FormTypeInstanceToClassConstRector
+
+Changes createForm(new FormType), add(new FormType) to ones with "FormType::class"
+
+- class: `Rector\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector`
+
+```diff
+ class SomeController
+ {
+     public function action()
+     {
+-        $form = $this->createForm(new TeamType, $entity);
++        $form = $this->createForm(TeamType::class, $entity);
+     }
+ }
+```
+
+<br>
+
+### GetRequestRector
+
+Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
+
+- class: `Rector\Symfony3\Rector\ClassMethod\GetRequestRector`
+
+```diff
++use Symfony\Component\HttpFoundation\Request;
++
+ class SomeController
+ {
+-    public function someAction()
++    public function someAction(Request $request)
+     {
+-        $this->getRequest()->...();
++        $request->...();
      }
  }
 ```
@@ -15097,7 +15205,7 @@ Make event object a first argument of `dispatch()` method, event name as second
 
 Merge removed `@Method` annotation to `@Route` one
 
-- class: `Rector\Symfony\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector`
+- class: `Rector\Symfony3\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector`
 
 ```diff
 -use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -15122,7 +15230,7 @@ Merge removed `@Method` annotation to `@Route` one
 
 Turns old option names to new ones in FormTypes in Form in Symfony
 
-- class: `Rector\Symfony\Rector\MethodCall\OptionNameRector`
+- class: `Rector\Symfony3\Rector\MethodCall\OptionNameRector`
 
 ```diff
  $builder = new FormBuilder;
@@ -15132,53 +15240,11 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 
 <br>
 
-### ParseFileRector
-
-session > use_strict_mode is true by default and can be removed
-
-- class: `Rector\Symfony\Rector\StaticCall\ParseFileRector`
-
-```diff
--session > use_strict_mode: true
-+session:
-```
-
-<br>
-
-### ProcessBuilderGetProcessRector
-
-Removes `$processBuilder->getProcess()` calls to `$processBuilder` in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
-
-- class: `Rector\Symfony\Rector\MethodCall\ProcessBuilderGetProcessRector`
-
-```diff
- $processBuilder = new Symfony\Component\Process\ProcessBuilder;
--$process = $processBuilder->getProcess();
--$commamdLine = $processBuilder->getProcess()->getCommandLine();
-+$process = $processBuilder;
-+$commamdLine = $processBuilder->getCommandLine();
-```
-
-<br>
-
-### ProcessBuilderInstanceRector
-
-Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.
-
-- class: `Rector\Symfony\Rector\StaticCall\ProcessBuilderInstanceRector`
-
-```diff
--$processBuilder = Symfony\Component\Process\ProcessBuilder::instance($args);
-+$processBuilder = new Symfony\Component\Process\ProcessBuilder($args);
-```
-
-<br>
-
 ### ReadOnlyOptionToAttributeRector
 
 Change "read_only" option in form to attribute
 
-- class: `Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector`
+- class: `Rector\Symfony3\Rector\MethodCall\ReadOnlyOptionToAttributeRector`
 
 ```diff
  use Symfony\Component\Form\FormBuilderInterface;
@@ -15192,24 +15258,11 @@ Change "read_only" option in form to attribute
 
 <br>
 
-### RedirectToRouteRector
-
-Turns redirect to route to short helper method in Controller in Symfony
-
-- class: `Rector\Symfony\Rector\MethodCall\RedirectToRouteRector`
-
-```diff
--$this->redirect($this->generateUrl("homepage"));
-+$this->redirectToRoute("homepage");
-```
-
-<br>
-
 ### RemoveDefaultGetBlockPrefixRector
 
 Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form
 
-- class: `Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector`
+- class: `Rector\Symfony3\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector`
 
 ```diff
  use Symfony\Component\Form\AbstractType;
@@ -15225,25 +15278,181 @@ Rename `getBlockPrefix()` if it returns the default value - class to underscore,
 
 <br>
 
-### ResponseStatusCodeRector
+### StringFormTypeToClassRector
 
-Turns status code numbers to constants
+Turns string Form Type references to their `CONSTANT` alternatives in FormTypes in Form in Symfony. To enable custom types, add `link` to your container XML `dump` in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"
 
-- class: `Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector`
+- class: `Rector\Symfony3\Rector\MethodCall\StringFormTypeToClassRector`
 
 ```diff
- class SomeController
- {
-     public function index()
-     {
-         $response = new \Symfony\Component\HttpFoundation\Response();
--        $response->setStatusCode(200);
-+        $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
+ $formBuilder = new Symfony\Component\Form\FormBuilder;
+-$formBuilder->add('name', 'form.type.text');
++$formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
+```
 
--        if ($response->getStatusCode() === 200) {}
-+        if ($response->getStatusCode() === \Symfony\Component\HttpFoundation\Response::HTTP_OK) {}
+<br>
+
+## Symfony4
+
+### ConsoleExecuteReturnIntRector
+
+Returns int from Command::execute command
+
+- class: `Rector\Symfony4\Rector\ClassMethod\ConsoleExecuteReturnIntRector`
+
+```diff
+ class SomeCommand extends Command
+ {
+-    public function execute(InputInterface $input, OutputInterface $output)
++    public function execute(InputInterface $input, OutputInterface $output): int
+     {
+-        return null;
++        return 0;
      }
  }
+```
+
+<br>
+
+### ConstraintUrlOptionRector
+
+Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
+
+- class: `Rector\Symfony4\Rector\ConstFetch\ConstraintUrlOptionRector`
+
+```diff
+-$constraint = new Url(["checkDNS" => true]);
++$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);
+```
+
+<br>
+
+### ContainerBuilderCompileEnvArgumentRector
+
+Turns old default value to parameter in `ContainerBuilder->build()` method in DI in Symfony
+
+- class: `Rector\Symfony4\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector`
+
+```diff
+ use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+ $containerBuilder = new ContainerBuilder();
+-$containerBuilder->compile();
++$containerBuilder->compile(true);
+```
+
+<br>
+
+### ContainerGetToConstructorInjectionRector
+
+Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
+
+:wrench: **configure it!**
+
+- class: `Rector\Symfony4\Rector\MethodCall\ContainerGetToConstructorInjectionRector`
+
+```php
+use Rector\Symfony4\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ContainerGetToConstructorInjectionRector::class)
+        ->call('configure', [[
+            ContainerGetToConstructorInjectionRector::CONTAINER_AWARE_PARENT_TYPES => [
+                'ContainerAwareParentClassName',
+                'ContainerAwareParentCommandClassName',
+                'ThisClassCallsMethodInConstructorClassName',
+            ],
+        ]]);
+};
+```
+
+↓
+
+```diff
+-final class SomeCommand extends ContainerAwareCommand
++final class SomeCommand extends Command
+ {
++    public function __construct(SomeService $someService)
++    {
++        $this->someService = $someService;
++    }
++
+     public function someMethod()
+     {
+         // ...
+-        $this->getContainer()->get('some_service');
+-        $this->container->get('some_service');
++        $this->someService;
++        $this->someService;
+     }
+ }
+```
+
+<br>
+
+### FormIsValidRector
+
+Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony
+
+- class: `Rector\Symfony4\Rector\MethodCall\FormIsValidRector`
+
+```diff
+-if ($form->isValid()) {
++if ($form->isSubmitted() && $form->isValid()) {
+ }
+```
+
+<br>
+
+### MakeDispatchFirstArgumentEventRector
+
+Make event object a first argument of `dispatch()` method, event name as second
+
+- class: `Rector\Symfony4\Rector\MethodCall\MakeDispatchFirstArgumentEventRector`
+
+```diff
+ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+ class SomeClass
+ {
+     public function run(EventDispatcherInterface $eventDispatcher)
+     {
+-        $eventDispatcher->dispatch('event_name', new Event());
++        $eventDispatcher->dispatch(new Event(), 'event_name');
+     }
+ }
+```
+
+<br>
+
+### ProcessBuilderGetProcessRector
+
+Removes `$processBuilder->getProcess()` calls to `$processBuilder` in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
+
+- class: `Rector\Symfony4\Rector\MethodCall\ProcessBuilderGetProcessRector`
+
+```diff
+ $processBuilder = new Symfony\Component\Process\ProcessBuilder;
+-$process = $processBuilder->getProcess();
+-$commamdLine = $processBuilder->getProcess()->getCommandLine();
++$process = $processBuilder;
++$commamdLine = $processBuilder->getCommandLine();
+```
+
+<br>
+
+### ProcessBuilderInstanceRector
+
+Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.
+
+- class: `Rector\Symfony4\Rector\StaticCall\ProcessBuilderInstanceRector`
+
+```diff
+-$processBuilder = Symfony\Component\Process\ProcessBuilder::instance($args);
++$processBuilder = new Symfony\Component\Process\ProcessBuilder($args);
 ```
 
 <br>
@@ -15252,7 +15461,7 @@ Turns status code numbers to constants
 
 Changes  Process string argument to an array
 
-- class: `Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector`
+- class: `Rector\Symfony4\Rector\New_\RootNodeTreeBuilderRector`
 
 ```diff
  use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -15270,7 +15479,7 @@ Changes  Process string argument to an array
 
 Simplify use of assertions in WebTestCase
 
-- class: `Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector`
+- class: `Rector\Symfony4\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector`
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -15300,25 +15509,11 @@ Simplify use of assertions in WebTestCase
 
 <br>
 
-### StringFormTypeToClassRector
-
-Turns string Form Type references to their `CONSTANT` alternatives in FormTypes in Form in Symfony. To enable custom types, add `link` to your container XML `dump` in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"
-
-- class: `Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector`
-
-```diff
- $formBuilder = new Symfony\Component\Form\FormBuilder;
--$formBuilder->add('name', 'form.type.text');
-+$formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
-```
-
-<br>
-
 ### StringToArrayArgumentProcessRector
 
 Changes Process string argument to an array
 
-- class: `Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector`
+- class: `Rector\Symfony4\Rector\New_\StringToArrayArgumentProcessRector`
 
 ```diff
  use Symfony\Component\Process\Process;
@@ -15332,7 +15527,7 @@ Changes Process string argument to an array
 
 Adds a new `$filter` argument in `VarDumperTestTrait->assertDumpEquals()` and `VarDumperTestTrait->assertDumpMatchesFormat()` in Validator in Symfony.
 
-- class: `Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector`
+- class: `Rector\Symfony4\Rector\MethodCall\VarDumperTestTraitMethodArgsRector`
 
 ```diff
 -$varDumperTestTrait->assertDumpEquals($dump, $data, $message = "");
@@ -15344,6 +15539,93 @@ Adds a new `$filter` argument in `VarDumperTestTrait->assertDumpEquals()` and `V
 ```diff
 -$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $message = "");
 +$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $filter = 0, $message = "");
+```
+
+<br>
+
+## Symfony5
+
+### BinaryFileResponseCreateToNewInstanceRector
+
+Change deprecated `BinaryFileResponse::create()` to use `__construct()` instead
+
+- class: `Rector\Symfony5\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector`
+
+```diff
+ use Symfony\Component\HttpFoundation;
+
+ class SomeClass
+ {
+     public function run()
+     {
+-        $binaryFile = BinaryFileResponse::create();
++        $binaryFile = new BinaryFileResponse(null);
+     }
+ }
+```
+
+<br>
+
+### PropertyAccessorCreationBooleanToFlagsRector
+
+Changes first argument of `PropertyAccessor::__construct()` to flags from boolean
+
+- class: `Rector\Symfony5\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $propertyAccessor = new PropertyAccessor(true);
++        $propertyAccessor = new PropertyAccessor(PropertyAccessor::MAGIC_CALL | PropertyAccessor::MAGIC_GET | PropertyAccessor::MAGIC_SET);
+     }
+ }
+```
+
+<br>
+
+### PropertyPathMapperToDataMapperRector
+
+Migrate from PropertyPathMapper to DataMapper and PropertyPathAccessor
+
+- class: `Rector\Symfony5\Rector\New_\PropertyPathMapperToDataMapperRector`
+
+```diff
+ use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
+
+ class SomeClass
+ {
+     public function run()
+     {
+-        return new PropertyPathMapper();
++        return new \Symfony\Component\Form\Extension\Core\DataMapper\DataMapper(new \Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor());
+     }
+ }
+```
+
+<br>
+
+### ReflectionExtractorEnableMagicCallExtractorRector
+
+Migrates from deprecated enable_magic_call_extraction context option in ReflectionExtractor
+
+- class: `Rector\Symfony5\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector`
+
+```diff
+ use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+
+ class SomeClass
+ {
+     public function run()
+     {
+         $reflectionExtractor = new ReflectionExtractor();
+         $readInfo = $reflectionExtractor->getReadInfo(Dummy::class, 'bar', [
+-            'enable_magic_call_extraction' => true,
++            'enable_magic_methods_extraction' => ReflectionExtractor::MAGIC_CALL | ReflectionExtractor::MAGIC_GET | ReflectionExtractor::MAGIC_SET,
+         ]);
+     }
+ }
 ```
 
 <br>

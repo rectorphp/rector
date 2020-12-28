@@ -65,7 +65,7 @@ final class RunnableClassFinder
                 return false;
             }
 
-            foreach ((array) $node->implements as $implement) {
+            foreach ($node->implements as $implement) {
                 if ((string) $implement !== RunnableInterface::class) {
                     continue;
                 }

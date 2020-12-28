@@ -16,10 +16,10 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\ParentStaticType;
-use Rector\PHPStan\Type\SelfObjectType;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
@@ -53,7 +53,10 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
     public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
     {
         $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeNode->name);
-        if (! $type instanceof MixedType || $type->isExplicitMixed()) {
+        if (! $type instanceof MixedType) {
+            return $type;
+        }
+        if ($type->isExplicitMixed()) {
             return $type;
         }
 

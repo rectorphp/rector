@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\Unset_\UnsetCastRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {
@@ -18,7 +18,7 @@ class SomeClass
 
 namespace Rector\Php72\Tests\Rector\Unset_\UnsetCastRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run($value)
     {

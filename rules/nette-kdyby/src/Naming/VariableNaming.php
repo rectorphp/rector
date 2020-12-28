@@ -26,6 +26,7 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -146,7 +147,7 @@ final class VariableNaming
             return $this->resolveFromPropertyFetch($node);
         }
 
-        if ($node instanceof MethodCall || $node instanceof NullsafeMethodCall || $node instanceof StaticCall) {
+        if ($this->isCall($node)) {
             return $this->resolveFromMethodCall($node);
         }
 
@@ -244,16 +245,30 @@ final class VariableNaming
         return $varName . ucfirst($propertyName);
     }
 
-    /**
-     * @param MethodCall|NullsafeMethodCall|StaticCall $expr
-     */
-    private function resolveFromMethodCall(Expr $expr): ?string
+    private function isCall(?Node $node): bool
     {
-        if ($expr->name instanceof MethodCall) {
-            return $this->resolveFromMethodCall($expr->name);
+        if ($node === null) {
+            return false;
         }
 
-        $methodName = $this->nodeNameResolver->getName($expr->name);
+        return StaticInstanceOf::isOneOf($node, [MethodCall::class, NullsafeMethodCall::class, StaticCall::class]);
+    }
+
+    private function resolveFromMethodCall(?Node $node): ?string
+    {
+        if ($node === null) {
+            return null;
+        }
+
+        if (! property_exists($node, 'name')) {
+            return null;
+        }
+
+        if ($node->name instanceof MethodCall) {
+            return $this->resolveFromMethodCall($node->name);
+        }
+
+        $methodName = $this->nodeNameResolver->getName($node->name);
         if (! is_string($methodName)) {
             return null;
         }

@@ -120,7 +120,7 @@ CODE_SAMPLE
 
     private function isTestingConsoleOutput(Class_ $class): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $class->stmts, function (Node $node): bool {
+        return (bool) $this->betterNodeFinder->findFirst($class->stmts, function (Node $node): bool {
             return $this->isStaticCallNamed($node, 'Illuminate\Support\Facades\Artisan', 'output');
         });
     }

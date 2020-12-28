@@ -44,8 +44,13 @@ final class BreakingRemovalGuard
         if ($parent instanceof BooleanNot) {
             $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
         }
-
-        return ! $parent instanceof Assign && ! $this->isIfCondition($node) && ! $this->isWhileCondition($node);
+        if ($parent instanceof Assign) {
+            return false;
+        }
+        if ($this->isIfCondition($node)) {
+            return false;
+        }
+        return ! $this->isWhileCondition($node);
     }
 
     private function isIfCondition(Node $node): bool

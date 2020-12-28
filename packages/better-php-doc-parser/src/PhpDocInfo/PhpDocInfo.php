@@ -30,9 +30,9 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
@@ -164,18 +164,15 @@ final class PhpDocInfo
     {
         $name = StaticAnnotationNaming::normalizeName($name);
 
-        /** @var AttributeAwareNodeInterface[]|PhpDocTagNode[] $tags */
+        /** @var PhpDocTagNode[]|AttributeAwareNodeInterface[] $tags */
         $tags = $this->phpDocNode->getTags();
 
         $tags = array_filter($tags, function (PhpDocTagNode $tag) use ($name): bool {
             return $tag->name === $name;
         });
-
-        // @todo add dynamic function type resolver to PHPStan, the same type on input is on output
         $tags = array_values($tags);
 
-        /** @var PhpDocTagNode[]|AttributeAwareNodeInterface[] $tags */
-        return $tags;
+        return array_values($tags);
     }
 
     public function getParamType(string $name): Type

@@ -56,16 +56,23 @@ final class FluentMethodCallSkipper
      */
     private $getterMethodCallAnalyzer;
 
+    /**
+     * @var StringMatcher
+     */
+    private $stringMatcher;
+
     public function __construct(
         FluentCallStaticTypeResolver $fluentCallStaticTypeResolver,
         SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer,
         FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        GetterMethodCallAnalyzer $getterMethodCallAnalyzer
+        GetterMethodCallAnalyzer $getterMethodCallAnalyzer,
+        StringMatcher $stringMatcher
     ) {
         $this->fluentCallStaticTypeResolver = $fluentCallStaticTypeResolver;
         $this->sameClassMethodCallAnalyzer = $sameClassMethodCallAnalyzer;
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
         $this->getterMethodCallAnalyzer = $getterMethodCallAnalyzer;
+        $this->stringMatcher = $stringMatcher;
     }
 
     public function shouldSkipRootMethodCall(MethodCall $methodCall): bool
@@ -89,7 +96,7 @@ final class FluentMethodCallSkipper
 
         $calleeUniqueType = $this->resolveCalleeUniqueType($firstAssignFluentCall, $calleeUniqueTypes);
 
-        return $this->isAllowedType($calleeUniqueType, self::ALLOWED_FLUENT_TYPES);
+        return $this->stringMatcher->isAllowedType($calleeUniqueType, self::ALLOWED_FLUENT_TYPES);
     }
 
     /**
@@ -105,7 +112,7 @@ final class FluentMethodCallSkipper
 
         $calleeUniqueType = $this->resolveCalleeUniqueType($assignAndRootExpr, $calleeUniqueTypes);
 
-        return $this->isAllowedType($calleeUniqueType, self::ALLOWED_FLUENT_TYPES);
+        return $this->stringMatcher->isAllowedType($calleeUniqueType, self::ALLOWED_FLUENT_TYPES);
     }
 
     /**
@@ -120,23 +127,5 @@ final class FluentMethodCallSkipper
         }
 
         return $calleeUniqueTypes[1] ?? $calleeUniqueTypes[0];
-    }
-
-    /**
-     * @param string[] $allowedTypes
-     */
-    private function isAllowedType(string $currentType, array $allowedTypes): bool
-    {
-        foreach ($allowedTypes as $allowedType) {
-            if (is_a($currentType, $allowedType, true)) {
-                return true;
-            }
-
-            if (fnmatch($allowedType, $currentType, FNM_NOESCAPE)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

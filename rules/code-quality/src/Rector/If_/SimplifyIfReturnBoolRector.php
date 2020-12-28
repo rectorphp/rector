@@ -134,7 +134,10 @@ CODE_SAMPLE
         }
 
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof Return_ || $nextNode->expr === null) {
+        if (! $nextNode instanceof Return_) {
+            return true;
+        }
+        if ($nextNode->expr === null) {
             return true;
         }
 
@@ -189,7 +192,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (count((array) $if->else->stmts) !== 1) {
+        if (count($if->else->stmts) !== 1) {
             return false;
         }
 
@@ -200,7 +203,7 @@ CODE_SAMPLE
 
     private function isIfWithSingleReturnExpr(If_ $if): bool
     {
-        if (count((array) $if->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return false;
         }
 

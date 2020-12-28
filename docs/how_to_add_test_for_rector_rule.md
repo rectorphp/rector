@@ -12,7 +12,7 @@ See "Applied rules" under the diff:
 
 ![Applied Rules](/docs/images/docs_applied_rules.png)
 
-Our rule in this example is: `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`
+Our rule in this example is: `Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector`
 
 This rule's job is to add `final` to every class that has no children and is not a Doctrine entity = everywhere it can without breaking our code.
 
@@ -87,7 +87,7 @@ In this particular case, the code should change - `final` should be added so tha
 ```php
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector\Fixture;
 
 class AddFinal
 {
@@ -97,7 +97,7 @@ class AddFinal
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector\Fixture;
 
 final class AddFinal
 {
@@ -113,13 +113,13 @@ final class AddFinal
 Run PHPUnit with the test file to confirm:
 
 ```bash
-vendor/bin/phpunit rules/solid/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php
+vendor/bin/phpunit rules/privatization/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php
 ```
 
 To run only the single test fixture, add `--filter test#X`, where X is the fixture's order number.
 
 ```bash
-vendor/bin/phpunit rules/solid/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php --filter test#4
+vendor/bin/phpunit rules/privatization/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php --filter test#4
 ```
 
 If PHPUnit fails, you've successfully added a test case! :)

@@ -128,7 +128,7 @@ CODE_SAMPLE
         $conditions = $this->getBooleanAndConditions($expr);
         $ifs = $this->createInvertedIfNodesFromConditions($node, $conditions);
 
-        $this->keepCommentIfExists($node, $ifs);
+        $this->mirrorComments($ifs[0], $node);
 
         $this->addNodesAfterNode($ifs, $node);
         $this->addNodeAfterNode($ifReturn, $node);
@@ -233,15 +233,6 @@ CODE_SAMPLE
         return $ifs;
     }
 
-    /**
-     * @param If_[] $ifs
-     */
-    private function keepCommentIfExists(If_ $if, array $ifs): void
-    {
-        $nodeComments = $if->getAttribute(AttributeKey::COMMENTS);
-        $ifs[0]->setAttribute(AttributeKey::COMMENTS, $nodeComments);
-    }
-
     private function getIfNextReturn(If_ $if): ?Return_
     {
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
@@ -262,7 +253,10 @@ CODE_SAMPLE
     private function isIfReturnsVoid(If_ $if): bool
     {
         $lastStmt = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
-        return $lastStmt instanceof Return_ && $lastStmt->expr === null;
+        if (! $lastStmt instanceof Return_) {
+            return false;
+        }
+        return $lastStmt->expr === null;
     }
 
     private function isParentIfReturnsVoid(If_ $if): bool
@@ -301,11 +295,13 @@ CODE_SAMPLE
 
     private function isNestedIfInLoop(If_ $if): bool
     {
-        return $this->isIfInLoop($if)
-            && (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
-                $if,
-                [If_::class, Else_::class, ElseIf_::class]
-            );
+        if (! $this->isIfInLoop($if)) {
+            return false;
+        }
+        return (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
+            $if,
+            [If_::class, Else_::class, ElseIf_::class]
+        );
     }
 
     private function isLastIfOrBeforeLastReturn(If_ $if): bool

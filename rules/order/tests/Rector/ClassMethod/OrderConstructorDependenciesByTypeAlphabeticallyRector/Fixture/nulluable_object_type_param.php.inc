@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\Fixture;
 
-class NullableObjectTypeParamClass
+class NulluableObjectTypeParam
 {
     public function __construct(
         LatteToTwigConverter $latteToTwigConverter,
@@ -19,7 +19,7 @@ class NullableObjectTypeParamClass
 
 namespace Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\Fixture;
 
-class NullableObjectTypeParamClass
+class NulluableObjectTypeParam
 {
     public function __construct(
         ?LatteAndTwigFinder $latteAndTwigFinder,

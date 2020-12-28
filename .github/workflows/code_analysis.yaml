@@ -19,7 +19,7 @@ jobs:
 
                     -
                         name: 'Show command'
-                        run: bin/rector show --config rector-ci.php --ansi
+                        run: bin/rector show --ansi
 
                     -
                         name: Validate Fixtures
@@ -47,6 +47,10 @@ jobs:
                         run: bin/rector check-static-type-mappers --ansi
 
                     -
+                        name: 'Validate Max File Length'
+                        run: bin/rector validate-file-length
+
+                    -
                         name: 'PHP Linter'
                         run: vendor/bin/parallel-lint src bin/rector config tests packages rules --exclude packages/rector-generator/templates --colors --exclude rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source --exclude rules/autodiscovery/tests/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected
 
@@ -64,6 +68,6 @@ jobs:
                     coverage: none
                     tools: composer:v2
 
-            -   run: composer install --no-progress --ansi
+            -   uses: "ramsey/composer-install@v1"
 
             -   run: ${{ matrix.actions.run }}

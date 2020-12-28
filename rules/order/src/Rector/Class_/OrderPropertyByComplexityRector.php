@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\ValueObject\Visibility;
 use Rector\Order\PropertyRanker;
 use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
 use Rector\Order\ValueObject\PropertyNameRankAndPosition;
@@ -137,17 +138,17 @@ CODE_SAMPLE
 
     /**
      * @param Class_|Trait_ $classLike
-     * @return array<string, Property[]>
+     * @return array<int, Property[]>
      */
     private function resolvePropertyByVisibilityByPosition(ClassLike $classLike): array
     {
         $propertyByVisibilityByPosition = [];
-        foreach ((array) $classLike->stmts as $position => $classStmt) {
+        foreach ($classLike->stmts as $position => $classStmt) {
             if (! $classStmt instanceof Property) {
                 continue;
             }
 
-            $visibility = $this->getVisibilityAsString($classStmt);
+            $visibility = $this->getVisibilityAsConstant($classStmt);
             $propertyByVisibilityByPosition[$visibility][$position] = $classStmt;
         }
 
@@ -177,16 +178,16 @@ CODE_SAMPLE
         return $propertyNames;
     }
 
-    private function getVisibilityAsString(Property $property): string
+    private function getVisibilityAsConstant(Property $property): int
     {
         if ($property->isPrivate()) {
-            return 'private';
+            return Visibility::PRIVATE;
         }
 
         if ($property->isProtected()) {
-            return 'protected';
+            return Visibility::PROTECTED;
         }
 
-        return 'public';
+        return Visibility::PUBLIC;
     }
 }

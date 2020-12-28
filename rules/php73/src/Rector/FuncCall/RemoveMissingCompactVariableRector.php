@@ -6,6 +6,7 @@ namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
@@ -83,14 +84,18 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function unsetUnusedArrayElements(Node $node, Scope $scope): void
+    private function unsetUnusedArrayElements(FuncCall $funcCall, Scope $scope): void
     {
-        foreach ($node->args as $key => $arg) {
+        foreach ($funcCall->args as $positoin => $arg) {
             if (! $arg->value instanceof Array_) {
                 continue;
             }
 
             foreach ($arg->value->items as $arrayKey => $item) {
+                if (! $item instanceof ArrayItem) {
+                    continue;
+                }
+
                 $value = $this->getValue($item->value);
                 if ($scope->hasVariableType($value)->yes()) {
                     continue;
@@ -101,14 +106,14 @@ CODE_SAMPLE
 
             if ($arg->value->items === []) {
                 // Drops empty array from `compact()` arguments.
-                unset($node->args[$key]);
+                unset($funcCall->args[$positoin]);
             }
         }
     }
 
-    private function unsetUnusedArguments(Node $node, Scope $scope): void
+    private function unsetUnusedArguments(FuncCall $funcCall, Scope $scope): void
     {
-        foreach ($node->args as $key => $arg) {
+        foreach ($funcCall->args as $key => $arg) {
             if ($arg->value instanceof Array_) {
                 continue;
             }
@@ -118,7 +123,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            unset($node->args[$key]);
+            unset($funcCall->args[$key]);
         }
     }
 }

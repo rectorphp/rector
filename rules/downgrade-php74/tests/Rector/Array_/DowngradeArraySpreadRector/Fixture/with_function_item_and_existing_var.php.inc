@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class WithFunctionItemAndExistingVarClass
+class WithFunctionItemAndExistingVar
 {
     function getArray(): array
     {
@@ -23,7 +23,7 @@ class WithFunctionItemAndExistingVarClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class WithFunctionItemAndExistingVarClass
+class WithFunctionItemAndExistingVar
 {
     function getArray(): array
     {

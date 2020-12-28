@@ -92,7 +92,7 @@ CODE_SAMPLE
         }
 
         $camelCaseName = StaticRectorStrings::underscoreToCamelCase($nodeName);
-        if ($camelCaseName === 'this' || $camelCaseName === '' || is_numeric($camelCaseName[0])) {
+        if ($this->isReserved($camelCaseName)) {
             return null;
         }
 
@@ -115,24 +115,36 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isFoundInParentNode(Variable $variable): bool
+    private function isReserved(string $string): bool
     {
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parentNode) {
-            /** @var ClassMethod|Function_ $parentNode */
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof ClassMethod || $parentNode instanceof Function_) {
-                break;
-            }
+        if ($string === 'this') {
+            return true;
         }
 
-        if ($parentNode === null) {
+        if ($string === '') {
+            return true;
+        }
+
+        return is_numeric($string[0]);
+    }
+
+    private function isFoundInParentNode(Variable $variable): bool
+    {
+        /** @var ClassMethod|Function_|null $classMethodOrFunction */
+        $classMethodOrFunction = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $variable,
+            [ClassMethod::class, Function_::class]
+        );
+
+        if ($classMethodOrFunction === null) {
             return false;
         }
 
-        $params = $parentNode->getParams();
+        /** @var Param[] $params */
+        $params = $classMethodOrFunction->getParams();
+
         foreach ($params as $param) {
-            if ($param->var->name === $variable->name) {
+            if ($this->areNamesEqual($param->var, $variable)) {
                 return true;
             }
         }
@@ -143,6 +155,9 @@ CODE_SAMPLE
     private function isFoundInPreviousNode(Variable $variable): bool
     {
         $previousNode = $variable->getAttribute(AttributeKey::PREVIOUS_NODE);
-        return $previousNode instanceof Expr && $this->isFoundInParentNode($variable);
+        if (! $previousNode instanceof Expr) {
+            return false;
+        }
+        return $this->isFoundInParentNode($variable);
     }
 }

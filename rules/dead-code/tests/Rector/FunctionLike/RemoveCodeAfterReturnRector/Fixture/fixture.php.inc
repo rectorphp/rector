@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveCodeAfterReturnRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(int $a)
     {
@@ -17,7 +17,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveCodeAfterReturnRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(int $a)
     {

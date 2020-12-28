@@ -28,21 +28,15 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     }
 
     /**
-     * @param Name $nameNode
+     * @param Name $node
      */
-    public function resolve(Node $nameNode): Type
+    public function resolve(Node $node): Type
     {
-        $name = $nameNode->toString();
-
-        if ($name === 'parent') {
-            return $this->resolveParent($nameNode);
+        if ($node->toString() === 'parent') {
+            return $this->resolveParent($node);
         }
 
-        $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $name);
-        if ($fullyQualifiedName === null) {
-            return new MixedType();
-        }
-
+        $fullyQualifiedName = $this->resolveFullyQualifiedName($node);
         return new ObjectType($fullyQualifiedName);
     }
 
@@ -69,11 +63,13 @@ final class NameTypeResolver implements NodeTypeResolverInterface
         return $type;
     }
 
-    private function resolveFullyQualifiedName(Node $nameNode, string $name): string
+    private function resolveFullyQualifiedName(Name $name): string
     {
-        if (in_array($name, ['self', 'static', 'this'], true)) {
+        $nameValue = $name->toString();
+
+        if (in_array($nameValue, ['self', 'static', 'this'], true)) {
             /** @var string|null $class */
-            $class = $nameNode->getAttribute(AttributeKey::CLASS_NAME);
+            $class = $name->getAttribute(AttributeKey::CLASS_NAME);
             if ($class === null) {
                 // anonymous class probably
                 return 'Anonymous';
@@ -83,11 +79,11 @@ final class NameTypeResolver implements NodeTypeResolverInterface
         }
 
         /** @var Name|null $resolvedNameNode */
-        $resolvedNameNode = $nameNode->getAttribute(AttributeKey::RESOLVED_NAME);
+        $resolvedNameNode = $name->getAttribute(AttributeKey::RESOLVED_NAME);
         if ($resolvedNameNode instanceof Name) {
             return $resolvedNameNode->toString();
         }
 
-        return $name;
+        return $nameValue;
     }
 }

@@ -66,7 +66,7 @@ CODE_SAMPLE
         }
 
         // exception handle has 1 param exactly
-        if (count((array) $node->params) !== 1) {
+        if (count($node->params) !== 1) {
             return null;
         }
 

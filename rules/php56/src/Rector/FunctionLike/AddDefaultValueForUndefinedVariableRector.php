@@ -25,6 +25,7 @@ use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -158,7 +159,7 @@ CODE_SAMPLE
 
     private function collectDefinedVariablesFromForeach(Foreach_ $foreach): void
     {
-        $this->traverseNodesWithCallable((array) $foreach->stmts, function (Node $node): void {
+        $this->traverseNodesWithCallable($foreach->stmts, function (Node $node): void {
             if ($node instanceof Assign || $node instanceof AssignRef) {
                 if (! $node->var instanceof Variable) {
                     return;
@@ -177,6 +178,10 @@ CODE_SAMPLE
     private function shouldSkipVariable(Variable $variable): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode === null) {
+            return true;
+        }
+
         if ($parentNode instanceof Global_) {
             return true;
         }
@@ -186,8 +191,7 @@ CODE_SAMPLE
         )) {
             return true;
         }
-
-        if ($parentNode instanceof Unset_ || $parentNode instanceof UnsetCast) {
+        if (StaticInstanceOf::isOneOf($parentNode, [Unset_::class, UnsetCast::class])) {
             return true;
         }
 
@@ -225,15 +229,9 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isListAssign(?Node $parentNode): bool
+    private function isListAssign(Node $node): bool
     {
-        if ($parentNode instanceof Node) {
-            $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof List_ || $parentParentNode instanceof Array_) {
-                return true;
-            }
-        }
-
-        return false;
+        $parentParentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        return StaticInstanceOf::isOneOf($parentParentNode, [List_::class, Array_::class]);
     }
 }

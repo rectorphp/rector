@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Node\CustomNode;
 
-use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\NodeAbstract;
 
 /**
@@ -13,12 +13,12 @@ use PhpParser\NodeAbstract;
 final class FileWithoutNamespace extends NodeAbstract
 {
     /**
-     * @var Node[]
+     * @var Stmt[]
      */
     public $stmts = [];
 
     /**
-     * @param Node[] $stmts
+     * @param Stmt[] $stmts
      */
     public function __construct(array $stmts)
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class NullableTypeClass {
+class NullableType {
     private ?string $property;
 }
 
@@ -12,7 +12,7 @@ class NullableTypeClass {
 
 namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class NullableTypeClass {
+class NullableType {
     /**
      * @var string|null
      */

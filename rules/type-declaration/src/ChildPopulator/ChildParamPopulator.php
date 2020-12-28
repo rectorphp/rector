@@ -4,34 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\ChildPopulator;
 
-use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\UnionType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\SelfObjectType;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\ValueObject\NewType;
 
-final class ChildParamPopulator
+final class ChildParamPopulator extends AbstractChildPopulator
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
     /**
      * @var NodeNameResolver
      */
@@ -50,10 +36,8 @@ final class ChildParamPopulator
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         RectorChangeCollector $rectorChangeCollector,
-        StaticTypeMapper $staticTypeMapper,
         NodeRepository $nodeRepository
     ) {
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->nodeRepository = $nodeRepository;
@@ -99,9 +83,6 @@ final class ChildParamPopulator
         Type $paramType
     ): void {
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        if ($methodName === null) {
-            return;
-        }
 
         $currentClassMethod = $classLike->getMethod($methodName);
         if ($currentClassMethod === null) {
@@ -129,21 +110,5 @@ final class ChildParamPopulator
         $paramNode->type->setAttribute(NewType::HAS_NEW_INHERITED_TYPE, true);
 
         $this->rectorChangeCollector->notifyNodeFileInfo($paramNode);
-    }
-
-    /**
-     * @return Name|NullableType|UnionType|null
-     */
-    private function resolveChildTypeNode(Type $type): ?Node
-    {
-        if ($type instanceof MixedType) {
-            return null;
-        }
-
-        if ($type instanceof SelfObjectType || $type instanceof StaticType) {
-            $type = new ObjectType($type->getClassName());
-        }
-
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
     }
 }

@@ -62,16 +62,19 @@ final class TernaryToNullCoalescingRector extends AbstractRector
             // not a match
             return null;
         }
-
-        if ($checkedNode === null || $fallbackNode === null) {
+        if ($checkedNode === null) {
+            return null;
+        }
+        if ($fallbackNode === null) {
             return null;
         }
 
         /** @var Identical|NotIdentical $ternaryCompareNode */
         $ternaryCompareNode = $node->cond;
-        if ($this->isNullMatch($ternaryCompareNode->left, $ternaryCompareNode->right, $checkedNode) ||
-            $this->isNullMatch($ternaryCompareNode->right, $ternaryCompareNode->left, $checkedNode)
-        ) {
+        if ($this->isNullMatch($ternaryCompareNode->left, $ternaryCompareNode->right, $checkedNode)) {
+            return new Coalesce($checkedNode, $fallbackNode);
+        }
+        if ($this->isNullMatch($ternaryCompareNode->right, $ternaryCompareNode->left, $checkedNode)) {
             return new Coalesce($checkedNode, $fallbackNode);
         }
 
@@ -86,9 +89,11 @@ final class TernaryToNullCoalescingRector extends AbstractRector
 
         /** @var Isset_ $issetNode */
         $issetNode = $ternary->cond;
-
         // none or multiple isset values cannot be handled here
-        if (! isset($issetNode->vars[0]) || count($issetNode->vars) > 1) {
+        if (! isset($issetNode->vars[0])) {
+            return null;
+        }
+        if (count($issetNode->vars) > 1) {
             return null;
         }
 

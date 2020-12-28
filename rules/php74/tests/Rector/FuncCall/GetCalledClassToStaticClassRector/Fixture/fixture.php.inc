@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\FuncCall\GetCalledClassToStaticClassRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function callOnMe()
     {
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\Php74\Tests\Rector\FuncCall\GetCalledClassToStaticClassRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function callOnMe()
     {

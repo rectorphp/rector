@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\While_\Fixture;
+namespace Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector\Fixture;
 
 function dontremovecomment()
 {
@@ -14,7 +14,7 @@ function dontremovecomment()
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\While_\Fixture;
+namespace Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector\Fixture;
 
 function dontremovecomment()
 {

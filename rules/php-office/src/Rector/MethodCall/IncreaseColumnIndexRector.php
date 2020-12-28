@@ -127,7 +127,7 @@ CODE_SAMPLE
         }
 
         $assignVariable = $this->findVariableAssignName($for->init, $variableName);
-        if ($assignVariable === null) {
+        if (! $assignVariable instanceof Assign) {
             return null;
         }
 

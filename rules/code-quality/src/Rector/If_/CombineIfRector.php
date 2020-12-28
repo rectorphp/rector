@@ -93,7 +93,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count((array) $if->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return true;
         }
 

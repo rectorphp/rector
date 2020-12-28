@@ -110,7 +110,7 @@ final class KernelTestCaseNodeFactory
      *
      * @return Expression[]
      *
-     * E.g. "['SomeService']" → "$this->someService = self::$container->get(SomeService::class);"
+     * E.g. "['SomeService']" → "$this->someService = $this->getService(SomeService::class);"
      */
     public function createSelfContainerGetWithTypeAssigns(Class_ $class, array $serviceTypes): array
     {

@@ -130,8 +130,6 @@ final class BetterStandardPrinter extends Standard
         $this->detectTabOrSpaceIndentCharacter($newStmts);
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
-        $content = $this->contentPatcher->cleanUpDuplicateContent($content);
-
         $contentOriginal = $this->print($origStmts);
 
         $content = $this->contentPatcher->rollbackValidAnnotation(
@@ -236,14 +234,14 @@ final class BetterStandardPrinter extends Standard
 
     public function pFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace): string
     {
-        $content = self::pStmts((array) $fileWithoutNamespace->stmts, false);
+        $content = $this->pStmts($fileWithoutNamespace->stmts, false);
 
         return ltrim($content);
     }
 
     public function pFileNode(FileNode $fileNode): string
     {
-        return self::pStmts((array) $fileNode->stmts);
+        return $this->pStmts($fileNode->stmts);
     }
 
     /**

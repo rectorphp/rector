@@ -82,7 +82,7 @@ CODE_SAMPLE
             $commandName
         );
 
-        $node->stmts = array_merge([$defaultNameProperty], (array) $node->stmts);
+        $node->stmts = array_merge([$defaultNameProperty], $node->stmts);
 
         return $node;
     }
@@ -103,7 +103,7 @@ CODE_SAMPLE
     {
         $commandName = null;
 
-        $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (&$commandName) {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandName) {
             if (! $node instanceof StaticCall) {
                 return null;
             }
@@ -126,7 +126,7 @@ CODE_SAMPLE
     {
         $commandName = null;
 
-        $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (&$commandName) {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandName) {
             if (! $node instanceof MethodCall) {
                 return null;
             }
@@ -162,11 +162,12 @@ CODE_SAMPLE
             return;
         }
 
-        if (count((array) $constructClassMethod->stmts) !== 1) {
+        $stmts = (array) $constructClassMethod->stmts;
+        if (count($stmts) !== 1) {
             return;
         }
 
-        $onlyNode = $constructClassMethod->stmts[0];
+        $onlyNode = $stmts[0];
         if ($onlyNode instanceof Expression) {
             $onlyNode = $onlyNode->expr;
         }
@@ -187,25 +188,21 @@ CODE_SAMPLE
         $this->removeNode($constructClassMethod);
     }
 
-    private function matchCommandNameNodeInConstruct(Expr $expr): ?Node
+    private function matchCommandNameNodeInConstruct(StaticCall $staticCall): ?Expr
     {
-        if (! $expr instanceof MethodCall && ! $expr instanceof StaticCall) {
+        if (! $this->isName($staticCall->name, MethodName::CONSTRUCT)) {
             return null;
         }
 
-        if (! $this->isName($expr->name, MethodName::CONSTRUCT)) {
+        if (count($staticCall->args) < 1) {
             return null;
         }
 
-        if (count((array) $expr->args) < 1) {
-            return null;
-        }
-
-        $staticType = $this->getStaticType($expr->args[0]->value);
+        $staticType = $this->getStaticType($staticCall->args[0]->value);
         if (! $staticType instanceof StringType) {
             return null;
         }
 
-        return $expr->args[0]->value;
+        return $staticCall->args[0]->value;
     }
 }

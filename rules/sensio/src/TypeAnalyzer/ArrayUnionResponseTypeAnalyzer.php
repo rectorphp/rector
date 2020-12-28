@@ -32,8 +32,10 @@ final class ArrayUnionResponseTypeAnalyzer
 
             return false;
         }
-
-        return $hasArrayType && $hasResponseType;
+        if (! $hasArrayType) {
+            return false;
+        }
+        return $hasResponseType;
     }
 
     private function isTypeOfClassName(Type $type, string $className): bool

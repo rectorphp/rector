@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
 
-final class CallableJustForTestType
+final class CallableType
 {
     private $code;
     /**
@@ -27,7 +27,7 @@ final class CallableJustForTestType
 
 namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
 
-final class CallableJustForTestType
+final class CallableType
 {
     /**
      * @var callable|null

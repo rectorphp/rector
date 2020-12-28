@@ -40,6 +40,10 @@ final class PropertyFetchAssignManipulator
             $paramName,
             &$propertyNames
         ) {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
             if (! $this->isVariableAssignToThisPropertyFetch($node, $paramName)) {
                 return null;
             }
@@ -60,24 +64,23 @@ final class PropertyFetchAssignManipulator
      * Matches:
      * "$this->someValue = $<variableName>;"
      */
-    private function isVariableAssignToThisPropertyFetch(Node $node, string $variableName): bool
+    private function isVariableAssignToThisPropertyFetch(Assign $assign, string $variableName): bool
     {
-        if (! $node instanceof Assign) {
+        if (! $assign->expr instanceof Variable) {
             return false;
         }
 
-        if (! $node->expr instanceof Variable) {
+        if (! $this->nodeNameResolver->isName($assign->expr, $variableName)) {
             return false;
         }
 
-        if (! $this->nodeNameResolver->isName($node->expr, $variableName)) {
+        if (! $assign->var instanceof PropertyFetch) {
             return false;
         }
 
-        if (! $node->var instanceof PropertyFetch) {
-            return false;
-        }
+        $propertyFetch = $assign->var;
+
         // must be local property
-        return $this->nodeNameResolver->isName($node->var->var, 'this');
+        return $this->nodeNameResolver->isName($propertyFetch->var, 'this');
     }
 }

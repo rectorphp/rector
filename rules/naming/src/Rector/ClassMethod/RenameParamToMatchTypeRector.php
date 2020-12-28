@@ -11,7 +11,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
-use Rector\Naming\ParamRenamer\MatchTypeParamRenamer;
+use Rector\Naming\ParamRenamer\ParamRenamer;
 use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -37,9 +37,9 @@ final class RenameParamToMatchTypeRector extends AbstractRector
     private $breakingVariableRenameGuard;
 
     /**
-     * @var MatchTypeParamRenamer
+     * @var ParamRenamer
      */
-    private $matchTypeParamRenamer;
+    private $paramRenamer;
 
     /**
      * @var ParamRenameFactory
@@ -56,12 +56,12 @@ final class RenameParamToMatchTypeRector extends AbstractRector
         ExpectedNameResolver $expectedNameResolver,
         MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
         ParamRenameFactory $paramRenameFactory,
-        MatchTypeParamRenamer $matchTypeParamRenamer
+        ParamRenamer $paramRenamer
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->paramRenameFactory = $paramRenameFactory;
-        $this->matchTypeParamRenamer = $matchTypeParamRenamer;
+        $this->paramRenamer = $paramRenamer;
         $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
 
@@ -121,8 +121,8 @@ CODE_SAMPLE
             if ($paramRename === null) {
                 continue;
             }
-            $matchTypeParamRenamerRename = $this->matchTypeParamRenamer->rename($paramRename);
 
+            $matchTypeParamRenamerRename = $this->paramRenamer->rename($paramRename);
             if ($matchTypeParamRenamerRename === null) {
                 continue;
             }

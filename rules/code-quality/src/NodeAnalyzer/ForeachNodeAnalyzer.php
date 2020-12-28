@@ -31,7 +31,7 @@ final class ForeachNodeAnalyzer
      */
     public function matchAssignItemsOnlyForeachArrayVariable(Foreach_ $foreach): ?Expr
     {
-        if (count((array) $foreach->stmts) !== 1) {
+        if (count($foreach->stmts) !== 1) {
             return null;
         }
 

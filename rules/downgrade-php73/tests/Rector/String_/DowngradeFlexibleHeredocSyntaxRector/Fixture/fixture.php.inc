@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\DowngradeFlexibleHeredocSyntaxRector\Fixture;
+namespace Rector\DowngradePhp73\Tests\Rector\String_\DowngradeFlexibleHeredocSyntaxRector\Fixture;
 
-class FixtureClass
+class Fixture
 {
     public function run()
     {
@@ -27,9 +27,9 @@ class FixtureClass
 -----
 <?php
 
-namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\DowngradeFlexibleHeredocSyntaxRector\Fixture;
+namespace Rector\DowngradePhp73\Tests\Rector\String_\DowngradeFlexibleHeredocSyntaxRector\Fixture;
 
-class FixtureClass
+class Fixture
 {
     public function run()
     {

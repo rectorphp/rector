@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php72\Rector\While_;
 
-use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
@@ -14,7 +13,6 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -99,7 +97,7 @@ CODE_SAMPLE
         /** @var List_ $listNode */
         $listNode = $assignNode->var;
 
-        $foreachedExpr = count((array) $listNode->items) === 1 ? $this->createFuncCall(
+        $foreachedExpr = count($listNode->items) === 1 ? $this->createFuncCall(
             'array_keys',
             [$eachFuncCall->args[0]]
         ) : $eachFuncCall->args[0]->value;
@@ -110,9 +108,7 @@ CODE_SAMPLE
             'stmts' => $node->stmts,
         ]);
 
-        /** @var Comment[] $comments */
-        $comments = $node->getAttribute(AttributeKey::COMMENTS);
-        $foreach->setAttribute(AttributeKey::COMMENTS, $comments);
+        $this->mirrorComments($foreach, $node);
 
         // is key included? add it to foreach
         if ($listNode->items !== []) {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -14,6 +15,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -101,10 +103,9 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Assign) {
-            if ($node->var instanceof PropertyFetch || $node->var instanceof StaticPropertyFetch) {
+            if (StaticInstanceOf::isOneOf($node->var, [PropertyFetch::class, StaticPropertyFetch::class])) {
                 return $this->processMagicSet($node);
             }
-
             return null;
         }
 
@@ -167,20 +168,18 @@ CODE_SAMPLE
         if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetch, $objectType)) {
             return true;
         }
-
-        // $this->value = $value
         return $this->propertyFetchManipulator->isPropertyToSelf($propertyFetch);
     }
 
     private function createMethodCallNodeFromAssignNode(
         PropertyFetch $propertyFetch,
-        Node $node,
+        Expr $expr,
         string $method
     ): MethodCall {
         /** @var Variable $variableNode */
         $variableNode = $propertyFetch->var;
 
-        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch), $node]);
+        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch), $expr]);
     }
 
     private function createMethodCallNodeFromPropertyFetchNode(
