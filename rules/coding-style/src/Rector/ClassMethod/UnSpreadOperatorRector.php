@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\CodingStyle\Tests\Rector\ClassMethod\UnSpreadOperatorRector\UnSpreadOperatorRectorTest
  */
-final class UnSpreadOperatorRectorTest extends AbstractRector
+final class UnSpreadOperatorRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -64,6 +64,30 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $node;
+        if ($node instanceof ClassMethod) {
+            return $this->processUnspreadOperatorClassMethodParams($node);
+        }
+
+        return $this->processUnspreadOperatorMethodCallArgs($node);
+    }
+
+    private function processUnspreadOperatorClassMethodParams(ClassMethod $classMethod): ?ClassMethod
+    {
+        $params = $classMethod->params;
+        if ($params === []) {
+            return null;
+        }
+
+        return $classMethod;
+    }
+
+    private function processUnspreadOperatorMethodCallArgs(MethodCall $methodCall): ?MethodCall
+    {
+        $args = $methodCall->args;
+        if ($args === []) {
+            return null;
+        }
+
+        return $methodCall;
     }
 }
