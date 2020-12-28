@@ -15,18 +15,25 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.3
-                    coverage: pcov
+                    coverage: xdebug
                     tools: composer:v2
 
             -
                 run: composer install --no-progress --ansi
 
-            # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
             -
                 run: |
-                    vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+                    composer require --dev nimut/phpunit-merger
+
+                    vendor/bin/phpunit --coverage-php build/logs/rules.cov rules
+                    vendor/bin/phpunit --coverage-php build/logs/packages.cov packages
+                    vendor/bin/phpunit --coverage-php build/logs/tests.cov tests
+                    vendor/bin/phpunit --coverage-php build/logs/utils.cov utils
+
+                    vendor/bin/phpunit-merger coverage build/logs clover.xml
+
                     # Coveralls.io
                     composer require --dev php-coveralls/php-coveralls:^2.4
-                    vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
+                    vendor/bin/php-coveralls --coverage_clover=clover.xml -v
                 env:
                     COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
