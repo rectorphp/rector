@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\UnSpreadOperatorRector\Fixture;
 
-final class SkipNoMethodCallArgs
+final class SkipNoParamsOrArgs
 {
     public function run()
     {

@@ -80,7 +80,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $spreadVariables = $this->getSpreadVariables($args);
+        $spreadVariables = $this->getSpreadVariables($params);
         if ($spreadVariables === []) {
             return null;
         }

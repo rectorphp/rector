@@ -2,9 +2,10 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\UnSpreadOperatorRector\Fixture;
 
-final class SkipNoClassMethodParams
+final class SkipNoSpreadVariables
 {
-    public function run()
+    public function run(array $data)
     {
+        $this->execute($data);
     }
 }
