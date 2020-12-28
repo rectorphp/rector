@@ -116,8 +116,8 @@ target_downgrade_php_rectorconfigs=($(echo ${downgrade_php_rectorconfigs[$target
 
 packages_to_downgrade=()
 rectorconfigs_to_downgrade=()
-declare -A package_paths
-declare -A packages_by_rectorconfig
+declare -A package_paths=()
+declare -A packages_by_rectorconfig=()
 
 # Switch to production
 composer install --no-dev --no-progress --ansi
@@ -230,7 +230,7 @@ fi
 # Calculate all the dependents for all packages,
 # including only packages to be downgraded
 note "Calculating package execution order"
-declare -A package_dependents
+declare -A package_dependents=()
 counter=1
 while [ $counter -le $numberPackages ]
 do
@@ -267,7 +267,7 @@ done
 # In case of circular dependencies (eg: package1 requires package2
 # and package2 requires package1), the process will fail
 # hasNonDowngradedDependents=()
-declare -A circular_reference_packages_by_rector_config
+declare -A circular_reference_packages_by_rector_config=()
 
 note "Executing Rector to downgrade $numberDowngradedPackages packages"
 downgraded_packages=()
