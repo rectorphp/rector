@@ -36,11 +36,18 @@ return [
                 return $content;
             }
 
+            // skip bin/rector.php for composer autoload class
+            if (Strings::endsWith($filePath, 'bin/rector.php')) {
+                return $content;
+            }
+
             return Unprefixer::unprefixQuoted($content, $prefix);
         },
 
         // scoper missed PSR-4 autodiscovery in Symfony
         function (string $filePath, string $prefix, string $content): string {
+
+
             // scoper missed PSR-4 autodiscovery in Symfony
             if (! Strings::endsWith($filePath, 'config.php') && ! Strings::endsWith($filePath, 'services.php')) {
                 return $content;
