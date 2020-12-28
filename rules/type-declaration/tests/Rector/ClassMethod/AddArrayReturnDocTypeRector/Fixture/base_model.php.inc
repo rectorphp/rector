@@ -14,7 +14,7 @@ final class DemoFile
 	 * @return T[]
 	 */
 	public static function findMany(
-		BaseModel $me
+		string $otherModelClass
 	): array {
         /** @var T[] $rArray */
 		$rArray = []; // get data from somewhere
