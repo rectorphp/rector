@@ -138,6 +138,8 @@ CODE_SAMPLE
 
         $currentReturnType = $this->getNodeReturnPhpDocType($node);
 
+        dump($currentReturnType);
+
         if ($currentReturnType !== null && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
             $currentReturnType,
             $inferedType
