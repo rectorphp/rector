@@ -377,6 +377,8 @@ parameters:
             paths:
                 - packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php
                 - src/Configuration/Configuration.php
+                # prevent circular dependnecy
+                - packages/static-type-mapper/src/Naming/NameScopeFactory.php
 
         - '#Unable to resolve the template type ExpectedType in call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)#'
         # class-string vs string

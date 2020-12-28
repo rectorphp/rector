@@ -11,9 +11,11 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Util\StaticInstanceOf;
@@ -58,6 +60,8 @@ final class StaticTypeMapper
         $this->phpParserNodeMapper = $phpParserNodeMapper;
         $this->phpDocTypeMapper = $phpDocTypeMapper;
         $this->nameScopeFactory = $nameScopeFactory;
+
+        $this->nameScopeFactory->setStaticTypeMapper($this);
     }
 
     public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType): TypeNode
@@ -85,6 +89,16 @@ final class StaticTypeMapper
 
     public function mapPHPStanPhpDocTypeToPHPStanType(PhpDocTagValueNode $phpDocTagValueNode, Node $node): Type
     {
+        if ($phpDocTagValueNode instanceof TemplateTagValueNode) {
+            // special case
+            $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
+            if ($phpDocTagValueNode->bound === null) {
+                return new MixedType();
+            }
+
+            return $this->phpDocTypeMapper->mapToPHPStanType($phpDocTagValueNode->bound, $node, $nameScope);
+        }
+
         if (StaticInstanceOf::isOneOf(
             $phpDocTagValueNode,
             [ReturnTagValueNode::class, ParamTagValueNode::class, VarTagValueNode::class, ThrowsTagValueNode::class]
@@ -105,10 +119,6 @@ final class StaticTypeMapper
     public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
     {
         $nameScope = $this->nameScopeFactory->createNameScopeFromNode($node);
-
-        dump($nameScope);
-        die;
-
         return $this->phpDocTypeMapper->mapToPHPStanType($typeNode, $node, $nameScope);
     }
 }

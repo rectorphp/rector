@@ -137,9 +137,6 @@ CODE_SAMPLE
         );
 
         $currentReturnType = $this->getNodeReturnPhpDocType($node);
-
-        dump($currentReturnType);
-
         if ($currentReturnType !== null && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
             $currentReturnType,
             $inferedType
@@ -184,11 +181,7 @@ CODE_SAMPLE
     {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
-        return $phpDocInfo->getReturnType();
+        return $phpDocInfo ? $phpDocInfo->getReturnType() : null;
     }
 
     /**
