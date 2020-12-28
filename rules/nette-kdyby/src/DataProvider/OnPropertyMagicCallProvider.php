@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\DataProvider;
 
-use Nette\Application\UI\Control;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
@@ -14,6 +13,14 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class OnPropertyMagicCallProvider
 {
+    /**
+     * Package "nette/application" is required for DEV, might not exist for PROD.
+     * So access the class throgh the string
+     *
+     * @var string
+     */
+    private const CONTROL_CLASS = 'Nette\Application\UI\Control';
+
     /**
      * @var MethodCall[]
      */
@@ -86,9 +93,8 @@ final class OnPropertyMagicCallProvider
         if ($className === null) {
             return false;
         }
-
         // control event, inner only
-        if (is_a($className, Control::class, true)) {
+        if (is_a($className, self::CONTROL_CLASS, true)) {
             return false;
         }
 

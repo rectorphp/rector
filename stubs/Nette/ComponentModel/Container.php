@@ -203,7 +203,8 @@ abstract class Container implements IContainer
             }
             $oldMyself->cloning = null;
         }
-        parent::__clone();
+        // In the stubs, this class has no parent
+        // parent::__clone();
     }
 
 
