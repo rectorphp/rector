@@ -72,7 +72,7 @@ jobs:
                     coverage: none
 
             # Test the downgraded Rector by running the default set on its own src
-            -   run: bin/rector process src --dry-run
+            -   run: bin/rector process rules/downgrade-php70/src
 
             # Run PHPStan to make sure no PHP 7.2+ code was left behind
             -   run: vendor/bin/phpstan analyse -c ci/downgrade/phpstan.neon --ansi
