@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
-use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector;
 use Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector;
 use Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector;
@@ -24,10 +23,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
-    $services->set(ChangePhpVersionInPlatformCheckRector::class)
-        ->call('configure', [[
-            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70200,
-        ]]);
     $services->set(DowngradeTrailingCommasInFunctionCallsRector::class);
     $services->set(SetCookieOptionsArrayToArgumentsRector::class);
 };

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
-use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
 use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector;
 use Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector;
@@ -36,9 +35,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
-    $services->set(ChangePhpVersionInPlatformCheckRector::class)->call('configure', [[
-        ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70400,
-    ]]);
     $services->set(DowngradePropertyPromotionRector::class);
     $services->set(DowngradeNonCapturingCatchesRector::class);
     $services->set(DowngradeMatchToSwitchRector::class);
