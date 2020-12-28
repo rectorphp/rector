@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\ClassMethod;
 
-use Nette\Application\UI\Control;
-use Nette\ComponentModel\IContainer;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
@@ -29,12 +27,25 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
     /**
      * @var string
      */
+    private const COMPONENT_CONTAINER_CLASS = 'Nette\ComponentModel\IContainer';
+
+    /**
+     * @var string
+     */
     private const PARENT = 'parent';
 
     /**
      * @var string
      */
     private const NAME = 'name';
+
+    /**
+     * Package "nette/application" is required for DEV, might not exist for PROD.
+     * So access the class throgh the string
+     *
+     * @var string
+     */
+    private const CONTROL_CLASS = 'Nette\Application\UI\Control';
 
     /**
      * @var StaticCallAnalyzer
@@ -112,7 +123,7 @@ CODE_SAMPLE
             return $this->refactorStaticCall($node);
         }
 
-        if ($node instanceof New_ && $this->isObjectType($node->class, (string) IContainer::class)) {
+        if ($node instanceof New_ && $this->isObjectType($node->class, self::COMPONENT_CONTAINER_CLASS)) {
             return $this->refactorNew($node);
         }
 
@@ -121,7 +132,7 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        if (! $this->isInObjectType($classMethod, Control::class)) {
+        if (! $this->isInObjectType($classMethod, self::CONTROL_CLASS)) {
             return null;
         }
 
@@ -133,7 +144,7 @@ CODE_SAMPLE
         foreach ($classMethod->params as $param) {
             if ($this->isName($param, self::PARENT) && $param->type !== null && $this->isName(
                 $param->type,
-                IContainer::class
+                    self::COMPONENT_CONTAINER_CLASS
             )) {
                 $this->removeNode($param);
                 $hasClassMethodChanged = true;

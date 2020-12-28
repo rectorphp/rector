@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Rector\ClassMethod;
 
-use Nette\Application\Routers\RouteList;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -38,6 +37,14 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      * @see https://regex101.com/r/qVlXk2/2
      */
     private const ACTION_RENDER_NAME_MATCHING_REGEX = '#^(action|render)(?<short_action_name>.*?$)#sm';
+
+    /**
+     * Package "nette/application" is required for DEV, might not exist for PROD.
+     * So access the class throgh the string
+     *
+     * @var string
+     */
+    private const ROUTE_LIST_CLASS = 'Nette\Application\Routers\RouteList';
 
     /**
      * @var RouteInfoFactory
@@ -140,7 +147,7 @@ CODE_SAMPLE
         }
 
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
-        $routeListObjectType = new ObjectType(RouteList::class);
+        $routeListObjectType = new ObjectType(self::ROUTE_LIST_CLASS);
         if (! $inferedReturnType->isSuperTypeOf($routeListObjectType)->yes()) {
             return null;
         }

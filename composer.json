@@ -63,16 +63,7 @@
     },
     "autoload": {
         "files": [
-            "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
-            "stubs/Nette/ComponentModel/IComponent.php",
-            "stubs/Nette/ComponentModel/IContainer.php",
-            "stubs/Nette/ComponentModel/Container.php",
-            "stubs/Nette/Application/Routers/RouteList.php",
-            "stubs/Nette/Application/UI/IRenderable.php",
-            "stubs/Nette/Application/UI/ISignalReceiver.php",
-            "stubs/Nette/Application/UI/IStatePersistent.php",
-            "stubs/Nette/Application/UI/Component.php",
-            "stubs/Nette/Application/UI/Control.php"
+            "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php"
         ],
         "psr-4": {
             "Rector\\Testing\\": "packages/testing/src",
