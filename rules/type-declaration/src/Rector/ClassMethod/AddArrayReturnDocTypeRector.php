@@ -6,6 +6,9 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -158,6 +161,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->hasArrayShapeNode($classMethod)) {
+            return true;
+        }
+
         $currentPhpDocReturnType = $this->getNodeReturnPhpDocType($classMethod);
         if ($currentPhpDocReturnType instanceof ArrayType && $currentPhpDocReturnType->getItemType() instanceof MixedType) {
             return true;
@@ -302,5 +309,25 @@ CODE_SAMPLE
 
         $currentReturnType = $this->getNodeReturnPhpDocType($classMethod);
         return $currentReturnType instanceof ArrayType;
+    }
+
+    private function hasArrayShapeNode(ClassMethod $classMethod): bool
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return false;
+        }
+
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (! $returnTagValueNode instanceof ReturnTagValueNode) {
+            return false;
+        }
+
+        if (! $returnTagValueNode->type instanceof ArrayTypeNode) {
+            return false;
+        }
+
+        return $returnTagValueNode->type->type instanceof ArrayShapeNode;
     }
 }
