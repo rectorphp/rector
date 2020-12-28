@@ -32,6 +32,9 @@ final class NameImportingPostRector extends AbstractPostRector
      */
     private $docBlockNameImporter;
 
+    /**
+     * @var string[]|null[]
+     */
     private $importedNames = [];
 
     public function __construct(
