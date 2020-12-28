@@ -8,14 +8,16 @@ abstract class SkipArrayShapeTypeForChild
     /**
      * @return array{a: string, b: int, c: float}[]
      */
-    public function X(): array {
+    public function X(): array
+    {
         return [];
     }
 }
 
 class ChildClassWithArrayShapeReturnType extends SkipArrayShapeTypeForChild
 {
-    public function X(): array {
+    public function X(): array
+    {
         return [
             [
                 'a' => 'string',
