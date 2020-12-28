@@ -25,21 +25,6 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
     private const DESTINATION_DIRECTORY = __DIR__ . '/__temp';
 
     /**
-     * @var TemplateVariablesFactory
-     */
-    private $templateVariablesFactory;
-
-    /**
-     * @var TemplateFinder
-     */
-    private $templateFinder;
-
-    /**
-     * @var FileGenerator
-     */
-    private $fileGenerator;
-
-    /**
      * @var SmartFileSystem
      */
     private $smartFileSystem;
@@ -53,9 +38,9 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->templateVariablesFactory = $this->getService(TemplateVariablesFactory::class);
-        $this->templateFinder = $this->getService(TemplateFinder::class);
-        $this->fileGenerator = $this->getService(FileGenerator::class);
+        $this->getService(TemplateVariablesFactory::class);
+        $this->getService(TemplateFinder::class);
+        $this->getService(FileGenerator::class);
         $this->smartFileSystem = $this->getService(SmartFileSystem::class);
         $this->rectorRecipeGenerator = $this->getService(RectorRecipeGenerator::class);
     }

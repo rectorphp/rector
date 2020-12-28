@@ -177,8 +177,10 @@ final class GenerateCommand extends Command
         if (Strings::endsWith($generatedFilePath, 'Test.php')) {
             return true;
         }
-
-        return Strings::endsWith($generatedFilePath, 'Test.php.inc') && StaticPHPUnitEnvironment::isPHPUnitRun();
+        if (! Strings::endsWith($generatedFilePath, 'Test.php.inc')) {
+            return false;
+        }
+        return StaticPHPUnitEnvironment::isPHPUnitRun();
     }
 
     /**

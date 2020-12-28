@@ -43,12 +43,12 @@ final class ManualInteractiveInputProvider
      */
     public function setInput(array $manualInteractiveInput): void
     {
-        $input = new ArrayInput([]);
+        $arrayInput = new ArrayInput([]);
         $inputStream = $this->createInputStream($manualInteractiveInput);
-        $input->setStream($inputStream);
+        $arrayInput->setStream($inputStream);
 
         // use stream input as input for SymfonyStyle
-        $this->privatesAccessor->setPrivateProperty($this->symfonyStyle, 'input', $input);
+        $this->privatesAccessor->setPrivateProperty($this->symfonyStyle, 'input', $arrayInput);
     }
 
     /**

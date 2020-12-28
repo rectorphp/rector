@@ -8,6 +8,9 @@ use ReflectionClass;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * @see \Rector\RectorGenerator\Tests\Provider\NodeTypesProviderTest
+ */
 final class NodeTypesProvider
 {
     /**

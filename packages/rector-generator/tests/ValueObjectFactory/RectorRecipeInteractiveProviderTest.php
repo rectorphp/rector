@@ -9,7 +9,6 @@ use Rector\RectorGenerator\Exception\ConfigurationException;
 use Rector\RectorGenerator\Generator\RectorRecipeGenerator;
 use Rector\RectorGenerator\Testing\ManualInteractiveInputProvider;
 use Rector\RectorGenerator\ValueObjectFactory\RectorRecipeInteractiveFactory;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\EasyTesting\PHPUnit\Behavior\DirectoryAssertableTrait;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -26,12 +25,7 @@ final class RectorRecipeInteractiveProviderTest extends AbstractKernelTestCase
     /**
      * @var RectorRecipeInteractiveFactory
      */
-    private $rectorRecipeInteractiveProvider;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
+    private $rectorRecipeInteractiveFactory;
 
     /**
      * @var RectorRecipeGenerator
@@ -51,7 +45,7 @@ final class RectorRecipeInteractiveProviderTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->rectorRecipeInteractiveProvider = $this->getService(RectorRecipeInteractiveFactory::class);
+        $this->rectorRecipeInteractiveFactory = $this->getService(RectorRecipeInteractiveFactory::class);
         $this->rectorRecipeGenerator = $this->getService(RectorRecipeGenerator::class);
 
         $this->manualInteractiveInputProvider = $this->getService(ManualInteractiveInputProvider::class);
@@ -65,7 +59,7 @@ final class RectorRecipeInteractiveProviderTest extends AbstractKernelTestCase
         $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage('Rector name "T" must end with "Rector"');
 
-        $this->rectorRecipeInteractiveProvider->create();
+        $this->rectorRecipeInteractiveFactory->create();
     }
 
     public function testGeneratesRectorRule(): void
@@ -73,7 +67,7 @@ final class RectorRecipeInteractiveProviderTest extends AbstractKernelTestCase
         $this->manualInteractiveInputProvider->setInput(
             ['TestPackageName', 'TestRector', 'Arg', 'Description', null, null, 'no']
         );
-        $rectorRecipe = $this->rectorRecipeInteractiveProvider->create();
+        $rectorRecipe = $this->rectorRecipeInteractiveFactory->create();
 
         // generate
         $this->rectorRecipeGenerator->generate($rectorRecipe, self::DESTINATION_DIRECTORY);

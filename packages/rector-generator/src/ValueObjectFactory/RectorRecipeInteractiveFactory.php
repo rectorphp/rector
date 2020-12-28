@@ -18,6 +18,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 final class RectorRecipeInteractiveFactory
 {
+    /**
+     * @var string
+     */
     public const EXAMPLE_CODE_BEFORE = <<<'CODE_SAMPLE'
 <?php
 
@@ -31,6 +34,9 @@ class SomeClass
 
 CODE_SAMPLE;
 
+    /**
+     * @var string
+     */
     public const EXAMPLE_CODE_AFTER = <<<'CODE_SAMPLE'
 <?php
 
@@ -126,14 +132,14 @@ CODE_SAMPLE;
      */
     private function askForNodeTypes(): array
     {
-        $question = new ChoiceQuestion(sprintf(
+        $choiceQuestion = new ChoiceQuestion(sprintf(
             'For what Nodes should the Rector be run (e.g. <fg=yellow>%s</>)',
             'Expr/MethodCall',
         ), $this->nodeTypesProvider->provide());
 
-        $question->setMultiselect(true);
+        $choiceQuestion->setMultiselect(true);
 
-        $nodeTypes = $this->symfonyStyle->askQuestion($question);
+        $nodeTypes = $this->symfonyStyle->askQuestion($choiceQuestion);
 
         $classes = [];
         foreach ($nodeTypes as $nodeType) {
