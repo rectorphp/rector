@@ -23,7 +23,6 @@ use Rector\TypeDeclaration\OverrideGuard\ClassMethodReturnTypeOverrideGuard;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
-use Rector\TypeDeclaration\TypeNormalizer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -45,11 +44,6 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
     private $returnTypeInferer;
 
     /**
-     * @var TypeNormalizer
-     */
-    private $typeNormalizer;
-
-    /**
      * @var ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
@@ -61,12 +55,10 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
 
     public function __construct(
         ReturnTypeInferer $returnTypeInferer,
-        TypeNormalizer $typeNormalizer,
         ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
         AdvancedArrayAnalyzer $advancedArrayAnalyzer
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
-        $this->typeNormalizer = $typeNormalizer;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->advancedArrayAnalyzer = $advancedArrayAnalyzer;
     }
@@ -181,7 +173,7 @@ CODE_SAMPLE
     {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        return $phpDocInfo ? $phpDocInfo->getReturnType() : null;
+        return $phpDocInfo !== null ? $phpDocInfo->getReturnType() : null;
     }
 
     /**
