@@ -38,7 +38,7 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
     /**
      * @var string[]
      */
-    private const EXCLUDED_METHOD_NAMES = [MethodName::CONSTRUCT, MethodName::DESCTRUCT, '__clone'];
+    private const EXCLUDED_METHOD_NAMES = [MethodName::CONSTRUCT, MethodName::DESCTRUCT, MethodName::CLONE];
 
     /**
      * @var bool
