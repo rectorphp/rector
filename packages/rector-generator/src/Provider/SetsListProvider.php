@@ -10,12 +10,12 @@ use ReflectionClass;
 final class SetsListProvider
 {
     /**
-     * @return array<int, string>
+     * @return string[]
      */
     public function provide(): array
     {
-        $setListReflection = new ReflectionClass(SetList::class);
-        $constants = $setListReflection->getConstants();
+        $reflectionClass = new ReflectionClass(SetList::class);
+        $constants = $reflectionClass->getConstants();
 
         return array_keys($constants);
     }

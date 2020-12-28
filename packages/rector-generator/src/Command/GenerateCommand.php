@@ -11,10 +11,10 @@ use Rector\RectorGenerator\Config\ConfigFilesystem;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\Generator\FileGenerator;
 use Rector\RectorGenerator\Guard\OverrideGuard;
-use Rector\RectorGenerator\Provider\RectorRecipeInteractiveProvider;
 use Rector\RectorGenerator\Provider\RectorRecipeProvider;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
+use Rector\RectorGenerator\ValueObjectFactory\RectorRecipeInteractiveFactory;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,9 +24,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\RectorGenerator\Tests\RectorGenerator\GenerateCommandInteractiveModeTest
+ */
 final class GenerateCommand extends Command
 {
-    private const INTERACTIVE_MODE_NAME = 'interactive';
+    /**
+     * @var string
+     */
+    public const INTERACTIVE_MODE_NAME = 'interactive';
 
     /**
      * @var SymfonyStyle
@@ -69,9 +75,9 @@ final class GenerateCommand extends Command
     private $rectorRecipeProvider;
 
     /**
-     * @var RectorRecipeInteractiveProvider
+     * @var RectorRecipeInteractiveFactory
      */
-    private $rectorRecipeInteractiveProvider;
+    private $rectorRecipeInteractiveFactory;
 
     public function __construct(
         ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
@@ -82,7 +88,7 @@ final class GenerateCommand extends Command
         TemplateFinder $templateFinder,
         TemplateVariablesFactory $templateVariablesFactory,
         RectorRecipeProvider $rectorRecipeProvider,
-        RectorRecipeInteractiveProvider $rectorRecipeInteractiveProvider
+        RectorRecipeInteractiveFactory $rectorRecipeInteractiveFactory
     ) {
         parent::__construct();
 
@@ -94,7 +100,7 @@ final class GenerateCommand extends Command
         $this->symfonyStyle = $symfonyStyle;
         $this->fileGenerator = $fileGenerator;
         $this->rectorRecipeProvider = $rectorRecipeProvider;
-        $this->rectorRecipeInteractiveProvider = $rectorRecipeInteractiveProvider;
+        $this->rectorRecipeInteractiveFactory = $rectorRecipeInteractiveFactory;
     }
 
     protected function configure(): void
@@ -171,9 +177,10 @@ final class GenerateCommand extends Command
         if (Strings::endsWith($generatedFilePath, 'Test.php')) {
             return true;
         }
-
-
-        return Strings::endsWith($generatedFilePath, 'Test.php.inc') && StaticPHPUnitEnvironment::isPHPUnitRun();
+        if (! Strings::endsWith($generatedFilePath, 'Test.php.inc')) {
+            return false;
+        }
+        return StaticPHPUnitEnvironment::isPHPUnitRun();
     }
 
     /**
@@ -204,6 +211,6 @@ final class GenerateCommand extends Command
             return $this->rectorRecipeProvider->provide();
         }
 
-        return $this->rectorRecipeInteractiveProvider->provide($this->symfonyStyle);
+        return $this->rectorRecipeInteractiveFactory->create();
     }
 }
