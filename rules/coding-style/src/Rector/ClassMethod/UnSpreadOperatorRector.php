@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -78,6 +80,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $spreadVariables = $this->getSpreadVariables($args);
+        if ($spreadVariables === []) {
+            return null;
+        }
+
         return $classMethod;
     }
 
@@ -88,6 +95,33 @@ CODE_SAMPLE
             return null;
         }
 
+        $spreadVariables = $this->getSpreadVariables($args);
+        if ($spreadVariables === []) {
+            return null;
+        }
+
         return $methodCall;
+    }
+
+    /**
+     * @param Param[]|Args[] $array
+     * @return Param[]|Args[]
+     */
+    private function getSpreadVariables(array $array): array
+    {
+        $spreadVariables = [];
+        foreach ($array as $key => $paramOrArg) {
+            if ($paramOrArg instanceof Param && ! $paramOrArg->variadic) {
+                continue;
+            }
+
+            if ($paramOrArg instanceof Arg && ! $paramOrArg->unpack) {
+                continue;
+            }
+
+            $spreadVariables[$key] = $paramOrArg;
+        }
+
+        return $spreadVariables;
     }
 }
