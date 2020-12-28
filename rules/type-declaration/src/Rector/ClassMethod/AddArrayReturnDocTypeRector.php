@@ -166,6 +166,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->hasInheritDoc($classMethod)) {
+            return true;
+        }
+
         return $currentPhpDocReturnType instanceof IterableType;
     }
 
@@ -254,5 +258,15 @@ CODE_SAMPLE
         }
 
         return $attributeAwareReturnTagValueNode->type->type instanceof ArrayShapeNode;
+    }
+
+    private function hasInheritDoc(ClassMethod $classMethod): bool
+    {
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return false;
+        }
+
+        return $phpDocInfo->hasInheritDoc();
     }
 }
