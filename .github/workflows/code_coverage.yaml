@@ -13,13 +13,12 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.3
-                    coverage: pcov
+                    coverage: xdebug
                     tools: composer:v2
 
             -
                 run: composer install --no-progress --ansi
 
-            # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
             -
                 run: |
                     composer require --dev nimut/phpunit-merger
