@@ -76,3 +76,21 @@ jobs:
 
             # Run PHPStan to make sure no PHP 7.2+ code was left behind
             -   run: vendor/bin/phpstan analyse -c ci/downgrade/phpstan.neon --ansi
+
+            # If we reach here the downgrade works! Then, deploy it to its own repo
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.4
+                    coverage: none
+
+            # publish it to remote repository
+            -
+                uses: symplify/github-action-monorepo-split@master
+                env:
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                with:
+                    package-directory: '.'
+                    split-repository-organization: 'rectorphp'
+                    split-repository-name: 'rector-php71'
+                    user-name: "kaizen-ci"
+                    user-email: "info@kaizen-ci.org"
