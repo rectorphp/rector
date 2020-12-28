@@ -29,10 +29,6 @@ note "Starts"
 note "Coping root files to $NESTED_DIRECTORY directory"
 rsync -av * "$NESTED_DIRECTORY" --quiet
 
-# clean up
-composer require symplify/package-scoper:^9.0.21
-vendor/bin/package-scoper clean-dev-files "$NESTED_DIRECTORY"
-
 
 note "Running composer update without dev"
 composer update --no-dev --no-progress --ansi --working-dir "$NESTED_DIRECTORY"
@@ -48,7 +44,7 @@ composer config platform-check false
 note "Running scoper to $SCOPED_DIRECTORY"
 wget https://github.com/humbug/php-scoper/releases/download/0.14.0/php-scoper.phar -N --no-verbose
 
-php php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir "../$SCOPED_DIRECTORY" --config scoper.php.inc --force --ansi --working-dir "$NESTED_DIRECTORY"
+php php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir "../$SCOPED_DIRECTORY" --config scoper.php --force --ansi --working-dir "$NESTED_DIRECTORY"
 
 
 note "Dumping Composer Autoload"

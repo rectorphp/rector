@@ -33,7 +33,6 @@
         "symplify/autowire-array-parameter": "^9.0.21",
         "symplify/console-color-diff": "^9.0.21",
         "symplify/package-builder": "^9.0.21",
-        "symplify/package-scoper": "^9.0",
         "symplify/rule-doc-generator": "^9.0.21",
         "symplify/set-config-resolver": "^9.0.21",
         "symplify/simple-php-doc-parser": "^9.0.21",
