@@ -6,7 +6,7 @@ namespace Rector\PHPStanExtensions\NodeAnalyzer;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\TypeWithClassName;
-use Symplify\PHPStanRules\Naming\SimpleNameResolver;
+use Symplify\Astral\Naming\SimpleNameResolver;
 
 final class TypeAndNameAnalyzer
 {
