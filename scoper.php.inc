@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
+use Rector\Compiler\Unprefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -27,6 +28,15 @@ return [
     ScoperOption::WHITELIST => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
     ScoperOption::PATCHERS => [
         // [BEWARE] $filePath is absolute!
+
+        // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::match($filePath, '#^(config|src|rules|packages)\/#')) {
+                return $content;
+            }
+
+            return Unprefixer::unprefixQuoted($content, $prefix);
+        },
 
         // scoper missed PSR-4 autodiscovery in Symfony
         function (string $filePath, string $prefix, string $content): string {

@@ -60,5 +60,4 @@ cp -R scoped/. "$SCOPED_DIRECTORY"
 chmod 777 "$SCOPED_DIRECTORY/bin/rector"
 chmod 777 "$SCOPED_DIRECTORY/bin/rector.php"
 
-
 note "Finished"
