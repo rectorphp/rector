@@ -64,6 +64,10 @@ jobs:
                     name: rector-downgraded-code
                     path: build/rector-php71.zip
 
+            # Remove the zip so it is not copied to the target repo
+            -   run: rm build/rector-php71.zip
+            -   run: rm -R build
+
             # Switch to PHP 7.1 and run PHPStan to analyze the code,
             # as to make sure no 7.2+ code was left behind (if there is, PHP will throw some error)
             -   uses: shivammathur/setup-php@v2
