@@ -12,7 +12,7 @@
 		<whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="true">
 			<directory suffix=".php">./</directory>
 			<exclude>
-                <file>./phpstorm.meta.php</file>
+                <file>./.phpstorm.meta.php</file>
                 <directory suffix=".php">./packages/*/tests</directory>
 				<directory suffix=".php">./rules/*/tests</directory>
 	            <directory suffix=".php">./packages/rector-generator/templates</directory>
