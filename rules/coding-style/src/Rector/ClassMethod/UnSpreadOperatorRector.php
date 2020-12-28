@@ -86,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($spreadVariables as $key => $spreadVariable) {
+        foreach (array_keys($spreadVariables) as $key) {
             $classMethod->params[$key]->variadic = false;
             $classMethod->params[$key]->type = new Identifier('array');
         }
@@ -106,7 +106,7 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($spreadVariables as $key => $spreadVariable) {
+        foreach (array_keys($spreadVariables) as $key) {
             $methodCall->args[$key]->unpack = false;
         }
 
