@@ -17,6 +17,11 @@ final class MethodName
     public const DESCTRUCT = '__destruct';
 
     /**
+     * @var string
+     */
+    public const CLONE = '__clone';
+
+    /**
      * Mostly used in unit tests
      * @var string
      */

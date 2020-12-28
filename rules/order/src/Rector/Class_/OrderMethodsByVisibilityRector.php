@@ -38,7 +38,7 @@ final class OrderMethodsByVisibilityRector extends AbstractConstantPropertyMetho
         '__toString',
         '__invoke',
         MethodName::SET_STATE,
-        '__clone',
+        MethodName::CLONE,
         'setUpBeforeClass',
         'tearDownAfterClass',
         MethodName::SET_UP,

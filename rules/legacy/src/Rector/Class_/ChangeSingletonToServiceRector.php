@@ -129,7 +129,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isNames($classMethod, [MethodName::CONSTRUCT, '__clone', '__wakeup'])) {
+            if (! $this->isNames($classMethod, [MethodName::CONSTRUCT, MethodName::CLONE, '__wakeup'])) {
                 continue;
             }
 
