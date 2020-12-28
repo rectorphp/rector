@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
@@ -85,6 +86,11 @@ CODE_SAMPLE
             return null;
         }
 
+        foreach ($spreadVariables as $key => $spreadVariable) {
+            $classMethod->params[$key]->variadic = false;
+            $classMethod->params[$key]->type = new Identifier('array');
+        }
+
         return $classMethod;
     }
 
@@ -100,12 +106,16 @@ CODE_SAMPLE
             return null;
         }
 
+        foreach ($spreadVariables as $key => $spreadVariable) {
+            $methodCall->args[$key]->unpack = false;
+        }
+
         return $methodCall;
     }
 
     /**
-     * @param Param[]|Args[] $array
-     * @return Param[]|Args[]
+     * @param Param[]|Arg[] $array
+     * @return Param[]|Arg[]
      */
     private function getSpreadVariables(array $array): array
     {
@@ -121,7 +131,7 @@ CODE_SAMPLE
                 }
             }
 
-            if (! $paramOrArg->unpack) {
+            if ($paramOrArg instanceof Arg && ! $paramOrArg->unpack) {
                 continue;
             }
 
