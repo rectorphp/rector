@@ -20,7 +20,9 @@ final class Unprefixer
         $content = Strings::replace($content, '#' . $match . '#', '\'\\\\r\\\\n\'');
 
         $match = sprintf('\'%s\\\\', $prefix);
+        $content = Strings::replace($content, '#' . $match . '#', "'");
 
+        $match = sprintf('\'%s\\\\\\\\', $prefix);
         $content = Strings::replace($content, '#' . $match . '#', "'");
 
         return self::unPreSlashQuotedValues($content);
