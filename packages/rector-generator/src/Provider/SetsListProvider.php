@@ -10,7 +10,7 @@ use ReflectionClass;
 final class SetsListProvider
 {
     /**
-     * @return array<int, string>
+     * @return string[]
      */
     public function provide(): array
     {
