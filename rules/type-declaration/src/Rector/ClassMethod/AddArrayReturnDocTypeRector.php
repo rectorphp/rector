@@ -319,15 +319,15 @@ CODE_SAMPLE
             return false;
         }
 
-        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if (! $returnTagValueNode instanceof ReturnTagValueNode) {
+        $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (! $attributeAwareReturnTagValueNode instanceof ReturnTagValueNode) {
             return false;
         }
 
-        if (! $returnTagValueNode->type instanceof ArrayTypeNode) {
+        if (! $attributeAwareReturnTagValueNode->type instanceof ArrayTypeNode) {
             return false;
         }
 
-        return $returnTagValueNode->type->type instanceof ArrayShapeNode;
+        return $attributeAwareReturnTagValueNode->type->type instanceof ArrayShapeNode;
     }
 }
