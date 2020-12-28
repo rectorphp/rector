@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\Rector;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Comment;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -294,6 +296,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $newNode->setAttribute(self::COMMENTS, $oldNode->getAttribute(self::COMMENTS));
     }
 
+    protected function rollbackComments(Node $node, Comment $comment): void
+    {
+        $node->setAttribute(AttributeKey::COMMENTS, null);
+        $node->setDocComment(new Doc($comment->getText()));
+        $node->setAttribute(AttributeKey::PHP_DOC_INFO, null);
+    }
+
     /**
      * @param Stmt[] $stmts
      */
@@ -351,24 +360,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @param string[] $allowedTypes
-     */
-    protected function isAllowedType(string $currentType, array $allowedTypes): bool
-    {
-        foreach ($allowedTypes as $allowedType) {
-            if (is_a($currentType, $allowedType, true)) {
-                return true;
-            }
-
-            if (fnmatch($allowedType, $currentType, FNM_NOESCAPE)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @param Arg[] $newArgs
      * @param Arg[] $appendingArgs
      * @return Arg[]
@@ -389,6 +380,15 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return $this->currentFileInfo;
+    }
+
+    protected function unwrapExpression(Stmt $stmt): Node
+    {
+        if ($stmt instanceof Expression) {
+            return $stmt->expr;
+        }
+
+        return $stmt;
     }
 
     private function isMatchingNodeType(string $nodeClass): bool

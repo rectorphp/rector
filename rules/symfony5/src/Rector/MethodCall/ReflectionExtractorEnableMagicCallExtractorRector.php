@@ -116,7 +116,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count((array) $methodCall->args) < 3) {
+        if (count($methodCall->args) < 3) {
             return true;
         }
 
@@ -132,9 +132,9 @@ CODE_SAMPLE
         $contextOptions = $methodCall->args[2]->value;
 
         $contextOptionValue = null;
-        /** @var ArrayItem $arrayItem */
+
         foreach ($contextOptions->items as $index => $arrayItem) {
-            if ($arrayItem === null) {
+            if (! $arrayItem instanceof ArrayItem) {
                 continue;
             }
 

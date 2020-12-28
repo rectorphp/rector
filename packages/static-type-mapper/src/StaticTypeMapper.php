@@ -16,10 +16,11 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
+use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
-use Rector\StaticTypeMapper\PHPStan\NameScopeFactory;
 
 /**
  * Maps PhpParser <=> PHPStan <=> PHPStan doc <=> string type nodes between all possible formats
@@ -84,11 +85,10 @@ final class StaticTypeMapper
 
     public function mapPHPStanPhpDocTypeToPHPStanType(PhpDocTagValueNode $phpDocTagValueNode, Node $node): Type
     {
-        if ($phpDocTagValueNode instanceof ReturnTagValueNode ||
-            $phpDocTagValueNode instanceof ParamTagValueNode ||
-            $phpDocTagValueNode instanceof VarTagValueNode ||
-            $phpDocTagValueNode instanceof ThrowsTagValueNode
-        ) {
+        if (StaticInstanceOf::isOneOf(
+            $phpDocTagValueNode,
+            [ReturnTagValueNode::class, ParamTagValueNode::class, VarTagValueNode::class, ThrowsTagValueNode::class]
+        )) {
             return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
         }
 

@@ -50,7 +50,10 @@ final class MethodCallToVariableNameResolver
     {
         $methodCallVarName = $this->nodeNameResolver->getName($methodCall->var);
         $methodCallName = $this->nodeNameResolver->getName($methodCall->name);
-        if ($methodCallVarName === null || $methodCallName === null) {
+        if ($methodCallVarName === null) {
+            return null;
+        }
+        if ($methodCallName === null) {
             return null;
         }
 

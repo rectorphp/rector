@@ -4,24 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\ChildPopulator;
 
-use PhpParser\Node;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\UnionType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\SelfObjectType;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 
-final class ChildReturnPopulator
+final class ChildReturnPopulator extends AbstractChildPopulator
 {
     /**
      * @var NodeNameResolver
@@ -29,22 +20,13 @@ final class ChildReturnPopulator
     private $nodeNameResolver;
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var NodeRepository
      */
     private $nodeRepository;
 
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        StaticTypeMapper $staticTypeMapper,
-        NodeRepository $nodeRepository
-    ) {
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeRepository = $nodeRepository;
     }
 
@@ -54,9 +36,6 @@ final class ChildReturnPopulator
     public function populateChildren(ClassMethod $classMethod, Type $returnType): void
     {
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        if ($methodName === null) {
-            throw new ShouldNotHappenException();
-        }
 
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($className)) {
@@ -100,21 +79,5 @@ final class ChildReturnPopulator
 
         // make sure the type is not overridden
         $currentClassMethod->returnType->setAttribute(AttributeKey::DO_NOT_CHANGE, true);
-    }
-
-    /**
-     * @return Name|NullableType|UnionType|null
-     */
-    private function resolveChildTypeNode(Type $type): ?Node
-    {
-        if ($type instanceof MixedType) {
-            return null;
-        }
-
-        if ($type instanceof SelfObjectType || $type instanceof StaticType) {
-            $type = new ObjectType($type->getClassName());
-        }
-
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
     }
 }

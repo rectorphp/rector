@@ -36,7 +36,7 @@ final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
                     new PseudoNamespaceToNamespace('PHPUnit_', ['PHPUnit_Framework_MockObject_MockObject']),
                     new PseudoNamespaceToNamespace('ChangeMe_', ['KeepMe_']),
                     new PseudoNamespaceToNamespace(
-                        'Rector_Generic_Tests_Rector_Name_PseudoNamespaceToNamespaceRector_Fixture_'
+                        'Rector_Renaming_Tests_Rector_FileWithoutNamespace_PseudoNamespaceToNamespaceRector_Fixture_'
                     ),
                 ],
             ],

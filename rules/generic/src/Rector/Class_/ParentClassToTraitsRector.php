@@ -80,10 +80,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->extends === null || $node->isAnonymous()) {
+        if ($node->extends === null) {
             return null;
         }
-
+        if ($node->isAnonymous()) {
+            return null;
+        }
         $nodeParentClassName = $this->getName($node->extends);
         if (! isset($this->parentClassToTraits[$nodeParentClassName])) {
             return null;

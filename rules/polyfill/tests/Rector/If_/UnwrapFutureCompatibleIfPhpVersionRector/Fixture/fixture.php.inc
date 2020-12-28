@@ -2,7 +2,7 @@
 
 namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

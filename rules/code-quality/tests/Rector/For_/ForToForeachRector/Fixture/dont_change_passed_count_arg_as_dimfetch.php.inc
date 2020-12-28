@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
 
-class NestedFirstUsed
+class DontChangePassedCountArgAsDimfetch
 {
     public function run($tokens)
     {
@@ -20,7 +20,7 @@ class NestedFirstUsed
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
 
-class NestedFirstUsed
+class DontChangePassedCountArgAsDimfetch
 {
     public function run($tokens)
     {

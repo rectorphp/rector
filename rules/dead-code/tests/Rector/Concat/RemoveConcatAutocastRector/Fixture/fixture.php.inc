@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Concat\RemoveConcatAutocastRector\Fixture;
 
-class SomeConcatingClass
+class Fixture
 {
     public function run($value)
     {
@@ -16,7 +16,7 @@ class SomeConcatingClass
 
 namespace Rector\DeadCode\Tests\Rector\Concat\RemoveConcatAutocastRector\Fixture;
 
-class SomeConcatingClass
+class Fixture
 {
     public function run($value)
     {

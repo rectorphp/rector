@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NetteKdyby\Naming\EventClassNaming;
@@ -79,6 +80,14 @@ final class ListeningMethodsCollector
                     return null;
                 }
 
+                if (! $node instanceof ArrayItem) {
+                    return;
+                }
+
+                if ($node->key === null) {
+                    return;
+                }
+
                 $eventClass = $this->valueResolver->getValue($node->key);
 
                 if ($type === self::EVENT_TYPE_CONTRIBUTTE) {
@@ -87,7 +96,10 @@ final class ListeningMethodsCollector
                     return null;
                 }
 
-                /** @var ArrayItem $node */
+                if (! $node instanceof ArrayItem) {
+                    throw new ShouldNotHappenException();
+                }
+
                 $eventClassAndClassMethod = $this->resolveCustomClassMethodAndEventClass(
                     $node,
                     $classLike,
@@ -172,10 +184,6 @@ final class ListeningMethodsCollector
                 $dispatchingClass,
                 $property
             );
-        }
-
-        if ($eventClass === null) {
-            return null;
         }
 
         if ($classMethod === null) {

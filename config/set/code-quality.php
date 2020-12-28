@@ -63,11 +63,11 @@ use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
+use Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
-use Rector\SOLID\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -114,7 +114,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ThrowWithPreviousExceptionRector::class);
     $services->set(RemoveSoleValueSprintfRector::class);
     $services->set(ShortenElseIfRector::class);
-    $services->set(UseInterfaceOverImplementationInConstructorRector::class);
     $services->set(AddPregQuoteDelimiterRector::class);
     $services->set(ArrayMergeOfNonArraysToSimpleArrayRector::class);
     $services->set(IntvalToTypeCastRector::class);
@@ -167,4 +166,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NewStaticToNewSelfRector::class);
     $services->set(DateTimeToDateTimeInterfaceRector::class);
     $services->set(UnwrapSprintfOneArgumentRector::class);
+    $services->set(SwitchNegatedTernaryRector::class);
 };

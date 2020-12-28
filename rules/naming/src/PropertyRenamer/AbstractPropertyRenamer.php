@@ -11,7 +11,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
 use Rector\Naming\Contract\RenameGuard\RenameGuardInterface;
 use Rector\Naming\Contract\RenamerInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
@@ -31,7 +31,7 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
     protected $propertyRenameGuard;
 
     /**
-     * @var GuardInterface
+     * @var ConflictingGuardInterface
      */
     protected $conflictingPropertyNameGuard;
 
@@ -92,7 +92,7 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
      */
     public function rename(RenameValueObjectInterface $renameValueObject): ?Node
     {
-        if ($this->areNamesDifferent($renameValueObject)) {
+        if (! $this->areNamesDifferent($renameValueObject)) {
             return null;
         }
 
@@ -113,32 +113,34 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
         return $renameValueObject->getProperty();
     }
 
-    private function areNamesDifferent(RenameValueObjectInterface $renameValueObject): bool
+    private function areNamesDifferent(PropertyRename $propertyRename): bool
     {
-        return $renameValueObject->getCurrentName() === $renameValueObject->getExpectedName();
+        return $propertyRename->getCurrentName() !== $propertyRename->getExpectedName();
     }
 
-    /**
-     * @param PropertyRename $renameValueObject
-     */
-    private function renamePropertyFetchesInClass(RenameValueObjectInterface $renameValueObject): void
+    private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
     {
         // 1. replace property fetch rename in whole class
         $this->callableNodeTraverser->traverseNodesWithCallable(
-            [$renameValueObject->getClassLike()],
-            function (Node $node) use ($renameValueObject): ?Node {
-                if ($this->nodeNameResolver->isLocalPropertyFetchNamed($node, $renameValueObject->getCurrentName())) {
-                    /** @var PropertyFetch $node */
-                    $node->name = new Identifier($renameValueObject->getExpectedName());
+            $propertyRename->getClassLike(),
+            function (Node $node) use ($propertyRename): ?Node {
+                if ($this->nodeNameResolver->isLocalPropertyFetchNamed(
+                    $node,
+                    $propertyRename->getCurrentName()
+                ) && $node instanceof PropertyFetch) {
+                    $node->name = new Identifier($propertyRename->getExpectedName());
                     return $node;
                 }
 
                 if ($this->nodeNameResolver->isLocalStaticPropertyFetchNamed(
                     $node,
-                    $renameValueObject->getCurrentName()
+                    $propertyRename->getCurrentName()
                 )) {
-                    /** @var StaticPropertyFetch $node */
-                    $node->name = new VarLikeIdentifier($renameValueObject->getExpectedName());
+                    if (! $node instanceof StaticPropertyFetch) {
+                        return null;
+                    }
+
+                    $node->name = new VarLikeIdentifier($propertyRename->getExpectedName());
                     return $node;
                 }
 

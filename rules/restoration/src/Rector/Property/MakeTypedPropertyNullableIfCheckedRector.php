@@ -96,7 +96,7 @@ CODE_SAMPLE
 
     private function shouldSkipProperty(Property $property): bool
     {
-        if (count((array) $property->props) !== 1) {
+        if (count($property->props) !== 1) {
             return true;
         }
 
@@ -125,7 +125,7 @@ CODE_SAMPLE
     {
         $isIdenticalOrNotIdenticalToNull = false;
 
-        $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             $onlyPropertyProperty,
             &$isIdenticalOrNotIdenticalToNull
         ) {
@@ -148,7 +148,7 @@ CODE_SAMPLE
     {
         $isBooleanNot = false;
 
-        $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             $onlyPropertyProperty,
             &$isBooleanNot
         ) {

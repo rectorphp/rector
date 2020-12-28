@@ -7,8 +7,8 @@ namespace Rector\Defluent\NodeAnalyzer;
 use PhpParser\Node\Expr;
 use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 
 final class ExprStringTypeResolver
 {

@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -87,14 +86,13 @@ CODE_SAMPLE
             $firstElseIf = array_shift($node->elseifs);
             $node->cond = $firstElseIf->cond;
             $node->stmts = $firstElseIf->stmts;
-
-            $this->copyCommentIfExists($firstElseIf, $node);
+            $this->mirrorComments($node, $firstElseIf);
 
             return $node;
         }
 
         if ($node->else !== null) {
-            $this->addNodesAfterNode((array) $node->else->stmts, $node);
+            $this->addNodesAfterNode($node->else->stmts, $node);
             $node->else = null;
             return $node;
         }
@@ -102,18 +100,13 @@ CODE_SAMPLE
         return null;
     }
 
-    private function doesLastStatementBreakFlow(Node $node): bool
+    private function doesLastStatementBreakFlow(If_ $if): bool
     {
-        $lastStmt = end($node->stmts);
+        $lastStmt = end($if->stmts);
+
         return ! ($lastStmt instanceof Return_
             || $lastStmt instanceof Throw_
             || $lastStmt instanceof Continue_
             || ($lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_));
-    }
-
-    private function copyCommentIfExists(Node $from, Node $to): void
-    {
-        $nodeComments = $from->getAttribute(AttributeKey::COMMENTS);
-        $to->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 }

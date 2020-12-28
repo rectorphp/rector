@@ -2,7 +2,7 @@
 
 namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -12,7 +12,7 @@ class SomeClass
                 break;
 
             default:
-                $this->syntaxError('SELECT, UPDATE or DELETE');
+                $statement = $this->syntaxError('SELECT, UPDATE or DELETE');
                 break;
         }
     }
@@ -24,7 +24,7 @@ class SomeClass
 
 namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

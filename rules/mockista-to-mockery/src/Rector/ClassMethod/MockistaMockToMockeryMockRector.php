@@ -138,6 +138,7 @@ CODE_SAMPLE
                 return null;
             }
 
+            /** @var PropertyFetch|MethodCall $node */
             if (! $this->isNames($node->name, self::METHODS_TO_REMOVE)) {
                 return null;
             }
@@ -244,6 +245,7 @@ CODE_SAMPLE
             return false;
         }
 
+        /** @var MethodCall|PropertyFetch $node */
         if (! $node->var instanceof Variable) {
             return false;
         }

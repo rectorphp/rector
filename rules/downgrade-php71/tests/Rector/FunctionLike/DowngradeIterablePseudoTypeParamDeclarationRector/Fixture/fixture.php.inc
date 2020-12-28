@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(iterable $iterator)
     {
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @param mixed[]|\Traversable $iterator

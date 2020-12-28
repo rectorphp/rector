@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Downgrade\Rector\LNumber\ChangePhpVersionInPlatformCheckRector;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector;
 use Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector;
 use Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector;
@@ -13,10 +12,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(DowngradeFlexibleHeredocSyntaxRector::class);
     $services->set(DowngradeListReferenceAssignmentRector::class);
-    $services->set(ChangePhpVersionInPlatformCheckRector::class)
-        ->call('configure', [[
-            ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70200,
-        ]]);
     $services->set(DowngradeTrailingCommasInFunctionCallsRector::class);
     $services->set(SetCookieOptionsArrayToArgumentsRector::class);
 };

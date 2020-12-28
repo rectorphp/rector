@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\Fixture;
 
-final class DemoFile
+final class WithParamDocblock
 {
 	/**
      * @param string $x
@@ -20,7 +20,7 @@ final class DemoFile
 
 namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\Fixture;
 
-final class DemoFile
+final class WithParamDocblock
 {
 	/**
      * @param string $x

@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedPrivateConstantRector\Fixture;
 
-final class SomeController
+final class Fixture
 {
     private const SOME_CONSTANT = 5;
     public function run()
@@ -17,7 +17,7 @@ final class SomeController
 
 namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedPrivateConstantRector\Fixture;
 
-final class SomeController
+final class Fixture
 {
     public function run()
     {

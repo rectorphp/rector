@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Ternary\TernaryConditionVariableAssignmentRector\Fixture;
 
 function skip_different_variable_names($value)
 {

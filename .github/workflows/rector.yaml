@@ -13,8 +13,8 @@ jobs:
                         name: Rector without Dev Dependencies
                         install: composer install --no-progress --ansi --no-dev
                         run: |
-                            # needs to remove, add dev dependencies are missing and phpstan.neon includes them
-                            rm phpstan.neon
+                            # must be removed, as local config is missing dev dependencies
+                            rm phpstan-for-rector.neon
                             bin/rector list
 
         runs-on: ubuntu-latest

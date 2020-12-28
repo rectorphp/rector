@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\Fixture;
 
-class BooleanOperatorInCondition
+class Fixture4
 {
     public function exists(): bool
     {
@@ -20,7 +20,7 @@ class BooleanOperatorInCondition
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\Fixture;
 
-class BooleanOperatorInCondition
+class Fixture4
 {
     public function exists(): bool
     {

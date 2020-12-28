@@ -1,0 +1,12 @@
+{
+    "name": "rector/rector-prefixed",
+    "description": "Prefixed scoped version of rector/rector package",
+    "license": "MIT",
+    "bin": [
+        "bin/rector"
+    ],
+    "require": {
+        "php": "^7.3|^8.0",
+        "phpstan/phpstan": "^0.12.64"
+    }
+}

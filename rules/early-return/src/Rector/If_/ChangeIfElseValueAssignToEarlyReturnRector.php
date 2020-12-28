@@ -6,8 +6,10 @@ namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\StmtsManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -106,18 +108,23 @@ CODE_SAMPLE
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->stmts);
 
         $return = new Return_($assign->expr);
-        $this->copyCommentIfExists($assign, $return);
+        $this->mirrorComments($return, $assign);
         $node->stmts[$lastIfStmtKey] = $return;
 
+        $else = $node->else;
+        if (! $else instanceof Else_) {
+            throw new ShouldNotHappenException();
+        }
+
+        $elseStmts = $else->stmts;
+
         /** @var Assign $assign */
-        $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->else->stmts);
+        $assign = $this->stmtsManipulator->getUnwrappedLastStmt($elseStmts);
 
-        $lastElseStmtKey = array_key_last($node->else->stmts);
-
-        $elseStmts = $node->else->stmts;
+        $lastElseStmtKey = array_key_last($elseStmts);
 
         $return = new Return_($assign->expr);
-        $this->copyCommentIfExists($assign, $return);
+        $this->mirrorComments($return, $assign);
         $elseStmts[$lastElseStmtKey] = $return;
 
         $node->else = null;
@@ -126,11 +133,5 @@ CODE_SAMPLE
         $this->removeNode($nextNode);
 
         return $node;
-    }
-
-    private function copyCommentIfExists(Node $from, Node $to): void
-    {
-        $nodeComments = $from->getAttribute(AttributeKey::COMMENTS);
-        $to->setAttribute(AttributeKey::COMMENTS, $nodeComments);
     }
 }

@@ -200,7 +200,7 @@ final class EregToPcreTransformer
             $r[$rr] .= '()';
             ++$i;
         } else {
-            $position = (int) $i + 1;
+            $position = $i + 1;
             [$t, $ii] = $this->_ere2pcre($content, $position);
             if ($ii >= $l || $content[$ii] !== ')') {
                 throw new InvalidEregException('"(" does not have a matching ")"');
@@ -270,8 +270,8 @@ final class EregToPcreTransformer
             throw new InvalidEregException('"{" does not have a matching "}"');
         }
 
-        $start = (int) $i + 1;
-        $length = (int) $ii - ($i + 1);
+        $start = $i + 1;
+        $length = $ii - ($i + 1);
         $bound = Strings::substring($s, $start, $length);
 
         $matches = Strings::match($bound, self::BOUND_REGEX);
@@ -298,15 +298,15 @@ final class EregToPcreTransformer
      */
     private function processCharacterClass(string $content, int $i, string $cls): array
     {
-        $offset = (int) $i;
+        $offset = $i;
         $ii = strpos($content, ']', $offset);
         if ($ii === false) {
             throw new InvalidEregException('"[" does not have a matching "]"');
         }
 
-        $start = (int) $i + 1;
+        $start = $i + 1;
 
-        $length = (int) ($ii - ($i + 1));
+        $length = $ii - ($i + 1);
         $ccls = Strings::substring($content, $start, $length);
         if (! isset(self::CHARACTER_CLASS_MAP[$ccls])) {
             throw new InvalidEregException('an invalid or unsupported character class [' . $ccls . ']');

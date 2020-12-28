@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
+use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInferer;
@@ -35,14 +34,21 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
      */
     private $functionLikeReturnTypeResolver;
 
+    /**
+     * @var ClassMethodAndPropertyAnalyzer
+     */
+    private $classMethodAndPropertyAnalyzer;
+
     public function __construct(
         ReturnTagReturnTypeInferer $returnTagReturnTypeInferer,
         ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
-        FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver
+        FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
+        ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer
     ) {
         $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;
         $this->returnTagReturnTypeInferer = $returnTagReturnTypeInferer;
         $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
+        $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
     }
 
     public function inferProperty(Property $property): Type
@@ -58,7 +64,10 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
         $propertyName = $this->nodeNameResolver->getName($property);
 
         foreach ($classLike->getMethods() as $classMethod) {
-            if (! $this->hasClassMethodOnlyStatementReturnOfPropertyFetch($classMethod, $propertyName)) {
+            if (! $this->classMethodAndPropertyAnalyzer->hasClassMethodOnlyStatementReturnOfPropertyFetch(
+                $classMethod,
+                $propertyName
+            )) {
                 continue;
             }
 
@@ -75,29 +84,6 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
     public function getPriority(): int
     {
         return 1700;
-    }
-
-    private function hasClassMethodOnlyStatementReturnOfPropertyFetch(
-        ClassMethod $classMethod,
-        string $propertyName
-    ): bool {
-        if (count((array) $classMethod->stmts) !== 1) {
-            return false;
-        }
-
-        $onlyClassMethodStmt = $classMethod->stmts[0];
-        if (! $onlyClassMethodStmt instanceof Return_) {
-            return false;
-        }
-
-        /** @var Return_ $return */
-        $return = $onlyClassMethodStmt;
-
-        if (! $return->expr instanceof PropertyFetch) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($return->expr, $propertyName);
     }
 
     private function inferClassMethodReturnType(ClassMethod $classMethod): Type

@@ -20,7 +20,7 @@ final class ChangedFilesDetectorTest extends AbstractRectorTestCase
     {
         parent::setUp();
 
-        $this->changedFilesDetector = self::$container->get(ChangedFilesDetector::class);
+        $this->changedFilesDetector = $this->getService(ChangedFilesDetector::class);
     }
 
     protected function tearDown(): void

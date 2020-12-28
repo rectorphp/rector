@@ -78,11 +78,11 @@ CODE_SAMPLE
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         if ($parentNode instanceof Assign && $parentNode->var === $node) {
-            return new Array_((array) $node->items);
+            return new Array_($node->items);
         }
 
         if ($parentNode instanceof Foreach_ && $parentNode->valueVar === $node) {
-            return new Array_((array) $node->items);
+            return new Array_($node->items);
         }
 
         return null;

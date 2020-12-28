@@ -119,11 +119,7 @@ CODE_SAMPLE
             return $this->refactorProperty($node);
         }
 
-        if ($node instanceof ClassMethod) {
-            return $this->refactorClassMethod($node);
-        }
-
-        return null;
+        return $this->refactorClassMethod($node);
     }
 
     private function refactorProperty(Property $property): ?Property
@@ -177,7 +173,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $classMethod->params) !== 1) {
+        if (count($classMethod->params) !== 1) {
             return null;
         }
 
@@ -191,9 +187,9 @@ CODE_SAMPLE
         return $classMethod;
     }
 
-    private function hasNodeTagValueNode(Node $node, string $tagValueNodeClass): bool
+    private function hasNodeTagValueNode(Property $property, string $tagValueNodeClass): bool
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return false;
         }

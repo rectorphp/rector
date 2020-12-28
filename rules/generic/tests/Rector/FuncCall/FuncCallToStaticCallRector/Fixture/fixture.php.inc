@@ -2,7 +2,7 @@
 
 namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToStaticCallRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function someMethod()
     {
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToStaticCallRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function someMethod()
     {

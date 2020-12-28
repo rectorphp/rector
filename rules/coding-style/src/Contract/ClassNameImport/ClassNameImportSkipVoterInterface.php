@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Contract\ClassNameImport;
 
 use PhpParser\Node;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 interface ClassNameImportSkipVoterInterface
 {

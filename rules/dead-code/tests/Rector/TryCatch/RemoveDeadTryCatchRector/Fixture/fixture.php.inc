@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\TryCatch\RemoveDeadTryCatchRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\TryCatch\RemoveDeadTryCatchRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

@@ -21,6 +21,7 @@ use Rector\Naming\NamingConvention\NamingConventionAnalyzer;
 use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
 use Rector\Naming\ValueObject\VariableAndCallAssign;
 use Rector\Naming\VariableRenamer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -146,8 +147,16 @@ CODE_SAMPLE
             return null;
         }
 
-        $expectedName = $this->expectedNameResolver->resolveForCall($variableAndCallAssign->getCall());
-        if ($expectedName === null || $this->isName($node->var, $expectedName)) {
+        $call = $variableAndCallAssign->getCall();
+        if ($this->isMultipleCall($call)) {
+            return null;
+        }
+
+        $expectedName = $this->expectedNameResolver->resolveForCall($call);
+        if ($expectedName === null) {
+            return null;
+        }
+        if ($this->isName($node->var, $expectedName)) {
             return null;
         }
 
@@ -158,6 +167,43 @@ CODE_SAMPLE
         $this->renameVariable($variableAndCallAssign, $expectedName);
 
         return $node;
+    }
+
+    /**
+     * @param FuncCall|StaticCall|MethodCall $node
+     */
+    private function isMultipleCall(Node $node): bool
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parentNode) {
+            $countUsed = count($this->betterNodeFinder->find($parentNode, function (Node $n) use ($node): bool {
+                if (get_class($node) !== get_class($n)) {
+                    return false;
+                }
+
+                /** @var FuncCall|StaticCall|MethodCall $n */
+                $passedNode = clone $n;
+
+                /** @var FuncCall|StaticCall|MethodCall $node */
+                $usedNode = clone $node;
+
+                /** @var FuncCall|StaticCall|MethodCall $passedNode */
+                $passedNode->args = [];
+
+                /** @var FuncCall|StaticCall|MethodCall $usedNode */
+                $usedNode->args = [];
+
+                return $this->areNodesEqual($passedNode, $usedNode);
+            }));
+
+            if ($countUsed > 1) {
+                return true;
+            }
+
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return false;
     }
 
     private function shouldSkip(VariableAndCallAssign $variableAndCallAssign, string $expectedName): bool

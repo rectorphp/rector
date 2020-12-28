@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp71\Tests\Rector\ClassConst\Fixture;
 
-class SomeClass
+class Fixture
 {
     const PUBLIC_CONST_A = 1;
     public const PUBLIC_CONST_B = 2;
@@ -16,7 +16,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp71\Tests\Rector\ClassConst\Fixture;
 
-class SomeClass
+class Fixture
 {
     const PUBLIC_CONST_A = 1;
     const PUBLIC_CONST_B = 2;

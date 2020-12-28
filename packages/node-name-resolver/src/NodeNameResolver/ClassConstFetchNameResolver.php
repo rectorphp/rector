@@ -36,8 +36,10 @@ final class ClassConstFetchNameResolver implements NodeNameResolverInterface
     {
         $class = $this->nodeNameResolver->getName($node->class);
         $name = $this->nodeNameResolver->getName($node->name);
-
-        if ($class === null || $name === null) {
+        if ($class === null) {
+            return null;
+        }
+        if ($name === null) {
             return null;
         }
 

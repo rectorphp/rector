@@ -32,9 +32,9 @@ abstract class AbstractNodeTypeResolverTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->betterNodeFinder = self::$container->get(BetterNodeFinder::class);
-        $this->testingParser = self::$container->get(TestingParser::class);
-        $this->nodeTypeResolver = self::$container->get(NodeTypeResolver::class);
+        $this->betterNodeFinder = $this->getService(BetterNodeFinder::class);
+        $this->testingParser = $this->getService(TestingParser::class);
+        $this->nodeTypeResolver = $this->getService(NodeTypeResolver::class);
     }
 
     /**

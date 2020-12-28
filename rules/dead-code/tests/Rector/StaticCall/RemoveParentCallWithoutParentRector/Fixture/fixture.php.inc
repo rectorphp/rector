@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector\Fixture;
 
-class OrphanClass
+class Fixture
 {
     public function __construct()
     {
@@ -21,7 +21,7 @@ class OrphanClass
 
 namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector\Fixture;
 
-class OrphanClass
+class Fixture
 {
     public function __construct()
     {

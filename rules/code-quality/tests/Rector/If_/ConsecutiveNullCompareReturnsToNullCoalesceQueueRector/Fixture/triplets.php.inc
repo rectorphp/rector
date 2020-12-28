@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\Fixture;
 
 class Triplets
 {
@@ -41,7 +41,7 @@ class Triplets
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\Fixture;
 
 class Triplets
 {

@@ -72,7 +72,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $node->args) === 1) {
+        if (count($node->args) === 1) {
             // complete default value ''
             $node->args[1] = $node->args[0];
             $node->args[0] = new Arg(new String_(''));
@@ -85,7 +85,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $node->args) === 2 && $this->isStringOrUnionStringOnlyType($node->args[1]->value)) {
+        if (count($node->args) === 2 && $this->isStringOrUnionStringOnlyType($node->args[1]->value)) {
             $node->args = array_reverse($node->args);
         }
 

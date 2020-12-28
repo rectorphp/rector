@@ -7,6 +7,7 @@ namespace Rector\Php52\Rector\Switch_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Switch_;
@@ -75,16 +76,18 @@ CODE_SAMPLE
     {
         foreach ($node->cases as $case) {
             foreach ($case->stmts as $key => $caseStmt) {
-                if ($caseStmt instanceof Continue_) {
-                    $case->stmts[$key] = $this->processContinueStatement($caseStmt);
+                if (! $caseStmt instanceof Continue_) {
+                    continue;
                 }
+
+                $case->stmts[$key] = $this->processContinueStatement($caseStmt);
             }
         }
 
         return $node;
     }
 
-    private function processContinueStatement(Continue_ $continue): Node
+    private function processContinueStatement(Continue_ $continue): Stmt
     {
         if ($continue->num === null) {
             return new Break_();
@@ -101,7 +104,7 @@ CODE_SAMPLE
         return $continue;
     }
 
-    private function processVariableNum(Continue_ $continue, Variable $numVariable): Node
+    private function processVariableNum(Continue_ $continue, Variable $numVariable): Stmt
     {
         $staticType = $this->getStaticType($numVariable);
 

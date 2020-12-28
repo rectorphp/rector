@@ -7,6 +7,10 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * Fixed in nikic/php-parser 4.10.4
+ * Keep this test to ensure this is keep working in the future
+ */
 final class DoNotDuplicateCodeTest extends AbstractRectorTestCase
 {
     /**

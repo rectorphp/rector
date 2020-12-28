@@ -25,6 +25,10 @@ final class ArrayManipulator
     public function isArrayOnlyScalarValues(Array_ $array): bool
     {
         foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             if ($arrayItem->value instanceof Array_) {
                 if (! $this->isArrayOnlyScalarValues($arrayItem->value)) {
                     return false;
@@ -91,6 +95,9 @@ final class ArrayManipulator
 
     public function hasKeyName(ArrayItem $arrayItem, string $name): bool
     {
-        return $arrayItem->key instanceof String_ && $arrayItem->key->value === $name;
+        if (! $arrayItem->key instanceof String_) {
+            return false;
+        }
+        return $arrayItem->key->value === $name;
     }
 }

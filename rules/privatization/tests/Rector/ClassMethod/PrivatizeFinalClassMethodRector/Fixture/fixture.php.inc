@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeFinalClassMethodRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     protected function someMethod()
     {
@@ -15,7 +15,7 @@ final class SomeClass
 
 namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeFinalClassMethodRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     private function someMethod()
     {

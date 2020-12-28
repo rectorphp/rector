@@ -2,7 +2,7 @@
 
 namespace Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlPConnectToMysqliConnectRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     public function run($host, $username, $password)
     {
@@ -16,7 +16,7 @@ final class SomeClass
 
 namespace Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlPConnectToMysqliConnectRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     public function run($host, $username, $password)
     {

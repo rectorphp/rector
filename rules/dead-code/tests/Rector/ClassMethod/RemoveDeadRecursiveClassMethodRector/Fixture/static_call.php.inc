@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDeadRecursiveClassMethodRector\Fixture;
 
-class YesAnotherStaticCall
+class StaticCall
 {
     public static function run()
     {
@@ -16,7 +16,7 @@ class YesAnotherStaticCall
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDeadRecursiveClassMethodRector\Fixture;
 
-class YesAnotherStaticCall
+class StaticCall
 {
 }
 

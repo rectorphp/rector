@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector\Fixture;
 
-class SkipElseFalseValue
+class SkipElseFalse
 {
     public function run()
     {

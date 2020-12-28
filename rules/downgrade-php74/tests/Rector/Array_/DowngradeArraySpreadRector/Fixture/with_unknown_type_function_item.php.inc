@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class WithUnknownTypeFunctionItemClass
+class WithUnknownTypeFunctionItem
 {
     function getArrayOrTraversable()
     {
@@ -21,7 +21,7 @@ class WithUnknownTypeFunctionItemClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
-class WithUnknownTypeFunctionItemClass
+class WithUnknownTypeFunctionItem
 {
     function getArrayOrTraversable()
     {

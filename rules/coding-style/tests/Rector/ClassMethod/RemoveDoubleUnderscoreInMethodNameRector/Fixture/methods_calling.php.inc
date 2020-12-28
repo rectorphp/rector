@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector\Fixture;
 
-final class MethodCalling
+final class MethodsCalling
 {
     public function run(MyClass $myClass)
     {
@@ -33,7 +33,7 @@ final class MethodCalling
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector\Fixture;
 
-final class MethodCalling
+final class MethodsCalling
 {
     public function run(MyClass $myClass)
     {

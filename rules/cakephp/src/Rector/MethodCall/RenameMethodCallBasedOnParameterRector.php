@@ -105,7 +105,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (count((array) $methodCall->args) < 1) {
+            if (count($methodCall->args) < 1) {
                 continue;
             }
 

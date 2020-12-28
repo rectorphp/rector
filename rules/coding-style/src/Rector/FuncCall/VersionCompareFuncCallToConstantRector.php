@@ -101,7 +101,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $node->args) !== 3) {
+        if (count($node->args) !== 3) {
             return null;
         }
 
@@ -123,10 +123,13 @@ CODE_SAMPLE
 
     private function isPhpVersionConstant(Expr $expr): bool
     {
-        return $expr instanceof ConstFetch && $expr->name->toString() === 'PHP_VERSION';
+        if (! $expr instanceof ConstFetch) {
+            return false;
+        }
+        return $expr->name->toString() === 'PHP_VERSION';
     }
 
-    private function getNewNodeForArg(Expr $expr): Node
+    private function getNewNodeForArg(Expr $expr): Expr
     {
         if ($this->isPhpVersionConstant($expr)) {
             return new ConstFetch(new Name('PHP_VERSION_ID'));

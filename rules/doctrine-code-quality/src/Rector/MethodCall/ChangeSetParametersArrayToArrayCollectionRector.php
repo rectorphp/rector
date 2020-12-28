@@ -37,7 +37,7 @@ final class ChangeSetParametersArrayToArrayCollectionRector extends AbstractRect
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->needToSkip($node)) {
+        if ($this->shouldSkipMethodCall($node)) {
             return null;
         }
 
@@ -112,9 +112,9 @@ CODE_SAMPLE
             ]);
     }
 
-    private function needToSkip(Node $node): bool
+    private function shouldSkipMethodCall(MethodCall $methodCall): bool
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
         if ($classLike === null) {
             return true;
         }
@@ -123,11 +123,11 @@ CODE_SAMPLE
         if (! $this->isObjectType($classLike, 'Doctrine\ORM\EntityRepository')) {
             return true;
         }
-        if (! $this->isObjectType($node->var, 'Doctrine\ORM\EntityRepository')) {
+        if (! $this->isObjectType($methodCall->var, 'Doctrine\ORM\EntityRepository')) {
             return true;
         }
 
-        return ! $this->isName($node->name, 'setParameters');
+        return ! $this->isName($methodCall->name, 'setParameters');
     }
 
     private function getNewArrayCollectionFromSetParametersArgument(Arg $arg): New_

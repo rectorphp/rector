@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector;
 
 use Iterator;
+use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\Rector\Property\ChangePropertyVisibilityRector;
 use Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector\Source\ParentObject;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -34,13 +35,13 @@ final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
             ChangePropertyVisibilityRector::class => [
                 ChangePropertyVisibilityRector::PROPERTY_TO_VISIBILITY_BY_CLASS => [
                     ParentObject::class => [
-                        'toBePublicProperty' => 'public',
-                        'toBeProtectedProperty' => 'protected',
-                        'toBePrivateProperty' => 'private',
-                        'toBePublicStaticProperty' => 'public',
+                        'toBePublicProperty' => Visibility::PUBLIC,
+                        'toBeProtectedProperty' => Visibility::PROTECTED,
+                        'toBePrivateProperty' => Visibility::PRIVATE,
+                        'toBePublicStaticProperty' => Visibility::PUBLIC,
                     ],
-                    'Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector\Fixture\NormalObject' => [
-                        'toBePublicStaticProperty' => 'public',
+                    'Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector\Fixture\Fixture3' => [
+                        'toBePublicStaticProperty' => Visibility::PUBLIC,
                     ],
                 ],
             ],

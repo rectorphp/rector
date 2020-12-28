@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class SomeConfigController
+class Config
 {
     public function actionGet()
     {
@@ -21,7 +21,7 @@ class SomeConfigController
 
 namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
-class SomeConfigController
+class Config
 {
     private \Illuminate\Contracts\Config\Repository $configRepository;
     public function __construct(\Illuminate\Contracts\Config\Repository $configRepository)

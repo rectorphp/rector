@@ -13,8 +13,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Rector\TypeDeclaration\ValueObject\NewType;
@@ -119,8 +119,10 @@ CODE_SAMPLE
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return null;
         }
-
-        if ($node->params === null || $node->params === []) {
+        if ($node->params === null) {
+            return null;
+        }
+        if ($node->params === []) {
             return null;
         }
 

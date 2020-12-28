@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class LostCommentBeforeElseIf
+class LostCommentBeforeElseif
 {
     public function convert($data)
     {
@@ -27,9 +27,9 @@ class LostCommentBeforeElseIf
 -----
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class LostCommentBeforeElseIf
+class LostCommentBeforeElseif
 {
     public function convert($data)
     {

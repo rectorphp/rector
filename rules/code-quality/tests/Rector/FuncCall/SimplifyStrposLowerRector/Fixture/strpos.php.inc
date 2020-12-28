@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyStrposLowerRector\Fixture;
 
-final class StrposCalls
+final class Strpos
 {
     public function run()
     {
@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyStrposLowerRector\Fixture;
 
-final class StrposCalls
+final class Strpos
 {
     public function run()
     {

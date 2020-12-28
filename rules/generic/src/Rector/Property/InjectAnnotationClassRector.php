@@ -134,7 +134,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
 
@@ -193,15 +193,15 @@ CODE_SAMPLE
         return (bool) Strings::match($serviceName, self::BETWEEN_PERCENT_CHARS_REGEX);
     }
 
-    private function resolveType(Node $node, PhpDocTagValueNode $phpDocTagValueNode): Type
+    private function resolveType(Property $property, PhpDocTagValueNode $phpDocTagValueNode): Type
     {
         if ($phpDocTagValueNode instanceof JMSInjectTagValueNode) {
-            return $this->resolveJMSDIInjectType($node, $phpDocTagValueNode);
+            return $this->resolveJMSDIInjectType($property, $phpDocTagValueNode);
         }
 
         if ($phpDocTagValueNode instanceof PHPDIInjectTagValueNode) {
             /** @var PhpDocInfo $phpDocInfo */
-            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+            $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
             return $phpDocInfo->getVarType();
         }
@@ -215,10 +215,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $name = $this->getName($property);
-        if ($name === null) {
-            return null;
-        }
+        $propertyName = $this->getName($property);
 
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -230,19 +227,19 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $this->addConstructorDependencyToClass($classLike, $type, $name);
+        $this->addConstructorDependencyToClass($classLike, $type, $propertyName);
 
         return $property;
     }
 
-    private function resolveJMSDIInjectType(Node $node, JMSInjectTagValueNode $jmsInjectTagValueNode): Type
+    private function resolveJMSDIInjectType(Property $property, JMSInjectTagValueNode $jmsInjectTagValueNode): Type
     {
         $serviceMap = $this->serviceMapProvider->provide();
         $serviceName = $jmsInjectTagValueNode->getServiceName();
 
         if ($serviceName) {
-            // 1. service class
             if (class_exists($serviceName)) {
+                // single class service
                 return new ObjectType($serviceName);
             }
 
@@ -257,7 +254,7 @@ CODE_SAMPLE
 
         // 3. service is in @var annotation
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         $varType = $phpDocInfo->getVarType();
         if (! $varType instanceof MixedType) {
@@ -265,19 +262,19 @@ CODE_SAMPLE
         }
 
         // the @var is missing and service name was not found → report it
-        $this->reportServiceNotFound($serviceName, $node);
+        $this->reportServiceNotFound($serviceName, $property);
 
         return new MixedType();
     }
 
-    private function reportServiceNotFound(?string $serviceName, Node $node): void
+    private function reportServiceNotFound(?string $serviceName, Property $property): void
     {
         if ($serviceName !== null) {
             return;
         }
 
         /** @var SmartFileInfo $fileInfo */
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        $fileInfo = $property->getAttribute(AttributeKey::FILE_INFO);
 
         $errorMessage = sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName);
 

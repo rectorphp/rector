@@ -21,6 +21,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NetteKdyby\BlueprintFactory\VariableWithTypesFactory;
 use Rector\NetteKdyby\ValueObject\VariableWithType;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 /**
  * @todo decouple to generic object factory for better re-use, e.g. this is just value object pattern
@@ -42,14 +43,21 @@ final class EventValueObjectClassFactory
      */
     private $nodeFactory;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
     public function __construct(
         ClassNaming $classNaming,
         NodeFactory $nodeFactory,
+        NodeNameResolver $nodeNameResolver,
         VariableWithTypesFactory $variableWithTypesFactory
     ) {
         $this->classNaming = $classNaming;
         $this->variableWithTypesFactory = $variableWithTypesFactory;
         $this->nodeFactory = $nodeFactory;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -130,11 +138,10 @@ final class EventValueObjectClassFactory
     {
         $usedVariableNames = [];
 
-        $className = $classBuilder->getNode()
-            ->name;
-
         foreach ($variablesWithTypes as $variablesWithType) {
             if (in_array($variablesWithType->getName(), $usedVariableNames, true)) {
+                $className = $this->nodeNameResolver->getName($classBuilder->getNode());
+
                 $message = sprintf(
                     'Variable "$%s" is duplicated in to be created "%s" class',
                     $variablesWithType->getName(),

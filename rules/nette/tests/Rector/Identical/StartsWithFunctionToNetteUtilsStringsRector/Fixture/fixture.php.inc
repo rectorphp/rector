@@ -2,7 +2,7 @@
 
 namespace Rector\Nette\Tests\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function start($needle)
     {
@@ -19,7 +19,7 @@ class SomeClass
 
 namespace Rector\Nette\Tests\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function start($needle)
     {

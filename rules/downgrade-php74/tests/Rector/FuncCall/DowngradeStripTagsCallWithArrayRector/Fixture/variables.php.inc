@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\Fixture;
 
-class VariableClass
+class Variables
 {
     public function run($string)
     {
@@ -18,7 +18,7 @@ class VariableClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\Fixture;
 
-class VariableClass
+class Variables
 {
     public function run($string)
     {

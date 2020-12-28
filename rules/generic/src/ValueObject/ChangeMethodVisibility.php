@@ -17,11 +17,11 @@ final class ChangeMethodVisibility
     private $method;
 
     /**
-     * @var string
+     * @var int
      */
     private $visibility;
 
-    public function __construct(string $class, string $method, string $visibility)
+    public function __construct(string $class, string $method, int $visibility)
     {
         $this->class = $class;
         $this->method = $method;
@@ -38,7 +38,7 @@ final class ChangeMethodVisibility
         return $this->method;
     }
 
-    public function getVisibility(): string
+    public function getVisibility(): int
     {
         return $this->visibility;
     }

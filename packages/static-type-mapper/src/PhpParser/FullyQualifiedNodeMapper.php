@@ -9,9 +9,9 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\AliasedObjectType;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
 {

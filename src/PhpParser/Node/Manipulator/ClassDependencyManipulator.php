@@ -78,9 +78,9 @@ final class ClassDependencyManipulator
         ?Type $type,
         Assign $assign
     ): void {
+        /** @var ClassMethod|null $constructorMethod */
         $constructorMethod = $class->getMethod(MethodName::CONSTRUCT);
 
-        /** @var ClassMethod|null $constructorMethod */
         if ($constructorMethod !== null) {
             $this->classMethodAssignManipulator->addParameterAndAssignToMethod(
                 $constructorMethod,
@@ -119,7 +119,7 @@ final class ClassDependencyManipulator
 
             $classMethod->stmts = array_merge((array) $classMethod->stmts, $stmts);
 
-            $class->stmts = array_merge((array) $class->stmts, [$classMethod]);
+            $class->stmts = array_merge($class->stmts, [$classMethod]);
             return;
         }
 

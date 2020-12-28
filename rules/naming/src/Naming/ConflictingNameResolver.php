@@ -114,9 +114,7 @@ final class ConflictingNameResolver
 
         // params
         foreach ($functionLike->params as $param) {
-            /** @var string $paramName */
-            $paramName = $this->nodeNameResolver->getName($param);
-            $paramNames[] = $paramName;
+            $paramNames[] = $this->nodeNameResolver->getName($param);
         }
 
         return $paramNames;

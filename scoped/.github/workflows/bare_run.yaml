@@ -1,0 +1,23 @@
+name: Bare Run
+
+on: [pull_request, push]
+
+jobs:
+    bare_run:
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php_version: ['7.3', '7.4', '8.0']
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php_version }}
+                    coverage: none
+
+            -   run: php bin/rector --ansi

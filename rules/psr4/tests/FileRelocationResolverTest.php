@@ -22,7 +22,7 @@ final class FileRelocationResolverTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->fileRelocationResolver = self::$container->get(FileRelocationResolver::class);
+        $this->fileRelocationResolver = $this->getService(FileRelocationResolver::class);
     }
 
     /**

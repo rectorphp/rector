@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -108,12 +107,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === null || $node->stmts === []) {
+        if ($node->stmts === null) {
             return null;
         }
-
+        if ($node->stmts === []) {
+            return null;
+        }
         $haveNodeChanged = false;
-        foreach ((array) $node->stmts as $key => $stmt) {
+        foreach ($node->stmts as $key => $stmt) {
             if ($stmt instanceof Expression) {
                 $stmt = $stmt->expr;
             }
@@ -123,14 +124,14 @@ CODE_SAMPLE
             }
 
             /** @var If_ $stmt */
-            if (count((array) $stmt->stmts) === 1) {
+            if (count($stmt->stmts) === 1) {
                 $node->stmts[$key] = $stmt->stmts[0];
                 continue;
             }
 
             $haveNodeChanged = true;
             // move all nodes one level up
-            array_splice($node->stmts, $key, count((array) $stmt->stmts) - 1, $stmt->stmts);
+            array_splice($node->stmts, $key, count($stmt->stmts) - 1, $stmt->stmts);
         }
 
         if ($haveNodeChanged) {
@@ -147,7 +148,7 @@ CODE_SAMPLE
         }
 
         // just one if
-        if (count((array) $node->elseifs) !== 0) {
+        if (count($node->elseifs) !== 0) {
             return false;
         }
 
@@ -168,8 +169,10 @@ CODE_SAMPLE
 
     private function resolvePropertyFetchType(PropertyFetch $propertyFetch): Type
     {
-        /** @var Class_ $classLike */
         $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return new MixedType();
+        }
 
         $propertyName = $this->getName($propertyFetch);
         if ($propertyName === null) {
@@ -205,11 +208,11 @@ CODE_SAMPLE
         return $this->typeFactory->createMixedPassedOrUnionTypeAndKeepConstant($resolvedTypes);
     }
 
-    private function resolvePropertyTypeAfterConstructor(ClassLike $classLike, string $propertyName): Type
+    private function resolvePropertyTypeAfterConstructor(Class_ $class, string $propertyName): Type
     {
         $propertyTypeFromConstructor = null;
 
-        $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod !== null) {
             $propertyTypeFromConstructor = $this->resolveAssignedTypeInStmtsByPropertyName(
                 (array) $constructClassMethod->stmts,
@@ -238,6 +241,10 @@ CODE_SAMPLE
             }
 
             if (! $this->isPropertyFetchAssignOfPropertyName($node, $propertyName)) {
+                return null;
+            }
+
+            if (! $node instanceof Assign) {
                 return null;
             }
 

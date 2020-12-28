@@ -9,6 +9,7 @@ use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
 use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector;
 use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
+use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
 use Rector\DeadCode\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
@@ -45,6 +46,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
+    $services->set(RecastingRemovalRector::class);
 
     $services->set(RemoveDeadStmtRector::class);
 

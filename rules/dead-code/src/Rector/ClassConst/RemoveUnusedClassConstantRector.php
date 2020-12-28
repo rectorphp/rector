@@ -104,25 +104,22 @@ CODE_SAMPLE
         return null;
     }
 
-    /**
-     * @param ClassConst $node
-     */
-    private function shouldSkip(Node $node): bool
+    private function shouldSkip(ClassConst $classConst): bool
     {
         if ($this->isOpenSourceProjectType()) {
             return true;
         }
 
-        if (count((array) $node->consts) !== 1) {
+        if (count($classConst->consts) !== 1) {
             return true;
         }
 
-        if ($this->classConstManipulator->isEnum($node)) {
+        if ($this->classConstManipulator->isEnum($classConst)) {
             return true;
         }
 
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return false;
         }

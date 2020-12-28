@@ -6,8 +6,10 @@ namespace Rector\CakePHP\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -65,25 +67,36 @@ CODE_SAMPLE
         if ($classLike === null) {
             return null;
         }
+
         if (! $this->isName($node, 'fixtures')) {
             return null;
         }
 
         foreach ($node->props as $prop) {
-            if (! $prop->default instanceof Array_) {
-                continue;
-            }
-
-            foreach ($prop->default->items as $item) {
-                if (! $item->value instanceof String_) {
-                    continue;
-                }
-
-                $this->renameFixtureName($item->value);
-            }
+            $this->refactorPropertyWithArrayDefault($prop);
         }
 
         return $node;
+    }
+
+    private function refactorPropertyWithArrayDefault(PropertyProperty $propertyProperty): void
+    {
+        if (! $propertyProperty->default instanceof Array_) {
+            return;
+        }
+
+        $array = $propertyProperty->default;
+        foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
+            if (! $arrayItem->value instanceof String_) {
+                continue;
+            }
+
+            $this->renameFixtureName($arrayItem->value);
+        }
     }
 
     private function renameFixtureName(String_ $string): void

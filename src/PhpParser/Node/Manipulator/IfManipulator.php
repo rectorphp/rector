@@ -72,7 +72,7 @@ final class IfManipulator
      */
     public function matchIfNotNullReturnValue(If_ $if): ?Expr
     {
-        $stmts = (array) $if->stmts;
+        $stmts = $if->stmts;
         if (count($stmts) !== 1) {
             return null;
         }
@@ -101,13 +101,18 @@ final class IfManipulator
         if ($if->stmts === []) {
             return null;
         }
-
-        if (! $if->cond instanceof NotIdentical || ! $this->isNotIdenticalNullCompare($if->cond)) {
+        if (! $if->cond instanceof NotIdentical) {
+            return null;
+        }
+        if (! $this->isNotIdenticalNullCompare($if->cond)) {
             return null;
         }
 
         $insideIfNode = $if->stmts[0];
-        if (! $insideIfNode instanceof Expression || ! $insideIfNode->expr instanceof Assign) {
+        if (! $insideIfNode instanceof Expression) {
+            return null;
+        }
+        if (! $insideIfNode->expr instanceof Assign) {
             return null;
         }
 
@@ -127,7 +132,7 @@ final class IfManipulator
      */
     public function matchIfValueReturnValue(If_ $if): ?Expr
     {
-        $stmts = (array) $if->stmts;
+        $stmts = $if->stmts;
 
         if (count($stmts) !== 1) {
             return null;
@@ -183,7 +188,11 @@ final class IfManipulator
 
     public function isIfAndElseWithSameVariableAssignAsLastStmts(If_ $if, Expr $desiredExpr): bool
     {
-        if (! $this->isIfWithElse($if)) {
+        if ($if->else === null) {
+            return false;
+        }
+
+        if ((bool) $if->elseifs) {
             return false;
         }
 
@@ -230,7 +239,7 @@ final class IfManipulator
      */
     public function collectNestedIfsWithNonBreaking(Foreach_ $foreach): array
     {
-        if (count((array) $foreach->stmts) !== 1) {
+        if (count($foreach->stmts) !== 1) {
             return [];
         }
 
@@ -299,7 +308,7 @@ final class IfManipulator
 
     public function isIfWithOnlyOneStmt(If_ $if): bool
     {
-        return count((array) $if->stmts) === 1;
+        return count($if->stmts) === 1;
     }
 
     public function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
@@ -308,10 +317,11 @@ final class IfManipulator
             return false;
         }
 
-        return $if->cond instanceof Identical && $this->betterStandardPrinter->areNodesEqual(
-            $this->getIfVar($if),
-            $assign->var
-        );
+        if (! $if->cond instanceof Identical) {
+            return false;
+        }
+
+        return $this->betterStandardPrinter->areNodesEqual($this->getIfCondVar($if), $assign->var);
     }
 
     public function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $node): bool
@@ -319,11 +329,10 @@ final class IfManipulator
         if (! $node instanceof MethodCall && ! $node instanceof PropertyFetch) {
             return false;
         }
-
-        return $if->cond instanceof NotIdentical && ! $this->betterStandardPrinter->areNodesEqual(
-            $this->getIfVar($if),
-            $node->var
-        );
+        if (! $if->cond instanceof NotIdentical) {
+            return false;
+        }
+        return ! $this->betterStandardPrinter->areNodesEqual($this->getIfCondVar($if), $node->var);
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr
@@ -367,21 +376,12 @@ final class IfManipulator
 
     private function hasOnlyStmtOfType(If_ $if, string $desiredType): bool
     {
-        $stmts = (array) $if->stmts;
+        $stmts = $if->stmts;
         if (count($stmts) !== 1) {
             return false;
         }
 
         return is_a($stmts[0], $desiredType);
-    }
-
-    private function isIfWithElse(If_ $if): bool
-    {
-        if ($if->else === null) {
-            return false;
-        }
-
-        return ! (bool) $if->elseifs;
     }
 
     private function isIfWithoutElseAndElseIfs(If_ $if): bool
@@ -393,10 +393,11 @@ final class IfManipulator
         return ! (bool) $if->elseifs;
     }
 
-    private function getIfVar(If_ $if): Node
+    private function getIfCondVar(If_ $if): Node
     {
         /** @var Identical|NotIdentical $ifCond */
         $ifCond = $if->cond;
+
         return $this->constFetchManipulator->isNull($ifCond->left) ? $ifCond->right : $ifCond->left;
     }
 }

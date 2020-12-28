@@ -2,7 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector\Fixture;
 
-class CaseSensitive
+class Fixture2
 {
     protected function configure(): void
     {
@@ -22,7 +22,7 @@ class CaseSensitive
 
 namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector\Fixture;
 
-class CaseSensitive
+class Fixture2
 {
     protected function configure(): void
     {

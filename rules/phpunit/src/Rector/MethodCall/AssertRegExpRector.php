@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -103,14 +104,14 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         return $node;
     }
 
-    private function resolveOldCondition(Node $node): int
+    private function resolveOldCondition(Expr $expr): int
     {
-        if ($node instanceof LNumber) {
-            return $node->value;
+        if ($expr instanceof LNumber) {
+            return $expr->value;
         }
 
-        if ($node instanceof ConstFetch) {
-            return $this->isTrue($node) ? 1 : 0;
+        if ($expr instanceof ConstFetch) {
+            return $this->isTrue($expr) ? 1 : 0;
         }
 
         throw new ShouldNotHappenException();

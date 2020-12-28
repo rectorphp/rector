@@ -56,16 +56,12 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ((array) $node->implements === []) {
+        if ($node->implements === []) {
             return null;
         }
 
         foreach ($node->implements as $key => $implement) {
             $implementedInterfaceName = $this->getName($implement);
-            if ($implementedInterfaceName === null) {
-                return null;
-            }
-
             if (! Strings::match($implementedInterfaceName, $this->interfacePattern)) {
                 continue;
             }

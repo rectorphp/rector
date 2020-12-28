@@ -118,7 +118,7 @@ CODE_SAMPLE
 
         /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
-        if (count((array) $methodCallNode->args) !== 1) {
+        if (count($methodCallNode->args) !== 1) {
             return null;
         }
 

@@ -2,7 +2,7 @@
 
 namespace Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     /**
      * @var SomeDependency
@@ -27,7 +27,7 @@ final class SomeClass
 
 namespace Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     /**
      * @var SomeDependency

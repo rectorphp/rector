@@ -27,7 +27,7 @@ final class BetterStandardPrinterTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->betterStandardPrinter = self::$container->get(BetterStandardPrinter::class);
+        $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
     }
 
     public function testAddingCommentOnSomeNodesFail(): void

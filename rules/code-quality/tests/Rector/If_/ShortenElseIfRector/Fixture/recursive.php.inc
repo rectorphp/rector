@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class RecursiveClass
+class Recursive
 {
     /**
      * @var bool
@@ -44,9 +44,9 @@ class RecursiveClass
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class RecursiveClass
+class Recursive
 {
     /**
      * @var bool

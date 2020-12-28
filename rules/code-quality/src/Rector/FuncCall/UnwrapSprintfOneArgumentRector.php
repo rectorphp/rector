@@ -48,7 +48,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count((array) $node->args) > 1) {
+        if (count($node->args) > 1) {
             return null;
         }
 

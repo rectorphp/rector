@@ -117,17 +117,17 @@ CODE_SAMPLE
         return $stmt instanceof FunctionLike;
     }
 
-    private function isUnreachable(Node $node): bool
+    private function isUnreachable(Stmt $stmt): bool
     {
-        $isUnreachable = $node->getAttribute(AttributeKey::IS_UNREACHABLE);
+        $isUnreachable = $stmt->getAttribute(AttributeKey::IS_UNREACHABLE);
         if ($isUnreachable === true) {
             return true;
         }
 
         // traverse up for unreachable node in the same scope
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        $previousNode = $stmt->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
 
-        while ($previousNode instanceof Node && ! $this->isBreakingScopeNode($previousNode)) {
+        while ($previousNode instanceof Stmt && ! $this->isBreakingScopeNode($previousNode)) {
             $isUnreachable = $previousNode->getAttribute(AttributeKey::IS_UNREACHABLE);
             if ($isUnreachable === true) {
                 return true;
@@ -142,9 +142,9 @@ CODE_SAMPLE
     /**
      * Keep content after markTestSkipped(), intentional temporary
      */
-    private function isAfterMarkTestSkippedMethodCall(Node $node): bool
+    private function isAfterMarkTestSkippedMethodCall(Stmt $stmt): bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPrevious($node, function (Node $node): bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($stmt, function (Node $node): bool {
             if (! $node instanceof MethodCall) {
                 return false;
             }
@@ -164,20 +164,20 @@ CODE_SAMPLE
     /**
      * Check nodes that breaks scope while traversing up
      */
-    private function isBreakingScopeNode(Node $node): bool
+    private function isBreakingScopeNode(Stmt $stmt): bool
     {
-        if ($node instanceof ClassLike) {
+        if ($stmt instanceof ClassLike) {
             return true;
         }
 
-        if ($node instanceof ClassMethod) {
+        if ($stmt instanceof ClassMethod) {
             return true;
         }
 
-        if ($node instanceof Namespace_) {
+        if ($stmt instanceof Namespace_) {
             return true;
         }
 
-        return $node instanceof Else_;
+        return $stmt instanceof Else_;
     }
 }

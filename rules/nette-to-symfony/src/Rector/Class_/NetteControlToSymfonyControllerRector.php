@@ -20,7 +20,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\Nette\TemplatePropertyAssignCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -101,25 +101,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isAnonymousClass($node)) {
+        if ($this->shouldSkipClass($node)) {
             return null;
         }
 
-        // skip presenter
-        if ($this->isName($node, '*Presenter')) {
-            return null;
-        }
+        $shortClassName = $this->getShortName($node);
+        $shortClassName = $this->removeSuffix($shortClassName, 'Control');
+        $shortClassName .= 'Controller';
 
-        if (! $this->isObjectType($node, 'Nette\Application\UI\Control')) {
-            return null;
-        }
-
-        $className = (string) $node->name;
-
-        $className = $this->removeSuffix($className, 'Control');
-        $className .= 'Controller';
-
-        $node->name = new Identifier($className);
+        $node->name = new Identifier($shortClassName);
         $node->extends = new FullyQualified(AbstractController::class);
 
         $classMethod = $node->getMethod('render');
@@ -128,6 +118,20 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    private function shouldSkipClass(Class_ $class): bool
+    {
+        if ($this->isAnonymousClass($class)) {
+            return true;
+        }
+
+        // skip presenter
+        if ($this->isName($class, '*Presenter')) {
+            return true;
+        }
+
+        return ! $this->isObjectType($class, 'Nette\Application\UI\Control');
     }
 
     private function removeSuffix(string $content, string $suffix): string

@@ -78,10 +78,26 @@ CODE_SAMPLE
         $valueNode = $issetNode->vars[0];
 
         // various scenarios
+        $ifFirstStmt = $node->stmts[0];
+        if (! $ifFirstStmt instanceof Expression) {
+            return null;
+        }
+
+        $else = $node->else;
+        if (! $else instanceof Else_) {
+            return null;
+        }
+
+        $elseFirstStmt = $else->stmts[0];
+        if (! $elseFirstStmt instanceof Expression) {
+            return null;
+        }
+
         /** @var Assign $firstAssign */
-        $firstAssign = $node->stmts[0]->expr;
+        $firstAssign = $ifFirstStmt->expr;
+
         /** @var Assign $secondAssign */
-        $secondAssign = $node->else->stmts[0]->expr;
+        $secondAssign = $elseFirstStmt->expr;
 
         // 1. array_merge
         if (! $firstAssign->expr instanceof FuncCall) {
@@ -112,7 +128,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count((array) $if->elseifs) > 1) {
+        if (count($if->elseifs) > 1) {
             return true;
         }
 
@@ -128,10 +144,29 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->areNodesEqual($if->cond->vars[0], $if->stmts[0]->expr->var)) {
+        $ifStmt = $if->stmts[0];
+        if (! $ifStmt instanceof Expression) {
             return true;
         }
-        return ! $this->areNodesEqual($if->cond->vars[0], $if->else->stmts[0]->expr->var);
+
+        if (! $ifStmt->expr instanceof Assign) {
+            return true;
+        }
+
+        if (! $this->areNodesEqual($if->cond->vars[0], $ifStmt->expr->var)) {
+            return true;
+        }
+
+        $firstElseStmt = $if->else->stmts[0];
+        if (! $firstElseStmt instanceof Expression) {
+            return false;
+        }
+
+        if (! $firstElseStmt->expr instanceof Assign) {
+            return false;
+        }
+
+        return ! $this->areNodesEqual($if->cond->vars[0], $firstElseStmt->expr->var);
     }
 
     /**
@@ -139,7 +174,7 @@ CODE_SAMPLE
      */
     private function hasOnlyStatementAssign(Node $node): bool
     {
-        if (count((array) $node->stmts) !== 1) {
+        if (count($node->stmts) !== 1) {
             return false;
         }
 

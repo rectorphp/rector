@@ -67,12 +67,12 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var MethodCall|null $getMockBuilderMethodCall */
         $getMockBuilderMethodCall = $this->isName(
             $node->var->name,
             'disableOriginalConstructor'
         ) ? $node->var->var : $node->var;
 
-        /** @var MethodCall|null $getMockBuilderMethodCall */
         if ($getMockBuilderMethodCall === null) {
             return null;
         }

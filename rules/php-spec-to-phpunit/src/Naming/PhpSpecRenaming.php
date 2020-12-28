@@ -12,6 +12,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -35,34 +36,39 @@ final class PhpSpecRenaming
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, StringFormatConverter $stringFormatConverter)
-    {
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        StringFormatConverter $stringFormatConverter,
+        ClassNaming $classNaming
+    ) {
         $this->stringFormatConverter = $stringFormatConverter;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->classNaming = $classNaming;
     }
 
     public function renameMethod(ClassMethod $classMethod): void
     {
-        $name = $this->nodeNameResolver->getName($classMethod);
-        if ($name === null) {
-            return;
-        }
-
         if ($classMethod->isPrivate()) {
             return;
         }
 
-        $name = $this->removeNamePrefixes($name);
+        $classMethodName = $this->nodeNameResolver->getName($classMethod);
+        $classMethodName = $this->removeNamePrefixes($classMethodName);
 
         // from PhpSpec to PHPUnit method naming convention
-        $name = $this->stringFormatConverter->underscoreAndHyphenToCamelCase($name);
+        $classMethodName = $this->stringFormatConverter->underscoreAndHyphenToCamelCase($classMethodName);
 
         // add "test", so PHPUnit runs the method
-        if (! Strings::startsWith($name, 'test')) {
-            $name = 'test' . ucfirst($name);
+        if (! Strings::startsWith($classMethodName, 'test')) {
+            $classMethodName = 'test' . ucfirst($classMethodName);
         }
 
-        $classMethod->name = new Identifier($name);
+        $classMethod->name = new Identifier($classMethodName);
     }
 
     public function renameExtends(Class_ $class): void
@@ -72,26 +78,32 @@ final class PhpSpecRenaming
 
     public function renameNamespace(Class_ $class): void
     {
-        /** @var Namespace_ $namespace */
+        /** @var Namespace_|null $namespace */
         $namespace = $class->getAttribute(AttributeKey::NAMESPACE_NODE);
-        if ($namespace->name === null) {
+        if ($namespace === null) {
             return;
         }
 
-        $newNamespaceName = StaticRectorStrings::removePrefixes($namespace->name->toString(), ['spec\\']);
+        $namespaceName = $this->nodeNameResolver->getName($namespace);
+        if ($namespaceName === null) {
+            return;
+        }
+
+        $newNamespaceName = StaticRectorStrings::removePrefixes($namespaceName, ['spec\\']);
 
         $namespace->name = new Name('Tests\\' . $newNamespaceName);
     }
 
     public function renameClass(Class_ $class): void
     {
+        $classShortName = $this->classNaming->getShortName($class);
         // anonymous class?
-        if ($class->name === null) {
+        if ($classShortName === '') {
             throw new ShouldNotHappenException();
         }
 
         // 2. change class name
-        $newClassName = StaticRectorStrings::removeSuffixes($class->name->toString(), [self::SPEC]);
+        $newClassName = StaticRectorStrings::removeSuffixes($classShortName, [self::SPEC]);
         $newTestClassName = $newClassName . 'Test';
 
         $class->name = new Identifier($newTestClassName);
@@ -104,7 +116,8 @@ final class PhpSpecRenaming
             throw new ShouldNotHappenException();
         }
 
-        $bareClassName = StaticRectorStrings::removeSuffixes($class->name->toString(), [self::SPEC, 'Test']);
+        $shortClassName = $this->classNaming->getShortName($class);
+        $bareClassName = StaticRectorStrings::removeSuffixes($shortClassName, [self::SPEC, 'Test']);
 
         return lcfirst($bareClassName);
     }

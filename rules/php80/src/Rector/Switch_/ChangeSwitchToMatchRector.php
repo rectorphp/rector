@@ -9,26 +9,44 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\MatchArm;
-use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Php80\NodeAnalyzer\SwitchAnalyzer;
+use Rector\Php80\NodeResolver\SwitchExprsResolver;
+use Rector\Php80\ValueObject\CondAndExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/match_expression_v2
+ * @see https://3v4l.org/572T5
  *
  * @see \Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\ChangeSwitchToMatchRectorTest
  */
 final class ChangeSwitchToMatchRector extends AbstractRector
 {
     /**
+     * @var SwitchExprsResolver
+     */
+    private $switchExprsResolver;
+
+    /**
+     * @var SwitchAnalyzer
+     */
+    private $switchAnalyzer;
+
+    /**
      * @var Expr|null
      */
     private $assignExpr;
+
+    public function __construct(SwitchExprsResolver $switchExprsResolver, SwitchAnalyzer $switchAnalyzer)
+    {
+        $this->switchExprsResolver = $switchExprsResolver;
+        $this->switchAnalyzer = $switchAnalyzer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -39,7 +57,7 @@ class SomeClass
 {
     public function run()
     {
-        $statement = switch ($this->lexer->lookahead['type']) {
+        switch ($this->lexer->lookahead['type']) {
             case Lexer::T_SELECT:
                 $statement = $this->SelectStatement();
                 break;
@@ -48,12 +66,8 @@ class SomeClass
                 $statement = $this->UpdateStatement();
                 break;
 
-            case Lexer::T_DELETE:
-                $statement = $this->DeleteStatement();
-                break;
-
             default:
-                $this->syntaxError('SELECT, UPDATE or DELETE');
+                $statement = $this->syntaxError('SELECT, UPDATE or DELETE');
                 break;
         }
     }
@@ -68,7 +82,6 @@ class SomeClass
         $statement = match ($this->lexer->lookahead['type']) {
             Lexer::T_SELECT => $this->SelectStatement(),
             Lexer::T_UPDATE => $this->UpdateStatement(),
-            Lexer::T_DELETE => $this->DeleteStatement(),
             default => $this->syntaxError('SELECT, UPDATE or DELETE'),
         };
     }
@@ -91,22 +104,36 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->shouldSkipSwitch($node)) {
+            return null;
+        }
+
+        $condAndExprs = $this->switchExprsResolver->resolve($node);
+        if ($condAndExprs === []) {
+            return null;
+        }
+
+        if (! $this->haveCondAndExprsMatchPotential($condAndExprs)) {
+            return null;
+        }
+
         $this->assignExpr = null;
 
-        if (! $this->hasEachCaseBreak($node)) {
-            return null;
+        $isReturn = false;
+        foreach ($condAndExprs as $condAndExpr) {
+            if ($condAndExpr->getKind() === CondAndExpr::TYPE_RETURN) {
+                $isReturn = true;
+                break;
+            }
         }
 
-        if (! $this->hasSingleStmtCases($node)) {
-            return null;
-        }
-
-        if (! $this->hasSingleAssignVariableInStmtCase($node)) {
-            return null;
-        }
-
-        $matchArms = $this->createMatchArmsFromCases($node->cases);
+        $matchArms = $this->createMatchArmsFromCases($condAndExprs);
         $match = new Match_($node->cond, $matchArms);
+
+        if ($isReturn) {
+            return new Return_($match);
+        }
+
         if ($this->assignExpr) {
             return new Assign($this->assignExpr, $match);
         }
@@ -114,45 +141,28 @@ CODE_SAMPLE
         return $match;
     }
 
-    private function hasEachCaseBreak(Switch_ $switch): bool
+    private function shouldSkipSwitch(Switch_ $switch): bool
     {
-        foreach ($switch->cases as $case) {
-            foreach ($case->stmts as $caseStmt) {
-                if (! $caseStmt instanceof Break_) {
-                    continue;
-                }
-
-                return true;
-            }
+        if (! $this->switchAnalyzer->hasEachCaseBreak($switch)) {
+            return true;
         }
 
-        return false;
+        return ! $this->switchAnalyzer->hasEachCaseSingleStmt($switch);
     }
 
-    private function hasSingleStmtCases(Switch_ $switch): bool
+    /**
+     * @param CondAndExpr[] $condAndExprs
+     */
+    private function haveCondAndExprsMatchPotential(array $condAndExprs): bool
     {
-        foreach ($switch->cases as $case) {
-            $stmtsWithoutBreak = array_filter($case->stmts, function (Node $node): bool {
-                return ! $node instanceof Break_;
-            });
-
-            if (count($stmtsWithoutBreak) !== 1) {
-                return false;
-            }
+        $uniqueCondAndExprKinds = $this->resolveUniqueKinds($condAndExprs);
+        if (count($uniqueCondAndExprKinds) > 1) {
+            return false;
         }
 
-        return true;
-    }
-
-    private function hasSingleAssignVariableInStmtCase(Switch_ $switch): bool
-    {
         $assignVariableNames = [];
-
-        foreach ($switch->cases as $case) {
-            /** @var Expression $onlyStmt */
-            $onlyStmt = $case->stmts[0];
-            $expr = $onlyStmt->expr;
-
+        foreach ($condAndExprs as $condAndExpr) {
+            $expr = $condAndExpr->getExpr();
             if (! $expr instanceof Assign) {
                 continue;
             }
@@ -161,34 +171,44 @@ CODE_SAMPLE
         }
 
         $assignVariableNames = array_unique($assignVariableNames);
-
         return count($assignVariableNames) <= 1;
     }
 
     /**
-     * @param Case_[] $cases
+     * @param CondAndExpr[] $condAndExprs
      * @return MatchArm[]
      */
-    private function createMatchArmsFromCases(array $cases): array
+    private function createMatchArmsFromCases(array $condAndExprs): array
     {
         $matchArms = [];
-        foreach ($cases as $case) {
-            $stmt = $case->stmts[0];
-            if (! $stmt instanceof Expression) {
-                throw new ShouldNotHappenException();
-            }
-
-            $expr = $stmt->expr;
+        foreach ($condAndExprs as $condAndExpr) {
+            $expr = $condAndExpr->getExpr();
 
             if ($expr instanceof Assign) {
                 $this->assignExpr = $expr->var;
                 $expr = $expr->expr;
             }
 
-            $condList = $case->cond === null ? null : [$case->cond];
+            $condExpr = $condAndExpr->getCondExpr();
+
+            $condList = $condExpr === null ? null : [$condExpr];
             $matchArms[] = new MatchArm($condList, $expr);
         }
 
         return $matchArms;
+    }
+
+    /**
+     * @param CondAndExpr[] $condAndExprs
+     * @return string[]
+     */
+    private function resolveUniqueKinds(array $condAndExprs): array
+    {
+        $condAndExprKinds = [];
+        foreach ($condAndExprs as $condAndExpr) {
+            $condAndExprKinds[] = $condAndExpr->getKind();
+        }
+
+        return array_unique($condAndExprKinds);
     }
 }

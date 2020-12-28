@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
-class UsesConstant
+class SkipUsedInAnotherClass
 {
     private const SOME = ConstainsConstant::KEEP_PUBLIC . '_pcs';
 }

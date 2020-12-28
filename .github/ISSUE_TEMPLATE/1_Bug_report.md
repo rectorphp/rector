@@ -10,15 +10,15 @@ about: Report errors and problems
 
 | Subject        | Details                                                         |
 | :------------- | :---------------------------------------------------------------|
-| Rector version | e.g. v0.7.0 (invoke `vendor/bin/rector --version`)              |
-| Installed as   | composer dependency / prefixed Rector PHAR                      |
+| Rector version | e.g. v0.9.5 (invoke `vendor/bin/rector --version`)              |
+| Installed as   | composer dependency / prefixed Rector                           |
 
 <!-- Please describe your problem here. -->
 
 ## Minimal PHP Code Causing Issue
 
-<!-- Try to reproduce the issue using https://getrector.org/demo/ and post the URL here. -->
+<!-- Reproduce the issue using https://getrector.org/demo/ and post the URL here. -->
 
 ## Expected Behaviour
 
-<!-- Was the change done incorrectly? Or should Rector skip it? -->
+<!-- How should Rector change the code? Or should Rector skip it? -->

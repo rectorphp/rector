@@ -102,11 +102,12 @@ CODE_SAMPLE
 
     private function matchLocalPropertyFetchInGetterMethod(ClassMethod $classMethod): ?PropertyFetch
     {
-        if (count((array) $classMethod->getStmts()) !== 1) {
+        $stmts = (array) $classMethod->stmts;
+        if (count($stmts) !== 1) {
             return null;
         }
 
-        $onlyStmt = $classMethod->stmts[0];
+        $onlyStmt = $stmts[0] ?? null;
         if (! $onlyStmt instanceof Return_) {
             return null;
         }

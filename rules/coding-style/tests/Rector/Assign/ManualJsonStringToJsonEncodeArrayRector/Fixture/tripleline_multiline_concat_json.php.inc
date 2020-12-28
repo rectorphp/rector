@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\Fixture;
 
-final class TripleLineMultilineConcatJson
+final class TriplelineMultilineConcatJson
 {
     public function run()
     {
@@ -18,7 +18,7 @@ final class TripleLineMultilineConcatJson
 
 namespace Rector\CodingStyle\Tests\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\Fixture;
 
-final class TripleLineMultilineConcatJson
+final class TriplelineMultilineConcatJson
 {
     public function run()
     {

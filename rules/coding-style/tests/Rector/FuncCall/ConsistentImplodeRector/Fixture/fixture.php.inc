@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentImplodeRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(array $items)
     {
@@ -19,7 +19,7 @@ class SomeClass
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentImplodeRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run(array $items)
     {

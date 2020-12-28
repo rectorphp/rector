@@ -18,7 +18,7 @@ use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\SOLID\Guard\VariableToConstantGuard;
+use Rector\ReadWrite\Guard\VariableToConstantGuard;
 
 final class VariableManipulator
 {

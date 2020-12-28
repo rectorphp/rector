@@ -15,8 +15,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\RemovingStatic\StaticTypesInClassResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -209,7 +209,7 @@ CODE_SAMPLE
             }
         }
 
-        $this->classesUsingTypes = (array) array_unique($this->classesUsingTypes);
+        $this->classesUsingTypes = array_unique($this->classesUsingTypes);
 
         return $this->classesUsingTypes;
     }

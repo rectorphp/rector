@@ -89,12 +89,12 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function hasUuidReturnType(Node $node): bool
+    private function hasUuidReturnType(ClassMethod $classMethod): bool
     {
-        if ($node->returnType === null) {
+        if ($classMethod->returnType === null) {
             return false;
         }
 
-        return $this->isName($node->returnType, UuidInterface::class);
+        return $this->isName($classMethod->returnType, UuidInterface::class);
     }
 }

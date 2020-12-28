@@ -122,8 +122,10 @@ CODE_SAMPLE
         $this->reset();
 
         $this->matchOnEqualFirstValueAndSecondValue($node);
-
-        if ($this->firstValue === null || $this->secondValue === null) {
+        if ($this->firstValue === null) {
+            return null;
+        }
+        if ($this->secondValue === null) {
             return null;
         }
 
@@ -172,27 +174,23 @@ CODE_SAMPLE
         }
     }
 
-    private function areVariablesEqual(BinaryOp $binaryOp, ?Expr $firstValue, ?Expr $secondValue): bool
+    private function areVariablesEqual(BinaryOp $binaryOp, Expr $firstValue, Expr $secondValue): bool
     {
-        if ($firstValue === null || $secondValue === null) {
-            return false;
-        }
-
         if ($this->areNodesEqual($binaryOp->left, $firstValue) && $this->areNodesEqual(
             $binaryOp->right,
             $secondValue
         )) {
             return true;
         }
-        return $this->areNodesEqual($binaryOp->right, $firstValue) && $this->areNodesEqual(
-            $binaryOp->left,
-            $secondValue
-        );
+        if (! $this->areNodesEqual($binaryOp->right, $firstValue)) {
+            return false;
+        }
+        return $this->areNodesEqual($binaryOp->left, $secondValue);
     }
 
     private function matchOnEqual(If_ $if): void
     {
-        if (count((array) $if->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return;
         }
 
@@ -209,7 +207,7 @@ CODE_SAMPLE
 
     private function processElse(Else_ $else): void
     {
-        if (count((array) $else->stmts) !== 1) {
+        if (count($else->stmts) !== 1) {
             return;
         }
 

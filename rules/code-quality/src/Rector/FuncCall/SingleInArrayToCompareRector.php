@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
@@ -75,16 +76,21 @@ CODE_SAMPLE
 
         /** @var Array_ $arrayNode */
         $arrayNode = $node->args[1]->value;
-        if (count((array) $arrayNode->items) !== 1) {
+        if (count($arrayNode->items) !== 1) {
             return null;
         }
 
-        $onlyArrayItem = $arrayNode->items[0]->value;
-        // strict
-        if (isset($node->args[2])) {
-            return new Identical($node->args[0]->value, $onlyArrayItem);
+        $firstArrayItem = $arrayNode->items[0];
+        if (! $firstArrayItem instanceof ArrayItem) {
+            return null;
         }
 
-        return new Equal($node->args[0]->value, $onlyArrayItem);
+        $firstArrayItemValue = $firstArrayItem->value;
+        // strict
+        if (isset($node->args[2])) {
+            return new Identical($node->args[0]->value, $firstArrayItemValue);
+        }
+
+        return new Equal($node->args[0]->value, $firstArrayItemValue);
     }
 }

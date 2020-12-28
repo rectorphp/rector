@@ -16,10 +16,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -250,12 +249,12 @@ CODE_SAMPLE
         Class_ $class,
         ClassMethod $classMethod,
         string $name,
-        ObjectType $objectType
+        FullyQualifiedObjectType $fullyQualifiedObjectType
     ): void {
         $assign = $this->nodeFactory->createPropertyAssignment($name);
         $classMethod->stmts[] = new Expression($assign);
 
-        $this->addConstructorDependencyToClass($class, $objectType, $name);
+        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $name);
     }
 
     private function createEntityManagerParam(): Param
@@ -268,7 +267,11 @@ CODE_SAMPLE
     private function removeRegistryDependencyAssign(Class_ $class, ClassMethod $classMethod, Param $registryParam): void
     {
         foreach ((array) $classMethod->stmts as $constructorMethodStmt) {
-            if (! $constructorMethodStmt instanceof Expression && ! $constructorMethodStmt->expr instanceof Assign) {
+            if (! $constructorMethodStmt instanceof Expression) {
+                continue;
+            }
+
+            if (! $constructorMethodStmt->expr instanceof Assign) {
                 continue;
             }
 

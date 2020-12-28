@@ -60,9 +60,6 @@ final class PropertyUsageAnalyzer
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
-        if ($propertyName === null) {
-            return false;
-        }
 
         $childrenClassNames = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
         foreach ($childrenClassNames as $childClassName) {
@@ -72,7 +69,7 @@ final class PropertyUsageAnalyzer
             }
 
             $isPropertyFetched = (bool) $this->betterNodeFinder->findFirst(
-                (array) $childClass->stmts,
+                $childClass->stmts,
                 function (Node $node) use ($propertyName): bool {
                     return $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyName);
                 }

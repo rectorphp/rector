@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class ClassNameClass {
+class ClassnameType {
     private \Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass $property;
 }
 
@@ -12,7 +12,7 @@ class ClassNameClass {
 
 namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class ClassNameClass {
+class ClassnameType {
     /**
      * @var \Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass
      */

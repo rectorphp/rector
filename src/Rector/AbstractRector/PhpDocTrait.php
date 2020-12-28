@@ -58,13 +58,7 @@ trait PhpDocTrait
 
     protected function getPhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): ?PhpDocTagValueNode
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
-        return $phpDocInfo->getByType($phpDocTagNodeClass);
+        return $this->phpDocInfoManipulator->getPhpDocTagValueNode($node, $phpDocTagNodeClass);
     }
 
     protected function hasPhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): bool

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector;
+namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 class UnionNestedAndSingleLevelArrayScalars
 {
@@ -18,7 +18,7 @@ class UnionNestedAndSingleLevelArrayScalars
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector;
+namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 class UnionNestedAndSingleLevelArrayScalars
 {

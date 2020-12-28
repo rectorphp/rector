@@ -37,9 +37,9 @@ abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->phpDocInfoFactory = self::$container->get(PhpDocInfoFactory::class);
-        $this->phpDocInfoPrinter = self::$container->get(PhpDocInfoPrinter::class);
-        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
+        $this->phpDocInfoFactory = $this->getService(PhpDocInfoFactory::class);
+        $this->phpDocInfoPrinter = $this->getService(PhpDocInfoPrinter::class);
+        $this->smartFileSystem = $this->getService(SmartFileSystem::class);
     }
 
     protected function createPhpDocInfoFromDocCommentAndNode(string $docComment, Node $node): PhpDocInfo

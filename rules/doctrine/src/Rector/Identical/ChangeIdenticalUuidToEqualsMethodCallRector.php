@@ -91,22 +91,22 @@ CODE_SAMPLE
         return $this->createMethodCall($entityMethodCall, 'equals', [$staticCall]);
     }
 
-    private function matchEntityCallAndComparedVariable(Node $node): ?TwoNodeMatch
+    private function matchEntityCallAndComparedVariable(Identical $identical): ?TwoNodeMatch
     {
-        if ($this->doctrineEntityManipulator->isMethodCallOnDoctrineEntity($node->left, 'getId')) {
-            if ($this->isAlreadyUuidType($node->right)) {
+        if ($this->doctrineEntityManipulator->isMethodCallOnDoctrineEntity($identical->left, 'getId')) {
+            if ($this->isAlreadyUuidType($identical->right)) {
                 return null;
             }
 
-            return new TwoNodeMatch($node->left, $node->right);
+            return new TwoNodeMatch($identical->left, $identical->right);
         }
 
-        if ($this->doctrineEntityManipulator->isMethodCallOnDoctrineEntity($node->right, 'getId')) {
-            if ($this->isAlreadyUuidType($node->left)) {
+        if ($this->doctrineEntityManipulator->isMethodCallOnDoctrineEntity($identical->right, 'getId')) {
+            if ($this->isAlreadyUuidType($identical->left)) {
                 return null;
             }
 
-            return new TwoNodeMatch($node->right, $node->left);
+            return new TwoNodeMatch($identical->right, $identical->left);
         }
 
         return null;

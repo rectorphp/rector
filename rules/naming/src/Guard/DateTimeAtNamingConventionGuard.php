@@ -7,13 +7,13 @@ namespace Rector\Naming\Guard;
 use DateTimeInterface;
 use Nette\Utils\Strings;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Naming\Contract\Guard\GuardInterface;
+use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
-final class DateTimeAtNamingConventionGuard implements GuardInterface
+final class DateTimeAtNamingConventionGuard implements ConflictingGuardInterface
 {
     /**
      * @var string
@@ -45,13 +45,11 @@ final class DateTimeAtNamingConventionGuard implements GuardInterface
         return $this->isDateTimeAtNamingConvention($renameValueObject);
     }
 
-    /**
-     * @param PropertyRename $renameValueObject
-     */
-    private function isDateTimeAtNamingConvention(RenameValueObjectInterface $renameValueObject): bool
+    private function isDateTimeAtNamingConvention(PropertyRename $propertyRename): bool
     {
-        $type = $this->nodeTypeResolver->resolve($renameValueObject->getProperty());
+        $type = $this->nodeTypeResolver->resolve($propertyRename->getProperty());
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
+
         if (! $type instanceof TypeWithClassName) {
             return false;
         }
@@ -60,6 +58,6 @@ final class DateTimeAtNamingConventionGuard implements GuardInterface
             return false;
         }
 
-        return (bool) Strings::match($renameValueObject->getCurrentName(), self::AT_NAMING_REGEX . '');
+        return (bool) Strings::match($propertyRename->getCurrentName(), self::AT_NAMING_REGEX . '');
     }
 }

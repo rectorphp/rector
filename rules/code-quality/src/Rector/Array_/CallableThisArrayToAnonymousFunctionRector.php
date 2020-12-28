@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
@@ -102,12 +103,22 @@ CODE_SAMPLE
             return null;
         }
 
-        $objectVariable = $node->items[0]->value;
+        $firstArrayItem = $node->items[0];
+        if (! $firstArrayItem instanceof ArrayItem) {
+            return null;
+        }
+
+        $objectVariable = $firstArrayItem->value;
         if (! $objectVariable instanceof Variable && ! $objectVariable instanceof PropertyFetch) {
             return null;
         }
 
-        $methodName = $node->items[1]->value;
+        $secondArrayItem = $node->items[1];
+        if (! $secondArrayItem instanceof ArrayItem) {
+            return null;
+        }
+
+        $methodName = $secondArrayItem->value;
         if (! $methodName instanceof String_) {
             return null;
         }
@@ -123,7 +134,7 @@ CODE_SAMPLE
     private function shouldSkipArray(Array_ $array): bool
     {
         // callback is exactly "[$two, 'items']"
-        if (count((array) $array->items) !== 2) {
+        if (count($array->items) !== 2) {
             return true;
         }
 

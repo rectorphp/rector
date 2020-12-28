@@ -11,7 +11,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 
 final class DocAliasResolver
 {
@@ -49,9 +49,7 @@ final class DocAliasResolver
             /** @var PhpDocInfo $phpDocInfo */
             $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-            if ($phpDocInfo->getVarType()) {
-                $possibleDocAliases = $this->collectVarType($phpDocInfo, $possibleDocAliases);
-            }
+            $possibleDocAliases = $this->collectVarType($phpDocInfo, $possibleDocAliases);
 
             // e.g. "use Dotrine\ORM\Mapping as ORM" etc.
             $matches = Strings::matchAll($docComment->getText(), self::DOC_ALIAS_REGEX);

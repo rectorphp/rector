@@ -2,7 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     public function run()
     {
@@ -16,7 +16,7 @@ final class SomeClass
 
 namespace Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector\Fixture;
 
-final class SomeClass
+final class Fixture
 {
     public function run()
     {

@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class SkippedValuesClass
+class SkippedValues
 {
     public function run($string)
     {
@@ -17,7 +17,7 @@ class SkippedValuesClass
 
 namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
-class SkippedValuesClass
+class SkippedValues
 {
     public function run($string)
     {

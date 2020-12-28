@@ -13,9 +13,9 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\PHPStan\Type\AliasedObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\TypeNormalizer;
 
 final class TypeComparator
@@ -94,7 +94,10 @@ final class TypeComparator
         if ($firstType instanceof FloatType && $secondType instanceof FloatType) {
             return true;
         }
-        return $firstType instanceof BooleanType && $secondType instanceof BooleanType;
+        if (! $firstType instanceof BooleanType) {
+            return false;
+        }
+        return $secondType instanceof BooleanType;
     }
 
     private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType): bool
@@ -102,7 +105,13 @@ final class TypeComparator
         if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType && $firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
             return true;
         }
-        return $secondType instanceof AliasedObjectType && $firstType instanceof ObjectType && $secondType->getFullyQualifiedClass() === $firstType->getClassName();
+        if (! $secondType instanceof AliasedObjectType) {
+            return false;
+        }
+        if (! $firstType instanceof ObjectType) {
+            return false;
+        }
+        return $secondType->getFullyQualifiedClass() === $firstType->getClassName();
     }
 
     /**
@@ -110,10 +119,12 @@ final class TypeComparator
      */
     private function areArrayTypeWithSingleObjectChildToParent(Type $firstType, Type $secondType): bool
     {
-        if (! $firstType instanceof ArrayType || ! $secondType instanceof ArrayType) {
+        if (! $firstType instanceof ArrayType) {
             return false;
         }
-
+        if (! $secondType instanceof ArrayType) {
+            return false;
+        }
         $firstArrayItemType = $firstType->getItemType();
         $secondArrayItemType = $secondType->getItemType();
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
@@ -80,8 +81,7 @@ CODE_SAMPLE
         $previousNode = $previousNode->expr;
         $previousVariableNode = $previousNode->var;
 
-        // has some comment
-        if ($previousVariableNode->getComments() || $previousVariableNode->getDocComment()) {
+        if ($this->hasSomeComment($previousVariableNode)) {
             return null;
         }
 
@@ -116,7 +116,10 @@ CODE_SAMPLE
         $variableNode = $return->expr;
 
         $previousExpression = $return->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousExpression === null || ! $previousExpression instanceof Expression) {
+        if ($previousExpression === null) {
+            return true;
+        }
+        if (! $previousExpression instanceof Expression) {
             return true;
         }
 
@@ -133,13 +136,18 @@ CODE_SAMPLE
         return $this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode);
     }
 
-    private function isReturnWithVarAnnotation(Node $node): bool
+    private function hasSomeComment(Expr $expr): bool
     {
-        if (! $node instanceof Return_) {
-            return false;
+        if ($expr->getComments() !== []) {
+            return true;
         }
 
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        return $expr->getDocComment() !== null;
+    }
+
+    private function isReturnWithVarAnnotation(Return_ $return): bool
+    {
+        $phpDocInfo = $return->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return false;
         }
@@ -153,8 +161,12 @@ CODE_SAMPLE
     private function isPreviousExpressionVisuallySimilar(Expression $previousExpression, Node $previousNode): bool
     {
         $prePreviousExpression = $previousExpression->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        return $prePreviousExpression instanceof Expression &&
-            $prePreviousExpression->expr instanceof AssignOp &&
-            $this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var);
+        if (! $prePreviousExpression instanceof Expression) {
+            return false;
+        }
+        if (! $prePreviousExpression->expr instanceof AssignOp) {
+            return false;
+        }
+        return $this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var);
     }
 }

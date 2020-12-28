@@ -12,7 +12,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Restoration\Type\ConstantReturnToParamTypeConverter;
@@ -115,15 +114,12 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // must be exactly 1 param
-        if (count((array) $node->params) !== 1) {
+        if (count($node->params) !== 1) {
             return null;
         }
 
         $firstParam = $node->params[0];
         $paramName = $this->getName($firstParam);
-        if ($paramName === null) {
-            throw new ShouldNotHappenException();
-        }
 
         foreach ($this->inferParamFromClassMethodReturn as $inferParamFromClassMethodReturn) {
             $returnClassMethod = $this->matchReturnClassMethod($node, $inferParamFromClassMethodReturn);
@@ -136,7 +132,7 @@ CODE_SAMPLE
             /** @var PhpDocInfo|null $currentPhpDocInfo */
             $currentPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($currentPhpDocInfo === null) {
-                $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+                $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
             }
 
             $paramType = $this->constantReturnToParamTypeConverter->convert($returnType);

@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function go()
     {
@@ -21,7 +21,7 @@ class SomeClass
 
 namespace Rector\DeadCode\Tests\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function go()
     {

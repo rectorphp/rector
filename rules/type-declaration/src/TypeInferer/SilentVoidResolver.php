@@ -77,7 +77,7 @@ final class SilentVoidResolver
         }
 
         // has same amount of returns as switches
-        return count((array) $switch->cases) === $casesWithReturn;
+        return count($switch->cases) === $casesWithReturn;
     }
 
     private function isTryCatchAlwaysReturn(TryCatch $tryCatch): bool
@@ -87,7 +87,7 @@ final class SilentVoidResolver
         }
 
         foreach ($tryCatch->catches as $catch) {
-            return $this->hasStmtsAlwaysReturn((array) $catch->stmts);
+            return $this->hasStmtsAlwaysReturn($catch->stmts);
         }
 
         return true;

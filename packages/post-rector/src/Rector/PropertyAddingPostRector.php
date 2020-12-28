@@ -57,10 +57,12 @@ final class PropertyAddingPostRector extends AbstractPostRector
 
     public function enterNode(Node $node): ?Node
     {
-        if (! $node instanceof Class_ || $node->isAnonymous()) {
+        if (! $node instanceof Class_) {
             return null;
         }
-
+        if ($node->isAnonymous()) {
+            return null;
+        }
         $this->addConstants($node);
         $this->addProperties($node);
         $this->addPropertiesWithoutConstructor($node);

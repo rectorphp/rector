@@ -27,9 +27,12 @@ define('__RECTOR_RUNNING__', true);
 
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder();
-$autoloadIncluder->includeCwdVendorAutoloadIfExists();
-$autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
+
+$autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
+$autoloadIncluder->loadIfExistsAndNotLoadedYet(getcwd() . '/vendor/autoload.php');
+
+$autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
 
 $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
@@ -81,11 +84,6 @@ final class AutoloadIncluder
      */
     private $alreadyLoadedAutoloadFiles = [];
 
-    public function includeCwdVendorAutoloadIfExists(): void
-    {
-        $this->loadIfExistsAndNotLoadedYet(getcwd() . '/vendor/autoload.php');
-    }
-
     public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
     {
         // Rector's vendor is already loaded
@@ -124,18 +122,18 @@ final class AutoloadIncluder
         $this->loadIfExistsAndNotLoadedYet($fileToAutoload);
     }
 
-    private function loadIfExistsAndNotLoadedYet(string $file): void
+    public function loadIfExistsAndNotLoadedYet(string $filePath): void
     {
-        if (! file_exists($file)) {
+        if (! file_exists($filePath)) {
             return;
         }
 
-        if (in_array($file, $this->alreadyLoadedAutoloadFiles, true)) {
+        if (in_array($filePath, $this->alreadyLoadedAutoloadFiles, true)) {
             return;
         }
 
-        $this->alreadyLoadedAutoloadFiles[] = realpath($file);
+        $this->alreadyLoadedAutoloadFiles[] = realpath($filePath);
 
-        require_once $file;
+        require_once $filePath;
     }
 }

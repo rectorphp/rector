@@ -31,12 +31,8 @@ trait AbstractRectorTrait
     use NodeCollectorTrait;
     use NotifyingRemovingNodeTrait;
 
-    protected function isNonAnonymousClass(?Node $node): bool
+    protected function isNonAnonymousClass(Node $node): bool
     {
-        if ($node === null) {
-            return false;
-        }
-
         if (! $node instanceof Class_) {
             return false;
         }

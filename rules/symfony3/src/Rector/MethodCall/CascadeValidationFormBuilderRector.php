@@ -100,7 +100,7 @@ CODE_SAMPLE
         /** @var Array_ $formBuilderOptionsArrayNode */
         $formBuilderOptionsArrayNode = $node->args[1]->value;
 
-        if (! $this->findAndRemoveCascadeValidationOption($node, $formBuilderOptionsArrayNode)) {
+        if (! $this->isSuccessfulRemovalCascadeValidationOption($node, $formBuilderOptionsArrayNode)) {
             return null;
         }
 
@@ -122,7 +122,7 @@ CODE_SAMPLE
         return ! $methodCall->args[1]->value instanceof Array_;
     }
 
-    private function findAndRemoveCascadeValidationOption(MethodCall $methodCall, Array_ $optionsArrayNode): bool
+    private function isSuccessfulRemovalCascadeValidationOption(MethodCall $methodCall, Array_ $optionsArrayNode): bool
     {
         foreach ($optionsArrayNode->items as $key => $arrayItem) {
             if ($arrayItem === null) {
@@ -150,12 +150,12 @@ CODE_SAMPLE
         return false;
     }
 
-    private function addConstraintsOptionToFollowingAddMethodCalls(Node $node): void
+    private function addConstraintsOptionToFollowingAddMethodCalls(MethodCall $methodCall): void
     {
         $new = new New_(new FullyQualified('Symfony\Component\Validator\Constraints\Valid'));
         $constraintsArrayItem = new ArrayItem($new, new String_('constraints'));
 
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
 
         while ($parentNode instanceof MethodCall) {
             if ($this->isName($parentNode->name, 'add')) {

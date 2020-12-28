@@ -36,7 +36,7 @@ final class PropertyToMethodRectorTest extends AbstractRectorTestCase
                 PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
                     new PropertyToMethod(Translator::class, 'locale', 'getLocale', 'setLocale'),
                     new PropertyToMethod(
-                        'Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Fixture\SomeClassWithParameters',
+                        'Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Fixture\Fixture2',
                         'parameter',
                         'getConfig',
                         null,

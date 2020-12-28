@@ -84,11 +84,9 @@ CODE_SAMPLE
      * Is handled by:
      * @see DefluentReturnMethodCallRector
      * @see InArgFluentChainMethodCallToStandaloneMethodCallRector
-     *
-     * @param MethodCall|Return_ $node
      */
-    private function isHandledByAnotherRule(Node $node): bool
+    private function isHandledByAnotherRule(MethodCall $methodCall): bool
     {
-        return $this->hasParentTypes($node, [Return_::class, Arg::class]);
+        return $this->hasParentTypes($methodCall, [Return_::class, Arg::class]);
     }
 }

@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Routing;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\AliasedObjectType;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class ExplicitRouteAnnotationDecorator
 {
@@ -40,21 +37,11 @@ final class ExplicitRouteAnnotationDecorator
         $phpDocInfo->addTagValueNodeWithShortName($symfonyRouteTagValueNode);
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);
-        $this->addUseType($fullyQualifiedObjectType, $classMethod);
+        $this->useNodesToAddCollector->addUseImport($classMethod, $fullyQualifiedObjectType);
 
         // remove
         $this->useNodesToAddCollector->removeShortUse($classMethod, 'Route');
 
         $classMethod->setAttribute(self::HAS_ROUTE_ANNOTATION, true);
-    }
-
-    /**
-     * @param FullyQualifiedObjectType|AliasedObjectType $objectType
-     */
-    private function addUseType(ObjectType $objectType, Node $positionNode): void
-    {
-        assert($objectType instanceof FullyQualifiedObjectType || $objectType instanceof AliasedObjectType);
-
-        $this->useNodesToAddCollector->addUseImport($positionNode, $objectType);
     }
 }

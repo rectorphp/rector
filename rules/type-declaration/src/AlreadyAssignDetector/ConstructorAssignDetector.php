@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ConstructorAssignDetector extends AbstractAssignDetector
 {
-    public function detect(ClassLike $classLike, string $propertyName): bool
+    public function isPropertyAssigned(ClassLike $classLike, string $propertyName): bool
     {
         $isAssignedInConstructor = false;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Function_\AddClosureReturnTypeRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector\Fixture;
 
 class CallableFalsePositive
 {
@@ -30,7 +30,7 @@ class CallableFalsePositive
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Function_\AddClosureReturnTypeRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector\Fixture;
 
 class CallableFalsePositive
 {

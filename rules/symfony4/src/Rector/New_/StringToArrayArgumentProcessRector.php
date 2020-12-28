@@ -6,6 +6,7 @@ namespace Rector\Symfony4\Rector\New_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
@@ -106,31 +107,30 @@ CODE_SAMPLE
     }
 
     /**
-     * @param New_|MethodCall $node
+     * @param New_|MethodCall $expr
      */
-    private function processStringType(Node $node, int $argumentPosition, Node $firstArgument): void
+    private function processStringType(Expr $expr, int $argumentPosition, Expr $firstArgumentExpr): void
     {
-        if ($firstArgument instanceof Concat) {
-            $arrayNode = $this->nodeTransformer->transformConcatToStringArray($firstArgument);
+        if ($firstArgumentExpr instanceof Concat) {
+            $arrayNode = $this->nodeTransformer->transformConcatToStringArray($firstArgumentExpr);
             if ($arrayNode !== null) {
-                $node->args[$argumentPosition] = new Arg($arrayNode);
+                $expr->args[$argumentPosition] = new Arg($arrayNode);
             }
 
             return;
         }
 
-        if ($this->isFuncCallName($firstArgument, 'sprintf')) {
-            /** @var FuncCall $firstArgument */
-            $arrayNode = $this->nodeTransformer->transformSprintfToArray($firstArgument);
+        if ($firstArgumentExpr instanceof FuncCall && $this->isFuncCallName($firstArgumentExpr, 'sprintf')) {
+            $arrayNode = $this->nodeTransformer->transformSprintfToArray($firstArgumentExpr);
             if ($arrayNode !== null) {
-                $node->args[$argumentPosition]->value = $arrayNode;
+                $expr->args[$argumentPosition]->value = $arrayNode;
             }
-        } elseif ($firstArgument instanceof String_) {
-            $parts = $this->splitProcessCommandToItems($firstArgument->value);
-            $node->args[$argumentPosition]->value = $this->createArray($parts);
+        } elseif ($firstArgumentExpr instanceof String_) {
+            $parts = $this->splitProcessCommandToItems($firstArgumentExpr->value);
+            $expr->args[$argumentPosition]->value = $this->createArray($parts);
         }
 
-        $this->processPreviousAssign($node, $firstArgument);
+        $this->processPreviousAssign($expr, $firstArgumentExpr);
     }
 
     /**
@@ -142,9 +142,9 @@ CODE_SAMPLE
         return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', $process);
     }
 
-    private function processPreviousAssign(Node $node, Node $firstArgument): void
+    private function processPreviousAssign(Node $node, Expr $firstArgumentExpr): void
     {
-        $previousNodeAssign = $this->findPreviousNodeAssign($node, $firstArgument);
+        $previousNodeAssign = $this->findPreviousNodeAssign($node, $firstArgumentExpr);
         if ($previousNodeAssign === null) {
             return;
         }
@@ -161,17 +161,17 @@ CODE_SAMPLE
         }
     }
 
-    private function findPreviousNodeAssign(Node $node, Node $firstArgument): ?Assign
+    private function findPreviousNodeAssign(Node $node, Expr $firstArgumentExpr): ?Assign
     {
         /** @var Assign|null $assign */
         $assign = $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use (
-            $firstArgument
+            $firstArgumentExpr
         ): ?Assign {
             if (! $checkedNode instanceof Assign) {
                 return null;
             }
 
-            if (! $this->areNodesEqual($checkedNode->var, $firstArgument)) {
+            if (! $this->areNodesEqual($checkedNode->var, $firstArgumentExpr)) {
                 return null;
             }
 

@@ -74,7 +74,7 @@ CODE_SAMPLE
 
     private function refactorUseImport(Use_ $use): void
     {
-        if (count((array) $use->uses) < 2) {
+        if (count($use->uses) < 2) {
             return;
         }
 
@@ -88,7 +88,7 @@ CODE_SAMPLE
 
     private function refactorTraitUse(TraitUse $traitUse): void
     {
-        if (count((array) $traitUse->traits) < 2) {
+        if (count($traitUse->traits) < 2) {
             return;
         }
 

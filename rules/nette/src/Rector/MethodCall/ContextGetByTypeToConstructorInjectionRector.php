@@ -101,9 +101,9 @@ CODE_SAMPLE
         return $this->processMethodCallNode($node);
     }
 
-    private function isInTestClass(Node $node): bool
+    private function isInTestClass(MethodCall $methodCall): bool
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
         if ($classLike === null) {
             return false;
         }

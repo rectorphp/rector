@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -107,6 +108,10 @@ CODE_SAMPLE
     {
         if (count((array) $classMethod->stmts) !== 1) {
             return null;
+        }
+
+        if (! isset($classMethod->stmts[0])) {
+            throw new ShouldNotHappenException();
         }
 
         $onlyStmt = $classMethod->stmts[0];

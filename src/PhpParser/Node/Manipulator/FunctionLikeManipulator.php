@@ -53,10 +53,12 @@ final class FunctionLikeManipulator
         $this->callableNodeTraverser->traverseNodesWithCallable($functionLike, function (Node $node) use (
             &$returnedLocalPropertyNames
         ) {
-            if (! $node instanceof Return_ || $node->expr === null) {
+            if (! $node instanceof Return_) {
                 return null;
             }
-
+            if ($node->expr === null) {
+                return null;
+            }
             if (! $this->propertyFetchAnalyzer->isLocalPropertyFetch($node->expr)) {
                 return null;
             }

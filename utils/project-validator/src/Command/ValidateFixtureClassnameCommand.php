@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Rector\Utils\ProjectValidator\Command;
 
 use Nette\Utils\Strings;
-use const PATHINFO_DIRNAME;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Util\StaticRectorStrings;
-use Rector\PSR4\Composer\PSR4AutoloadPathsProvider;
+use Rector\Utils\ProjectValidator\Finder\FixtureFinder;
+use Rector\Utils\ProjectValidator\Naming\ExpectedNameResolver;
+use Rector\Utils\ProjectValidator\Naming\NamespaceMatcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -45,7 +45,10 @@ final class ValidateFixtureClassnameCommand extends Command
      */
     private const CLASS_USE_TRAIT_REGEX = '#^\s{0,}use\s+(.*);$#msU';
 
-    private const EXCLUDE_NAME = [
+    /**
+     * @var string[]
+     */
+    private const EXCLUDE_NAMES = [
         'string',
         'false',
         'resource',
@@ -54,6 +57,21 @@ final class ValidateFixtureClassnameCommand extends Command
         'this',
         'object',
         'array_item',
+        'array',
+        'callable',
+        'scalar',
+        'throw',
+        'boolean',
+        'elseif',
+        'exit',
+        'function',
+        'substr',
+        'abstract',
+        'exception',
+        'concat',
+        'const',
+        'variable',
+        'property',
     ];
 
     /**
@@ -67,11 +85,6 @@ final class ValidateFixtureClassnameCommand extends Command
     private $symfonyStyle;
 
     /**
-     * @var array<string, string>|array<string, string[]>
-     */
-    private $psr4autoloadPaths;
-
-    /**
      * @var string
      */
     private $currentDirectory;
@@ -81,19 +94,39 @@ final class ValidateFixtureClassnameCommand extends Command
      */
     private $smartFileSystem;
 
+    /**
+     * @var FixtureFinder
+     */
+    private $fixtureFinder;
+
+    /**
+     * @var NamespaceMatcher
+     */
+    private $namespaceMather;
+
+    /**
+     * @var ExpectedNameResolver
+     */
+    private $expectedNameResolver;
+
     public function __construct(
         FinderSanitizer $finderSanitizer,
-        PSR4AutoloadPathsProvider $psr4AutoloadPathsProvider,
         SymfonyStyle $symfonyStyle,
-        SmartFileSystem $smartFileSystem
+        ExpectedNameResolver $expectedNameResolver,
+        SmartFileSystem $smartFileSystem,
+        FixtureFinder $fixtureFinder,
+        NamespaceMatcher $namespaceMather
     ) {
         $this->finderSanitizer = $finderSanitizer;
         $this->symfonyStyle = $symfonyStyle;
-        $this->psr4autoloadPaths = $psr4AutoloadPathsProvider->provide();
         $this->currentDirectory = getcwd();
         $this->smartFileSystem = $smartFileSystem;
 
         parent::__construct();
+
+        $this->fixtureFinder = $fixtureFinder;
+        $this->namespaceMather = $namespaceMather;
+        $this->expectedNameResolver = $expectedNameResolver;
     }
 
     protected function configure(): void
@@ -105,36 +138,37 @@ final class ValidateFixtureClassnameCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $optionFix = (bool) $input->getOption(Option::FIX);
-        $fixtureFiles = $this->getFixtureFiles();
+
+        $fixtureFileInfos = $this->fixtureFinder->findFixtureFileInfos();
         $incorrectClassNameFiles = [];
 
-        foreach ($fixtureFiles as $fixtureFile) {
+        foreach ($fixtureFileInfos as $fixtureFileInfo) {
             // 1. geting expected namespace ...
-            $paths = explode('/tests/', (string) $fixtureFile);
+            $paths = explode('/tests/', (string) $fixtureFileInfo);
             if (count($paths) > 2) {
                 continue;
             }
 
             $path = ltrim(substr($paths[0], strlen($this->currentDirectory)) . '/tests', '/');
-            $expectedNamespace = $this->getExpectedNamespace($path, $paths[1]);
 
+            $expectedNamespace = $this->expectedNameResolver->resolve($path, $paths[1]);
             if ($expectedNamespace === null) {
                 continue;
             }
 
             // 2. reading file contents
-            $fileContent = $this->smartFileSystem->readFile((string) $fixtureFile);
+            $fileContent = $this->smartFileSystem->readFile((string) $fixtureFileInfo);
+
             $matchAll = Strings::matchAll($fileContent, self::NAMESPACE_REGEX);
 
-            if (! $this->isFoundCorrectNamespace($matchAll, $expectedNamespace)) {
+            if (! $this->namespaceMather->isFoundCorrectNamespace($matchAll, $expectedNamespace)) {
                 continue;
             }
 
             $incorrectClassNameFiles = $this->checkAndFixClassName(
                 $fileContent,
-                $fixtureFile,
+                $fixtureFileInfo,
                 $incorrectClassNameFiles,
-                $expectedNamespace,
                 $optionFix
             );
         }
@@ -169,7 +203,6 @@ final class ValidateFixtureClassnameCommand extends Command
         string $fileContent,
         SmartFileInfo $fixtureFile,
         array $incorrectClassNameFiles,
-        string $expectedNamespace,
         bool $optionFix
     ): array {
         $matchAll = Strings::matchAll($fileContent, self::CLASS_REGEX);
@@ -179,7 +212,8 @@ final class ValidateFixtureClassnameCommand extends Command
         }
 
         $fileName = substr($fixtureFile->getFileName(), 0, -8);
-        if (in_array($fileName, self::EXCLUDE_NAME, true)) {
+
+        if (in_array($fileName, self::EXCLUDE_NAMES, true)) {
             return $incorrectClassNameFiles;
         }
 
@@ -220,65 +254,10 @@ final class ValidateFixtureClassnameCommand extends Command
     }
 
     /**
-     * @return SmartFileInfo[]
-     */
-    private function getFixtureFiles(): array
-    {
-        $finder = new Finder();
-        $finder = $finder->files()
-            ->name('#\.php\.inc$#')
-            ->notName('#empty_file\.php\.inc$#')
-            ->path('#/Fixture/#')
-            ->notPath('#/blade-template/#')
-            ->notPath('#/RenameNamespaceRector/#')
-            ->notPath('#/TemplateAnnotationToThisRenderRector/#')
-            ->notPath('#bootstrap_names\.php\.inc#')
-            ->notPath('#trait_name\.php\.inc#')
-            ->notName('#_\.php\.inc$#')
-            ->notPath('#/ParamTypeDeclarationRector/#')
-            ->notPath('#/ReturnTypeDeclarationRector/#')
-            ->in(__DIR__ . '/../../../../tests')
-            ->in(__DIR__ . '/../../../../packages');
-
-        return $this->finderSanitizer->sanitize($finder);
-    }
-
-    private function getExpectedNamespace(string $path, string $relativePath): ?string
-    {
-        $relativePath = str_replace('/', '\\', dirname($relativePath, PATHINFO_DIRNAME));
-        foreach ($this->psr4autoloadPaths as $prefix => $psr4autoloadPath) {
-            if (is_string($psr4autoloadPath) && $psr4autoloadPath === $path) {
-                return $prefix . $relativePath;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param array<int, array<int, string>> $matchAll
-     */
-    private function isFoundCorrectNamespace(array $matchAll, string $expectedNamespace): bool
-    {
-        if ($matchAll === []) {
-            return true;
-        }
-
-        $countMatchAll = count($matchAll);
-        if ($countMatchAll === 1 && $matchAll[0][1] === $expectedNamespace) {
-            return true;
-        }
-
-        return $countMatchAll === 2 && $matchAll[0][1] === $expectedNamespace && $matchAll[1][1] === $expectedNamespace;
-    }
-
-    /**
      * @param array<int, array<int, string>> $matchAll
      */
     private function getClassName(array $matchAll): string
     {
-        $countMatchAll = count($matchAll);
-
         return $matchAll[0][2];
     }
 }

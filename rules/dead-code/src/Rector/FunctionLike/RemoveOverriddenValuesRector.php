@@ -184,8 +184,7 @@ CODE_SAMPLE
 
                 if ($this->isAssignNodeUsed($previousNode, $nodeByTypeAndPosition)) {
                     // continue
-
-                // instant override → remove
+                    // instant override → remove
                 } elseif ($this->shouldRemoveAssignNode($previousNode, $nodeByTypeAndPosition)) {
                     /** @var VariableNodeUse $previousNode */
                     $nodesToRemove[] = $previousNode->getParentNode();

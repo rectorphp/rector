@@ -93,9 +93,11 @@ CODE_SAMPLE
         if ($parentNode instanceof While_) {
             return true;
         }
-
         // skip assign to List
-        return $parentNode instanceof Assign && $parentNode->var instanceof List_;
+        if (! $parentNode instanceof Assign) {
+            return false;
+        }
+        return $parentNode->var instanceof List_;
     }
 
     /**

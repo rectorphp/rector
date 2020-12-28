@@ -30,7 +30,7 @@ final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->typeNodeAnalyzer = self::$container->get(TypeNodeAnalyzer::class);
+        $this->typeNodeAnalyzer = $this->getService(TypeNodeAnalyzer::class);
     }
 
     /**

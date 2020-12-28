@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function someFunction(mixed $anything)
     {
@@ -15,7 +15,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @param mixed $anything

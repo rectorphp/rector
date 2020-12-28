@@ -19,7 +19,7 @@ final class ExcludePathsTest extends AbstractKernelTestCase
     {
         $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/config/config-with-excluded-paths.php']);
 
-        $this->filesFinder = self::$container->get(FilesFinder::class);
+        $this->filesFinder = $this->getService(FilesFinder::class);
         $splFileInfos = $this->filesFinder->findInDirectoriesAndFiles([__DIR__ . '/Source'], ['php']);
 
         $this->assertCount(1, $splFileInfos);

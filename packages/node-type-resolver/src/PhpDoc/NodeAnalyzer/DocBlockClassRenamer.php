@@ -10,8 +10,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 final class DocBlockClassRenamer

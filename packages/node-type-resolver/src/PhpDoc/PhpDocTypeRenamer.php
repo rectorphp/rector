@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
@@ -49,15 +50,21 @@ final class PhpDocTypeRenamer
         $this->phpDocNodeTraverser->traverseWithCallable($attributeAwarePhpDocNode, '', function (
             PhpDocParserNode $node
         ) use ($pseudoNamespaceToNamespace, $phpParserNode): PhpDocParserNode {
+            if (! $node instanceof TypeNode) {
+                return $node;
+            }
+
             if ($this->shouldSkip($node, $phpParserNode, $pseudoNamespaceToNamespace)) {
                 return $node;
             }
 
             /** @var IdentifierTypeNode $node */
             $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $phpParserNode);
+            if (! $staticType instanceof ObjectType) {
+                return $node;
+            }
 
             // change underscore to \\
-            /** @var ObjectType $staticType */
             $slashedName = '\\' . Strings::replace($staticType->getClassName(), '#_#', '\\');
             $node->name = $slashedName;
 
@@ -66,15 +73,15 @@ final class PhpDocTypeRenamer
     }
 
     private function shouldSkip(
-        PhpDocParserNode $phpDocParserNode,
+        TypeNode $typeNode,
         Node $phpParserNode,
         PseudoNamespaceToNamespace $pseudoNamespaceToNamespace
     ): bool {
-        if (! $phpDocParserNode instanceof IdentifierTypeNode) {
+        if (! $typeNode instanceof IdentifierTypeNode) {
             return true;
         }
 
-        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocParserNode, $phpParserNode);
+        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $phpParserNode);
         if (! $staticType instanceof ObjectType) {
             return true;
         }

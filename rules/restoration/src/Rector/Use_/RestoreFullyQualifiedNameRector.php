@@ -92,11 +92,7 @@ CODE_SAMPLE
             return $this->refactorParam($node);
         }
 
-        if ($node instanceof ClassMethod) {
-            return $this->refactorClassMethod($node);
-        }
-
-        return null;
+        return $this->refactorClassMethod($node);
     }
 
     private function refactoryUse(Use_ $use): Use_
@@ -150,10 +146,10 @@ CODE_SAMPLE
         return $classMethod;
     }
 
-    private function refactorReturnTagValueNode(Node $node): void
+    private function refactorReturnTagValueNode(ClassMethod $classMethod): void
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }

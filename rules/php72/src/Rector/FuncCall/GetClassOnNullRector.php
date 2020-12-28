@@ -139,9 +139,10 @@ CODE_SAMPLE
         )) {
             return true;
         }
-        return $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value) && ! $this->isNull(
-            $ternary->cond->left
-        );
+        if (! $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
+            return false;
+        }
+        return ! $this->isNull($ternary->cond->left);
     }
 
     /**
@@ -158,8 +159,9 @@ CODE_SAMPLE
         )) {
             return true;
         }
-        return $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value) && $this->isNull(
-            $ternary->cond->left
-        );
+        if (! $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
+            return false;
+        }
+        return $this->isNull($ternary->cond->left);
     }
 }

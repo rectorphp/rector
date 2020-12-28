@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\While_\Fixture;
+namespace Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector\Fixture;
 
 function each1()
 {
@@ -19,7 +19,7 @@ function each1()
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\While_\Fixture;
+namespace Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector\Fixture;
 
 function each1()
 {

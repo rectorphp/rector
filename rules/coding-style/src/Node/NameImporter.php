@@ -16,10 +16,10 @@ use Rector\Core\Configuration\Option;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class NameImporter
@@ -194,7 +194,7 @@ final class NameImporter
             return false;
         }
 
-        return count((array) $name->parts) === 1;
+        return count($name->parts) === 1;
     }
 
     private function isNonExistingClassLikeAndFunctionFullyQualifiedName(Name $name): bool

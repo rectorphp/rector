@@ -45,19 +45,20 @@ final class RouteInfoFactory
     public function createFromNode(Node $node): ?RouteInfo
     {
         if ($node instanceof New_) {
-            if (! isset($node->args[0]) || ! isset($node->args[1])) {
+            if ($this->hasNoArg($node)) {
                 return null;
             }
-
             return $this->createRouteInfoFromArgs($node);
         }
 
         // Route::create()
         if ($node instanceof StaticCall) {
-            if (! isset($node->args[0]) || ! isset($node->args[1])) {
+            if (! isset($node->args[0])) {
                 return null;
             }
-
+            if (! isset($node->args[1])) {
+                return null;
+            }
             if (! $this->nodeNameResolver->isNames($node->name, ['get', 'head', 'post', 'put', 'patch', 'delete'])) {
                 return null;
             }
@@ -77,6 +78,15 @@ final class RouteInfoFactory
         return null;
     }
 
+    private function hasNoArg(New_ $new): bool
+    {
+        if (! isset($new->args[0])) {
+            return true;
+        }
+
+        return ! isset($new->args[1]);
+    }
+
     /**
      * @param New_|StaticCall $node
      * @param string[] $methods
@@ -85,9 +95,11 @@ final class RouteInfoFactory
     {
         $pathArgument = $node->args[0]->value;
         $routePath = $this->valueResolver->getValue($pathArgument);
-
         // route path is needed
-        if ($routePath === null || ! is_string($routePath)) {
+        if ($routePath === null) {
+            return null;
+        }
+        if (! is_string($routePath)) {
             return null;
         }
 

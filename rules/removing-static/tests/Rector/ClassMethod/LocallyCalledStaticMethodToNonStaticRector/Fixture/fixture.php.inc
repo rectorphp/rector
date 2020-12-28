@@ -2,7 +2,7 @@
 
 namespace Rector\RemovingStatic\Tests\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -20,7 +20,7 @@ class SomeClass
 
 namespace Rector\RemovingStatic\Tests\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {

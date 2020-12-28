@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
 
-final class DonotChangeSameParamterNameWithVariableName
+final class DoNotChangeSameParameterNameWithVariableName
 {
     public function run(string $a_b)
     {
@@ -15,7 +15,7 @@ final class DonotChangeSameParamterNameWithVariableName
 
 namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
 
-final class DonotChangeSameParamterNameWithVariableName
+final class DoNotChangeSameParameterNameWithVariableName
 {
     public function run(string $a_b)
     {

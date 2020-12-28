@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\Fixture;
 
-class PropertyClass
+class Properties
 {
     public function run($string)
     {
@@ -16,7 +16,7 @@ class PropertyClass
 
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector\Fixture;
 
-class PropertyClass
+class Properties
 {
     public function run($string)
     {

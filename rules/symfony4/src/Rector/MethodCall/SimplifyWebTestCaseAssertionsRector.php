@@ -125,14 +125,12 @@ CODE_SAMPLE
         if ($args !== null) {
             return $this->createLocalMethodCall('assertSelectorTextContains', $args);
         }
-
-        // 3. assertResponseRedirects
         return $this->processAssertResponseRedirects($node);
     }
 
-    private function isInWebTestCase(Node $node): bool
+    private function isInWebTestCase(MethodCall $methodCall): bool
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
         if ($classLike === null) {
             return false;
         }
@@ -140,28 +138,24 @@ CODE_SAMPLE
         return $this->isObjectType($classLike, 'Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
     }
 
-    private function processAssertResponseStatusCodeSame(Node $node): ?MethodCall
+    private function processAssertResponseStatusCodeSame(MethodCall $methodCall): ?MethodCall
     {
-        if (! $node instanceof MethodCall) {
+        if (! $this->isName($methodCall->name, self::ASSERT_SAME)) {
             return null;
         }
 
-        if (! $this->isName($node->name, self::ASSERT_SAME)) {
+        if (! $this->areNodesEqual($methodCall->args[1]->value, $this->getStatusCodeMethodCall)) {
             return null;
         }
 
-        if (! $this->areNodesEqual($node->args[1]->value, $this->getStatusCodeMethodCall)) {
-            return null;
-        }
-
-        $statusCode = $this->getValue($node->args[0]->value);
+        $statusCode = $this->getValue($methodCall->args[0]->value);
 
         // handled by another methods
         if (in_array($statusCode, [200, 301], true)) {
             return null;
         }
 
-        return $this->createLocalMethodCall('assertResponseStatusCodeSame', [$node->args[0]]);
+        return $this->createLocalMethodCall('assertResponseStatusCodeSame', [$methodCall->args[0]]);
     }
 
     /**

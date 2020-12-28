@@ -16,6 +16,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
@@ -34,6 +35,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DateTimeToDateTimeInterfaceRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
     private const METHODS_RETURNING_CLASS_INSTANCE_MAP = [
         'add', 'modify', MethodName::SET_STATE, 'setDate', 'setISODate', 'setTime', 'setTimestamp', 'setTimezone', 'sub',
     ];
@@ -166,20 +170,27 @@ CODE_SAMPLE
     private function refactorMethodCall(Param $param, MethodCall $methodCall): void
     {
         $paramName = $this->getName($param->var);
-        if ($paramName === null || $this->shouldSkipMethodCallRefactor($paramName, $methodCall)) {
+        if ($paramName === null) {
+            return;
+        }
+        if ($this->shouldSkipMethodCallRefactor($paramName, $methodCall)) {
             return;
         }
 
         $assign = new Assign(new Variable($paramName), $methodCall);
 
-        /** @var Node $parentNode */
-        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Arg) {
-            $parentNode->value = $assign;
+        /** @var Node $parent */
+        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Arg) {
+            $parent->value = $assign;
             return;
         }
 
-        $parentNode->expr = $assign;
+        if (! $parent instanceof Expression) {
+            return;
+        }
+
+        $parent->expr = $assign;
     }
 
     private function shouldSkipMethodCallRefactor(string $paramName, MethodCall $methodCall): bool

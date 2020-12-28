@@ -106,11 +106,11 @@ CODE_SAMPLE
         $paramName = $this->getName($param);
 
         // If it is the NullableType, extract the name from its inner type
-        /** @var Node */
+        /** @var Node $paramType */
         $paramType = $param->type;
         $isNullableType = $param->type instanceof NullableType;
         if ($isNullableType) {
-            /** @var NullableType */
+            /** @var NullableType $nullableType */
             $nullableType = $paramType;
             $paramTypeName = $this->getName($nullableType->type);
         } else {
@@ -166,7 +166,7 @@ CODE_SAMPLE
                  * Getting a ReflectionNamedType works from PHP 7.1 onwards
                  * @see https://www.php.net/manual/en/reflectionparameter.gettype.php#125334
                  */
-                /** @var ReflectionNamedType|null */
+                /** @var ReflectionNamedType|null $reflectionParamType */
                 $reflectionParamType = $reflectionParameter->getType();
                 /**
                  * If the type is null, we don't have enough information

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -69,7 +70,11 @@ CODE_SAMPLE
                                 ,
                                 [
                                     self::METHOD_VISIBILITIES => [
-                                        new ChangeMethodVisibility('FrameworkClass', 'someMethod', 'protected'),
+                                        new ChangeMethodVisibility(
+                                            'FrameworkClass',
+                                            'someMethod',
+                                            Visibility::PROTECTED
+                                        ),
                                     ],
                                 ]
                             ),

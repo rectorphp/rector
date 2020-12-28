@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\FuncCall;
@@ -157,7 +158,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             return null;
         }
 
-        $this->prepare($node);
+        $this->prepareMethodCall($node);
 
         if ($this->isName($node->name, 'beConstructed*')) {
             return $this->processBeConstructed($node);
@@ -174,8 +175,6 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         if ($this->shouldSkip($node)) {
             return null;
         }
-
-        // $this->clone() → clone $this->testedObject
         if ($this->isName($node->name, 'clone')) {
             return new Clone_($this->testedObjectPropertyFetch);
         }
@@ -210,6 +209,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         if (isset($methodCall->args[1]) && $methodCall->args[1]->value instanceof Array_) {
             /** @var Array_ $array */
             $array = $methodCall->args[1]->value;
+
             if (isset($array->items[0])) {
                 $thisObjectPropertyMethodCall->args[] = new Arg($array->items[0]->value);
             }
@@ -234,17 +234,17 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         return $parentMethodCall;
     }
 
-    private function prepare(Node $node): void
+    private function prepareMethodCall(MethodCall $methodCall): void
     {
         if ($this->isPrepared) {
             return;
         }
 
         /** @var Class_ $classLike */
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
 
         $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($classLike);
-        $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($node);
+        $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($methodCall);
         $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($classLike);
 
         $this->isPrepared = true;
@@ -260,7 +260,6 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         if ($this->isName($methodCall->name, 'beConstructedThrough')) {
-            // static method
             $methodName = $this->getValue($methodCall->args[0]->value);
             $staticCall = $this->createStaticCall($this->testedClass, $methodName);
 
@@ -359,6 +358,10 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         /** @var Array_ $array */
         $array = $methodCall->args[1]->value;
         foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             $staticCall->args[] = new Arg($arrayItem->value);
         }
     }

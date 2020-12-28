@@ -117,7 +117,10 @@ CODE_SAMPLE
 
     private function isAliasWithConfiguredEntity(string $name): bool
     {
-        return $this->isAlias($name) && $this->hasAlias($name);
+        if (! $this->isAlias($name)) {
+            return false;
+        }
+        return $this->hasAlias($name);
     }
 
     private function convertAliasToFqn(string $name): string

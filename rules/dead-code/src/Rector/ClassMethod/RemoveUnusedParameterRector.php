@@ -307,7 +307,7 @@ CODE_SAMPLE
     {
         $unusedParameters = [];
 
-        foreach ((array) $classMethod->params as $i => $param) {
+        foreach ($classMethod->params as $i => $param) {
             // skip property promotion
             /** @var Param $param */
             if ($param->flags !== 0) {

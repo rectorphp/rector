@@ -89,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var string */
+        /** @var string $parentReflectionMethodName */
         $parentReflectionMethodName = $this->getDifferentReturnTypeNameFromAncestorClass($node);
         // The return type name could either be a classname, without the leading "\",
         // or one among the reserved identifiers ("static", "self", "iterable", etc)
@@ -131,7 +131,10 @@ CODE_SAMPLE
         }
 
         $nodeReturnType = $classMethod->returnType;
-        if ($nodeReturnType === null || $nodeReturnType instanceof UnionType) {
+        if ($nodeReturnType === null) {
+            return null;
+        }
+        if ($nodeReturnType instanceof UnionType) {
             return null;
         }
         $nodeReturnTypeName = $this->getName(
@@ -157,7 +160,7 @@ CODE_SAMPLE
             }
 
             $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
-            /** @var ReflectionNamedType|null */
+            /** @var ReflectionNamedType|null $parentReflectionMethodReturnType */
             $parentReflectionMethodReturnType = $parentReflectionMethod->getReturnType();
             if ($parentReflectionMethodReturnType === null || $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
                 continue;
@@ -171,13 +174,13 @@ CODE_SAMPLE
 
     private function addDocBlockReturn(ClassMethod $classMethod): void
     {
-        /** @var PhpDocInfo|null */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
         }
 
-        /** @var Node */
+        /** @var Node $returnType */
         $returnType = $classMethod->returnType;
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
         $phpDocInfo->changeReturnType($type);

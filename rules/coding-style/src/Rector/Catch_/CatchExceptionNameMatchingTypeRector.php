@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\Catch_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -73,7 +74,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (count((array) $node->types) !== 1) {
+        if (count($node->types) !== 1) {
             return null;
         }
 
@@ -107,8 +108,18 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->var->name = $newVariableName;
+        $newVariable = new Variable($newVariableName);
+        $isFoundInPrevious = (bool) $this->betterNodeFinder->findFirstPrevious($node, function (Node $n) use (
+            $newVariable
+        ): bool {
+            return $this->areNodesEqual($n, $newVariable);
+        });
 
+        if ($isFoundInPrevious) {
+            return null;
+        }
+
+        $node->var->name = $newVariableName;
         $this->renameVariableInStmts($node, $oldVariableName, $newVariableName);
 
         return $node;
@@ -120,6 +131,10 @@ CODE_SAMPLE
             $oldVariableName,
             $newVariableName
         ): void {
+            if (! $node instanceof Variable) {
+                return;
+            }
+
             if (! $this->isVariableName($node, $oldVariableName)) {
                 return;
             }

@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function getAnything(): static
     {
@@ -20,7 +20,7 @@ class SomeClass
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     /**
      * @return $this

@@ -6,10 +6,10 @@ namespace Rector\Generic\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generic\ValueObject\NormalToFluent;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -77,10 +77,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $classMethodStatementCount = count((array) $node->stmts);
+        $classMethodStatementCount = count($node->stmts);
 
         // iterate from bottom to up, so we can merge
         for ($i = $classMethodStatementCount - 1; $i >= 0; --$i) {
+            /** @var Expression $stmt */
             $stmt = $node->stmts[$i];
             if ($this->shouldSkipPreviousStmt($node, $i, $stmt)) {
                 continue;
@@ -120,39 +121,39 @@ CODE_SAMPLE
         $this->callsToFluent = $callsToFluent;
     }
 
-    private function shouldSkipPreviousStmt(Node $node, int $i, Stmt $stmt): bool
+    private function shouldSkipPreviousStmt(ClassMethod $classMethod, int $i, Expression $expression): bool
     {
         // we look only for 2+ stmts
-        if (! isset($node->stmts[$i - 1])) {
+        if (! isset($classMethod->stmts[$i - 1])) {
             return true;
         }
 
         // we look for 2 methods calls in a row
-        if (! $stmt instanceof Expression) {
+        if (! $expression instanceof Expression) {
             return true;
         }
 
-        $prevStmt = $node->stmts[$i - 1];
+        $prevStmt = $classMethod->stmts[$i - 1];
 
         return ! $prevStmt instanceof Expression;
     }
 
-    private function isBothMethodCallMatch(Expression $firstStmt, Expression $secondStmt): bool
+    private function isBothMethodCallMatch(Expression $firstExpression, Expression $secondExpression): bool
     {
-        if (! $firstStmt->expr instanceof MethodCall) {
+        if (! $firstExpression->expr instanceof MethodCall) {
             return false;
         }
 
-        if (! $secondStmt->expr instanceof MethodCall) {
+        if (! $secondExpression->expr instanceof MethodCall) {
             return false;
         }
 
-        $firstMethodCallMatch = $this->matchMethodCall($firstStmt->expr);
+        $firstMethodCallMatch = $this->matchMethodCall($firstExpression->expr);
         if ($firstMethodCallMatch === null) {
             return false;
         }
 
-        $secondMethodCallMatch = $this->matchMethodCall($secondStmt->expr);
+        $secondMethodCallMatch = $this->matchMethodCall($secondExpression->expr);
         if ($secondMethodCallMatch === null) {
             return false;
         }
@@ -179,8 +180,13 @@ CODE_SAMPLE
             ++$i;
         }
 
+        $stmt = $classMethod->stmts[$fluentMethodCallIndex];
+        if (! $stmt instanceof Expression) {
+            throw new ShouldNotHappenException();
+        }
+
         /** @var MethodCall $fluentMethodCall */
-        $fluentMethodCall = $classMethod->stmts[$fluentMethodCallIndex]->expr;
+        $fluentMethodCall = $stmt->expr;
 
         // they are added in reversed direction
         $methodCallsToAdd = array_reverse($methodCallsToAdd);

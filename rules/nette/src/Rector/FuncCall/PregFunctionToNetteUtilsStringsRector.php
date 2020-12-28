@@ -18,7 +18,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
-use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Nette\Tests\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector\PregFunctionToNetteUtilsStringsRectorTest
  */
-final class PregFunctionToNetteUtilsStringsRector extends AbstractRector
+final class PregFunctionToNetteUtilsStringsRector extends AbstractPregToNetteUtilsStringsRector
 {
     /**
      * @var array<string, string>
@@ -125,18 +124,16 @@ CODE_SAMPLE
      */
     private function refactorFuncCall(FuncCall $funcCall): ?Expr
     {
-        $oldFunctionNames = array_keys(self::FUNCTION_NAME_TO_METHOD_NAME);
-        if (! $this->isNames($funcCall, $oldFunctionNames)) {
+        $methodName = $this->matchFuncCallRenameToMethod($funcCall, self::FUNCTION_NAME_TO_METHOD_NAME);
+        if ($methodName === null) {
             return null;
         }
 
-        $currentFunctionName = $this->getName($funcCall);
-
-        $methodName = self::FUNCTION_NAME_TO_METHOD_NAME[$currentFunctionName];
         $matchStaticCall = $this->createMatchStaticCall($funcCall, $methodName);
 
         // skip assigns, might be used with different return value
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+
         if ($parentNode instanceof Assign) {
             if ($methodName === 'split') {
                 return $this->processSplit($funcCall, $matchStaticCall);
@@ -148,6 +145,8 @@ CODE_SAMPLE
 
             return null;
         }
+
+        $currentFunctionName = $this->getName($funcCall);
 
         // assign
         if (isset($funcCall->args[2]) && $currentFunctionName !== 'preg_replace') {

@@ -136,22 +136,19 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param FuncCall $node
-     */
-    private function shouldRefactor(Node $node): bool
+    private function shouldRefactor(FuncCall $funcCall): bool
     {
-        if (! $this->isFuncCallName($node, 'strip_tags')) {
+        if (! $this->isName($funcCall, 'strip_tags')) {
             return false;
         }
 
         // If param not provided, do nothing
-        if (count((array) $node->args) < 2) {
+        if (count($funcCall->args) < 2) {
             return false;
         }
 
         // Process anything other than String and null (eg: variables, function calls)
-        $allowableTagsParam = $node->args[1]->value;
+        $allowableTagsParam = $funcCall->args[1]->value;
 
         // Skip for string
         if ($allowableTagsParam instanceof String_) {

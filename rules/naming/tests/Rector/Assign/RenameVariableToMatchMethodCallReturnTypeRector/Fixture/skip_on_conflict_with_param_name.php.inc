@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Fixture;
 
-class SkipOnConflictWithParamNameClass
+class SkipOnConflictWithParamName
 {
     public function run($fastRunner)
     {

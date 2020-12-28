@@ -56,27 +56,27 @@ final class SingletonClassMethodAnalyzer
      */
     public function matchStaticPropertyFetch(ClassMethod $classMethod): ?StaticPropertyFetch
     {
-        if (count((array) $classMethod->stmts) !== 2) {
+        $stmts = (array) $classMethod->stmts;
+        if (count($stmts) !== 2) {
             return null;
         }
 
-        if (! $classMethod->stmts[0] instanceof If_) {
+        $firstStmt = $stmts[0] ?? null;
+        if (! $firstStmt instanceof If_) {
             return null;
         }
 
-        /** @var If_ $if */
-        $if = $classMethod->stmts[0];
-        $staticPropertyFetch = $this->matchStaticPropertyFetchInIfCond($if->cond);
+        $staticPropertyFetch = $this->matchStaticPropertyFetchInIfCond($firstStmt->cond);
 
-        if (count((array) $if->stmts) !== 1) {
+        if (count($firstStmt->stmts) !== 1) {
             return null;
         }
 
-        if (! $if->stmts[0] instanceof Expression) {
+        if (! $firstStmt->stmts[0] instanceof Expression) {
             return null;
         }
 
-        $stmt = $if->stmts[0]->expr;
+        $stmt = $firstStmt->stmts[0]->expr;
 
         // create self and assign to static property
         if (! $stmt instanceof Assign) {

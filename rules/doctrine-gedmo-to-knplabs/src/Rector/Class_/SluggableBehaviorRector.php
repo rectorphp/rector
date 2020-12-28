@@ -128,7 +128,7 @@ CODE_SAMPLE
 
         // remove property setter/getter
 
-        foreach ((array) $node->getMethods() as $classMethod) {
+        foreach ($node->getMethods() as $classMethod) {
             if (! $this->isNames($classMethod, ['getSlug', 'setSlug'])) {
                 continue;
             }
@@ -157,7 +157,7 @@ CODE_SAMPLE
         $classMethod->stmts[] = new Return_($this->createArray($slugFields));
 
         $returnType = new ArrayType(new MixedType(), new StringType());
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->changeReturnType($returnType);
 //        $this->docBlockManipulator->addReturnTag($classMethod, new ArrayType(new MixedType(), new StringType()));
 

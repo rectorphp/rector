@@ -39,12 +39,13 @@ final class FunctionParser
             return null;
         }
 
-        $ast = $this->parser->parse($functionCode)[0];
+        $nodes = (array) $this->parser->parse($functionCode);
 
-        if (! $ast instanceof Namespace_) {
+        $firstNode = $nodes[0] ?? null;
+        if (! $firstNode instanceof Namespace_) {
             return null;
         }
 
-        return $ast;
+        return $firstNode;
     }
 }

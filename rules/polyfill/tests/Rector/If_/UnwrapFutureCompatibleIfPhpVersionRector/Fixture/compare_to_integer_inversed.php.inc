@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
+namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
 
 class CompareToIntegerInversed
 {
@@ -19,7 +19,7 @@ class CompareToIntegerInversed
 -----
 <?php
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
+namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
 
 class CompareToIntegerInversed
 {

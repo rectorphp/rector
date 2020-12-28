@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff;
 use PhpCsFixer\Fixer\Basic\Psr4Fixer;
+use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
@@ -19,8 +20,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\StandaloneLineInMultilineArrayFixer;
+use Symplify\CodingStandard\Fixer\Commenting\RemoveCommentedCodeFixer;
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
-use Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
@@ -28,6 +29,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(StandaloneLineInMultilineArrayFixer::class);
     $services->set(ArrayOpenerAndCloserNewlineFixer::class);
+
+    $services->set(ClassAttributesSeparationFixer::class);
 
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
         ->call('configure', [[
@@ -53,7 +56,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/config',
         __DIR__ . '/ecs.php',
         __DIR__ . '/rector.php',
-        __DIR__ . '/rector-ci.php',
         __DIR__ . '/config/set',
     ]);
 
@@ -88,12 +90,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         BlankLineAfterOpeningTagFixer::class,
         Psr4Fixer::class,
 
+        // buggy - fix on master
+        RemoveCommentedCodeFixer::class,
+
         PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
-        CommentedOutCodeSniff::class . '.Found' => [
-            __DIR__ . '/rules/php72/src/Rector/Assign/ListEachRector.php',
-            __DIR__ . '/rules/dead-code/src/Rector/FunctionLike/RemoveOverriddenValuesRector.php',
-            __DIR__ . '/rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php',
-        ],
         PhpUnitStrictFixer::class => [
             __DIR__ . '/packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',

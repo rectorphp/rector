@@ -123,7 +123,7 @@ final class EventAndListenerTreeProvider
 
             $eventClassInNamespace = $this->eventValueObjectClassFactory->create(
                 $eventClassName,
-                (array) $methodCall->args
+                $methodCall->args
             );
 
             $dispatchMethodCall = $this->dispatchMethodCallFactory->createFromEventClassName($eventClassName);
@@ -190,13 +190,17 @@ final class EventAndListenerTreeProvider
         /** @var Class_ $eventClass */
         $eventClass = $eventClassInNamespace->stmts[0];
         $getterMethodBlueprints = [];
+
         foreach ($eventClass->getMethods() as $classMethod) {
             if (! $this->nodeNameResolver->isName($classMethod, 'get*')) {
                 continue;
             }
 
+            $stmts = (array) $classMethod->stmts;
+
             /** @var Return_ $return */
-            $return = $classMethod->stmts[0];
+            $return = $stmts[0];
+
             /** @var PropertyFetch $propertyFetch */
             $propertyFetch = $return->expr;
 

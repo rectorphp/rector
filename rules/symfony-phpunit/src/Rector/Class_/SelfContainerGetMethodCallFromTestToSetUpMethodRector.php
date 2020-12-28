@@ -58,13 +58,13 @@ class SomeTest extends KernelTestCase
 {
     public function testOne()
     {
-        $itemRepository = self::$container->get(ItemRepository::class);
+        $itemRepository = $this->getService(ItemRepository::class);
         $itemRepository->doStuff();
     }
 
     public function testTwo()
     {
-        $itemRepository = self::$container->get(ItemRepository::class);
+        $itemRepository = $this->getService(ItemRepository::class);
         $itemRepository->doAnotherStuff();
     }
 }
@@ -84,7 +84,7 @@ class SomeTest extends KernelTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->itemRepository = self::$container->get(ItemRepository::class);
+        $this->itemRepository = $this->getService(ItemRepository::class);
     }
 
     public function testOne()
@@ -120,7 +120,7 @@ CODE_SAMPLE
             return null;
         }
 
-        // 1. find self::$container->get(<X>)
+        // 1. find $this->getService(<X>)
         $serviceTypes = $this->selfContainerMethodCallCollector->collectContainerGetServiceTypes($node);
         if ($serviceTypes === []) {
             return null;

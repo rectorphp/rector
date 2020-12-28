@@ -42,13 +42,13 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->propertyRenameFactory = self::$container->get(PropertyRenameFactory::class);
-        $this->matchPropertyTypeExpectedNameResolver = self::$container->get(
+        $this->propertyRenameFactory = $this->getService(PropertyRenameFactory::class);
+        $this->matchPropertyTypeExpectedNameResolver = $this->getService(
             MatchPropertyTypeExpectedNameResolver::class
         );
 
-        $this->fileInfoParser = self::$container->get(FileInfoParser::class);
-        $this->betterNodeFinder = self::$container->get(BetterNodeFinder::class);
+        $this->fileInfoParser = $this->getService(FileInfoParser::class);
+        $this->betterNodeFinder = $this->getService(BetterNodeFinder::class);
     }
 
     /**

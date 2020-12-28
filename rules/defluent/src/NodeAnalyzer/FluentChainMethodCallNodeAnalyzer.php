@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -57,10 +59,9 @@ final class FluentChainMethodCallNodeAnalyzer
      */
     public function isFluentClassMethodOfMethodCall(MethodCall $methodCall): bool
     {
-        if ($methodCall->var instanceof MethodCall || $methodCall->var instanceof StaticCall) {
+        if ($this->isCall($methodCall->var)) {
             return false;
         }
-
         $calleeStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
 
         // we're not sure
@@ -172,8 +173,7 @@ final class FluentChainMethodCallNodeAnalyzer
         $methods = array_reverse($methods);
 
         foreach ($methods as $method) {
-            $activeMethodName = $this->nodeNameResolver->getName($node->name);
-            if ($activeMethodName !== $method) {
+            if (! $this->nodeNameResolver->isName($node->name, $method)) {
                 return false;
             }
 
@@ -216,5 +216,10 @@ final class FluentChainMethodCallNodeAnalyzer
         }
 
         return null;
+    }
+
+    private function isCall(Expr $expr): bool
+    {
+        return StaticInstanceOf::isOneOf($expr, [MethodCall::class, StaticCall::class]);
     }
 }

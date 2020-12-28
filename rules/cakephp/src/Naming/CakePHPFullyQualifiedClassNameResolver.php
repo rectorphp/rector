@@ -63,7 +63,10 @@ final class CakePHPFullyQualifiedClassNameResolver
 
         // B. is Cake native class?
         $cakePhpVersion = 'Cake\\' . $pseudoNamespace . '\\' . $shortClass;
-        if (class_exists($cakePhpVersion) || interface_exists($cakePhpVersion)) {
+        if (class_exists($cakePhpVersion)) {
+            return $cakePhpVersion;
+        }
+        if (interface_exists($cakePhpVersion)) {
             return $cakePhpVersion;
         }
 

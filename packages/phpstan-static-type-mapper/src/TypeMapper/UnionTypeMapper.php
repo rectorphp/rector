@@ -97,7 +97,6 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
-        // match array types
         $arrayNode = $this->matchArrayTypes($type);
         if ($arrayNode !== null) {
             return $arrayNode;
@@ -155,8 +154,10 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($unionTypeAnalysis === null) {
             return false;
         }
-
-        return $unionTypeAnalysis->hasIterable() && $unionTypeAnalysis->hasArray();
+        if (! $unionTypeAnalysis->hasIterable()) {
+            return false;
+        }
+        return $unionTypeAnalysis->hasArray();
     }
 
     /**

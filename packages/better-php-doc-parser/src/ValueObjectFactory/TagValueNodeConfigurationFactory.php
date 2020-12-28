@@ -42,6 +42,12 @@ final class TagValueNodeConfigurationFactory
      */
     public const CLOSING_BRACKET_REGEX = '#\)$#';
 
+    /**
+     * @var string
+     * @see https://regex101.com/r/0KlSQv/1
+     */
+    public const ARRAY_COLON_SEPARATOR_REGEX = '#{([^{}]+)[:]([^{}]+)}#';
+
     public function createFromOriginalContent(
         ?string $originalContent,
         PhpDocTagValueNode $phpDocTagValueNode
@@ -68,9 +74,9 @@ final class TagValueNodeConfigurationFactory
             );
         }
 
-        $isSilentKeyExplicit = (bool) Strings::contains($originalContent, sprintf('%s=', $silentKey));
+        $isSilentKeyExplicit = Strings::contains($originalContent, sprintf('%s=', $silentKey));
 
-        $arrayEqualSign = $this->resolveArrayEqualSignByPhpNodeClass($phpDocTagValueNode);
+        $arrayEqualSign = $this->resolveArraySeparatorSign($originalContent, $phpDocTagValueNode);
 
         return new TagValueNodeConfiguration(
             $originalContent,
@@ -110,6 +116,27 @@ final class TagValueNodeConfigurationFactory
         return (bool) Strings::match($originalContent, $quotedArrayPattern);
     }
 
+    private function resolveArraySeparatorSign(string $originalContent, PhpDocTagValueNode $phpDocTagValueNode): string
+    {
+        $hasArrayColonSeparator = (bool) Strings::match($originalContent, self::ARRAY_COLON_SEPARATOR_REGEX);
+
+        if ($hasArrayColonSeparator) {
+            return ':';
+        }
+        return $this->resolveArrayEqualSignByPhpNodeClass($phpDocTagValueNode);
+    }
+
+    private function createQuotedKeyPattern(?string $silentKey, string $key, string $escapedKey): string
+    {
+        if ($silentKey === $key) {
+            // @see https://regex101.com/r/VgvK8C/4/
+            return sprintf('#(%s=")|\("#', $escapedKey);
+        }
+
+        // @see https://regex101.com/r/VgvK8C/3/
+        return sprintf('#%s="#', $escapedKey);
+    }
+
     /**
      * Before:
      * (options={"key":"value"})
@@ -137,16 +164,5 @@ final class TagValueNodeConfigurationFactory
         }
 
         return ':';
-    }
-
-    private function createQuotedKeyPattern(?string $silentKey, string $key, string $escapedKey): string
-    {
-        if ($silentKey === $key) {
-            // @see https://regex101.com/r/VgvK8C/4/
-            return sprintf('#(%s=")|\("#', $escapedKey);
-        }
-
-        // @see https://regex101.com/r/VgvK8C/3/
-        return sprintf('#%s="#', $escapedKey);
     }
 }

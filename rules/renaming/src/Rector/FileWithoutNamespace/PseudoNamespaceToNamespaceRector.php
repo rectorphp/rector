@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
@@ -101,7 +102,7 @@ CODE_SAMPLE
         $this->newNamespace = null;
 
         if ($node instanceof FileWithoutNamespace) {
-            $stmts = $this->refactorStmts((array) $node->stmts);
+            $stmts = $this->refactorStmts($node->stmts);
             $node->stmts = $stmts;
 
             // add a new namespace?
@@ -130,12 +131,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]
+     * @param Stmt[] $stmts
+     * @return Stmt[]
      */
-    private function refactorStmts(array $nodes): array
+    private function refactorStmts(array $stmts): array
     {
-        $this->traverseNodesWithCallable($nodes, function (Node $node): ?Node {
+        $this->traverseNodesWithCallable($stmts, function (Node $node): ?Node {
             if (! $this->isInstancesOf($node, [Name::class, Identifier::class, Property::class, FunctionLike::class])) {
                 return null;
             }
@@ -144,15 +145,17 @@ CODE_SAMPLE
             foreach ($this->pseudoNamespacesToNamespaces as $namespacePrefixWithExcludedClasses) {
                 $this->phpDocTypeRenamer->changeUnderscoreType($node, $namespacePrefixWithExcludedClasses);
             }
-
-            if ($node instanceof Name || $node instanceof Identifier) {
+            if ($node instanceof Name) {
+                return $this->processNameOrIdentifier($node);
+            }
+            if ($node instanceof Identifier) {
                 return $this->processNameOrIdentifier($node);
             }
 
             return null;
         });
 
-        return $nodes;
+        return $stmts;
     }
 
     /**

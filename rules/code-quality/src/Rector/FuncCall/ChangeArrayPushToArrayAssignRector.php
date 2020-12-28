@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -84,7 +83,7 @@ CODE_SAMPLE
 
             // keep comments of first line
             if ($position === 1) {
-                $assignExpression->setAttribute(AttributeKey::COMMENTS, $node->getComments());
+                $this->mirrorComments($assignExpression, $node);
             }
 
             $this->addNodeAfterNode($assignExpression, $node);
