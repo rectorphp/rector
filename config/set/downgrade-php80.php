@@ -39,7 +39,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangePhpVersionInPlatformCheckRector::class)->call('configure', [[
         ChangePhpVersionInPlatformCheckRector::TARGET_PHP_VERSION => 70400,
     ]]);
-    $services->set(DowngradePropertyPromotionToConstructorPropertyAssignRector::class);
     $services->set(DowngradePropertyPromotionRector::class);
     $services->set(DowngradeNonCapturingCatchesRector::class);
     $services->set(DowngradeMatchToSwitchRector::class);
