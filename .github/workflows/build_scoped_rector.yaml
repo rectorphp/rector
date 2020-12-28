@@ -5,6 +5,7 @@ on:
     push:
         branches:
             - master
+    pull_request: null
 
 jobs:
     build_scoped_rector:

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
+use Rector\Compiler\Unprefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -28,8 +29,30 @@ return [
     ScoperOption::PATCHERS => [
         // [BEWARE] $filePath is absolute!
 
+        // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
+        function (string $filePath, string $prefix, string $content): string {
+            // skip vendor
+            if (Strings::contains($filePath, 'vendor/')) {
+                return $content;
+            }
+
+            // skip bin/rector.php for composer autoload class
+            if (Strings::endsWith($filePath, 'bin/rector.php')) {
+                return $content;
+            }
+
+            // skip scoper-autoload
+            if (Strings::endsWith($filePath, 'vendor/scoper-autoload.php')) {
+                return $content;
+            }
+
+            return Unprefixer::unprefixQuoted($content, $prefix);
+        },
+
         // scoper missed PSR-4 autodiscovery in Symfony
         function (string $filePath, string $prefix, string $content): string {
+
+
             // scoper missed PSR-4 autodiscovery in Symfony
             if (! Strings::endsWith($filePath, 'config.php') && ! Strings::endsWith($filePath, 'services.php')) {
                 return $content;

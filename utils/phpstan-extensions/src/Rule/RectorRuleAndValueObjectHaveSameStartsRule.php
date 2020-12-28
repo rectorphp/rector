@@ -12,7 +12,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use Rector\PHPStanExtensions\NodeAnalyzer\SymfonyConfigRectorValueObjectResolver;
 use Rector\PHPStanExtensions\NodeAnalyzer\TypeAndNameAnalyzer;
-use Symplify\PHPStanRules\Naming\SimpleNameResolver;
+use Symplify\Astral\Naming\SimpleNameResolver;
 
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\RectorRuleAndValueObjectHaveSameStartsRule\RectorRuleAndValueObjectHaveSameStartsRuleTest
