@@ -1,7 +1,7 @@
 <?php
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-final class ReturnPhpDocShouldNotBeReplacedByLessSpecificType
+final class SkipReturnPhpDoc2
 {
     /** @return array{a: string, b: float, c: array<int, string>} */
     public function get(): array { 
