@@ -71,7 +71,7 @@ jobs:
 
             # 4. add Rector prefixed
             -
-                run: composer require rector/rector-prefixed --ansi
+                run: composer require rector/rector-prefixed:dev-master --ansi
                 working-directory: repository/${{ matrix.package_name }}
 
             # 5. run Rector bare
