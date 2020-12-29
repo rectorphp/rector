@@ -7,9 +7,6 @@ on:
 
 jobs:
     daily_pull_requests:
-        # dont run jobs on forks, because gh-tokens are not available 
-        if: github.event.pull_request.head.repo.full_name == github.repository
-        
         strategy:
             fail-fast: false
             matrix:
@@ -40,25 +37,31 @@ jobs:
 
         steps:
             -
+                if: github.event.pull_request.head.repo.full_name == github.repository
                 uses: actions/checkout@v2
                 with:
                     token: ${{ secrets.ACCESS_TOKEN }}
 
             # see https://github.com/shivammathur/setup-php
             -
+                if: github.event.pull_request.head.repo.full_name == github.repository
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.4
                     coverage: none
                     tools: composer:v2
 
-            -   run: composer install --no-progress --ansi
+            -
+                if: github.event.pull_request.head.repo.full_name == github.repository
+                run: composer install --no-progress --ansi
 
             -
+                if: github.event.pull_request.head.repo.full_name == github.repository
                 run: ${{ matrix.actions.run }}
 
             # see https://github.com/peter-evans/create-pull-request
             -
+                if: github.event.pull_request.head.repo.full_name == github.repository
                 name: Create pull-request
                 uses: peter-evans/create-pull-request@v3
                 with:
