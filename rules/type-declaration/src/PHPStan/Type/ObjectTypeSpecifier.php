@@ -128,7 +128,7 @@ final class ObjectTypeSpecifier
             return null;
         }
 
-        $namespacedObject = $namespaceName . '\\' . $objectType->getClassName();
+        $namespacedObject = $namespaceName . '\\' . ltrim($objectType->getClassName(), '\\');
 
         if (ClassExistenceStaticHelper::doesClassLikeExist($namespacedObject)) {
             return new FullyQualifiedObjectType($namespacedObject);
