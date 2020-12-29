@@ -84,4 +84,4 @@ jobs:
                 run: |
                     cp ci/rector/rector-php7-upgrade.php repository/${{ matrix.package_name }}/rector.php
                     cd repository/${{ matrix.package_name }}
-                    vendor/bin/rector process . --ansi --dry-run
+                    vendor/bin/rector process . --ansi
