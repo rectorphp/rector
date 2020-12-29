@@ -428,7 +428,7 @@ CODE_SAMPLE
 
     private function createParamTagNode(string $name, TypeNode $typeNode): AttributeAwareParamTagValueNode
     {
-        return new AttributeAwareParamTagValueNode($typeNode, false, '$' . $name, '', false);
+        return new AttributeAwareParamTagValueNode($typeNode, false, '$' . $name, '');
     }
 
     private function setTypeIfNotNull(ParamAndArg $paramAndArg, Param $param): void

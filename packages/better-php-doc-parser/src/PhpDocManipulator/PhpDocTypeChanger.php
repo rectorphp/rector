@@ -11,6 +11,7 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
+use Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc\AttributeAwareParamTagValueNodeFactory;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -32,11 +33,6 @@ final class PhpDocTypeChanger
     private $staticTypeMapper;
 
     /**
-     * @var ParamPhpDocNodeFactory
-     */
-    private $paramPhpDocNodeFactory;
-
-    /**
      * @var RectorChangeCollector
      */
     private $rectorChangeCollector;
@@ -46,18 +42,28 @@ final class PhpDocTypeChanger
      */
     private $currentNodeProvider;
 
+    /**
+     * @var AttributeAwareParamTagValueNodeFactory
+     */
+    private $attributeAwareParamTagValueNodeFactory;
+
+    /**
+     * @var ParamPhpDocNodeFactory
+     */
+    private $paramPhpDocNodeFactory;
+
     public function __construct(
-        ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
         StaticTypeMapper $staticTypeMapper,
         TypeComparator $typeComparator,
         RectorChangeCollector $rectorChangeCollector,
-        CurrentNodeProvider $currentNodeProvider
+        CurrentNodeProvider $currentNodeProvider,
+        ParamPhpDocNodeFactory $paramPhpDocNodeFactory
     ) {
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->currentNodeProvider = $currentNodeProvider;
+        $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
     }
 
     public function changeVarType(PhpDocInfo $phpDocInfo, Type $newType): void
