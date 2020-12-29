@@ -32,6 +32,9 @@ final class StaticEasyPrefixer
         // this is public API of a Rector rule
         'Symplify\RuleDocGenerator\*',
 
+        // for configuring sets with ValueObjectInliner
+        'Symplify\SymfonyPhpConfig\*',
+
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',
     ];
