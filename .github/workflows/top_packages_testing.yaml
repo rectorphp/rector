@@ -18,7 +18,6 @@ jobs:
                 with:
                     php-version: 7.4
                     coverage: none
-                    tools: composer:v2
 
             # get top 10 packages
             -
@@ -59,15 +58,30 @@ jobs:
                 with:
                     php-version: 7.4
                     coverage: none
-                    tools: composer:v2
 
-            -   run: composer install --no-progress --ansi
+#            -   uses: "ramsey/composer-install@v1"
 
             # 2. git clone package in the last version
             -   run: git clone $(php ci/get_packagist_url.php ${{ matrix.package_name }}) --depth 1 repository/${{ matrix.package_name }}
 
             # 3. install its dependencies
-            -   run: composer install --no-progress --ansi --working-dir repository/${{ matrix.package_name }} --ansi
+            -
+                run: composer install --no-progress --ansi --ansi
+                working-directory: repository/${{ matrix.package_name }}
 
-            # 4. run Rector on it
-            -   run: bin/rector process repository/${{ matrix.package_name }} --autoload-file repository/${{ matrix.package_name }}/vendor/autoload.php --config ci/rector/rector-php7-upgrade.php --ansi
+            # 4. add Rector prefixed
+            -
+                run: composer require rector/rector-prefixed --ansi
+                working-directory: repository/${{ matrix.package_name }}
+
+            # 5. run Rector bare
+            -
+                run: vendor/bin/rector list --ansi
+                working-directory: repository/${{ matrix.package_name }}
+
+            # 6. run Rector bare
+            -
+                run: |
+                    cp ci/rector/rector-php7-upgrade.php repository/${{ matrix.package_name }}/rector.php
+                    cd repository/${{ matrix.package_name }}
+                    vendor/bin/rector process . --ansi --dry-run

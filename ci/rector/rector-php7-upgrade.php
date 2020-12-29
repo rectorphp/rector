@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::PHP_70,
     ]);
 
-    $parameters->set(Option::EXCLUDE_PATHS, [
+    $parameters->set(Option::SKIP, [
         '*/vendor/*'
     ]);
 };
