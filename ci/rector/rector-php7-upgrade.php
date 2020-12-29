@@ -17,6 +17,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::PHP_70,
     ]);
 
+    $parameters->set(Option::AUTOLOAD_PATHS, [
+        __DIR__ . '/tests'
+    ]);
+
     $parameters->set(Option::SKIP, [
         '*/vendor/*'
     ]);
