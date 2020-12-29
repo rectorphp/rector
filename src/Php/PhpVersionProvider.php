@@ -6,12 +6,12 @@ namespace Rector\Core\Php;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
-use Rector\Core\Util\PhpVersionFactory;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
+/**
+ * @see \Rector\Core\Tests\Php\PhpVersionProviderTest
+ */
 final class PhpVersionProvider
 {
     /**
@@ -20,36 +20,15 @@ final class PhpVersionProvider
     private $parameterProvider;
 
     /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
-     * @var PhpVersionFactory
-     */
-    private $phpVersionFactory;
-
-    /**
-     * @var ComposerJsonFactory
-     */
-    private $composerJsonFactory;
-
-    /**
      * @var ProjectComposerJsonPhpVersionResolver
      */
     private $projectComposerJsonPhpVersionResolver;
 
     public function __construct(
         ParameterProvider $parameterProvider,
-        ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver,
-        SmartFileSystem $smartFileSystem,
-        PhpVersionFactory $phpVersionFactory,
-        ComposerJsonFactory $composerJsonFactory
+        ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver
     ) {
         $this->parameterProvider = $parameterProvider;
-        $this->smartFileSystem = $smartFileSystem;
-        $this->phpVersionFactory = $phpVersionFactory;
-        $this->composerJsonFactory = $composerJsonFactory;
         $this->projectComposerJsonPhpVersionResolver = $projectComposerJsonPhpVersionResolver;
     }
 

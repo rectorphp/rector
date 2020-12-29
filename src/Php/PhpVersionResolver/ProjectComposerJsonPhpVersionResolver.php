@@ -48,12 +48,12 @@ final class ProjectComposerJsonPhpVersionResolver
             return $this->phpVersionFactory->createIntVersion($platformPhp);
         }
 
-        $projectPhpVersion = $projectComposerJson->getRequirePhpVersion();
-        if ($projectPhpVersion === null) {
+        $requirePhpVersion = $projectComposerJson->getRequirePhpVersion();
+        if ($requirePhpVersion === null) {
             return null;
         }
 
-        return $this->createIntVersionFromComposerVersion($projectPhpVersion);
+        return $this->createIntVersionFromComposerVersion($requirePhpVersion);
     }
 
     private function createIntVersionFromComposerVersion(string $projectPhpVersion): int
