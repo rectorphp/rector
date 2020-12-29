@@ -94,6 +94,8 @@ jobs:
             -   run: rm -rf rector-downgrade/.git
             # Prevent this same workflow from triggering again
             -   run: rm -f rector-downgrade/.github/workflows/build_php71.yaml
+            # Remove unneeded workflows
+            -   run: rm -f rector-downgrade/.github/workflows/publish_docker_images.yaml
 
             # publish it to remote repository
             -
