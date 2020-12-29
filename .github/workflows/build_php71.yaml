@@ -83,16 +83,16 @@ jobs:
                     php-version: 7.4
                     coverage: none
 
-            # Remove all files that we don't need in the target repo
+            # Copy all files for the target repo to rector-downgrade/
             # Remove the artifact
             -   run: rm build/rector-php71.zip
             -   run: rm -R build
+            # Copy all files
+            -   run: rsync -av * rector-downgrade --quiet
             # Prevent the source .git overriding the target .git
-            -   run: rm -rf .git
-            # Prevent this same workflow (and all others too) from triggering again
-            -   run: rm -rf .github
-            # Unneeded stuff
-            -   run: rm -rf .docker
+            -   run: rm -rf rector-downgrade/.git
+            # Prevent this same workflow from triggering again
+            -   run: rm -f rector-downgrade/.github/workflows/build_php71.yaml
 
             # publish it to remote repository
             -
@@ -100,7 +100,7 @@ jobs:
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
-                    package-directory: '.'
+                    package-directory: 'rector-downgrade'
                     split-repository-organization: 'rectorphp'
                     split-repository-name: 'rector-php71'
                     user-name: "kaizen-ci"
