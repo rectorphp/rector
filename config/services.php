@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Composer\Semver\VersionParser;
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
 use PhpParser\BuilderFactory;
@@ -96,4 +97,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(Inflector::class)
         ->factory([ref(InflectorFactory::class), 'build']);
+
+    $services->set(VersionParser::class);
 };

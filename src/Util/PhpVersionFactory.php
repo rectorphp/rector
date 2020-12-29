@@ -22,7 +22,7 @@ final class PhpVersionFactory
             return (int) $explodeVersion[0] * 10000 + (int) $explodeVersion[1] * 100;
         }
 
-        if ($countExplodedVersion === 3) {
+        if ($countExplodedVersion >= 3) {
             return (int) $explodeVersion[0] * 10000 + (int) $explodeVersion[1] * 100 + (int) $explodeVersion[2];
         }
 
