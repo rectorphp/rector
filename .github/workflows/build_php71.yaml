@@ -87,8 +87,9 @@ jobs:
             # Remove the artifact
             -   run: rm build/rector-php71.zip
             -   run: rm -R build
-            # Copy all files
+            # Copy all files, including hidden files
             -   run: rsync -av * rector-downgrade --quiet
+            -   run: rsync -av .[^.]* rector-downgrade --quiet
             # Prevent the source .git overriding the target .git
             -   run: rm -rf rector-downgrade/.git
             # Prevent this same workflow from triggering again
