@@ -1,4 +1,4 @@
-name: Weekly Pull Requests
+name: Weekly Code Coverage
 
 on:
     schedule:
@@ -6,15 +6,29 @@ on:
         -   cron: "0 0 * * 0"
 
 jobs:
-    weekly_pull_requests:
+    weekly_code_coverage:
         strategy:
             fail-fast: false
             matrix:
                 actions:
                     -
-                        name: "Re-Generate CHANGELOG.md"
-                        run: "composer changelog"
-                        branch: 'automated-regenerated-changelog'
+                        name: "Re-Generate Code Coverage"
+                        run: |
+                            composer require --dev nimut/phpunit-merger
+
+                            vendor/bin/phpunit --coverage-php build/logs/rules.cov rules
+                            vendor/bin/phpunit --coverage-php build/logs/packages.cov packages
+                            vendor/bin/phpunit --coverage-php build/logs/tests.cov tests
+                            vendor/bin/phpunit --coverage-php build/logs/utils.cov utils
+
+                            vendor/bin/phpunit-merger coverage build/logs clover.xml
+
+                            # Coveralls.io
+                            composer require --dev php-coveralls/php-coveralls:^2.4
+                            vendor/bin/php-coveralls --coverage_clover=clover.xml -v
+                        env:
+                            COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                        branch: 'master'
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
@@ -42,16 +56,3 @@ jobs:
             -
                 if: github.event.pull_request.head.repo.full_name == github.repository
                 run: ${{ matrix.actions.run }}
-
-            # see https://github.com/peter-evans/create-pull-request
-            -
-                if: github.event.pull_request.head.repo.full_name == github.repository
-                name: Create pull-request
-                uses: peter-evans/create-pull-request@v3
-                with:
-                    token: ${{ secrets.GITHUB_TOKEN }}
-                    commit-message: "[automated] ${{ matrix.actions.name }}"
-                    base: 'master'
-                    branch: ${{ matrix.actions.branch }}
-                    title: '[automated] ${{ matrix.actions.name }}'
-                    delete-branch: true
