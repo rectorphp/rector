@@ -11,7 +11,6 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
-use Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc\AttributeAwareParamTagValueNodeFactory;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -41,11 +40,6 @@ final class PhpDocTypeChanger
      * @var CurrentNodeProvider
      */
     private $currentNodeProvider;
-
-    /**
-     * @var AttributeAwareParamTagValueNodeFactory
-     */
-    private $attributeAwareParamTagValueNodeFactory;
 
     /**
      * @var ParamPhpDocNodeFactory
