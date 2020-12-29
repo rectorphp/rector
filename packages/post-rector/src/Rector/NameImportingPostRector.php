@@ -32,11 +32,6 @@ final class NameImportingPostRector extends AbstractPostRector
      */
     private $docBlockNameImporter;
 
-    /**
-     * @var string[]
-     */
-    private $importedNames = [];
-
     public function __construct(
         ParameterProvider $parameterProvider,
         NameImporter $nameImporter,
@@ -55,17 +50,6 @@ final class NameImportingPostRector extends AbstractPostRector
         }
 
         if ($node instanceof Name) {
-            $name = $this->getName($node);
-            if ($name === null) {
-                return null;
-            }
-
-            if (in_array($name, $this->importedNames, true)) {
-                $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-                return new Name($node->getLast(), $node->getAttributes());
-            }
-
-            $this->importedNames[] = $name;
             return $this->nameImporter->importName($node);
         }
 
