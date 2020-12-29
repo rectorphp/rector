@@ -1,12 +1,9 @@
 name: Code Coverage
 
-#on:
-#    push:
-#        branches:
-#            - master
-
 on:
-    pull_request: null
+    push:
+        branches:
+            - master
 
 jobs:
     code_coverage:
