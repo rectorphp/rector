@@ -98,7 +98,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $reflectionClass = new ReflectionClass();
+        $reflectionClass = new ReflectionClass($className);
+        if ($reflectionClass === null) {
+            return null;
+        }
+
         return (string) $reflectionClass->getFileName();
     }
 
@@ -112,12 +116,20 @@ CODE_SAMPLE
         $type = $scope->getType($methodCall->var);
         if ($type instanceof ObjectType) {
             $classReflection = $type->getClassReflection();
+            if ($classReflection === null) {
+                return null;
+            }
+
             return (string) $classReflection->getFileName();
         }
 
         if ($type instanceof ThisType) {
             $staticObjectType = $type->getStaticObjectType();
             $classReflection = $staticObjectType->getClassReflection();
+            if ($classReflection === null) {
+                return null;
+            }
+
             return (string) $classReflection->getFileName();
         }
 
