@@ -91,8 +91,6 @@ jobs:
             -   run: rsync -av * rector-downgrade --quiet
             # Set-up own workflows for target repo
             -   run: cp -R ci/downgrade/target-repo/. rector-downgrade/
-            # Copy configuration for PHPStan
-            -   run: cp ci/downgrade/phpstan.neon rector-downgrade/
 
             # publish it to remote repository
             -
