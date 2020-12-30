@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use ReflectionClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,6 +23,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnSpreadOperatorRector extends AbstractRector
 {
+    /**
+     * @see https://regex101.com/r/ChpDsj/1
+     * @var string
+     */
+    private const ANONYMOUS_CLASS_REGEX = '#^AnonymousClass[\w+]#';
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove spread operator', [
@@ -74,8 +84,31 @@ CODE_SAMPLE
         return $this->processUnspreadOperatorMethodCallArgs($node);
     }
 
+    private function getClassName(ClassMethod $classMethod): ?string
+    {
+        $parent = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Class_) {
+            return null;
+        }
+
+        $shortClassName = (string) $parent->name;
+        if (Strings::match($shortClassName, self::ANONYMOUS_CLASS_REGEX)) {
+            return [];
+        }
+
+        return (string) $parent->namespacedName;
+    }
+
     private function processUnspreadOperatorClassMethodParams(ClassMethod $classMethod): ?ClassMethod
     {
+        $className = $this->getClassName($classMethod);
+        $reflectionClass = new ReflectionClass($className);
+        $fileName = $reflectionClass->getFileName();
+
+        if (Strings::contains($fileName, 'vendor')) {
+            return null;
+        }
+
         $params = $classMethod->params;
         if ($params === []) {
             return null;
