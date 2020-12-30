@@ -12,8 +12,8 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
@@ -152,6 +152,10 @@ CODE_SAMPLE
         $fileName = $node instanceof ClassMethod
             ? $this->getClassFileNameByClassMethod($node)
             : $this->getClassFileNameByMethodCall($node);
+
+        if ($fileName === null) {
+            return false;
+        }
 
         return Strings::contains($fileName, 'vendor');
     }
