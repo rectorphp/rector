@@ -21,6 +21,7 @@ jobs:
                     php-version: ${{ matrix.php_version }}
                     coverage: none
 
-            -   run: mkdir temp && cd temp
-            -   run: composer require phpstan/phpstan --dev --ansi
-            -   run: vendor/bin/phpstan analyse -c ../ci/downgrade/phpstan.neon --ansi
+            -   run: |
+                    mkdir temp && cd temp
+                    composer require phpstan/phpstan --dev --ansi
+                    vendor/bin/phpstan analyse -c ../ci/downgrade/phpstan.neon --ansi
