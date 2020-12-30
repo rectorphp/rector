@@ -12,6 +12,7 @@ use Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector;
 use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector;
+use Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector;
@@ -32,7 +33,6 @@ use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
 use Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector;
 use Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector;
-use Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
