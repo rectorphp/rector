@@ -99,10 +99,6 @@ CODE_SAMPLE
         }
 
         $reflectionClass = new ReflectionClass($className);
-        if ($reflectionClass === null) {
-            return null;
-        }
-
         return (string) $reflectionClass->getFileName();
     }
 
