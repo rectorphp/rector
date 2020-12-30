@@ -93,12 +93,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $className = (string) $parent->namespacedName;
-        if (Strings::match($className, self::ANONYMOUS_CLASS_REGEX)) {
+        $shortClassName = (string) $parent->name;
+        if (Strings::match($shortClassName, self::ANONYMOUS_CLASS_REGEX)) {
             return null;
         }
 
-        $reflectionClass = new ReflectionClass($className);
+        $reflectionClass = new ReflectionClass((string) $parent->namespacedName);
         return (string) $reflectionClass->getFileName();
     }
 
