@@ -23,5 +23,6 @@ jobs:
 
             -   run: |
                     mkdir temp && cd temp
-                    composer require phpstan/phpstan --dev --ansi
-                    vendor/bin/phpstan analyse -c ../ci/downgrade/phpstan.neon --ansi
+                    composer require phpstan/phpstan --dev --ansi --no-interaction
+                    cd ..
+                    temp/vendor/bin/phpstan analyse -c ci/downgrade/phpstan.neon --ansi
