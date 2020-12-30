@@ -10,6 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::SETS, [
+        SetList::PHP_80,
         SetList::PHP_74,
         SetList::PHP_73,
         SetList::PHP_72,
