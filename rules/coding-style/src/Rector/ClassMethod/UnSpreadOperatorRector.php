@@ -12,6 +12,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -85,23 +86,42 @@ CODE_SAMPLE
         return $this->processUnspreadOperatorMethodCallArgs($node);
     }
 
-    private function getClassName(ClassMethod $classMethod): ?string
+    private function getClassFileNameByClassMethod(ClassMethod $classMethod): ?string
     {
         $parent = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof Class_) {
             return null;
         }
 
-        return (string) $parent->namespacedName;
+        $reflectionClass = new ReflectionClass((string) $parent->namespacedName);
+        return (string) $reflectionClass->getFileName();
+    }
+
+    private function getClassFileNameByMethodCall(MethodCall $methodCall): ?string
+    {
+        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            return null;
+        }
+
+        $type = $scope->getType($methodCall->var);
+        if ($type instanceof ObjectType) {
+            $classReflection = $type->getClassReflection();
+            return (string) $classReflection->getFileName();
+        }
+
+        if ($type instanceof ThisType) {
+            $staticObjectType = $type->getStaticObjectType();
+            $classReflection = $staticObjectType->getClassReflection();
+            return (string) $classReflection->getFileName();
+        }
+
+        return null;
     }
 
     private function processUnspreadOperatorClassMethodParams(ClassMethod $classMethod): ?ClassMethod
     {
-        $className = $this->getClassName($classMethod);
-        $reflectionClass = new ReflectionClass($className);
-        $fileName = (string) $reflectionClass->getFileName();
-
-        if ($this->isInVendor($fileName)) {
+        if ($this->isInVendor($classMethod)) {
             return null;
         }
 
@@ -123,26 +143,22 @@ CODE_SAMPLE
         return $classMethod;
     }
 
-    private function isInVendor(string $fileName): bool
+    /**
+     * @param ClassMethod|MethodCall $node
+     */
+    private function isInVendor(Node $node): bool
     {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $fileName = $node instanceof ClassMethod
+            ? $this->getClassFileNameByClassMethod($node)
+            : $this->getClassFileNameByMethodCall($node);
+
         return Strings::contains($fileName, 'vendor');
     }
 
     private function processUnspreadOperatorMethodCallArgs(MethodCall $methodCall): ?MethodCall
     {
-        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
-        $type = $scope->getType($methodCall->var);
-
-        if ($type instanceof ThisType) {
-            $fileName = $type->getStaticObjectType()
-                ->getClassReflection()
-                ->getFileName();
-        } else {
-            $fileName = $type->getClassReflection()
-                ->getFileName();
-        }
-
-        if ($this->isInVendor($fileName)) {
+        if ($this->isInVendor($methodCall)) {
             return null;
         }
 
