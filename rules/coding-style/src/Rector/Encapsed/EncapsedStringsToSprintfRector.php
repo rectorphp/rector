@@ -97,6 +97,7 @@ CODE_SAMPLE
         $stringValue = $encapsedStringPart->value;
         if ($stringValue === "\n") {
             $this->argumentVariables[] = new ConstFetch(new Name('PHP_EOL'));
+            $this->sprintfFormat .= '%s';
             return;
         }
 
@@ -122,7 +123,7 @@ CODE_SAMPLE
     private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables): Node
     {
         // special case for variable with PHP_EOL
-        if ($string === '%s' && count($argumentVariables) === 2) {
+        if ($string === '%s%s' && count($argumentVariables) === 2 && $argumentVariables[1] === PHP_EOL) {
             return new Concat($argumentVariables[0], $argumentVariables[1]);
         }
 
