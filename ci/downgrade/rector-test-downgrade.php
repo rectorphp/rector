@@ -12,6 +12,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::AUTOLOAD_PATHS, [
-        __DIR__ . '/tests/fixture-finalize'
+        __DIR__ . '/tests/Finalize/Fixture/Source'
     ]);
 };

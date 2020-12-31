@@ -24,5 +24,13 @@ jobs:
             -   run: |
                     mkdir temp && cd temp
                     composer require doctrine/orm --ansi --no-interaction
-                    ../bin/rector process ../ci/downgrade/tests/fixture-finalize --config ../ci/downgrade/rector-finalize.php --ansi
+                    composer require "phpunit/phpunit:^7.5" --dev --ansi --no-interaction
+
+            -   run: |
+                    cd temp
+                    ../bin/rector process ../ci/downgrade/tests/Finalize/Fixture/Source --config ../ci/downgrade/rector-test-downgrade.php --ansi
+
+            -   run: |
+                    cd temp
+                    vendor/bin/phpunit ../ci/downgrade/tests/Finalize/FinalizeTest.php
 
