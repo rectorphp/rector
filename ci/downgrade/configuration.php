@@ -29,15 +29,10 @@ final class DowngradeRectorConfig
      * Exclude paths when downgrading the Rector source code
      */
     public const RECTOR_EXCLUDE_PATHS = [
-        // '/Source/',
-        // '/*Source/',
-        // '/Fixture/',
-        // '/Expected/',
         '*/tests/*',
         __DIR__ . '/../../packages/rector-generator/templates/*',
         __DIR__ . '/../../vendor/*',
         __DIR__ . '/../../ci/*',
         __DIR__ . '/../../stubs/*',
-        // '*.php.inc',
     ];
 }
