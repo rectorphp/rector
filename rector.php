@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\Core\Configuration\Option;
+use Rector\Core\NonPhpFile\ComposerChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
@@ -18,6 +19,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+
+    var_dump('xxx');
+
     $services = $containerConfigurator->services();
 
     $configuration = ValueObjectInliner::inline([
@@ -33,6 +37,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
                 TestCase::class => PreferThisOrSelfMethodCallRector::PREFER_THIS,
             ],
+        ]]);
+
+    $services->set(ComposerChanger::class)
+        ->call('configure', [[
+
         ]]);
 
     $services->set(AutoInPhpSymfonyConfigRector::class);
