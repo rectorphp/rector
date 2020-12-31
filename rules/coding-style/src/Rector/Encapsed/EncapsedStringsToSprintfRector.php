@@ -123,7 +123,7 @@ CODE_SAMPLE
     private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables): Node
     {
         // special case for variable with PHP_EOL
-        if ($string === '%s%s' && count($argumentVariables) === 2 && $argumentVariables[1] === PHP_EOL) {
+        if (count($argumentVariables) === 2 && $argumentVariables[1] instanceof ConstFetch && (string) $argumentVariables[1]->name === 'PHP_EOL') {
             return new Concat($argumentVariables[0], $argumentVariables[1]);
         }
 
