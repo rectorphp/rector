@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\RectorPrefixed\Tests;
+namespace Rector\RectorPhp71\Tests;
 
 use Doctrine\ORM\Mapping as ORM;
 
