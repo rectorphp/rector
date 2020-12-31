@@ -34,7 +34,6 @@ final class DowngradeRectorConfig
         // '/Fixture/',
         // '/Expected/',
         '*/tests/*',
-        __DIR__ . '/../../packages/doctrine-annotation-generated/src/*',
         __DIR__ . '/../../packages/rector-generator/templates/*',
         __DIR__ . '/../../vendor/*',
         __DIR__ . '/../../ci/*',
