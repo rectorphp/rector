@@ -21,10 +21,11 @@ jobs:
                     php-version: ${{ matrix.php_version }}
                     coverage: none
 
+            # Use library versions compatible with PHP 7.1
             -   run: |
                     mkdir temp && cd temp
-                    composer require doctrine/orm --ansi --no-interaction
-                    composer require "phpunit/phpunit:^7.5" --dev --ansi --no-interaction
+                    composer require "doctrine/orm:~2.7.5" --ansi --no-interaction
+                    composer require "phpunit/phpunit:~7.5" --dev --ansi --no-interaction
 
             -   run: |
                     cd temp
