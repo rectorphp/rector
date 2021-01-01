@@ -24,16 +24,8 @@ jobs:
             # Use library versions compatible with PHP 7.1
             -   run: |
                     mkdir temp && cd temp
-                    composer require "doctrine/orm:~2.7.5" --ansi --no-interaction
                     composer require "phpunit/phpunit:~7.5" --dev --ansi --no-interaction
 
-            # Apply Rector on a few sources
             -   run: |
-                    cd temp
-                    ../bin/rector process ../ci/downgrade/tests/Finalize/Fixture/Source --config ../ci/downgrade/rector-test-downgrade.php --ansi
-
-            # Validate the results are the expected ones
-            -   run: |
-                    cd temp
-                    vendor/bin/phpunit ../ci/downgrade/tests/
+                    temp/vendor/bin/phpunit tests
 
