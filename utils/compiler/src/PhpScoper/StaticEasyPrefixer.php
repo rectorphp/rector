@@ -29,6 +29,12 @@ final class StaticEasyPrefixer
         // phpstan needs to be here, as phpstan-extracted/vendor autoload is statically generated and namespaces cannot be changed
         'PHPStan\*',
 
+        // this is public API of a Rector rule
+        'Symplify\RuleDocGenerator\*',
+
+        // for configuring sets with ValueObjectInliner
+        'Symplify\SymfonyPhpConfig\*',
+
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',
     ];

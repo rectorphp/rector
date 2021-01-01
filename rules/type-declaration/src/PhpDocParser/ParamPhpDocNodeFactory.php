@@ -27,8 +27,7 @@ final class ParamPhpDocNodeFactory
             $typeNode,
             $param->variadic,
             '$' . $this->nodeNameResolver->getName($param),
-            '',
-            $param->byRef
+            ''
         );
     }
 }

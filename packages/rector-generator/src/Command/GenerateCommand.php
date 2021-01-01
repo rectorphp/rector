@@ -13,15 +13,27 @@ use Rector\RectorGenerator\Generator\FileGenerator;
 use Rector\RectorGenerator\Guard\OverrideGuard;
 use Rector\RectorGenerator\Provider\RectorRecipeProvider;
 use Rector\RectorGenerator\TemplateVariablesFactory;
+use Rector\RectorGenerator\ValueObject\RectorRecipe;
+use Rector\RectorGenerator\ValueObjectFactory\RectorRecipeInteractiveFactory;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\RectorGenerator\Tests\RectorGenerator\GenerateCommandInteractiveModeTest
+ */
 final class GenerateCommand extends Command
 {
+    /**
+     * @var string
+     */
+    public const INTERACTIVE_MODE_NAME = 'interactive';
+
     /**
      * @var SymfonyStyle
      */
@@ -62,6 +74,11 @@ final class GenerateCommand extends Command
      */
     private $rectorRecipeProvider;
 
+    /**
+     * @var RectorRecipeInteractiveFactory
+     */
+    private $rectorRecipeInteractiveFactory;
+
     public function __construct(
         ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
         ConfigFilesystem $configFilesystem,
@@ -70,29 +87,37 @@ final class GenerateCommand extends Command
         SymfonyStyle $symfonyStyle,
         TemplateFinder $templateFinder,
         TemplateVariablesFactory $templateVariablesFactory,
-        RectorRecipeProvider $rectorRecipeProvider
+        RectorRecipeProvider $rectorRecipeProvider,
+        RectorRecipeInteractiveFactory $rectorRecipeInteractiveFactory
     ) {
         parent::__construct();
 
-        $this->symfonyStyle = $symfonyStyle;
         $this->templateVariablesFactory = $templateVariablesFactory;
         $this->composerPackageAutoloadUpdater = $composerPackageAutoloadUpdater;
         $this->templateFinder = $templateFinder;
         $this->configFilesystem = $configFilesystem;
         $this->overrideGuard = $overrideGuard;
+        $this->symfonyStyle = $symfonyStyle;
         $this->fileGenerator = $fileGenerator;
         $this->rectorRecipeProvider = $rectorRecipeProvider;
+        $this->rectorRecipeInteractiveFactory = $rectorRecipeInteractiveFactory;
     }
 
     protected function configure(): void
     {
         $this->setAliases(['c', 'create', 'g']);
         $this->setDescription('[DEV] Create a new Rector, in a proper location, with new tests');
+        $this->addOption(
+            self::INTERACTIVE_MODE_NAME,
+            'i',
+            InputOption::VALUE_NONE,
+            'Turns on Interactive Mode - Rector will be generated based on responses to questions instead of using rector-recipe.php',
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rectorRecipe = $this->rectorRecipeProvider->provide();
+        $rectorRecipe = $this->getRectorRecipe($input);
 
         $templateVariables = $this->templateVariablesFactory->createFromRectorRecipe($rectorRecipe);
 
@@ -136,7 +161,7 @@ final class GenerateCommand extends Command
     private function resolveTestCaseDirectoryPath(array $generatedFilePaths): string
     {
         foreach ($generatedFilePaths as $generatedFilePath) {
-            if (! Strings::endsWith($generatedFilePath, 'Test.php')) {
+            if (! $this->isGeneratedFilePathTestCase($generatedFilePath)) {
                 continue;
             }
 
@@ -145,6 +170,17 @@ final class GenerateCommand extends Command
         }
 
         throw new ShouldNotHappenException();
+    }
+
+    private function isGeneratedFilePathTestCase(string $generatedFilePath): bool
+    {
+        if (Strings::endsWith($generatedFilePath, 'Test.php')) {
+            return true;
+        }
+        if (! Strings::endsWith($generatedFilePath, 'Test.php.inc')) {
+            return false;
+        }
+        return StaticPHPUnitEnvironment::isPHPUnitRun();
     }
 
     /**
@@ -166,5 +202,15 @@ final class GenerateCommand extends Command
         $message = sprintf('Make tests green again:%svendor/bin/phpunit %s', PHP_EOL . PHP_EOL, $testCaseFilePath);
 
         $this->symfonyStyle->success($message);
+    }
+
+    private function getRectorRecipe(InputInterface $input): RectorRecipe
+    {
+        $isInteractive = $input->getOption(self::INTERACTIVE_MODE_NAME);
+        if (! $isInteractive) {
+            return $this->rectorRecipeProvider->provide();
+        }
+
+        return $this->rectorRecipeInteractiveFactory->create();
     }
 }

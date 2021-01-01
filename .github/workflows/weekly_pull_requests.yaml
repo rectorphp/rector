@@ -7,10 +7,6 @@ on:
 
 jobs:
     weekly_pull_requests:
-
-        # dont run jobs on forks, because gh-tokens are not available 
-        if: github.event.pull_request.head.repo.full_name == github.repository
-
         strategy:
             fail-fast: false
             matrix:
@@ -34,10 +30,11 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.4
-                    coverage: none
+                    coverage: xdebug
                     tools: composer:v2
 
-            -   run: composer install --no-progress --ansi
+            -
+                run: composer install --no-progress --ansi
 
             -
                 run: ${{ matrix.actions.run }}

@@ -1,0 +1,54 @@
+name: Weekly Code Coverage
+
+on:
+    schedule:
+        # https://crontab.guru/once-a-week
+        -   cron: "0 0 * * 0"
+
+jobs:
+    weekly_code_coverage:
+        strategy:
+            fail-fast: false
+            matrix:
+                actions:
+                    -
+                        name: "Re-Generate Code Coverage"
+                        run: |
+                            composer require --dev nimut/phpunit-merger
+
+                            vendor/bin/phpunit --coverage-php build/logs/rules.cov rules
+                            vendor/bin/phpunit --coverage-php build/logs/packages.cov packages
+                            vendor/bin/phpunit --coverage-php build/logs/tests.cov tests
+                            vendor/bin/phpunit --coverage-php build/logs/utils.cov utils
+
+                            vendor/bin/phpunit-merger coverage build/logs clover.xml
+
+                            # Coveralls.io
+                            composer require --dev php-coveralls/php-coveralls:^2.4
+                            vendor/bin/php-coveralls --coverage_clover=clover.xml -v
+                        env:
+                            COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                        branch: 'master'
+
+        name: ${{ matrix.actions.name }}
+        runs-on: ubuntu-latest
+
+        steps:
+            -
+                uses: actions/checkout@v2
+                with:
+                    token: ${{ secrets.ACCESS_TOKEN }}
+
+            # see https://github.com/shivammathur/setup-php
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.4
+                    coverage: xdebug
+                    tools: composer:v2
+
+            -
+                run: composer install --no-progress --ansi
+
+            -
+                run: ${{ matrix.actions.run }}

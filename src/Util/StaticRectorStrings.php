@@ -37,6 +37,13 @@ final class StaticRectorStrings
         return false;
     }
 
+    public static function dashesToCamelCase(string $input): string
+    {
+        $tokens = explode('-', $input);
+
+        return implode('', array_map('ucfirst', $tokens));
+    }
+
     public static function camelCaseToDashes(string $input): string
     {
         return self::camelCaseToGlue($input, '-');

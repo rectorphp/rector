@@ -40,8 +40,7 @@ final class AttributeAwareParamTagValueNodeFactory implements AttributeNodeAware
             $node->type,
             $node->isVariadic,
             $node->parameterName,
-            $node->description,
-            false
+            $node->description
         );
     }
 

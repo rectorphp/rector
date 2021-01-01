@@ -14,7 +14,7 @@ final class ObjectMagicMethods
     public const METHOD_NAMES = [
         '__call',
         '__callStatic',
-        '__clone',
+        MethodName::CLONE,
         MethodName::CONSTRUCT,
         '__debugInfo',
         MethodName::DESCTRUCT,

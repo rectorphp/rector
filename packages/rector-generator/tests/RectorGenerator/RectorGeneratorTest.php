@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\Tests\RectorGenerator;
 
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\RectorGenerator\Finder\TemplateFinder;
-use Rector\RectorGenerator\Generator\FileGenerator;
-use Rector\RectorGenerator\TemplateVariablesFactory;
+use Rector\RectorGenerator\Generator\RectorRecipeGenerator;
 use Rector\RectorGenerator\Tests\RectorGenerator\Source\StaticRectorRecipeFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symplify\EasyTesting\PHPUnit\Behavior\DirectoryAssertableTrait;
@@ -24,34 +22,21 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
     private const DESTINATION_DIRECTORY = __DIR__ . '/__temp';
 
     /**
-     * @var TemplateVariablesFactory
-     */
-    private $templateVariablesFactory;
-
-    /**
-     * @var TemplateFinder
-     */
-    private $templateFinder;
-
-    /**
-     * @var FileGenerator
-     */
-    private $fileGenerator;
-
-    /**
      * @var SmartFileSystem
      */
     private $smartFileSystem;
+
+    /**
+     * @var RectorRecipeGenerator
+     */
+    private $rectorRecipeGenerator;
 
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->templateVariablesFactory = $this->getService(TemplateVariablesFactory::class);
-        $this->templateFinder = $this->getService(TemplateFinder::class);
-        $this->fileGenerator = $this->getService(FileGenerator::class);
-
         $this->smartFileSystem = $this->getService(SmartFileSystem::class);
+        $this->rectorRecipeGenerator = $this->getService(RectorRecipeGenerator::class);
     }
 
     protected function tearDown(): void
@@ -62,30 +47,18 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
 
     public function test(): void
     {
-        $this->doGenerateFiles(true);
+        $rectorRecipe = $this->createConfiguration(true);
+        $this->rectorRecipeGenerator->generate($rectorRecipe, self::DESTINATION_DIRECTORY);
 
         $this->assertDirectoryEquals(__DIR__ . '/Fixture/expected', self::DESTINATION_DIRECTORY);
     }
 
     public function test3rdParty(): void
     {
-        $this->doGenerateFiles(false);
+        $rectorRecipe = $this->createConfiguration(false);
+        $this->rectorRecipeGenerator->generate($rectorRecipe, self::DESTINATION_DIRECTORY);
 
         $this->assertDirectoryEquals(__DIR__ . '/Fixture/expected_3rd_party', self::DESTINATION_DIRECTORY);
-    }
-
-    private function doGenerateFiles(bool $isRectorRepository): void
-    {
-        $rectorRecipe = $this->createConfiguration($isRectorRepository);
-        $templateFileInfos = $this->templateFinder->find($rectorRecipe);
-        $templateVariables = $this->templateVariablesFactory->createFromRectorRecipe($rectorRecipe);
-
-        $this->fileGenerator->generateFiles(
-            $templateFileInfos,
-            $templateVariables,
-            $rectorRecipe,
-            self::DESTINATION_DIRECTORY
-        );
     }
 
     private function createConfiguration(bool $isRectorRepository): RectorRecipe

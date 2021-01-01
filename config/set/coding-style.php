@@ -12,6 +12,7 @@ use Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector;
 use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector;
+use Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector;
@@ -77,4 +78,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SplitGroupedUseImportsRector::class);
     $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
     $services->set(PostIncDecToPreIncDecRector::class);
+    $services->set(UnSpreadOperatorRector::class);
 };

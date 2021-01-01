@@ -16,7 +16,7 @@ final class MagicMethodDetector
     private const MAGIC_METHODS = [
         '__call',
         '__callStatic',
-        '__clone',
+        MethodName::CLONE,
         '__debugInfo',
         MethodName::DESCTRUCT,
         '__get',
