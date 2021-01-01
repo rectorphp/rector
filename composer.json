@@ -44,7 +44,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "2.17.1",
-        "nette/application": "^3.0",
+        "nette/application": "~3.0.7",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
         "ocramius/package-versions": "^1.9",
