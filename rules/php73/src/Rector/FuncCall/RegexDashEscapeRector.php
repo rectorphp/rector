@@ -29,9 +29,9 @@ final class RegexDashEscapeRector extends AbstractRector
 
     /**
      * @var string
-     * @see https://regex101.com/r/TBVme9/1
+     * @see https://regex101.com/r/TBVme9/3
      */
-    private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\[)-(\\\\(w|s|d).*?)\]#i';
+    private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\[)-(\\\\(w|s|d)[^\?]*?)\]#i';
 
     /**
      * @var RegexPatternArgumentManipulator
