@@ -35,5 +35,5 @@ jobs:
             # Validate the results are the expected ones
             -   run: |
                     cd temp
-                    vendor/bin/phpunit ../ci/downgrade/tests/Finalize/FinalizeTest.php
+                    vendor/bin/phpunit ../ci/downgrade/tests/
 
