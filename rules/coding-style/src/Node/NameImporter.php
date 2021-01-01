@@ -92,10 +92,6 @@ final class NameImporter
             return null;
         }
 
-        if ($this->classNameImportSkipper->isFoundInUse($name)) {
-            return null;
-        }
-
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
         if (! $staticType instanceof FullyQualifiedObjectType) {
             return null;
