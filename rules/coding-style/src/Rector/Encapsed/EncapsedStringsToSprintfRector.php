@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\Encapsed;
 
+use Nette\Utils\Strings;
 use const PHP_EOL;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -128,7 +129,7 @@ CODE_SAMPLE
             return new Concat($argumentVariables[0], $argumentVariables[1]);
         }
 
-        if (strpos($string, PHP_EOL) !== false) {
+        if (Strings::contains($string, PHP_EOL)) {
             return null;
         }
 
