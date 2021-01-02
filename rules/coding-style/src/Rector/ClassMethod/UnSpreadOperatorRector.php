@@ -205,21 +205,11 @@ CODE_SAMPLE
     {
         $spreadVariables = [];
         foreach ($array as $key => $paramOrArg) {
-            if ($paramOrArg instanceof Param) {
-                if (! $paramOrArg->variadic) {
-                    continue;
-                }
-
-                if ($paramOrArg->type !== null) {
-                    continue;
-                }
-            }
-
-            if ($paramOrArg instanceof Arg && ! $paramOrArg->unpack) {
+            if ($paramOrArg instanceof Param && (! $paramOrArg->variadic || $paramOrArg->type !== null)) {
                 continue;
             }
 
-            if ($paramOrArg instanceof Arg && ! $paramOrArg->value instanceof Variable) {
+            if ($paramOrArg instanceof Arg && (! $paramOrArg->unpack || ! $paramOrArg->value instanceof Variable)) {
                 continue;
             }
 
