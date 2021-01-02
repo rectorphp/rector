@@ -18,7 +18,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-
     $services = $containerConfigurator->services();
 
     $configuration = ValueObjectInliner::inline([

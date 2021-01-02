@@ -59,24 +59,18 @@ final class ComposerProcessor
 
     private function reportFileContentChange(SmartFileInfo $smartFileInfo, string $newContent): void
     {
-        $relativeFilePathFromCwd = $smartFileInfo->getRelativeFilePathFromCwd();
-
         if ($this->configuration->isDryRun()) {
-            $message = sprintf('File "%s" would be changed ("dry-run" is on now)', $relativeFilePathFromCwd);
-            $this->symfonyStyle->note($message);
-        } else {
-            $message = sprintf('File "%s" was changed', $relativeFilePathFromCwd);
-            $this->symfonyStyle->note($message);
-
-            $this->smartFileSystem->dumpFile($smartFileInfo->getRealPath(), $newContent);
-            $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
-
-            $command = $this->composerRector->getCommand();
-            $process = new Process(explode(' ', $command), getcwd());
-            $process->run(function (string $type, string $message) {
-                // $type is always err https://github.com/composer/composer/issues/3795#issuecomment-76401013
-                echo $message;
-            });
+            return;
         }
+
+        $this->smartFileSystem->dumpFile($smartFileInfo->getRealPath(), $newContent);
+        $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
+
+        $command = $this->composerRector->getCommand();
+        $process = new Process(explode(' ', $command), getcwd());
+        $process->run(function (string $type, string $message) {
+            // $type is always err https://github.com/composer/composer/issues/3795#issuecomment-76401013
+            echo $message;
+        });
     }
 }
