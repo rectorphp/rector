@@ -123,16 +123,8 @@ CODE_SAMPLE
     private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables): Node
     {
         // special case for variable with PHP_EOL
-        if ($string === '%s%s' && count($argumentVariables) === 2 &&
-            count(
-                array_filter(
-                    $argumentVariables,
-                    fn($argumentVar): bool => $argumentVar instanceof ConstFetch && $argumentVar->name.'' === 'PHP_EOL'
-                )
-            )
-        )
-        {
-                return new Concat($argumentVariables[0], $argumentVariables[1]);
+        if ($string === '%s%s' && count($argumentVariables) === 2 && $this->hasEndOfLine($argumentVariables)) {
+            return new Concat($argumentVariables[0], $argumentVariables[1]);
         }
 
         $arguments = [new Arg(new String_($string))];
@@ -141,5 +133,23 @@ CODE_SAMPLE
         }
 
         return new FuncCall(new Name('sprintf'), $arguments);
+    }
+
+    /**
+     * @param Expr[] $argumentVariables
+     */
+    private function hasEndOfLine(array $argumentVariables): bool
+    {
+        foreach ($argumentVariables as $argumentVariable) {
+            if (! $argumentVariable instanceof ConstFetch) {
+                continue;
+            }
+
+            if ($this->isName($argumentVariable, 'PHP_EOL')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
