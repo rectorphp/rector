@@ -8,7 +8,7 @@ use Rector\Composer\ComposerModifier\AddPackage;
 
 final class AddPackageTest extends TestCase
 {
-    public function testAddNonExistingPackage()
+    public function testAddNonExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -28,7 +28,7 @@ final class AddPackageTest extends TestCase
         $this->assertEquals($changedComposerData, $addPackage->modify($composerData));
     }
 
-    public function testAddExistingPackage()
+    public function testAddExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -43,7 +43,7 @@ final class AddPackageTest extends TestCase
         $this->assertEquals($changedComposerData, $addPackage->modify($composerData));
     }
 
-    public function testAddExistingDevPackage()
+    public function testAddExistingDevPackage(): void
     {
         $composerData = [
             'require' => [
@@ -60,7 +60,7 @@ final class AddPackageTest extends TestCase
         $this->assertEquals($changedComposerData, $addPackage->modify($composerData));
     }
 
-    public function testAddPackageToUnknownSection()
+    public function testAddPackageToUnknownSection(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected one of: "require", "require-dev". Got: "require_dev"');

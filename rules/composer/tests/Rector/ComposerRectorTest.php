@@ -13,7 +13,7 @@ use Rector\Composer\Rector\ComposerRector;
 
 final class ComposerRectorTest extends TestCase
 {
-    public function testRefactorWithOneAddedPackage()
+    public function testRefactorWithOneAddedPackage(): void
     {
         $composerRector = new ComposerRector();
         $composerRector->configure([
@@ -37,7 +37,7 @@ final class ComposerRectorTest extends TestCase
         $this->assertEquals($newContent, $composerRector->refactor($originalContent));
     }
 
-    public function testRefactorWithOneAddedAndOneRemovedPackage()
+    public function testRefactorWithOneAddedAndOneRemovedPackage(): void
     {
         $composerRector = new ComposerRector();
         $composerRector->configure([
@@ -61,7 +61,7 @@ final class ComposerRectorTest extends TestCase
         $this->assertEquals($newContent, $composerRector->refactor($originalContent));
     }
 
-    public function testRefactorWithAddedAndRemovedSamePackage()
+    public function testRefactorWithAddedAndRemovedSamePackage(): void
     {
         $composerRector = new ComposerRector();
         $composerRector->configure([
@@ -85,7 +85,7 @@ final class ComposerRectorTest extends TestCase
         $this->assertEquals($newContent, $composerRector->refactor($originalContent));
     }
 
-    public function testRefactorWithRemovedAndAddedBackSamePackage()
+    public function testRefactorWithRemovedAndAddedBackSamePackage(): void
     {
         $composerRector = new ComposerRector();
         $composerRector->configure([
@@ -110,7 +110,7 @@ final class ComposerRectorTest extends TestCase
         $this->assertEquals($newContent, $composerRector->refactor($originalContent));
     }
 
-    public function testRefactorWithMovedAndChangedPackages()
+    public function testRefactorWithMovedAndChangedPackages(): void
     {
         $composerRector = new ComposerRector();
         $composerRector->configure([
@@ -139,7 +139,7 @@ final class ComposerRectorTest extends TestCase
         $this->assertEquals($newContent, $composerRector->refactor($originalContent));
     }
 
-    public function testRefactorWithMultipleConfiguration()
+    public function testRefactorWithMultipleConfiguration(): void
     {
         $composerRector = new ComposerRector();
         $composerRector->configure([
@@ -172,7 +172,7 @@ final class ComposerRectorTest extends TestCase
         $this->assertEquals($newContent, $composerRector->refactor($originalContent));
     }
 
-    public function testRefactorWithConfigurationAndReconfigurationAndConfiguration()
+    public function testRefactorWithConfigurationAndReconfigurationAndConfiguration(): void
     {
         $composerRector = new ComposerRector();
         $composerRector->configure([
@@ -203,7 +203,7 @@ final class ComposerRectorTest extends TestCase
         $this->assertEquals($newContent, $composerRector->refactor($originalContent));
     }
 
-    public function testFilePath()
+    public function testFilePath(): void
     {
         $composerRector = new ComposerRector();
         $this->assertEquals(getcwd() . '/composer.json', $composerRector->getFilePath());
@@ -212,7 +212,7 @@ final class ComposerRectorTest extends TestCase
         $this->assertEquals('test/composer.json', $composerRector->getFilePath());
     }
 
-    public function testCommand()
+    public function testCommand(): void
     {
         $composerRector = new ComposerRector();
         $this->assertEquals('composer update', $composerRector->getCommand());
@@ -221,7 +221,7 @@ final class ComposerRectorTest extends TestCase
         $this->assertEquals('composer update --prefer-stable', $composerRector->getCommand());
     }
 
-    public function testWrongConfigureString()
+    public function testWrongConfigureString(): void
     {
         $composerRector = new ComposerRector();
 
@@ -231,7 +231,7 @@ final class ComposerRectorTest extends TestCase
         ]);
     }
 
-    public function testWrongConfigureInt()
+    public function testWrongConfigureInt(): void
     {
         $composerRector = new ComposerRector();
 
@@ -241,7 +241,7 @@ final class ComposerRectorTest extends TestCase
         ]);
     }
 
-    public function testWrongConfigureClass()
+    public function testWrongConfigureClass(): void
     {
         $composerRector = new ComposerRector();
 
@@ -251,7 +251,7 @@ final class ComposerRectorTest extends TestCase
         ]);
     }
 
-    public function testWrongReconfigureString()
+    public function testWrongReconfigureString(): void
     {
         $composerRector = new ComposerRector();
 
@@ -261,7 +261,7 @@ final class ComposerRectorTest extends TestCase
         ]);
     }
 
-    public function testWrongReconfigureInt()
+    public function testWrongReconfigureInt(): void
     {
         $composerRector = new ComposerRector();
 
@@ -271,7 +271,7 @@ final class ComposerRectorTest extends TestCase
         ]);
     }
 
-    public function testWrongReconfigureClass()
+    public function testWrongReconfigureClass(): void
     {
         $composerRector = new ComposerRector();
 

@@ -7,7 +7,7 @@ use Rector\Composer\ComposerModifier\RemovePackage;
 
 final class RemovePackageTest extends TestCase
 {
-    public function testRemoveNonExistingPackage()
+    public function testRemoveNonExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -21,7 +21,7 @@ final class RemovePackageTest extends TestCase
         $this->assertEquals($changedComposerData, $removePackage->modify($composerData));
     }
 
-    public function testRemoveExistingPackage()
+    public function testRemoveExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -40,7 +40,7 @@ final class RemovePackageTest extends TestCase
         $this->assertEquals($changedComposerData, $removePackage->modify($composerData));
     }
 
-    public function testRemoveExistingDevPackage()
+    public function testRemoveExistingDevPackage(): void
     {
         $composerData = [
             'require' => [

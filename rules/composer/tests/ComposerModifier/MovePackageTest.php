@@ -9,7 +9,7 @@ use Rector\Composer\Rector\ComposerRector;
 
 final class MovePackageTest extends TestCase
 {
-    public function testMoveNonExistingPackage()
+    public function testMoveNonExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -23,7 +23,7 @@ final class MovePackageTest extends TestCase
         $this->assertEquals($changedComposerData, $movePackage->modify($composerData));
     }
 
-    public function testMoveExistingPackage()
+    public function testMoveExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -45,7 +45,7 @@ final class MovePackageTest extends TestCase
         $this->assertEquals($changedComposerData, $movePackage->modify($composerData));
     }
 
-    public function testMoveExistingDevPackage()
+    public function testMoveExistingDevPackage(): void
     {
         $composerData = [
             'require' => [
@@ -67,7 +67,7 @@ final class MovePackageTest extends TestCase
         $this->assertEquals($changedComposerData, $movePackage->modify($composerData));
     }
 
-    public function testMovePackageToUnknownSection()
+    public function testMovePackageToUnknownSection(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected one of: "require", "require-dev". Got: "require_dev"');

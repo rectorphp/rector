@@ -7,7 +7,7 @@ use Rector\Composer\ComposerModifier\ChangePackageVersion;
 
 final class ChangePackageVersionTest extends TestCase
 {
-    public function testChangeVersionNonExistingPackage()
+    public function testChangeVersionNonExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -21,7 +21,7 @@ final class ChangePackageVersionTest extends TestCase
         $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
     }
 
-    public function testChangeVersionExistingPackage()
+    public function testChangeVersionExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -41,7 +41,7 @@ final class ChangePackageVersionTest extends TestCase
         $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
     }
 
-    public function testChangeVersionExistingDevPackage()
+    public function testChangeVersionExistingDevPackage(): void
     {
         $composerData = [
             'require' => [
