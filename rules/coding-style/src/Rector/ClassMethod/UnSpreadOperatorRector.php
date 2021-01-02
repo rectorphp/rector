@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -215,6 +216,10 @@ CODE_SAMPLE
             }
 
             if ($paramOrArg instanceof Arg && ! $paramOrArg->unpack) {
+                continue;
+            }
+
+            if ($paramOrArg instanceof Arg && ! $paramOrArg->value instanceof Variable) {
                 continue;
             }
 
