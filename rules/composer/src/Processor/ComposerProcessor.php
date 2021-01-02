@@ -47,7 +47,7 @@ final class ComposerProcessor
     {
         $smartFileInfo = new SmartFileInfo($this->composerRector->getFilePath());
         $oldContents = $smartFileInfo->getContents();
-        $newContents = $this->composerRector->process($oldContents);
+        $newContents = $this->composerRector->refactor($oldContents);
 
         // nothing has changed
         if ($oldContents === $newContents) {

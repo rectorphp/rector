@@ -54,7 +54,7 @@ final class ComposerRector
         return $this->command;
     }
 
-    public function process(string $content): string
+    public function refactor(string $content): string
     {
         $composerData = json_decode($content, true);
         foreach ($this->configuration as $composerChanger) {
