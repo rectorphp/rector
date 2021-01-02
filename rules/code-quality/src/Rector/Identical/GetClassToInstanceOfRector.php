@@ -25,6 +25,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class GetClassToInstanceOfRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private const NO_NAMESPACED_CLASSNAMES = ['self', 'static'];
+
+    /**
      * @var BinaryOpManipulator
      */
     private $binaryOpManipulator;
@@ -92,8 +97,8 @@ final class GetClassToInstanceOfRector extends AbstractRector
             return null;
         }
 
-        $class = $className === 'static'
-            ? new Name('static')
+        $class = in_array($className, self::NO_NAMESPACED_CLASSNAMES, true)
+            ? new Name($className)
             : new FullyQualified($className);
         $instanceof = new Instanceof_($varNode, $class);
         if ($node instanceof NotIdentical) {
