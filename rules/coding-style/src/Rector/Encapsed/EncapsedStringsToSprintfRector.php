@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\Encapsed;
 
+use Nette\Utils\Strings;
+use const PHP_EOL;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -97,6 +99,7 @@ CODE_SAMPLE
         $stringValue = $encapsedStringPart->value;
         if ($stringValue === "\n") {
             $this->argumentVariables[] = new ConstFetch(new Name('PHP_EOL'));
+            $this->sprintfFormat .= '%s';
             return;
         }
 
@@ -117,13 +120,17 @@ CODE_SAMPLE
 
     /**
      * @param Expr[] $argumentVariables
-     * @return Concat|FuncCall
+     * @return Concat|FuncCall|null
      */
-    private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables): Node
+    private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables): ?Node
     {
         // special case for variable with PHP_EOL
-        if ($string === '%s' && count($argumentVariables) === 2) {
+        if ($string === '%s%s' && count($argumentVariables) === 2 && $this->hasEndOfLine($argumentVariables)) {
             return new Concat($argumentVariables[0], $argumentVariables[1]);
+        }
+
+        if (Strings::contains($string, PHP_EOL)) {
+            return null;
         }
 
         $arguments = [new Arg(new String_($string))];
@@ -132,5 +139,23 @@ CODE_SAMPLE
         }
 
         return new FuncCall(new Name('sprintf'), $arguments);
+    }
+
+    /**
+     * @param Expr[] $argumentVariables
+     */
+    private function hasEndOfLine(array $argumentVariables): bool
+    {
+        foreach ($argumentVariables as $argumentVariable) {
+            if (! $argumentVariable instanceof ConstFetch) {
+                continue;
+            }
+
+            if ($this->isName($argumentVariable, 'PHP_EOL')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
