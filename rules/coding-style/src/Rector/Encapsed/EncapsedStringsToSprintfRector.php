@@ -118,13 +118,17 @@ CODE_SAMPLE
 
     /**
      * @param Expr[] $argumentVariables
-     * @return Concat|FuncCall
+     * @return Concat|FuncCall|null
      */
-    private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables): Node
+    private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables): ?Node
     {
         // special case for variable with PHP_EOL
         if ($string === '%s%s' && count($argumentVariables) === 2 && $this->hasEndOfLine($argumentVariables)) {
             return new Concat($argumentVariables[0], $argumentVariables[1]);
+        }
+
+        if (strpos($string, PHP_EOL) !== false) {
+            return null;
         }
 
         $arguments = [new Arg(new String_($string))];
