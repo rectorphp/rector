@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
@@ -23,6 +24,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class GetClassToInstanceOfRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const NO_NAMESPACED_CLASSNAMES = ['self', 'static'];
+
     /**
      * @var BinaryOpManipulator
      */
@@ -91,7 +97,10 @@ final class GetClassToInstanceOfRector extends AbstractRector
             return null;
         }
 
-        $instanceof = new Instanceof_($varNode, new FullyQualified($className));
+        $class = in_array($className, self::NO_NAMESPACED_CLASSNAMES, true)
+            ? new Name($className)
+            : new FullyQualified($className);
+        $instanceof = new Instanceof_($varNode, $class);
         if ($node instanceof NotIdentical) {
             return new BooleanNot($instanceof);
         }

@@ -35,14 +35,12 @@ jobs:
 
         steps:
             -
-                if: github.event.pull_request.head.repo.full_name == github.repository
                 uses: actions/checkout@v2
                 with:
                     token: ${{ secrets.ACCESS_TOKEN }}
 
             # see https://github.com/shivammathur/setup-php
             -
-                if: github.event.pull_request.head.repo.full_name == github.repository
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.4
@@ -50,9 +48,7 @@ jobs:
                     tools: composer:v2
 
             -
-                if: github.event.pull_request.head.repo.full_name == github.repository
                 run: composer install --no-progress --ansi
 
             -
-                if: github.event.pull_request.head.repo.full_name == github.repository
                 run: ${{ matrix.actions.run }}

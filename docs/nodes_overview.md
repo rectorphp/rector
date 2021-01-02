@@ -2428,7 +2428,7 @@ return new TryCatch($tryStmts, [$catch]);
 ```php
 try {
     echo 'one';
-} catch (CatchedType) {
+} catch (\CatchedType) {
     echo 'two';
 }
 ```
