@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -204,17 +205,11 @@ CODE_SAMPLE
     {
         $spreadVariables = [];
         foreach ($array as $key => $paramOrArg) {
-            if ($paramOrArg instanceof Param) {
-                if (! $paramOrArg->variadic) {
-                    continue;
-                }
-
-                if ($paramOrArg->type !== null) {
-                    continue;
-                }
+            if ($paramOrArg instanceof Param && (! $paramOrArg->variadic || $paramOrArg->type !== null)) {
+                continue;
             }
 
-            if ($paramOrArg instanceof Arg && ! $paramOrArg->unpack) {
+            if ($paramOrArg instanceof Arg && (! $paramOrArg->unpack || ! $paramOrArg->value instanceof Variable)) {
                 continue;
             }
 
