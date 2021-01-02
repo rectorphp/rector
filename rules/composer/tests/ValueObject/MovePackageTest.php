@@ -1,11 +1,11 @@
 <?php
 
-namespace Rector\Composer\Tests\ComposerModifier;
+namespace Rector\Composer\Tests\ValueObject;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ComposerModifier\MovePackage;
-use Rector\Composer\Rector\ComposerRector;
+use Rector\Composer\Modifier\ComposerModifier;
+use Rector\Composer\ValueObject\MovePackage;
 
 final class MovePackageTest extends TestCase
 {
@@ -63,7 +63,7 @@ final class MovePackageTest extends TestCase
             ],
         ];
 
-        $movePackage = new MovePackage('vendor1/package2', ComposerRector::SECTION_REQUIRE);
+        $movePackage = new MovePackage('vendor1/package2', ComposerModifier::SECTION_REQUIRE);
         $this->assertEquals($changedComposerData, $movePackage->modify($composerData));
     }
 

@@ -1,125 +1,125 @@
 <?php
 
-namespace Rector\Composer\Tests\Rector;
+namespace Rector\Composer\Tests\Modifier;
 
-use InvalidArgumentException;
+use Nette\Utils\Json;
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ComposerModifier\AddPackage;
-use Rector\Composer\ComposerModifier\ChangePackage;
-use Rector\Composer\ComposerModifier\ChangePackageVersion;
-use Rector\Composer\ComposerModifier\MovePackage;
-use Rector\Composer\ComposerModifier\RemovePackage;
-use Rector\Composer\Rector\ComposerRector;
+use Rector\Composer\ValueObject\AddPackage;
+use Rector\Composer\ValueObject\ChangePackage;
+use Rector\Composer\ValueObject\ChangePackageVersion;
+use Rector\Composer\ValueObject\MovePackage;
+use Rector\Composer\ValueObject\RemovePackage;
+use Rector\Composer\Modifier\ComposerModifier;
 
-final class ComposerRectorTest extends TestCase
+final class ComposerModifierTest extends TestCase
 {
     public function testRefactorWithOneAddedPackage(): void
     {
-        $composerRector = new ComposerRector();
+        $composerRector = new ComposerModifier();
         $composerRector->configure([
             new AddPackage('vendor1/package3', '^3.0'),
         ]);
 
-        $originalContent = json_encode([
+        $originalContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
             ],
         ]);
 
-        $newContent = json_encode([
+        $newContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
                 'vendor1/package3' => '^3.0',
             ],
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $this->assertEquals($newContent, $composerRector->refactor($originalContent));
+        ], Json::PRETTY);
+        $this->assertEquals($newContent, $composerRector->modify($originalContent));
     }
 
     public function testRefactorWithOneAddedAndOneRemovedPackage(): void
     {
-        $composerRector = new ComposerRector();
+        $composerRector = new ComposerModifier();
         $composerRector->configure([
             new AddPackage('vendor1/package3', '^3.0'),
             new RemovePackage('vendor1/package1'),
         ]);
 
-        $originalContent = json_encode([
+        $originalContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
             ],
         ]);
 
-        $newContent = json_encode([
+        $newContent = Json::encode([
             'require' => [
                 'vendor1/package2' => '^2.0',
                 'vendor1/package3' => '^3.0',
             ],
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $this->assertEquals($newContent, $composerRector->refactor($originalContent));
+        ], Json::PRETTY);
+        $this->assertEquals($newContent, $composerRector->modify($originalContent));
     }
 
     public function testRefactorWithAddedAndRemovedSamePackage(): void
     {
-        $composerRector = new ComposerRector();
+        $composerRector = new ComposerModifier();
         $composerRector->configure([
             new AddPackage('vendor1/package3', '^3.0'),
             new RemovePackage('vendor1/package3'),
         ]);
 
-        $originalContent = json_encode([
+        $originalContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
             ],
         ]);
 
-        $newContent = json_encode([
+        $newContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
             ],
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $this->assertEquals($newContent, $composerRector->refactor($originalContent));
+        ], Json::PRETTY);
+        $this->assertEquals($newContent, $composerRector->modify($originalContent));
     }
 
     public function testRefactorWithRemovedAndAddedBackSamePackage(): void
     {
-        $composerRector = new ComposerRector();
+        $composerRector = new ComposerModifier();
         $composerRector->configure([
             new RemovePackage('vendor1/package3'),
             new AddPackage('vendor1/package3', '^3.0'),
         ]);
 
-        $originalContent = json_encode([
+        $originalContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
             ],
         ]);
 
-        $newContent = json_encode([
+        $newContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
                 'vendor1/package3' => '^3.0',
             ],
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $this->assertEquals($newContent, $composerRector->refactor($originalContent));
+        ], Json::PRETTY);
+        $this->assertEquals($newContent, $composerRector->modify($originalContent));
     }
 
     public function testRefactorWithMovedAndChangedPackages(): void
     {
-        $composerRector = new ComposerRector();
+        $composerRector = new ComposerModifier();
         $composerRector->configure([
             new MovePackage('vendor1/package1'),
             new ChangePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 
-        $originalContent = json_encode([
+        $originalContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
@@ -127,7 +127,7 @@ final class ComposerRectorTest extends TestCase
             ],
         ]);
 
-        $newContent = json_encode([
+        $newContent = Json::encode([
             'require' => [
                 'vendor1/package3' => '~3.0.0',
                 'vendor2/package1' => '^3.0',
@@ -135,13 +135,13 @@ final class ComposerRectorTest extends TestCase
             'require-dev' => [
                 'vendor1/package1' => '^1.0',
             ],
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $this->assertEquals($newContent, $composerRector->refactor($originalContent));
+        ], Json::PRETTY);
+        $this->assertEquals($newContent, $composerRector->modify($originalContent));
     }
 
     public function testRefactorWithMultipleConfiguration(): void
     {
-        $composerRector = new ComposerRector();
+        $composerRector = new ComposerModifier();
         $composerRector->configure([
             new MovePackage('vendor1/package1'),
         ]);
@@ -152,7 +152,7 @@ final class ComposerRectorTest extends TestCase
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 
-        $originalContent = json_encode([
+        $originalContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
@@ -160,7 +160,7 @@ final class ComposerRectorTest extends TestCase
             ],
         ]);
 
-        $newContent = json_encode([
+        $newContent = Json::encode([
             'require' => [
                 'vendor1/package3' => '~3.0.0',
                 'vendor2/package1' => '^3.0',
@@ -168,13 +168,13 @@ final class ComposerRectorTest extends TestCase
             'require-dev' => [
                 'vendor1/package1' => '^1.0',
             ],
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $this->assertEquals($newContent, $composerRector->refactor($originalContent));
+        ], Json::PRETTY);
+        $this->assertEquals($newContent, $composerRector->modify($originalContent));
     }
 
     public function testRefactorWithConfigurationAndReconfigurationAndConfiguration(): void
     {
-        $composerRector = new ComposerRector();
+        $composerRector = new ComposerModifier();
         $composerRector->configure([
             new MovePackage('vendor1/package1'),
         ]);
@@ -185,7 +185,7 @@ final class ComposerRectorTest extends TestCase
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 
-        $originalContent = json_encode([
+        $originalContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
@@ -193,91 +193,31 @@ final class ComposerRectorTest extends TestCase
             ],
         ]);
 
-        $newContent = json_encode([
+        $newContent = Json::encode([
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package3' => '~3.0.0',
                 'vendor2/package1' => '^3.0',
             ],
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $this->assertEquals($newContent, $composerRector->refactor($originalContent));
+        ], Json::PRETTY);
+        $this->assertEquals($newContent, $composerRector->modify($originalContent));
     }
 
     public function testFilePath(): void
     {
-        $composerRector = new ComposerRector();
+        $composerRector = new ComposerModifier();
         $this->assertEquals(getcwd() . '/composer.json', $composerRector->getFilePath());
 
-        $composerRector->setFilePath('test/composer.json');
+        $composerRector->filePath('test/composer.json');
         $this->assertEquals('test/composer.json', $composerRector->getFilePath());
     }
 
     public function testCommand(): void
     {
-        $composerRector = new ComposerRector();
+        $composerRector = new ComposerModifier();
         $this->assertEquals('composer update', $composerRector->getCommand());
 
-        $composerRector->setCommand('composer update --prefer-stable');
+        $composerRector->command('composer update --prefer-stable');
         $this->assertEquals('composer update --prefer-stable', $composerRector->getCommand());
-    }
-
-    public function testWrongConfigureString(): void
-    {
-        $composerRector = new ComposerRector();
-
-        $this->expectException(InvalidArgumentException::class);
-        $composerRector->configure([
-            'a',
-        ]);
-    }
-
-    public function testWrongConfigureInt(): void
-    {
-        $composerRector = new ComposerRector();
-
-        $this->expectException(InvalidArgumentException::class);
-        $composerRector->configure([
-            1,
-        ]);
-    }
-
-    public function testWrongConfigureClass(): void
-    {
-        $composerRector = new ComposerRector();
-
-        $this->expectException(InvalidArgumentException::class);
-        $composerRector->configure([
-            new ComposerRector(),
-        ]);
-    }
-
-    public function testWrongReconfigureString(): void
-    {
-        $composerRector = new ComposerRector();
-
-        $this->expectException(InvalidArgumentException::class);
-        $composerRector->reconfigure([
-            'a',
-        ]);
-    }
-
-    public function testWrongReconfigureInt(): void
-    {
-        $composerRector = new ComposerRector();
-
-        $this->expectException(InvalidArgumentException::class);
-        $composerRector->reconfigure([
-            1,
-        ]);
-    }
-
-    public function testWrongReconfigureClass(): void
-    {
-        $composerRector = new ComposerRector();
-
-        $this->expectException(InvalidArgumentException::class);
-        $composerRector->reconfigure([
-            new ComposerRector(),
-        ]);
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\Composer\Tests\ComposerModifier;
+namespace Rector\Composer\Tests\ValueObject;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ComposerModifier\ChangePackageVersion;
+use Rector\Composer\ValueObject\ChangePackage;
 
-final class ChangePackageVersionTest extends TestCase
+final class ChangePackageTest extends TestCase
 {
-    public function testChangeVersionNonExistingPackage(): void
+    public function testChangeNonExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -17,11 +17,11 @@ final class ChangePackageVersionTest extends TestCase
         ];
         $changedComposerData = $composerData;
 
-        $changePackageVersion = new ChangePackageVersion('vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
+        $changePackage = new ChangePackage('vendor1/package3', 'vendor1/package4', '^3.0');
+        $this->assertEquals($changedComposerData, $changePackage->modify($composerData));
     }
 
-    public function testChangeVersionExistingPackage(): void
+    public function testChangeExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -32,16 +32,16 @@ final class ChangePackageVersionTest extends TestCase
 
         $changedComposerData = [
             'require' => [
-                'vendor1/package1' => '^3.0',
+                'vendor1/package3' => '^3.0',
                 'vendor1/package2' => '^2.0',
             ],
         ];
 
-        $changePackageVersion = new ChangePackageVersion('vendor1/package1', '^3.0');
-        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
+        $changePackage = new ChangePackage('vendor1/package1', 'vendor1/package3', '^3.0');
+        $this->assertEquals($changedComposerData, $changePackage->modify($composerData));
     }
 
-    public function testChangeVersionExistingDevPackage(): void
+    public function testChangeExistingDevPackage(): void
     {
         $composerData = [
             'require' => [
@@ -57,11 +57,11 @@ final class ChangePackageVersionTest extends TestCase
                 'vendor1/package1' => '^1.0',
             ],
             'require-dev' => [
-                'vendor1/package2' => '^3.0',
+                'vendor1/package3' => '^3.0',
             ],
         ];
 
-        $changePackageVersion = new ChangePackageVersion('vendor1/package2', '^3.0');
-        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
+        $changePackage = new ChangePackage('vendor1/package2', 'vendor1/package3', '^3.0');
+        $this->assertEquals($changedComposerData, $changePackage->modify($composerData));
     }
 }

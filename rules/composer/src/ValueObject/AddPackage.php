@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ComposerModifier;
+namespace Rector\Composer\ValueObject;
 
-use Rector\Composer\Rector\ComposerRector;
+use Rector\Composer\Modifier\ComposerModifier;
+use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -26,9 +27,9 @@ final class AddPackage implements ComposerModifierInterface
      * @param string $version
      * @param string $section require or require-dev
      */
-    public function __construct(string $packageName, string $version, string $section = ComposerRector::SECTION_REQUIRE)
+    public function __construct(string $packageName, string $version, string $section = ComposerModifier::SECTION_REQUIRE)
     {
-        Assert::oneOf($section, [ComposerRector::SECTION_REQUIRE, ComposerRector::SECTION_REQUIRE_DEV]);
+        Assert::oneOf($section, [ComposerModifier::SECTION_REQUIRE, ComposerModifier::SECTION_REQUIRE_DEV]);
 
         $this->packageName = $packageName;
         $this->version = $version;
@@ -37,7 +38,7 @@ final class AddPackage implements ComposerModifierInterface
 
     public function modify(array $composerData): array
     {
-        if (!isset($composerData[ComposerRector::SECTION_REQUIRE][$this->packageName]) && !isset($composerData[ComposerRector::SECTION_REQUIRE_DEV][$this->packageName])) {
+        if (!isset($composerData[ComposerModifier::SECTION_REQUIRE][$this->packageName]) && !isset($composerData[ComposerModifier::SECTION_REQUIRE_DEV][$this->packageName])) {
             $composerData[$this->section][$this->packageName] = $this->version;
         }
 

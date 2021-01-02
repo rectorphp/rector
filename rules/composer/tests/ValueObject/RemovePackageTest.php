@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Composer\Tests\ComposerModifier;
+namespace Rector\Composer\Tests\ValueObject;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ComposerModifier\RemovePackage;
+use Rector\Composer\ValueObject\RemovePackage;
 
 final class RemovePackageTest extends TestCase
 {

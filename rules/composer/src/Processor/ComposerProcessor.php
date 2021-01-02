@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Composer\Processor;
 
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
-use Rector\Composer\Rector\ComposerRector;
+use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Configuration\Configuration;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
@@ -14,8 +14,8 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ComposerProcessor
 {
-    /** @var ComposerRector */
-    private $composerRector;
+    /** @var ComposerModifier */
+    private $composerModifier;
 
     /** @var Configuration */
     private $configuration;
@@ -30,13 +30,13 @@ final class ComposerProcessor
     private $errorAndDiffCollector;
 
     public function __construct(
-        ComposerRector $composerRector,
+        ComposerModifier $composerModifier,
         Configuration $configuration,
         SymfonyStyle $symfonyStyle,
         SmartFileSystem $smartFileSystem,
         ErrorAndDiffCollector $errorAndDiffCollector
     ) {
-        $this->composerRector = $composerRector;
+        $this->composerModifier = $composerModifier;
         $this->configuration = $configuration;
         $this->symfonyStyle = $symfonyStyle;
         $this->smartFileSystem = $smartFileSystem;
@@ -45,9 +45,9 @@ final class ComposerProcessor
 
     public function process(): void
     {
-        $smartFileInfo = new SmartFileInfo($this->composerRector->getFilePath());
+        $smartFileInfo = new SmartFileInfo($this->composerModifier->getFilePath());
         $oldContents = $smartFileInfo->getContents();
-        $newContents = $this->composerRector->refactor($oldContents);
+        $newContents = $this->composerModifier->modify($oldContents);
 
         // nothing has changed
         if ($oldContents === $newContents) {
@@ -67,7 +67,7 @@ final class ComposerProcessor
         $this->smartFileSystem->dumpFile($smartFileInfo->getRealPath(), $newContent);
         $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
 
-        $command = $this->composerRector->getCommand();
+        $command = $this->composerModifier->getCommand();
         $process = new Process(explode(' ', $command), getcwd());
         $process->run(function (string $type, string $message) {
             // $type is always err https://github.com/composer/composer/issues/3795#issuecomment-76401013

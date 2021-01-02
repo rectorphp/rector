@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Composer\Tests\ComposerModifier;
+namespace Rector\Composer\Tests\ValueObject;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ComposerModifier\AddPackage;
+use Rector\Composer\ValueObject\AddPackage;
 
 final class AddPackageTest extends TestCase
 {

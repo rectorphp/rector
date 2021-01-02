@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\Rector;
+namespace Rector\Composer\Modifier;
 
-use Rector\Composer\ComposerModifier\ComposerModifierInterface;
+use Nette\Utils\Json;
+use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 use Webmozart\Assert\Assert;
 
-final class ComposerRector
+final class ComposerModifier
 {
     public const SECTION_REQUIRE = 'require';
 
@@ -22,19 +23,25 @@ final class ComposerRector
     /** @var ComposerModifierInterface[] */
     private $configuration = [];
 
+    /**
+     * @param ComposerModifierInterface[] $configuration
+     */
     public function configure(array $configuration): void
     {
         Assert::allIsInstanceOf($configuration, ComposerModifierInterface::class);
         $this->configuration = array_merge($this->configuration, $configuration);
     }
 
+    /**
+     * @param ComposerModifierInterface[] $configuration
+     */
     public function reconfigure(array $configuration): void
     {
         Assert::allIsInstanceOf($configuration, ComposerModifierInterface::class);
         $this->configuration = $configuration;
     }
 
-    public function setFilePath(string $filePath): void
+    public function filePath(string $filePath): void
     {
         $this->filePath = $filePath;
     }
@@ -44,7 +51,7 @@ final class ComposerRector
         return $this->filePath ?: getcwd() . '/composer.json';
     }
 
-    public function setCommand(string $command): void
+    public function command(string $command): void
     {
         $this->command = $command;
     }
@@ -54,15 +61,15 @@ final class ComposerRector
         return $this->command;
     }
 
-    public function refactor(string $content): string
+    public function modify(string $content): string
     {
-        $composerData = json_decode($content, true);
+        $composerData = Json::decode($content, Json::FORCE_ARRAY);
         foreach ($this->configuration as $composerChanger) {
             $composerData = $composerChanger->modify($composerData);
         }
 
         // TODO post process - if sort packages is set, we need sort them
 
-        return json_encode($composerData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        return Json::encode($composerData, Json::PRETTY);
     }
 }

@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ComposerModifier;
+namespace Rector\Composer\ValueObject;
 
-use Rector\Composer\Rector\ComposerRector;
+use Rector\Composer\Modifier\ComposerModifier;
+use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 
 /**
  * Changes one package for another
@@ -29,7 +30,7 @@ final class ChangePackage implements ComposerModifierInterface
 
     public function modify(array $composerData): array
     {
-        foreach ([ComposerRector::SECTION_REQUIRE, ComposerRector::SECTION_REQUIRE_DEV] as $section) {
+        foreach ([ComposerModifier::SECTION_REQUIRE, ComposerModifier::SECTION_REQUIRE_DEV] as $section) {
             if (isset($composerData[$section][$this->oldPackageName])) {
                 unset($composerData[$section][$this->oldPackageName]);
                 $composerData[$section][$this->newPackageName] = $this->targetVersion;
