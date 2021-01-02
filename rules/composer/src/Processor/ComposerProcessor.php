@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer;
+namespace Rector\Composer\Processor;
 
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\Composer\Rector\ComposerRector;
 use Rector\Core\Configuration\Configuration;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;

@@ -2,9 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ComposerChanger;
+namespace Rector\Composer\ComposerModifier;
 
-final class ChangePackageVersion implements ComposerChangerInterface
+use Rector\Composer\Rector\ComposerRector;
+
+/**
+ * Changes package version of package which is already in composer data
+ */
+final class ChangePackageVersion implements ComposerModifierInterface
 {
     /** @var string */
     private $packageName;
@@ -18,9 +23,9 @@ final class ChangePackageVersion implements ComposerChangerInterface
         $this->targetVersion = $targetVersion;
     }
 
-    public function process(array $composerData): array
+    public function modify(array $composerData): array
     {
-        foreach (['require', 'require-dev'] as $section) {
+        foreach ([ComposerRector::SECTION_REQUIRE, ComposerRector::SECTION_REQUIRE_DEV] as $section) {
             if (isset($composerData[$section][$this->packageName])) {
                 $composerData[$section][$this->packageName] = $this->targetVersion;
             }

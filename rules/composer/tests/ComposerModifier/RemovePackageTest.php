@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Composer\Tests\ComposerChanger;
+namespace Rector\Composer\Tests\ComposerModifier;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ComposerChanger\RemovePackage;
+use Rector\Composer\ComposerModifier\RemovePackage;
 
 final class RemovePackageTest extends TestCase
 {
@@ -18,7 +18,7 @@ final class RemovePackageTest extends TestCase
         $changedComposerData = $composerData;
 
         $removePackage = new RemovePackage('vendor1/package3');
-        $this->assertEquals($changedComposerData, $removePackage->process($composerData));
+        $this->assertEquals($changedComposerData, $removePackage->modify($composerData));
     }
 
     public function testRemoveExistingPackage()
@@ -37,7 +37,7 @@ final class RemovePackageTest extends TestCase
         ];
 
         $removePackage = new RemovePackage('vendor1/package1');
-        $this->assertEquals($changedComposerData, $removePackage->process($composerData));
+        $this->assertEquals($changedComposerData, $removePackage->modify($composerData));
     }
 
     public function testRemoveExistingDevPackage()
@@ -58,6 +58,6 @@ final class RemovePackageTest extends TestCase
         ];
 
         $removePackage = new RemovePackage('vendor1/package2');
-        $this->assertEquals($changedComposerData, $removePackage->process($composerData));
+        $this->assertEquals($changedComposerData, $removePackage->modify($composerData));
     }
 }

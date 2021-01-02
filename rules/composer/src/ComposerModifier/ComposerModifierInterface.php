@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ComposerChanger;
+namespace Rector\Composer\ComposerModifier;
 
-interface ComposerChangerInterface
+interface ComposerModifierInterface
 {
     /**
      * @param array $composerData decoded data from composer.json
      * @return array changed $composerData
      */
-    public function process(array $composerData): array;
+    public function modify(array $composerData): array;
 }

@@ -13,5 +13,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure();
 
     $services->load('Rector\Composer\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/ComposerChanger']);
+        ->exclude([__DIR__ . '/../src/ComposerModifier']);
 };

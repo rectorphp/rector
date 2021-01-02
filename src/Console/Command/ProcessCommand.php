@@ -9,7 +9,7 @@ use Rector\Caching\Application\CachedFileInfoFilterAndReporter;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Composer\ComposerProcessor;
+use Rector\Composer\Processor\ComposerProcessor;
 use Rector\Core\Application\RectorApplication;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;

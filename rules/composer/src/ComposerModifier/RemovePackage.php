@@ -2,9 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ComposerChanger;
+namespace Rector\Composer\ComposerModifier;
 
-final class RemovePackage implements ComposerChangerInterface
+use Rector\Composer\Rector\ComposerRector;
+
+/**
+ * Removes package from composer data
+ */
+final class RemovePackage implements ComposerModifierInterface
 {
     /** @var string */
     private $packageName;
@@ -14,9 +19,9 @@ final class RemovePackage implements ComposerChangerInterface
         $this->packageName = $packageName;
     }
 
-    public function process(array $composerData): array
+    public function modify(array $composerData): array
     {
-        foreach (['require', 'require-dev'] as $section) {
+        foreach ([ComposerRector::SECTION_REQUIRE, ComposerRector::SECTION_REQUIRE_DEV] as $section) {
             unset($composerData[$section][$this->packageName]);
             if (empty($composerData[$section])) {
                 unset($composerData[$section]);

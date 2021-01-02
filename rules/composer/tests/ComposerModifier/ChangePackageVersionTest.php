@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Composer\Tests\ComposerChanger;
+namespace Rector\Composer\Tests\ComposerModifier;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ComposerChanger\ChangePackageVersion;
+use Rector\Composer\ComposerModifier\ChangePackageVersion;
 
 final class ChangePackageVersionTest extends TestCase
 {
@@ -18,7 +18,7 @@ final class ChangePackageVersionTest extends TestCase
         $changedComposerData = $composerData;
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerData, $changePackageVersion->process($composerData));
+        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
     }
 
     public function testChangeVersionExistingPackage()
@@ -38,7 +38,7 @@ final class ChangePackageVersionTest extends TestCase
         ];
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package1', '^3.0');
-        $this->assertEquals($changedComposerData, $changePackageVersion->process($composerData));
+        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
     }
 
     public function testChangeVersionExistingDevPackage()
@@ -62,6 +62,6 @@ final class ChangePackageVersionTest extends TestCase
         ];
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package2', '^3.0');
-        $this->assertEquals($changedComposerData, $changePackageVersion->process($composerData));
+        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
     }
 }
