@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
 class KnownFloatParamTypeWithCondition
 {
@@ -18,7 +18,7 @@ class KnownFloatParamTypeWithCondition
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
 class KnownFloatParamTypeWithCondition
 {

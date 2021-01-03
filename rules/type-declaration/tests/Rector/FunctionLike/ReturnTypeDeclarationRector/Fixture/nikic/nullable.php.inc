@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Nikic\Nullable;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\Nikic\Nullable;
 
 class Foo {}
 
@@ -13,11 +13,11 @@ function test($value) {
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Nikic\Nullable;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\Nikic\Nullable;
 
 class Foo {}
 
-function test($value): ?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Nikic\Nullable\Foo {
+function test($value): ?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\Nikic\Nullable\Foo {
     return $value;
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Rename;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\Rename;
 
 class A {
     /**
@@ -19,7 +19,7 @@ class B extends A {
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Rename;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\Rename;
 
 class A {
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various3;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various3;
 
 /** @return void */ function my_foo() {
 }
@@ -24,7 +24,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various3;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various3;
 
 function my_foo(): void {
 }

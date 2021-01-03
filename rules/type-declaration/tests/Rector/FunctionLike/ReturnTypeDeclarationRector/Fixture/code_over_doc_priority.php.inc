@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
 class CodeOverDocPriority
 {
@@ -17,7 +17,7 @@ class CodeOverDocPriority
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
 class CodeOverDocPriority
 {

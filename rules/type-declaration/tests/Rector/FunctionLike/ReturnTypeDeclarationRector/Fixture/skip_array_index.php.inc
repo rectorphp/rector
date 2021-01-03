@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
 interface RepositoryInterface
 {

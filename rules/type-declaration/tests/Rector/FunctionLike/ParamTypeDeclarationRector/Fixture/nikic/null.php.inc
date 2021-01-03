@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Nikic\Null_;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\Nikic\Null_;
 
 class A
 {
@@ -24,7 +24,7 @@ function foo4($a) {}
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Nikic\Null_;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\Nikic\Null_;
 
 class A
 {
@@ -39,9 +39,9 @@ function foo() {
 function foo2($a) {}
 
 /** @param null|A $a */
-function foo3(?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Nikic\Null_\A $a = null) {}
+function foo3(?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\Nikic\Null_\A $a = null) {}
 
 /** @param null|A $a */
-function foo4(?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Nikic\Null_\A $a) {}
+function foo4(?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\Nikic\Null_\A $a) {}
 
 ?>

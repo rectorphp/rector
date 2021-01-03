@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\NullableInheritance;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\NullableInheritance;
 
 class Foo
 {}
@@ -18,18 +18,18 @@ class B extends A {
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\NullableInheritance;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\NullableInheritance;
 
 class Foo
 {}
 
 class A {
     /** @param Foo $a */
-    public function test2(\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\NullableInheritance\Foo $a) {}
+    public function test2(\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\NullableInheritance\Foo $a) {}
 }
 
 class B extends A {
     /** @param null|Foo $a */
-    public function test2(?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\NullableInheritance\Foo $a) {}
+    public function test2(?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\NullableInheritance\Foo $a) {}
 }
 ?>
