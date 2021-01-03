@@ -17,7 +17,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
-use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
@@ -86,11 +85,6 @@ final class PhpDocInfo
     private $phpDocRemover;
 
     /**
-     * @var AttributeAwareNodeFactory
-     */
-    private $attributeAwareNodeFactory;
-
-    /**
      * @param mixed[] $tokens
      */
     public function __construct(
@@ -100,8 +94,7 @@ final class PhpDocInfo
         StaticTypeMapper $staticTypeMapper,
         Node $node,
         PhpDocTypeChanger $phpDocTypeChanger,
-        PhpDocRemover $phpDocRemover,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory
+        PhpDocRemover $phpDocRemover
     ) {
         $this->phpDocNode = $attributeAwarePhpDocNode;
         $this->tokens = $tokens;
@@ -111,7 +104,6 @@ final class PhpDocInfo
         $this->node = $node;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocRemover = $phpDocRemover;
-        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 
     public function getOriginalContent(): string

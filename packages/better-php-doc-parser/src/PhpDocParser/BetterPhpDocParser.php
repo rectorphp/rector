@@ -14,7 +14,7 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\RequiredTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
@@ -25,8 +25,8 @@ use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpAttribute\ValueObject\TagName;
-use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocNode;
-use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\RequiredTagValueNode;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\Mapper\NodeMapper;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -55,11 +55,6 @@ final class BetterPhpDocParser extends PhpDocParser
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
-
-    /**
-     * @var AttributeAwareNodeFactory
-     */
-    private $attributeAwareNodeFactory;
 
     /**
      * @var MultilineSpaceFormatPreserver
@@ -92,31 +87,36 @@ final class BetterPhpDocParser extends PhpDocParser
     private $phpUnitDataProviderDocNodeFactory;
 
     /**
+     * @var NodeMapper
+     */
+    private $nodeMapper;
+
+    /**
      * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
      */
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory,
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
         Lexer $lexer,
         AnnotationContentResolver $annotationContentResolver,
         PHPUnitDataProviderDocNodeFactory $phpUnitDataProviderDocNodeFactory,
+        NodeMapper $nodeMapper,
         array $phpDocNodeFactories = []
     ) {
         parent::__construct($typeParser, $constExprParser);
 
         $this->privatesCaller = new PrivatesCaller();
         $this->privatesAccessor = new PrivatesAccessor();
-        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->lexer = $lexer;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->phpUnitDataProviderDocNodeFactory = $phpUnitDataProviderDocNodeFactory;
+        $this->nodeMapper = $nodeMapper;
 
         $this->setPhpDocNodeFactories($phpDocNodeFactories);
     }
@@ -130,7 +130,7 @@ final class BetterPhpDocParser extends PhpDocParser
     }
 
     /**
-     * @return AttributeAwarePhpDocNode|PhpDocNode
+     * @return AttributeAwareInterface&PhpDocNode
      */
     public function parse(TokenIterator $tokenIterator): PhpDocNode
     {
@@ -158,7 +158,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
 
-        return $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
+        return $this->nodeMapper->mapNode($phpDocNode);
     }
 
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
@@ -332,9 +332,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
     private function resolveTokenEnd(TokenIterator $tokenIterator): int
     {
-        $tokenEnd = $this->getTokenIteratorIndex($tokenIterator);
-
-        return $this->adjustTokenEndToFitClassAnnotation($tokenIterator, $tokenEnd);
+        return $this->getTokenIteratorIndex($tokenIterator);
     }
 
     private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
@@ -361,31 +359,5 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         return trim($originalContent);
-    }
-
-    /**
-     * @see https://github.com/rectorphp/rector/issues/2158
-     *
-     * Need to find end of this bracket first, because the parseChild() skips class annotatinos
-     */
-    private function adjustTokenEndToFitClassAnnotation(TokenIterator $tokenIterator, int $tokenEnd): int
-    {
-        $tokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
-        if ($tokens[$tokenEnd][0] !== '(') {
-            return $tokenEnd;
-        }
-
-        while ($tokens[$tokenEnd][0] !== ')') {
-            ++$tokenEnd;
-
-            // to prevent missing index error
-            if (! isset($tokens[$tokenEnd])) {
-                return --$tokenEnd;
-            }
-        }
-
-        ++$tokenEnd;
-
-        return $tokenEnd;
     }
 }
