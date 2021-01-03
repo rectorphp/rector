@@ -75,6 +75,6 @@ final class ComposerModifier
 
         // TODO post process - if sort packages is set, we need sort them
 
-        return Json::encode($composerData, Json::PRETTY) . "\n";
+        return Json::encode($composerData, Json::PRETTY);
     }
 }
