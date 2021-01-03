@@ -591,3 +591,8 @@ parameters:
                 - utils/compiler/tests/PatchersCallbackTest.php
 
         - '#Parameter \#3 \$type of method Rector\\CodeQualityStrict\\Rector\\ClassMethod\\ParamTypeToAssertTypeRector\:\:getToBeProcessedTypes\(\) expects PHPStan\\Type\\ObjectType\|PHPStan\\Type\\UnionType, PHPStan\\Type\\Type given#'
+
+        - '#Anonymous class is not allowed#'
+        - '#File "ClassInCorrectNamespaceRector\.php" should have prefix "Skip" prefix#'
+        - '#File "HaveSameStarts\.php" should have prefix "Skip" prefix#'
+        - '#File "AbstractSkip\.php" should have prefix "Skip" prefix#'

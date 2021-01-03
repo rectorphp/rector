@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\AutoImportNamesParameter;
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
 use Safe\DateTimeImmutable;
 
