@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixt
 
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\EliteManager;
 
-class KeepParam
+class Param
 {
     /**
      * @var EliteManager
@@ -25,7 +25,7 @@ namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixt
 
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\EliteManager;
 
-class KeepParam
+class Param
 {
     /**
      * @var EliteManager
