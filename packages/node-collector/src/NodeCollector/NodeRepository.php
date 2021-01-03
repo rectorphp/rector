@@ -362,8 +362,8 @@ final class NodeRepository
                 continue;
             }
 
-            // include child usages
-            if (! is_a($desiredClassName, $className, true)) {
+            // include child usages and parent usages
+            if (! is_a($className, $desiredClassName, true) && ! is_a($desiredClassName, $className, true)) {
                 continue;
             }
 
