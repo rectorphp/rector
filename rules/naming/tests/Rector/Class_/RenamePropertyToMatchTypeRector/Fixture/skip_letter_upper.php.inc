@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixt
 
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\BIGLetterFirst;
 
-class LetterUpper
+class SkipLetterUpper
 {
     public function __construct(BIGLetterFirst $random)
     {

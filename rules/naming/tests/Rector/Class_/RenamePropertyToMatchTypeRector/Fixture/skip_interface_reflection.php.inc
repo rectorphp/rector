@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixt
 
 use ReflectionProperty;
 
-interface InterfaceReflection
+interface SkipInterfaceReflection
 {
     public function method(ReflectionProperty $propertyReflection);
 }

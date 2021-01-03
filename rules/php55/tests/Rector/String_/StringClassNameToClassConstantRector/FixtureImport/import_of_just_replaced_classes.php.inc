@@ -2,7 +2,7 @@
 
 namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\FixtureImport;
 
-class SkipImportOfJustReplacedClasses
+class ImportOfJustReplacedClasses
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class SkipImportOfJustReplacedClasses
 namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\FixtureImport;
 
 use Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\SomeUser;
-class SkipImportOfJustReplacedClasses
+class ImportOfJustReplacedClasses
 {
     public function run()
     {

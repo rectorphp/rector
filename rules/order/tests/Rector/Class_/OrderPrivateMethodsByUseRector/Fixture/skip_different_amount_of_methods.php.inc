@@ -2,7 +2,7 @@
 
 namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
 
-class DifferentAmountOfMethods
+class SkipDifferentAmountOfMethods
 {
     public function run()
     {

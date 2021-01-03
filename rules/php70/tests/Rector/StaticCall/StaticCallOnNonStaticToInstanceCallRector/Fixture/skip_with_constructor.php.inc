@@ -2,7 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\Fixture;
 
-class WithConstructor
+class SkipWithConstructor
 {
     private $required;
 
@@ -22,6 +22,6 @@ class TryWithContructor
 {
     public function run()
     {
-        return WithConstructor::doWork();
+        return SkipWithConstructor::doWork();
     }
 }

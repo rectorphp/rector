@@ -183,7 +183,7 @@
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/YetAnotherClass.php",
             "rules/coding-style/tests/Rector/Throw_/AnnotateThrowablesRector/Source/i_throw_an_exception.func.php",
             "rules/dead-code/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
-            "rules/naming/tests/ValueObjectFactory/PropertyRenameFactory/Fixture/SomeClass.php.inc",
+            "rules/naming/tests/ValueObjectFactory/PropertyRenameFactory/Fixture/skip_some_class.php.inc",
             "rules/renaming/tests/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
             "rules/renaming/tests/Rector/Name/RenameClassRector/Source/SkipClassImportingSameName.php",
             "rules/renaming/tests/Rector/Name/RenameClassRector/Source/SkipSameNamedInterface.php",
