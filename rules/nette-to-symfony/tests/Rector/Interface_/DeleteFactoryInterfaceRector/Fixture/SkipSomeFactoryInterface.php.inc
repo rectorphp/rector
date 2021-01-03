@@ -6,7 +6,7 @@ namespace Rector\NetteToSymfony\Tests\Rector\Interface_\DeleteFactoryInterfaceRe
 
 use Rector\NetteToSymfony\Tests\Rector\Interface_\DeleteFactoryInterfaceRector\Source\SomeControl;
 
-interface SomeFactoryInterface
+interface SkipSomeFactoryInterface
 {
     /**
      * @return SomeControl

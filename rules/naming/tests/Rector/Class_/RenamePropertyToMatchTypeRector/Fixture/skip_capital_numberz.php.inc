@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixt
 
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\PHP9Crawler;
 
-class CapitalNumberz
+class SkipCapitalNumberz
 {
     public function __construct(PHP9Crawler $some)
     {
