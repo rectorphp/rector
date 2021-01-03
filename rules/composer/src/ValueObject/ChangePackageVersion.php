@@ -9,6 +9,7 @@ use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 
 /**
  * Changes package version of package which is already in composer data
+ * @see \Rector\Composer\Tests\ValueObject\ChangePackageVersionTest
  */
 final class ChangePackageVersion implements ComposerModifierInterface
 {

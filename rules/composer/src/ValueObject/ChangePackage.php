@@ -9,6 +9,7 @@ use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 
 /**
  * Changes one package for another
+ * @see \Rector\Composer\Tests\ValueObject\ChangePackageTest
  */
 final class ChangePackage implements ComposerModifierInterface
 {

@@ -7,7 +7,6 @@ namespace Rector\Composer\Processor;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Configuration\Configuration;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -20,9 +19,6 @@ final class ComposerProcessor
     /** @var Configuration */
     private $configuration;
 
-    /** @var SymfonyStyle */
-    private $symfonyStyle;
-
     /** @var SmartFileSystem */
     private $smartFileSystem;
 
@@ -32,13 +28,11 @@ final class ComposerProcessor
     public function __construct(
         ComposerModifier $composerModifier,
         Configuration $configuration,
-        SymfonyStyle $symfonyStyle,
         SmartFileSystem $smartFileSystem,
         ErrorAndDiffCollector $errorAndDiffCollector
     ) {
         $this->composerModifier = $composerModifier;
         $this->configuration = $configuration;
-        $this->symfonyStyle = $symfonyStyle;
         $this->smartFileSystem = $smartFileSystem;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
     }
@@ -69,7 +63,7 @@ final class ComposerProcessor
 
         $command = $this->composerModifier->getCommand();
         $process = new Process(explode(' ', $command), getcwd());
-        $process->run(function (string $type, string $message) {
+        $process->run(function (string $type, string $message): void {
             // $type is always err https://github.com/composer/composer/issues/3795#issuecomment-76401013
             echo $message;
         });

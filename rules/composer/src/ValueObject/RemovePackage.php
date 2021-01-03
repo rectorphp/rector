@@ -9,6 +9,7 @@ use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 
 /**
  * Removes package from composer data
+ * @see \Rector\Composer\Tests\ValueObject\RemovePackageTest
  */
 final class RemovePackage implements ComposerModifierInterface
 {

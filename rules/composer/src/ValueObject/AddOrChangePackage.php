@@ -10,6 +10,7 @@ use Webmozart\Assert\Assert;
 
 /**
  * Adds package to selected section, if package is already in composer data, package is updated (version and/or section)
+ * @see \Rector\Composer\Tests\ValueObject\AddOrChangePackageTest
  */
 final class AddOrChangePackage implements ComposerModifierInterface
 {

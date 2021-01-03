@@ -8,10 +8,15 @@ use Nette\Utils\Json;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @see \Rector\Composer\Tests\Modifier\ComposerModifierTest
+ */
 final class ComposerModifier
 {
+    /** @var string */
     public const SECTION_REQUIRE = 'require';
 
+    /** @var string */
     public const SECTION_REQUIRE_DEV = 'require-dev';
 
     /** @var string|null */
@@ -70,6 +75,6 @@ final class ComposerModifier
 
         // TODO post process - if sort packages is set, we need sort them
 
-        return Json::encode($composerData, Json::PRETTY);
+        return Json::encode($composerData, Json::PRETTY) . "\n";
     }
 }

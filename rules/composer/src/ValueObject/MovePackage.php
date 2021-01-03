@@ -10,6 +10,7 @@ use Webmozart\Assert\Assert;
 
 /**
  * Moves package to selected section, if package is not in composer data, nothing happen, also if package is already in selected section
+ * @see \Rector\Composer\Tests\ValueObject\MovePackageTest
  */
 final class MovePackage implements ComposerModifierInterface
 {
