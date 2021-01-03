@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\Type;
+namespace Rector\PhpdocParserPrinter\ValueObject\TypeNode;
 
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;

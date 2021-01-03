@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\Type;
+namespace Rector\PhpdocParserPrinter\ValueObject\TypeNode;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;

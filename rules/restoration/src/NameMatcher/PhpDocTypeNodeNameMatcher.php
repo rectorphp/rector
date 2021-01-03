@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Restoration\NameMatcher;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\FullyQualifiedIdentifierTypeNode;
+use Rector\PhpdocParserPrinter\ValueObject\TypeNode\FullyQualifiedIdentifierTypeNode;
 
 final class PhpDocTypeNodeNameMatcher
 {

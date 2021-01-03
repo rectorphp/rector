@@ -9,7 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\DataProviderTagValueNode;
+use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\DataProviderTagValueNode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 final class PHPUnitDataProviderDocNodeFactory

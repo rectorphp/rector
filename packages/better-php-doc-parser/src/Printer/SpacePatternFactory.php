@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwareGenericTagValueNode;
+use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwareParamTagValueNode;
 
 final class SpacePatternFactory
 {

@@ -9,11 +9,11 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwareVarTagValueNode;
+use Rector\PhpdocParserPrinter\ValueObject\TypeNode\FullyQualifiedIdentifierTypeNode;
 
 final class VarAnnotationManipulator
 {
