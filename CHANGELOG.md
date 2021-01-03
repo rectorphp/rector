@@ -1,4 +1,6 @@
+<!-- changelog-linker -->
 
+## Unreleased
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -8,3443 +10,1341 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLinker](https://github.com/Symplify/ChangelogLinker).
 
-<!-- changelog-linker -->
 
-## Unreleased
 
 ### Added
-
-- [#4779] [CI] Add PHP 8.0 to Github actions tests, Thanks to [@samsonasik]
-- [#4791] [CodeQuality] Add DateTimeToDateTimeInterfaceRector, Thanks to [@simivar]
-- [#4789] [DX] Add init-recipe command to create recipe config in root
-- [#4740] [Docs] Add docblock docs
-- [#4762] [Downgrade] [PHP 8.0] Add DowngradePropertyPromotionToConstructorPropertyAssignRector
-- [#4788] [PHP 8.0] [Downgrade] Add DowngradeNonCapturingCatchesRector
-- [#4787] [PHP 8.0] [Downgrade] Add DowngradeNonCapturingCatchesRector
-- [#4780] [PHPStanExtensions] Add ForbiddenMethodCallOnTypeRule + move from docComment and Comments to PhpDocInfo
-- [#4741] [PHP 8.0] Add nette utils strings replace, static fixes
-- [#4758] Donwgrade PHP 7.4: Added covariant rule to set, Thanks to [@leoloso]
-- [#4799] add docblock on downgrade by default
-- [#4772] [Downgrade PHP 8.0] Add DowngradeClassOnObjectToGetClassRector, Thanks to [@samsonasik]
-- [#4776] [Downgrade PHP 7.1] Fixes [#4196] Add DowngradePipeToMultiCatchExceptionRector, Thanks to [@samsonasik]
-- [#4764] Added some missing Nette 3.0 tasks, Thanks to [@lulco]
-- [#4792] [PHP 8.0] Add SetStateToStaticRector, Thanks to [@simivar]
-- [#4794] [PHP 8.0] Add FinalPrivateToPrivateVisibilityRector, Thanks to [@simivar]
-- [#4795] [PHP 8.0] Add RemoveParentCallWithoutParentRector to the set config, Thanks to [@simivar]
+- [#5005] [AbstractRector] Add rollbackComments, Thanks to [@samsonasik]- [#4940] [CodeQuality] Add SwitchNegatedTernaryRector, Thanks to [@samsonasik]- [#4827] [CodeQuality] Add UnwrapSprintfOneArgumentRector, Thanks to [@samsonasik]- [#4861] [CodingStyle] Add PostIncDecToPreIncDecRector, Thanks to [@samsonasik]- [#5072] [CodingStyle] Add %s for pass PHP_EOL constant on EncapsedStringsToSprintfRector, Thanks to [@samsonasik]- [#5015] [CodingStyle] Add UnSpreadOperatorRector, Thanks to [@samsonasik]- [#4931] [DX] Add Interactive Mode to Generate command, Thanks to [@simivar]- [#4883] [DX] Add ValidateFixtureNamespaceCommand and ValidateFixtureClassnameCommand, Thanks to [@samsonasik]- [#4889] [Downgrade] Add ".0" after downgrading the numeric literal separator on floats, Thanks to [@leoloso]- [#4974] [EarlyReturn] Add ChangeOrIfReturnToEarlyReturnRector, Thanks to [@samsonasik]- [#4906] [EarlyReturn]  Add ReturnBinaryAndToEarlyReturnRector, Thanks to [@samsonasik]- [#4863] [Naming] add failing test case for type property collection name- [#5065] [NetteToSymfony] Add new Route class support- [#4998] [PHPStan] Added PathsAreNotTooLongRule phpstan rule- [#5043] [PHPStanStaticTypeMapper] Add closure conversion- [#5031] [PhpVersionResolver] Add project composer.json as source + decouple to composer json fatcory- [#5034] [Test] Add utils/ to whitelist test coverage, Thanks to [@samsonasik]- [#4907] [UPGRADE] Add Rector 0.9 upgrade docs- [#4846] [Symfony 5.2] Add BinaryFileResponseCreateToNewInstanceRector, Thanks to [@simivar]- [#4874] [Symfony 5.2] Add PropertyAccessorCreationBooleanToFlagsRector, Thanks to [@simivar]- [#4806] [Downgrade][PHP 7.3] Add SetCookieOptionsArrayToArgumentsRector, Thanks to [@simivar]- [#4807] [Downgrade PHP 8.0] Fixes [#4154] Add DowngradeNullsafeToTernaryOperatorRector, Thanks to [@samsonasik]- [#4973] add phpstan-for-rector config path, consolidate return type extensions - re-use from Symplify- [#5068] [FlySystem 2.0] Add Upgrade set for MethodCallRename, Thanks to [@samsonasik]- [#4815] Added test cases for RenameParamToMatchTypeRector, Thanks to [@leoloso]- [#5013] Add failing test fixture for AddArrayReturnDocTypeRector - array shape is replaced by structural type, Thanks to [@jkuchar]- [#4821] [Downgrade PHP 7.1] Add SymmetricArrayDestructuringToListRector, Thanks to [@samsonasik]- [#4823] [Downgade PHP 7.1] Add DowngradeNegativeStringOffsetToStrlenRector, Thanks to [@samsonasik]- [#5019] Add template annotation resolving support- [#5020] Add support for inheritdoc in parent type use- [#4898] Added tests for RenameVariableToMatchNewTypeRector, Thanks to [@leoloso]- [#4825] [Downgrade PHP 7.4]  Add DowngradeFreadFwriteFalsyToNegationRector, Thanks to [@samsonasik]- [#4981] Add Visibility consts- [#4828] [Downgrade PHP 8.0]  Add DowngradeTrailingCommasInParamUseRector, Thanks to [@samsonasik]- [#4876] [Symfony 5.2] Add ReflectionExtractorEnableMagicCallExtractorRector, Thanks to [@simivar]- [#4887] [Symfony 5.2] Add PropertyPathMapperToDataMapperRector, Thanks to [@simivar]- [#4979] [Util] Add StaticInstanceOf, Thanks to [@samsonasik]- [#4814] [Utils] Add OnlyOneClassMethodRule- [#4996] [cs] add variable types- [#4997] [scoper] adding Symfony version test, name prefix by date for easier diffs
 
 ### Changed
-
-- [#4797] [DX] Use MethodName const instead of string for __set_state, Thanks to [@simivar]
-- [#4782] [DeadDocBlock] decouple return and param rules
-- [#4796] [Downgrade] [PHP 7.3] Downgrade trailing commas in function calls
-- [#4742] [PHP 8.0] [Naming] Skip union type to resolve param name
-- [#4757] [Solid] Skip ChangeAndIfToEarlyReturnRector on nested if in loop, Thanks to [@samsonasik]
-- [#4798] [PHP 8.0] get_parent_class() cannot be called on non-existing classes anymore
-- [#4755] Downgrade PHP 7.4 covariant return type, Thanks to [@leoloso]
-- [#4770] Downgrade PHP 7.4 contravariant argument type, Thanks to [@leoloso]
-- [#4774] Downgrade PHP 7.4 Covariant return types - Handle also interfaces, Thanks to [@leoloso]
-- [#4737] README: mention the `rd` debugging helper function, Thanks to [@staabm]
-- [#4733] Readme: make „pick from sets“ more prominent, Thanks to [@staabm]
-- [#4786] PHPStan rule decouple to Symplify
-- [#4783] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4768] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]
-- [#4767] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4739] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4732] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
-- [#4759] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4745] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4784] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]
+- [#4785] [AUTO_IMPORT_NAMES] Failing fixture for [#4650] to skip already in use statement, Thanks to [@samsonasik]- [#4947] [CodeQuality] Register SwitchNegatedTernaryRector to code-quality config set, Thanks to [@samsonasik]- [#4992] [CodeQuality] Move MoveVariableDeclarationNearReferenceRector- [#4989] [CodeQuality] Move MoveVariableDeclarationNearReferenceRector- [#5073] [CodeQuality] Do not namespacing "self" on GetClassToInstanceOfRector, Thanks to [@samsonasik]- [#5071] [CodeQuality] Do not namespacing "static" on GetClassToInstanceOfRector, Thanks to [@samsonasik]- [#5050] [CodingStyle] Register UnSpreadOperatorRector to coding-style config set, Thanks to [@samsonasik]- [#5070] [CodingStyle] Skip dynamic args on UnSpreadOperatorRector, Thanks to [@samsonasik]- [#4951] [CodingStyle] Failing fixture for MakeInheritedMethodVisibilitySameAsParentRector prepend public to protected on static, Thanks to [@samsonasik]- [#4960] [CodingStyle] Skip CatchExceptionNameMatchingTypeRector on variable previously defined, Thanks to [@samsonasik]- [#4968] [CodingStyle] Re-use assigned variable for Method/Static/FuncCall/New_ on SplitDoubleAssignRector, Thanks to [@samsonasik]- [#4966] [CodingStyle] Skip SymplifyQuoteEscapeRector on \n\t, Thanks to [@samsonasik]- [#4985] [CodingStyle] Move PHPStormVarAnnotationRector- [#4983] [DeadCode] Move RecastingRemovalRector from PHPStan set- [#4943] [DeadCode] Skip RemoveEmptyClassMethodRector on final method in non-final class, Thanks to [@samsonasik]- [#4984] [DeadDocBlock] Move RemoveNonExistingVarAnnotationRector here- [#4988] [DeadDocBlock] Skip RemoveNonExistingVarAnnotationRector on has other comment before var, Thanks to [@samsonasik]- [#4934] [Doc] Using transparent image for space.png, Thanks to [@samsonasik]- [#4878] [Downgrade] Apply trailing commas rule also on func/method/static call, Thanks to [@leoloso]- [#4879] [Downgrade] Composer's platform check must use the PHP version below, Thanks to [@leoloso]- [#4975] [EarlyReturn] Register ChangeOrIfReturnToEarlyReturnRector to early-return set, Thanks to [@samsonasik]- [#4915] [EarlyReturn] Enable ReturnBinaryAndToEarlyReturnRector in early-return config set, Thanks to [@samsonasik]- [#4868] [EarlyReturn] Decouple new ruleset- [#4840] [Symfony 5.2][Mime] Rename Address::fromString() to Address::create(), Thanks to [@simivar]- [#5007] [PHPUnit] Enable Coverage again, Thanks to [@samsonasik]- [#4986] [Privatization] Move FinalizeClassesWithoutChildrenRector here- [#4987] [Privatization] Move MakeUnusedClassesWithChildrenAbstractRector here- [#5023] [RectorGenerator] Test interactive generator- [#4842] [Symfony 5.2][Security] Migrate PUBLIC_ACCESS to the new class, Thanks to [@simivar]- [#4964] [Solid] Skip ChangeReadOnlyVariableWithDefaultValueToConstantRector on byRef parameter, Thanks to [@samsonasik]- [#4914] [Solid] Skip MoveVariableDeclarationNearReferenceRector when next statement has static call, Thanks to [@samsonasik]- [#4858] [Symfony] Split Symfony rules to dedicated namespaces, Thanks to [@simivar]- [#5044] [Test] Separate Weekly CI for code coverage generation, Thanks to [@samsonasik]- [#5041] [Test] Move Re-generate code coverage to weekly pull request, Thanks to [@samsonasik]- [#5016] [TypeDeclaration] Skip array shrapnels- [#4885] dupli- [#4811] keep description string as standard- [#5036] [Github Action] Move fork check in steps for daily and weekly pull request, Thanks to [@samsonasik]- [#4812] [Downgrade PHP 8.0] Register DowngradeNullsafeToTernaryOperatorRector to downgrade php80 config set, Thanks to [@samsonasik]- [#4882] Move package to 1st position in recipe- [#4994] change rector-ci.php to rector.php- [#5030] Do not prefix Symplify\SymfonyPhpConfig, Thanks to [@lulco]- [#4865] droping events- [#4813] dont run jobs on forks, because gh-tokens are not available, Thanks to [@staabm]- [#5039] Lower requirement for `phpstan/phpdoc-parser`, Thanks to [@Wirone]- [#5067] [Type Declaration] Skip AddArrayReturnDocTypeRector on return php doc, Thanks to [@samsonasik]- [#5066] [PHP 7.3]  Skip RegexDashEscapeRector double escape, Thanks to [@samsonasik]- [#4857] Static updates- [#4818] [Downgrade PHP 7.2] Parameter type widening, Thanks to [@leoloso]- [#5029] use clone const- [#4853] Typo in the helper text, uses undefined constant, Thanks to [@ordago]- [#4822] [Downgrade PHP X.Y] Consistent usage of getPhpVersion() as constant - 1 in tests, Thanks to [@samsonasik]- [#4848] Renamed NoParticularNodeRule to ForbiddenNodeRule, Thanks to [@leoloso]- [#4845] Do not enforce interface-typing for classes with wider public API than defined by interface, Thanks to [@Wirone]- [#4838] Bump min PHP version to 7.3- [#4835] [PHP 8.0] Skip void type in union- [#4834] [PHP 8.0] Make Attribute silent keys explicit, with named args- [#4810] [Downgrade PHP 8.0] Register DowngradeClassOnObjectToGetClassRector to downgrade-php80 config set, Thanks to [@samsonasik]- [#4809] [Downgrade PHP 7.1] Register DowngradePipeToMultiCatchExceptionRector to downgrade-php71 config set, Thanks to [@samsonasik]- [#4888] [Symfony 5.2] Rename setProviderKey()/getProviderKey() to setFirewallName()/getFirewallName(), Thanks to [@simivar]- [#4924] Keep colon when it's used in Doctrine tag's original content., Thanks to [@Charl13]- [#4801] move string downgrade types to object classes- [#5006] [PHP 8.0] Skip promotion property if worked with before assign- [#4972] [PHP 7.4] Skip TypedPropertyRector on standalone null type, Thanks to [@samsonasik]- [#4971] [PHP 8.0] Skip exception in match, must be expr- [#4970] use getService() API call over static- [#4962] [PHP 7.0]  Skip StaticCallOnNonStaticToInstanceCallRector on dynamic static call, Thanks to [@samsonasik]- [#5008] [PHP 8.0] Skip accessed variable before property assign- [#4926] Upgrade to php-parser 4.10.4 and PHPStan 0.12.63- [#5046] Skip variadic arguments from property promotion, Thanks to [@Wirone]- [#4923] Using $this->mirrorComments() from AbstractRector to keep comment, Thanks to [@samsonasik]- [#4808] dont run weekly jobs on forks, because gh-tokens are not available, Thanks to [@staabm]- [#4909] Bundle bin/rector.php in dist archive, Thanks to [@Wirone]- [#4897] Access classes installed on DEV through their strings, Thanks to [@leoloso]- [#5012] Cleanup exclusion manager test- [#4830] Bump to Symplify 9- [#4901] [Utils] Run validate-fixture-namespace and validate-fixture-classname  for /tests/ directory, Thanks to [@samsonasik]- [#4902] [Utils] Run validate-fixture-namespace/classname to packages, Thanks to [@samsonasik]- [#4935] [Utils] Run validate-fixture-namespace/classname to rules/ directories, Thanks to [@samsonasik]- [#5061] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4804] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]- [#5062] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]- [#4802] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]- [#4803] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#5001] [ci] enable ramsey- [#4999] [phpstan] enable file lenght rule- [#5025] [scoper] unprefix string classes to match types- [#5009] [scoper] keep phpstan.phar to avoid conflict in install- [#5011] [scoper] symplify prefix pick- [#4995] [static] no nullable node
 
 ### Fixed
-
-- [#4727] [BetterStandardPrinter] Fixes [#4691] Donot convert string literal comment, Thanks to [@samsonasik]
-- [#4771] [DX] Fixes [#3675] Report running rule without configuration, Thanks to [@samsonasik]
-- [#4729] [DX] Fixes [#4724] Filename too long, rename ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector to ChangeSetParametersArrayToArrayCollectionRector, Thanks to [@samsonasik]
-- [#4778] [DX] Fixes [#4777] Update ConfiguredCodeSample to CodeSample for no configuration in Rector class, Thanks to [@samsonasik]
-- [#4746] [DeadCode] Fixes [#4663] Handle RemoveEmptyMethodCallRector on parent is Assign, Thanks to [@samsonasik]
-- [#4751] [DeadCode] Fix RemoveDeadConstructorRector
-- [#4749] [DeadCode] Fix dead method in property promotion
-- [#4763] [Downgrade] Fix file matching for ChangePhpVersionInPlatformCheckRector
-- [#4800] [Downgrade] [PHP 8.0] Fix static type
-- [#4775] [PHPstan] Fixes [#4731] Skip RemoveNonExistingVarAnnotationRector on comment in next line of @var, Thanks to [@samsonasik]
-- [#4753] Fix CallTypeAnalyzer when methodName is null, Thanks to [@lulco]
-- [#4752] [PHP 8.0] Fix property removal in property promotion, if they have doctrine annotations
-- [#4730] Fix permissions on /tmp in Docker, Thanks to [@JanMikes]
-- [#4747] Fixed the import for class Closure, Thanks to [@leoloso]
-- [#4750] Fix UnusedForeachValueToArrayKeysRector on objects, Thanks to [@simivar]
+- [#4953] [CodeQuality] Fixes [#4950] Skip IssetOnPropertyObjectToPropertyExistsRector on property as variable, Thanks to [@samsonasik]- [#4877] [Downgrade] Fix parameter type widening issue, when method lives on the ancestor's interface, Thanks to [@leoloso]- [#4900] [PHP72]  Fixes WhileEachToForeachRector to keep comment on update to Foreach, Thanks to [@samsonasik]- [#4805] [PHP 8.0] CI test fixes- [#4929] Static fixes- [#4832] fix no use- [#4930] Static fixes 3- [#4912] (Fix) checkstyle.md, Thanks to [@HDVinnie]- [#4910] [PHP 8.0]  Fixes crash on get_class() without parameter on ClassOnObjectRector, Thanks to [@samsonasik]- [#4908] [Symfony Code Quality] Fixes EventListenerToEventSubscriberRector do not replace method call properly, Thanks to [@samsonasik]- [#4841] [PHP 8.0] Fix used variable rename in propperty promotion- [#4864] static fixes- [#4862] Typo fix: missing ; in code example, Thanks to [@samsonasik]- [#4860] static fixes- [#4856] Fixed typo: Alais => Alias, Thanks to [@leoloso]- [#4980] fix parent visilibty- [#4851] [Downgrade PHP 7.4] Fix bug on ContravariantArgumentType: reflection on __construct may not return type, Thanks to [@leoloso]- [#4850] [Downgrade PHP 7.4] Fixed bug for CovariantReturnType downgrading, Thanks to [@leoloso]- [#4849] Fixed inconsistent naming: PHP_7_3 to PHP_73, Thanks to [@leoloso]
 
 ### Removed
-
-- [#4793] [MysqlQueryMysqlErrorWithLinkRector] Remove already existing connection parameter from function call, Thanks to [@simivar]
-- [#4735] drop symfony\process for single call
-- [#4734] remove ci-detector, make no-progress-bar api compatible with other CI tools
-- [#4743] remove double `\*\*` glob to speedup bootstrapping, Thanks to [@staabm]
+- [#4933] [BetterStandardPrinter] Remove unneded cleanUpDuplicateContent(), Thanks to [@samsonasik]- [#4870] [CI] drop ignore platform reqs- [#5058] [CI] Remove fork check in daily and weekly CI, Thanks to [@samsonasik]- [#4939] [Downgrade] Drop ChangePhpVersionInPlatformCheckRector as not useful, paltform check false is good enough- [#4993] [SOLID] Drop UseInterfaceOverImplementationInConstructorRector, very subjective- [#4944] drop ecs-after-rector, recommend current setup- [#4819] [Downgrade PHP 7.0] Remove param and return types, Thanks to [@leoloso]- [#5035] respect PHPStan descission to drop & in param docs- [#4886] [phpstan] remove non-existing packages/file-system-rector/src/Rector/AbstractFileSystemRector.php- [#4921] [static] Narrow param types, remove duplicated methods
 
 
-
-## Unreleased
 
 ### Added
-
-- [#4721] [Downgrade] Add composer platform check
-- [#4687] [NetteUtilsCodeQuality] Fixes [#4686] Add SubstrMinusToStringEndsWithRector, Thanks to [@samsonasik]
-- [#4672] [Renaming] Add renaming support for blade.php templates in Laravel
-- [#4698] added failing ChangeIfElseValueAssignToEarlyReturnRector test, regarding lost comments, Thanks to [@clxmstaab]
-- [#4696] ChangeAndIfToEarlyReturnRector: added a failing testcase for continue-in-foreach, Thanks to [@clxmstaab]
-- [#4719] Add issue labels to issue templates, Thanks to [@staabm]
+- [#4779] [CI] Add PHP 8.0 to Github actions tests, Thanks to [@samsonasik]- [#4791] [CodeQuality] Add DateTimeToDateTimeInterfaceRector, Thanks to [@simivar]- [#4789] [DX] Add init-recipe command to create recipe config in root- [#4740] [Docs] Add docblock docs- [#4762] [Downgrade] [PHP 8.0] Add DowngradePropertyPromotionToConstructorPropertyAssignRector- [#4788] [PHP 8.0] [Downgrade] Add DowngradeNonCapturingCatchesRector- [#4787] [PHP 8.0] [Downgrade] Add DowngradeNonCapturingCatchesRector- [#4780] [PHPStanExtensions] Add ForbiddenMethodCallOnTypeRule + move from docComment and Comments to PhpDocInfo- [#4741] [PHP 8.0] Add nette utils strings replace, static fixes- [#4758] Donwgrade PHP 7.4: Added covariant rule to set, Thanks to [@leoloso]- [#4799] add docblock on downgrade by default- [#4772] [Downgrade PHP 8.0] Add DowngradeClassOnObjectToGetClassRector, Thanks to [@samsonasik]- [#4776] [Downgrade PHP 7.1] Fixes [#4196] Add DowngradePipeToMultiCatchExceptionRector, Thanks to [@samsonasik]- [#4764] Added some missing Nette 3.0 tasks, Thanks to [@lulco]- [#4792] [PHP 8.0] Add SetStateToStaticRector, Thanks to [@simivar]- [#4794] [PHP 8.0] Add FinalPrivateToPrivateVisibilityRector, Thanks to [@simivar]- [#4795] [PHP 8.0] Add RemoveParentCallWithoutParentRector to the set config, Thanks to [@simivar]
 
 ### Changed
-
-- [#4688] [Docs] Improve rule doc generator to generat rules_overview with categories
-- [#4695] [NetteCodeQuality] Register SubstrMinusToStringEndsWithRector to nette-code-quality config set, Thanks to [@samsonasik]
-- [#4670] [Solid] use Variable node type for for MoveVariableDeclarationNearReferenceRector, Thanks to [@samsonasik]
-- [#4694] [SymfonyPhpConfig] Use Symplify package instead + simplify set validation
-- [#4718] trait refactoring
-- [#4689] use symplify/skipper
-- [#4697] create LostCommentBeforeElseIf failing test, Thanks to [@clxmstaab]
-- [#4681] skip spaced or html tagged
-- [#4717] Various improvements
-- [#4676] Improve Blade class renames
-- [#4703] make use symplify/php-doc-parser
-- [#4707] simplify ArrayThisCallToThisMethodCallRector, Thanks to [@clxmstaab]
-- [#4674] use  explicit container in service definitions
-- [#4713] make sure we don't get a diff in which every line is different, Thanks to [@clxmstaab]
-- [#4714] Decouple DowngradeSetList
-- [#4706] [Downgrade PHP 7.1] feature/downgrade iterable pseudo type
-- [#4682] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4722] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4685] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4668] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+- [#4797] [DX] Use MethodName const instead of string for __set_state, Thanks to [@simivar]- [#4782] [DeadDocBlock] decouple return and param rules- [#4796] [Downgrade] [PHP 7.3] Downgrade trailing commas in function calls- [#4742] [PHP 8.0] [Naming] Skip union type to resolve param name- [#4757] [Solid] Skip ChangeAndIfToEarlyReturnRector on nested if in loop, Thanks to [@samsonasik]- [#4798] [PHP 8.0] get_parent_class() cannot be called on non-existing classes anymore- [#4755] Downgrade PHP 7.4 covariant return type, Thanks to [@leoloso]- [#4770] Downgrade PHP 7.4 contravariant argument type, Thanks to [@leoloso]- [#4774] Downgrade PHP 7.4 Covariant return types - Handle also interfaces, Thanks to [@leoloso]- [#4737] README: mention the `rd` debugging helper function, Thanks to [@staabm]- [#4733] Readme: make „pick from sets“ more prominent, Thanks to [@staabm]- [#4786] PHPStan rule decouple to Symplify- [#4783] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4768] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]- [#4767] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4739] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4732] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]- [#4759] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4745] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4784] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]
 
 ### Fixed
-
-- [#4679] [DX] Fixes [#4205] Change phpversion from string to php constant int type, Thanks to [@samsonasik]
-- [#4678] [Solid] Fixes [#4677] Skip MoveVariableDeclarationNearReferenceRector on multiple usage in Switch -> cases, Thanks to [@samsonasik]
+- [#4727] [BetterStandardPrinter] Fixes [#4691] Donot convert string literal comment, Thanks to [@samsonasik]- [#4771] [DX] Fixes [#3675] Report running rule without configuration, Thanks to [@samsonasik]- [#4729] [DX] Fixes [#4724] Filename too long, rename ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector to ChangeSetParametersArrayToArrayCollectionRector, Thanks to [@samsonasik]- [#4778] [DX] Fixes [#4777] Update ConfiguredCodeSample to CodeSample for no configuration in Rector class, Thanks to [@samsonasik]- [#4746] [DeadCode] Fixes [#4663] Handle RemoveEmptyMethodCallRector on parent is Assign, Thanks to [@samsonasik]- [#4751] [DeadCode] Fix RemoveDeadConstructorRector- [#4749] [DeadCode] Fix dead method in property promotion- [#4763] [Downgrade] Fix file matching for ChangePhpVersionInPlatformCheckRector- [#4800] [Downgrade] [PHP 8.0] Fix static type- [#4775] [PHPstan] Fixes [#4731] Skip RemoveNonExistingVarAnnotationRector on comment in next line of @var, Thanks to [@samsonasik]- [#4753] Fix CallTypeAnalyzer when methodName is null, Thanks to [@lulco]- [#4752] [PHP 8.0] Fix property removal in property promotion, if they have doctrine annotations- [#4730] Fix permissions on /tmp in Docker, Thanks to [@JanMikes]- [#4747] Fixed the import for class Closure, Thanks to [@leoloso]- [#4750] Fix UnusedForeachValueToArrayKeysRector on objects, Thanks to [@simivar]
 
 ### Removed
-
-- [#4701] [DX] Drop buggy --only option
-- [#4684] update: drop migrify/php-config-printer for symplify/php-config-printer, Thanks to [@HDVinnie]
-- [#4700] Drop --set forgotten leftover
-- [#4710] remove extra space after declare, if there already is one
-- [#4715] drop MinimalVersionChecker, is checked by composer itself
-- [#4716] drop old compiler
+- [#4793] [MysqlQueryMysqlErrorWithLinkRector] Remove already existing connection parameter from function call, Thanks to [@simivar]- [#4735] drop symfony\process for single call- [#4734] remove ci-detector, make no-progress-bar api compatible with other CI tools- [#4743] remove double `\*\*` glob to speedup bootstrapping, Thanks to [@staabm]
 
 
-
-## Unreleased
 
 ### Added
-
-- [#4660] [CodingStyle] Add static support to PreferThisOrSelfMethodCallRector
-- [#4653] [PSR-4] autoprefix on namespace add
-- [#4624] [StrictTypes] Fixes [#4429] Add ParamTypeToAssertTypeRector, Thanks to [@samsonasik]
-- [#4637] [Laravel 5.8] Add CallOnAppArrayAccessToStandaloneAssignRector, PropertyDeferToDeferrableProviderToRector, MakeTaggedPassedToParameterIterableTypeRector
+- [#4721] [Downgrade] Add composer platform check- [#4687] [NetteUtilsCodeQuality] Fixes [#4686] Add SubstrMinusToStringEndsWithRector, Thanks to [@samsonasik]- [#4672] [Renaming] Add renaming support for blade.php templates in Laravel- [#4698] added failing ChangeIfElseValueAssignToEarlyReturnRector test, regarding lost comments, Thanks to [@clxmstaab]- [#4696] ChangeAndIfToEarlyReturnRector: added a failing testcase for continue-in-foreach, Thanks to [@clxmstaab]- [#4719] Add issue labels to issue templates, Thanks to [@staabm]
 
 ### Changed
-
-- [#4640] [CodingStyle] Skip RemoveDoubleUnderscoreInMethodNameRector when method name only __, Thanks to [@samsonasik]
-- [#4645] [CodingStyle] Skip RemoveDoubleUnderscoreInMethodNameRector on first numeric on new name, Thanks to [@samsonasik]
-- [#4642] [CodingStyle] Improve RemoveParamReturnDocblockRector: handle namespaced [@param] & [@return], Thanks to [@samsonasik]
-- [#4662] [Laravel] Improve static to DI set
-- [#4643] [Solid] Improve MoveVariableDeclarationNearReferenceRector : skip variable with usage in multiple level, Thanks to [@samsonasik]
-- [#4657] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]
-- [#4656] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4638] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4639] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+- [#4688] [Docs] Improve rule doc generator to generat rules_overview with categories- [#4695] [NetteCodeQuality] Register SubstrMinusToStringEndsWithRector to nette-code-quality config set, Thanks to [@samsonasik]- [#4670] [Solid] use Variable node type for for MoveVariableDeclarationNearReferenceRector, Thanks to [@samsonasik]- [#4694] [SymfonyPhpConfig] Use Symplify package instead + simplify set validation- [#4718] trait refactoring- [#4689] use symplify/skipper- [#4697] create LostCommentBeforeElseIf failing test, Thanks to [@clxmstaab]- [#4681] skip spaced or html tagged- [#4717] Various improvements- [#4676] Improve Blade class renames- [#4703] make use symplify/php-doc-parser- [#4707] simplify ArrayThisCallToThisMethodCallRector, Thanks to [@clxmstaab]- [#4674] use  explicit container in service definitions- [#4713] make sure we don't get a diff in which every line is different, Thanks to [@clxmstaab]- [#4714] Decouple DowngradeSetList- [#4706] [Downgrade PHP 7.1] feature/downgrade iterable pseudo type- [#4682] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4722] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4685] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4668] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
 
 ### Fixed
-
-- [#4666] [BetterStandardPrinter] Fixes [#4652] Skip [@return] explicit format, Thanks to [@samsonasik]
-- [#4646] [BetterStandardPrinter] Fixes [#3388] Skip Localization Annotation route, Thanks to [@samsonasik]
-- [#4665] [CodingStyle] Fix lowercase misses in importing, decouple ImportSkipper to collector with ClassNameImportSkipVoters
-- [#4651] [PSR-4] fix case of missing namespace
-- [#4641] Some small grammatical fixes, Thanks to [@xdhmoore]
-- [#4648] [PHP 7.4] Fixes [#4647] Make limit Value in AddLiteralSeparatorToNumberRector configurable, Thanks to [@samsonasik]
-
-
-
-## Unreleased
-
-### Changed
-
-- [#4632] rename to RequireClassTypeInClassMethodByTypeRule
-- [#4633] [Downgrade PHP 7.1] Class constant visibility, Thanks to [@norberttech]
-- [#4631] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]
-- [#4630] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+- [#4679] [DX] Fixes [#4205] Change phpversion from string to php constant int type, Thanks to [@samsonasik]- [#4678] [Solid] Fixes [#4677] Skip MoveVariableDeclarationNearReferenceRector on multiple usage in Switch -> cases, Thanks to [@samsonasik]
 
 ### Removed
+- [#4701] [DX] Drop buggy --only option- [#4684] update: drop migrify/php-config-printer for symplify/php-config-printer, Thanks to [@HDVinnie]- [#4700] Drop --set forgotten leftover- [#4710] remove extra space after declare, if there already is one- [#4715] drop MinimalVersionChecker, is checked by composer itself- [#4716] drop old compiler
 
+
+
+### Added
+- [#4660] [CodingStyle] Add static support to PreferThisOrSelfMethodCallRector- [#4653] [PSR-4] autoprefix on namespace add- [#4624] [StrictTypes] Fixes [#4429] Add ParamTypeToAssertTypeRector, Thanks to [@samsonasik]- [#4637] [Laravel 5.8] Add CallOnAppArrayAccessToStandaloneAssignRector, PropertyDeferToDeferrableProviderToRector, MakeTaggedPassedToParameterIterableTypeRector
+
+### Changed
+- [#4640] [CodingStyle] Skip RemoveDoubleUnderscoreInMethodNameRector when method name only __, Thanks to [@samsonasik]- [#4645] [CodingStyle] Skip RemoveDoubleUnderscoreInMethodNameRector on first numeric on new name, Thanks to [@samsonasik]- [#4642] [CodingStyle] Improve RemoveParamReturnDocblockRector: handle namespaced [@param] & [@return], Thanks to [@samsonasik]- [#4662] [Laravel] Improve static to DI set- [#4643] [Solid] Improve MoveVariableDeclarationNearReferenceRector : skip variable with usage in multiple level, Thanks to [@samsonasik]- [#4657] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]- [#4656] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4638] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4639] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+
+### Fixed
+- [#4666] [BetterStandardPrinter] Fixes [#4652] Skip [@return] explicit format, Thanks to [@samsonasik]- [#4646] [BetterStandardPrinter] Fixes [#3388] Skip Localization Annotation route, Thanks to [@samsonasik]- [#4665] [CodingStyle] Fix lowercase misses in importing, decouple ImportSkipper to collector with ClassNameImportSkipVoters- [#4651] [PSR-4] fix case of missing namespace- [#4641] Some small grammatical fixes, Thanks to [@xdhmoore]- [#4648] [PHP 7.4] Fixes [#4647] Make limit Value in AddLiteralSeparatorToNumberRector configurable, Thanks to [@samsonasik]
+
+
+
+### Changed
+- [#4632] rename to RequireClassTypeInClassMethodByTypeRule- [#4633] [Downgrade PHP 7.1] Class constant visibility, Thanks to [@norberttech]- [#4631] [automated] Apply Coding Standard, Thanks to [@github-actions][bot]- [#4630] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+
+### Removed
 - [#4634] remove RequireClassTypeInClassMethodByTypeRule
 
 
 
-## Unreleased
-
 ### Added
-
 - [#4615] [docs] add 10 more relevant node construction examples
 
 ### Changed
-
-- [#4613] [CodeQuality] ForToForeachRector improvement on ArrayDimFetch handling, Thanks to [@samsonasik]
-- [#4625] [Symplify 9] Follow up + phpstan rules tidying
-- [#4616] [Symplify 9] First update + switch to RuleDocGenerator
-- [#4618] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4617] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+- [#4613] [CodeQuality] ForToForeachRector improvement on ArrayDimFetch handling, Thanks to [@samsonasik]- [#4625] [Symplify 9] Follow up + phpstan rules tidying- [#4616] [Symplify 9] First update + switch to RuleDocGenerator- [#4618] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4617] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
 
 ### Fixed
-
-- [#4622] [BetterStandardPrinter] Fixes [#4620] Do not change valid Annotation Route Option, Thanks to [@samsonasik]
-- [#4623] [Naming] Fixes [#4621] : Skip rename when after rename has numeric in first char, Thanks to [@samsonasik]
+- [#4622] [BetterStandardPrinter] Fixes [#4620] Do not change valid Annotation Route Option, Thanks to [@samsonasik]- [#4623] [Naming] Fixes [#4621] : Skip rename when after rename has numeric in first char, Thanks to [@samsonasik]
 
 
-
-## Unreleased
 
 ### Added
-
 - [#4614] [PHPUnit] Add AssertSameTrueFalseToAssertTrueFalseRector
 
 ### Changed
-
-- [#4613] [CodeQuality] ForToForeachRector improvement on ArrayDimFetch handling, Thanks to [@samsonasik]
-- [#4611] [PHPUnit 8.0] Replace confusing ReplaceAssertArraySubsetRector with doms plug and play approach
-- [#4610] improve SpecificAssertContainsRector for union type
-- [#4609] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+- [#4613] [CodeQuality] ForToForeachRector improvement on ArrayDimFetch handling, Thanks to [@samsonasik]- [#4611] [PHPUnit 8.0] Replace confusing ReplaceAssertArraySubsetRector with doms plug and play approach- [#4610] improve SpecificAssertContainsRector for union type- [#4609] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
 
 
-
-## Unreleased
 
 ### Added
-
 - [#4596] [Carbon] Add ChangeCarbonSingularMethodCallToPluralRector
 
 ### Changed
-
-- [#4607] [CodeQuality] Skip ForToForeachRector on assign count is used inside for statements, Thanks to [@samsonasik]
-- [#4605] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
-- [#4604] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
+- [#4607] [CodeQuality] Skip ForToForeachRector on assign count is used inside for statements, Thanks to [@samsonasik]- [#4605] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]- [#4604] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
 
 
-
-## Unreleased
 
 ### Added
-
-- [#4596] [Carbon] Add ChangeCarbonSingularMethodCallToPluralRector
-- [#4459] [CodeQuality] Add nested foreach foreach that is required for assign
-- [#4457] [CodeQuality] Add MoveOutMethodCallInsideIfConditionRector, Thanks to [@samsonasik]
-- [#4466] [CodeQuality] Decouple complete dynamic properties rector, add skip of Closure::bind()
-- [#4468] [CodeQuality] Add NewStaticToNewSelfRector
-- [#4496] [CodeQualityStrict] Add CountArrayToEmptyArrayComparisonRector to CodeQualityStrict, Thanks to [@samsonasik]
-- [#4600] [CodingStyle] Fixes [#4453] Add RemoveParamReturnDocblockRector, Thanks to [@samsonasik]
-- [#4448] [DeadCode] Add expr-names support to RemoveEmptyMethodCallRector
-- [#4442] [DoctrineCodeQuality] Add ImproveDoctrineCollectionDocTypeInEntityRector
-- [#4589] [Laravel] Add AddMockConsoleOutputFalseToConsoleTestsRector
-- [#4591] [Laravel] Add AddGuardToLoginEventRector
-- [#4515] [Nette] Add RemoveParentAndNameFromComponentConstructorRector
-- [#4520] [Nette] Add MoveFinalGetUserToCheckRequirementsClassMethodRector
-- [#4439] [PHPStan] Fixes [#4433] Add CheckCodeSampleBeforeAfterAlwaysDifferentRule, Thanks to [@samsonasik]
-- [#4603] [PHPUnit] Add ConstructClassMethodToSetUpTestCaseRector
-- [#4601] [PHPUnit] Add maybe string check to SpecificAssertContainsRector
-- [#4602] [PHPUnit] Add class constant reference to ExceptionAnnotationRector
-- [#4489] [Performance] Add CountArrayToEmptyArrayComparisonRector, Thanks to [@samsonasik]
-- [#4471] [Restoration] Add InferParamFromClassMethodReturnRector
-- [#4410] [SOLID] Add MoveVariableDeclarationNearReferenceRector [needs more work before use]
-- [#4504] Add regex uri to regex constant, Thanks to [@samsonasik]
-- [#4580] [Laravel 5.7] Add parent boot rule
-- [#4549] add empty file test case, Thanks to [@samsonasik]
-- [#4586] [Laravel 5.7] Add ChangeQueryWhereDateValueWithCarbonRector
-- [#4551] [Nette 3.0] Fixes [#4387] : Add ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector, Thanks to [@samsonasik]
-- [#4536] Bump EndBug/add-and-commit version to 5.1.0, Thanks to [@simivar]
-- [#4557] [PHP 8.0] Fixes [#4527] Add NullsafeOperatorRector, Thanks to [@samsonasik]
-- [#4592] add non-static call too
-- [#4524] rector.php.dist: added missing use for commented rule, Thanks to [@uestla]
-- [#4517] Add a Doctrine DBAL 2.11 Rule Set, Thanks to [@chrisguitarguy]
-- [#4484] [ci] add ci-review job
-- [#4518] [docs] add command for used node stats + simplify node docs, so it uses most needed examples over are nodes (e.g. /=)
+- [#4596] [Carbon] Add ChangeCarbonSingularMethodCallToPluralRector- [#4459] [CodeQuality] Add nested foreach foreach that is required for assign- [#4457] [CodeQuality] Add MoveOutMethodCallInsideIfConditionRector, Thanks to [@samsonasik]- [#4466] [CodeQuality] Decouple complete dynamic properties rector, add skip of Closure::bind()- [#4468] [CodeQuality] Add NewStaticToNewSelfRector- [#4496] [CodeQualityStrict] Add CountArrayToEmptyArrayComparisonRector to CodeQualityStrict, Thanks to [@samsonasik]- [#4600] [CodingStyle] Fixes [#4453] Add RemoveParamReturnDocblockRector, Thanks to [@samsonasik]- [#4448] [DeadCode] Add expr-names support to RemoveEmptyMethodCallRector- [#4442] [DoctrineCodeQuality] Add ImproveDoctrineCollectionDocTypeInEntityRector- [#4589] [Laravel] Add AddMockConsoleOutputFalseToConsoleTestsRector- [#4591] [Laravel] Add AddGuardToLoginEventRector- [#4515] [Nette] Add RemoveParentAndNameFromComponentConstructorRector- [#4520] [Nette] Add MoveFinalGetUserToCheckRequirementsClassMethodRector- [#4439] [PHPStan] Fixes [#4433] Add CheckCodeSampleBeforeAfterAlwaysDifferentRule, Thanks to [@samsonasik]- [#4603] [PHPUnit] Add ConstructClassMethodToSetUpTestCaseRector- [#4601] [PHPUnit] Add maybe string check to SpecificAssertContainsRector- [#4602] [PHPUnit] Add class constant reference to ExceptionAnnotationRector- [#4489] [Performance] Add CountArrayToEmptyArrayComparisonRector, Thanks to [@samsonasik]- [#4471] [Restoration] Add InferParamFromClassMethodReturnRector- [#4410] [SOLID] Add MoveVariableDeclarationNearReferenceRector [needs more work before use]- [#4504] Add regex uri to regex constant, Thanks to [@samsonasik]- [#4580] [Laravel 5.7] Add parent boot rule- [#4549] add empty file test case, Thanks to [@samsonasik]- [#4586] [Laravel 5.7] Add ChangeQueryWhereDateValueWithCarbonRector- [#4551] [Nette 3.0] Fixes [#4387] : Add ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector, Thanks to [@samsonasik]- [#4536] Bump EndBug/add-and-commit version to 5.1.0, Thanks to [@simivar]- [#4557] [PHP 8.0] Fixes [#4527] Add NullsafeOperatorRector, Thanks to [@samsonasik]- [#4592] add non-static call too- [#4524] rector.php.dist: added missing use for commented rule, Thanks to [@uestla]- [#4517] Add a Doctrine DBAL 2.11 Rule Set, Thanks to [@chrisguitarguy]- [#4484] [ci] add ci-review job- [#4518] [docs] add command for used node stats + simplify node docs, so it uses most needed examples over are nodes (e.g. /=)
 
 ### Changed
-
-- [#4487] [CI] Run ECS only on match git diff
-- [#4449] [CI] fasten up Rector CI feedback
-- [#4462] [CodeQuality] Improve missing property type resolution for array dim fetch
-- [#4455] [CodeQuality] Support multi boolean and in isset on property
-- [#4477] [CodeQuality] Register MoveOutMethodCallInsideIfConditionRector to config code-quality set, Thanks to [@samsonasik]
-- [#4461] [CodeQuality] Skip nested foreach
-- [#4467] [CodeQuality] Skip dynamic properties for bindTo()
-- [#4441] [CodeQuality] Register IssetOnPropertyObjectToPropertyExistsRector to code-quality config set, Thanks to [@samsonasik]
-- [#4502] [CodeQualityStrict] Enable MoveOutMethodCallInsideIfConditionRector, Thanks to [@samsonasik]
-- [#4590] [CodingStyle] Failing test case for cannot change this to self, Thanks to [@samsonasik]
-- [#4445] [DeadCode] Count arg value as used
-- [#4490] [EarlyReturn] Decouple new set
-- [#4554] [FileSystem] Improve MovedFileWithNodesFactory : Skip if $desiredGroupName already inside $oldClassName, Thanks to [@samsonasik]
-- [#4486] [Naming] Allow does in MakeIsserClassMethodNameStartWithIsRector
-- [#4510] [TypeDeclaration] Switch from stringy types to PHPStan types
-- [#4593] laravel call on static
-- [#4492] Improve MoveOutMethodCallInsideIfConditionRector
-- [#4507] phpstan cleanup
-- [#4509] phpstan cleanup
-- [#4514] Inform about useless second part in tests fixture, after -----, if it is identical
-- [#4483] Return also explicitly mixed types in IdentifierTypeMapper, Thanks to [@ComiR]
-- [#4482] Map iterable in ScalarStringToTypeMapper, Thanks to [@ComiR]
-- [#4522] Change file system approach of MultipleClassFileToPsr4ClassesRector to file without namespace node
-- [#4565] [PHP 8.0] Improve NullsafeOperatorRector : Skip no direct usage after if in next statement at last, Thanks to [@samsonasik]
-- [#4571] [PHP 8.0] Improve NullsafeOperatorRector : No need ?-> on very first call, Thanks to [@samsonasik]
-- [#4440] Downgrade PHP7.4 array_merge without arguments ([#4377]), Thanks to [@ComiR]
-- [#4443] Infer var type annotation only if none exists, Thanks to [@ComiR]
-- [#4444] make use of Types of doc types
-- [#4552] [Nette 3.0] Register ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector to nette-30 config set, Thanks to [@samsonasik]
-- [#4550] merge AstractGenericRectorTestCase and AbstractRectorTestCase
-- [#4451] decouple ProjectType from Option
-- [#4525] change RenameSpecFileToTestFileRector filesystem to normal one
-- [#4454] Check for property fetch type in DoctrineCollectionDoctype rector, Thanks to [@pierredup]
-- [#4541] move step count to own method
-- [#4540] move suffix filesystem 3
-- [#4572] [PHP 8.0] Improve NullsafeOperatorRector : Check against !== null, Thanks to [@samsonasik]
-- [#4534] decouple
-- [#4595] [Carbon 2] Init
-- [#4529] move suffix filesystem 2
-- [#4528] Move from Filesystem rules to FileNode
-- [#4526] Start ruleset for CakePHP 4.2, Thanks to [@markstory]
-- [#4594] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
-- [#4498] [ci] automated rebase experiment
-- [#4513] [ci] use composer v2 for rector_ci
-- [#4491] [cs] improve configured rules types
-- [#4481] [docs] apply correct standard on dumper Rector list + apply automated CI commit on propagate monorepo deps
-- [#4519] [docs] more node cleanup
-- [#4501] [docs] decouple pages from README
+- [#4487] [CI] Run ECS only on match git diff- [#4449] [CI] fasten up Rector CI feedback- [#4462] [CodeQuality] Improve missing property type resolution for array dim fetch- [#4455] [CodeQuality] Support multi boolean and in isset on property- [#4477] [CodeQuality] Register MoveOutMethodCallInsideIfConditionRector to config code-quality set, Thanks to [@samsonasik]- [#4461] [CodeQuality] Skip nested foreach- [#4467] [CodeQuality] Skip dynamic properties for bindTo()- [#4441] [CodeQuality] Register IssetOnPropertyObjectToPropertyExistsRector to code-quality config set, Thanks to [@samsonasik]- [#4502] [CodeQualityStrict] Enable MoveOutMethodCallInsideIfConditionRector, Thanks to [@samsonasik]- [#4590] [CodingStyle] Failing test case for cannot change this to self, Thanks to [@samsonasik]- [#4445] [DeadCode] Count arg value as used- [#4490] [EarlyReturn] Decouple new set- [#4554] [FileSystem] Improve MovedFileWithNodesFactory : Skip if $desiredGroupName already inside $oldClassName, Thanks to [@samsonasik]- [#4486] [Naming] Allow does in MakeIsserClassMethodNameStartWithIsRector- [#4510] [TypeDeclaration] Switch from stringy types to PHPStan types- [#4593] laravel call on static- [#4492] Improve MoveOutMethodCallInsideIfConditionRector- [#4507] phpstan cleanup- [#4509] phpstan cleanup- [#4514] Inform about useless second part in tests fixture, after -----, if it is identical- [#4483] Return also explicitly mixed types in IdentifierTypeMapper, Thanks to [@ComiR]- [#4482] Map iterable in ScalarStringToTypeMapper, Thanks to [@ComiR]- [#4522] Change file system approach of MultipleClassFileToPsr4ClassesRector to file without namespace node- [#4565] [PHP 8.0] Improve NullsafeOperatorRector : Skip no direct usage after if in next statement at last, Thanks to [@samsonasik]- [#4571] [PHP 8.0] Improve NullsafeOperatorRector : No need ?-> on very first call, Thanks to [@samsonasik]- [#4440] Downgrade PHP7.4 array_merge without arguments ([#4377]), Thanks to [@ComiR]- [#4443] Infer var type annotation only if none exists, Thanks to [@ComiR]- [#4444] make use of Types of doc types- [#4552] [Nette 3.0] Register ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector to nette-30 config set, Thanks to [@samsonasik]- [#4550] merge AstractGenericRectorTestCase and AbstractRectorTestCase- [#4451] decouple ProjectType from Option- [#4525] change RenameSpecFileToTestFileRector filesystem to normal one- [#4454] Check for property fetch type in DoctrineCollectionDoctype rector, Thanks to [@pierredup]- [#4541] move step count to own method- [#4540] move suffix filesystem 3- [#4572] [PHP 8.0] Improve NullsafeOperatorRector : Check against !== null, Thanks to [@samsonasik]- [#4534] decouple- [#4595] [Carbon 2] Init- [#4529] move suffix filesystem 2- [#4528] Move from Filesystem rules to FileNode- [#4526] Start ruleset for CakePHP 4.2, Thanks to [@markstory]- [#4594] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]- [#4498] [ci] automated rebase experiment- [#4513] [ci] use composer v2 for rector_ci- [#4491] [cs] improve configured rules types- [#4481] [docs] apply correct standard on dumper Rector list + apply automated CI commit on propagate monorepo deps- [#4519] [docs] more node cleanup- [#4501] [docs] decouple pages from README
 
 ### Fixed
-
-- [#4577] [BetterStandardPrinter] Fixes [#3673] Doctrine Annotation comment should not be changed, Thanks to [@samsonasik]
-- [#4576] [BetterStandardPrinter] Fixes [#4274] [#4573] Annotation callback and Route values should not be changed, Thanks to [@samsonasik]
-- [#4585] [BetterStandardPrinter] Fixes [#4476] [@ORM] Constraint should not be changed, Thanks to [@samsonasik]
-- [#4584] [BetterStandardPrinter] Fixes [#4581] [@Orm]\Column should not be changed, Thanks to [@samsonasik]
-- [#4579] [CodeQuality] Fixes [#4578] Skip ForToForeachRector on complex init expression, Thanks to [@samsonasik]
-- [#4533] [CodeQuality] Fixes [#4516] Skip Apply ArrayThisCallToThisMethodCallRector on array inside property, Thanks to [@samsonasik]
-- [#4597] [DX] Fixes [#4588] Enable PreferThisOrSelfMethodCallRector in rector-ci.php, Thanks to [@samsonasik]
-- [#4545] [DeadCode] Fix removal of class under
-- [#4564] [DeadCode] Fixes [#4561] Skip RemoveUnusedPrivatePropertyRector removes used Parameter, Thanks to [@samsonasik]
-- [#4598] [DeadCode] Fixes [#4472] Remove method call on $this, Thanks to [@samsonasik]
-- [#4450] [DeadCode] Fix removal of if->cond
-- [#4587] [Doctrine] Fixes [#4566] Rename ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector to ServiceEntityRepositoryParentCallToDIRector, Thanks to [@samsonasik]
-- [#4479] [DoctrineAnnotaitonGenerated] Update to doctrine/annotations 1.11 + fix static
-- [#4436] [DoctrineCodeQuality] Fix oveCurrentDateTimeDefaultInEntityToConstructorRector for default value
-- [#4506] [NetteCodeQuality] Fix ChangeFormArrayAccessToAnnotatedControlVariableRector for in-closure
-- [#4599] [Symfony] Fixes [#4583] Skip AbstractToConstructorInjectionRector when service type not found, Thanks to [@samsonasik]
-- [#4553] Fixes [#4499] Code duplication on interface_exists and trait_exists inside if condition, Thanks to [@samsonasik]
-- [#4480] Fix not provided --output-file argument translated into string instead of null, Thanks to [@JanMikes]
-- [#4562] Fix StrStartsWithRector to allow strpos not identical operation, Thanks to [@ronnylt]
-- [#4560] fix: PHP_Parser T_Match issue with php 7, Thanks to [@dameert]
-- [#4532] Typo Fix funciton -> function, Thanks to [@samsonasik]
-- [#4505] fix non-existing method trying to get method reflection
-- [#4546] Fix Xdebug spelling, Thanks to [@chapeupreto]
-- [#4475] Typo Fix: Strings::endWith() should be Strings::endsWith(), Thanks to [@samsonasik]
-- [#4537] fix linter
-- [#4547] Fixes [#4543] Skip Rector check on empty files, Thanks to [@samsonasik]
+- [#4577] [BetterStandardPrinter] Fixes [#3673] Doctrine Annotation comment should not be changed, Thanks to [@samsonasik]- [#4576] [BetterStandardPrinter] Fixes [#4274] [#4573] Annotation callback and Route values should not be changed, Thanks to [@samsonasik]- [#4585] [BetterStandardPrinter] Fixes [#4476] [@ORM] Constraint should not be changed, Thanks to [@samsonasik]- [#4584] [BetterStandardPrinter] Fixes [#4581] [@Orm]\Column should not be changed, Thanks to [@samsonasik]- [#4579] [CodeQuality] Fixes [#4578] Skip ForToForeachRector on complex init expression, Thanks to [@samsonasik]- [#4533] [CodeQuality] Fixes [#4516] Skip Apply ArrayThisCallToThisMethodCallRector on array inside property, Thanks to [@samsonasik]- [#4597] [DX] Fixes [#4588] Enable PreferThisOrSelfMethodCallRector in rector-ci.php, Thanks to [@samsonasik]- [#4545] [DeadCode] Fix removal of class under- [#4564] [DeadCode] Fixes [#4561] Skip RemoveUnusedPrivatePropertyRector removes used Parameter, Thanks to [@samsonasik]- [#4598] [DeadCode] Fixes [#4472] Remove method call on $this, Thanks to [@samsonasik]- [#4450] [DeadCode] Fix removal of if->cond- [#4587] [Doctrine] Fixes [#4566] Rename ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector to ServiceEntityRepositoryParentCallToDIRector, Thanks to [@samsonasik]- [#4479] [DoctrineAnnotaitonGenerated] Update to doctrine/annotations 1.11 + fix static- [#4436] [DoctrineCodeQuality] Fix oveCurrentDateTimeDefaultInEntityToConstructorRector for default value- [#4506] [NetteCodeQuality] Fix ChangeFormArrayAccessToAnnotatedControlVariableRector for in-closure- [#4599] [Symfony] Fixes [#4583] Skip AbstractToConstructorInjectionRector when service type not found, Thanks to [@samsonasik]- [#4553] Fixes [#4499] Code duplication on interface_exists and trait_exists inside if condition, Thanks to [@samsonasik]- [#4480] Fix not provided --output-file argument translated into string instead of null, Thanks to [@JanMikes]- [#4562] Fix StrStartsWithRector to allow strpos not identical operation, Thanks to [@ronnylt]- [#4560] fix: PHP_Parser T_Match issue with php 7, Thanks to [@dameert]- [#4532] Typo Fix funciton -> function, Thanks to [@samsonasik]- [#4505] fix non-existing method trying to get method reflection- [#4546] Fix Xdebug spelling, Thanks to [@chapeupreto]- [#4475] Typo Fix: Strings::endWith() should be Strings::endsWith(), Thanks to [@samsonasik]- [#4537] fix linter- [#4547] Fixes [#4543] Skip Rector check on empty files, Thanks to [@samsonasik]
 
 ### Removed
-
-- [#4521] [Decouple] Remove set, rather job for PHPStorm
-- [#4542] [DoctrineCodeQuality] Remove redundant default values from annotations, Thanks to [@simivar]
-- [#4511] [DynamicTypeAnalysis] Drop for too theoretical content, needs real project to test out
-- [#4497] [ci] remove old merageable file
+- [#4521] [Decouple] Remove set, rather job for PHPStorm- [#4542] [DoctrineCodeQuality] Remove redundant default values from annotations, Thanks to [@simivar]- [#4511] [DynamicTypeAnalysis] Drop for too theoretical content, needs real project to test out- [#4497] [ci] remove old merageable file
 
 
 
 ## [0.8.29] - 2020-10-16
 
 ### Added
-
-- [#4424] add doctrine embedded php doc node
-- [#4427] add $parameters->set(Option::ENABLE_CACHE, true) to readme config, Thanks to [@samsonasik]
+- [#4424] add doctrine embedded php doc node- [#4427] add $parameters->set(Option::ENABLE_CACHE, true) to readme config, Thanks to [@samsonasik]
 
 ### Changed
-
-- [#4430] [DeadCode] Improve unused private property detection
-- [#4431] [NodeAnalyzer] Check property fetch for read
-- [#4404] [Downgrade PHP 7.4] Support iterable pseudo-type when downgrading the array spread, Thanks to [@leoloso]
+- [#4430] [DeadCode] Improve unused private property detection- [#4431] [NodeAnalyzer] Check property fetch for read- [#4404] [Downgrade PHP 7.4] Support iterable pseudo-type when downgrading the array spread, Thanks to [@leoloso]
 
 ### Removed
-
 - [#4392] [Downgrade PHP7.3] Remove unneeded params from `list()`, and even remove `list()`, Thanks to [@leoloso]
 
 ## [0.8.28] - 2020-10-15
 
 ### Changed
-
 -
 ### Fixed
-
 - [#4422] [DeadCode] Fix binary different nesting in RemoveOverriddenValuesRector
 
 ## [0.8.27] - 2020-10-15
 
 ### Changed
-
-- [#4420] [DeadCode] Make RemoveUnusedPrivateConstantRector skip enum
-- [#4419] [DeadCode] Make RemoveUnusedPrivateConstantRector skip enum
+- [#4420] [DeadCode] Make RemoveUnusedPrivateConstantRector skip enum- [#4419] [DeadCode] Make RemoveUnusedPrivateConstantRector skip enum
 
 ## [0.8.26] - 2020-10-15
-
 - [#4417] [DeadCode] Various improvements
 
 ## [0.8.25] - 2020-10-15
-
-- [#4412] decouple CommentRemover
-- [#4408] Downgrade Rector to PHP 7.1 - Use same signature for `prettyPrintFile` as in PrettyPrinterAbstract, Thanks to [@leoloso]
+- [#4412] decouple CommentRemover- [#4408] Downgrade Rector to PHP 7.1 - Use same signature for `prettyPrintFile` as in PrettyPrinterAbstract, Thanks to [@leoloso]
 
 ### Removed
-
 - [#4411] [DeadCode] Remove php-doc from remove params
 
 ## [0.8.24] - 2020-10-14
 
 ### Changed
-
-- [#4409] [DeadCode] Improve parent and current type comparison on RemoveDelegatingParentCallRector
-- [#4405] reactivate coverage report, Thanks to [@samsonasik]
+- [#4409] [DeadCode] Improve parent and current type comparison on RemoveDelegatingParentCallRector- [#4405] reactivate coverage report, Thanks to [@samsonasik]
 
 ## [0.8.23] - 2020-10-14
-
 - [#4400] [Defluent] Refactoring to multiple rules
 
 ## [0.8.22] - 2020-10-13
-
 - [#4395] [SOLID] Change if && to early return (process nested ifs), Thanks to [@dobryy]
 
 ## [0.8.20] - 2020-10-12
 
 ### Added
-
 - [#4394] [PHP 7.4] Add null on conditional type of property type
 
 ### Changed
-
 - [#4399] hotfix mysql connection resolving
 
 ## [0.8.19] - 2020-10-11
 
 ### Added
-
 - [#4393] [SimplePhpDocParser] Add README + getParam\*() helper methods
 
 ### Changed
-
-- [#4390] [SOLID] Change if && to early return (more than two conditions), Thanks to [@dobryy]
-- [#4391] [SimplePhpDocParser] Init
+- [#4390] [SOLID] Change if && to early return (more than two conditions), Thanks to [@dobryy]- [#4391] [SimplePhpDocParser] Init
 
 ## [0.8.18] - 2020-10-11
 
 ### Added
-
-- [#4382] [Generic] Add skip for ArgumentAdderRector
-- [#4153] [SymfonyPHPConfig] Add monorepo split for value objects function
-- [#4383] [docs] add README link to web service
+- [#4382] [Generic] Add skip for ArgumentAdderRector- [#4153] [SymfonyPHPConfig] Add monorepo split for value objects function- [#4383] [docs] add README link to web service
 
 ### Changed
-
-- [#4344] [SOLID] Change if && to early return, Thanks to [@dobryy]
-- [#4381] [Nette 3.0] Set update
-- [#4380] [Downgrade PHP 7.4] Array spread - don't use ternary for arrays, or PHPStan complains, Thanks to [@leoloso]
+- [#4344] [SOLID] Change if && to early return, Thanks to [@dobryy]- [#4381] [Nette 3.0] Set update- [#4380] [Downgrade PHP 7.4] Array spread - don't use ternary for arrays, or PHPStan complains, Thanks to [@leoloso]
 
 ### Fixed
-
 - [#4389] Fix syntax error in ExceptionCorrector message, Thanks to [@szepeviktor]
 
 ### Removed
-
 - [#4378] Remove AbstractFileSystemRector and move to AbstractRector
 
 ## [0.8.17] - 2020-10-09
 
 ### Added
-
 - [#4379] [Downgrade PHP 7.4] Added downgrade array spread rule to set, Thanks to [@leoloso]
 
 ## [0.8.16] - 2020-10-09
-
 - [#4364] [docs] How to add Rector rule test
 
 ### Changed
-
-- [#4373] [Legacy] From file system Rector to classic Rector
-- [#4367] [PHP74] Do not transform callable|null into typed property, Thanks to [@antograssiot]
-- [#4372] [PSR-4] Move from FileSystemRector to FileWithoutNamespace node
-- [#4368] Improved rector in docker autoloading, Thanks to [@JanMikes]
-- [#4357] Downgrade PHP7.4 strip_tags array arg, Thanks to [@leoloso]
-- [#4361] [Downgrade PHP 7.4] Numeric Literal Separator Rector, Thanks to [@leoloso]
-- [#4371] [Downgrade PHP 7.3] List reference assignment, Thanks to [@leoloso]
-- [#4375] Downgrade php74 array spread, Thanks to [@leoloso]
+- [#4373] [Legacy] From file system Rector to classic Rector- [#4367] [PHP74] Do not transform callable|null into typed property, Thanks to [@antograssiot]- [#4372] [PSR-4] Move from FileSystemRector to FileWithoutNamespace node- [#4368] Improved rector in docker autoloading, Thanks to [@JanMikes]- [#4357] Downgrade PHP7.4 strip_tags array arg, Thanks to [@leoloso]- [#4361] [Downgrade PHP 7.4] Numeric Literal Separator Rector, Thanks to [@leoloso]- [#4371] [Downgrade PHP 7.3] List reference assignment, Thanks to [@leoloso]- [#4375] Downgrade php74 array spread, Thanks to [@leoloso]
 
 ### Fixed
-
-- [#4369] cs fixes
-- [#4374] Fixes config/set link in readme, Thanks to [@samsonasik]
+- [#4369] cs fixes- [#4374] Fixes config/set link in readme, Thanks to [@samsonasik]
 
 ## [0.8.15] - 2020-10-05
 
 ### Added
-
-- [#4340] [Docs] Add missing php opening tag, Thanks to [@dobryy]
-- [#4350] [PHP 8.0] Add [@Route] to #[Route] attribute in Symfony 5.2
-- [#4353] add fixture with property [@required] annotation to attribute
-- [#4347] Add missing abstract keyword, Thanks to [@dobryy]
-- [#4352] [PHP 8.0] Add importing of Route, fix name to Annotation\Route one
-- [#4355] Add meta node FileWithoutNamespace
-- [#4341] [symfony] add AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector, Thanks to [@samsonasik]
+- [#4340] [Docs] Add missing php opening tag, Thanks to [@dobryy]- [#4350] [PHP 8.0] Add [@Route] to #[Route] attribute in Symfony 5.2- [#4353] add fixture with property [@required] annotation to attribute- [#4347] Add missing abstract keyword, Thanks to [@dobryy]- [#4352] [PHP 8.0] Add importing of Route, fix name to Annotation\Route one- [#4355] Add meta node FileWithoutNamespace- [#4341] [symfony] add AutoWireWithClassNameSuffixForMethodWithRequiredAnnotationRector, Thanks to [@samsonasik]
 
 ### Changed
-
-- [#4356] [DX] Update dump nodes to not-use symfony style
-- [#4335] [Naming] Apply ParamRenamer without conflict resolution for Naming set, Thanks to [@dobryy]
-- [#4348] [PHP 8.0] [@Required] to #[Required] attribute from Symfony 5.2
-- [#4342] bump phpstan rules
-- [#4346] [naming] move UnderscoreToCamelCaseLocalVariableNameRector to Naming Set, Thanks to [@samsonasik]
+- [#4356] [DX] Update dump nodes to not-use symfony style- [#4335] [Naming] Apply ParamRenamer without conflict resolution for Naming set, Thanks to [@dobryy]- [#4348] [PHP 8.0] [@Required] to #[Required] attribute from Symfony 5.2- [#4342] bump phpstan rules- [#4346] [naming] move UnderscoreToCamelCaseLocalVariableNameRector to Naming Set, Thanks to [@samsonasik]
 
 ### Fixed
-
 - [#4354] [static] replace string attirbutes with contants + fix require rule
 
 ## [0.8.14] - 2020-10-01
 
 ### Added
-
 - [#4336] [Restoration] Add RestoreFullyQualifiedNameRector
 
 ### Fixed
-
 - [#4339] Fixes [#4337] : Make Option::SKIP works again with ParameterProvider, Thanks to [@samsonasik]
 
 ## [0.8.13] - 2020-09-29
 
 ### Added
-
 - [#4311] add init command, Thanks to [@Kerrialn]
 
 ### Changed
-
-- [#4312] [Naming] Move UnderscoreToCamelCaseVariableNameRector to Naming set, Thanks to [@dobryy]
-- [#4329] Init command feature, Thanks to [@Kerrialn]
-- [#4331] composer: move tracy from require to require-dev
+- [#4312] [Naming] Move UnderscoreToCamelCaseVariableNameRector to Naming set, Thanks to [@dobryy]- [#4329] Init command feature, Thanks to [@Kerrialn]- [#4331] composer: move tracy from require to require-dev
 
 ### Fixed
-
 - [#4332] [PSR-4] Fix declare for NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector
 
 ## [0.8.12] - 2020-09-28
 
 ### Added
-
-- [#4284] Add UnderscoreToCamelCaseLocalVariableNameRector to only change local variable name, Thanks to [@samsonasik]
-- [#4292] [PHP 8.0] Add Annotation to Attribute rule based on php-parser
-- [#4297] [renaming] Fixes [#4295] add \ prefix on FQ method call, Thanks to [@samsonasik]
+- [#4284] Add UnderscoreToCamelCaseLocalVariableNameRector to only change local variable name, Thanks to [@samsonasik]- [#4292] [PHP 8.0] Add Annotation to Attribute rule based on php-parser- [#4297] [renaming] Fixes [#4295] add \ prefix on FQ method call, Thanks to [@samsonasik]
 
 ### Changed
-
-- [#4281] [DOCS] Switch DumpRectorCommand from console to string printer
-- [#4283] [Naming] Make UnderscoreToCamelCasePropertyNameRector work with PropertyRenamer, Thanks to [@dobryy]
-- [#4303] [Renaming] Move RenamePropertyRector to appropriate set, Thanks to [@dobryy]
-- [#4308] update docs
-- [#4304] Support latest php-parser, Thanks to [@nexxai]
-- [#4296] bump migrify deps
-- [#4305] [coding-style] make UnderscoreToCamelCaseVariableNameRector update [@param] docblock as well, Thanks to [@samsonasik]
+- [#4281] [DOCS] Switch DumpRectorCommand from console to string printer- [#4283] [Naming] Make UnderscoreToCamelCasePropertyNameRector work with PropertyRenamer, Thanks to [@dobryy]- [#4303] [Renaming] Move RenamePropertyRector to appropriate set, Thanks to [@dobryy]- [#4308] update docs- [#4304] Support latest php-parser, Thanks to [@nexxai]- [#4296] bump migrify deps- [#4305] [coding-style] make UnderscoreToCamelCaseVariableNameRector update [@param] docblock as well, Thanks to [@samsonasik]
 
 ### Fixed
-
-- [#4307] Update example to new-style php80 Attributes Fixes [#4306], Thanks to [@alister]
-- [#4298] [Code Quality] Fixes [#4286] Skip ArrayKeyExistsTernaryThenValueToCoalescingRector when else is a not null, Thanks to [@samsonasik]
-- [#4293] Fixes [#4290] wrong skip assignment not from parameter in UnderscoreToCamelCaseLocalVariableNameRector, Thanks to [@samsonasik]
-- [#4289] Move ocramius/package-versions to require-dev, fixes [#4285], Thanks to [@sandermarechal]
+- [#4307] Update example to new-style php80 Attributes Fixes [#4306], Thanks to [@alister]- [#4298] [Code Quality] Fixes [#4286] Skip ArrayKeyExistsTernaryThenValueToCoalescingRector when else is a not null, Thanks to [@samsonasik]- [#4293] Fixes [#4290] wrong skip assignment not from parameter in UnderscoreToCamelCaseLocalVariableNameRector, Thanks to [@samsonasik]- [#4289] Move ocramius/package-versions to require-dev, fixes [#4285], Thanks to [@sandermarechal]
 
 ## [0.8.9] - 2020-09-24
 
 ### Changed
-
 - [#4288] prepare monorepo-builder.php
 
-## Unreleased
-
 ### Added
-
 - [#4438] [core] Add ClassReflectionToAstResolver service, Thanks to [@samsonasik]
 
 ### Changed
-
-- [#4435] [DeadCode] Improve RemoveEmptyMethodCallRector: Using PHPStan\Reflection\ClassReflection->isBuiltIn() to check internal class, Thanks to [@samsonasik]
-- [#4434] Decouple CachedFileInfoFilterAndReporter
+- [#4435] [DeadCode] Improve RemoveEmptyMethodCallRector: Using PHPStan\Reflection\ClassReflection->isBuiltIn() to check internal class, Thanks to [@samsonasik]- [#4434] Decouple CachedFileInfoFilterAndReporter
 
 ### Fixed
-
-- [#4428] [DeadCode] Fixes [#4425] Remove empty method call, Thanks to [@samsonasik]
-- [#4436] [DoctrineCodeQuality] Fix oveCurrentDateTimeDefaultInEntityToConstructorRector for default value
+- [#4428] [DeadCode] Fixes [#4425] Remove empty method call, Thanks to [@samsonasik]- [#4436] [DoctrineCodeQuality] Fix oveCurrentDateTimeDefaultInEntityToConstructorRector for default value
 
 ## [v0.8.8] - 2020-09-24
 
 ### Added
-
-- [#4271] [DOC] Add more spaces between node code samples
-- [#4237] Add Proccessed file Caching, Thanks to [@mssimi]
+- [#4271] [DOC] Add more spaces between node code samples- [#4237] Add Proccessed file Caching, Thanks to [@mssimi]
 
 ### Changed
-
-- [#4262] [DX] move Nette FileSytem to SmartFileSystem DI
-- [#4241] [Docs] update docs and type check
-- [#4259] [Docs] Update node docs with examples how to create them, Thanks to [@mssimi]
-- [#4257] [Docs] Fixup
-- [#4261] [Docs] Update node docs with examples how to create them - part 2, Thanks to [@mssimi]
-- [#4269] [Docs] update docs with node examples
-- [#4255] [Naming] Factory to create PropertyRename, Thanks to [@dobryy]
-- [#4253] [Naming] Decouple conflict resolution, Thanks to [@dobryy]
-- [#4215] [Naming] Make bool property respect is/has/was naming, Thanks to [@dobryy]
-- [#4242] [Naming] Decouple property renaming into PropertyRenamer, Thanks to [@dobryy]
-- [#4279] [PHPStan] Enable regex constant rule
-- [#4256] changed files detector test, Thanks to [@mssimi]
-- [#4254] node name resolver skip on identifier, Thanks to [@mssimi]
-- [#4249] update link to correct README
-- [#4280] [ci] show rector ci fail
+- [#4262] [DX] move Nette FileSytem to SmartFileSystem DI- [#4241] [Docs] update docs and type check- [#4259] [Docs] Update node docs with examples how to create them, Thanks to [@mssimi]- [#4257] [Docs] Fixup- [#4261] [Docs] Update node docs with examples how to create them - part 2, Thanks to [@mssimi]- [#4269] [Docs] update docs with node examples- [#4255] [Naming] Factory to create PropertyRename, Thanks to [@dobryy]- [#4253] [Naming] Decouple conflict resolution, Thanks to [@dobryy]- [#4215] [Naming] Make bool property respect is/has/was naming, Thanks to [@dobryy]- [#4242] [Naming] Decouple property renaming into PropertyRenamer, Thanks to [@dobryy]- [#4279] [PHPStan] Enable regex constant rule- [#4256] changed files detector test, Thanks to [@mssimi]- [#4254] node name resolver skip on identifier, Thanks to [@mssimi]- [#4249] update link to correct README- [#4280] [ci] show rector ci fail
 
 ### Fixed
-
-- [#4244] [MagicDisclosure] Fix FluentChainMethodCallToNormalMethodCallRector fix
-- [#4243] [MagicDisclosure] Fix alised date time
-- [#4245] [StaticRemoval] Various fixes
-- [#4248] Fix PHPStan constants issues, Thanks to [@dobryy]
-- [#4250] static fixes
-- [#4252] Remove auto-bind parameter + fix array return type parent
-- [#4260] fix rector docs generator sorting issue, Thanks to [@mssimi]
-- [#4277] allow php-parser 4.10 + fixes of args merge change
+- [#4244] [MagicDisclosure] Fix FluentChainMethodCallToNormalMethodCallRector fix- [#4243] [MagicDisclosure] Fix alised date time- [#4245] [StaticRemoval] Various fixes- [#4248] Fix PHPStan constants issues, Thanks to [@dobryy]- [#4250] static fixes- [#4252] Remove auto-bind parameter + fix array return type parent- [#4260] fix rector docs generator sorting issue, Thanks to [@mssimi]- [#4277] allow php-parser 4.10 + fixes of args merge change
 
 ### Removed
-
 - [#4270] drop ScreenFile command, not really used or maintained
 
 ## [v0.8.7] - 2020-09-15
 
 ### Added
-
-- [#4188] [CI] Add PHP Linter
-- [#4202] [DX] Add Rule that checks that Rule + value object have same starts, Thanks to [@dobryy]
-- [#4120] revert [Experimental] Add safe_types option - [#3535]
-- [#4181] [RemovingStatic] Add LocallyCalledStaticMethodToNonStaticRector
-- [#4203] [RemovingStatic] Add support for union types
-- [#4212] [RemovingStatic] Add SingleStaticServiceToDynamicRector
-- [#4134] add check markdown github action workflow for fix README.md markdown file, Thanks to [@samsonasik]
-- [#4141] Add local pretty version PHP 8.0
-- [#4214] Fixes [#3939] Add IssetOnPropertyObjectToPropertyExists rule, Thanks to [@samsonasik]
-- [#4220] Github Actions: add a job which tests the lowest supported versions, Thanks to [@staabm]
-- [#4172] Added downgrade rules, Thanks to [@leoloso]
-- [#4082] [Downgrade PHP 8.0] Add union types to doc types
-- [#4182] Fixes [#3789] add skip Option to exclude files by rule, Thanks to [@samsonasik]
+- [#4188] [CI] Add PHP Linter- [#4202] [DX] Add Rule that checks that Rule + value object have same starts, Thanks to [@dobryy]- [#4120] revert [Experimental] Add safe_types option - [#3535]- [#4181] [RemovingStatic] Add LocallyCalledStaticMethodToNonStaticRector- [#4203] [RemovingStatic] Add support for union types- [#4212] [RemovingStatic] Add SingleStaticServiceToDynamicRector- [#4134] add check markdown github action workflow for fix README.md markdown file, Thanks to [@samsonasik]- [#4141] Add local pretty version PHP 8.0- [#4214] Fixes [#3939] Add IssetOnPropertyObjectToPropertyExists rule, Thanks to [@samsonasik]- [#4220] Github Actions: add a job which tests the lowest supported versions, Thanks to [@staabm]- [#4172] Added downgrade rules, Thanks to [@leoloso]- [#4082] [Downgrade PHP 8.0] Add union types to doc types- [#4182] Fixes [#3789] add skip Option to exclude files by rule, Thanks to [@samsonasik]
 
 ### Changed
-
-- [#4210] [DX] PHPStan rule to check getNodeTypes() return classes of `PhpParser\Node`, Thanks to [@dobryy]
-- [#4206] [DX] PHPStan rule to check, that value objects do not have value object suffix, Thanks to [@dobryy]
-- [#4174] [DX] Configurable rule must have configure code sample, and vice versa, Thanks to [@dobryy]
-- [#4130] [Naming] Rename foreach value variable to match method return type, Thanks to [@dobryy]
-- [#4221] [Naming] Foreach over "data", renames to "datum", Thanks to [@dobryy]
-- [#4183] [NodeRepository] Introduce NodeRepository, single place to get all nodes
-- [#4185] [NodeRepository] merge ClassLikeParsedNodesFinder to NodeRepository
-- [#4186] [NodeRepository] Merge function like finder to NodeRepository
-- [#4204] [RemovingStatic] Do not cause this in static method
-- [#4118] Abstract downgrade type + Implementation for object type, Thanks to [@leoloso]
-- [#4226] run dump-rectors for new IssetOnPropertyObjectToPropertyExistsRector rule, Thanks to [@samsonasik]
-- [#4128] make EXCLUDE_PATHS work across different OSes, Thanks to [@staabm]
-- [#4129] run ecs markdown-code-format to README.md, Thanks to [@samsonasik]
-- [#4132] Commented out vendor locking, Thanks to [@leoloso]
-- [#4133] Improved rule FollowRequireByDirRector, Thanks to [@geryguilbon]
-- [#4211] load rector-recipe.php only in case of GenerateCommand
-- [#4135] Downgrade null coalescing operator, Thanks to [@leoloso]
-- [#4137] Downgrade arrow functions, Thanks to [@leoloso]
-- [#4138] apply run ecs check-heredoc-nowdoc command to packages and rules directory, Thanks to [@samsonasik]
-- [#4119] Correct various mysql_\* to mysqli_\* conversion bugs, Thanks to [@jjthiessen]
-- [#4175] Split downgrade sets, Thanks to [@leoloso]
-- [#4147] Organize downgrades by PHP version, Thanks to [@leoloso]
-- [#4142] Restructure class hierarchy to implement downgrade rules, Thanks to [@leoloso]
-- [#4149] register check-markdown command to composer script, Thanks to [@samsonasik]
-- [#4150] Downgrade union type, Thanks to [@leoloso]
-- [#4162] [Downgrade PHP 8.0] mixed and static types, Thanks to [@leoloso]
-- [#4192] Downgrade PHP7.1 features: nullable types and void return type, Thanks to [@leoloso]
+- [#4210] [DX] PHPStan rule to check getNodeTypes() return classes of `PhpParser\Node`, Thanks to [@dobryy]- [#4206] [DX] PHPStan rule to check, that value objects do not have value object suffix, Thanks to [@dobryy]- [#4174] [DX] Configurable rule must have configure code sample, and vice versa, Thanks to [@dobryy]- [#4130] [Naming] Rename foreach value variable to match method return type, Thanks to [@dobryy]- [#4221] [Naming] Foreach over "data", renames to "datum", Thanks to [@dobryy]- [#4183] [NodeRepository] Introduce NodeRepository, single place to get all nodes- [#4185] [NodeRepository] merge ClassLikeParsedNodesFinder to NodeRepository- [#4186] [NodeRepository] Merge function like finder to NodeRepository- [#4204] [RemovingStatic] Do not cause this in static method- [#4118] Abstract downgrade type + Implementation for object type, Thanks to [@leoloso]- [#4226] run dump-rectors for new IssetOnPropertyObjectToPropertyExistsRector rule, Thanks to [@samsonasik]- [#4128] make EXCLUDE_PATHS work across different OSes, Thanks to [@staabm]- [#4129] run ecs markdown-code-format to README.md, Thanks to [@samsonasik]- [#4132] Commented out vendor locking, Thanks to [@leoloso]- [#4133] Improved rule FollowRequireByDirRector, Thanks to [@geryguilbon]- [#4211] load rector-recipe.php only in case of GenerateCommand- [#4135] Downgrade null coalescing operator, Thanks to [@leoloso]- [#4137] Downgrade arrow functions, Thanks to [@leoloso]- [#4138] apply run ecs check-heredoc-nowdoc command to packages and rules directory, Thanks to [@samsonasik]- [#4119] Correct various mysql_\* to mysqli_\* conversion bugs, Thanks to [@jjthiessen]- [#4175] Split downgrade sets, Thanks to [@leoloso]- [#4147] Organize downgrades by PHP version, Thanks to [@leoloso]- [#4142] Restructure class hierarchy to implement downgrade rules, Thanks to [@leoloso]- [#4149] register check-markdown command to composer script, Thanks to [@samsonasik]- [#4150] Downgrade union type, Thanks to [@leoloso]- [#4162] [Downgrade PHP 8.0] mixed and static types, Thanks to [@leoloso]- [#4192] Downgrade PHP7.1 features: nullable types and void return type, Thanks to [@leoloso]
 
 ### Fixed
-
-- [#4180] [DX] Fix NoAbstractMethodRule cases
-- [#4177] Fixed invalid method name in code sample., Thanks to [@bkonetzny]
-- [#4224] phpstan fixes
-- [#4140] static fixes
-- [#4136] Fix example: exclude directory in config, Thanks to [@obstschale]
-- [#4219] fix Symfony inline_function fallback
+- [#4180] [DX] Fix NoAbstractMethodRule cases- [#4177] Fixed invalid method name in code sample., Thanks to [@bkonetzny]- [#4224] phpstan fixes- [#4140] static fixes- [#4136] Fix example: exclude directory in config, Thanks to [@obstschale]- [#4219] fix Symfony inline_function fallback
 
 ### Removed
-
-- [#4179] Remove `DowngradeRectorInterface`, Thanks to [@leoloso]
-- [#4199] drop html from RectorRecipe, buggy and confusing, handle manually
+- [#4179] Remove `DowngradeRectorInterface`, Thanks to [@leoloso]- [#4199] drop html from RectorRecipe, buggy and confusing, handle manually
 
 ## [v0.8.6] - 2020-09-03
 
 ### Added
-
 - [#4114] [DX] Add rule to check "Tests" in namespace for \*Test.php files, Thanks to [@dobryy]
 
 ### Changed
-
 - [#4117] FixMissing Ruleset does not throw SetNotFoundException, Thanks to [@julianpollmann]
 
 ### Fixed
-
 - [#4115] Fixes [#3448] : Fixes relative path link on dump-rectors generate class link documentation, Thanks to [@samsonasik]
 
 ### Removed
-
 - [#4113] [CodingStyle] Drop SimplifyBoolIdenticalTrueRector, does not bring expected value
 
 ## [v0.8.5] - 2020-09-02
 
 ### Changed
-
 - [#4112] show set path in PHAR
 
 ## [v0.8.4] - 2020-09-02
 
 ### Added
-
 - [#4107] Added "Rector Configuration" section, Thanks to [@leoloso]
 
 ### Fixed
-
-- [#4111] show command - display loaded sets + fix set provider
--
+- [#4111] show command - display loaded sets + fix set provider-
 ## [v0.8.3] - 2020-09-02
 
 ### Added
-
-- [#4103] [PHPUnit] Add self call fixtures for AssertResourceToClosedResourceRector rule, Thanks to [@peter279k]
-- [#4106] add ActiveRectorsProvider, fix reporting 0 rules registered
+- [#4103] [PHPUnit] Add self call fixtures for AssertResourceToClosedResourceRector rule, Thanks to [@peter279k]- [#4106] add ActiveRectorsProvider, fix reporting 0 rules registered
 
 ### Fixed
-
-- [#4102] Fixes [#3930] : TypedPropertyRector should not remove DocBlock comment when it specifies the values contained in an array, Thanks to [@samsonasik]
-- [#4101] Typo fix: NESTED_STIRNGS to NESTED_STRINGS, Thanks to [@samsonasik]
+- [#4102] Fixes [#3930] : TypedPropertyRector should not remove DocBlock comment when it specifies the values contained in an array, Thanks to [@samsonasik]- [#4101] Typo fix: NESTED_STIRNGS to NESTED_STRINGS, Thanks to [@samsonasik]
 
 ### Removed
-
 - [#4104] remove leftover generated file rector-temp-phpstan103667.neon, Thanks to [@samsonasik]
 
 ## [v0.8.2] - 2020-09-01
 
 ### Changed
-
 - [#4100] [CodingStyle] Skip annotation var on already set mixed[] array
 
 ## [v0.8.0] - 2020-09-01
 
 ### Added
-
-- [#4089] [CI] Add type-declaration set
-- [#4026] [DX] Add TypeMethodWrap, RemovedArgument
-- [#4028] [DX] Add MethodVisibility value object
-- [#4091] [DX] Add rule to check not "Tests" namespace outside "tests" directory, Thanks to [@dobryy]
-- [#4029] [DX] Add AddedArgument
-- [#4030] [DX] Add ReplacedArgument
-- [#4034] [DX] Various value objects added
-- [#4020] [DX] Add MethodReturnType value object
-- [#4003] [Naming] Add MakeGetterClassMethodNameStartWithGetRector
-- [#4005] [Naming] Add MakeIsserClassMethodNameStartWithIsRector
-- [#4069] [Order] Add abstract class, check for changed order and move category to Class_, to prevent minus types
-- [#4098] [PHPUnit] Add self call fixtures for AssertEqualsToSame rule, Thanks to [@peter279k]
-- [#4037] Add AssertResourceToClosedResourceRector rule, Thanks to [@peter279k]
-- [#4000] [PHP 7.0] Fix node adding to NonVariableToVariableOnFunctionCallRector
-- [#4064] Add multiple annotation support on class
-- [#4012] [phpstan] add rule to prevent array with string keys
-- [#4015] [phpstan] Add rule for complex config
+- [#4089] [CI] Add type-declaration set- [#4026] [DX] Add TypeMethodWrap, RemovedArgument- [#4028] [DX] Add MethodVisibility value object- [#4091] [DX] Add rule to check not "Tests" namespace outside "tests" directory, Thanks to [@dobryy]- [#4029] [DX] Add AddedArgument- [#4030] [DX] Add ReplacedArgument- [#4034] [DX] Various value objects added- [#4020] [DX] Add MethodReturnType value object- [#4003] [Naming] Add MakeGetterClassMethodNameStartWithGetRector- [#4005] [Naming] Add MakeIsserClassMethodNameStartWithIsRector- [#4069] [Order] Add abstract class, check for changed order and move category to Class_, to prevent minus types- [#4098] [PHPUnit] Add self call fixtures for AssertEqualsToSame rule, Thanks to [@peter279k]- [#4037] Add AssertResourceToClosedResourceRector rule, Thanks to [@peter279k]- [#4000] [PHP 7.0] Fix node adding to NonVariableToVariableOnFunctionCallRector- [#4064] Add multiple annotation support on class- [#4012] [phpstan] add rule to prevent array with string keys- [#4015] [phpstan] Add rule for complex config
 
 ### Changed
-
-- [#4008] [DX] Replacing arrays with objects
-- [#4035] [DX] Last value objects
-- [#4076] [Naming] Rename the rule to make it correspond with what rule does, Thanks to [@dobryy]
-- [#4084] [Transform] Move StaticCallToMethodCallRector to Transform
-- [#4077] [Transform] Move FuncCallToMethodCallRector to Transform category
-- [#4074] [Transform] Move HelperFunctionToConstructorInjectionRector to Transform package
-- [#4073] [Transform] Decouple new set that changes nodes
-- [#4053] [TryCatch] Try/Catch with filled Finally can not be dead, Thanks to [@SilverFire]
-- [#4067] [TypeDeclaration] Skip return void on non-root return
-- [#4085] StaticCall to MethodCall
-- [#4014] phpstan config no array
-- [#4036] misc
-- [#4080] update FuncNameToStaticCallName to FuncCallToStaticCall
-- [#4039] beware reference
-- [#4017] README + recipe improvements
-- [#4007] show configuration
-- [#3970] RenameParamToMatchTypeRector doesn't skip variable that is used in callback function `use` statement, Thanks to [@dobryy]
-- [#4048] update ecs
-- [#4052] [Code Quality] If the whole concatenated string is longer than 120 chars, skip it, Thanks to [@SilverFire]
-- [#4099] Configurable downgrade, Thanks to [@leoloso]
-- [#3999] refactoring of variable name counted
-- [#4060] report doc changes
-- [#4063] report @var changes
-- [#3998] Failing test: Multiple resets of the same func in a array, Thanks to [@SilverFire]
-- [#3997] Failing test: Reset in a condition produces a LogicException, Thanks to [@SilverFire]
-- [#3996] Refactor extra file tests wobbly arrays to typed value objects
-- [#4070] naming
-- [#3978] merge CorrectDatetimeEntityPropertyDefaultToConstructorRector to MoveCurrentDateTimeDefaultInEntityToConstructorRector
-- [#4018] follow up
-- [#4010] [docs] print object configuration
-- [#4019] [objectize] moving parameter typehint to objects
+- [#4008] [DX] Replacing arrays with objects- [#4035] [DX] Last value objects- [#4076] [Naming] Rename the rule to make it correspond with what rule does, Thanks to [@dobryy]- [#4084] [Transform] Move StaticCallToMethodCallRector to Transform- [#4077] [Transform] Move FuncCallToMethodCallRector to Transform category- [#4074] [Transform] Move HelperFunctionToConstructorInjectionRector to Transform package- [#4073] [Transform] Decouple new set that changes nodes- [#4053] [TryCatch] Try/Catch with filled Finally can not be dead, Thanks to [@SilverFire]- [#4067] [TypeDeclaration] Skip return void on non-root return- [#4085] StaticCall to MethodCall- [#4014] phpstan config no array- [#4036] misc- [#4080] update FuncNameToStaticCallName to FuncCallToStaticCall- [#4039] beware reference- [#4017] README + recipe improvements- [#4007] show configuration- [#3970] RenameParamToMatchTypeRector doesn't skip variable that is used in callback function `use` statement, Thanks to [@dobryy]- [#4048] update ecs- [#4052] [Code Quality] If the whole concatenated string is longer than 120 chars, skip it, Thanks to [@SilverFire]- [#4099] Configurable downgrade, Thanks to [@leoloso]- [#3999] refactoring of variable name counted- [#4060] report doc changes- [#4063] report @var changes- [#3998] Failing test: Multiple resets of the same func in a array, Thanks to [@SilverFire]- [#3997] Failing test: Reset in a condition produces a LogicException, Thanks to [@SilverFire]- [#3996] Refactor extra file tests wobbly arrays to typed value objects- [#4070] naming- [#3978] merge CorrectDatetimeEntityPropertyDefaultToConstructorRector to MoveCurrentDateTimeDefaultInEntityToConstructorRector- [#4018] follow up- [#4010] [docs] print object configuration- [#4019] [objectize] moving parameter typehint to objects
 
 ### Fixed
-
-- [#4006] Fix invalid set reporting
-- [#4001] Fix lazy command chain removal
-- [#4023] Fixed RemoveMissingCompactVariableRector to handle array arguments properly, Thanks to [@SilverFire]
-- [#4095] Fixes [#4013] ConsoleExecuteReturnIntRector ignores already type casted variable, Thanks to [@samsonasik]
-- [#4047] fix: swapped naming of camel and pascal cases, Thanks to [@TomPavelec]
-- [#4021] Fix variable name resolving for static method calls, Thanks to [@SilverFire]
-- [#4066] Fix return infer type for "yield from"
-- [#4059] Fix dump rectors
-- [#4058] Fix array type
-- [#4057] Fix coding standard CI
-- [#4054] [Type Declaration] Create new unit test for ArrayTypeMapper with fixes, Thanks to [@dobryy]
-- [#4068] Fix static class call
-- [#4044] [Type Declaration] The smallest possible fixture fixed ReturnUuid, Thanks to [@dobryy]
-- [#4043] [Type Declaration] Fix unwrapping of multiple union types, Thanks to [@dobryy]
-- [#4041] Fixed some edge cases of creating constant name from value, Thanks to [@TomPavelec]
-- [#4088] symplify fixes
-- [#4092] Replace types with container access from fe72e003e. fixes [#4090], Thanks to [@alister]
-- [#4093] Typo fix: allowDevDependnecies to allowDevDependencies, Thanks to [@samsonasik]
-- [#4022] Fixed ClassMethodPropertyFetchManipulator to omit property assign by method call, Thanks to [@SilverFire]
+- [#4006] Fix invalid set reporting- [#4001] Fix lazy command chain removal- [#4023] Fixed RemoveMissingCompactVariableRector to handle array arguments properly, Thanks to [@SilverFire]- [#4095] Fixes [#4013] ConsoleExecuteReturnIntRector ignores already type casted variable, Thanks to [@samsonasik]- [#4047] fix: swapped naming of camel and pascal cases, Thanks to [@TomPavelec]- [#4021] Fix variable name resolving for static method calls, Thanks to [@SilverFire]- [#4066] Fix return infer type for "yield from"- [#4059] Fix dump rectors- [#4058] Fix array type- [#4057] Fix coding standard CI- [#4054] [Type Declaration] Create new unit test for ArrayTypeMapper with fixes, Thanks to [@dobryy]- [#4068] Fix static class call- [#4044] [Type Declaration] The smallest possible fixture fixed ReturnUuid, Thanks to [@dobryy]- [#4043] [Type Declaration] Fix unwrapping of multiple union types, Thanks to [@dobryy]- [#4041] Fixed some edge cases of creating constant name from value, Thanks to [@TomPavelec]- [#4088] symplify fixes- [#4092] Replace types with container access from fe72e003e. fixes [#4090], Thanks to [@alister]- [#4093] Typo fix: allowDevDependnecies to allowDevDependencies, Thanks to [@samsonasik]- [#4022] Fixed ClassMethodPropertyFetchManipulator to omit property assign by method call, Thanks to [@SilverFire]
 
 ### Removed
-
-- [#4079] Removing single-rule elastic package set, merge Decomplex set to CodingStyle, merge FrameworkMigration to NetteToSymfony
-- [#4081] Drop YAML config support
-- [#4083] drop MessageAsArrayRector, as only rule in guzzle
+- [#4079] Removing single-rule elastic package set, merge Decomplex set to CodingStyle, merge FrameworkMigration to NetteToSymfony- [#4081] Drop YAML config support- [#4083] drop MessageAsArrayRector, as only rule in guzzle
 
 ## [v0.7.65] - 2020-08-20
 
 ### Added
-
-- [#3977] [DoctrineCodeQuality] Add ChangeBigIntEntityPropertyToIntTypeRector
-- [#3994] add ConfigShifter to make use of root config parameter override
-- [#3986] Add failing test case for [#3981], Thanks to [@olivernybroe]
+- [#3977] [DoctrineCodeQuality] Add ChangeBigIntEntityPropertyToIntTypeRector- [#3994] add ConfigShifter to make use of root config parameter override- [#3986] Add failing test case for [#3981], Thanks to [@olivernybroe]
 
 ### Changed
-
-- [#3984] [DX] TemplateAnnotationToThisRenderRector fixture's namespace issue, Thanks to [@dobryy]
-- [#3983] [DX] Architecture rules respect namespace, Thanks to [@dobryy]
-- [#3973] [DX] Rename namespaces respect node type, Thanks to [@dobryy]
-- [#3988] import repo entity
-- [#3987] composer: lock to php-parser 4.8 to prevent bugs
-- [#3982] update ecs.php to use constants over strings
+- [#3984] [DX] TemplateAnnotationToThisRenderRector fixture's namespace issue, Thanks to [@dobryy]- [#3983] [DX] Architecture rules respect namespace, Thanks to [@dobryy]- [#3973] [DX] Rename namespaces respect node type, Thanks to [@dobryy]- [#3988] import repo entity- [#3987] composer: lock to php-parser 4.8 to prevent bugs- [#3982] update ecs.php to use constants over strings
 
 ### Fixed
-
 - [#3990] fix class call
 
 ### Removed
-
 - [#3989] Remove YAML from tests
 
 
 
 <!-- dumped content start -->
-## Unreleased
-
 ### Added
-
-- [#3954] [Doctrine] Add constructor getRepository to service
-- [#3972] [DoctrineCodeQuality] Add few entity rules
-- [#3950] [Fluent] Add factory case
-- [#3941] [TypeDeclaration] Add nested key support
-- [#3958] Add AssertEqualsToSameRector, Thanks to [@dereuromark]
-- [#3953] add easy-ci
-- [#3952] add new ManagerRegistry namespace
+- [#3954] [Doctrine] Add constructor getRepository to service- [#3972] [DoctrineCodeQuality] Add few entity rules- [#3950] [Fluent] Add factory case- [#3941] [TypeDeclaration] Add nested key support- [#3958] Add AssertEqualsToSameRector, Thanks to [@dereuromark]- [#3953] add easy-ci- [#3952] add new ManagerRegistry namespace
 
 ### Changed
-
-- [#3924] [CodingStyle] Make ConsistentPregDelimiterRector configurable
-- [#3911] [DX] Rename namespaces of Rector rules to respect node, instead of domain, Thanks to [@dobryy]
-- [#3947] [Defluent] Allow DateTime to be fluent
-- [#3969] [Order] Move ClassLike and Class_ rules into correct namespaces, Thanks to [@dobryy]
-- [#3923] [Order] Order class methods by visibility, Thanks to [@dobryy]
-- [#3929] [Order] Order properties by visibility, Thanks to [@dobryy]
-- [#3934] [Order] Order constants by visibility, Thanks to [@dobryy]
-- [#3933] [Order] Visibility rules refactoring, Thanks to [@dobryy]
-- [#3968] [Order] Order first level class statements, Thanks to [@dobryy]
-- [#3962] [RectorGenerator] prevent incorrect package configuration
-- [#3916] [SOLID] skip reference-write functions
-- [#3966] Recipe array to object
-- [#3945] service entity repository combo
-- [#3922] make ConsistentPregDelimiterRector configurable
-- [#3964] make sure recipe is loaded
-- [#3925] make use of NodeConnectingVisitor + improve generate Rector docs
-- [#3946] misc
-- [#3951] move Polyfill to rules
-- [#3936] PHPStan: require iterable types
-- [#3937] fixture for the issue [#3931], Thanks to [@dobryy]
-- [#3926] update create-rector.php.dist
-- [#3949] [static] use Symplify rule
+- [#3924] [CodingStyle] Make ConsistentPregDelimiterRector configurable- [#3911] [DX] Rename namespaces of Rector rules to respect node, instead of domain, Thanks to [@dobryy]- [#3947] [Defluent] Allow DateTime to be fluent- [#3969] [Order] Move ClassLike and Class_ rules into correct namespaces, Thanks to [@dobryy]- [#3923] [Order] Order class methods by visibility, Thanks to [@dobryy]- [#3929] [Order] Order properties by visibility, Thanks to [@dobryy]- [#3934] [Order] Order constants by visibility, Thanks to [@dobryy]- [#3933] [Order] Visibility rules refactoring, Thanks to [@dobryy]- [#3968] [Order] Order first level class statements, Thanks to [@dobryy]- [#3962] [RectorGenerator] prevent incorrect package configuration- [#3916] [SOLID] skip reference-write functions- [#3966] Recipe array to object- [#3945] service entity repository combo- [#3922] make ConsistentPregDelimiterRector configurable- [#3964] make sure recipe is loaded- [#3925] make use of NodeConnectingVisitor + improve generate Rector docs- [#3946] misc- [#3951] move Polyfill to rules- [#3936] PHPStan: require iterable types- [#3937] fixture for the issue [#3931], Thanks to [@dobryy]- [#3926] update create-rector.php.dist- [#3949] [static] use Symplify rule
 
 ### Fixed
-
-- [#3957] Fix sample configuration generation, Thanks to [@hxv]
-- [#3944] README: fix typo, Thanks to [@mfn]
+- [#3957] Fix sample configuration generation, Thanks to [@hxv]- [#3944] README: fix typo, Thanks to [@mfn]
 
 ### Removed
-
 - [#3938] drop EnsureDataProviderInDocBlockRector, job for coding standards
 
 ## [v0.7.63] - 2020-08-06
 
 ### Added
-
 - [#3921] [CodeQuality] Add argument support to ArrayThisCallToThisMethodCallRector
 
 ### Changed
-
 - [#3889] [Order] Make OrderPrivateMethodsByUseRector process file in one run u…, Thanks to [@dobryy]
 
 ### Fixed
-
 - [#3918] Fix set path was not found, Thanks to [@zingimmick]
 
 ### Removed
-
-- [#3920] drop SimpleArrayCallableToStringRector, as it makes code magical and harder to proces
-- [#3917] drop slevomat cs to prevent breaking build for last months
+- [#3920] drop SimpleArrayCallableToStringRector, as it makes code magical and harder to proces- [#3917] drop slevomat cs to prevent breaking build for last months
 
 ## [v0.7.62] - 2020-08-05
 
 ### Added
-
-- [#3885] [TypeDeclaration] Skip typed property for @var adding
-- [#3910] add parent-property test
-- [#3886] Add set-path constant support
-- [#3896] FunctionTo\* correction renames, add PHPStan rule to check correct category of rule
+- [#3885] [TypeDeclaration] Skip typed property for @var adding- [#3910] add parent-property test- [#3886] Add set-path constant support- [#3896] FunctionTo\* correction renames, add PHPStan rule to check correct category of rule
 
 ### Changed
-
-- [#3894] [Generic] FuncCallToMethodCall only in case of parent class
-- [#3901] [Generic] skip static method in FuncCallToMethodCallRector
-- [#3883] [Naming] Allow uuid to have name id
-- [#3906] [Naming] Decouple RenameParamToMatchTypeRector
-- [#3898] [SOLID] Skip property that is being changed by func call
-- [#3895] rename FunctionToStaticCallRector to FuncCallToStaticCallRector
-- [#3912] cleanup
-- [#3899] Provide existing expression to get type
-- [#3904] Check that Recipe node types are imported, Thanks to [@dobryy]
-- [#3907] skip configure unless in tests
-- [#3909] Rename StaticCallToAnotherServiceConstructorInjectionRector to StaticCallToMethodCall
-- [#3913] re-use param in constructor
+- [#3894] [Generic] FuncCallToMethodCall only in case of parent class- [#3901] [Generic] skip static method in FuncCallToMethodCallRector- [#3883] [Naming] Allow uuid to have name id- [#3906] [Naming] Decouple RenameParamToMatchTypeRector- [#3898] [SOLID] Skip property that is being changed by func call- [#3895] rename FunctionToStaticCallRector to FuncCallToStaticCallRector- [#3912] cleanup- [#3899] Provide existing expression to get type- [#3904] Check that Recipe node types are imported, Thanks to [@dobryy]- [#3907] skip configure unless in tests- [#3909] Rename StaticCallToAnotherServiceConstructorInjectionRector to StaticCallToMethodCall- [#3913] re-use param in constructor
 
 ### Fixed
-
-- [#3888] [Architecture] fix repository property
-- [#3905] method call remover fix, Thanks to [@mssimi]
+- [#3888] [Architecture] fix repository property- [#3905] method call remover fix, Thanks to [@mssimi]
 
 ## [v0.7.61] - 2020-08-03
 
 ### Changed
-
-- [#3879] [Nette 3.0] use dev nette deps to resolve form/application types
-- [#3878] [Nette 3.0] Various rules updates
+- [#3879] [Nette 3.0] use dev nette deps to resolve form/application types- [#3878] [Nette 3.0] Various rules updates
 
 ## [v0.7.60] - 2020-08-02
 
 ### Added
-
-- [#3874] [NetteCodeQuality] add case with type form
-- [#3876] add param type test case
+- [#3874] [NetteCodeQuality] add case with type form- [#3876] add param type test case
 
 ### Changed
-
-- [#3872] [NetteCodeQuality] Skip isset on form input + multiplier check
-- [#3870] [NetteCodeQuality] Get component
-- [#3875] make use of constant
+- [#3872] [NetteCodeQuality] Skip isset on form input + multiplier check- [#3870] [NetteCodeQuality] Get component- [#3875] make use of constant
 
 ### Fixed
-
-- [#3877] [NetteCodeQuality] Fix unset, on purpose
-- [#3871] fix import slash
+- [#3877] [NetteCodeQuality] Fix unset, on purpose- [#3871] fix import slash
 
 ## [v0.7.59] - 2020-08-02
 
 ### Changed
-
 - [#3869] skip form
 
 ## [v0.7.58] - 2020-08-02
 
 ### Added
-
-- [#3850] [Generic] Add method call remover rector, Thanks to [@mssimi]
-- [#3854] [MagicDisclosure] Add last method with differnt type support
-- [#3859] [MagicDisclosure] Add support for child parent class types
-- [#3860] [MagicDisclosure] Add SetterOnSetterMethodCallToStandaloneAssignRector
-- [#3867] [NetteCodeQuality] Add ArrayAccessSetControlToAddComponentMethodCallRector
+- [#3850] [Generic] Add method call remover rector, Thanks to [@mssimi]- [#3854] [MagicDisclosure] Add last method with differnt type support- [#3859] [MagicDisclosure] Add support for child parent class types- [#3860] [MagicDisclosure] Add SetterOnSetterMethodCallToStandaloneAssignRector- [#3867] [NetteCodeQuality] Add ArrayAccessSetControlToAddComponentMethodCallRector
 
 ### Changed
-
-- [#3853] [Defluent] New set + various improvements
-- [#3866] [Docs] Show constants over values
-- [#3856] [MagicDisclosure] Skip getters
-- [#3862] [MagicDisclosure] Improve naming
-- [#3861] [MagicDisclosure] Fluent refactoring
-- [#3868] extend direct access
-- [#3852] Resolve " TypeError in ValueResolver::resolveClassConstFetch()", Thanks to [@fsok]
-- [#3855] [ci] Improve workflow for squash commits
-- [#3865] [ci] enable defluent set
+- [#3853] [Defluent] New set + various improvements- [#3866] [Docs] Show constants over values- [#3856] [MagicDisclosure] Skip getters- [#3862] [MagicDisclosure] Improve naming- [#3861] [MagicDisclosure] Fluent refactoring- [#3868] extend direct access- [#3852] Resolve " TypeError in ValueResolver::resolveClassConstFetch()", Thanks to [@fsok]- [#3855] [ci] Improve workflow for squash commits- [#3865] [ci] enable defluent set
 
 ### Fixed
-
-- [#3863] [MagicDisclosure] fixes
-- [#3857] [RectorGenerator] Fix trailing comma in function calls error in php 7.2, Thanks to [@zingimmick]
+- [#3863] [MagicDisclosure] fixes- [#3857] [RectorGenerator] Fix trailing comma in function calls error in php 7.2, Thanks to [@zingimmick]
 
 ### Removed
-
 - [#3858] [MagicDisclosure] Drop type scoping from ReturnThisRemoveRector, as always localy scope
 
 ## [v0.7.57] - 2020-07-31
 
 ### Added
-
-- [#3835] [Nette] Add ArrayDimFetchControlToGetComponentMethodCallRector
-- [#3841] Add failing fixture for AddDefaultValueForUndefinedVariableRector, Thanks to [@u01jmg3]
+- [#3835] [Nette] Add ArrayDimFetchControlToGetComponentMethodCallRector- [#3841] Add failing fixture for AddDefaultValueForUndefinedVariableRector, Thanks to [@u01jmg3]
 
 ### Changed
-
-- [#3847] [MagicRemoval] Improve rules
-- [#3826] [Order] Order properties and constants with respect of complexity and position, Thanks to [@dobryy]
-- [#3837] skip on method call
-- [#3838] test kodiak for rebase
-- [#3839] compile
+- [#3847] [MagicRemoval] Improve rules- [#3826] [Order] Order properties and constants with respect of complexity and position, Thanks to [@dobryy]- [#3837] skip on method call- [#3838] test kodiak for rebase- [#3839] compile
 
 ### Fixed
-
 - [#3842] [PHP 5.6] Fix foreach unset variable default
 
 ## [v0.7.56] - 2020-07-30
 
 ### Added
-
-- [#3829] add suffix to prevent phpunit autoload
-- [#3825] Add failing test case for issue 3824, Thanks to [@fsok]
-- [#3821] add ConfigurableRectorInterface
+- [#3829] add suffix to prevent phpunit autoload- [#3825] Add failing test case for issue 3824, Thanks to [@fsok]- [#3821] add ConfigurableRectorInterface
 
 ### Changed
-
-- [#3833] [Nette] Rename follow up variables too
-- [#3832] [Nette] Skip nested control access to /ChangeControlArrayAccessToAnnotatedControlVariableRector
-- [#3823] [RectorGenerator] Refactoring to testable code
-- [#3831] decouple testing tools
+- [#3833] [Nette] Rename follow up variables too- [#3832] [Nette] Skip nested control access to /ChangeControlArrayAccessToAnnotatedControlVariableRector- [#3823] [RectorGenerator] Refactoring to testable code- [#3831] decouple testing tools
 
 ### Fixed
-
 - [#3830] [PHP 7.0] Fix variable name on static call
 
 ## [v0.7.55] - 2020-07-29
 
 ### Added
-
-- [#3808] [CodeQuality] Add case class name fix
-- [#3801] [Form] add nested callback case
+- [#3808] [CodeQuality] Add case class name fix- [#3801] [Form] add nested callback case
 
 ### Changed
-
-- [#3803] [Celebrity] Merge to code-quality
-- [#3822] [DX] Update README and other docs files to use PHP syntax for configs, Thanks to [@dobryy]
-- [#3800] [Nette] Load data from __construct of same class
-- [#3795] [Order] Order any param (Nullable or with default value) that has type of Object, Thanks to [@dobryy]
-- [#3818] Move src/Rector to rules/generic/src/Rector, Core namespace for rules to Generic
-- [#3791] Enable Order Set with failing rules disabled, Thanks to [@dobryy]
-- [#3809] Update doctrine/inflector requirement from ^1.3 to ^1.4|^2.0, Thanks to [@zingimmick]
-- [#3819] [Nette 3.0] Translate contract
-- [#3820] docs
-- [#3802] misc
-- [#3815] [Nette 3.0] Various new rules
+- [#3803] [Celebrity] Merge to code-quality- [#3822] [DX] Update README and other docs files to use PHP syntax for configs, Thanks to [@dobryy]- [#3800] [Nette] Load data from __construct of same class- [#3795] [Order] Order any param (Nullable or with default value) that has type of Object, Thanks to [@dobryy]- [#3818] Move src/Rector to rules/generic/src/Rector, Core namespace for rules to Generic- [#3791] Enable Order Set with failing rules disabled, Thanks to [@dobryy]- [#3809] Update doctrine/inflector requirement from ^1.3 to ^1.4|^2.0, Thanks to [@zingimmick]- [#3819] [Nette 3.0] Translate contract- [#3820] docs- [#3802] misc- [#3815] [Nette 3.0] Various new rules
 
 ### Fixed
-
-- [#3805] [Nette] dim fetch naming fixes
-- [#3811] fix fixture content
+- [#3805] [Nette] dim fetch naming fixes- [#3811] fix fixture content
 
 ## [v0.7.54] - 2020-07-27
 
 ### Added
-
-- [#3781] [Nette] add support for connection with method call
-- [#3787] [Nette] Add dim fetch support
-- [#3790] [Nette] Add ChangeControlArrayAccessToAnnotatedControlVariableRector
-- [#3797] [Nette] skip non control adding add methods
-- [#3773] [Nette] Add ChangeFormArrayAccessToAnnotatedControlVariableRector
-- [#3775] [Nette] add support for new instance type
-- [#3774] [Nette] Add external form factory support
-- [#3796] [Nette] Add control assign unique per variable
-- [#3782] [Nette] Add MakeGetComponentAssignAnnotatedRector
-- [#3777] [Nette] add add\*() method resolution for factories
-- [#3785] [Nette] add support for getComponent() resolution in form array access
-- [#3776] [PHP 7.4] Add use imported FQN name
+- [#3781] [Nette] add support for connection with method call- [#3787] [Nette] Add dim fetch support- [#3790] [Nette] Add ChangeControlArrayAccessToAnnotatedControlVariableRector- [#3797] [Nette] skip non control adding add methods- [#3773] [Nette] Add ChangeFormArrayAccessToAnnotatedControlVariableRector- [#3775] [Nette] add support for new instance type- [#3774] [Nette] Add external form factory support- [#3796] [Nette] Add control assign unique per variable- [#3782] [Nette] Add MakeGetComponentAssignAnnotatedRector- [#3777] [Nette] add add\*() method resolution for factories- [#3785] [Nette] add support for getComponent() resolution in form array access- [#3776] [PHP 7.4] Add use imported FQN name
 
 ### Changed
-
-- [#3784] [Nette] Improve AddDatePickerToDateControlRector
-- [#3780] [Nette] skip being assigned
-- [#3799] [Nette] prevent duplicates on array dims of Form
-- [#3793] [Nette] move quality rules to nette-code-quality directory
-- [#3786] [Order] Order __constructor dependencies by type alphabetically, Thanks to [@dobryy]
-- [#3770] [PHP7.4] Invalid type with class keyword in Doctrine ORM property, Thanks to [@dobryy]
-- [#3788] Bump to phpstan 0.12.33, nikic/php-parser to 4.6
-- [#3792] [PHP 7.4] Make property nullable if not set in constructor
+- [#3784] [Nette] Improve AddDatePickerToDateControlRector- [#3780] [Nette] skip being assigned- [#3799] [Nette] prevent duplicates on array dims of Form- [#3793] [Nette] move quality rules to nette-code-quality directory- [#3786] [Order] Order __constructor dependencies by type alphabetically, Thanks to [@dobryy]- [#3770] [PHP7.4] Invalid type with class keyword in Doctrine ORM property, Thanks to [@dobryy]- [#3788] Bump to phpstan 0.12.33, nikic/php-parser to 4.6- [#3792] [PHP 7.4] Make property nullable if not set in constructor
 
 ### Fixed
-
 - [#3794] fix removing of doc
 
 ### Removed
-
 - [#3778] remove MethodCallNodeVisitor, use better parent traversal approach
 
 ## [v0.7.53] - 2020-07-23
 
 ### Added
-
 - [#3762] [SymfonyPhpConfig] Add AddEmptyLineBetweenCallsInPhpConfigRector
 
 ### Changed
-
-- [#3761] [Config] Warn about YAML deprecation + load YAML sets
-- [#3766] [PHP 5.5] Skip exception to string by default, probably on purpose
-- [#3763] [Nette 3.0] Skip already fetched in form contorl
+- [#3761] [Config] Warn about YAML deprecation + load YAML sets- [#3766] [PHP 5.5] Skip exception to string by default, probably on purpose- [#3763] [Nette 3.0] Skip already fetched in form contorl
 
 ### Fixed
-
 - [#3759] [DeadCode] Fix variable usage detection, Thanks to [@dobryy]
 
 <!-- dumped content end -->
 
-## Unreleased
-
 ### Added
-
 - [#3760] [Nette] Add form dim access to standalone Form Control
 
 ## [v0.7.52] - 2020-07-22
 
 ### Changed
-
 - [#3749] Support exception names that begin with an abbreviation, Thanks to [@u01jmg3]
 
 ## [v0.7.51] - 2020-07-21
-
 - [#3750] [CodingStyle] Create WrapEncapsedVariableInCurlyBracesRector, Thanks to [@u01jmg3]
 
 ## [v0.7.49] - 2020-07-21
 
 ### Added
-
-- [#3712] [Legacy] Add AddTopIncludeRector squash, Thanks to [@phpfui]
-- [#3705] [Symfony] Add RemoveDefaultGetBlockPrefixRector
-- [#3700] [Symfony] add support for options to entry_options rename in collection
-- [#3731] add TemplateAnnotationToThisRenderRector for nested closure
-- [#3697] [Symfony 3.0] Add ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector
-- [#3709] Add Comparison to ComparisonExpression rename, Thanks to [@othercorey]
-- [#3720] Add more refactorings for CakePHP 4.0, Thanks to [@markstory]
-- [#3695] [Symfony 3.0] Add ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector
-- [#3735] add rector.php support
-- [#3701] add support for options to entry_options rename in collection
-- [#3699] [Utils] Add RequireStringArgumentInMethodCallRule
-- [#3745] [ci] add colors
+- [#3712] [Legacy] Add AddTopIncludeRector squash, Thanks to [@phpfui]- [#3705] [Symfony] Add RemoveDefaultGetBlockPrefixRector- [#3700] [Symfony] add support for options to entry_options rename in collection- [#3731] add TemplateAnnotationToThisRenderRector for nested closure- [#3697] [Symfony 3.0] Add ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector- [#3709] Add Comparison to ComparisonExpression rename, Thanks to [@othercorey]- [#3720] Add more refactorings for CakePHP 4.0, Thanks to [@markstory]- [#3695] [Symfony 3.0] Add ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector- [#3735] add rector.php support- [#3701] add support for options to entry_options rename in collection- [#3699] [Utils] Add RequireStringArgumentInMethodCallRule- [#3745] [ci] add colors
 
 ### Changed
-
-- [#3717] [CodingStyle] Create new TernaryConditionVariableAssignmentRector, Thanks to [@u01jmg3]
-- [#3732] [CodingStyle] Create new WrapVariableVariableNameInCurlyBracesRector, Thanks to [@u01jmg3]
-- [#3744] [DeadCode] Skip [@api] in unused public constants
-- [#3713] [Legacy] Correct test for AddTopIncludeRector
-- [#3737] [Naming] Decoupling of RenameVariableToMatchGetMethodNameRector
-- [#3706] [Naming] Name variable after get method, Thanks to [@dobryy]
-- [#3738] [Naming] Skip non-object type returns, classes with children and typical naming patterns
-- [#3740] [Naming] apply "new" naming rule
-- [#3707] [Renaming] Prevent RenameMethodRector from renaming to duplicated class method and in class itself
-- [#3741] [Set] move to new package
-- [#3704] [Symfony] Update instance to class reference to collection types
-- [#3703] [Symfony 3.0] cleanup get name
-- [#3698] make use of AbstractFormAddRector
-- [#3724] Switch ecs.yaml to ecs.php
-- [#3719] config YAML to PHP
-- [#3722] Improve grammar, Thanks to [@u01jmg3]
-- [#3723] Convert config.php to config.yaml
-- [#3725] change ecs-after-rector.yaml to ecs-after-rector.php
-- [#3727] Switch rector-ci configuration from YAML to PHP
-- [#3730] use of constants
-- [#3733] correct namespace in configs
-- [#3746] Move existing Rector from the `coding-style` set to the `php70` set, Thanks to [@u01jmg3]
-- [#3747] make use of new set from symplify
-- [#3694] tyding
-- [#3734] [sets] YAML to PHP
+- [#3717] [CodingStyle] Create new TernaryConditionVariableAssignmentRector, Thanks to [@u01jmg3]- [#3732] [CodingStyle] Create new WrapVariableVariableNameInCurlyBracesRector, Thanks to [@u01jmg3]- [#3744] [DeadCode] Skip [@api] in unused public constants- [#3713] [Legacy] Correct test for AddTopIncludeRector- [#3737] [Naming] Decoupling of RenameVariableToMatchGetMethodNameRector- [#3706] [Naming] Name variable after get method, Thanks to [@dobryy]- [#3738] [Naming] Skip non-object type returns, classes with children and typical naming patterns- [#3740] [Naming] apply "new" naming rule- [#3707] [Renaming] Prevent RenameMethodRector from renaming to duplicated class method and in class itself- [#3741] [Set] move to new package- [#3704] [Symfony] Update instance to class reference to collection types- [#3703] [Symfony 3.0] cleanup get name- [#3698] make use of AbstractFormAddRector- [#3724] Switch ecs.yaml to ecs.php- [#3719] config YAML to PHP- [#3722] Improve grammar, Thanks to [@u01jmg3]- [#3723] Convert config.php to config.yaml- [#3725] change ecs-after-rector.yaml to ecs-after-rector.php- [#3727] Switch rector-ci configuration from YAML to PHP- [#3730] use of constants- [#3733] correct namespace in configs- [#3746] Move existing Rector from the `coding-style` set to the `php70` set, Thanks to [@u01jmg3]- [#3747] make use of new set from symplify- [#3694] tyding- [#3734] [sets] YAML to PHP
 
 ### Fixed
-
-- [#3739] [Naming] Apply RenameVariableToMatchGetMethodNameRector on code + fix docblock rename
-- [#3736] Fixing Compiler
+- [#3739] [Naming] Apply RenameVariableToMatchGetMethodNameRector on code + fix docblock rename- [#3736] Fixing Compiler
 
 ### Removed
-
 - [#3708] [Renaming] Remove RenameMethodCallRector, ported to RenameMethodRector
 
 ## [vO.7.43]
 
 ### Fixed
-
 - [#3644] [Sensio] Fix nested function scope of return
 
 ## [v0.7.48]
 
 ### Added
-
-- [#3678] [Symfony] add Kernel support to ChangeFileLoaderInExtensionAndKernelRector
-- [#3690] [Symfony 3] Add custom xml to StringFormTypeToClassRector"
+- [#3678] [Symfony] add Kernel support to ChangeFileLoaderInExtensionAndKernelRector- [#3690] [Symfony 3] Add custom xml to StringFormTypeToClassRector"
 
 ### Changed
-
-- [#3680] [CodingStyle] Import classes only for Fully Qualified class names byt skipping all Qualified names, Thanks to [@dobryy]
-- [#3686] [Downgrade] PHP 7.4 to 7.1 (Property  Type), Thanks to [@dobryy]
-- [#3687] [Legacy] RemoveIncludeRector, Thanks to [@phpfui]
-- [#3682] [MysqlToMysqli] Mysql mysqli stackoverflow feedback, Thanks to [@ludekbenedik]
-- [#3676] [Symfony] Extend ChangeFileLoaderInExtensionRectorTest to make it configurable
-- [#3665] Check minimum required php version from composer.json, Thanks to [@dobryy]
-- [#3691] inform about wrong path to config param
-- [#3677] Prevent negative values for IndentLevel, Thanks to [@phpfui]
-- [#3692] use strings over ::class in type detection, as they get prefixed by phar builder
+- [#3680] [CodingStyle] Import classes only for Fully Qualified class names byt skipping all Qualified names, Thanks to [@dobryy]- [#3686] [Downgrade] PHP 7.4 to 7.1 (Property  Type), Thanks to [@dobryy]- [#3687] [Legacy] RemoveIncludeRector, Thanks to [@phpfui]- [#3682] [MysqlToMysqli] Mysql mysqli stackoverflow feedback, Thanks to [@ludekbenedik]- [#3676] [Symfony] Extend ChangeFileLoaderInExtensionRectorTest to make it configurable- [#3665] Check minimum required php version from composer.json, Thanks to [@dobryy]- [#3691] inform about wrong path to config param- [#3677] Prevent negative values for IndentLevel, Thanks to [@phpfui]- [#3692] use strings over ::class in type detection, as they get prefixed by phar builder
 
 ### Fixed
-
-- [#3683] [Php74] Fix AddLiteralSeparatorToNumberRector if float number has zero after …, Thanks to [@ludekbenedik]
-- [#3689] [SOLID] fix foreach variable override in const decoupling
-- [#3693] fix import of already existing param/var/return type or class annotation
-- [#3674] fix data provider to iterator
+- [#3683] [Php74] Fix AddLiteralSeparatorToNumberRector if float number has zero after …, Thanks to [@ludekbenedik]- [#3689] [SOLID] fix foreach variable override in const decoupling- [#3693] fix import of already existing param/var/return type or class annotation- [#3674] fix data provider to iterator
 
 ### Removed
-
-- [#3669] [MockeryToProphecy]  Remove close call to mockery from test classes, Thanks to [@jaapio]
-- [#3672] [cs] remove throws
+- [#3669] [MockeryToProphecy]  Remove close call to mockery from test classes, Thanks to [@jaapio]- [#3672] [cs] remove throws
 
 ## [v0.7.47] - 2020-07-07
 
 ### Added
-
 - [#3664] [Symfony] Add ChangeXmlToYamlFileLoaderInExtensionRector
 
 ### Changed
-
-- [#3670] [CodeQuality] improve UnusedForeachValueToArrayKeysRector to work with array foreach values
-- [#3671] [DeadCode] Skip property used as arg
-- [#3661] Rewrite mockery mock creation, Thanks to [@jaapio]
+- [#3670] [CodeQuality] improve UnusedForeachValueToArrayKeysRector to work with array foreach values- [#3671] [DeadCode] Skip property used as arg- [#3661] Rewrite mockery mock creation, Thanks to [@jaapio]
 
 ## [v0.7.46] - 2020-07-06
-
 - [#3663] [Naming] Make rename property/variable skip date time at convention
 
 ## [v0.7.44] - 2020-07-06
-
-- [#3652] [CI] simlify jobs to matrix
-- [#3653] [CodingStyle] Split UnderscoreToPascalCaseVariableAndPropertyNameRector, Thanks to [@dobryy]
-- [#3657] [CodingStyle] Make UnderscoreToPascalCaseVariableNameRector skip native variables, like _SERVER
-- [#3662] [PHP 7.4] Make RestoreDefaultNullToNullableTypePropertyRector skip nullable defined in ctor
+- [#3652] [CI] simlify jobs to matrix- [#3653] [CodingStyle] Split UnderscoreToPascalCaseVariableAndPropertyNameRector, Thanks to [@dobryy]- [#3657] [CodingStyle] Make UnderscoreToPascalCaseVariableNameRector skip native variables, like _SERVER- [#3662] [PHP 7.4] Make RestoreDefaultNullToNullableTypePropertyRector skip nullable defined in ctor
 
 ### Removed
-
 - [#3658] remove func call from method calls
 
 ## [v0.7.43] - 2020-07-05
 
 ### Changed
-
-- [#3654] [Sension] improve template annotation
-- [#3649] decouple createConcat() method
-- [#3648] update rule to support multiple occurrences of the class in the string, Thanks to [@dobryy]
+- [#3654] [Sension] improve template annotation- [#3649] decouple createConcat() method- [#3648] update rule to support multiple occurrences of the class in the string, Thanks to [@dobryy]
 
 ### Fixed
-
-- [#3651] fix get name or static call
-- [#3650] Fix typo in rector_rules_overview.md, Thanks to [@Gymnasiast]
+- [#3651] fix get name or static call- [#3650] Fix typo in rector_rules_overview.md, Thanks to [@Gymnasiast]
 
 ## [v0.7.42] - 2020-07-03
 
 ### Added
-
-- [#3613] [CodingStyle] Add new rector to replace hardcoded class name reference in string with `class` keyword reference, Thanks to [@dobryy]
-- [#3601] [Decouple] Add DecoupleClassMethodToOwnClassRector
-- [#3612] [Naming] Add RenameVariableToMatchNewTypeRector
-- [#3632] [SOLID] Prevent adding constant, that is reserved keyword in RepeatedLiteralToClassConstantRector
-- [#3609] [Symfony] add support for union of response and array
-- [#3622] [Symfony] add constant return array support to TemplateAnnotationToThisRenderRector
+- [#3613] [CodingStyle] Add new rector to replace hardcoded class name reference in string with `class` keyword reference, Thanks to [@dobryy]- [#3601] [Decouple] Add DecoupleClassMethodToOwnClassRector- [#3612] [Naming] Add RenameVariableToMatchNewTypeRector- [#3632] [SOLID] Prevent adding constant, that is reserved keyword in RepeatedLiteralToClassConstantRector- [#3609] [Symfony] add support for union of response and array- [#3622] [Symfony] add constant return array support to TemplateAnnotationToThisRenderRector
 
 ### Changed
-
-- [#3637] [DynamicTypeAnalysis] Speedup dynamic type storage in tests
-- [#3606] [Symfony] decouple ReturnTypeDeclarationUpdater
-- [#3608] [Symfony] rename TemplateAnnotationRector to TemplateAnnotationToThisRender
-- [#3623] [Symfony] pass return data as args
-- [#3604] [Symfony] merge TemplateAnnotationRector version to 5
-- [#3602] rename FluentReplaceRector to DefluentMethodCallRector
-- [#3603] move ReturnThisRemoveRector to MagicDisclosure
-- [#3614] use explicit xBuilder classes to prevent typos and PHPStan and PHPStorm confussion
-- [#3605] rename file to fileInfo to reflect the type
-- [#3607] decouple PhpDocInfoManipulator
-- [#3630] Make use of PHPStan static reflection
-- [#3638] speed limits
-- [#3627] fail on found errors
-- [#3629] merge PropertyNaming to one class
-- [#3631] [phar] include phpstan dev deps
-- [#3615] [tests] rename file to fileInfo
+- [#3637] [DynamicTypeAnalysis] Speedup dynamic type storage in tests- [#3606] [Symfony] decouple ReturnTypeDeclarationUpdater- [#3608] [Symfony] rename TemplateAnnotationRector to TemplateAnnotationToThisRender- [#3623] [Symfony] pass return data as args- [#3604] [Symfony] merge TemplateAnnotationRector version to 5- [#3602] rename FluentReplaceRector to DefluentMethodCallRector- [#3603] move ReturnThisRemoveRector to MagicDisclosure- [#3614] use explicit xBuilder classes to prevent typos and PHPStan and PHPStorm confussion- [#3605] rename file to fileInfo to reflect the type- [#3607] decouple PhpDocInfoManipulator- [#3630] Make use of PHPStan static reflection- [#3638] speed limits- [#3627] fail on found errors- [#3629] merge PropertyNaming to one class- [#3631] [phar] include phpstan dev deps- [#3615] [tests] rename file to fileInfo
 
 ### Fixed
-
-- [#3633] [CodeQuality] fix callable this if part of the method
-- [#3616] [Symfony] Fix template array in TemplateAnnotationToThisRenderRector
-- [#3626] fix class name
-- [#3628] Fix PHPStan Reflection break from 0.12.26
-- [#3634] fix rector.phar build
+- [#3633] [CodeQuality] fix callable this if part of the method- [#3616] [Symfony] Fix template array in TemplateAnnotationToThisRenderRector- [#3626] fix class name- [#3628] Fix PHPStan Reflection break from 0.12.26- [#3634] fix rector.phar build
 
 ### Removed
-
-- [#3624] [MagicDisclosure] remove MethodBody to Return_
-- [#3610] [Symfony] prevent remove of mixed return
-- [#3611] [Symfony] remove template annotation if returns response
-- [#3636] remove issue-tests, already covered in specific rule tests
+- [#3624] [MagicDisclosure] remove MethodBody to Return_- [#3610] [Symfony] prevent remove of mixed return- [#3611] [Symfony] remove template annotation if returns response- [#3636] remove issue-tests, already covered in specific rule tests
 
 ## [v0.7.41] - 2020-06-26
 
 ### Changed
-
 - [#3597] skip parent ctor in AnnotatedPropertyInjectToConstructorInjectionRector
 
 ## [v0.7.40] - 2020-06-25
-
-- [#3592] make sure interface type is checked
-- [#3595] Make use of Symplify/EasyTesting
-- [#3594] Symfony FormTypeInstanceToClassConstRector: Include AbstractController in allowed object types, Thanks to [@andyexeter]
+- [#3592] make sure interface type is checked- [#3595] Make use of Symplify/EasyTesting- [#3594] Symfony FormTypeInstanceToClassConstRector: Include AbstractController in allowed object types, Thanks to [@andyexeter]
 
 ### Fixed
-
 - [#3596] Various fixes
 ## [v0.7.39]^2
 
 ### Changed
-
 - [#3579] Boolean Operands cause ChangeNestedForeachIfsToEarlyContinueRector to…, Thanks to [@derrickschoen]
 
 ## [v0.7.38] - 2020-06-24
 
 ### Added
-
-- [#3591] [NetteCodeQuality] Add MoveInjectToExistingConstructorRector
-- [#3588] add inject in case of parent __construct
-- [#3586] add typed property if on PHP 7.4
+- [#3591] [NetteCodeQuality] Add MoveInjectToExistingConstructorRector- [#3588] add inject in case of parent __construct- [#3586] add typed property if on PHP 7.4
 
 ### Changed
-
-- [#3590] prefer local __construct
-- [#3589] re-use parent property
-- [#3587] respect [@Inject] on ContextGetByTypeToConstructorInjectionRector
-- [#3582] Update create_own_rule.md, Thanks to [@Philosoft]
+- [#3590] prefer local __construct- [#3589] re-use parent property- [#3587] respect [@Inject] on ContextGetByTypeToConstructorInjectionRector- [#3582] Update create_own_rule.md, Thanks to [@Philosoft]
 
 ### Fixed
-
-- [#3585] fix rector description
-- [#3584] fix swtich return types
+- [#3585] fix rector description- [#3584] fix swtich return types
 
 ### Removed
-
-- [#3583] remove [@return] tag if not needed in ReturnTypeDeclarationRector
-- [#3581] remove [@return] tag if not needed in ReturnTypeDeclarationRector
-
-## Unreleased
+- [#3583] remove [@return] tag if not needed in ReturnTypeDeclarationRector- [#3581] remove [@return] tag if not needed in ReturnTypeDeclarationRector
 
 ### Added
-
-- [#3571] [Autodiscovery] add types/suffix support to MoveValueObjectsToValueObjectDirectoryRector
-- [#3572] Add rename class support in twig/latte as well
-- [#3566] added support post class move rename in XML files, Thanks to [@vladyslavstartsev]
-- [#3565] Add post class move rename in neon/yaml files
-- [#3577] add NonEmptyArrayTypeMapper
+- [#3571] [Autodiscovery] add types/suffix support to MoveValueObjectsToValueObjectDirectoryRector- [#3572] Add rename class support in twig/latte as well- [#3566] added support post class move rename in XML files, Thanks to [@vladyslavstartsev]- [#3565] Add post class move rename in neon/yaml files- [#3577] add NonEmptyArrayTypeMapper
 
 ### Changed
-
-- [#3578] return type - skip void
-- [#3574] skip common patterns in value object
-- [#3573] allow skip null scope
+- [#3578] return type - skip void- [#3574] skip common patterns in value object- [#3573] allow skip null scope
 
 ### Fixed
-
 - [#3576] fix return type in abstract class
 
 ## [v0.7.37] - 2020-06-21
 
 ### Changed
-
-- [#3559] "$this->"" needs to become "static::" instead of "self::", Thanks to [@derrickschoen]
-- [#3562] Correct spelling mistake, Thanks to [@PurpleBooth]
-- [#3561] decopule AbstractFileMovingFileSystemRector
+- [#3559] "$this->"" needs to become "static::" instead of "self::", Thanks to [@derrickschoen]- [#3562] Correct spelling mistake, Thanks to [@PurpleBooth]- [#3561] decopule AbstractFileMovingFileSystemRector
 
 ### Fixed
-
-- [#3560] Fix double move of classes
-- [#3563] Fix node printing with post-race condition
+- [#3560] Fix double move of classes- [#3563] Fix node printing with post-race condition
 
 ## [v0.7.36] - 2020-06-19
 
 ### Added
-
 - [#3558] Add parsed tokens and stmts object
 
 ### Fixed
-
 - [#3557] fix importing of soon-to-be-existing classes
 
 ## [v0.7.35] - 2020-06-19
 
 ### Added
-
-- [#3550] [Autodiscovery] add class-rename to MoveServicesBySuffixToDirectoryRector
-- [#3535] [Experimental] Add safe_types option
-- [#3539] Re-add --only option
-- [#3553] add TokensByFilePathStorage + decouple file system rules to own step
-- [#3538] [PHP 7.2] Add ReplaceEachAssignmentWithKeyCurrentRector
-- [#3548] Add [@fixme], if ini_set/init_get removal breaks the code
+- [#3550] [Autodiscovery] add class-rename to MoveServicesBySuffixToDirectoryRector- [#3535] [Experimental] Add safe_types option- [#3539] Re-add --only option- [#3553] add TokensByFilePathStorage + decouple file system rules to own step- [#3538] [PHP 7.2] Add ReplaceEachAssignmentWithKeyCurrentRector- [#3548] Add [@fixme], if ini_set/init_get removal breaks the code
 
 ### Changed
-
-- [#3536] [Autodiscovery] rename interface used in other places too
-- [#3549] [Autodiscovery] Skip control factory in interface split
-- [#3552] [PHP] Handle arrow functions in AddDefaultValueForUndefinedVariableRector, Thanks to [@fsok]
-- [#3551] skip Form factories too
-- [#3546] allow new phpstan
-- [#3547] Expand CakePHP 4.1 standard, Thanks to [@markstory]
-- [#3555] implements rename
+- [#3536] [Autodiscovery] rename interface used in other places too- [#3549] [Autodiscovery] Skip control factory in interface split- [#3552] [PHP] Handle arrow functions in AddDefaultValueForUndefinedVariableRector, Thanks to [@fsok]- [#3551] skip Form factories too- [#3546] allow new phpstan- [#3547] Expand CakePHP 4.1 standard, Thanks to [@markstory]- [#3555] implements rename
 
 ### Fixed
-
 - [#3556] Fix imported interface renaming
 
 ### Removed
-
 - [#3554] remove MoveAndRenameNamespaceRector, not tested and not working, prefer class rename
 
 ## [v0.7.34] - 2020-06-16
 
 ### Added
-
-- [#3507] [CodeQuality] Add ArrayThisCallToThisMethodCallRector
-- [#3528] [Order] Add OrderClassConstantsByIntegerValueRector
-- [#3519] [Rector] Add UpdateFileNameByClassNameFileSystemRector
-- [#3527] Add PHPUnit 9.0 regex method name changes
-- [#3523] add NullableTypeMapper
-- [#3511] Add rector rules for deprecated features in CakePHP 4.1, Thanks to [@markstory]
-- [#3534] [docs] make code sample required for Rector rules, add code highlight
+- [#3507] [CodeQuality] Add ArrayThisCallToThisMethodCallRector- [#3528] [Order] Add OrderClassConstantsByIntegerValueRector- [#3519] [Rector] Add UpdateFileNameByClassNameFileSystemRector- [#3527] Add PHPUnit 9.0 regex method name changes- [#3523] add NullableTypeMapper- [#3511] Add rector rules for deprecated features in CakePHP 4.1, Thanks to [@markstory]- [#3534] [docs] make code sample required for Rector rules, add code highlight
 
 ### Changed
-
-- [#3506] [Autodiscovery] Do not nest already correct name
-- [#3487] [CakePHP] Convert array options to fluent method calls, Thanks to [@garas]
-- [#3503] I found a bug with the ChangeNestedForeachIfsToEarlyContinueRector, Thanks to [@derrickschoen]
-- [#3512] Don't type hint to traits, Thanks to [@UFTimmy]
-- [#3524] skip encapsed string from constant extraction
-- [#3520] skip multi assign ChangeReadOnlyVariableWithDefaultValueToConstantRector
-- [#3525] [PHP 7.4] Make array spread work only for integer keys
-- [#3533] decouple more responsibility to TagValueNodeConfiguration
+- [#3506] [Autodiscovery] Do not nest already correct name- [#3487] [CakePHP] Convert array options to fluent method calls, Thanks to [@garas]- [#3503] I found a bug with the ChangeNestedForeachIfsToEarlyContinueRector, Thanks to [@derrickschoen]- [#3512] Don't type hint to traits, Thanks to [@UFTimmy]- [#3524] skip encapsed string from constant extraction- [#3520] skip multi assign ChangeReadOnlyVariableWithDefaultValueToConstantRector- [#3525] [PHP 7.4] Make array spread work only for integer keys- [#3533] decouple more responsibility to TagValueNodeConfiguration
 
 ### Fixed
-
-- [#3526] Fix for array of callable print in phpdoc
-- [#3532] Fix quote in array values of phpdoc tags, decouple TagValueNodeConfiguration
-- [#3508] Fix regex to account for windows., Thanks to [@UFTimmy]
-- [#3522] fix [@template] tag preposition
-- [#3521] fix nested comment in nested foreach to if
+- [#3526] Fix for array of callable print in phpdoc- [#3532] Fix quote in array values of phpdoc tags, decouple TagValueNodeConfiguration- [#3508] Fix regex to account for windows., Thanks to [@UFTimmy]- [#3522] fix [@template] tag preposition- [#3521] fix nested comment in nested foreach to if
 
 ### Removed
-
 - [#3518] Simplify ExplicitPhpErrorApiRector and remove replaceNode() use
 
 ## [v0.7.32] - 2020-06-10
 
 ### Added
-
 - [#3505] add parent::__construct() in case of existing empty ctor
 
 ## [v0.7.31] - 2020-06-09
-
 - [#3502] [Architecture] Add typed property support for [@inject] to ctor rule
 
 ## [v0.7.30] - 2020-06-09
-
-- [#3479] [NetteUtilsCodeQuality] Add ReplaceTimeNumberWithDateTimeConstantRector
-- [#3491] [Restoration] Add RemoveUselessJustForSakeInterfaceRector
-- [#3483] [Restoration] Add MakeTypedPropertyNullableIfCheckedRector
-- [#3475] [Sensio] Add [@route] migration to Symfony
-- [#3476] [Sensio] Add RemoveServiceFromSensioRouteRector
-- [#3477] [PHP 7.4] Add conflicting short import typed property fix
-- [#3492] Add support for rename of [@property]
-- [#3498] Add return type replacement in TemplateAnnotationRector
+- [#3479] [NetteUtilsCodeQuality] Add ReplaceTimeNumberWithDateTimeConstantRector- [#3491] [Restoration] Add RemoveUselessJustForSakeInterfaceRector- [#3483] [Restoration] Add MakeTypedPropertyNullableIfCheckedRector- [#3475] [Sensio] Add [@route] migration to Symfony- [#3476] [Sensio] Add RemoveServiceFromSensioRouteRector- [#3477] [PHP 7.4] Add conflicting short import typed property fix- [#3492] Add support for rename of [@property]- [#3498] Add return type replacement in TemplateAnnotationRector
 
 ### Changed
-
-- [#3486] test children inject typed
-- [#3484] [PHP 7.4] Allow run typed properties on class-like types only"
-- [#3482] [PHP 7.4] Prevent already used property name
-- [#3481] [PHP 7.4] Prevent child typed property override by abstract
-- [#3497] TemplateAnnotationRector improvements
-- [#3499] Update documentation link in PhpRectorInterface, Thanks to [@RusiPapazov]
+- [#3486] test children inject typed- [#3484] [PHP 7.4] Allow run typed properties on class-like types only"- [#3482] [PHP 7.4] Prevent already used property name- [#3481] [PHP 7.4] Prevent child typed property override by abstract- [#3497] TemplateAnnotationRector improvements- [#3499] Update documentation link in PhpRectorInterface, Thanks to [@RusiPapazov]
 
 ### Fixed
-
-- [#3488] PHPStan compatibility fixes, Thanks to [@ondrejmirtes]
-- [#3494] Fix typo in rector_rules_overview.md, Thanks to [@berezuev]
-- [#3485] fix skip non-class for nullable types
-- [#3495] fix method call name
-- [#3496] constant table fix
-- [#3478] fix prefixed GetToConstructorInjectionRector classes
-- [#3474] Various [@template]/@method annotation fixes
+- [#3488] PHPStan compatibility fixes, Thanks to [@ondrejmirtes]- [#3494] Fix typo in rector_rules_overview.md, Thanks to [@berezuev]- [#3485] fix skip non-class for nullable types- [#3495] fix method call name- [#3496] constant table fix- [#3478] fix prefixed GetToConstructorInjectionRector classes- [#3474] Various [@template]/@method annotation fixes
 
 ### Removed
-
 - [#3460] Update docker commands to remove container on exit, Thanks to [@codereviewvideos]
 
 ## [v0.7.29]
 
 ### Added
-
-- [#3456] [CodingStyle] Add RemoveDoubleUnderscoreInMethodNameRector
-- [#3470] add fix for preslah of entity class
-- [#3455] Add RemoveFuncCallArgRector, ClearReturnNewByReferenceRector, RemoveIniGetSetFuncCallRector, ReplaceHttpServerVarsByServerRector
-- [#3459] [PHP 8.0] Add RemoveUnusedVariableInCatchRector
-- [#3458] [PHP 8.0] Add TokenGetAllToObjectRector
+- [#3456] [CodingStyle] Add RemoveDoubleUnderscoreInMethodNameRector- [#3470] add fix for preslah of entity class- [#3455] Add RemoveFuncCallArgRector, ClearReturnNewByReferenceRector, RemoveIniGetSetFuncCallRector, ReplaceHttpServerVarsByServerRector- [#3459] [PHP 8.0] Add RemoveUnusedVariableInCatchRector- [#3458] [PHP 8.0] Add TokenGetAllToObjectRector
 
 ### Changed
-
-- [#3450] update to phpstan/phpstan-phpunit 0.12.9
-- [#3457] [PHP 7.2] Various improvements in ListEach and WhileEach Rectors
-- [#3453] Future-proof ScopeFactory, Thanks to [@ondrejmirtes]
-- [#3468] use string for classes in doc node factory
-- [#3472] [phar] Un-pre-slash strings that should be clean
-- [#3467] [phar] unprefix class strings
+- [#3450] update to phpstan/phpstan-phpunit 0.12.9- [#3457] [PHP 7.2] Various improvements in ListEach and WhileEach Rectors- [#3453] Future-proof ScopeFactory, Thanks to [@ondrejmirtes]- [#3468] use string for classes in doc node factory- [#3472] [phar] Un-pre-slash strings that should be clean- [#3467] [phar] unprefix class strings
 
 ### Fixed
-
-- [#3466] [Symfony 2.8] Fix ArgumentDefaultValueReplacerRector to work with bool values
-- [#3469] fix orm prefix
-- [#3451] Fixed link to nodes overview in own rector code sample, Thanks to [@norberttech]
-- [#3471] phar extra slashes fix
-- [#3452] [testing] Rework AbstractRunnableRectorTestCase to be part of main test + fix ListEachRector behavior
+- [#3466] [Symfony 2.8] Fix ArgumentDefaultValueReplacerRector to work with bool values- [#3469] fix orm prefix- [#3451] Fixed link to nodes overview in own rector code sample, Thanks to [@norberttech]- [#3471] phar extra slashes fix- [#3452] [testing] Rework AbstractRunnableRectorTestCase to be part of main test + fix ListEachRector behavior
 
 ## [v0.7.27] - 2020-05-30
 
 ### Added
-
-- [#3399] [Nette] Add ContextGetByTypeToConstructorInjectionRector
-- [#3434] [NetteKdyby] Add ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector
-- [#3416] [NetteKdyby] Add ReplaceMagicPropertyEventWithEventClassRector
-- [#3429] [Privatization] Add PrivatizeFinalClassMethodRector
-- [#3411] [Privatization] Add property privatization rule
-- [#3446] [Restoration] Add CompleteMissingDependencyInNewRector
-- [#3396] [SOLID] add InjectMethodFactory for multi parent abstract rector
-- [#3392] [SOLID] Add MultiParentingToAbstractDependencyRector
-- [#3410] Add Drupal logo + link to Drupal Rector rules to README.md, Thanks to [@shaal]
-- [#3398] add ParsedClassConstFetchNodeCollector
-- [#3418] add addComment() to Rector, fix comment preserving
-- [#3350] Add [@mixin] support from PHPStan
-- [#3422] Add Report and Extension package
-- [#3419] Configuration - add getOutputFormat()
-- [#3421] adding fixture for validation with message, Thanks to [@bitgandtter]
-- [#3417] compensate comments added on too nested node
-- [#3423] Add AfterProcessEvent and AfterReportEvent
-- [#3441] [Nette Kdyby] Add direct event class support for string-only based events
-- [#3437] [Nette Kdyby] Add support for unique dim fetch event param name
-- [#3439] [Nette Kdyby] Add under_score dim fetch support, prevent double event fill override
-- [#3440] [Nette Kdyby] Add ReplaceEventManagerWithEventSubscriberRector
-- [#3442] [Nette Kdyby] do not add getter for unused param in listener method
-- [#3387] [compiler] Add ScoperTest
+- [#3399] [Nette] Add ContextGetByTypeToConstructorInjectionRector- [#3434] [NetteKdyby] Add ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector- [#3416] [NetteKdyby] Add ReplaceMagicPropertyEventWithEventClassRector- [#3429] [Privatization] Add PrivatizeFinalClassMethodRector- [#3411] [Privatization] Add property privatization rule- [#3446] [Restoration] Add CompleteMissingDependencyInNewRector- [#3396] [SOLID] add InjectMethodFactory for multi parent abstract rector- [#3392] [SOLID] Add MultiParentingToAbstractDependencyRector- [#3410] Add Drupal logo + link to Drupal Rector rules to README.md, Thanks to [@shaal]- [#3398] add ParsedClassConstFetchNodeCollector- [#3418] add addComment() to Rector, fix comment preserving- [#3350] Add [@mixin] support from PHPStan- [#3422] Add Report and Extension package- [#3419] Configuration - add getOutputFormat()- [#3421] adding fixture for validation with message, Thanks to [@bitgandtter]- [#3417] compensate comments added on too nested node- [#3423] Add AfterProcessEvent and AfterReportEvent- [#3441] [Nette Kdyby] Add direct event class support for string-only based events- [#3437] [Nette Kdyby] Add support for unique dim fetch event param name- [#3439] [Nette Kdyby] Add under_score dim fetch support, prevent double event fill override- [#3440] [Nette Kdyby] Add ReplaceEventManagerWithEventSubscriberRector- [#3442] [Nette Kdyby] do not add getter for unused param in listener method- [#3387] [compiler] Add ScoperTest
 
 ### Changed
-
-- [#3415] [CodingStyle] UnderscoreToCamelCaseVariableAndPropertyNameRector
-- [#3449] [Nette Kdyby] refactor to EventAndListenerTree
-- [#3447] [Nette Kdyby] Sync getters in listener method and event class
-- [#3377] composer: bump to Symplify 8-dev
-- [#3445] [Nette Kdyby] Skip control events"
-- [#3393] Guard against ShouldNotHappenException, Thanks to [@UFTimmy]
-- [#3395] Keep empty php code as is, Thanks to [@shaal]
-- [#3390] Use Newline from Standard Printer, Thanks to [@tavy315]
-- [#3412] skip public properties
-- [#3406] [Kdyby to Contributte] Migrate events
-- [#3435] improve CustomEventFactory
-- [#3428] Keep new line untouched
+- [#3415] [CodingStyle] UnderscoreToCamelCaseVariableAndPropertyNameRector- [#3449] [Nette Kdyby] refactor to EventAndListenerTree- [#3447] [Nette Kdyby] Sync getters in listener method and event class- [#3377] composer: bump to Symplify 8-dev- [#3445] [Nette Kdyby] Skip control events"- [#3393] Guard against ShouldNotHappenException, Thanks to [@UFTimmy]- [#3395] Keep empty php code as is, Thanks to [@shaal]- [#3390] Use Newline from Standard Printer, Thanks to [@tavy315]- [#3412] skip public properties- [#3406] [Kdyby to Contributte] Migrate events- [#3435] improve CustomEventFactory- [#3428] Keep new line untouched
 
 ### Fixed
-
-- [#3379] fix missing doc for property type infering
-- [#3443] [Nette Kdyby] Fix event undescore_variable name
-- [#3403] Fix typo in StrStartsWithRector code sample, Thanks to [@guilliamxavier]
-- [#3407] Fix SimplifyArraySearchRector w.r.t. "strictness", Thanks to [@guilliamxavier]
-- [#3427] fix-readding comment
-- [#3386] Fix RenameAnnotationRector for null phpdoc, Thanks to [@eclipxe13]
-- [#3378] fix doc FQN importing
-- [#3345] Fix invalid path, Thanks to [@ddziaduch]
+- [#3379] fix missing doc for property type infering- [#3443] [Nette Kdyby] Fix event undescore_variable name- [#3403] Fix typo in StrStartsWithRector code sample, Thanks to [@guilliamxavier]- [#3407] Fix SimplifyArraySearchRector w.r.t. "strictness", Thanks to [@guilliamxavier]- [#3427] fix-readding comment- [#3386] Fix RenameAnnotationRector for null phpdoc, Thanks to [@eclipxe13]- [#3378] fix doc FQN importing- [#3345] Fix invalid path, Thanks to [@ddziaduch]
 
 ### Removed
-
 - [#3400] remove interface suffix/prexit for PropertyNaming
 
 ## [v0.7.26] - 2020-05-16
 
 ### Added
-
-- [#3351] [CodingStyle] Add SplitGroupedUseImportsRector
-- [#3358] [Legacy] Add FunctionToStaticMethodRector
-- [#3369] [PSR-4] Add NormalizeNamespaceByPSR4ComposerAutoloadRector
-- [#3362] [PHP 5.5] Fix StringClassNameToClassConstantRector for importing freshly added class names
-- [#3355] [docs] add counter next to Rector group
+- [#3351] [CodingStyle] Add SplitGroupedUseImportsRector- [#3358] [Legacy] Add FunctionToStaticMethodRector- [#3369] [PSR-4] Add NormalizeNamespaceByPSR4ComposerAutoloadRector- [#3362] [PHP 5.5] Fix StringClassNameToClassConstantRector for importing freshly added class names- [#3355] [docs] add counter next to Rector group
 
 ### Changed
-
-- [#3372] [MockistaToMockery] init
-- [#3348] Decoule ClassRenamer, improve NormalizeNamespaceByPSR4ComposerAutoloadRector
-- [#3361] Rule Rector\ClassMethod\AddArrayReturnDocTypeRector could not process files, Thanks to [@MetalArend]
-- [#3359] Rule "Rector\ClassConst\VarConstantCommentRector" keeps throwing "could not process" errors., Thanks to [@MetalArend]
+- [#3372] [MockistaToMockery] init- [#3348] Decoule ClassRenamer, improve NormalizeNamespaceByPSR4ComposerAutoloadRector- [#3361] Rule Rector\ClassMethod\AddArrayReturnDocTypeRector could not process files, Thanks to [@MetalArend]- [#3359] Rule "Rector\ClassConst\VarConstantCommentRector" keeps throwing "could not process" errors., Thanks to [@MetalArend]
 
 ### Deprecated
-
-- [#3367] [ElasticsearchDSL] Deprecate single custom rule, better handled by community
-- [#3366] [Oxid] Deprecate single custom rule, better handled by community
-- [#3365] [Shopware] Deprecate single custom rule, better handled by community
-- [#3363] [Silverstripe] deprecate, handled by community
-- [#3364] [Sylius] Deprecate single custom rule, better handled by community
-- [#3376] remove deprecated AutoReturnFactoryCompilerPass
+- [#3367] [ElasticsearchDSL] Deprecate single custom rule, better handled by community- [#3366] [Oxid] Deprecate single custom rule, better handled by community- [#3365] [Shopware] Deprecate single custom rule, better handled by community- [#3363] [Silverstripe] deprecate, handled by community- [#3364] [Sylius] Deprecate single custom rule, better handled by community- [#3376] remove deprecated AutoReturnFactoryCompilerPass
 
 ### Fixed
-
 - [#3356] [CodeQuality] Fix SimplifyIfReturnBoolRector for else if
 
 ## [v0.7.23] - 2020-05-11
 
 ### Added
-
-- [#3325] [SOLID] Add RepeatedLiteralToClassConstantRector
-- [#3346] Add symplify/parameter-name-guard
-- [#3328] [utils] add FindFirstInstanceOfReturnTypeExtension to PHPStan extension
+- [#3325] [SOLID] Add RepeatedLiteralToClassConstantRector- [#3346] Add symplify/parameter-name-guard- [#3328] [utils] add FindFirstInstanceOfReturnTypeExtension to PHPStan extension
 
 ### Changed
-
-- [#3320] Resolving todos [#5]
-- [#3321] Resolving todos [#6]
-- [#3322] node printing functions consolidation
-- [#3326] Make use of createMethodCall()
-- [#3332] Define `__RECTOR_RUNNING__` constant at analysis time, Thanks to [@staabm]
-- [#3340] move MultipleClassFileToPsr4ClassesRector to PSR4
-- [#3343] Alter command name, Thanks to [@ddziaduch]
+- [#3320] Resolving todos [#5]- [#3321] Resolving todos [#6]- [#3322] node printing functions consolidation- [#3326] Make use of createMethodCall()- [#3332] Define `__RECTOR_RUNNING__` constant at analysis time, Thanks to [@staabm]- [#3340] move MultipleClassFileToPsr4ClassesRector to PSR4- [#3343] Alter command name, Thanks to [@ddziaduch]
 
 ### Deprecated
-
 - [#3324] Deprecate Zend 1 to Symfony 4 set
 
 ### Fixed
-
-- [#3344] Fix link and it's name, Thanks to [@ddziaduch]
-- [#3338] Various fixes
-- [#3341] fix namespace
-- [#3327] various PHPStan fixes
+- [#3344] Fix link and it's name, Thanks to [@ddziaduch]- [#3338] Various fixes- [#3341] fix namespace- [#3327] various PHPStan fixes
 
 ## [v0.7.22] - 2020-05-05
 
 ### Added
-
-- [#3293] [Naming] Add RenamePropertyToMatchTypeRector
-- [#3295] [Naming] Fix duplicate name on already existing + add "naming" set to CI
-- [#3305] [Order] Add OrderPropertyByComplexityRector
-- [#3301] [Order] Add OrderPrivateMethodsByUseRector
-- [#3304] [Order] Add OrderPublicInterfaceMethodRector
-- [#3289] [Performance] Add PreslashSimpleFunctionRector
-- [#3290] [SOLID] Add AddFalseDefaultToBoolPropertyRector
-- [#3277] [PHP 8.0] Add ClassOnObjectRector
-- [#3285] Add resolving for private properties of annotation object
-- [#3283] simplify Param node factory + add generic phpdoc class-node factory
-- [#3279] [PHP 8.0] Add get_debug_type()
-- [#3278] [PHP 8.0] Add static type
-- [#3308] add = for [@Route] options separator
-- [#3254] [PHP 8.0] Add attributes v2
+- [#3293] [Naming] Add RenamePropertyToMatchTypeRector- [#3295] [Naming] Fix duplicate name on already existing + add "naming" set to CI- [#3305] [Order] Add OrderPropertyByComplexityRector- [#3301] [Order] Add OrderPrivateMethodsByUseRector- [#3304] [Order] Add OrderPublicInterfaceMethodRector- [#3289] [Performance] Add PreslashSimpleFunctionRector- [#3290] [SOLID] Add AddFalseDefaultToBoolPropertyRector- [#3277] [PHP 8.0] Add ClassOnObjectRector- [#3285] Add resolving for private properties of annotation object- [#3283] simplify Param node factory + add generic phpdoc class-node factory- [#3279] [PHP 8.0] Add get_debug_type()- [#3278] [PHP 8.0] Add static type- [#3308] add = for [@Route] options separator- [#3254] [PHP 8.0] Add attributes v2
 
 ### Changed
-
-- [#3294] [Naming] Decouple ConflictingNameResolver and ExpectedNameResolver
-- [#3273] use propety over property property
-- [#3270] TagValueNode refactoring
-- [#3269] [#3268] - rector should scan linked directories, Thanks to [@atompulse]
-- [#3280] refactoring to generic items
-- [#3281] moving to generic tag node
-- [#3284] merge more factories to MultiPhpDocNodeFactory
-- [#3288] Improve $node name get on static or method call
-- [#3241] Symfony Route annotation needs equal sign, not colon, Thanks to [@stephanvierkant]
-- [#3310] workflow: generate changelog
-- [#3319] Resolving todos [#4]
-- [#3309] workflow: generate documentation
-- [#3306] do not export compiler as part of package
-- [#3313] Resolving todos
-- [#3314] Resolving todos [#2]
-- [#3300] various coding standard improvements
-- [#3299] Tests for [@noRector], Thanks to [@tomasnorre]
-- [#3298] Update Symplify deprecations
-- [#3318] symplify NodeDumper to PHP code test
-- [#3297] [Utils] PHPStan rule improvements
+- [#3294] [Naming] Decouple ConflictingNameResolver and ExpectedNameResolver- [#3273] use propety over property property- [#3270] TagValueNode refactoring- [#3269] [#3268] - rector should scan linked directories, Thanks to [@atompulse]- [#3280] refactoring to generic items- [#3281] moving to generic tag node- [#3284] merge more factories to MultiPhpDocNodeFactory- [#3288] Improve $node name get on static or method call- [#3241] Symfony Route annotation needs equal sign, not colon, Thanks to [@stephanvierkant]- [#3310] workflow: generate changelog- [#3319] Resolving todos [#4]- [#3309] workflow: generate documentation- [#3306] do not export compiler as part of package- [#3313] Resolving todos- [#3314] Resolving todos [#2]- [#3300] various coding standard improvements- [#3299] Tests for [@noRector], Thanks to [@tomasnorre]- [#3298] Update Symplify deprecations- [#3318] symplify NodeDumper to PHP code test- [#3297] [Utils] PHPStan rule improvements
 
 ### Fixed
-
-- [#3317] Fix when PropertyProperty is a subnode of Property, Thanks to [@tomasnorre]
-- [#3275] Fix constant referencing in annotations
-- [#3311] Fix comment removing
+- [#3317] Fix when PropertyProperty is a subnode of Property, Thanks to [@tomasnorre]- [#3275] Fix constant referencing in annotations- [#3311] Fix comment removing
 
 ### Removed
-
-- [#3302] [CakePHPtoSymfony] Remove unfinished set
-- [#3287] [DX] drop confusing --only option to promote config
-- [#3296] remove scan-fatal-errors, move to migrify
-
-## Unreleased
+- [#3302] [CakePHPtoSymfony] Remove unfinished set- [#3287] [DX] drop confusing --only option to promote config- [#3296] remove scan-fatal-errors, move to migrify
 
 ### Changed
-
 - [#3266] publish dump-rectors command with 3rd party install
 
 ## [v0.7.20] - 2020-04-26
-
-- [#3253] make Doctrine property inferer skip non doc
-- [#3262] [cs] sort private methods by call order and property by complexity
-- [#3265] [docs] make dump-rectors command open to public
+- [#3253] make Doctrine property inferer skip non doc- [#3262] [cs] sort private methods by call order and property by complexity- [#3265] [docs] make dump-rectors command open to public
 
 ### Fixed
-
-- [#3252] [CodeQuality] Fix CompactToVariablesRector for unknown names
-- [#3260] [Nette] Fix preg_match_all() to Nette\Utils migrations
-- [#3261] Fix autoloading for phpstan configs
-- [#3248] Fix [@Route] name can be empty, Thanks to [@stephanvierkant]
+- [#3252] [CodeQuality] Fix CompactToVariablesRector for unknown names- [#3260] [Nette] Fix preg_match_all() to Nette\Utils migrations- [#3261] Fix autoloading for phpstan configs- [#3248] Fix [@Route] name can be empty, Thanks to [@stephanvierkant]
 
 ### Removed
-
 - [#3264] remove RectorStandaloneRunner, too hacky
 
 ## [v0.7.19] - 2020-04-24
 
 ### Added
-
-- [#3251] [CodeQuality] Add UnusedForeachValueToArrayKeysRector
-- [#3235] [DX] Add validate fixture suffix
-- [#3237] [PHP 8.0] Add str_ends_with()
-- [#3245] [PHP 8.0] Add Stringable
-- [#3228] [PHP 8.0] Add str_starts_with - rule [#500] 🎉🎉🎉
+- [#3251] [CodeQuality] Add UnusedForeachValueToArrayKeysRector- [#3235] [DX] Add validate fixture suffix- [#3237] [PHP 8.0] Add str_ends_with()- [#3245] [PHP 8.0] Add Stringable- [#3228] [PHP 8.0] Add str_starts_with - rule [#500] 🎉🎉🎉
 
 ### Changed
-
-- [#3242] Update rector counter, Thanks to [@vladyslavstartsev]
-- [#3238] StrStartWith refactoring
-- [#3239] simplify throws class resolving
-- [#3240] Symfony route with prefix, Thanks to [@stephanvierkant]
-- [#3244] docs refactoring
+- [#3242] Update rector counter, Thanks to [@vladyslavstartsev]- [#3238] StrStartWith refactoring- [#3239] simplify throws class resolving- [#3240] Symfony route with prefix, Thanks to [@stephanvierkant]- [#3244] docs refactoring
 
 ### Fixed
-
-- [#3236] various suffix fixes
-- [#3233] Fix single-line doc end
+- [#3236] various suffix fixes- [#3233] Fix single-line doc end
 
 ## [v0.7.18] - 2020-04-23
 
 ### Changed
-
 - [#3224] https://github.com/rectorphp/rector/issues/3223, Thanks to [@atompulse]
 
 ### Fixed
-
 - [#3232] Compiler: Fix invalid changes in config/set neon files, Thanks to [@RiKap]
 
 ## [v0.7.17] - 2020-04-23
 
 ### Added
-
-- [#3219] [Restoration] Add RemoveFinalFromEntityRector
-- [#3218] Add more tag value node tests
-- [#3196] [CodeQuality] Add SplitListScalarAssignToSeparateLineRector
-- [#3195] [PHPUnit] Add strict param to ReplaceAssertArraySubsetRector
-- [#3118] Add cache for un-changed files
-- [#3193] add condition test for [@Route]
+- [#3219] [Restoration] Add RemoveFinalFromEntityRector- [#3218] Add more tag value node tests- [#3196] [CodeQuality] Add SplitListScalarAssignToSeparateLineRector- [#3195] [PHPUnit] Add strict param to ReplaceAssertArraySubsetRector- [#3118] Add cache for un-changed files- [#3193] add condition test for [@Route]
 
 ### Changed
-
-- [#3175] [CodeQuality] Make ChangeArrayPushToArrayAssignRector skip spread
-- [#3211] [PhpDoc] Use generic approach to TagValueNode annotations quotes and explicitness
-- [#3182] [Privatization] Make PrivatizeLocalOnlyMethodRector skip entities
-- [#3156] Upgrade to php-parser 4.4
-- [#3174] include PHPExcel_Worksheet_PageSetup
-- [#3186] Updating the link to Drupal-Rector repo, Thanks to [@shaal]
-- [#3187] Test with Drupal-Rector project to discover BC breaks early on, Thanks to [@shaal]
-- [#3217] reorganize phpdoc reprint test
-- [#3194] Spacing + quoting improvements in [@Route]
-- [#3197] various improvements
-- [#3198] use FileInfo in Parser
-- [#3200] Run rector list in CI to detect potential issues, Thanks to [@JanMikes]
-- [#3215] improve TagValueNodes
+- [#3175] [CodeQuality] Make ChangeArrayPushToArrayAssignRector skip spread- [#3211] [PhpDoc] Use generic approach to TagValueNode annotations quotes and explicitness- [#3182] [Privatization] Make PrivatizeLocalOnlyMethodRector skip entities- [#3156] Upgrade to php-parser 4.4- [#3174] include PHPExcel_Worksheet_PageSetup- [#3186] Updating the link to Drupal-Rector repo, Thanks to [@shaal]- [#3187] Test with Drupal-Rector project to discover BC breaks early on, Thanks to [@shaal]- [#3217] reorganize phpdoc reprint test- [#3194] Spacing + quoting improvements in [@Route]- [#3197] various improvements- [#3198] use FileInfo in Parser- [#3200] Run rector list in CI to detect potential issues, Thanks to [@JanMikes]- [#3215] improve TagValueNodes
 
 ### Fixed
-
-- [#3199] [PHPUnit] Fix ExceptionAnnotationRector for null phpdoc
-- [#3191] [PHP 7.3] Fix regex slash escaping
-- [#3177] fix back annotation
-- [#3176] Type and Choice fixes
-- [#3204] various fixes
+- [#3199] [PHPUnit] Fix ExceptionAnnotationRector for null phpdoc- [#3191] [PHP 7.3] Fix regex slash escaping- [#3177] fix back annotation- [#3176] Type and Choice fixes- [#3204] various fixes
 
 ### Removed
-
 - [#3216] drop hide autoload errors
 
 ## [v0.7.16] - 2020-04-16
 
 ### Added
-
 - [#3172] [PHPOffice] Add IncreaseColumnIndexRector
 
 ## [v0.7.15] - 2020-04-16
 
 ### Changed
-
-- [#3168] [PHPOffice] Init migration to PHPSpreadSheets
-- [#3171] Cleanup
+- [#3168] [PHPOffice] Init migration to PHPSpreadSheets- [#3171] Cleanup
 
 ## [v0.7.14] - 2020-04-14
 
 ### Added
-
 - [#3164] [DeadCode] Add RemoveUnusedAssignVariableRector
 
 ### Fixed
-
 - [#3161] fix comment removal
 
 ## [v0.7.12] - 2020-04-13
 
 ### Added
-
-- [#3155] Add extra allowed interface to EntityAliasToClassConstantReferenceRector, Thanks to [@acrobat]
-- [#3154] provide config + add post Rectors for FileSystemRector
+- [#3155] Add extra allowed interface to EntityAliasToClassConstantReferenceRector, Thanks to [@acrobat]- [#3154] provide config + add post Rectors for FileSystemRector
 
 ### Fixed
-
 - [#3153] [DeadCode] Fix RemoveUnusedDoctrineEntityMethodAndPropertyRector for id
 
 ## [v0.7.11] - 2020-04-08
-
 - [#3152] fix ThisCallOnStaticMethodToStaticCallRector in prefixed rector
 
 ## [v0.7.10] - 2020-04-08
 
 ### Changed
-
 - [#3151] check for array at UselessIfCondBeforeForeachDetector
 
 ## [v0.7.9] - 2020-04-08
 
 ### Fixed
-
-- [#3149] fix sniff public
-- [#3148] fix PrivatizeLocalOnlyMethodRector for event subscriber methods
+- [#3149] fix sniff public- [#3148] fix PrivatizeLocalOnlyMethodRector for event subscriber methods
 
 ## [v0.7.8] - 2020-04-07
 
 ### Added
-
-- [#3108] [DeadCode] Add RemoveDeadRecursiveClassMethodRector
-- [#3117] [PHPUnit] Add AddProphecyTraitRector
-- [#3093] [Privatization] Add PrivatizeLocalGetterToPropertyRector
-- [#3100] [Privatization] Add PrivatizeLocalPropertyToPrivatePropertyRector
-- [#3116] move node adding to PostRector
-- [#3140] add ClassSyncerNodeTraverser
-- [#3089] Add RunnableTestCase to run fixed code in a test, Thanks to [@paslandau]
-- [#3094] Add parallel execution to ci/run_all_sets, Thanks to [@paslandau]
-- [#3134] Add DoctrineAnnotationParserSyncer to prevent doctrine/annotation constant by-value override
-- [#3114] move property adding to PostRector
-- [#3141] [PHPUnit 9.1] Add assertFileNotExists() method rename
-- [#3080] [CodeQuality] Add ArrayKeysAndInArrayToIssetRector
-- [#3070] [DeadCode] Add empty() + count($values) > 0 checks to RemoveUnusedNonEmptyArrayBeforeForeachRector
-- [#3068] [DeadCode] Add RemoveAssignOfVoidReturnFunctionRector
-- [#3062] [DeadCode] Add RemoveUnusedFunctionRector
-- [#3066] [DeadCode] Add RemoveUnusedNonEmptyArrayBeforeForeachRector
-- [#3047] [PHPUnit] Add CreateMockToCreateStubRector
-- [#3081] [TypeDeclaration] Add class method param type resolving by property
-- [#3058] [PHP 7.4] Add default null type on properties
-- [#3059] [PHP 7.4] Add restoration null default only
-- [#3057] [PHP 7.4] Add id tag support + remove array on collection property
-- [#3078] Add Safe 0.7 set
-- [#3072] [PHP 8.0] Add StrContainsRector
-
-- [#3111] [API] NodeRemovingCommander to PostRector
-- [#3084] [Privatization] Privatize methods that are used only locally
-- [#3120] Improve performance
-- [#3097] move ci validation scripts to objectivy ProjectValidator package
-- [#3139] Correct sentence in README.md, Thanks to [@callmebob2016]
-- [#3092] Cleanup
-- [#3137] Fixup has same commit message, Thanks to [@JanMikes]
-- [#3136] Copy .git directory into docker image, Thanks to [@JanMikes]
-- [#3103] move constant privatization to privatization set
-- [#3113] move name-importing to PostRector
-- [#3106] Require symfony 5.0.6 or 4.4.6, Thanks to [@UFTimmy]
-- [#3128] Allow PHPStan generics
-- [#3115] move node-replacing to PostRector
-- [#3146] Make sure doctrine alias rector works in symfony controllers, Thanks to [@acrobat]
-- [#3082] [CodeQuality] use array_key_exists instead of isset
-- [#3056] [PHP 7.4] Improve TypedPropertyRector for Doctrine collection
-- [#3051] improve GeneratedValueTagValueNode
-- [#3063] [PHP 5.5] Prevent error on non-string value in PregReplaceEModifierRector
-- [#3040] Proofread docs, Thanks to [@greg0ire]
-- [#3039] Proofread readme, Thanks to [@greg0ire]
-- [#3083] use just one type of printing
+- [#3108] [DeadCode] Add RemoveDeadRecursiveClassMethodRector- [#3117] [PHPUnit] Add AddProphecyTraitRector- [#3093] [Privatization] Add PrivatizeLocalGetterToPropertyRector- [#3100] [Privatization] Add PrivatizeLocalPropertyToPrivatePropertyRector- [#3116] move node adding to PostRector- [#3140] add ClassSyncerNodeTraverser- [#3089] Add RunnableTestCase to run fixed code in a test, Thanks to [@paslandau]- [#3094] Add parallel execution to ci/run_all_sets, Thanks to [@paslandau]- [#3134] Add DoctrineAnnotationParserSyncer to prevent doctrine/annotation constant by-value override- [#3114] move property adding to PostRector- [#3141] [PHPUnit 9.1] Add assertFileNotExists() method rename- [#3080] [CodeQuality] Add ArrayKeysAndInArrayToIssetRector- [#3070] [DeadCode] Add empty() + count($values) > 0 checks to RemoveUnusedNonEmptyArrayBeforeForeachRector- [#3068] [DeadCode] Add RemoveAssignOfVoidReturnFunctionRector- [#3062] [DeadCode] Add RemoveUnusedFunctionRector- [#3066] [DeadCode] Add RemoveUnusedNonEmptyArrayBeforeForeachRector- [#3047] [PHPUnit] Add CreateMockToCreateStubRector- [#3081] [TypeDeclaration] Add class method param type resolving by property- [#3058] [PHP 7.4] Add default null type on properties- [#3059] [PHP 7.4] Add restoration null default only- [#3057] [PHP 7.4] Add id tag support + remove array on collection property- [#3078] Add Safe 0.7 set- [#3072] [PHP 8.0] Add StrContainsRector
+- [#3111] [API] NodeRemovingCommander to PostRector- [#3084] [Privatization] Privatize methods that are used only locally- [#3120] Improve performance- [#3097] move ci validation scripts to objectivy ProjectValidator package- [#3139] Correct sentence in README.md, Thanks to [@callmebob2016]- [#3092] Cleanup- [#3137] Fixup has same commit message, Thanks to [@JanMikes]- [#3136] Copy .git directory into docker image, Thanks to [@JanMikes]- [#3103] move constant privatization to privatization set- [#3113] move name-importing to PostRector- [#3106] Require symfony 5.0.6 or 4.4.6, Thanks to [@UFTimmy]- [#3128] Allow PHPStan generics- [#3115] move node-replacing to PostRector- [#3146] Make sure doctrine alias rector works in symfony controllers, Thanks to [@acrobat]- [#3082] [CodeQuality] use array_key_exists instead of isset- [#3056] [PHP 7.4] Improve TypedPropertyRector for Doctrine collection- [#3051] improve GeneratedValueTagValueNode- [#3063] [PHP 5.5] Prevent error on non-string value in PregReplaceEModifierRector- [#3040] Proofread docs, Thanks to [@greg0ire]- [#3039] Proofread readme, Thanks to [@greg0ire]- [#3083] use just one type of printing
 
 ### Fixed
-
-- [#3050] Fix assert choice tag value node with class constant reference
-- [#3049] fix union type on ReturnTypeDeclarationRector
-- [#3052] fix content resolving
-- [#3054] skip if not used with the `array []` operator fixes [#3053], Thanks to [@derflocki]
-- [#3065] Fix multiple annotation reading of same type at class method
-- [#3069] Fix Route separating key
-- [#3077] Fix auto import
-- [#3079] Fix annotation in requirements of [@Route]
-- [#3064] [PHP 7.4] Fix ChangeReflectionTypeToStringToGetNameRector
-- [#3132] Fix Gedmo annotation printing
-- [#3130] Fix missing array key in ArrayMergeOfNonArraysToSimpleArrayRector
-- [#3096] Fix [@Route] localized paths
-- [#3129] fix missing host at [@Route] annotation
+- [#3050] Fix assert choice tag value node with class constant reference- [#3049] fix union type on ReturnTypeDeclarationRector- [#3052] fix content resolving- [#3054] skip if not used with the `array []` operator fixes [#3053], Thanks to [@derflocki]- [#3065] Fix multiple annotation reading of same type at class method- [#3069] Fix Route separating key- [#3077] Fix auto import- [#3079] Fix annotation in requirements of [@Route]- [#3064] [PHP 7.4] Fix ChangeReflectionTypeToStringToGetNameRector- [#3132] Fix Gedmo annotation printing- [#3130] Fix missing array key in ArrayMergeOfNonArraysToSimpleArrayRector- [#3096] Fix [@Route] localized paths- [#3129] fix missing host at [@Route] annotation
 
 ### Removed
-
-- [#3122] remove json rector dump formatter, not needed
-- [#3071] remove ctor dependency on property/assign removal
-- [#3076] [PHP 8.0] drop preg_match support from StrContains, too vague
+- [#3122] remove json rector dump formatter, not needed- [#3071] remove ctor dependency on property/assign removal- [#3076] [PHP 8.0] drop preg_match support from StrContains, too vague
 
 ## [v0.7.7] - 2020-03-20
 
 ### Added
-
-- [#3024] add DoctrineBehaviors 2.0
-- [#3019] add fix for getIterator() on Finder for Array spread
-- [#3034] Add checkstyle output format
-- [#3021] add phpunit 9 rector to convert non-strict assertContains, Thanks to [@nightlinus]
-- [#3023] add DoctrineBehaviors 2.0
+- [#3024] add DoctrineBehaviors 2.0- [#3019] add fix for getIterator() on Finder for Array spread- [#3034] Add checkstyle output format- [#3021] add phpunit 9 rector to convert non-strict assertContains, Thanks to [@nightlinus]- [#3023] add DoctrineBehaviors 2.0
 
 ### Changed
-
-- [#3032] [DeadCode] Skip shifted variable
-- [#3015] Rector CI is now exclusive for non-fork pushes + PRs, Thanks to [@JanMikes]
-- [#3013] Commit rector processed changes from CI, Thanks to [@JanMikes]
-- [#3036] Run cs after rector ci, Thanks to [@JanMikes]
-- [#3027] ForToForeachRector fixture, Thanks to [@crishoj]
+- [#3032] [DeadCode] Skip shifted variable- [#3015] Rector CI is now exclusive for non-fork pushes + PRs, Thanks to [@JanMikes]- [#3013] Commit rector processed changes from CI, Thanks to [@JanMikes]- [#3036] Run cs after rector ci, Thanks to [@JanMikes]- [#3027] ForToForeachRector fixture, Thanks to [@crishoj]
 
 ### Fixed
-
-- [#3029] Fix other loop
-- [#3022] PHP 7.4 deprecation fix, Thanks to [@alexeyshockov]
-- [#3030] fix no-space change reprint in case of dual comment
-- [#3035] Fix typo in README.md, Thanks to [@pgrimaud]
-- [#3031] fix asterisk indent
+- [#3029] Fix other loop- [#3022] PHP 7.4 deprecation fix, Thanks to [@alexeyshockov]- [#3030] fix no-space change reprint in case of dual comment- [#3035] Fix typo in README.md, Thanks to [@pgrimaud]- [#3031] fix asterisk indent
 
 ### Removed
-
 - [#3016] Delete DogFoodClass, Thanks to [@JanMikes]
 
 ## [v0.7.4] - 2020-03-11
 
 ### Added
-
-- [#3003] Add failing tests for method annotation, Thanks to [@stedekay]
-- [#2990] AssertTrueFalseToSpecificMethodRector: add broken test ('Pick more specific node than PhpParser\Node\Expr\StaticCall'), Thanks to [@gnutix]
-- [#2988] add space between name and value
+- [#3003] Add failing tests for method annotation, Thanks to [@stedekay]- [#2990] AssertTrueFalseToSpecificMethodRector: add broken test ('Pick more specific node than PhpParser\Node\Expr\StaticCall'), Thanks to [@gnutix]- [#2988] add space between name and value
 
 ### Changed
-
-- [#3009] [ReadyToBeMerged][AnnotateThrowables] Support `$this` calling a method of the same class, Thanks to [@Aerendir]
-- [#3012] check for used variable without comments
-- [#2981] Skip passed argument
-- [#2984] improve array shape double collon spacing
-- [#2987] improve param array type for change type
-- [#2980] skip empty method on open-source
-- [#3010] Abstract files system
-- [#2998] AnnotateThrowables: support analysis of called functions and methods, Thanks to [@Aerendir]
+- [#3009] [ReadyToBeMerged][AnnotateThrowables] Support `$this` calling a method of the same class, Thanks to [@Aerendir]- [#3012] check for used variable without comments- [#2981] Skip passed argument- [#2984] improve array shape double collon spacing- [#2987] improve param array type for change type- [#2980] skip empty method on open-source- [#3010] Abstract files system- [#2998] AnnotateThrowables: support analysis of called functions and methods, Thanks to [@Aerendir]
 
 ### Fixed
-
-- [#3008] [ReadyToBeMerged][AnnotateThrowables] Fix a small mispelling., Thanks to [@Aerendir]
-- [#2992] fix spacing of data provider
-- [#2997] Fix various static calls errors in PHPUnit Rectors., Thanks to [@gnutix]
-- [#3004] fix method annotation
-- [#2985] fix union param
-- [#2982] Fix PhpDocInfoPrinter slash removal
-- [#2996] fix multiline with one space
+- [#3008] [ReadyToBeMerged][AnnotateThrowables] Fix a small mispelling., Thanks to [@Aerendir]- [#2992] fix spacing of data provider- [#2997] Fix various static calls errors in PHPUnit Rectors., Thanks to [@gnutix]- [#3004] fix method annotation- [#2985] fix union param- [#2982] Fix PhpDocInfoPrinter slash removal- [#2996] fix multiline with one space
 
 ### Removed
-
 - [#3005] remove comments only in case of change to original node
 
 ## [v0.7.3] - 2020-03-01
 
 ### Added
-
-- [#2948] [DeadCode] Add RemoveDuplicatedIfReturnRector
-- [#2950] [GetClassOnNullRector] Add failing test in trait., Thanks to [@gnutix]
-- [#2953] AssertRegExpRectorTest: add broken test on static method call, Thanks to [@gnutix]
-- [#2956] AssertTrueFalseInternalTypeToSpecificMethodRector: add broken test method call, Thanks to [@gnutix]
-- [#2952] ReturnTypeDeclarationRector: add broken test on array indexes (?), Thanks to [@gnutix]
-- [#2951] AddSeeTestAnnotationRectorTest: add broken test for simple comment., Thanks to [@gnutix]
-- [#2943] add failing test case for [#2939], Thanks to [@fsok]
-- [#2954] RemoveDefaultArgumentValueRector: add broken test on static method call., Thanks to [@gnutix]
-- [#2968] Class Cognitive complexity improvements + add docContent as first step to format preserving of doc nodes
+- [#2948] [DeadCode] Add RemoveDuplicatedIfReturnRector- [#2950] [GetClassOnNullRector] Add failing test in trait., Thanks to [@gnutix]- [#2953] AssertRegExpRectorTest: add broken test on static method call, Thanks to [@gnutix]- [#2956] AssertTrueFalseInternalTypeToSpecificMethodRector: add broken test method call, Thanks to [@gnutix]- [#2952] ReturnTypeDeclarationRector: add broken test on array indexes (?), Thanks to [@gnutix]- [#2951] AddSeeTestAnnotationRectorTest: add broken test for simple comment., Thanks to [@gnutix]- [#2943] add failing test case for [#2939], Thanks to [@fsok]- [#2954] RemoveDefaultArgumentValueRector: add broken test on static method call., Thanks to [@gnutix]- [#2968] Class Cognitive complexity improvements + add docContent as first step to format preserving of doc nodes
 
 ### Changed
-
-- [#2974] [DX] Improve ForToForeachRector
-- [#2966] make open-source parameter typo-proof
-- [#2969] decopule class dependency manipulator methods
-- [#2949] Improve PropertyFetchManipulator
-- [#2972] Simplify PropertyFetchManipulator
-- [#2962] cleanup extra space in doc print
-- [#2975] Decrease class complexity <=50
-- [#2947] Let amount of usages decide whether whitespaces or tabs are used, Thanks to [@alexanderschnitzler]
+- [#2974] [DX] Improve ForToForeachRector- [#2966] make open-source parameter typo-proof- [#2969] decopule class dependency manipulator methods- [#2949] Improve PropertyFetchManipulator- [#2972] Simplify PropertyFetchManipulator- [#2962] cleanup extra space in doc print- [#2975] Decrease class complexity <=50- [#2947] Let amount of usages decide whether whitespaces or tabs are used, Thanks to [@alexanderschnitzler]
 
 ### Fixed
-
-- [#2978] [DeadCode] Fix shifted value
-- [#2979] fix spacing for array shape item
-- [#2959] fix return dim array fetch
-- [#2960] fix naming of non-func call
-- [#2963] fix get class on trait
-- [#2964] fix complexity
-- [#2965] fix extra space in phpdoc
-- [#2977] fix array shape type
-- [#2961] various fixes
+- [#2978] [DeadCode] Fix shifted value- [#2979] fix spacing for array shape item- [#2959] fix return dim array fetch- [#2960] fix naming of non-func call- [#2963] fix get class on trait- [#2964] fix complexity- [#2965] fix extra space in phpdoc- [#2977] fix array shape type- [#2961] various fixes
 
 ### Removed
-
 - [#2946] remove dead code
 
 ## [v0.7.2] - 2020-02-27
 
 ### Added
-
-- [#2924] [CodeIgniter] Add 4.0 set
-- [#2941] Make compiler own kernel app + add more debug info
-- [#2940] add Windows print test
-- [#2933] add project_type
-- [#2931] add has lifecycle callbacks
-- [#2925] add docs space test
+- [#2924] [CodeIgniter] Add 4.0 set- [#2941] Make compiler own kernel app + add more debug info- [#2940] add Windows print test- [#2933] add project_type- [#2931] add has lifecycle callbacks- [#2925] add docs space test
 
 ### Changed
-
 - [#2926] [DeadCode] Skip abstract methods in RemoveUnusedParameterRector as 3rd contract
 
 ### Fixed
-
-- [#2935] Fix double boolean
-- [#2934] fix [@method] union return type annotation
-- [#2932] Fix prophecy mocking arg
+- [#2935] Fix double boolean- [#2934] fix [@method] union return type annotation- [#2932] Fix prophecy mocking arg
 
 ### Removed
-
 - [#2937] skip open source class in remove unused param in open-source
 
 ## [v0.7.1] - 2020-02-23
 
 ### Added
-
-- [#2906] [CodeQuality] Add InlineIfToExplicitIfRector
-- [#2898] [CodingStyle] Add CamelCaseFunctionNamingToUnderscoreRector
-- [#2919] [DeadCode] Add RemoveUnusedVariableAssignRector
-- [#2918] [DeadCode] Add RemoveUnusedClassConstantRector
-- [#2914] [JMS] Add RemoveJmsInjectParamsAnnotationRector and RemoveJmsServiceAnnotationRector
-- [#2920] [MysqlToMysqli] Add MysqlQueryMysqlErrorWithLinkRector
-- [#2917] [Phalcon] Add DecoupleSaveMethodCallWithArgumentToAssignRector
-- [#2907] [SOLID] Add ChangeNestedForeachIfsToEarlyContinueRector
-- [#2873] [SOLID] Add ChangeReadOnlyVariableWithDefaultValueToConstantRector
-- [#2901] add links to each rule to docs
-- [#2902] add mergeable
-- [#2862] Adding failing test for RemoveAlwaysElseRector, Thanks to [@escopecz]
-- [#2867] Add failing test for issue [#2863], Thanks to [@fsok]
-- [#2853] [DeadCode] Add RemoveDeadTryCatchRector
-- [#2856] [SOLID] Add ChangeReadOnlyPropertyWithDefaultValueToConstantRector
-- [#2848] add first OXID rector, Thanks to [@alfredbez]
+- [#2906] [CodeQuality] Add InlineIfToExplicitIfRector- [#2898] [CodingStyle] Add CamelCaseFunctionNamingToUnderscoreRector- [#2919] [DeadCode] Add RemoveUnusedVariableAssignRector- [#2918] [DeadCode] Add RemoveUnusedClassConstantRector- [#2914] [JMS] Add RemoveJmsInjectParamsAnnotationRector and RemoveJmsServiceAnnotationRector- [#2920] [MysqlToMysqli] Add MysqlQueryMysqlErrorWithLinkRector- [#2917] [Phalcon] Add DecoupleSaveMethodCallWithArgumentToAssignRector- [#2907] [SOLID] Add ChangeNestedForeachIfsToEarlyContinueRector- [#2873] [SOLID] Add ChangeReadOnlyVariableWithDefaultValueToConstantRector- [#2901] add links to each rule to docs- [#2902] add mergeable- [#2862] Adding failing test for RemoveAlwaysElseRector, Thanks to [@escopecz]- [#2867] Add failing test for issue [#2863], Thanks to [@fsok]- [#2853] [DeadCode] Add RemoveDeadTryCatchRector- [#2856] [SOLID] Add ChangeReadOnlyPropertyWithDefaultValueToConstantRector- [#2848] add first OXID rector, Thanks to [@alfredbez]
 
 ### Changed
-
-- [#2883] [OXID] replace backwards-compatability classes in oxNew, Thanks to [@alfredbez]
-- [#2886] skip test fixtures
-- [#2872] Skip unpackaged args in ArraySpreadInsteadOfArrayMergeRector
-- [#2871] Make ParamTypeDeclaration test pass with parent interface
-- [#2874] Update set for transforming Kdyby\Translation to Contributte\Translation, Thanks to [@Ivorius]
-- [#2869] Keep comments
-- [#2868] update CHANGELOG
-- [#2875] disable coverage on pr, secret does not work
-- [#2876] `AnnotateThrowablesRector`: Improve organization of tests., Thanks to [@Aerendir]
-- [#2881] Callable type falling tests, Thanks to [@snapshotpl]
-- [#2884] Callable type
-- [#2922] skip used property
-- [#2890] Support throw of static methods, Thanks to [@Aerendir]
-- [#2904] Support throw from the method of an instantiated class., Thanks to [@Aerendir]
-- [#2916] improve complexity
-- [#2915] improve EregToPcreTransformer complexity
-- [#2913] replace SHORT_NAME with short name interface
-- [#2909] Rector CI: enable SOLID set
-- [#2905] Fixup
-- [#2903] prevent getName() on StaticCall or MethodCall
-- [#2896] keep array function static
-- [#2631] [AddArrayReturnDocTypeRector] sets a less specific type in child method (mixed[]) than is defined in parent method (SomeObject[]), Thanks to [@gnutix]
-- [#2650] [CountOnNullRector] Should understand array/countable variable in trait method, Thanks to [@gnutix]
-- [#2860] Make `AnnotateThrowablesRector` continue on unhandled node types., Thanks to [@Aerendir]
-- [#2859] Apply properties to constants rule from SOLID
-- [#2858] Cleanup AnnotateThrowablesRector
-- [#2857] Improve AnnotateThrowablesRector
-- [#2851] move Nette package to rules
+- [#2883] [OXID] replace backwards-compatability classes in oxNew, Thanks to [@alfredbez]- [#2886] skip test fixtures- [#2872] Skip unpackaged args in ArraySpreadInsteadOfArrayMergeRector- [#2871] Make ParamTypeDeclaration test pass with parent interface- [#2874] Update set for transforming Kdyby\Translation to Contributte\Translation, Thanks to [@Ivorius]- [#2869] Keep comments- [#2868] update CHANGELOG- [#2875] disable coverage on pr, secret does not work- [#2876] `AnnotateThrowablesRector`: Improve organization of tests., Thanks to [@Aerendir]- [#2881] Callable type falling tests, Thanks to [@snapshotpl]- [#2884] Callable type- [#2922] skip used property- [#2890] Support throw of static methods, Thanks to [@Aerendir]- [#2904] Support throw from the method of an instantiated class., Thanks to [@Aerendir]- [#2916] improve complexity- [#2915] improve EregToPcreTransformer complexity- [#2913] replace SHORT_NAME with short name interface- [#2909] Rector CI: enable SOLID set- [#2905] Fixup- [#2903] prevent getName() on StaticCall or MethodCall- [#2896] keep array function static- [#2631] [AddArrayReturnDocTypeRector] sets a less specific type in child method (mixed[]) than is defined in parent method (SomeObject[]), Thanks to [@gnutix]- [#2650] [CountOnNullRector] Should understand array/countable variable in trait method, Thanks to [@gnutix]- [#2860] Make `AnnotateThrowablesRector` continue on unhandled node types., Thanks to [@Aerendir]- [#2859] Apply properties to constants rule from SOLID- [#2858] Cleanup AnnotateThrowablesRector- [#2857] Improve AnnotateThrowablesRector- [#2851] move Nette package to rules
 
 ### Fixed
-
-- [#2865] fix callable print [closes [#2841]]
-- [#2866] Skip CountOnNullRector on trait + fix return type mixed override
-- [#2885] Fix already constant
-- [#2900] Fix incorrect regexes to preserve doc tags spacing
-- [#2899] fix duplicate switch without break
-- [#2880] Fix PHP notice in ternary to spaceship rector, Thanks to [@fsok]
-- [#2870] fix remove alwasy else for anonymous function jump
-- [#2921] Fix FinalizeClassesWithoutChildrenRector for embedable
-- [#2893] fix tab indent
-- [#2897] fix nested array dim fetch resolving type
+- [#2865] fix callable print [closes [#2841]]- [#2866] Skip CountOnNullRector on trait + fix return type mixed override- [#2885] Fix already constant- [#2900] Fix incorrect regexes to preserve doc tags spacing- [#2899] fix duplicate switch without break- [#2880] Fix PHP notice in ternary to spaceship rector, Thanks to [@fsok]- [#2870] fix remove alwasy else for anonymous function jump- [#2921] Fix FinalizeClassesWithoutChildrenRector for embedable- [#2893] fix tab indent- [#2897] fix nested array dim fetch resolving type
 
 ## [v0.7.0] - 2020-02-14
 
 ### Added
-
-- [#2795] [CakePHPToSymfony] Add CakePHPBeforeFilterToRequestEventSubscriberRector
-- [#2850] [PHPStan] Add KeepRectorNamespaceForRectorRule
-- [#2784] [PHPUnit] feature: add rule to refactor exception methods, Thanks to [@alfredbez]
-- [#2849] [Renaming] Add RenameFuncCallToStaticCallRector
-- [#2811] Add support for phpunit 9, Thanks to [@snapshotpl]
-- [#2843] add more checks to 'composer complete-check', Thanks to [@alfredbez]
-- [#2802] added --config parameter to README, Thanks to [@C0pyR1ght]
+- [#2795] [CakePHPToSymfony] Add CakePHPBeforeFilterToRequestEventSubscriberRector- [#2850] [PHPStan] Add KeepRectorNamespaceForRectorRule- [#2784] [PHPUnit] feature: add rule to refactor exception methods, Thanks to [@alfredbez]- [#2849] [Renaming] Add RenameFuncCallToStaticCallRector- [#2811] Add support for phpunit 9, Thanks to [@snapshotpl]- [#2843] add more checks to 'composer complete-check', Thanks to [@alfredbez]- [#2802] added --config parameter to README, Thanks to [@C0pyR1ght]
 
 ### Changed
-
-- [#2781] [PhpDoc] move get param types to php doc info
-- [#2830] Decouple Static Type Mapper
-- [#2838] move Rector-rule based packages from /packages to /rules
-- [#2756] github-action: Annotate Github Pull Requests based on a Checkstyle X…, Thanks to [@staabm]
-- [#2829] decouple PropertyFetchTypeResolver
-- [#2847] move core architecture to own set
-- [#2775] Merge pull request [#2775] from rectorphp/php-doc-object-attribute
-- [#2845] improve original format in CallableTypeNode
-- [#2783] Merge pull request [#2783] from rectorphp/cleanup-parsed-nodes
-- [#2844] Update to PHPStan 0.12.10 stable
-- [#2786] Merge pull request [#2786] from rectorphp/php-doc-only
-- [#2792] decouple ImplicitToExplicitRoutingAnnotationDecorator
-- [#2794] Merge pull request [#2794] from rectorphp/cakephp-before-request
-- [#2840] Inject the coveralls token as a secret, Thanks to [@ikvasnica]
-- [#2797] use PhpDocInfo by default
-- [#2799] DocBlockManipulator decoupling
-- [#2801] Decouple DocBlockClassRenamer
-- [#2790] Merge pull request [#2790] from rectorphp/cakephp-routes-to-explicit
-- [#2807] Move src namespace frm Rector\ to Rector\Core\
-- [#2817] decouple ParentConstantReflectionResolver
-- [#2825] decouple VendorLock package
-- [#2821] rector for doctrine setParameters method, Thanks to [@vladyslavstartsev]
-- [#2818] decouple function node finder and collector from ParsedNodesByType
-- [#2823] NodeNameResolver decoupled to own package
-- [#2742] Decouple PHPStan Type to function resolver logic, Thanks to [@Lctrs]
-- [#2810] rename package to use lowercased standard, prevent confusion with PSR-4
-- [#2791] [cs] apply property and method order
+- [#2781] [PhpDoc] move get param types to php doc info- [#2830] Decouple Static Type Mapper- [#2838] move Rector-rule based packages from /packages to /rules- [#2756] github-action: Annotate Github Pull Requests based on a Checkstyle X…, Thanks to [@staabm]- [#2829] decouple PropertyFetchTypeResolver- [#2847] move core architecture to own set- [#2775] Merge pull request [#2775] from rectorphp/php-doc-object-attribute- [#2845] improve original format in CallableTypeNode- [#2783] Merge pull request [#2783] from rectorphp/cleanup-parsed-nodes- [#2844] Update to PHPStan 0.12.10 stable- [#2786] Merge pull request [#2786] from rectorphp/php-doc-only- [#2792] decouple ImplicitToExplicitRoutingAnnotationDecorator- [#2794] Merge pull request [#2794] from rectorphp/cakephp-before-request- [#2840] Inject the coveralls token as a secret, Thanks to [@ikvasnica]- [#2797] use PhpDocInfo by default- [#2799] DocBlockManipulator decoupling- [#2801] Decouple DocBlockClassRenamer- [#2790] Merge pull request [#2790] from rectorphp/cakephp-routes-to-explicit- [#2807] Move src namespace frm Rector\ to Rector\Core\- [#2817] decouple ParentConstantReflectionResolver- [#2825] decouple VendorLock package- [#2821] rector for doctrine setParameters method, Thanks to [@vladyslavstartsev]- [#2818] decouple function node finder and collector from ParsedNodesByType- [#2823] NodeNameResolver decoupled to own package- [#2742] Decouple PHPStan Type to function resolver logic, Thanks to [@Lctrs]- [#2810] rename package to use lowercased standard, prevent confusion with PSR-4- [#2791] [cs] apply property and method order
 
 ### Deprecated
-
 - [#2780] remove deprecated `removeBy*()` in DocBlockManipulator
 
 ### Fixed
-
-- [#2819] Cognitive complexity fixes
-- [#2813] Fix encapsed
-- [#2846] Fix dev in build
-- [#2808] Fix replacement for Table::buildRules(), Thanks to [@markstory]
-- [#2800] Update to PHPStan 0.12.9 and fix scoping deps
-- [#2812] [PHP 74] Fix ArraySpreadInsteadOfArrayMergeRector for non-constant string keys
-- [#2816] PHPStan fixes, Thanks to [@ondrejmirtes]
-- [#2814] Fix protected parent constant override
+- [#2819] Cognitive complexity fixes- [#2813] Fix encapsed- [#2846] Fix dev in build- [#2808] Fix replacement for Table::buildRules(), Thanks to [@markstory]- [#2800] Update to PHPStan 0.12.9 and fix scoping deps- [#2812] [PHP 74] Fix ArraySpreadInsteadOfArrayMergeRector for non-constant string keys- [#2816] PHPStan fixes, Thanks to [@ondrejmirtes]- [#2814] Fix protected parent constant override
 
 ### Removed
-
-- [#2831] remove parameter in imports
-- [#2827] remove unused method
-- [#2798] Remove nullable PhpDoc
-- [#2826] remove duplicated method
-- [#2787] Merge pull request [#2787] from rectorphp/remove-setter-only
-- [#2789] Merge pull request [#2789] from rectorphp/remove-many-args
+- [#2831] remove parameter in imports- [#2827] remove unused method- [#2798] Remove nullable PhpDoc- [#2826] remove duplicated method- [#2787] Merge pull request [#2787] from rectorphp/remove-setter-only- [#2789] Merge pull request [#2789] from rectorphp/remove-many-args
 
 ## [v0.6.14] - 2020-01-29
 
 ### Added
-
-- [#2758] [CI] add SonarCube
-- [#2726] [CakePHPToSymfony] Add CakePHPModelToDoctrineEntityRector
-- [#2744] [CakePHPToSymfony] Add CakePHPModelToDoctrineRepositoryRector
-- [#2731] [CakePHPToSymfony] Add model migration for ManyToOne, OneToOne, ManyToMany
-- [#2745] [CakePHPToSymfony] Add threaded and count to CakePHPModelToDoctrineRepositoryRector
-- [#2747] [CakePHPToSymfony] Add list to CakePHPModelToDoctrineRepositoryRector
-- [#2735] [DX] add rd() function mapping to tracy
-- [#2711] Add SetcookieRector, Thanks to [@zonuexe]
-- [#2757] Added phpunit problem matcher, Thanks to [@staabm]
-- [#2759] add travis retry
-- [#2761] Added opcache to docker image, Thanks to [@JanMikes]
+- [#2758] [CI] add SonarCube- [#2726] [CakePHPToSymfony] Add CakePHPModelToDoctrineEntityRector- [#2744] [CakePHPToSymfony] Add CakePHPModelToDoctrineRepositoryRector- [#2731] [CakePHPToSymfony] Add model migration for ManyToOne, OneToOne, ManyToMany- [#2745] [CakePHPToSymfony] Add threaded and count to CakePHPModelToDoctrineRepositoryRector- [#2747] [CakePHPToSymfony] Add list to CakePHPModelToDoctrineRepositoryRector- [#2735] [DX] add rd() function mapping to tracy- [#2711] Add SetcookieRector, Thanks to [@zonuexe]- [#2757] Added phpunit problem matcher, Thanks to [@staabm]- [#2759] add travis retry- [#2761] Added opcache to docker image, Thanks to [@JanMikes]
 
 ### Changed
-
-- [#2722] Merge pull request [#2722] from rectorphp/readme-demo
-- [#2736] Merge pull request [#2736] from rectorphp/generator-core
-- [#2728] Merge pull request [#2728] from C0pyR1ght/patch-4, Thanks to [@C0pyR1ght]
-- [#2737] Docker build secured image for online demo, Thanks to [@JanMikes]
-- [#2762] Warmup opcache in docker, Thanks to [@JanMikes]
-- [#2739] split workflows, badge is above repository
-- [#2769] Merge pull request [#2769] from rectorphp/node-type-resolver
-- [#2773] decouple PhpParserNodeMapper
-- [#2772] misc
-- [#2770] Cleanup
-- [#2771] Decouple ArrayTypeAnalyzer, CountableTypeAnalyzer and StringTypeAnalyzer
-- [#2768] Merge pull request [#2768] from rectorphp/node-type-resolver
-- [#2767] Merge pull request [#2767] from rectorphp/sonarcube
-- [#2750] move non-Rectors out of Rector namespace
-- [#2752] Merge pull request [#2752] from rectorphp/find-collector
+- [#2722] Merge pull request [#2722] from rectorphp/readme-demo- [#2736] Merge pull request [#2736] from rectorphp/generator-core- [#2728] Merge pull request [#2728] from C0pyR1ght/patch-4, Thanks to [@C0pyR1ght]- [#2737] Docker build secured image for online demo, Thanks to [@JanMikes]- [#2762] Warmup opcache in docker, Thanks to [@JanMikes]- [#2739] split workflows, badge is above repository- [#2769] Merge pull request [#2769] from rectorphp/node-type-resolver- [#2773] decouple PhpParserNodeMapper- [#2772] misc- [#2770] Cleanup- [#2771] Decouple ArrayTypeAnalyzer, CountableTypeAnalyzer and StringTypeAnalyzer- [#2768] Merge pull request [#2768] from rectorphp/node-type-resolver- [#2767] Merge pull request [#2767] from rectorphp/sonarcube- [#2750] move non-Rectors out of Rector namespace- [#2752] Merge pull request [#2752] from rectorphp/find-collector
 
 ### Fixed
-
-- [#2723] Fix AssertChoide with choices
-- [#2741] Merge pull request [#2741] from rectorphp/fix-inter
+- [#2723] Fix AssertChoide with choices- [#2741] Merge pull request [#2741] from rectorphp/fix-inter
 
 ## [v0.6.13] - 2020-01-20
 
 ### Added
-
 - [#2720] add .travis.yml with tag release
 
 ## [v0.6.12] - 2020-01-20
-
-- [#2704] [CI] Add check for duplicated fixture after before content
-- [#2709] [CakePHPToSymfony] Add CakePHPControllerRenderToSymfonyRector
-- [#2718] [CakePHPToSymfony] Add h function templates
-- [#2714] Added composer rector-ci to workflow, Thanks to [@jeroensmit]
+- [#2704] [CI] Add check for duplicated fixture after before content- [#2709] [CakePHPToSymfony] Add CakePHPControllerRenderToSymfonyRector- [#2718] [CakePHPToSymfony] Add h function templates- [#2714] Added composer rector-ci to workflow, Thanks to [@jeroensmit]
 
 ### Changed
-
-- [#2630] [AddArrayReturnDocTypeRector] Allow mixed[] and iterable<mixed> in place of Rector's setting wrong infered types, Thanks to [@gnutix]
-- [#2710] Merge pull request [#2710] from jeroensmit/splitIfs, Thanks to [@jeroensmit]
-- [#2712] Merge pull request [#2712] from jeroensmit/RemoveUnusedAliasBug, Thanks to [@jeroensmit]
-- [#2713] Merge pull request [#2713] from jeroensmit/CombineIfPreserveDoc, Thanks to [@jeroensmit]
-- [#2703] Merge pull request [#2703] from rectorphp/dx-readme
-- [#2702] Merge pull request [#2702] from rectorphp/dx-get-node-types
-- [#2700] Merge pull request [#2700] from Aerendir/failing-test-case-for-2699, Thanks to [@Aerendir]
-- [#2698] Merge pull request [#2698] from rectorphp/cakephp-controller-render
-- [#2694] Merge pull request [#2694] from Aerendir/failing-test-case-for-2693, Thanks to [@Aerendir]
-- [#2691] updated UnwrapFutureCompatibleIfRectorTest, Thanks to [@C0pyR1ght]
-- [#2715] Merge pull request [#2715] from rectorphp/coverage
-- [#2719] Use on published release to trigger a new release on rector-prefixed, Thanks to [@Lctrs]
+- [#2630] [AddArrayReturnDocTypeRector] Allow mixed[] and iterable<mixed> in place of Rector's setting wrong infered types, Thanks to [@gnutix]- [#2710] Merge pull request [#2710] from jeroensmit/splitIfs, Thanks to [@jeroensmit]- [#2712] Merge pull request [#2712] from jeroensmit/RemoveUnusedAliasBug, Thanks to [@jeroensmit]- [#2713] Merge pull request [#2713] from jeroensmit/CombineIfPreserveDoc, Thanks to [@jeroensmit]- [#2703] Merge pull request [#2703] from rectorphp/dx-readme- [#2702] Merge pull request [#2702] from rectorphp/dx-get-node-types- [#2700] Merge pull request [#2700] from Aerendir/failing-test-case-for-2699, Thanks to [@Aerendir]- [#2698] Merge pull request [#2698] from rectorphp/cakephp-controller-render- [#2694] Merge pull request [#2694] from Aerendir/failing-test-case-for-2693, Thanks to [@Aerendir]- [#2691] updated UnwrapFutureCompatibleIfRectorTest, Thanks to [@C0pyR1ght]- [#2715] Merge pull request [#2715] from rectorphp/coverage- [#2719] Use on published release to trigger a new release on rector-prefixed, Thanks to [@Lctrs]
 
 ### Fixed
-
-- [#2707] Merge pull request [#2707] from rectorphp/fix-throws-void
-- [#2706] Fix UnwrapFutureCompatibleIfFunctionExistsRector for no else [closes [#2691]]
-- [#2708] Merge pull request [#2708] from rectorphp/fix-type-order
+- [#2707] Merge pull request [#2707] from rectorphp/fix-throws-void- [#2706] Fix UnwrapFutureCompatibleIfFunctionExistsRector for no else [closes [#2691]]- [#2708] Merge pull request [#2708] from rectorphp/fix-type-order
 
 ## [v0.6.11]
 
 ### Added
-
-- [#2683] [PHPUnit] Add ClassMethod/RemoveEmptyTestMethodRector
-- [#2692] Add PHP Linter
-- [#2676] Add CheckStaticTypeMappersCommand to CI
-- [#2655] Rename --rule argument into --only, add documentation., Thanks to [@gnutix]
-- [#2663] Add support for stringy calls in CallReflectionResolver, Thanks to [@Lctrs]
-- [#2674] Added CombineIfRector, Thanks to [@jeroensmit]
-- [#2670] Add support for invokable and array callables in CallReflectionResolver, Thanks to [@Lctrs]
-- [#2685] Add --output-file
+- [#2683] [PHPUnit] Add ClassMethod/RemoveEmptyTestMethodRector- [#2692] Add PHP Linter- [#2676] Add CheckStaticTypeMappersCommand to CI- [#2655] Rename --rule argument into --only, add documentation., Thanks to [@gnutix]- [#2663] Add support for stringy calls in CallReflectionResolver, Thanks to [@Lctrs]- [#2674] Added CombineIfRector, Thanks to [@jeroensmit]- [#2670] Add support for invokable and array callables in CallReflectionResolver, Thanks to [@Lctrs]- [#2685] Add --output-file
 
 ### Changed
-
-- [#2690] [PHPUnit] Improve GetMockRector
-- [#2662] Good bye CallManipulator, Thanks to [@Lctrs]
-- [#2654] Merge pull request [#2654] from rectorphp/polyfill-php
-- [#2687] Changed ChangeMethodVisibilityRector yaml config, Thanks to [@C0pyR1ght]
-- [#2657] Migrate from PHPStan's Broker to ReflectionProvider, Thanks to [@Lctrs]
-- [#2658] Introduce a CallReflectionResolver, Thanks to [@Lctrs]
-- [#2659] Update rector-prefixed only on push to master, Thanks to [@Lctrs]
-- [#2660] Decouple PHPStanStaticTypeMapper
-- [#2681] Merge pull request [#2681] from rectorphp/phpunit4
-- [#2682] Merge pull request [#2682] from rectorphp/get-mock
-- [#2664] Merge pull request [#2664] from rectorphp/static-type-mapper-collector
-- [#2666] Merge pull request [#2666] from rectorphp/type-mapper-col-2
-- [#2671] Merge pull request [#2671] from rectorphp/type-mapper-col-3
-- [#2672] Merge pull request [#2672] from jeroensmit/RemoveDelegatingParentCallDefault, Thanks to [@jeroensmit]
-- [#2673] Merge pull request [#2673] from staabm/patch-3, Thanks to [@staabm]
+- [#2690] [PHPUnit] Improve GetMockRector- [#2662] Good bye CallManipulator, Thanks to [@Lctrs]- [#2654] Merge pull request [#2654] from rectorphp/polyfill-php- [#2687] Changed ChangeMethodVisibilityRector yaml config, Thanks to [@C0pyR1ght]- [#2657] Migrate from PHPStan's Broker to ReflectionProvider, Thanks to [@Lctrs]- [#2658] Introduce a CallReflectionResolver, Thanks to [@Lctrs]- [#2659] Update rector-prefixed only on push to master, Thanks to [@Lctrs]- [#2660] Decouple PHPStanStaticTypeMapper- [#2681] Merge pull request [#2681] from rectorphp/phpunit4- [#2682] Merge pull request [#2682] from rectorphp/get-mock- [#2664] Merge pull request [#2664] from rectorphp/static-type-mapper-collector- [#2666] Merge pull request [#2666] from rectorphp/type-mapper-col-2- [#2671] Merge pull request [#2671] from rectorphp/type-mapper-col-3- [#2672] Merge pull request [#2672] from jeroensmit/RemoveDelegatingParentCallDefault, Thanks to [@jeroensmit]- [#2673] Merge pull request [#2673] from staabm/patch-3, Thanks to [@staabm]
 
 ### Fixed
-
-- [#2668] Fixed url, Thanks to [@palpalani]
-- [#2686] Fix sync releases with rector-prefixed, Thanks to [@Lctrs]
+- [#2668] Fixed url, Thanks to [@palpalani]- [#2686] Fix sync releases with rector-prefixed, Thanks to [@Lctrs]
 
 ## [v0.6.10] - 2020-01-12
 
 ### Added
-
-- [#2640] [AddDoesNotPerformAssertionToNonAssertingTestRector] Add failing test for Prophecy assertions., Thanks to [@gnutix]
-- [#2638] [CodingStyle] Prevent adding non-namespaced imports to non-namespaced class
-- [#2546] [Php70] add a rector to pass only variables as arguments by reference, Thanks to [@Lctrs]
-- [#2648] [Doctrine 2.0] Add class rename set
-- [#2644] [CakePHP 3.0] add class renames
-- [#2643] [CakePHP 3.0] Add AppUsesStaticCallToUseStatementRector
-- [#2613] Add support for PHPStan 0.12+ [@template] annotation., Thanks to [@gnutix]
-- [#2649] Add PHPStanAttributeTypeSyncer
-- [#2622] added link, Thanks to [@C0pyR1ght]
-- [#2623] added get started to readme, Thanks to [@C0pyR1ght]
-- [#2624] Add Gmagick to Imagick set
-- [#2629] Add a --no-progress-bar option (inspired from ECS) for nicer CI output., Thanks to [@gnutix]
+- [#2640] [AddDoesNotPerformAssertionToNonAssertingTestRector] Add failing test for Prophecy assertions., Thanks to [@gnutix]- [#2638] [CodingStyle] Prevent adding non-namespaced imports to non-namespaced class- [#2546] [Php70] add a rector to pass only variables as arguments by reference, Thanks to [@Lctrs]- [#2648] [Doctrine 2.0] Add class rename set- [#2644] [CakePHP 3.0] add class renames- [#2643] [CakePHP 3.0] Add AppUsesStaticCallToUseStatementRector- [#2613] Add support for PHPStan 0.12+ [@template] annotation., Thanks to [@gnutix]- [#2649] Add PHPStanAttributeTypeSyncer- [#2622] added link, Thanks to [@C0pyR1ght]- [#2623] added get started to readme, Thanks to [@C0pyR1ght]- [#2624] Add Gmagick to Imagick set- [#2629] Add a --no-progress-bar option (inspired from ECS) for nicer CI output., Thanks to [@gnutix]
 
 ### Changed
-
-- [#2587] [ForeachItemsAssignToEmptyArrayToAssignRector] apply on code it should not, Thanks to [@gnutix]
-- [#2610] Improve Rector success message., Thanks to [@gnutix]
-- [#2618] More reliable way getting first stmt item, Thanks to [@Jaapze]
-- [#2645] Extend AddDoesNotPerformAssertionToNonAssertingTestRector by catching more test messages
-- [#2641] use Github Actions to compiler and publish prefixed rector.phar
-- [#2635] Test with Doctrine
-- [#2625] REAME changed URL to relative path, Thanks to [@C0pyR1ght]
+- [#2587] [ForeachItemsAssignToEmptyArrayToAssignRector] apply on code it should not, Thanks to [@gnutix]- [#2610] Improve Rector success message., Thanks to [@gnutix]- [#2618] More reliable way getting first stmt item, Thanks to [@Jaapze]- [#2645] Extend AddDoesNotPerformAssertionToNonAssertingTestRector by catching more test messages- [#2641] use Github Actions to compiler and publish prefixed rector.phar- [#2635] Test with Doctrine- [#2625] REAME changed URL to relative path, Thanks to [@C0pyR1ght]
 
 ### Fixed
-
-- [#2636] [AddDoesNotPerformAssertionToNonAssertingTestRector] fix skipping if annotation already exists (fixes infinite loop too), Thanks to [@gnutix]
-- [#2619] [CI] Fix GitHub actions phar build
-- [#2637] [CountOnNullRector] fix Rector applying on properties with phpdocs array, Thanks to [@gnutix]
-- [#2617] Fix PHPStan [@return] class-string<T>, Thanks to [@gnutix]
-- [#2639] fix pattern miss matching
-- [#2646] Fix Union Array type StaticTypeMapper to string
+- [#2636] [AddDoesNotPerformAssertionToNonAssertingTestRector] fix skipping if annotation already exists (fixes infinite loop too), Thanks to [@gnutix]- [#2619] [CI] Fix GitHub actions phar build- [#2637] [CountOnNullRector] fix Rector applying on properties with phpdocs array, Thanks to [@gnutix]- [#2617] Fix PHPStan [@return] class-string<T>, Thanks to [@gnutix]- [#2639] fix pattern miss matching- [#2646] Fix Union Array type StaticTypeMapper to string
 
 ### Removed
-
-- [#2633] drop redundant interface and factory, remove symfony/var-dumper from rector.phar
-- [#2609] Remove stubs/ from rector.phar, Thanks to [@gnutix]
+- [#2633] drop redundant interface and factory, remove symfony/var-dumper from rector.phar- [#2609] Remove stubs/ from rector.phar, Thanks to [@gnutix]
 
 ## [v0.6.9] - 2020-01-08
 
 ### Fixed
-
 - [#2608] Fix non-direct parent foreach in ForeachItemsAssignToEmptyArrayToAssignRector
 
 ## [v0.6.8] - 2020-01-08
 
 ### Added
-
-- [#2601] [DoctrineGemoToKnplabs] Add LoggableBehaviorRector
-- [#2599] [DoctrineGemoToKnplabs] Add BlameableBehaviorRector
+- [#2601] [DoctrineGemoToKnplabs] Add LoggableBehaviorRector- [#2599] [DoctrineGemoToKnplabs] Add BlameableBehaviorRector
 
 ### Changed
-
-- [#2605] more reliable way getting last stmt, Thanks to [@Jaapze]
-- [#2603] Transition more jobs to GithubAction, Thanks to [@staabm]
+- [#2605] more reliable way getting last stmt, Thanks to [@Jaapze]- [#2603] Transition more jobs to GithubAction, Thanks to [@staabm]
 
 ### Fixed
-
-- [#2607] [CodeQuality] Fix nested foreach case in ForeachItemsAssignToEmptyArrayToAssignRector
-- [#2600] [Symfony] fix process error of controller with Internationalized routing, Thanks to [@ghostika]
+- [#2607] [CodeQuality] Fix nested foreach case in ForeachItemsAssignToEmptyArrayToAssignRector- [#2600] [Symfony] fix process error of controller with Internationalized routing, Thanks to [@ghostika]
 
 ## [v0.6.7] - 2020-01-07
 
 ### Added
-
-- [#2565] [DeadCode] Add RemoveUnusedClassesRector
-- [#2593] [DoctrineGedmoToKnpLabs] Add SoftDeletableBehaviorRector
-- [#2569] [Polyfill] Add UnwrapFutureCompatibleIfFunctionExistsRector
-- [#2570] [SOLID] Add ChangeNestedIfsToEarlyReturnRector & ChangeIfElseValueAssignToEarlyReturnRector
-- [#2568] [Symfony 5] Add param types
+- [#2565] [DeadCode] Add RemoveUnusedClassesRector- [#2593] [DoctrineGedmoToKnpLabs] Add SoftDeletableBehaviorRector- [#2569] [Polyfill] Add UnwrapFutureCompatibleIfFunctionExistsRector- [#2570] [SOLID] Add ChangeNestedIfsToEarlyReturnRector & ChangeIfElseValueAssignToEarlyReturnRector- [#2568] [Symfony 5] Add param types
 
 ### Changed
-
-- [#2581] Try pcov for code coverage, Thanks to [@staabm]
-- [#2572] Don't return void when function contains empty return statement, Thanks to [@snapshotpl]
-- [#2575] PHPStan 0.12.4 compatibility updates, Thanks to [@ondrejmirtes]
-- [#2576] travis: try phpdbg
-- [#2598] Skip ReturnTypeDeclarationRector when the type is already defined as \Traversable, Thanks to [@gnutix]
-- [#2582] avoid direct container in the code
-- [#2584] Update compiler with PHPStan 0.12.4 workflow change
-- [#2589] Transition some travis checks to GithubActions, Thanks to [@staabm]
-- [#2592] Transition fatal-error scan to GithubAction, Thanks to [@staabm]
-- [#2583] Revert "Try pcov for code coverage"
+- [#2581] Try pcov for code coverage, Thanks to [@staabm]- [#2572] Don't return void when function contains empty return statement, Thanks to [@snapshotpl]- [#2575] PHPStan 0.12.4 compatibility updates, Thanks to [@ondrejmirtes]- [#2576] travis: try phpdbg- [#2598] Skip ReturnTypeDeclarationRector when the type is already defined as \Traversable, Thanks to [@gnutix]- [#2582] avoid direct container in the code- [#2584] Update compiler with PHPStan 0.12.4 workflow change- [#2589] Transition some travis checks to GithubActions, Thanks to [@staabm]- [#2592] Transition fatal-error scan to GithubAction, Thanks to [@staabm]- [#2583] Revert "Try pcov for code coverage"
 
 ### Fixed
-
-- [#2586] fix box autoload Neon class in scoper.php.inc by --no-parallel
-- [#2588] Fix PHPStan 0.12+ [@implements] and [@extends] class annotations., Thanks to [@gnutix]
-- [#2595] Fix running AddArrayReturnDocTypeRector on empty arrays, Thanks to [@gnutix]
-- [#2566] fix ChangeArrayPushToArrayAssignRector for multiple items
+- [#2586] fix box autoload Neon class in scoper.php.inc by --no-parallel- [#2588] Fix PHPStan 0.12+ [@implements] and [@extends] class annotations., Thanks to [@gnutix]- [#2595] Fix running AddArrayReturnDocTypeRector on empty arrays, Thanks to [@gnutix]- [#2566] fix ChangeArrayPushToArrayAssignRector for multiple items
 
 ### Removed
-
-- [#2591] Remove travis-CI jobs which were moved to GithubAction, Thanks to [@staabm]
-- [#2567] make nested chain call remove configurable
+- [#2591] Remove travis-CI jobs which were moved to GithubAction, Thanks to [@staabm]- [#2567] make nested chain call remove configurable
 
 ## [v0.6.6] - 2020-01-04
 
 ### Added
-
-- [#2557] [CodeQuality] Add ChangeArrayPushToArrayAssignRector
-- [#2559] [CodeQuality] Add ForRepeatedCountToOwnVariableRector
-- [#2561] [CodingQuality] Add ForeachItemsAssignToEmptyArrayToAssignRector
-- [#2558] [MinimalScope] Add ChangeLocalPropertyToVariableRector
-- [#2538] [Php71] Add failing test case for CountOnNullRector, Thanks to [@gnutix]
-- [#2548] add IterableType to StaticTypeMapper::mapPHPStanTypeToPHPStanPhpDocType()
+- [#2557] [CodeQuality] Add ChangeArrayPushToArrayAssignRector- [#2559] [CodeQuality] Add ForRepeatedCountToOwnVariableRector- [#2561] [CodingQuality] Add ForeachItemsAssignToEmptyArrayToAssignRector- [#2558] [MinimalScope] Add ChangeLocalPropertyToVariableRector- [#2538] [Php71] Add failing test case for CountOnNullRector, Thanks to [@gnutix]- [#2548] add IterableType to StaticTypeMapper::mapPHPStanTypeToPHPStanPhpDocType()
 
 ### Changed
-
-- [#2541] [Restoration] Preconfigure CompleteImportForPartialAnnotationRector
-- [#2562] Prevent variable name override
-- [#2553] Improve 3rd party property type resolution
-- [#2550] allow loading bleedingEdge.neon config inside PHPStan phar
-- [#2563] prevent variable scope changing
+- [#2541] [Restoration] Preconfigure CompleteImportForPartialAnnotationRector- [#2562] Prevent variable name override- [#2553] Improve 3rd party property type resolution- [#2550] allow loading bleedingEdge.neon config inside PHPStan phar- [#2563] prevent variable scope changing
 
 ### Fixed
-
 - [#2547] fix function callback in assert callback
 
 ## [v0.6.5] - 2020-01-03
 
 ### Added
-
-- [#2524] [CodeQuality] Add AbsolutizeRequireAndIncludePathRector
-- [#2510] [CodeQuality] Add IntvalToTypeCastRector
-- [#2523] [CodeQuality] Add ArrayKeyExistsTernaryThenValueToCoalescingRector
-- [#2528] [SOLID] Add RemoveAlwaysElseRector
-- [#2536] [TypeDeclaration] Add support for PhpStan's class-string type in PropertyTypeDeclarationRector, Thanks to [@gnutix]
-- [#2505] add hasByType() method to PhpDocInfo
-- [#2514] [Doctrine/dbal] Add 2.10 and 3.0 sets
-- [#2517] add resource type to StaticTypeMapper
-- [#2519] README: add docs for [#2087]
-- [#2503] [Gedmo to Knp] Add Translatable Behavior Rector
-- [#2526] add ctor only test-case
-- [#2529] Added phpdoc, Thanks to [@staabm]
-- [#2532] [PHP 7.4] Add @var removal to TypedPropertyRector
+- [#2524] [CodeQuality] Add AbsolutizeRequireAndIncludePathRector- [#2510] [CodeQuality] Add IntvalToTypeCastRector- [#2523] [CodeQuality] Add ArrayKeyExistsTernaryThenValueToCoalescingRector- [#2528] [SOLID] Add RemoveAlwaysElseRector- [#2536] [TypeDeclaration] Add support for PhpStan's class-string type in PropertyTypeDeclarationRector, Thanks to [@gnutix]- [#2505] add hasByType() method to PhpDocInfo- [#2514] [Doctrine/dbal] Add 2.10 and 3.0 sets- [#2517] add resource type to StaticTypeMapper- [#2519] README: add docs for [#2087]- [#2503] [Gedmo to Knp] Add Translatable Behavior Rector- [#2526] add ctor only test-case- [#2529] Added phpdoc, Thanks to [@staabm]- [#2532] [PHP 7.4] Add @var removal to TypedPropertyRector
 
 ### Changed
-
-- [#2530] [CodingStyle] Skip re-escaping chars by SymplifyQuoteEscapeRector
-- [#2527] [DeadCode] RemoveUnusedElseForReturnedValueRector
-- [#2534] improve generic type conversion
-- [#2531] Apply Rector on itself
-- [#2512] Update Travis
-- [#2509] Do not suggest typed property when defined in vendored parent, Thanks to [@ruudk]
+- [#2530] [CodingStyle] Skip re-escaping chars by SymplifyQuoteEscapeRector- [#2527] [DeadCode] RemoveUnusedElseForReturnedValueRector- [#2534] improve generic type conversion- [#2531] Apply Rector on itself- [#2512] Update Travis- [#2509] Do not suggest typed property when defined in vendored parent, Thanks to [@ruudk]
 
 ### Fixed
-
-- [#2533] [CodeQuality] Fix identical boolcast
-- [#2520] [CodingStyle] Fix IdenticalFalseToBooleanNotRector for null|bool
-- [#2518] [TypeDeclaration] Fix static property type resolution
-- [#2511] Fix single-line comment and constant scalar type match
-- [#2508] Fix param type union
-- [#2507] Fix AddArrayReturnDocTypeRector for existing comment
+- [#2533] [CodeQuality] Fix identical boolcast- [#2520] [CodingStyle] Fix IdenticalFalseToBooleanNotRector for null|bool- [#2518] [TypeDeclaration] Fix static property type resolution- [#2511] Fix single-line comment and constant scalar type match- [#2508] Fix param type union- [#2507] Fix AddArrayReturnDocTypeRector for existing comment
 
 ## [v0.6.4] - 2019-12-27
 
 ### Added
-
-- [#2497] [DeadCode] Add TernaryToBooleanOrFalseToBooleanAndRector
-- [#2496] [Nette] Add magic template code quality
-- [#2500] [PHP] add PHP version feature checks, Thanks to [@fsok]
-- [#2484] [Gedmo to Knp] Add TreeBehaviorRector
-- [#2476] Add ScanFatalErrors command
-- [#2479] prevent re-adding id at AddEntityIdByConditionRector
+- [#2497] [DeadCode] Add TernaryToBooleanOrFalseToBooleanAndRector- [#2496] [Nette] Add magic template code quality- [#2500] [PHP] add PHP version feature checks, Thanks to [@fsok]- [#2484] [Gedmo to Knp] Add TreeBehaviorRector- [#2476] Add ScanFatalErrors command- [#2479] prevent re-adding id at AddEntityIdByConditionRector
 
 ### Changed
-
-- [#2482] [DoctrineGedmoToKnplabs] init set
-- [#2502] Apply HelperFunctionToConstructorInjectionRector only in non-static class method scope
-- [#2475] [RemoveEmptyClassMethodRector + RemoveDeadConstructorRector] Should not apply on protected/private constructors, Thanks to [@gnutix]
-- [#2478] Link a few more recent articles, Thanks to [@staabm]
-- [#2480] merge ParentTypehintedArgumentRector to AddParamTypeDeclarationRector
-- [#2481] init MoveValueObjectsToValueObjectDirectoryRector
-- [#2487] Skip non-variable non-scalars in BinaryOpBetweenNumberAndStringRector
+- [#2482] [DoctrineGedmoToKnplabs] init set- [#2502] Apply HelperFunctionToConstructorInjectionRector only in non-static class method scope- [#2475] [RemoveEmptyClassMethodRector + RemoveDeadConstructorRector] Should not apply on protected/private constructors, Thanks to [@gnutix]- [#2478] Link a few more recent articles, Thanks to [@staabm]- [#2480] merge ParentTypehintedArgumentRector to AddParamTypeDeclarationRector- [#2481] init MoveValueObjectsToValueObjectDirectoryRector- [#2487] Skip non-variable non-scalars in BinaryOpBetweenNumberAndStringRector
 
 ### Fixed
-
-- [#2485] Fix grouped use statement import
-- [#2486] Fix alias object conflict with existing type
-- [#2483] Fix typos, Thanks to [@staabm]
-- [#2501] Fix return override in case of parent vendor lock
-- [#2489] Fix name resolution in ArrayKeyFirstLastRector
-- [#2491] Fix codesample in TypedPropertyRector, Thanks to [@ruudk]
-- [#2493] fix PREG_SPLIT_DELIM_CAPTURE for split Nette Utils
-- [#2499] Fix function override under namespace
-- [#2492] [docs] Fix codesample in TypedPropertyRector, Thanks to [@ruudk]
+- [#2485] Fix grouped use statement import- [#2486] Fix alias object conflict with existing type- [#2483] Fix typos, Thanks to [@staabm]- [#2501] Fix return override in case of parent vendor lock- [#2489] Fix name resolution in ArrayKeyFirstLastRector- [#2491] Fix codesample in TypedPropertyRector, Thanks to [@ruudk]- [#2493] fix PREG_SPLIT_DELIM_CAPTURE for split Nette Utils- [#2499] Fix function override under namespace- [#2492] [docs] Fix codesample in TypedPropertyRector, Thanks to [@ruudk]
 
 ## [v0.6.3] - 2019-12-23
 
 ### Added
-
-- [#2457] [Class_] Add AddInterfaceByTraitRector
-- [#2463] [Doctrine] Add AddEntityIdByConditionRector
-- [#2465] [PHP Deglobalize] Add ChangeGlobalVariablesToPropertiesRector
-- [#2461] Added int to StaticTypeMapper, Thanks to [@lulco]
-- [#2458] prevent duplicated added interface
-- [#2472] add symfony5 set
+- [#2457] [Class_] Add AddInterfaceByTraitRector- [#2463] [Doctrine] Add AddEntityIdByConditionRector- [#2465] [PHP Deglobalize] Add ChangeGlobalVariablesToPropertiesRector- [#2461] Added int to StaticTypeMapper, Thanks to [@lulco]- [#2458] prevent duplicated added interface- [#2472] add symfony5 set
 
 ### Changed
-
-- [#2464] [Nette] Control to Symfony Form + Controller
-- [#2470] merge Rector arguments on import
-- [#2459] disable imports by default
+- [#2464] [Nette] Control to Symfony Form + Controller- [#2470] merge Rector arguments on import- [#2459] disable imports by default
 
 ### Fixed
-
-- [#2466] [Symfony] fix dot in GetParameterToConstructorInjectionRector
-- [#2467] fix rename method call
+- [#2466] [Symfony] fix dot in GetParameterToConstructorInjectionRector- [#2467] fix rename method call
 
 ## [v0.6.2] - 2019-12-18
 
 ### Added
-
-- [#2439] [PHPUnit] Add get_class double sided to AssertCompareToSpecificMethodRector
-- [#2447] [TypeDeclaration] Add AddParamTypeDeclarationRector
-- [#2450] add intersection type support to StaticTypeMapper
-- [#2448] [PHP 7.0] Add StaticCallOnNonStaticToInstanceCallRector edge case of property fetch static call
-- [#2437] [Phalcon 4.0] Add FlashWithCssClassesToExtraCallRector
+- [#2439] [PHPUnit] Add get_class double sided to AssertCompareToSpecificMethodRector- [#2447] [TypeDeclaration] Add AddParamTypeDeclarationRector- [#2450] add intersection type support to StaticTypeMapper- [#2448] [PHP 7.0] Add StaticCallOnNonStaticToInstanceCallRector edge case of property fetch static call- [#2437] [Phalcon 4.0] Add FlashWithCssClassesToExtraCallRector
 
 ### Changed
-
-- [#2442] [Symfony] refactor to ServiceMap
-- [#2438] Make BarewordStringRector skip missing file
-- [#2436] Update .travis.yml, Thanks to [@andreybolonin]
-- [#2428] Document import_short_classes + import_doc_blocks, Thanks to [@gnutix]
-- [#2427] Update phalcon40.yaml, Thanks to [@ruudboon]
+- [#2442] [Symfony] refactor to ServiceMap- [#2438] Make BarewordStringRector skip missing file- [#2436] Update .travis.yml, Thanks to [@andreybolonin]- [#2428] Document import_short_classes + import_doc_blocks, Thanks to [@gnutix]- [#2427] Update phalcon40.yaml, Thanks to [@ruudboon]
 
 ### Fixed
-
-- [#2435] Various fixes
-- [#2420] Fix NewToStaticCallRector documentation, Thanks to [@RusiPapazov]
+- [#2435] Various fixes- [#2420] Fix NewToStaticCallRector documentation, Thanks to [@RusiPapazov]
 
 ## [v0.6.1] - 2019-12-10
 
 **Rector is now shipped as prefixed phar - download from [rector-prefixed](https://github.com/rectorphp/rector-prefixed)**
 
 ### Added
-
-- [#2410] Added default to prevent rector from breaking, Thanks to [@jeroensmit]
-- [#2409] [Phalcon 4] Add SwapClassMethodArgumentsRector rule
-- [#2407] Added missing methods, Thanks to [@ruudboon]
-- [#2406] Added check for correct delimiter to use in preg_quote, Thanks to [@jeroensmit]
-- [#2369] Add typo auto import + Swiftmailer 60 set
-- [#2397] Add rector rule for EntityInterface::isNew(), Thanks to [@markstory]
-- [#2373] Another attempt to add Compiler + upgrade to PHPStan 0.12
-- [#2374] Add another deprecation to the cakephp40 set., Thanks to [@markstory]
-- [#2392] Fix CompleteDynamicPropertiesRector to add parent property
+- [#2410] Added default to prevent rector from breaking, Thanks to [@jeroensmit]- [#2409] [Phalcon 4] Add SwapClassMethodArgumentsRector rule- [#2407] Added missing methods, Thanks to [@ruudboon]- [#2406] Added check for correct delimiter to use in preg_quote, Thanks to [@jeroensmit]- [#2369] Add typo auto import + Swiftmailer 60 set- [#2397] Add rector rule for EntityInterface::isNew(), Thanks to [@markstory]- [#2373] Another attempt to add Compiler + upgrade to PHPStan 0.12- [#2374] Add another deprecation to the cakephp40 set., Thanks to [@markstory]- [#2392] Fix CompleteDynamicPropertiesRector to add parent property
 
 ### Changed
-
-- [#2394] [TypeDeclaration] Object without class
-- [#2414] StaticTypeMapper - missing boolean type, Thanks to [@sojki]
-- [#2386] chore: use php 7.4 cli, Thanks to [@danielroe]
-- [#2359] Prevent crashing on dead symlinks, Thanks to [@jeroensmit]
-- [#2378] [Phalcon 4.0] init
-- [#2389] composer: lock phpstan to 0.11.19 due to breaking changes [closes [#2385]]
-- [#2390] Make sure name is passed to getName(), instead of expr
-- [#2396] prevent union sub-type nullable override
-- [#2395] prevent union sub-type nullable override
-- [#2400] return false on MethodCall name to prevent expr errors
-- [#2391] Exludes stubs on package install to prevent PHPStorm confussion
+- [#2394] [TypeDeclaration] Object without class- [#2414] StaticTypeMapper - missing boolean type, Thanks to [@sojki]- [#2386] chore: use php 7.4 cli, Thanks to [@danielroe]- [#2359] Prevent crashing on dead symlinks, Thanks to [@jeroensmit]- [#2378] [Phalcon 4.0] init- [#2389] composer: lock phpstan to 0.11.19 due to breaking changes [closes [#2385]]- [#2390] Make sure name is passed to getName(), instead of expr- [#2396] prevent union sub-type nullable override- [#2395] prevent union sub-type nullable override- [#2400] return false on MethodCall name to prevent expr errors- [#2391] Exludes stubs on package install to prevent PHPStorm confussion
 
 ### Fixed
-
-- [#2372] [Symfony] Fix ConsoleExecuteReturnInt for nested functions
-- [#2393] [TypeDeclaration] Fix returned yield nodes in nested function [closes [#2381]]
-- [#2371] Update FilesFinder.php to fix builds..., Thanks to [@mallardduck]
-- [#2411] Fix undefined offset in UseInterfaceOverImplementationInConstructorRector, Thanks to [@jeroensmit]
-- [#2368] Fix: RandomFunctionRector typo fix + regenerated docs, Thanks to [@radimvaculik]
-- [#2404] Fix - iterable type introduced in PHP 7.1, Thanks to [@sojki]
-- [#2358] fix var type on method call
+- [#2372] [Symfony] Fix ConsoleExecuteReturnInt for nested functions- [#2393] [TypeDeclaration] Fix returned yield nodes in nested function [closes [#2381]]- [#2371] Update FilesFinder.php to fix builds..., Thanks to [@mallardduck]- [#2411] Fix undefined offset in UseInterfaceOverImplementationInConstructorRector, Thanks to [@jeroensmit]- [#2368] Fix: RandomFunctionRector typo fix + regenerated docs, Thanks to [@radimvaculik]- [#2404] Fix - iterable type introduced in PHP 7.1, Thanks to [@sojki]- [#2358] fix var type on method call
 
 ## [v0.6.0] - 2019-11-26
 
 ### Added
-
 - [#2347] Add diff based execution, Thanks to [@EmanueleMinotto]
 
 ### Changed
-
-- [#2350] [NetteToSymfony] Extend migration set
-- [#2351] Open "create" command to the public
-- [#2346] [PHP] ContinueToBreakInSwitchRector skip continue with argument >1, Thanks to [@fsok]
-- [#2344] Bump to Symfony 4.4/5 and PHP 7.2+
-- [#2343] allow Symfony 5, bump min to Symfony 4.4
+- [#2350] [NetteToSymfony] Extend migration set- [#2351] Open "create" command to the public- [#2346] [PHP] ContinueToBreakInSwitchRector skip continue with argument >1, Thanks to [@fsok]- [#2344] Bump to Symfony 4.4/5 and PHP 7.2+- [#2343] allow Symfony 5, bump min to Symfony 4.4
 
 ### Fixed
-
-- [#2353] Fixed error on classConstFetch outside class, Thanks to [@jeroensmit]
-- [#2352] Fix description, Thanks to [@staabm]
-- [#2349] [Php 70] Fix this call on static for PHPUnit non-assert
+- [#2353] Fixed error on classConstFetch outside class, Thanks to [@jeroensmit]- [#2352] Fix description, Thanks to [@staabm]- [#2349] [Php 70] Fix this call on static for PHPUnit non-assert
 
 ## [v0.5.23] - 2019-11-20
 
 ### Added
-
-- [#2332] [PHPUnit][Symfony] Add jakzal-injetor Rector
-- [#2338] [ID to UUID] Add middle step to initalize default uuid value
-- [#2337] Add more refactorings for CakePHP 4, Thanks to [@markstory]
-- [#2331] [PHP 8.0] Add union types
-- [#2329] [PHP Deglobalize] Add ChangeGlobalVariablesToPropertiesRector
+- [#2332] [PHPUnit][Symfony] Add jakzal-injetor Rector- [#2338] [ID to UUID] Add middle step to initalize default uuid value- [#2337] Add more refactorings for CakePHP 4, Thanks to [@markstory]- [#2331] [PHP 8.0] Add union types- [#2329] [PHP Deglobalize] Add ChangeGlobalVariablesToPropertiesRector
 
 ### Fixed
-
 - [#2341] fix magic static
 
 ## [v0.5.22]
 
 ### Added
-
-- [#2302] [DX] add "paths" parameter
-- [#2264] [DynamicTypeAnalysis] Add Dynamic type infering
-- [#2278] travis: change ENV matrix to jobs + add Windows OS
-- [#2310] Added docs check, Thanks to [@jeroensmit]
-- [#2326] [PHPUnit 8.0] Add ReplaceAssertArraySubsetWithDmsPolyfillRector
-- [#2273] Add a working and a failing test case for [#2187], Thanks to [@gnutix]
-- [#2321] [Nette 3.0]  Add Nette 2.x to Nette 3 upgrade set
+- [#2302] [DX] add "paths" parameter- [#2264] [DynamicTypeAnalysis] Add Dynamic type infering- [#2278] travis: change ENV matrix to jobs + add Windows OS- [#2310] Added docs check, Thanks to [@jeroensmit]- [#2326] [PHPUnit 8.0] Add ReplaceAssertArraySubsetWithDmsPolyfillRector- [#2273] Add a working and a failing test case for [#2187], Thanks to [@gnutix]- [#2321] [Nette 3.0]  Add Nette 2.x to Nette 3 upgrade set
 
 ### Changed
-
-- [#2297] Bump to PHP Parser 4.3
-- [#2306] improve stmt count check
-- [#2257] Update return types when set to array, Thanks to [@stedekay]
-- [#2325] [DX] report missing rules in `exclude_rectors` parameter
-- [#2311] [DeadCode] Class constant with trait, Thanks to [@jeroensmit]
-- [#2291] [PHP70] Skip PHPUnit assert in `ThisCallOnStaticMethodToStaticCallRector`
-- [#2328] simplify `ImportSkipper` skip for ClassLike name
-- [#2277] Update rule with proper syntax of `ReturnArrayClassMethodToYieldRector`, Thanks to [@gnutix]
-- [#2315] bugfix(Symfony33); correct the replacement of a namespace, Thanks to [@nissim94]
-- [#2292] check variable name
-- [#2300] Give testset a name, Thanks to [@jeroensmit]
-- [#2309] Merged `RemoveDeadZeroAndOneOperationRector` and` RemoveZeroAndOneBinarRector`, Thanks to [@jeroensmit]
+- [#2297] Bump to PHP Parser 4.3- [#2306] improve stmt count check- [#2257] Update return types when set to array, Thanks to [@stedekay]- [#2325] [DX] report missing rules in `exclude_rectors` parameter- [#2311] [DeadCode] Class constant with trait, Thanks to [@jeroensmit]- [#2291] [PHP70] Skip PHPUnit assert in `ThisCallOnStaticMethodToStaticCallRector`- [#2328] simplify `ImportSkipper` skip for ClassLike name- [#2277] Update rule with proper syntax of `ReturnArrayClassMethodToYieldRector`, Thanks to [@gnutix]- [#2315] bugfix(Symfony33); correct the replacement of a namespace, Thanks to [@nissim94]- [#2292] check variable name- [#2300] Give testset a name, Thanks to [@jeroensmit]- [#2309] Merged `RemoveDeadZeroAndOneOperationRector` and` RemoveZeroAndOneBinarRector`, Thanks to [@jeroensmit]
 
 ### Fixed
-
-- [#2282] [CodeQuality] Fix return type copy
-- [#2284] [CodingStyle] Fix extra new-line for EncapsedString
-- [#2324] [PHPUnit] Fix array subset for non-scalar values
-- [#2288] fix double import of function names
-- [#2289] fix name resolving on variable
-- [#2269] fix false static type of Symfony\SplFileInfo getRealPath()
-- [#2293] RemoveSetterOnlyPropertyAndMethodRector and UnusedPrivatePropertyRector fixes, Thanks to [@jeroensmit]
-- [#2294] Importing fix
-- [#2299] Fixed removing constructor when parameter defaults are different, Thanks to [@jeroensmit]
-- [#2323] Fixed sed command, Thanks to [@jeroensmit]
-- [#2318] Fixed issue with sed command:, Thanks to [@jeroensmit]
-- [#2275] fix no-regular naming
-- [#2308] Fix removing 0 when on left side of Minus, Thanks to [@jeroensmit]
-- [#2327] Fix parent interface, extends, implements same name as short name
-- [#2317] code fixes
-- [#2281] Fix ECS for windows, Thanks to [@orklah]
+- [#2282] [CodeQuality] Fix return type copy- [#2284] [CodingStyle] Fix extra new-line for EncapsedString- [#2324] [PHPUnit] Fix array subset for non-scalar values- [#2288] fix double import of function names- [#2289] fix name resolving on variable- [#2269] fix false static type of Symfony\SplFileInfo getRealPath()- [#2293] RemoveSetterOnlyPropertyAndMethodRector and UnusedPrivatePropertyRector fixes, Thanks to [@jeroensmit]- [#2294] Importing fix- [#2299] Fixed removing constructor when parameter defaults are different, Thanks to [@jeroensmit]- [#2323] Fixed sed command, Thanks to [@jeroensmit]- [#2318] Fixed issue with sed command:, Thanks to [@jeroensmit]- [#2275] fix no-regular naming- [#2308] Fix removing 0 when on left side of Minus, Thanks to [@jeroensmit]- [#2327] Fix parent interface, extends, implements same name as short name- [#2317] code fixes- [#2281] Fix ECS for windows, Thanks to [@orklah]
 
 ## [v0.5.21] - 2019-11-05
 
 ### Added
-
-- [#2254] [CI] Add nette-utils-code-quality set
-- [#2255] [CI] Add coding-style set
-- [#2246] [CodeQuality] Add property assigns to RemoveAlwaysTrueConditionSetInConstructorRector
-- [#2240] add template nested
-- [#2223] Add AbstractController as base class if no one exists, Thanks to [@stedekay]
+- [#2254] [CI] Add nette-utils-code-quality set- [#2255] [CI] Add coding-style set- [#2246] [CodeQuality] Add property assigns to RemoveAlwaysTrueConditionSetInConstructorRector- [#2240] add template nested- [#2223] Add AbstractController as base class if no one exists, Thanks to [@stedekay]
 
 ### Changed
-
-- [#2234] Decouple PropertyFetchManipulator methods for array dim fetch
-- [#2248] decouple phpunit 50 set
-- [#2237] keep comment on type change
-- [#2207] Previous statement rewrite, Thanks to [@jeroensmit]
-- [#2231] make screen generate file by default
-- [#2258] run all sets
-- [#2238] infer php version from composer.json
-- [#2252] Import default
-- [#2253] Speedup
-- [#2239] Better anonymous class handling, Thanks to [@jeroensmit]
-- [#2259] [tests] use generic method over explicit fixture yield
+- [#2234] Decouple PropertyFetchManipulator methods for array dim fetch- [#2248] decouple phpunit 50 set- [#2237] keep comment on type change- [#2207] Previous statement rewrite, Thanks to [@jeroensmit]- [#2231] make screen generate file by default- [#2258] run all sets- [#2238] infer php version from composer.json- [#2252] Import default- [#2253] Speedup- [#2239] Better anonymous class handling, Thanks to [@jeroensmit]- [#2259] [tests] use generic method over explicit fixture yield
 
 ### Fixed
-
-- [#2249] [CodeQuality] Fix else in SimplifyForeachToArrayFilterRector
-- [#2236] [TypeDeclaration] Fix CompleteVarDocTypePropertyRector for mixed[] override
-- [#2261] Fix provider
-- [#2235] Fix importing parent that is identical in short to class name
-- [#2251] fix standalone run to symfony demo
-- [#2250] Fixed edge cases of RemoveDeadStmtRector, Thanks to [@jeroensmit]
-- [#2247] Fixed removal of non expressions, Thanks to [@jeroensmit]
-- [#2262] Fixes
-- [#2263] Fix StaticTypeMapper for nullables
-- [#2214] travis dogfood replay, Thanks to [@ktomk]
-- [#2203] optimize ConsoleExecuteReturnIntRector
-- [#2211] Ignore not required files in docker build, Thanks to [@JanMikes]
-- [#2222] Enable code quality set
-- [#2196] Update grammar in the README for clarity, Thanks to [@sbine]
-- [#2220] [cs] re-order private methods by call order
+- [#2249] [CodeQuality] Fix else in SimplifyForeachToArrayFilterRector- [#2236] [TypeDeclaration] Fix CompleteVarDocTypePropertyRector for mixed[] override- [#2261] Fix provider- [#2235] Fix importing parent that is identical in short to class name- [#2251] fix standalone run to symfony demo- [#2250] Fixed edge cases of RemoveDeadStmtRector, Thanks to [@jeroensmit]- [#2247] Fixed removal of non expressions, Thanks to [@jeroensmit]- [#2262] Fixes- [#2263] Fix StaticTypeMapper for nullables- [#2214] travis dogfood replay, Thanks to [@ktomk]- [#2203] optimize ConsoleExecuteReturnIntRector- [#2211] Ignore not required files in docker build, Thanks to [@JanMikes]- [#2222] Enable code quality set- [#2196] Update grammar in the README for clarity, Thanks to [@sbine]- [#2220] [cs] re-order private methods by call order
 
 ### Removed
-
 - [#2233] Also remove assignment if the value of the assignment is different, Thanks to [@jeroensmit]
 
 ## [v0.5.20] - 2019-10-31
 
 ### Added
-
-- [#2224] add dead-code set to CI
-- [#2197] Add test to ConsoleExecuteReturnIntRector for a not command class, Thanks to [@franmomu]
-- [#2221] Add Rector-CI and handy "sets" parameter
-- [#2206] [PHPUnit 7.5] Add WithConsecutiveArgToArrayRector
+- [#2224] add dead-code set to CI- [#2197] Add test to ConsoleExecuteReturnIntRector for a not command class, Thanks to [@franmomu]- [#2221] Add Rector-CI and handy "sets" parameter- [#2206] [PHPUnit 7.5] Add WithConsecutiveArgToArrayRector
 
 ### Fixed
-
-- [#2202] Fix ConsoleExecuteReturnIntRector if target class not directly extends Command, Thanks to [@keulinho]
-- [#2198] Fixed TYPO3 community package link, Thanks to [@JanMikes]
-- [#2218] Fix empty -c/--config value
-- [#2217] FIX AddDoesNotPerformAssertionToNonAssertingTest, Thanks to [@DaveLiddament]
-- [#2200] Fix ConsoleExecuteReturnIntRector for non console commands, Thanks to [@keulinho]
+- [#2202] Fix ConsoleExecuteReturnIntRector if target class not directly extends Command, Thanks to [@keulinho]- [#2198] Fixed TYPO3 community package link, Thanks to [@JanMikes]- [#2218] Fix empty -c/--config value- [#2217] FIX AddDoesNotPerformAssertionToNonAssertingTest, Thanks to [@DaveLiddament]- [#2200] Fix ConsoleExecuteReturnIntRector for non console commands, Thanks to [@keulinho]
 
 ## [v0.5.19] - 2019-10-24
 
 ### Added
-
-- [#2195] [Laravel] Add Laravel 6 instant upgrade set
-- [#2192] Add test case for route annotation with optional parameters, Thanks to [@stedekay]
-- [#2182] [PHP 74] Add ChangeReflectionTypeToStringToGetNameRector
+- [#2195] [Laravel] Add Laravel 6 instant upgrade set- [#2192] Add test case for route annotation with optional parameters, Thanks to [@stedekay]- [#2182] [PHP 74] Add ChangeReflectionTypeToStringToGetNameRector
 
 ### Fixed
-
-- [#2193] fix union too many types
-- [#2190] Various Return types fixes
-- [#2194] fix for Template and Route annotation
-- [#2191] prevent mixed of specific override
+- [#2193] fix union too many types- [#2190] Various Return types fixes- [#2194] fix for Template and Route annotation- [#2191] prevent mixed of specific override
 
 ## [v0.5.18] - 2019-10-22
 
 ### Added
-
-- [#2177] [CodeQuality] Add ArrayMergeOfNonArraysToSimpleArrayRector
-- [#2176] [CodeQuality] Add AddPregQuoteDelimiterRector
-- [#2184] [FEATURE] Possibility to add custom phpstan.neon configuration, Thanks to [@sabbelasichon]
-- [#2172] Add rules for ConsoleIo::styles(), Thanks to [@markstory]
-- [#2175] Added rector sets composition hint, Thanks to [@SilverFire]
-- [#2181] add test case for [#2158]
-- [#2188] add Standalone Runner
+- [#2177] [CodeQuality] Add ArrayMergeOfNonArraysToSimpleArrayRector- [#2176] [CodeQuality] Add AddPregQuoteDelimiterRector- [#2184] [FEATURE] Possibility to add custom phpstan.neon configuration, Thanks to [@sabbelasichon]- [#2172] Add rules for ConsoleIo::styles(), Thanks to [@markstory]- [#2175] Added rector sets composition hint, Thanks to [@SilverFire]- [#2181] add test case for [#2158]- [#2188] add Standalone Runner
 
 ### Fixed
-
-- [#2180] fix ArgumentAdderRector for anonymous class [closes [#2157]]
-- [#2183] fix RemoveUnusedAliasRector for doc vs class concurency
-- [#2174] Fix for Issue2173, Thanks to [@dpesch]
-- [#2169] Fixes
-- [#2168] Prevent CI floods with progress bar
+- [#2180] fix ArgumentAdderRector for anonymous class [closes [#2157]]- [#2183] fix RemoveUnusedAliasRector for doc vs class concurency- [#2174] Fix for Issue2173, Thanks to [@dpesch]- [#2169] Fixes- [#2168] Prevent CI floods with progress bar
 
 ## [v0.5.17] - 2019-10-15
 
 ### Added
-
-- [#2087] Added way to exclude rectors, Thanks to [@jeroensmit]
-- [#2156] [PHPUnit] [Doc] Add FixDataProviderAnnotationTypoRector
-- [#2155] [PHPUnit] [Doc] Add EnsureDataProviderInDocBlockRector
-- [#2144] [PHPUnit] Add RemoveDataProviderTestPrefixRector
-- [#2132] [Symfony] Add ConsoleExecuteReturnIntRector, Thanks to [@keulinho]
-- [#2166] add paypal backers
-- [#2150] phpstan - add getContainer() after boot()
-- [#2141] add inter support
-- [#2142] [PHPUnit 6] Add AddDoesNotPerformAssertionToNonAssertingTestRector
-- [#2087] Added way to exclude rectors, Thanks to [@jeroensmit]
+- [#2087] Added way to exclude rectors, Thanks to [@jeroensmit]- [#2156] [PHPUnit] [Doc] Add FixDataProviderAnnotationTypoRector- [#2155] [PHPUnit] [Doc] Add EnsureDataProviderInDocBlockRector- [#2144] [PHPUnit] Add RemoveDataProviderTestPrefixRector- [#2132] [Symfony] Add ConsoleExecuteReturnIntRector, Thanks to [@keulinho]- [#2166] add paypal backers- [#2150] phpstan - add getContainer() after boot()- [#2141] add inter support- [#2142] [PHPUnit 6] Add AddDoesNotPerformAssertionToNonAssertingTestRector- [#2087] Added way to exclude rectors, Thanks to [@jeroensmit]
 
 ### Fixed
-
-- [#2146] fix ValueResolver static array for non static keys
-- [#2152] fix get property by class
-- [#2114] Fix for issue [#2090], Thanks to [@jeroensmit]
-- [#2140] fix 3rd party testing without config
-- [#2147] fix string-named func
-- [#2164] [code-quality] fixes processing of trait - RemoveAlwaysTrueConditionSetInConstructorRector  [#2162], Thanks to [@lapetr]
-- [#2165] Bugfix for RemoveUnreachableStatementRector, Thanks to [@jeroensmit]
+- [#2146] fix ValueResolver static array for non static keys- [#2152] fix get property by class- [#2114] Fix for issue [#2090], Thanks to [@jeroensmit]- [#2140] fix 3rd party testing without config- [#2147] fix string-named func- [#2164] [code-quality] fixes processing of trait - RemoveAlwaysTrueConditionSetInConstructorRector  [#2162], Thanks to [@lapetr]- [#2165] Bugfix for RemoveUnreachableStatementRector, Thanks to [@jeroensmit]
 
 ### Changed
-
-- [#2145] [DeadCode] Make RemoveDefaultArgumentValueRector skip native functions
-- [#2148] [TypeDeclaration] Prevent array-iterable-Iterator override in ReturnTypeDeclarationRector
-- [#2159] Screen file command improvements
-- [#2149] prevent doc type of child array override
-- [#2151] make `ReturnTypeDeclarationRector` keep implementation
+- [#2145] [DeadCode] Make RemoveDefaultArgumentValueRector skip native functions- [#2148] [TypeDeclaration] Prevent array-iterable-Iterator override in ReturnTypeDeclarationRector- [#2159] Screen file command improvements- [#2149] prevent doc type of child array override- [#2151] make `ReturnTypeDeclarationRector` keep implementation
 
 ## [v0.5.16] - 2019-10-10
-
 - [#2139] Add `screen-file` command for learning & trainings
 
 ## [v0.5.15] - 2019-10-10
 
 ### Fixed
-
-- [#2135] Fix EncapsedStringsToSprintfRector for non-var exprs
-- [#2130] fix stub loading location
-- [#2128] Fix `EncapsedStringsToSprintfRector` when using class properties, Thanks to [@gnutix]
+- [#2135] Fix EncapsedStringsToSprintfRector for non-var exprs- [#2130] fix stub loading location- [#2128] Fix `EncapsedStringsToSprintfRector` when using class properties, Thanks to [@gnutix]
 
 ## [v0.5.14] - 2019-10-09
 
 ### Added
-
-- [#2123] [SOLID] Prefer interface if possible
-- [#2115] [DeadCode] Add `SimplifyIfElseWithSameContentRector`
-- [#2080] [DeadCode] Add `RemoveUnreachableStatementRector`
-- [#2103] [StrictCodeQuality] Add `VarInlineAnnotationToAssertRector`
-- [#2122] [StrictCodeQuality] Add freshly created node support to var inline assert
-- [#2047] Add conditional method renaming rector, Thanks to [@markstory]
-- [#2094] Add `ShortenElseIfRector`, Thanks to [@keulinho]
-- [#2095] Add fixture for phpunit x>y to greaterThan refactoring, Thanks to [@keulinho]
-- [#2096] `ImportFullyQualifiedNamesRector` : add a failing test about modified annotations that shouldn't be, Thanks to [@gnutix]
-- [#2084] Add failing test case for `ReturnArrayClassMethodToYieldRector` (removing comments), Thanks to [@gnutix]
-- [#2099] Add documentation for `ImportFullyQualifiedNamesRector` new argument, Thanks to [@gnutix]
-- [#2100] Add FunctionCallToConstantRector, Thanks to [@keulinho]
-- [#2081] Add failing test: StringifyStrNeedlesRector adds (string) to a method call that returns a string anyway, Thanks to [@gnutix]
-- [#2077] Add an option to skip importing root namespace classes (like \DateTime), Thanks to [@gnutix]
-- [#2091] Add `UseIncrementAssignRector`, Thanks to [@keulinho]
-- [#2074] Add a PHPUnit TestCase stub., Thanks to [@gnutix]
-- [#2073] `StringToArrayArgumentProcessRectorTest` : add failing test around Traversable, Thanks to [@gnutix]
-- [#2062] Add stubs instead of dump class replace in constructor
-- [#2052] Add post run name imports
-- [#2049] Added StrictArraySearchRector - Issue [#2009], Thanks to [@jeroenherczeg]
-- [#2124] add CommanderCollector
-- [#2054] [DoctrineCodeQuality] Initialize collections in constructor
+- [#2123] [SOLID] Prefer interface if possible- [#2115] [DeadCode] Add `SimplifyIfElseWithSameContentRector`- [#2080] [DeadCode] Add `RemoveUnreachableStatementRector`- [#2103] [StrictCodeQuality] Add `VarInlineAnnotationToAssertRector`- [#2122] [StrictCodeQuality] Add freshly created node support to var inline assert- [#2047] Add conditional method renaming rector, Thanks to [@markstory]- [#2094] Add `ShortenElseIfRector`, Thanks to [@keulinho]- [#2095] Add fixture for phpunit x>y to greaterThan refactoring, Thanks to [@keulinho]- [#2096] `ImportFullyQualifiedNamesRector` : add a failing test about modified annotations that shouldn't be, Thanks to [@gnutix]- [#2084] Add failing test case for `ReturnArrayClassMethodToYieldRector` (removing comments), Thanks to [@gnutix]- [#2099] Add documentation for `ImportFullyQualifiedNamesRector` new argument, Thanks to [@gnutix]- [#2100] Add FunctionCallToConstantRector, Thanks to [@keulinho]- [#2081] Add failing test: StringifyStrNeedlesRector adds (string) to a method call that returns a string anyway, Thanks to [@gnutix]- [#2077] Add an option to skip importing root namespace classes (like \DateTime), Thanks to [@gnutix]- [#2091] Add `UseIncrementAssignRector`, Thanks to [@keulinho]- [#2074] Add a PHPUnit TestCase stub., Thanks to [@gnutix]- [#2073] `StringToArrayArgumentProcessRectorTest` : add failing test around Traversable, Thanks to [@gnutix]- [#2062] Add stubs instead of dump class replace in constructor- [#2052] Add post run name imports- [#2049] Added StrictArraySearchRector - Issue [#2009], Thanks to [@jeroenherczeg]- [#2124] add CommanderCollector- [#2054] [DoctrineCodeQuality] Initialize collections in constructor
 
 ### Changed
-
-- [#2065] [CodingStyle] Allow private ctor override for static factory
-- [#2067] Use contextual method rename rector in cake4 rules., Thanks to [@markstory]
-- [#2125] improve uuid steps
-- [#2107] restart changed doc
-- [#2097] Improve class annotation matching
-- [#2109] skip var type in anonymous class for `PropertyTypeDeclarationRector`
-- [#2083] Do not apply `SimplifyIfReturnBoolRector` when there are comments in between the if statements, Thanks to [@gnutix]
-- [#2072] [CodingStyle] Skip common annotation aliases in RemoveUnusedAliasRector
+- [#2065] [CodingStyle] Allow private ctor override for static factory- [#2067] Use contextual method rename rector in cake4 rules., Thanks to [@markstory]- [#2125] improve uuid steps- [#2107] restart changed doc- [#2097] Improve class annotation matching- [#2109] skip var type in anonymous class for `PropertyTypeDeclarationRector`- [#2083] Do not apply `SimplifyIfReturnBoolRector` when there are comments in between the if statements, Thanks to [@gnutix]- [#2072] [CodingStyle] Skip common annotation aliases in RemoveUnusedAliasRector
 
 ### Fixed
-
-- [#2121] Allow `@Template` to get nullable values
-- [#2076] [Symfony] Fix is submitted
-- [#2093] fix stringy str needless for return strings
-- [#2112] fix joinColumns always fallback
-- [#2070] Fixed the third argument in `VarDumperTestTrait`, Thanks to [@adrozdek]
-- [#2075] Fix ReflectionException (Method `PHPUnit\Framework\TestCase::tearDown(...)` does not exist) thrown while autoloading class Symfony\Bundle\FrameworkBundle\Test\WebTestCase., Thanks to [@gnutix]
-- [#2088] Fix changing the wrong property fetches, Thanks to [@jeroensmit]
-- [#2078] Fix type resolution for traversable
-- [#2079] fix [@TODO] malfforms
-- [#2102] Fix countable for countable classes without countable
-- [#2101] Fix virtual property
-- [#2082] Fixing `return new static()` not being covered by `MakeInheritedMethodVisibilitySameAsParentRector`, Thanks to [@gnutix]
-- [#2060] [PHP 7.1] Skip extra argument removal for parent static call
+- [#2121] Allow `@Template` to get nullable values- [#2076] [Symfony] Fix is submitted- [#2093] fix stringy str needless for return strings- [#2112] fix joinColumns always fallback- [#2070] Fixed the third argument in `VarDumperTestTrait`, Thanks to [@adrozdek]- [#2075] Fix ReflectionException (Method `PHPUnit\Framework\TestCase::tearDown(...)` does not exist) thrown while autoloading class Symfony\Bundle\FrameworkBundle\Test\WebTestCase., Thanks to [@gnutix]- [#2088] Fix changing the wrong property fetches, Thanks to [@jeroensmit]- [#2078] Fix type resolution for traversable- [#2079] fix [@TODO] malfforms- [#2102] Fix countable for countable classes without countable- [#2101] Fix virtual property- [#2082] Fixing `return new static()` not being covered by `MakeInheritedMethodVisibilitySameAsParentRector`, Thanks to [@gnutix]- [#2060] [PHP 7.1] Skip extra argument removal for parent static call
 
 ## [v0.5.13] - 2019-09-27
 
 ### Added
-
-- [#1980] [ZendToSymfony] Init Zend 1 to Symfony 4
-- [#1982] [Autodiscovery] init
-- [#2044] [CodeQuality] Add RemoveSoleValueSprintfRector
-- [#2032] [CodingStyle] Add MakeInheritedMethodVisibilitySameAsParentRector
-- [#2033] [CodingStyle] Add CallUserFuncCallToVariadicRector
-- [#1978] [DX] add check class existence scripts
-- [#1924] [DeadCode] Add RemoveAlwaysTrueIfConditionRector
-- [#2012] [Doctrine] Add ChangeReturnTypeOfClassMethodWithGetIdRector
-- [#1928] [Doctrine] Add stubs instead of full orm dependencies
-- [#2003] [Doctrine] add CustomIdGenerator + step 2 for uuid Doctrine migration
-- [#1994] [Doctrine] Add AlwaysInitializeUuidInEntityRector
-- [#2031] [Monolog] Add 2.0 upgrade set
-- [#1984] [PHPStan] add PreventParentMethodVisibilityOverrideRule
-- [#1947] [PHPUnit] Add [@see] annotation to reference test
-- [#1948] [PHPUnit] Add array call to data provider
-- [#2035] [Php53] Add DirNameFileConstantToDirConstantRector [close [#2006]]
-- [#2037] [Php71] Add ListToArrayDestructRector
-- [#2040] [Rector] Add RemoveZeroBreakContinueRector
-- [#2034] [Restoration] Add MissingClassConstantReferenceToStringRector
-- [#2020] [Symfony] Add MergeMethodAnnotationToRouteAnnotationRector
-- [#2019] [TypeDeclaration] Add AddMethodCallBasedParamTypeRector
-- [#2000] add isInDoctrineEntityClass() method
-- [#2001] add changeName/getName to serializer
-- [#1968] add skip of one to one relations with mapped by
-- [#1998] make DocBlockManipulator protected in AbstractRector + add GeneratedValue annotatoin parsing
-- [#1955] Added stub directory to Docker composer build phase, Thanks to [@JanMikes]
-- [#2015] Add rules for renaming CakePHP's Router methods, Thanks to [@ADmad]
-- [#2048] Add support for various annotation formats
-- [#1927] Add Sensio TemplateTagValueNode
-- [#1933] add removeNodeFromStatements() method to remove statement without key easily
-- [#2039] add function aliases to celebrity
-- [#1921] Add uuid only to entities with id
-- [#1939] Add ReturnedNodesReturnTypeInferer + big \*TypeDeclarationRector refactoring
+- [#1980] [ZendToSymfony] Init Zend 1 to Symfony 4- [#1982] [Autodiscovery] init- [#2044] [CodeQuality] Add RemoveSoleValueSprintfRector- [#2032] [CodingStyle] Add MakeInheritedMethodVisibilitySameAsParentRector- [#2033] [CodingStyle] Add CallUserFuncCallToVariadicRector- [#1978] [DX] add check class existence scripts- [#1924] [DeadCode] Add RemoveAlwaysTrueIfConditionRector- [#2012] [Doctrine] Add ChangeReturnTypeOfClassMethodWithGetIdRector- [#1928] [Doctrine] Add stubs instead of full orm dependencies- [#2003] [Doctrine] add CustomIdGenerator + step 2 for uuid Doctrine migration- [#1994] [Doctrine] Add AlwaysInitializeUuidInEntityRector- [#2031] [Monolog] Add 2.0 upgrade set- [#1984] [PHPStan] add PreventParentMethodVisibilityOverrideRule- [#1947] [PHPUnit] Add [@see] annotation to reference test- [#1948] [PHPUnit] Add array call to data provider- [#2035] [Php53] Add DirNameFileConstantToDirConstantRector [close [#2006]]- [#2037] [Php71] Add ListToArrayDestructRector- [#2040] [Rector] Add RemoveZeroBreakContinueRector- [#2034] [Restoration] Add MissingClassConstantReferenceToStringRector- [#2020] [Symfony] Add MergeMethodAnnotationToRouteAnnotationRector- [#2019] [TypeDeclaration] Add AddMethodCallBasedParamTypeRector- [#2000] add isInDoctrineEntityClass() method- [#2001] add changeName/getName to serializer- [#1968] add skip of one to one relations with mapped by- [#1998] make DocBlockManipulator protected in AbstractRector + add GeneratedValue annotatoin parsing- [#1955] Added stub directory to Docker composer build phase, Thanks to [@JanMikes]- [#2015] Add rules for renaming CakePHP's Router methods, Thanks to [@ADmad]- [#2048] Add support for various annotation formats- [#1927] Add Sensio TemplateTagValueNode- [#1933] add removeNodeFromStatements() method to remove statement without key easily- [#2039] add function aliases to celebrity- [#1921] Add uuid only to entities with id- [#1939] Add ReturnedNodesReturnTypeInferer + big \*TypeDeclarationRector refactoring
 
 ### Changed
-
-- [#2036] [Php72] improve UnsetCastRector
-- [#2017] [Renaming] init new package
-- [#2030] [Renaming] fqnize freshly namespaced class
-- [#1943] Improve covariance in ReturnTypeDeclarationRector
-- [#1992] improve join table patterns
-- [#1952] improve test case provided rector class debug info
-- [#1937] uuid rules are now designed to be used at once
-- [#1925] rename level to set to prevent confusion of duplicate
-- [#2046] Decouple annotation to own PhpDocNodeFactory to allow extension without change
-- [#1869] Refactoring order creates incompatible return types, Thanks to [@scheb]
-- [#1986] improve single info multiline doc, drop NodeDecorator
-- [#1976] [phpstorm meta] make getByType() return nullable
-- [#1993] Improve annotation content joins
-- [#1996] Optimize class renaming
-- [#1997] Improve annotation spacing
-- [#1972] Migrate tests to data providers
-- [#1971] Cleanup
-- [#2043] [CI] run all sets check
-- [#1979] [DX] check invalid config arguments
-- [#2011] [Doctrine] Step [#3] - `getUuid`/`setUuid` method calls to id values
-- [#1966] [Doctrine] split id and relation migration to 2 steps
-- [#2016] [Php] Split to own packages by version
-- [#1989] [PhpDoc] Multiline test improvements
-- [#2045] [Symfony] Make MakeDispatchFirstArgumentEventRector work with get_class
-- [#1938] [TypeDeclaration] Extend ReturnTypeDeclarationRector with incorrect types override
-- [#1931] Make type replacement of annotatoin OOP
-- [#1932] make use of `getProperties()`, `getMethods()`, `getConstants()` and `getTraitUses()`
-- [#1914] Create rector for transforming Laravel validation rules to a prettier format, Thanks to [@sashabeton]
-- [#1923] `RemoveUnusedPrivatePropertyRector` should skip entities [closes [#1922]]
-- [#1940] cleanup type resolving
-- [#1934] UUID report old to new table
-- [#1961] Migrate `TypeInferers` and `TypeResolvers` to PHPStan object types
-- [#1991] make `EntityUuidNodeFactory` extensible
-- [#2002] cover name at `JoinColumn` removal
-- [#1999] make column tag value node changeable
-- [#1957] Move from string types to PHPStan types
-- [#1946] from helper methods to isStaticType() with PHPStan object typing
-- [#1953] StaticTypeMapper refactoring
-- [#1866] Misc
-- [#2013] cleanup
-- [#1951] Update README.md, Thanks to [@drbyte]
+- [#2036] [Php72] improve UnsetCastRector- [#2017] [Renaming] init new package- [#2030] [Renaming] fqnize freshly namespaced class- [#1943] Improve covariance in ReturnTypeDeclarationRector- [#1992] improve join table patterns- [#1952] improve test case provided rector class debug info- [#1937] uuid rules are now designed to be used at once- [#1925] rename level to set to prevent confusion of duplicate- [#2046] Decouple annotation to own PhpDocNodeFactory to allow extension without change- [#1869] Refactoring order creates incompatible return types, Thanks to [@scheb]- [#1986] improve single info multiline doc, drop NodeDecorator- [#1976] [phpstorm meta] make getByType() return nullable- [#1993] Improve annotation content joins- [#1996] Optimize class renaming- [#1997] Improve annotation spacing- [#1972] Migrate tests to data providers- [#1971] Cleanup- [#2043] [CI] run all sets check- [#1979] [DX] check invalid config arguments- [#2011] [Doctrine] Step [#3] - `getUuid`/`setUuid` method calls to id values- [#1966] [Doctrine] split id and relation migration to 2 steps- [#2016] [Php] Split to own packages by version- [#1989] [PhpDoc] Multiline test improvements- [#2045] [Symfony] Make MakeDispatchFirstArgumentEventRector work with get_class- [#1938] [TypeDeclaration] Extend ReturnTypeDeclarationRector with incorrect types override- [#1931] Make type replacement of annotatoin OOP- [#1932] make use of `getProperties()`, `getMethods()`, `getConstants()` and `getTraitUses()`- [#1914] Create rector for transforming Laravel validation rules to a prettier format, Thanks to [@sashabeton]- [#1923] `RemoveUnusedPrivatePropertyRector` should skip entities [closes [#1922]]- [#1940] cleanup type resolving- [#1934] UUID report old to new table- [#1961] Migrate `TypeInferers` and `TypeResolvers` to PHPStan object types- [#1991] make `EntityUuidNodeFactory` extensible- [#2002] cover name at `JoinColumn` removal- [#1999] make column tag value node changeable- [#1957] Move from string types to PHPStan types- [#1946] from helper methods to isStaticType() with PHPStan object typing- [#1953] StaticTypeMapper refactoring- [#1866] Misc- [#2013] cleanup- [#1951] Update README.md, Thanks to [@drbyte]
 
 ### Fixed
-
-- [#2021] [PHP71] Fix BinaryOpBetweenNumberAndStringRector for variables
-- [#1969] fix spacing with SpacelessPhpDocTagNode
-- [#2018] fix renaming class to existing one [closes [#1438]]
-- [#2014] Code sample fixes, Thanks to [@HypeMC]
-- [#2024] fix parent typehint for anonymous class
-- [#2025] Fix numeric string type in BinaryOpBetweenNumberAndStringRector
-- [#2026] Fix pseudo namespace to namespace with use statement
-- [#1967] Fix Doctrine stubs + separate reported files into 2
-- [#2027] Fix printing of tab-indented files
-- [#1962] Fixed small typos for Symfony docs., Thanks to [@adrozdek]
-- [#2022] Fix anonymous class constant
-- [#1990] fix multi constaints
-- [#1983] Fix Return type Covariance Inverse Order
-- [#1926] [DeadCode] Keep parent call delegation in case of accessibility override
-- [#2023] [DeadCode] Skip magic property `RemoveUnusedPrivatePropertyRector`
+- [#2021] [PHP71] Fix BinaryOpBetweenNumberAndStringRector for variables- [#1969] fix spacing with SpacelessPhpDocTagNode- [#2018] fix renaming class to existing one [closes [#1438]]- [#2014] Code sample fixes, Thanks to [@HypeMC]- [#2024] fix parent typehint for anonymous class- [#2025] Fix numeric string type in BinaryOpBetweenNumberAndStringRector- [#2026] Fix pseudo namespace to namespace with use statement- [#1967] Fix Doctrine stubs + separate reported files into 2- [#2027] Fix printing of tab-indented files- [#1962] Fixed small typos for Symfony docs., Thanks to [@adrozdek]- [#2022] Fix anonymous class constant- [#1990] fix multi constaints- [#1983] Fix Return type Covariance Inverse Order- [#1926] [DeadCode] Keep parent call delegation in case of accessibility override- [#2023] [DeadCode] Skip magic property `RemoveUnusedPrivatePropertyRector`
 
 ### Removed
-
-- [#1954] remove `CallableCollectorPopulator`
-- [#1935] remove `getDoctrine\*()` methods from `PhpDocInfo`, use `getByType()` instead
-- [#1958] remove few PHP-Parser rules to prevent package-rules vs package-features confusion
+- [#1954] remove `CallableCollectorPopulator`- [#1935] remove `getDoctrine\*()` methods from `PhpDocInfo`, use `getByType()` instead- [#1958] remove few PHP-Parser rules to prevent package-rules vs package-features confusion
 
 ## [v0.5.12] - 2019-08-29
 
 ### Added
-
-- [#1898] Start CakePHP 4.0 rectors, Thanks to [@markstory]
-- [#1902] [BetterPhpDocParser] Add support for parsing Doctrine annotations
-- [#1906] [DoctrinePhpDocParser] Add relation tags and join column
-- [#1910] Add more rectors for CakePHP 4.0, Thanks to [@markstory]
-- [#1916] add parent construct call to uuid init
-- [#1912] [Doctrine] Id to UUID migration
+- [#1898] Start CakePHP 4.0 rectors, Thanks to [@markstory]- [#1902] [BetterPhpDocParser] Add support for parsing Doctrine annotations- [#1906] [DoctrinePhpDocParser] Add relation tags and join column- [#1910] Add more rectors for CakePHP 4.0, Thanks to [@markstory]- [#1916] add parent construct call to uuid init- [#1912] [Doctrine] Id to UUID migration
 
 ### Changed
-
-- [#1903] [dx] make ShouldNotHappen exceptions more informative
-- [#1915] allow non-uuid props
-- [#1897] allow testing outside Rector
-- [#1901] Move Jetbrains PhpStorm stubs into dev dependencies, Thanks to [@atierant]
-- [#1908] let parse only Doctrine tags we need
+- [#1903] [dx] make ShouldNotHappen exceptions more informative- [#1915] allow non-uuid props- [#1897] allow testing outside Rector- [#1901] Move Jetbrains PhpStorm stubs into dev dependencies, Thanks to [@atierant]- [#1908] let parse only Doctrine tags we need
 
 ### Fixed
-
 - [#1917] fix expected namespace
 
 ## [v0.5.11] - 2019-08-25
 
 ### Added
-
-- [#1880] [DeadCode] Add RemoveNullPropertyInitializationRector to dead-code set
-- [#1865] [PSR4] Add NormalizeNamespaceByPSR4ComposerAutoloadRector
-- [#1895] add makeFinal() method to AbstractRector
-- [#1889] Add cakephp3.8 target and fix a typo, Thanks to [@markstory]
-- [#1847] [PHP 7.4] Add literal thousand superator
+- [#1880] [DeadCode] Add RemoveNullPropertyInitializationRector to dead-code set- [#1865] [PSR4] Add NormalizeNamespaceByPSR4ComposerAutoloadRector- [#1895] add makeFinal() method to AbstractRector- [#1889] Add cakephp3.8 target and fix a typo, Thanks to [@markstory]- [#1847] [PHP 7.4] Add literal thousand superator
 
 ### Changed
-
-- [#1878] [PSR4] Improve renamed classes collector to sort by highest parent
-- [#1894] rename levels command to sets
-- [#1896] merge isName and isNameInsensitive
+- [#1878] [PSR4] Improve renamed classes collector to sort by highest parent- [#1894] rename levels command to sets- [#1896] merge isName and isNameInsensitive
 
 ### Fixed
-
-- [#1885] [CodingStyle] Fix ImportFullyQualifiedNamesRector for imported namespace
-- [#1888] Fix missing args in PreferThisOrSelfMethodCallRector
-- [#1891] Fix fqn doc with alraedy PHP imported namespace
-- [#1882] [CodingStyle] Import short classes as well [ref #1877]
-- [#1883] [CodingStyle] Make import `ImportFullyQualifiedNamesRector` include same short class in same namespace
-- [#1881] [RenameClassRector] Include [@ORM], [@Assert], [@Serializer] etc annotations
-- [#1884] Parent constant visibility when it is declared in a super-superclass, Thanks to [@scheb]
+- [#1885] [CodingStyle] Fix ImportFullyQualifiedNamesRector for imported namespace- [#1888] Fix missing args in PreferThisOrSelfMethodCallRector- [#1891] Fix fqn doc with alraedy PHP imported namespace- [#1882] [CodingStyle] Import short classes as well [ref #1877]- [#1883] [CodingStyle] Make import `ImportFullyQualifiedNamesRector` include same short class in same namespace- [#1881] [RenameClassRector] Include [@ORM], [@Assert], [@Serializer] etc annotations- [#1884] Parent constant visibility when it is declared in a super-superclass, Thanks to [@scheb]
 
 ### Removed
-
-- [#1870] [DeadCode] Remove null value from property, Thanks to [@jacekll]
-- [#1875] Remove default excluded file patterns (closes [#1815]), Thanks to [@scheb]
+- [#1870] [DeadCode] Remove null value from property, Thanks to [@jacekll]- [#1875] Remove default excluded file patterns (closes [#1815]), Thanks to [@scheb]
 
 ## [v0.5.10] - 2019-08-19
 
 ### Added
-
-- [#1855] [CodingStyle] Add `AddArrayDefaultToArrayPropertyRector`
-- [#1800] [DeadCode] Add `RemoveUnusedDoctrineEntityMethodAndPropertyRector`
-- [#1819] [DeadCode] Add `RemoveSetterOnlyPropertyAndMethodCallRector`
-- [#1823] [Nette] Add `JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector`
-- [#1857] [TypeDeclaration] Add `AddArrayReturnDocTypeRector`
-- [#1856] [TypeDeclaration] Add `AddArrayParamDocTypeRector`
-- [#1850] add reporting extension, rename rector finish to finishing
-- [#1818] add removed nodes collector
-- [#1826] add concat + multiline case to `ManualJsonStringToJsonEncodeArrayRector`
-- [#1825] add implode support to `ManualJsonStringToJsonEncodeArrayRector`
-- [#1802] add iterable return type for yield values in `ReturnTypeDeclarationRector`
-- [#1851] Fix FluentReplaceRector for more than 2 calls + add * matching support
-- [#1807] add alias support to PropertyTypeDeclarationRector
-- [#1844] add RectorFinishExtensionRunner
+- [#1855] [CodingStyle] Add `AddArrayDefaultToArrayPropertyRector`- [#1800] [DeadCode] Add `RemoveUnusedDoctrineEntityMethodAndPropertyRector`- [#1819] [DeadCode] Add `RemoveSetterOnlyPropertyAndMethodCallRector`- [#1823] [Nette] Add `JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector`- [#1857] [TypeDeclaration] Add `AddArrayReturnDocTypeRector`- [#1856] [TypeDeclaration] Add `AddArrayParamDocTypeRector`- [#1850] add reporting extension, rename rector finish to finishing- [#1818] add removed nodes collector- [#1826] add concat + multiline case to `ManualJsonStringToJsonEncodeArrayRector`- [#1825] add implode support to `ManualJsonStringToJsonEncodeArrayRector`- [#1802] add iterable return type for yield values in `ReturnTypeDeclarationRector`- [#1851] Fix FluentReplaceRector for more than 2 calls + add * matching support- [#1807] add alias support to PropertyTypeDeclarationRector- [#1844] add RectorFinishExtensionRunner
 
 ### Changed
-
-- [#1828] allow multiline empty spaces strings
-- [#1841] class manipulator now returns Property on property name search
-- [#1814] Improve PHPStan trait scope resolving
-- [#1862] [TypeDeclaration] Various `AddArrayReturnDocTypeRector` improvements
-- [#1805] resolve target entity from same namespace
-- [#1858] Always keeps array in `*TypeInfo`
-- [#1854] Ignores resource also when type is nullable, Thanks to [@tigitz]
-- [#1793] Break class name in `@var` when relation is defined in same namespace, Thanks to [@snapshotpl]
-- [#1852] Fix decimal to float
-- [#1806] use DateTimeInterface over `DateTime`
-- [#1839] skip ManyToOne properties in `SetterOnlyMethodAnalyzer` ([#1838])
-- [#1829] skip same-namespace-short name in `ImportFullyQualifiedNamesRector`
-- [#1827] simplify `ManualJsonStringToJsonEncodeArrayRector`
-- [#1821] skip abstract parent methods in `RemoveUnusedDoctrineEntityMethodAndPropertyRector`
-- [#1838] skip ManyToOne properties in `SetterOnlyMethodAnalyzer`
-- [#1840] Constants declared in interfaces have to be public, Thanks to [@scheb]
-- [#1863] merge ArrayPropertyDefaultValueRector to superior `AddArrayDefaultToArrayPropertyRector`
-- [#1842] Overriding constants require at least the parent's visibility, Thanks to [@scheb]
-- [#1813] dont load phpstan-phpunit if phpunit not installed, Thanks to [@slepic]
-- [#1808] Correct `NameResolver::getName()` + cleanup static analysis
+- [#1828] allow multiline empty spaces strings- [#1841] class manipulator now returns Property on property name search- [#1814] Improve PHPStan trait scope resolving- [#1862] [TypeDeclaration] Various `AddArrayReturnDocTypeRector` improvements- [#1805] resolve target entity from same namespace- [#1858] Always keeps array in `*TypeInfo`- [#1854] Ignores resource also when type is nullable, Thanks to [@tigitz]- [#1793] Break class name in `@var` when relation is defined in same namespace, Thanks to [@snapshotpl]- [#1852] Fix decimal to float- [#1806] use DateTimeInterface over `DateTime`- [#1839] skip ManyToOne properties in `SetterOnlyMethodAnalyzer` ([#1838])- [#1829] skip same-namespace-short name in `ImportFullyQualifiedNamesRector`- [#1827] simplify `ManualJsonStringToJsonEncodeArrayRector`- [#1821] skip abstract parent methods in `RemoveUnusedDoctrineEntityMethodAndPropertyRector`- [#1838] skip ManyToOne properties in `SetterOnlyMethodAnalyzer`- [#1840] Constants declared in interfaces have to be public, Thanks to [@scheb]- [#1863] merge ArrayPropertyDefaultValueRector to superior `AddArrayDefaultToArrayPropertyRector`- [#1842] Overriding constants require at least the parent's visibility, Thanks to [@scheb]- [#1813] dont load phpstan-phpunit if phpunit not installed, Thanks to [@slepic]- [#1808] Correct `NameResolver::getName()` + cleanup static analysis
 
 ### Fixed
-
-- [#1830] Fix non-same parent method name for RemoveParentCallWithoutParentRector
-- [#1804] Fix nullable array type param for PropertyTypeDeclarationRector
-- [#1803] Fix nullable for xToOne annotation by default
-- [#1794] Fix method call type
-- [#1864] Fix type resolutoin in PropertyNodeParamTypeInferer
-- [#1817] Fix analysed files for PHPStan scope resolver
-- [#1831] Fix unused method type for return type
-- [#1837] Fix RemoveSetterOnlyPropertyAndMethodCallRector race condition
-- [#1853] Fix different method call return in FluentReplaceRector
-- [#1859] Fix lowercase of union fqn types
-- [#1832] Fix args miss-match in RemoveDelegatingParentCallRector
-- [#1845] HelperFunctionToDependencyInjectionRector fix, Thanks to [@sashabeton]
-- [#1836] Fixing NodeRemovingVisitor
-- [#1835] Fix reseting of removed nodes
-- [#1833] Fix var/method call resolver
+- [#1830] Fix non-same parent method name for RemoveParentCallWithoutParentRector- [#1804] Fix nullable array type param for PropertyTypeDeclarationRector- [#1803] Fix nullable for xToOne annotation by default- [#1794] Fix method call type- [#1864] Fix type resolutoin in PropertyNodeParamTypeInferer- [#1817] Fix analysed files for PHPStan scope resolver- [#1831] Fix unused method type for return type- [#1837] Fix RemoveSetterOnlyPropertyAndMethodCallRector race condition- [#1853] Fix different method call return in FluentReplaceRector- [#1859] Fix lowercase of union fqn types- [#1832] Fix args miss-match in RemoveDelegatingParentCallRector- [#1845] HelperFunctionToDependencyInjectionRector fix, Thanks to [@sashabeton]- [#1836] Fixing NodeRemovingVisitor- [#1835] Fix reseting of removed nodes- [#1833] Fix var/method call resolver
 
 
 ## [v0.5.9] - 2019-08-01
 
 ### Added
-
-- [#1761] [CodeQuality] Add ThrowWithPreviousExceptionRector
-- [#1762] [CodingStyle] Add ManualJsonStringToJsonEncodeArrayRector
-- [#1760] [DeadCode] Add RemoveDuplicatedCaseInSwitchRector
-- [#1776] [NodeTypeResolver] Add phpunit extension
-- [#1781] [TypeDeclaration] Add PropertyTypeDeclarationRector
-- [#1774] add empty array to static type to string resolver
-- [#1786] add priority to PropertyTypeInfererInterface and put doctrine infering first
-- [#1789] add xToOne relation support to Doctrine var type resolver
-- [#1787] add return nullable type to GetterOrSetterPropertyTypeInferer
+- [#1761] [CodeQuality] Add ThrowWithPreviousExceptionRector- [#1762] [CodingStyle] Add ManualJsonStringToJsonEncodeArrayRector- [#1760] [DeadCode] Add RemoveDuplicatedCaseInSwitchRector- [#1776] [NodeTypeResolver] Add phpunit extension- [#1781] [TypeDeclaration] Add PropertyTypeDeclarationRector- [#1774] add empty array to static type to string resolver- [#1786] add priority to PropertyTypeInfererInterface and put doctrine infering first- [#1789] add xToOne relation support to Doctrine var type resolver- [#1787] add return nullable type to GetterOrSetterPropertyTypeInferer
 
 ### Changed
-
-- [#1769] [Restoration] Return removed class annotations
-- [#1788] infer from [@return] doc type in PropertyTypeDeclaration
+- [#1769] [Restoration] Return removed class annotations- [#1788] infer from [@return] doc type in PropertyTypeDeclaration
 
 ### Fixed
-
-- [#1782] [Symfony] Fix frozen parameter bag in DefaultAnalyzedSymfonyApplicationContainer
-- [#1779] FIXED: Catastrophic backtracking in regular expression if the current…, Thanks to [@hernst42]
-- [#1772] fix type analyzer for FQN
-- [#1790] fix laravel53 config
+- [#1782] [Symfony] Fix frozen parameter bag in DefaultAnalyzedSymfonyApplicationContainer- [#1779] FIXED: Catastrophic backtracking in regular expression if the current…, Thanks to [@hernst42]- [#1772] fix type analyzer for FQN- [#1790] fix laravel53 config
 
 ### Removed
-
-- [#1791] [CodingStyle] remove extra break from BinarySwitchToIfElseRector
-- [#1780] [NodeTypeResolver] drop duplicated generic array type
+- [#1791] [CodingStyle] remove extra break from BinarySwitchToIfElseRector- [#1780] [NodeTypeResolver] drop duplicated generic array type
 
 ### Unknown Category
-
-- [#1764] [Symfony] Use Symfony bridge interface for `doctrine` service, Thanks to [@stloyd]
-- [#1759] [SymfonyCodeQuality] From listener to subscriber
-- [#1777] make constant array types unique
-- [#1771] skip non-annotation prefix
+- [#1764] [Symfony] Use Symfony bridge interface for `doctrine` service, Thanks to [@stloyd]- [#1759] [SymfonyCodeQuality] From listener to subscriber- [#1777] make constant array types unique- [#1771] skip non-annotation prefix
 
 ## [v0.5.8] - 2019-07-21
 
 ### Added
-
-- [#1691] [Architecture] Add `ConstructorInjectionToActionInjectionRector`
-- [#1689] [CodeQuality] Add `is_a` with string true
-- [#1754] [CodeQuality] Add `RemoveAlwaysTrueConditionSetInConstructorRector`
-- [#1690] [CodeQuality] Add `StrlenZeroToIdenticalEmptyStringRector`
-- [#1722] [CodingStyle] Add `EncapsedStringsToSprintfRector`
-- [#1717] [DeadCode] Add static, self and FQN type to `RemoveUnusedPrivateMethodRector`
-- [#1671] [Doctrine] Add registry to EM
-- [#1693] [Doctrine] Add `RemoveRepositoryFromEntityAnnotationRector`
-- [#1709] [FuncCall] Don't add `$result` to `parse_str` if second parameter is already set, Thanks to [@ravanscafi]
-- [#1720] [Generic] Add `ServiceGetterToConstructorInjectionRector`
-- [#1676] [PHP] Add scope limitation to `ArgumentAdderRector` for 3party non-existing params
-- [#1695] [PHPStan] Add `RemoveNonExistingVarAnnotationRector`
-- [#1696] [PHPUnit][Symfony] Add `AddMessageToEqualsResponseCodeRector`
-- [#1744] add reference support to `ParamTypeDeclarationRector`
-- [#1694] Add `rector.yaml` to `.dockerignore`, Thanks to [@aboks]
-- [#1674] Add Polyfil function support
-- [#1681] Add `parent::__construct()` to command dependencies
+- [#1691] [Architecture] Add `ConstructorInjectionToActionInjectionRector`- [#1689] [CodeQuality] Add `is_a` with string true- [#1754] [CodeQuality] Add `RemoveAlwaysTrueConditionSetInConstructorRector`- [#1690] [CodeQuality] Add `StrlenZeroToIdenticalEmptyStringRector`- [#1722] [CodingStyle] Add `EncapsedStringsToSprintfRector`- [#1717] [DeadCode] Add static, self and FQN type to `RemoveUnusedPrivateMethodRector`- [#1671] [Doctrine] Add registry to EM- [#1693] [Doctrine] Add `RemoveRepositoryFromEntityAnnotationRector`- [#1709] [FuncCall] Don't add `$result` to `parse_str` if second parameter is already set, Thanks to [@ravanscafi]- [#1720] [Generic] Add `ServiceGetterToConstructorInjectionRector`- [#1676] [PHP] Add scope limitation to `ArgumentAdderRector` for 3party non-existing params- [#1695] [PHPStan] Add `RemoveNonExistingVarAnnotationRector`- [#1696] [PHPUnit][Symfony] Add `AddMessageToEqualsResponseCodeRector`- [#1744] add reference support to `ParamTypeDeclarationRector`- [#1694] Add `rector.yaml` to `.dockerignore`, Thanks to [@aboks]- [#1674] Add Polyfil function support- [#1681] Add `parent::__construct()` to command dependencies
 
 ### Changed
-
-- [#1748] [CodingStyle] Improve `NewlineBeforeNewAssignSetRector`
-- [#1697] [DeadCode] Allow static constant call on `RemoveUnusedPrivateConstantRector`, Thanks to [@ravanscafi]
-- [#1719] Resolve anonymous class return type to object
+- [#1748] [CodingStyle] Improve `NewlineBeforeNewAssignSetRector`- [#1697] [DeadCode] Allow static constant call on `RemoveUnusedPrivateConstantRector`, Thanks to [@ravanscafi]- [#1719] Resolve anonymous class return type to object
 
 ### Fixed
-
-- [#1752] [CodeQuality] Fix `CompleteDynamicPropertiesRector` for dynamic property fetch
-- [#1718] [DeadCode] Fix too deep nesting in dead private property
-- [#1710] [MethodCall] Fix multilevel array subsets, Thanks to [@ravanscafi]
-- [#1715] [SOLID] Fix `PrivatizeLocalClassConstantRector` for in-class use
-- [#1698] Fix `NameTypeResolver` resolveFullyQualifiedName return type, Thanks to [@ravanscafi]
-- [#1684] fix new phpstan reports
-- [#1702] Fixed some issues for `RemoveZeroAndOneBinaryRector`, Thanks to [@jeroensmit]
-- [#1703] Fixed unintended removal of properties when used inside a trait, Thanks to [@jeroensmit]
-- [#1738] Fix InjectAnnotationClassRector with aliases
-- [#1705] Fixed wrong naming of docs script in composer.json, Thanks to [@jeroensmit]
-- [#1712] Fix tests according to review and a few typos, Thanks to [@ravanscafi]
-- [#1673] Fix `InjectAnnotationClassRector` for `@var` case
-- [#1677] [Bugfix] `IsCountableRector` & `IsIterableRector` should first check method availability, Thanks to [@stloyd]
-- [#1686] [Bugfix] PHPDoc type-hint `resource` should not be used as PHP type-hint, Thanks to [@stloyd]
-- [#1739] [CodeStyle] Newline before assign
-- [#1716] [DeadCode] Keep array method call in `RemoveUnusedPrivateMethodRector`
-- [#1753] [DeadCode] Rector `RemoveDeadConstructorRector` should skip `private` method, Thanks to [@stloyd]
-- [#1687] [Symfony] Set few default common service names for Symfony App Analyzer, Thanks to [@stloyd]
-- [#1675] [Symfony] Make set symfony42 refactor get(...) in former container aware commands
-- [#1666] Skip session in `SelfContainerGetMethodCallFromTestToSetUpMethodRector`
-- [#1757] make SymfonyContainer factory configurable with "kernel_environment" parameter in rector.yaml
-- [#1707] Don't mess with lines between docblock comment and var type., Thanks to [@ravanscafi]
-- [#1699] Update composer scripts, Thanks to [@ravanscafi]
-- [#1755] make interface description PHPStorm compatible, so it will not break abstract method complete
-- [#1711] Do not mark injected properties as private when moved to constructor, Thanks to [@holtkamp]
-- [#1714] Cleanup
-- [#1721] skip `Illuminate\Support\Collection` magic for `CompleteDynamicPropertiesRector`
-- [#1725] Empty compacts are forbidden, keep signature by replacing with empty array, Thanks to [@ravanscafi]
-- [#1728] `is_real()` is deprecated instead of `is_float()`, Thanks to [@holtkamp]
-- [#1735] Consider reference symbol in docblock for param type declaration rector, Thanks to [@tigitz]
-- [#1736] Colorify neon files, Thanks to [@szepeviktor]
-- [#1737] Typo in Travis config, Thanks to [@szepeviktor]
+- [#1752] [CodeQuality] Fix `CompleteDynamicPropertiesRector` for dynamic property fetch- [#1718] [DeadCode] Fix too deep nesting in dead private property- [#1710] [MethodCall] Fix multilevel array subsets, Thanks to [@ravanscafi]- [#1715] [SOLID] Fix `PrivatizeLocalClassConstantRector` for in-class use- [#1698] Fix `NameTypeResolver` resolveFullyQualifiedName return type, Thanks to [@ravanscafi]- [#1684] fix new phpstan reports- [#1702] Fixed some issues for `RemoveZeroAndOneBinaryRector`, Thanks to [@jeroensmit]- [#1703] Fixed unintended removal of properties when used inside a trait, Thanks to [@jeroensmit]- [#1738] Fix InjectAnnotationClassRector with aliases- [#1705] Fixed wrong naming of docs script in composer.json, Thanks to [@jeroensmit]- [#1712] Fix tests according to review and a few typos, Thanks to [@ravanscafi]- [#1673] Fix `InjectAnnotationClassRector` for `@var` case- [#1677] [Bugfix] `IsCountableRector` & `IsIterableRector` should first check method availability, Thanks to [@stloyd]- [#1686] [Bugfix] PHPDoc type-hint `resource` should not be used as PHP type-hint, Thanks to [@stloyd]- [#1739] [CodeStyle] Newline before assign- [#1716] [DeadCode] Keep array method call in `RemoveUnusedPrivateMethodRector`- [#1753] [DeadCode] Rector `RemoveDeadConstructorRector` should skip `private` method, Thanks to [@stloyd]- [#1687] [Symfony] Set few default common service names for Symfony App Analyzer, Thanks to [@stloyd]- [#1675] [Symfony] Make set symfony42 refactor get(...) in former container aware commands- [#1666] Skip session in `SelfContainerGetMethodCallFromTestToSetUpMethodRector`- [#1757] make SymfonyContainer factory configurable with "kernel_environment" parameter in rector.yaml- [#1707] Don't mess with lines between docblock comment and var type., Thanks to [@ravanscafi]- [#1699] Update composer scripts, Thanks to [@ravanscafi]- [#1755] make interface description PHPStorm compatible, so it will not break abstract method complete- [#1711] Do not mark injected properties as private when moved to constructor, Thanks to [@holtkamp]- [#1714] Cleanup- [#1721] skip `Illuminate\Support\Collection` magic for `CompleteDynamicPropertiesRector`- [#1725] Empty compacts are forbidden, keep signature by replacing with empty array, Thanks to [@ravanscafi]- [#1728] `is_real()` is deprecated instead of `is_float()`, Thanks to [@holtkamp]- [#1735] Consider reference symbol in docblock for param type declaration rector, Thanks to [@tigitz]- [#1736] Colorify neon files, Thanks to [@szepeviktor]- [#1737] Typo in Travis config, Thanks to [@szepeviktor]
 
 ### Removed
-
-- [#1679] [MakeCommandLazyRector] Remove duplicated check, Thanks to [@stloyd]
-- [#1701] Make sure parameter is not removed when a child class does use the parameter, Thanks to [@jeroensmit]
-- [#1723] Do not remove args when replacing to static calls, Thanks to [@ravanscafi]
-- [#1713] Remove `--with-style` in favour of mentioning ECS, Thanks to [@stloyd]
+- [#1679] [MakeCommandLazyRector] Remove duplicated check, Thanks to [@stloyd]- [#1701] Make sure parameter is not removed when a child class does use the parameter, Thanks to [@jeroensmit]- [#1723] Do not remove args when replacing to static calls, Thanks to [@ravanscafi]- [#1713] Remove `--with-style` in favour of mentioning ECS, Thanks to [@stloyd]
 
 ## [v0.5.7] - 2019-06-28
 
 ### Fixed
-
 - [#1661] Minor phpdoc fixes
 
 ## [v0.5.6] - 2019-06-28
 
 ### Removed
-
 - [#1659] remove deprecated singly implemented autowire compiler pass
 
 ## [v0.5.6] - 2019-06-28
 
 ### Added
-
-- [#1584] [DeadCode] Add `RemoveDeadZeroAndOneOperationRector`
-- [#1586] [DeadCode] Add `RemoveDelegatingParentCallRector`
-- [#1603] [DeadCode] Add `RemoveDuplicatedInstanceOfRector`
-- [#1656] [SymfonyPHPUnit] Add `SelfContainerGetMethodCallFromTestToSetUpMethodRector`
-- [#1589] Add assign ref support to `AddDefaultValueForUndefinedVariableRector`
-- [#1609] Add `ElasticSearchDSL` package, Thanks to [@shyim]
-- [#1611] Add rector for ShopRegistration, Thanks to [@shyim]
-- [#1615] add exclude to typical reported typos
-- [#1610] Add shopware version const rector, Thanks to [@shyim]
-- [#1640] Add `--rule` option to process only single rule from set
+- [#1584] [DeadCode] Add `RemoveDeadZeroAndOneOperationRector`- [#1586] [DeadCode] Add `RemoveDelegatingParentCallRector`- [#1603] [DeadCode] Add `RemoveDuplicatedInstanceOfRector`- [#1656] [SymfonyPHPUnit] Add `SelfContainerGetMethodCallFromTestToSetUpMethodRector`- [#1589] Add assign ref support to `AddDefaultValueForUndefinedVariableRector`- [#1609] Add `ElasticSearchDSL` package, Thanks to [@shyim]- [#1611] Add rector for ShopRegistration, Thanks to [@shyim]- [#1615] add exclude to typical reported typos- [#1610] Add shopware version const rector, Thanks to [@shyim]- [#1640] Add `--rule` option to process only single rule from set
 
 ### Changed
-
-- [#1582] Rename "level" directory to "set"
-- [#1612] travis: allow PHP 7.4
+- [#1582] Rename "level" directory to "set"- [#1612] travis: allow PHP 7.4
 
 ### Fixed
-
-- [#1619] [CodeQuality] Fix `__set`/`__get` case for `CompleteDynamicPropertiesRector`
-- [#1643] [CodingStyle] Fix extra slash in array simple types
-- [#1616] [DeadCode] Fix removed comment after return at `RemoveCodeAfterReturnRector`
-- [#1602] [Laravel] Fix missing method name in 5.7
-- [#1645] [PHP] Fix `mktime` rename with args [closes [#1622]]
-- [#1647] [PHP] Fix `JsonThrowOnErrorRector` inter-args
-- [#1644] [PHP] Fix missed variadic on `ReflectionMethod::invoke()` [closes [#1625]]
-- [#1618] [PHP] Fix class signature over interface priority in `RemoveExtraParametersRector`
-- [#1642] [PHP] Fix `StringifyStrNeedlesRector` duplicated change
-- [#1617] [Symfony] Fix GetRequestRector overlap to non-controllers
-- [#1605] Fix Open Collective link for `FUNDING.yml`, Thanks to [@pxgamer]
-- [#1583] Fix CountOnNullRector for nullable and invalid property
-- [#1599] Fix `StringClassNameToClassConstantRector` for empty name [closes [#1596]]
-- [#1590] Fix nullable item in `ListSwapArrayOrderRector`
-- [#1631] Fix typo : rename `jsm-decouple.yaml` to `jms-decouple.yaml`, Thanks to [@gnutix]
-- [#1588] Fix foreach scope for `AddDefaultValueForUndefinedVariableRector`
-- [#1601] Fix trait skip in `RemoveParentCallWithoutParentRector`
+- [#1619] [CodeQuality] Fix `__set`/`__get` case for `CompleteDynamicPropertiesRector`- [#1643] [CodingStyle] Fix extra slash in array simple types- [#1616] [DeadCode] Fix removed comment after return at `RemoveCodeAfterReturnRector`- [#1602] [Laravel] Fix missing method name in 5.7- [#1645] [PHP] Fix `mktime` rename with args [closes [#1622]]- [#1647] [PHP] Fix `JsonThrowOnErrorRector` inter-args- [#1644] [PHP] Fix missed variadic on `ReflectionMethod::invoke()` [closes [#1625]]- [#1618] [PHP] Fix class signature over interface priority in `RemoveExtraParametersRector`- [#1642] [PHP] Fix `StringifyStrNeedlesRector` duplicated change- [#1617] [Symfony] Fix GetRequestRector overlap to non-controllers- [#1605] Fix Open Collective link for `FUNDING.yml`, Thanks to [@pxgamer]- [#1583] Fix CountOnNullRector for nullable and invalid property- [#1599] Fix `StringClassNameToClassConstantRector` for empty name [closes [#1596]]- [#1590] Fix nullable item in `ListSwapArrayOrderRector`- [#1631] Fix typo : rename `jsm-decouple.yaml` to `jms-decouple.yaml`, Thanks to [@gnutix]- [#1588] Fix foreach scope for `AddDefaultValueForUndefinedVariableRector`- [#1601] Fix trait skip in `RemoveParentCallWithoutParentRector`
 
 ### Changed
-
-- [#1587] [PHP] Skip list in `AddDefaultValueForUndefinedVariableRector`
-- [#1651] Update link to `UPGRADE.md 3.0`, Thanks to [@vasilvestre]
-- [#1581] use `STOP_TRAVERSAL` over exception
-- [#1525] [#1469] prototype github issue template, Thanks to [@funivan]
+- [#1587] [PHP] Skip list in `AddDefaultValueForUndefinedVariableRector`- [#1651] Update link to `UPGRADE.md 3.0`, Thanks to [@vasilvestre]- [#1581] use `STOP_TRAVERSAL` over exception- [#1525] [#1469] prototype github issue template, Thanks to [@funivan]
 
 ## [v0.5.5] - 2019-06-08
-
 - [#1577] skip analysis of new anonymous classes in method call [closes [#1574]]
 
 ## [v0.5.4] - 2019-06-06
 
 ### Added
-
-- [#1570] [DeadCode] Add `RemoveConcatAutocastRector`
-- [#1519] [Symfony] Add `MakeCommandLazyRector`
-- [#1568] [Symfony 4.3] Add `parent::__construct` to `EventDispatcher`
-- [#1562] add `CallableNodeTraverserTrait`
+- [#1570] [DeadCode] Add `RemoveConcatAutocastRector`- [#1519] [Symfony] Add `MakeCommandLazyRector`- [#1568] [Symfony 4.3] Add `parent::__construct` to `EventDispatcher`- [#1562] add `CallableNodeTraverserTrait`
 
 ### Changed
-
-- [#1523] make RectorsFinder return consistent order by shorter names
-- [#1572] [Symfony 4.3] Improve event name and class flip
-- [#1548] Widen `PHPStan` version constraint to `~0.11.6`., Thanks to [@Aerendir]
+- [#1523] make RectorsFinder return consistent order by shorter names- [#1572] [Symfony 4.3] Improve event name and class flip- [#1548] Widen `PHPStan` version constraint to `~0.11.6`., Thanks to [@Aerendir]
 
 ### Fixed
-
-- [#1550] Fix `symfony/finder` 3.4 compact in `LevelOptionResolver`
-- [#1544] Fix phpdoc-parser BC break for generic multiline nodes
-- [#1569] Fix reporting of changed nodes
-- [#1559] Fix classname change for `FilterControllerEvent`, Thanks to [@keulinho]
-- [#1557] Fix scope overflow in `AddDefaultValueForUndefinedVariableRector`
-- [#1556] fix static method in reflection for `StaticCallOnNonStaticToInstanceCallRector`
-- [#1571] Fix anonymous class method return type resolving
-- [#1567] Fix `solid.yaml`, Thanks to [@Great-Antique]
-- [#1549] fix unescaped regular
-- [#1538] Don't remove aliases of classes with same name but different namespaces., Thanks to [@Aerendir]
-- [#1553] [CodeQuality] Skip collections `ForeachToInArrayRector` [closes [#1533]]
-- [#1524] Cover multiline in description-aware nodes [closes [#1522]]
-- [#1565] make `StringClassNameToClassConstantRector` case sensitive [closes [#1539]]
-- [#1545] Ensure Doctrine's `Collection`-like arrays are ignored., Thanks to [@Aerendir]
-- [#1554] optimize
-- [#1558] Do not call parent constructor of `AutowiredEventDispatcher` unless it exists, Thanks to [@cgkkevinr]
-- [#1561] make `RemoveUnusedAliasRector` take into account aliases that keep 2 classes with same short name explicit
-- [#1555] skip nullable array for `ArrayPropertyDefaultValueRector` [closes [#1542]]
+- [#1550] Fix `symfony/finder` 3.4 compact in `LevelOptionResolver`- [#1544] Fix phpdoc-parser BC break for generic multiline nodes- [#1569] Fix reporting of changed nodes- [#1559] Fix classname change for `FilterControllerEvent`, Thanks to [@keulinho]- [#1557] Fix scope overflow in `AddDefaultValueForUndefinedVariableRector`- [#1556] fix static method in reflection for `StaticCallOnNonStaticToInstanceCallRector`- [#1571] Fix anonymous class method return type resolving- [#1567] Fix `solid.yaml`, Thanks to [@Great-Antique]- [#1549] fix unescaped regular- [#1538] Don't remove aliases of classes with same name but different namespaces., Thanks to [@Aerendir]- [#1553] [CodeQuality] Skip collections `ForeachToInArrayRector` [closes [#1533]]- [#1524] Cover multiline in description-aware nodes [closes [#1522]]- [#1565] make `StringClassNameToClassConstantRector` case sensitive [closes [#1539]]- [#1545] Ensure Doctrine's `Collection`-like arrays are ignored., Thanks to [@Aerendir]- [#1554] optimize- [#1558] Do not call parent constructor of `AutowiredEventDispatcher` unless it exists, Thanks to [@cgkkevinr]- [#1561] make `RemoveUnusedAliasRector` take into account aliases that keep 2 classes with same short name explicit- [#1555] skip nullable array for `ArrayPropertyDefaultValueRector` [closes [#1542]]
 
 ## [v0.5.3] - 2019-06-01
 
 ### Added
-
 - [#1520] [PHP] Add `is_countable` to `CountOnNull`
 
 ### Changed
-
 - [#1521] make `LevelOptionResolver` smarter + add `--set` alias to `--level`
 
 ## [v0.5.2] - 2019-05-31
 
 ### Fixed
-
-- [#1510] [CodeQuality] Add trait and parent class support for `CompleteDynamicPropertiesRector`
-- [#1508] [CodeQuality] Fix unneeded return in `CallableThisArrayToAnonymousFunctionRector`
-- [#1509] [PHP] Fix `AddDefaultValueForUndefinedVariableRector` for static variable
-- [#1507] [PHP] Fix `BinaryOpBetweenNumberAndStringRector` for concat
-- [#1517] fix `RenameClassRector` to change only direct class names, not children
-- [#1511] fix `PHPStormVarAnnotationRector` for too nested var [closes [#1407]]
-- [#1513] Make Symfony 4.3 + phpdoc-parser 0.3.4 compatible
-- [#1506] Ensure `static` variables are considered as declared, Thanks to [@Aerendir]
-- [#1502] Test concatenation dot is ignored, Thanks to [@Aerendir]
+- [#1510] [CodeQuality] Add trait and parent class support for `CompleteDynamicPropertiesRector`- [#1508] [CodeQuality] Fix unneeded return in `CallableThisArrayToAnonymousFunctionRector`- [#1509] [PHP] Fix `AddDefaultValueForUndefinedVariableRector` for static variable- [#1507] [PHP] Fix `BinaryOpBetweenNumberAndStringRector` for concat- [#1517] fix `RenameClassRector` to change only direct class names, not children- [#1511] fix `PHPStormVarAnnotationRector` for too nested var [closes [#1407]]- [#1513] Make Symfony 4.3 + phpdoc-parser 0.3.4 compatible- [#1506] Ensure `static` variables are considered as declared, Thanks to [@Aerendir]- [#1502] Test concatenation dot is ignored, Thanks to [@Aerendir]
 
 ## [v0.5.1] - 2019-05-30
 
 ### Added
-
 - [#1496] [Symfony 4.3] Add class renames, method renames and added arguments
 
 ### Fixed
-
 - [#1493] Fix documentation minor mistake, Thanks to [@alterphp]
 
 ## [v0.5.0] - 2019-05-28
 
 ### Added
-
-- [#1487] [Legacy] Remove singleton
-- [#1468] [MultipleClassFileToPsr4ClassesRector] Original file is deleted even if class matches filename, Thanks to [@JanMikes]
-- [#1424] [SplitStringClassConstantToClassConstFetchRector] Remove duplicated namespace separator, Thanks to [@mxr576]
-- [#1470] [PHP][CodingStyle] string class to ::class
-- [#1367] [DeadCode] Anonymous class implementing an interface doesn't respect interface signature, Thanks to [@pierredup]
-- [#1404] [TypeDeclaration] Create new set
-- [#1414] [PSR-4 Split] Split interfaces and traits as well, Thanks to [@JanMikes]
-- [#1416] [PHP 7.4] Spread array
-- [#1419] [CodeQuality] Add For to foreach
-- [#1443] [CodeQuality] Add CompactToVariablesRector
-- [#1488] 🎉[CodeQuality] Add CompleteDynamicPropertiesRector
-- [#1390] [CodeQuality] Add AndAssignsToSeparateLinesRector
-- [#1485] [CodingStyle] Add VarConstantCommentRector
-- [#1484] [CodingStyle] Add SplitDoubleAssignRector
-- [#1483] [CodingStyle] Add ArrayPropertyDefaultValueRector
-- [#1482] [CodingStyle] Add CatchExceptionNameMatchingTypeRector
-- [#1481] [CodingStyle] Add FollowRequireByDirRector
-- [#1480] [CodingStyle] Add ConsistentPregDelimiterRector
-- [#1447] [CodingStyle] add partial support already imported support to ImportFullyQualifiedNamesRector
-- [#1389] [DeadCode] Add RemoveAndTrueRector
-- [#1392] [DeadCode] Add RemoveDefaultArgumentValueRector
-- [#1451] [PHP] Add RemoveMissingCompactVariableRector
-- [#1418] [PHP-DI] Add php-di [@Inject] annotation import
-- [#1460] [Psr4] Add supprot for namespace less MultipleClassFileToPsr4ClassesRector
-- [#1486] [SOLID] Add AbstractChildlessUnusedClassesRector
-- [#1406] [TypeDeclaration] Add AddFunctionReturnTypeRector
-- [#1403] [Symfony 4.3] Add swapped dispatch() arguments for EventDispatcher
-- [#1429] Add missing end bracket at HowItWorks.md's sample, Thanks to [@sasezaki]
-- [#1430] Add working directory option, Thanks to [@ktomk]
-- [#1417] Add trait analysis without class dependency
-- [#1491] add JsonOutputFormatter
-- [#1492] Symplify 6 bump + add relative paths to JsonOutputFormatter
-- [#1410] [PHP 7.4] Add ClosureToArrowFunctionRector
-- [#1449] [PHP 7.1] Add BinaryOpBetweenNumberAndStringRector
-- [#1450] [PHP 7.1] Add float to BinaryOpBetweenNumberAndStringRector
-- [#1452] Add non-namespaced support to ImportFullyQualifiedNamesRector
-- [#1461] [supporŧ] add funding Github - news from Github Satellite
-- [#1478] composer: add authors
-- [#1382] Add support to rename classes and it's namespace, Thanks to [@JanMikes]
-- [#1377] Add function support to ImportFullyQualifiedNamesRector
-- [#1489] [backers] add Jan Votruba
+- [#1487] [Legacy] Remove singleton- [#1468] [MultipleClassFileToPsr4ClassesRector] Original file is deleted even if class matches filename, Thanks to [@JanMikes]- [#1424] [SplitStringClassConstantToClassConstFetchRector] Remove duplicated namespace separator, Thanks to [@mxr576]- [#1470] [PHP][CodingStyle] string class to ::class- [#1367] [DeadCode] Anonymous class implementing an interface doesn't respect interface signature, Thanks to [@pierredup]- [#1404] [TypeDeclaration] Create new set- [#1414] [PSR-4 Split] Split interfaces and traits as well, Thanks to [@JanMikes]- [#1416] [PHP 7.4] Spread array- [#1419] [CodeQuality] Add For to foreach- [#1443] [CodeQuality] Add CompactToVariablesRector- [#1488] 🎉[CodeQuality] Add CompleteDynamicPropertiesRector- [#1390] [CodeQuality] Add AndAssignsToSeparateLinesRector- [#1485] [CodingStyle] Add VarConstantCommentRector- [#1484] [CodingStyle] Add SplitDoubleAssignRector- [#1483] [CodingStyle] Add ArrayPropertyDefaultValueRector- [#1482] [CodingStyle] Add CatchExceptionNameMatchingTypeRector- [#1481] [CodingStyle] Add FollowRequireByDirRector- [#1480] [CodingStyle] Add ConsistentPregDelimiterRector- [#1447] [CodingStyle] add partial support already imported support to ImportFullyQualifiedNamesRector- [#1389] [DeadCode] Add RemoveAndTrueRector- [#1392] [DeadCode] Add RemoveDefaultArgumentValueRector- [#1451] [PHP] Add RemoveMissingCompactVariableRector- [#1418] [PHP-DI] Add php-di [@Inject] annotation import- [#1460] [Psr4] Add supprot for namespace less MultipleClassFileToPsr4ClassesRector- [#1486] [SOLID] Add AbstractChildlessUnusedClassesRector- [#1406] [TypeDeclaration] Add AddFunctionReturnTypeRector- [#1403] [Symfony 4.3] Add swapped dispatch() arguments for EventDispatcher- [#1429] Add missing end bracket at HowItWorks.md's sample, Thanks to [@sasezaki]- [#1430] Add working directory option, Thanks to [@ktomk]- [#1417] Add trait analysis without class dependency- [#1491] add JsonOutputFormatter- [#1492] Symplify 6 bump + add relative paths to JsonOutputFormatter- [#1410] [PHP 7.4] Add ClosureToArrowFunctionRector- [#1449] [PHP 7.1] Add BinaryOpBetweenNumberAndStringRector- [#1450] [PHP 7.1] Add float to BinaryOpBetweenNumberAndStringRector- [#1452] Add non-namespaced support to ImportFullyQualifiedNamesRector- [#1461] [supporŧ] add funding Github - news from Github Satellite- [#1478] composer: add authors- [#1382] Add support to rename classes and it's namespace, Thanks to [@JanMikes]- [#1377] Add function support to ImportFullyQualifiedNamesRector- [#1489] [backers] add Jan Votruba
 
 ### Changed
-
-- [#1412] [ImportFullyQualifiedNamesRector] Allow to opt-out from doc block modification, Thanks to [@mxr576]
-- [#1439] [PSR4] Improve MultipleClassFileToPsr4ClassesRector output
-- [#1477] introduce OutputFormatterCollector to allow extension of output formatters
-- [#1446] Narrow ArraySpreadInsteadOfArrayMergeRector to numeric-arrays only
-- [#1479] update to php-parser 4.2.2
+- [#1412] [ImportFullyQualifiedNamesRector] Allow to opt-out from doc block modification, Thanks to [@mxr576]- [#1439] [PSR4] Improve MultipleClassFileToPsr4ClassesRector output- [#1477] introduce OutputFormatterCollector to allow extension of output formatters- [#1446] Narrow ArraySpreadInsteadOfArrayMergeRector to numeric-arrays only- [#1479] update to php-parser 4.2.2
 
 ### Fixed
-
-- [#1395] Preserve file permissions when updating a file, Thanks to [@LeSuisse]
-- [#1397] [DeadCode] Various set fixes
-- [#1398] Fix travis for Laravel self-run
-- [#1391] fix ImportFullyQualifiedNamesRector on multiple files
-- [#1444] fix ReservedObjectRector for lowercased object
-- [#1471] fix deleting file that matches class name
-- [#1425] speedup RenameClassRector on doc comments
-- [#1464] do not override printing files with previous stmts if possible
+- [#1395] Preserve file permissions when updating a file, Thanks to [@LeSuisse]- [#1397] [DeadCode] Various set fixes- [#1398] Fix travis for Laravel self-run- [#1391] fix ImportFullyQualifiedNamesRector on multiple files- [#1444] fix ReservedObjectRector for lowercased object- [#1471] fix deleting file that matches class name- [#1425] speedup RenameClassRector on doc comments- [#1464] do not override printing files with previous stmts if possible
 
 ### Removed
-
 - [#1415] Removed duplicated code, Thanks to [@DaveLiddament]
 
 ## [v0.4.12] - 2019-05-02
 
 ### Added
-
-- [#1326] [CodingStyle] Add SplitStringClassConstantToClassConstFetchRector
-- [#1327] [CodingStyle] Add ImportFullyQualifiedNamesRector
-- [#1363] [PHP] Add AddDefaultValueForUndefinedVariableRector
-- [#1347] [RemovingStatic] Add new level
-- [#1333] Add PrivatizeLocalClassConstantRector to SOLID, Thanks to [@mxr576]
-- [#1362] [PHP 7.4] Add ReservedFnFunctionRector
+- [#1326] [CodingStyle] Add SplitStringClassConstantToClassConstFetchRector- [#1327] [CodingStyle] Add ImportFullyQualifiedNamesRector- [#1363] [PHP] Add AddDefaultValueForUndefinedVariableRector- [#1347] [RemovingStatic] Add new level- [#1333] Add PrivatizeLocalClassConstantRector to SOLID, Thanks to [@mxr576]- [#1362] [PHP 7.4] Add ReservedFnFunctionRector
 
 ### Changed
-
-- [#1323] allow Nette 3.0, Thanks to [@mimmi20]
-- [#1325] [DeadCode] Skip magic methods in RemoveUnusedParameterRector
-- [#1351] [DeadCode] Keep different case in RemoveDoubleAssignRector
-- [#1353] [DeadCode] Skip traits in RemoveUnusedPrivateMethodRector
-- [#1370] make ImportFullyQualifiedNamesRector take into account existing imports on combination of PHP and doc block
-- [#1354] Speedup tests by 90 % from 41 secs to 4
-- [#1357] Tests improvements
-- [#1359] Notice file rectors on run
+- [#1323] allow Nette 3.0, Thanks to [@mimmi20]- [#1325] [DeadCode] Skip magic methods in RemoveUnusedParameterRector- [#1351] [DeadCode] Keep different case in RemoveDoubleAssignRector- [#1353] [DeadCode] Skip traits in RemoveUnusedPrivateMethodRector- [#1370] make ImportFullyQualifiedNamesRector take into account existing imports on combination of PHP and doc block- [#1354] Speedup tests by 90 % from 41 secs to 4- [#1357] Tests improvements- [#1359] Notice file rectors on run
 
 ### Fixed
-
-- [#1369] [CodingStyle] ImportsInClassCollection fixes
-- [#1368] [CodingStyle] Fix ImportFullyQualifiedNamesRector for self imports
-- [#1365] [CodingStyle] Fix interface short name identical with class name in ImportFullyQualifiedNamesRector
-- [#1348] [DeadCode] Remove overriden fix
-- [#1352] [DeadCode] Fix RemoveUnusedPrivateMethodRector for self call
-- [#1350] [Laravel] Fix MinutesToSecondsInCacheRector DateTimeInterface argument
-- [#1361] [Symfony] Fix GetRequestRector for get non method calls
-- [#1375] Fix file removal in MultipleClassFileToPsr4ClassesRector
-- [#1320] [CakePHP]FIx rule for cakephp37, Thanks to [@o0h]
-- [#1331] Use `dev` as Symfony default env to fix issue [#1319], Thanks to [@BernhardWebstudio]
+- [#1369] [CodingStyle] ImportsInClassCollection fixes- [#1368] [CodingStyle] Fix ImportFullyQualifiedNamesRector for self imports- [#1365] [CodingStyle] Fix interface short name identical with class name in ImportFullyQualifiedNamesRector- [#1348] [DeadCode] Remove overriden fix- [#1352] [DeadCode] Fix RemoveUnusedPrivateMethodRector for self call- [#1350] [Laravel] Fix MinutesToSecondsInCacheRector DateTimeInterface argument- [#1361] [Symfony] Fix GetRequestRector for get non method calls- [#1375] Fix file removal in MultipleClassFileToPsr4ClassesRector- [#1320] [CakePHP]FIx rule for cakephp37, Thanks to [@o0h]- [#1331] Use `dev` as Symfony default env to fix issue [#1319], Thanks to [@BernhardWebstudio]
 
 ### Removed
-
 - [#1349] [DeadCode] Remove double
 
 ## [v0.4.11] - 2019-04-14
 
 ### Added
-
-- [#1317] Add Changelog
-- [#1302] [Symfony 4.3] Add SimplifyWebTestCaseAssertionsRector
-- [#1302] [Symfony 4.3] Add `SimplifyWebTestCaseAssertionsRector`
-- [#1311] [CodingStyle] Add `SplitGroupedConstantsAndPropertiesRector`
-- [#1301] [PHPUnit] Add `RemoveExpectAnyFromMockRector`
-- [#1304] [SOLID] Add `PrivatizeLocalClassConstantRector`
-- [#1303] [SOLID] Add `FinalizeClassesWithoutChildrenRector`
-- [#1302] [Symfony 4.3] Add `SimplifyWebTestCaseAssertionsRector`
+- [#1317] Add Changelog- [#1302] [Symfony 4.3] Add SimplifyWebTestCaseAssertionsRector- [#1302] [Symfony 4.3] Add `SimplifyWebTestCaseAssertionsRector`- [#1311] [CodingStyle] Add `SplitGroupedConstantsAndPropertiesRector`- [#1301] [PHPUnit] Add `RemoveExpectAnyFromMockRector`- [#1304] [SOLID] Add `PrivatizeLocalClassConstantRector`- [#1303] [SOLID] Add `FinalizeClassesWithoutChildrenRector`- [#1302] [Symfony 4.3] Add `SimplifyWebTestCaseAssertionsRector`
 
 ### Changed
-
-- [#1316] Merge collected nodes to ParsedNodesByType
-- [#1314] rename `Attribute` to `AttributeKey` to prevent duplicated names with other projects
-- [#1318] Update reference to drupal8-rector/drupal8-rector, Thanks to [@mxr576]
-- [#1316] Merge collected nodes to ParsedNodesByType
+- [#1316] Merge collected nodes to ParsedNodesByType- [#1314] rename `Attribute` to `AttributeKey` to prevent duplicated names with other projects- [#1318] Update reference to drupal8-rector/drupal8-rector, Thanks to [@mxr576]- [#1316] Merge collected nodes to ParsedNodesByType
 
 ### Fixed
-
 - [#1305] [Symfony 3.0] Fix wrong indentation in symfony30.yaml, Thanks to [@Dodenis]
 
 [#1302]: https://github.com/rectorphp/rector/pull/1302
@@ -5901,3 +3801,169 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#4663]: https://github.com/rectorphp/rector/pull/4663
 [#4196]: https://github.com/rectorphp/rector/pull/4196
 [#3675]: https://github.com/rectorphp/rector/pull/3675
+[#5073]: https://github.com/rectorphp/rector/pull/5073
+[#5072]: https://github.com/rectorphp/rector/pull/5072
+[#5071]: https://github.com/rectorphp/rector/pull/5071
+[#5070]: https://github.com/rectorphp/rector/pull/5070
+[#5068]: https://github.com/rectorphp/rector/pull/5068
+[#5067]: https://github.com/rectorphp/rector/pull/5067
+[#5066]: https://github.com/rectorphp/rector/pull/5066
+[#5065]: https://github.com/rectorphp/rector/pull/5065
+[#5062]: https://github.com/rectorphp/rector/pull/5062
+[#5061]: https://github.com/rectorphp/rector/pull/5061
+[#5058]: https://github.com/rectorphp/rector/pull/5058
+[#5050]: https://github.com/rectorphp/rector/pull/5050
+[#5046]: https://github.com/rectorphp/rector/pull/5046
+[#5044]: https://github.com/rectorphp/rector/pull/5044
+[#5043]: https://github.com/rectorphp/rector/pull/5043
+[#5041]: https://github.com/rectorphp/rector/pull/5041
+[#5039]: https://github.com/rectorphp/rector/pull/5039
+[#5036]: https://github.com/rectorphp/rector/pull/5036
+[#5035]: https://github.com/rectorphp/rector/pull/5035
+[#5034]: https://github.com/rectorphp/rector/pull/5034
+[#5031]: https://github.com/rectorphp/rector/pull/5031
+[#5030]: https://github.com/rectorphp/rector/pull/5030
+[#5029]: https://github.com/rectorphp/rector/pull/5029
+[#5025]: https://github.com/rectorphp/rector/pull/5025
+[#5023]: https://github.com/rectorphp/rector/pull/5023
+[#5020]: https://github.com/rectorphp/rector/pull/5020
+[#5019]: https://github.com/rectorphp/rector/pull/5019
+[#5016]: https://github.com/rectorphp/rector/pull/5016
+[#5015]: https://github.com/rectorphp/rector/pull/5015
+[#5013]: https://github.com/rectorphp/rector/pull/5013
+[#5012]: https://github.com/rectorphp/rector/pull/5012
+[#5011]: https://github.com/rectorphp/rector/pull/5011
+[#5009]: https://github.com/rectorphp/rector/pull/5009
+[#5008]: https://github.com/rectorphp/rector/pull/5008
+[#5007]: https://github.com/rectorphp/rector/pull/5007
+[#5006]: https://github.com/rectorphp/rector/pull/5006
+[#5005]: https://github.com/rectorphp/rector/pull/5005
+[#5001]: https://github.com/rectorphp/rector/pull/5001
+[#4999]: https://github.com/rectorphp/rector/pull/4999
+[#4998]: https://github.com/rectorphp/rector/pull/4998
+[#4997]: https://github.com/rectorphp/rector/pull/4997
+[#4996]: https://github.com/rectorphp/rector/pull/4996
+[#4995]: https://github.com/rectorphp/rector/pull/4995
+[#4994]: https://github.com/rectorphp/rector/pull/4994
+[#4993]: https://github.com/rectorphp/rector/pull/4993
+[#4992]: https://github.com/rectorphp/rector/pull/4992
+[#4989]: https://github.com/rectorphp/rector/pull/4989
+[#4988]: https://github.com/rectorphp/rector/pull/4988
+[#4987]: https://github.com/rectorphp/rector/pull/4987
+[#4986]: https://github.com/rectorphp/rector/pull/4986
+[#4985]: https://github.com/rectorphp/rector/pull/4985
+[#4984]: https://github.com/rectorphp/rector/pull/4984
+[#4983]: https://github.com/rectorphp/rector/pull/4983
+[#4981]: https://github.com/rectorphp/rector/pull/4981
+[#4980]: https://github.com/rectorphp/rector/pull/4980
+[#4979]: https://github.com/rectorphp/rector/pull/4979
+[#4975]: https://github.com/rectorphp/rector/pull/4975
+[#4974]: https://github.com/rectorphp/rector/pull/4974
+[#4973]: https://github.com/rectorphp/rector/pull/4973
+[#4972]: https://github.com/rectorphp/rector/pull/4972
+[#4971]: https://github.com/rectorphp/rector/pull/4971
+[#4970]: https://github.com/rectorphp/rector/pull/4970
+[#4968]: https://github.com/rectorphp/rector/pull/4968
+[#4966]: https://github.com/rectorphp/rector/pull/4966
+[#4964]: https://github.com/rectorphp/rector/pull/4964
+[#4962]: https://github.com/rectorphp/rector/pull/4962
+[#4960]: https://github.com/rectorphp/rector/pull/4960
+[#4953]: https://github.com/rectorphp/rector/pull/4953
+[#4951]: https://github.com/rectorphp/rector/pull/4951
+[#4950]: https://github.com/rectorphp/rector/pull/4950
+[#4947]: https://github.com/rectorphp/rector/pull/4947
+[#4944]: https://github.com/rectorphp/rector/pull/4944
+[#4943]: https://github.com/rectorphp/rector/pull/4943
+[#4940]: https://github.com/rectorphp/rector/pull/4940
+[#4939]: https://github.com/rectorphp/rector/pull/4939
+[#4935]: https://github.com/rectorphp/rector/pull/4935
+[#4934]: https://github.com/rectorphp/rector/pull/4934
+[#4933]: https://github.com/rectorphp/rector/pull/4933
+[#4931]: https://github.com/rectorphp/rector/pull/4931
+[#4930]: https://github.com/rectorphp/rector/pull/4930
+[#4929]: https://github.com/rectorphp/rector/pull/4929
+[#4926]: https://github.com/rectorphp/rector/pull/4926
+[#4924]: https://github.com/rectorphp/rector/pull/4924
+[#4923]: https://github.com/rectorphp/rector/pull/4923
+[#4921]: https://github.com/rectorphp/rector/pull/4921
+[#4915]: https://github.com/rectorphp/rector/pull/4915
+[#4914]: https://github.com/rectorphp/rector/pull/4914
+[#4912]: https://github.com/rectorphp/rector/pull/4912
+[#4910]: https://github.com/rectorphp/rector/pull/4910
+[#4909]: https://github.com/rectorphp/rector/pull/4909
+[#4908]: https://github.com/rectorphp/rector/pull/4908
+[#4907]: https://github.com/rectorphp/rector/pull/4907
+[#4906]: https://github.com/rectorphp/rector/pull/4906
+[#4902]: https://github.com/rectorphp/rector/pull/4902
+[#4901]: https://github.com/rectorphp/rector/pull/4901
+[#4900]: https://github.com/rectorphp/rector/pull/4900
+[#4898]: https://github.com/rectorphp/rector/pull/4898
+[#4897]: https://github.com/rectorphp/rector/pull/4897
+[#4889]: https://github.com/rectorphp/rector/pull/4889
+[#4888]: https://github.com/rectorphp/rector/pull/4888
+[#4887]: https://github.com/rectorphp/rector/pull/4887
+[#4886]: https://github.com/rectorphp/rector/pull/4886
+[#4885]: https://github.com/rectorphp/rector/pull/4885
+[#4883]: https://github.com/rectorphp/rector/pull/4883
+[#4882]: https://github.com/rectorphp/rector/pull/4882
+[#4879]: https://github.com/rectorphp/rector/pull/4879
+[#4878]: https://github.com/rectorphp/rector/pull/4878
+[#4877]: https://github.com/rectorphp/rector/pull/4877
+[#4876]: https://github.com/rectorphp/rector/pull/4876
+[#4874]: https://github.com/rectorphp/rector/pull/4874
+[#4870]: https://github.com/rectorphp/rector/pull/4870
+[#4868]: https://github.com/rectorphp/rector/pull/4868
+[#4865]: https://github.com/rectorphp/rector/pull/4865
+[#4864]: https://github.com/rectorphp/rector/pull/4864
+[#4863]: https://github.com/rectorphp/rector/pull/4863
+[#4862]: https://github.com/rectorphp/rector/pull/4862
+[#4861]: https://github.com/rectorphp/rector/pull/4861
+[#4860]: https://github.com/rectorphp/rector/pull/4860
+[#4858]: https://github.com/rectorphp/rector/pull/4858
+[#4857]: https://github.com/rectorphp/rector/pull/4857
+[#4856]: https://github.com/rectorphp/rector/pull/4856
+[#4853]: https://github.com/rectorphp/rector/pull/4853
+[#4851]: https://github.com/rectorphp/rector/pull/4851
+[#4850]: https://github.com/rectorphp/rector/pull/4850
+[#4849]: https://github.com/rectorphp/rector/pull/4849
+[#4848]: https://github.com/rectorphp/rector/pull/4848
+[#4846]: https://github.com/rectorphp/rector/pull/4846
+[#4845]: https://github.com/rectorphp/rector/pull/4845
+[#4842]: https://github.com/rectorphp/rector/pull/4842
+[#4841]: https://github.com/rectorphp/rector/pull/4841
+[#4840]: https://github.com/rectorphp/rector/pull/4840
+[#4838]: https://github.com/rectorphp/rector/pull/4838
+[#4835]: https://github.com/rectorphp/rector/pull/4835
+[#4834]: https://github.com/rectorphp/rector/pull/4834
+[#4832]: https://github.com/rectorphp/rector/pull/4832
+[#4830]: https://github.com/rectorphp/rector/pull/4830
+[#4828]: https://github.com/rectorphp/rector/pull/4828
+[#4827]: https://github.com/rectorphp/rector/pull/4827
+[#4825]: https://github.com/rectorphp/rector/pull/4825
+[#4823]: https://github.com/rectorphp/rector/pull/4823
+[#4822]: https://github.com/rectorphp/rector/pull/4822
+[#4821]: https://github.com/rectorphp/rector/pull/4821
+[#4819]: https://github.com/rectorphp/rector/pull/4819
+[#4818]: https://github.com/rectorphp/rector/pull/4818
+[#4815]: https://github.com/rectorphp/rector/pull/4815
+[#4814]: https://github.com/rectorphp/rector/pull/4814
+[#4813]: https://github.com/rectorphp/rector/pull/4813
+[#4812]: https://github.com/rectorphp/rector/pull/4812
+[#4811]: https://github.com/rectorphp/rector/pull/4811
+[#4810]: https://github.com/rectorphp/rector/pull/4810
+[#4809]: https://github.com/rectorphp/rector/pull/4809
+[#4808]: https://github.com/rectorphp/rector/pull/4808
+[#4807]: https://github.com/rectorphp/rector/pull/4807
+[#4806]: https://github.com/rectorphp/rector/pull/4806
+[#4805]: https://github.com/rectorphp/rector/pull/4805
+[#4804]: https://github.com/rectorphp/rector/pull/4804
+[#4803]: https://github.com/rectorphp/rector/pull/4803
+[#4802]: https://github.com/rectorphp/rector/pull/4802
+[#4801]: https://github.com/rectorphp/rector/pull/4801
+[#4785]: https://github.com/rectorphp/rector/pull/4785
+[#4650]: https://github.com/rectorphp/rector/pull/4650
+[#4154]: https://github.com/rectorphp/rector/pull/4154
+[@ordago]: https://github.com/ordago
+[@jkuchar]: https://github.com/jkuchar
+[@Wirone]: https://github.com/Wirone
+[@Charl13]: https://github.com/Charl13
