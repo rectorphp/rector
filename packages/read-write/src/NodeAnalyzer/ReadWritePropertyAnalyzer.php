@@ -115,6 +115,10 @@ final class ReadWritePropertyAnalyzer
             return false;
         }
 
+        if ($arrayDimFetch->var instanceof ArrayDimFetch) {
+            return true;
+        }
+
         // the array dim fetch is assing here only; but the variable might be used later
         if ($this->readExprAnalyzer->isExprRead($arrayDimFetch->var)) {
             return true;
