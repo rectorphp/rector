@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 use Symfony\Component\Routing\Annotation\Route;
 
-class SymfonyRoute
+class SkipSymfonyRoute
 {
     /**
      * @Route(

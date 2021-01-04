@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\InheritanceType("SINGLE_TABLE")
  */
-class ShouldKeepAllDocBlocksAnnotationsParameters
+class SkipShouldKeepAllDocBlocksAnnotationsParameters
 {
     public function nothing(): void
     {

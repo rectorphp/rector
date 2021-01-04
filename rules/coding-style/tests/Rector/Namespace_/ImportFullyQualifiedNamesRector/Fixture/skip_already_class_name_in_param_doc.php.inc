@@ -5,7 +5,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 use Elasticr\FoRest\Request\ApiRequest;
 use Tests\Elasticr\FoRest\Request\ArticleRequest;
 
-final class AlreadyClassExists
+final class SkipAlreadyClassExists
 {
     /**
      * @return \Tests\Elasticr\FoRest\App\Request\AlreadyClassExists

@@ -6,7 +6,7 @@ use Nette\Utils\FileSystem as NetteFileSystem;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 
-final class NetteSymfonyFilesystemAlias
+final class SkipNetteSymfonyFilesystemAlias
 {
     /**
      * @var Filesystem
