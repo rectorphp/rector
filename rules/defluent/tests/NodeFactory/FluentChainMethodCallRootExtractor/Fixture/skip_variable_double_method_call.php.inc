@@ -6,10 +6,11 @@ namespace Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor\F
 
 use Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor\Source\SomeClassWithFluentMethods;
 
-final class ReturnNewDoubleMethodCall
+final class SkipVariableDoubleMethodCall
 {
     public function run()
     {
-        return (new SomeClassWithFluentMethods())->one()->two();
+        $mainVariable = new SomeClassWithFluentMethods();
+        $mainVariable->one()->two();
     }
 }

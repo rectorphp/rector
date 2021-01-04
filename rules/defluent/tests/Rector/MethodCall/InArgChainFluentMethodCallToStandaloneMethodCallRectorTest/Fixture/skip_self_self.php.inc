@@ -7,7 +7,7 @@ use DateTimeZone;
 use Rector\Defluent\Tests\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest\Source\SetGetDateTime;
 use Nette\Utils\DateTime as NetteDateTime;
 
-final class SelfSelf
+final class SkipSelfSelf
 {
     public function run(SetGetDateTime $setGetDateTime, DateTimeZone $dateTimeZone)
     {

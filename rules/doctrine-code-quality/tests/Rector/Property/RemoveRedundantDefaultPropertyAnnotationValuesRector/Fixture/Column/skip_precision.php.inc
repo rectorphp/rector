@@ -8,10 +8,10 @@ use Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPrope
 /**
  * @ORM\Entity
  */
-class ScaleSkipped
+class SkipPrecision
 {
     /**
-     * @ORM\Column(type="decimal", precision=1)
+     * @ORM\Column(type="integer", precision=1)
      */
     private $training;
 }

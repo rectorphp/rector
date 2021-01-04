@@ -6,7 +6,7 @@ namespace Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor\F
 
 use Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor\Source\AnotherTypeFactory;
 
-final class IsFactoryVariableDoubleMethodCall
+final class SkipIsFactoryVariableDoubleMethodCall
 {
     public function run()
     {
