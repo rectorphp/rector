@@ -4,7 +4,7 @@ namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravariantA
 
 use Exception;
 
-final class SetNotFoundException extends Exception
+final class SkipConstruct extends Exception
 {
     private $setName;
 

@@ -8,10 +8,10 @@ use Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPrope
 /**
  * @ORM\Entity
  */
-class FetchSkipped
+class SkipOrphanRemoval
 {
     /**
-     * @ORM\OneToMany(targetEntity=Training::class, fetch="AUTO")
+     * @ORM\OneToMany(targetEntity=Training::class, orphanRemoval=true)
      */
     private $trainings = [];
 }
