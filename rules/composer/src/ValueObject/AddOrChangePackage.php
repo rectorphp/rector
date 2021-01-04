@@ -24,8 +24,8 @@ final class AddOrChangePackage implements ComposerModifierInterface
     private $section;
 
     /**
-     * @param string $packageName
-     * @param string $version
+     * @param string $packageName name of package (vendor/package)
+     * @param string $version target package version (1.2.3, ^1.2, ~1.2.3 etc.)
      * @param string $section require or require-dev
      */
     public function __construct(string $packageName, string $version, string $section = ComposerModifier::SECTION_REQUIRE)
@@ -37,6 +37,9 @@ final class AddOrChangePackage implements ComposerModifierInterface
         $this->section = $section;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function modify(array $composerData): array
     {
         $composerData[$this->section][$this->packageName] = $this->version;

@@ -22,6 +22,11 @@ final class ChangePackage implements ComposerModifierInterface
     /** @var string */
     private $targetVersion;
 
+    /**
+     * @param string $oldPackageName name of package to be replaced (vendor1/package1)
+     * @param string $newPackageName new name of package (vendor2/package2)
+     * @param string $targetVersion target package version (1.2.3, ^1.2, ~1.2.3 etc.)
+     */
     public function __construct(string $oldPackageName, string $newPackageName, string $targetVersion)
     {
         $this->oldPackageName = $oldPackageName;
@@ -29,6 +34,9 @@ final class ChangePackage implements ComposerModifierInterface
         $this->targetVersion = $targetVersion;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function modify(array $composerData): array
     {
         foreach ([ComposerModifier::SECTION_REQUIRE, ComposerModifier::SECTION_REQUIRE_DEV] as $section) {

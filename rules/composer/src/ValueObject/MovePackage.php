@@ -21,7 +21,7 @@ final class MovePackage implements ComposerModifierInterface
     private $section;
 
     /**
-     * @param string $packageName
+     * @param string $packageName name of package to be moved (vendor/package)
      * @param string $section require or require-dev
      */
     public function __construct(string $packageName, string $section = ComposerModifier::SECTION_REQUIRE_DEV)
@@ -32,6 +32,9 @@ final class MovePackage implements ComposerModifierInterface
         $this->section = $section;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function modify(array $composerData): array
     {
         $originalSection = $this->section === ComposerModifier::SECTION_REQUIRE ? ComposerModifier::SECTION_REQUIRE_DEV : ComposerModifier::SECTION_REQUIRE;

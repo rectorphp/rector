@@ -19,12 +19,19 @@ final class ChangePackageVersion implements ComposerModifierInterface
     /** @var string */
     private $targetVersion;
 
+    /**
+     * @param string $packageName name of package to be changed (vendor/package)
+     * @param string $targetVersion target package version (1.2.3, ^1.2, ~1.2.3 etc.)
+     */
     public function __construct(string $packageName, string $targetVersion)
     {
         $this->packageName = $packageName;
         $this->targetVersion = $targetVersion;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function modify(array $composerData): array
     {
         foreach ([ComposerModifier::SECTION_REQUIRE, ComposerModifier::SECTION_REQUIRE_DEV] as $section) {

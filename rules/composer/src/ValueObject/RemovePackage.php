@@ -16,11 +16,17 @@ final class RemovePackage implements ComposerModifierInterface
     /** @var string */
     private $packageName;
 
+    /**
+     * @param string $packageName name of package to be removed (vendor/package)
+     */
     public function __construct(string $packageName)
     {
         $this->packageName = $packageName;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function modify(array $composerData): array
     {
         foreach ([ComposerModifier::SECTION_REQUIRE, ComposerModifier::SECTION_REQUIRE_DEV] as $section) {
