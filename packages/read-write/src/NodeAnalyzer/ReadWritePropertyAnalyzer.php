@@ -13,8 +13,10 @@ use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\Node\MissingParentNodeException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
+use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Webmozart\Assert\Assert;
@@ -36,14 +38,21 @@ final class ReadWritePropertyAnalyzer
      */
     private $readExprAnalyzer;
 
+    /**
+     * @var ScopeAwareNodeFinder
+     */
+    private $scopeAwareNodeFinder;
+
     public function __construct(
         VariableToConstantGuard $variableToConstantGuard,
         AssignManipulator $assignManipulator,
-        ReadExprAnalyzer $readExprAnalyzer
+        ReadExprAnalyzer $readExprAnalyzer,
+        ScopeAwareNodeFinder $scopeAwareNodeFinder
     ) {
         $this->variableToConstantGuard = $variableToConstantGuard;
         $this->assignManipulator = $assignManipulator;
         $this->readExprAnalyzer = $readExprAnalyzer;
+        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
     }
 
     /**
@@ -67,11 +76,16 @@ final class ReadWritePropertyAnalyzer
             }
         }
 
-        if ($parent instanceof ArrayDimFetch && $parent->dim === $node) {
+        if ($parent instanceof ArrayDimFetch && $parent->dim === $node && $this->isNotInsideUnset($parent)) {
             return $this->isArrayDimFetchRead($parent);
         }
 
         return ! $this->assignManipulator->isLeftPartOfAssign($node);
+    }
+
+    private function isNotInsideUnset(ArrayDimFetch $arrayDimFetch): bool
+    {
+        return ! (bool) $this->scopeAwareNodeFinder->findParentType($arrayDimFetch, [Unset_::class]);
     }
 
     private function unwrapPostPreIncDec(Node $node): Node

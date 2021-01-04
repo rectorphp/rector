@@ -6285,7 +6285,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddInterfaceByTraitRector::class)
         ->call('configure', [[
             AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
-                'SomeTrait' => SomeInterface::class,
+                'SomeTrait' => 'SomeInterface',
             ],
         ]]);
 };
@@ -6888,7 +6888,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MergeInterfacesRector::class)
         ->call('configure', [[
             MergeInterfacesRector::OLD_TO_NEW_INTERFACES => [
-                'SomeOldInterface' => SomeInterface::class,
+                'SomeOldInterface' => 'SomeInterface',
             ],
         ]]);
 };
@@ -7223,7 +7223,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RemoveInterfacesRector::class)
         ->call('configure', [[
-            RemoveInterfacesRector::INTERFACES_TO_REMOVE => [SomeInterface::class],
+            RemoveInterfacesRector::INTERFACES_TO_REMOVE => ['SomeInterface'],
         ]]);
 };
 ```
