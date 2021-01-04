@@ -15,7 +15,12 @@ final class ChangePackageTest extends TestCase
                 'vendor1/package2' => '^2.0',
             ],
         ];
-        $changedComposerData = $composerData;
+        $changedComposerData = [
+            'require' => [
+                'vendor1/package1' => '^1.0',
+                'vendor1/package2' => '^2.0',
+            ],
+        ];
 
         $changePackage = new ChangePackage('vendor1/package3', 'vendor1/package4', '^3.0');
         $this->assertEquals($changedComposerData, $changePackage->modify($composerData));

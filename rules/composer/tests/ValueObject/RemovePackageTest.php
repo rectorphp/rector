@@ -15,7 +15,12 @@ final class RemovePackageTest extends TestCase
                 'vendor1/package2' => '^2.0',
             ],
         ];
-        $changedComposerData = $composerData;
+        $changedComposerData = [
+            'require' => [
+                'vendor1/package1' => '^1.0',
+                'vendor1/package2' => '^2.0',
+            ],
+        ];
 
         $removePackage = new RemovePackage('vendor1/package3');
         $this->assertEquals($changedComposerData, $removePackage->modify($composerData));

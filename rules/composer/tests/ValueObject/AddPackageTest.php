@@ -37,7 +37,12 @@ final class AddPackageTest extends TestCase
             ],
         ];
 
-        $changedComposerData = $composerData;
+        $changedComposerData = [
+            'require' => [
+                'vendor1/package1' => '^1.0',
+                'vendor1/package2' => '^2.0',
+            ],
+        ];
 
         $addPackage = new AddPackage('vendor1/package1', '^3.0');
         $this->assertEquals($changedComposerData, $addPackage->modify($composerData));
@@ -54,7 +59,14 @@ final class AddPackageTest extends TestCase
             ],
         ];
 
-        $changedComposerData = $composerData;
+        $changedComposerData = [
+            'require' => [
+                'vendor1/package1' => '^1.0',
+            ],
+            'require-dev' => [
+                'vendor1/package2' => '^2.0',
+            ],
+        ];
 
         $addPackage = new AddPackage('vendor1/package2', '^3.0');
         $this->assertEquals($changedComposerData, $addPackage->modify($composerData));

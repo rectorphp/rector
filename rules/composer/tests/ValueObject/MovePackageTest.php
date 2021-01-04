@@ -17,7 +17,12 @@ final class MovePackageTest extends TestCase
                 'vendor1/package2' => '^2.0',
             ],
         ];
-        $changedComposerData = $composerData;
+        $changedComposerData = [
+            'require' => [
+                'vendor1/package1' => '^1.0',
+                'vendor1/package2' => '^2.0',
+            ],
+        ];
 
         $movePackage = new MovePackage('vendor1/package3');
         $this->assertEquals($changedComposerData, $movePackage->modify($composerData));
