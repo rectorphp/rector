@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class SkipDoctrineEntityProperty
+class DoctrineEntityProperty
 {
     private $unusedProperty;
 
@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class SkipDoctrineEntityProperty
+class DoctrineEntityProperty
 {
     /**
      * @ORM\Column

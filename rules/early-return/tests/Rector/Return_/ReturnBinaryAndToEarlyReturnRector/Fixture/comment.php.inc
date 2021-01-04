@@ -2,7 +2,7 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\Fixture;
 
-class KeepComment
+class Comment
 {
     public function accept($something, $somethingelse, $anotherelse, $last)
     {
@@ -23,7 +23,7 @@ class KeepComment
 
 namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\Fixture;
 
-class KeepComment
+class Comment
 {
     public function accept($something, $somethingelse, $anotherelse, $last)
     {
