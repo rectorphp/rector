@@ -7,6 +7,7 @@ namespace Rector\ReadWrite\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
@@ -15,8 +16,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\Node\MissingParentNodeException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
-use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Webmozart\Assert\Assert;
@@ -39,20 +40,20 @@ final class ReadWritePropertyAnalyzer
     private $readExprAnalyzer;
 
     /**
-     * @var ScopeAwareNodeFinder
+     * @var BetterNodeFinder
      */
-    private $scopeAwareNodeFinder;
+    private $betterNodeFinder;
 
     public function __construct(
         VariableToConstantGuard $variableToConstantGuard,
         AssignManipulator $assignManipulator,
         ReadExprAnalyzer $readExprAnalyzer,
-        ScopeAwareNodeFinder $scopeAwareNodeFinder
+        BetterNodeFinder $betterNodeFinder
     ) {
         $this->variableToConstantGuard = $variableToConstantGuard;
         $this->assignManipulator = $assignManipulator;
         $this->readExprAnalyzer = $readExprAnalyzer;
-        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
@@ -76,16 +77,19 @@ final class ReadWritePropertyAnalyzer
             }
         }
 
-        if ($parent instanceof ArrayDimFetch && $parent->dim === $node && $this->isNotInsideUnset($parent)) {
+        if ($parent instanceof ArrayDimFetch && $parent->dim === $node && $this->isNotInsideIssetUnset($parent)) {
             return $this->isArrayDimFetchRead($parent);
         }
 
         return ! $this->assignManipulator->isLeftPartOfAssign($node);
     }
 
-    private function isNotInsideUnset(ArrayDimFetch $arrayDimFetch): bool
+    private function isNotInsideIssetUnset(ArrayDimFetch $arrayDimFetch): bool
     {
-        return ! (bool) $this->scopeAwareNodeFinder->findParentType($arrayDimFetch, [Unset_::class]);
+        return ! (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
+            $arrayDimFetch,
+            [Isset_::class, Unset_::class]
+        );
     }
 
     private function unwrapPostPreIncDec(Node $node): Node
@@ -109,6 +113,10 @@ final class ReadWritePropertyAnalyzer
 
         if (! $this->assignManipulator->isLeftPartOfAssign($arrayDimFetch)) {
             return false;
+        }
+
+        if ($arrayDimFetch->var instanceof ArrayDimFetch) {
+            return true;
         }
 
         // the array dim fetch is assing here only; but the variable might be used later
