@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\Fixture;
 
-final class Issue1286
+final class SkipIssue1286
 {
     public function run()
     {

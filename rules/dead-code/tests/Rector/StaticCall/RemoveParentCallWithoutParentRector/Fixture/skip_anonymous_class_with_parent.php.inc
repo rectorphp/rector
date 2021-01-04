@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector\Fixture;
 
-class AnonymousClassWithParent
+class SkipAnonymousClassWithParent
 {
     public function foo()
     {

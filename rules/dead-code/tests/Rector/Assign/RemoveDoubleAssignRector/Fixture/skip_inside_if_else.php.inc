@@ -6,7 +6,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 
-class InsideIfElse
+class SkipInsideIfElse
 {
     public function callMe(StaticCall $staticCall, $newMethod): StaticCall
     {

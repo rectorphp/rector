@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\Fixture;
 
-final class Issue1093
+final class SkipIssue1093
 {
     public function run($themes = [])
     {

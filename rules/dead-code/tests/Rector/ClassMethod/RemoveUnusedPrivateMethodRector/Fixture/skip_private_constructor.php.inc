@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Fixture;
 
-final class PrivateConstructor
+final class SkipPrivateConstructor
 {
     private function __construct()
     {

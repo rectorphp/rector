@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedPrivateConstantRector\Fixture;
 
-final class UsedInTrait
+final class SkipUsedInTrait
 {
     use aTrait;
     private const SOME_CONSTANT = 5;

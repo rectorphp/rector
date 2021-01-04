@@ -11,7 +11,7 @@ class StrictPapa
 
 }
 
-class ParentRequired extends StrictPapa
+class SkipParentRequired extends StrictPapa
 {
     public function getIt($value, $value2)
     {

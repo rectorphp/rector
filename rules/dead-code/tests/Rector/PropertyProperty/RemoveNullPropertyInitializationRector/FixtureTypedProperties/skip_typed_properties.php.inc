@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\PropertyProperty\RemoveNullPropertyInitializationRector\Fixture;
 
-class TypedPropertyClass
+class SkipTypedPropertyClass
 {
     private ?string $lowerCase = null;
 }

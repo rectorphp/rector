@@ -8,7 +8,7 @@ Trait SomeTrait {
         return $this->a;
     }
 }
-class WithTrait
+class SkipWithTrait
 {
     use SomeTrait;
     private $a;
