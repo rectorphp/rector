@@ -36,7 +36,7 @@ jobs:
                     # make sure skipped files have "skip_" prefix
                     -
                         name: Validate Fixtures skip file prefix
-                        run: vendor/symplify/easy-testing/bin/easy-testing validate-fixture-skip-naming rules tests
+                        run: vendor/symplify/easy-testing/bin/easy-testing validate-fixture-skip-naming packages rules tests utils
 
                     -
                         name: 'Validate Sets Loading'
