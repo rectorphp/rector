@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\BooleanNot\SimplifyDeMorganBinaryRector\Fixture;
 
-class BinaryAnd
+class SkipBinaryAnd
 {
     public static function chr_to_decimal(string $char): int
     {

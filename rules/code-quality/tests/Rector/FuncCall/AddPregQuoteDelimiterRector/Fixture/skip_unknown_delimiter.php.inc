@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\Fixture;
 
-class UnknownDelimiter
+class SkipUnknownDelimiter
 {
     public function test()
     {
