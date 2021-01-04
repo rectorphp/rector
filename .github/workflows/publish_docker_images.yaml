@@ -7,7 +7,7 @@ on:
 
         # Publish `v1.2.3` tags as releases.
         tags:
-            - *
+            - '*'
 
 jobs:
     publish_images:
