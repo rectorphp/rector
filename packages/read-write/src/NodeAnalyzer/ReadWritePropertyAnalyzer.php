@@ -83,9 +83,9 @@ final class ReadWritePropertyAnalyzer
         return ! $this->assignManipulator->isLeftPartOfAssign($node);
     }
 
-    private function isNotInsideUnset(Node $node): bool
+    private function isNotInsideUnset(ArrayDimFetch $arrayDimFetch): bool
     {
-        return ! (bool) $this->scopeAwareNodeFinder->findParentType($node, [Unset_::class]);
+        return ! (bool) $this->scopeAwareNodeFinder->findParentType($arrayDimFetch, [Unset_::class]);
     }
 
     private function unwrapPostPreIncDec(Node $node): Node
