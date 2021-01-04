@@ -72,7 +72,7 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
 
     public function provideData(): Iterator
     {
-        yield [new SmartFileInfo(__DIR__ . '/Fixture/SomeClass.php.inc'), 'eliteManager', 'eventManager'];
+        yield [new SmartFileInfo(__DIR__ . '/Fixture/skip_some_class.php.inc'), 'eliteManager', 'eventManager'];
     }
 
     private function getPropertyFromFileInfo(SmartFileInfo $fileInfo): Property
