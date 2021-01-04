@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ValueObject;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
