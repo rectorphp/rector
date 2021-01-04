@@ -8,7 +8,7 @@ use Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPrope
 /**
  * @ORM\Entity
  */
-class OrphanRemovalSkipped
+class SkipOrphanRemoval
 {
     /**
      * @ORM\ManyToMany(targetEntity=Training::class, orphanRemoval=true)

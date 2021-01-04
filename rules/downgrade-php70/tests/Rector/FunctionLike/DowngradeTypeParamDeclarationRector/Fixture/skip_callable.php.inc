@@ -2,9 +2,9 @@
 
 namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeParamDeclarationRector\Fixture;
 
-class ArrayFunctionParam
+class SkipCallable
 {
-    public function run(array $value)
+    public function run(callable $value)
     {
     }
 }

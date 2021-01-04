@@ -7,7 +7,7 @@ interface NothingHappensInterface
     public function test(array $input);
 }
 
-class NothingHappens implements NothingHappensInterface
+class SkipNothingHappens implements NothingHappensInterface
 {
     public function test(array $input)
     {

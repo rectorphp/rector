@@ -8,7 +8,7 @@ use Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPrope
 /**
  * @ORM\Entity
  */
-class UniqueSkipped
+class SkipUnique
 {
     /**
      * @ORM\Column(type="string", unique=true)

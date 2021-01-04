@@ -8,7 +8,7 @@ use Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPrope
 /**
  * @ORM\Entity
  */
-class NullableSkipped
+class SkipNullable
 {
     /**
      * @ORM\Column(type="string", nullable=true)

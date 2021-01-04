@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector\Fixture\OneToOne;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector\Fixture\ManyToOne;
 
 use Doctrine\ORM\Mapping as ORM;
 use Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector\Source\Training;
@@ -8,10 +8,10 @@ use Rector\DoctrineCodeQuality\Tests\Rector\Property\RemoveRedundantDefaultPrope
 /**
  * @ORM\Entity
  */
-class FetchSkipped
+class SkipFetch
 {
     /**
-     * @ORM\OneToOne(targetEntity=Training::class, fetch="AUTO")
+     * @ORM\ManyToOne(targetEntity=Training::class, fetch="AUTO")
      */
     private $trainings = [];
 }
