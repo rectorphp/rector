@@ -33,6 +33,11 @@ jobs:
                         name: Validate Fixtures class name
                         run: bin/rector validate-fixture-classname --ansi
 
+                    # make sure skipped files have "skip_" prefix
+#                    -
+#                        name: Validate Fixtures skip file prefix
+#                        run: vendor/bin/easy-testing validate-fixture-skip-naming rules tests
+
                     -
                         name: 'Validate Sets Loading'
                         # this is very slow, so it has to be in own workflow

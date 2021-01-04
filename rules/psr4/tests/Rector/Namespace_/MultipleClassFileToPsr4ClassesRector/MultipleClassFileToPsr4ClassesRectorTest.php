@@ -86,7 +86,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
             ],
         ];
 
-        yield [new SmartFileInfo(__DIR__ . '/Fixture/ReadyException.php.inc'), []];
+        yield [new SmartFileInfo(__DIR__ . '/Fixture/skip_ready_exception.php.inc'), []];
     }
 
     protected function getRectorClass(): string

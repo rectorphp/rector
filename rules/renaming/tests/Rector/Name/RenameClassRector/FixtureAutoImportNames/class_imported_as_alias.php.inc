@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\AutoImportNamesParameter;
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\FirstNamespace\FirstOriginalClass as AliasedClass;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SecondNamespace;
@@ -12,7 +12,7 @@ $secondClass = new SecondNamespace\SecondOriginalClass();
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\AutoImportNamesParameter;
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SecondNamespace\SecondOriginalClass;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\FirstNamespace\FirstOriginalClass as AliasedClass;
