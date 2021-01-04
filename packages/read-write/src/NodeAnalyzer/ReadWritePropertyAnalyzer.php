@@ -77,14 +77,14 @@ final class ReadWritePropertyAnalyzer
             }
         }
 
-        if ($parent instanceof ArrayDimFetch && $parent->dim === $node && $this->isInsideIssetUnset($parent)) {
+        if ($parent instanceof ArrayDimFetch && $parent->dim === $node && $this->isNotInsideIssetUnset($parent)) {
             return $this->isArrayDimFetchRead($parent);
         }
 
         return ! $this->assignManipulator->isLeftPartOfAssign($node);
     }
 
-    private function isInsideIssetUnset(ArrayDimFetch $arrayDimFetch): bool
+    private function isNotInsideIssetUnset(ArrayDimFetch $arrayDimFetch): bool
     {
         return ! (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
             $arrayDimFetch,
