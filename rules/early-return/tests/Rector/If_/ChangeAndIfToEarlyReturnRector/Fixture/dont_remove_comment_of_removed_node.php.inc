@@ -2,7 +2,7 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class KeepCommentOfRemovedNode
+class DontRemoveCommentOfRemovedNode
 {
     public function canDrive(Car $car): void
     {
@@ -21,7 +21,7 @@ class KeepCommentOfRemovedNode
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class KeepCommentOfRemovedNode
+class DontRemoveCommentOfRemovedNode
 {
     public function canDrive(Car $car): void
     {

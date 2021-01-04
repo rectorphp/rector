@@ -2,12 +2,14 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
-class SimpleIf
+class SkipNoBreak
 {
     public function run()
     {
         if ($cond1) {
-            return 'foo';
+            foo();
+        } else {
+            return 'bar';
         }
     }
 }
