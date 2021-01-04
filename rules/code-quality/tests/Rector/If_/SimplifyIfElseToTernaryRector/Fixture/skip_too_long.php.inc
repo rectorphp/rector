@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfElseToTernaryRector\Fixture;
 
-class TooLong
+class SkipTooLong
 {
     public function run()
     {

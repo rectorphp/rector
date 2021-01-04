@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyConditionsRector\Fixture;
 
-class DualNull
+class SkipDualNull
 {
     public function run()
     {

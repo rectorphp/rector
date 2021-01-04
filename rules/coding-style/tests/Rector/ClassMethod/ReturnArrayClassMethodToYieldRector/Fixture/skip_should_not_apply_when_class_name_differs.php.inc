@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Fixture;
 
-final class ShouldNotApplyWhenClassNameDiffers
+final class SkipShouldNotApplyWhenClassNameDiffers
 {
     public function getSubscribedEvents(): array
     {

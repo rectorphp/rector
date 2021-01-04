@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
-class NullableToFalse
+class SkipNullableToFalse
 {
     public function run(string $someString)
     {

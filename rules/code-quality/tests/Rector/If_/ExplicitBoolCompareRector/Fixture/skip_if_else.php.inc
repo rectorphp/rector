@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
 use PhpParser\Node\Stmt\If_;
 
-final class IfElse
+final class SkipIfElse
 {
     public function run(If_ $if)
     {

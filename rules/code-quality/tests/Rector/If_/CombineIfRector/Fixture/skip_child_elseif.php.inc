@@ -2,14 +2,14 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
 
-class ChildElse
+class SkipChildElseif
 {
     public function run()
     {
         if ($cond1) {
             if ($cond2) {
                 return 'foo';
-            } else {
+            } elseif($cond3) {
                 return 'bar';
             }
         }

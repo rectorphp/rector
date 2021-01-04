@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector\Fixture;
 
-class NullableScalars
+class SkipNullableScalars
 {
     public function run(?array $arrayOrNull)
     {

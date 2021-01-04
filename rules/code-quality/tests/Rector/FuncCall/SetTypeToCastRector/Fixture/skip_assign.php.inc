@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
 
-class Assign
+class SkipAssign
 {
     public function run($foo)
     {

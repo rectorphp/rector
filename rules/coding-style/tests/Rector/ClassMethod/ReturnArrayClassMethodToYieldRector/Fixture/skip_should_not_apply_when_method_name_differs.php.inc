@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYi
 
 use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Source\ParentTestCase;
 
-final class ShouldNotApplyWhenMethodNameDiffers extends ParentTestCase
+final class SkipShouldNotApplyWhenMethodNameDiffers extends ParentTestCase
 {
     public function getSomePublicData(): array
     {

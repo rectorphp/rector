@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
 
-class ParentElse
+class SkipParentElseif
 {
     public function run()
     {
@@ -10,7 +10,7 @@ class ParentElse
             if ($cond2) {
                 return 'foo';
             }
-        } else {
+        } elseif($cond3) {
             return 'bar';
         }
     }
