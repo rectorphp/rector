@@ -37,11 +37,8 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     /**
      * @return JMSInjectTagValueNode|null
      */
-    public function createFromNodeAndTokens(
-        Node $node,
-        TokenIterator $tokenIterator,
-        string $annotationClass
-    ): ?PhpDocTagValueNode {
+    public function create(Node $node, TokenIterator $tokenIterator, string $annotationClass): ?PhpDocTagValueNode
+    {
         if (! $node instanceof Property) {
             return null;
         }
@@ -54,10 +51,7 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
 
         $serviceName = $inject->value === null ? $this->nodeNameResolver->getName($node) : $inject->value;
 
-        // needed for proper doc block formatting
-        $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
-
         $items = $this->annotationItemsResolver->resolve($inject);
-        return new JMSInjectTagValueNode($items, $serviceName, $annotationContent);
+        return new JMSInjectTagValueNode($items, $serviceName);
     }
 }

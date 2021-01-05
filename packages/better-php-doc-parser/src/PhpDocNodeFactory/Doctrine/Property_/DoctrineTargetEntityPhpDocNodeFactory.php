@@ -33,7 +33,7 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
         ];
     }
 
-    public function createFromNodeAndTokens(
+    public function create(
         Node $node,
         TokenIterator $tokenIterator,
         string $annotationClass

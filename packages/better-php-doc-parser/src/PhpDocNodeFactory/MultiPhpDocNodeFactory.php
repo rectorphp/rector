@@ -94,7 +94,7 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
         ];
     }
 
-    public function createFromNodeAndTokens(
+    public function create(
         Node $node,
         TokenIterator $tokenIterator,
         string $annotationClass

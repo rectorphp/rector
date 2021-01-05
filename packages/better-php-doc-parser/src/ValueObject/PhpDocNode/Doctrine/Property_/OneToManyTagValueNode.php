@@ -23,7 +23,7 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
     ) {
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
 
-        parent::__construct($items, $content);
+        parent::__construct($items);
     }
 
     public function getTargetEntity(): string

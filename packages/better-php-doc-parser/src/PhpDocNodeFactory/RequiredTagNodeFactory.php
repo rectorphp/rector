@@ -12,11 +12,8 @@ use Rector\Symfony\ValueObject\PhpDocNode\RequiredTagValueNode;
 
 final class RequiredTagNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
-    public function createFromNodeAndTokens(
-        Node $node,
-        TokenIterator $tokenIterator,
-        string $annotationClass
-    ): ?PhpDocTagValueNode {
+    public function create(Node $node, TokenIterator $tokenIterator, string $annotationClass): ?PhpDocTagValueNode
+    {
         return new RequiredTagValueNode();
     }
 }

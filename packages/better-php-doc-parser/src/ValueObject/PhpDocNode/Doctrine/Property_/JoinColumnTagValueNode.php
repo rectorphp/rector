@@ -20,11 +20,11 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
      */
     private $tag;
 
-    public function __construct(array $items, ?string $content = null, ?string $originalTag = null)
+    public function __construct(array $items, ?string $originalTag = null)
     {
         $this->tag = $originalTag;
 
-        parent::__construct($items, $content);
+        parent::__construct($items);
     }
 
     public function isNullable(): ?bool

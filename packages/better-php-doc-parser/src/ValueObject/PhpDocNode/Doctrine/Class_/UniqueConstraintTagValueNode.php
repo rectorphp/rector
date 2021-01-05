@@ -18,7 +18,7 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode im
     {
         $this->tag = $originalTag;
 
-        parent::__construct($items, $content);
+        parent::__construct($items);
     }
 
     public function getTag(): string

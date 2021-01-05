@@ -24,7 +24,7 @@ final class DoctrineEmbeddedPhpDocNodeFactory extends AbstractPhpDocNodeFactory 
         ];
     }
 
-    public function createFromNodeAndTokens(
+    public function create(
         Node $node,
         TokenIterator $tokenIterator,
         string $annotationClass

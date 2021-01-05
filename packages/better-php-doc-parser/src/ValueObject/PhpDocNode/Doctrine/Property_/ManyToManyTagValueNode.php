@@ -22,14 +22,11 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
      */
     private $fullyQualifiedTargetEntity;
 
-    public function __construct(
-        array $items,
-        ?string $content = null,
-        ?string $fullyQualifiedTargetEntity = null
-    ) {
+    public function __construct(array $items, ?string $fullyQualifiedTargetEntity = null)
+    {
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
 
-        parent::__construct($items, $content);
+        parent::__construct($items);
     }
 
     public function getTargetEntity(): string

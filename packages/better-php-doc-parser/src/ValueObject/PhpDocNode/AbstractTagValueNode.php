@@ -30,7 +30,7 @@ abstract class AbstractTagValueNode implements AttributeAwareInterface, PhpDocTa
     /**
      * @param mixed[] $items
      */
-    public function __construct(array $items, ?string $originalContent = null)
+    public function __construct(array $items)
     {
         $this->items = $items;
     }

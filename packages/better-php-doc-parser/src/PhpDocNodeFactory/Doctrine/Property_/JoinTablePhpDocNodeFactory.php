@@ -6,15 +6,15 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Property_;
 
 use Doctrine\ORM\Mapping\JoinTable;
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
 final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
 {
@@ -35,6 +35,16 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     private const JOIN_COLUMN_REGEX = '#(?<tag>@(ORM\\\\)?JoinColumn)\((?<content>.*?)\),?#si';
 
     /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    public function __construct(CurrentNodeProvider $currentNodeProvider)
+    {
+        $this->currentNodeProvider = $currentNodeProvider;
+    }
+
+    /**
      * @return string[]
      */
     public function getClasses(): array
@@ -45,11 +55,9 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     /**
      * @return JoinTableTagValueNode|null
      */
-    public function createFromNodeAndTokens(
-        Node $node,
-        TokenIterator $tokenIterator,
-        string $annotationClass
-    ): ?PhpDocTagValueNode {
+    public function create(SmartTokenIterator $smartTokenIterator, string $annotationClass): ?AttributeAwareInterface
+    {
+        $node = $this->currentNodeProvider->getNode();
         if (! $node instanceof Property) {
             throw new ShouldNotHappenException();
         }
@@ -60,7 +68,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
             return null;
         }
 
-        $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
+        $annotationContent = $this->resolveContentFromTokenIterator($smartTokenIterator);
 
         $joinColumnsAnnotationContent = $this->annotationContentResolver->resolveNestedKey(
             $annotationContent,
@@ -73,8 +81,6 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
             self::JOIN_COLUMNS
         );
 
-        $joinColumnsAroundSpaces = $this->matchCurlyBracketAroundSpaces($joinColumnsAnnotationContent);
-
         // inversed join columns
         $inverseJoinColumnsAnnotationContent = $this->annotationContentResolver->resolveNestedKey(
             $annotationContent,
@@ -86,18 +92,11 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
             self::INVERSE_JOIN_COLUMNS
         );
 
-        $inverseJoinColumnAroundSpaces = $this->matchCurlyBracketAroundSpaces(
-            $inverseJoinColumnsAnnotationContent
-        );
-
         return new JoinTableTagValueNode(
             $joinTable->name,
             $joinTable->schema,
             $joinColumnValuesTags,
-            $inverseJoinColumnValuesTags,
-            $annotationContent,
-            $joinColumnsAroundSpaces,
-            $inverseJoinColumnAroundSpaces
+            $inverseJoinColumnValuesTags
         );
     }
 
@@ -120,11 +119,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
             $subAnnotation = $joinColumnContents[$key];
 
             $items = $this->annotationItemsResolver->resolve($joinColumn);
-            $joinColumnValuesTags[] = new JoinColumnTagValueNode(
-                $items,
-                $subAnnotation['content'],
-                $subAnnotation['tag']
-            );
+            $joinColumnValuesTags[] = new JoinColumnTagValueNode($items, $subAnnotation['tag']);
         }
 
         return $joinColumnValuesTags;

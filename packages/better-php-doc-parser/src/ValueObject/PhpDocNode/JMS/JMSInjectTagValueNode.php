@@ -15,11 +15,11 @@ final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortN
      */
     private $serviceName;
 
-    public function __construct(array $items, ?string $serviceName, ?string $annotationContent)
+    public function __construct(array $items, ?string $serviceName)
     {
         $this->serviceName = $serviceName;
 
-        parent::__construct($items, $annotationContent);
+        parent::__construct($items);
     }
 
     public function getServiceName(): ?string
