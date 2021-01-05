@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocNode;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -115,8 +115,9 @@ final class PhpDocInfoFactory
 
     /**
      * @param mixed[][] $tokens
+     * @return AttributeAwareInterface&PhpDocNode
      */
-    private function parseTokensToPhpDocNode(array $tokens): AttributeAwarePhpDocNode
+    private function parseTokensToPhpDocNode(array $tokens)
     {
         $tokenIterator = new TokenIterator($tokens);
 
@@ -133,7 +134,7 @@ final class PhpDocInfoFactory
         }
 
         $phpDocChildNodes = $attributeAwarePhpDocNode->children;
-        /** @var AttributeAwareNodeInterface $lastChildNode */
+        /** @var AttributeAwareInterface $lastChildNode */
         $lastChildNode = array_pop($phpDocChildNodes);
 
         /** @var StartAndEnd $startAndEnd */

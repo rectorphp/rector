@@ -7,6 +7,7 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -16,7 +17,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\ValueObject\TypeNode\AttributeAwareArrayTypeNode;
 use Rector\PhpdocParserPrinter\ValueObject\TypeNode\AttributeAwareGenericTypeNode;
 use Rector\PhpdocParserPrinter\ValueObject\TypeNode\AttributeAwareIdentifierTypeNode;
@@ -177,7 +178,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         // @see https://github.com/phpstan/phpdoc-parser/blob/98a088b17966bdf6ee25c8a4b634df313d8aa531/tests/PHPStan/Parser/PhpDocParserTest.php#L2692-L2696
 
         foreach ($genericTypes as $genericType) {
-            /** @var AttributeAwareNodeInterface $genericType */
+            /** @var AttributeAwareInterface&GenericTypeNode $genericType */
             $genericType->setAttribute(self::HAS_GENERIC_TYPE_PARENT, $withKey);
         }
 

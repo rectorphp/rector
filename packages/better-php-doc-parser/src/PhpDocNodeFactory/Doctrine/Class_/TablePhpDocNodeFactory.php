@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_;
 
 use Doctrine\ORM\Mapping\Table;
-use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
@@ -81,33 +80,22 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             $indexesContent
         );
 
-//        $indexesAroundSpaces = $this->matchCurlyBracketAroundSpaces($indexesContent);
-
-//        $haveIndexesFinalComma = (bool) Strings::match($indexesContent, self::SPACE_BEFORE_CLOSING_BRACKET_REGEX);
         $uniqueConstraintsContent = $this->annotationContentResolver->resolveNestedKey(
             $annotationContent,
             'uniqueConstraints'
         );
-
-//        $uniqueConstraintAroundSpaces = $this->matchCurlyBracketAroundSpaces($uniqueConstraintsContent);
 
         $uniqueConstraintTagValueNodes = $this->uniqueConstraintPhpDocNodeFactory->createUniqueConstraintTagValueNodes(
             $table->uniqueConstraints,
             $uniqueConstraintsContent
         );
 
-//        $haveUniqueConstraintsFinalComma = (bool) Strings::match(
-//            $uniqueConstraintsContent,
-//            self::SPACE_BEFORE_CLOSING_BRACKET_REGEX
-//        );
-
         return new TableTagValueNode(
             $table->name,
             $table->schema,
             $indexTagValueNodes,
             $uniqueConstraintTagValueNodes,
-            $table->options,
-            $annotationContent
+            $table->options
         );
     }
 }

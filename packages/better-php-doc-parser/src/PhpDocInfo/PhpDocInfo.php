@@ -18,7 +18,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
@@ -26,6 +25,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwareParamTagValueNode;
 use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocNode;
 use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocTagNode;
@@ -151,13 +151,13 @@ final class PhpDocInfo
     }
 
     /**
-     * @return PhpDocTagNode[]|AttributeAwareNodeInterface[]
+     * @return (PhpDocTagNode&AttributeAwareInterface)[]
      */
     public function getTagsByName(string $name): array
     {
         $name = StaticAnnotationNaming::normalizeName($name);
 
-        /** @var PhpDocTagNode[]|AttributeAwareNodeInterface[] $tags */
+        /** @var (PhpDocTagNode&AttributeAwareInterface)[] $tags */
         $tags = $this->phpDocNode->getTags();
 
         $tags = array_filter($tags, function (PhpDocTagNode $tag) use ($name): bool {
