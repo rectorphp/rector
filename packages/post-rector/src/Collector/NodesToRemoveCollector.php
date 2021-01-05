@@ -63,11 +63,12 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
 
     public function addNodeToRemove(Node $node): void
     {
-        if ($this->isUsedInArg($node)) {
+        /** Node|null $parentNode */
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($this->isUsedInArg($node, $parentNode)) {
             return;
         }
 
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         // chain call: "->method()->another()"
         $this->ensureIsNotPartOfChainMethodCall($node);
 
@@ -116,9 +117,8 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
         unset($this->nodesToRemove[$key]);
     }
 
-    private function isUsedInArg(Node $node): bool
+    private function isUsedInArg(Node $node, ?Node $parentNode): bool
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
             return false;
         }
@@ -145,12 +145,12 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
                     return false;
                 }
 
-                $call = $this->betterNodeFinder->findFirstParentInstanceOf($variable, [StaticCall::class]);
-                if ($call === null) {
+                $staticCall = $this->betterNodeFinder->findFirstParentInstanceOf($variable, [StaticCall::class]);
+                if ($staticCall === null) {
                     return true;
                 }
 
-                return (string) $call->name !== '__construct';
+                return (string) $staticCall->name !== '__construct';
             });
         }
 
