@@ -87,7 +87,7 @@ CODE_SAMPLE
             /** @var Expr $object */
             $object = $issetVar->var->getAttribute(AttributeKey::ORIGINAL_NODE);
 
-            /** @var Scope $scope|null */
+            /** @var Scope|null $scope */
             $scope = $object->getAttribute(AttributeKey::SCOPE);
 
             if ($scope === null) {
