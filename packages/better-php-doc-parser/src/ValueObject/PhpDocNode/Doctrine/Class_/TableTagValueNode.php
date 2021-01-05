@@ -5,22 +5,14 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
-use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 
+/**
+ * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_\TablePhpDocNodeFactory
+ */
 final class TableTagValueNode extends AbstractDoctrineTagValueNode implements SilentKeyNodeInterface
 {
-    /**
-     * @var bool
-     */
-    private $haveIndexesFinalComma = false;
-
-    /**
-     * @var bool
-     */
-    private $haveUniqueConstraintsFinalComma = false;
-
     /**
      * @var IndexTagValueNode[]
      */
@@ -30,16 +22,6 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
      * @var UniqueConstraintTagValueNode[]
      */
     private $uniqueConstraints = [];
-
-    /**
-     * @var AroundSpaces|null
-     */
-    private $indexesAroundSpaces;
-
-    /**
-     * @var AroundSpaces|null
-     */
-    private $uniqueConstraintsAroundSpaces;
 
     /**
      * @param mixed[] $options
@@ -52,11 +34,7 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         array $indexes,
         array $uniqueConstraints,
         array $options,
-        ?string $originalContent = null,
-        bool $haveIndexesFinalComma = false,
-        bool $haveUniqueConstraintsFinalComma = false,
-        ?AroundSpaces $indexesAroundSpaces = null,
-        ?AroundSpaces $uniqueConstraintsAroundSpaces = null
+        ?string $originalContent = null
     ) {
         $this->items['name'] = $name;
         $this->items['schema'] = $schema;
@@ -66,11 +44,6 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         $this->uniqueConstraints = $uniqueConstraints;
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
-
-        $this->haveIndexesFinalComma = $haveIndexesFinalComma;
-        $this->haveUniqueConstraintsFinalComma = $haveUniqueConstraintsFinalComma;
-        $this->indexesAroundSpaces = $indexesAroundSpaces;
-        $this->uniqueConstraintsAroundSpaces = $uniqueConstraintsAroundSpaces;
     }
 
     public function __toString(): string

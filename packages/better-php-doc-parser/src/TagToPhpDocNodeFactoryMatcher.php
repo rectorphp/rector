@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser;
 
-use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 
 final class TagToPhpDocNodeFactoryMatcher
 {
@@ -21,12 +21,22 @@ final class TagToPhpDocNodeFactoryMatcher
      */
     private $classAnnotationMatcher;
 
+    /**
+     * @var PhpDocNodeFactoryInterface[]
+     */
+    private $phpDocNodeFactories = [];
+
+    /**
+     * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
+     */
     public function __construct(
         CurrentNodeProvider $currentNodeProvider,
-        ClassAnnotationMatcher $classAnnotationMatcher
+        ClassAnnotationMatcher $classAnnotationMatcher,
+        array $phpDocNodeFactories
     ) {
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
+        $this->phpDocNodeFactories = $phpDocNodeFactories;
     }
 
     public function match(string $tag): ?PhpDocNodeFactoryInterface

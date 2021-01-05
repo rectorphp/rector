@@ -6,22 +6,21 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_;
 
 use Doctrine\ORM\Mapping\Table;
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\TableTagValueNode;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
 final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
 {
     /**
      * @var string
-     * @see https://regex101.com/r/HKjBVt/1
      */
-    private const SPACE_BEFORE_CLOSING_BRACKET_REGEX = '#,(\s+)?}$#m';
+    private const TAG_NAME = 'Doctrine\ORM\Mapping\Table';
 
     /**
      * @var IndexPhpDocNodeFactory
@@ -33,12 +32,24 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
      */
     private $uniqueConstraintPhpDocNodeFactory;
 
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
     public function __construct(
         IndexPhpDocNodeFactory $indexPhpDocNodeFactory,
-        UniqueConstraintPhpDocNodeFactory $uniqueConstraintPhpDocNodeFactory
+        UniqueConstraintPhpDocNodeFactory $uniqueConstraintPhpDocNodeFactory,
+        CurrentNodeProvider $currentNodeProvider
     ) {
         $this->indexPhpDocNodeFactory = $indexPhpDocNodeFactory;
         $this->uniqueConstraintPhpDocNodeFactory = $uniqueConstraintPhpDocNodeFactory;
+        $this->currentNodeProvider = $currentNodeProvider;
+    }
+
+    public function isMatch(string $tag): bool
+    {
+        return $tag === self::TAG_NAME;
     }
 
     /**
@@ -46,25 +57,23 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
      */
     public function getClasses(): array
     {
-        return ['Doctrine\ORM\Mapping\Table'];
+        return [self::TAG_NAME];
     }
 
-    public function createFromNodeAndTokens(
-        Node $node,
-        TokenIterator $tokenIterator,
-        string $annotationClass
-    ): ?PhpDocTagValueNode {
-        if (! $node instanceof Class_) {
+    public function create(SmartTokenIterator $smartTokenIterator, string $currentTag): ?AttributeAwareInterface
+    {
+        $currentNode = $this->currentNodeProvider->getNode();
+        if (! $currentNode instanceof Class_) {
             throw new ShouldNotHappenException();
         }
 
         /** @var Table|null $table */
-        $table = $this->nodeAnnotationReader->readClassAnnotation($node, $annotationClass);
+        $table = $this->nodeAnnotationReader->readClassAnnotation($currentNode, $currentTag);
         if ($table === null) {
             return null;
         }
 
-        $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
+        $annotationContent = $this->resolveContentFromTokenIterator($smartTokenIterator);
 
         $indexesContent = $this->annotationContentResolver->resolveNestedKey($annotationContent, 'indexes');
         $indexTagValueNodes = $this->indexPhpDocNodeFactory->createIndexTagValueNodes(
@@ -72,25 +81,25 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             $indexesContent
         );
 
-        $indexesAroundSpaces = $this->matchCurlyBracketAroundSpaces($indexesContent);
+//        $indexesAroundSpaces = $this->matchCurlyBracketAroundSpaces($indexesContent);
 
-        $haveIndexesFinalComma = (bool) Strings::match($indexesContent, self::SPACE_BEFORE_CLOSING_BRACKET_REGEX);
+//        $haveIndexesFinalComma = (bool) Strings::match($indexesContent, self::SPACE_BEFORE_CLOSING_BRACKET_REGEX);
         $uniqueConstraintsContent = $this->annotationContentResolver->resolveNestedKey(
             $annotationContent,
             'uniqueConstraints'
         );
 
-        $uniqueConstraintAroundSpaces = $this->matchCurlyBracketAroundSpaces($uniqueConstraintsContent);
+//        $uniqueConstraintAroundSpaces = $this->matchCurlyBracketAroundSpaces($uniqueConstraintsContent);
 
         $uniqueConstraintTagValueNodes = $this->uniqueConstraintPhpDocNodeFactory->createUniqueConstraintTagValueNodes(
             $table->uniqueConstraints,
             $uniqueConstraintsContent
         );
 
-        $haveUniqueConstraintsFinalComma = (bool) Strings::match(
-            $uniqueConstraintsContent,
-            self::SPACE_BEFORE_CLOSING_BRACKET_REGEX
-        );
+//        $haveUniqueConstraintsFinalComma = (bool) Strings::match(
+//            $uniqueConstraintsContent,
+//            self::SPACE_BEFORE_CLOSING_BRACKET_REGEX
+//        );
 
         return new TableTagValueNode(
             $table->name,
@@ -98,11 +107,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             $indexTagValueNodes,
             $uniqueConstraintTagValueNodes,
             $table->options,
-            $annotationContent,
-            $haveIndexesFinalComma,
-            $haveUniqueConstraintsFinalComma,
-            $indexesAroundSpaces,
-            $uniqueConstraintAroundSpaces
+            $annotationContent
         );
     }
 }
