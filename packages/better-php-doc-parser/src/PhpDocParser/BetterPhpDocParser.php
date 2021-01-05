@@ -14,18 +14,17 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use Rector\Symfony\ValueObject\PhpDocNode\RequiredTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
-use Rector\BetterPhpDocParser\PhpDocNodeFactory\PHPUnitDataProviderDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Mapper\NodeMapper;
+use Rector\Symfony\ValueObject\PhpDocNode\RequiredTagValueNode;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -76,11 +75,6 @@ final class BetterPhpDocParser extends PhpDocParser
     private $annotationContentResolver;
 
     /**
-     * @var PHPUnitDataProviderDocNodeFactory
-     */
-    private $phpUnitDataProviderDocNodeFactory;
-
-    /**
      * @var NodeMapper
      */
     private $nodeMapper;
@@ -95,7 +89,6 @@ final class BetterPhpDocParser extends PhpDocParser
         ClassAnnotationMatcher $classAnnotationMatcher,
         Lexer $lexer,
         AnnotationContentResolver $annotationContentResolver,
-        PHPUnitDataProviderDocNodeFactory $phpUnitDataProviderDocNodeFactory,
         NodeMapper $nodeMapper,
         array $phpDocNodeFactories = []
     ) {
@@ -107,7 +100,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->lexer = $lexer;
         $this->annotationContentResolver = $annotationContentResolver;
-        $this->phpUnitDataProviderDocNodeFactory = $phpUnitDataProviderDocNodeFactory;
         $this->nodeMapper = $nodeMapper;
 
         $this->setPhpDocNodeFactories($phpDocNodeFactories);
@@ -147,9 +139,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
 
         $phpDocNode = new PhpDocNode(array_values($children));
-
-        $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
-
         return $this->nodeMapper->mapNode($phpDocNode);
     }
 
@@ -177,10 +166,8 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $lowercasedTag = strtolower($tag);
 
-        if ($lowercasedTag === '@dataprovider') {
-            $this->phpUnitDataProviderDocNodeFactory->setPhpDocParser($this);
-            $tagValueNode = $this->phpUnitDataProviderDocNodeFactory->createFromTokens($tokenIterator);
-        } elseif ($lowercasedTag === '@' . TagName::REQUIRED) {
+        // @todo move away to custom factory :)
+        if ($lowercasedTag === '@' . TagName::REQUIRED) {
             $tagValueNode = new RequiredTagValueNode();
         } else {
             // class-annotation

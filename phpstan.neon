@@ -608,3 +608,5 @@ parameters:
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node\|null#'
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode&Rector\\PhpdocParserPrinter\\Contract\\AttributeAwareInterface\:\:\$description#'
+
+        - '#Array \(array<Rector\\PhpdocParserPrinter\\ValueObject\\PhpDocNode\\AttributeAwarePhpDocTagNode\|Rector\\PhpdocParserPrinter\\ValueObject\\PhpDocNode\\AttributeAwarePhpDocTextNode\>\) does not accept PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode#'
