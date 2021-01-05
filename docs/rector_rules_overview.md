@@ -1185,7 +1185,7 @@ Change isset on property object to `property_exists()`
 
 ### JoinStringConcatRector
 
-Joins concat of 2 strings, unless the lenght is too long
+Joins concat of 2 strings, unless the length is too long
 
 - class: `Rector\CodeQuality\Rector\Concat\JoinStringConcatRector`
 
