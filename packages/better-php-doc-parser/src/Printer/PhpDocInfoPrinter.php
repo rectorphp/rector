@@ -5,12 +5,21 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
+use PHPStan\PhpDoc\Tag\ThrowsTag;
+use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ExtendsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ImplementsTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\MixinTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\UsesTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
@@ -18,6 +27,7 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocNode;
 use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocTagNode;
 
@@ -26,22 +36,22 @@ use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocTagNod
  */
 final class PhpDocInfoPrinter
 {
-    /**
-     * @var string
-     * @see https://regex101.com/r/Ab0Vey/1
-     */
-    public const CLOSING_DOCBLOCK_REGEX = '#\*\/(\s+)?$#';
+//    /**
+//     * @var string
+//     * @see https://regex101.com/r/Ab0Vey/1
+//     */
+//    public const CLOSING_DOCBLOCK_REGEX = '#\*\/(\s+)?$#';
 
-    /**
-     * @var string
-     */
-    private const NEWLINE_ASTERISK = PHP_EOL . ' * ';
+//    /**
+//     * @var string
+//     */
+//    private const NEWLINE_ASTERISK = PHP_EOL . ' * ';
 
-    /**
-     * @var string
-     * @see https://regex101.com/r/mVmOCY/2
-     */
-    private const OPENING_DOCBLOCK_REGEX = '#^(/\*\*)#';
+//    /**
+//     * @var string
+//     * @see https://regex101.com/r/mVmOCY/2
+//     */
+//    private const OPENING_DOCBLOCK_REGEX = '#^(/\*\*)#';
 
     /**
      * @var string
@@ -180,18 +190,18 @@ final class PhpDocInfoPrinter
 
         $output = $this->printEnd($output);
 
-        // fix missing start
-        if (! Strings::match($output, self::DOCBLOCK_START_REGEX) && $output) {
-            $output = '/**' . $output;
-        }
-
-        // fix missing end
-        if (Strings::match($output, self::OPENING_DOCBLOCK_REGEX) && $output && ! Strings::match(
-            $output,
-            self::CLOSING_DOCBLOCK_REGEX
-        )) {
-            $output .= ' */';
-        }
+//        // fix missing start
+//        if (! Strings::match($output, self::DOCBLOCK_START_REGEX) && $output) {
+//            $output = '/**' . $output;
+//        }
+//
+//        // fix missing end
+//        if (Strings::match($output, self::OPENING_DOCBLOCK_REGEX) && $output && ! Strings::match(
+//            $output,
+//            self::CLOSING_DOCBLOCK_REGEX
+//        )) {
+//            $output .= ' */';
+//        }
 
         return $output;
     }
@@ -379,14 +389,22 @@ final class PhpDocInfoPrinter
 
     private function hasDescription(AttributeAwarePhpDocTagNode $attributeAwarePhpDocTagNode): bool
     {
-        $hasDescriptionWithOriginalSpaces = $attributeAwarePhpDocTagNode->getAttribute(
-            Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES
-        );
-        if (! $hasDescriptionWithOriginalSpaces) {
-            return false;
-        }
+        $isTagValueNodeWithDescription = StaticInstanceOf::isOneOf($attributeAwarePhpDocTagNode->value, [
+            TemplateTagValueNode::class,
+            ParamTagValueNode::class,
+            DeprecatedTagValueNode::class,
+            MethodTagValueNode::class,
+            ImplementsTagValueNode::class,
+            ExtendsTagValueNode::class,
+            MixinTagValueNode::class,
+            ThrowsTagValueNode::class,
+            VarTagValueNode::class,
+            ReturnTagValueNode::class,
+            PropertyTagValueNode::class,
+            UsesTagValueNode::class,
+        ]);
 
-        if (! property_exists($attributeAwarePhpDocTagNode->value, 'description')) {
+        if (! $isTagValueNodeWithDescription) {
             return false;
         }
 
