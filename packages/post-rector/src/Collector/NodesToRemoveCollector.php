@@ -9,7 +9,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -142,16 +141,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
                     return false;
                 }
 
-                $staticCall = $this->betterNodeFinder->findFirstParentInstanceOf($variable, [StaticCall::class]);
-                if ($staticCall === null) {
-                    return true;
-                }
-
-                if (! $staticCall instanceof Identifier) {
-                    return false;
-                }
-
-                return $staticCall->name->toString() !== '__construct';
+                return ! (bool) $this->betterNodeFinder->findFirstParentInstanceOf($variable, [StaticCall::class]);
             });
         }
 
