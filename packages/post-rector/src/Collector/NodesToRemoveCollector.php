@@ -7,6 +7,7 @@ namespace Rector\PostRector\Collector;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
@@ -118,6 +119,10 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
     private function isUsedInArg(Node $node): bool
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode === null) {
+            return false;
+        }
+
         if (! $node instanceof Param) {
             return false;
         }
@@ -140,12 +145,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
                     return false;
                 }
 
-                $methodCall = $this->betterNodeFinder->findFirstParentInstanceOf($variable, MethodCall::class);
-                if ($methodCall === null) {
-                    return true;
-                }
-
-                return $methodCall->name->toString() !== '__construct';
+                return (bool) $this->betterNodeFinder->findFirstParentInstanceOf($variable, New_::class);
             });
         }
 
