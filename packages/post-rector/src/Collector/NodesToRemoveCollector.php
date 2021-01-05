@@ -128,7 +128,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
 
         $paramVariable = $node->var;
         if ($paramVariable instanceof Variable) {
-            $isUsedInArg = $this->betterNodeFinder->findFirst((array) $parentNode->stmts, function (Node $variable) use (
+            return (bool) $this->betterNodeFinder->findFirst((array) $parentNode->stmts, function (Node $variable) use (
                 $paramVariable
             ): bool {
                 if (! $this->betterStandardPrinter->areNodesEqual($variable, $paramVariable)) {
@@ -137,10 +137,6 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
 
                 return (bool) $this->betterNodeFinder->findFirstParentInstanceOf($variable, Arg::class);
             });
-
-            if ($isUsedInArg) {
-                return true;
-            }
         }
 
         return false;
