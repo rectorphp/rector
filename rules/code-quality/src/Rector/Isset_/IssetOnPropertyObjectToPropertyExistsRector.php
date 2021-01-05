@@ -90,7 +90,7 @@ CODE_SAMPLE
             /** @var Scope $scope|null */
             $scope = $object->getAttribute(AttributeKey::SCOPE);
 
-            if (! $scope) {
+            if ($scope === null) {
                 continue;
             }
 
