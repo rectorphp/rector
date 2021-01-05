@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 
-use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddableTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
@@ -41,9 +39,23 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constrain
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertEmailTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertRangeTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
+use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Exception\NotImplementedYetException;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
 final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements GenericPhpDocNodeFactoryInterface
 {
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    public function __construct(CurrentNodeProvider $currentNodeProvider)
+    {
+        $this->currentNodeProvider = $currentNodeProvider;
+    }
+
     /**
      * @return array<string, string>
      */
@@ -94,21 +106,28 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
         ];
     }
 
-    public function create(
-        Node $node,
-        TokenIterator $tokenIterator,
-        string $annotationClass
-    ): ?PhpDocTagValueNode {
-        $tagValueNodeClassesToAnnotationClasses = $this->getTagValueNodeClassesToAnnotationClasses();
-        $tagValueNodeClass = array_search($annotationClass, $tagValueNodeClassesToAnnotationClasses, true);
+    public function isMatch(string $tag): bool
+    {
+        throw new NotImplementedYetException();
+    }
 
-        $annotation = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
+    /**
+     * @return PhpDocTagValueNode&AttributeAwareInterface|null
+     */
+    public function create(SmartTokenIterator $smartTokenIterator, string $resolvedTag): ?AttributeAwareInterface
+    {
+        $currentNode = $this->currentNodeProvider->getNode();
+
+        $tagValueNodeClassesToAnnotationClasses = $this->getTagValueNodeClassesToAnnotationClasses();
+        $tagValueNodeClass = array_search($resolvedTag, $tagValueNodeClassesToAnnotationClasses, true);
+
+        $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $resolvedTag);
         if ($annotation === null) {
             return null;
         }
 
         $items = $this->annotationItemsResolver->resolve($annotation);
-        $content = $this->annotationContentResolver->resolveFromTokenIterator($tokenIterator);
+        $content = $this->annotationContentResolver->resolveFromTokenIterator($smartTokenIterator);
 
         return new $tagValueNodeClass($items, $content);
     }

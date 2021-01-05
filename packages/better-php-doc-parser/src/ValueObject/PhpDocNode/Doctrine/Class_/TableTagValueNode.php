@@ -47,9 +47,7 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         $items = $this->items;
         $items = $this->addCustomItems($items);
 
-        $items = $this->completeItemsQuotes($items, ['indexes', 'uniqueConstraints']);
         $items = $this->filterOutMissingItems($items);
-        $items = $this->makeKeysExplicit($items);
 
         return $this->printContentItems($items);
     }

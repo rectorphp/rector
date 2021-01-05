@@ -85,9 +85,7 @@ abstract class AbstractTagValueNode implements AttributeAwareInterface, PhpDocTa
      */
     protected function printItems(array $items): string
     {
-        $items = $this->completeItemsQuotes($items);
         $items = $this->filterOutMissingItems($items);
-        $items = $this->makeKeysExplicit($items);
 
         return $this->printContentItems($items);
     }

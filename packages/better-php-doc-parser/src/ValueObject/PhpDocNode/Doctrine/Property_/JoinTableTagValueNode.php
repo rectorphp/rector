@@ -59,7 +59,6 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     public function __toString(): string
     {
         $items = $this->createItems();
-        $items = $this->makeKeysExplicit($items);
 
         return $this->printContentItems($items);
     }

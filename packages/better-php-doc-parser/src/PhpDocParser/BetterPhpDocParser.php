@@ -13,14 +13,13 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
-use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\TagToPhpDocNodeFactoryMatcher;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Mapper\NodeMapper;
+use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocTagNode;
+use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -29,11 +28,6 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
  */
 final class BetterPhpDocParser extends PhpDocParser
 {
-    /**
-     * @var PhpDocNodeFactoryInterface[]
-     */
-    private $phpDocNodeFactories = [];
-
     /**
      * @var PrivatesCaller
      */
@@ -74,9 +68,6 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     private $tagToPhpDocNodeFactoryMatcher;
 
-    /**
-     * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
-     */
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
@@ -85,8 +76,7 @@ final class BetterPhpDocParser extends PhpDocParser
         TagToPhpDocNodeFactoryMatcher $tagToPhpDocNodeFactoryMatcher,
         Lexer $lexer,
         AnnotationContentResolver $annotationContentResolver,
-        NodeMapper $nodeMapper,
-        array $phpDocNodeFactories = []
+        NodeMapper $nodeMapper
     ) {
         parent::__construct($typeParser, $constExprParser);
 
@@ -97,8 +87,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->lexer = $lexer;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->nodeMapper = $nodeMapper;
-
-        $this->setPhpDocNodeFactories($phpDocNodeFactories);
         $this->tagToPhpDocNodeFactoryMatcher = $tagToPhpDocNodeFactoryMatcher;
     }
 
@@ -111,6 +99,7 @@ final class BetterPhpDocParser extends PhpDocParser
     }
 
     /**
+     * @param SmartTokenIterator $tokenIterator
      * @return AttributeAwareInterface&PhpDocNode
      */
     public function parse(TokenIterator $tokenIterator): PhpDocNode
@@ -137,12 +126,16 @@ final class BetterPhpDocParser extends PhpDocParser
         return $this->nodeMapper->mapNode($phpDocNode);
     }
 
+    /**
+     * @param SmartTokenIterator $tokenIterator
+     * @return PhpDocTagNode&AttributeAwareInterface
+     */
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
     {
         $tag = $this->resolveTag($tokenIterator);
 
         $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);
-        return new PhpDocTagNode($tag, $phpDocTagValueNode);
+        return new AttributeAwarePhpDocTagNode($tag, $phpDocTagValueNode);
     }
 
     /**
@@ -180,38 +173,9 @@ final class BetterPhpDocParser extends PhpDocParser
         return $this->nodeMapper->mapNode($tagValueNode);
     }
 
-    /**
-     * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
-     */
-    private function setPhpDocNodeFactories(array $phpDocNodeFactories): void
-    {
-        foreach ($phpDocNodeFactories as $phpDocNodeFactory) {
-            $classes = $this->resolvePhpDocNodeFactoryClasses($phpDocNodeFactory);
-            foreach ($classes as $class) {
-                $this->phpDocNodeFactories[$class] = $phpDocNodeFactory;
-            }
-        }
-    }
-
     private function parseChildAndStoreItsPositions(TokenIterator $tokenIterator): Node
     {
         $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', $tokenIterator);
         return $this->nodeMapper->mapNode($phpDocNode);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolvePhpDocNodeFactoryClasses(PhpDocNodeFactoryInterface $phpDocNodeFactory): array
-    {
-        if ($phpDocNodeFactory instanceof SpecificPhpDocNodeFactoryInterface) {
-            return $phpDocNodeFactory->getClasses();
-        }
-
-        if ($phpDocNodeFactory instanceof GenericPhpDocNodeFactoryInterface) {
-            return $phpDocNodeFactory->getTagValueNodeClassesToAnnotationClasses();
-        }
-
-        throw new ShouldNotHappenException();
     }
 }
