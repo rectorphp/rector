@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class DoNotRemoveMethodParameterUsed
+class DoNotRemoveMethodParameterUsedInArg
 {
     private B $b;
     private C $c;
@@ -20,7 +20,7 @@ class DoNotRemoveMethodParameterUsed
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class DoNotRemoveMethodParameterUsed
+class DoNotRemoveMethodParameterUsedInArg
 {
     public function __construct(B $b)
     {
