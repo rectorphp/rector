@@ -46,11 +46,16 @@ final class TagToPhpDocNodeFactoryMatcher
             throw new ShouldNotHappenException();
         }
 
-        $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
-            $tag,
-            $currentPhpNode
-        );
+        $resolvedTag = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($tag, $currentPhpNode);
 
-        return $this->phpDocNodeFactories[$fullyQualifiedAnnotationClass] ?? null;
+        foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
+            if (! $phpDocNodeFactory->isMatch($resolvedTag)) {
+                continue;
+            }
+
+            return $phpDocNodeFactory;
+        }
+
+        return null;
     }
 }

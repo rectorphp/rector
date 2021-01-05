@@ -15,6 +15,9 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
      */
     private $fullyQualifiedTargetEntity;
 
+    /**
+     * @param mixed[] $items
+     */
     public function __construct(array $items, string $fullyQualifiedTargetEntity)
     {
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;

@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddedTagValueNode;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
 final class DoctrineEmbeddedPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements GenericPhpDocNodeFactoryInterface
 {
@@ -24,21 +25,23 @@ final class DoctrineEmbeddedPhpDocNodeFactory extends AbstractPhpDocNodeFactory 
         ];
     }
 
+    /**
+     * @return (PhpDocTagValueNode&AttributeAwareInterface)|null
+     */
     public function create(
         Node $node,
         TokenIterator $tokenIterator,
         string $annotationClass
-    ): ?PhpDocTagValueNode {
+    ): ?AttributeAwareInterface {
         /** @var Embedded|null $annotation */
         $annotation = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
         if ($annotation === null) {
             return null;
         }
 
-        $content = $this->resolveContentFromTokenIterator($tokenIterator);
         $items = $this->annotationItemsResolver->resolve($annotation);
         $fullyQualifiedClassName = $this->resolveFqnTargetEntity($annotation->class, $node);
 
-        return new EmbeddedTagValueNode($items, $content, $fullyQualifiedClassName);
+        return new EmbeddedTagValueNode($items, $fullyQualifiedClassName);
     }
 }

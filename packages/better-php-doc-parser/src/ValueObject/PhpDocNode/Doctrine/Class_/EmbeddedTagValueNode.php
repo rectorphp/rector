@@ -12,9 +12,12 @@ final class EmbeddedTagValueNode extends AbstractDoctrineTagValueNode
      */
     private $fullyQualifiedClassName;
 
-    public function __construct(array $items, ?string $originalContent, string $fullyQualifiedClassName)
+    /**
+     * @param mixed[] $items
+     */
+    public function __construct(array $items, string $fullyQualifiedClassName)
     {
-        parent::__construct($items, $originalContent);
+        parent::__construct($items);
 
         $this->fullyQualifiedClassName = $fullyQualifiedClassName;
     }
@@ -27,11 +30,6 @@ final class EmbeddedTagValueNode extends AbstractDoctrineTagValueNode
     public function getClass(): string
     {
         return $this->items['class'];
-    }
-
-    public function getFullyQualifiedClassName(): string
-    {
-        return $this->fullyQualifiedClassName;
     }
 
     public function getColumnPrefix(): ?string

@@ -35,6 +35,11 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     private const JOIN_COLUMN_REGEX = '#(?<tag>@(ORM\\\\)?JoinColumn)\((?<content>.*?)\),?#si';
 
     /**
+     * @var string
+     */
+    private const TAG_NAME = 'Doctrine\ORM\Mapping\JoinTable';
+
+    /**
      * @var CurrentNodeProvider
      */
     private $currentNodeProvider;
@@ -49,7 +54,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
      */
     public function getClasses(): array
     {
-        return ['Doctrine\ORM\Mapping\JoinTable'];
+        return [self::TAG_NAME];
     }
 
     /**
@@ -98,6 +103,11 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
             $joinColumnValuesTags,
             $inverseJoinColumnValuesTags
         );
+    }
+
+    public function isMatch(string $tag): bool
+    {
+        return $tag === self::TAG_NAME;
     }
 
     /**

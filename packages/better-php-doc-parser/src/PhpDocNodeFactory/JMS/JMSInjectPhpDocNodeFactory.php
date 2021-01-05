@@ -5,25 +5,33 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\JMS;
 
 use JMS\DiExtraBundle\Annotation\Inject;
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
 final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
 {
+    public const TAG_NAME = 'JMS\DiExtraBundle\Annotation\Inject';
+
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, CurrentNodeProvider $currentNodeProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     /**
@@ -31,14 +39,15 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
      */
     public function getClasses(): array
     {
-        return ['JMS\DiExtraBundle\Annotation\Inject'];
+        return [self::TAG_NAME];
     }
 
     /**
      * @return JMSInjectTagValueNode|null
      */
-    public function create(Node $node, TokenIterator $tokenIterator, string $annotationClass): ?PhpDocTagValueNode
+    public function create(SmartTokenIterator $tokenIterator, string $annotationClass): ?AttributeAwareInterface
     {
+        $node = $this->currentNodeProvider->getNode();
         if (! $node instanceof Property) {
             return null;
         }
@@ -53,5 +62,9 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
 
         $items = $this->annotationItemsResolver->resolve($inject);
         return new JMSInjectTagValueNode($items, $serviceName);
+    }
+
+    public function isMatch(string $tag): bool
+    {
     }
 }
