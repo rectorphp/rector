@@ -301,13 +301,9 @@ final class PhpDocInfoPrinter
         }
 
         $nodeOutput = $this->printNode($phpDocTagNodeValue, $startAndEnd);
-        $tagSpaceSeparator = $this->resolveTagSpaceSeparator($phpDocTagNode);
 
         // space is handled by $tagSpaceSeparator
         $nodeOutput = ltrim($nodeOutput);
-        if ($nodeOutput && $tagSpaceSeparator !== '') {
-            $output .= $tagSpaceSeparator;
-        }
 
         /** @var AttributeAwarePhpDocTagNode $phpDocTagNode */
         if ($this->hasDescription($phpDocTagNode)) {
@@ -379,29 +375,6 @@ final class PhpDocInfoPrinter
         }
 
         return $output;
-    }
-
-    /**
-     * Covers:
-     * - "@Long\Annotation"
-     * - "@Route("/", name="homepage")",
-     * - "@customAnnotation(value)"
-     */
-    private function resolveTagSpaceSeparator(PhpDocTagNode $phpDocTagNode): string
-    {
-        $originalContent = $this->phpDocInfo->getOriginalContent();
-        $spacePattern = $this->spacePatternFactory->createSpacePattern($phpDocTagNode);
-
-        $matches = Strings::match($originalContent, $spacePattern);
-        if (isset($matches['space'])) {
-            return $matches['space'];
-        }
-
-        if ($this->isCommonTag($phpDocTagNode)) {
-            return ' ';
-        }
-
-        return '';
     }
 
     private function hasDescription(AttributeAwarePhpDocTagNode $attributeAwarePhpDocTagNode): bool
