@@ -8,7 +8,7 @@ trait SkipNullType
     {
         $collator = new Collator('es');
 
-        usort($contents, fn ($a, $b) => $this->sortItem($collator, $a, $b));
+        usort($contents, function ($a, $b) { return $this->sortItem($collator, $a, $b); });
 
         return $contents;
     }
