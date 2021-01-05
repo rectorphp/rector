@@ -4,8 +4,8 @@ namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRecto
 
 class DoNotRemoveMethodParameterUsedInArg
 {
-    private B $b;
-    private C $c;
+    private $b;
+    private $c;
 
     public function __construct(B $b)
     {
