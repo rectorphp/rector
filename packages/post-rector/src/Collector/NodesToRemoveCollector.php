@@ -151,7 +151,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
                     return false;
                 }
 
-                return (string) $staticCall->name !== '__construct';
+                return $staticCall->name->toString() !== '__construct';
             });
         }
 
