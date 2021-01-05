@@ -87,8 +87,13 @@ CODE_SAMPLE
             /** @var Expr $object */
             $object = $issetVar->var->getAttribute(AttributeKey::ORIGINAL_NODE);
 
-            /** @var Scope $scope */
+            /** @var Scope $scope|null */
             $scope = $object->getAttribute(AttributeKey::SCOPE);
+
+            if (is_null($scope)) {
+                continue;
+            }
+
             /** @var ThisType|ObjectType $type */
             $type = $scope->getType($object);
 
