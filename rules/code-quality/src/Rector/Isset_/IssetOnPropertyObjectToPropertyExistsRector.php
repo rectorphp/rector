@@ -90,19 +90,15 @@ CODE_SAMPLE
 
             /** @var ThisType|ObjectType|null $type */
             $type = $this->getType($object);
+            /** @var Identifier|Variable $name */
+            $name = $issetVar->name;
 
-            if ($type === null) {
+            if ($type === null || ! $name instanceof Identifier) {
                 continue;
             }
 
             if ($type instanceof ThisType) {
                 $newNodes[] = new NotIdentical($issetVar, $this->createNull());
-                continue;
-            }
-
-            /** @var Identifier|Variable $name */
-            $name = $issetVar->name;
-            if (! $name instanceof Identifier) {
                 continue;
             }
 
