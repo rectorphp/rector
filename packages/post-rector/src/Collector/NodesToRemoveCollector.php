@@ -7,7 +7,7 @@ namespace Rector\PostRector\Collector;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
@@ -145,7 +145,12 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
                     return false;
                 }
 
-                return (bool) $this->betterNodeFinder->findFirstParentInstanceOf($variable, New_::class);
+                $call = $this->betterNodeFinder->findFirstParentInstanceOf($variable, [StaticCall::class]);
+                if ($call === null) {
+                    return true;
+                }
+
+                return (string) $call->name !== '__construct';
             });
         }
 
