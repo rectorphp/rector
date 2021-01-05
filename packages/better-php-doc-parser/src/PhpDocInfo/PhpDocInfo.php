@@ -401,17 +401,7 @@ final class PhpDocInfo
 
     public function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
-        $paramTagValueNode = $this->phpDocNode->getParam($name);
-        if ($paramTagValueNode === null) {
-            return null;
-        }
-
-        $attributeAwareParamTagValueNode = $this->attributeAwareNodeFactory->createFromNode($paramTagValueNode, '');
-        if (! $attributeAwareParamTagValueNode instanceof AttributeAwareParamTagValueNode) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $attributeAwareParamTagValueNode;
+        return $this->phpDocNode->getParam($name);
     }
 
     /**

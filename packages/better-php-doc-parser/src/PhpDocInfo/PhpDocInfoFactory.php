@@ -43,11 +43,6 @@ final class PhpDocInfoFactory
     private $staticTypeMapper;
 
     /**
-     * @var AttributeAwareNodeFactory
-     */
-    private $attributeAwareNodeFactory;
-
-    /**
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
@@ -58,7 +53,6 @@ final class PhpDocInfoFactory
     private $phpDocRemover;
 
     public function __construct(
-        AttributeAwareNodeFactory $attributeAwareNodeFactory,
         CurrentNodeProvider $currentNodeProvider,
         Lexer $lexer,
         BetterPhpDocParser $betterPhpDocParser,
@@ -70,7 +64,6 @@ final class PhpDocInfoFactory
         $this->lexer = $lexer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocRemover = $phpDocRemover;
     }
@@ -160,12 +153,6 @@ final class PhpDocInfoFactory
         array $tokens,
         Node $node
     ): PhpDocInfo {
-        /** @var AttributeAwarePhpDocNode $attributeAwarePhpDocNode */
-        $attributeAwarePhpDocNode = $this->attributeAwareNodeFactory->createFromNode(
-            $attributeAwarePhpDocNode,
-            $content
-        );
-
         $phpDocInfo = new PhpDocInfo(
             $attributeAwarePhpDocNode,
             $tokens,
@@ -174,7 +161,6 @@ final class PhpDocInfoFactory
             $node,
             $this->phpDocTypeChanger,
             $this->phpDocRemover,
-            $this->attributeAwareNodeFactory
         );
 
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);

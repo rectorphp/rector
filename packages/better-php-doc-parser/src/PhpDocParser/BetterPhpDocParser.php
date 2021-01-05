@@ -20,7 +20,6 @@ use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\PHPUnitDataProviderDocNodeFactory;
-use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -55,11 +54,6 @@ final class BetterPhpDocParser extends PhpDocParser
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
-
-    /**
-     * @var MultilineSpaceFormatPreserver
-     */
-    private $multilineSpaceFormatPreserver;
 
     /**
      * @var CurrentNodeProvider
@@ -97,7 +91,6 @@ final class BetterPhpDocParser extends PhpDocParser
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
-        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
         Lexer $lexer,
@@ -110,7 +103,6 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $this->privatesCaller = new PrivatesCaller();
         $this->privatesAccessor = new PrivatesAccessor();
-        $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->lexer = $lexer;
@@ -170,6 +162,9 @@ final class BetterPhpDocParser extends PhpDocParser
         return new PhpDocTagNode($tag, $phpDocTagValueNode);
     }
 
+    /**
+     * @return PhpDocTagValueNode&AttributeAwareInterface
+     */
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
         // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
@@ -204,15 +199,12 @@ final class BetterPhpDocParser extends PhpDocParser
             }
         }
 
-        $originalTokenIterator = clone $tokenIterator;
-        $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
-
         // fallback to original parser
         if ($tagValueNode === null) {
             $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
         }
 
-        return $this->attributeAwareNodeFactory->createFromNode($tagValueNode, $docContent);
+        return $this->nodeMapper->mapNode($tagValueNode);
     }
 
     /**
@@ -230,9 +222,6 @@ final class BetterPhpDocParser extends PhpDocParser
 
     private function parseChildAndStoreItsPositions(TokenIterator $tokenIterator): Node
     {
-        $originalTokenIterator = clone $tokenIterator;
-        $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
-
         $tokenStart = $this->getTokenIteratorIndex($tokenIterator);
         $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', [$tokenIterator]);
 
@@ -240,26 +229,8 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $startAndEnd = new StartAndEnd($tokenStart, $tokenEnd);
 
-        $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
+        $attributeAwareNode = $this->nodeMapper->mapNode($phpDocNode);
         $attributeAwareNode->setAttribute(Attribute::START_END, $startAndEnd);
-
-        $possibleMultilineText = $this->multilineSpaceFormatPreserver->resolveCurrentPhpDocNodeText(
-            $attributeAwareNode
-        );
-
-        if ($possibleMultilineText) {
-            // add original text, for keeping trimmed spaces
-            $originalContent = $this->getOriginalContentFromTokenIterator($tokenIterator);
-
-            // we try to match original content without trimmed spaces
-            $currentTextPattern = '#' . preg_quote($possibleMultilineText, '#') . '#s';
-            $currentTextPattern = Strings::replace($currentTextPattern, '#(\s)+#', '\s+');
-            $match = Strings::match($originalContent, $currentTextPattern);
-
-            if (isset($match[0])) {
-                $attributeAwareNode->setAttribute(Attribute::ORIGINAL_CONTENT, $match[0]);
-            }
-        }
 
         return $attributeAwareNode;
     }

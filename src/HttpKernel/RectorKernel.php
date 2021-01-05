@@ -9,6 +9,7 @@ use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\Loader\ConfigurableCallValuesCollectingPhpFileLoader;
+use Rector\PhpdocParserPrinter\Bundle\PhpdocParserPrinterBundle;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -86,6 +87,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
             new ComposerJsonManipulatorBundle(),
             new SkipperBundle(),
             new SimplePhpDocParserBundle(),
+            new PhpdocParserPrinterBundle(),
         ];
     }
 

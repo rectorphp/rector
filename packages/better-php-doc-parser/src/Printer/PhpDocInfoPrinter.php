@@ -77,11 +77,6 @@ final class PhpDocInfoPrinter
     private $phpDocInfo;
 
     /**
-     * @var MultilineSpaceFormatPreserver
-     */
-    private $multilineSpaceFormatPreserver;
-
-    /**
      * @var SpacePatternFactory
      */
     private $spacePatternFactory;
@@ -93,12 +88,10 @@ final class PhpDocInfoPrinter
 
     public function __construct(
         EmptyPhpDocDetector $emptyPhpDocDetector,
-        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
         OriginalSpacingRestorer $originalSpacingRestorer,
         SpacePatternFactory $spacePatternFactory
     ) {
         $this->originalSpacingRestorer = $originalSpacingRestorer;
-        $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
         $this->spacePatternFactory = $spacePatternFactory;
         $this->emptyPhpDocDetector = $emptyPhpDocDetector;
     }
@@ -170,7 +163,6 @@ final class PhpDocInfoPrinter
 
         /** @var StartAndEnd|null $startAndEnd */
         $startAndEnd = $attributeAwareNode->getAttribute(Attribute::START_END) ?: $startAndEnd;
-        $attributeAwareNode = $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAwareNode);
 
         if ($startAndEnd !== null) {
             $isLastToken = ($nodeCount === $key);
@@ -245,7 +237,7 @@ final class PhpDocInfoPrinter
     }
 
     /**
-     * @param PhpDocTagNode|AttributeAwareNodeInterface $phpDocTagNode
+     * @param PhpDocTagNode&AttributeAwareNodeInterface $phpDocTagNode
      */
     private function printPhpDocTagNode(
         PhpDocTagNode $phpDocTagNode,
@@ -261,22 +253,19 @@ final class PhpDocInfoPrinter
 
         $nodeOutput = $this->printNode($phpDocTagNodeValue, $startAndEnd);
 
-        // space is handled by $tagSpaceSeparator
-        $nodeOutput = ltrim($nodeOutput);
-
         /** @var AttributeAwarePhpDocTagNode $phpDocTagNode */
-        if ($this->hasDescription($phpDocTagNode)) {
-            $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
-            $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
-            $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', function () use ($phpDocTagNode) {
-                // warning: classic string replace() breaks double "\\" slashes to "\"
-                return $phpDocTagNode->value->description;
-            });
+//        if ($this->hasDescription($phpDocTagNode)) {
+//            $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
+//            $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
+//            $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', function () use ($phpDocTagNode) {
+//                // warning: classic string replace() breaks double "\\" slashes to "\"
+//                return $phpDocTagNode->value->description;
+//            });
 
-            if (substr_count($nodeOutput, "\n") !== 0) {
-                $nodeOutput = Strings::replace($nodeOutput, "#\n#", self::NEWLINE_ASTERISK);
-            }
-        }
+//            if (substr_count($nodeOutput, "\n") !== 0) {
+//                $nodeOutput = Strings::replace($nodeOutput, "#\n#", self::NEWLINE_ASTERISK);
+//            }
+//        }
 
         return $output . $nodeOutput;
     }
