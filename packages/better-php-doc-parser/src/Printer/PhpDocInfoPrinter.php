@@ -252,21 +252,6 @@ final class PhpDocInfoPrinter
         }
 
         $nodeOutput = $this->printNode($phpDocTagNodeValue, $startAndEnd);
-
-        /** @var AttributeAwarePhpDocTagNode $phpDocTagNode */
-//        if ($this->hasDescription($phpDocTagNode)) {
-//            $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
-//            $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
-//            $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', function () use ($phpDocTagNode) {
-//                // warning: classic string replace() breaks double "\\" slashes to "\"
-//                return $phpDocTagNode->value->description;
-//            });
-
-//            if (substr_count($nodeOutput, "\n") !== 0) {
-//                $nodeOutput = Strings::replace($nodeOutput, "#\n#", self::NEWLINE_ASTERISK);
-//            }
-//        }
-
         return $output . $nodeOutput;
     }
 

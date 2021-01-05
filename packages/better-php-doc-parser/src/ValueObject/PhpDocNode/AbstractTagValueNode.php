@@ -5,18 +5,16 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\PartPhpDocTagPrinter\Behavior\ArrayPartPhpDocTagPrinterTrait;
-use Rector\BetterPhpDocParser\PhpDocNode\PrintTagValueNodeTrait;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
+use Rector\PhpdocParserPrinter\Attributes\AttributesTrait;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
 abstract class AbstractTagValueNode implements AttributeAwareInterface, PhpDocTagValueNode
 {
-    use AttributeTrait;
-    use PrintTagValueNodeTrait;
+    use AttributesTrait;
     use ArrayPartPhpDocTagPrinterTrait;
 
     /**
