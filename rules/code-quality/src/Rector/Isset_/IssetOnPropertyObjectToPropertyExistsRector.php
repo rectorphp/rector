@@ -88,7 +88,7 @@ CODE_SAMPLE
             /** @var Expr $object */
             $object = $issetVar->var->getAttribute(AttributeKey::ORIGINAL_NODE);
 
-            /** @var ThisType|ObjectType $type */
+            /** @var ThisType|ObjectType|null $type */
             $type = $this->getType($object);
 
             if ($type === null) {
