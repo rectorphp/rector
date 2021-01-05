@@ -14,17 +14,13 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
-use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Mapper\NodeMapper;
-use Rector\Symfony\ValueObject\PhpDocNode\RequiredTagValueNode;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -118,8 +114,6 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     public function parse(TokenIterator $tokenIterator): PhpDocNode
     {
-        $originalTokenIterator = clone $tokenIterator;
-
         $tokenIterator->consumeTokenType(Lexer::TOKEN_OPEN_PHPDOC);
 
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
@@ -147,7 +141,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $tag = $this->resolveTag($tokenIterator);
 
         $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);
-
         return new PhpDocTagNode($tag, $phpDocTagValueNode);
     }
 
@@ -164,26 +157,19 @@ final class BetterPhpDocParser extends PhpDocParser
             throw new ShouldNotHappenException();
         }
 
-        $lowercasedTag = strtolower($tag);
+        // class-annotation
+        $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
+        if ($phpDocNodeFactory !== null) {
+            $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
+                $tag,
+                $currentPhpNode
+            );
 
-        // @todo move away to custom factory :)
-        if ($lowercasedTag === '@' . TagName::REQUIRED) {
-            $tagValueNode = new RequiredTagValueNode();
-        } else {
-            // class-annotation
-            $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
-            if ($phpDocNodeFactory !== null) {
-                $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
-                    $tag,
-                    $currentPhpNode
-                );
-
-                $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens(
-                    $currentPhpNode,
-                    $tokenIterator,
-                    $fullyQualifiedAnnotationClass
-                );
-            }
+            $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens(
+                $currentPhpNode,
+                $tokenIterator,
+                $fullyQualifiedAnnotationClass
+            );
         }
 
         // fallback to original parser
@@ -209,17 +195,8 @@ final class BetterPhpDocParser extends PhpDocParser
 
     private function parseChildAndStoreItsPositions(TokenIterator $tokenIterator): Node
     {
-        $tokenStart = $this->getTokenIteratorIndex($tokenIterator);
-        $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', [$tokenIterator]);
-
-        $tokenEnd = $this->resolveTokenEnd($tokenIterator);
-
-        $startAndEnd = new StartAndEnd($tokenStart, $tokenEnd);
-
-        $attributeAwareNode = $this->nodeMapper->mapNode($phpDocNode);
-        $attributeAwareNode->setAttribute(Attribute::START_END, $startAndEnd);
-
-        return $attributeAwareNode;
+        $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', $tokenIterator);
+        return $this->nodeMapper->mapNode($phpDocNode);
     }
 
     private function resolveTag(TokenIterator $tokenIterator): string
@@ -281,41 +258,5 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         throw new ShouldNotHappenException();
-    }
-
-    private function getTokenIteratorIndex(TokenIterator $tokenIterator): int
-    {
-        return (int) $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
-    }
-
-    private function resolveTokenEnd(TokenIterator $tokenIterator): int
-    {
-        return $this->getTokenIteratorIndex($tokenIterator);
-    }
-
-    private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
-    {
-        $originalTokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
-        $originalContent = '';
-
-        foreach ($originalTokens as $originalToken) {
-            // skip opening
-            if ($originalToken[1] === Lexer::TOKEN_OPEN_PHPDOC) {
-                continue;
-            }
-
-            // skip closing
-            if ($originalToken[1] === Lexer::TOKEN_CLOSE_PHPDOC) {
-                continue;
-            }
-
-            if ($originalToken[1] === Lexer::TOKEN_PHPDOC_EOL) {
-                $originalToken[0] = PHP_EOL;
-            }
-
-            $originalContent .= $originalToken[0];
-        }
-
-        return trim($originalContent);
     }
 }
