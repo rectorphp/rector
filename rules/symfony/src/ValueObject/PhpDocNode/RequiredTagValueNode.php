@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
+namespace Rector\Symfony\ValueObject\PhpDocNode;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;

@@ -71,7 +71,6 @@
         "psr-4": {
             "Rector\\Testing\\": "packages/testing/src",
             "Rector\\Architecture\\": "rules/architecture/src",
-            "Rector\\AttributeAwarePhpDoc\\": "packages/attribute-aware-php-doc/src",
             "Rector\\Autodiscovery\\": "rules/autodiscovery/src",
             "Rector\\BetterPhpDocParser\\": "packages/better-php-doc-parser/src",
             "Rector\\Caching\\": "packages/caching/src",
