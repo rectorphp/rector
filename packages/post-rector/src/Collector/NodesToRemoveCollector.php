@@ -118,18 +118,25 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
     private function isUsedInArg(Node $node): bool
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($node instanceof Param && $parentNode instanceof ClassMethod) {
-            $paramVariable = $node->var;
-            if ($paramVariable instanceof Variable) {
-                $variables = $this->betterNodeFinder->findInstanceOf($parentNode->stmts, Variable::class);
-                foreach ($variables as $variable) {
-                    if (! $this->betterStandardPrinter->areNodesEqual($variable, $paramVariable)) {
-                        continue;
-                    }
+        if (! $node instanceof Param) {
+            return false;
+        }
 
-                    if ($this->betterNodeFinder->findFirstParentInstanceOf($variable, Arg::class)) {
-                        return true;
-                    }
+        if (! $parentNode instanceof ClassMethod) {
+            return false;
+        }
+
+        $paramVariable = $node->var;
+        if ($paramVariable instanceof Variable) {
+            $variables = $this->betterNodeFinder->findInstanceOf((array) $parentNode->stmts, Variable::class);
+            foreach ($variables as $variable) {
+                if (! $this->betterStandardPrinter->areNodesEqual($variable, $paramVariable)) {
+                    continue;
+                }
+
+                $hasArgParent = $this->betterNodeFinder->findFirstParentInstanceOf($variable, Arg::class);
+                if ($hasArgParent) {
+                    return true;
                 }
             }
         }
