@@ -135,7 +135,17 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
                     return false;
                 }
 
-                return (bool) $this->betterNodeFinder->findFirstParentInstanceOf($variable, Arg::class);
+                $hasArgParent = (bool) $this->betterNodeFinder->findFirstParentInstanceOf($variable, Arg::class);
+                if (! $hasArgParent) {
+                    return false;
+                }
+
+                $methodCall = $this->betterNodeFinder->findFirstParentInstanceOf($variable, MethodCall::class);
+                if ($methodCall === null) {
+                    return true;
+                }
+
+                return $methodCall->name->toString() !== '__construct';
             });
         }
 
