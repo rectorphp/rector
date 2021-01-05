@@ -36,40 +36,11 @@ use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocTagNod
  */
 final class PhpDocInfoPrinter
 {
-//    /**
-//     * @var string
-//     * @see https://regex101.com/r/Ab0Vey/1
-//     */
-//    public const CLOSING_DOCBLOCK_REGEX = '#\*\/(\s+)?$#';
-
-//    /**
-//     * @var string
-//     */
-//    private const NEWLINE_ASTERISK = PHP_EOL . ' * ';
-
-//    /**
-//     * @var string
-//     * @see https://regex101.com/r/mVmOCY/2
-//     */
-//    private const OPENING_DOCBLOCK_REGEX = '#^(/\*\*)#';
-
     /**
      * @var string
      * @see https://regex101.com/r/5fJyws/1
      */
     private const CALLABLE_REGEX = '#callable(\s+)\(#';
-
-    /**
-     * @var string
-     * @see https://regex101.com/r/LLWiPl/1
-     */
-    private const DOCBLOCK_START_REGEX = '#^(\/\/|\/\*\*|\/\*|\#)#';
-
-    /**
-     * @var string
-     * @see https://regex101.com/r/hFwSMz/1
-     */
-    private const SPACE_AFTER_ASTERISK_REGEX = '#([^*])\*[ \t]+$#sm';
 
     /**
      * @var int
@@ -164,7 +135,6 @@ final class PhpDocInfoPrinter
         $this->removedNodePositions = [];
 
         $phpDocString = $this->printPhpDocNode($this->attributeAwarePhpDocNode);
-        $phpDocString = $this->removeExtraSpacesAfterAsterisk($phpDocString);
 
         // hotfix of extra space with callable ()
         return Strings::replace($phpDocString, self::CALLABLE_REGEX, 'callable(');
@@ -188,27 +158,7 @@ final class PhpDocInfoPrinter
             $output .= $this->printNode($phpDocChildNode, null, $key + 1, $nodeCount);
         }
 
-        $output = $this->printEnd($output);
-
-//        // fix missing start
-//        if (! Strings::match($output, self::DOCBLOCK_START_REGEX) && $output) {
-//            $output = '/**' . $output;
-//        }
-//
-//        // fix missing end
-//        if (Strings::match($output, self::OPENING_DOCBLOCK_REGEX) && $output && ! Strings::match(
-//            $output,
-//            self::CLOSING_DOCBLOCK_REGEX
-//        )) {
-//            $output .= ' */';
-//        }
-
-        return $output;
-    }
-
-    private function removeExtraSpacesAfterAsterisk(string $phpDocString): string
-    {
-        return Strings::replace($phpDocString, self::SPACE_AFTER_ASTERISK_REGEX, '$1*');
+        return $this->printEnd($output);
     }
 
     private function printNode(
