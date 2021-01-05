@@ -66,7 +66,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
     {
         /** Node|null $parentNode */
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($this->isUsedInArg($node, $parentNode)) {
+        if ($parentNode !== null && $this->isUsedInArg($node, $parentNode)) {
             return;
         }
 
@@ -118,12 +118,8 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
         unset($this->nodesToRemove[$key]);
     }
 
-    private function isUsedInArg(Node $node, ?Node $parentNode): bool
+    private function isUsedInArg(Node $node, Node $parentNode): bool
     {
-        if ($parentNode === null) {
-            return false;
-        }
-
         if (! $node instanceof Param) {
             return false;
         }
