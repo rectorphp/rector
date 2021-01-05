@@ -594,6 +594,7 @@ parameters:
         - '#File "ClassInCorrectNamespaceRector\.php" should have prefix "Skip" prefix#'
         - '#File "HaveSameStarts\.php" should have prefix "Skip" prefix#'
         - '#File "AbstractSkip\.php" should have prefix "Skip" prefix#'
+<<<<<<< HEAD
 
         # generics nullable bugs
         - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node\|null#'
@@ -607,3 +608,4 @@ parameters:
         - '#Parameter \#2 \$type of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<T of PhpParser\\Node\>\:\:findInstanceOfName\(\) expects class\-string<T of PhpParser\\Node\>, string given#'
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node\|null#'
+        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode&Rector\\PhpdocParserPrinter\\Contract\\AttributeAwareInterface\:\:\$description#'

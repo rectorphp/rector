@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
-use PHPStan\PhpDoc\Tag\ThrowsTag;
 use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ExtendsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
@@ -191,7 +190,7 @@ final class PhpDocInfoPrinter
                 return $this->printPhpDocTagNode($attributeAwareNode, $startAndEnd, $output);
             }
 
-            return $output . self::NEWLINE_ASTERISK . $this->printAttributeWithAsterisk($attributeAwareNode);
+            return $output . (string) $attributeAwareNode;
         }
 
         if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startAndEnd) {
@@ -205,7 +204,7 @@ final class PhpDocInfoPrinter
             );
         }
 
-        return $output . $this->printAttributeWithAsterisk($attributeAwareNode);
+        return $output . (string) $attributeAwareNode;
     }
 
     private function printEnd(string $output): string
@@ -282,13 +281,6 @@ final class PhpDocInfoPrinter
         return $output . $nodeOutput;
     }
 
-    private function printAttributeWithAsterisk(AttributeAwareNodeInterface $attributeAwareNode): string
-    {
-        $content = (string) $attributeAwareNode;
-
-        return $this->explodeAndImplode($content, PHP_EOL, self::NEWLINE_ASTERISK);
-    }
-
     /**
      * @return StartAndEnd[]
      */
@@ -339,7 +331,9 @@ final class PhpDocInfoPrinter
 
     private function hasDescription(AttributeAwarePhpDocTagNode $attributeAwarePhpDocTagNode): bool
     {
-        $isTagValueNodeWithDescription = StaticInstanceOf::isOneOf($attributeAwarePhpDocTagNode->value, [
+        $phpDocTagValueNode = $attributeAwarePhpDocTagNode->value;
+
+        $isTagValueNodeWithDescription = StaticInstanceOf::isOneOf($phpDocTagValueNode, [
             TemplateTagValueNode::class,
             ParamTagValueNode::class,
             DeprecatedTagValueNode::class,
@@ -358,7 +352,7 @@ final class PhpDocInfoPrinter
             return false;
         }
 
-        return (bool) $attributeAwarePhpDocTagNode->value->description;
+        return (bool) $phpDocTagValueNode->description;
     }
 
     private function explodeAndImplode(string $content, string $explodeChar, string $implodeChar): string
