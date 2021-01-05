@@ -127,8 +127,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
                         continue;
                     }
 
-                    $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-                    if ($parentNode instanceof Arg) {
+                    if ($this->betterNodeFinder->findFirstParentInstanceOf($variable, Arg::class)) {
                         return true;
                     }
                 }
