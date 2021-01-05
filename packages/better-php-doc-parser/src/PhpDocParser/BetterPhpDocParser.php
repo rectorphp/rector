@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -17,6 +16,7 @@ use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\TagToPhpDocNodeFactoryMatcher;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
@@ -29,12 +29,6 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
  */
 final class BetterPhpDocParser extends PhpDocParser
 {
-    /**
-     * @var string
-     * @see https://regex101.com/r/HlGzME/1
-     */
-    private const TAG_REGEX = '#@(var|param|return|throws|property|deprecated)#';
-
     /**
      * @var PhpDocNodeFactoryInterface[]
      */
@@ -76,6 +70,11 @@ final class BetterPhpDocParser extends PhpDocParser
     private $nodeMapper;
 
     /**
+     * @var TagToPhpDocNodeFactoryMatcher
+     */
+    private $tagToPhpDocNodeFactoryMatcher;
+
+    /**
      * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
      */
     public function __construct(
@@ -83,6 +82,7 @@ final class BetterPhpDocParser extends PhpDocParser
         ConstExprParser $constExprParser,
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
+        TagToPhpDocNodeFactoryMatcher $tagToPhpDocNodeFactoryMatcher,
         Lexer $lexer,
         AnnotationContentResolver $annotationContentResolver,
         NodeMapper $nodeMapper,
@@ -99,6 +99,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->nodeMapper = $nodeMapper;
 
         $this->setPhpDocNodeFactories($phpDocNodeFactories);
+        $this->tagToPhpDocNodeFactoryMatcher = $tagToPhpDocNodeFactoryMatcher;
     }
 
     public function parseString(string $docBlock): PhpDocNode
@@ -149,7 +150,6 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
-        // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
         $tagValueNode = null;
 
         $currentPhpNode = $this->currentNodeProvider->getNode();
@@ -158,7 +158,7 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         // class-annotation
-        $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
+        $phpDocNodeFactory = $this->tagToPhpDocNodeFactoryMatcher->match($tag);
         if ($phpDocNodeFactory !== null) {
             $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
                 $tag,
@@ -197,51 +197,6 @@ final class BetterPhpDocParser extends PhpDocParser
     {
         $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', $tokenIterator);
         return $this->nodeMapper->mapNode($phpDocNode);
-    }
-
-    private function resolveTag(TokenIterator $tokenIterator): string
-    {
-        $tag = $tokenIterator->currentTokenValue();
-
-        $tokenIterator->next();
-
-        // basic annotation
-        if (Strings::match($tag, self::TAG_REGEX)) {
-            return $tag;
-        }
-
-        // is not e.g "@var "
-        // join tags like "@ORM\Column" etc.
-        if ($tokenIterator->currentTokenType() !== Lexer::TOKEN_IDENTIFIER) {
-            return $tag;
-        }
-        $oldTag = $tag;
-
-        $tag .= $tokenIterator->currentTokenValue();
-
-        $isTagMatchedByFactories = (bool) $this->matchTagToPhpDocNodeFactory($tag);
-        if (! $isTagMatchedByFactories) {
-            return $oldTag;
-        }
-
-        $tokenIterator->next();
-
-        return $tag;
-    }
-
-    private function matchTagToPhpDocNodeFactory(string $tag): ?PhpDocNodeFactoryInterface
-    {
-        $currentPhpNode = $this->currentNodeProvider->getNode();
-        if ($currentPhpNode === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
-            $tag,
-            $currentPhpNode
-        );
-
-        return $this->phpDocNodeFactories[$fullyQualifiedAnnotationClass] ?? null;
     }
 
     /**
