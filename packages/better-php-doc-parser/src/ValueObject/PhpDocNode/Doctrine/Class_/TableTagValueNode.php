@@ -6,7 +6,6 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
-use Rector\Core\Exception\ShouldNotHappenException;
 
 /**
  * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_\TablePhpDocNodeFactory
@@ -33,8 +32,7 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         ?string $schema,
         array $indexes,
         array $uniqueConstraints,
-        array $options,
-        ?string $originalContent = null
+        array $options
     ) {
         $this->items['name'] = $name;
         $this->items['schema'] = $schema;
@@ -42,8 +40,6 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
 
         $this->indexes = $indexes;
         $this->uniqueConstraints = $uniqueConstraints;
-
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string
@@ -75,29 +71,11 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
     private function addCustomItems(array $items): array
     {
         if ($this->indexes !== []) {
-            if ($this->indexesAroundSpaces === null) {
-                throw new ShouldNotHappenException();
-            }
-
-            $items['indexes'] = $this->printNestedTag(
-                $this->indexes,
-                $this->haveIndexesFinalComma,
-                $this->indexesAroundSpaces->getOpeningSpace(),
-                $this->indexesAroundSpaces->getClosingSpace()
-            );
+            $items['indexes'] = $this->printNestedTag($this->indexes);
         }
 
         if ($this->uniqueConstraints !== []) {
-            if ($this->uniqueConstraintsAroundSpaces === null) {
-                throw new ShouldNotHappenException();
-            }
-
-            $items['uniqueConstraints'] = $this->printNestedTag(
-                $this->uniqueConstraints,
-                $this->haveUniqueConstraintsFinalComma,
-                $this->uniqueConstraintsAroundSpaces->getOpeningSpace(),
-                $this->uniqueConstraintsAroundSpaces->getClosingSpace()
-            );
+            $items['uniqueConstraints'] = $this->printNestedTag($this->uniqueConstraints);
         }
 
         return $items;

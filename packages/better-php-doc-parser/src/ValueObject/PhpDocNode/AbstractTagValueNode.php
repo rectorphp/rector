@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode;
 
-use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
@@ -13,8 +12,6 @@ use Rector\BetterPhpDocParser\PartPhpDocTagPrinter\Behavior\ArrayPartPhpDocTagPr
 use Rector\BetterPhpDocParser\PhpDocNode\PrintTagValueNodeTrait;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
-use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
-use Rector\Core\Exception\ShouldNotHappenException;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
@@ -38,7 +35,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     public function __construct(array $items, ?string $originalContent = null)
     {
         $this->items = $items;
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     /**
@@ -140,59 +136,11 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     /**
      * @param PhpDocTagValueNode[] $tagValueNodes
      */
-    protected function printNestedTag(
-        array $tagValueNodes,
-        bool $haveFinalComma,
-        ?string $openingSpace,
-        ?string $closingSpace
-    ): string {
+    protected function printNestedTag(array $tagValueNodes, bool $haveFinalComma): string
+    {
         $tagValueNodesAsString = $this->printTagValueNodesSeparatedByComma($tagValueNodes);
 
-        if ($openingSpace === null) {
-            $openingSpace = PHP_EOL . '    ';
-        }
-
-        if ($closingSpace === null) {
-            $closingSpace = PHP_EOL;
-        }
-
-        return sprintf(
-            '{%s%s%s%s}',
-            $openingSpace,
-            $tagValueNodesAsString,
-            $haveFinalComma ? ',' : '',
-            $closingSpace
-        );
-    }
-
-    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
-    {
-        $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory();
-
-        // prevent override
-        if ($this->tagValueNodeConfiguration !== null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->tagValueNodeConfiguration = $tagValueNodeConfigurationFactory->createFromOriginalContent(
-            $originalContent,
-            $this
-        );
-    }
-
-    private function shouldPrintEmptyBrackets(): bool
-    {
-        // @todo decouple
-        if ($this->tagValueNodeConfiguration->getOriginalContent() !== null && Strings::endsWith(
-            $this->tagValueNodeConfiguration->getOriginalContent(),
-            '()'
-        )) {
-            return true;
-        }
-        if (! $this->tagValueNodeConfiguration->hasOpeningBracket()) {
-            return false;
-        }
-        return $this->tagValueNodeConfiguration->hasClosingBracket();
+        return sprintf('{%s%s%s%s}', $tagValueNodesAsString, $haveFinalComma ? ',' : '', );
     }
 
     /**

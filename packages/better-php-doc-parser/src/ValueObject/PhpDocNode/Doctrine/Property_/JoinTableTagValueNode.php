@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_;
 
-use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpAttribute\Contract\ManyPhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
@@ -38,16 +36,6 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     private $inverseJoinColumns = [];
 
     /**
-     * @var AroundSpaces|null
-     */
-    private $inverseJoinColumnsAroundSpaces;
-
-    /**
-     * @var AroundSpaces|null
-     */
-    private $joinColumnsAroundSpaces;
-
-    /**
      * @var string|null
      */
     private $schema;
@@ -60,18 +48,12 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         string $name,
         ?string $schema = null,
         array $joinColumns = [],
-        array $inverseJoinColumns = [],
-        ?string $originalContent = null,
-        ?AroundSpaces $joinColumnsAroundSpaces = null,
-        ?AroundSpaces $inverseJoinColumnsAroundSpaces = null
+        array $inverseJoinColumns = []
     ) {
         $this->name = $name;
         $this->schema = $schema;
         $this->joinColumns = $joinColumns;
         $this->inverseJoinColumns = $inverseJoinColumns;
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
-        $this->inverseJoinColumnsAroundSpaces = $inverseJoinColumnsAroundSpaces;
-        $this->joinColumnsAroundSpaces = $joinColumnsAroundSpaces;
     }
 
     public function __toString(): string
@@ -151,29 +133,11 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         $items = [];
 
         if ($this->joinColumns !== []) {
-            if ($this->joinColumnsAroundSpaces === null) {
-                throw new ShouldNotHappenException();
-            }
-
-            $items[$joinColumnsKey] = $this->printNestedTag(
-                $this->joinColumns,
-                false,
-                $this->joinColumnsAroundSpaces->getOpeningSpace(),
-                $this->joinColumnsAroundSpaces->getClosingSpace()
-            );
+            $items[$joinColumnsKey] = $this->printNestedTag($this->joinColumns, false);
         }
 
         if ($this->inverseJoinColumns !== []) {
-            if ($this->inverseJoinColumnsAroundSpaces === null) {
-                throw new ShouldNotHappenException();
-            }
-
-            $items[$inverseJoinColumnsKey] = $this->printNestedTag(
-                $this->inverseJoinColumns,
-                false,
-                $this->inverseJoinColumnsAroundSpaces->getOpeningSpace(),
-                $this->inverseJoinColumnsAroundSpaces->getClosingSpace()
-            );
+            $items[$inverseJoinColumnsKey] = $this->printNestedTag($this->inverseJoinColumns, false);
         }
 
         return $items;
