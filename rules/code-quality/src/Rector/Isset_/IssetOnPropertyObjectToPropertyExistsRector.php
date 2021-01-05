@@ -91,6 +91,10 @@ CODE_SAMPLE
             /** @var ThisType|ObjectType $type */
             $type = $this->getType($object);
 
+            if ($type === null) {
+                continue;
+            }
+
             if ($type instanceof ThisType) {
                 $newNodes[] = new NotIdentical($issetVar, $this->createNull());
                 continue;
