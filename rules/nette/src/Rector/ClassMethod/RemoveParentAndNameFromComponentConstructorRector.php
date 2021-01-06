@@ -6,10 +6,10 @@ namespace Rector\Nette\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Param;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -17,7 +17,6 @@ use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://github.com/nette/component-model/commit/1fb769f4602cf82694941530bac1111b3c5cd11b
@@ -247,8 +246,10 @@ CODE_SAMPLE
 
     private function isUsedMultipleTimes(ClassMethod $classMethod, Param $param): bool
     {
-        $variable      = $param->var;
-        $countVariable = count($this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use ($variable): bool {
+        $variable = $param->var;
+        $countVariable = count($this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
+            $variable
+        ): bool {
             return $this->areNodesEqual($node, $variable);
         }));
 
