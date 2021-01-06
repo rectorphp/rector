@@ -93,7 +93,7 @@ final class PhpDocInfoFactory
         } else {
             $content = $docComment->getText();
             $tokens = $this->lexer->tokenize($content);
-            $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
+            $phpDocNode = $this->parseTokensToPhpDocNode($content);
         }
 
         return $this->createFromPhpDocNode($phpDocNode, $content, $tokens, $node);
@@ -113,10 +113,9 @@ final class PhpDocInfoFactory
      * @param mixed[][] $tokens
      * @return AttributeAwareInterface&PhpDocNode
      */
-    private function parseTokensToPhpDocNode(array $tokens)
+    private function parseTokensToPhpDocNode(string $docContent)
     {
-        $tokenIterator = new SmartTokenIterator($tokens);
-        return $this->tokenAwarePhpDocParser->parseSmartTokenIterator($tokenIterator);
+        return $this->tokenAwarePhpDocParser->parseDocBlock($docContent);
     }
 
     /**
