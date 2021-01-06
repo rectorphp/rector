@@ -141,14 +141,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->hasClassMethodChanged($classMethod)) {
-            return null;
-        }
-
-        return $classMethod;
+        return $this->removeClassMethodParams($classMethod);
     }
 
-    private function hasClassMethodChanged(ClassMethod $classMethod): bool
+    private function removeClassMethodParams(ClassMethod $classMethod): ?ClassMethod
     {
         $hasClassMethodChanged = false;
         foreach ($classMethod->params as $param) {
@@ -170,7 +166,11 @@ CODE_SAMPLE
             }
         }
 
-        return $hasClassMethodChanged;
+        if (! $hasClassMethodChanged) {
+            return null;
+        }
+
+        return $classMethod;
     }
 
     private function refactorStaticCall(StaticCall $staticCall): ?StaticCall
