@@ -5,7 +5,7 @@ namespace Rector\Nette\Tests\Rector\ClassMethod\RemoveParentAndNameFromComponent
 use Nette\Application\UI\Control;
 use Nette\ComponentModel\IContainer;
 
-class FutureUseNameControl extends Control
+class FutureUseName extends Control
 {
     private $name;
 
@@ -28,7 +28,7 @@ namespace Rector\Nette\Tests\Rector\ClassMethod\RemoveParentAndNameFromComponent
 use Nette\Application\UI\Control;
 use Nette\ComponentModel\IContainer;
 
-class FutureUseNameControl extends Control
+class FutureUseName extends Control
 {
     private $name;
 
