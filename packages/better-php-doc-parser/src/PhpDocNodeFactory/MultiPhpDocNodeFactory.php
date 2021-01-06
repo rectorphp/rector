@@ -92,6 +92,9 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
 
     public function isMatch(string $tag): bool
     {
+        dump($tag);
+        die;
+
         return isset(self::ANNOTATION_TO_NODE[$tag]);
     }
 
