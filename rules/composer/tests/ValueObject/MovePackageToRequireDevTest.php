@@ -15,6 +15,7 @@ final class MovePackageToRequireDevTest extends TestCase
                 'vendor1/package2' => '^2.0',
             ],
         ];
+
         $changedComposerData = [
             'require' => [
                 'vendor1/package1' => '^1.0',
@@ -22,8 +23,8 @@ final class MovePackageToRequireDevTest extends TestCase
             ],
         ];
 
-        $movePackage = new MovePackageToRequireDev('vendor1/package3');
-        $this->assertEquals($changedComposerData, $movePackage->modify($composerData));
+        $movePackageToRequireDev = new MovePackageToRequireDev('vendor1/package3');
+        $this->assertEquals($changedComposerData, $movePackageToRequireDev->modify($composerData));
     }
 
     public function testMoveExistingPackage(): void
@@ -44,8 +45,8 @@ final class MovePackageToRequireDevTest extends TestCase
             ],
         ];
 
-        $movePackage = new MovePackageToRequireDev('vendor1/package1');
-        $this->assertEquals($changedComposerData, $movePackage->modify($composerData));
+        $movePackageToRequireDev = new MovePackageToRequireDev('vendor1/package1');
+        $this->assertEquals($changedComposerData, $movePackageToRequireDev->modify($composerData));
     }
 
     public function testMoveExistingDevPackage(): void
@@ -68,7 +69,7 @@ final class MovePackageToRequireDevTest extends TestCase
             ],
         ];
 
-        $movePackage = new MovePackageToRequireDev('vendor1/package2');
-        $this->assertEquals($changedComposerData, $movePackage->modify($composerData));
+        $movePackageToRequireDev = new MovePackageToRequireDev('vendor1/package2');
+        $this->assertEquals($changedComposerData, $movePackageToRequireDev->modify($composerData));
     }
 }

@@ -9,7 +9,7 @@ use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 
 /**
  * Moves package to require-dev section, if package is not in composer data, nothing happen, also if package is already in require-dev section
- * @see \Rector\Composer\Tests\ValueObject\MovePackageTest
+ * @see \Rector\Composer\Tests\ValueObject\MovePackageToRequireDevTest
  */
 final class MovePackageToRequireDev implements ComposerModifierInterface
 {
