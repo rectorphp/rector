@@ -72,20 +72,12 @@ final class PhpDocInfoPrinter
     private $phpDocInfo;
 
     /**
-     * @var SpacePatternFactory
-     */
-    private $spacePatternFactory;
-
-    /**
      * @var EmptyPhpDocDetector
      */
     private $emptyPhpDocDetector;
 
-    public function __construct(
-        EmptyPhpDocDetector $emptyPhpDocDetector,
-        SpacePatternFactory $spacePatternFactory
-    ) {
-        $this->spacePatternFactory = $spacePatternFactory;
+    public function __construct(EmptyPhpDocDetector $emptyPhpDocDetector)
+    {
         $this->emptyPhpDocDetector = $emptyPhpDocDetector;
     }
 
