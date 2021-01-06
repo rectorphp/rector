@@ -26,6 +26,9 @@ jobs:
                             # Coveralls.io
                             composer require --dev php-coveralls/php-coveralls:^2.4
                             vendor/bin/php-coveralls --coverage_clover=clover.xml -v
+                            
+                            # clean up
+                            git checkout .
                         env:
                             COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                         branch: 'master'
