@@ -5,11 +5,18 @@ declare(strict_types=1);
 namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
@@ -32,20 +39,39 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
      */
     private $nodesToRemove = [];
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
     public function __construct(
         AffectedFilesCollector $affectedFilesCollector,
-        BreakingRemovalGuard $breakingRemovalGuard
+        BreakingRemovalGuard $breakingRemovalGuard,
+        BetterNodeFinder $betterNodeFinder,
+        BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->affectedFilesCollector = $affectedFilesCollector;
         $this->breakingRemovalGuard = $breakingRemovalGuard;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function addNodeToRemove(Node $node): void
     {
+        /** Node|null $parentNode */
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode !== null && $this->isUsedInArg($node, $parentNode)) {
+            return;
+        }
+
         // chain call: "->method()->another()"
         $this->ensureIsNotPartOfChainMethodCall($node);
 
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $node instanceof Expression && $parentNode instanceof Expression) {
             // only expressions can be removed
             $node = $parentNode;
@@ -89,6 +115,37 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
     public function unset(int $key): void
     {
         unset($this->nodesToRemove[$key]);
+    }
+
+    private function isUsedInArg(Node $node, Node $parentNode): bool
+    {
+        if (! $node instanceof Param) {
+            return false;
+        }
+
+        if (! $parentNode instanceof ClassMethod) {
+            return false;
+        }
+
+        $paramVariable = $node->var;
+        if ($paramVariable instanceof Variable) {
+            return (bool) $this->betterNodeFinder->findFirst((array) $parentNode->stmts, function (Node $variable) use (
+                $paramVariable
+            ): bool {
+                if (! $this->betterStandardPrinter->areNodesEqual($variable, $paramVariable)) {
+                    return false;
+                }
+
+                $hasArgParent = (bool) $this->betterNodeFinder->findFirstParentInstanceOf($variable, Arg::class);
+                if (! $hasArgParent) {
+                    return false;
+                }
+
+                return ! (bool) $this->betterNodeFinder->findFirstParentInstanceOf($variable, [StaticCall::class]);
+            });
+        }
+
+        return false;
     }
 
     private function ensureIsNotPartOfChainMethodCall(Node $node): void
