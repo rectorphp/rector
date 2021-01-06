@@ -4,32 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Printer;
 
-use Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ExtendsTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ImplementsTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\MixinTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\UsesTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Util\StaticInstanceOf;
-use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Printer\PhpDocPrinter;
 use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocNode;
-use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocTagNode;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
 /**
@@ -77,6 +55,7 @@ final class PhpDocInfoPrinter
      * @var EmptyPhpDocDetector
      */
     private $emptyPhpDocDetector;
+
     /**
      * @var PhpDocPrinter
      */

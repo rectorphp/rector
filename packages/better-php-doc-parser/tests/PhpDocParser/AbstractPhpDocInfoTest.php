@@ -102,7 +102,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     private function printNodePhpDocInfoToString(Node $node): string
     {
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ( ! $phpDocInfo instanceof PhpDocInfo) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             throw new ShouldNotHappenException();
         }
 
@@ -119,6 +119,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType), $fileInfo->getRelativeFilePathFromCwd());
+        $isTagFound = $phpDocInfo->hasByType($tagValueNodeType);
+        $this->assertTrue($isTagFound, $fileInfo->getRelativeFilePathFromCwd());
     }
 }

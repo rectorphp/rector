@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Attributes\Attribute;
 
-use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
-
 final class Attribute
 {
     /**
