@@ -4,7 +4,7 @@ namespace Rector\Composer\Tests\Modifier;
 
 use Nette\Utils\Json;
 use Rector\Composer\ValueObject\AddPackage;
-use Rector\Composer\ValueObject\ChangePackage;
+use Rector\Composer\ValueObject\ReplacePackage;
 use Rector\Composer\ValueObject\ChangePackageVersion;
 use Rector\Composer\ValueObject\MovePackageToRequireDev;
 use Rector\Composer\ValueObject\RemovePackage;
@@ -126,7 +126,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new MovePackageToRequireDev('vendor1/package1'),
-            new ChangePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
+            new ReplacePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 
@@ -158,7 +158,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             new MovePackageToRequireDev('vendor1/package1'),
         ]);
         $composerModifier->configure([
-            new ChangePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
+            new ReplacePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
         ]);
         $composerModifier->configure([
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
@@ -192,7 +192,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             new MovePackageToRequireDev('vendor1/package1'),
         ]);
         $composerModifier->reconfigure([
-            new ChangePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
+            new ReplacePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
         ]);
         $composerModifier->configure([
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
@@ -222,7 +222,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new MovePackageToRequireDev('vendor1/package1'),
-            new ChangePackage('vendor1/package2', 'vendor1/package0', '^3.0'),
+            new ReplacePackage('vendor1/package2', 'vendor1/package0', '^3.0'),
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 

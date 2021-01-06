@@ -8,10 +8,10 @@ use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 
 /**
- * Changes one package for another
- * @see \Rector\Composer\Tests\ValueObject\ChangePackageTest
+ * Replace one package for another
+ * @see \Rector\Composer\Tests\ValueObject\ReplacePackageTest
  */
-final class ChangePackage implements ComposerModifierInterface
+final class ReplacePackage implements ComposerModifierInterface
 {
     /** @var string */
     private $oldPackageName;
