@@ -5,8 +5,16 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_;
 
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
+/**
+ * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Property_\DoctrineEmbeddedPhpDocNodeFactory
+ */
 final class EmbeddedTagValueNode extends AbstractDoctrineTagValueNode
 {
+    /**
+     * @var string
+     */
+    public const TAG_NAME = 'Doctrine\ORM\Mapping\Embedded';
+
     /**
      * @var string
      */

@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
-use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;

@@ -5,34 +5,26 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Property_;
 
 use Doctrine\ORM\Mapping\Embedded;
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddedTagValueNode;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
+use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
-final class DoctrineEmbeddedPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements GenericPhpDocNodeFactoryInterface
+final class DoctrineEmbeddedPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
-    /**
-     * @return array<string, string>
-     */
-    public function getTagValueNodeClassesToAnnotationClasses(): array
+    public function isMatch(string $tag): bool
     {
-        return [
-            EmbeddedTagValueNode::class => 'Doctrine\ORM\Mapping\Embedded',
-        ];
+        return $tag === EmbeddedTagValueNode::TAG_NAME;
     }
 
     /**
      * @return (PhpDocTagValueNode&AttributeAwareInterface)|null
      */
-    public function create(
-        Node $node,
-        TokenIterator $tokenIterator,
-        string $annotationClass
-    ): ?AttributeAwareInterface {
+    public function create(SmartTokenIterator $tokenIterator, string $annotationClass): ?AttributeAwareInterface
+    {
+        $node = $this->currentNodeProvider->getNode();
+
         /** @var Embedded|null $annotation */
         $annotation = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
         if ($annotation === null) {

@@ -40,14 +40,14 @@ abstract class AbstractPhpDocNodeFactory
     protected $annotationItemsResolver;
 
     /**
-     * @var ObjectTypeSpecifier
-     */
-    private $objectTypeSpecifier;
-
-    /**
      * @var CurrentNodeProvider
      */
     protected $currentNodeProvider;
+
+    /**
+     * @var ObjectTypeSpecifier
+     */
+    private $objectTypeSpecifier;
 
     /**
      * @required
