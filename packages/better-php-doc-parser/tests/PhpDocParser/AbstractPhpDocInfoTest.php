@@ -106,9 +106,6 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
             throw new ShouldNotHappenException();
         }
 
-        dump($phpDocInfo->getPhpDocNode()->children);
-        die;
-
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
     }
 

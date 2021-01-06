@@ -14,12 +14,6 @@ final class Attribute
     public const HAS_DESCRIPTION_WITH_ORIGINAL_SPACES = 'has_description_with_restored_spaces';
 
     /**
-     * @experiment
-     * @var string
-     */
-    public const START_END = StartAndEnd::class;
-
-    /**
      * @var string
      */
     public const LAST_TOKEN_POSITION = 'last_token_position';

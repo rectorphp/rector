@@ -7,15 +7,12 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
-use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\Parser\TokenAwarePhpDocParser;
 use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocNode;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -23,9 +20,9 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpDocInfoFactory
 {
     /**
-     * @var PhpDocParser
+     * @var TokenAwarePhpDocParser
      */
-    private $betterPhpDocParser;
+    private $tokenAwarePhpDocParser;
 
     /**
      * @var Lexer
@@ -55,12 +52,12 @@ final class PhpDocInfoFactory
     public function __construct(
         CurrentNodeProvider $currentNodeProvider,
         Lexer $lexer,
-        BetterPhpDocParser $betterPhpDocParser,
+        TokenAwarePhpDocParser $tokenAwarePhpDocParser,
         PhpDocRemover $phpDocRemover,
         PhpDocTypeChanger $phpDocTypeChanger,
         StaticTypeMapper $staticTypeMapper
     ) {
-        $this->betterPhpDocParser = $betterPhpDocParser;
+        $this->tokenAwarePhpDocParser = $tokenAwarePhpDocParser;
         $this->lexer = $lexer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -97,7 +94,6 @@ final class PhpDocInfoFactory
             $content = $docComment->getText();
             $tokens = $this->lexer->tokenize($content);
             $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
-            $this->setPositionOfLastToken($phpDocNode);
         }
 
         return $this->createFromPhpDocNode($phpDocNode, $content, $tokens, $node);
@@ -120,28 +116,7 @@ final class PhpDocInfoFactory
     private function parseTokensToPhpDocNode(array $tokens)
     {
         $tokenIterator = new SmartTokenIterator($tokens);
-        return $this->betterPhpDocParser->parse($tokenIterator);
-    }
-
-    /**
-     * Needed for printing
-     */
-    private function setPositionOfLastToken(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): void
-    {
-        if ($attributeAwarePhpDocNode->children === []) {
-            return;
-        }
-
-        $phpDocChildNodes = $attributeAwarePhpDocNode->children;
-        /** @var AttributeAwareInterface $lastChildNode */
-        $lastChildNode = array_pop($phpDocChildNodes);
-
-        /** @var StartAndEnd $startAndEnd */
-        $startAndEnd = $lastChildNode->getAttribute(Attribute::START_END);
-
-        if ($startAndEnd !== null) {
-            $attributeAwarePhpDocNode->setAttribute(Attribute::LAST_TOKEN_POSITION, $startAndEnd->getEnd());
-        }
+        return $this->tokenAwarePhpDocParser->parseSmartTokenIterator($tokenIterator);
     }
 
     /**
