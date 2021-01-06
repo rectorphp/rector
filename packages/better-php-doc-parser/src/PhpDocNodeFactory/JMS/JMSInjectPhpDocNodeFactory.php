@@ -6,14 +6,14 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\JMS;
 
 use JMS\DiExtraBundle\Annotation\Inject;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
-final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
+final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
     /**
      * @var string
@@ -28,14 +28,6 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getClasses(): array
-    {
-        return [self::TAG_NAME];
     }
 
     /**
@@ -62,5 +54,6 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
 
     public function isMatch(string $tag): bool
     {
+        return $tag === self::TAG_NAME;
     }
 }

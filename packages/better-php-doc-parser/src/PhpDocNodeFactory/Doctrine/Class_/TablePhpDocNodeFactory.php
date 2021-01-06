@@ -6,14 +6,14 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_;
 
 use Doctrine\ORM\Mapping\Table;
 use PhpParser\Node\Stmt\Class_;
-use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
-final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
+final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
     /**
      * @var string
@@ -41,14 +41,6 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
     public function isMatch(string $tag): bool
     {
         return $tag === self::TAG_NAME;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getClasses(): array
-    {
-        return [self::TAG_NAME];
     }
 
     public function create(SmartTokenIterator $smartTokenIterator, string $currentTag): ?AttributeAwareInterface

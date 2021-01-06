@@ -43,7 +43,7 @@ final class IndexPhpDocNodeFactory
         foreach ($indexes as $key => $index) {
             $currentContent = $indexContents[$key];
             $items = $this->annotationItemsResolver->resolve($index);
-            $indexTagValueNodes[] = new IndexTagValueNode($items, $currentContent['content'], $currentContent['tag']);
+            $indexTagValueNodes[] = new IndexTagValueNode($items, $currentContent['tag']);
         }
 
         return $indexTagValueNodes;

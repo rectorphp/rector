@@ -44,11 +44,7 @@ final class UniqueConstraintPhpDocNodeFactory
             $subAnnotationContent = $uniqueConstraintContents[$key];
 
             $items = $this->annotationItemsResolver->resolve($uniqueConstraint);
-            $uniqueConstraintTagValueNodes[] = new UniqueConstraintTagValueNode(
-                $items,
-                $subAnnotationContent['content'],
-                $subAnnotationContent['tag']
-            );
+            $uniqueConstraintTagValueNodes[] = new UniqueConstraintTagValueNode($items, $subAnnotationContent['tag']);
         }
 
         return $uniqueConstraintTagValueNodes;

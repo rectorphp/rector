@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddableTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
@@ -39,76 +38,74 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constrain
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertEmailTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertRangeTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
-use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
-final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements GenericPhpDocNodeFactoryInterface
+final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
     /**
      * @return array<string, string>
      */
-    public function getTagValueNodeClassesToAnnotationClasses(): array
-    {
-        return [
-            // tag value node class => annotation class
-
-            // doctrine - intentionally in string, so prefixer of rector.phar doesn't prefix it
-            EmbeddableTagValueNode::class => 'Doctrine\ORM\Mapping\Embeddable',
-            EntityTagValueNode::class => 'Doctrine\ORM\Mapping\Entity',
-            InheritanceTypeTagValueNode::class => 'Doctrine\ORM\Mapping\InheritanceType',
-            ColumnTagValueNode::class => 'Doctrine\ORM\Mapping\Column',
-            CustomIdGeneratorTagValueNode::class => 'Doctrine\ORM\Mapping\CustomIdGenerator',
-            IdTagValueNode::class => 'Doctrine\ORM\Mapping\Id',
-            GeneratedValueTagValueNode::class => 'Doctrine\ORM\Mapping\GeneratedValue',
-            JoinColumnTagValueNode::class => 'Doctrine\ORM\Mapping\JoinColumn',
-            // symfony/http-kernel
-            SymfonyRouteTagValueNode::class => 'Symfony\Component\Routing\Annotation\Route',
-            // symfony/validator
-            AssertRangeTagValueNode::class => 'Symfony\Component\Validator\Constraints\Range',
-            AssertTypeTagValueNode::class => 'Symfony\Component\Validator\Constraints\Type',
-            AssertChoiceTagValueNode::class => 'Symfony\Component\Validator\Constraints\Choice',
-            AssertEmailTagValueNode::class => 'Symfony\Component\Validator\Constraints\Email',
-            // gedmo
-            LocaleTagValueNode::class => 'Gedmo\Mapping\Annotation\Locale',
-            BlameableTagValueNode::class => 'Gedmo\Mapping\Annotation\Blameable',
-            SlugTagValueNode::class => 'Gedmo\Mapping\Annotation\Slug',
-            SoftDeleteableTagValueNode::class => 'Gedmo\Mapping\Annotation\SoftDeleteable',
-            TreeRootTagValueNode::class => 'Gedmo\Mapping\Annotation\TreeRoot',
-            TreeLeftTagValueNode::class => 'Gedmo\Mapping\Annotation\TreeLeft',
-            TreeLevelTagValueNode::class => 'Gedmo\Mapping\Annotation\TreeLevel',
-            TreeParentTagValueNode::class => 'Gedmo\Mapping\Annotation\TreeParent',
-            TreeRightTagValueNode::class => 'Gedmo\Mapping\Annotation\TreeRight',
-            VersionedTagValueNode::class => 'Gedmo\Mapping\Annotation\Versioned',
-            TranslatableTagValueNode::class => 'Gedmo\Mapping\Annotation\Translatable',
-            LoggableTagValueNode::class => 'Gedmo\Mapping\Annotation\Loggable',
-            TreeTagValueNode::class => 'Gedmo\Mapping\Annotation\Tree',
-            // Sensio
-            SensioTemplateTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template',
-            SensioMethodTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method',
-            SensioRouteTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route',
-            // JMS
-            JMSInjectParamsTagValueNode::class => 'JMS\DiExtraBundle\Annotation\InjectParams',
-            JMSServiceValueNode::class => 'JMS\DiExtraBundle\Annotation\Service',
-            SerializerTypeTagValueNode::class => 'JMS\Serializer\Annotation\Type',
-            PHPDIInjectTagValueNode::class => 'DI\Annotation\Inject',
-        ];
-    }
+    private const ANNOTATION_TO_NODE = [
+        // doctrine - intentionally in string, so prefixer of rector.phar doesn't prefix it
+        'Doctrine\ORM\Mapping\Embeddable' => EmbeddableTagValueNode::class,
+        'Doctrine\ORM\Mapping\Entity' => EntityTagValueNode::class,
+        'Doctrine\ORM\Mapping\InheritanceType' => InheritanceTypeTagValueNode::class,
+        'Doctrine\ORM\Mapping\Column' => ColumnTagValueNode::class,
+        'Doctrine\ORM\Mapping\CustomIdGenerator' => CustomIdGeneratorTagValueNode::class,
+        'Doctrine\ORM\Mapping\Id' => IdTagValueNode::class,
+        'Doctrine\ORM\Mapping\GeneratedValue' => GeneratedValueTagValueNode::class,
+        'Doctrine\ORM\Mapping\JoinColumn' => JoinColumnTagValueNode::class,
+        // symfony/http-kernel
+        'Symfony\Component\Routing\Annotation\Route' => SymfonyRouteTagValueNode::class,
+        // symfony/validator
+        'Symfony\Component\Validator\Constraints\Range' => AssertRangeTagValueNode::class,
+        'Symfony\Component\Validator\Constraints\Type' => AssertTypeTagValueNode::class,
+        'Symfony\Component\Validator\Constraints\Choice' => AssertChoiceTagValueNode::class,
+        'Symfony\Component\Validator\Constraints\Email' => AssertEmailTagValueNode::class,
+        // gedmo
+        'Gedmo\Mapping\Annotation\Locale' => LocaleTagValueNode::class,
+        'Gedmo\Mapping\Annotation\Blameable' => BlameableTagValueNode::class,
+        'Gedmo\Mapping\Annotation\Slug' => SlugTagValueNode::class,
+        'Gedmo\Mapping\Annotation\SoftDeleteable' => SoftDeleteableTagValueNode::class,
+        'Gedmo\Mapping\Annotation\TreeRoot' => TreeRootTagValueNode::class,
+        'Gedmo\Mapping\Annotation\TreeLeft' => TreeLeftTagValueNode::class,
+        'Gedmo\Mapping\Annotation\TreeLevel' => TreeLevelTagValueNode::class,
+        'Gedmo\Mapping\Annotation\TreeParent' => TreeParentTagValueNode::class,
+        'Gedmo\Mapping\Annotation\TreeRight' => TreeRightTagValueNode::class,
+        'Gedmo\Mapping\Annotation\Versioned' => VersionedTagValueNode::class,
+        'Gedmo\Mapping\Annotation\Translatable' => TranslatableTagValueNode::class,
+        'Gedmo\Mapping\Annotation\Loggable' => LoggableTagValueNode::class,
+        'Gedmo\Mapping\Annotation\Tree' => TreeTagValueNode::class,
+        // Sensio
+        'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template' => SensioTemplateTagValueNode::class,
+        'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method' => SensioMethodTagValueNode::class,
+        'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route' => SensioRouteTagValueNode::class,
+        // JMS
+        'JMS\DiExtraBundle\Annotation\InjectParams' => JMSInjectParamsTagValueNode::class,
+        'JMS\DiExtraBundle\Annotation\Service' => JMSServiceValueNode::class,
+        'JMS\Serializer\Annotation\Type' => SerializerTypeTagValueNode::class,
+        'DI\Annotation\Inject' => PHPDIInjectTagValueNode::class,
+    ];
 
     public function isMatch(string $tag): bool
     {
-        throw new NotImplementedYetException();
+        return isset(self::ANNOTATION_TO_NODE[$tag]);
     }
 
     /**
-     * @return PhpDocTagValueNode&AttributeAwareInterface|null
+     * @return (PhpDocTagValueNode&AttributeAwareInterface)|null
      */
     public function create(SmartTokenIterator $smartTokenIterator, string $resolvedTag): ?AttributeAwareInterface
     {
         $currentNode = $this->currentNodeProvider->getNode();
+        if ($currentNode === null) {
+            throw new ShouldNotHappenException();
+        }
 
-        $tagValueNodeClassesToAnnotationClasses = $this->getTagValueNodeClassesToAnnotationClasses();
-        $tagValueNodeClass = array_search($resolvedTag, $tagValueNodeClassesToAnnotationClasses, true);
+        $tagValueNodeClass = self::ANNOTATION_TO_NODE[$resolvedTag];
 
         $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $resolvedTag);
         if ($annotation === null) {
@@ -116,8 +113,7 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
         }
 
         $items = $this->annotationItemsResolver->resolve($annotation);
-        $content = $this->annotationContentResolver->resolveFromTokenIterator($smartTokenIterator);
 
-        return new $tagValueNodeClass($items, $content);
+        return new $tagValueNodeClass($items);
     }
 }

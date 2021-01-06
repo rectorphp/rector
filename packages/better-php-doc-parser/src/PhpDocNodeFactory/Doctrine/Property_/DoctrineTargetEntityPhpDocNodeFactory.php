@@ -9,39 +9,37 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ManyToManyTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ManyToOneTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToOneTagValueNode;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
-/**
- * @todo split to respect one pattern
- */
-final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements GenericPhpDocNodeFactoryInterface
+final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    public function getTagValueNodeClassesToAnnotationClasses(): array
-    {
-        return [
-            OneToOneTagValueNode::class => 'Doctrine\ORM\Mapping\OneToOne',
-            OneToManyTagValueNode::class => 'Doctrine\ORM\Mapping\OneToMany',
-            ManyToManyTagValueNode::class => 'Doctrine\ORM\Mapping\ManyToMany',
-            ManyToOneTagValueNode::class => 'Doctrine\ORM\Mapping\ManyToOne',
-        ];
-    }
+    private const ANNOTATION_TO_NODE = [
+        'Doctrine\ORM\Mapping\OneToOne' => OneToOneTagValueNode::class,
+        'Doctrine\ORM\Mapping\OneToMany' => OneToManyTagValueNode::class,
+        'Doctrine\ORM\Mapping\ManyToMany' => ManyToManyTagValueNode::class,
+        'Doctrine\ORM\Mapping\ManyToOne' => ManyToOneTagValueNode::class,
+    ];
 
     /**
-     * @return PhpDocTagValueNode&AttributeAwareInterface|null
+     * @return (PhpDocTagValueNode&AttributeAwareInterface)|null
      */
     public function create(SmartTokenIterator $smartTokenIterator, string $resolvedTag): ?AttributeAwareInterface
     {
         $currentNode = $this->currentNodeProvider->getNode();
+        if ($currentNode=== null) {
+            throw new ShouldNotHappenException();
+        }
 
         /** @var OneToOne|OneToMany|ManyToMany|ManyToOne|null $annotation */
         $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $resolvedTag);
@@ -49,8 +47,7 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
             return null;
         }
 
-        $tagValueNodeClassesToAnnotationClasses = $this->getTagValueNodeClassesToAnnotationClasses();
-        $tagValueNodeClass = array_search($resolvedTag, $tagValueNodeClassesToAnnotationClasses, true);
+        $tagValueNodeClass = self::ANNOTATION_TO_NODE[$resolvedTag];
 
         $items = $this->annotationItemsResolver->resolve($annotation);
         $fullyQualifiedTargetEntity = $this->resolveFqnTargetEntity($annotation->targetEntity, $currentNode);
@@ -60,5 +57,6 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
 
     public function isMatch(string $tag): bool
     {
+        return in_array($tag, self::ANNOTATION_TO_NODE, true);
     }
 }

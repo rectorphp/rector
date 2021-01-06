@@ -13,11 +13,13 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
+use Rector\BetterPhpDocParser\TagResolver;
 use Rector\BetterPhpDocParser\TagToPhpDocNodeFactoryMatcher;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Mapper\NodeMapper;
+use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocNode;
 use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocTagNode;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -68,6 +70,11 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     private $tagToPhpDocNodeFactoryMatcher;
 
+    /**
+     * @var TagResolver
+     */
+    private $tagResolver;
+
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
@@ -76,18 +83,22 @@ final class BetterPhpDocParser extends PhpDocParser
         TagToPhpDocNodeFactoryMatcher $tagToPhpDocNodeFactoryMatcher,
         Lexer $lexer,
         AnnotationContentResolver $annotationContentResolver,
+        PrivatesCaller $privatesCaller,
+        PrivatesAccessor $privatesAccessor,
+        TagResolver $tagResolver,
         NodeMapper $nodeMapper
     ) {
         parent::__construct($typeParser, $constExprParser);
 
-        $this->privatesCaller = new PrivatesCaller();
-        $this->privatesAccessor = new PrivatesAccessor();
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->lexer = $lexer;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->nodeMapper = $nodeMapper;
         $this->tagToPhpDocNodeFactoryMatcher = $tagToPhpDocNodeFactoryMatcher;
+        $this->privatesCaller = $privatesCaller;
+        $this->privatesAccessor = $privatesAccessor;
+        $this->tagResolver = $tagResolver;
     }
 
     public function parseString(string $docBlock): PhpDocNode
@@ -122,7 +133,7 @@ final class BetterPhpDocParser extends PhpDocParser
         // might be in the middle of annotations
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
 
-        $phpDocNode = new PhpDocNode(array_values($children));
+        $phpDocNode = new AttributeAwarePhpDocNode(array_values($children));
         return $this->nodeMapper->mapNode($phpDocNode);
     }
 
@@ -132,13 +143,14 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
     {
-        $tag = $this->resolveTag($tokenIterator);
+        $tag = $this->tagResolver->resolveTag($tokenIterator);
 
         $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);
         return new AttributeAwarePhpDocTagNode($tag, $phpDocTagValueNode);
     }
 
     /**
+     * @param SmartTokenIterator $tokenIterator
      * @return PhpDocTagValueNode&AttributeAwareInterface
      */
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
@@ -153,16 +165,8 @@ final class BetterPhpDocParser extends PhpDocParser
         // class-annotation
         $phpDocNodeFactory = $this->tagToPhpDocNodeFactoryMatcher->match($tag);
         if ($phpDocNodeFactory !== null) {
-            $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
-                $tag,
-                $currentPhpNode
-            );
-
-            $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens(
-                $currentPhpNode,
-                $tokenIterator,
-                $fullyQualifiedAnnotationClass
-            );
+            $resolvedTag = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($tag, $currentPhpNode);
+            $tagValueNode = $phpDocNodeFactory->create($tokenIterator, $resolvedTag);
         }
 
         // fallback to original parser

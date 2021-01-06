@@ -7,15 +7,15 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Property_;
 use Doctrine\ORM\Mapping\JoinTable;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
-final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
+final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
     /**
      * @var string
@@ -37,14 +37,6 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
      * @var string
      */
     private const TAG_NAME = 'Doctrine\ORM\Mapping\JoinTable';
-
-    /**
-     * @return string[]
-     */
-    public function getClasses(): array
-    {
-        return [self::TAG_NAME];
-    }
 
     /**
      * @return JoinTableTagValueNode|null

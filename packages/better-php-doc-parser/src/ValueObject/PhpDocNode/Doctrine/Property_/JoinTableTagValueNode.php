@@ -132,11 +132,11 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         $items = [];
 
         if ($this->joinColumns !== []) {
-            $items[$joinColumnsKey] = $this->printNestedTag($this->joinColumns, false);
+            $items[$joinColumnsKey] = $this->printNestedTag($this->joinColumns);
         }
 
         if ($this->inverseJoinColumns !== []) {
-            $items[$inverseJoinColumnsKey] = $this->printNestedTag($this->inverseJoinColumns, false);
+            $items[$inverseJoinColumnsKey] = $this->printNestedTag($this->inverseJoinColumns);
         }
 
         return $items;

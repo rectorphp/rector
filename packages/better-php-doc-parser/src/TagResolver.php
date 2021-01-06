@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
+use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
 final class TagResolver
 {
@@ -29,10 +29,10 @@ final class TagResolver
     /**
      * E.g. @ORM\Column → @Doctrine\ORM\Mapping\Column
      */
-    public function resolveTag(TokenIterator $tokenIterator): string
+    public function resolveTag(SmartTokenIterator $smartTokenIterator): string
     {
-        $tag = $tokenIterator->currentTokenValue();
-        $tokenIterator->next();
+        $tag = $smartTokenIterator->currentTokenValue();
+        $smartTokenIterator->next();
 
         // basic annotation
         if (Strings::match($tag, self::TAG_REGEX)) {
@@ -41,19 +41,19 @@ final class TagResolver
 
         // is not e.g "@var "
         // join tags like "@ORM\Column" etc.
-        if ($tokenIterator->currentTokenType() !== Lexer::TOKEN_IDENTIFIER) {
+        if ($smartTokenIterator->currentTokenType() !== Lexer::TOKEN_IDENTIFIER) {
             return $tag;
         }
         $oldTag = $tag;
 
-        $tag .= $tokenIterator->currentTokenValue();
+        $tag .= $smartTokenIterator->currentTokenValue();
 
         $isTagMatchedByFactories = (bool) $this->tagToPhpDocNodeFactoryMatcher->match($tag);
         if (! $isTagMatchedByFactories) {
             return $oldTag;
         }
 
-        $tokenIterator->next();
+        $smartTokenIterator->next();
 
         return $tag;
     }
