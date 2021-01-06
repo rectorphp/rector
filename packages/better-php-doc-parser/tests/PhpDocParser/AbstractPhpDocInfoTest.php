@@ -102,9 +102,12 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     private function printNodePhpDocInfoToString(Node $node): string
     {
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if ( ! $phpDocInfo instanceof PhpDocInfo) {
             throw new ShouldNotHappenException();
         }
+
+        dump($phpDocInfo->getPhpDocNode()->children);
+        die;
 
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
     }
