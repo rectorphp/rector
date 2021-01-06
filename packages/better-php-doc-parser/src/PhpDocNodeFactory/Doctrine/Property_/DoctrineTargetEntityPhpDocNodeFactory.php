@@ -37,7 +37,7 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
     public function create(SmartTokenIterator $smartTokenIterator, string $resolvedTag): ?AttributeAwareInterface
     {
         $currentNode = $this->currentNodeProvider->getNode();
-        if ($currentNode=== null) {
+        if ($currentNode === null) {
             throw new ShouldNotHappenException();
         }
 

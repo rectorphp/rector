@@ -67,11 +67,6 @@ final class PhpDocInfoPrinter
     private $attributeAwarePhpDocNode;
 
     /**
-     * @var OriginalSpacingRestorer
-     */
-    private $originalSpacingRestorer;
-
-    /**
      * @var PhpDocInfo
      */
     private $phpDocInfo;
@@ -88,10 +83,8 @@ final class PhpDocInfoPrinter
 
     public function __construct(
         EmptyPhpDocDetector $emptyPhpDocDetector,
-        OriginalSpacingRestorer $originalSpacingRestorer,
         SpacePatternFactory $spacePatternFactory
     ) {
-        $this->originalSpacingRestorer = $originalSpacingRestorer;
         $this->spacePatternFactory = $spacePatternFactory;
         $this->emptyPhpDocDetector = $emptyPhpDocDetector;
     }
@@ -186,14 +179,7 @@ final class PhpDocInfoPrinter
         }
 
         if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startAndEnd) {
-            $nodeContent = (string) $attributeAwareNode;
-
-            return $this->originalSpacingRestorer->restoreInOutputWithTokensStartAndEndPosition(
-                $attributeAwareNode,
-                $nodeContent,
-                $this->tokens,
-                $startAndEnd
-            );
+            return (string) $attributeAwareNode;
         }
 
         return $output . (string) $attributeAwareNode;
