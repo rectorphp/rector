@@ -91,7 +91,8 @@ CODE_SAMPLE
 
     private function isTopMostConcatNode(Concat $concat): bool
     {
-        return ! ($concat->getAttribute(AttributeKey::PARENT_NODE) instanceof Concat);
+        $parent = $concat->getAttribute(AttributeKey::PARENT_NODE);
+        return ! $parent instanceof Concat;
     }
 
     /**
@@ -117,7 +118,20 @@ CODE_SAMPLE
             return $node;
         }
 
-        $resultString = new String_($concat->left->value . $concat->right->value);
+        $leftValue = $concat->left->value;
+        $rightValue = $concat->right->value;
+
+        if ($leftValue === "\n") {
+            $this->nodeReplacementIsRestricted = true;
+            return $node;
+        }
+
+        if ($rightValue === "\n") {
+            $this->nodeReplacementIsRestricted = true;
+            return $node;
+        }
+
+        $resultString = new String_($leftValue . $rightValue);
         if (Strings::length($resultString->value) >= self::LINE_BREAK_POINT) {
             $this->nodeReplacementIsRestricted = true;
             return $node;
