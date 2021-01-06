@@ -6,6 +6,7 @@ namespace Rector\Nette\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -15,6 +16,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Rector\NodeCollector\Reflection\MethodReflectionProvider;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -148,7 +150,7 @@ CODE_SAMPLE
     {
         $hasClassMethodChanged = false;
         foreach ($classMethod->params as $param) {
-            if ($this->isUsedMultipleTimes($classMethod, $param)) {
+            if ($this->isInAssign($classMethod, $param)) {
                 continue;
             }
 
@@ -249,15 +251,18 @@ CODE_SAMPLE
         return true;
     }
 
-    private function isUsedMultipleTimes(ClassMethod $classMethod, Param $param): bool
+    private function isInAssign(ClassMethod $classMethod, Param $param): bool
     {
         $variable = $param->var;
-        $countVariable = count($this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
+        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
             $variable
         ): bool {
-            return $this->areNodesEqual($node, $variable);
-        }));
+            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parent instanceof Assign) {
+                return false;
+            }
 
-        return $countVariable > 2;
+            return $this->areNodesEqual($node, $variable);
+        });
     }
 }
