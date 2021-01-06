@@ -141,6 +141,15 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $this->hasClassMethodChanged($classMethod)) {
+            return null;
+        }
+
+        return $classMethod;
+    }
+
+    private function hasClassMethodChanged(ClassMethod $classMethod): bool
+    {
         $hasClassMethodChanged = false;
         foreach ($classMethod->params as $param) {
             if ($this->isUsedMultipleTimes($classMethod, $param)) {
@@ -161,11 +170,7 @@ CODE_SAMPLE
             }
         }
 
-        if (! $hasClassMethodChanged) {
-            return null;
-        }
-
-        return $classMethod;
+        return $hasClassMethodChanged;
     }
 
     private function refactorStaticCall(StaticCall $staticCall): ?StaticCall
