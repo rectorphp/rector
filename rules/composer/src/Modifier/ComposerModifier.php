@@ -6,6 +6,7 @@ namespace Rector\Composer\Modifier;
 
 use Nette\Utils\Json;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Symplify\ComposerJsonManipulator\Sorter\ComposerPackageSorter;
 use Webmozart\Assert\Assert;
 
 /**
@@ -13,6 +14,9 @@ use Webmozart\Assert\Assert;
  */
 final class ComposerModifier
 {
+    /** @var ComposerPackageSorter */
+    private $composerPackageSorter;
+
     /** @var string */
     public const SECTION_REQUIRE = 'require';
 
@@ -27,6 +31,11 @@ final class ComposerModifier
 
     /** @var ComposerModifierInterface[] */
     private $configuration = [];
+
+    public function __construct(ComposerPackageSorter $composerPackageSorter)
+    {
+        $this->composerPackageSorter = $composerPackageSorter;
+    }
 
     /**
      * @param ComposerModifierInterface[] $configuration
@@ -73,7 +82,14 @@ final class ComposerModifier
             $composerData = $composerChanger->modify($composerData);
         }
 
-        // TODO post process - if sort packages is set, we need sort them
+        if (isset($composerData['config']['sort-packages']) && $composerData['config']['sort-packages'] === true) {
+            if (isset($composerData[self::SECTION_REQUIRE])) {
+                $composerData[self::SECTION_REQUIRE] = $this->composerPackageSorter->sortPackages($composerData[self::SECTION_REQUIRE]);
+            }
+            if (isset($composerData[self::SECTION_REQUIRE_DEV])) {
+                $composerData[self::SECTION_REQUIRE_DEV] = $this->composerPackageSorter->sortPackages($composerData[self::SECTION_REQUIRE_DEV]);
+            }
+        }
 
         return Json::encode($composerData, Json::PRETTY);
     }
