@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class SkipUnknownPropertyType
+final class SkipNotVariableType
 {
     public function run(\stdClass $data)
     {
