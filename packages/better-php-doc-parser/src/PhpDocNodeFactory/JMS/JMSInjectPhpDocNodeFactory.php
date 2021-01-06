@@ -16,22 +16,19 @@ use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
 final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
 {
-    public const TAG_NAME = 'JMS\DiExtraBundle\Annotation\Inject';
+    /**
+     * @var string
+     */
+    private const TAG_NAME = 'JMS\DiExtraBundle\Annotation\Inject';
 
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, CurrentNodeProvider $currentNodeProvider)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     /**

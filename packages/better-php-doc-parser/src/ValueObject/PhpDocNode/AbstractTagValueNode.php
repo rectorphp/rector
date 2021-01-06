@@ -101,10 +101,6 @@ abstract class AbstractTagValueNode implements AttributeAwareInterface, PhpDocTa
         $items = array_filter($items);
 
         if ($items === []) {
-            if ($this->shouldPrintEmptyBrackets()) {
-                return '()';
-            }
-
             return '';
         }
 
@@ -115,7 +111,6 @@ abstract class AbstractTagValueNode implements AttributeAwareInterface, PhpDocTa
             }
 
             $arrayItemAsString = $this->printArrayItem($value, $key, $this->tagValueNodeConfiguration);
-            $arrayItemAsString = $this->correctArraySingleItemPrint($value, $arrayItemAsString);
 
             /** @var string $key */
             $items[$key] = $arrayItemAsString;
@@ -132,39 +127,10 @@ abstract class AbstractTagValueNode implements AttributeAwareInterface, PhpDocTa
     /**
      * @param PhpDocTagValueNode[] $tagValueNodes
      */
-    protected function printNestedTag(array $tagValueNodes, bool $haveFinalComma): string
+    protected function printNestedTag(array $tagValueNodes): string
     {
         $tagValueNodesAsString = $this->printTagValueNodesSeparatedByComma($tagValueNodes);
-
-        return sprintf('{%s%s%s%s}', $tagValueNodesAsString, $haveFinalComma ? ',' : '', );
-    }
-
-    /**
-     * @param mixed[] $value
-     */
-    private function correctArraySingleItemPrint(array $value, string $arrayItemAsString): string
-    {
-        if (count($value) !== 1) {
-            return $arrayItemAsString;
-        }
-
-        if ($this->tagValueNodeConfiguration->getOriginalContent() === null) {
-            return $arrayItemAsString;
-        }
-
-        // item is in the original in same format → use it
-        if ($this->tagValueNodeConfiguration->originalContentContains($arrayItemAsString)) {
-            return $arrayItemAsString;
-        }
-
-        // is original item used the same, just without {} brackets?
-        $nakedItem = trim($arrayItemAsString, '{}');
-
-        if (! $this->tagValueNodeConfiguration->originalContentContains('(' . $nakedItem . ')')) {
-            return $arrayItemAsString;
-        }
-
-        return $nakedItem;
+        return sprintf('{%s%s%s%s}', $tagValueNodesAsString);
     }
 
     /**

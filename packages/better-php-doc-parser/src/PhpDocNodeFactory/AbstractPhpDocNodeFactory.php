@@ -11,6 +11,7 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
 use Rector\BetterPhpDocParser\AnnotationReader\NodeAnnotationReader;
 use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
@@ -22,18 +23,6 @@ abstract class AbstractPhpDocNodeFactory
      * @see https://regex101.com/r/548EJJ/1
      */
     private const CLASS_CONST_REGEX = '#::class#';
-
-    /**
-     * @var string
-     * @see https://regex101.com/r/CsmMaz/1
-     */
-    private const OPENING_SPACE_REGEX = '#^\{(?<opening_space>\s+)#';
-
-    /**
-     * @var string
-     * @see https://regex101.com/r/Rrbi3V/1
-     */
-    private const CLOSING_SPACE_REGEX = '#(?<closing_space>\s+)\}$#';
 
     /**
      * @var NodeAnnotationReader
@@ -56,18 +45,25 @@ abstract class AbstractPhpDocNodeFactory
     private $objectTypeSpecifier;
 
     /**
+     * @var CurrentNodeProvider
+     */
+    protected $currentNodeProvider;
+
+    /**
      * @required
      */
     public function autowireAbstractPhpDocNodeFactory(
         NodeAnnotationReader $nodeAnnotationReader,
         AnnotationContentResolver $annotationContentResolver,
         AnnotationItemsResolver $annotationItemsResolver,
-        ObjectTypeSpecifier $objectTypeSpecifier
+        ObjectTypeSpecifier $objectTypeSpecifier,
+        CurrentNodeProvider $currentNodeProvider
     ): void {
         $this->nodeAnnotationReader = $nodeAnnotationReader;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->annotationItemsResolver = $annotationItemsResolver;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     protected function resolveContentFromTokenIterator(TokenIterator $tokenIterator): string

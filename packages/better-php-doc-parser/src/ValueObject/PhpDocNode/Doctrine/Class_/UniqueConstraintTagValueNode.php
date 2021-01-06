@@ -14,7 +14,10 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode im
      */
     private $tag;
 
-    public function __construct(array $items, ?string $content = null, ?string $originalTag = null)
+    /**
+     * @param mixed[] $items
+     */
+    public function __construct(array $items, ?string $originalTag = null)
     {
         $this->tag = $originalTag;
 

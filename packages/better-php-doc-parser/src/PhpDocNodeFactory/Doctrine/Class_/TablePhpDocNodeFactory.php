@@ -31,19 +31,12 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
      */
     private $uniqueConstraintPhpDocNodeFactory;
 
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
     public function __construct(
         IndexPhpDocNodeFactory $indexPhpDocNodeFactory,
-        UniqueConstraintPhpDocNodeFactory $uniqueConstraintPhpDocNodeFactory,
-        CurrentNodeProvider $currentNodeProvider
+        UniqueConstraintPhpDocNodeFactory $uniqueConstraintPhpDocNodeFactory
     ) {
         $this->indexPhpDocNodeFactory = $indexPhpDocNodeFactory;
         $this->uniqueConstraintPhpDocNodeFactory = $uniqueConstraintPhpDocNodeFactory;
-        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     public function isMatch(string $tag): bool

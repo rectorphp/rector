@@ -16,11 +16,10 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
      */
     private $fullyQualifiedTargetEntity;
 
-    public function __construct(
-        array $items,
-        ?string $content = null,
-        ?string $fullyQualifiedTargetEntity = null
-    ) {
+    /**
+     * @param mixed[] $items
+     */
+    public function __construct(array $items, ?string $fullyQualifiedTargetEntity = null) {
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
 
         parent::__construct($items);

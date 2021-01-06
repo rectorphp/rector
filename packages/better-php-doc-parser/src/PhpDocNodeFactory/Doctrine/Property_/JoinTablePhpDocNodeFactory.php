@@ -40,16 +40,6 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     private const TAG_NAME = 'Doctrine\ORM\Mapping\JoinTable';
 
     /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    public function __construct(CurrentNodeProvider $currentNodeProvider)
-    {
-        $this->currentNodeProvider = $currentNodeProvider;
-    }
-
-    /**
      * @return string[]
      */
     public function getClasses(): array

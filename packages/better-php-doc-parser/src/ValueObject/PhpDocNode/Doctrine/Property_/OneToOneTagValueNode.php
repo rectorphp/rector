@@ -18,7 +18,6 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
 
     public function __construct(
         array $items,
-        ?string $content = null,
         ?string $fullyQualifiedTargetEntity = null
     ) {
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;

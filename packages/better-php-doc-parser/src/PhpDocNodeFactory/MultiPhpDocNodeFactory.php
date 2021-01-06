@@ -47,16 +47,6 @@ use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements GenericPhpDocNodeFactoryInterface
 {
     /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    public function __construct(CurrentNodeProvider $currentNodeProvider)
-    {
-        $this->currentNodeProvider = $currentNodeProvider;
-    }
-
-    /**
      * @return array<string, string>
      */
     public function getTagValueNodeClassesToAnnotationClasses(): array
