@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class DemoFile
+final class UnknownPropertyType
 {
     public function run(\stdClass $data)
     {
