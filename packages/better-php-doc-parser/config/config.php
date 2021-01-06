@@ -3,10 +3,9 @@
 declare(strict_types=1);
 
 use Doctrine\Common\Annotations\Reader;
-use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
-use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingAnnotationReader;
+use Rector\PhpdocParserPrinter\Parser\TokenAwarePhpDocParser;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -26,9 +25,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/PhpDocNode',
         ]);
 
-    $services->set(Lexer::class);
-
-    $services->alias(PhpDocParser::class, BetterPhpDocParser::class);
+    // @todo add token aware
+    $services->alias(PhpDocParser::class, TokenAwarePhpDocParser::class);
 
     $services->alias(Reader::class, ConstantPreservingAnnotationReader::class);
 };
