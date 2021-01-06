@@ -6,14 +6,17 @@ namespace Rector\Nette\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Rector\NodeCollector\Reflection\MethodReflectionProvider;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -140,8 +143,17 @@ CODE_SAMPLE
             return null;
         }
 
+        return $this->removeClassMethodParams($classMethod);
+    }
+
+    private function removeClassMethodParams(ClassMethod $classMethod): ?ClassMethod
+    {
         $hasClassMethodChanged = false;
         foreach ($classMethod->params as $param) {
+            if ($this->isInAssign($classMethod, $param)) {
+                continue;
+            }
+
             if ($this->isName($param, self::PARENT) && $param->type !== null && $this->isName(
                 $param->type,
                     self::COMPONENT_CONTAINER_CLASS
@@ -237,5 +249,20 @@ CODE_SAMPLE
         }
 
         return true;
+    }
+
+    private function isInAssign(ClassMethod $classMethod, Param $param): bool
+    {
+        $variable = $param->var;
+        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
+            $variable
+        ): bool {
+            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parent instanceof Assign) {
+                return false;
+            }
+
+            return $this->areNodesEqual($node, $variable);
+        });
     }
 }
