@@ -3,19 +3,25 @@
 namespace Rector\Composer\Tests\Modifier;
 
 use Nette\Utils\Json;
-use PHPUnit\Framework\TestCase;
 use Rector\Composer\ValueObject\AddPackage;
 use Rector\Composer\ValueObject\ChangePackage;
 use Rector\Composer\ValueObject\ChangePackageVersion;
 use Rector\Composer\ValueObject\MovePackage;
 use Rector\Composer\ValueObject\RemovePackage;
 use Rector\Composer\Modifier\ComposerModifier;
+use Rector\Core\HttpKernel\RectorKernel;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class ComposerModifierTest extends TestCase
+final class ComposerModifierTest extends AbstractKernelTestCase
 {
+    protected function setUp(): void
+    {
+        $this->bootKernelWithConfigs(RectorKernel::class, []);
+    }
+
     public function testRefactorWithOneAddedPackage(): void
     {
-        $composerModifier = new ComposerModifier();
+        $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new AddPackage('vendor1/package3', '^3.0'),
         ]);
@@ -39,7 +45,7 @@ final class ComposerModifierTest extends TestCase
 
     public function testRefactorWithOneAddedAndOneRemovedPackage(): void
     {
-        $composerModifier = new ComposerModifier();
+        $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new AddPackage('vendor1/package3', '^3.0'),
             new RemovePackage('vendor1/package1'),
@@ -63,7 +69,7 @@ final class ComposerModifierTest extends TestCase
 
     public function testRefactorWithAddedAndRemovedSamePackage(): void
     {
-        $composerModifier = new ComposerModifier();
+        $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new AddPackage('vendor1/package3', '^3.0'),
             new RemovePackage('vendor1/package3'),
@@ -87,7 +93,7 @@ final class ComposerModifierTest extends TestCase
 
     public function testRefactorWithRemovedAndAddedBackSamePackage(): void
     {
-        $composerModifier = new ComposerModifier();
+        $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new RemovePackage('vendor1/package3'),
             new AddPackage('vendor1/package3', '^3.0'),
@@ -112,7 +118,7 @@ final class ComposerModifierTest extends TestCase
 
     public function testRefactorWithMovedAndChangedPackages(): void
     {
-        $composerModifier = new ComposerModifier();
+        $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new MovePackage('vendor1/package1'),
             new ChangePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
@@ -141,7 +147,7 @@ final class ComposerModifierTest extends TestCase
 
     public function testRefactorWithMultipleConfiguration(): void
     {
-        $composerModifier = new ComposerModifier();
+        $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new MovePackage('vendor1/package1'),
         ]);
@@ -174,7 +180,7 @@ final class ComposerModifierTest extends TestCase
 
     public function testRefactorWithConfigurationAndReconfigurationAndConfiguration(): void
     {
-        $composerModifier = new ComposerModifier();
+        $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new MovePackage('vendor1/package1'),
         ]);
@@ -205,7 +211,7 @@ final class ComposerModifierTest extends TestCase
 
     public function testFilePath(): void
     {
-        $composerModifier = new ComposerModifier();
+        $composerModifier = $this->getService(ComposerModifier::class);
         $this->assertEquals(getcwd() . '/composer.json', $composerModifier->getFilePath());
 
         $composerModifier->filePath('test/composer.json');
@@ -214,7 +220,7 @@ final class ComposerModifierTest extends TestCase
 
     public function testCommand(): void
     {
-        $composerModifier = new ComposerModifier();
+        $composerModifier = $this->getService(ComposerModifier::class);
         $this->assertEquals('composer update', $composerModifier->getCommand());
 
         $composerModifier->command('composer update --prefer-stable');
