@@ -23,7 +23,7 @@ final class SimplifyIfElseToTernaryRector extends AbstractRector
     /**
      * @var int
      */
-    private const LINE_LENGHT_LIMIT = 120;
+    private const LINE_LENGTH_LIMIT = 120;
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -169,6 +169,6 @@ CODE_SAMPLE
 
     private function isNodeTooLong(Assign $assign): bool
     {
-        return Strings::length($this->print($assign)) > self::LINE_LENGHT_LIMIT;
+        return Strings::length($this->print($assign)) > self::LINE_LENGTH_LIMIT;
     }
 }

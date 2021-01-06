@@ -31,7 +31,7 @@ final class JoinStringConcatRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Joins concat of 2 strings, unless the lenght is too long',
+            'Joins concat of 2 strings, unless the length is too long',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
