@@ -8,8 +8,8 @@ namespace Rector\Core\Tests\Issues\Issue4191\DoNotDuplicateComment\Fixture;
 // Second Comment
 /**
  */
-// First Comment
-// Second Comment
+// Third Comment
+// Forth Comment
 class b {}
 
 ?>
