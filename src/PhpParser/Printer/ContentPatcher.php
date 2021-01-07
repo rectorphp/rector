@@ -93,10 +93,10 @@ final class ContentPatcher
     public const INVALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX = '#\*\s+@(var|return)([^\s].*|\s[^"\s]*|([^"]*[^"]))$#msU';
 
     /**
-     * @see https://regex101.com/r/uLmRxk/4
+     * @see https://regex101.com/r/uLmRxk/6
      * @var string
      */
-    public const VALID_NO_DUPLICATE_COMMENT_REGEX = '#(?<c>^\/\/\s{0,}.*)#m';
+    public const VALID_NO_DUPLICATE_COMMENT_REGEX = '#(?<c>(\/\/\s{0,}.*\s+){1,})#m';
 
     /**
      * @see https://regex101.com/r/Ef83BV/1
@@ -180,13 +180,13 @@ final class ContentPatcher
             return $content;
         }
 
-        $originalComment = '';
         foreach ($matchNoDuplicateComments as $matchNoDuplicateComment) {
-            $originalComment .=  $matchNoDuplicateComment['c'] . PHP_EOL;
+            $matchNoDuplicateComment['c'] = trim($matchNoDuplicateComment['c']);
+            $duplicatedComment = $matchNoDuplicateComment['c'] . PHP_EOL . $matchNoDuplicateComment['c'];
+            $content = str_replace($duplicatedComment, $matchNoDuplicateComment['c'], $content);
         }
 
-        $duplicatedComment = $originalComment . $originalComment;
-        return str_replace($duplicatedComment, $originalComment, $content);
+        return $content;
     }
 
     private function isSkipped(string $validAnnotationRegex, string $validAnnotation, string $invalidAnnotation): bool
