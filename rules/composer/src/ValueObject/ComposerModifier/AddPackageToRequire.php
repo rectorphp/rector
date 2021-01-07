@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 use Rector\Composer\ValueObject\Version\Version;
+use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
  * Only adds package to require section, if package is already in composer data, nothing happen
@@ -33,12 +33,9 @@ final class AddPackageToRequire implements ComposerModifierInterface
     /**
      * @inheritDoc
      */
-    public function modify(array $composerData): array
+    public function modify(ComposerJson $composerData): ComposerJson
     {
-        if (!isset($composerData[ComposerModifier::SECTION_REQUIRE][$this->packageName]) && !isset($composerData[ComposerModifier::SECTION_REQUIRE_DEV][$this->packageName])) {
-            $composerData[ComposerModifier::SECTION_REQUIRE][$this->packageName] = $this->version->getVersion();
-        }
-
+        $composerData->addRequiredPackage($this->packageName, $this->version->getVersion());
         return $composerData;
     }
 }

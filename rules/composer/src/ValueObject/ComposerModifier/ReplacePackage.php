@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
+use InvalidArgumentException;
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\ValueObject\Version\Version;
+use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
  * Replace one package for another
@@ -19,7 +22,7 @@ final class ReplacePackage implements ComposerModifierInterface
     /** @var string */
     private $newPackageName;
 
-    /** @var string */
+    /** @var Version */
     private $targetVersion;
 
     /**
@@ -29,22 +32,20 @@ final class ReplacePackage implements ComposerModifierInterface
      */
     public function __construct(string $oldPackageName, string $newPackageName, string $targetVersion)
     {
+        if ($oldPackageName === $newPackageName) {
+            throw new InvalidArgumentException('$oldPackageName cannot be the same as $newPackageName. If you want to change version of package, use ' . ChangePackageVersion::class);
+        }
         $this->oldPackageName = $oldPackageName;
         $this->newPackageName = $newPackageName;
-        $this->targetVersion = $targetVersion;
+        $this->targetVersion = new Version($targetVersion);
     }
 
     /**
      * @inheritDoc
      */
-    public function modify(array $composerData): array
+    public function modify(ComposerJson $composerData): ComposerJson
     {
-        foreach ([ComposerModifier::SECTION_REQUIRE, ComposerModifier::SECTION_REQUIRE_DEV] as $section) {
-            if (isset($composerData[$section][$this->oldPackageName])) {
-                unset($composerData[$section][$this->oldPackageName]);
-                $composerData[$section][$this->newPackageName] = $this->targetVersion;
-            }
-        }
+        $composerData->replacePackage($this->oldPackageName, $this->newPackageName, $this->targetVersion->getVersion());
         return $composerData;
     }
 }

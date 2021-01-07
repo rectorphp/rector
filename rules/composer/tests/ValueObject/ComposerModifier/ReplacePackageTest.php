@@ -4,69 +4,65 @@ namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
 use PHPUnit\Framework\TestCase;
 use Rector\Composer\ValueObject\ComposerModifier\ReplacePackage;
+use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 final class ReplacePackageTest extends TestCase
 {
     public function testReplaceNonExistingPackage(): void
     {
-        $composerData = [
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-            ],
-        ];
-        $replacedComposerData = [
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-            ],
-        ];
+        $composerJson = new ComposerJson();
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
+        ]);
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
+
+        ]);
 
         $replacePackage = new ReplacePackage('vendor1/package3', 'vendor1/package4', '^3.0');
-        $this->assertEquals($replacedComposerData, $replacePackage->modify($composerData));
+        $this->assertEquals($changedComposerJson, $replacePackage->modify($composerJson));
     }
 
     public function testReplaceExistingPackage(): void
     {
-        $composerData = [
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-            ],
-        ];
+        $composerJson = new ComposerJson();
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
+        ]);
 
-        $replacedComposerData = [
-            'require' => [
-                'vendor1/package3' => '^3.0',
-                'vendor1/package2' => '^2.0',
-            ],
-        ];
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setRequire([
+            'vendor1/package3' => '^3.0',
+            'vendor1/package2' => '^2.0',
+        ]);
 
         $replacePackage = new ReplacePackage('vendor1/package1', 'vendor1/package3', '^3.0');
-        $this->assertEquals($replacedComposerData, $replacePackage->modify($composerData));
+        $this->assertEquals($changedComposerJson, $replacePackage->modify($composerJson));
     }
 
     public function testReplaceExistingDevPackage(): void
     {
-        $composerData = [
-            'require' => [
-                'vendor1/package1' => '^1.0',
-            ],
-            'require-dev' => [
-                'vendor1/package2' => '^2.0',
-            ],
-        ];
+        $composerJson = new ComposerJson();
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+        ]);
+        $composerJson->setRequireDev([
+            'vendor1/package2' => '^2.0',
+        ]);
 
-        $replacedComposerData = [
-            'require' => [
-                'vendor1/package1' => '^1.0',
-            ],
-            'require-dev' => [
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+        ]);
+        $changedComposerJson->setRequireDev([
                 'vendor1/package3' => '^3.0',
-            ],
-        ];
+        ]);
 
         $replacePackage = new ReplacePackage('vendor1/package2', 'vendor1/package3', '^3.0');
-        $this->assertEquals($replacedComposerData, $replacePackage->modify($composerData));
+        $this->assertEquals($changedComposerJson, $replacePackage->modify($composerJson));
     }
 }

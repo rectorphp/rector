@@ -10,6 +10,7 @@ use Rector\Composer\ValueObject\ComposerModifier\MovePackageToRequireDev;
 use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\HttpKernel\RectorKernel;
+use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class ComposerModifierTest extends AbstractKernelTestCase
@@ -27,21 +28,19 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             new AddPackageToRequire('vendor1/package3', '^3.0'),
         ]);
 
-        $originalContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-            ],
+        $composerJson = new ComposerJson();
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
         ]);
 
-        $newContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-                'vendor1/package3' => '^3.0',
-            ],
-        ], Json::PRETTY);
-        $this->assertEquals($newContent, $composerModifier->modify($originalContent));
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
+            'vendor1/package3' => '^3.0',
+        ]);
+        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithOneAddedAndOneRemovedPackage(): void
@@ -53,20 +52,18 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             new RemovePackage('vendor1/package1'),
         ]);
 
-        $originalContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-            ],
+        $composerJson = new ComposerJson();
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
         ]);
 
-        $newContent = Json::encode([
-            'require' => [
-                'vendor1/package2' => '^2.0',
-                'vendor1/package3' => '^3.0',
-            ],
-        ], Json::PRETTY);
-        $this->assertEquals($newContent, $composerModifier->modify($originalContent));
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setRequire([
+            'vendor1/package2' => '^2.0',
+            'vendor1/package3' => '^3.0',
+        ]);
+        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithAddedAndRemovedSamePackage(): void
@@ -78,20 +75,18 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             new RemovePackage('vendor1/package3'),
         ]);
 
-        $originalContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-            ],
+        $composerJson = new ComposerJson();
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
         ]);
 
-        $newContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-            ],
-        ], Json::PRETTY);
-        $this->assertEquals($newContent, $composerModifier->modify($originalContent));
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
+        ]);
+        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithRemovedAndAddedBackSamePackage(): void
@@ -103,21 +98,19 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             new AddPackageToRequire('vendor1/package3', '^3.0'),
         ]);
 
-        $originalContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-            ],
+        $composerJson = new ComposerJson();
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
         ]);
 
-        $newContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-                'vendor1/package3' => '^3.0',
-            ],
-        ], Json::PRETTY);
-        $this->assertEquals($newContent, $composerModifier->modify($originalContent));
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
+            'vendor1/package3' => '^3.0',
+        ]);
+        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithMovedAndChangedPackages(): void
@@ -130,24 +123,22 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 
-        $originalContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-                'vendor1/package3' => '^3.0',
-            ],
+        $composerJson = new ComposerJson();
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
+            'vendor1/package3' => '^3.0',
         ]);
 
-        $newContent = Json::encode([
-            'require' => [
-                'vendor1/package3' => '~3.0.0',
-                'vendor2/package1' => '^3.0',
-            ],
-            'require-dev' => [
-                'vendor1/package1' => '^1.0',
-            ],
-        ], Json::PRETTY);
-        $this->assertEquals($newContent, $composerModifier->modify($originalContent));
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setRequire([
+            'vendor1/package3' => '~3.0.0',
+            'vendor2/package1' => '^3.0',
+        ]);
+        $changedComposerJson->setRequireDev([
+            'vendor1/package1' => '^1.0',
+        ]);
+        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithMultipleConfiguration(): void
@@ -164,24 +155,22 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 
-        $originalContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-                'vendor1/package3' => '^3.0',
-            ],
+        $composerJson = new ComposerJson();
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
+            'vendor1/package3' => '^3.0',
         ]);
 
-        $newContent = Json::encode([
-            'require' => [
-                'vendor1/package3' => '~3.0.0',
-                'vendor2/package1' => '^3.0',
-            ],
-            'require-dev' => [
-                'vendor1/package1' => '^1.0',
-            ],
-        ], Json::PRETTY);
-        $this->assertEquals($newContent, $composerModifier->modify($originalContent));
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setRequire([
+            'vendor1/package3' => '~3.0.0',
+            'vendor2/package1' => '^3.0',
+        ]);
+        $changedComposerJson->setRequireDev([
+            'vendor1/package1' => '^1.0',
+        ]);
+        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithConfigurationAndReconfigurationAndConfiguration(): void
@@ -198,22 +187,20 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 
-        $originalContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-                'vendor1/package3' => '^3.0',
-            ],
+        $composerJson = new ComposerJson();
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
+            'vendor1/package3' => '^3.0',
         ]);
 
-        $newContent = Json::encode([
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package3' => '~3.0.0',
-                'vendor2/package1' => '^3.0',
-            ],
-        ], Json::PRETTY);
-        $this->assertEquals($newContent, $composerModifier->modify($originalContent));
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package3' => '~3.0.0',
+            'vendor2/package1' => '^3.0',
+        ]);
+        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithMovedAndChangedPackagesWithSortPackages(): void
@@ -226,30 +213,28 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 
-        $originalContent = Json::encode([
-            'config' => [
-                'sort-packages' => true,
-            ],
-            'require' => [
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-                'vendor1/package3' => '^3.0',
-            ],
+        $composerJson = new ComposerJson();
+        $composerJson->setConfig([
+            'sort-packages' => true
+        ]);
+        $composerJson->setRequire([
+            'vendor1/package1' => '^1.0',
+            'vendor1/package2' => '^2.0',
+            'vendor1/package3' => '^3.0',
         ]);
 
-        $newContent = Json::encode([
-            'config' => [
-                'sort-packages' => true,
-            ],
-            'require' => [
-                'vendor1/package0' => '^3.0',
-                'vendor1/package3' => '~3.0.0',
-            ],
-            'require-dev' => [
-                'vendor1/package1' => '^1.0',
-            ],
-        ], Json::PRETTY);
-        $this->assertEquals($newContent, $composerModifier->modify($originalContent));
+        $changedComposerJson = new ComposerJson();
+        $changedComposerJson->setConfig([
+            'sort-packages' => true
+        ]);
+        $changedComposerJson->setRequire([
+            'vendor1/package0' => '^3.0',
+            'vendor1/package3' => '~3.0.0',
+        ]);
+        $changedComposerJson->setRequireDev([
+            'vendor1/package1' => '^1.0',
+        ]);
+        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testFilePath(): void

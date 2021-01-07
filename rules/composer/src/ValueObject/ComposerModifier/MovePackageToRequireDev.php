@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
  * Moves package to require-dev section, if package is not in composer data, nothing happen, also if package is already in require-dev section
@@ -27,19 +27,9 @@ final class MovePackageToRequireDev implements ComposerModifierInterface
     /**
      * @inheritDoc
      */
-    public function modify(array $composerData): array
+    public function modify(ComposerJson $composerData): ComposerJson
     {
-        $originalSection = ComposerModifier::SECTION_REQUIRE;
-
-        if (isset($composerData[$originalSection][$this->packageName])) {
-            $composerData[ComposerModifier::SECTION_REQUIRE_DEV][$this->packageName] = $composerData[$originalSection][$this->packageName];
-            unset($composerData[$originalSection][$this->packageName]);
-        }
-
-        if (isset($composerData[$originalSection]) && $composerData[$originalSection] === []) {
-            unset($composerData[$originalSection]);
-        }
-
+        $composerData->movePackageToRequireDev($this->packageName);
         return $composerData;
     }
 }

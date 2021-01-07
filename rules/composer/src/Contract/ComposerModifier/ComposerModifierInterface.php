@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Composer\Contract\ComposerModifier;
 
+use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+
 interface ComposerModifierInterface
 {
     /**
-     * @param array<string,mixed> $composerData decoded data from composer.json
-     * @return array<string,mixed> changed $composerData
+     * @param ComposerJson $composerData decoded data from composer.json
+     * @return ComposerJson changed $composerData
      */
-    public function modify(array $composerData): array;
+    public function modify(ComposerJson $composerData): ComposerJson;
 }

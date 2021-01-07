@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Composer\Modifier;
 
-use Nette\Utils\Json;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 use Symplify\ComposerJsonManipulator\Sorter\ComposerPackageSorter;
+use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Webmozart\Assert\Assert;
 
 /**
@@ -75,22 +75,12 @@ final class ComposerModifier
         return $this->command;
     }
 
-    public function modify(string $content): string
+    public function modify(ComposerJson $composerJson): ComposerJson
     {
-        $composerData = Json::decode($content, Json::FORCE_ARRAY);
         foreach ($this->configuration as $composerChanger) {
-            $composerData = $composerChanger->modify($composerData);
+            $composerJson = $composerChanger->modify($composerJson);
         }
 
-        if (isset($composerData['config']['sort-packages']) && $composerData['config']['sort-packages'] === true) {
-            if (isset($composerData[self::SECTION_REQUIRE])) {
-                $composerData[self::SECTION_REQUIRE] = $this->composerPackageSorter->sortPackages($composerData[self::SECTION_REQUIRE]);
-            }
-            if (isset($composerData[self::SECTION_REQUIRE_DEV])) {
-                $composerData[self::SECTION_REQUIRE_DEV] = $this->composerPackageSorter->sortPackages($composerData[self::SECTION_REQUIRE_DEV]);
-            }
-        }
-
-        return Json::encode($composerData, Json::PRETTY);
+        return $composerJson;
     }
 }

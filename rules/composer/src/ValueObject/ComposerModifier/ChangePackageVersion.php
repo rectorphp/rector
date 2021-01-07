@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 use Rector\Composer\ValueObject\Version\Version;
+use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
  * Changes package version of package which is already in composer data
@@ -33,13 +33,9 @@ final class ChangePackageVersion implements ComposerModifierInterface
     /**
      * @inheritDoc
      */
-    public function modify(array $composerData): array
+    public function modify(ComposerJson $composerData): ComposerJson
     {
-        foreach ([ComposerModifier::SECTION_REQUIRE, ComposerModifier::SECTION_REQUIRE_DEV] as $section) {
-            if (isset($composerData[$section][$this->packageName])) {
-                $composerData[$section][$this->packageName] = $this->targetVersion->getVersion();
-            }
-        }
+        $composerData->changePackageVersion($this->packageName, $this->targetVersion->getVersion());
         return $composerData;
     }
 }

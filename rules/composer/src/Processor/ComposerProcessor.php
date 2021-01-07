@@ -8,11 +8,19 @@ use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Configuration\Configuration;
 use Symfony\Component\Process\Process;
+use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
+use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ComposerProcessor
 {
+    /** @var ComposerJsonFactory */
+    private $composerJsonFactory;
+
+    /** @var ComposerJsonPrinter */
+    private $composerJsonPrinter;
+
     /** @var ComposerModifier */
     private $composerModifier;
 
@@ -26,11 +34,15 @@ final class ComposerProcessor
     private $errorAndDiffCollector;
 
     public function __construct(
+        ComposerJsonFactory $composerJsonFactory,
+        ComposerJsonPrinter $composerJsonPrinter,
         ComposerModifier $composerModifier,
         Configuration $configuration,
         SmartFileSystem $smartFileSystem,
         ErrorAndDiffCollector $errorAndDiffCollector
     ) {
+        $this->composerJsonFactory = $composerJsonFactory;
+        $this->composerJsonPrinter = $composerJsonPrinter;
         $this->composerModifier = $composerModifier;
         $this->configuration = $configuration;
         $this->smartFileSystem = $smartFileSystem;
@@ -40,8 +52,12 @@ final class ComposerProcessor
     public function process(): void
     {
         $smartFileInfo = new SmartFileInfo($this->composerModifier->getFilePath());
+
+        $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
+
         $oldContents = $smartFileInfo->getContents();
-        $newContents = $this->composerModifier->modify($oldContents) . "\n";
+        $newComposerJson = $this->composerModifier->modify($composerJson);
+        $newContents = $this->composerJsonPrinter->printToString($newComposerJson);
 
         // nothing has changed
         if ($oldContents === $newContents) {
