@@ -3,7 +3,7 @@
 namespace Rector\Composer\Tests\Modifier;
 
 use Nette\Utils\Json;
-use Rector\Composer\ValueObject\AddPackage;
+use Rector\Composer\ValueObject\AddPackageToRequire;
 use Rector\Composer\ValueObject\ReplacePackage;
 use Rector\Composer\ValueObject\ChangePackageVersion;
 use Rector\Composer\ValueObject\MovePackageToRequireDev;
@@ -24,7 +24,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
-            new AddPackage('vendor1/package3', '^3.0'),
+            new AddPackageToRequire('vendor1/package3', '^3.0'),
         ]);
 
         $originalContent = Json::encode([
@@ -49,7 +49,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
-            new AddPackage('vendor1/package3', '^3.0'),
+            new AddPackageToRequire('vendor1/package3', '^3.0'),
             new RemovePackage('vendor1/package1'),
         ]);
 
@@ -74,7 +74,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
-            new AddPackage('vendor1/package3', '^3.0'),
+            new AddPackageToRequire('vendor1/package3', '^3.0'),
             new RemovePackage('vendor1/package3'),
         ]);
 
@@ -100,7 +100,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new RemovePackage('vendor1/package3'),
-            new AddPackage('vendor1/package3', '^3.0'),
+            new AddPackageToRequire('vendor1/package3', '^3.0'),
         ]);
 
         $originalContent = Json::encode([

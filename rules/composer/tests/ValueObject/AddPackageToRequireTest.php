@@ -2,11 +2,10 @@
 
 namespace Rector\Composer\Tests\ValueObject;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ValueObject\AddPackage;
+use Rector\Composer\ValueObject\AddPackageToRequire;
 
-final class AddPackageTest extends TestCase
+final class AddPackageToRequireTest extends TestCase
 {
     public function testAddNonExistingPackage(): void
     {
@@ -22,10 +21,10 @@ final class AddPackageTest extends TestCase
                 'vendor1/package2' => '^2.0',
                 'vendor1/package3' => '^3.0',
             ],
-        ];;
+        ];
 
-        $addPackage = new AddPackage('vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerData, $addPackage->modify($composerData));
+        $addPackageToRequire = new AddPackageToRequire('vendor1/package3', '^3.0');
+        $this->assertEquals($changedComposerData, $addPackageToRequire->modify($composerData));
     }
 
     public function testAddExistingPackage(): void
@@ -44,8 +43,8 @@ final class AddPackageTest extends TestCase
             ],
         ];
 
-        $addPackage = new AddPackage('vendor1/package1', '^3.0');
-        $this->assertEquals($changedComposerData, $addPackage->modify($composerData));
+        $addPackageToRequire = new AddPackageToRequire('vendor1/package1', '^3.0');
+        $this->assertEquals($changedComposerData, $addPackageToRequire->modify($composerData));
     }
 
     public function testAddExistingDevPackage(): void
@@ -68,14 +67,7 @@ final class AddPackageTest extends TestCase
             ],
         ];
 
-        $addPackage = new AddPackage('vendor1/package2', '^3.0');
-        $this->assertEquals($changedComposerData, $addPackage->modify($composerData));
-    }
-
-    public function testAddPackageToUnknownSection(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected one of: "require", "require-dev". Got: "require_dev"');
-        new AddPackage('vendor1/package1', '^1.0', 'require_dev');
+        $addPackageToRequire = new AddPackageToRequire('vendor1/package2', '^3.0');
+        $this->assertEquals($changedComposerData, $addPackageToRequire->modify($composerData));
     }
 }
