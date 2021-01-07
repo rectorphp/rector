@@ -7,6 +7,7 @@ namespace Rector\PostRector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Core\Configuration\Option;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -14,7 +15,6 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 
 final class NameImportingPostRector extends AbstractPostRector
 {
@@ -58,17 +58,7 @@ final class NameImportingPostRector extends AbstractPostRector
         }
 
         if ($node instanceof Name) {
-            $name = $this->getName($node);
-
-            if (! is_callable($name)) {
-                return $this->nameImporter->importName($node);
-            }
-
-            if (substr_count($node->toCodeString(), '\\') > 1 && $this->classNameImportSkipper->isFoundInUse($node) && ! function_exists($node->getLast())) {
-                return null;
-            }
-
-            return $this->nameImporter->importName($node);
+            return $this->processNodeName($node);
         }
 
         $importDocBlocks = (bool) $this->parameterProvider->provideParameter(Option::IMPORT_DOC_BLOCKS);
@@ -113,5 +103,22 @@ CODE_SAMPLE
                 ),
             ]
         );
+    }
+
+    private function processNodeName(Name $name): ?Node
+    {
+        $importName = $this->getName($name);
+
+        if (! is_callable($importName)) {
+            return $this->nameImporter->importName($name);
+        }
+
+        if (substr_count($name->toCodeString(), '\\') > 1
+            && $this->classNameImportSkipper->isFoundInUse($name)
+            && ! function_exists($name->getLast())) {
+            return null;
+        }
+
+        return $this->nameImporter->importName($name);
     }
 }
