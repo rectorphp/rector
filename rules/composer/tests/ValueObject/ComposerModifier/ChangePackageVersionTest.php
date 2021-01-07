@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\Composer\Tests\ValueObject;
+namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ValueObject\RemovePackage;
+use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
 
-final class RemovePackageTest extends TestCase
+final class ChangePackageVersionTest extends TestCase
 {
-    public function testRemoveNonExistingPackage(): void
+    public function testChangeVersionNonExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -22,11 +22,11 @@ final class RemovePackageTest extends TestCase
             ],
         ];
 
-        $removePackage = new RemovePackage('vendor1/package3');
-        $this->assertEquals($changedComposerData, $removePackage->modify($composerData));
+        $changePackageVersion = new ChangePackageVersion('vendor1/package3', '^3.0');
+        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
     }
 
-    public function testRemoveExistingPackage(): void
+    public function testChangeVersionExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -37,15 +37,16 @@ final class RemovePackageTest extends TestCase
 
         $changedComposerData = [
             'require' => [
+                'vendor1/package1' => '^3.0',
                 'vendor1/package2' => '^2.0',
             ],
         ];
 
-        $removePackage = new RemovePackage('vendor1/package1');
-        $this->assertEquals($changedComposerData, $removePackage->modify($composerData));
+        $changePackageVersion = new ChangePackageVersion('vendor1/package1', '^3.0');
+        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
     }
 
-    public function testRemoveExistingDevPackage(): void
+    public function testChangeVersionExistingDevPackage(): void
     {
         $composerData = [
             'require' => [
@@ -60,9 +61,12 @@ final class RemovePackageTest extends TestCase
             'require' => [
                 'vendor1/package1' => '^1.0',
             ],
+            'require-dev' => [
+                'vendor1/package2' => '^3.0',
+            ],
         ];
 
-        $removePackage = new RemovePackage('vendor1/package2');
-        $this->assertEquals($changedComposerData, $removePackage->modify($composerData));
+        $changePackageVersion = new ChangePackageVersion('vendor1/package2', '^3.0');
+        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
     }
 }

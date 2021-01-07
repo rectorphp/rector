@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ValueObject;
+namespace Rector\Composer\ValueObject\ComposerModifier;
 
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\ValueObject\Version\Version;
 
 /**
  * Changes package version of package which is already in composer data
- * @see \Rector\Composer\Tests\ValueObject\ChangePackageVersionTest
+ * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\ChangePackageVersionTest
  */
 final class ChangePackageVersion implements ComposerModifierInterface
 {
     /** @var string */
     private $packageName;
 
-    /** @var string */
+    /** @var Version */
     private $targetVersion;
 
     /**
@@ -26,7 +27,7 @@ final class ChangePackageVersion implements ComposerModifierInterface
     public function __construct(string $packageName, string $targetVersion)
     {
         $this->packageName = $packageName;
-        $this->targetVersion = $targetVersion;
+        $this->targetVersion = new Version($targetVersion);
     }
 
     /**
@@ -36,7 +37,7 @@ final class ChangePackageVersion implements ComposerModifierInterface
     {
         foreach ([ComposerModifier::SECTION_REQUIRE, ComposerModifier::SECTION_REQUIRE_DEV] as $section) {
             if (isset($composerData[$section][$this->packageName])) {
-                $composerData[$section][$this->packageName] = $this->targetVersion;
+                $composerData[$section][$this->packageName] = $this->targetVersion->getVersion();
             }
         }
         return $composerData;

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ValueObject;
+namespace Rector\Composer\ValueObject\ComposerModifier;
 
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 
 /**
  * Removes package from composer data
- * @see \Rector\Composer\Tests\ValueObject\RemovePackageTest
+ * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\RemovePackageTest
  */
 final class RemovePackage implements ComposerModifierInterface
 {

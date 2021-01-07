@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ValueObject;
+namespace Rector\Composer\ValueObject\ComposerModifier;
 
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 
 /**
  * Replace one package for another
- * @see \Rector\Composer\Tests\ValueObject\ReplacePackageTest
+ * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\ReplacePackageTest
  */
 final class ReplacePackage implements ComposerModifierInterface
 {

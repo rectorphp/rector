@@ -3,11 +3,11 @@
 namespace Rector\Composer\Tests\Modifier;
 
 use Nette\Utils\Json;
-use Rector\Composer\ValueObject\AddPackageToRequire;
-use Rector\Composer\ValueObject\ReplacePackage;
-use Rector\Composer\ValueObject\ChangePackageVersion;
-use Rector\Composer\ValueObject\MovePackageToRequireDev;
-use Rector\Composer\ValueObject\RemovePackage;
+use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
+use Rector\Composer\ValueObject\ComposerModifier\ReplacePackage;
+use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
+use Rector\Composer\ValueObject\ComposerModifier\MovePackageToRequireDev;
+use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;

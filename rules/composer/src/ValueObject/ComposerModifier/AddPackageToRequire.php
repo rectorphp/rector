@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ValueObject;
+namespace Rector\Composer\ValueObject\ComposerModifier;
 
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\ValueObject\Version\Version;
 
 /**
  * Only adds package to require section, if package is already in composer data, nothing happen
- * @see \Rector\Composer\Tests\ValueObject\AddPackageToRequireTest
+ * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\AddPackageToRequireTest
  */
 final class AddPackageToRequire implements ComposerModifierInterface
 {
     /** @var string */
     private $packageName;
 
-    /** @var string */
+    /** @var Version */
     private $version;
 
     /**
@@ -26,7 +27,7 @@ final class AddPackageToRequire implements ComposerModifierInterface
     public function __construct(string $packageName, string $version)
     {
         $this->packageName = $packageName;
-        $this->version = $version;
+        $this->version = new Version($version);
     }
 
     /**
@@ -35,7 +36,7 @@ final class AddPackageToRequire implements ComposerModifierInterface
     public function modify(array $composerData): array
     {
         if (!isset($composerData[ComposerModifier::SECTION_REQUIRE][$this->packageName]) && !isset($composerData[ComposerModifier::SECTION_REQUIRE_DEV][$this->packageName])) {
-            $composerData[ComposerModifier::SECTION_REQUIRE][$this->packageName] = $this->version;
+            $composerData[ComposerModifier::SECTION_REQUIRE][$this->packageName] = $this->version->getVersion();
         }
 
         return $composerData;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Composer\Tests\ValueObject;
+namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ValueObject\MovePackageToRequireDev;
+use Rector\Composer\ValueObject\ComposerModifier\MovePackageToRequireDev;
 
 final class MovePackageToRequireDevTest extends TestCase
 {

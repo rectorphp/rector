@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\Composer\Tests\ValueObject;
+namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ValueObject\ChangePackageVersion;
+use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
 
-final class ChangePackageVersionTest extends TestCase
+final class AddPackageToRequireTest extends TestCase
 {
-    public function testChangeVersionNonExistingPackage(): void
+    public function testAddNonExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -19,14 +19,15 @@ final class ChangePackageVersionTest extends TestCase
             'require' => [
                 'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
+                'vendor1/package3' => '^3.0',
             ],
         ];
 
-        $changePackageVersion = new ChangePackageVersion('vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
+        $addPackageToRequire = new AddPackageToRequire('vendor1/package3', '^3.0');
+        $this->assertEquals($changedComposerData, $addPackageToRequire->modify($composerData));
     }
 
-    public function testChangeVersionExistingPackage(): void
+    public function testAddExistingPackage(): void
     {
         $composerData = [
             'require' => [
@@ -37,16 +38,16 @@ final class ChangePackageVersionTest extends TestCase
 
         $changedComposerData = [
             'require' => [
-                'vendor1/package1' => '^3.0',
+                'vendor1/package1' => '^1.0',
                 'vendor1/package2' => '^2.0',
             ],
         ];
 
-        $changePackageVersion = new ChangePackageVersion('vendor1/package1', '^3.0');
-        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
+        $addPackageToRequire = new AddPackageToRequire('vendor1/package1', '^3.0');
+        $this->assertEquals($changedComposerData, $addPackageToRequire->modify($composerData));
     }
 
-    public function testChangeVersionExistingDevPackage(): void
+    public function testAddExistingDevPackage(): void
     {
         $composerData = [
             'require' => [
@@ -62,11 +63,11 @@ final class ChangePackageVersionTest extends TestCase
                 'vendor1/package1' => '^1.0',
             ],
             'require-dev' => [
-                'vendor1/package2' => '^3.0',
+                'vendor1/package2' => '^2.0',
             ],
         ];
 
-        $changePackageVersion = new ChangePackageVersion('vendor1/package2', '^3.0');
-        $this->assertEquals($changedComposerData, $changePackageVersion->modify($composerData));
+        $addPackageToRequire = new AddPackageToRequire('vendor1/package2', '^3.0');
+        $this->assertEquals($changedComposerData, $addPackageToRequire->modify($composerData));
     }
 }
