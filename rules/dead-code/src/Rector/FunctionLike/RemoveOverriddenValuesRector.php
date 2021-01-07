@@ -178,6 +178,13 @@ CODE_SAMPLE
             $previousNode = null;
 
             foreach ($nodesByTypeAndPosition as $nodeByTypeAndPosition) {
+                $variableNode = $nodeByTypeAndPosition->getVariableNode();
+                $comments = $variableNode->getAttribute(AttributeKey::COMMENTS);
+
+                if ($comments !== null) {
+                    continue;
+                }
+
                 if (! $nodeByTypeAndPosition->isName($assignedVariableName)) {
                     continue;
                 }
