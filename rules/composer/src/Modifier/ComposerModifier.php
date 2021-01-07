@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Composer\Modifier;
 
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
-use Symplify\ComposerJsonManipulator\Sorter\ComposerPackageSorter;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Webmozart\Assert\Assert;
 
@@ -14,9 +13,6 @@ use Webmozart\Assert\Assert;
  */
 final class ComposerModifier
 {
-    /** @var ComposerPackageSorter */
-    private $composerPackageSorter;
-
     /** @var string */
     public const SECTION_REQUIRE = 'require';
 
@@ -31,11 +27,6 @@ final class ComposerModifier
 
     /** @var ComposerModifierInterface[] */
     private $configuration = [];
-
-    public function __construct(ComposerPackageSorter $composerPackageSorter)
-    {
-        $this->composerPackageSorter = $composerPackageSorter;
-    }
 
     /**
      * @param ComposerModifierInterface[] $configuration

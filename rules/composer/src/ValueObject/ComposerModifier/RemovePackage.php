@@ -27,9 +27,9 @@ final class RemovePackage implements ComposerModifierInterface
     /**
      * @inheritDoc
      */
-    public function modify(ComposerJson $composerData): ComposerJson
+    public function modify(ComposerJson $composerJson): ComposerJson
     {
-        $composerData->removePackage($this->packageName);
-        return $composerData;
+        $composerJson->removePackage($this->packageName);
+        return $composerJson;
     }
 }

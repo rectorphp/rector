@@ -1,12 +1,7 @@
 {
     "name": "rector/rector",
     "description": "Instant upgrade and refactoring of your PHP code",
-    "keywords": [
-        "instant upgrades",
-        "instant refactoring",
-        "ast",
-        "automated refactoring"
-    ],
+    "keywords": ["instant upgrades", "instant refactoring", "ast", "automated refactoring"],
     "homepage": "https://getrector.org",
     "license": "MIT",
     "authors": [

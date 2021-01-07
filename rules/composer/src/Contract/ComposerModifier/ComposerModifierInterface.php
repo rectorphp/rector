@@ -9,8 +9,8 @@ use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 interface ComposerModifierInterface
 {
     /**
-     * @param ComposerJson $composerData decoded data from composer.json
+     * @param ComposerJson $composerJson decoded data from composer.json
      * @return ComposerJson changed $composerData
      */
-    public function modify(ComposerJson $composerData): ComposerJson;
+    public function modify(ComposerJson $composerJson): ComposerJson;
 }

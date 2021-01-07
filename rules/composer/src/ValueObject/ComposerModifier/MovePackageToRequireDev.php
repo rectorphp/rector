@@ -27,9 +27,9 @@ final class MovePackageToRequireDev implements ComposerModifierInterface
     /**
      * @inheritDoc
      */
-    public function modify(ComposerJson $composerData): ComposerJson
+    public function modify(ComposerJson $composerJson): ComposerJson
     {
-        $composerData->movePackageToRequireDev($this->packageName);
-        return $composerData;
+        $composerJson->movePackageToRequireDev($this->packageName);
+        return $composerJson;
     }
 }

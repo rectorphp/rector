@@ -33,9 +33,9 @@ final class ChangePackageVersion implements ComposerModifierInterface
     /**
      * @inheritDoc
      */
-    public function modify(ComposerJson $composerData): ComposerJson
+    public function modify(ComposerJson $composerJson): ComposerJson
     {
-        $composerData->changePackageVersion($this->packageName, $this->targetVersion->getVersion());
-        return $composerData;
+        $composerJson->changePackageVersion($this->packageName, $this->targetVersion->getVersion());
+        return $composerJson;
     }
 }
