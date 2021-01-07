@@ -174,6 +174,7 @@ final class BetterStandardPrinter extends Standard
             ContentPatcher::VALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX,
             ContentPatcher::INVALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX
         );
+        $content = $this->contentPatcher->rollbackDuplicateComment($contentOriginal, $content);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
