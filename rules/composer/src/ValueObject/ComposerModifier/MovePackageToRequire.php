@@ -24,9 +24,6 @@ final class MovePackageToRequire implements ComposerModifierInterface
         $this->packageName = $packageName;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function modify(ComposerJson $composerJson): ComposerJson
     {
         $composerJson->movePackageToRequire($this->packageName);

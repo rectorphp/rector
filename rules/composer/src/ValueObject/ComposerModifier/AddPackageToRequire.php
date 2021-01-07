@@ -30,9 +30,6 @@ final class AddPackageToRequire implements ComposerModifierInterface
         $this->version = new Version($version);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function modify(ComposerJson $composerJson): ComposerJson
     {
         $composerJson->addRequiredPackage($this->packageName, $this->version->getVersion());
