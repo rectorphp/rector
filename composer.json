@@ -19,6 +19,12 @@
     "bin": [
         "bin/rector"
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/lulco/composer-json-manipulator"
+        }
+    ],
     "require": {
         "php": "^7.3|^8.0",
         "ext-dom": "*",
@@ -42,6 +48,7 @@
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
         "symplify/autowire-array-parameter": "^9.0.21",
+        "symplify/composer-json-manipulator": "dev-added-methods-to-manipulate-json as 9.0.25",
         "symplify/console-color-diff": "^9.0.21",
         "symplify/package-builder": "^9.0.21",
         "symplify/rule-doc-generator": "^9.0.21",
