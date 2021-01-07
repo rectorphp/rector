@@ -59,15 +59,20 @@ final class NameImportingPostRector extends AbstractPostRector
 
         if ($node instanceof Name) {
             $name = $this->getName($node);
+
             if (! is_callable($name)) {
                 return $this->nameImporter->importName($node);
             }
 
-            if (! $this->classNameImportSkipper->isFoundInUse($node)) {
+            if (substr_count($node->toString(), '\\') === 1) {
+                return null;
+            }
+
+            if ($node->toCodeString() !== $node->toString()) {
                 return $this->nameImporter->importName($node);
             }
 
-            return null;
+            return $this->nameImporter->importName($node);
         }
 
         $importDocBlocks = (bool) $this->parameterProvider->provideParameter(Option::IMPORT_DOC_BLOCKS);
