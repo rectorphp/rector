@@ -96,7 +96,7 @@ final class ContentPatcher
      * @see https://regex101.com/r/uLmRxk/4
      * @var string
      */
-    public const VALID_NO_DUPLICATE_COMMENT = '#(?<c>^\/\/\s{0,}.*)#m';
+    public const VALID_NO_DUPLICATE_COMMENT_REGEX = '#(?<c>^\/\/\s{0,}.*)#m';
 
     /**
      * @see https://regex101.com/r/Ef83BV/1
@@ -175,7 +175,7 @@ final class ContentPatcher
 
     public function rollbackDuplicateComment(string $originalContent, string $content): string
     {
-        $matchNoDuplicateComments = Strings::matchAll($originalContent, self::VALID_NO_DUPLICATE_COMMENT);
+        $matchNoDuplicateComments = Strings::matchAll($originalContent, self::VALID_NO_DUPLICATE_COMMENT_REGEX);
         if ($matchNoDuplicateComments === []) {
             return $content;
         }
