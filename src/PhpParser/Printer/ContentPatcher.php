@@ -180,7 +180,6 @@ final class ContentPatcher
             return $content;
         }
 
-        $originalComment = '';
         foreach ($matchNoDuplicateComments as $matchNoDuplicateComment) {
             $duplicatedComment = $matchNoDuplicateComment['c'] . PHP_EOL . $matchNoDuplicateComment['c'];
             $content = str_replace($duplicatedComment, $matchNoDuplicateComment['c'], $content);
