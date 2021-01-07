@@ -14,6 +14,7 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 
 final class NameImportingPostRector extends AbstractPostRector
 {
@@ -32,14 +33,21 @@ final class NameImportingPostRector extends AbstractPostRector
      */
     private $docBlockNameImporter;
 
+    /**
+     * @var ClassNameImportSkipper
+     */
+    private $classNameImportSkipper;
+
     public function __construct(
         ParameterProvider $parameterProvider,
         NameImporter $nameImporter,
-        DocBlockNameImporter $docBlockNameImporter
+        DocBlockNameImporter $docBlockNameImporter,
+        ClassNameImportSkipper $classNameImportSkipper
     ) {
         $this->parameterProvider = $parameterProvider;
         $this->nameImporter = $nameImporter;
         $this->docBlockNameImporter = $docBlockNameImporter;
+        $this->classNameImportSkipper = $classNameImportSkipper;
     }
 
     public function enterNode(Node $node): ?Node
@@ -56,7 +64,7 @@ final class NameImportingPostRector extends AbstractPostRector
                 return $this->nameImporter->importName($node);
             }
 
-            if (substr_count($node->toString(), '\\') === 1) {
+            if (substr_count($node->toCodeString(), '\\') > 1 && $this->classNameImportSkipper->isFoundInUse($node)) {
                 return null;
             }
 
