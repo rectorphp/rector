@@ -298,10 +298,7 @@ CODE_SAMPLE
         if (! $this->isIfInLoop($if)) {
             return false;
         }
-        return (bool) $this->betterNodeFinder->findParentTypes(
-            $if,
-            [If_::class, Else_::class, ElseIf_::class]
-        );
+        return (bool) $this->betterNodeFinder->findParentTypes($if, [If_::class, Else_::class, ElseIf_::class]);
     }
 
     private function isLastIfOrBeforeLastReturn(If_ $if): bool

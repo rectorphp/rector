@@ -76,7 +76,6 @@ final class BetterNodeFinder
         return null;
     }
 
-
     /**
      * @param class-string<T>[] $types
      * @return T|null
