@@ -6,11 +6,9 @@ namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\UnusedNodeResolver\UnusedClassResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -114,7 +112,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->hasApiAnnotation($class)) {
+        if ($this->hasTagByName($class, 'api')) {
             return true;
         }
 
@@ -124,7 +122,7 @@ CODE_SAMPLE
     private function hasMethodWithApiAnnotation(Class_ $class): bool
     {
         foreach ($class->getMethods() as $classMethod) {
-            if (! $this->hasApiAnnotation($classMethod)) {
+            if (! $this->hasTagByName($classMethod, 'api')) {
                 continue;
             }
 
@@ -132,15 +130,5 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    private function hasApiAnnotation(Node $node): bool
-    {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return false;
-        }
-
-        return $phpDocInfo->hasByName('api');
     }
 }

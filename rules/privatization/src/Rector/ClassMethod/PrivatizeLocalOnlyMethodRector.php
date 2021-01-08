@@ -127,15 +127,11 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isAnonymousClass($classLike)) {
+        if ($this->shouldSkipClassLike($classLike)) {
             return true;
         }
 
-        if ($this->isObjectType($classLike, 'PHPUnit\Framework\TestCase')) {
-            return true;
-        }
-
-        if ($this->isDoctrineEntityClass($classLike)) {
+        if ($this->hasTagByName($classMethod, 'api')) {
             return true;
         }
 
@@ -193,6 +189,10 @@ CODE_SAMPLE
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
+        if ($this->hasTagByName($classMethod, 'api')) {
+            return true;
+        }
+
         if ($classMethod->isPrivate()) {
             return true;
         }
@@ -212,5 +212,32 @@ CODE_SAMPLE
 
         // possibly container service factories
         return $this->isNames($classMethod, ['create', 'create*']);
+    }
+
+    private function hasApiAnnotation(Node $node): bool
+    {
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return false;
+        }
+
+        return $phpDocInfo->hasByName('api');
+    }
+
+    private function shouldSkipClassLike(Class_ $classLike): bool
+    {
+        if ($this->isAnonymousClass($classLike)) {
+            return true;
+        }
+
+        if ($this->isDoctrineEntityClass($classLike)) {
+            return true;
+        }
+
+        if ($this->isObjectType($classLike, 'PHPUnit\Framework\TestCase')) {
+            return true;
+        }
+
+        return $this->hasTagByName($classLike, 'api');
     }
 }
