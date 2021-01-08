@@ -14,7 +14,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
@@ -37,16 +37,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BetterNodeFinder::class);
 
     $services->set(ReflectionProvider::class)
-        ->factory([ref(PHPStanServicesFactory::class), 'createReflectionProvider']);
+        ->factory([service(PHPStanServicesFactory::class), 'createReflectionProvider']);
 
     $services->set(NodeScopeResolver::class)
-        ->factory([ref(PHPStanServicesFactory::class), 'createNodeScopeResolver']);
+        ->factory([service(PHPStanServicesFactory::class), 'createNodeScopeResolver']);
 
     $services->set(ScopeFactory::class)
-        ->factory([ref(PHPStanServicesFactory::class), 'createScopeFactory']);
+        ->factory([service(PHPStanServicesFactory::class), 'createScopeFactory']);
 
     $services->set(TypeNodeResolver::class)
-        ->factory([ref(PHPStanServicesFactory::class), 'createTypeNodeResolver']);
+        ->factory([service(PHPStanServicesFactory::class), 'createTypeNodeResolver']);
 
     $services->set(NodeConnectingVisitor::class);
 };

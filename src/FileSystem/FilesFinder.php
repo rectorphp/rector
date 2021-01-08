@@ -124,6 +124,8 @@ final class FilesFinder
         $finder = Finder::create()
             ->followLinks()
             ->files()
+            // skip empty files
+            ->size('> 0')
             ->in($absoluteDirectories)
             ->name($suffixesPattern)
             ->sortByName();
