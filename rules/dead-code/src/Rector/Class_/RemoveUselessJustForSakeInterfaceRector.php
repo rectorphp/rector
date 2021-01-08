@@ -194,8 +194,8 @@ CODE_SAMPLE
         }
 
         // is native PHP interface?
-        $reflectionInterface = new ReflectionClass($implementedInterfaceName);
-        if ($reflectionInterface->isInternal()) {
+        $reflectionClass = new ReflectionClass($implementedInterfaceName);
+        if ($reflectionClass->isInternal()) {
             return true;
         }
 
