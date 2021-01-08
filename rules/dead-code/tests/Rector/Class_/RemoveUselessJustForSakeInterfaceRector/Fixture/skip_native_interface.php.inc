@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Restoration\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\Fixture;
 
 use ArrayAccess;
 

@@ -26,20 +26,12 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $interfacePattern;
-
-    /**
      * @var RenamedClassesCollector
      */
     private $renamedClassesCollector;
 
-    public function __construct(
-        RenamedClassesCollector $renamedClassesCollector,
-        string $interfacePattern = '#(.*?)#'
-    ) {
-        $this->interfacePattern = $interfacePattern;
+    public function __construct(RenamedClassesCollector $renamedClassesCollector)
+    {
         $this->renamedClassesCollector = $renamedClassesCollector;
     }
 
@@ -197,10 +189,6 @@ CODE_SAMPLE
 
     private function shouldSkipInterface(string $implementedInterfaceName): bool
     {
-        if (! Strings::match($implementedInterfaceName, $this->interfacePattern)) {
-            return true;
-        }
-
         if (! interface_exists($implementedInterfaceName)) {
             return true;
         }

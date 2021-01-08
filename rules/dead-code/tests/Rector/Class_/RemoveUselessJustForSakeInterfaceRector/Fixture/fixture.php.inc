@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Restoration\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\Fixture;
 
 class SomeClass implements OnlyHereUsedInterface
 {
@@ -21,7 +21,7 @@ class SomePresenter
 -----
 <?php
 
-namespace Rector\Restoration\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\Fixture;
 
 class SomeClass
 {
@@ -29,7 +29,7 @@ class SomeClass
 
 class SomePresenter
 {
-    public function __construct(\Rector\Restoration\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\Fixture\SomeClass $onlyHereUsed)
+    public function __construct(\Rector\DeadCode\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\Fixture\SomeClass $onlyHereUsed)
     {
     }
 }
