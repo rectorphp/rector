@@ -14,7 +14,7 @@ final class ComposerAutoloadedDirectoryProvider
     /**
      * @var string[]
      */
-    private const AUTOLOAD_SECTIONS = ['autolaod', 'autoload-dev'];
+    private const AUTOLOAD_SECTIONS = ['autoload', 'autoload-dev'];
 
     /**
      * @var string
