@@ -36,6 +36,11 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements Zer
     private const CONTROLLER_PRESENTER_SUFFIX_REGEX = '#(Controller|Presenter)$#';
 
     /**
+     * @var string
+     */
+    private const API = 'api';
+
+    /**
      * @var ClassMethodVisibilityVendorLockResolver
      */
     private $classMethodVisibilityVendorLockResolver;
@@ -131,7 +136,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->hasTagByName($classMethod, 'api')) {
+        if ($this->hasTagByName($classMethod, self::API)) {
             return true;
         }
 
@@ -158,7 +163,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $phpDocInfo->hasByNames(['api', TagName::REQUIRED]);
+        return $phpDocInfo->hasByNames([self::API, TagName::REQUIRED]);
     }
 
     private function isControllerAction(Class_ $class, ClassMethod $classMethod): bool
@@ -189,7 +194,7 @@ CODE_SAMPLE
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        if ($this->hasTagByName($classMethod, 'api')) {
+        if ($this->hasTagByName($classMethod, self::API)) {
             return true;
         }
 
@@ -214,30 +219,20 @@ CODE_SAMPLE
         return $this->isNames($classMethod, ['create', 'create*']);
     }
 
-    private function hasApiAnnotation(Node $node): bool
+    private function shouldSkipClassLike(Class_ $class): bool
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return false;
-        }
-
-        return $phpDocInfo->hasByName('api');
-    }
-
-    private function shouldSkipClassLike(Class_ $classLike): bool
-    {
-        if ($this->isAnonymousClass($classLike)) {
+        if ($this->isAnonymousClass($class)) {
             return true;
         }
 
-        if ($this->isDoctrineEntityClass($classLike)) {
+        if ($this->isDoctrineEntityClass($class)) {
             return true;
         }
 
-        if ($this->isObjectType($classLike, 'PHPUnit\Framework\TestCase')) {
+        if ($this->isObjectType($class, 'PHPUnit\Framework\TestCase')) {
             return true;
         }
 
-        return $this->hasTagByName($classLike, 'api');
+        return $this->hasTagByName($class, self::API);
     }
 }
