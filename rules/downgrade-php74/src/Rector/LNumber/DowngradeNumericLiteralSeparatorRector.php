@@ -68,9 +68,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $numberNode      = clone $node;
+        $numberNode = clone $node;
         $numberNodeValue = (string) $numberNode->value;
-        if (strpos($numberNodeValue, '+') !== false) {
+        if (Strings::contains($numberNodeValue, '+')) {
             return null;
         }
 
