@@ -9,7 +9,8 @@ use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
 use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter;
 use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 
@@ -24,10 +25,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->load('Rector\ConsoleDiffer\\', __DIR__ . '/../src');
 
     $services->set(DifferAndFormatter::class)
-        ->arg('$differ', ref('differ'));
+        ->arg('$differ', service('differ'));
 
     $services->set(MarkdownDifferAndFormatter::class)
-        ->arg('$markdownDiffer', ref('markdownDiffer'));
+        ->arg('$markdownDiffer', service('markdownDiffer'));
 
     $services->set('diffOutputBuilder', StrictUnifiedDiffOutputBuilder::class)
         ->arg('$options', [
@@ -36,13 +37,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->set('differ', Differ::class)
-        ->arg('$outputBuilder', ref('diffOutputBuilder'));
+        ->arg('$outputBuilder', service('diffOutputBuilder'));
 
     $services->set('markdownDiffOutputBuilder', UnifiedDiffOutputBuilder::class)
-        ->factory([ref(CompleteUnifiedDiffOutputBuilderFactory::class), 'create']);
+        ->factory([service(CompleteUnifiedDiffOutputBuilderFactory::class), 'create']);
 
     $services->set('markdownDiffer', Differ::class)
-        ->arg('$outputBuilder', ref('markdownDiffOutputBuilder'));
+        ->arg('$outputBuilder', service('markdownDiffOutputBuilder'));
 
     $services->set(ColorConsoleDiffFormatter::class);
 
