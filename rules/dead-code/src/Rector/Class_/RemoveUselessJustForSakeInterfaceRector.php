@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\Rector\Class_;
+namespace Rector\DeadCode\Rector\Class_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -21,25 +21,17 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
- * @see \Rector\Restoration\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\RemoveUselessJustForSakeInterfaceRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\RemoveUselessJustForSakeInterfaceRectorTest
  */
 final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $interfacePattern;
-
     /**
      * @var RenamedClassesCollector
      */
     private $renamedClassesCollector;
 
-    public function __construct(
-        RenamedClassesCollector $renamedClassesCollector,
-        string $interfacePattern = '#(.*?)#'
-    ) {
-        $this->interfacePattern = $interfacePattern;
+    public function __construct(RenamedClassesCollector $renamedClassesCollector)
+    {
         $this->renamedClassesCollector = $renamedClassesCollector;
     }
 
@@ -61,14 +53,9 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
         }
 
         foreach ($node->implements as $key => $implement) {
+            /** @var string $implementedInterfaceName */
             $implementedInterfaceName = $this->getName($implement);
-            if (! Strings::match($implementedInterfaceName, $this->interfacePattern)) {
-                continue;
-            }
-
-            // is interface in /vendor? probably useful
-            $classFileLocation = $this->resolveClassFileLocation($implementedInterfaceName);
-            if (Strings::contains($classFileLocation, 'vendor')) {
+            if ($this->shouldSkipInterface($implementedInterfaceName)) {
                 continue;
             }
 
@@ -83,6 +70,7 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
             $this->removeOrReplaceImlementedInterface($implementedInterfaceName, $node, $key);
 
             // 2. remove file if not in /vendor
+            $classFileLocation = $this->resolveClassFileLocation($implementedInterfaceName);
             $this->removeInterfaceFile($implementedInterfaceName, $classFileLocation);
 
             // 3. replace interface with explicit current class
@@ -132,9 +120,9 @@ CODE_SAMPLE
             ]);
     }
 
-    private function resolveClassFileLocation(string $implementedInterfaceName): string
+    private function resolveClassFileLocation(string $classLikeName): string
     {
-        $reflectionClass = new ReflectionClass($implementedInterfaceName);
+        $reflectionClass = new ReflectionClass($classLikeName);
         $fileName = $reflectionClass->getFileName();
         if (! $fileName) {
             throw new ShouldNotHappenException();
@@ -197,5 +185,22 @@ CODE_SAMPLE
 
         // get first parent interface
         return $reflectionClass->getInterfaceNames()[0] ?? null;
+    }
+
+    private function shouldSkipInterface(string $implementedInterfaceName): bool
+    {
+        if (! interface_exists($implementedInterfaceName)) {
+            return true;
+        }
+
+        // is native PHP interface?
+        $reflectionClass = new ReflectionClass($implementedInterfaceName);
+        if ($reflectionClass->isInternal()) {
+            return true;
+        }
+
+        // is interface in /vendor? probably useful
+        $classFileLocation = $this->resolveClassFileLocation($implementedInterfaceName);
+        return Strings::contains($classFileLocation, 'vendor');
     }
 }

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector;
+namespace Rector\DeadCode\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector;
 
 use Iterator;
-use Rector\Restoration\Rector\Class_\RemoveUselessJustForSakeInterfaceRector;
+use Rector\DeadCode\Rector\Class_\RemoveUselessJustForSakeInterfaceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
