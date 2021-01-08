@@ -68,6 +68,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->value === PHP_FLOAT_MAX) {
+            return null;
+        }
+
         $node->value = (string) $node->value;
 
         /**
