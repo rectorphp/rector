@@ -61,14 +61,9 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
         }
 
         foreach ($node->implements as $key => $implement) {
+            /** @var string $implementedInterfaceName */
             $implementedInterfaceName = $this->getName($implement);
-            if (! Strings::match($implementedInterfaceName, $this->interfacePattern)) {
-                continue;
-            }
-
-            // is interface in /vendor? probably useful
-            $classFileLocation = $this->resolveClassFileLocation($implementedInterfaceName);
-            if (Strings::contains($classFileLocation, 'vendor')) {
+            if ($this->shouldSkipInterface($implementedInterfaceName)) {
                 continue;
             }
 
@@ -83,6 +78,7 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
             $this->removeOrReplaceImlementedInterface($implementedInterfaceName, $node, $key);
 
             // 2. remove file if not in /vendor
+            $classFileLocation = $this->resolveClassFileLocation($implementedInterfaceName);
             $this->removeInterfaceFile($implementedInterfaceName, $classFileLocation);
 
             // 3. replace interface with explicit current class
@@ -132,9 +128,9 @@ CODE_SAMPLE
             ]);
     }
 
-    private function resolveClassFileLocation(string $implementedInterfaceName): string
+    private function resolveClassFileLocation(string $classLikeName): string
     {
-        $reflectionClass = new ReflectionClass($implementedInterfaceName);
+        $reflectionClass = new ReflectionClass($classLikeName);
         $fileName = $reflectionClass->getFileName();
         if (! $fileName) {
             throw new ShouldNotHappenException();
@@ -197,5 +193,26 @@ CODE_SAMPLE
 
         // get first parent interface
         return $reflectionClass->getInterfaceNames()[0] ?? null;
+    }
+
+    private function shouldSkipInterface(string $implementedInterfaceName): bool
+    {
+        if (! Strings::match($implementedInterfaceName, $this->interfacePattern)) {
+            return true;
+        }
+
+        if (! interface_exists($implementedInterfaceName)) {
+            return true;
+        }
+
+        // is native PHP interface?
+        $reflectionInterface = new ReflectionClass($implementedInterfaceName);
+        if ($reflectionInterface->isInternal()) {
+            return true;
+        }
+
+        // is interface in /vendor? probably useful
+        $classFileLocation = $this->resolveClassFileLocation($implementedInterfaceName);
+        return Strings::contains($classFileLocation, 'vendor');
     }
 }
