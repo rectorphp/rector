@@ -136,12 +136,12 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
                     return false;
                 }
 
-                $hasArgParent = (bool) $this->betterNodeFinder->findFirstParentInstanceOf($variable, Arg::class);
+                $hasArgParent = (bool) $this->betterNodeFinder->findParentType($variable, Arg::class);
                 if (! $hasArgParent) {
                     return false;
                 }
 
-                return ! (bool) $this->betterNodeFinder->findFirstParentInstanceOf($variable, [StaticCall::class]);
+                return ! (bool) $this->betterNodeFinder->findParentType($variable, StaticCall::class);
             });
         }
 

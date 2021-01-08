@@ -31,7 +31,7 @@ final class ScopeNestingComparator
 
     public function isNodeConditionallyScoped(Node $node): bool
     {
-        $foundParentType = $this->betterNodeFinder->findFirstParentInstanceOf(
+        $foundParentType = $this->betterNodeFinder->findParentTypes(
             $node,
             ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [FunctionLike::class]
         );
@@ -45,6 +45,6 @@ final class ScopeNestingComparator
 
     private function findParentControlStructure(Node $node): ?Node
     {
-        return $this->betterNodeFinder->findFirstParentInstanceOf($node, ControlStructure::BREAKING_SCOPE_NODE_TYPES);
+        return $this->betterNodeFinder->findParentTypes($node, ControlStructure::BREAKING_SCOPE_NODE_TYPES);
     }
 }

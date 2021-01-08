@@ -199,7 +199,7 @@ final class LocalPropertyAnalyzer
      */
     private function isPartOfClosureBind(PropertyFetch $propertyFetch): bool
     {
-        $parentStaticCall = $this->betterNodeFinder->findFirstParentInstanceOf($propertyFetch, StaticCall::class);
+        $parentStaticCall = $this->betterNodeFinder->findParentType($propertyFetch, StaticCall::class);
         if (! $parentStaticCall instanceof StaticCall) {
             return false;
         }
@@ -213,7 +213,7 @@ final class LocalPropertyAnalyzer
 
     private function isPartOfClosureBindTo(PropertyFetch $propertyFetch): bool
     {
-        $parentMethodCall = $this->betterNodeFinder->findFirstParentInstanceOf($propertyFetch, MethodCall::class);
+        $parentMethodCall = $this->betterNodeFinder->findParentType($propertyFetch, MethodCall::class);
         if (! $parentMethodCall instanceof MethodCall) {
             return false;
         }
