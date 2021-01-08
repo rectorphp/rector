@@ -26,16 +26,33 @@ final class ClassMethodVisibilityGuard
             return false;
         }
 
+        $methodName = $this->nodeNameResolver->getName($classMethod);
         $parentClasses = $this->getParentClasses($class);
-        $propertyName = $this->nodeNameResolver->getName($classMethod);
+        return $this->methodExistsInClasses($parentClasses, $methodName);
+    }
 
-        foreach ($parentClasses as $parentClass) {
-            if (method_exists($parentClass, $propertyName)) {
-                return true;
-            }
+    public function isClassMethodVisibilityGuardedByTrait(ClassMethod $classMethod, Class_ $class): bool
+    {
+        $traits = $this->getParentTraits($class);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+
+        return $this->methodExistsInClasses($traits, $methodName);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getParentTraits(Class_ $class): array
+    {
+        /** @var string $className */
+        $className = $this->nodeNameResolver->getName($class);
+
+        $traits = class_uses($className);
+        if ($traits === false) {
+            return [];
         }
 
-        return false;
+        return $traits;
     }
 
     /**
@@ -52,5 +69,19 @@ final class ClassMethodVisibilityGuard
         }
 
         return $classParents;
+    }
+
+    /**
+     * @param string[] $classes
+     */
+    private function methodExistsInClasses(array $classes, string $method): bool
+    {
+        foreach ($classes as $class) {
+            if (method_exists($class, $method)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
