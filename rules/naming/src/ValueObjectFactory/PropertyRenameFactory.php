@@ -41,12 +41,12 @@ final class PropertyRenameFactory
 
         $propertyClassLike = $property->getAttribute(AttributeKey::CLASS_NODE);
         if ($propertyClassLike === null) {
-            throw new ShouldNotHappenException("There shouldn't be a property without AttributeKey::CLASS_NODE");
+            return null;
         }
 
         $propertyClassLikeName = $property->getAttribute(AttributeKey::CLASS_NAME);
         if ($propertyClassLikeName === null) {
-            throw new ShouldNotHappenException("There shouldn't be a property without AttributeKey::CLASS_NAME");
+            return null;
         }
 
         return new PropertyRename(
