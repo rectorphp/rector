@@ -88,7 +88,9 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     }
 
     /**
-     * @param class-string $nodeType
+     * @template T as Node
+     * @param class-string<T> $nodeType
+     * @return T
      */
     private function parseFileAndGetFirstNodeOfType(SmartFileInfo $fileInfo, string $nodeType): Node
     {

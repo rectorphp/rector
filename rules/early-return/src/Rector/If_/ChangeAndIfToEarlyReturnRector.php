@@ -245,7 +245,7 @@ CODE_SAMPLE
 
     private function isIfInLoop(If_ $if): bool
     {
-        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf($if, self::LOOP_TYPES);
+        $parentLoop = $this->betterNodeFinder->findParentTypes($if, self::LOOP_TYPES);
 
         return $parentLoop !== null;
     }
@@ -272,7 +272,7 @@ CODE_SAMPLE
     private function isFunctionLikeReturnsVoid(If_ $if): bool
     {
         /** @var FunctionLike|null $functionLike */
-        $functionLike = $this->betterNodeFinder->findFirstParentInstanceOf($if, FunctionLike::class);
+        $functionLike = $this->betterNodeFinder->findParentType($if, FunctionLike::class);
         if ($functionLike === null) {
             return true;
         }
@@ -298,7 +298,7 @@ CODE_SAMPLE
         if (! $this->isIfInLoop($if)) {
             return false;
         }
-        return (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
+        return (bool) $this->betterNodeFinder->findParentTypes(
             $if,
             [If_::class, Else_::class, ElseIf_::class]
         );

@@ -91,12 +91,12 @@ final class BundleClassResolver
 
         $this->addFullyQualifiedNamesToNodes($nodes);
 
-        $class = $this->betterNodeFinder->findFirstNonAnonymousClass($nodes);
-        if ($class === null) {
+        $classLike = $this->betterNodeFinder->findFirstNonAnonymousClass($nodes);
+        if ($classLike === null) {
             return null;
         }
 
-        return $this->nodeNameResolver->getName($class);
+        return $this->nodeNameResolver->getName($classLike);
     }
 
     /**

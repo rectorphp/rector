@@ -19,6 +19,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Webmozart\Assert\Assert;
 
 /**
+ * @template T of Node
  * @see \Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
  */
 final class BetterNodeFinder
@@ -49,13 +50,39 @@ final class BetterNodeFinder
     }
 
     /**
-     * @template T of Node
-     * @param class-string<T>|class-string<T>[] $type
+     * @param class-string<T> $type
      * @return T|null
      */
-    public function findFirstParentInstanceOf(Node $node, $type): ?Node
+    public function findParentType(Node $node, string $type): ?Node
     {
-        $types = is_array($type) ? $type : [$type];
+        Assert::isAOf($type, Node::class);
+
+        /** @var Node|null $parent */
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent === null) {
+            return null;
+        }
+
+        do {
+            if (is_a($parent, $type, true)) {
+                return $parent;
+            }
+
+            if ($parent === null) {
+                return null;
+            }
+        } while ($parent = $parent->getAttribute(AttributeKey::PARENT_NODE));
+
+        return null;
+    }
+
+
+    /**
+     * @param class-string<T>[] $types
+     * @return T|null
+     */
+    public function findParentTypes(Node $node, array $types): ?Node
+    {
         Assert::allIsAOf($types, Node::class);
 
         /** @var Node|null $parent */
@@ -78,7 +105,6 @@ final class BetterNodeFinder
     }
 
     /**
-     * @template T of Node
      * @param class-string<T> $type
      * @return T|null
      */
@@ -97,7 +123,6 @@ final class BetterNodeFinder
     }
 
     /**
-     * @template T of Node
      * @param array<class-string<T>> $types
      * @return T|null
      */
@@ -118,7 +143,6 @@ final class BetterNodeFinder
     }
 
     /**
-     * @template T of Node
      * @param class-string<T> $type
      * @param Node|Node[]|Stmt[] $nodes
      * @return T[]
@@ -131,7 +155,6 @@ final class BetterNodeFinder
     }
 
     /**
-     * @template T of Node
      * @param class-string<T> $type
      * @param Node|Node[] $nodes
      * @return T|null
@@ -144,6 +167,7 @@ final class BetterNodeFinder
     }
 
     /**
+     * @param class-string<T> $type
      * @param Node|Node[] $nodes
      */
     public function hasInstanceOfName($nodes, string $type, string $name): bool
@@ -171,7 +195,6 @@ final class BetterNodeFinder
     }
 
     /**
-     * @template T of Node
      * @param Node|Node[] $nodes
      * @param class-string<T>[] $types
      */
@@ -193,7 +216,6 @@ final class BetterNodeFinder
     }
 
     /**
-     * @template T of Node
      * @param class-string<T> $type
      * @param Node|Node[] $nodes
      * @return T|null
@@ -303,7 +325,6 @@ final class BetterNodeFinder
     }
 
     /**
-     * @template T of Node
      * @param class-string<T>[] $types
      * @return T|null
      */
@@ -339,7 +360,6 @@ final class BetterNodeFinder
     }
 
     /**
-     * @template T of Node
      * @param Node|Node[] $nodes
      * @param class-string<T> $type
      * @return T|null
@@ -349,7 +369,6 @@ final class BetterNodeFinder
         Assert::isAOf($type, Node::class);
 
         $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
-
         foreach ($foundInstances as $foundInstance) {
             if (! $this->nodeNameResolver->isName($foundInstance, $name)) {
                 continue;

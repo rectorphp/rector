@@ -131,7 +131,7 @@ CODE_SAMPLE
     private function isFoundInParentNode(Variable $variable): bool
     {
         /** @var ClassMethod|Function_|null $classMethodOrFunction */
-        $classMethodOrFunction = $this->betterNodeFinder->findFirstParentInstanceOf(
+        $classMethodOrFunction = $this->betterNodeFinder->findParentTypes(
             $variable,
             [ClassMethod::class, Function_::class]
         );

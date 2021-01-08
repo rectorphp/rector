@@ -146,7 +146,7 @@ CODE_SAMPLE
 
     private function isInsideProperty(Array_ $array): bool
     {
-        $parentProperty = $this->betterNodeFinder->findFirstParentInstanceOf($array, [Property::class]);
+        $parentProperty = $this->betterNodeFinder->findParentType($array, Property::class);
 
         return $parentProperty !== null;
     }
