@@ -68,7 +68,9 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->value === PHP_FLOAT_MAX) {
+        $numberNode      = clone $node;
+        $numberNodeValue = (string) $numberNode->value;
+        if (strpos($numberNodeValue, '+') !== false) {
             return null;
         }
 
