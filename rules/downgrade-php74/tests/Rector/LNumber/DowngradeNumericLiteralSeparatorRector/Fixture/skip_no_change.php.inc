@@ -14,6 +14,7 @@ class SkipNoChange
         $binary = 0b11111111;
         $octal = 0123;
         $hex = 0x1A;
+        $one_dot_zero = 1.0;
     }
 }
 
