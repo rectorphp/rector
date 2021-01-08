@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\Rector\Class_;
+namespace Rector\DeadCode\Rector\Class_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -21,7 +21,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
- * @see \Rector\Restoration\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\RemoveUselessJustForSakeInterfaceRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\RemoveUselessJustForSakeInterfaceRectorTest
  */
 final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
 {

@@ -14674,7 +14674,7 @@ Remove final from Doctrine entities
 
 Remove interface, that are added just for its sake, but nowhere useful
 
-- class: `Rector\Restoration\Rector\Class_\RemoveUselessJustForSakeInterfaceRector`
+- class: `Rector\DeadCode\Rector\Class_\RemoveUselessJustForSakeInterfaceRector`
 
 ```diff
 -class SomeClass implements OnlyHereUsedInterface
