@@ -87,7 +87,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeNode($node);
+        $this->removeFile($this->getFileInfo());
 
         return null;
     }
