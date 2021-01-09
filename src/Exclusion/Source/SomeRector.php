@@ -11,5 +11,6 @@ final class SomeRector implements RectorInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
+        return new RuleDefinition('...' , []);
     }
 }
