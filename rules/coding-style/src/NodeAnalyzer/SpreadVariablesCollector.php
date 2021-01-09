@@ -4,49 +4,33 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class SpreadVariablesCollector
 {
     /**
-     * @param Param[]|Arg[] $nodes
-     * @return Param[]|Arg[]
+     * @return array<int, Param>
      */
-    public function getSpreadVariables(array $nodes): array
+    public function resolveFromClassMethod(ClassMethod $classMethod): array
     {
-        $spreadVariables = [];
+        $spreadParams = [];
 
-        foreach ($nodes as $key => $paramOrArg) {
-            if ($this->isVariadicParam($paramOrArg)) {
-                $spreadVariables[$key] = $paramOrArg;
+        foreach ($classMethod->params as $key => $param) {
+            // prevent race-condition removal on class method
+            $originalParam = $param->getAttribute(AttributeKey::ORIGINAL_NODE);
+            if (! $originalParam instanceof Param) {
+                continue;
             }
 
-            if ($this->isVariadicArg($paramOrArg)) {
-                $spreadVariables[$key] = $paramOrArg;
+            if (! $originalParam->variadic) {
+                continue;
             }
+
+            $spreadParams[$key] = $param;
         }
 
-        return $spreadVariables;
-    }
-
-    private function isVariadicParam(Node $node): bool
-    {
-        if (! $node instanceof Param) {
-            return false;
-        }
-
-        return $node->variadic && $node->type === null;
-    }
-
-    private function isVariadicArg(Node $node): bool
-    {
-        if (! $node instanceof Arg) {
-            return false;
-        }
-
-        return $node->unpack && $node->value instanceof Variable;
+        return $spreadParams;
     }
 }
