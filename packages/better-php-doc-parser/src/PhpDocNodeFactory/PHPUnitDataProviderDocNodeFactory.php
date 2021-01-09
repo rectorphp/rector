@@ -62,7 +62,7 @@ final class PHPUnitDataProviderDocNodeFactory
         $method = $this->privatesCaller->callPrivateMethod(
             $this->phpDocParser,
             'parseOptionalDescription',
-            $tokenIterator
+            [$tokenIterator]
         );
 
         return new DataProviderTagValueNode($method);
