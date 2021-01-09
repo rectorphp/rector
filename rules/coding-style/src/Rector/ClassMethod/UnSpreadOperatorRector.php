@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
+use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -27,10 +20,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnSpreadOperatorRector extends AbstractRector
 {
     /**
-     * @see https://regex101.com/r/ChpDsj/1
-     * @var string
+     * @var SpreadVariablesCollector
      */
-    private const ANONYMOUS_CLASS_REGEX = '#^AnonymousClass[\w+]#';
+    private $spreadVariablesCollector;
+
+    public function __construct(SpreadVariablesCollector $spreadVariablesCollector)
+    {
+        $this->spreadVariablesCollector = $spreadVariablesCollector;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -87,135 +84,70 @@ CODE_SAMPLE
         return $this->processUnspreadOperatorMethodCallArgs($node);
     }
 
-    private function getClassFileNameByClassMethod(ClassMethod $classMethod): ?string
-    {
-        $parent = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Class_) {
-            return null;
-        }
-
-        $shortClassName = (string) $parent->name;
-        if (Strings::match($shortClassName, self::ANONYMOUS_CLASS_REGEX)) {
-            return null;
-        }
-
-        $reflectionClass = new ReflectionClass((string) $parent->namespacedName);
-        return (string) $reflectionClass->getFileName();
-    }
-
-    private function getClassFileNameByMethodCall(MethodCall $methodCall): ?string
-    {
-        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
-            return null;
-        }
-
-        $type = $scope->getType($methodCall->var);
-        if ($type instanceof ObjectType) {
-            $classReflection = $type->getClassReflection();
-            if ($classReflection === null) {
-                return null;
-            }
-
-            return (string) $classReflection->getFileName();
-        }
-
-        if ($type instanceof ThisType) {
-            $staticObjectType = $type->getStaticObjectType();
-            $classReflection = $staticObjectType->getClassReflection();
-            if ($classReflection === null) {
-                return null;
-            }
-
-            return (string) $classReflection->getFileName();
-        }
-
-        return null;
-    }
-
     private function processUnspreadOperatorClassMethodParams(ClassMethod $classMethod): ?ClassMethod
     {
-        if ($this->isInVendor($classMethod)) {
+        $spreadParams = $this->spreadVariablesCollector->resolveFromClassMethod($classMethod);
+        if ($spreadParams === []) {
             return null;
         }
 
-        $params = $classMethod->params;
-        if ($params === []) {
-            return null;
-        }
-
-        $spreadVariables = $this->getSpreadVariables($params);
-        if ($spreadVariables === []) {
-            return null;
-        }
-
-        foreach (array_keys($spreadVariables) as $key) {
-            $classMethod->params[$key]->variadic = false;
-            $classMethod->params[$key]->type = new Identifier('array');
+        foreach ($spreadParams as $spreadParam) {
+            $spreadParam->variadic = false;
+            $spreadParam->type = new Identifier('array');
         }
 
         return $classMethod;
     }
 
-    /**
-     * @param ClassMethod|MethodCall $node
-     */
-    private function isInVendor(Node $node): bool
-    {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        $fileName = $node instanceof ClassMethod
-            ? $this->getClassFileNameByClassMethod($node)
-            : $this->getClassFileNameByMethodCall($node);
-
-        if ($fileName === null) {
-            return false;
-        }
-
-        return Strings::contains($fileName, 'vendor');
-    }
-
     private function processUnspreadOperatorMethodCallArgs(MethodCall $methodCall): ?MethodCall
     {
-        if ($this->isInVendor($methodCall)) {
+        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($methodCall);
+        if ($classMethod === null) {
             return null;
         }
 
-        $args = $methodCall->args;
-        if ($args === []) {
+        $spreadParams = $this->spreadVariablesCollector->resolveFromClassMethod($classMethod);
+        if ($spreadParams === []) {
             return null;
         }
 
-        $spreadVariables = $this->getSpreadVariables($args);
-        if ($spreadVariables === []) {
-            return null;
+        $firstSpreadParamPosition = array_key_first($spreadParams);
+        $variadicArgs = $this->resolveVariadicArgsByVariadicParams($methodCall, $firstSpreadParamPosition);
+
+        $hasUnpacked = false;
+
+        foreach ($variadicArgs as $position => $variadicArg) {
+            if ($variadicArg->unpack) {
+                $variadicArg->unpack = false;
+                $hasUnpacked = true;
+                $methodCall->args[$position] = $variadicArg;
+            }
         }
 
-        foreach (array_keys($spreadVariables) as $key) {
-            $methodCall->args[$key]->unpack = false;
+        if ($hasUnpacked) {
+            return $methodCall;
         }
 
+        $methodCall->args[$firstSpreadParamPosition] = new Arg($this->createArray($variadicArgs));
         return $methodCall;
     }
 
     /**
-     * @param Param[]|Arg[] $array
-     * @return Param[]|Arg[]
+     * @return Arg[]
      */
-    private function getSpreadVariables(array $array): array
+    private function resolveVariadicArgsByVariadicParams(MethodCall $methodCall, int $firstSpreadParamPosition): array
     {
-        $spreadVariables = [];
-        foreach ($array as $key => $paramOrArg) {
-            if ($paramOrArg instanceof Param && (! $paramOrArg->variadic || $paramOrArg->type !== null)) {
+        $variadicArgs = [];
+
+        foreach ($methodCall->args as $position => $arg) {
+            if ($position < $firstSpreadParamPosition) {
                 continue;
             }
 
-            if ($paramOrArg instanceof Arg && (! $paramOrArg->unpack || ! $paramOrArg->value instanceof Variable)) {
-                continue;
-            }
-
-            $spreadVariables[$key] = $paramOrArg;
+            $variadicArgs[] = $arg;
+            unset($methodCall->args[$position]);
         }
 
-        return $spreadVariables;
+        return $variadicArgs;
     }
 }
