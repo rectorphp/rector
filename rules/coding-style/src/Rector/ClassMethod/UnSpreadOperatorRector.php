@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\VendorLocker\VendorFileDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,9 +25,17 @@ final class UnSpreadOperatorRector extends AbstractRector
      */
     private $vendorFileDetector;
 
-    public function __construct(VendorFileDetector $vendorFileDetector)
-    {
+    /**
+     * @var SpreadVariablesCollector
+     */
+    private $spreadVariablesCollector;
+
+    public function __construct(
+        VendorFileDetector $vendorFileDetector,
+        SpreadVariablesCollector $spreadVariablesCollector
+    ) {
         $this->vendorFileDetector = $vendorFileDetector;
+        $this->spreadVariablesCollector = $spreadVariablesCollector;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -97,7 +104,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $spreadVariables = $this->getSpreadVariables($params);
+        $spreadVariables = $this->spreadVariablesCollector->getSpreadVariables($params);
         if ($spreadVariables === []) {
             return null;
         }
@@ -121,7 +128,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $spreadVariables = $this->getSpreadVariables($args);
+        $spreadVariables = $this->spreadVariablesCollector->getSpreadVariables($args);
         if ($spreadVariables === []) {
             return null;
         }
@@ -131,27 +138,5 @@ CODE_SAMPLE
         }
 
         return $methodCall;
-    }
-
-    /**
-     * @param Param[]|Arg[] $array
-     * @return Param[]|Arg[]
-     */
-    private function getSpreadVariables(array $array): array
-    {
-        $spreadVariables = [];
-        foreach ($array as $key => $paramOrArg) {
-            if ($paramOrArg instanceof Param && (! $paramOrArg->variadic || $paramOrArg->type !== null)) {
-                continue;
-            }
-
-            if ($paramOrArg instanceof Arg && (! $paramOrArg->unpack || ! $paramOrArg->value instanceof Variable)) {
-                continue;
-            }
-
-            $spreadVariables[$key] = $paramOrArg;
-        }
-
-        return $spreadVariables;
     }
 }
