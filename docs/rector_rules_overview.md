@@ -18,7 +18,7 @@
 
 - [CodingStyle](#codingstyle) (37)
 
-- [DeadCode](#deadcode) (42)
+- [DeadCode](#deadcode) (43)
 
 - [DeadDocBlock](#deaddocblock) (3)
 
@@ -128,7 +128,7 @@
 
 - [Renaming](#renaming) (10)
 
-- [Restoration](#restoration) (9)
+- [Restoration](#restoration) (8)
 
 - [Sensio](#sensio) (3)
 
@@ -1604,7 +1604,7 @@ Simplify regex pattern to known ranges
 
 ### SimplifyStrposLowerRector
 
-Simplify `strpos(strtolower(),` "...") calls
+Simplify `strpos(strtolower()`, "...") calls
 
 - class: `Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector`
 
@@ -3591,6 +3591,33 @@ Remove unused assigns to variables
      public function run()
      {
 -        $value = 5;
+     }
+ }
+```
+
+<br>
+
+### RemoveUselessJustForSakeInterfaceRector
+
+Remove interface, that are added just for its sake, but nowhere useful
+
+- class: `Rector\DeadCode\Rector\Class_\RemoveUselessJustForSakeInterfaceRector`
+
+```diff
+-class SomeClass implements OnlyHereUsedInterface
++class SomeClass
+ {
+ }
+
+-interface OnlyHereUsedInterface
+-{
+-}
+-
+ class SomePresenter
+ {
+-    public function __construct(OnlyHereUsedInterface $onlyHereUsed)
++    public function __construct(SomeClass $onlyHereUsed)
+     {
      }
  }
 ```
@@ -10020,7 +10047,7 @@ Change method call `duplicateStyleArray()` to `getStyle()` + `applyFromArray()`
 
 ### ChangeIOFactoryArgumentRector
 
-Change argument of `PHPExcel_IOFactory::createReader(),` `PHPExcel_IOFactory::createWriter()` and `PHPExcel_IOFactory::identify()`
+Change argument of `PHPExcel_IOFactory::createReader()`, `PHPExcel_IOFactory::createWriter()` and `PHPExcel_IOFactory::identify()`
 
 - class: `Rector\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector`
 
@@ -10560,7 +10587,7 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 
 ### ConstructClassMethodToSetUpTestCaseRector
 
-Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to `setUp(),` to prevent dangerous override
+Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to `setUp()`, to prevent dangerous override
 
 - class: `Rector\PHPUnit\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector`
 
@@ -14670,33 +14697,6 @@ Remove final from Doctrine entities
 
 <br>
 
-### RemoveUselessJustForSakeInterfaceRector
-
-Remove interface, that are added just for its sake, but nowhere useful
-
-- class: `Rector\DeadCode\Rector\Class_\RemoveUselessJustForSakeInterfaceRector`
-
-```diff
--class SomeClass implements OnlyHereUsedInterface
-+class SomeClass
- {
- }
-
--interface OnlyHereUsedInterface
--{
--}
--
- class SomePresenter
- {
--    public function __construct(OnlyHereUsedInterface $onlyHereUsed)
-+    public function __construct(SomeClass $onlyHereUsed)
-     {
-     }
- }
-```
-
-<br>
-
 ### RestoreFullyQualifiedNameRector
 
 Restore accidentally shortened class names to its fully qualified form.
@@ -15747,7 +15747,7 @@ Move self::$container service fetching from test methods up to setUp method
 
 ### AutoInPhpSymfonyConfigRector
 
-Make sure there is `public(),` `autowire(),` `autoconfigure()` calls on `defaults()` in Symfony configs
+Make sure there is `public()`, `autowire()`, `autoconfigure()` calls on `defaults()` in Symfony configs
 
 - class: `Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector`
 
