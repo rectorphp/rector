@@ -58,6 +58,10 @@ final class ManualInteractiveInputProvider
     private function createInputStream(array $manualInteractiveInput)
     {
         // mimics CommandTester, only with DI approach
-        return $this->privatesCaller->callPrivateMethod(CommandTester::class, 'createStream', $manualInteractiveInput);
+        return $this->privatesCaller->callPrivateMethod(
+            CommandTester::class,
+            'createStream',
+            [$manualInteractiveInput]
+        );
     }
 }
