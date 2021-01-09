@@ -9,19 +9,12 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class HasOffsetTypeMapper implements TypeMapperInterface
 {
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    public function __construct(PhpVersionProvider $phpVersionProvider)
+    public function __construct()
     {
-        $this->phpVersionProvider = $phpVersionProvider;
     }
 
     public function getNodeClass(): string
