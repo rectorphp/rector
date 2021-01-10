@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddableTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
