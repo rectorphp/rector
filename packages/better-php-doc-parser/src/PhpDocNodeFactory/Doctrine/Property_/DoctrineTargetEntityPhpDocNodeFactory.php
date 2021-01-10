@@ -18,6 +18,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
+use Rector\PhpdocParserPrinter\ValueObject\Tag;
 
 final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
@@ -34,7 +35,7 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
     /**
      * @return (PhpDocTagValueNode&AttributeAwareInterface)|null
      */
-    public function create(SmartTokenIterator $smartTokenIterator, string $resolvedTag): ?AttributeAwareInterface
+    public function create(SmartTokenIterator $smartTokenIterator, Tag $tag): ?AttributeAwareInterface
     {
         $currentNode = $this->currentNodeProvider->getNode();
         if ($currentNode === null) {
@@ -42,12 +43,12 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
         }
 
         /** @var OneToOne|OneToMany|ManyToMany|ManyToOne|null $annotation */
-        $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $resolvedTag);
+        $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $tag->getFullyQualifiedClass());
         if ($annotation === null) {
             return null;
         }
 
-        $tagValueNodeClass = self::ANNOTATION_TO_NODE[$resolvedTag];
+        $tagValueNodeClass = self::ANNOTATION_TO_NODE[$tag->getFullyQualifiedClass()];
 
         $items = $this->annotationItemsResolver->resolve($annotation);
         $fullyQualifiedTargetEntity = $this->resolveFqnTargetEntity($annotation->targetEntity, $currentNode);
@@ -55,8 +56,8 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
         return new $tagValueNodeClass($items, $fullyQualifiedTargetEntity);
     }
 
-    public function isMatch(string $tag): bool
+    public function isMatch(Tag $tag): bool
     {
-        return in_array($tag, self::ANNOTATION_TO_NODE, true);
+        return in_array($tag->getFullyQualifiedClass(), self::ANNOTATION_TO_NODE, true);
     }
 }

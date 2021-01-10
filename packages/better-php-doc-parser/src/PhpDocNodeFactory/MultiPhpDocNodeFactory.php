@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddableTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
@@ -42,6 +41,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
+use Rector\PhpdocParserPrinter\ValueObject\Tag;
 
 final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
@@ -90,24 +90,29 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
         'DI\Annotation\Inject' => PHPDIInjectTagValueNode::class,
     ];
 
-    public function isMatch(string $tag): bool
+    public function isMatch(Tag $tag): bool
     {
-        return isset(self::ANNOTATION_TO_NODE[$tag]);
+        return isset(self::ANNOTATION_TO_NODE[$tag->getFullyQualifiedClass()]);
     }
 
     /**
      * @return (PhpDocTagValueNode&AttributeAwareInterface)|null
      */
-    public function create(SmartTokenIterator $smartTokenIterator, string $resolvedTag): ?AttributeAwareInterface
+    public function create(SmartTokenIterator $smartTokenIterator, Tag $tag): ?AttributeAwareInterface
     {
         $currentNode = $this->currentNodeProvider->getNode();
         if ($currentNode === null) {
             throw new ShouldNotHappenException();
         }
 
-        $tagValueNodeClass = self::ANNOTATION_TO_NODE[$resolvedTag];
+        $fullyQualifiedClass = $tag->getFullyQualifiedClass();
+        if ($fullyQualifiedClass === null) {
+            throw new ShouldNotHappenException();
+        }
 
-        $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $resolvedTag);
+        $tagValueNodeClass = self::ANNOTATION_TO_NODE[$fullyQualifiedClass];
+
+        $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $fullyQualifiedClass);
         if ($annotation === null) {
             return null;
         }

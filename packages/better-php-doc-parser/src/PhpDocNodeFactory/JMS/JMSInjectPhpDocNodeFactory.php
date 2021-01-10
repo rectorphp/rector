@@ -8,10 +8,12 @@ use JMS\DiExtraBundle\Annotation\Inject;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
+use Rector\PhpdocParserPrinter\ValueObject\Tag;
 
 final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
@@ -33,15 +35,20 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     /**
      * @return JMSInjectTagValueNode|null
      */
-    public function create(SmartTokenIterator $tokenIterator, string $annotationClass): ?AttributeAwareInterface
+    public function create(SmartTokenIterator $tokenIterator, Tag $tag): ?AttributeAwareInterface
     {
         $node = $this->currentNodeProvider->getNode();
         if (! $node instanceof Property) {
             return null;
         }
 
+        $fullyQualifiedClass = $tag->getFullyQualifiedClass();
+        if ($fullyQualifiedClass === null) {
+            throw new ShouldNotHappenException();
+        }
+
         /** @var Inject|null $inject */
-        $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
+        $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, $fullyQualifiedClass);
         if ($inject === null) {
             return null;
         }
@@ -52,8 +59,8 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
         return new JMSInjectTagValueNode($items, $serviceName);
     }
 
-    public function isMatch(string $tag): bool
+    public function isMatch(Tag $tag): bool
     {
-        return $tag === self::TAG_NAME;
+        return $tag->isMatch(self::TAG_NAME);
     }
 }

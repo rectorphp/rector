@@ -14,6 +14,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
+use Rector\PhpdocParserPrinter\ValueObject\Tag;
 
 final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
@@ -41,7 +42,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     /**
      * @return JoinTableTagValueNode|null
      */
-    public function create(SmartTokenIterator $smartTokenIterator, string $annotationClass): ?AttributeAwareInterface
+    public function create(SmartTokenIterator $smartTokenIterator, Tag $annotationClass): ?AttributeAwareInterface
     {
         $node = $this->currentNodeProvider->getNode();
         if (! $node instanceof Property) {
@@ -86,9 +87,9 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
         );
     }
 
-    public function isMatch(string $tag): bool
+    public function isMatch(Tag $tag): bool
     {
-        return $tag === self::TAG_NAME;
+        return $tag->isMatch(self::TAG_NAME);
     }
 
     /**

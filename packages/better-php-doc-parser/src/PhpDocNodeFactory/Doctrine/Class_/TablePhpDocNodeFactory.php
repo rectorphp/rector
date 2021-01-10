@@ -12,6 +12,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
+use Rector\PhpdocParserPrinter\ValueObject\Tag;
 
 final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
@@ -38,20 +39,25 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
         $this->uniqueConstraintPhpDocNodeFactory = $uniqueConstraintPhpDocNodeFactory;
     }
 
-    public function isMatch(string $tag): bool
+    public function isMatch(Tag $tag): bool
     {
-        return $tag === self::TAG_NAME;
+        return $tag->isMatch(self::TAG_NAME);
     }
 
-    public function create(SmartTokenIterator $smartTokenIterator, string $currentTag): ?AttributeAwareInterface
+    public function create(SmartTokenIterator $smartTokenIterator, Tag $tag): ?AttributeAwareInterface
     {
         $currentNode = $this->currentNodeProvider->getNode();
         if (! $currentNode instanceof Class_) {
             throw new ShouldNotHappenException();
         }
 
+        $fullyQualifiedClass = $tag->getFullyQualifiedClass();
+        if ($fullyQualifiedClass === null) {
+            throw new ShouldNotHappenException();
+        }
+
         /** @var Table|null $table */
-        $table = $this->nodeAnnotationReader->readClassAnnotation($currentNode, $currentTag);
+        $table = $this->nodeAnnotationReader->readClassAnnotation($currentNode, $fullyQualifiedClass);
         if ($table === null) {
             return null;
         }

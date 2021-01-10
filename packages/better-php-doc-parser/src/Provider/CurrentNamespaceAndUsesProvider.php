@@ -42,6 +42,6 @@ final class CurrentNamespaceAndUsesProvider implements CurrentNamespaceAndUsesPr
             return [];
         }
 
-        return $currentNode->getAttribute(AttributeKey::USE_NODES);
+        return (array) $currentNode->getAttribute(AttributeKey::USE_NODES);
     }
 }

@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
+use Rector\PhpdocParserPrinter\ValueObject\Tag;
 use Rector\Symfony\ValueObject\PhpDocNode\RequiredTagValueNode;
 
 final class RequiredTagNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
@@ -19,13 +20,13 @@ final class RequiredTagNodeFactory extends AbstractPhpDocNodeFactory implements 
     /**
      * @return RequiredTagValueNode|null
      */
-    public function create(SmartTokenIterator $smartTokenIterator, string $annotationClass): ?AttributeAwareInterface
+    public function create(SmartTokenIterator $smartTokenIterator, Tag $annotationClass): ?AttributeAwareInterface
     {
         return new RequiredTagValueNode();
     }
 
-    public function isMatch(string $tag): bool
+    public function isMatch(Tag $tag): bool
     {
-        return $tag === self::TAG_NAME;
+        return $tag->isMatch(self::TAG_NAME);
     }
 }

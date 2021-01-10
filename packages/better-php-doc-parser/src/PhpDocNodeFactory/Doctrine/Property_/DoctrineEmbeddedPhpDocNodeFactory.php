@@ -12,18 +12,19 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Contract\PhpDocNodeFactoryInterface;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
+use Rector\PhpdocParserPrinter\ValueObject\Tag;
 
 final class DoctrineEmbeddedPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
-    public function isMatch(string $tag): bool
+    public function isMatch(Tag $tag): bool
     {
-        return $tag === EmbeddedTagValueNode::TAG_NAME;
+        return $tag->isMatch(EmbeddedTagValueNode::TAG_NAME);
     }
 
     /**
      * @return (PhpDocTagValueNode&AttributeAwareInterface)|null
      */
-    public function create(SmartTokenIterator $tokenIterator, string $annotationClass): ?AttributeAwareInterface
+    public function create(SmartTokenIterator $tokenIterator, Tag $annotationClass): ?AttributeAwareInterface
     {
         $currentNode = $this->currentNodeProvider->getNode();
         if ($currentNode === null) {
