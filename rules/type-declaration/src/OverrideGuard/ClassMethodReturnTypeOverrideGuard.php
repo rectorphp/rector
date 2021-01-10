@@ -18,7 +18,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class ClassMethodReturnTypeOverrideGuard
 {
     /**
-     * @var array<string, array<string>>
+     * @var array<string, string[]>
      */
     private const CHAOTIC_CLASS_METHOD_NAMES = [
         NodeVisitor::class => ['enterNode', 'leaveNode', 'beforeTraverse', 'afterTraverse'],

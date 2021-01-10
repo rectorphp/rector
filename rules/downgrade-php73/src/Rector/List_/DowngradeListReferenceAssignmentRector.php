@@ -156,7 +156,7 @@ CODE_SAMPLE
     /**
      * Count the number of params by reference placed at the end
      * These params are not needed anymore, so they can be removed
-     * @param (ArrayItem|null)[] $listItems
+     * @param ArrayItem|null[] $listItems
      */
     private function countRightSideMostParamsByRefOrEmpty(array $listItems): int
     {
@@ -188,8 +188,8 @@ CODE_SAMPLE
     }
 
     /**
-     * @param (ArrayItem|null)[] $listItems
-     * @param (int|string)[] $nestedArrayIndexes
+     * @param ArrayItem|null[] $listItems
+     * @param int|string[] $nestedArrayIndexes
      * @return AssignRef[]
      */
     private function createAssignRefArrayFromListReferences(
@@ -245,7 +245,7 @@ CODE_SAMPLE
      * - list(&$a, $b)
      * - list($a, $b, list(&$c, $d))
      *
-     * @param (ArrayItem|null)[] $items
+     * @param ArrayItem|null[] $items
      */
     private function hasAnyItemByRef(array $items): bool
     {
@@ -257,7 +257,7 @@ CODE_SAMPLE
      * - list(&$a, &$b)
      * - list(&$a, &$b, list(&$c, &$d))
      *
-     * @param (ArrayItem|null)[] $items
+     * @param ArrayItem|null[] $items
      */
     private function hasAllItemsByRef(array $items): bool
     {
@@ -279,7 +279,7 @@ CODE_SAMPLE
 
     /**
      * Re-build the path to the variable with all accumulated indexes
-     * @param (string|int)[] $nestedArrayIndexes The path to build nested lists
+     * @param string|int[] $nestedArrayIndexes The path to build nested lists
      * @param string|int $arrayIndex
      */
     private function createAssignRefWithArrayDimFetch(
@@ -299,7 +299,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param (ArrayItem|null)[] $items
+     * @param ArrayItem|null[] $items
      * @return ArrayItem[]
      */
     private function getItemsByRef(array $items, int $condition): array

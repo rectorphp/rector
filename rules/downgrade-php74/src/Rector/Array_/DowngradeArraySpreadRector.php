@@ -165,7 +165,7 @@ CODE_SAMPLE
 
     /**
      * @see https://wiki.php.net/rfc/spread_operator_for_array
-     * @param (ArrayItem|null)[] $items
+     * @param ArrayItem|null[] $items
      */
     private function createArrayMerge(Array_ $array, array $items): FuncCall
     {
@@ -209,7 +209,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param (ArrayItem|null)[] $items
+     * @param ArrayItem|null[] $items
      */
     private function createArrayItem(array $items): ArrayItem
     {
