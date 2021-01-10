@@ -593,7 +593,6 @@ parameters:
         - '#File "ClassInCorrectNamespaceRector\.php" should have prefix "Skip" prefix#'
         - '#File "HaveSameStarts\.php" should have prefix "Skip" prefix#'
         - '#File "AbstractSkip\.php" should have prefix "Skip" prefix#'
-<<<<<<< HEAD
 
         # generics nullable bugs
         - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node\|null#'

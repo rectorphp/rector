@@ -14,7 +14,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\PhpdocParserPrinter\Parser\TokenAwarePhpDocParser;
 use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocNode;
-use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PhpDocInfoFactory
@@ -110,7 +109,6 @@ final class PhpDocInfoFactory
     }
 
     /**
-     * @param mixed[][] $tokens
      * @return AttributeAwareInterface&PhpDocNode
      */
     private function parseTokensToPhpDocNode(string $docContent)
