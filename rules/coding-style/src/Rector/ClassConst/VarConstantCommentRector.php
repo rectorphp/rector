@@ -26,8 +26,6 @@ final class VarConstantCommentRector extends AbstractRector
      */
     private const ARRAY_LIMIT_TYPES = 3;
 
-    private $typeAnalyzer;
-
     /**
      * @var TypeComparator
      */
