@@ -283,7 +283,6 @@
             "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src",
             "Rector\\Utils\\NodeDocumentationGenerator\\": "utils/node-documentation-generator/src",
             "Rector\\Utils\\NodeDocumentationGenerator\\Tests\\": "utils/node-documentation-generator/tests",
-            "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/phpstan-attribute-type-syncer/src",
             "Rector\\Utils\\PHPStanTypeMapperChecker\\": "utils/phpstan-type-mapper-checker/src",
             "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
             "Rector\\Carbon\\Tests\\": "rules/carbon/tests"
