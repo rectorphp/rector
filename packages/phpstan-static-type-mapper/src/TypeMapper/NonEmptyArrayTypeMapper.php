@@ -9,7 +9,7 @@ use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
+use Rector\PhpdocParserPrinter\ValueObject\TypeNode\AttributeAwareArrayTypeNode;
 use Rector\PhpdocParserPrinter\ValueObject\TypeNode\AttributeAwareIdentifierTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
