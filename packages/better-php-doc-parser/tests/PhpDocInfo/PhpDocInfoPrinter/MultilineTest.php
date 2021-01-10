@@ -39,7 +39,9 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         $printedContent = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
         $printedContent = trim($printedContent);
 
-        $this->assertSame(trim($docComment), $printedContent, $relativeFilePathFromCwd);
+        $expectedContent = trim($docComment);
+
+        $this->assertSame($expectedContent, $printedContent, $relativeFilePathFromCwd);
     }
 
     public function provideData(): Iterator

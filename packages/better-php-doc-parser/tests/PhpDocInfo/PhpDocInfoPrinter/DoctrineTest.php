@@ -28,7 +28,9 @@ final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
         $printedDocComment = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
         $printedDocComment = trim($printedDocComment);
 
-        $this->assertSame(trim($docComment), $printedDocComment, $relativeFilePathFromCwd);
+        $expectedContent = trim($docComment);
+
+        $this->assertSame($expectedContent, $printedDocComment, $relativeFilePathFromCwd);
     }
 
     public function provideDataClass(): Iterator
