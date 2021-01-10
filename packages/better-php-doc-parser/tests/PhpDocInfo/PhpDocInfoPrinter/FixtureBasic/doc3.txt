@@ -1,5 +1,5 @@
 /**
- * @param SomeType
+ * @param SomeType $someValue
  *
  *
  * @return SomeType

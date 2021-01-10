@@ -60,6 +60,7 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
         $printedDocComment = trim($printedDocComment);
 
         $relativeFilePath = $inputFileInfo->getRelativeFilePathFromCwd();
+
         $this->assertSame(trim($expectedFileInfo->getContents()), $printedDocComment, $relativeFilePath);
     }
 }
