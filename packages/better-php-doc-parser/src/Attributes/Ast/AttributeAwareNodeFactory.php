@@ -10,8 +10,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactoryCollector;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\Mapper\NodeMapper;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\Attributes\Ast\AttributeAwareNodeFactoryTest
@@ -23,9 +23,17 @@ final class AttributeAwareNodeFactory
      */
     private $attributeAwareNodeFactoryCollector;
 
-    public function __construct(AttributeAwareNodeFactoryCollector $attributeAwareNodeFactoryCollector)
-    {
+    /**
+     * @var NodeMapper
+     */
+    private $nodeMapper;
+
+    public function __construct(
+        AttributeAwareNodeFactoryCollector $attributeAwareNodeFactoryCollector,
+        NodeMapper $nodeMapper
+    ) {
         $this->attributeAwareNodeFactoryCollector = $attributeAwareNodeFactoryCollector;
+        $this->nodeMapper = $nodeMapper;
     }
 
     /**
@@ -50,10 +58,7 @@ final class AttributeAwareNodeFactory
             return $attributeNodeAwareFactory->create($node, $docContent);
         }
 
-        throw new ShouldNotHappenException(sprintf(
-            'Node "%s" was missed in "%s". Generate it with: bin/rector sync-types',
-            get_class($node),
-            __METHOD__
-        ));
+        // new package fallback
+        return $this->nodeMapper->mapNode($node);
     }
 }
