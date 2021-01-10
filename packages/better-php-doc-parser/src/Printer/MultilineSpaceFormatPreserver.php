@@ -52,33 +52,33 @@ final class MultilineSpaceFormatPreserver
     /**
      * Fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
      */
-    public function fixMultilineDescriptions(AttributeAwareInterface $attributeAwareNode): AttributeAwareInterface
+    public function fixMultilineDescriptions(AttributeAwareInterface $attributeAware): AttributeAwareInterface
     {
-        $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
+        $originalContent = $attributeAware->getAttribute(Attribute::ORIGINAL_CONTENT);
         if (! $originalContent) {
-            return $attributeAwareNode;
+            return $attributeAware;
         }
 
-        $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($attributeAwareNode);
+        $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($attributeAware);
         if ($nodeWithRestoredSpaces !== null) {
-            $attributeAwareNode = $nodeWithRestoredSpaces;
-            $attributeAwareNode->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
+            $attributeAware = $nodeWithRestoredSpaces;
+            $attributeAware->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
         }
 
-        return $attributeAwareNode;
+        return $attributeAware;
     }
 
     /**
-     * @param PhpDocTextNode|AttributeAwareInterface $attributeAwareNode
+     * @param PhpDocTextNode|AttributeAwareInterface $attributeAware
      */
     private function restoreOriginalSpacingInText(
-        AttributeAwareInterface $attributeAwareNode
+        AttributeAwareInterface $attributeAware
     ): ?AttributeAwareInterface {
         /** @var string $originalContent */
-        $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
+        $originalContent = $attributeAware->getAttribute(Attribute::ORIGINAL_CONTENT);
         $oldSpaces = Strings::matchAll($originalContent, '#\s+#ms');
 
-        $currentText = $this->resolveCurrentPhpDocNodeText($attributeAwareNode);
+        $currentText = $this->resolveCurrentPhpDocNodeText($attributeAware);
         if ($currentText === null) {
             return null;
         }
@@ -107,28 +107,25 @@ final class MultilineSpaceFormatPreserver
             return null;
         }
 
-        return $this->setNewTextToPhpDocNode($attributeAwareNode, $newText);
+        return $this->setNewTextToPhpDocNode($attributeAware, $newText);
     }
 
     private function setNewTextToPhpDocNode(
-        AttributeAwareInterface $attributeAwareNode,
+        AttributeAwareInterface $attributeAware,
         string $newText
     ): AttributeAwareInterface {
-        if ($attributeAwareNode instanceof PhpDocTagNode && property_exists(
-            $attributeAwareNode->value,
-            'description'
-        )) {
-            $attributeAwareNode->value->description = $newText;
+        if ($attributeAware instanceof PhpDocTagNode && property_exists($attributeAware->value, 'description')) {
+            $attributeAware->value->description = $newText;
         }
 
-        if ($attributeAwareNode instanceof PhpDocTextNode) {
-            $attributeAwareNode->text = $newText;
+        if ($attributeAware instanceof PhpDocTextNode) {
+            $attributeAware->text = $newText;
         }
 
-        if ($attributeAwareNode instanceof AttributeAwarePhpDocTagNode && $attributeAwareNode->value instanceof AttributeAwareGenericTagValueNode) {
-            $attributeAwareNode->value->value = $newText;
+        if ($attributeAware instanceof AttributeAwarePhpDocTagNode && $attributeAware->value instanceof AttributeAwareGenericTagValueNode) {
+            $attributeAware->value->value = $newText;
         }
 
-        return $attributeAwareNode;
+        return $attributeAware;
     }
 }

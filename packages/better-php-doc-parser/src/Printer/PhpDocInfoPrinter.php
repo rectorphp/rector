@@ -202,7 +202,7 @@ final class PhpDocInfoPrinter
     }
 
     private function printNode(
-        AttributeAwareInterface $attributeAwareNode,
+        AttributeAwareInterface $attributeAware,
         ?StartAndEnd $startAndEnd = null,
         int $key = 0,
         int $nodeCount = 0
@@ -210,8 +210,8 @@ final class PhpDocInfoPrinter
         $output = '';
 
         /** @var StartAndEnd|null $startAndEnd */
-        $startAndEnd = $attributeAwareNode->getAttribute(Attribute::START_END) ?: $startAndEnd;
-        $attributeAwareNode = $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAwareNode);
+        $startAndEnd = $attributeAware->getAttribute(Attribute::START_END) ?: $startAndEnd;
+        $attributeAware = $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAware);
 
         if ($startAndEnd !== null) {
             $isLastToken = ($nodeCount === $key);
@@ -226,26 +226,26 @@ final class PhpDocInfoPrinter
             $this->currentTokenPosition = $startAndEnd->getEnd();
         }
 
-        if ($attributeAwareNode instanceof PhpDocTagNode) {
+        if ($attributeAware instanceof PhpDocTagNode) {
             if ($startAndEnd !== null) {
-                return $this->printPhpDocTagNode($attributeAwareNode, $startAndEnd, $output);
+                return $this->printPhpDocTagNode($attributeAware, $startAndEnd, $output);
             }
 
-            return $output . self::NEWLINE_ASTERISK . $this->printAttributeWithAsterisk($attributeAwareNode);
+            return $output . self::NEWLINE_ASTERISK . $this->printAttributeWithAsterisk($attributeAware);
         }
 
-        if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startAndEnd) {
-            $nodeContent = (string) $attributeAwareNode;
+        if (! $attributeAware instanceof PhpDocTextNode && ! $attributeAware instanceof GenericTagValueNode && $startAndEnd) {
+            $nodeContent = (string) $attributeAware;
 
             return $this->originalSpacingRestorer->restoreInOutputWithTokensStartAndEndPosition(
-                $attributeAwareNode,
+                $attributeAware,
                 $nodeContent,
                 $this->tokens,
                 $startAndEnd
             );
         }
 
-        return $output . $this->printAttributeWithAsterisk($attributeAwareNode);
+        return $output . $this->printAttributeWithAsterisk($attributeAware);
     }
 
     private function printEnd(string $output): string
@@ -326,9 +326,9 @@ final class PhpDocInfoPrinter
         return $output . $nodeOutput;
     }
 
-    private function printAttributeWithAsterisk(AttributeAwareInterface $attributeAwareNode): string
+    private function printAttributeWithAsterisk(AttributeAwareInterface $attributeAware): string
     {
-        $content = (string) $attributeAwareNode;
+        $content = (string) $attributeAware;
 
         return $this->explodeAndImplode($content, PHP_EOL, self::NEWLINE_ASTERISK);
     }

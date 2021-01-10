@@ -88,7 +88,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     }
 
     /**
-     * @template T as Node
+     * @template T of Node
      * @param class-string<T> $nodeType
      * @return T
      */

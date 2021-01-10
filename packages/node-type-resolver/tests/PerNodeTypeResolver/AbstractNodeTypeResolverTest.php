@@ -38,7 +38,7 @@ abstract class AbstractNodeTypeResolverTest extends AbstractKernelTestCase
     }
 
     /**
-     * @template T as Node
+     * @template T of Node
      * @param class-string<T> $type
      * @return T[]
      */
