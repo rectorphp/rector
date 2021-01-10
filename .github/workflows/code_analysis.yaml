@@ -44,10 +44,6 @@ jobs:
                         run: bin/rector validate-sets --ansi
 
                     -
-                        name: 'Validate PHPStan Types Compatibility'
-                        run: bin/rector sync-types --ansi
-
-                    -
                         name: 'Validate PHPStan Mappers Compatibility'
                         run: bin/rector check-static-type-mappers --ansi
 
