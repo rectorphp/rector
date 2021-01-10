@@ -42,8 +42,13 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
             throw new ShouldNotHappenException();
         }
 
+        $fullyQualifiedClass = $tag->getFullyQualifiedClass();
+        if ($fullyQualifiedClass === null) {
+            throw new ShouldNotHappenException();
+        }
+
         /** @var OneToOne|OneToMany|ManyToMany|ManyToOne|null $annotation */
-        $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $tag->getFullyQualifiedClass());
+        $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $fullyQualifiedClass);
         if ($annotation === null) {
             return null;
         }

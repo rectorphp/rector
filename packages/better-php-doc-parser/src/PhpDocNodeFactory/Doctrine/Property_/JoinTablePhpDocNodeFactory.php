@@ -42,15 +42,20 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     /**
      * @return JoinTableTagValueNode|null
      */
-    public function create(SmartTokenIterator $smartTokenIterator, Tag $annotationClass): ?AttributeAwareInterface
+    public function create(SmartTokenIterator $smartTokenIterator, Tag $tag): ?AttributeAwareInterface
     {
         $node = $this->currentNodeProvider->getNode();
         if (! $node instanceof Property) {
             throw new ShouldNotHappenException();
         }
 
+        $fullyQualifiedClass = $tag->getFullyQualifiedClass();
+        if ($fullyQualifiedClass === null) {
+            throw new ShouldNotHappenException();
+        }
+
         /** @var JoinTable|null $joinTable */
-        $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
+        $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $fullyQualifiedClass);
         if ($joinTable === null) {
             return null;
         }

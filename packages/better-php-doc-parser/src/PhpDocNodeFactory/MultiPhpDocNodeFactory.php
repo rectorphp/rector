@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddableTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
@@ -95,9 +96,6 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
         return isset(self::ANNOTATION_TO_NODE[$tag->getFullyQualifiedClass()]);
     }
 
-    /**
-     * @return (PhpDocTagValueNode&AttributeAwareInterface)|null
-     */
     public function create(SmartTokenIterator $smartTokenIterator, Tag $tag): ?AttributeAwareInterface
     {
         $currentNode = $this->currentNodeProvider->getNode();

@@ -24,15 +24,20 @@ final class DoctrineEmbeddedPhpDocNodeFactory extends AbstractPhpDocNodeFactory 
     /**
      * @return (PhpDocTagValueNode&AttributeAwareInterface)|null
      */
-    public function create(SmartTokenIterator $tokenIterator, Tag $annotationClass): ?AttributeAwareInterface
+    public function create(SmartTokenIterator $tokenIterator, Tag $tag): ?AttributeAwareInterface
     {
         $currentNode = $this->currentNodeProvider->getNode();
         if ($currentNode === null) {
             throw new ShouldNotHappenException();
         }
 
+        $fullyQualifiedClass = $tag->getFullyQualifiedClass();
+        if ($fullyQualifiedClass === null) {
+            throw new ShouldNotHappenException();
+        }
+
         /** @var Embedded|null $annotation */
-        $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $annotationClass);
+        $annotation = $this->nodeAnnotationReader->readAnnotation($currentNode, $fullyQualifiedClass);
         if ($annotation === null) {
             return null;
         }
