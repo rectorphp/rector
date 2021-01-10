@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class DoNotRemoveMethodParameterUsedInArg
+final class RemoveUnusedAssignOfBothProperties
 {
     private $b;
     private $c;
@@ -12,11 +12,6 @@ class DoNotRemoveMethodParameterUsedInArg
         $this->b = $b;
         $this->c = new C($b);
     }
-
-    public function get()
-    {
-        return $this->c;
-    }
 }
 
 ?>
@@ -25,18 +20,10 @@ class DoNotRemoveMethodParameterUsedInArg
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class DoNotRemoveMethodParameterUsedInArg
+final class RemoveUnusedAssignOfBothProperties
 {
-    private $c;
-
     public function __construct(B $b)
     {
-        $this->c = new C($b);
-    }
-
-    public function get()
-    {
-        return $this->c;
     }
 }
 

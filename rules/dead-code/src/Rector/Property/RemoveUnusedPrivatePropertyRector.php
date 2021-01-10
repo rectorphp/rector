@@ -88,6 +88,6 @@ CODE_SAMPLE
 
         /** @var Class_|Interface_|Trait_|null $classLike */
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        return $classLike === null || $classLike instanceof Trait_ || $classLike instanceof Interface_;
+        return ! $classLike instanceof Class_;
     }
 }
