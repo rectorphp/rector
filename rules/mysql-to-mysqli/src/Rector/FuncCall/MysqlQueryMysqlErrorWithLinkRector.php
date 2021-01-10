@@ -202,7 +202,13 @@ CODE_SAMPLE
         }
 
         $connectionPosition = self::FUNCTION_CONNECTION_PARAMETER_POSITION_MAP[$functionName];
-        unset($funcCall->args[$connectionPosition]);
+        foreach ($funcCall->args as $key => $arg) {
+            if ($key === $connectionPosition) {
+                $funcCall->{$key + 1} = $arg;
+                unset($funcCall->args[$connectionPosition - 1]);
+                break;
+            }
+        }
     }
 
     private function isUnionTypeWithResourceSubType(Type $staticType, ResourceType $resourceType): bool
