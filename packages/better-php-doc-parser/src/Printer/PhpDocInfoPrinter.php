@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\PhpdocParserPrinter\Printer\PhpDocPrinter;
-use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocNode;
 use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
 
 /**
@@ -15,42 +13,6 @@ use Rector\PhpdocParserPrinter\ValueObject\SmartTokenIterator;
  */
 final class PhpDocInfoPrinter
 {
-    /**
-     * @var string
-     * @see https://regex101.com/r/5fJyws/1
-     */
-    private const CALLABLE_REGEX = '#callable(\s+)\(#';
-
-    /**
-     * @var int
-     */
-    private $tokenCount;
-
-    /**
-     * @var int
-     */
-    private $currentTokenPosition;
-
-    /**
-     * @var mixed[]
-     */
-    private $tokens = [];
-
-    /**
-     * @var StartAndEnd[]
-     */
-    private $removedNodePositions = [];
-
-    /**
-     * @var AttributeAwarePhpDocNode
-     */
-    private $attributeAwarePhpDocNode;
-
-    /**
-     * @var PhpDocInfo
-     */
-    private $phpDocInfo;
-
     /**
      * @var EmptyPhpDocDetector
      */

@@ -25,11 +25,10 @@ final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
         $fileInfo = new SmartFileInfo($docFilePath);
         $relativeFilePathFromCwd = $fileInfo->getRelativeFilePathFromCwd();
 
-        $this->assertSame(
-            $docComment,
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo),
-            $relativeFilePathFromCwd
-        );
+        $printedDocComment = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+        $printedDocComment = trim($printedDocComment);
+
+        $this->assertSame(trim($docComment), $printedDocComment, $relativeFilePathFromCwd);
     }
 
     public function provideDataClass(): Iterator
