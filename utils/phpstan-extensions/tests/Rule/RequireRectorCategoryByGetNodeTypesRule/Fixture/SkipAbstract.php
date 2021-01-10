@@ -6,7 +6,7 @@ namespace Rector\PHPStanExtensions\Tests\Rule\RequireRectorCategoryByGetNodeType
 
 use PhpParser\Node\Stmt\ClassMethod;
 
-abstract class AbstractSkip
+abstract class SkipAbstract
 {
     public function getNodeTypes(): array
     {
