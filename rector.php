@@ -55,6 +55,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         Setlist::PHP_71,
         Setlist::PHP_72,
         Setlist::PHP_73,
+        Setlist::PHP_74,
+        Setlist::PHP_80,
         Setlist::EARLY_RETURN,
     ]);
 
