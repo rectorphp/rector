@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareThisTypeNode;
+use Rector\PhpdocParserPrinter\ValueObject\TypeNode\AttributeAwareThisTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class ThisTypeMapper implements TypeMapperInterface

@@ -11,9 +11,9 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareThisTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PhpdocParserPrinter\ValueObject\TypeNode\AttributeAwareThisTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 /**

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
+use Rector\PhpdocParserPrinter\Attributes\AttributesTrait;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
-final class AttributeAwareParamTagValueNode extends ParamTagValueNode implements AttributeAwareNodeInterface, TypeAwareTagValueNodeInterface
+final class AttributeAwareParamTagValueNode extends ParamTagValueNode implements AttributeAwareInterface, TypeAwareTagValueNodeInterface
 {
-    use AttributeTrait;
+    use AttributesTrait;
 
     public function __toString(): string
     {

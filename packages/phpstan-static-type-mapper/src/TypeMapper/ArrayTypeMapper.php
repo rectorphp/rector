@@ -17,10 +17,10 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\ValueObject\TypeNode\AttributeAwareGenericTypeNode;
+use Rector\PhpdocParserPrinter\ValueObject\TypeNode\AttributeAwareIdentifierTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\TypeNormalizer;
@@ -177,7 +177,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         // @see https://github.com/phpstan/phpdoc-parser/blob/98a088b17966bdf6ee25c8a4b634df313d8aa531/tests/PHPStan/Parser/PhpDocParserTest.php#L2692-L2696
 
         foreach ($genericTypes as $genericType) {
-            /** @var AttributeAwareNodeInterface $genericType */
+            /** @var AttributeAwareInterface $genericType */
             $genericType->setAttribute(self::HAS_GENERIC_TYPE_PARENT, $withKey);
         }
 

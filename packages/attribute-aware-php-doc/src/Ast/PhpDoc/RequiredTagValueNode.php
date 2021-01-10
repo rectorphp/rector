@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
+use Rector\PhpdocParserPrinter\Attributes\AttributesTrait;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
-final class RequiredTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface, PhpAttributableTagNodeInterface
+final class RequiredTagValueNode implements PhpDocTagValueNode, AttributeAwareInterface, PhpAttributableTagNodeInterface
 {
-    use AttributeTrait;
+    use AttributesTrait;
 
     public function __toString(): string
     {

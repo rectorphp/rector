@@ -7,11 +7,11 @@ namespace Rector\Utils\PHPStanAttributeTypeSyncer\NodeFactory;
 use Nette\Utils\Strings;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\Core\PhpParser\Builder\ClassBuilder;
 use Rector\Core\PhpParser\Builder\NamespaceBuilder;
 use Rector\Core\PhpParser\Builder\TraitUseBuilder;
+use Rector\PhpdocParserPrinter\Attributes\AttributesTrait;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\Utils\PHPStanAttributeTypeSyncer\ClassNaming\AttributeClassNaming;
 use Rector\Utils\PHPStanAttributeTypeSyncer\ValueObject\Paths;
 
@@ -40,7 +40,7 @@ final class AttributeAwareClassFactory
         $shortClassName = $this->attributeClassNaming->createAttributeAwareShortClassName($nodeClass);
         $classBuilder = $this->createClassBuilder($nodeClass, $shortClassName);
 
-        $traitUseBuilder = new TraitUseBuilder(new FullyQualified(AttributeTrait::class));
+        $traitUseBuilder = new TraitUseBuilder(new FullyQualified(AttributesTrait::class));
         $classBuilder->addStmt($traitUseBuilder);
 
         $namespaceBuilder->addStmt($classBuilder->getNode());
@@ -53,7 +53,7 @@ final class AttributeAwareClassFactory
         $classBuilder = new ClassBuilder($shortClassName);
         $classBuilder->makeFinal();
         $classBuilder->extend(new FullyQualified($nodeClass));
-        $classBuilder->implement(new FullyQualified(AttributeAwareNodeInterface::class));
+        $classBuilder->implement(new FullyQualified(AttributeAwareInterface::class));
 
         return $classBuilder;
     }

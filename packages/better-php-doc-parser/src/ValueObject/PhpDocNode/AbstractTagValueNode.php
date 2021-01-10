@@ -6,8 +6,6 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\PartPhpDocTagPrinter\Behavior\ArrayPartPhpDocTagPrinterTrait;
 use Rector\BetterPhpDocParser\PhpDocNode\PrintTagValueNodeTrait;
@@ -15,10 +13,12 @@ use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
 use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\PhpdocParserPrinter\Attributes\AttributesTrait;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
-abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
+abstract class AbstractTagValueNode implements AttributeAwareInterface, PhpDocTagValueNode
 {
-    use AttributeTrait;
+    use AttributesTrait;
     use PrintTagValueNodeTrait;
     use ArrayPartPhpDocTagPrinterTrait;
 

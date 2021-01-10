@@ -8,12 +8,12 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Attributes\AttributesTrait;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
-final class AttributeAwareCallableTypeNode extends CallableTypeNode implements AttributeAwareNodeInterface
+final class AttributeAwareCallableTypeNode extends CallableTypeNode implements AttributeAwareInterface
 {
-    use AttributeTrait;
+    use AttributesTrait;
 
     public function __toString(): string
     {

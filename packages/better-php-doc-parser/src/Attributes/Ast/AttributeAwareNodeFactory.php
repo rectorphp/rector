@@ -10,8 +10,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactoryCollector;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\Attributes\Ast\AttributeAwareNodeFactoryTest
@@ -29,11 +29,11 @@ final class AttributeAwareNodeFactory
     }
 
     /**
-     * @return PhpDocNode|PhpDocChildNode|PhpDocTagValueNode|AttributeAwareNodeInterface
+     * @return PhpDocNode|PhpDocChildNode|PhpDocTagValueNode|AttributeAwareInterface
      */
-    public function createFromNode(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function createFromNode(Node $node, string $docContent): AttributeAwareInterface
     {
-        if ($node instanceof AttributeAwareNodeInterface) {
+        if ($node instanceof AttributeAwareInterface) {
             return $node;
         }
 

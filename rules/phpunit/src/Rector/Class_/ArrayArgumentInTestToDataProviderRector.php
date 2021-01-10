@@ -20,13 +20,13 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocTagNode;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
@@ -310,9 +310,10 @@ CODE_SAMPLE
 
     private function createDataProviderTagNode(string $dataProviderMethodName): PhpDocTagNode
     {
-        return new AttributeAwarePhpDocTagNode('@dataProvider', new GenericTagValueNode(
-            $dataProviderMethodName . '()'
-        ));
+        return new AttributeAwarePhpDocTagNode(
+            '@dataProvider',
+            new GenericTagValueNode($dataProviderMethodName . '()')
+        );
     }
 
     private function isNestedArray(Array_ $array): bool

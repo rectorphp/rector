@@ -8,9 +8,9 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Laravel\ValueObject\ServiceNameTypeAndVariableName;
+use Rector\PhpdocParserPrinter\ValueObject\TypeNode\FullyQualifiedIdentifierTypeNode;
 
 final class AppAssignFactory
 {

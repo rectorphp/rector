@@ -7,12 +7,12 @@ namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Attributes\AttributesTrait;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
-final class AttributeAwareTemplateTagValueNode extends TemplateTagValueNode implements AttributeAwareNodeInterface
+final class AttributeAwareTemplateTagValueNode extends TemplateTagValueNode implements AttributeAwareInterface
 {
-    use AttributeTrait;
+    use AttributesTrait;
 
     /**
      * @var string

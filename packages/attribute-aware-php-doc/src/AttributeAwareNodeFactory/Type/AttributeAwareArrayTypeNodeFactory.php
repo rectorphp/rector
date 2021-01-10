@@ -10,7 +10,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
 final class AttributeAwareArrayTypeNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
@@ -32,7 +32,7 @@ final class AttributeAwareArrayTypeNodeFactory implements AttributeNodeAwareFact
     /**
      * @param ArrayTypeNode $node
      */
-    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareInterface
     {
         $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type, $docContent);
 

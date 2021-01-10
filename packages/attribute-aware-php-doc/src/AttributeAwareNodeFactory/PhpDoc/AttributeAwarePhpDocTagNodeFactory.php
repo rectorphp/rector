@@ -6,9 +6,9 @@ namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocTagNode;
 
 final class AttributeAwarePhpDocTagNodeFactory implements AttributeNodeAwareFactoryInterface
 {
@@ -25,7 +25,7 @@ final class AttributeAwarePhpDocTagNodeFactory implements AttributeNodeAwareFact
     /**
      * @param PhpDocTagNode $node
      */
-    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareInterface
     {
         return new AttributeAwarePhpDocTagNode($node->name, $node->value);
     }

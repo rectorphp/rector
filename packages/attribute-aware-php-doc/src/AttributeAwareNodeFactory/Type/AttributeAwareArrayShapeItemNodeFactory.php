@@ -10,7 +10,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeItemNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
 final class AttributeAwareArrayShapeItemNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
@@ -32,7 +32,7 @@ final class AttributeAwareArrayShapeItemNodeFactory implements AttributeNodeAwar
     /**
      * @param ArrayShapeItemNode $node
      */
-    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareInterface
     {
         $node->valueType = $this->attributeAwareNodeFactory->createFromNode($node->valueType, $docContent);
         return new AttributeAwareArrayShapeItemNode($node->keyName, $node->optional, $node->valueType, $docContent);

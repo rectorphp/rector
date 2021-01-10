@@ -14,12 +14,12 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
+use Rector\PhpdocParserPrinter\ValueObject\PhpDocNode\AttributeAwarePhpDocTagNode;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
@@ -202,7 +202,7 @@ final class PhpDocInfoPrinter
     }
 
     private function printNode(
-        AttributeAwareNodeInterface $attributeAwareNode,
+        AttributeAwareInterface $attributeAwareNode,
         ?StartAndEnd $startAndEnd = null,
         int $key = 0,
         int $nodeCount = 0
@@ -286,7 +286,7 @@ final class PhpDocInfoPrinter
     }
 
     /**
-     * @param PhpDocTagNode|AttributeAwareNodeInterface $phpDocTagNode
+     * @param PhpDocTagNode|AttributeAwareInterface $phpDocTagNode
      */
     private function printPhpDocTagNode(
         PhpDocTagNode $phpDocTagNode,
@@ -296,7 +296,7 @@ final class PhpDocInfoPrinter
         $output .= $phpDocTagNode->name;
 
         $phpDocTagNodeValue = $phpDocTagNode->value;
-        if (! $phpDocTagNodeValue instanceof AttributeAwareNodeInterface) {
+        if (! $phpDocTagNodeValue instanceof AttributeAwareInterface) {
             throw new ShouldNotHappenException();
         }
 
@@ -326,7 +326,7 @@ final class PhpDocInfoPrinter
         return $output . $nodeOutput;
     }
 
-    private function printAttributeWithAsterisk(AttributeAwareNodeInterface $attributeAwareNode): string
+    private function printAttributeWithAsterisk(AttributeAwareInterface $attributeAwareNode): string
     {
         $content = (string) $attributeAwareNode;
 
@@ -342,7 +342,7 @@ final class PhpDocInfoPrinter
             return $this->removedNodePositions;
         }
 
-        /** @var AttributeAwareNodeInterface[] $removedNodes */
+        /** @var AttributeAwareInterface[] $removedNodes */
         $removedNodes = array_diff(
             $this->phpDocInfo->getOriginalPhpDocNode()
                 ->children,

@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
+use Rector\PhpdocParserPrinter\ValueObject\TypeNode\AttributeAwareIdentifierTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class NonEmptyArrayTypeMapper implements TypeMapperInterface

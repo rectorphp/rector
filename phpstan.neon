@@ -462,7 +462,7 @@ parameters:
         - '#PHPDoc tag @param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
 
         # intersection mess
-        - '#Parameter \#1 \$phpDocTagNodes of method Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory\:\:createFromTagValueNodes\(\) expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\>, array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|Rector\\BetterPhpDocParser\\Contract\\PhpDocNode\\AttributeAwareNodeInterface\> given#'
+        - '#Parameter \#1 \$phpDocTagNodes of method Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory\:\:createFromTagValueNodes\(\) expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\>, array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|Rector\\BetterPhpDocParser\\Contract\\PhpDocNode\\AttributeAwareInterface\> given#'
 
         # false postives
         - '#Parameter \#2 \$right of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
@@ -497,7 +497,7 @@ parameters:
         - '#Class "Rector\\Nette\\Rector\\Class_\\MoveFinalGetUserToCheckRequirementsClassMethodRector" is missing @see annotation with test case class reference#'
 
         # type juggling
-        - '#AttributeAwareNodeInterface#'
+        - '#AttributeAwareInterface#'
         - '#Method Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetIdToUuidValueRector\:\:getSetUuidMethodCallOnSameVariable\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\|null#'
 
         -

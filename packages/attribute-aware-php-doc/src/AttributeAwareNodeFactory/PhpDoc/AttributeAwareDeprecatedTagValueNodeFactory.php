@@ -8,7 +8,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareDeprecatedTagValueNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
 final class AttributeAwareDeprecatedTagValueNodeFactory implements AttributeNodeAwareFactoryInterface
 {
@@ -25,7 +25,7 @@ final class AttributeAwareDeprecatedTagValueNodeFactory implements AttributeNode
     /**
      * @param DeprecatedTagValueNode $node
      */
-    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareInterface
     {
         return new AttributeAwareDeprecatedTagValueNode($node->description);
     }

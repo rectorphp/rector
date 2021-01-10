@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\AttributeAwarePhpDoc\Ast\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Attributes\AttributesTrait;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
-final class AttributeAwareIntersectionTypeNode extends IntersectionTypeNode implements AttributeAwareNodeInterface
+final class AttributeAwareIntersectionTypeNode extends IntersectionTypeNode implements AttributeAwareInterface
 {
-    use AttributeTrait;
+    use AttributesTrait;
 
     public function __toString(): string
     {

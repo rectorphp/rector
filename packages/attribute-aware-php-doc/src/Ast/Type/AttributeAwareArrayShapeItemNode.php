@@ -10,12 +10,12 @@ use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprStringNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Attributes\AttributesTrait;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 
-final class AttributeAwareArrayShapeItemNode extends ArrayShapeItemNode implements AttributeAwareNodeInterface
+final class AttributeAwareArrayShapeItemNode extends ArrayShapeItemNode implements AttributeAwareInterface
 {
-    use AttributeTrait;
+    use AttributesTrait;
 
     /**
      * @var bool

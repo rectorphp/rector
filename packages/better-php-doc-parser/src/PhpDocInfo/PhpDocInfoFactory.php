@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -19,6 +18,7 @@ use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PhpDocInfoFactory
@@ -141,7 +141,7 @@ final class PhpDocInfoFactory
         }
 
         $phpDocChildNodes = $attributeAwarePhpDocNode->children;
-        /** @var AttributeAwareNodeInterface $lastChildNode */
+        /** @var AttributeAwareInterface $lastChildNode */
         $lastChildNode = array_pop($phpDocChildNodes);
 
         /** @var StartAndEnd $startAndEnd */

@@ -10,7 +10,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 final class AttributeAwarePhpDocNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
@@ -43,12 +43,12 @@ final class AttributeAwarePhpDocNodeFactory implements AttributeNodeAwareFactory
     /**
      * @param PhpDocNode $node
      */
-    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareInterface
     {
         $this->phpDocNodeTraverser->traverseWithCallable($node, $docContent, function (Node $node) use (
             $docContent
-        ): AttributeAwareNodeInterface {
-            if ($node instanceof AttributeAwareNodeInterface) {
+        ): AttributeAwareInterface {
+            if ($node instanceof AttributeAwareInterface) {
                 return $node;
             }
 

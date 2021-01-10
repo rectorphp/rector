@@ -19,11 +19,11 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\Core\PhpParser\Builder\ClassBuilder;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Builder\NamespaceBuilder;
 use Rector\Core\PhpParser\Builder\ParamBuilder;
+use Rector\PhpdocParserPrinter\Contract\AttributeAwareInterface;
 use Rector\Utils\PHPStanAttributeTypeSyncer\ClassNaming\AttributeClassNaming;
 use Rector\Utils\PHPStanAttributeTypeSyncer\ValueObject\Paths;
 use ReflectionClass;
@@ -126,7 +126,7 @@ final class AttributeAwareClassFactoryFactory
         $methodBuilder->addParam($docContentParam);
         $methodBuilder->makePublic();
 
-        $methodBuilder->setReturnType(new FullyQualified(AttributeAwareNodeInterface::class));
+        $methodBuilder->setReturnType(new FullyQualified(AttributeAwareInterface::class));
 
         // add @paramBuilder doc with more precise type
         $paramDocBlock = sprintf('/**%s * @paramBuilder \\%s%s */', PHP_EOL, $nodeClass, PHP_EOL);
