@@ -12,6 +12,7 @@ use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -24,6 +25,18 @@ final class VarConstantCommentRector extends AbstractRector
      * @var int
      */
     private const ARRAY_LIMIT_TYPES = 3;
+
+    private $typeAnalyzer;
+
+    /**
+     * @var TypeComparator
+     */
+    private $typeComparator;
+
+    public function __construct(TypeComparator $typeComparator)
+    {
+        $this->typeComparator = $typeComparator;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -86,6 +99,13 @@ CODE_SAMPLE
             if ($currentVarType instanceof ArrayType && $currentVarType->getItemType() instanceof MixedType) {
                 return null;
             }
+        }
+
+        if ($phpDocInfo instanceof PhpDocInfo && $this->typeComparator->isSubtype(
+            $constType,
+            $phpDocInfo->getVarType()
+        )) {
+            return null;
         }
 
         $phpDocInfo->changeVarType($constType);
