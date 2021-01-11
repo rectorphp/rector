@@ -22,7 +22,7 @@ final class KeepRectorNamespaceForRectorRuleTest extends AbstractServiceAwareRul
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Fixture/Rector/ClassInCorrectNamespaceRector.php', []];
+        yield [__DIR__ . '/Fixture/Rector/SkipClassInCorrectNamespaceRector.php', []];
 
         $errorMessage = sprintf(KeepRectorNamespaceForRectorRule::ERROR_MESSAGE, 'WrongClass');
         yield [__DIR__ . '/Fixture/Rector/WrongClass.php', [[$errorMessage, 7]]];

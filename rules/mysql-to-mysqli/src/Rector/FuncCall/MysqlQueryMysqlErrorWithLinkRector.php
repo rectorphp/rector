@@ -194,7 +194,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return (string) $node->expr->name === 'mysqli_connect';
+            return $this->isName($node->expr, 'mysqli_connect');
         });
     }
 
