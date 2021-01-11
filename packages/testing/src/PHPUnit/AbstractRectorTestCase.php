@@ -331,6 +331,16 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             return;
         }
 
+        $movedFiles = $this->removedAndAddedFilesCollector->getMovedFiles();
+        foreach ($movedFiles as $movedFile) {
+            if (! Strings::endsWith($movedFile->getNewPathname(), $expectedExtraFileName)) {
+                continue;
+            }
+
+            $this->assertStringEqualsFile($expectedExtraContentFilePath, $movedFile->getFileContent());
+            return;
+        }
+
         throw new ShouldNotHappenException();
     }
 

@@ -155,8 +155,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $filePath = 'src/Controller/SomeFormController.php';
-            $this->printNodesToFilePath([$symfonyControllerNamespace], $filePath);
+            $this->printNodesToFilePath([$symfonyControllerNamespace], 'src/Controller/SomeFormController.php');
 
             return $formTypeClass;
         }
