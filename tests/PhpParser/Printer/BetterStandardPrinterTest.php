@@ -12,9 +12,9 @@ use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class BetterStandardPrinterTest extends AbstractKernelTestCase

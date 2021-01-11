@@ -327,6 +327,14 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
     {
+        $addedFilesWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
+        foreach ($addedFilesWithContents as $addedFilesWithContent) {
+            if ($addedFilesWithContent->getFilePath() === $expectedExtraFileName) {
+                $this->assertStringEqualsFile($expectedExtraContentFilePath, $addedFilesWithContent->getFileContent());
+                return;
+            }
+        }
+
         $temporaryPath = StaticFixtureSplitter::getTemporaryPath();
         $expectedFilePath = $temporaryPath . '/' . $expectedExtraFileName;
         $this->assertFileExists($expectedFilePath);
