@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StaticType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -46,6 +47,21 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         if ($name === 'static') {
             $className = (string) $node->getAttribute(AttributeKey::CLASS_NAME);
             return new StaticType($className);
+        }
+
+        if ($name === 'self') {
+
+            $classReflectionOrName = '';
+
+            /** @var Scope|null $scope */
+            $scope = $node->getAttribute(AttributeKey::SCOPE);
+            if ($scope !== null) {
+                $classReflectionOrName = $scope->getClassReflection();
+            } else {
+                $classReflectionOrName = (string) $node->getAttribute(AttributeKey::CLASS_NAME);
+            }
+
+            return new ThisType($classReflectionOrName);
         }
 
         return new MixedType();
