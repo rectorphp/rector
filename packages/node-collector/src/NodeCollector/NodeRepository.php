@@ -7,6 +7,7 @@ namespace Rector\NodeCollector\NodeCollector;
 use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -106,6 +107,11 @@ final class NodeRepository
      */
     private $typeUnwrapper;
 
+    /**
+     * @var array<string, Attribute[]>
+     */
+    private $attributes = [];
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
@@ -166,6 +172,11 @@ final class NodeRepository
         if ($node instanceof FuncCall) {
             $functionName = $this->nodeNameResolver->getName($node);
             $this->funcCallsByName[$functionName][] = $node;
+        }
+
+        if ($node instanceof Attribute) {
+            $attributeClass = $this->nodeNameResolver->getName($node->name);
+            $this->attributes[$attributeClass][] = $node;
         }
     }
 
@@ -493,6 +504,14 @@ final class NodeRepository
     public function findClassConstByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
     {
         return $this->parsedNodeCollector->findClassConstByClassConstFetch($classConstFetch);
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function findAttributes(string $class): array
+    {
+        return $this->attributes[$class] ?? [];
     }
 
     private function addMethod(ClassMethod $classMethod): void

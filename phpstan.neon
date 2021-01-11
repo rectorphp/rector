@@ -623,3 +623,4 @@ parameters:
 
         # fixed in php-parser master
         - '#Method Rector\\SymfonyCodeQuality\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+        - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\CallableTypeMapper" class\. Use unique content or abstract service instead#'

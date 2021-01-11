@@ -6,9 +6,9 @@ namespace Rector\SymfonyCodeQuality\Rector\Attribute;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
-use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticRectorStrings;
+use Rector\SymfonyCodeQuality\ConstantNameAndValueMatcher;
+use Rector\SymfonyCodeQuality\ConstantNameAndValueResolver;
 use Rector\SymfonyCodeQuality\NodeFactory\RouteNameClassFactory;
 use Rector\SymfonyCodeQuality\ValueObject\ClassName;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,9 +27,28 @@ final class ExtractAttributeRouteNameConstantsRector extends AbstractRector
      */
     private $routeNameClassFactory;
 
-    public function __construct(RouteNameClassFactory $routeNameClassFactory)
+    /**
+     * @var bool
+     */
+    private $isRouteNameValueObjectCreated = false;
+
+    /**
+     * @var ConstantNameAndValueMatcher
+     */
+    private $constantNameAndValueMatcher;
+
+    /**
+     * @var ConstantNameAndValueResolver
+     */
+    private $constantNameAndValueResolver;
+
+    public function __construct(RouteNameClassFactory $routeNameClassFactory,
+    ConstantNameAndValueMatcher $constantNameAndValueMatcher,
+                                ConstantNameAndValueResolver $constantNameAndValueResolver)
     {
         $this->routeNameClassFactory = $routeNameClassFactory;
+        $this->constantNameAndValueMatcher = $constantNameAndValueMatcher;
+        $this->constantNameAndValueResolver = $constantNameAndValueResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -82,35 +101,36 @@ CODE_SAMPLE
             return null;
         }
 
-        $collectedConstantsToValues = [];
+        $this->createRouteNameValueObject();
 
         foreach ($node->args as $arg) {
             if (! $this->isName($arg, 'name')) {
                 continue;
             }
 
-            if ($arg->value instanceof ClassConstFetch) {
+            $constantNameAndValue = $this->constantNameAndValueMatcher->matchFromArg($arg);
+            if ($constantNameAndValue === null) {
                 continue;
             }
 
-            $argumentValue = $this->getValue($arg->value);
-            if (! is_string($argumentValue)) {
-                continue;
-            }
-
-            $constantName = StaticRectorStrings::camelCaseToConstant($argumentValue);
-            $arg->value = $this->createClassConstFetch(ClassName::ROUTE_CLASS_NAME, $constantName);
-
-            $collectedConstantsToValues[$constantName] = $argumentValue;
+            $arg->value = $this->createClassConstFetch(ClassName::ROUTE_CLASS_NAME, $constantNameAndValue->getName());
         }
-
-        if ($collectedConstantsToValues === []) {
-            return null;
-        }
-
-        $namespace = $this->routeNameClassFactory->create($collectedConstantsToValues);
-        $this->printNodesToFilePath([$namespace], 'src/ValueObject/Routing/RouteName.php');
 
         return $node;
+    }
+
+    private function createRouteNameValueObject(): void
+    {
+        if ($this->isRouteNameValueObjectCreated) {
+            return;
+        }
+
+        $routeAttributes = $this->nodeRepository->findAttributes(Route::class);
+        $constantNameAndValues = $this->constantNameAndValueResolver->resolveFromAttributes($routeAttributes);
+
+        $namespace = $this->routeNameClassFactory->create($constantNameAndValues);
+        $this->printNodesToFilePath([$namespace], 'src/ValueObject/Routing/RouteName.php');
+
+        $this->isRouteNameValueObjectCreated = true;
     }
 }

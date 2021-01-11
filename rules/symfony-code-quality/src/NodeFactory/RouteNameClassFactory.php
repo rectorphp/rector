@@ -7,6 +7,7 @@ namespace Rector\SymfonyCodeQuality\NodeFactory;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\SymfonyCodeQuality\ValueObject\ClassName;
+use Rector\SymfonyCodeQuality\ValueObject\ConstantNameAndValue;
 use Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
 use Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder;
 
@@ -23,15 +24,18 @@ final class RouteNameClassFactory
     }
 
     /**
-     * @param array<string, string> $constantNamesToValues
+     * @param ConstantNameAndValue[] $constantNamesAndValues
      */
-    public function create(array $constantNamesToValues): Namespace_
+    public function create(array $constantNamesAndValues): Namespace_
     {
         $classBuilder = new ClassBuilder(ClassName::ROUTE_CLASS_SHORT_NAME);
         $classBuilder->makeFinal();
 
-        foreach ($constantNamesToValues as $constantName => $constantValue) {
-            $classConst = $this->nodeFactory->createPublicClassConst($constantName, $constantValue);
+        foreach ($constantNamesAndValues as $constantNameAndValue) {
+            $classConst = $this->nodeFactory->createPublicClassConst(
+                $constantNameAndValue->getName(),
+                $constantNameAndValue->getValue()
+            );
             $classBuilder->addStmt($classConst);
         }
 
