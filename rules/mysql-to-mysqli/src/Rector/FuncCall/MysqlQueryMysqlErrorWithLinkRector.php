@@ -15,6 +15,7 @@ use PHPStan\Type\ResourceType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -173,7 +174,29 @@ CODE_SAMPLE
         if (! $expr instanceof Variable) {
             return false;
         }
-        return $this->isName($expr, 'connection');
+
+        return $this->isMysqliConnect($expr);
+    }
+
+    private function isMysqliConnect(Variable $variable)
+    {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $node) use (
+            $variable
+        ): bool {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            if (! $node->expr instanceof FuncCall) {
+                return false;
+            }
+
+            if (! $this->areNodesEqual($node->var, $variable)) {
+                return false;
+            }
+
+            return (string) $node->expr->name === 'mysqli_connect';
+        });
     }
 
     private function findConnectionVariable(FuncCall $funcCall): ?Expr
@@ -202,13 +225,7 @@ CODE_SAMPLE
         }
 
         $connectionPosition = self::FUNCTION_CONNECTION_PARAMETER_POSITION_MAP[$functionName];
-        foreach ($funcCall->args as $key => $arg) {
-            if ($key === $connectionPosition) {
-                $funcCall->{$key + 1} = $arg;
-                unset($funcCall->args[$connectionPosition - 1]);
-                break;
-            }
-        }
+        unset($funcCall->args[$connectionPosition]);
     }
 
     private function isUnionTypeWithResourceSubType(Type $staticType, ResourceType $resourceType): bool
