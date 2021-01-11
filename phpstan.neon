@@ -590,6 +590,16 @@ parameters:
             paths:
                 - utils/compiler/tests/PatchersCallbackTest.php
 
+        -
+            message: '#There should be no empty class#'
+            paths:
+                - packages/static-type-mapper/src/ValueObject/Type/ParentStaticType.php #9
+                - packages/static-type-mapper/src/ValueObject/Type/SelfObjectType.php #9
+                - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeEntityManager.php #7
+                - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeNonKernelClass.php #7
+                - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeTranslator.php #9
+                - rules/transform/tests/Rector/MethodCall/MethodCallToStaticCallRector/AnotherDependency.php #7
+
         - '#Parameter \#3 \$type of method Rector\\CodeQualityStrict\\Rector\\ClassMethod\\ParamTypeToAssertTypeRector\:\:getToBeProcessedTypes\(\) expects PHPStan\\Type\\ObjectType\|PHPStan\\Type\\UnionType, PHPStan\\Type\\Type given#'
 
         - '#Anonymous class is not allowed#'
