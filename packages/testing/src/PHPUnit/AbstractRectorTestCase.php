@@ -10,9 +10,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -123,7 +121,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
             $this->bootKernelWithConfigInfos(RectorKernel::class, $configFileInfos);
 
-            $enabledRectorsProvider = static::$container->get(EnabledRectorsProvider::class);
+            $enabledRectorsProvider = $this->getService(EnabledRectorsProvider::class);
             $enabledRectorsProvider->reset();
         } else {
             // prepare container with all rectors
@@ -150,27 +148,23 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         }
 
         // load stubs
-        $stubLoader = static::$container->get(StubLoader::class);
+        $stubLoader = $this->getService(StubLoader::class);
         $stubLoader->loadStubs();
 
         // disable any output
-        $symfonyStyle = static::$container->get(SymfonyStyle::class);
+        $symfonyStyle = $this->getService(SymfonyStyle::class);
         $symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
 
-        $this->fileProcessor = static::$container->get(FileProcessor::class);
-        $this->nonPhpFileProcessor = static::$container->get(NonPhpFileProcessor::class);
-        $this->parameterProvider = static::$container->get(ParameterProvider::class);
+        $this->fileProcessor = $this->getService(FileProcessor::class);
+        $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
+        $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
 
         // needed for PHPStan, because the analyzed file is just create in /temp
-        $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
+        $this->nodeScopeResolver = $this->getService(NodeScopeResolver::class);
 
         $this->configurePhpVersionFeatures();
-
-        // so the files are removed and added
-        $configuration = static::$container->get(Configuration::class);
-        $configuration->setIsDryRun(false);
 
         $this->oldParameterValues = [];
     }
@@ -329,17 +323,15 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         $addedFilesWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
         foreach ($addedFilesWithContents as $addedFilesWithContent) {
-            if ($addedFilesWithContent->getFilePath() === $expectedExtraFileName) {
-                $this->assertStringEqualsFile($expectedExtraContentFilePath, $addedFilesWithContent->getFileContent());
-                return;
+            if (! Strings::endsWith($addedFilesWithContent->getFilePath(), $expectedExtraFileName)) {
+                continue;
             }
+
+            $this->assertStringEqualsFile($expectedExtraContentFilePath, $addedFilesWithContent->getFileContent());
+            return;
         }
 
-        $temporaryPath = StaticFixtureSplitter::getTemporaryPath();
-        $expectedFilePath = $temporaryPath . '/' . $expectedExtraFileName;
-        $this->assertFileExists($expectedFilePath);
-
-        $this->assertFileEquals($expectedExtraContentFilePath, $expectedFilePath);
+        throw new ShouldNotHappenException();
     }
 
     protected function getFixtureTempDirectory(): string
@@ -469,9 +461,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
             // mimic post-rectors
             $changedContent = $this->fileProcessor->printToString($originalFileInfo);
-
-            $removedAndAddedFilesProcessor = $this->getService(RemovedAndAddedFilesProcessor::class);
-            $removedAndAddedFilesProcessor->run();
         } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
             $changedContent = $this->nonPhpFileProcessor->processFileInfo($originalFileInfo);
         } else {

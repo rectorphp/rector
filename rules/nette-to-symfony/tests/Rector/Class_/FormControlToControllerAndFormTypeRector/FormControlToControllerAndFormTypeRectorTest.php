@@ -27,7 +27,7 @@ final class FormControlToControllerAndFormTypeRectorTest extends AbstractRectorT
     {
         yield [
             new SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'),
-            'SomeFormController.php',
+            'src/Controller/SomeFormController.php',
             __DIR__ . '/Source/extra_file.php',
         ];
     }
