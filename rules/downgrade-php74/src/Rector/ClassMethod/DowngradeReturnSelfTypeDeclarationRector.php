@@ -11,7 +11,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeReturnSelfTypeDeclarationRector\DowngradeReturnObjectTypeDeclarationRectorTest
+ * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeReturnSelfTypeDeclarationRector\DowngradeReturnSelfTypeDeclarationRectorTest
  */
 final class DowngradeReturnSelfTypeDeclarationRector extends AbstractDowngradeReturnTypeDeclarationRector
 {
