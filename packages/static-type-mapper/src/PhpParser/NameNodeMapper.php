@@ -44,24 +44,13 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
             return new FullyQualifiedObjectType($name);
         }
 
+        $className = (string) $node->getAttribute(AttributeKey::CLASS_NAME);
         if ($name === 'static') {
-            $className = (string) $node->getAttribute(AttributeKey::CLASS_NAME);
             return new StaticType($className);
         }
 
         if ($name === 'self') {
-
-            $classReflectionOrName = '';
-
-            /** @var Scope|null $scope */
-            $scope = $node->getAttribute(AttributeKey::SCOPE);
-            if ($scope !== null) {
-                $classReflectionOrName = $scope->getClassReflection();
-            } else {
-                $classReflectionOrName = (string) $node->getAttribute(AttributeKey::CLASS_NAME);
-            }
-
-            return new ThisType($classReflectionOrName);
+            return new ThisType($className);
         }
 
         return new MixedType();
