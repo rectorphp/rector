@@ -12,9 +12,6 @@ class SkipEmptyArray extends SomeType
         return [];
     }
 
-    /**
-     * @param String_ $node
-     */
     public function process(\PhpParser\Node $node)
     {
     }
