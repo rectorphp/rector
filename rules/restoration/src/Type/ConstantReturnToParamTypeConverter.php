@@ -9,7 +9,6 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 
 final class ConstantReturnToParamTypeConverter
