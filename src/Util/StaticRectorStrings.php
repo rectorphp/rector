@@ -114,6 +114,12 @@ final class StaticRectorStrings
         return Strings::replace($string, self::UNDERSCORE_REGEX, '-');
     }
 
+    public static function camelCaseToConstant(string $input): string
+    {
+        $result = self::camelCaseToUnderscore($input);
+        return strtoupper($result);
+    }
+
     private static function camelCaseToGlue(string $input, string $glue): string
     {
         if ($input === strtolower($input)) {

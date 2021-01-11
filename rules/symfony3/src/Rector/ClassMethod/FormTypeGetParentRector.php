@@ -145,6 +145,6 @@ CODE_SAMPLE
             return;
         }
 
-        $return->expr = $this->createClassConstantReference($formClass);
+        $return->expr = $this->createClassConstReference($formClass);
     }
 }

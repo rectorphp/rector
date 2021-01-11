@@ -2,24 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\Class_\FormControlToControllerAndFormTypeRector;
+namespace Rector\SymfonyCodeQuality\Tests\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;
 
 use Iterator;
-use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
+use Rector\SymfonyCodeQuality\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class FormControlToControllerAndFormTypeRectorTest extends AbstractRectorTestCase
+/**
+ * @requires PHP 8.0
+ */
+final class ExtractAttributeRouteNameConstantsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
     public function test(
-        SmartFileInfo $fileInfo,
+        SmartFileInfo $inputFile,
         string $expectedExtraFileName,
         string $expectedExtraContentFilePath
     ): void {
-        $this->doTestFileInfo($fileInfo);
+        $this->doTestFileInfo($inputFile);
         $this->doTestExtraFile($expectedExtraFileName, $expectedExtraContentFilePath);
     }
 
@@ -27,13 +30,13 @@ final class FormControlToControllerAndFormTypeRectorTest extends AbstractRectorT
     {
         yield [
             new SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'),
-            'src/Controller/SomeFormController.php',
+            'src/ValueObject/Routing/RouteName.php',
             __DIR__ . '/Source/extra_file.php',
         ];
     }
 
     protected function getRectorClass(): string
     {
-        return FormControlToControllerAndFormTypeRector::class;
+        return ExtractAttributeRouteNameConstantsRector::class;
     }
 }

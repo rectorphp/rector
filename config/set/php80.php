@@ -90,6 +90,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'pg_numrows' => 'pg_num_rows',
                 'pg_result' => 'pg_fetch_result',
                 'pg_setclientencoding' => 'pg_set_client_encoding',
-            ]
+            ],
         ]]);
 };

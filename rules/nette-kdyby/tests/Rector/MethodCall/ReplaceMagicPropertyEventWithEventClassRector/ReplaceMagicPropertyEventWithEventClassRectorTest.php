@@ -28,10 +28,7 @@ final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRe
     ): void {
         $this->doTestFileInfo($fixtureFileInfo);
 
-        $expectedEventFilePath = $this->originalTempFileInfo->getPath() . $expectedRelativeFilePath;
-        $this->assertFileExists($expectedEventFilePath);
-
-        $this->assertFileEquals($expectedContentFilePath, $expectedEventFilePath);
+        $this->doTestExtraFile($expectedRelativeFilePath, $expectedContentFilePath);
     }
 
     public function provideData(): Iterator

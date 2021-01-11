@@ -295,7 +295,7 @@ CODE_SAMPLE
     private function createEventName(string $eventName): Node
     {
         if (class_exists($eventName)) {
-            return $this->createClassConstantReference($eventName);
+            return $this->createClassConstReference($eventName);
         }
 
         // is string a that could be caught in constant, e.g. KernelEvents?

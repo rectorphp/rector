@@ -149,7 +149,7 @@ CODE_SAMPLE
             }
         }
 
-        $methodCall->args[$position]->value = $this->createClassConstantReference($argValue->class->toString());
+        $methodCall->args[$position]->value = $this->createClassConstReference($argValue->class->toString());
 
         return $methodCall;
     }
@@ -184,7 +184,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $arrayItem->value = $this->createClassConstantReference($newClass->toString());
+            $arrayItem->value = $this->createClassConstReference($newClass->toString());
         }
     }
 

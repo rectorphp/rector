@@ -11,8 +11,8 @@ use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
+use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 
 final class DataProviderClassMethodFactory
 {

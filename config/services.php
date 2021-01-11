@@ -46,7 +46,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/Exception',
             __DIR__ . '/../src/DependencyInjection/CompilerPass',
             __DIR__ . '/../src/DependencyInjection/Loader',
-            __DIR__ . '/../src/PhpParser/Builder',
             __DIR__ . '/../src/HttpKernel',
             __DIR__ . '/../src/ValueObject',
             __DIR__ . '/../src/Bootstrap',
