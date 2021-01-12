@@ -81,6 +81,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $calls = $this->nodeRepository->findCallsByClassMethod($node);
+        if ($calls !== []) {
+            return null;
+        }
+
         $this->removeNode($node);
         return $node;
     }

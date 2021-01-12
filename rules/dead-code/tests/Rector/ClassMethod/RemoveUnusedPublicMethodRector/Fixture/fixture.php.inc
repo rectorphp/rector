@@ -34,6 +34,10 @@ final class Fixture
     private function keep()
     {
     }
+
+    public function execute()
+    {
+    }
 }
 
 ?>
