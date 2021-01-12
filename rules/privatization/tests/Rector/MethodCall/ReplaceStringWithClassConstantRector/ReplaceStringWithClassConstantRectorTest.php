@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Privatization\Tests\Rector\MethodCall\ReplaceStringWithClassConstantRector;
 
 use Iterator;
-use Rector\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,18 +23,8 @@ final class ReplaceStringWithClassConstantRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            ReplaceStringWithClassConstantRector::class =>
-                [
-                    ReplaceStringWithClassConstantRector::methodCallWithPositionAndClassConstants => [
-                        'before' => 'after',
-                    ],
-                ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_config.php');
     }
 }

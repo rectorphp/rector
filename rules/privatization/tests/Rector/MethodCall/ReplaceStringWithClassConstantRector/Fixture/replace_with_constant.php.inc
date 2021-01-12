@@ -2,11 +2,15 @@
 
 namespace Rector\Privatization\Tests\Rector\MethodCall\ReplaceStringWithClassConstantRector\Fixture;
 
-class SomeClass
+final class ReplaceWithConstant
 {
     public function run()
     {
         $this->call('name');
+    }
+
+    public function call(string $value)
+    {
     }
 }
 
@@ -16,11 +20,15 @@ class SomeClass
 
 namespace Rector\Privatization\Tests\Rector\MethodCall\ReplaceStringWithClassConstantRector\Fixture;
 
-class SomeClass
+final class ReplaceWithConstant
 {
     public function run()
     {
-        $this->call(Placeholder::NAME);
+        $this->call(\Rector\Privatization\Tests\Rector\MethodCall\ReplaceStringWithClassConstantRector\Source\Placeholder::NAME);
+    }
+
+    public function call(string $value)
+    {
     }
 }
 

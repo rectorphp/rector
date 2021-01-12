@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Rector\Privatization\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Privatization\NodeFactory\ClassConstantFetchValueFactory;
+use Rector\Privatization\ValueObject\ReplaceStringWithClassConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,12 +23,22 @@ final class ReplaceStringWithClassConstantRector extends AbstractRector implemen
     /**
      * @var string
      */
-    public const METHOD_CALL_WITH_POSITION_AND_CLASS_CONSTANTS = 'method_call_with_position_and_class_constants';
+    public const REPLACE_STRING_WITH_CLASS_CONSTANT = 'replace_string_with_class_constant';
 
     /**
-     * @var mixed[]
+     * @var ReplaceStringWithClassConstant[]
      */
-    private $methodcallwithpositionandclassconstants = [];
+    private $replaceStringWithClassConstants = [];
+
+    /**
+     * @var ClassConstantFetchValueFactory
+     */
+    private $classConstantFetchValueFactory;
+
+    public function __construct(ClassConstantFetchValueFactory $classConstantFetchValueFactory)
+    {
+        $this->classConstantFetchValueFactory = $classConstantFetchValueFactory;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -51,8 +65,8 @@ class SomeClass
 CODE_SAMPLE
 ,
                 [
-                    self::methodCallWithPositionAndClassConstants => [
-                        'before' => 'after',
+                    self::REPLACE_STRING_WITH_CLASS_CONSTANT => [
+                        new ReplaceStringWithClassConstant('SomeClass', 'call', 1, 'Placeholder'),
                     ],
                 ]
             ),
@@ -72,9 +86,36 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // change the node
+        if ($node->args === []) {
+            return null;
+        }
 
-        return $node;
+        $hasChanged = false;
+
+        foreach ($this->replaceStringWithClassConstants as $replaceStringWithClassConstant) {
+            $desiredArg = $this->matchArg($node, $replaceStringWithClassConstant);
+            if ($desiredArg === null) {
+                continue;
+            }
+
+            $classConstFetch = $this->classConstantFetchValueFactory->create(
+                $desiredArg->value,
+                $replaceStringWithClassConstant->getClassWithConstants()
+            );
+
+            if ($classConstFetch === null) {
+                continue;
+            }
+
+            $desiredArg->value = $classConstFetch;
+            $hasChanged = true;
+        }
+
+        if ($hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     /**
@@ -82,6 +123,30 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->methodcallwithpositionandclassconstants = $configuration[self::methodCallWithPositionAndClassConstants] ?? [];
+        $this->replaceStringWithClassConstants = $configuration[self::REPLACE_STRING_WITH_CLASS_CONSTANT] ?? [];
+    }
+
+    private function matchArg(
+        MethodCall $methodCall,
+        ReplaceStringWithClassConstant $replaceStringWithClassConstant
+    ): ?Arg {
+        if (! $this->isOnClassMethodCall(
+            $methodCall,
+            $replaceStringWithClassConstant->getClass(),
+            $replaceStringWithClassConstant->getMethod()
+        )) {
+            return null;
+        }
+
+        $desiredArg = $methodCall->args[$replaceStringWithClassConstant->getArgPosition()] ?? null;
+        if ($desiredArg === null) {
+            return null;
+        }
+
+        if ($desiredArg->value instanceof ClassConstFetch) {
+            return null;
+        }
+
+        return $desiredArg;
     }
 }
