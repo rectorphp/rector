@@ -38,6 +38,12 @@ final class Fixture
     public function execute()
     {
     }
+
+    public function run()
+    {
+        $obj = new self;
+        $obj->execute();
+    }
 }
 
 ?>

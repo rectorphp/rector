@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
@@ -17,6 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedPublicMethodRector extends AbstractRector implements ZeroCacheRectorInterface
 {
+    /**
+     * @var MethodCall[]
+     */
+    private $calls = [];
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -81,8 +87,25 @@ CODE_SAMPLE
             return null;
         }
 
-        $calls = $this->nodeRepository->findCallsByClassMethod($node);
-        if ($calls !== []) {
+        $this->calls = array_merge($this->calls, $this->nodeRepository->findCallsByClassMethod($node));
+        if ($this->calls !== []) {
+            return null;
+        }
+
+        $isFoundCall = (bool) $this->betterNodeFinder->findFirst(
+            $node->stmts,
+            function (Node $node) : bool {
+                foreach ($this->calls as $call) {
+                    if ($this->areNodesEqual($call, $node)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        );
+
+        if ($isFoundCall) {
             return null;
         }
 
