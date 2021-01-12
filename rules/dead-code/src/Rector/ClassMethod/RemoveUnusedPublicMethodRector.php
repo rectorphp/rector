@@ -90,11 +90,27 @@ CODE_SAMPLE
         }
 
         $this->calls = array_merge($this->calls, $this->nodeRepository->findCallsByClassMethod($node));
-        if ($this->calls !== []) {
-            return null;
+        dump($this->calls);
+        if ($this->calls === []) {
+            $this->removeNode($node);
+            return $node;
         }
 
-        $this->removeNode($node);
-        return $node;
+        $isFoundCall = (bool) $this->betterNodeFinder->findFirst($node->stmts, function (Node $n): bool {
+            foreach ($this->calls as $call) {
+                if ($this->areNodesEqual($call, $n)) {
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        if ($isFoundCall) {
+            $this->removeNode($node);
+            return $node;
+        }
+
+        return null;
     }
 }
