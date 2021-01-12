@@ -15,6 +15,8 @@ use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPublicMethodRector\RemoveUnusedPublicMethodRectorTest
@@ -96,18 +98,15 @@ CODE_SAMPLE
             return $node;
         }
 
-        $isFoundCall = (bool) $this->betterNodeFinder->findFirst($node->stmts, function (Node $n): bool {
-            if (! $n instanceof MethodCall) {
+        $isFoundCall = (bool) $this->betterNodeFinder->findFirst($node->stmts, function (Node $node): bool {
+            if (! $node instanceof MethodCall) {
                 return false;
             }
 
-            $scope = $n->getAttribute(AttributeKey::SCOPE);
-            if ($scope === null) {
+            $className = $this->getMethodCallClassName($node);
+            if ($className === null) {
                 return false;
             }
-
-            $type = $scope->getType($n);
-            dump($type);
 
             return false;
         });
@@ -118,5 +117,25 @@ CODE_SAMPLE
 
         $this->removeNode($node);
         return $node;
+    }
+
+    private function getMethodCallClassName(MethodCall $methodCall): ?string
+    {
+        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            return null;
+        }
+
+        $type = $scope->getType($n->var);
+        if ($type instanceof ObjectType) {
+            return $type->getClassName();
+        }
+
+        if ($type instanceof ThisType) {
+            $type = $type->getStaticObjectType();
+            return $type->getClassName();
+        }
+
+        return null;
     }
 }
