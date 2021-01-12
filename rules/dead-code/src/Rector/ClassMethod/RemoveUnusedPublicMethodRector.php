@@ -14,6 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPublicMethodRector\RemoveUnusedPublicMethodRectorTest
@@ -90,27 +91,32 @@ CODE_SAMPLE
         }
 
         $this->calls = array_merge($this->calls, $this->nodeRepository->findCallsByClassMethod($node));
-        dump($this->calls);
         if ($this->calls === []) {
             $this->removeNode($node);
             return $node;
         }
 
         $isFoundCall = (bool) $this->betterNodeFinder->findFirst($node->stmts, function (Node $n): bool {
-            foreach ($this->calls as $call) {
-                if ($this->areNodesEqual($call, $n)) {
-                    return true;
-                }
-
+            if (! $n instanceof MethodCall) {
                 return false;
             }
+
+            $scope = $n->getAttribute(AttributeKey::SCOPE);
+            if ($scope === null) {
+                return false;
+            }
+
+            $type = $scope->getType($n);
+            dump($type);
+
+            return false;
         });
 
         if ($isFoundCall) {
-            $this->removeNode($node);
-            return $node;
+            return null;
         }
 
-        return null;
+        $this->removeNode($node);
+        return $node;
     }
 }
