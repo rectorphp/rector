@@ -92,13 +92,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->calls = array_merge($this->calls, $this->nodeRepository->findCallsByClassMethod($node));
-        if ($this->calls === []) {
+        $calls = $this->nodeRepository->findCallsByClassMethod($node);
+        if ($calls === []) {
             $this->removeNode($node);
             return $node;
         }
 
-        $isFoundCall = (bool) $this->betterNodeFinder->findFirst($node->stmts, function (Node $node): bool {
+        $isFoundCall = (bool) $this->betterNodeFinder->findFirst($node->stmts, function (Node $node) use ($calls): bool {
             if (! $node instanceof MethodCall) {
                 return false;
             }
@@ -106,6 +106,23 @@ CODE_SAMPLE
             $className = $this->getMethodCallClassName($node);
             if ($className === null) {
                 return false;
+            }
+
+            $methodName = (string) $node->name;
+            foreach ($calls as $call) {
+                $callClassName = $this->getMethodCallClassName($call);
+                if ($callClassName === null) {
+                    return false;
+                }
+
+                if ($callClassName !== $className) {
+                    continue;
+                }
+
+                $callName = (string) $call->name;
+                if ($callName === $methodName) {
+                    return true;
+                }
             }
 
             return false;
@@ -126,7 +143,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $type = $scope->getType($n->var);
+        $type = $scope->getType($methodCall->var);
         if ($type instanceof ObjectType) {
             return $type->getClassName();
         }
