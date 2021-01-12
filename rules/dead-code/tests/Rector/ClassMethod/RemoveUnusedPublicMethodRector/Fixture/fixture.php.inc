@@ -4,10 +4,6 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPublicMethodRecto
 
 final class Fixture
 {
-    public function unusedpublicMethod()
-    {
-    }
-
     private function keep()
     {
     }
@@ -20,6 +16,10 @@ final class Fixture
     {
         $obj = new self;
         $obj->execute();
+    }
+
+    public function unusedpublicMethod()
+    {
     }
 }
 
