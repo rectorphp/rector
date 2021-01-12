@@ -60,27 +60,27 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 
 ## Documentation
 
-- [Explore 630+ Rector Rules](/docs/rector_rules_overview.md)
+- [Explore 660+ Rector Rules](/docs/rector_rules_overview.md)
 - [How Does Rector Work?](/docs/how_it_works.md)
-- [PHP Parser Nodes Overview](/docs/nodes_overview.md)
+- [PHP Parser Nodes](/docs/nodes_overview.md)
 
 ### Advanced
 
-- [How To Run Rector on Changed Files Only](/docs/how_to_run_rector_on_changed_files_only.md)
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
-- [How To Work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
-- [How run Rector in Docker](/docs/how_to_run_rector_in_docker.md)
+- [How tTo Run Rector on Changed Files Only](/docs/how_to_run_rector_on_changed_files_only.md)
 
 ### Contributing
 
-- [How to Add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
+- [How to add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
+- [How to work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
 - [How to Create New Rector Rule](/docs/create_own_rule.md)
-- [How to Generate New Rector Rule with Recipe](/docs/rector_recipe.md)
 
-## CI
+### CI
 
 - [Add Checkstyle with your CI](/docs/checkstyle.md)
+
+<br>
 
 ## Install
 
