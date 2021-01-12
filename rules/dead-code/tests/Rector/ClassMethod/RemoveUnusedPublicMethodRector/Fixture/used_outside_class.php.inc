@@ -21,6 +21,7 @@ final class UsedOutsideClass
     $obj = new UsedOutsideClass();
     $obj->execute();
 });
+
 ?>
 -----
 <?php
