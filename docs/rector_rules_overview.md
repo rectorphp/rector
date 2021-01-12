@@ -1,4 +1,4 @@
-# 655 Rules Overview
+# 658 Rules Overview
 
 <br>
 
@@ -40,7 +40,7 @@
 
 - [DowngradePhp73](#downgradephp73) (4)
 
-- [DowngradePhp74](#downgradephp74) (10)
+- [DowngradePhp74](#downgradephp74) (11)
 
 - [DowngradePhp80](#downgradephp80) (12)
 
@@ -112,7 +112,7 @@
 
 - [Php74](#php74) (15)
 
-- [Php80](#php80) (15)
+- [Php80](#php80) (16)
 
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 
@@ -142,7 +142,7 @@
 
 - [Symfony5](#symfony5) (4)
 
-- [SymfonyCodeQuality](#symfonycodequality) (1)
+- [SymfonyCodeQuality](#symfonycodequality) (2)
 
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 
@@ -311,8 +311,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
+                'ValueObjectInterfaceClassName',
+            ],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
+                'Search',
+            ],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -5712,6 +5716,25 @@ Remove "_" as thousands separator in numbers
 
 <br>
 
+### DowngradeReturnSelfTypeDeclarationRector
+
+Remove "self" return type, add a `"@return` self" tag instead
+
+- class: `Rector\DowngradePhp74\Rector\ClassMethod\DowngradeReturnSelfTypeDeclarationRector`
+
+```diff
+ class A
+ {
+-    public function foo(): self
++    public function foo()
+     {
+         return $this;
+     }
+ }
+```
+
+<br>
+
 ### DowngradeStripTagsCallWithArrayRector
 
 Convert 2nd param to `strip_tags` from array to string
@@ -6867,10 +6890,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(InjectAnnotationClassRector::class)
         ->call('configure', [[
-            InjectAnnotationClassRector::ANNOTATION_CLASSES => [
-                'DI\Annotation\Inject',
-                'JMS\DiExtraBundle\Annotation\Inject',
-            ],
+            InjectAnnotationClassRector::ANNOTATION_CLASSES => ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject'],
         ]]);
 };
 ```
@@ -7881,7 +7901,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
+            AddTopIncludeRector::PATTERNS => [
+                'pat*/*/?ame.php',
+                'somepath/?ame.php',
+            ],
         ]]);
 };
 ```
@@ -12843,6 +12866,25 @@ Change simple property init and assign to constructor promotion
 
 <br>
 
+### FalseableCountToZeroRector
+
+Convert false of `pg_num_rows()` to zero
+
+- class: `Rector\Php80\Rector\Assign\FalseableCountToZeroRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = pg_num_rows('...');
++        $value = (int) pg_num_rows('...');
+     }
+ }
+```
+
+<br>
+
 ### FinalPrivateToPrivateVisibilityRector
 
 Changes method visibility from final private to only private
@@ -14908,10 +14950,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
-                'SymfonyControllerClassName',
-                'GetTraitClassName',
-            ],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
         ]]);
 };
 ```
@@ -15696,6 +15735,27 @@ Change Symfony Event listener class to Event Subscriber based on configuration i
 -        tags:
 -            - { name: kernel.event_listener, event: 'some_event', method: 'methodToBeCalled' }
 +}
+```
+
+<br>
+
+### ExtractAttributeRouteNameConstantsRector
+
+`Extract` #[Route] attribute name argument from string to constant
+
+- class: `Rector\SymfonyCodeQuality\Rector\Attribute\ExtractAttributeRouteNameConstantsRector`
+
+```diff
+ use Symfony\Component\Routing\Annotation\Route;
+
+ class SomeClass
+ {
+-    #[Route(path: "path", name: "/name")]
++    #[Route(path: "path", name: RouteName::NAME)]
+     public function run()
+     {
+     }
+ }
 ```
 
 <br>
