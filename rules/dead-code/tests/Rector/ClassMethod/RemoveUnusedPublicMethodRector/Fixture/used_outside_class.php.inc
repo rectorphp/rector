@@ -17,9 +17,10 @@ final class UsedOutsideClass
     }
 }
 
-$obj = new UsedOutsideClass();
-$obj->execute();
-
+(function() {
+    $obj = new UsedOutsideClass();
+    $obj->execute();
+});
 ?>
 -----
 <?php
@@ -37,7 +38,9 @@ final class UsedOutsideClass
     }
 }
 
-$obj = new UsedOutsideClass();
-$obj->execute();
+(function() {
+    $obj = new UsedOutsideClass();
+    $obj->execute();
+});
 
 ?>
