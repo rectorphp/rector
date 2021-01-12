@@ -12,10 +12,15 @@ use Webmozart\Assert\Assert;
 
 /**
  * Removes package from composer data
- * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\RemovePackageTest
+ * @see \Rector\Composer\Tests\Modifier\RemovePackageTest
  */
 final class RemovePackageModifier implements ComposerModifierInterface
 {
+    /**
+     * @param ComposerJson $composerJson
+     * @param RemovePackage $composerModifierConfiguration
+     * @return ComposerJson
+     */
     public function modify(ComposerJson $composerJson, ComposerModifierConfigurationInterface $composerModifierConfiguration): ComposerJson
     {
         Assert::isInstanceOf($composerModifierConfiguration, RemovePackage::class);

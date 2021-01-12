@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
 
 /**
  * Replace one package for another
- * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\ReplacePackageTest
+ * @see \Rector\Composer\Tests\Modifier\ReplacePackageTest
  */
 final class ReplacePackageModifier implements ComposerModifierInterface
 {

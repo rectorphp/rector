@@ -1,13 +1,24 @@
 <?php
 
-namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
+namespace Rector\Composer\Tests\Modifier;
 
-use PHPUnit\Framework\TestCase;
+use Rector\Composer\Modifier\RemovePackageModifier;
 use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
+use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class RemovePackageTest extends TestCase
+final class RemovePackageTest extends AbstractKernelTestCase
 {
+    /** @var RemovePackageModifier */
+    private $removePackageModifier;
+
+    protected function setUp(): void
+    {
+        $this->bootKernelWithConfigs(RectorKernel::class, []);
+        $this->removePackageModifier = $this->getService(RemovePackageModifier::class);
+    }
+
     public function testRemoveNonExistingPackage(): void
     {
         $composerJson = new ComposerJson();
@@ -23,7 +34,7 @@ final class RemovePackageTest extends TestCase
         ]);
 
         $removePackage = new RemovePackage('vendor1/package3');
-        $this->assertEquals($changedComposerJson, $removePackage->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->removePackageModifier->modify($composerJson, $removePackage));
     }
 
     public function testRemoveExistingPackage(): void
@@ -40,7 +51,7 @@ final class RemovePackageTest extends TestCase
         ]);
 
         $removePackage = new RemovePackage('vendor1/package1');
-        $this->assertEquals($changedComposerJson, $removePackage->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->removePackageModifier->modify($composerJson, $removePackage));
     }
 
     public function testRemoveExistingDevPackage(): void
@@ -59,6 +70,6 @@ final class RemovePackageTest extends TestCase
         ]);
 
         $removePackage = new RemovePackage('vendor1/package2');
-        $this->assertEquals($changedComposerJson, $removePackage->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->removePackageModifier->modify($composerJson, $removePackage));
     }
 }

@@ -12,10 +12,15 @@ use Webmozart\Assert\Assert;
 
 /**
  * Only adds package to require-dev section, if package is already in composer data, nothing happen
- * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\AddPackageToRequireDevTest
+ * @see \Rector\Composer\Tests\Modifier\AddPackageToRequireDevTest
  */
 final class AddPackageToRequireDevModifier implements ComposerModifierInterface
 {
+    /**
+     * @param ComposerJson $composerJson
+     * @param AddPackageToRequireDev $composerModifierConfiguration
+     * @return ComposerJson
+     */
     public function modify(ComposerJson $composerJson, ComposerModifierConfigurationInterface $composerModifierConfiguration): ComposerJson
     {
         Assert::isInstanceOf($composerModifierConfiguration, AddPackageToRequireDev::class);

@@ -9,7 +9,7 @@ use Rector\Composer\ValueObject\Version\Version;
 
 /**
  * Only adds package to require-dev section, if package is already in composer data, nothing happen
- * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\AddPackageToRequireDevTest
+ * @see \Rector\Composer\Tests\Modifier\AddPackageToRequireDevTest
  */
 final class AddPackageToRequireDev implements ComposerModifierConfigurationInterface
 {

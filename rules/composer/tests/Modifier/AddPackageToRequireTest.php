@@ -1,13 +1,24 @@
 <?php
 
-namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
+namespace Rector\Composer\Tests\Modifier;
 
-use PHPUnit\Framework\TestCase;
+use Rector\Composer\Modifier\AddPackageToRequireModifier;
 use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
+use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class AddPackageToRequireTest extends TestCase
+final class AddPackageToRequireTest extends AbstractKernelTestCase
 {
+    /** @var AddPackageToRequireModifier */
+    private $addPackageToRequireModifier;
+
+    protected function setUp(): void
+    {
+        $this->bootKernelWithConfigs(RectorKernel::class, []);
+        $this->addPackageToRequireModifier = $this->getService(AddPackageToRequireModifier::class);
+    }
+
     public function testAddNonExistingPackage(): void
     {
         $composerJson = new ComposerJson();
@@ -24,7 +35,7 @@ final class AddPackageToRequireTest extends TestCase
         ]);
 
         $addPackageToRequire = new AddPackageToRequire('vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerJson, $addPackageToRequire->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->addPackageToRequireModifier->modify($composerJson, $addPackageToRequire));
     }
 
     public function testAddExistingPackage(): void
@@ -42,7 +53,7 @@ final class AddPackageToRequireTest extends TestCase
         ]);
 
         $addPackageToRequire = new AddPackageToRequire('vendor1/package1', '^3.0');
-        $this->assertEquals($changedComposerJson, $addPackageToRequire->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->addPackageToRequireModifier->modify($composerJson, $addPackageToRequire));
     }
 
     public function testAddExistingDevPackage(): void
@@ -64,6 +75,6 @@ final class AddPackageToRequireTest extends TestCase
         ]);
 
         $addPackageToRequire = new AddPackageToRequire('vendor1/package2', '^3.0');
-        $this->assertEquals($changedComposerJson, $addPackageToRequire->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->addPackageToRequireModifier->modify($composerJson, $addPackageToRequire));
     }
 }

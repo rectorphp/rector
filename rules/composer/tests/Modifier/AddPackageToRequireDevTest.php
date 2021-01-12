@@ -1,13 +1,24 @@
 <?php
 
-namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
+namespace Rector\Composer\Tests\Modifier;
 
-use PHPUnit\Framework\TestCase;
+use Rector\Composer\Modifier\AddPackageToRequireDevModifier;
 use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequireDev;
+use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class AddPackageToRequireDevTest extends TestCase
+final class AddPackageToRequireDevTest extends AbstractKernelTestCase
 {
+    /** @var AddPackageToRequireDevModifier */
+    private $addPackageToRequireDevModifier;
+
+    protected function setUp(): void
+    {
+        $this->bootKernelWithConfigs(RectorKernel::class, []);
+        $this->addPackageToRequireDevModifier = $this->getService(AddPackageToRequireDevModifier::class);
+    }
+
     public function testAddNonExistingPackage(): void
     {
         $composerJson = new ComposerJson();
@@ -26,7 +37,7 @@ final class AddPackageToRequireDevTest extends TestCase
         ]);
 
         $addPackageToRequireDev = new AddPackageToRequireDev('vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerJson, $addPackageToRequireDev->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->addPackageToRequireDevModifier->modify($composerJson, $addPackageToRequireDev));
     }
 
     public function testAddExistingPackage(): void
@@ -44,7 +55,7 @@ final class AddPackageToRequireDevTest extends TestCase
         ]);
 
         $addPackageToRequireDev = new AddPackageToRequireDev('vendor1/package1', '^3.0');
-        $this->assertEquals($changedComposerJson, $addPackageToRequireDev->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->addPackageToRequireDevModifier->modify($composerJson, $addPackageToRequireDev));
     }
 
     public function testAddExistingDevPackage(): void
@@ -66,6 +77,6 @@ final class AddPackageToRequireDevTest extends TestCase
         ]);
 
         $addPackageToRequireDev = new AddPackageToRequireDev('vendor1/package2', '^3.0');
-        $this->assertEquals($changedComposerJson, $addPackageToRequireDev->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->addPackageToRequireDevModifier->modify($composerJson, $addPackageToRequireDev));
     }
 }

@@ -11,6 +11,7 @@ use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequireDev;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
 use Rector\Composer\ValueObject\ComposerModifier\MovePackageToRequire;
 use Rector\Composer\ValueObject\ComposerModifier\MovePackageToRequireDev;
+use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
 use Rector\Composer\ValueObject\ComposerModifier\ReplacePackage;
 
 final class ComposerModifierFactory
@@ -67,7 +68,7 @@ final class ComposerModifierFactory
                 return $this->movePackageToRequireModifier;
             case MovePackageToRequireDev::class:
                 return $this->movePackageToRequireDevModifier;
-            case RemovePackageModifier::class:
+            case RemovePackage::class:
                 return $this->removePackageModifier;
             case ReplacePackage::class:
                 return $this->replacePackageModifier;

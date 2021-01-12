@@ -1,13 +1,24 @@
 <?php
 
-namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
+namespace Rector\Composer\Tests\Modifier;
 
-use PHPUnit\Framework\TestCase;
+use Rector\Composer\Modifier\ChangePackageVersionModifier;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
+use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class ChangePackageVersionTest extends TestCase
+final class ChangePackageVersionTest extends AbstractKernelTestCase
 {
+    /** @var ChangePackageVersionModifier */
+    private $changePackageVersionModifier;
+
+    protected function setUp(): void
+    {
+        $this->bootKernelWithConfigs(RectorKernel::class, []);
+        $this->changePackageVersionModifier = $this->getService(ChangePackageVersionModifier::class);
+    }
+
     public function testChangeVersionNonExistingPackage(): void
     {
         $composerJson = new ComposerJson();
@@ -23,7 +34,7 @@ final class ChangePackageVersionTest extends TestCase
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerJson, $changePackageVersion->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->changePackageVersionModifier->modify($composerJson, $changePackageVersion));
     }
 
     public function testChangeVersionExistingPackage(): void
@@ -41,7 +52,7 @@ final class ChangePackageVersionTest extends TestCase
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package1', '^3.0');
-        $this->assertEquals($changedComposerJson, $changePackageVersion->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->changePackageVersionModifier->modify($composerJson, $changePackageVersion));
     }
 
     public function testChangeVersionExistingDevPackage(): void
@@ -63,6 +74,6 @@ final class ChangePackageVersionTest extends TestCase
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package2', '^3.0');
-        $this->assertEquals($changedComposerJson, $changePackageVersion->modify($composerJson));
+        $this->assertEquals($changedComposerJson, $this->changePackageVersionModifier->modify($composerJson, $changePackageVersion));
     }
 }
