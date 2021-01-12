@@ -14,14 +14,14 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Builder\ClassBuilder;
-use Rector\Core\PhpParser\Builder\MethodBuilder;
-use Rector\Core\PhpParser\Builder\NamespaceBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NetteKdyby\BlueprintFactory\VariableWithTypesFactory;
 use Rector\NetteKdyby\ValueObject\VariableWithType;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
+use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder;
 
 /**
  * @todo decouple to generic object factory for better re-use, e.g. this is just value object pattern

@@ -11,15 +11,15 @@ final class __Name__Test extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(string $inputFile, string $expectedExtraFileName, string $expectedExtraContentFilePath): void
+    public function test(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, string $expectedExtraFileName, string $expectedExtraContentFilePath): void
     {
-        $this->doTestFileInfo($inputFile);
+        $this->doTestFileInfo($fileInfo);
         $this->doTestExtraFile($expectedExtraFileName, $expectedExtraContentFilePath);
     }
 
     public function provideData(): \Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc', '__ExtraFileName__', __DIR__ . '/Source/extra_file.php'];
+        yield [new \Symplify\SmartFileSystem\SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'), '__ExtraFileName__', __DIR__ . '/Source/extra_file.php'];
     }
 
     protected function getRectorClass(): string

@@ -26,10 +26,10 @@ class FunctionCall
 {
     public function doThing()
     {
-        foo();
         bar();
-        foo();
+
         bar();
+
         return foo();
     }
 }

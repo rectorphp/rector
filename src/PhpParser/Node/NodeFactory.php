@@ -45,14 +45,14 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\PhpParser\Builder\MethodBuilder;
-use Rector\Core\PhpParser\Builder\ParamBuilder;
-use Rector\Core\PhpParser\Builder\PropertyBuilder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\NodeFactoryTest
@@ -516,19 +516,17 @@ final class NodeFactory
             $arrayItem = new ArrayItem($this->createArray($item));
         }
 
-        if ($arrayItem !== null) {
-            if ($key === null) {
-                return $arrayItem;
-            }
-
-            $arrayItem->key = BuilderHelpers::normalizeValue($key);
-
-            return $arrayItem;
-        }
-
         if ($item instanceof ClassConstFetch) {
             $itemValue = BuilderHelpers::normalizeValue($item);
-            return new ArrayItem($itemValue);
+            $arrayItem = new ArrayItem($itemValue);
+        }
+
+        if ($item instanceof Arg) {
+            $arrayItem = new ArrayItem($item->value);
+        }
+
+        if ($arrayItem !== null) {
+            return $this->createArrayItemWithKey($key, $arrayItem);
         }
 
         throw new NotImplementedException(sprintf(
@@ -617,5 +615,17 @@ final class NodeFactory
         }
 
         return $classConst;
+    }
+
+    /**
+     * @param int|string|null $key
+     */
+    private function createArrayItemWithKey($key, ArrayItem $arrayItem): ArrayItem
+    {
+        if ($key !== null) {
+            $arrayItem->key = BuilderHelpers::normalizeValue($key);
+        }
+
+        return $arrayItem;
     }
 }

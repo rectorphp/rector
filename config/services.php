@@ -20,7 +20,7 @@ use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Descriptor\TextDescriptor;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
@@ -46,7 +46,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/Exception',
             __DIR__ . '/../src/DependencyInjection/CompilerPass',
             __DIR__ . '/../src/DependencyInjection/Loader',
-            __DIR__ . '/../src/PhpParser/Builder',
             __DIR__ . '/../src/HttpKernel',
             __DIR__ . '/../src/ValueObject',
             __DIR__ . '/../src/Bootstrap',
@@ -65,10 +64,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NodeFinder::class);
 
     $services->set(Parser::class)
-        ->factory([ref(NikicPhpParserFactory::class), 'create']);
+        ->factory([service(NikicPhpParserFactory::class), 'create']);
 
     $services->set(Lexer::class)
-        ->factory([ref(PhpParserLexerFactory::class), 'create']);
+        ->factory([service(PhpParserLexerFactory::class), 'create']);
 
     // symplify/package-builder
     $services->set(Filesystem::class);
@@ -78,10 +77,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FileSystemFilter::class);
     $services->set(ParameterProvider::class);
     $services->set(ParameterProvider::class)
-        ->arg('$container', ref('service_container'));
+        ->arg('$container', service('service_container'));
 
     $services->set(RectorClassesProvider::class)
-        ->arg('$container', ref('service_container'));
+        ->arg('$container', service('service_container'));
 
     $services->set(CommandNaming::class);
 
@@ -91,12 +90,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(SymfonyStyleFactory::class);
     $services->set(SymfonyStyle::class)
-        ->factory([ref(SymfonyStyleFactory::class), 'create']);
+        ->factory([service(SymfonyStyleFactory::class), 'create']);
 
     $services->set(InflectorFactory::class);
 
     $services->set(Inflector::class)
-        ->factory([ref(InflectorFactory::class), 'build']);
+        ->factory([service(InflectorFactory::class), 'build']);
 
     $services->set(VersionParser::class);
 };

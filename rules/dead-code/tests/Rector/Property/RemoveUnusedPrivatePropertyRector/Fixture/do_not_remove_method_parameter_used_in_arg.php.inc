@@ -12,6 +12,11 @@ class DoNotRemoveMethodParameterUsedInArg
         $this->b = $b;
         $this->c = new C($b);
     }
+
+    public function get()
+    {
+        return $this->c;
+    }
 }
 
 ?>
@@ -22,9 +27,16 @@ namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRecto
 
 class DoNotRemoveMethodParameterUsedInArg
 {
+    private $c;
+
     public function __construct(B $b)
     {
-        new C($b);
+        $this->c = new C($b);
+    }
+
+    public function get()
+    {
+        return $this->c;
     }
 }
 

@@ -22,8 +22,7 @@ final class CommentRemoverTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-
-        $this->commentRemover = static::$container->get(CommentRemover::class);
+        $this->commentRemover = $this->getService(CommentRemover::class);
     }
 
     /**

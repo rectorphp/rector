@@ -80,6 +80,7 @@ parameters:
         - '*tests/Source/*'
         # part of composer
         - '*/tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Expected/Just*ExceptionWithoutNamespace.php'
+        - packages/better-php-doc-parser/tests/PhpDocParser/TagValueNodeReprint/Fixture/SymfonyRoute/RouteName.php
 
         # tests
         - tests/DependencyInjection/config
@@ -590,9 +591,37 @@ parameters:
             paths:
                 - utils/compiler/tests/PatchersCallbackTest.php
 
+        -
+            message: '#There should be no empty class#'
+            paths:
+                - packages/static-type-mapper/src/ValueObject/Type/ParentStaticType.php #9
+                - packages/static-type-mapper/src/ValueObject/Type/SelfObjectType.php #9
+                - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeEntityManager.php #7
+                - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeNonKernelClass.php #7
+                - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeTranslator.php #9
+                - rules/transform/tests/Rector/MethodCall/MethodCallToStaticCallRector/AnotherDependency.php #7
+
         - '#Parameter \#3 \$type of method Rector\\CodeQualityStrict\\Rector\\ClassMethod\\ParamTypeToAssertTypeRector\:\:getToBeProcessedTypes\(\) expects PHPStan\\Type\\ObjectType\|PHPStan\\Type\\UnionType, PHPStan\\Type\\Type given#'
 
         - '#Anonymous class is not allowed#'
         - '#File "ClassInCorrectNamespaceRector\.php" should have prefix "Skip" prefix#'
         - '#File "HaveSameStarts\.php" should have prefix "Skip" prefix#'
         - '#File "AbstractSkip\.php" should have prefix "Skip" prefix#'
+
+        # generics nullable bugs
+        - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node\|null#'
+        - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node#'
+        - '#Method (.*?) should return (.*?)\|null but returns PhpParser\\Node\|null#'
+        - '#Method (.*?) should return array<T of PhpParser\\Node\> but returns array<PhpParser\\Node\>#'
+        - '#Method (.*?) should return array<T of PhpParser\\Node\> but returns array<T of PhpParser\\Node\>#'
+
+        - '#Parameter \#1 \$node of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<PhpParser\\Node\>\:\:findFirstAncestorInstanceOf\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\\Variable\|null given#'
+        - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<PhpParser\\Node\>\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
+        - '#Parameter \#2 \$type of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<T of PhpParser\\Node\>\:\:findInstanceOfName\(\) expects class\-string<T of PhpParser\\Node\>, string given#'
+        - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
+        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node\|null#'
+
+        # fixed in php-parser master
+        - '#Method Rector\\SymfonyCodeQuality\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+        - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\CallableTypeMapper" class\. Use unique content or abstract service instead#'
+        - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'

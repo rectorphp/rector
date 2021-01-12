@@ -1,4 +1,4 @@
-# 655 Rules Overview
+# 658 Rules Overview
 
 <br>
 
@@ -18,7 +18,7 @@
 
 - [CodingStyle](#codingstyle) (37)
 
-- [DeadCode](#deadcode) (42)
+- [DeadCode](#deadcode) (43)
 
 - [DeadDocBlock](#deaddocblock) (3)
 
@@ -40,7 +40,7 @@
 
 - [DowngradePhp73](#downgradephp73) (4)
 
-- [DowngradePhp74](#downgradephp74) (10)
+- [DowngradePhp74](#downgradephp74) (11)
 
 - [DowngradePhp80](#downgradephp80) (12)
 
@@ -112,7 +112,7 @@
 
 - [Php74](#php74) (15)
 
-- [Php80](#php80) (15)
+- [Php80](#php80) (16)
 
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 
@@ -128,7 +128,7 @@
 
 - [Renaming](#renaming) (10)
 
-- [Restoration](#restoration) (9)
+- [Restoration](#restoration) (8)
 
 - [Sensio](#sensio) (3)
 
@@ -142,7 +142,7 @@
 
 - [Symfony5](#symfony5) (4)
 
-- [SymfonyCodeQuality](#symfonycodequality) (1)
+- [SymfonyCodeQuality](#symfonycodequality) (2)
 
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 
@@ -311,8 +311,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
+                'ValueObjectInterfaceClassName',
+            ],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
+                'Search',
+            ],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -1604,7 +1608,7 @@ Simplify regex pattern to known ranges
 
 ### SimplifyStrposLowerRector
 
-Simplify `strpos(strtolower(),` "...") calls
+Simplify `strpos(strtolower()`, "...") calls
 
 - class: `Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector`
 
@@ -3591,6 +3595,33 @@ Remove unused assigns to variables
      public function run()
      {
 -        $value = 5;
+     }
+ }
+```
+
+<br>
+
+### RemoveUselessJustForSakeInterfaceRector
+
+Remove interface, that are added just for its sake, but nowhere useful
+
+- class: `Rector\DeadCode\Rector\Class_\RemoveUselessJustForSakeInterfaceRector`
+
+```diff
+-class SomeClass implements OnlyHereUsedInterface
++class SomeClass
+ {
+ }
+
+-interface OnlyHereUsedInterface
+-{
+-}
+-
+ class SomePresenter
+ {
+-    public function __construct(OnlyHereUsedInterface $onlyHereUsed)
++    public function __construct(SomeClass $onlyHereUsed)
+     {
      }
  }
 ```
@@ -5685,6 +5716,25 @@ Remove "_" as thousands separator in numbers
 
 <br>
 
+### DowngradeReturnSelfTypeDeclarationRector
+
+Remove "self" return type, add a `"@return` self" tag instead
+
+- class: `Rector\DowngradePhp74\Rector\ClassMethod\DowngradeReturnSelfTypeDeclarationRector`
+
+```diff
+ class A
+ {
+-    public function foo(): self
++    public function foo()
+     {
+         return $this;
+     }
+ }
+```
+
+<br>
+
 ### DowngradeStripTagsCallWithArrayRector
 
 Convert 2nd param to `strip_tags` from array to string
@@ -6840,10 +6890,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(InjectAnnotationClassRector::class)
         ->call('configure', [[
-            InjectAnnotationClassRector::ANNOTATION_CLASSES => [
-                'DI\Annotation\Inject',
-                'JMS\DiExtraBundle\Annotation\Inject',
-            ],
+            InjectAnnotationClassRector::ANNOTATION_CLASSES => ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject'],
         ]]);
 };
 ```
@@ -7854,7 +7901,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
+            AddTopIncludeRector::PATTERNS => [
+                'pat*/*/?ame.php',
+                'somepath/?ame.php',
+            ],
         ]]);
 };
 ```
@@ -10020,7 +10070,7 @@ Change method call `duplicateStyleArray()` to `getStyle()` + `applyFromArray()`
 
 ### ChangeIOFactoryArgumentRector
 
-Change argument of `PHPExcel_IOFactory::createReader(),` `PHPExcel_IOFactory::createWriter()` and `PHPExcel_IOFactory::identify()`
+Change argument of `PHPExcel_IOFactory::createReader()`, `PHPExcel_IOFactory::createWriter()` and `PHPExcel_IOFactory::identify()`
 
 - class: `Rector\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector`
 
@@ -10560,7 +10610,7 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 
 ### ConstructClassMethodToSetUpTestCaseRector
 
-Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to `setUp(),` to prevent dangerous override
+Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to `setUp()`, to prevent dangerous override
 
 - class: `Rector\PHPUnit\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector`
 
@@ -12816,6 +12866,25 @@ Change simple property init and assign to constructor promotion
 
 <br>
 
+### FalseableCountToZeroRector
+
+Convert false of `pg_num_rows()` to zero
+
+- class: `Rector\Php80\Rector\Assign\FalseableCountToZeroRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = pg_num_rows('...');
++        $value = (int) pg_num_rows('...');
+     }
+ }
+```
+
+<br>
+
 ### FinalPrivateToPrivateVisibilityRector
 
 Changes method visibility from final private to only private
@@ -14670,33 +14739,6 @@ Remove final from Doctrine entities
 
 <br>
 
-### RemoveUselessJustForSakeInterfaceRector
-
-Remove interface, that are added just for its sake, but nowhere useful
-
-- class: `Rector\Restoration\Rector\Class_\RemoveUselessJustForSakeInterfaceRector`
-
-```diff
--class SomeClass implements OnlyHereUsedInterface
-+class SomeClass
- {
- }
-
--interface OnlyHereUsedInterface
--{
--}
--
- class SomePresenter
- {
--    public function __construct(OnlyHereUsedInterface $onlyHereUsed)
-+    public function __construct(SomeClass $onlyHereUsed)
-     {
-     }
- }
-```
-
-<br>
-
 ### RestoreFullyQualifiedNameRector
 
 Restore accidentally shortened class names to its fully qualified form.
@@ -14908,10 +14950,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
-                'SymfonyControllerClassName',
-                'GetTraitClassName',
-            ],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
         ]]);
 };
 ```
@@ -15700,6 +15739,27 @@ Change Symfony Event listener class to Event Subscriber based on configuration i
 
 <br>
 
+### ExtractAttributeRouteNameConstantsRector
+
+`Extract` #[Route] attribute name argument from string to constant
+
+- class: `Rector\SymfonyCodeQuality\Rector\Attribute\ExtractAttributeRouteNameConstantsRector`
+
+```diff
+ use Symfony\Component\Routing\Annotation\Route;
+
+ class SomeClass
+ {
+-    #[Route(path: "path", name: "/name")]
++    #[Route(path: "path", name: RouteName::NAME)]
+     public function run()
+     {
+     }
+ }
+```
+
+<br>
+
 ## SymfonyPHPUnit
 
 ### SelfContainerGetMethodCallFromTestToSetUpMethodRector
@@ -15747,7 +15807,7 @@ Move self::$container service fetching from test methods up to setUp method
 
 ### AutoInPhpSymfonyConfigRector
 
-Make sure there is `public(),` `autowire(),` `autoconfigure()` calls on `defaults()` in Symfony configs
+Make sure there is `public()`, `autowire()`, `autoconfigure()` calls on `defaults()` in Symfony configs
 
 - class: `Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector`
 

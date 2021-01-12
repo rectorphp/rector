@@ -66,7 +66,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $arg = new Arg($this->createClassConstantReference('PhpOffice\PhpSpreadsheet\Chart\Renderer\JpGraph'));
+        $arg = new Arg($this->createClassConstReference('PhpOffice\PhpSpreadsheet\Chart\Renderer\JpGraph'));
         $node->args = [$arg];
 
         return $node;

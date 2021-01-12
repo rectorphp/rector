@@ -234,7 +234,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
 
         $tokenStart = $this->getTokenIteratorIndex($tokenIterator);
-        $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', $tokenIterator);
+        $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', [$tokenIterator]);
 
         $tokenEnd = $this->resolveTokenEnd($tokenIterator);
 

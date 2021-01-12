@@ -6,7 +6,7 @@ namespace Rector\Legacy\NodeFactory;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\Core\PhpParser\Builder\MethodBuilder;
+use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 
 final class ClassMethodFactory
 {

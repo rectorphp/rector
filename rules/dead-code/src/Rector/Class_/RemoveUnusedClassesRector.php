@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\UnusedNodeResolver\UnusedClassResolver;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -87,7 +88,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeNode($node);
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            $this->removeNode($node);
+        } else {
+            $this->removeFile($this->getFileInfo());
+        }
 
         return null;
     }
@@ -108,6 +113,27 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->hasMethodWithApiAnnotation($class)) {
+            return true;
+        }
+
+        if ($this->hasTagByName($class, 'api')) {
+            return true;
+        }
+
         return $class->isAbstract();
+    }
+
+    private function hasMethodWithApiAnnotation(Class_ $class): bool
+    {
+        foreach ($class->getMethods() as $classMethod) {
+            if (! $this->hasTagByName($classMethod, 'api')) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

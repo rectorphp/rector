@@ -156,7 +156,7 @@ CODE_SAMPLE
             ));
         }
 
-        $classConstFetch = $this->createClassConstantReference($entityClassName);
+        $classConstFetch = $this->createClassConstReference($entityClassName);
 
         $methodCall = $this->builderFactory->methodCall(
             new Variable('entityManager'),

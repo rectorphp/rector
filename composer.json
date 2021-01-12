@@ -19,12 +19,6 @@
     "bin": [
         "bin/rector"
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/lulco/composer-json-manipulator"
-        }
-    ],
     "require": {
         "php": "^7.3|^8.0",
         "ext-dom": "*",
@@ -44,23 +38,22 @@
         "sebastian/diff": "^4.0",
         "symfony/cache": "^4.4.8|^5.1",
         "symfony/console": "^4.4.8|^5.1",
-        "symfony/dependency-injection": "^4.4.8|^5.1",
+        "symfony/dependency-injection": "^5.1",
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
-        "symplify/autowire-array-parameter": "^9.0.21",
-        "symplify/composer-json-manipulator": "dev-added-methods-to-manipulate-json as 9.0.25",
-        "symplify/console-color-diff": "^9.0.21",
-        "symplify/package-builder": "^9.0.21",
-        "symplify/rule-doc-generator": "^9.0.21",
-        "symplify/set-config-resolver": "^9.0.21",
-        "symplify/simple-php-doc-parser": "^9.0.21",
-        "symplify/skipper": "^9.0.21",
-        "symplify/smart-file-system": "^9.0.21",
-        "symplify/symfony-php-config": "^9.0.21",
+        "symplify/autowire-array-parameter": "^9.0.26",
+        "symplify/console-color-diff": "^9.0.26",
+        "symplify/package-builder": "^9.0.26",
+        "symplify/rule-doc-generator": "^9.0.26",
+        "symplify/set-config-resolver": "^9.0.26",
+        "symplify/simple-php-doc-parser": "^9.0.26",
+        "symplify/skipper": "^9.0.26",
+        "symplify/smart-file-system": "^9.0.26",
+        "symplify/symfony-php-config": "^9.0.26",
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "2.17.1",
+        "friendsofphp/php-cs-fixer": "^2.17.3",
         "nette/application": "^3.0",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
@@ -69,12 +62,12 @@
         "phpstan/phpstan-nette": "^0.12.12",
         "phpunit/phpunit": "^9.5",
         "sebastian/diff": "^4.0.4",
-        "symplify/changelog-linker": "^9.0.21",
-        "symplify/coding-standard": "^9.0.21",
-        "symplify/easy-coding-standard": "^9.0.21",
-        "symplify/easy-testing": "^9.0.21",
-        "symplify/phpstan-extensions": "^9.0.21",
-        "symplify/phpstan-rules": "^9.0.21",
+        "symplify/changelog-linker": "^9.0.26",
+        "symplify/coding-standard": "^9.0.26",
+        "symplify/easy-coding-standard": "^9.0.26",
+        "symplify/easy-testing": "^9.0.26",
+        "symplify/phpstan-extensions": "^9.0.26",
+        "symplify/phpstan-rules": "^9.0.26",
         "tracy/tracy": "^2.7"
     },
     "replace": {
@@ -302,7 +295,6 @@
             "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src",
             "Rector\\Utils\\NodeDocumentationGenerator\\": "utils/node-documentation-generator/src",
             "Rector\\Utils\\NodeDocumentationGenerator\\Tests\\": "utils/node-documentation-generator/tests",
-            "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/phpstan-attribute-type-syncer/src",
             "Rector\\Utils\\PHPStanTypeMapperChecker\\": "utils/phpstan-type-mapper-checker/src",
             "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
             "Rector\\Carbon\\Tests\\": "rules/carbon/tests"

@@ -33,7 +33,7 @@ final class RequireRectorCategoryByGetNodeTypesRuleTest extends AbstractServiceA
         yield [__DIR__ . '/Fixture/ClassMethod/ChangeSomethingRector.php', [[$errorMessage, 14]]];
         yield [__DIR__ . '/Fixture/FunctionLike/SkipSubtypeRector.php', []];
         yield [__DIR__ . '/Fixture/ClassMethod/SkipInterface.php', []];
-        yield [__DIR__ . '/Fixture/AbstractSkip.php', []];
+        yield [__DIR__ . '/Fixture/SkipAbstract.php', []];
     }
 
     protected function getRule(): Rule

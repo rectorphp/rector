@@ -168,7 +168,7 @@ CODE_SAMPLE
         $this->addChoiceTypeOptions($method, $optionsArray);
         $this->addMultiFileTypeOptions($method, $optionsArray);
 
-        $methodCall->args[1] = new Arg($this->createClassConstantReference($classType));
+        $methodCall->args[1] = new Arg($this->createClassConstReference($classType));
 
         if ($optionsArray->items !== []) {
             $methodCall->args[2] = new Arg($optionsArray);

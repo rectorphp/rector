@@ -114,7 +114,7 @@ CODE_SAMPLE
 
     private function shouldSkipAsPartOfNestedForeach(Foreach_ $foreach): bool
     {
-        $foreachParent = $this->betterNodeFinder->findFirstParentInstanceOf($foreach, Foreach_::class);
+        $foreachParent = $this->betterNodeFinder->findParentType($foreach, Foreach_::class);
         return $foreachParent !== null;
     }
 }

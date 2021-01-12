@@ -86,10 +86,7 @@ final class ReadWritePropertyAnalyzer
 
     private function isNotInsideIssetUnset(ArrayDimFetch $arrayDimFetch): bool
     {
-        return ! (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
-            $arrayDimFetch,
-            [Isset_::class, Unset_::class]
-        );
+        return ! (bool) $this->betterNodeFinder->findParentTypes($arrayDimFetch, [Isset_::class, Unset_::class]);
     }
 
     private function unwrapPostPreIncDec(Node $node): Node

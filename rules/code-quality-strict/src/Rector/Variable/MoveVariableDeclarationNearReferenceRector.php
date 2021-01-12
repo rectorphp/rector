@@ -204,7 +204,7 @@ CODE_SAMPLE
 
     private function isInsideLoopStmts(Node $node): bool
     {
-        $loopNode = $this->betterNodeFinder->findFirstParentInstanceOf(
+        $loopNode = $this->betterNodeFinder->findParentTypes(
             $node,
             [For_::class, While_::class, Foreach_::class, Do_::class]
         );

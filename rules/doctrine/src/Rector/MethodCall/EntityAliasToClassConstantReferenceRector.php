@@ -103,7 +103,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->args[0]->value = $this->createClassConstantReference(
+        $node->args[0]->value = $this->createClassConstReference(
             $this->convertAliasToFqn($node->args[0]->value->value)
         );
 

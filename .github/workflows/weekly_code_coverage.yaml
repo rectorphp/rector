@@ -31,7 +31,7 @@ jobs:
                             git checkout .
                             git clean -xfd build
                         env:
-                            COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                            COVERALLS_REPO_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                         branch: 'master'
 
         name: ${{ matrix.actions.name }}
@@ -40,8 +40,6 @@ jobs:
         steps:
             -
                 uses: actions/checkout@v2
-                with:
-                    token: ${{ secrets.ACCESS_TOKEN }}
 
             # see https://github.com/shivammathur/setup-php
             -

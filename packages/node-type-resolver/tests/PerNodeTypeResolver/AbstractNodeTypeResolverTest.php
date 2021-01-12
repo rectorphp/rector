@@ -38,7 +38,9 @@ abstract class AbstractNodeTypeResolverTest extends AbstractKernelTestCase
     }
 
     /**
-     * @return Node[]
+     * @template T as Node
+     * @param class-string<T> $type
+     * @return T[]
      */
     protected function getNodesForFileOfType(string $file, string $type): array
     {
