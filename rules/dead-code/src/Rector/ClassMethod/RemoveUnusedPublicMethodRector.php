@@ -9,14 +9,14 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPublicMethodRector\RemoveUnusedPublicMethodRectorTest
@@ -93,43 +93,18 @@ CODE_SAMPLE
         }
 
         $calls = $this->nodeRepository->findCallsByClassMethod($node);
-        if ($calls === []) {
-            $this->removeNode($node);
-            return $node;
+        if ($calls !== []) {
+            $this->calls = array_merge($this->calls, $calls);
+            return null;
         }
 
-        $isFoundCall = (bool) $this->betterNodeFinder->findFirst($node->stmts, function (Node $node) use ($calls): bool {
-            if (! $node instanceof MethodCall) {
-                return false;
+        $calls = array_unique($this->calls);
+        foreach ($calls as $call) {
+            $classMethod = $this->betterNodeFinder->findParentType($call, ClassMethod::class, );
+
+            if ($this->areNodesEqual($classMethod, $node)) {
+                return null;
             }
-
-            $className = $this->getMethodCallClassName($node);
-            if ($className === null) {
-                return false;
-            }
-
-            $methodName = (string) $node->name;
-            foreach ($calls as $call) {
-                $callClassName = $this->getMethodCallClassName($call);
-                if ($callClassName === null) {
-                    return false;
-                }
-
-                if ($callClassName !== $className) {
-                    continue;
-                }
-
-                $callName = (string) $call->name;
-                if ($callName === $methodName) {
-                    return true;
-                }
-            }
-
-            return false;
-        });
-
-        if ($isFoundCall) {
-            return null;
         }
 
         $this->removeNode($node);
