@@ -95,6 +95,7 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var MethodCall[] $calls */
         $calls = $this->calls;
         foreach ($calls as $call) {
             $classMethod = $this->betterNodeFinder->findParentType($call, ClassMethod::class);
