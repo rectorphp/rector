@@ -98,9 +98,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $calls = array_unique($this->calls);
+        $calls = $this->calls;
         foreach ($calls as $call) {
-            $classMethod = $this->betterNodeFinder->findParentType($call, ClassMethod::class, );
+            $classMethod = $this->betterNodeFinder->findParentType($call, ClassMethod::class);
 
             if ($this->areNodesEqual($classMethod, $node)) {
                 return null;
