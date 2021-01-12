@@ -13,12 +13,6 @@ use Webmozart\Assert\Assert;
  */
 final class ComposerModifier
 {
-    /** @var string */
-    public const SECTION_REQUIRE = 'require';
-
-    /** @var string */
-    public const SECTION_REQUIRE_DEV = 'require-dev';
-
     /** @var string|null */
     private $filePath;
 

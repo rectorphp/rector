@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use InvalidArgumentException;
-use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
 use Rector\Composer\ValueObject\Version\Version;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use Webmozart\Assert\Assert;
 
 /**
  * Replace one package for another
@@ -32,9 +31,8 @@ final class ReplacePackage implements ComposerModifierInterface
      */
     public function __construct(string $oldPackageName, string $newPackageName, string $targetVersion)
     {
-        if ($oldPackageName === $newPackageName) {
-            throw new InvalidArgumentException('$oldPackageName cannot be the same as $newPackageName. If you want to change version of package, use ' . ChangePackageVersion::class);
-        }
+        Assert::notSame($oldPackageName, $newPackageName, '$oldPackageName cannot be the same as $newPackageName. If you want to change version of package, use ' . ChangePackageVersion::class);
+
         $this->oldPackageName = $oldPackageName;
         $this->newPackageName = $newPackageName;
         $this->targetVersion = new Version($targetVersion);
