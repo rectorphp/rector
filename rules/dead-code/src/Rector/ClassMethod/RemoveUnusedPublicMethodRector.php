@@ -77,6 +77,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->isPublic()) {
+            return null;
+        }
+
+        $this->removeNode($node);
         return $node;
     }
 }

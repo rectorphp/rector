@@ -6,12 +6,14 @@ final class Fixture
 {
     public function unusedpublicMethod()
     {
-        echo 'statement';
+    }
+
+    private function keep()
+    {
     }
 
     public function execute()
     {
-        echo 'statement';
     }
 
     public function run()
@@ -29,15 +31,8 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPublicMethodRecto
 
 final class Fixture
 {
-    public function execute()
+    private function keep()
     {
-        echo 'statement';
-    }
-
-    public function run()
-    {
-        $obj = new self;
-        $obj->execute();
     }
 }
 
