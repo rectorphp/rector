@@ -4,15 +4,15 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPublicMethodRecto
 
 final class UsedOutsideClass
 {
+    public function unusedpublicMethod()
+    {
+    }
+
     private function keep()
     {
     }
 
     public function execute()
-    {
-    }
-
-    public function unusedpublicMethod()
     {
     }
 }
