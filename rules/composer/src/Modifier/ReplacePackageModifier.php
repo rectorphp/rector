@@ -17,9 +17,7 @@ use Webmozart\Assert\Assert;
 final class ReplacePackageModifier implements ComposerModifierInterface
 {
     /**
-     * @param ComposerJson $composerJson
      * @param ReplacePackage $composerModifierConfiguration
-     * @return ComposerJson
      */
     public function modify(ComposerJson $composerJson, ComposerModifierConfigurationInterface $composerModifierConfiguration): ComposerJson
     {
