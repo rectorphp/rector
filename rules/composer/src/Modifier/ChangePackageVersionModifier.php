@@ -23,7 +23,7 @@ final class ChangePackageVersionModifier implements ComposerModifierInterface
     {
         Assert::isInstanceOf($composerModifierConfiguration, ChangePackageVersion::class);
 
-        $composerJson->changePackageVersion($composerModifierConfiguration->getPackageName(), $composerModifierConfiguration->getTargetVersion()->getVersion());
+        $composerJson->changePackageVersion($composerModifierConfiguration->getPackageName(), $composerModifierConfiguration->getTargetVersion());
         return $composerJson;
     }
 }

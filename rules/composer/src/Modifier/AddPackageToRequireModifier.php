@@ -23,7 +23,7 @@ final class AddPackageToRequireModifier implements ComposerModifierInterface
     {
         Assert::isInstanceOf($composerModifierConfiguration, AddPackageToRequire::class);
 
-        $composerJson->addRequiredPackage($composerModifierConfiguration->getPackageName(), $composerModifierConfiguration->getVersion()->getVersion());
+        $composerJson->addRequiredPackage($composerModifierConfiguration->getPackageName(), $composerModifierConfiguration->getVersion());
         return $composerJson;
     }
 }

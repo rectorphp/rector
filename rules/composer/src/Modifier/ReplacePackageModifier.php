@@ -23,7 +23,7 @@ final class ReplacePackageModifier implements ComposerModifierInterface
     {
         Assert::isInstanceOf($composerModifierConfiguration, ReplacePackage::class);
 
-        $composerJson->replacePackage($composerModifierConfiguration->getOldPackageName(), $composerModifierConfiguration->getNewPackageName(), $composerModifierConfiguration->getTargetVersion()->getVersion());
+        $composerJson->replacePackage($composerModifierConfiguration->getOldPackageName(), $composerModifierConfiguration->getNewPackageName(), $composerModifierConfiguration->getTargetVersion());
         return $composerJson;
     }
 }

@@ -34,8 +34,8 @@ final class AddPackageToRequireDev implements ComposerModifierConfigurationInter
         return $this->packageName;
     }
 
-    public function getVersion(): Version
+    public function getVersion(): string
     {
-        return $this->version;
+        return $this->version->getVersion();
     }
 }

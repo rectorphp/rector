@@ -47,8 +47,8 @@ final class ReplacePackage implements ComposerModifierConfigurationInterface
         return $this->newPackageName;
     }
 
-    public function getTargetVersion(): Version
+    public function getTargetVersion(): string
     {
-        return $this->targetVersion;
+        return $this->targetVersion->getVersion();
     }
 }

@@ -34,8 +34,8 @@ final class ChangePackageVersion implements ComposerModifierConfigurationInterfa
         return $this->packageName;
     }
 
-    public function getTargetVersion(): Version
+    public function getTargetVersion(): string
     {
-        return $this->targetVersion;
+        return $this->targetVersion->getVersion();
     }
 }
