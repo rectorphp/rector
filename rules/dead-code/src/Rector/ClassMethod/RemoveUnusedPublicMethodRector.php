@@ -94,7 +94,7 @@ CODE_SAMPLE
 
         $isFoundCall = (bool) $this->betterNodeFinder->findFirst(
             $node->stmts,
-            function (Node $node) : bool {
+            function (Node $node): bool {
                 foreach ($this->calls as $call) {
                     if ($this->areNodesEqual($call, $node)) {
                         return true;
