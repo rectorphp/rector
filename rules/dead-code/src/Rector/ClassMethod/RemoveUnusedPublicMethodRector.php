@@ -9,12 +9,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -109,25 +106,5 @@ CODE_SAMPLE
 
         $this->removeNode($node);
         return $node;
-    }
-
-    private function getMethodCallClassName(MethodCall $methodCall): ?string
-    {
-        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
-            return null;
-        }
-
-        $type = $scope->getType($methodCall->var);
-        if ($type instanceof ObjectType) {
-            return $type->getClassName();
-        }
-
-        if ($type instanceof ThisType) {
-            $type = $type->getStaticObjectType();
-            return $type->getClassName();
-        }
-
-        return null;
     }
 }
