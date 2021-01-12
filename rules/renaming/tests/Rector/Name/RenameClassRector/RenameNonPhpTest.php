@@ -12,6 +12,9 @@ use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\Renaming\Rector\Name\RenameClassRector
+ */
 final class RenameNonPhpTest extends AbstractRectorTestCase
 {
     /**
@@ -30,21 +33,8 @@ final class RenameNonPhpTest extends AbstractRectorTestCase
         );
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            RenameClassRector::class => [
-                RenameClassRector::OLD_TO_NEW_CLASSES => [
-                    OldClass::class => NewClass::class,
-                    // Laravel
-                    'Session' => 'Illuminate\Support\Facades\Session',
-                    'Form' => 'Collective\Html\FormFacade',
-                    'Html' => 'Collective\Html\HtmlFacade',
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/rename_non_php_config.php');
     }
 }
