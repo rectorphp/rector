@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\Fixture;
 
-final class MethodCall
+final class SomeMethodCalls
 {
     public function run()
     {
@@ -29,7 +29,7 @@ final class MethodCall
 
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\Fixture;
 
-final class MethodCall
+final class SomeMethodCalls
 {
     public function run()
     {
