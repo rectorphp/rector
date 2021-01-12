@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\Contract\ComposerModifier\ComposerModifierConfigurationInterface;
 use Rector\Composer\ValueObject\Version\Version;
-use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Webmozart\Assert\Assert;
 
 /**
  * Replace one package for another
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\ReplacePackageTest
  */
-final class ReplacePackage implements ComposerModifierInterface
+final class ReplacePackage implements ComposerModifierConfigurationInterface
 {
     /** @var string */
     private $oldPackageName;
@@ -38,9 +37,18 @@ final class ReplacePackage implements ComposerModifierInterface
         $this->targetVersion = new Version($targetVersion);
     }
 
-    public function modify(ComposerJson $composerJson): ComposerJson
+    public function getOldPackageName(): string
     {
-        $composerJson->replacePackage($this->oldPackageName, $this->newPackageName, $this->targetVersion->getVersion());
-        return $composerJson;
+        return $this->oldPackageName;
+    }
+
+    public function getNewPackageName(): string
+    {
+        return $this->newPackageName;
+    }
+
+    public function getTargetVersion(): Version
+    {
+        return $this->targetVersion;
     }
 }

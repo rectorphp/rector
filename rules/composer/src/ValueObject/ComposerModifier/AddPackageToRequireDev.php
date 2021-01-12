@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\Contract\ComposerModifier\ComposerModifierConfigurationInterface;
 use Rector\Composer\ValueObject\Version\Version;
-use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
  * Only adds package to require-dev section, if package is already in composer data, nothing happen
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\AddPackageToRequireDevTest
  */
-final class AddPackageToRequireDev implements ComposerModifierInterface
+final class AddPackageToRequireDev implements ComposerModifierConfigurationInterface
 {
     /** @var string */
     private $packageName;
@@ -30,9 +29,13 @@ final class AddPackageToRequireDev implements ComposerModifierInterface
         $this->version = new Version($version);
     }
 
-    public function modify(ComposerJson $composerJson): ComposerJson
+    public function getPackageName(): string
     {
-        $composerJson->addRequiredDevPackage($this->packageName, $this->version->getVersion());
-        return $composerJson;
+        return $this->packageName;
+    }
+
+    public function getVersion(): Version
+    {
+        return $this->version;
     }
 }

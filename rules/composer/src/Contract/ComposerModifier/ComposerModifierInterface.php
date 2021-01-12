@@ -8,5 +8,5 @@ use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 interface ComposerModifierInterface
 {
-    public function modify(ComposerJson $composerJson): ComposerJson;
+    public function modify(ComposerJson $composerJson, ComposerModifierConfigurationInterface $composerModifierConfiguration): ComposerJson;
 }

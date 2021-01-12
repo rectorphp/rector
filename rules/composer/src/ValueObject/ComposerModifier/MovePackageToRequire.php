@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
-use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use Rector\Composer\Contract\ComposerModifier\ComposerModifierConfigurationInterface;
 
 /**
  * Moves package to require section, if package is not in composer data, nothing happen, also if package is already in require section
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\MovePackageToRequireTest
  */
-final class MovePackageToRequire implements ComposerModifierInterface
+final class MovePackageToRequire implements ComposerModifierConfigurationInterface
 {
     /** @var string */
     private $packageName;
@@ -24,9 +23,8 @@ final class MovePackageToRequire implements ComposerModifierInterface
         $this->packageName = $packageName;
     }
 
-    public function modify(ComposerJson $composerJson): ComposerJson
+    public function getPackageName(): string
     {
-        $composerJson->movePackageToRequire($this->packageName);
-        return $composerJson;
+        return $this->packageName;
     }
 }

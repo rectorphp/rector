@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\Contract\ComposerModifier\ComposerModifierConfigurationInterface;
 use Rector\Composer\ValueObject\Version\Version;
-use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
  * Changes package version of package which is already in composer data
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\ChangePackageVersionTest
  */
-final class ChangePackageVersion implements ComposerModifierInterface
+final class ChangePackageVersion implements ComposerModifierConfigurationInterface
 {
     /** @var string */
     private $packageName;
@@ -30,9 +29,13 @@ final class ChangePackageVersion implements ComposerModifierInterface
         $this->targetVersion = new Version($targetVersion);
     }
 
-    public function modify(ComposerJson $composerJson): ComposerJson
+    public function getPackageName(): string
     {
-        $composerJson->changePackageVersion($this->packageName, $this->targetVersion->getVersion());
-        return $composerJson;
+        return $this->packageName;
+    }
+
+    public function getTargetVersion(): Version
+    {
+        return $this->targetVersion;
     }
 }

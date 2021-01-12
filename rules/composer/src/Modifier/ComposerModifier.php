@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Composer\Modifier;
 
-use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\Contract\ComposerModifier\ComposerModifierConfigurationInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Webmozart\Assert\Assert;
 
@@ -13,30 +13,38 @@ use Webmozart\Assert\Assert;
  */
 final class ComposerModifier
 {
+    /** @var ComposerModifierFactory */
+    private $composerModifierFactory;
+
     /** @var string|null */
     private $filePath;
 
     /** @var string */
     private $command = 'composer update';
 
-    /** @var ComposerModifierInterface[] */
+    /** @var ComposerModifierConfigurationInterface[] */
     private $configuration = [];
 
+    public function __construct(ComposerModifierFactory $composerModifierFactory)
+    {
+        $this->composerModifierFactory = $composerModifierFactory;
+    }
+
     /**
-     * @param ComposerModifierInterface[] $configuration
+     * @param ComposerModifierConfigurationInterface[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsInstanceOf($configuration, ComposerModifierInterface::class);
+        Assert::allIsInstanceOf($configuration, ComposerModifierConfigurationInterface::class);
         $this->configuration = array_merge($this->configuration, $configuration);
     }
 
     /**
-     * @param ComposerModifierInterface[] $configuration
+     * @param ComposerModifierConfigurationInterface[] $configuration
      */
     public function reconfigure(array $configuration): void
     {
-        Assert::allIsInstanceOf($configuration, ComposerModifierInterface::class);
+        Assert::allIsInstanceOf($configuration, ComposerModifierConfigurationInterface::class);
         $this->configuration = $configuration;
     }
 
@@ -62,8 +70,13 @@ final class ComposerModifier
 
     public function modify(ComposerJson $composerJson): ComposerJson
     {
-        foreach ($this->configuration as $composerChanger) {
-            $composerJson = $composerChanger->modify($composerJson);
+        foreach ($this->configuration as $composerModifierConfiguration) {
+            $composerModifier = $this->composerModifierFactory->create($composerModifierConfiguration);
+            if ($composerModifier === null) {
+                // TODO add some error message to output
+                continue;
+            }
+            $composerJson = $composerModifier->modify($composerJson, $composerModifierConfiguration);
         }
 
         return $composerJson;
