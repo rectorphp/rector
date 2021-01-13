@@ -1,4 +1,4 @@
-# 658 Rules Overview
+# 660 Rules Overview
 
 <br>
 
@@ -18,7 +18,7 @@
 
 - [CodingStyle](#codingstyle) (37)
 
-- [DeadCode](#deadcode) (43)
+- [DeadCode](#deadcode) (44)
 
 - [DeadDocBlock](#deaddocblock) (3)
 
@@ -120,7 +120,7 @@
 
 - [PostRector](#postrector) (7)
 
-- [Privatization](#privatization) (13)
+- [Privatization](#privatization) (14)
 
 - [RectorGenerator](#rectorgenerator) (1)
 
@@ -3578,6 +3578,35 @@ Remove unused private properties
  class SomeClass
  {
 -    private $property;
+ }
+```
+
+<br>
+
+### RemoveUnusedPublicMethodRector
+
+Remove unused public method
+
+- class: `Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPublicMethodRector`
+
+```diff
+ class SomeClass
+ {
+-    public function unusedpublicMethod()
+-    {
+-        // ...
+-    }
+-
+     public function execute()
+     {
+         // ...
+     }
+
+     public function run()
+     {
+         $obj = new self;
+         $obj->execute();
+     }
  }
 ```
 
@@ -13792,6 +13821,47 @@ Replace repeated strings with constant
 +        if ($key === self::REQUIRES) {
 +            return $items[self::REQUIRES];
          }
+     }
+ }
+```
+
+<br>
+
+### ReplaceStringWithClassConstantRector
+
+Replace string values in specific method call by constant of provided class
+
+:wrench: **configure it!**
+
+- class: `Rector\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector`
+
+```php
+use Rector\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector;
+use Rector\Privatization\ValueObject\ReplaceStringWithClassConstant;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ReplaceStringWithClassConstantRector::class)
+        ->call('configure', [[
+            ReplaceStringWithClassConstantRector::REPLACE_STRING_WITH_CLASS_CONSTANT => ValueObjectInliner::inline([
+                new ReplaceStringWithClassConstant('SomeClass', 'call', 'Placeholder', 1),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $this->call('name');
++        $this->call(Placeholder::NAME);
      }
  }
 ```

@@ -1757,7 +1757,7 @@ return $class;
 ↓
 
 ```php
-final class ClassName extends ParentClass
+final class ClassName extends \ParentClass
 {
 }
 ```
