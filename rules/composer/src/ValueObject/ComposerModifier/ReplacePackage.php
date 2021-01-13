@@ -15,13 +15,19 @@ use Webmozart\Assert\Assert;
  */
 final class ReplacePackage implements ComposerModifierInterface
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $oldPackageName;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $newPackageName;
 
-    /** @var Version */
+    /**
+     * @var Version
+     */
     private $targetVersion;
 
     /**
@@ -31,7 +37,11 @@ final class ReplacePackage implements ComposerModifierInterface
      */
     public function __construct(string $oldPackageName, string $newPackageName, string $targetVersion)
     {
-        Assert::notSame($oldPackageName, $newPackageName, '$oldPackageName cannot be the same as $newPackageName. If you want to change version of package, use ' . ChangePackageVersion::class);
+        Assert::notSame(
+            $oldPackageName,
+            $newPackageName,
+            '$oldPackageName cannot be the same as $newPackageName. If you want to change version of package, use ' . ChangePackageVersion::class
+        );
 
         $this->oldPackageName = $oldPackageName;
         $this->newPackageName = $newPackageName;

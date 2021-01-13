@@ -38,7 +38,8 @@ final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
      */
     public function testContainsArrayType(TypeNode $typeNode, bool $expectedContains): void
     {
-        $this->assertSame($expectedContains, $this->typeNodeAnalyzer->containsArrayType($typeNode));
+        $containsArrayType = $this->typeNodeAnalyzer->containsArrayType($typeNode);
+        $this->assertSame($expectedContains, $containsArrayType);
     }
 
     public function provideDataForArrayType(): Iterator
@@ -55,7 +56,8 @@ final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
      */
     public function testIsIntersectionAndNotNullable(TypeNode $typeNode, bool $expectedIs): void
     {
-        $this->assertSame($expectedIs, $this->typeNodeAnalyzer->isIntersectionAndNotNullable($typeNode));
+        $isIntersection = $this->typeNodeAnalyzer->isIntersectionAndNotNullable($typeNode);
+        $this->assertSame($expectedIs, $isIntersection);
     }
 
     public function provideDataForIntersectionAndNotNullable(): Iterator

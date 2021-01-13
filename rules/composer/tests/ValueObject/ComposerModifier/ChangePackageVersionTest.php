@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
 use PHPUnit\Framework\TestCase;
@@ -16,14 +18,15 @@ final class ChangePackageVersionTest extends TestCase
             'vendor1/package2' => '^2.0',
         ]);
 
-        $changedComposerJson = new ComposerJson();
-        $changedComposerJson->setRequire([
+        $expectedComposerJson = new ComposerJson();
+        $expectedComposerJson->setRequire([
             'vendor1/package1' => '^1.0',
             'vendor1/package2' => '^2.0',
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerJson, $changePackageVersion->modify($composerJson));
+        $changePackageVersion->modify($composerJson);
+        $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
     public function testChangeVersionExistingPackage(): void
@@ -34,14 +37,15 @@ final class ChangePackageVersionTest extends TestCase
             'vendor1/package2' => '^2.0',
         ]);
 
-        $changedComposerJson = new ComposerJson();
-        $changedComposerJson->setRequire([
+        $expectedComposerJson = new ComposerJson();
+        $expectedComposerJson->setRequire([
             'vendor1/package1' => '^3.0',
             'vendor1/package2' => '^2.0',
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package1', '^3.0');
-        $this->assertEquals($changedComposerJson, $changePackageVersion->modify($composerJson));
+        $changePackageVersion->modify($composerJson);
+        $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
     public function testChangeVersionExistingDevPackage(): void
@@ -54,15 +58,17 @@ final class ChangePackageVersionTest extends TestCase
             'vendor1/package2' => '^2.0',
         ]);
 
-        $changedComposerJson = new ComposerJson();
-        $changedComposerJson->setRequire([
+        $expectedComposerJson = new ComposerJson();
+        $expectedComposerJson->setRequire([
             'vendor1/package1' => '^1.0',
         ]);
-        $changedComposerJson->setRequireDev([
+        $expectedComposerJson->setRequireDev([
             'vendor1/package2' => '^3.0',
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package2', '^3.0');
-        $this->assertEquals($changedComposerJson, $changePackageVersion->modify($composerJson));
+        $changePackageVersion->modify($composerJson);
+
+        $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 }

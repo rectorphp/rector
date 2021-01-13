@@ -24,7 +24,8 @@ final class InterfaceTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $variableNodes = $this->getNodesForFileOfType($file, Interface_::class);
 
-        $this->assertEquals($expectedType, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
+        $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]);
+        $this->assertEquals($expectedType, $resolvedType);
     }
 
     public function dataProvider(): Iterator

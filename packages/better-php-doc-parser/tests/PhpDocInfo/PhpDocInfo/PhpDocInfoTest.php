@@ -78,10 +78,8 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
 
         $this->docBlockManipulator->replaceTagByAnother($phpDocInfo->getPhpDocNode(), 'test', 'flow');
 
-        $this->assertStringEqualsFile(
-            __DIR__ . '/Source/expected-replaced-tag.txt',
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo)
-        );
+        $printedPhpDocInfo = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+        $this->assertStringEqualsFile(__DIR__ . '/Source/expected-replaced-tag.txt', $printedPhpDocInfo);
     }
 
     private function createPhpDocInfoFromFile(string $path): PhpDocInfo

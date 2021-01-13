@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
 use PHPUnit\Framework\TestCase;
@@ -16,34 +18,36 @@ final class MovePackageToRequireDevTest extends TestCase
             'vendor1/package2' => '^2.0',
         ]);
 
-        $changedComposerJson = new ComposerJson();
-        $changedComposerJson->setRequire([
+        $expectedComposerJson = new ComposerJson();
+        $expectedComposerJson->setRequire([
             'vendor1/package1' => '^1.0',
             'vendor1/package2' => '^2.0',
         ]);
 
         $movePackageToRequireDev = new MovePackageToRequireDev('vendor1/package3');
-        $this->assertEquals($changedComposerJson, $movePackageToRequireDev->modify($composerJson));
+        $movePackageToRequireDev->modify($composerJson);
+        $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
     public function testMoveExistingPackage(): void
     {
         $composerJson = new ComposerJson();
         $composerJson->setRequire([
-                'vendor1/package1' => '^1.0',
-                'vendor1/package2' => '^2.0',
-        ]);
-
-        $changedComposerJson = new ComposerJson();
-        $changedComposerJson->setRequire([
+            'vendor1/package1' => '^1.0',
             'vendor1/package2' => '^2.0',
         ]);
-        $changedComposerJson->setRequireDev([
+
+        $expectedComposerJson = new ComposerJson();
+        $expectedComposerJson->setRequire([
+            'vendor1/package2' => '^2.0',
+        ]);
+        $expectedComposerJson->setRequireDev([
             'vendor1/package1' => '^1.0',
         ]);
 
         $movePackageToRequireDev = new MovePackageToRequireDev('vendor1/package1');
-        $this->assertEquals($changedComposerJson, $movePackageToRequireDev->modify($composerJson));
+        $movePackageToRequireDev->modify($composerJson);
+        $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
     public function testMoveExistingDevPackage(): void
@@ -56,15 +60,16 @@ final class MovePackageToRequireDevTest extends TestCase
             'vendor1/package2' => '^2.0',
         ]);
 
-        $changedComposerJson = new ComposerJson();
-        $changedComposerJson->setRequire([
+        $expectedComposerJson = new ComposerJson();
+        $expectedComposerJson->setRequire([
             'vendor1/package1' => '^1.0',
         ]);
-        $changedComposerJson->setRequireDev([
+        $expectedComposerJson->setRequireDev([
             'vendor1/package2' => '^2.0',
         ]);
 
         $movePackageToRequireDev = new MovePackageToRequireDev('vendor1/package2');
-        $this->assertEquals($changedComposerJson, $movePackageToRequireDev->modify($composerJson));
+        $movePackageToRequireDev->modify($composerJson);
+        $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 }

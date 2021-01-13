@@ -625,3 +625,44 @@ parameters:
         - '#Method Rector\\SymfonyCodeQuality\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
         - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\CallableTypeMapper" class\. Use unique content or abstract service instead#'
         - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'
+
+        # resolve later - clean duplicated code
+        - '#Content of method "resolveClass\(\)" is duplicated with method "resolveClassName\(\)" in "Rector\\NetteToSymfony\\Analyzer\\NetteControlFactoryInterfaceAnalyzer" class\. Use unique content or abstract service instead#'
+        - '#Content of method "collectMockVariableName\(\)" is duplicated with method "collectMockVariableName\(\)" in "Rector\\MockistaToMockery\\Rector\\ClassMethod\\MockistaMockToMockeryMockRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "shouldSkipMethodCallIncludingNew\(\)" is duplicated with method "shouldSkipMethodCallIncludingNew\(\)" in "Rector\\Defluent\\Rector\\AbstractFluentChainMethodCallRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method "mapToPhpParserNode\(\)" in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getFqnClassName\(\)" is duplicated with method "getFullyQualifiedName\(\)" in "Rector\\TypeDeclaration\\Rector\\FunctionLike\\ParamTypeDeclarationRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "resolveMethodCallVar\(\)" is duplicated with method "resolveMethodCallVar\(\)" in "Rector\\Defluent\\NodeFactory\\SeparateReturnMethodCallFactory" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getFullyQualifiedName\(\)" is duplicated with method "resolveClassName\(\)" in "Rector\\NetteToSymfony\\Analyzer\\NetteControlFactoryInterfaceAnalyzer" class\. Use unique content or abstract service instead#'
+        - '#Content of method "endsWith\(\)" is duplicated with method "endsWith\(\)" in "Rector\\Naming\\ExpectedNameResolver\\AbstractExpectedNameResolver" class\. Use unique content or abstract service instead#'
+        - '#Content of method "convertParamsToArgs\(\)" is duplicated with method "convertParamNodesToArgNodes\(\)" in "Rector\\Core\\PhpParser\\Node\\NodeFactory" class\. Use unique content or abstract service instead#'
+        - '#Content of method "resolveForParam\(\)" is duplicated with method "resolve\(\)" in "Rector\\Naming\\ExpectedNameResolver\\MatchParamTypeExpectedNameResolver" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isInTestClass\(\)" is duplicated with method "isInTestClass\(\)" in "Rector\\Core\\Rector\\AbstractPHPUnitRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getFqnClassName\(\)" is duplicated with method "resolveClassName\(\)" in "Rector\\NetteToSymfony\\Analyzer\\NetteControlFactoryInterfaceAnalyzer" class\. Use unique content or abstract service instead#'
+        - '#Content of method "shouldSkipMethodCallIncludingNew\(\)" is duplicated with method "shouldSkipMethodCallIncludingNew\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnFluentChainMethodCallToNormalMethodCallRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "endsWith\(\)" is duplicated with method "endsWith\(\)" in "Rector\\Naming\\Naming\\ExpectedNameResolver" class\. Use unique content or abstract service instead#'
+        - '#Content of method "resolve\(\)" is duplicated with method "resolveForParam\(\)" in "Rector\\Naming\\Naming\\ExpectedNameResolver" class\. Use unique content or abstract service instead#'
+        - '#Content of method "refactor\(\)" is duplicated with method "refactor\(\)" in "Rector\\Nette\\Rector\\FuncCall\\PregFunctionToNetteUtilsStringsRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isTypes\(\)" is duplicated with method "isTypes\(\)" in "Rector\\Core\\Context\\ContextAnalyzer" class\. Use unique content or abstract service instead#'
+        - '#Content of method "removeFirstArgument\(\)" is duplicated with method "moveArguments\(\)" in "Rector\\PHPUnit\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isInstancesOf\(\)" is duplicated with method "isTypes\(\)" in "Rector\\Core\\Context\\ContextAnalyzer" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getFullyQualifiedName\(\)" is duplicated with method "getClassName\(\)" in "Rector\\Naming\\Naming\\PropertyNaming" class\. Use unique content or abstract service instead#'
+        - '#Content of method "(.*?)Trait\(\)" is duplicated with method "autowireNameResolverTrait\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isLocalMethodCallNamed\(\)" is duplicated with method "isLocalMethodCallNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isLocalMethodCallsNamed\(\)" is duplicated with method "isLocalMethodCallsNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isFuncCallName\(\)" is duplicated with method "isFuncCallName\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isClassConstReference\(\)" is duplicated with method "isClassConstReference\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isStaticCallNamed\(\)" is duplicated with method "isStaticCallNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isStaticCallsNamed\(\)" is duplicated with method "isStaticCallsNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isMethodCall\(\)" is duplicated with method "isMethodCall\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isVariableName\(\)" is duplicated with method "isVariableName\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isInClassNamed\(\)" is duplicated with method "isInClassNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isInClassesNamed\(\)" is duplicated with method "isInClassesNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getClassName\(\)" is duplicated with method "resolveClassName\(\)" in "Rector\\NetteToSymfony\\Analyzer\\NetteControlFactoryInterfaceAnalyzer" class\. Use unique content or abstract service instead#'
+
+        -
+             message: '#Do not use setter on a service#'
+             paths:
+                 - rules/composer/src/Modifier/ComposerModifier.php
+
+

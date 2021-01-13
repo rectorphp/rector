@@ -13,7 +13,9 @@ use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
  */
 final class MovePackageToRequireDev implements ComposerModifierInterface
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $packageName;
 
     /**

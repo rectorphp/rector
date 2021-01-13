@@ -14,10 +14,14 @@ use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
  */
 final class ChangePackageVersion implements ComposerModifierInterface
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $packageName;
 
-    /** @var Version */
+    /**
+     * @var Version
+     */
     private $targetVersion;
 
     /**

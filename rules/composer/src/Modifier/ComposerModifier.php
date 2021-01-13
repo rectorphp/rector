@@ -13,13 +13,19 @@ use Webmozart\Assert\Assert;
  */
 final class ComposerModifier
 {
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $filePath;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $command = 'composer update';
 
-    /** @var ComposerModifierInterface[] */
+    /**
+     * @var ComposerModifierInterface[]
+     */
     private $configuration = [];
 
     /**
@@ -40,7 +46,7 @@ final class ComposerModifier
         $this->configuration = $configuration;
     }
 
-    public function filePath(string $filePath): void
+    public function setFilePath(string $filePath): void
     {
         $this->filePath = $filePath;
     }
@@ -50,7 +56,7 @@ final class ComposerModifier
         return $this->filePath ?: getcwd() . '/composer.json';
     }
 
-    public function command(string $command): void
+    public function setCommand(string $command): void
     {
         $this->command = $command;
     }
