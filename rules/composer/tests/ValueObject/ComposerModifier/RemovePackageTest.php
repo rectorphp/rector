@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
 use PHPUnit\Framework\TestCase;
@@ -16,14 +18,15 @@ final class RemovePackageTest extends TestCase
             'vendor1/package2' => '^2.0',
         ]);
 
-        $changedComposerJson = new ComposerJson();
-        $changedComposerJson->setRequire([
+        $expectedComposerJson = new ComposerJson();
+        $expectedComposerJson->setRequire([
             'vendor1/package1' => '^1.0',
             'vendor1/package2' => '^2.0',
         ]);
 
         $removePackage = new RemovePackage('vendor1/package3');
-        $this->assertEquals($changedComposerJson, $removePackage->modify($composerJson));
+        $removePackage->modify($composerJson);
+        $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
     public function testRemoveExistingPackage(): void
@@ -34,13 +37,14 @@ final class RemovePackageTest extends TestCase
             'vendor1/package2' => '^2.0',
         ]);
 
-        $changedComposerJson = new ComposerJson();
-        $changedComposerJson->setRequire([
+        $expectedComposerJson = new ComposerJson();
+        $expectedComposerJson->setRequire([
             'vendor1/package2' => '^2.0',
         ]);
 
         $removePackage = new RemovePackage('vendor1/package1');
-        $this->assertEquals($changedComposerJson, $removePackage->modify($composerJson));
+        $removePackage->modify($composerJson);
+        $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
     public function testRemoveExistingDevPackage(): void
@@ -53,12 +57,13 @@ final class RemovePackageTest extends TestCase
             'vendor1/package2' => '^2.0',
         ]);
 
-        $changedComposerJson = new ComposerJson();
-        $changedComposerJson->setRequire([
+        $expectedComposerJson = new ComposerJson();
+        $expectedComposerJson->setRequire([
             'vendor1/package1' => '^1.0',
         ]);
 
         $removePackage = new RemovePackage('vendor1/package2');
-        $this->assertEquals($changedComposerJson, $removePackage->modify($composerJson));
+        $removePackage->modify($composerJson);
+        $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 }

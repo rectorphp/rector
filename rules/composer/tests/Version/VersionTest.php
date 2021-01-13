@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rector\Composer\Tests\Version;
 
 use PHPUnit\Framework\TestCase;
