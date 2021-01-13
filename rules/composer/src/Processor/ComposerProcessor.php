@@ -10,6 +10,7 @@ use Rector\Core\Configuration\Configuration;
 use Symfony\Component\Process\Process;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
+use Symplify\SmartFileSystem\Exception\FileNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -51,7 +52,11 @@ final class ComposerProcessor
 
     public function process(): void
     {
-        $smartFileInfo = new SmartFileInfo($this->composerModifier->getFilePath());
+        try {
+            $smartFileInfo = new SmartFileInfo($this->composerModifier->getFilePath());
+        } catch (FileNotFoundException $e) {
+            return;
+        }
 
         $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
 
