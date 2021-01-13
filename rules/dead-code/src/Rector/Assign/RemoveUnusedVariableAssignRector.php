@@ -74,11 +74,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $expr = $this->betterNodeFinder->findParentType(
-            $node,
-            Expr::class
-        );
-
+        $expr = $this->betterNodeFinder->findParentType($node, Expr::class);
         if ($expr instanceof Expr) {
             $this->removeNode($expr);
             return $node;
