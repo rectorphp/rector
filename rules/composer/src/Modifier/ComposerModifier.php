@@ -46,7 +46,7 @@ final class ComposerModifier
         $this->configuration = $configuration;
     }
 
-    public function filePath(string $filePath): void
+    public function setFilePath(string $filePath): void
     {
         $this->filePath = $filePath;
     }
@@ -56,7 +56,7 @@ final class ComposerModifier
         return $this->filePath ?: getcwd() . '/composer.json';
     }
 
-    public function command(string $command): void
+    public function setCommand(string $command): void
     {
         $this->command = $command;
     }

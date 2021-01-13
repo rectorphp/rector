@@ -238,7 +238,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         $composerModifier = $this->getService(ComposerModifier::class);
         $this->assertSame(getcwd() . '/composer.json', $composerModifier->getFilePath());
 
-        $composerModifier->filePath('test/composer.json');
+        $composerModifier->setFilePath('test/composer.json');
         $this->assertSame('test/composer.json', $composerModifier->getFilePath());
     }
 
@@ -248,7 +248,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         $composerModifier = $this->getService(ComposerModifier::class);
         $this->assertSame('composer update', $composerModifier->getCommand());
 
-        $composerModifier->command('composer update --prefer-stable');
+        $composerModifier->setCommand('composer update --prefer-stable');
         $this->assertSame('composer update --prefer-stable', $composerModifier->getCommand());
     }
 }
