@@ -6,14 +6,10 @@ namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -78,30 +74,13 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var FuncCall|MethodCall|StaticCall|NullsafeMethodCall|New_|null $expr */
-        $expr = $this->betterNodeFinder->findParentTypes($node, [
-            FuncCall::class,
-            MethodCall::class,
-            StaticCall::class,
-            NullsafeMethodCall::class,
-            New_::class,
-        ]);
-
-        if ($expr === null) {
-            $this->removeNode($node);
-            return $node;
-        }
-
-        if (count($expr->args) !== 1) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Expression) {
             return null;
         }
 
-        if ($this->areNodesEqual($expr->args[0]->value, $node)) {
-            $this->removeNode($expr);
-            return $node;
-        }
-
-        return null;
+        $this->removeNode($node);
+        return $node;
     }
 
     /**

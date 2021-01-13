@@ -2,11 +2,11 @@
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedVariableAssignRector\Fixture;
 
-class SkipInExprMultiArgs
+class SkipInExpr
 {
     public function run()
     {
-        assert($user = User::find('foo bar'), call());
+        assert($user = User::find('foo bar'));
         assert(User::find('foo bar'));
     }
 }
