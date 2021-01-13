@@ -133,6 +133,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new ChangePackageVersion('contributte/forms-multiplier', '3.1.x-dev'),
                 // other packages
                 new ChangePackageVersion('radekdostal/nette-datetimepicker', '^3.0'),
-            ])
+            ]),
         ]);
 };

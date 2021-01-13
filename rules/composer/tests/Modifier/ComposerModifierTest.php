@@ -1,14 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Rector\Composer\Tests\Modifier;
 
-use Nette\Utils\Json;
+use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
-use Rector\Composer\ValueObject\ComposerModifier\ReplacePackage;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
 use Rector\Composer\ValueObject\ComposerModifier\MovePackageToRequireDev;
 use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
-use Rector\Composer\Modifier\ComposerModifier;
+use Rector\Composer\ValueObject\ComposerModifier\ReplacePackage;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
@@ -24,9 +23,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
     {
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
-        $composerModifier->configure([
-            new AddPackageToRequire('vendor1/package3', '^3.0'),
-        ]);
+        $composerModifier->configure([new AddPackageToRequire('vendor1/package3', '^3.0')]);
 
         $composerJson = new ComposerJson();
         $composerJson->setRequire([
@@ -40,7 +37,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             'vendor1/package2' => '^2.0',
             'vendor1/package3' => '^3.0',
         ]);
-        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
+        $this->assertSame($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithOneAddedAndOneRemovedPackage(): void
@@ -63,7 +60,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             'vendor1/package2' => '^2.0',
             'vendor1/package3' => '^3.0',
         ]);
-        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
+        $this->assertSame($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithAddedAndRemovedSamePackage(): void
@@ -86,7 +83,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             'vendor1/package1' => '^1.0',
             'vendor1/package2' => '^2.0',
         ]);
-        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
+        $this->assertSame($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithRemovedAndAddedBackSamePackage(): void
@@ -110,7 +107,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             'vendor1/package2' => '^2.0',
             'vendor1/package3' => '^3.0',
         ]);
-        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
+        $this->assertSame($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithMovedAndChangedPackages(): void
@@ -138,22 +135,16 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         $changedComposerJson->setRequireDev([
             'vendor1/package1' => '^1.0',
         ]);
-        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
+        $this->assertSame($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithMultipleConfiguration(): void
     {
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
-        $composerModifier->configure([
-            new MovePackageToRequireDev('vendor1/package1'),
-        ]);
-        $composerModifier->configure([
-            new ReplacePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
-        ]);
-        $composerModifier->configure([
-            new ChangePackageVersion('vendor1/package3', '~3.0.0'),
-        ]);
+        $composerModifier->configure([new MovePackageToRequireDev('vendor1/package1')]);
+        $composerModifier->configure([new ReplacePackage('vendor1/package2', 'vendor2/package1', '^3.0')]);
+        $composerModifier->configure([new ChangePackageVersion('vendor1/package3', '~3.0.0')]);
 
         $composerJson = new ComposerJson();
         $composerJson->setRequire([
@@ -170,22 +161,16 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         $changedComposerJson->setRequireDev([
             'vendor1/package1' => '^1.0',
         ]);
-        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
+        $this->assertSame($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithConfigurationAndReconfigurationAndConfiguration(): void
     {
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
-        $composerModifier->configure([
-            new MovePackageToRequireDev('vendor1/package1'),
-        ]);
-        $composerModifier->reconfigure([
-            new ReplacePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
-        ]);
-        $composerModifier->configure([
-            new ChangePackageVersion('vendor1/package3', '~3.0.0'),
-        ]);
+        $composerModifier->configure([new MovePackageToRequireDev('vendor1/package1')]);
+        $composerModifier->reconfigure([new ReplacePackage('vendor1/package2', 'vendor2/package1', '^3.0')]);
+        $composerModifier->configure([new ChangePackageVersion('vendor1/package3', '~3.0.0')]);
 
         $composerJson = new ComposerJson();
         $composerJson->setRequire([
@@ -200,7 +185,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
             'vendor1/package3' => '~3.0.0',
             'vendor2/package1' => '^3.0',
         ]);
-        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
+        $this->assertSame($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testRefactorWithMovedAndChangedPackagesWithSortPackages(): void
@@ -215,7 +200,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
 
         $composerJson = new ComposerJson();
         $composerJson->setConfig([
-            'sort-packages' => true
+            'sort-packages' => true,
         ]);
         $composerJson->setRequire([
             'vendor1/package1' => '^1.0',
@@ -225,7 +210,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
 
         $changedComposerJson = new ComposerJson();
         $changedComposerJson->setConfig([
-            'sort-packages' => true
+            'sort-packages' => true,
         ]);
         $changedComposerJson->setRequire([
             'vendor1/package0' => '^3.0',
@@ -234,26 +219,26 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         $changedComposerJson->setRequireDev([
             'vendor1/package1' => '^1.0',
         ]);
-        $this->assertEquals($changedComposerJson, $composerModifier->modify($composerJson));
+        $this->assertSame($changedComposerJson, $composerModifier->modify($composerJson));
     }
 
     public function testFilePath(): void
     {
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
-        $this->assertEquals(getcwd() . '/composer.json', $composerModifier->getFilePath());
+        $this->assertSame(getcwd() . '/composer.json', $composerModifier->getFilePath());
 
         $composerModifier->filePath('test/composer.json');
-        $this->assertEquals('test/composer.json', $composerModifier->getFilePath());
+        $this->assertSame('test/composer.json', $composerModifier->getFilePath());
     }
 
     public function testCommand(): void
     {
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
-        $this->assertEquals('composer update', $composerModifier->getCommand());
+        $this->assertSame('composer update', $composerModifier->getCommand());
 
         $composerModifier->command('composer update --prefer-stable');
-        $this->assertEquals('composer update --prefer-stable', $composerModifier->getCommand());
+        $this->assertSame('composer update --prefer-stable', $composerModifier->getCommand());
     }
 }

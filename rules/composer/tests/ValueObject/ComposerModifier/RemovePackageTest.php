@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
@@ -23,7 +23,7 @@ final class RemovePackageTest extends TestCase
         ]);
 
         $removePackage = new RemovePackage('vendor1/package3');
-        $this->assertEquals($changedComposerJson, $removePackage->modify($composerJson));
+        $this->assertSame($changedComposerJson, $removePackage->modify($composerJson));
     }
 
     public function testRemoveExistingPackage(): void
@@ -40,7 +40,7 @@ final class RemovePackageTest extends TestCase
         ]);
 
         $removePackage = new RemovePackage('vendor1/package1');
-        $this->assertEquals($changedComposerJson, $removePackage->modify($composerJson));
+        $this->assertSame($changedComposerJson, $removePackage->modify($composerJson));
     }
 
     public function testRemoveExistingDevPackage(): void
@@ -59,6 +59,6 @@ final class RemovePackageTest extends TestCase
         ]);
 
         $removePackage = new RemovePackage('vendor1/package2');
-        $this->assertEquals($changedComposerJson, $removePackage->modify($composerJson));
+        $this->assertSame($changedComposerJson, $removePackage->modify($composerJson));
     }
 }

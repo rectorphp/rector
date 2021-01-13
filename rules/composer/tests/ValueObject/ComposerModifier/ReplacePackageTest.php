@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
@@ -19,11 +19,10 @@ final class ReplacePackageTest extends TestCase
         $changedComposerJson->setRequire([
             'vendor1/package1' => '^1.0',
             'vendor1/package2' => '^2.0',
-
         ]);
 
         $replacePackage = new ReplacePackage('vendor1/package3', 'vendor1/package4', '^3.0');
-        $this->assertEquals($changedComposerJson, $replacePackage->modify($composerJson));
+        $this->assertSame($changedComposerJson, $replacePackage->modify($composerJson));
     }
 
     public function testReplaceExistingPackage(): void
@@ -41,7 +40,7 @@ final class ReplacePackageTest extends TestCase
         ]);
 
         $replacePackage = new ReplacePackage('vendor1/package1', 'vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerJson, $replacePackage->modify($composerJson));
+        $this->assertSame($changedComposerJson, $replacePackage->modify($composerJson));
     }
 
     public function testReplaceExistingDevPackage(): void
@@ -59,10 +58,10 @@ final class ReplacePackageTest extends TestCase
             'vendor1/package1' => '^1.0',
         ]);
         $changedComposerJson->setRequireDev([
-                'vendor1/package3' => '^3.0',
+            'vendor1/package3' => '^3.0',
         ]);
 
         $replacePackage = new ReplacePackage('vendor1/package2', 'vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerJson, $replacePackage->modify($composerJson));
+        $this->assertSame($changedComposerJson, $replacePackage->modify($composerJson));
     }
 }

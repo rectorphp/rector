@@ -1,18 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\Version;
 
 use Composer\Semver\VersionParser;
-use UnexpectedValueException;
 
 final class Version
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $version;
 
     /**
      * @param string $version version string
-     * @throws UnexpectedValueException if $version string is not valid
      */
     public function __construct(string $version)
     {

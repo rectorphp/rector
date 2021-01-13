@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
@@ -26,7 +26,7 @@ final class AddPackageToRequireDevTest extends TestCase
         ]);
 
         $addPackageToRequireDev = new AddPackageToRequireDev('vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerJson, $addPackageToRequireDev->modify($composerJson));
+        $this->assertSame($changedComposerJson, $addPackageToRequireDev->modify($composerJson));
     }
 
     public function testAddExistingPackage(): void
@@ -44,7 +44,7 @@ final class AddPackageToRequireDevTest extends TestCase
         ]);
 
         $addPackageToRequireDev = new AddPackageToRequireDev('vendor1/package1', '^3.0');
-        $this->assertEquals($changedComposerJson, $addPackageToRequireDev->modify($composerJson));
+        $this->assertSame($changedComposerJson, $addPackageToRequireDev->modify($composerJson));
     }
 
     public function testAddExistingDevPackage(): void
@@ -66,6 +66,6 @@ final class AddPackageToRequireDevTest extends TestCase
         ]);
 
         $addPackageToRequireDev = new AddPackageToRequireDev('vendor1/package2', '^3.0');
-        $this->assertEquals($changedComposerJson, $addPackageToRequireDev->modify($composerJson));
+        $this->assertSame($changedComposerJson, $addPackageToRequireDev->modify($composerJson));
     }
 }
