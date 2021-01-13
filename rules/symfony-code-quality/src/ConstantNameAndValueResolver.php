@@ -32,7 +32,7 @@ final class ConstantNameAndValueResolver
      * @param Attribute[] $routeAttributes
      * @return ConstantNameAndValue[]
      */
-    public function resolveFromAttributes(array $routeAttributes): array
+    public function resolveFromAttributes(array $routeAttributes, string $prefixForNumeric): array
     {
         $constantNameAndValues = [];
 
@@ -42,7 +42,7 @@ final class ConstantNameAndValueResolver
                     continue;
                 }
 
-                $constantNameAndValue = $this->constantNameAndValueMatcher->matchFromArg($arg);
+                $constantNameAndValue = $this->constantNameAndValueMatcher->matchFromArg($arg, $prefixForNumeric);
                 if ($constantNameAndValue === null) {
                     continue;
                 }
