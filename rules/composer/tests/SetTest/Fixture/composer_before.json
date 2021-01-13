@@ -1,0 +1,5 @@
+{
+    "require": {
+        "nette/nette": "^2.4"
+    }
+}
