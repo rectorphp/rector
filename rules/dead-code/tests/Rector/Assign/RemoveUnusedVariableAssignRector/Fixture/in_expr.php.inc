@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedVariableAssignRector\Fixture;
 
-class AssignInExpr
+class InExpr
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class AssignInExpr
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedVariableAssignRector\Fixture;
 
-class AssignInExpr
+class InExpr
 {
     public function run()
     {
