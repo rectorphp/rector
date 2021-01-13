@@ -13,13 +13,19 @@ use Webmozart\Assert\Assert;
  */
 final class ComposerModifier
 {
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $filePath;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $command = 'composer update';
 
-    /** @var ComposerModifierInterface[] */
+    /**
+     * @var ComposerModifierInterface[]
+     */
     private $configuration = [];
 
     /**

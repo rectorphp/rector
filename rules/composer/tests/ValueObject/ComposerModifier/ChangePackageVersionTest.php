@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
@@ -23,7 +23,7 @@ final class ChangePackageVersionTest extends TestCase
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package3', '^3.0');
-        $this->assertEquals($changedComposerJson, $changePackageVersion->modify($composerJson));
+        $this->assertSame($changedComposerJson, $changePackageVersion->modify($composerJson));
     }
 
     public function testChangeVersionExistingPackage(): void
@@ -41,7 +41,7 @@ final class ChangePackageVersionTest extends TestCase
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package1', '^3.0');
-        $this->assertEquals($changedComposerJson, $changePackageVersion->modify($composerJson));
+        $this->assertSame($changedComposerJson, $changePackageVersion->modify($composerJson));
     }
 
     public function testChangeVersionExistingDevPackage(): void
@@ -63,6 +63,6 @@ final class ChangePackageVersionTest extends TestCase
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package2', '^3.0');
-        $this->assertEquals($changedComposerJson, $changePackageVersion->modify($composerJson));
+        $this->assertSame($changedComposerJson, $changePackageVersion->modify($composerJson));
     }
 }

@@ -103,9 +103,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ComposerModifier::class)
         ->call('configure', [
             ValueObjectInliner::inline([
-                new ChangePackageVersion('nette/nette', '^3.0'),    // meta package
+                // meta package
+                new ChangePackageVersion('nette/nette', '^3.0'),
                 // https://github.com/nette/nette/blob/v2.4.0/composer.json vs https://github.com/nette/nette/blob/v3.0.0/composer.json
-                new ChangePackageVersion('nette/application', '^3.0.6'),    // older versions have security issues
+                // older versions have security issues
+                new ChangePackageVersion('nette/application', '^3.0.6'),
                 new ChangePackageVersion('nette/bootstrap', '^3.0'),
                 new ChangePackageVersion('nette/caching', '^3.0'),
                 new ChangePackageVersion('nette/component-model', '^3.0'),
@@ -133,6 +135,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new ChangePackageVersion('contributte/forms-multiplier', '3.1.x-dev'),
                 // other packages
                 new ChangePackageVersion('radekdostal/nette-datetimepicker', '^3.0'),
-            ])
+            ]),
         ]);
 };

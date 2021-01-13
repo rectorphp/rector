@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
@@ -23,7 +23,7 @@ final class MovePackageToRequireTest extends TestCase
         ]);
 
         $movePackageToRequire = new MovePackageToRequire('vendor1/package3');
-        $this->assertEquals($changedComposerJson, $movePackageToRequire->modify($composerJson));
+        $this->assertSame($changedComposerJson, $movePackageToRequire->modify($composerJson));
     }
 
     public function testMoveExistingDevPackage(): void
@@ -43,7 +43,7 @@ final class MovePackageToRequireTest extends TestCase
         ]);
 
         $movePackageToRequire = new MovePackageToRequire('vendor1/package1');
-        $this->assertEquals($changedComposerJson, $movePackageToRequire->modify($composerJson));
+        $this->assertSame($changedComposerJson, $movePackageToRequire->modify($composerJson));
     }
 
     public function testMoveExistingPackage(): void
@@ -65,6 +65,6 @@ final class MovePackageToRequireTest extends TestCase
         ]);
 
         $movePackageToRequire = new MovePackageToRequire('vendor1/package1');
-        $this->assertEquals($changedComposerJson, $movePackageToRequire->modify($composerJson));
+        $this->assertSame($changedComposerJson, $movePackageToRequire->modify($composerJson));
     }
 }
