@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -74,14 +78,29 @@ CODE_SAMPLE
             return null;
         }
 
-        $expr = $this->betterNodeFinder->findParentType($node, Expr::class);
-        if ($expr instanceof Expr) {
+        $expr = $this->betterNodeFinder->findParentTypes($node, [
+            FuncCall::class,
+            MethodCall::class,
+            StaticCall::class,
+            NullsafeMethodCall::class,
+            New_::class,
+        ]);
+
+        if ($expr === null) {
+            $this->removeNode($node);
+            return $node;
+        }
+
+        if (count($expr->args) !== 1) {
+            return null;
+        }
+
+        if ($this->areNodesEqual($expr->args[0]->value, $node)) {
             $this->removeNode($expr);
             return $node;
         }
 
-        $this->removeNode($node);
-        return $node;
+        return null;
     }
 
     /**
