@@ -15,22 +15,34 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ComposerProcessor
 {
-    /** @var ComposerJsonFactory */
+    /**
+     * @var ComposerJsonFactory
+     */
     private $composerJsonFactory;
 
-    /** @var ComposerJsonPrinter */
+    /**
+     * @var ComposerJsonPrinter
+     */
     private $composerJsonPrinter;
 
-    /** @var ComposerModifier */
+    /**
+     * @var ComposerModifier
+     */
     private $composerModifier;
 
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     private $configuration;
 
-    /** @var SmartFileSystem */
+    /**
+     * @var SmartFileSystem
+     */
     private $smartFileSystem;
 
-    /** @var ErrorAndDiffCollector */
+    /**
+     * @var ErrorAndDiffCollector
+     */
     private $errorAndDiffCollector;
 
     public function __construct(
@@ -51,8 +63,12 @@ final class ComposerProcessor
 
     public function process(): void
     {
-        $smartFileInfo = new SmartFileInfo($this->composerModifier->getFilePath());
+        $composerJsonFilePath = $this->composerModifier->getFilePath();
+        if (! $this->smartFileSystem->exists($composerJsonFilePath)) {
+            return;
+        }
 
+        $smartFileInfo = new SmartFileInfo($composerJsonFilePath);
         $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
 
         $oldContents = $smartFileInfo->getContents();
