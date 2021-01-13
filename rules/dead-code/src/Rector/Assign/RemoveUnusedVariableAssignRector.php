@@ -78,6 +78,7 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var FuncCall|MethodCall|StaticCall|NullsafeMethodCall|New_|null $expr */
         $expr = $this->betterNodeFinder->findParentTypes($node, [
             FuncCall::class,
             MethodCall::class,
