@@ -1,6 +1,6 @@
 <?php
 
-class SkipNegatedGreaterOrEqual
+class SkipGreaterOrEqual
 {
     function demo(int $a, int $b, int $c): bool
     {
