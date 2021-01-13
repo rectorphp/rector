@@ -10,6 +10,11 @@ class SomeClass
     public function run()
     {
     }
+
+    #[Route(path: "path_2", name: "100_level")]
+    public function go()
+    {
+    }
 }
 
 ?>
@@ -24,6 +29,11 @@ class SomeClass
 {
     #[Route(path: "path", name: \App\ValueObject\Routing\RouteName::NAME)]
     public function run()
+    {
+    }
+
+    #[Route(path: "path_2", name: \App\ValueObject\Routing\RouteName::ROUTE_100_LEVEL)]
+    public function go()
     {
     }
 }

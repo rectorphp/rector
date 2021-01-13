@@ -22,7 +22,7 @@ final class ConstantNameAndValueMatcher
         $this->valueResolver = $valueResolver;
     }
 
-    public function matchFromArg(Arg $arg): ?ConstantNameAndValue
+    public function matchFromArg(Arg $arg, string $prefixForNumeric): ?ConstantNameAndValue
     {
         if ($arg->value instanceof ClassConstFetch) {
             return null;
@@ -34,6 +34,11 @@ final class ConstantNameAndValueMatcher
         }
 
         $constantName = StaticRectorStrings::camelCaseToConstant($argumentValue);
+
+        if (! ctype_alpha($constantName[0])) {
+            $constantName = $prefixForNumeric . $constantName;
+        }
+
         return new ConstantNameAndValue($constantName, $argumentValue);
     }
 }

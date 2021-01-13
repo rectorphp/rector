@@ -659,10 +659,11 @@ parameters:
         - '#Content of method "isInClassNamed\(\)" is duplicated with method "isInClassNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
         - '#Content of method "isInClassesNamed\(\)" is duplicated with method "isInClassesNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
         - '#Content of method "getClassName\(\)" is duplicated with method "resolveClassName\(\)" in "Rector\\NetteToSymfony\\Analyzer\\NetteControlFactoryInterfaceAnalyzer" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getFqnClassName\(\)" is duplicated with method "resolveClass\(\)" in "Rector\\TypeDeclaration\\OverrideGuard\\ClassMethodReturnTypeOverrideGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "loadFileToJson\(\)" is duplicated with method "readFileToJsonArray\(\)" in "Rector\\PSR4\\Composer\\PSR4AutoloadPathsProvider" class\. Use unique content or abstract service instead#'
+        - '#Content of method "resolveClass\(\)" is duplicated with method "getClassName\(\)" in "Rector\\Naming\\Naming\\PropertyNaming" class\. Use unique content or abstract service instead#'
 
         -
              message: '#Do not use setter on a service#'
              paths:
                  - rules/composer/src/Modifier/ComposerModifier.php
-
-
