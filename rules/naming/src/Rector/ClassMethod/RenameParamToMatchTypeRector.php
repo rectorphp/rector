@@ -135,7 +135,6 @@ CODE_SAMPLE
             return null;
         }
 
-
         return $node;
     }
 
@@ -149,6 +148,10 @@ CODE_SAMPLE
         }
 
         // promoted property
-        return $this->isName($classMethod, MethodName::CONSTRUCT) && $param->flags;
+        if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
+            return false;
+        }
+
+        return $param->flags !== 0;
     }
 }

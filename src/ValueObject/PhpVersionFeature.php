@@ -9,182 +9,182 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const DIR_CONSTANT = 50300;
+    public const DIR_CONSTANT = PhpVersion::PHP_53;
 
     /**
      * @var int
      */
-    public const ELVIS_OPERATOR = 50300;
+    public const ELVIS_OPERATOR = PhpVersion::PHP_53;
 
     /**
      * @var int
      */
-    public const DATE_TIME_INTERFACE = 50500;
+    public const DATE_TIME_INTERFACE = PhpVersion::PHP_55;
 
     /**
      * @var int
      */
-    public const CLASSNAME_CONSTANT = 50500;
+    public const CLASSNAME_CONSTANT = PhpVersion::PHP_55;
 
     /**
      * @var int
      */
-    public const EXP_OPERATOR = 50600;
+    public const EXP_OPERATOR = PhpVersion::PHP_56;
 
     /**
      * @var int
      */
-    public const SCALAR_TYPES = 70000;
+    public const SCALAR_TYPES = PhpVersion::PHP_70;
 
     /**
      * @var int
      */
-    public const NULL_COALESCE = 70000;
+    public const NULL_COALESCE = PhpVersion::PHP_70;
 
     /**
      * @var int
      */
-    public const LIST_SWAP_ORDER = 70000;
+    public const LIST_SWAP_ORDER = PhpVersion::PHP_70;
 
     /**
      * @var int
      */
-    public const SPACESHIP = 70000;
+    public const SPACESHIP = PhpVersion::PHP_70;
 
     /**
      * @var int
      */
-    public const DIRNAME_LEVELS = 70000;
+    public const DIRNAME_LEVELS = PhpVersion::PHP_70;
 
     /**
      * @var int
      */
-    public const CSPRNG_FUNCTIONS = 70000;
+    public const CSPRNG_FUNCTIONS = PhpVersion::PHP_70;
 
     /**
      * @var int
      */
-    public const THROWABLE_TYPE = 70000;
+    public const THROWABLE_TYPE = PhpVersion::PHP_70;
 
     /**
      * @var int
      */
-    public const ITERABLE_TYPE = 70100;
+    public const ITERABLE_TYPE = PhpVersion::PHP_71;
 
     /**
      * @var int
      */
-    public const VOID_TYPE = 70100;
+    public const VOID_TYPE = PhpVersion::PHP_71;
 
     /**
      * @var int
      */
-    public const CONSTANT_VISIBILITY = 70100;
+    public const CONSTANT_VISIBILITY = PhpVersion::PHP_71;
 
     /**
      * @var int
      */
-    public const ARRAY_DESTRUCT = 70100;
+    public const ARRAY_DESTRUCT = PhpVersion::PHP_71;
 
     /**
      * @var int
      */
-    public const MULTI_EXCEPTION_CATCH = 70100;
+    public const MULTI_EXCEPTION_CATCH = PhpVersion::PHP_71;
 
     /**
      * @var int
      */
-    public const OBJECT_TYPE = 70200;
+    public const OBJECT_TYPE = PhpVersion::PHP_72;
 
     /**
      * @var int
      */
-    public const IS_COUNTABLE = 70300;
+    public const IS_COUNTABLE = PhpVersion::PHP_73;
 
     /**
      * @var int
      */
-    public const ARRAY_KEY_FIRST_LAST = 70300;
+    public const ARRAY_KEY_FIRST_LAST = PhpVersion::PHP_73;
 
     /**
      * @var int
      */
-    public const JSON_EXCEPTION = 70300;
+    public const JSON_EXCEPTION = PhpVersion::PHP_73;
 
     /**
      * @var int
      */
-    public const SETCOOKIE_ACCEPT_ARRAY_OPTIONS = 70300;
+    public const SETCOOKIE_ACCEPT_ARRAY_OPTIONS = PhpVersion::PHP_73;
 
     /**
      * @var int
      */
-    public const ARROW_FUNCTION = 70400;
+    public const ARROW_FUNCTION = PhpVersion::PHP_74;
 
     /**
      * @var int
      */
-    public const LITERAL_SEPARATOR = 70400;
+    public const LITERAL_SEPARATOR = PhpVersion::PHP_74;
 
     /**
      * @var int
      */
-    public const NULL_COALESCE_ASSIGN = 70400;
+    public const NULL_COALESCE_ASSIGN = PhpVersion::PHP_74;
 
     /**
      * @var int
      */
-    public const TYPED_PROPERTIES = 70400;
+    public const TYPED_PROPERTIES = PhpVersion::PHP_74;
 
     /**
      * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
      * @var int
      */
-    public const COVARIANT_RETURN = 70400;
+    public const COVARIANT_RETURN = PhpVersion::PHP_74;
 
     /**
      * @var int
      */
-    public const ARRAY_SPREAD = 70400;
+    public const ARRAY_SPREAD = PhpVersion::PHP_74;
 
     /**
      * @var int
      */
-    public const UNION_TYPES = 80000;
+    public const UNION_TYPES = PhpVersion::PHP_80;
 
     /**
      * @var int
      */
-    public const CLASS_ON_OBJECT = 80000;
+    public const CLASS_ON_OBJECT = PhpVersion::PHP_80;
 
     /**
      * @var int
      */
-    public const STATIC_RETURN_TYPE = 80000;
+    public const STATIC_RETURN_TYPE = PhpVersion::PHP_80;
 
     /**
      * @var int
      */
-    public const IS_ITERABLE = 70100;
+    public const IS_ITERABLE = PhpVersion::PHP_71;
 
     /**
      * @var int
      */
-    public const NULLABLE_TYPE = 70100;
+    public const NULLABLE_TYPE = PhpVersion::PHP_71;
 
     /**
      * @var int
      */
-    public const PARENT_VISIBILITY_OVERRIDE = 70200;
+    public const PARENT_VISIBILITY_OVERRIDE = PhpVersion::PHP_72;
 
     /**
      * @var int
      */
-    public const COUNT_ON_NULL = 70100;
+    public const COUNT_ON_NULL = PhpVersion::PHP_71;
 
     /**
      * @see https://wiki.php.net/rfc/constructor_promotion
      * @var int
      */
-    public const PROPERTY_PROMOTION = 80000;
+    public const PROPERTY_PROMOTION = PhpVersion::PHP_80;
 }

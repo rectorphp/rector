@@ -677,3 +677,8 @@ parameters:
              message: '#Do not use setter on a service#'
              paths:
                  - rules/composer/src/Modifier/ComposerModifier.php
+
+        -
+             message: '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name\:\:toString\(\)#'
+             paths:
+                - utils/phpstan-extensions/src/ReturnTypeExtension/NodeFinder/FindFirstInstanceOfReturnTypeExtension.php

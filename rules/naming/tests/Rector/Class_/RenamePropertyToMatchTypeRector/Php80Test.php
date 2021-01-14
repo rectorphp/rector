@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector;
+namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersion;
-use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -30,11 +30,11 @@ final class Php80Test extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return RenameParamToMatchTypeRector::class;
+        return RenamePropertyToMatchTypeRector::class;
     }
 
     protected function getPhpVersion(): int
     {
-        return PhpVersion::PHP_80;
+        return PhpVersionFeature::PROPERTY_PROMOTION;
     }
 }
