@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\FixtureUnionType;
+namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\FixturePhp80;
 
 use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
 
