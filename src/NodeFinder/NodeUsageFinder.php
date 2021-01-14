@@ -69,7 +69,8 @@ final class NodeUsageFinder
                 return false;
             }
 
-            if ($node === $variable) {
+            $areNodesEqual = $this->betterStandardPrinter->areNodesEqual($node, $variable);
+            if ($areNodesEqual) {
                 return false;
             }
 
