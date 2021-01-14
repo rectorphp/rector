@@ -662,6 +662,15 @@ parameters:
         - '#Content of method "getFqnClassName\(\)" is duplicated with method "resolveClass\(\)" in "Rector\\TypeDeclaration\\OverrideGuard\\ClassMethodReturnTypeOverrideGuard" class\. Use unique content or abstract service instead#'
         - '#Content of method "loadFileToJson\(\)" is duplicated with method "readFileToJsonArray\(\)" in "Rector\\PSR4\\Composer\\PSR4AutoloadPathsProvider" class\. Use unique content or abstract service instead#'
         - '#Content of method "resolveClass\(\)" is duplicated with method "getClassName\(\)" in "Rector\\Naming\\Naming\\PropertyNaming" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getFqnClassName\(\)" is duplicated with method "getClassName\(\)" in "Rector\\Naming\\Naming\\PropertyNaming" class\. Use unique content or abstract service instead#'
+        - '#Content of method "resolveMethodCallVar\(\)" is duplicated with method "resolveMethodCallVar\(\)" in "Rector\\Defluent\\NodeFactory\\NonFluentChainMethodCallFactory" class\. Use unique content or abstract service instead#'
+        - '#Content of method "resolveClassName\(\)" is duplicated with method "resolveClass\(\)" in "Rector\\TypeDeclaration\\OverrideGuard\\ClassMethodReturnTypeOverrideGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "refactor\(\)" is duplicated with method "refactor\(\)" in "Rector\\Nette\\Rector\\FuncCall\\PregMatchFunctionToNetteUtilsStringsRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isInstancesOf\(\)" is duplicated with method "isTypes\(\)" in "Rector\\PHPUnit\\Rector\\MethodCall\\AssertEqualsToSameRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getFullyQualifiedName\(\)" is duplicated with method "resolveClass\(\)" in "Rector\\TypeDeclaration\\OverrideGuard\\ClassMethodReturnTypeOverrideGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getClassName\(\)" is duplicated with method "getFullyQualifiedName\(\)" in "Rector\\TypeDeclaration\\Rector\\FunctionLike\\ParamTypeDeclarationRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getClassName\(\)" is duplicated with method "resolveClass\(\)" in "Rector\\TypeDeclaration\\OverrideGuard\\ClassMethodReturnTypeOverrideGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "resolveClassName\(\)" is duplicated with method "getClassName\(\)" in "Rector\\Naming\\Naming\\PropertyNaming" class\. Use unique content or abstract service instead#'
 
         -
              message: '#Do not use setter on a service#'
