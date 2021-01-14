@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\BooleanNot;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BooleanNot;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -66,16 +64,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->expr instanceof BinaryOp) {
-            return null;
-        }
-
-        // and is simpler to read → keep it
-        if ($node->expr instanceof BooleanAnd) {
-            return null;
-        }
-
-        if ($node->expr instanceof GreaterOrEqual) {
+        if (! $node->expr instanceof BooleanOr) {
             return null;
         }
 
