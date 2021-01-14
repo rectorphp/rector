@@ -15828,6 +15828,18 @@ Change Symfony Event listener class to Event Subscriber based on configuration i
  }
 ```
 
+Extra file:
+
+```php
+final class RouteName
+{
+    /**
+     * @var string
+     */
+    public NAME = 'name';
+}
+```
+
 <br>
 
 ## SymfonyPHPUnit
