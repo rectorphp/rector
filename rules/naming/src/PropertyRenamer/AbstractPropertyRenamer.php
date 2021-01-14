@@ -38,16 +38,6 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
     protected $propertyFetchRenamer;
 
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var NotPrivatePropertyGuard
      */
     private $notPrivatePropertyGuard;
@@ -80,8 +70,6 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
         HasMagicGetSetGuard $hasMagicGetSetGuard,
         PropertyFetchRenamer $propertyFetchRenamer
     ): void {
-        $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->notPrivatePropertyGuard = $notPrivatePropertyGuard;
         $this->ramseyUuidInterfaceGuard = $ramseyUuidInterfaceGuard;
         $this->dateTimeAtNamingConventionGuard = $dateTimeAtNamingConventionGuard;
