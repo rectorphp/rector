@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
         unzip \
         g++ \
         libzip-dev \
+    && rm -rf /var/lib/apt/lists/* \
     && pecl -q install \
         zip \
     && docker-php-ext-configure \
@@ -28,7 +29,8 @@ COPY stubs stubs
 # This is to make parsing version possible
 COPY .git .git
 
-RUN  composer install --no-dev --optimize-autoloader --prefer-dist
+RUN composer install --no-dev --optimize-autoloader --prefer-dist \
+    && composer clear-cache
 
 RUN mkdir /tmp/opcache
 
