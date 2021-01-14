@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y \
         opcache --enable-opcache \
     && docker-php-ext-enable \
         zip \
-        opcache
+        opcache \
+        intl
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
