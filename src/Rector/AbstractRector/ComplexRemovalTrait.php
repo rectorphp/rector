@@ -169,9 +169,8 @@ trait ComplexRemovalTrait
             return;
         }
 
-        /** @var Class_|null $class */
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
+        if (! $constructClassMethod instanceof ClassMethod) {
             return;
         }
 

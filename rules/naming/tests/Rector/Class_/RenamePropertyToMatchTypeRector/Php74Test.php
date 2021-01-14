@@ -9,10 +9,12 @@ use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class Php74TestTest extends AbstractRectorTestCase
+/**
+ * @requires PHP 7.4
+ */
+final class Php74Test extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 7.4
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
@@ -142,6 +143,15 @@ CODE_SAMPLE
         /** @var string $paramName */
         $paramName = $this->getName($param);
 
-        return $this->breakingVariableRenameGuard->shouldSkipParam($paramName, $expectedName, $classMethod, $param);
+        if ($this->breakingVariableRenameGuard->shouldSkipParam($paramName, $expectedName, $classMethod, $param)) {
+            return true;
+        }
+
+        // promoted property
+        if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
+            return false;
+        }
+
+        return $param->flags !== 0;
     }
 }
