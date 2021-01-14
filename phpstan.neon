@@ -671,6 +671,7 @@ parameters:
         - '#Content of method "getClassName\(\)" is duplicated with method "getFullyQualifiedName\(\)" in "Rector\\TypeDeclaration\\Rector\\FunctionLike\\ParamTypeDeclarationRector" class\. Use unique content or abstract service instead#'
         - '#Content of method "getClassName\(\)" is duplicated with method "resolveClass\(\)" in "Rector\\TypeDeclaration\\OverrideGuard\\ClassMethodReturnTypeOverrideGuard" class\. Use unique content or abstract service instead#'
         - '#Content of method "resolveClassName\(\)" is duplicated with method "getClassName\(\)" in "Rector\\Naming\\Naming\\PropertyNaming" class\. Use unique content or abstract service instead#'
+        - '#Content of method "resolveClassName\(\)" is duplicated with method "getFullyQualifiedName\(\)" in "Rector\\TypeDeclaration\\Rector\\FunctionLike\\ParamTypeDeclarationRector" class\. Use unique content or abstract service instead#'
 
         -
              message: '#Do not use setter on a service#'
