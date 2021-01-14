@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
         unzip \
         g++ \
         libzip-dev \
+        libicu-dev \
     && rm -rf /var/lib/apt/lists/* \
     && pecl -q install \
         zip \
