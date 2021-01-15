@@ -10,6 +10,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -40,16 +41,23 @@ final class ConflictingNameResolver
      */
     private $arrayFilter;
 
+    /**
+     * @var MatchParamTypeExpectedNameResolver
+     */
+    private $matchParamTypeExpectedNameResolver;
+
     public function __construct(
         ArrayFilter $arrayFilter,
         BetterNodeFinder $betterNodeFinder,
         ExpectedNameResolver $expectedNameResolver,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->arrayFilter = $arrayFilter;
+        $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
 
     /**
@@ -59,7 +67,7 @@ final class ConflictingNameResolver
     {
         $expectedNames = [];
         foreach ($classMethod->params as $param) {
-            $expectedName = $this->expectedNameResolver->resolveForParam($param);
+            $expectedName = $this->matchParamTypeExpectedNameResolver->resolve($param);
             if ($expectedName === null) {
                 continue;
             }

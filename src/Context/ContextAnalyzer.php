@@ -64,12 +64,12 @@ final class ContextAnalyzer
     }
 
     /**
-     * @param string[] $types
+     * @param class-string[] $types
      */
-    private function isTypes(Node $node, array $types): bool
+    public function isTypes(object $object, array $types): bool
     {
         foreach ($types as $type) {
-            if (is_a($node, $type, true)) {
+            if (is_a($object, $type, true)) {
                 return true;
             }
         }

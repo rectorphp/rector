@@ -26,9 +26,6 @@ includes:
 parameters:
     level: max
 
-    parallel:
-        maximumNumberOfProcesses: 6
-
     paths:
         - bin
         - src
@@ -46,7 +43,7 @@ parameters:
     scanDirectories:
         - stubs
 
-    reportUnmatchedIgnoredErrors: false
+#    reportUnmatchedIgnoredErrors: false
 
     checkGenericClassInNonGenericObjectType: false
 
@@ -120,7 +117,6 @@ parameters:
             message: "#in iterable type Iterator#"
             paths:
                 - *Test.php
-                - *TestCase.php
 
         -
             message: "#^Cognitive complexity for \"Rector\\\\BetterPhpDocParser\\\\Printer\\\\WhitespaceDetector\\:\\:detectOldWhitespaces\\(\\)\" is 18, keep it under 9$#"
@@ -128,29 +124,16 @@ parameters:
             path: packages/better-php-doc-parser/src/Printer/WhitespaceDetector.php
 
         -
-            message: "#^Parameter \\#1 \\$input of function array_splice expects array, array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null given\\.$#"
-            count: 1
-            path: rules/coding-style/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php
-
-        -
             message: "#^Cognitive complexity for \"Rector\\\\PhpSpecToPHPUnit\\\\Rector\\\\MethodCall\\\\PhpSpecPromisesToPHPUnitAssertRector\\:\\:refactor\\(\\)\" is 13, keep it under 9$#"
             count: 1
             path: rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
 
-        -
-            message: "#Use explicit property fetch names over dynamic#"
-            path: packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php
-
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
-
-        - '#In method "Rector\\Utils\\ProjectValidator\\Process\\ParallelTaskRunner\:\:(.*?)", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception#'
-        # weird
 
         - '#Cannot cast PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier to string#'
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
-        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
         - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
 
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is 10, keep it under 9#'
@@ -158,7 +141,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NetteKdyby\\ContributeEventClassResolver\:\:resolveGetterMethodByEventClassAndParam\(\)" is \d+, keep it under 9#'
         - '#Parameter \#1 \$type of class PhpParser\\Node\\NullableType constructor expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
-        - '#Parameter \#1 \$node of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirstAncestorInstanceOf\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\\Variable\|null given#'
         - '#Parameter \#1 \$objectType of method Rector\\Naming\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
         # known value
         - '#Property PhpParser\\Node\\Stmt\\Foreach_\:\:\$valueVar \(PhpParser\\Node\\Expr\) does not accept PhpParser\\Node\\Expr\|null#'
@@ -224,9 +206,6 @@ parameters:
             message: '#Use value object over return of values#'
             path: 'rules/php70/src/EregToPcreTransformer.php'
 
-        # 3rd party
-        - '#Class cognitive complexity for "(NodeTypeResolver|EregToPcreTransformer|DumpNodesCommand)" is \d+, keep it under 50#'
-
 #        -
 #            message: '#Instead of "Symfony\\Component\\Finder\\SplFileInfo" class/interface use "Symplify\\SmartFileSystem\\SmartFileInfo"#'
 #            paths:
@@ -237,9 +216,6 @@ parameters:
             paths:
                 - src/Configuration/RectorClassesProvider.php
 
-        # nodes/stmts mixup
-        - '#Parameter \#2 \$stmts of class PhpParser\\Node\\Stmt\\Namespace_ constructor expects array<PhpParser\\Node\\Stmt\>\|null, array<PhpParser\\Node\> given#'
-
         -
             message: '#Nested foreach with empty statement is not allowed#'
             path: packages/better-php-doc-parser/tests/PhpDocParser/TagValueNodeReprint/TagValueNodeReprintTest.php
@@ -248,8 +224,6 @@ parameters:
             message: '#Function "dump\(\)" cannot be used/left in the code#'
             path: tests/debug_functions.php
 
-        - '#Method Rector\\Utils\\PHPStanAttributeTypeSyncer\\NodeFactory\\AttributeAwareClassFactoryFactory\:\:createFromPhpDocParserNodeClass\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
-        - '#Method Rector\\Utils\\PHPStanAttributeTypeSyncer\\NodeFactory\\AttributeAwareClassFactory\:\:createFromPhpDocParserNodeClass\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
         - '#Method Rector\\NetteKdyby\\NodeFactory\\EventValueObjectClassFactory\:\:wrapClassToNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
 
         # 3rd party code
@@ -278,15 +252,7 @@ parameters:
                 - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php # 108
                 - rules/coding-style/src/Rector/ClassMethod/YieldClassMethodToArrayClassMethodRector.php # 47
                 - rules/php70/src/EregToPcreTransformer.php # 66
-                - rules/restoration/src/Rector/Class_/RemoveUselessJustForSakeInterfaceRector.php # 42
                 - rules/type-declaration/src/Rector/FunctionLike/ReturnTypeDeclarationRector.php # 82
-                - src/PhpParser/Builder/UseBuilder.php # 17
-
-        # nodes/stmts
-        - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
-
-        - '#Class with base "Application" name is already used in "(.*?)\\Symfony\\Component\\Console\\Application", "Symfony\\Component\\Console\\Application", "Rector\\Core\\Console\\Application"\. Use unique name to make classes easy to recognize#'
-        - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
 
         # trait in trait call
         - '#Call to an undefined method Rector\\PostRector\\Rector\\AbstractPostRector\:\:isObjectType\(\)#'
@@ -302,12 +268,10 @@ parameters:
                 - src/Rector/AbstractRector.php
                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
                 - rules/code-quality/src/Rector/For_/ForToForeachRector.php
-                - rules/coding-style/src/Rector/Use_/RemoveUnusedAliasRector.php
 
         # symplify 9
         - '#Use decoupled factory service to create "(.*?)" object#'
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
-        - '#SymfonyStyle usage is unneeded for only newline, write, and/or writeln, use PHP_EOL and concatenation instead#'
         - '#Trait method "(.*?)" should not contain any logic, but only delegate to other class call#'
         - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
         - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
@@ -317,12 +281,7 @@ parameters:
             paths:
                 - packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php # 61
 
-        - '#Class with base "Regex" name is already used in "MongoDB\\BSON\\Regex", "Symplify\\PHPStanRules\\ValueObject\\Regex"\. Use unique name to make classes easy to recognize#'
-
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocInfo\\PhpDocInfo\\PhpDocInfoTest\:\:createPhpDocInfoFromFile\(\) should return Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo but returns Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\|null#'
-
-        # Symfony spl file info false positive
-        - '#Parameter \#1 \$callback of function set_error_handler expects \(callable\(int, string, string, int, array\)\: bool\)\|null, \(array&callable\(\)\: mixed\)\|\(callable\(\)\: mixed&object\)\|\(callable\(\)\: mixed&string\) given#'
 
         -
             message: '#"(getComments|getDocComment|setDocComment)\(\)" call on "PhpParser\\Node" type is not allowed#'
@@ -341,7 +300,6 @@ parameters:
                 - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php
                 - rules/coding-style/src/Node/DocAliasResolver.php
                 - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfoFactory.php
-                - packages/better-php-doc-parser/tests/PhpDocParser/AbstractPhpDocInfoTest.php
                 - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php
 
         # false positives checked in another method
@@ -353,12 +311,6 @@ parameters:
                 - rules/php80/src/Rector/Switch_/ChangeSwitchToMatchRector.php
                 - packages/node-nesting-scope/src/NodeFinder/ScopeAwareNodeFinder.php
 
-        -
-            message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\. You have \d+ nesting#'
-            paths:
-                # allow configuration object nesting
-                - config/set
-
         # internal generating Rector
         -
             message: '#Class "Rector\\Utils\\DoctrineAnnotationParserSyncer\\Rector\\(.*?)" is missing @see annotation with test case class reference#'
@@ -369,9 +321,6 @@ parameters:
             message: '#Unreachable statement \- code above always terminates#'
             paths:
                 - src/Rector/AbstractRector/NodeTypeResolverTrait.php
-                # false positive
-                - rules/php72/src/Rector/ConstFetch/BarewordStringRector.php
-
 
         -
             message: '#Do not use setter on a service#'
@@ -381,7 +330,6 @@ parameters:
                 # prevent circular dependnecy
                 - packages/static-type-mapper/src/Naming/NameScopeFactory.php
 
-        - '#Unable to resolve the template type ExpectedType in call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)#'
         # class-string vs string
         - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
 
@@ -389,11 +337,6 @@ parameters:
             message: '#Method "renamePhpDocType\(\)" returns bool type, so the name should start with is/has/was#'
             paths:
                  - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockClassRenamer.php
-
-        -
-            message: '#Use "\$class\-\>namespaceName" instead of "\$class\-\>name" that only returns short class name#'
-            paths:
-                - packages/node-name-resolver/src/NodeNameResolver/ClassNameResolver.php
 
         -
             message: '#Cannot cast array<string\>\|bool\|string\|null to string#'
@@ -417,11 +360,6 @@ parameters:
 
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
 
-        -
-            message: '#Class cognitive complexity is 41, keep it under 40#'
-            paths:
-                - rules/phpunit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php
-
         # @todo loop magic, resolve later
         -
              message: '#Access to an undefined property PhpParser\\Node\:\:\$expr#'
@@ -429,13 +367,6 @@ parameters:
                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
 
         ###################################################
-
-        # is fixed in never simplify
-        -
-            message: '#Do not use setter on a service#'
-            paths:
-                - src/Configuration/RenamedClassesDataCollector.php
-        - '#Method "mustMatchGitDiff\(\)" returns bool type, so the name should start with is/has/was#'
 
         -
             message: '#Class cognitive complexity is 43, keep it under 40#'
@@ -474,11 +405,6 @@ parameters:
             message: '#Call to function is_string\(\) with float will always evaluate to false#'
             path: src/PhpParser/Printer/BetterStandardPrinter.php
 
-        - '#Parameter \#1 \$node of method Rector\\Php80\\Rector\\If_\\NullsafeOperatorRector\:\:getStartNode\(\) expects PhpParser\\Node, PhpParser\\Node\|null given#'
-
-        # @todo resolve in symplify
-        - '#Content of method "(.*?)\(\)" is duplicated with method in "(.*?)Trait" class\. Use unique content or abstract service instead#'
-
         # known values from other methods
         -
             message: '#Negated boolean expression is always true#'
@@ -499,7 +425,6 @@ parameters:
 
         # type juggling
         - '#AttributeAwareNodeInterface#'
-        - '#Method Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetIdToUuidValueRector\:\:getSetUuidMethodCallOnSameVariable\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\|null#'
 
         -
              message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'
@@ -515,11 +440,6 @@ parameters:
         - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
         - '#AttributeAwarePhpDocNode#'
 
-        # doc types
-        -
-            message: '#Access to an undefined property PhpParser\\Node\:\:\$args#'
-            paths:
-                - rules/naming/src/Rector/Assign/RenameVariableToMatchMethodCallReturnTypeRector.php
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
         - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\If_\\SimplifyIfIssetToNullCoalescingRector\:\:shouldSkip\(\)" is 10, keep it under 9#'
         - '#Instanceof between PhpParser\\Node\\Stmt and Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace will always evaluate to false#'
@@ -537,11 +457,6 @@ parameters:
             path: 'bin/rector.php'
 
         -
-            message: '#Do not use setter on a service#'
-            paths:
-                - packages/better-php-doc-parser/src/PhpDocNodeFactory/ParamPhpDocNodeFactory.php
-
-        -
             message: '#Class cognitive complexity is 42, keep it under 40#'
             paths:
                 - rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
@@ -553,11 +468,6 @@ parameters:
                 - rules/naming/src/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php
                 - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php
 
-        - '#Cannot call method getParentNode\(\) on Rector\\DeadCode\\ValueObject\\VariableNodeUse\|null#'
-
-        # @todo resolve later
-        - '#Content of method "endsWith\(\)" is duplicated with method in "Rector\\(.*?)" class\. Use unique content or abstract service instead#'
-
         - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is \d+, keep it under 9#'
 
         -
@@ -565,23 +475,6 @@ parameters:
             paths:
                 - packages/better-php-doc-parser/src/PhpDocParser/BetterPhpDocParser.php #268
                 - rules/php70/src/EregToPcreTransformer.php #277
-
-        - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'
-
-        -
-             message: '#Class cognitive complexity is \d+, keep it under 40#'
-             paths:
-                  - src/Rector/AbstractRector.php
-                  - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
-                  - rules/code-quality/src/Rector/For_/ForToForeachRector.php
-                  - rules/coding-style/src/Rector/Use_/RemoveUnusedAliasRector.php
-
-        - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'
-
-        -
-            message: '#Use explicit names over dynamic ones#'
-            paths:
-                - utils/compiler/tests/PatchersCallbackTest.php
 
         -
             message: '#There should be no empty class#'
@@ -593,77 +486,21 @@ parameters:
                 - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeTranslator.php #9
                 - rules/transform/tests/Rector/MethodCall/MethodCallToStaticCallRector/AnotherDependency.php #7
 
-        - '#Parameter \#3 \$type of method Rector\\CodeQualityStrict\\Rector\\ClassMethod\\ParamTypeToAssertTypeRector\:\:getToBeProcessedTypes\(\) expects PHPStan\\Type\\ObjectType\|PHPStan\\Type\\UnionType, PHPStan\\Type\\Type given#'
-
         - '#Anonymous class is not allowed#'
-        - '#File "ClassInCorrectNamespaceRector\.php" should have prefix "Skip" prefix#'
-        - '#File "HaveSameStarts\.php" should have prefix "Skip" prefix#'
-        - '#File "AbstractSkip\.php" should have prefix "Skip" prefix#'
 
         # generics nullable bugs
         - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node\|null#'
         - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node#'
         - '#Method (.*?) should return (.*?)\|null but returns PhpParser\\Node\|null#'
         - '#Method (.*?) should return array<T of PhpParser\\Node\> but returns array<PhpParser\\Node\>#'
-        - '#Method (.*?) should return array<T of PhpParser\\Node\> but returns array<T of PhpParser\\Node\>#'
 
-        - '#Parameter \#1 \$node of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<PhpParser\\Node\>\:\:findFirstAncestorInstanceOf\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\\Variable\|null given#'
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<PhpParser\\Node\>\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         - '#Parameter \#2 \$type of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<T of PhpParser\\Node\>\:\:findInstanceOfName\(\) expects class\-string<T of PhpParser\\Node\>, string given#'
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
-        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node\|null#'
 
         # fixed in php-parser master
         - '#Method Rector\\SymfonyCodeQuality\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
-        - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\CallableTypeMapper" class\. Use unique content or abstract service instead#'
         - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'
-
-        # resolve later - clean duplicated code
-        - '#Content of method "resolveClass\(\)" is duplicated with method "resolveClassName\(\)" in "Rector\\NetteToSymfony\\Analyzer\\NetteControlFactoryInterfaceAnalyzer" class\. Use unique content or abstract service instead#'
-        - '#Content of method "collectMockVariableName\(\)" is duplicated with method "collectMockVariableName\(\)" in "Rector\\MockistaToMockery\\Rector\\ClassMethod\\MockistaMockToMockeryMockRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "shouldSkipMethodCallIncludingNew\(\)" is duplicated with method "shouldSkipMethodCallIncludingNew\(\)" in "Rector\\Defluent\\Rector\\AbstractFluentChainMethodCallRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method "mapToPhpParserNode\(\)" in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getFqnClassName\(\)" is duplicated with method "getFullyQualifiedName\(\)" in "Rector\\TypeDeclaration\\Rector\\FunctionLike\\ParamTypeDeclarationRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "resolveMethodCallVar\(\)" is duplicated with method "resolveMethodCallVar\(\)" in "Rector\\Defluent\\NodeFactory\\SeparateReturnMethodCallFactory" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getFullyQualifiedName\(\)" is duplicated with method "resolveClassName\(\)" in "Rector\\NetteToSymfony\\Analyzer\\NetteControlFactoryInterfaceAnalyzer" class\. Use unique content or abstract service instead#'
-        - '#Content of method "endsWith\(\)" is duplicated with method "endsWith\(\)" in "Rector\\Naming\\ExpectedNameResolver\\AbstractExpectedNameResolver" class\. Use unique content or abstract service instead#'
-        - '#Content of method "convertParamsToArgs\(\)" is duplicated with method "convertParamNodesToArgNodes\(\)" in "Rector\\Core\\PhpParser\\Node\\NodeFactory" class\. Use unique content or abstract service instead#'
-        - '#Content of method "resolveForParam\(\)" is duplicated with method "resolve\(\)" in "Rector\\Naming\\ExpectedNameResolver\\MatchParamTypeExpectedNameResolver" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isInTestClass\(\)" is duplicated with method "isInTestClass\(\)" in "Rector\\Core\\Rector\\AbstractPHPUnitRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getFqnClassName\(\)" is duplicated with method "resolveClassName\(\)" in "Rector\\NetteToSymfony\\Analyzer\\NetteControlFactoryInterfaceAnalyzer" class\. Use unique content or abstract service instead#'
-        - '#Content of method "shouldSkipMethodCallIncludingNew\(\)" is duplicated with method "shouldSkipMethodCallIncludingNew\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnFluentChainMethodCallToNormalMethodCallRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "endsWith\(\)" is duplicated with method "endsWith\(\)" in "Rector\\Naming\\Naming\\ExpectedNameResolver" class\. Use unique content or abstract service instead#'
-        - '#Content of method "resolve\(\)" is duplicated with method "resolveForParam\(\)" in "Rector\\Naming\\Naming\\ExpectedNameResolver" class\. Use unique content or abstract service instead#'
-        - '#Content of method "refactor\(\)" is duplicated with method "refactor\(\)" in "Rector\\Nette\\Rector\\FuncCall\\PregFunctionToNetteUtilsStringsRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isTypes\(\)" is duplicated with method "isTypes\(\)" in "Rector\\Core\\Context\\ContextAnalyzer" class\. Use unique content or abstract service instead#'
-        - '#Content of method "removeFirstArgument\(\)" is duplicated with method "moveArguments\(\)" in "Rector\\PHPUnit\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isInstancesOf\(\)" is duplicated with method "isTypes\(\)" in "Rector\\Core\\Context\\ContextAnalyzer" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getFullyQualifiedName\(\)" is duplicated with method "getClassName\(\)" in "Rector\\Naming\\Naming\\PropertyNaming" class\. Use unique content or abstract service instead#'
-        - '#Content of method "(.*?)Trait\(\)" is duplicated with method "autowireNameResolverTrait\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isLocalMethodCallNamed\(\)" is duplicated with method "isLocalMethodCallNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isLocalMethodCallsNamed\(\)" is duplicated with method "isLocalMethodCallsNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isFuncCallName\(\)" is duplicated with method "isFuncCallName\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isClassConstReference\(\)" is duplicated with method "isClassConstReference\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isStaticCallNamed\(\)" is duplicated with method "isStaticCallNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isStaticCallsNamed\(\)" is duplicated with method "isStaticCallsNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isMethodCall\(\)" is duplicated with method "isMethodCall\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isVariableName\(\)" is duplicated with method "isVariableName\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isInClassNamed\(\)" is duplicated with method "isInClassNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isInClassesNamed\(\)" is duplicated with method "isInClassesNamed\(\)" in "Rector\\Core\\Rector\\AbstractRector\\NameResolverTrait" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getClassName\(\)" is duplicated with method "resolveClassName\(\)" in "Rector\\NetteToSymfony\\Analyzer\\NetteControlFactoryInterfaceAnalyzer" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getFqnClassName\(\)" is duplicated with method "resolveClass\(\)" in "Rector\\TypeDeclaration\\OverrideGuard\\ClassMethodReturnTypeOverrideGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "loadFileToJson\(\)" is duplicated with method "readFileToJsonArray\(\)" in "Rector\\PSR4\\Composer\\PSR4AutoloadPathsProvider" class\. Use unique content or abstract service instead#'
-        - '#Content of method "resolveClass\(\)" is duplicated with method "getClassName\(\)" in "Rector\\Naming\\Naming\\PropertyNaming" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getFqnClassName\(\)" is duplicated with method "getClassName\(\)" in "Rector\\Naming\\Naming\\PropertyNaming" class\. Use unique content or abstract service instead#'
-        - '#Content of method "resolveMethodCallVar\(\)" is duplicated with method "resolveMethodCallVar\(\)" in "Rector\\Defluent\\NodeFactory\\NonFluentChainMethodCallFactory" class\. Use unique content or abstract service instead#'
-        - '#Content of method "resolveClassName\(\)" is duplicated with method "resolveClass\(\)" in "Rector\\TypeDeclaration\\OverrideGuard\\ClassMethodReturnTypeOverrideGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "refactor\(\)" is duplicated with method "refactor\(\)" in "Rector\\Nette\\Rector\\FuncCall\\PregMatchFunctionToNetteUtilsStringsRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isInstancesOf\(\)" is duplicated with method "isTypes\(\)" in "Rector\\PHPUnit\\Rector\\MethodCall\\AssertEqualsToSameRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getFullyQualifiedName\(\)" is duplicated with method "resolveClass\(\)" in "Rector\\TypeDeclaration\\OverrideGuard\\ClassMethodReturnTypeOverrideGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getClassName\(\)" is duplicated with method "getFullyQualifiedName\(\)" in "Rector\\TypeDeclaration\\Rector\\FunctionLike\\ParamTypeDeclarationRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getClassName\(\)" is duplicated with method "resolveClass\(\)" in "Rector\\TypeDeclaration\\OverrideGuard\\ClassMethodReturnTypeOverrideGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "resolveClassName\(\)" is duplicated with method "getClassName\(\)" in "Rector\\Naming\\Naming\\PropertyNaming" class\. Use unique content or abstract service instead#'
-        - '#Content of method "resolveClassName\(\)" is duplicated with method "getFullyQualifiedName\(\)" in "Rector\\TypeDeclaration\\Rector\\FunctionLike\\ParamTypeDeclarationRector" class\. Use unique content or abstract service instead#'
 
         -
              message: '#Do not use setter on a service#'
@@ -674,3 +511,5 @@ parameters:
              message: '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name\:\:toString\(\)#'
              paths:
                 - utils/phpstan-extensions/src/ReturnTypeExtension/NodeFinder/FindFirstInstanceOfReturnTypeExtension.php
+
+        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node#'

@@ -96,13 +96,18 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     {
         $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($fileInfo);
 
-        return $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
+        $foundNode = $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
+        if (! $foundNode instanceof Node) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $foundNode;
     }
 
     private function printNodePhpDocInfoToString(Node $node): string
     {
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             throw new ShouldNotHappenException();
         }
 

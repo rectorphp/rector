@@ -13,6 +13,7 @@ use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use Rector\Core\Context\ContextAnalyzer;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -45,9 +46,15 @@ final class AssertEqualsToSameRector extends AbstractPHPUnitRector
      */
     private $identifierManipulator;
 
-    public function __construct(IdentifierManipulator $identifierManipulator)
+    /**
+     * @var ContextAnalyzer
+     */
+    private $contextAnalyzer;
+
+    public function __construct(IdentifierManipulator $identifierManipulator, ContextAnalyzer $contextAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
+        $this->contextAnalyzer = $contextAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -95,7 +102,7 @@ final class AssertEqualsToSameRector extends AbstractPHPUnitRector
 
         $valueNode = $node->args[0];
         $valueNodeType = $this->getNodeType($valueNode->value);
-        if (! $this->isTypes($valueNodeType, self::SCALAR_TYPES)) {
+        if (! $this->contextAnalyzer->isTypes($valueNodeType, self::SCALAR_TYPES)) {
             return null;
         }
 
@@ -110,19 +117,5 @@ final class AssertEqualsToSameRector extends AbstractPHPUnitRector
         $nodeScope = $expr->getAttribute(AttributeKey::SCOPE);
 
         return $nodeScope->getType($expr);
-    }
-
-    /**
-     * @param string[] $types
-     */
-    private function isTypes(Type $valueType, array $types): bool
-    {
-        foreach ($types as $type) {
-            if (is_a($valueType, $type, true)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -318,7 +318,7 @@ final class NodeFactory
         return new StaticCall(
             new Name(self::REFERENCE_PARENT),
             new Identifier(MethodName::CONSTRUCT),
-            $this->convertParamNodesToArgNodes($params)
+            $this->createArgsFromParams($params)
         );
     }
 
@@ -489,6 +489,20 @@ final class NodeFactory
         return new ClassConstFetch($name, $constantName);
     }
 
+    /**
+     * @param Param[] $params
+     * @return Arg[]
+     */
+    public function createArgsFromParams(array $params): array
+    {
+        $args = [];
+        foreach ($params as $param) {
+            $args[] = new Arg($param->var);
+        }
+
+        return $args;
+    }
+
     private function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
     {
         $classConstFetchNode = $this->builderFactory->classConstFetch($className, $constantName);
@@ -586,20 +600,6 @@ final class NodeFactory
         // complete property property parent, needed for other operations
         $propertyProperty = $property->props[0];
         $propertyProperty->setAttribute(AttributeKey::PARENT_NODE, $property);
-    }
-
-    /**
-     * @param Param[] $paramNodes
-     * @return Arg[]
-     */
-    private function convertParamNodesToArgNodes(array $paramNodes): array
-    {
-        $args = [];
-        foreach ($paramNodes as $paramNode) {
-            $args[] = new Arg($paramNode->var);
-        }
-
-        return $args;
     }
 
     /**

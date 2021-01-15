@@ -202,7 +202,7 @@ CODE_SAMPLE
         $anonymousFunction->params = $newParams;
 
         $innerMethodCall = new MethodCall($node, $classMethod->name);
-        $innerMethodCall->args = $this->convertParamsToArgs($newParams);
+        $innerMethodCall->args = $this->nodeFactory->createArgsFromParams($newParams);
 
         if ($classMethod->returnType !== null) {
             $newReturnType = $classMethod->returnType;
@@ -269,20 +269,6 @@ CODE_SAMPLE
         }
 
         return $newParams;
-    }
-
-    /**
-     * @param Param[] $params
-     * @return Arg[]
-     */
-    private function convertParamsToArgs(array $params): array
-    {
-        $args = [];
-        foreach ($params as $param) {
-            $args[] = new Arg($param->var);
-        }
-
-        return $args;
     }
 
     /**

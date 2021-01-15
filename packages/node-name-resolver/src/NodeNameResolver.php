@@ -146,7 +146,7 @@ final class NodeNameResolver
 
     public function areNamesEqual(Node $firstNode, Node $secondNode): bool
     {
-        return $this->getName($firstNode) === $this->getName($secondNode);
+        return $this->isName($firstNode, $this->getName($secondNode));
     }
 
     /**

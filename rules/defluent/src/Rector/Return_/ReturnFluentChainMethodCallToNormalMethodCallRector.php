@@ -6,7 +6,6 @@ namespace Rector\Defluent\Rector\Return_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Defluent\NodeFactory\ReturnFluentMethodCallFactory;
 use Rector\Defluent\NodeFactory\SeparateReturnMethodCallFactory;
@@ -102,16 +101,6 @@ CODE_SAMPLE
         $this->addNodesAfterNode($nodesToAdd, $node);
 
         return null;
-    }
-
-    protected function shouldSkipMethodCallIncludingNew(MethodCall $methodCall): bool
-    {
-        if ($this->shouldSkipMethodCall($methodCall)) {
-            return true;
-        }
-
-        $rootVariable = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($methodCall);
-        return $rootVariable instanceof New_;
     }
 
     /**
