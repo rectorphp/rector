@@ -66,12 +66,10 @@ final class ComposerModifier
         return $this->command;
     }
 
-    public function modify(ComposerJson $composerJson): ComposerJson
+    public function modify(ComposerJson $composerJson): void
     {
         foreach ($this->configuration as $composerChanger) {
-            $composerJson = $composerChanger->modify($composerJson);
+            $composerChanger->modify($composerJson);
         }
-
-        return $composerJson;
     }
 }
