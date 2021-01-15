@@ -13,6 +13,9 @@ use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
+/**
+ * @see \Rector\Composer\Tests\Processor\ComposerProcessorTest
+ */
 final class ComposerProcessor
 {
     /**
@@ -72,8 +75,8 @@ final class ComposerProcessor
         $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
 
         $oldContents = $smartFileInfo->getContents();
-        $newComposerJson = $this->composerModifier->modify($composerJson);
-        $newContents = $this->composerJsonPrinter->printToString($newComposerJson);
+        $this->composerModifier->modify($composerJson);
+        $newContents = $this->composerJsonPrinter->printToString($composerJson);
 
         // nothing has changed
         if ($oldContents === $newContents) {

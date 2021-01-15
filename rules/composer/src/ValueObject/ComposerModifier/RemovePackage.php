@@ -18,17 +18,13 @@ final class RemovePackage implements ComposerModifierInterface
      */
     private $packageName;
 
-    /**
-     * @param string $packageName name of package to be removed (vendor/package)
-     */
     public function __construct(string $packageName)
     {
         $this->packageName = $packageName;
     }
 
-    public function modify(ComposerJson $composerJson): ComposerJson
+    public function modify(ComposerJson $composerJson): void
     {
         $composerJson->removePackage($this->packageName);
-        return $composerJson;
     }
 }
