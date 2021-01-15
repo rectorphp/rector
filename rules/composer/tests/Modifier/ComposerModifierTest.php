@@ -247,8 +247,5 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
         $this->assertSame('composer update', $composerModifier->getCommand());
-
-        $composerModifier->setCommand('composer update --prefer-stable');
-        $this->assertSame('composer update --prefer-stable', $composerModifier->getCommand());
     }
 }

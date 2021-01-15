@@ -14,14 +14,14 @@ use Webmozart\Assert\Assert;
 final class ComposerModifier
 {
     /**
+     * @var string
+     */
+    private const COMPOSER_UPDATE = 'composer update';
+
+    /**
      * @var string|null
      */
     private $filePath;
-
-    /**
-     * @var string
-     */
-    private $command = 'composer update';
 
     /**
      * @var ComposerModifierInterface[]
@@ -56,14 +56,9 @@ final class ComposerModifier
         return $this->filePath ?: getcwd() . '/composer.json';
     }
 
-    public function setCommand(string $command): void
-    {
-        $this->command = $command;
-    }
-
     public function getCommand(): string
     {
-        return $this->command;
+        return self::COMPOSER_UPDATE;
     }
 
     public function modify(ComposerJson $composerJson): void
