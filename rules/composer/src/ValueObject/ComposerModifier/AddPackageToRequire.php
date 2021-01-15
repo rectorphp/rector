@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
-
 /**
- * Only adds package to require section, if package is already in composer data, nothing happen
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\AddPackageToRequireTest
  */
 final class AddPackageToRequire
@@ -28,8 +25,13 @@ final class AddPackageToRequire
         $this->version = $version;
     }
 
-    public function refactor(ComposerJson $composerJson): void
+    public function getPackageName(): string
     {
-        $composerJson->addRequiredPackage($this->packageName, $this->version);
+        return $this->packageName;
+    }
+
+    public function getVersion(): string
+    {
+        return $this->version;
     }
 }
