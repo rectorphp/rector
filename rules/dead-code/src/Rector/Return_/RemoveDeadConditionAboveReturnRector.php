@@ -75,7 +75,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($previousNode->stmts) > 1) {
+        $countStmt = count($previousNode->stmts);
+        if ($countStmt === 0) {
+            return null;
+        }
+
+        if ($countStmt > 1) {
             return null;
         }
 
