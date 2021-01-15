@@ -77,7 +77,8 @@ CODE_SAMPLE
 
         $countStmt = count($previousNode->stmts);
         if ($countStmt === 0) {
-            return null;
+            $this->removeNode($previousNode);
+            return $node;
         }
 
         if ($countStmt > 1) {
