@@ -187,10 +187,6 @@ trait NodeTypeResolverTrait
     protected function isMethodStaticCallOrClassMethodObjectType(Node $node, string $type): bool
     {
         if ($node instanceof MethodCall) {
-            if ($node->var instanceof Variable) {
-                return $this->isObjectType($node->var, $type);
-            }
-
             // method call is variable return
             return $this->isObjectType($node->var, $type);
         }
