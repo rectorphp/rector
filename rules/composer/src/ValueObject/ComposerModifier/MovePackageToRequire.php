@@ -18,9 +18,6 @@ final class MovePackageToRequire implements ComposerModifierInterface
      */
     private $packageName;
 
-    /**
-     * @param string $packageName name of package to be moved (vendor/package)
-     */
     public function __construct(string $packageName)
     {
         $this->packageName = $packageName;
