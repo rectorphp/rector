@@ -231,29 +231,6 @@ CODE_SAMPLE
         });
     }
 
-    private function collectMockVariableName(FuncCall $funcCall): void
-    {
-        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Assign) {
-            return;
-        }
-
-        if (! $parentNode->var instanceof Variable) {
-            return;
-        }
-
-        /** @var Variable $variable */
-        $variable = $parentNode->var;
-
-        /** @var string $variableName */
-        $variableName = $this->getName($variable);
-
-        $type = $funcCall->args[0]->value;
-        $mockedType = $this->getValue($type);
-
-        $this->mockVariableTypesByNames[$variableName] = $mockedType;
-    }
-
     private function isMethodCallOrPropertyFetchOnMockVariable(Node $node): bool
     {
         if (! $node instanceof MethodCall && ! $this->isPropertyFetchDisguisedAsMethodCall($node)) {

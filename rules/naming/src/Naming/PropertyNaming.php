@@ -21,7 +21,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 /**
  * @deprecated
@@ -188,15 +187,6 @@ final class PropertyNaming
 
         $classMethod = reset($classMethods);
         return $this->nodeNameResolver->getName($classMethod);
-    }
-
-    private function getClassName(TypeWithClassName $typeWithClassName): string
-    {
-        if ($typeWithClassName instanceof ShortenedObjectType) {
-            return $typeWithClassName->getFullyQualifiedName();
-        }
-
-        return $typeWithClassName->getClassName();
     }
 
     private function resolveShortClassName(string $className): string

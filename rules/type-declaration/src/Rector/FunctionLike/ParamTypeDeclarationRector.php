@@ -206,8 +206,8 @@ CODE_SAMPLE
         }
 
         $fullyQualifiedName = $this->nodeTypeResolver->getFullyQualifiedClassName($type);
-        $reflectionClass = $this->reflectionProvider->getClass($fullyQualifiedName);
+        $classReflection = $this->reflectionProvider->getClass($fullyQualifiedName);
 
-        return $reflectionClass->isTrait();
+        return $classReflection->isTrait();
     }
 }

@@ -13,7 +13,6 @@ use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\Core\Context\ContextAnalyzer;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\Util\StaticInstanceOf;
@@ -47,15 +46,9 @@ final class AssertEqualsToSameRector extends AbstractPHPUnitRector
      */
     private $identifierManipulator;
 
-    /**
-     * @var ContextAnalyzer
-     */
-    private $contextAnalyzer;
-
-    public function __construct(IdentifierManipulator $identifierManipulator, ContextAnalyzer $contextAnalyzer)
+    public function __construct(IdentifierManipulator $identifierManipulator)
     {
         $this->identifierManipulator = $identifierManipulator;
-        $this->contextAnalyzer = $contextAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

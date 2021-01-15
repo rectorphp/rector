@@ -7,11 +7,12 @@ namespace Rector\Defluent\NodeResolver;
 use PhpParser\Node\Expr;
 use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
 use Rector\Defluent\ValueObject\AssignAndRootExpr;
+use Rector\Defluent\ValueObject\FirstAssignFluentCall;
 
 final class FirstMethodCallVarResolver
 {
     /**
-     * @param \Rector\Defluent\ValueObject\FirstAssignFluentCall|AssignAndRootExpr $firstCallFactoryAware
+     * @param FirstAssignFluentCall|AssignAndRootExpr $firstCallFactoryAware
      */
     public function resolve(FirstCallFactoryAwareInterface $firstCallFactoryAware, int $key): Expr
     {

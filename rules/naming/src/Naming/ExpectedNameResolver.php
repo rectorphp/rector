@@ -23,7 +23,6 @@ use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class ExpectedNameResolver
@@ -39,11 +38,6 @@ final class ExpectedNameResolver
     private $propertyNaming;
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -57,12 +51,10 @@ final class ExpectedNameResolver
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         PropertyNaming $propertyNaming,
-        StaticTypeMapper $staticTypeMapper,
         MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
