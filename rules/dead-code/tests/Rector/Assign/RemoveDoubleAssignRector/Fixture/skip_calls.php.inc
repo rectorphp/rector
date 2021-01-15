@@ -10,6 +10,7 @@ class SkipCalls
         $item = array_pop($items);
         $item = array_pop($items);
         $item = array_pop($items);
+        $item = null;
     }
 
     public function staticCalls()
@@ -17,6 +18,7 @@ class SkipCalls
         $item = StaticClass::dump();
         $item = StaticClass::dump();
         $item = StaticClass::dump();
+        $item = null;
     }
 
     public function nonStaticCalls()
@@ -24,6 +26,8 @@ class SkipCalls
         $nonStaticClass = (new NonStaticClass());
         $item = $nonStaticClass->dump();
         $item = $nonStaticClass->dump();
+        $item = $nonStaticClass->dump();
+        $item = null;
     }
 }
 

@@ -80,7 +80,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isCall($node->expr)) {
+        if ($this->isCall($previousStatement->expr->expr)) {
             return null;
         }
 
