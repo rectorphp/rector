@@ -9,25 +9,18 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\Naming\ConstantNaming;
 
 final class ClassConstantFactory
 {
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var ConstantNaming
      */
     private $constantNaming;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, ConstantNaming $constantNaming)
+    public function __construct(ConstantNaming $constantNaming)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->constantNaming = $constantNaming;
     }
 

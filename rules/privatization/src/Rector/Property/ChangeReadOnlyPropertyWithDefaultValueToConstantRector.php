@@ -8,11 +8,11 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
-use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeFactory\ClassConstantFactory;
+use Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -27,28 +27,21 @@ final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends Abstr
     private $propertyManipulator;
 
     /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
      * @var ClassConstantFactory
      */
     private $classConstantFactory;
 
     /**
-     * @var \Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer
+     * @var PropertyFetchWithConstFetchReplacer
      */
     private $propertyFetchWithConstFetchReplacer;
 
     public function __construct(
         PropertyManipulator $propertyManipulator,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
         ClassConstantFactory $classConstantFactory,
-        \Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer
+        PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer
     ) {
         $this->propertyManipulator = $propertyManipulator;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->classConstantFactory = $classConstantFactory;
         $this->propertyFetchWithConstFetchReplacer = $propertyFetchWithConstFetchReplacer;
     }
@@ -137,9 +130,9 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Class_ $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        $this->propertyFetchWithConstFetchReplacer->replace($class, $node);
+        /** @var Class_ $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $this->propertyFetchWithConstFetchReplacer->replace($classLike, $node);
 
         return $this->classConstantFactory->createFromProperty($node);
     }

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -50,7 +51,7 @@ final class PropertyFetchWithConstFetchReplacer
         $this->constantNaming = $constantNaming;
     }
 
-    public function replace(Node\Stmt\Class_ $class, Property $property): void
+    public function replace(Class_ $class, Property $property): void
     {
         $propertyProperty = $property->props[0];
 
