@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\MockeryToProphecy\Collector\MockVariableCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -33,6 +34,16 @@ final class MockistaMockToMockeryMockRector extends AbstractPHPUnitRector
      * @var string[]
      */
     private $mockVariableTypesByNames = [];
+
+    /**
+     * @var MockVariableCollector
+     */
+    private $mockVariableCollector;
+
+    public function __construct(MockVariableCollector $mockVariableCollector)
+    {
+        $this->mockVariableCollector = $mockVariableCollector;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -102,7 +113,11 @@ CODE_SAMPLE
             }
 
             /** @var FuncCall $node */
-            $this->collectMockVariableName($node);
+            $collectedVariableTypesByNames = $this->mockVariableCollector->collectMockVariableName($node);
+            $this->mockVariableTypesByNames = array_merge(
+                $this->mockVariableTypesByNames,
+                $collectedVariableTypesByNames
+            );
 
             return $this->createStaticCall('Mockery', 'mock', $node->args);
         });

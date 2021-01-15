@@ -125,8 +125,8 @@ final class ClassMethodExternalCallNodeAnalyzer
 
         if (! $this->nodeTypeResolver->isObjectType(
             $classLike,
-            'Symfony\Component\EventDispatcher\EventSubscriberInterface')
-        ) {
+            'Symfony\Component\EventDispatcher\EventSubscriberInterface'
+        )) {
             return false;
         }
 

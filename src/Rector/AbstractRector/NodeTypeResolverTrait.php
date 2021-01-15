@@ -100,13 +100,7 @@ trait NodeTypeResolverTrait
      */
     protected function isObjectTypes(Node $node, array $requiredTypes): bool
     {
-        foreach ($requiredTypes as $requiredType) {
-            if ($this->isObjectType($node, $requiredType)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->nodeTypeResolver->isObjectTypes($node, $requiredTypes);
     }
 
     protected function isReturnOfObjectType(Return_ $return, string $objectType): bool

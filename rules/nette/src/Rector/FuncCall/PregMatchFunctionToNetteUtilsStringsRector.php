@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\FuncCall;
 
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -70,27 +69,7 @@ CODE_SAMPLE
             ]);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getNodeTypes(): array
-    {
-        return [FuncCall::class, Identical::class];
-    }
-
-    /**
-     * @param FuncCall|Identical $node
-     */
-    public function refactor(Node $node): ?Node
-    {
-        if ($node instanceof Identical) {
-            return $this->refactorIdentical($node);
-        }
-
-        return $this->refactorFuncCall($node);
-    }
-
-    private function refactorIdentical(Identical $identical): ?Bool_
+    public function refactorIdentical(Identical $identical): ?Bool_
     {
         $parentNode = $identical->getAttribute(AttributeKey::PARENT_NODE);
 
@@ -114,7 +93,7 @@ CODE_SAMPLE
     /**
      * @return FuncCall|StaticCall|Assign|null
      */
-    private function refactorFuncCall(FuncCall $funcCall): ?Expr
+    public function refactorFuncCall(FuncCall $funcCall): ?Expr
     {
         $methodName = $this->matchFuncCallRenameToMethod($funcCall, self::FUNCTION_NAME_TO_METHOD_NAME);
         if ($methodName === null) {

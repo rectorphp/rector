@@ -4,16 +4,39 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\FuncCall;
 
+use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Nette\Contract\PregToNetteUtilsStringInterface;
 
 /**
  * @see https://www.tomasvotruba.cz/blog/2019/02/07/what-i-learned-by-using-thecodingmachine-safe/#is-there-a-better-way
  *
  * @see \Rector\Nette\Tests\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector\PregMatchFunctionToNetteUtilsStringsRectorTest
  */
-abstract class AbstractPregToNetteUtilsStringsRector extends AbstractRector
+abstract class AbstractPregToNetteUtilsStringsRector extends AbstractRector implements PregToNetteUtilsStringInterface
 {
+    /**
+     * @param FuncCall|Identical $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node instanceof Identical) {
+            return $this->refactorIdentical($node);
+        }
+
+        return $this->refactorFuncCall($node);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [FuncCall::class, Identical::class];
+    }
+
     /**
      * @param array<string, string> $functionRenameMap
      */

@@ -41,6 +41,7 @@ use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
+use Webmozart\Assert\Assert;
 
 final class NodeTypeResolver
 {
@@ -101,6 +102,20 @@ final class NodeTypeResolver
     public function autowireNodeTypeResolver(ArrayTypeAnalyzer $arrayTypeAnalyzer): void
     {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
+    }
+
+    /**
+     * @param string[]|ObjectType[] $requiredTypes
+     */
+    public function isObjectTypes(Node $node, array $requiredTypes): bool
+    {
+        foreach ($requiredTypes as $requiredType) {
+            if ($this->isObjectType($node, $requiredType)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
