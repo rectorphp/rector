@@ -10,6 +10,9 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\If_;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Return_\RemoveDeadConditionAboveReturnRector\RemoveDeadConditionAboveReturnRectorTest
@@ -60,6 +63,33 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if (! $previousNode instanceof If_) {
+            return null;
+        }
+
+        if ($previousNode->elseifs !== []) {
+            return null;
+        }
+
+        if ($previousNode->else instanceof Else_) {
+            return null;
+        }
+
+        if (count($previousNode->stmts) > 1) {
+            return null;
+        }
+
+        $stmt = $previousNode->stmts[0];
+        if (! $stmt instanceof Return_) {
+            return null;
+        }
+
+        if (! $this->areNodesEqual($stmt, $node)) {
+            return null;
+        }
+
+        $this->removeNode($previousNode);
         return $node;
     }
 }
