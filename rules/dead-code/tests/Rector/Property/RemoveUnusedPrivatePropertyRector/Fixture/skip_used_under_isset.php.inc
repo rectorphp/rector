@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-use Rector\Composer\Modifier\ComposerModifier;
-use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\Rector\ComposerModifier;
+use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 
 final class SkipUsedUnderIsset
 {

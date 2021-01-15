@@ -25,7 +25,7 @@ final class MovePackageToRequireTest extends TestCase
         ]);
 
         $movePackageToRequire = new MovePackageToRequire('vendor1/package3');
-        $movePackageToRequire->modify($composerJson);
+        $movePackageToRequire->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
@@ -46,7 +46,7 @@ final class MovePackageToRequireTest extends TestCase
         ]);
 
         $movePackageToRequire = new MovePackageToRequire('vendor1/package1');
-        $movePackageToRequire->modify($composerJson);
+        $movePackageToRequire->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
@@ -69,7 +69,7 @@ final class MovePackageToRequireTest extends TestCase
         ]);
 
         $movePackageToRequire = new MovePackageToRequire('vendor1/package1');
-        $movePackageToRequire->modify($composerJson);
+        $movePackageToRequire->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 }

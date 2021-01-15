@@ -24,7 +24,7 @@ final class ReplacePackageTest extends TestCase
         ]);
 
         $replacePackage = new ReplacePackage('vendor1/package3', 'vendor1/package4', '^3.0');
-        $replacePackage->modify($composerJson);
+        $replacePackage->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
@@ -43,7 +43,7 @@ final class ReplacePackageTest extends TestCase
         ]);
 
         $replacePackage = new ReplacePackage('vendor1/package1', 'vendor1/package3', '^3.0');
-        $replacePackage->modify($composerJson);
+        $replacePackage->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
@@ -66,7 +66,7 @@ final class ReplacePackageTest extends TestCase
         ]);
 
         $replacePackage = new ReplacePackage('vendor1/package2', 'vendor1/package3', '^3.0');
-        $replacePackage->modify($composerJson);
+        $replacePackage->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 }

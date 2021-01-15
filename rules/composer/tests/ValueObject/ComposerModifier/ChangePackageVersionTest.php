@@ -25,7 +25,7 @@ final class ChangePackageVersionTest extends TestCase
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package3', '^3.0');
-        $changePackageVersion->modify($composerJson);
+        $changePackageVersion->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
@@ -44,7 +44,7 @@ final class ChangePackageVersionTest extends TestCase
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package1', '^3.0');
-        $changePackageVersion->modify($composerJson);
+        $changePackageVersion->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
@@ -67,7 +67,7 @@ final class ChangePackageVersionTest extends TestCase
         ]);
 
         $changePackageVersion = new ChangePackageVersion('vendor1/package2', '^3.0');
-        $changePackageVersion->modify($composerJson);
+        $changePackageVersion->refactor($composerJson);
 
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }

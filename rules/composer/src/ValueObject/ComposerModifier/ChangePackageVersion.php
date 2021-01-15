@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\ChangePackageVersionTest
  */
-final class ChangePackageVersion implements ComposerModifierInterface
+final class ChangePackageVersion implements ComposerRectorInterface
 {
     /**
      * @var string
@@ -28,7 +28,7 @@ final class ChangePackageVersion implements ComposerModifierInterface
         $this->targetVersion = $targetVersion;
     }
 
-    public function modify(ComposerJson $composerJson): void
+    public function refactor(ComposerJson $composerJson): void
     {
         $composerJson->changePackageVersion($this->packageName, $this->targetVersion);
     }

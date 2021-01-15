@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Composer\Modifier\ComposerModifier;
+use Rector\Composer\Rector\ComposerModifier;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
 use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
 use Rector\Composer\ValueObject\ComposerModifier\ReplacePackage;

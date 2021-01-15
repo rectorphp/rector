@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
  * Only adds package to require section, if package is already in composer data, nothing happen
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\AddPackageToRequireTest
  */
-final class AddPackageToRequire implements ComposerModifierInterface
+final class AddPackageToRequire implements ComposerRectorInterface
 {
     /**
      * @var string
@@ -29,7 +29,7 @@ final class AddPackageToRequire implements ComposerModifierInterface
         $this->version = $version;
     }
 
-    public function modify(ComposerJson $composerJson): void
+    public function refactor(ComposerJson $composerJson): void
     {
         $composerJson->addRequiredPackage($this->packageName, $this->version);
     }

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\Modifier;
+namespace Rector\Composer\Rector;
 
-use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
+use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Webmozart\Assert\Assert;
 
@@ -24,25 +24,25 @@ final class ComposerModifier
     private $filePath;
 
     /**
-     * @var ComposerModifierInterface[]
+     * @var ComposerRectorInterface[]
      */
     private $configuration = [];
 
     /**
-     * @param ComposerModifierInterface[] $configuration
+     * @param ComposerRectorInterface[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsInstanceOf($configuration, ComposerModifierInterface::class);
+        Assert::allIsInstanceOf($configuration, ComposerRectorInterface::class);
         $this->configuration = array_merge($this->configuration, $configuration);
     }
 
     /**
-     * @param ComposerModifierInterface[] $configuration
+     * @param ComposerRectorInterface[] $configuration
      */
     public function reconfigure(array $configuration): void
     {
-        Assert::allIsInstanceOf($configuration, ComposerModifierInterface::class);
+        Assert::allIsInstanceOf($configuration, ComposerRectorInterface::class);
         $this->configuration = $configuration;
     }
 
@@ -64,7 +64,7 @@ final class ComposerModifier
     public function modify(ComposerJson $composerJson): void
     {
         foreach ($this->configuration as $composerChanger) {
-            $composerChanger->modify($composerJson);
+            $composerChanger->refactor($composerJson);
         }
     }
 }

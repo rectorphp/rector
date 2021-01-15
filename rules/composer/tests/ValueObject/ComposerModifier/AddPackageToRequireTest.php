@@ -26,7 +26,7 @@ final class AddPackageToRequireTest extends TestCase
         ]);
 
         $addPackageToRequire = new AddPackageToRequire('vendor1/package3', '^3.0');
-        $addPackageToRequire->modify($composerJson);
+        $addPackageToRequire->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
@@ -45,7 +45,7 @@ final class AddPackageToRequireTest extends TestCase
         ]);
 
         $addPackageToRequire = new AddPackageToRequire('vendor1/package1', '^3.0');
-        $addPackageToRequire->modify($composerJson);
+        $addPackageToRequire->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
@@ -68,7 +68,7 @@ final class AddPackageToRequireTest extends TestCase
         ]);
 
         $addPackageToRequire = new AddPackageToRequire('vendor1/package2', '^3.0');
-        $addPackageToRequire->modify($composerJson);
+        $addPackageToRequire->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 }

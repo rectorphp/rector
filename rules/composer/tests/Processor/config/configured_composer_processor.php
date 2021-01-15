@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Rector\Composer\Modifier\ComposerModifier;
+use Rector\Composer\Rector\ComposerModifier;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

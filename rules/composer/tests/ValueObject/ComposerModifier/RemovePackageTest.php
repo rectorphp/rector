@@ -25,7 +25,7 @@ final class RemovePackageTest extends TestCase
         ]);
 
         $removePackage = new RemovePackage('vendor1/package3');
-        $removePackage->modify($composerJson);
+        $removePackage->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
@@ -43,7 +43,7 @@ final class RemovePackageTest extends TestCase
         ]);
 
         $removePackage = new RemovePackage('vendor1/package1');
-        $removePackage->modify($composerJson);
+        $removePackage->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 
@@ -63,7 +63,7 @@ final class RemovePackageTest extends TestCase
         ]);
 
         $removePackage = new RemovePackage('vendor1/package2');
-        $removePackage->modify($composerJson);
+        $removePackage->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
 }

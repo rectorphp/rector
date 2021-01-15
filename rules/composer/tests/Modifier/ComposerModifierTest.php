@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Composer\Tests\Modifier;
 
-use Rector\Composer\Modifier\ComposerModifier;
+use Rector\Composer\Rector\ComposerModifier;
 use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
 use Rector\Composer\ValueObject\ComposerModifier\MovePackageToRequireDev;
