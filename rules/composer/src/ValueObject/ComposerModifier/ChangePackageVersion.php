@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\ChangePackageVersionTest
  */
-final class ChangePackageVersion implements ComposerRectorInterface
+final class ChangePackageVersion
 {
     /**
      * @var string

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
  * Only adds package to require section, if package is already in composer data, nothing happen
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\AddPackageToRequireTest
  */
-final class AddPackageToRequire implements ComposerRectorInterface
+final class AddPackageToRequire
 {
     /**
      * @var string

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Webmozart\Assert\Assert;
 
@@ -12,7 +11,7 @@ use Webmozart\Assert\Assert;
  * Replace one package for another
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\ReplacePackageTest
  */
-final class ReplacePackage implements ComposerRectorInterface
+final class ReplacePackage
 {
     /**
      * @var string

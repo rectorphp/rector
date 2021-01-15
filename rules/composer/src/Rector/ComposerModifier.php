@@ -6,7 +6,6 @@ namespace Rector\Composer\Rector;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
-use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Composer\Tests\Modifier\ComposerModifierTest
