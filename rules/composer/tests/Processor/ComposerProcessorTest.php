@@ -2,15 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\Tests\SetTest;
+namespace Rector\Composer\Tests\Processor;
 
 use Iterator;
 use Rector\Composer\Processor\ComposerProcessor;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\HttpKernel\RectorKernel;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class SetTest extends AbstractRectorTestCase
+final class ComposerProcessorTest extends AbstractKernelTestCase
 {
+    /**
+     * @var ComposerProcessor
+     */
+    private $composerProcessor;
+
+    protected function setUp(): void
+    {
+        $this->bootKernel(RectorKernel::class);
+        $this->composerProcessor = $this->getService(ComposerProcessor::class);
+    }
+
     /**
      * @dataProvider provideData()
      */

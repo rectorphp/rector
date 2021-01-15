@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
@@ -10,9 +10,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ComposerModifier::class)
         ->call('setFilePath', [__DIR__ . '/Fixture/composer_before.json'])
-        ->call('configure', [
-            ValueObjectInliner::inline([
-                new ChangePackageVersion('nette/nette', '^3.0'),
-            ]),
-        ]);
+        ->call('configure', [ValueObjectInliner::inline([new ChangePackageVersion('nette/nette', '^3.0')])]);
 };

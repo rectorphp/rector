@@ -13,6 +13,9 @@ use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
+/**
+ * @see \Rector\Composer\Tests\SetTest\ComposerProcessorTest
+ */
 final class ComposerProcessor
 {
     /**
