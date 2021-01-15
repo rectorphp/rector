@@ -6,7 +6,7 @@ namespace Rector\Composer\Rector;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
-use Rector\Composer\ValueObject\ComposerModifier\PackageAndVersion;
+use Rector\Composer\ValueObject\PackageAndVersion;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -53,7 +53,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, PackageAndVersion[]> $configuration
+     * @param array<string, \Rector\Composer\ValueObject\PackageAndVersion[]> $configuration
      */
     public function configure(array $configuration): void
     {

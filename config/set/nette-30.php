@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Rector\Composer\Rector\ComposerModifier;
+use Rector\Composer\ComposerModifier;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
 use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
-use Rector\Composer\ValueObject\ComposerModifier\ReplacePackageAndVersion;
+use Rector\Composer\ValueObject\ReplacePackageAndVersion;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;

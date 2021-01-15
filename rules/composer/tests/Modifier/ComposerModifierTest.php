@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Composer\Tests\Modifier;
 
-use Rector\Composer\Rector\ComposerModifier;
+use Rector\Composer\ComposerModifier;
 use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
 use Rector\Composer\ValueObject\ComposerModifier\MovePackageToRequireDev;
 use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
-use Rector\Composer\ValueObject\ComposerModifier\ReplacePackageAndVersion;
+use Rector\Composer\ValueObject\ReplacePackageAndVersion;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;

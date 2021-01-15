@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Composer\Processor;
 
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
-use Rector\Composer\Rector\ComposerModifier;
+use Rector\Composer\ComposerModifier;
 use Rector\Core\Configuration\Configuration;
 use Symfony\Component\Process\Process;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;

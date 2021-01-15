@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ValueObject\ComposerModifier;
+namespace Rector\Composer\ValueObject;
 
 final class PackageAndVersion
 {

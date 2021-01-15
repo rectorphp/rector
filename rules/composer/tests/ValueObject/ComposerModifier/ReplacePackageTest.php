@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Composer\Tests\ValueObject\ComposerModifier;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Composer\ValueObject\ComposerModifier\ReplacePackageAndVersion;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 final class ReplacePackageTest extends TestCase
@@ -23,7 +22,11 @@ final class ReplacePackageTest extends TestCase
             'vendor1/package2' => '^2.0',
         ]);
 
-        $replacePackage = new ReplacePackageAndVersion('vendor1/package3', 'vendor1/package4', '^3.0');
+        $replacePackage = new \Rector\Composer\ValueObject\ReplacePackageAndVersion(
+            'vendor1/package3',
+            'vendor1/package4',
+            '^3.0'
+        );
         $replacePackage->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
@@ -42,7 +45,11 @@ final class ReplacePackageTest extends TestCase
             'vendor1/package2' => '^2.0',
         ]);
 
-        $replacePackage = new ReplacePackageAndVersion('vendor1/package1', 'vendor1/package3', '^3.0');
+        $replacePackage = new \Rector\Composer\ValueObject\ReplacePackageAndVersion(
+            'vendor1/package1',
+            'vendor1/package3',
+            '^3.0'
+        );
         $replacePackage->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }
@@ -65,7 +72,11 @@ final class ReplacePackageTest extends TestCase
             'vendor1/package3' => '^3.0',
         ]);
 
-        $replacePackage = new ReplacePackageAndVersion('vendor1/package2', 'vendor1/package3', '^3.0');
+        $replacePackage = new \Rector\Composer\ValueObject\ReplacePackageAndVersion(
+            'vendor1/package2',
+            'vendor1/package3',
+            '^3.0'
+        );
         $replacePackage->refactor($composerJson);
         $this->assertSame($expectedComposerJson->getJsonArray(), $composerJson->getJsonArray());
     }

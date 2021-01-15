@@ -2,15 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\ValueObject\ComposerModifier;
+namespace Rector\Composer\ValueObject;
 
 use Rector\Composer\Rector\ChangePackageVersionRector;
 use Webmozart\Assert\Assert;
 
-/**
- * Replace one package for another
- * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\ReplacePackageTest
- */
 final class ReplacePackageAndVersion
 {
     /**
@@ -33,7 +29,7 @@ final class ReplacePackageAndVersion
         Assert::notSame(
             $oldPackageName,
             $newPackageName,
-            '$oldPackageName cannot be the same as $newPackageName. If you want to change version of package, use ' . ChangePackageVersionRector::class
+            'Old and new package have to be different. If you want to only change package version, use ' . ChangePackageVersionRector::class
         );
 
         $this->oldPackageName = $oldPackageName;
