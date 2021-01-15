@@ -30,6 +30,7 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\PackageBuilder\Strings\StringFormatConverter;
 use Symplify\SmartFileSystem\FileSystemFilter;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use Symplify\SmartFileSystem\Json\JsonFileSystem;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -91,6 +92,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SymfonyStyleFactory::class);
     $services->set(SymfonyStyle::class)
         ->factory([service(SymfonyStyleFactory::class), 'create']);
+
+    $services->set(JsonFileSystem::class);
 
     $services->set(InflectorFactory::class);
 

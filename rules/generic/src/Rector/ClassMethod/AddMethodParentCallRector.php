@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -57,7 +58,7 @@ class SunshineCommand extends ParentClassWithNewConstructor
 CODE_SAMPLE
                     , [
                         self::METHODS_BY_PARENT_TYPES => [
-                            'ParentClassWithNewConstructor' => '__construct',
+                            'ParentClassWithNewConstructor' => MethodName::CONSTRUCT,
                         ],
                     ]
                 ),

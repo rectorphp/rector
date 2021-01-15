@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming\ExpectedNameResolver;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
@@ -43,7 +42,7 @@ abstract class AbstractExpectedNameResolver implements ExpectedNameResolverInter
         /** @var string $currentName */
         $currentName = $this->nodeNameResolver->getName($node);
 
-        if ($this->endsWith($currentName, $expectedName)) {
+        if ($this->nodeNameResolver->endsWith($currentName, $expectedName)) {
             return null;
         }
 
@@ -52,15 +51,5 @@ abstract class AbstractExpectedNameResolver implements ExpectedNameResolverInter
         }
 
         return $expectedName;
-    }
-
-    /**
-     * Ends with ucname
-     * Starts with adjective, e.g. (Post $firstPost, Post $secondPost)
-     */
-    protected function endsWith(string $currentName, string $expectedName): bool
-    {
-        $suffixNamePattern = '#\w+' . ucfirst($expectedName) . '#';
-        return (bool) Strings::match($currentName, $suffixNamePattern);
     }
 }

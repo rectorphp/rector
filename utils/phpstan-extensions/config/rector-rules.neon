@@ -1,5 +1,19 @@
 services:
     -
+        class: Symplify\PHPStanRules\Rules\PreventDuplicateClassMethodRule
+        tags: [phpstan.rules.rule]
+
+    -
+        class: Symplify\PHPStanRules\Rules\PreferredMethodCallOverIdenticalCompareRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            identicalToPreferredMethodCalls:
+                Rector\Core\Rector\AbstractRector:
+                    getName: isName
+                Rector\NodeNameResolver\NodeNameResolver:
+                    getName: isName
+
+    -
         class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
         tags: [phpstan.rules.rule]
 
@@ -122,6 +136,7 @@ services:
         arguments:
             parentClasses:
                 - Rector
+                - Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface
 
     -
         class: Symplify\PHPStanRules\Rules\PreferredClassRule

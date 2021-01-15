@@ -11,6 +11,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\ValueObject\MethodName;
 use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
@@ -86,7 +87,7 @@ CODE_SAMPLE
         }
 
         // Contravariant arguments are supported for __construct
-        if ($this->getName($functionLike) === '__construct') {
+        if ($this->isName($functionLike, MethodName::CONSTRUCT)) {
             return false;
         }
 

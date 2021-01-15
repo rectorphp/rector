@@ -13,7 +13,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ClassMethodReturnTypeOverrideGuard
 {
@@ -29,9 +29,15 @@ final class ClassMethodReturnTypeOverrideGuard
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function shouldSkipClassMethod(ClassMethod $classMethod): bool
@@ -107,8 +113,8 @@ final class ClassMethodReturnTypeOverrideGuard
                 return false;
             }
 
-            $oldClass = $this->resolveClass($oldTypeWithClassName);
-            $newClass = $this->resolveClass($newUnionedType);
+            $oldClass = $this->nodeTypeResolver->getFullyQualifiedClassName($oldTypeWithClassName);
+            $newClass = $this->nodeTypeResolver->getFullyQualifiedClassName($newUnionedType);
 
             if (is_a($oldClass, $newClass, true) || is_a($newClass, $oldClass, true)) {
                 $isMatchingClassTypes = true;
@@ -118,14 +124,5 @@ final class ClassMethodReturnTypeOverrideGuard
         }
 
         return $isMatchingClassTypes;
-    }
-
-    private function resolveClass(TypeWithClassName $typeWithClassName): string
-    {
-        if ($typeWithClassName instanceof ShortenedObjectType) {
-            return $typeWithClassName->getFullyQualifiedName();
-        }
-
-        return $typeWithClassName->getClassName();
     }
 }

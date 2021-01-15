@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\MockeryToProphecy\Collector\MockVariableCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -33,6 +34,16 @@ final class MockistaMockToMockeryMockRector extends AbstractPHPUnitRector
      * @var string[]
      */
     private $mockVariableTypesByNames = [];
+
+    /**
+     * @var MockVariableCollector
+     */
+    private $mockVariableCollector;
+
+    public function __construct(MockVariableCollector $mockVariableCollector)
+    {
+        $this->mockVariableCollector = $mockVariableCollector;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -102,7 +113,11 @@ CODE_SAMPLE
             }
 
             /** @var FuncCall $node */
-            $this->collectMockVariableName($node);
+            $collectedVariableTypesByNames = $this->mockVariableCollector->collectMockVariableName($node);
+            $this->mockVariableTypesByNames = array_merge(
+                $this->mockVariableTypesByNames,
+                $collectedVariableTypesByNames
+            );
 
             return $this->createStaticCall('Mockery', 'mock', $node->args);
         });
@@ -214,29 +229,6 @@ CODE_SAMPLE
 
             [$node->name, $previousMethodCall->name] = [$previousMethodCall->name, $node->name];
         });
-    }
-
-    private function collectMockVariableName(FuncCall $funcCall): void
-    {
-        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Assign) {
-            return;
-        }
-
-        if (! $parentNode->var instanceof Variable) {
-            return;
-        }
-
-        /** @var Variable $variable */
-        $variable = $parentNode->var;
-
-        /** @var string $variableName */
-        $variableName = $this->getName($variable);
-
-        $type = $funcCall->args[0]->value;
-        $mockedType = $this->getValue($type);
-
-        $this->mockVariableTypesByNames[$variableName] = $mockedType;
     }
 
     private function isMethodCallOrPropertyFetchOnMockVariable(Node $node): bool
