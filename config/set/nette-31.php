@@ -14,6 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)->call('configure', [[
         RenameClassRector::OLD_TO_NEW_CLASSES => [
+            // https://github.com/nette/application/compare/v3.0.7...v3.1.0
             'Nette\Application\IRouter' => 'Nette\Routing\Router',  // TODO not sure about this, it is not simple rename, Nette\Routing\Router already exists in nette/routing
             'Nette\Application\IResponse' => 'Nette\Application\Response',
             'Nette\Application\UI\IRenderable' => 'Nette\Application\UI\Renderable',
@@ -22,6 +23,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Nette\Application\UI\ITemplate' => 'Nette\Application\UI\Template',
             'Nette\Application\UI\ITemplateFactory' => 'Nette\Application\UI\TemplateFactory',
             'Nette\Bridges\ApplicationLatte\ILatteFactory' => 'Nette\Bridges\ApplicationLatte\LatteFactory',
+
+            // https://github.com/nette/bootstrap/compare/v3.0.2...v3.1.0
+            'Nette\Configurator' => 'Nette\Bootstrap\Configurator',
+
+            // https://github.com/nette/caching/compare/v3.0.2...v3.1.0
+            'Nette\Caching\IBulkReader' => 'Nette\Caching\BulkReader',
+            'Nette\Caching\IStorage' => 'Nette\Caching\Storage',
+            'Nette\Caching\Storages\IJournal' => 'Nette\Caching\Storages\Journal',
+
+            // https://github.com/nette/database/compare/v3.0.7...v3.1.1
+            'Nette\Database\ISupplementalDriver' => 'Nette\Database\Driver',
+            'Nette\Database\IConventions' => 'Nette\Database\Conventions',
+            'Nette\Database\Context' => 'Nette\Database\Explorer',
         ],
     ]]);
 
