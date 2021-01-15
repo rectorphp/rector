@@ -8,13 +8,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\Naming\ConstantNaming;
 
 final class PropertyFetchWithConstFetchReplacer
@@ -39,16 +38,23 @@ final class PropertyFetchWithConstFetchReplacer
      */
     private $constantNaming;
 
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        ConstantNaming $constantNaming
+        ConstantNaming $constantNaming,
+        NodeFactory $nodeFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->constantNaming = $constantNaming;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function replace(Class_ $class, Property $property): void
@@ -72,20 +78,7 @@ final class PropertyFetchWithConstFetchReplacer
             }
 
             // replace with constant fetch
-            // replace with constant fetch
-            $name = $this->createSelf($node);
-            return new ClassConstFetch($name, $constantName);
+            return $this->nodeFactory->createSelfFetchConstant($constantName, $node);
         });
-    }
-
-    /**
-     * @param PropertyFetch|StaticPropertyFetch $propertyFetch
-     */
-    private function createSelf($propertyFetch): Name
-    {
-        $name = new Name('self');
-        $name->setAttribute(AttributeKey::CLASS_NAME, $propertyFetch->getAttribute(AttributeKey::CLASS_NAME));
-
-        return $name;
     }
 }

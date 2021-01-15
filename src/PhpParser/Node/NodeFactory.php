@@ -482,6 +482,13 @@ final class NodeFactory
         return new FuncCall(new Name($name), $arguments);
     }
 
+    public function createSelfFetchConstant(string $constantName, Node $node): ClassConstFetch
+    {
+        $name = new Name('self');
+        $name->setAttribute(AttributeKey::CLASS_NAME, $node->getAttribute(AttributeKey::CLASS_NAME));
+        return new ClassConstFetch($name, $constantName);
+    }
+
     private function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
     {
         $classConstFetchNode = $this->builderFactory->classConstFetch($className, $constantName);
