@@ -9,6 +9,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ComposerModifier::class)
-        ->call('setFilePath', [__DIR__ . '/Fixture/composer_before.json'])
+        ->call('setFilePath', [__DIR__ . '/../Fixture/composer_before.json'])
         ->call('configure', [ValueObjectInliner::inline([new ChangePackageVersion('nette/nette', '^3.0')])]);
 };
