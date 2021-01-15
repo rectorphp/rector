@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Naming;
 
-use Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
@@ -48,6 +47,7 @@ final class ExpectedNameResolver
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
+
     /**
      * @var MatchParamTypeExpectedNameResolver
      */
@@ -84,7 +84,7 @@ final class ExpectedNameResolver
             return null;
         }
 
-        if ($this->endsWith($currentName, $expectedName)) {
+        if ($this->nodeNameResolver->endsWith($currentName, $expectedName)) {
             return null;
         }
 
@@ -219,16 +219,6 @@ final class ExpectedNameResolver
         }
 
         return $expectedNameFromMethodName->getSingularized();
-    }
-
-    /**
-     * Ends with ucname
-     * Starts with adjective, e.g. (Post $firstPost, Post $secondPost)
-     */
-    private function endsWith(string $currentName, string $expectedName): bool
-    {
-        $suffixNamePattern = '#\w+' . ucfirst($expectedName) . '#';
-        return (bool) Strings::match($currentName, $suffixNamePattern);
     }
 
     /**

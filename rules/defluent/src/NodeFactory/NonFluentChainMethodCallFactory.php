@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
+use Rector\Defluent\NodeResolver\FirstMethodCallVarResolver;
 use Rector\Defluent\ValueObject\AssignAndRootExpr;
 use Rector\Defluent\ValueObject\FluentCallsKind;
 use Rector\NetteKdyby\Naming\VariableNaming;
@@ -29,14 +30,14 @@ final class NonFluentChainMethodCallFactory
     private $variableNaming;
 
     /**
-     * @var \Rector\Defluent\NodeResolver\FirstMethodCallVarResolver
+     * @var FirstMethodCallVarResolver
      */
     private $firstMethodCallVarResolver;
 
     public function __construct(
         FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
         VariableNaming $variableNaming,
-        \Rector\Defluent\NodeResolver\FirstMethodCallVarResolver $firstMethodCallVarResolver
+        FirstMethodCallVarResolver $firstMethodCallVarResolver
     ) {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
         $this->variableNaming = $variableNaming;

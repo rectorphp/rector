@@ -43,7 +43,7 @@ parameters:
     scanDirectories:
         - stubs
 
-#    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
 
     checkGenericClassInNonGenericObjectType: false
 
@@ -513,3 +513,9 @@ parameters:
                 - utils/phpstan-extensions/src/ReturnTypeExtension/NodeFinder/FindFirstInstanceOfReturnTypeExtension.php
 
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node#'
+
+
+        -
+             message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\.#'
+             paths:
+                 - config/set/*

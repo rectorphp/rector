@@ -39,6 +39,7 @@ use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 final class NodeTypeResolver
@@ -284,6 +285,15 @@ final class NodeTypeResolver
         }
 
         return $this->isStaticType($defaultNodeValue, BooleanType::class);
+    }
+
+    public function getFullyQualifiedClassName(TypeWithClassName $typeWithClassName): string
+    {
+        if ($typeWithClassName instanceof ShortenedObjectType) {
+            return $typeWithClassName->getFullyQualifiedName();
+        }
+
+        return $typeWithClassName->getClassName();
     }
 
     private function addNodeTypeResolver(NodeTypeResolverInterface $nodeTypeResolver): void

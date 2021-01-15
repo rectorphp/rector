@@ -4,28 +4,27 @@ declare(strict_types=1);
 
 namespace Rector\PSR4\Composer;
 
-use Nette\Utils\Json;
-use Symplify\SmartFileSystem\SmartFileSystem;
+use Symplify\SmartFileSystem\Json\JsonFileSystem;
 
 final class PSR4AutoloadPathsProvider
 {
     /**
-     * @var array<string, string[]>
+     * @var array<string, array<string, string>>
      */
     private $cachedComposerJsonPSR4AutoloadPaths = [];
 
     /**
-     * @var SmartFileSystem
+     * @var JsonFileSystem
      */
-    private $smartFileSystem;
+    private $jsonFileSystem;
 
-    public function __construct(SmartFileSystem $smartFileSystem)
+    public function __construct(JsonFileSystem $jsonFileSystem)
     {
-        $this->smartFileSystem = $smartFileSystem;
+        $this->jsonFileSystem = $jsonFileSystem;
     }
 
     /**
-     * @return array<string, string[]>
+     * @return array<string, array<string, string>>
      */
     public function provide(): array
     {
@@ -33,7 +32,7 @@ final class PSR4AutoloadPathsProvider
             return $this->cachedComposerJsonPSR4AutoloadPaths;
         }
 
-        $composerJson = $this->readFileToJsonArray($this->getComposerJsonPath());
+        $composerJson = $this->jsonFileSystem->loadFilePathToJson($this->getComposerJsonPath());
         $psr4Autoloads = array_merge(
             $composerJson['autoload']['psr-4'] ?? [],
             $composerJson['autoload-dev']['psr-4'] ?? []
@@ -44,16 +43,6 @@ final class PSR4AutoloadPathsProvider
         return $this->cachedComposerJsonPSR4AutoloadPaths;
     }
 
-    /**
-     * @return mixed[]
-     */
-    private function readFileToJsonArray(string $composerJson): array
-    {
-        $composerJsonContent = $this->smartFileSystem->readFile($composerJson);
-
-        return Json::decode($composerJsonContent, Json::FORCE_ARRAY);
-    }
-
     private function getComposerJsonPath(): string
     {
         // assume the project has "composer.json" in root directory
@@ -61,8 +50,8 @@ final class PSR4AutoloadPathsProvider
     }
 
     /**
-     * @param array<string, string[]> $psr4Autoloads
-     * @return array<string, string[]>
+     * @param array<string, array<string, string>> $psr4Autoloads
+     * @return array<string, array<string, string>>
      */
     private function removeEmptyNamespaces(array $psr4Autoloads): array
     {

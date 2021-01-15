@@ -218,6 +218,16 @@ final class NodeNameResolver
         return $this->isNames($node, $names);
     }
 
+    /**
+     * Ends with ucname
+     * Starts with adjective, e.g. (Post $firstPost, Post $secondPost)
+     */
+    public function endsWith(string $currentName, string $expectedName): bool
+    {
+        $suffixNamePattern = '#\w+' . ucfirst($expectedName) . '#';
+        return (bool) Strings::match($currentName, $suffixNamePattern);
+    }
+
     private function isCallOrIdentifier(Node $node): bool
     {
         return StaticInstanceOf::isOneOf($node, [MethodCall::class, StaticCall::class, Identifier::class]);

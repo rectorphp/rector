@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Util\StaticInstanceOf;
 
 final class ContextAnalyzer
 {
@@ -47,7 +48,7 @@ final class ContextAnalyzer
             return false;
         }
 
-        return $this->isTypes($firstParent, self::LOOP_NODES);
+        return StaticInstanceOf::isOneOf($firstParent, self::LOOP_NODES);
     }
 
     public function isInIf(Node $node): bool
@@ -60,20 +61,6 @@ final class ContextAnalyzer
             return false;
         }
 
-        return $this->isTypes($previousNode, [If_::class]);
-    }
-
-    /**
-     * @param class-string[] $types
-     */
-    public function isTypes(object $object, array $types): bool
-    {
-        foreach ($types as $type) {
-            if (is_a($object, $type, true)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $previousNode instanceof If_;
     }
 }
