@@ -16,6 +16,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -185,7 +186,7 @@ CODE_SAMPLE
             }
 
             $constantName = $this->createConstName($node->value);
-            return new ClassConstFetch(new Name('self'), $constantName);
+            return $this->nodeFactory->createSelfFetchConstant($constantName, $node);
         });
     }
 
