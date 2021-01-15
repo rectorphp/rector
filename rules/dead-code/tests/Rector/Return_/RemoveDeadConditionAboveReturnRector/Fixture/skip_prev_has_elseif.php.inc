@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Return_\RemoveDeadConditionAboveReturnRector\Fixture;
 
-class SkipPrevHasElseIf
+class SkipPrevHasElseif
 {
     public function run()
     {
