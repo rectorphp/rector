@@ -75,8 +75,8 @@ final class ComposerProcessor
         $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
 
         $oldContents = $smartFileInfo->getContents();
-        $newComposerJson = $this->composerModifier->modify($composerJson);
-        $newContents = $this->composerJsonPrinter->printToString($newComposerJson);
+        $this->composerModifier->modify($composerJson);
+        $newContents = $this->composerJsonPrinter->printToString($composerJson);
 
         // nothing has changed
         if ($oldContents === $newContents) {

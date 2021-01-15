@@ -48,9 +48,8 @@ final class ReplacePackage implements ComposerModifierInterface
         $this->targetVersion = new Version($targetVersion);
     }
 
-    public function modify(ComposerJson $composerJson): ComposerJson
+    public function modify(ComposerJson $composerJson): void
     {
         $composerJson->replacePackage($this->oldPackageName, $this->newPackageName, $this->targetVersion->getVersion());
-        return $composerJson;
     }
 }

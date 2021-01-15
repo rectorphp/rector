@@ -34,9 +34,8 @@ final class AddPackageToRequireDev implements ComposerModifierInterface
         $this->version = new Version($version);
     }
 
-    public function modify(ComposerJson $composerJson): ComposerJson
+    public function modify(ComposerJson $composerJson): void
     {
         $composerJson->addRequiredDevPackage($this->packageName, $this->version->getVersion());
-        return $composerJson;
     }
 }
