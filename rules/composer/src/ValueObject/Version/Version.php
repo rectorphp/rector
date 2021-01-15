@@ -13,9 +13,6 @@ final class Version
      */
     private $version;
 
-    /**
-     * @param string $version version string
-     */
     public function __construct(string $version)
     {
         $versionParser = new VersionParser();

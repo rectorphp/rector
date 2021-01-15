@@ -1,5 +1,5 @@
 {
     "require": {
-        "nette/nette": "^2.4"
+        "nette/nette": "^3.0"
     }
 }

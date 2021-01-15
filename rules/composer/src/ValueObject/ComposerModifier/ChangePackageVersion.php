@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
 use Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface;
-use Rector\Composer\ValueObject\Version\Version;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 
 /**
@@ -19,18 +18,18 @@ final class ChangePackageVersion implements ComposerModifierInterface
     private $packageName;
 
     /**
-     * @var Version
+     * @var string
      */
     private $targetVersion;
 
     public function __construct(string $packageName, string $targetVersion)
     {
         $this->packageName = $packageName;
-        $this->targetVersion = new Version($targetVersion);
+        $this->targetVersion = $targetVersion;
     }
 
     public function modify(ComposerJson $composerJson): void
     {
-        $composerJson->changePackageVersion($this->packageName, $this->targetVersion->getVersion());
+        $composerJson->changePackageVersion($this->packageName, $this->targetVersion);
     }
 }
