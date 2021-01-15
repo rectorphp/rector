@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\Composer\Rector\ComposerModifier;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
 use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
-use Rector\Composer\ValueObject\ComposerModifier\ReplacePackage;
+use Rector\Composer\ValueObject\ComposerModifier\ReplacePackageAndVersion;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
@@ -129,7 +129,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new ChangePackageVersion('latte/latte', '^2.5'),
                 new ChangePackageVersion('tracy/tracy', '^2.6'),
                 // webchemistry to contributte
-                new ReplacePackage('webchemistry/forms-multiplier', 'contributte/forms-multiplier', '3.1.x-dev'),
+                new ReplacePackageAndVersion(
+                    'webchemistry/forms-multiplier',
+                    'contributte/forms-multiplier',
+                    '3.1.x-dev'
+                ),
                 // contributte packages
                 new ChangePackageVersion('contributte/event-dispatcher-extra', '^0.8'),
                 new ChangePackageVersion('contributte/forms-multiplier', '3.1.x-dev'),

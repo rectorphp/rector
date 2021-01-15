@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-/**
- * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\AddPackageToRequireTest
- */
-final class AddPackageToRequire
+final class PackageAndVersion
 {
     /**
      * @var string

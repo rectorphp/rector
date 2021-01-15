@@ -9,7 +9,7 @@ use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
 use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
 use Rector\Composer\ValueObject\ComposerModifier\MovePackageToRequireDev;
 use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
-use Rector\Composer\ValueObject\ComposerModifier\ReplacePackage;
+use Rector\Composer\ValueObject\ComposerModifier\ReplacePackageAndVersion;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
@@ -122,7 +122,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new MovePackageToRequireDev('vendor1/package1'),
-            new ReplacePackage('vendor1/package2', 'vendor2/package1', '^3.0'),
+            new ReplacePackageAndVersion('vendor1/package2', 'vendor2/package1', '^3.0'),
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 
@@ -150,7 +150,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([new MovePackageToRequireDev('vendor1/package1')]);
-        $composerModifier->configure([new ReplacePackage('vendor1/package2', 'vendor2/package1', '^3.0')]);
+        $composerModifier->configure([new ReplacePackageAndVersion('vendor1/package2', 'vendor2/package1', '^3.0')]);
         $composerModifier->configure([new ChangePackageVersion('vendor1/package3', '~3.0.0')]);
 
         $composerJson = new ComposerJson();
@@ -177,7 +177,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         /** @var ComposerModifier $composerModifier */
         $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([new MovePackageToRequireDev('vendor1/package1')]);
-        $composerModifier->reconfigure([new ReplacePackage('vendor1/package2', 'vendor2/package1', '^3.0')]);
+        $composerModifier->reconfigure([new ReplacePackageAndVersion('vendor1/package2', 'vendor2/package1', '^3.0')]);
         $composerModifier->configure([new ChangePackageVersion('vendor1/package3', '~3.0.0')]);
 
         $composerJson = new ComposerJson();
@@ -203,7 +203,7 @@ final class ComposerModifierTest extends AbstractKernelTestCase
         $composerModifier = $this->getService(ComposerModifier::class);
         $composerModifier->configure([
             new MovePackageToRequireDev('vendor1/package1'),
-            new ReplacePackage('vendor1/package2', 'vendor1/package0', '^3.0'),
+            new ReplacePackageAndVersion('vendor1/package2', 'vendor1/package0', '^3.0'),
             new ChangePackageVersion('vendor1/package3', '~3.0.0'),
         ]);
 

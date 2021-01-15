@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject\ComposerModifier;
 
-use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use Rector\Composer\Rector\ChangePackageVersionRector;
 use Webmozart\Assert\Assert;
 
 /**
  * Replace one package for another
  * @see \Rector\Composer\Tests\ValueObject\ComposerModifier\ReplacePackageTest
  */
-final class ReplacePackage
+final class ReplacePackageAndVersion
 {
     /**
      * @var string
@@ -33,7 +33,7 @@ final class ReplacePackage
         Assert::notSame(
             $oldPackageName,
             $newPackageName,
-            '$oldPackageName cannot be the same as $newPackageName. If you want to change version of package, use ' . ChangePackageVersion::class
+            '$oldPackageName cannot be the same as $newPackageName. If you want to change version of package, use ' . ChangePackageVersionRector::class
         );
 
         $this->oldPackageName = $oldPackageName;
@@ -41,8 +41,18 @@ final class ReplacePackage
         $this->targetVersion = $targetVersion;
     }
 
-    public function refactor(ComposerJson $composerJson): void
+    public function getOldPackageName(): string
     {
-        $composerJson->replacePackage($this->oldPackageName, $this->newPackageName, $this->targetVersion);
+        return $this->oldPackageName;
+    }
+
+    public function getNewPackageName(): string
+    {
+        return $this->newPackageName;
+    }
+
+    public function getTargetVersion(): string
+    {
+        return $this->targetVersion;
     }
 }

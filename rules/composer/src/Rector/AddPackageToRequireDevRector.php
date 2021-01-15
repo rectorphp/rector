@@ -5,34 +5,36 @@ declare(strict_types=1);
 namespace Rector\Composer\Rector;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
-use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
 use Rector\Composer\ValueObject\ComposerModifier\PackageAndVersion;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-final class AddPackageToRequireRector implements ComposerRectorInterface
+final class AddPackageToRequireDevRector implements ComposerRectorInterface
 {
     /**
      * @var string
      */
-    public const PACKAGES_AND_VERSIONS = 'packages_and_versions';
+    public const PACKAGES_AND_VERSIONS = 'packages_and_version';
 
     /**
-     * @var AddPackageToRequire[]
+     * @var PackageAndVersion[]
      */
-    private $packagesAndVersions = [];
+    private $packageAndVersions = [];
 
     public function refactor(ComposerJson $composerJson): void
     {
-        foreach ($this->packagesAndVersions as $packageAndVersion) {
-            $composerJson->addRequiredPackage($packageAndVersion->getPackageName(), $packageAndVersion->getVersion());
+        foreach ($this->packageAndVersions as $packageAndVersion) {
+            $composerJson->addRequiredDevPackage(
+                $packageAndVersion->getPackageName(),
+                $packageAndVersion->getVersion()
+            );
         }
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add package to "require" in `composer.json`', [new ConfiguredCodeSample(
+        return new RuleDefinition('Add package to "require-dev" in `composer.json`', [new ConfiguredCodeSample(
             <<<'CODE_SAMPLE'
 {
 }
@@ -40,7 +42,7 @@ CODE_SAMPLE
             ,
             <<<'CODE_SAMPLE'
 {
-    "require": {
+    "require-dev": {
         "symfony/console": "^3.4"
     }
 }
@@ -57,6 +59,6 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? [];
+        $this->packageAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? [];
     }
 }

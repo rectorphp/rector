@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Rector\Composer\Rector;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
-use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
 use Rector\Composer\ValueObject\ComposerModifier\PackageAndVersion;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-final class AddPackageToRequireRector implements ComposerRectorInterface
+final class ChangePackageVersionRector implements ComposerRectorInterface
 {
     /**
      * @var string
@@ -19,34 +18,40 @@ final class AddPackageToRequireRector implements ComposerRectorInterface
     public const PACKAGES_AND_VERSIONS = 'packages_and_versions';
 
     /**
-     * @var AddPackageToRequire[]
+     * @var PackageAndVersion[]
      */
     private $packagesAndVersions = [];
 
     public function refactor(ComposerJson $composerJson): void
     {
-        foreach ($this->packagesAndVersions as $packageAndVersion) {
-            $composerJson->addRequiredPackage($packageAndVersion->getPackageName(), $packageAndVersion->getVersion());
+        foreach ($this->packagesAndVersions as $packagesAndVersion) {
+            $composerJson->changePackageVersion(
+                $packagesAndVersion->getPackageName(),
+                $packagesAndVersion->getVersion()
+            );
         }
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add package to "require" in `composer.json`', [new ConfiguredCodeSample(
+        return new RuleDefinition('Change package version `composer.json`', [new ConfiguredCodeSample(
             <<<'CODE_SAMPLE'
 {
+    "require-dev": {
+        "symfony/console": "^3.4"
+    }
 }
 CODE_SAMPLE
             ,
             <<<'CODE_SAMPLE'
 {
     "require": {
-        "symfony/console": "^3.4"
+        "symfony/console": "^4.4"
     }
 }
 CODE_SAMPLE
             , [
-                self::PACKAGES_AND_VERSIONS => [new PackageAndVersion('symfony/console', '^3.4')],
+                self::PACKAGES_AND_VERSIONS => [new PackageAndVersion('symfony/console', '^4.4')],
             ]
         ),
         ]);
