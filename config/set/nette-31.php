@@ -39,14 +39,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
     ]]);
 
-    // TODO not working now because of https://github.com/rectorphp/rector/issues/5171
     $services->set(ComposerModifier::class)
         ->call('configure', [
             ValueObjectInliner::inline([
                 // meta package
                 new ChangePackageVersion('nette/nette', '^3.1'),
                 // https://github.com/nette/nette/blob/v3.0.0/composer.json vs https://github.com/nette/nette/blob/v3.1.0/composer.json
-                new ChangePackageVersion('php', '^7.2'),
                 new ChangePackageVersion('nette/application', '^3.1'),
                 new ChangePackageVersion('nette/bootstrap', '^3.1'),
                 new ChangePackageVersion('nette/caching', '^3.1'),
