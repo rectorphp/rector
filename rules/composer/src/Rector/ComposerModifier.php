@@ -21,39 +21,29 @@ final class ComposerModifier
     /**
      * @var string|null
      */
-    private $filePath;
+    private $composerJsonFilePath;
 
     /**
      * @var ComposerRectorInterface[]
      */
-    private $configuration = [];
+    private $composerRectors = [];
 
     /**
-     * @param ComposerRectorInterface[] $configuration
+     * @param ComposerRectorInterface[] $composerRectors
      */
-    public function configure(array $configuration): void
+    public function __construct(array $composerRectors)
     {
-        Assert::allIsInstanceOf($configuration, ComposerRectorInterface::class);
-        $this->configuration = array_merge($this->configuration, $configuration);
-    }
-
-    /**
-     * @param ComposerRectorInterface[] $configuration
-     */
-    public function reconfigure(array $configuration): void
-    {
-        Assert::allIsInstanceOf($configuration, ComposerRectorInterface::class);
-        $this->configuration = $configuration;
+        $this->composerRectors = $composerRectors;
     }
 
     public function setFilePath(string $filePath): void
     {
-        $this->filePath = $filePath;
+        $this->composerJsonFilePath = $filePath;
     }
 
     public function getFilePath(): string
     {
-        return $this->filePath ?: getcwd() . '/composer.json';
+        return $this->composerJsonFilePath ?: getcwd() . '/composer.json';
     }
 
     public function getCommand(): string
@@ -63,7 +53,7 @@ final class ComposerModifier
 
     public function modify(ComposerJson $composerJson): void
     {
-        foreach ($this->configuration as $composerChanger) {
+        foreach ($this->composerRectors as $composerChanger) {
             $composerChanger->refactor($composerJson);
         }
     }
