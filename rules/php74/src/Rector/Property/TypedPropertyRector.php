@@ -16,6 +16,7 @@ use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\DeadDocBlock\TagRemover\VarTagRemover;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -62,7 +63,7 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
     private $doctrineTypeAnalyzer;
 
     /**
-     * @var \Rector\DeadDocBlock\TagRemover\VarTagRemover
+     * @var VarTagRemover
      */
     private $varTagRemover;
 
@@ -70,7 +71,7 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
         PropertyTypeInferer $propertyTypeInferer,
         VendorLockResolver $vendorLockResolver,
         DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        \Rector\DeadDocBlock\TagRemover\VarTagRemover $varTagRemover
+        VarTagRemover $varTagRemover
     ) {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
