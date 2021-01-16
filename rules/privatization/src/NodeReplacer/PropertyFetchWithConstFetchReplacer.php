@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Privatization\Naming\ConstantNaming;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class PropertyFetchWithConstFetchReplacer
 {
@@ -24,7 +24,7 @@ final class PropertyFetchWithConstFetchReplacer
     private $nodeNameResolver;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -45,7 +45,7 @@ final class PropertyFetchWithConstFetchReplacer
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         ConstantNaming $constantNaming,
         NodeFactory $nodeFactory

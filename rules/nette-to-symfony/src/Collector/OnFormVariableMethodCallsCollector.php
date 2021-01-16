@@ -10,14 +10,14 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class OnFormVariableMethodCallsCollector
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -33,7 +33,7 @@ final class OnFormVariableMethodCallsCollector
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;

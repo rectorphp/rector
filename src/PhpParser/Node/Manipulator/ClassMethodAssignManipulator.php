@@ -24,12 +24,12 @@ use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ClassMethodAssignManipulator
 {
@@ -39,7 +39,7 @@ final class ClassMethodAssignManipulator
     private $variableManipulator;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -71,7 +71,7 @@ final class ClassMethodAssignManipulator
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         VariableManipulator $variableManipulator,

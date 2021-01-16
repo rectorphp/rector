@@ -18,12 +18,12 @@ use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpDoc\PhpDocClassRenamer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ClassRenamer
 {
@@ -43,7 +43,7 @@ final class ClassRenamer
     private $nodeNameResolver;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -64,7 +64,7 @@ final class ClassRenamer
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         ClassNaming $classNaming,
         DocBlockManipulator $docBlockManipulator,
         NodeNameResolver $nodeNameResolver,

@@ -19,9 +19,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ShortNameResolver
@@ -38,7 +38,7 @@ final class ShortNameResolver
     private $shortNamesByFilePath = [];
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -48,7 +48,7 @@ final class ShortNameResolver
     private $currentFileInfoProvider;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         CurrentFileInfoProvider $currentFileInfoProvider
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;

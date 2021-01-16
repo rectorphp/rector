@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ParentGetterStmtsToExternalStmtsFactory
 {
@@ -22,7 +22,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
     private $nodeTypeResolver;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -33,7 +33,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
 
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;

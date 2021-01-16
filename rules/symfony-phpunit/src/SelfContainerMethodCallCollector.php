@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeAnalyzer;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class SelfContainerMethodCallCollector
 {
@@ -20,7 +20,7 @@ final class SelfContainerMethodCallCollector
     private $kernelTestCaseNodeAnalyzer;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -30,7 +30,7 @@ final class SelfContainerMethodCallCollector
     private $valueResolver;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
         ValueResolver $valueResolver
     ) {

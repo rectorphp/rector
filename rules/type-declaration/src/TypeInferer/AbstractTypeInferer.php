@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer;
 
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 abstract class AbstractTypeInferer
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     protected $callableNodeTraverser;
 
@@ -41,7 +41,7 @@ abstract class AbstractTypeInferer
      * @required
      */
     public function autowireAbstractTypeInferer(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         StaticTypeMapper $staticTypeMapper,

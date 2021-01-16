@@ -20,11 +20,11 @@ use Rector\CodeQuality\TypeResolver\ArrayDimFetchTypeResolver;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class LocalPropertyAnalyzer
 {
@@ -34,7 +34,7 @@ final class LocalPropertyAnalyzer
     private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -74,7 +74,7 @@ final class LocalPropertyAnalyzer
     private $typeFactory;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         ClassNodeAnalyzer $classNodeAnalyzer,
         NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,

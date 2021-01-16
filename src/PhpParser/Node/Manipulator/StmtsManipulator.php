@@ -8,13 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class StmtsManipulator
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -25,7 +25,7 @@ final class StmtsManipulator
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
-        CallableNodeTraverser $callableNodeTraverser
+        SimpleCallableNodeTraverser $callableNodeTraverser
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;

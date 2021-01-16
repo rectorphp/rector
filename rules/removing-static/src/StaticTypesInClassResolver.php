@@ -8,14 +8,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class StaticTypesInClassResolver
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -24,7 +24,7 @@ final class StaticTypesInClassResolver
      */
     private $nodeTypeResolver;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser, NodeTypeResolver $nodeTypeResolver)
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeTypeResolver = $nodeTypeResolver;

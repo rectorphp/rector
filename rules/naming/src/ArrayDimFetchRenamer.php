@@ -12,13 +12,13 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ArrayDimFetchRenamer
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -28,7 +28,7 @@ final class ArrayDimFetchRenamer
     private $betterStandardPrinter;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;

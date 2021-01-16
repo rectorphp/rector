@@ -7,7 +7,6 @@ namespace Rector\Naming\PropertyRenamer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
 use Rector\Naming\Contract\RenameGuard\RenameGuardInterface;
 use Rector\Naming\Contract\RenamerInterface;
@@ -19,6 +18,7 @@ use Rector\Naming\Guard\RamseyUuidInterfaceGuard;
 use Rector\Naming\RenameGuard\PropertyRenameGuard;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 abstract class AbstractPropertyRenamer implements RenamerInterface
 {
@@ -61,7 +61,7 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
      * @required
      */
     public function autowireAbstractPropertyRenamer(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         NotPrivatePropertyGuard $notPrivatePropertyGuard,
         RamseyUuidInterfaceGuard $ramseyUuidInterfaceGuard,

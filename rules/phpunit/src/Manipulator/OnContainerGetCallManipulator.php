@@ -11,13 +11,13 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\Collector\FormerVariablesByMethodCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\SymfonyPHPUnit\Naming\ServiceNaming;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeAnalyzer;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class OnContainerGetCallManipulator
 {
@@ -27,7 +27,7 @@ final class OnContainerGetCallManipulator
     private $nodeNameResolver;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
     private $callableNodeTraverser;
 
@@ -57,7 +57,7 @@ final class OnContainerGetCallManipulator
     private $formerVariablesByMethodCollector;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $callableNodeTraverser,
         KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
         NodeNameResolver $nodeNameResolver,
         NodesToRemoveCollector $nodesToRemoveCollector,
