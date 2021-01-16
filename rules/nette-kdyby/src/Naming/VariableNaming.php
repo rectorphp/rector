@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Naming;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -100,15 +101,16 @@ final class VariableNaming
             $name = $fallbackName;
         }
 
-        return lcfirst($this->createCountedValueName($name, $scope));
-    }
-
-    public function createCountedValueName(string $valueName, ?Scope $scope): string
-    {
-        if ($scope === null) {
-            return $valueName;
+        if (Strings::contains($name, '\\')) {
+            $name = Strings::after($name, '\\', - 1);
         }
 
+        $countedValueName = $this->createCountedValueName($name, $scope);
+        return lcfirst($countedValueName);
+    }
+
+    public function createCountedValueName(string $valueName, Scope $scope): string
+    {
         // make sure variable name is unique
         if (! $scope->hasVariableType($valueName)->yes()) {
             return $valueName;
