@@ -64,7 +64,7 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
         $returnType = new MixedType();
 
         // resolve property assigns
-        $this->callableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) use (
             $propertyNames,
             &$returnType
         ): ?int {

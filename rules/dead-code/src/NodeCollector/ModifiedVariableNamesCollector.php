@@ -10,25 +10,27 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ModifiedVariableNamesCollector
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeNameResolver $nodeNameResolver
+    ) {
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -50,7 +52,7 @@ final class ModifiedVariableNamesCollector
     {
         $variableNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
             &$variableNames
         ) {
             if (! $node instanceof Arg) {
@@ -79,7 +81,7 @@ final class ModifiedVariableNamesCollector
     {
         $modifiedVariableNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
             &$modifiedVariableNames
         ) {
             if (! $node instanceof Assign) {

@@ -18,12 +18,12 @@ use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpDoc\PhpDocClassRenamer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ClassRenamer
 {
@@ -43,9 +43,9 @@ final class ClassRenamer
     private $nodeNameResolver;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var PhpDocClassRenamer
@@ -64,7 +64,7 @@ final class ClassRenamer
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         ClassNaming $classNaming,
         DocBlockManipulator $docBlockManipulator,
         NodeNameResolver $nodeNameResolver,
@@ -72,7 +72,7 @@ final class ClassRenamer
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->phpDocClassRenamer = $phpDocClassRenamer;
         $this->classNaming = $classNaming;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -323,7 +323,7 @@ final class ClassRenamer
 
     private function changeNameToFullyQualifiedName(ClassLike $classLike): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) {
             if (! $node instanceof FullyQualified) {
                 return null;
             }

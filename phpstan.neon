@@ -514,6 +514,10 @@ parameters:
 
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node#'
 
+        -
+            message:  '#Class cognitive complexity is \d+, keep it under \d+#'
+            paths:
+                - rules/phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php
 
         -
              message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\.#'
@@ -523,3 +527,14 @@ parameters:
         - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
 
         - '#Content of method "removeFirstArgument\(\)" is duplicated with method "moveArguments\(\)" in "Rector\\PHPUnit\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector" class\. Use unique content or abstract service instead#'
+
+        -
+            message: '#Class Rector\\RemovingStatic\\Tests\\Rector\\ClassMethod\\DesiredClassMethodTypeToDynamicRector\\Fixture\\SomeClassMethod not found#'
+            paths:
+                - rules/removing-static/tests/Rector/ClassMethod/DesiredClassMethodTypeToDynamicRector/config/some_config.php
+
+        -
+            message: '#Class Rector\\RemovingStatic\\Tests\\Rector\\Property\\DesiredPropertyClassMethodTypeToDynamicRector\\Fixture\\StaticProperty not found#'
+
+            paths:
+                - rules/removing-static/tests/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector/config/some_config.php

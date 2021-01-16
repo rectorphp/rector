@@ -9,9 +9,9 @@ use PhpParser\Node;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class DocAliasResolver
 {
@@ -22,13 +22,13 @@ final class DocAliasResolver
     private const DOC_ALIAS_REGEX = '#\@(?<possible_alias>\w+)(\\\\)?#s';
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     /**
@@ -38,7 +38,7 @@ final class DocAliasResolver
     {
         $possibleDocAliases = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
             &$possibleDocAliases
         ): void {
             $docComment = $node->getDocComment();

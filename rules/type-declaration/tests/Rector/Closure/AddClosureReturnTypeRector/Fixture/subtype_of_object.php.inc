@@ -13,7 +13,7 @@ class SubtypeOfObject
 {
     public function run($stmt)
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable([$stmt], function (Node $node)
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable([$stmt], function (Node $node)
         {
             if (!$node instanceof String_) {
                 return $node;
@@ -48,7 +48,7 @@ class SubtypeOfObject
 {
     public function run($stmt)
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable([$stmt], function (Node $node): \PhpParser\Node
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable([$stmt], function (Node $node): \PhpParser\Node
         {
             if (!$node instanceof String_) {
                 return $node;

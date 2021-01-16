@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ParentGetterStmtsToExternalStmtsFactory
 {
@@ -22,9 +22,9 @@ final class ParentGetterStmtsToExternalStmtsFactory
     private $nodeTypeResolver;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var BetterStandardPrinter
@@ -33,11 +33,11 @@ final class ParentGetterStmtsToExternalStmtsFactory
 
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
@@ -79,7 +79,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
         }
 
         // stmts without assign
-        $this->callableNodeTraverser->traverseNodesWithCallable($getUserStmts, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($getUserStmts, function (Node $node) use (
             $userExpression
         ): ?MethodCall {
             if (! $this->betterStandardPrinter->areNodesEqual($node, $userExpression)) {

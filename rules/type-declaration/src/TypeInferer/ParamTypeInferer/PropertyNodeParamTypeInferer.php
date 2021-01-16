@@ -43,7 +43,7 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
 
         $propertyStaticTypes = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
             $paramName,
             &$propertyStaticTypes
         ) {

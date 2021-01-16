@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Parser;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class AnonymousFunctionNodeFactory
 {
@@ -33,14 +33,14 @@ final class AnonymousFunctionNodeFactory
     private $parser;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, Parser $parser)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, Parser $parser)
     {
         $this->parser = $parser;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function createAnonymousFunctionFromString(Expr $expr): ?Closure
@@ -62,7 +62,7 @@ final class AnonymousFunctionNodeFactory
 
         $stmt = $firstNode->expr;
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node): Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node): Node {
             if (! $node instanceof String_) {
                 return $node;
             }

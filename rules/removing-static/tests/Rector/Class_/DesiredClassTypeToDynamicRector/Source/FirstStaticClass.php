@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\Source;
+namespace Rector\RemovingStatic\Tests\Rector\Class_\DesiredClassTypeToDynamicRector\Source;
 
 final class FirstStaticClass
 {

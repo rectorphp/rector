@@ -24,12 +24,12 @@ use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ClassMethodAssignManipulator
 {
@@ -39,9 +39,9 @@ final class ClassMethodAssignManipulator
     private $variableManipulator;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
@@ -71,14 +71,14 @@ final class ClassMethodAssignManipulator
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         VariableManipulator $variableManipulator,
         CallReflectionResolver $callReflectionResolver
     ) {
         $this->variableManipulator = $variableManipulator;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -130,7 +130,7 @@ final class ClassMethodAssignManipulator
     {
         $arrayDestructionCreatedVariables = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
             &$arrayDestructionCreatedVariables
         ) {
             if (! $node instanceof Assign) {
@@ -233,7 +233,7 @@ final class ClassMethodAssignManipulator
     {
         $referencedVariables = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
             &$referencedVariables
         ) {
             if (! $node instanceof Variable) {

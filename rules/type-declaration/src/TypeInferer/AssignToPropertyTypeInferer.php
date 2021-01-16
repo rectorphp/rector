@@ -55,7 +55,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
     {
         $assignedExprTypes = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
             $propertyName,
             &$assignedExprTypes
         ) {

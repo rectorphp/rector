@@ -147,4 +147,9 @@ final class Option
      * @var string
      */
     public const PHPSTAN_FOR_RECTOR_PATH = 'phpstan_for_rector_path';
+
+    /**
+     * @var string
+     */
+    public const TYPES_TO_REMOVE_STATIC_FROM = 'types_to_remove_static_from';
 }
