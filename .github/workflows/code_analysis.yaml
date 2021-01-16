@@ -11,7 +11,7 @@ jobs:
                 actions:
                     -
                         name: 'PHPStan'
-                        run: vendor/bin/phpstan analyse --ansi --error-format symplify --debug
+                        run: vendor/bin/phpstan analyse --ansi --error-format symplify
 
                     -
                         name: 'PHPStan for config'
