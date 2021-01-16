@@ -408,7 +408,7 @@ parameters:
         # known values from other methods
         -
             message: '#Negated boolean expression is always true#'
-            path: rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
+            path: rules/php-spec-to-phpunit/src/NodeFactory/AssertMethodCallFactory.php
 
         -
             message: '#Call to function in_array\(\) with arguments string, array\(\) and true will always evaluate to false#'

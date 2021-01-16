@@ -13,7 +13,7 @@ use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
+use Rector\DeadCode\NodeCollector\UnusedParameterResolver;
 use Rector\DeadCode\NodeManipulator\MagicMethodDetector;
 use Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -48,16 +48,23 @@ final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCa
      */
     private $variadicFunctionLikeDetector;
 
+    /**
+     * @var UnusedParameterResolver
+     */
+    private $unusedParameterResolver;
+
     public function __construct(
         ClassManipulator $classManipulator,
         ClassMethodManipulator $classMethodManipulator,
         MagicMethodDetector $magicMethodDetector,
-        VariadicFunctionLikeDetector $variadicFunctionLikeDetector
+        VariadicFunctionLikeDetector $variadicFunctionLikeDetector,
+        UnusedParameterResolver $unusedParameterResolver
     ) {
         $this->classManipulator = $classManipulator;
         $this->classMethodManipulator = $classMethodManipulator;
         $this->magicMethodDetector = $magicMethodDetector;
         $this->variadicFunctionLikeDetector = $variadicFunctionLikeDetector;
+        $this->unusedParameterResolver = $unusedParameterResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -119,7 +126,7 @@ CODE_SAMPLE
         }
 
         $childrenOfClass = $this->nodeRepository->findChildrenOfClass($className);
-        $unusedParameters = $this->getUnusedParameters($node, $methodName, $childrenOfClass);
+        $unusedParameters = $this->unusedParameterResolver->resolve($node, $methodName, $childrenOfClass);
         if ($unusedParameters === []) {
             return null;
         }
@@ -174,48 +181,6 @@ CODE_SAMPLE
         }
 
         return $this->isAnonymousClass($classLike);
-    }
-
-    /**
-     * @param Class_[] $childrenOfClass
-     * @return Param[]
-     */
-    private function getUnusedParameters(ClassMethod $classMethod, string $methodName, array $childrenOfClass): array
-    {
-        $unusedParameters = $this->resolveUnusedParameters($classMethod);
-        if ($unusedParameters === []) {
-            return [];
-        }
-
-        foreach ($childrenOfClass as $childClassNode) {
-            $methodOfChild = $childClassNode->getMethod($methodName);
-            if ($methodOfChild === null) {
-                continue;
-            }
-
-            $unusedParameters = $this->getParameterOverlap(
-                $unusedParameters,
-                $this->resolveUnusedParameters($methodOfChild)
-            );
-        }
-
-        return $unusedParameters;
-    }
-
-    /**
-     * @param Param[] $parameters1
-     * @param Param[] $parameters2
-     * @return Param[]
-     */
-    private function getParameterOverlap(array $parameters1, array $parameters2): array
-    {
-        return array_uintersect(
-            $parameters1,
-            $parameters2,
-            function (Param $firstParam, Param $secondParam): int {
-                return $this->areNodesEqual($firstParam, $secondParam) ? 0 : 1;
-            }
-        );
     }
 
     /**
@@ -301,31 +266,18 @@ CODE_SAMPLE
     }
 
     /**
+     * @param Param[] $parameters1
+     * @param Param[] $parameters2
      * @return Param[]
      */
-    private function resolveUnusedParameters(ClassMethod $classMethod): array
+    private function getParameterOverlap(array $parameters1, array $parameters2): array
     {
-        $unusedParameters = [];
-
-        foreach ($classMethod->params as $i => $param) {
-            // skip property promotion
-            /** @var Param $param */
-            if ($param->flags !== 0) {
-                continue;
+        return array_uintersect(
+            $parameters1,
+            $parameters2,
+            function (Param $firstParam, Param $secondParam): int {
+                return $this->betterStandardPrinter->areNodesEqual($firstParam, $secondParam) ? 0 : 1;
             }
-
-            if ($this->classMethodManipulator->isParameterUsedInClassMethod($param, $classMethod)) {
-                // reset to keep order of removed arguments, if not construtctor - probably autowired
-                if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
-                    $unusedParameters = [];
-                }
-
-                continue;
-            }
-
-            $unusedParameters[$i] = $param;
-        }
-
-        return $unusedParameters;
+        );
     }
 }
