@@ -36,6 +36,7 @@ use Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector;
 use Rector\DeadCode\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector;
+use Rector\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
@@ -126,4 +127,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveDeadRecursiveClassMethodRector::class);
 
     $services->set(RemoveEmptyMethodCallRector::class);
+
+    $services->set(RemoveDeadConditionAboveReturnRector::class);
 };
