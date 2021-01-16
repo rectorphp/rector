@@ -123,13 +123,13 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkipReAssign(Expression $expression, Assign $expr): bool
+    private function shouldSkipReAssign(Expression $expression, Assign $assign): bool
     {
-        if ($this->hasReAssign($expression, $expr->var)) {
+        if ($this->hasReAssign($expression, $assign->var)) {
             return true;
         }
 
-        return $this->hasReAssign($expression, $expr->expr);
+        return $this->hasReAssign($expression, $assign->expr);
     }
 
     private function isUsedAsArraykeyOrInsideIfCondition(Expression $expression, Variable $variable): bool
