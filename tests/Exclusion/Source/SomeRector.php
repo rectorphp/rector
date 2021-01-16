@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Exclusion\Source;
+namespace Rector\Core\Tests\Exclusion\Source;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
