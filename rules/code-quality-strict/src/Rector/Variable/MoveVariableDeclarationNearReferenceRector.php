@@ -94,6 +94,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($parent->expr instanceof ArrayDimFetch) {
+            return null;
+        }
+
         if ($this->hasPropertyInExpr($expression, $parent->expr)) {
             return null;
         }
