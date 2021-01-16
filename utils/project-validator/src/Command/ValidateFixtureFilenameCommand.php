@@ -69,16 +69,6 @@ final class ValidateFixtureFilenameCommand extends Command
         $finder = $finder->files()
             ->name('#(?<=-)[^\/]*\.php\.inc$#')
             ->path('#/Fixture/#')
-            // paths that needs psr-4 autoload
-            ->notPath('#TagValueNodeReprint#')
-            ->notPath('#PhpSpecToPHPUnitRector#')
-            ->notPath('#Source#')
-            ->notPath('#expected#')
-            ->notPath('DoctrineRepositoryAsService/Fixture/PostController.php')
-            ->notPath('Namespace_/ImportFullyQualifiedNamesRector/Fixture/SharedShortName.php')
-            ->notPath('Name/RenameClassRector/Fixture/DuplicatedClass.php')
-            ->notPath('Rector/FileNode/RenameSpecFileToTestFileRector/Fixture/some_file_Spec.php')
-            ->notPath('Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Fixture/DateTime.php')
             ->in(__DIR__ . '/../../../../tests')
             ->in(__DIR__ . '/../../../../packages/*/tests')
             ->in(__DIR__ . '/../../../../rules/*/tests');
