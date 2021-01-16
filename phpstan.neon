@@ -408,7 +408,7 @@ parameters:
         # known values from other methods
         -
             message: '#Negated boolean expression is always true#'
-            path: rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
+            path: rules/php-spec-to-phpunit/src/NodeFactory/AssertMethodCallFactory.php
 
         -
             message: '#Call to function in_array\(\) with arguments string, array\(\) and true will always evaluate to false#'
@@ -521,3 +521,5 @@ parameters:
                  - config/set/*
 
         - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
+
+        - '#Content of method "removeFirstArgument\(\)" is duplicated with method "moveArguments\(\)" in "Rector\\PHPUnit\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector" class\. Use unique content or abstract service instead#'

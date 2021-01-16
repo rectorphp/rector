@@ -92,7 +92,7 @@ services:
         arguments:
             maxClassCognitiveComplexity: 50
             limitsByTypes:
-                Rector\Core\Rector\AbstractRector: 40
+                Rector\Core\Rector\AbstractRector: 35
                 Symfony\Component\Console\Command\Command: 40
                 PHPStan\Rule\Rule: 30
 
