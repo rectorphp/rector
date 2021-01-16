@@ -27,7 +27,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
     $services->set(RepeatedLiteralToClassConstantRector::class);
 
-    $services->set(ChangeLocalPropertyToVariableRector::class);
+    // $services->set(ChangeLocalPropertyToVariableRector::class);
+
     $services->set(PrivatizeLocalOnlyMethodRector::class);
     $services->set(PrivatizeLocalGetterToPropertyRector::class);
     $services->set(PrivatizeLocalPropertyToPrivatePropertyRector::class);
