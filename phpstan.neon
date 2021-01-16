@@ -523,3 +523,8 @@ parameters:
         - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
 
         - '#Content of method "removeFirstArgument\(\)" is duplicated with method "moveArguments\(\)" in "Rector\\PHPUnit\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector" class\. Use unique content or abstract service instead#'
+
+        -
+            message: '#Class Rector\\RemovingStatic\\Tests\\Rector\\ClassMethod\\DesiredClassMethodTypeToDynamicRector\\Fixture\\SomeClassMethod not found#'
+            paths:
+                - rules/removing-static/tests/Rector/ClassMethod/DesiredClassMethodTypeToDynamicRector/config/some_config.php

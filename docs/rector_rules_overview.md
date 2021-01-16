@@ -14385,15 +14385,15 @@ Change full static service, to dynamic one
 - class: `Rector\RemovingStatic\Rector\Class_\SingleStaticServiceToDynamicRector`
 
 ```php
-use Rector\RemovingStatic\Rector\Class_\SingleStaticServiceToDynamicRector;
+use Rector\RemovingStatic\Rector\Class_\DesiredClassTypeToDynamicRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(SingleStaticServiceToDynamicRector::class)
+    $services->set(DesiredClassTypeToDynamicRector::class)
         ->call('configure', [[
-            SingleStaticServiceToDynamicRector::CLASS_TYPES => ['SomeClass'],
+            DesiredClassTypeToDynamicRector::CLASS_TYPES => ['SomeClass'],
         ]]);
 };
 ```

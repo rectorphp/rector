@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Tests\Rector\StaticCall\DesiredStaticCallToDynamicRector\Source;
+namespace Rector\RemovingStatic\Tests\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector\Source;
 
 final class SomeStaticMethod
 {

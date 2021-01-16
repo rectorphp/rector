@@ -32,7 +32,7 @@ final class TryCatchToExpectExceptionRector extends AbstractPHPUnitRector
             new CodeSample(
                 <<<'CODE_SAMPLE'
 try {
-	$someService->run();
+    $someService->run();
 } catch (Throwable $exception) {
     $this->assertInstanceOf(RuntimeException::class, $e);
     $this->assertContains('There was an error executing the following script', $e->getMessage());

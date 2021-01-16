@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Tests\Rector\StaticCall\DesiredStaticCallToDynamicRector;
+namespace Rector\RemovingStatic\Tests\Rector\StaticPropertyFetch\DesiredStaticPropertyFetchTypeToDynamicRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DesiredStaticCallToDynamicRectorTest extends AbstractRectorTestCase
+final class DesiredStaticPropertyFetchTypeToDynamicRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

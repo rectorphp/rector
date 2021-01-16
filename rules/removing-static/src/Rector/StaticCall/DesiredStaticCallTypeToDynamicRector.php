@@ -14,15 +14,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\RemovingStatic\Tests\Rector\StaticCall\DesiredStaticCallToDynamicRector\DesiredStaticCallToDynamicRectorTest
+ * @see \Rector\RemovingStatic\Tests\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector\DesiredStaticCallTypeToDynamicRectorTest
  */
-final class DesiredStaticCallToDynamicRector extends AbstractRector
+final class DesiredStaticCallTypeToDynamicRector extends AbstractRector
 {
     /**
      * @var class-string[]
@@ -34,26 +33,17 @@ final class DesiredStaticCallToDynamicRector extends AbstractRector
      */
     private $propertyNaming;
 
-    /**
-     * @var StaticCallPresenceAnalyzer
-     */
-    private $staticCallPresenceAnalyzer;
-
-    public function __construct(
-        PropertyNaming $propertyNaming,
-        StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer,
-        ParameterProvider $parameterProvider
-    ) {
+    public function __construct(PropertyNaming $propertyNaming, ParameterProvider $parameterProvider)
+    {
         $this->classTypes = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
 
         $this->propertyNaming = $propertyNaming;
-        $this->staticCallPresenceAnalyzer = $staticCallPresenceAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change defined static service to dynamic one', [
-            new ConfiguredCodeSample(
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {
@@ -73,10 +63,6 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                [
-                    Option::TYPES_TO_REMOVE_STATIC_FROM => ['SomeClass'],
-                ]
             ),
         ]);
     }

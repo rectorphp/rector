@@ -14,7 +14,7 @@ class SkipReprintUnionArray
      */
     private $callableNodeTraverser;
 
-    public function __construct (SimpleCallableNodeTraverser $callableNodeTraverser)
+    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser)
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
     }
