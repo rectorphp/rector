@@ -4,7 +4,7 @@ on:
     pull_request: null
 
 jobs:
-    matrix:
+    code_analysis:
         strategy:
             fail-fast: false
             matrix:
@@ -67,7 +67,6 @@ jobs:
                 with:
                     php-version: 7.3
                     coverage: none
-                    tools: composer:v2
 
             -   uses: "ramsey/composer-install@v1"
 

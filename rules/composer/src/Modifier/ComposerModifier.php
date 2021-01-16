@@ -12,7 +12,7 @@ final class ComposerModifier
     /**
      * @var ComposerRectorInterface[]
      */
-    private $composerRectors;
+    private $composerRectors = [];
 
     /**
      * @param ComposerRectorInterface[] $composerRectors
