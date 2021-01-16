@@ -5,7 +5,11 @@ declare(strict_types=1);
 use Rector\Composer\Rector\ChangePackageVersionRector;
 use Rector\Composer\Rector\RemovePackageRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\RenameStaticMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -36,6 +40,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Nette\Database\ISupplementalDriver' => 'Nette\Database\Driver',
             'Nette\Database\IConventions' => 'Nette\Database\Conventions',
             'Nette\Database\Context' => 'Nette\Database\Explorer',
+            'Nette\Database\IRow' => 'Nette\Database\Row',
+            'Nette\Database\IRowContainer' => 'Nette\Database\ResultSet',
+            'Nette\Database\Table\IRow' => 'Nette\Database\Table\ActiveRow',
+            'Nette\Database\Table\IRowContainer' => 'Nette\Database\Table\Selection',
 
             // https://github.com/nette/forms/compare/v3.0.7...v3.1.0-RC2
             'Nette\Forms\IControl' => 'Nette\Forms\Control',
@@ -47,6 +55,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
             // https://github.com/nette/security/compare/v3.0.5...v3.1.2
             'Nette\Security\IAuthorizator' => 'Nette\Security\Authorizator',
+            'Nette\Security\Identity' => 'Nette\Security\SimpleIdentity',
             'Nette\Security\IResource' => 'Nette\Security\Resource',
             'Nette\Security\IRole' => 'Nette\Security\Role',
 
@@ -62,6 +71,29 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
     ]]);
 
+    $services->set(RenameMethodRector::class)->call('configure', [[
+        RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
+            // https://github.com/nette/caching/commit/60281abf366c4ab76e9436dc1bfe2e402db18b67
+            new MethodCallRename('Nette\Caching\Cache', 'start', 'capture'),
+            // https://github.com/nette/forms/commit/faaaf8b8fd3408a274a9de7ca3f342091010ad5d
+            new MethodCallRename('Nette\Forms\Container', 'addImage', 'addImageButton'),
+            // https://github.com/nette/utils/commit/d0427c1811462dbb6c503143eabe5478b26685f7
+            new MethodCallRename('Nette\Utils\Arrays', 'searchKey', 'getKeyOffset'),
+        ]),
+    ]]);
+
+    $services->set(RenameStaticMethodRector::class)
+        ->call('configure', [[
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => ValueObjectInliner::inline([
+                // https://github.com/nette/utils/commit/8a4b795acd00f3f6754c28a73a7e776b60350c34
+                new RenameStaticMethod('Nette\Utils\Callback', 'closure', 'Closure', 'fromCallable'),
+            ]),
+        ]]);
+
+    // TODO change $router[] = new Router() to $router->addRoute() because of deprecated flags
+
+    // TODO Presenter->getContext() and Presenter->context is deprecated
+
     $services->set(ChangePackageVersionRector::class)
         ->call('configure', [[
             ChangePackageVersionRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
@@ -74,7 +106,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new PackageAndVersion('nette/database', '^3.1'),
                 new PackageAndVersion('nette/di', '^3.0'),
                 new PackageAndVersion('nette/finder', '^2.5'),
-                new PackageAndVersion('nette/forms', '3.1.0-RC2'),  // TODO change whene 3.1 will be released
+                new PackageAndVersion('nette/forms', '3.1.0-RC2'),  // TODO change when 3.1 will be released
                 new PackageAndVersion('nette/http', '^3.1'),
                 new PackageAndVersion('nette/mail', '^3.1'),
                 new PackageAndVersion('nette/php-generator', '^3.5'),
