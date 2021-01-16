@@ -11,14 +11,9 @@ class DemoFile
     {
         return false;
     }
-    
-   
 }
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
-
 class DemoFile2 extends DemoFile {
-    
     public function run() {
        return true;       
     }
