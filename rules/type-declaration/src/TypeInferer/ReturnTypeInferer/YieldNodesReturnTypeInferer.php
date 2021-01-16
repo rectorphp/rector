@@ -80,7 +80,7 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
     {
         $yieldNodes = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
             Node $node
         ) use (&$yieldNodes): ?int {
             // skip nested scope

@@ -12,17 +12,17 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class VariableRenamer
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
@@ -35,11 +35,11 @@ final class VariableRenamer
     private $varTagValueNodeRenamer;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         VarTagValueNodeRenamer $varTagValueNodeRenamer
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
     }
@@ -59,7 +59,7 @@ final class VariableRenamer
             $isRenamingActive = true;
         }
 
-        $this->callableNodeTraverser->traverseNodesWithCallable(
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $functionLike->stmts,
             function (Node $node) use ($oldName, $expectedName, $assign, &$isRenamingActive): ?Variable {
                 if ($assign !== null && $node === $assign) {

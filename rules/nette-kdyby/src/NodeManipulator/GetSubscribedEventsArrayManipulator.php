@@ -10,24 +10,24 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NetteKdyby\ValueObject\NetteEventToContributeEventClass;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class GetSubscribedEventsArrayManipulator
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var ValueResolver
      */
     private $valueResolver;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, ValueResolver $valueResolver)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ValueResolver $valueResolver)
     {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->valueResolver = $valueResolver;
     }
 
@@ -37,7 +37,7 @@ final class GetSubscribedEventsArrayManipulator
             return $arrayItem !== null;
         });
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($arrayItems, function (Node $node): ?Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($arrayItems, function (Node $node): ?Node {
             if (! $node instanceof ArrayItem) {
                 return null;
             }

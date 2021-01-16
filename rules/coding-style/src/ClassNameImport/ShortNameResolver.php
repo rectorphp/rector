@@ -19,9 +19,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ShortNameResolver
@@ -38,9 +38,9 @@ final class ShortNameResolver
     private $shortNamesByFilePath = [];
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var CurrentFileInfoProvider
@@ -48,10 +48,10 @@ final class ShortNameResolver
     private $currentFileInfoProvider;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         CurrentFileInfoProvider $currentFileInfoProvider
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
@@ -87,7 +87,7 @@ final class ShortNameResolver
         }
 
         $shortClassLikeNames = [];
-        $this->callableNodeTraverser->traverseNodesWithCallable($namespace, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($namespace, function (Node $node) use (
             &$shortClassLikeNames
         ) {
             // ...
@@ -131,7 +131,7 @@ final class ShortNameResolver
     {
         $shortNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (
             &$shortNames
         ): void {
             // class name is used!
@@ -170,7 +170,7 @@ final class ShortNameResolver
     {
         $shortNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (&$shortNames) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (&$shortNames) {
             /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($phpDocInfo === null) {

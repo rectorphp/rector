@@ -8,7 +8,7 @@ class SkipReferenceDirect
     {
         $formerVariablesByMethods = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             &$formerVariablesByMethods,
             $skipSetUpMethod
         ): ?PropertyFetch {

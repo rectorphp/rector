@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class TemplatePropertyAssignCollector
 {
@@ -28,9 +28,9 @@ final class TemplatePropertyAssignCollector
     private $nodesToRemove = [];
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
@@ -42,9 +42,11 @@ final class TemplatePropertyAssignCollector
      */
     private $templateFileExpr;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeNameResolver $nodeNameResolver
+    ) {
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -55,7 +57,7 @@ final class TemplatePropertyAssignCollector
         $this->templateVariables = [];
         $this->nodesToRemove = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable(
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
             function (Node $node): void {
                 if ($node instanceof MethodCall) {

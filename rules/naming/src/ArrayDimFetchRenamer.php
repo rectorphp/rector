@@ -12,15 +12,15 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ArrayDimFetchRenamer
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var BetterStandardPrinter
@@ -28,10 +28,10 @@ final class ArrayDimFetchRenamer
     private $betterStandardPrinter;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         BetterStandardPrinter $betterStandardPrinter
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
@@ -43,10 +43,9 @@ final class ArrayDimFetchRenamer
         ArrayDimFetch $arrayDimFetch,
         string $variableName
     ): void {
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $arrayDimFetch,
-            $variableName
-        ) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (
+            Node $node
+        ) use ($arrayDimFetch, $variableName) {
             // do not rename element above
             if ($node->getLine() <= $arrayDimFetch->getLine()) {
                 return null;

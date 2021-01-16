@@ -52,22 +52,22 @@ final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInfe
     private function resolveAssignedNodeToProperty(ClassMethod $classMethod, string $propertyName): ?Expr
     {
         $assignedNode = null;
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $propertyName,
-            &$assignedNode
-        ): ?int {
-            if (! $node instanceof Assign) {
-                return null;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node) use ($propertyName, &$assignedNode): ?int {
+                if (! $node instanceof Assign) {
+                    return null;
+                }
+
+                if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
+                    return null;
+                }
+
+                $assignedNode = $node->expr;
+
+                return NodeTraverser::STOP_TRAVERSAL;
             }
-
-            if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
-                return null;
-            }
-
-            $assignedNode = $node->expr;
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
+        );
 
         return $assignedNode;
     }

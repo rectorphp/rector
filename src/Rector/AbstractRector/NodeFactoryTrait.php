@@ -71,7 +71,7 @@ trait NodeFactoryTrait
 
     protected function createNull(): ConstFetch
     {
-        return new ConstFetch(new Name('null'));
+        return $this->nodeFactory->createNull();
     }
 
     protected function createFalse(): ConstFetch

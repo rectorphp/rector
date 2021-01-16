@@ -1,4 +1,4 @@
-# 668 Rules Overview
+# 671 Rules Overview
 
 <br>
 
@@ -126,7 +126,7 @@
 
 - [RectorGenerator](#rectorgenerator) (1)
 
-- [RemovingStatic](#removingstatic) (6)
+- [RemovingStatic](#removingstatic) (9)
 
 - [Renaming](#renaming) (10)
 
@@ -2253,6 +2253,8 @@ Add extra space before new assign set
 - class: `Rector\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector`
 
 ```diff
++use Nette\Utils\Json;
++
  final class SomeClass
  {
      public function run()
@@ -2262,8 +2264,7 @@ Add extra space before new assign set
 +            'role_name' => 'admin',
 +            'numberz' => ['id' => 10]
 +        ];
-+
-+        $someJsonAsString = Nette\Utils\Json::encode($data);
++        $someJsonAsString = Json::encode($data);
      }
  }
 ```
@@ -11354,7 +11355,7 @@ Turns try/catch to `expectException()` call
 
 ```diff
 -try {
--	$someService->run();
+-    $someService->run();
 -} catch (Throwable $exception) {
 -    $this->assertInstanceOf(RuntimeException::class, $e);
 -    $this->assertContains('There was an error executing the following script', $e->getMessage());
@@ -14170,6 +14171,108 @@ Adds a new `$services->set(...)` call to PHP Config
 
 ## RemovingStatic
 
+### DesiredClassTypeToDynamicRector
+
+Change full static service, to dynamic one
+
+- class: `Rector\RemovingStatic\Rector\Class_\DesiredClassTypeToDynamicRector`
+
+```diff
+ class AnotherClass
+ {
++    /**
++     * @var SomeClass
++     */
++    private $someClass;
++
++    public fuction __construct(SomeClass $someClass)
++    {
++        $this->someClass = $someClass;
++    }
++
+     public function run()
+     {
+         SomeClass::someStatic();
+     }
+ }
+
+ class SomeClass
+ {
+-    public static function run()
++    public function run()
+     {
+-        self::someStatic();
++        $this->someStatic();
+     }
+
+-    private static function someStatic()
++    private function someStatic()
+     {
+     }
+ }
+```
+
+<br>
+
+### DesiredPropertyClassMethodTypeToDynamicRector
+
+Change defined static properties and methods to dynamic
+
+- class: `Rector\RemovingStatic\Rector\Property\DesiredPropertyClassMethodTypeToDynamicRector`
+
+```diff
+ final class SomeClass
+ {
+-    public static $name;
++    public $name;
+
+-    public static function go()
++    public function go()
+     {
+     }
+ }
+```
+
+<br>
+
+### DesiredStaticCallTypeToDynamicRector
+
+Change defined static service to dynamic one
+
+- class: `Rector\RemovingStatic\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector`
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        SomeStaticMethod::someStatic();
++        $this->someStaticMethod::someStatic();
+     }
+ }
+```
+
+<br>
+
+### DesiredStaticPropertyFetchTypeToDynamicRector
+
+Change defined static service to dynamic one
+
+- class: `Rector\RemovingStatic\Rector\StaticPropertyFetch\DesiredStaticPropertyFetchTypeToDynamicRector`
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        SomeStaticMethod::$someStatic;
++        $this->someStaticMethod::$someStatic;
+     }
+ }
+```
+
+<br>
+
 ### LocallyCalledStaticMethodToNonStaticRector
 
 Change static method and local-only calls to non-static
@@ -14370,67 +14473,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +    public function create(): AnotherClass
 +    {
 +        return new AnotherClass($this->staticClass);
-     }
- }
-```
-
-<br>
-
-### SingleStaticServiceToDynamicRector
-
-Change full static service, to dynamic one
-
-:wrench: **configure it!**
-
-- class: `Rector\RemovingStatic\Rector\Class_\SingleStaticServiceToDynamicRector`
-
-```php
-use Rector\RemovingStatic\Rector\Class_\SingleStaticServiceToDynamicRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(SingleStaticServiceToDynamicRector::class)
-        ->call('configure', [[
-            SingleStaticServiceToDynamicRector::CLASS_TYPES => ['SomeClass'],
-        ]]);
-};
-```
-
-↓
-
-```diff
- class AnotherClass
- {
-+    /**
-+     * @var SomeClass
-+     */
-+    private $someClass;
-+
-+    public fuction __construct(SomeClass $someClass)
-+    {
-+        $this->someClass = $someClass;
-+    }
-+
-     public function run()
-     {
-         SomeClass::someStatic();
-     }
- }
-
- class SomeClass
- {
--    public static function run()
-+    public function run()
-     {
--        self::someStatic();
-+        $this->someStatic();
-     }
-
--    private static function someStatic()
-+    private function someStatic()
-     {
      }
  }
 ```

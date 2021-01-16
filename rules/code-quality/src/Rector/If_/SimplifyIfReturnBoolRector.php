@@ -18,6 +18,7 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
+use Rector\CodeQuality\NodeManipulator\ExprBoolCaster;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
@@ -30,19 +31,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyIfReturnBoolRector extends AbstractRector
 {
     /**
-     * @var StaticTypeAnalyzer
-     */
-    private $staticTypeAnalyzer;
-
-    /**
      * @var CommentsMerger
      */
     private $commentsMerger;
 
-    public function __construct(CommentsMerger $commentsMerger, StaticTypeAnalyzer $staticTypeAnalyzer)
+    /**
+     * @var ExprBoolCaster
+     */
+    private $exprBoolCaster;
+
+    public function __construct(CommentsMerger $commentsMerger, ExprBoolCaster $exprBoolCaster)
     {
-        $this->staticTypeAnalyzer = $staticTypeAnalyzer;
         $this->commentsMerger = $commentsMerger;
+        $this->exprBoolCaster = $exprBoolCaster;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -154,18 +155,18 @@ CODE_SAMPLE
         if ($if->cond instanceof BooleanNot && $nextReturnNode->expr !== null && $this->isTrue(
             $nextReturnNode->expr
         )) {
-            return new Return_($this->boolCastOrNullCompareIfNeeded($if->cond->expr));
+            return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond->expr));
         }
 
-        return new Return_($this->boolCastOrNullCompareIfNeeded($if->cond));
+        return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond));
     }
 
     private function processReturnFalse(If_ $if, Return_ $nextReturnNode): ?Return_
     {
         if ($if->cond instanceof Identical) {
-            return new Return_($this->boolCastOrNullCompareIfNeeded(
-                new NotIdentical($if->cond->left, $if->cond->right)
-            ));
+            $notIdentical = new NotIdentical($if->cond->left, $if->cond->right);
+
+            return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($notIdentical));
         }
 
         if ($nextReturnNode->expr === null) {
@@ -177,10 +178,10 @@ CODE_SAMPLE
         }
 
         if ($if->cond instanceof BooleanNot) {
-            return new Return_($this->boolCastOrNullCompareIfNeeded($if->cond->expr));
+            return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond->expr));
         }
 
-        return new Return_($this->boolCastOrNullCompareIfNeeded(new BooleanNot($if->cond)));
+        return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded(new BooleanNot($if->cond)));
     }
 
     /**
@@ -220,38 +221,38 @@ CODE_SAMPLE
         return $ifInnerNode->expr !== null;
     }
 
-    private function boolCastOrNullCompareIfNeeded(Expr $expr): Expr
-    {
-        if ($this->isNullableType($expr)) {
-            $exprStaticType = $this->getStaticType($expr);
-            // if we remove null type, still has to be trueable
-            if ($exprStaticType instanceof UnionType) {
-                $unionTypeWithoutNullType = $this->typeUnwrapper->removeNullTypeFromUnionType($exprStaticType);
-                if ($this->staticTypeAnalyzer->isAlwaysTruableType($unionTypeWithoutNullType)) {
-                    return new NotIdentical($expr, $this->createNull());
-                }
-            } elseif ($this->staticTypeAnalyzer->isAlwaysTruableType($exprStaticType)) {
-                return new NotIdentical($expr, $this->createNull());
-            }
-        }
+//    private function boolCastOrNullCompareIfNeeded(Expr $expr): Expr
+//    {
+//        if ($this->isNullableType($expr)) {
+//            $exprStaticType = $this->getStaticType($expr);
+//            // if we remove null type, still has to be trueable
+//            if ($exprStaticType instanceof UnionType) {
+//                $unionTypeWithoutNullType = $this->typeUnwrapper->removeNullTypeFromUnionType($exprStaticType);
+//                if ($this->staticTypeAnalyzer->isAlwaysTruableType($unionTypeWithoutNullType)) {
+//                    return new NotIdentical($expr, $this->createNull());
+//                }
+//            } elseif ($this->staticTypeAnalyzer->isAlwaysTruableType($exprStaticType)) {
+//                return new NotIdentical($expr, $this->createNull());
+//            }
+//        }
+//
+//        if (! $this->isBoolCastNeeded($expr)) {
+//            return $expr;
+//        }
+//
+//        return new Bool_($expr);
+//    }
 
-        if (! $this->isBoolCastNeeded($expr)) {
-            return $expr;
-        }
-
-        return new Bool_($expr);
-    }
-
-    private function isBoolCastNeeded(Expr $expr): bool
-    {
-        if ($expr instanceof BooleanNot) {
-            return false;
-        }
-
-        if ($this->isStaticType($expr, BooleanType::class)) {
-            return false;
-        }
-
-        return ! $expr instanceof BinaryOp;
-    }
+//    private function isBoolCastNeeded(Expr $expr): bool
+//    {
+//        if ($expr instanceof BooleanNot) {
+//            return false;
+//        }
+//
+//        if ($this->isStaticType($expr, BooleanType::class)) {
+//            return false;
+//        }
+//
+//        return ! $expr instanceof BinaryOp;
+//    }
 }

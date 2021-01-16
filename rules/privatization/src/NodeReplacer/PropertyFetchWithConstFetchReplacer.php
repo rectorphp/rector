@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Privatization\Naming\ConstantNaming;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class PropertyFetchWithConstFetchReplacer
 {
@@ -24,9 +24,9 @@ final class PropertyFetchWithConstFetchReplacer
     private $nodeNameResolver;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var PropertyFetchAnalyzer
@@ -45,13 +45,13 @@ final class PropertyFetchWithConstFetchReplacer
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         ConstantNaming $constantNaming,
         NodeFactory $nodeFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->constantNaming = $constantNaming;
         $this->nodeFactory = $nodeFactory;
@@ -64,7 +64,7 @@ final class PropertyFetchWithConstFetchReplacer
         $propertyName = $this->nodeNameResolver->getName($property);
         $constantName = $this->constantNaming->createFromProperty($propertyProperty);
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use (
             $propertyName,
             $constantName
         ): ?ClassConstFetch {

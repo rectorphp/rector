@@ -10,31 +10,33 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\VarLikeIdentifier;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class PropertyFetchRenamer
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeNameResolver $nodeNameResolver
+    ) {
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function renamePropertyFetchesInClass(ClassLike $classLike, string $currentName, string $expectedName): void
     {
         // 1. replace property fetch rename in whole class
-        $this->callableNodeTraverser->traverseNodesWithCallable(
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             $classLike,
             function (Node $node) use ($currentName, $expectedName): ?Node {
                 if ($this->nodeNameResolver->isLocalPropertyFetchNamed(
