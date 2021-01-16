@@ -1,0 +1,35 @@
+name: Code Analysis PHP 8.0
+
+on:
+    pull_request: null
+
+jobs:
+    code_analysis_php80:
+        strategy:
+            fail-fast: false
+            matrix:
+                actions:
+                    -
+                        name: 'PHPStan'
+                        run: vendor/bin/phpstan analyse --ansi --error-format symplify
+
+                    -
+                        name: 'PHPStan for config'
+                        run: composer phpstan-config
+
+        name: ${{ matrix.actions.name }}
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            # see https://github.com/shivammathur/setup-php
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.0
+                    coverage: none
+
+            -   uses: "ramsey/composer-install@v1"
+
+            -   run: ${{ matrix.actions.run }}

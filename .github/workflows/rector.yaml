@@ -27,7 +27,7 @@ jobs:
                 with:
                     php-version: 7.4
                     coverage: none
-                    tools: composer:v2
+
 
             -   run: ${{ matrix.actions.install }}
 

@@ -222,7 +222,8 @@ final class ProcessCommand extends AbstractCommand
 
         $this->nonPhpFileProcessor->runOnFileInfos($nonPhpFileInfos);
 
-        $this->composerProcessor->process();
+        $composerJsonFilePath = getcwd() . '/composer.json';
+        $this->composerProcessor->process($composerJsonFilePath);
 
         $this->reportZeroCacheRectorsCondition();
 
