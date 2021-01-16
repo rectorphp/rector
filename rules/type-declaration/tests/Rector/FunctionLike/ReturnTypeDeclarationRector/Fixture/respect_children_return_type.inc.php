@@ -10,7 +10,7 @@ class RespectChildrenReturnType
     }
 }
 
-class DemoFile2 extends DemoFile {    
+class RespectChildrenReturnType2 extends RespectChildrenReturnType {    
     public function run() : Baba {
        return new Baba();        
     }
