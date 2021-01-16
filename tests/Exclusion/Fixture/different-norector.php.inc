@@ -7,7 +7,7 @@ final class DifferentNorector
     public function foo()
     {
         /**
-         * @noRector \Rector\Core\Exclusion\Source\SomeRector
+         * @noRector \Rector\Core\Tests\Exclusion\Source\SomeRector
          */
         round(1 + 0);
     }
@@ -24,7 +24,7 @@ final class DifferentNorector
     public function foo()
     {
         /**
-         * @noRector \Rector\Core\Exclusion\Source\SomeRector
+         * @noRector \Rector\Core\Tests\Exclusion\Source\SomeRector
          */
         round(1);
     }
