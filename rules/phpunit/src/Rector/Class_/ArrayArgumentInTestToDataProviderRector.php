@@ -7,9 +7,7 @@ namespace Rector\PHPUnit\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -17,7 +15,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
@@ -26,8 +23,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
+use Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 use Rector\PHPUnit\ValueObject\ParamAndArg;
@@ -64,16 +61,16 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
     private $dataProviderClassMethodFactory;
 
     /**
-     * @var TypeFactory
+     * @var ParamAndArgFromArrayResolver
      */
-    private $typeFactory;
+    private $paramAndArgFromArrayResolver;
 
     public function __construct(
         DataProviderClassMethodFactory $dataProviderClassMethodFactory,
-        TypeFactory $typeFactory
+        ParamAndArgFromArrayResolver $paramAndArgFromArrayResolver
     ) {
         $this->dataProviderClassMethodFactory = $dataProviderClassMethodFactory;
-        $this->typeFactory = $typeFactory;
+        $this->paramAndArgFromArrayResolver = $paramAndArgFromArrayResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -209,7 +206,7 @@ CODE_SAMPLE
 
         $methodCall->args = [];
 
-        $paramAndArgs = $this->collectParamAndArgsFromArray(
+        $paramAndArgs = $this->paramAndArgFromArrayResolver->resolve(
             $firstArgumentValue,
             $arrayArgumentToDataProvider->getVariableName()
         );
@@ -267,20 +264,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @return ParamAndArg[]
-     */
-    private function collectParamAndArgsFromArray(Array_ $array, string $variableName): array
-    {
-        $isNestedArray = $this->isNestedArray($array);
-        if ($isNestedArray) {
-            return $this->collectParamAndArgsFromNestedArray($array, $variableName);
-        }
-
-        $itemsStaticType = $this->resolveItemStaticType($array, $isNestedArray);
-        return $this->collectParamAndArgsFromNonNestedArray($array, $variableName, $itemsStaticType);
-    }
-
-    /**
      * @param ParamAndArg[] $paramAndArgs
      */
     private function refactorTestClassMethodParams(ClassMethod $classMethod, array $paramAndArgs): void
@@ -315,99 +298,6 @@ CODE_SAMPLE
         ));
     }
 
-    private function isNestedArray(Array_ $array): bool
-    {
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
-                continue;
-            }
-
-            if ($arrayItem->value instanceof Array_) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return ParamAndArg[]
-     */
-    private function collectParamAndArgsFromNestedArray(Array_ $array, string $variableName): array
-    {
-        $paramAndArgs = [];
-        $i = 1;
-
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
-                continue;
-            }
-
-            $nestedArray = $arrayItem->value;
-            if (! $nestedArray instanceof Array_) {
-                continue;
-            }
-
-            foreach ($nestedArray->items as $nestedArrayItem) {
-                if (! $nestedArrayItem instanceof ArrayItem) {
-                    continue;
-                }
-
-                $variable = new Variable($variableName . ($i === 1 ? '' : $i));
-
-                $itemsStaticType = $this->getStaticType($nestedArrayItem->value);
-                $paramAndArgs[] = new ParamAndArg($variable, $itemsStaticType);
-                ++$i;
-            }
-        }
-        return $paramAndArgs;
-    }
-
-    private function resolveItemStaticType(Array_ $array, bool $isNestedArray): Type
-    {
-        $staticTypes = [];
-        if (! $isNestedArray) {
-            foreach ($array->items as $arrayItem) {
-                if (! $arrayItem instanceof ArrayItem) {
-                    continue;
-                }
-
-                $staticTypes[] = $this->getStaticType($arrayItem->value);
-            }
-        }
-
-        return $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
-    }
-
-    /**
-     * @return ParamAndArg[]
-     */
-    private function collectParamAndArgsFromNonNestedArray(
-        Array_ $array,
-        string $variableName,
-        Type $itemsStaticType
-    ): array {
-        $i = 1;
-        $paramAndArgs = [];
-
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
-                continue;
-            }
-
-            $variable = new Variable($variableName . ($i === 1 ? '' : $i));
-
-            $paramAndArgs[] = new ParamAndArg($variable, $itemsStaticType);
-            ++$i;
-
-            if (! $arrayItem->value instanceof Array_) {
-                break;
-            }
-        }
-
-        return $paramAndArgs;
-    }
-
     /**
      * @param ParamAndArg[] $paramAndArgs
      * @return Param[]
@@ -417,7 +307,6 @@ CODE_SAMPLE
         $params = [];
         foreach ($paramAndArgs as $paramAndArg) {
             $param = new Param($paramAndArg->getVariable());
-
             $this->setTypeIfNotNull($paramAndArg, $param);
 
             $params[] = $param;

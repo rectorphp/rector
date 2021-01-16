@@ -462,15 +462,15 @@ final class NodeFactory
         return $uses;
     }
 
-    public function createStaticCall(string $class, string $method): StaticCall
+    /**
+     * @param Node[] $args
+     */
+    public function createStaticCall(string $class, string $method, array $args = []): StaticCall
     {
-        if (in_array($class, self::REFERENCES, true)) {
-            $class = new Name($class);
-        } else {
-            $class = new FullyQualified($class);
-        }
-
-        return new StaticCall($class, $method);
+        $class = $this->createClassPart($class);
+        $staticCall = new StaticCall($class, $method);
+        $staticCall->args = $this->createArgs($args);
+        return $staticCall;
     }
 
     /**
@@ -634,5 +634,14 @@ final class NodeFactory
         }
 
         return $arrayItem;
+    }
+
+    private function createClassPart(string $class): Name
+    {
+        if (in_array($class, self::REFERENCES, true)) {
+            return new Name($class);
+        }
+
+        return new FullyQualified($class);
     }
 }

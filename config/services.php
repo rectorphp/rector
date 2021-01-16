@@ -56,6 +56,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->alias(SymfonyApplication::class, ConsoleApplication::class);
 
     $services->set(NoRectorsLoadedReporter::class);
+    $services->set(\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser::class);
 
     $services->set(TextDescriptor::class);
 

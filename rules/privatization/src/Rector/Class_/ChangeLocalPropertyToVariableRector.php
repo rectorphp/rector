@@ -7,7 +7,6 @@ namespace Rector\Privatization\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
@@ -18,7 +17,9 @@ use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -42,10 +43,19 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
      */
     private $propertyFetchManipulator;
 
-    public function __construct(ClassManipulator $classManipulator, PropertyFetchManipulator $propertyFetchManipulator)
-    {
+    /**
+     * @var PropertyFetchWithVariableReplacer
+     */
+    private $propertyFetchWithVariableReplacer;
+
+    public function __construct(
+        ClassManipulator $classManipulator,
+        PropertyFetchManipulator $propertyFetchManipulator,
+        PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer
+    ) {
         $this->classManipulator = $classManipulator;
         $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->propertyFetchWithVariableReplacer = $propertyFetchWithVariableReplacer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -109,7 +119,7 @@ CODE_SAMPLE
             unset($propertyUsageByMethods[$propertyName]);
         }
 
-        $this->replacePropertyFetchesByLocalProperty($node, $propertyUsageByMethods);
+        $this->propertyFetchWithVariableReplacer->replacePropertyFetchesByVariable($node, $propertyUsageByMethods);
 
         // remove properties
         foreach ($node->getProperties() as $property) {
@@ -164,34 +174,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param string[][] $propertyUsageByMethods
-     */
-    private function replacePropertyFetchesByLocalProperty(Class_ $class, array $propertyUsageByMethods): void
-    {
-        foreach ($propertyUsageByMethods as $propertyName => $methodNames) {
-            $methodName = $methodNames[0];
-            $classMethod = $class->getMethod($methodName);
-            if ($classMethod === null) {
-                continue;
-            }
-
-            $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
-                $propertyName
-            ): ?Variable {
-                if (! $node instanceof PropertyFetch) {
-                    return null;
-                }
-
-                if (! $this->isName($node, $propertyName)) {
-                    return null;
-                }
-
-                return new Variable($propertyName);
-            });
-        }
-    }
-
-    /**
      * Covers https://github.com/rectorphp/rector/pull/2558#discussion_r363036110
      */
     private function isPropertyChangingInMultipleMethodCalls(
@@ -240,15 +222,7 @@ CODE_SAMPLE
 
     private function isScopeChangingNode(Node $node): bool
     {
-        foreach (self::SCOPE_CHANGING_NODE_TYPES as $scopeChangingNode) {
-            if (! is_a($node, $scopeChangingNode, true)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
+        return StaticInstanceOf::isOneOf($node, self::SCOPE_CHANGING_NODE_TYPES);
     }
 
     private function refactorIf(If_ $if, string $privatePropertyName): ?bool

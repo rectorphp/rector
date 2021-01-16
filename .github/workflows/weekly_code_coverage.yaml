@@ -26,7 +26,7 @@ jobs:
                             # Coveralls.io
                             composer require --dev php-coveralls/php-coveralls:^2.4
                             vendor/bin/php-coveralls --coverage_clover=clover.xml -v
-                            
+
                             # clean up
                             git checkout .
                             git clean -xfd build
@@ -47,7 +47,7 @@ jobs:
                 with:
                     php-version: 7.4
                     coverage: xdebug
-                    tools: composer:v2
+
 
             -
                 run: composer install --no-progress --ansi

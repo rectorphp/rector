@@ -48,7 +48,7 @@ jobs:
                     # PHP 7.3 is required, so Rector's code is PHP 7.3 compatible even after refactoring
                     php-version: 7.3
                     coverage: none
-                    tools: composer:v2
+
 
             -   run: composer install --no-progress --ansi
 

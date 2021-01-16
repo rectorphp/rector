@@ -85,6 +85,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($parent->expr instanceof ArrayDimFetch) {
+            return null;
+        }
+
         $expression = $parent->getAttribute(AttributeKey::PARENT_NODE);
         if (! $expression instanceof Expression) {
             return null;
@@ -97,10 +101,8 @@ CODE_SAMPLE
         if ($this->hasPropertyInExpr($expression, $parent->expr)) {
             return null;
         }
-        if ($this->hasReAssign($expression, $parent->var)) {
-            return null;
-        }
-        if ($this->hasReAssign($expression, $parent->expr)) {
+
+        if ($this->shouldSkipReAssign($expression, $parent)) {
             return null;
         }
 
@@ -119,6 +121,15 @@ CODE_SAMPLE
         $this->removeNode($expression);
 
         return $node;
+    }
+
+    private function shouldSkipReAssign(Expression $expression, Assign $assign): bool
+    {
+        if ($this->hasReAssign($expression, $assign->var)) {
+            return true;
+        }
+
+        return $this->hasReAssign($expression, $assign->expr);
     }
 
     private function isUsedAsArraykeyOrInsideIfCondition(Expression $expression, Variable $variable): bool

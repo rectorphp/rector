@@ -41,7 +41,7 @@ jobs:
                 with:
                     php-version: 7.4
                     coverage: xdebug
-                    tools: composer:v2
+
 
             -
                 run: composer install --no-progress --ansi

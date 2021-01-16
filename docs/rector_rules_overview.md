@@ -1,4 +1,4 @@
-# 660 Rules Overview
+# 668 Rules Overview
 
 <br>
 
@@ -18,7 +18,9 @@
 
 - [CodingStyle](#codingstyle) (37)
 
-- [DeadCode](#deadcode) (44)
+- [Composer](#composer) (7)
+
+- [DeadCode](#deadcode) (45)
 
 - [DeadDocBlock](#deaddocblock) (3)
 
@@ -311,12 +313,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
-                'ValueObjectInterfaceClassName',
-            ],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
-                'Search',
-            ],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -2470,7 +2468,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -2781,6 +2779,267 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+## Composer
+
+### AddPackageToRequireDevRector
+
+Add package to "require-dev" in `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\AddPackageToRequireDevRector`
+
+```php
+use Rector\Composer\Rector\AddPackageToRequireDevRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddPackageToRequireDevRector::class)
+        ->call('configure', [[
+            AddPackageToRequireDevRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('symfony/console', '^3.4'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
++    "require-dev": {
++        "symfony/console": "^3.4"
++    }
+ }
+```
+
+<br>
+
+### AddPackageToRequireRector
+
+Add package to "require" in `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\AddPackageToRequireRector`
+
+```php
+use Rector\Composer\Rector\AddPackageToRequireRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddPackageToRequireRector::class)
+        ->call('configure', [[
+            AddPackageToRequireRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('symfony/console', '^3.4'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
++    "require": {
++        "symfony/console": "^3.4"
++    }
+ }
+```
+
+<br>
+
+### ChangePackageVersionRector
+
+Change package version `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\ChangePackageVersionRector`
+
+```php
+use Rector\Composer\Rector\ChangePackageVersionRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ChangePackageVersionRector::class)
+        ->call('configure', [[
+            ChangePackageVersionRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('symfony/console', '^4.4'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
+-    "require-dev": {
+-        "symfony/console": "^3.4"
++    "require": {
++        "symfony/console": "^4.4"
+     }
+ }
+```
+
+<br>
+
+### MovePackageToRequireDevRector
+
+Moves package from "require" to "require-dev" in `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\MovePackageToRequireDevRector`
+
+```php
+use Rector\Composer\Rector\MovePackageToRequireDevRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(MovePackageToRequireDevRector::class)
+        ->call('configure', [[
+            MovePackageToRequireDevRector::PACKAGE_NAMES => ['symfony/console'],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
+-    "require": {
++    "require-dev": {
+         "symfony/console": "^3.4"
+     }
+ }
+```
+
+<br>
+
+### MovePackageToRequireRector
+
+Moves package from "require-dev" to "require" in `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\MovePackageToRequireRector`
+
+```php
+use Rector\Composer\Rector\MovePackageToRequireRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(MovePackageToRequireRector::class)
+        ->call('configure', [[
+            MovePackageToRequireRector::PACKAGE_NAMES => ['symfony/console'],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
+-    "require-dev": {
++    "require": {
+         "symfony/console": "^3.4"
+     }
+ }
+```
+
+<br>
+
+### RemovePackageRector
+
+Remove package from "require" and "require-dev" in `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\RemovePackageRector`
+
+```php
+use Rector\Composer\Rector\RemovePackageRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(RemovePackageRector::class)
+        ->call('configure', [[
+            RemovePackageRector::PACKAGE_NAMES => ['symfony/console'],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
+-    "require": {
+-        "symfony/console": "^3.4"
+-    }
+ }
+```
+
+<br>
+
+### ReplacePackageAndVersionRector
+
+Change package name and version `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\ReplacePackageAndVersionRector`
+
+```php
+use Rector\Composer\Rector\ReplacePackageAndVersionRector;
+use Rector\Composer\ValueObject\ReplacePackageAndVersion;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ReplacePackageAndVersionRector::class)
+        ->call('configure', [[
+            ReplacePackageAndVersionRector::REPLACE_PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new ReplacePackageAndVersion('symfony/console', 'symfony/http-kernel', '^4.4'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
+     "require-dev": {
+-        "symfony/console": "^3.4"
++        "symfony/http-kernel": "^4.4"
+     }
+ }
+```
+
+<br>
+
 ## DeadCode
 
 ### RecastingRemovalRector
@@ -2898,6 +3157,28 @@ Remove (string) casting when it comes to concat, that does this by default
      {
 -        return 'hi ' . (string) $value;
 +        return 'hi ' . $value;
+     }
+ }
+```
+
+<br>
+
+### RemoveDeadConditionAboveReturnRector
+
+Remove dead condition above return
+
+- class: `Rector\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector`
+
+```diff
+ final class SomeClass
+ {
+     public function go()
+     {
+-        if (1 === 1) {
+-            return 'yes';
+-        }
+-
+         return 'yes';
      }
  }
 ```
@@ -6919,7 +7200,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(InjectAnnotationClassRector::class)
         ->call('configure', [[
-            InjectAnnotationClassRector::ANNOTATION_CLASSES => ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject'],
+            InjectAnnotationClassRector::ANNOTATION_CLASSES => [
+                'DI\Annotation\Inject',
+                'JMS\DiExtraBundle\Annotation\Inject',
+            ],
         ]]);
 };
 ```
@@ -7930,10 +8214,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => [
-                'pat*/*/?ame.php',
-                'somepath/?ame.php',
-            ],
+            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
         ]]);
 };
 ```
@@ -8202,8 +8483,8 @@ Changes mockery mock creation to Prophesize
 - class: `Rector\MockeryToProphecy\Rector\ClassMethod\MockeryCreateMockToProphizeRector`
 
 ```diff
--$mock = \Mockery::mock(\'MyClass\');
-+ $mock = $this->prophesize(\'MyClass\');
+-$mock = \Mockery::mock('MyClass');
++ $mock = $this->prophesize('MyClass');
 +
  $service = new Service();
 -$service->injectDependency($mock);
@@ -14021,7 +14302,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 
@@ -15020,7 +15301,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
+                'SymfonyControllerClassName',
+                'GetTraitClassName',
+            ],
         ]]);
 };
 ```
