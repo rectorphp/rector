@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\ValueObject\Visibility;
+use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
@@ -27,7 +28,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]),
     ]]);
     $services->set(ArgumentAdderRector::class)->call('configure', [[
-        ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+        ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
             new ArgumentAdder('Illuminate\Auth\Middleware\Authenticate', 'authenticate', 0, 'request'),
             new ArgumentAdder(
                 'Illuminate\Foundation\Auth\ResetsPasswords',
