@@ -145,7 +145,6 @@ CODE_SAMPLE
             return;
         }
 
-        /** @var MethodCall $methodCall */
         $argumentVariableName = $this->getName($methodCall->args[1]->value);
         if ($argumentVariableName === null) {
             return;

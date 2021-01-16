@@ -514,6 +514,10 @@ parameters:
 
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node#'
 
+        -
+            message:  '#Class cognitive complexity is \d+, keep it under \d+#'
+            paths:
+                - rules/phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php
 
         -
              message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\.#'
