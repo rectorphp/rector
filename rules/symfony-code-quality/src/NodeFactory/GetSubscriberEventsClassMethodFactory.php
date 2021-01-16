@@ -17,6 +17,8 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\PhpParser\Node\Manipulator\VisibilityManipulator;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Symfony\Contract\Tag\TagInterface;
@@ -33,12 +35,12 @@ final class GetSubscriberEventsClassMethodFactory
     private $nodeFactory;
 
     /**
-     * @var \Rector\Core\PhpParser\Node\Manipulator\VisibilityManipulator
+     * @var VisibilityManipulator
      */
     private $visibilityManipulator;
 
     /**
-     * @var \Rector\Core\Php\PhpVersionProvider
+     * @var PhpVersionProvider
      */
     private $phpVersionProvider;
 
@@ -49,8 +51,8 @@ final class GetSubscriberEventsClassMethodFactory
 
     public function __construct(
         NodeFactory $nodeFactory,
-        \Rector\Core\PhpParser\Node\Manipulator\VisibilityManipulator $visibilityManipulator,
-    \Rector\Core\Php\PhpVersionProvider $phpVersionProvider,
+        VisibilityManipulator $visibilityManipulator,
+    PhpVersionProvider $phpVersionProvider,
         PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->nodeFactory = $nodeFactory;

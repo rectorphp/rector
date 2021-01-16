@@ -19,6 +19,7 @@ use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -43,14 +44,14 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
     private $propertyFetchManipulator;
 
     /**
-     * @var \Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer
+     * @var PropertyFetchWithVariableReplacer
      */
     private $propertyFetchWithVariableReplacer;
 
     public function __construct(
         ClassManipulator $classManipulator,
         PropertyFetchManipulator $propertyFetchManipulator,
-        \Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer
+        PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer
     ) {
         $this->classManipulator = $classManipulator;
         $this->propertyFetchManipulator = $propertyFetchManipulator;

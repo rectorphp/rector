@@ -11,6 +11,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\ValueObject\ServiceDefinition;
+use Rector\SymfonyCodeQuality\ApplicationMetadata\ListenerServiceDefinitionProvider;
+use Rector\SymfonyCodeQuality\NodeFactory\GetSubscriberEventsClassMethodFactory;
 use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -47,18 +49,18 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     private $eventNamesToClassConstants = [];
 
     /**
-     * @var \Rector\SymfonyCodeQuality\ApplicationMetadata\ListenerServiceDefinitionProvider
+     * @var ListenerServiceDefinitionProvider
      */
     private $listenerServiceDefinitionProvider;
 
     /**
-     * @var \Rector\SymfonyCodeQuality\NodeFactory\GetSubscriberEventsClassMethodFactory
+     * @var GetSubscriberEventsClassMethodFactory
      */
     private $getSubscriberEventsClassMethodFactory;
 
     public function __construct(
-        \Rector\SymfonyCodeQuality\ApplicationMetadata\ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,
-        \Rector\SymfonyCodeQuality\NodeFactory\GetSubscriberEventsClassMethodFactory $getSubscriberEventsClassMethodFactory
+        ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,
+        GetSubscriberEventsClassMethodFactory $getSubscriberEventsClassMethodFactory
     ) {
         $this->eventNamesToClassConstants = [
             // kernel events

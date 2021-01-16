@@ -25,6 +25,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\MatchersManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
+use Rector\PhpSpecToPHPUnit\NodeFactory\AssertMethodCallFactory;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
 /**
@@ -111,14 +112,14 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     private $matchersManipulator;
 
     /**
-     * @var \Rector\PhpSpecToPHPUnit\NodeFactory\AssertMethodCallFactory
+     * @var AssertMethodCallFactory
      */
     private $assertMethodCallFactory;
 
     public function __construct(
         MatchersManipulator $matchersManipulator,
         PhpSpecRenaming $phpSpecRenaming,
-        \Rector\PhpSpecToPHPUnit\NodeFactory\AssertMethodCallFactory $assertMethodCallFactory
+        AssertMethodCallFactory $assertMethodCallFactory
     ) {
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->matchersManipulator = $matchersManipulator;

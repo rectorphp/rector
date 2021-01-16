@@ -17,7 +17,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\CodingStyle\Node\ConcatJoiner;
 use Rector\CodingStyle\Node\ConcatManipulator;
-use Rector\CodingStyle\NodeAnalyzer\ImplodeAnalyzer;
 use Rector\CodingStyle\NodeFactory\JsonArrayFactory;
 use Rector\CodingStyle\NodeFactory\JsonEncodeStaticCallFactory;
 use Rector\CodingStyle\ValueObject\ConcatExpressionJoinData;
@@ -62,11 +61,6 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
     private $jsonEncodeStaticCallFactory;
 
     /**
-     * @var ImplodeAnalyzer
-     */
-    private $implodeAnalyzer;
-
-    /**
      * @var JsonArrayFactory
      */
     private $jsonArrayFactory;
@@ -75,13 +69,11 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
         ConcatJoiner $concatJoiner,
         ConcatManipulator $concatManipulator,
         JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory,
-        ImplodeAnalyzer $implodeAnalyzer,
         JsonArrayFactory $jsonArrayFactory
     ) {
         $this->concatJoiner = $concatJoiner;
         $this->concatManipulator = $concatManipulator;
         $this->jsonEncodeStaticCallFactory = $jsonEncodeStaticCallFactory;
-        $this->implodeAnalyzer = $implodeAnalyzer;
         $this->jsonArrayFactory = $jsonArrayFactory;
     }
 

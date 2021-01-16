@@ -7,6 +7,8 @@ namespace Rector\PhpSpecToPHPUnit\NodeFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\PhpParser\Node\Manipulator\ConstFetchManipulator;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -47,7 +49,7 @@ final class AssertMethodCallFactory
         string $name,
         Expr $value,
         ?Expr $expected,
-        Expr\PropertyFetch $testedObjectPropertyFetch
+        PropertyFetch $testedObjectPropertyFetch
     ): MethodCall {
         $this->isBoolAssert = false;
 
@@ -89,9 +91,9 @@ final class AssertMethodCallFactory
         return $name;
     }
 
-    private function thisToTestedObjectPropertyFetch(Expr $expr, Expr\PropertyFetch $propertyFetch): Expr
+    private function thisToTestedObjectPropertyFetch(Expr $expr, PropertyFetch $propertyFetch): Expr
     {
-        if (! $expr instanceof Expr\Variable) {
+        if (! $expr instanceof Variable) {
             return $expr;
         }
 

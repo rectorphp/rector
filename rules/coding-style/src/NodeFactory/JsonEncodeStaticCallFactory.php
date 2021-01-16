@@ -23,15 +23,9 @@ final class JsonEncodeStaticCallFactory
      */
     private $nodeFactory;
 
-    /**
-     * @var JsonArrayFactory
-     */
-    private $jsonArrayFactory;
-
-    public function __construct(NodeFactory $nodeFactory, JsonArrayFactory $jsonArrayFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
-        $this->jsonArrayFactory = $jsonArrayFactory;
     }
 
     /**

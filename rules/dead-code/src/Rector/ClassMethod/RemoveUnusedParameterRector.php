@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeCollector\UnusedParameterResolver;
 use Rector\DeadCode\NodeManipulator\MagicMethodDetector;
@@ -34,11 +33,6 @@ final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCa
     private $classManipulator;
 
     /**
-     * @var ClassMethodManipulator
-     */
-    private $classMethodManipulator;
-
-    /**
      * @var MagicMethodDetector
      */
     private $magicMethodDetector;
@@ -55,13 +49,11 @@ final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCa
 
     public function __construct(
         ClassManipulator $classManipulator,
-        ClassMethodManipulator $classMethodManipulator,
         MagicMethodDetector $magicMethodDetector,
         VariadicFunctionLikeDetector $variadicFunctionLikeDetector,
         UnusedParameterResolver $unusedParameterResolver
     ) {
         $this->classManipulator = $classManipulator;
-        $this->classMethodManipulator = $classMethodManipulator;
         $this->magicMethodDetector = $magicMethodDetector;
         $this->variadicFunctionLikeDetector = $variadicFunctionLikeDetector;
         $this->unusedParameterResolver = $unusedParameterResolver;

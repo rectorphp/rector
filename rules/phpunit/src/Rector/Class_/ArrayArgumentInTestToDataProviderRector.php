@@ -23,8 +23,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
+use Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 use Rector\PHPUnit\ValueObject\ParamAndArg;
@@ -61,22 +61,15 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
     private $dataProviderClassMethodFactory;
 
     /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var \Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver
+     * @var ParamAndArgFromArrayResolver
      */
     private $paramAndArgFromArrayResolver;
 
     public function __construct(
         DataProviderClassMethodFactory $dataProviderClassMethodFactory,
-        TypeFactory $typeFactory,
-        \Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver $paramAndArgFromArrayResolver
+        ParamAndArgFromArrayResolver $paramAndArgFromArrayResolver
     ) {
         $this->dataProviderClassMethodFactory = $dataProviderClassMethodFactory;
-        $this->typeFactory = $typeFactory;
         $this->paramAndArgFromArrayResolver = $paramAndArgFromArrayResolver;
     }
 
