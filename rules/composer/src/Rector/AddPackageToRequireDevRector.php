@@ -58,7 +58,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, \Rector\Composer\ValueObject\PackageAndVersion[]> $configuration
+     * @param array<string, PackageAndVersion[]> $configuration
      */
     public function configure(array $configuration): void
     {

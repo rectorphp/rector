@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\Tests\Rector\AddPackageToRequireDevRector;
-
-use Iterator;
+namespace Rector\Composer\Tests\Rector\ReplacePackageAndVersionRector;
 use Rector\Composer\Tests\Rector\AbstractComposerRectorTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AddPackageToRequireDevRectorTest extends AbstractComposerRectorTestCase
+final class ReplacePackageAndVersionRectorTest extends AbstractComposerRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -19,7 +17,7 @@ final class AddPackageToRequireDevRectorTest extends AbstractComposerRectorTestC
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideData(): Iterator
+    public function provideData(): \Iterator
     {
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.json');
     }

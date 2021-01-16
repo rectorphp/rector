@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\Tests\Rector\AddPackageToRequireDevRector;
+namespace Rector\Composer\Tests\Rector\RemovePackageRector;
 
 use Iterator;
 use Rector\Composer\Tests\Rector\AbstractComposerRectorTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AddPackageToRequireDevRectorTest extends AbstractComposerRectorTestCase
+final class RemovePackageRectorTest extends AbstractComposerRectorTestCase
 {
     /**
      * @dataProvider provideData()

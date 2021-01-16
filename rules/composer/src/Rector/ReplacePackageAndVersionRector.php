@@ -10,6 +10,9 @@ use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+/**
+ * @see \Rector\Composer\Tests\Rector\ReplacePackageAndVersionRector\ReplacePackageAndVersionRectorTest
+ */
 final class ReplacePackageAndVersionRector implements ComposerRectorInterface
 {
     /**
