@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\DeadDocBlock\TagRemover\VarTagRemover;
 use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeResolver\PromotedPropertyResolver;
@@ -36,10 +37,19 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      */
     private $variableRenamer;
 
-    public function __construct(PromotedPropertyResolver $promotedPropertyResolver, VariableRenamer $variableRenamer)
-    {
+    /**
+     * @var VarTagRemover
+     */
+    private $varTagRemover;
+
+    public function __construct(
+        PromotedPropertyResolver $promotedPropertyResolver,
+        VariableRenamer $variableRenamer,
+        VarTagRemover $varTagRemover
+    ) {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->variableRenamer = $variableRenamer;
+        $this->varTagRemover = $varTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -134,8 +144,15 @@ CODE_SAMPLE
             return;
         }
 
-        // make sure the docblock is useful
         $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
+
+        // make sure the docblock is useful
+        if ($param->type === null) {
+            return;
+        }
+
+        $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($param, $paramType);
     }
 
     private function removeClassMethodParam(ClassMethod $classMethod, string $paramName): void
