@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\DeadDocBlock\TagRemover;
 
+use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -32,14 +35,17 @@ final class VarTagRemover
         $this->staticTypeMapper = $staticTypeMapper;
     }
 
-    public function removeVarPhpTagValueNodeIfNotComment(Property $property, \PHPStan\Type\Type $type): void
+    /**
+     * @param Property|Param $node
+     */
+    public function removeVarPhpTagValueNodeIfNotComment(Node $node, Type $type): void
     {
         // keep doctrine collection narrow type
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type)) {
             return;
         }
 
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $propertyPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         // nothing to remove
         if ($propertyPhpDocInfo === null) {
             return;
@@ -61,14 +67,17 @@ final class VarTagRemover
         }
 
         // keep string[] etc.
-        if ($this->isNonBasicArrayType($property, $varTagValueNode)) {
+        if ($this->isNonBasicArrayType($node, $varTagValueNode)) {
             return;
         }
 
         $propertyPhpDocInfo->removeByType(VarTagValueNode::class);
     }
 
-    private function isNonBasicArrayType(Property $property, VarTagValueNode $varTagValueNode): bool
+    /**
+     * @param Param|Property $node
+     */
+    private function isNonBasicArrayType(Node $node, VarTagValueNode $varTagValueNode): bool
     {
         if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
@@ -84,7 +93,7 @@ final class VarTagRemover
 
         $varTypeDocString = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPhpDocString(
             $varTagValueNode->type,
-            $property
+            $node
         );
 
         return $varTypeDocString !== 'array';

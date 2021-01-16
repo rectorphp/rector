@@ -4,10 +4,10 @@ namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromo
 
 use Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Source\SomeTypedPropertyClass;
 
-class TypeWithVarType
+final class UsefulCommentTypeWithVarType
 {
     /**
-     * @var SomeTypedPropertyClass
+     * @var SomeTypedPropertyClass This is really useful
      */
     private $someTypedPropertyClass;
 
@@ -25,9 +25,14 @@ namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromo
 
 use Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Source\SomeTypedPropertyClass;
 
-class TypeWithVarType
+final class UsefulCommentTypeWithVarType
 {
-    public function __construct(private SomeTypedPropertyClass $someTypedPropertyClass)
+    public function __construct(
+        /**
+         * @var SomeTypedPropertyClass This is really useful
+         */
+        private SomeTypedPropertyClass $someTypedPropertyClass
+    )
     {
     }
 }
