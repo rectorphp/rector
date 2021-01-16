@@ -5,16 +5,23 @@ declare(strict_types=1);
 namespace Rector\Composer\Processor;
 
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
-use Rector\Composer\ComposerModifier;
+use Rector\Composer\Contract\Rector\ComposerRectorInterface;
+use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Configuration\Configuration;
 use Symfony\Component\Process\Process;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
+use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ComposerProcessor
 {
+    /**
+     * @var string
+     */
+    private const COMPOSER_UPDATE = 'composer update';
+
     /**
      * @var ComposerJsonFactory
      */
@@ -26,14 +33,19 @@ final class ComposerProcessor
     private $composerJsonPrinter;
 
     /**
-     * @var ComposerModifier
-     */
-    private $composerModifier;
-
-    /**
      * @var Configuration
      */
     private $configuration;
+
+    /**
+     * @var ErrorAndDiffCollector
+     */
+    private $errorAndDiffCollector;
+
+    /**
+     * @var ComposerRectorInterface[]
+     */
+    private $composerRectors = [];
 
     /**
      * @var SmartFileSystem
@@ -41,63 +53,81 @@ final class ComposerProcessor
     private $smartFileSystem;
 
     /**
-     * @var ErrorAndDiffCollector
+     * @var ComposerModifier
      */
-    private $errorAndDiffCollector;
+    private $composerModifier;
 
+    /**
+     * @param ComposerRectorInterface[] $composerRectors
+     */
     public function __construct(
         ComposerJsonFactory $composerJsonFactory,
         ComposerJsonPrinter $composerJsonPrinter,
-        ComposerModifier $composerModifier,
         Configuration $configuration,
+        ErrorAndDiffCollector $errorAndDiffCollector,
         SmartFileSystem $smartFileSystem,
-        ErrorAndDiffCollector $errorAndDiffCollector
+        ComposerModifier $composerModifier,
+        array $composerRectors
     ) {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->composerJsonPrinter = $composerJsonPrinter;
-        $this->composerModifier = $composerModifier;
         $this->configuration = $configuration;
-        $this->smartFileSystem = $smartFileSystem;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
+        $this->composerRectors = $composerRectors;
+        $this->smartFileSystem = $smartFileSystem;
+        $this->composerModifier = $composerModifier;
     }
 
-    public function process(): void
+    public function process(string $composerJsonFilePath): void
     {
-        $composerJsonFilePath = $this->composerModifier->getFilePath();
         if (! $this->smartFileSystem->exists($composerJsonFilePath)) {
+            return;
+        }
+
+        // to avoid modification of file
+        if ($this->composerRectors === []) {
             return;
         }
 
         $smartFileInfo = new SmartFileInfo($composerJsonFilePath);
         $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
 
-        $oldContents = $smartFileInfo->getContents();
-        $this->composerModifier->modify($composerJson);
-        $newContents = $this->composerJsonPrinter->printToString($composerJson);
+        $oldComposerJson = clone $composerJson;
+        foreach ($this->composerRectors as $composerRector) {
+            $composerRector->refactor($composerJson);
+        }
 
         // nothing has changed
-        if ($oldContents === $newContents) {
+        if ($oldComposerJson->getJsonArray() === $composerJson->getJsonArray()) {
             return;
         }
 
-        $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $newContents, $oldContents);
-        $this->reportFileContentChange($smartFileInfo, $newContents);
+        $this->addComposerJsonFileDiff($oldComposerJson, $composerJson, $smartFileInfo);
+        $this->reportFileContentChange($composerJson, $smartFileInfo);
     }
 
-    private function reportFileContentChange(SmartFileInfo $smartFileInfo, string $newContent): void
+    private function reportFileContentChange(ComposerJson $composerJson, SmartFileInfo $smartFileInfo): void
     {
         if ($this->configuration->isDryRun()) {
             return;
         }
 
-        $this->smartFileSystem->dumpFile($smartFileInfo->getRealPath(), $newContent);
-        $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
+        $this->composerJsonPrinter->print($composerJson, $smartFileInfo);
 
-        $command = $this->composerModifier->getCommand();
-        $process = new Process(explode(' ', $command), getcwd());
+        $process = new Process(explode(' ', self::COMPOSER_UPDATE), getcwd());
         $process->run(function (string $type, string $message): void {
             // $type is always err https://github.com/composer/composer/issues/3795#issuecomment-76401013
             echo $message;
         });
+    }
+
+    private function addComposerJsonFileDiff(
+        ComposerJson $oldComposerJson,
+        ComposerJson $newComposerJson,
+        SmartFileInfo $smartFileInfo
+    ): void {
+        $newContents = $this->composerJsonPrinter->printToString($newComposerJson);
+        $oldContents = $this->composerJsonPrinter->printToString($oldComposerJson);
+        $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $newContents, $oldContents);
     }
 }

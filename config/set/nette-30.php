@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Composer\ComposerModifier;
-use Rector\Composer\ValueObject\ComposerModifier\ChangePackageVersion;
-use Rector\Composer\ValueObject\ComposerModifier\RemovePackage;
-use Rector\Composer\ValueObject\ReplacePackageAndVersion;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
@@ -29,6 +25,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $containerConfigurator->import(__DIR__ . '/nette-30-composer.php');
     $containerConfigurator->import(__DIR__ . '/nette-30-dependency-injection.php');
     $containerConfigurator->import(__DIR__ . '/nette-30-return-types.php');
     $containerConfigurator->import(__DIR__ . '/nette-30-param-types.php');
@@ -99,46 +96,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveParentAndNameFromComponentConstructorRector::class);
     $services->set(MoveFinalGetUserToCheckRequirementsClassMethodRector::class);
     $services->set(ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector::class);
-
-    $services->set(ComposerModifier::class)
-        ->call('configure', [
-            ValueObjectInliner::inline([
-                // meta package
-                new ChangePackageVersion('nette/nette', '^3.0'),
-                // https://github.com/nette/nette/blob/v2.4.0/composer.json vs https://github.com/nette/nette/blob/v3.0.0/composer.json
-                // older versions have security issues
-                new ChangePackageVersion('nette/application', '^3.0.6'),
-                new ChangePackageVersion('nette/bootstrap', '^3.0'),
-                new ChangePackageVersion('nette/caching', '^3.0'),
-                new ChangePackageVersion('nette/component-model', '^3.0'),
-                new ChangePackageVersion('nette/database', '^3.0'),
-                new RemovePackage('nette/deprecated'),
-                new ChangePackageVersion('nette/di', '^3.0'),
-                new ChangePackageVersion('nette/finder', '^2.5'),
-                new ChangePackageVersion('nette/forms', '^3.0'),
-                new ChangePackageVersion('nette/http', '^3.0'),
-                new ChangePackageVersion('nette/mail', '^3.0'),
-                new ChangePackageVersion('nette/neon', '^3.0'),
-                new ChangePackageVersion('nette/php-generator', '^3.0'),
-                new RemovePackage('nette/reflection'),
-                new ChangePackageVersion('nette/robot-loader', '^3.0'),
-                new ChangePackageVersion('nette/safe-stream', '^2.4'),
-                new ChangePackageVersion('nette/security', '^3.0'),
-                new ChangePackageVersion('nette/tokenizer', '^3.0'),
-                new ChangePackageVersion('nette/utils', '^3.0'),
-                new ChangePackageVersion('latte/latte', '^2.5'),
-                new ChangePackageVersion('tracy/tracy', '^2.6'),
-                // webchemistry to contributte
-                new ReplacePackageAndVersion(
-                    'webchemistry/forms-multiplier',
-                    'contributte/forms-multiplier',
-                    '3.1.x-dev'
-                ),
-                // contributte packages
-                new ChangePackageVersion('contributte/event-dispatcher-extra', '^0.8'),
-                new ChangePackageVersion('contributte/forms-multiplier', '3.1.x-dev'),
-                // other packages
-                new ChangePackageVersion('radekdostal/nette-datetimepicker', '^3.0'),
-            ]),
-        ]);
 };

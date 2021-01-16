@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Composer\Tests\Rector;
 
 use Nette\Utils\Json;
-use Rector\Composer\ComposerModifier;
+use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Composer\Tests\Contract\ConfigFileAwareInterface;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Testing\Guard\FixtureGuard;
@@ -22,14 +22,14 @@ abstract class AbstractComposerRectorTestCase extends AbstractKernelTestCase imp
     private $fixtureGuard;
 
     /**
-     * @var ComposerModifier
-     */
-    private $composerModifier;
-
-    /**
      * @var ComposerJsonFactory
      */
     private $composerJsonFactory;
+
+    /**
+     * @var ComposerModifier
+     */
+    private $composerModifier;
 
     protected function setUp(): void
     {
