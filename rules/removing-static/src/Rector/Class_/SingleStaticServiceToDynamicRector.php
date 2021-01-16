@@ -16,12 +16,13 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -30,13 +31,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\SingleStaticServiceToDynamicRector\SingleStaticServiceToDynamicRectorTest
  */
-final class SingleStaticServiceToDynamicRector extends AbstractRector implements ConfigurableRectorInterface
+final class SingleStaticServiceToDynamicRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    public const CLASS_TYPES = 'class_types';
-
     /**
      * @var string
      */
@@ -57,8 +53,13 @@ final class SingleStaticServiceToDynamicRector extends AbstractRector implements
      */
     private $staticCallPresenceAnalyzer;
 
-    public function __construct(PropertyNaming $propertyNaming, StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer)
-    {
+    public function __construct(
+        PropertyNaming $propertyNaming,
+        StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer,
+        ParameterProvider $parameterProvider
+    ) {
+        $this->classTypes = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
+
         $this->propertyNaming = $propertyNaming;
         $this->staticCallPresenceAnalyzer = $staticCallPresenceAnalyzer;
     }
@@ -122,7 +123,7 @@ class SomeClass
 CODE_SAMPLE
 ,
                 [
-                    self::CLASS_TYPES => ['SomeClass'],
+                    Option::TYPES_TO_REMOVE_STATIC_FROM => ['SomeClass'],
                 ]
             ),
         ]);
@@ -158,14 +159,6 @@ CODE_SAMPLE
         }
 
         return $this->refactorStaticPropertyFetch($node);
-    }
-
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure(array $configuration): void
-    {
-        $this->classTypes = $configuration[self::CLASS_TYPES] ?? [];
     }
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
