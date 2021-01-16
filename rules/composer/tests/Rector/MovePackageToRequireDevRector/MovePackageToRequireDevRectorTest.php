@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace Rector\Composer\Tests\Rector\MovePackageToRequireDevRector;
+
 use Iterator;
 use Rector\Composer\Tests\Rector\AbstractComposerRectorTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
@@ -23,7 +24,7 @@ final class MovePackageToRequireDevRectorTest extends AbstractComposerRectorTest
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.json');
     }
 
-    protected function provideConfigFile(): string
+    public function provideConfigFile(): string
     {
         return __DIR__ . '/config/some_config.php';
     }

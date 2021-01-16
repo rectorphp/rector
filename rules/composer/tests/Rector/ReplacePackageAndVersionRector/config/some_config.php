@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Composer\Rector\MovePackageToRequireDevRector;
 use Rector\Composer\Rector\ReplacePackageAndVersionRector;
 use Rector\Composer\ValueObject\ReplacePackageAndVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -14,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplacePackageAndVersionRector::class)
         ->call('configure', [[
             ReplacePackageAndVersionRector::REPLACE_PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
-                new ReplacePackageAndVersion('vendor1/package1', 'vendor1/package3', '^4.0')
+                new ReplacePackageAndVersion('vendor1/package1', 'vendor1/package3', '^4.0'),
             ]),
         ]]);
 };

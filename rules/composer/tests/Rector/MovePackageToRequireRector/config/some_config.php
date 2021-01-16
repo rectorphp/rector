@@ -10,8 +10,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MovePackageToRequireRector::class)
         ->call('configure', [[
-            MovePackageToRequireRector::PACKAGE_NAMES => [
-                'vendor1/package1'
-            ],
+            MovePackageToRequireRector::PACKAGE_NAMES => ['vendor1/package1'],
         ]]);
 };

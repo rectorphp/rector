@@ -24,7 +24,7 @@ final class AddPackageToRequireDevRectorTest extends AbstractComposerRectorTestC
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.json');
     }
 
-    protected function provideConfigFile(): string
+    public function provideConfigFile(): string
     {
         return __DIR__ . '/config/some_config.php';
     }

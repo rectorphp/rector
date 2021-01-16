@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Rector\Composer\Rector;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
-use Rector\Composer\ValueObject\ComposerModifier\AddPackageToRequire;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+/**
+ * @see \Rector\Composer\Tests\Rector\AddPackageToRequireRector\AddPackageToRequireRectorTest
+ */
 final class AddPackageToRequireRector implements ComposerRectorInterface
 {
     /**
@@ -19,7 +21,7 @@ final class AddPackageToRequireRector implements ComposerRectorInterface
     public const PACKAGES_AND_VERSIONS = 'packages_and_versions';
 
     /**
-     * @var AddPackageToRequire[]
+     * @var PackageAndVersion[]
      */
     private $packagesAndVersions = [];
 
@@ -53,7 +55,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, \Rector\Composer\ValueObject\PackageAndVersion[]> $configuration
+     * @param array<string, PackageAndVersion[]> $configuration
      */
     public function configure(array $configuration): void
     {

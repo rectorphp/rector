@@ -10,10 +10,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RemovePackageRector::class)
         ->call('configure', [[
-            RemovePackageRector::PACKAGE_NAMES => [
-                'vendor1/package3',
-                'vendor1/package1',
-                'vendor1/package2',
-            ],
+            RemovePackageRector::PACKAGE_NAMES => ['vendor1/package3', 'vendor1/package1', 'vendor1/package2'],
         ]]);
 };

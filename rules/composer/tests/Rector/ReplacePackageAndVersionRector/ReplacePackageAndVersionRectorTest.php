@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace Rector\Composer\Tests\Rector\ReplacePackageAndVersionRector;
+
 use Rector\Composer\Tests\Rector\AbstractComposerRectorTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -22,7 +23,7 @@ final class ReplacePackageAndVersionRectorTest extends AbstractComposerRectorTes
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.json');
     }
 
-    protected function provideConfigFile(): string
+    public function provideConfigFile(): string
     {
         return __DIR__ . '/config/some_config.php';
     }

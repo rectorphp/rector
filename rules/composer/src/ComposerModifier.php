@@ -35,11 +35,6 @@ final class ComposerModifier
         $this->composerRectors = $composerRectors;
     }
 
-    public function setFilePath(string $filePath): void
-    {
-        $this->composerJsonFilePath = $filePath;
-    }
-
     public function getFilePath(): string
     {
         return $this->composerJsonFilePath ?: getcwd() . '/composer.json';

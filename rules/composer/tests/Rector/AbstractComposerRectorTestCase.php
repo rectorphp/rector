@@ -6,6 +6,7 @@ namespace Rector\Composer\Tests\Rector;
 
 use Nette\Utils\Json;
 use Rector\Composer\ComposerModifier;
+use Rector\Composer\Tests\Contract\ConfigFileAwareInterface;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Testing\Guard\FixtureGuard;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
@@ -13,7 +14,7 @@ use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-abstract class AbstractComposerRectorTestCase extends AbstractKernelTestCase
+abstract class AbstractComposerRectorTestCase extends AbstractKernelTestCase implements ConfigFileAwareInterface
 {
     /**
      * @var FixtureGuard
@@ -38,8 +39,6 @@ abstract class AbstractComposerRectorTestCase extends AbstractKernelTestCase
         $this->composerModifier = $this->getService(ComposerModifier::class);
         $this->composerJsonFactory = $this->getService(ComposerJsonFactory::class);
     }
-
-    abstract protected function provideConfigFile(): string;
 
     protected function doTestFileInfo(SmartFileInfo $smartFileInfo): void
     {

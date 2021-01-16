@@ -10,6 +10,9 @@ use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+/**
+ * @see \Rector\Composer\Tests\Rector\ChangePackageVersionRector\ChangePackageVersionRectorTest
+ */
 final class ChangePackageVersionRector implements ComposerRectorInterface
 {
     /**
@@ -58,7 +61,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, \Rector\Composer\ValueObject\PackageAndVersion[]> $configuration
+     * @param array<string, PackageAndVersion[]> $configuration
      */
     public function configure(array $configuration): void
     {
