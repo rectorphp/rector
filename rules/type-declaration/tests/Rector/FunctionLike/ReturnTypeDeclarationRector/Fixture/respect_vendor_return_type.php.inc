@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
-class DemoFile
+class RespectVendorReturnType
 {
     /**
      * @return bool
@@ -13,7 +13,7 @@ class DemoFile
     }
 }
 
-class DemoFile2 extends DemoFile {
+class RespectVendorReturnType2 extends RespectVendorReturnType {
     public function run() {
        return true;       
     }
