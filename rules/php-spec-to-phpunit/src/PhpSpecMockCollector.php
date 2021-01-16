@@ -39,12 +39,14 @@ final class PhpSpecMockCollector
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
-    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeNameResolver $nodeNameResolver
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     /**
@@ -58,7 +60,7 @@ final class PhpSpecMockCollector
             return $this->mocks[$className];
         }
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node): void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (Node $node): void {
             if (! $node instanceof ClassMethod) {
                 return;
             }

@@ -16,7 +16,7 @@ final class StmtsManipulator
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var BetterStandardPrinter
@@ -25,9 +25,9 @@ final class StmtsManipulator
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
-        SimpleCallableNodeTraverser $callableNodeTraverser
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
@@ -52,19 +52,20 @@ final class StmtsManipulator
      */
     public function filterOutExistingStmts(ClassMethod $classMethod, array $stmts): array
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            &$stmts
-        ) {
-            foreach ($stmts as $key => $assign) {
-                if (! $this->betterStandardPrinter->areNodesEqual($node, $assign)) {
-                    continue;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node) use (&$stmts) {
+                foreach ($stmts as $key => $assign) {
+                    if (! $this->betterStandardPrinter->areNodesEqual($node, $assign)) {
+                        continue;
+                    }
+
+                    unset($stmts[$key]);
                 }
 
-                unset($stmts[$key]);
+                return null;
             }
-
-            return null;
-        });
+        );
 
         return $stmts;
     }

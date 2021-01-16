@@ -24,7 +24,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var BetterStandardPrinter
@@ -33,11 +33,11 @@ final class ParentGetterStmtsToExternalStmtsFactory
 
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
@@ -79,7 +79,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
         }
 
         // stmts without assign
-        $this->callableNodeTraverser->traverseNodesWithCallable($getUserStmts, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($getUserStmts, function (Node $node) use (
             $userExpression
         ): ?MethodCall {
             if (! $this->betterStandardPrinter->areNodesEqual($node, $userExpression)) {

@@ -22,7 +22,7 @@ final class FunctionLikeManipulator
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var PropertyFetchAnalyzer
@@ -30,12 +30,12 @@ final class FunctionLikeManipulator
     private $propertyFetchAnalyzer;
 
     public function __construct(
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
@@ -50,7 +50,7 @@ final class FunctionLikeManipulator
         }
 
         $returnedLocalPropertyNames = [];
-        $this->callableNodeTraverser->traverseNodesWithCallable($functionLike, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($functionLike, function (Node $node) use (
             &$returnedLocalPropertyNames
         ) {
             if (! $node instanceof Return_) {

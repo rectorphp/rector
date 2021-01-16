@@ -20,14 +20,14 @@ final class ConcatManipulator
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
-        SimpleCallableNodeTraverser $callableNodeTraverser
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function getFirstConcatItem(Concat $concat): Node
@@ -50,7 +50,7 @@ final class ConcatManipulator
         $newConcat = clone $concat;
         $firstConcatItem = $this->getFirstConcatItem($concat);
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($newConcat, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($newConcat, function (Node $node) use (
             $firstConcatItem
         ): ?Expr {
             if (! $node instanceof Concat) {

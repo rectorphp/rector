@@ -20,7 +20,7 @@ final class NextVariableUsageNodeFinder
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var BetterStandardPrinter
@@ -45,11 +45,11 @@ final class NextVariableUsageNodeFinder
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         ParentScopeFinder $parentScopeFinder
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parentScopeFinder = $parentScopeFinder;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -65,10 +65,9 @@ final class NextVariableUsageNodeFinder
 
         /** @var Variable $expr */
         $expr = $assign->var;
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $scopeNode->stmts, function (Node $currentNode) use (
-            $expr,
-            &$nextUsageOfVariable
-        ): ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $scopeNode->stmts, function (
+            Node $currentNode
+        ) use ($expr, &$nextUsageOfVariable): ?int {
             // used above the assign
             if ($currentNode->getStartTokenPos() < $expr->getStartTokenPos()) {
                 return null;

@@ -24,9 +24,11 @@ final class StaticTypesInClassResolver
      */
     private $nodeTypeResolver;
 
-    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser, NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->simpleCallableNodeTraverser = $callableNodeTraverser;
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeTypeResolver $nodeTypeResolver
+    ) {
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 

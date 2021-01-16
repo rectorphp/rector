@@ -24,11 +24,11 @@ final class DocAliasResolver
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
-    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     /**
@@ -38,7 +38,7 @@ final class DocAliasResolver
     {
         $possibleDocAliases = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
             &$possibleDocAliases
         ): void {
             $docComment = $node->getDocComment();

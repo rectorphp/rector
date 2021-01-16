@@ -26,7 +26,7 @@ final class PropertyFetchWithConstFetchReplacer
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var PropertyFetchAnalyzer
@@ -45,13 +45,13 @@ final class PropertyFetchWithConstFetchReplacer
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         ConstantNaming $constantNaming,
         NodeFactory $nodeFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->constantNaming = $constantNaming;
         $this->nodeFactory = $nodeFactory;
@@ -64,7 +64,7 @@ final class PropertyFetchWithConstFetchReplacer
         $propertyName = $this->nodeNameResolver->getName($property);
         $constantName = $this->constantNaming->createFromProperty($propertyProperty);
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use (
             $propertyName,
             $constantName
         ): ?ClassConstFetch {

@@ -15,7 +15,7 @@ abstract class AbstractTypeInferer
     /**
      * @var SimpleCallableNodeTraverser
      */
-    protected $callableNodeTraverser;
+    protected $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
@@ -41,13 +41,13 @@ abstract class AbstractTypeInferer
      * @required
      */
     public function autowireAbstractTypeInferer(
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         StaticTypeMapper $staticTypeMapper,
         TypeFactory $typeFactory
     ): void {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->staticTypeMapper = $staticTypeMapper;

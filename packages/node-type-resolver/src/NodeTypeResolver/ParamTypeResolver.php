@@ -34,7 +34,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeTypeResolver
@@ -46,10 +46,12 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      */
     private $staticTypeMapper;
 
-    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeNameResolver $nodeNameResolver
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     /**
@@ -113,7 +115,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
         $paramStaticType = new MixedType();
 
         // special case for param inside method/function
-        $this->callableNodeTraverser->traverseNodesWithCallable(
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
             function (Node $node) use ($paramName, &$paramStaticType): ?int {
                 if (! $node instanceof Variable) {

@@ -125,22 +125,22 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
     {
         $paramStaticType = new ArrayType(new MixedType(), new MixedType());
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $propertyName,
-            &$paramStaticType
-        ): ?int {
-            if (! $node instanceof Variable) {
-                return null;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node) use ($propertyName, &$paramStaticType): ?int {
+                if (! $node instanceof Variable) {
+                    return null;
+                }
+
+                if (! $this->nodeNameResolver->isName($node, $propertyName)) {
+                    return null;
+                }
+
+                $paramStaticType = $this->nodeTypeResolver->getStaticType($node);
+
+                return NodeTraverser::STOP_TRAVERSAL;
             }
-
-            if (! $this->nodeNameResolver->isName($node, $propertyName)) {
-                return null;
-            }
-
-            $paramStaticType = $this->nodeTypeResolver->getStaticType($node);
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
+        );
 
         return $paramStaticType;
     }

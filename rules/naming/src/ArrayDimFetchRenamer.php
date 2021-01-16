@@ -20,7 +20,7 @@ final class ArrayDimFetchRenamer
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var BetterStandardPrinter
@@ -28,10 +28,10 @@ final class ArrayDimFetchRenamer
     private $betterStandardPrinter;
 
     public function __construct(
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         BetterStandardPrinter $betterStandardPrinter
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
@@ -43,10 +43,9 @@ final class ArrayDimFetchRenamer
         ArrayDimFetch $arrayDimFetch,
         string $variableName
     ): void {
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $arrayDimFetch,
-            $variableName
-        ) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (
+            Node $node
+        ) use ($arrayDimFetch, $variableName) {
             // do not rename element above
             if ($node->getLine() <= $arrayDimFetch->getLine()) {
                 return null;

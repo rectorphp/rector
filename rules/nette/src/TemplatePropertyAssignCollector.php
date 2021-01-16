@@ -30,7 +30,7 @@ final class TemplatePropertyAssignCollector
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
@@ -42,9 +42,11 @@ final class TemplatePropertyAssignCollector
      */
     private $templateFileExpr;
 
-    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeNameResolver $nodeNameResolver
+    ) {
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -55,7 +57,7 @@ final class TemplatePropertyAssignCollector
         $this->templateVariables = [];
         $this->nodesToRemove = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable(
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
             function (Node $node): void {
                 if ($node instanceof MethodCall) {

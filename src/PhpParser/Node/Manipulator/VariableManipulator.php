@@ -25,7 +25,7 @@ final class VariableManipulator
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var AssignManipulator
@@ -62,11 +62,11 @@ final class VariableManipulator
         AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         VariableToConstantGuard $variableToConstantGuard
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->assignManipulator = $assignManipulator;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -82,35 +82,36 @@ final class VariableManipulator
     {
         $assignsOfArrayToVariable = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
-            &$assignsOfArrayToVariable
-        ) {
-            if (! $node instanceof Assign) {
-                return null;
-            }
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->getStmts(),
+            function (Node $node) use (&$assignsOfArrayToVariable) {
+                if (! $node instanceof Assign) {
+                    return null;
+                }
 
-            if (! $node->var instanceof Variable) {
-                return null;
-            }
+                if (! $node->var instanceof Variable) {
+                    return null;
+                }
 
-            if (! $node->expr instanceof Array_ && ! $node->expr instanceof Scalar) {
-                return null;
-            }
+                if (! $node->expr instanceof Array_ && ! $node->expr instanceof Scalar) {
+                    return null;
+                }
 
-            if ($node->expr instanceof Encapsed) {
-                return null;
-            }
+                if ($node->expr instanceof Encapsed) {
+                    return null;
+                }
 
-            if ($node->expr instanceof Array_ && ! $this->arrayManipulator->isArrayOnlyScalarValues($node->expr)) {
-                return null;
-            }
+                if ($node->expr instanceof Array_ && ! $this->arrayManipulator->isArrayOnlyScalarValues($node->expr)) {
+                    return null;
+                }
 
-            if ($this->isTestCaseExpectedVariable($node->var)) {
-                return null;
-            }
+                if ($this->isTestCaseExpectedVariable($node->var)) {
+                    return null;
+                }
 
-            $assignsOfArrayToVariable[] = $node;
-        });
+                $assignsOfArrayToVariable[] = $node;
+            }
+        );
 
         return $assignsOfArrayToVariable;
     }

@@ -21,12 +21,14 @@ final class PropertyFetchAssignManipulator
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
-    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeNameResolver $nodeNameResolver
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     /**
@@ -36,7 +38,7 @@ final class PropertyFetchAssignManipulator
     {
         $propertyNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
             $paramName,
             &$propertyNames
         ) {

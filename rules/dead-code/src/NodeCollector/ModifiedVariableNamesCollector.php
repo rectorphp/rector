@@ -19,16 +19,18 @@ final class ModifiedVariableNamesCollector
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeNameResolver $nodeNameResolver
+    ) {
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -50,7 +52,7 @@ final class ModifiedVariableNamesCollector
     {
         $variableNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
             &$variableNames
         ) {
             if (! $node instanceof Arg) {
@@ -79,7 +81,7 @@ final class ModifiedVariableNamesCollector
     {
         $modifiedVariableNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use (
             &$modifiedVariableNames
         ) {
             if (! $node instanceof Assign) {

@@ -22,7 +22,7 @@ final class SelfContainerMethodCallCollector
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var ValueResolver
@@ -30,12 +30,12 @@ final class SelfContainerMethodCallCollector
     private $valueResolver;
 
     public function __construct(
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
         ValueResolver $valueResolver
     ) {
         $this->kernelTestCaseNodeAnalyzer = $kernelTestCaseNodeAnalyzer;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->valueResolver = $valueResolver;
     }
 
@@ -46,7 +46,7 @@ final class SelfContainerMethodCallCollector
     {
         $serviceTypes = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             &$serviceTypes,
             $skipSetUpMethod
         ): ?Node {

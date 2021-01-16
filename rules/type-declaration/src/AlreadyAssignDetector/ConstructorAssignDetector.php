@@ -17,7 +17,7 @@ final class ConstructorAssignDetector extends AbstractAssignDetector
     {
         $isAssignedInConstructor = false;
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
             $propertyName, &$isAssignedInConstructor
         ): ?int {
             $expr = $this->matchAssignExprToPropertyName($node, $propertyName);

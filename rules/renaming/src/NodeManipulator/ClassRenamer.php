@@ -45,7 +45,7 @@ final class ClassRenamer
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var PhpDocClassRenamer
@@ -64,7 +64,7 @@ final class ClassRenamer
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         ClassNaming $classNaming,
         DocBlockManipulator $docBlockManipulator,
         NodeNameResolver $nodeNameResolver,
@@ -72,7 +72,7 @@ final class ClassRenamer
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->phpDocClassRenamer = $phpDocClassRenamer;
         $this->classNaming = $classNaming;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -323,7 +323,7 @@ final class ClassRenamer
 
     private function changeNameToFullyQualifiedName(ClassLike $classLike): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) {
             if (! $node instanceof FullyQualified) {
                 return null;
             }

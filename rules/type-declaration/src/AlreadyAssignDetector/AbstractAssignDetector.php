@@ -15,7 +15,7 @@ abstract class AbstractAssignDetector
     /**
      * @var SimpleCallableNodeTraverser
      */
-    protected $callableNodeTraverser;
+    protected $simpleCallableNodeTraverser;
 
     /**
      * @var PropertyAssignMatcher
@@ -27,10 +27,10 @@ abstract class AbstractAssignDetector
      */
     public function autowireAbstractAssignDetector(
         PropertyAssignMatcher $propertyAssignMatcher,
-        SimpleCallableNodeTraverser $callableNodeTraverser
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ): void {
         $this->propertyAssignMatcher = $propertyAssignMatcher;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     protected function matchAssignExprToPropertyName(Node $node, string $propertyName): ?Expr

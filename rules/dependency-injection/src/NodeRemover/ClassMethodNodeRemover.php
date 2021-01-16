@@ -31,16 +31,16 @@ final class ClassMethodNodeRemover
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     public function __construct(
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         NodesToRemoveCollector $nodesToRemoveCollector
     ) {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function removeClassMethodIfUseless(ClassMethod $classMethod): void
@@ -61,22 +61,23 @@ final class ClassMethodNodeRemover
         /** @var string $paramName */
         $paramName = $this->nodeNameResolver->getName($param->var);
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $paramName
-        ) {
-            if (! $this->isParentConstructStaticCall($node)) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node) use ($paramName) {
+                if (! $this->isParentConstructStaticCall($node)) {
+                    return null;
+                }
+
+                /** @var StaticCall $node */
+                $this->removeParamFromArgs($node, $paramName);
+
+                if ($node->args === []) {
+                    $this->nodesToRemoveCollector->addNodeToRemove($node);
+                }
+
                 return null;
             }
-
-            /** @var StaticCall $node */
-            $this->removeParamFromArgs($node, $paramName);
-
-            if ($node->args === []) {
-                $this->nodesToRemoveCollector->addNodeToRemove($node);
-            }
-
-            return null;
-        });
+        );
 
         foreach ((array) $classMethod->stmts as $key => $stmt) {
             if ($stmt instanceof Expression) {

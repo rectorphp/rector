@@ -19,7 +19,7 @@ final class OnFormVariableMethodCallsCollector
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeTypeResolver
@@ -33,10 +33,10 @@ final class OnFormVariableMethodCallsCollector
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
@@ -62,21 +62,22 @@ final class OnFormVariableMethodCallsCollector
     {
         $newFormVariable = null;
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
-            &$newFormVariable
-        ): ?int {
-            if (! $node instanceof Assign) {
-                return null;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->getStmts(),
+            function (Node $node) use (&$newFormVariable): ?int {
+                if (! $node instanceof Assign) {
+                    return null;
+                }
+
+                if (! $this->nodeTypeResolver->isObjectType($node->expr, 'Nette\Application\UI\Form')) {
+                    return null;
+                }
+
+                $newFormVariable = $node->var;
+
+                return NodeTraverser::STOP_TRAVERSAL;
             }
-
-            if (! $this->nodeTypeResolver->isObjectType($node->expr, 'Nette\Application\UI\Form')) {
-                return null;
-            }
-
-            $newFormVariable = $node->var;
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
+        );
 
         return $newFormVariable;
     }
@@ -87,22 +88,22 @@ final class OnFormVariableMethodCallsCollector
     private function collectOnFormVariableMethodCalls(ClassMethod $classMethod, Expr $expr): array
     {
         $onFormVariableMethodCalls = [];
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
-            $expr,
-            &$onFormVariableMethodCalls
-        ) {
-            if (! $node instanceof MethodCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->getStmts(),
+            function (Node $node) use ($expr, &$onFormVariableMethodCalls) {
+                if (! $node instanceof MethodCall) {
+                    return null;
+                }
+
+                if (! $this->betterStandardPrinter->areNodesEqual($node->var, $expr)) {
+                    return null;
+                }
+
+                $onFormVariableMethodCalls[] = $node;
+
                 return null;
             }
-
-            if (! $this->betterStandardPrinter->areNodesEqual($node->var, $expr)) {
-                return null;
-            }
-
-            $onFormVariableMethodCalls[] = $node;
-
-            return null;
-        });
+        );
 
         return $onFormVariableMethodCalls;
     }

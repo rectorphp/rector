@@ -22,7 +22,7 @@ final class VariableRenamer
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
@@ -35,11 +35,11 @@ final class VariableRenamer
     private $varTagValueNodeRenamer;
 
     public function __construct(
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         VarTagValueNodeRenamer $varTagValueNodeRenamer
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
     }
@@ -59,7 +59,7 @@ final class VariableRenamer
             $isRenamingActive = true;
         }
 
-        $this->callableNodeTraverser->traverseNodesWithCallable(
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $functionLike->stmts,
             function (Node $node) use ($oldName, $expectedName, $assign, &$isRenamingActive): ?Variable {
                 if ($assign !== null && $node === $assign) {

@@ -20,16 +20,18 @@ final class ClassMethodPropertyFetchManipulator
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeNameResolver $nodeNameResolver
+    ) {
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -46,26 +48,26 @@ final class ClassMethodPropertyFetchManipulator
     {
         $assignedParamName = null;
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $propertyName,
-            &$assignedParamName
-        ): ?int {
-            if (! $node instanceof Assign) {
-                return null;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node) use ($propertyName, &$assignedParamName): ?int {
+                if (! $node instanceof Assign) {
+                    return null;
+                }
+
+                if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
+                    return null;
+                }
+
+                if (StaticInstanceOf::isOneOf($node->expr, [MethodCall::class, StaticCall::class])) {
+                    return null;
+                }
+
+                $assignedParamName = $this->nodeNameResolver->getName($node->expr);
+
+                return NodeTraverser::STOP_TRAVERSAL;
             }
-
-            if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
-                return null;
-            }
-
-            if (StaticInstanceOf::isOneOf($node->expr, [MethodCall::class, StaticCall::class])) {
-                return null;
-            }
-
-            $assignedParamName = $this->nodeNameResolver->getName($node->expr);
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
+        );
 
         /** @var string|null $assignedParamName */
         if ($assignedParamName === null) {

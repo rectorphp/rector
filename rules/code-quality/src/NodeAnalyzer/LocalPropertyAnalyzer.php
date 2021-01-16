@@ -36,7 +36,7 @@ final class LocalPropertyAnalyzer
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var ClassNodeAnalyzer
@@ -74,7 +74,7 @@ final class LocalPropertyAnalyzer
     private $typeFactory;
 
     public function __construct(
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         ClassNodeAnalyzer $classNodeAnalyzer,
         NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
@@ -83,7 +83,7 @@ final class LocalPropertyAnalyzer
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         TypeFactory $typeFactory
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->classNodeAnalyzer = $classNodeAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -100,7 +100,7 @@ final class LocalPropertyAnalyzer
     {
         $fetchedLocalPropertyNameToTypes = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             &$fetchedLocalPropertyNameToTypes
         ): ?int {
             // skip anonymous class scope

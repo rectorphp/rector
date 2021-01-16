@@ -35,12 +35,12 @@ final class AnonymousFunctionNodeFactory
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
-    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser, Parser $parser)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, Parser $parser)
     {
         $this->parser = $parser;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function createAnonymousFunctionFromString(Expr $expr): ?Closure
@@ -62,7 +62,7 @@ final class AnonymousFunctionNodeFactory
 
         $stmt = $firstNode->expr;
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node): Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node): Node {
             if (! $node instanceof String_) {
                 return $node;
             }

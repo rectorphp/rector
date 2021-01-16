@@ -12,11 +12,11 @@ class SkipReprintUnionArray
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
-    public function __construct(SimpleCallableNodeTraverser $callableNodeTraverser)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
      * @return Yield_[]|YieldFrom[]
@@ -25,7 +25,7 @@ class SkipReprintUnionArray
     {
         $yieldNodes = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable(
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $functionLike->getStmts(),
             function (\PhpParser\Node $node) use (&$yieldNodes): ?int {
                 if (! $node instanceof Yield_ && ! $node instanceof YieldFrom) {

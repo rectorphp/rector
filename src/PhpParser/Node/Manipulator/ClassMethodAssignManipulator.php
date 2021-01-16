@@ -41,7 +41,7 @@ final class ClassMethodAssignManipulator
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeNameResolver
@@ -71,14 +71,14 @@ final class ClassMethodAssignManipulator
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         VariableManipulator $variableManipulator,
         CallReflectionResolver $callReflectionResolver
     ) {
         $this->variableManipulator = $variableManipulator;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -130,7 +130,7 @@ final class ClassMethodAssignManipulator
     {
         $arrayDestructionCreatedVariables = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
             &$arrayDestructionCreatedVariables
         ) {
             if (! $node instanceof Assign) {
@@ -233,7 +233,7 @@ final class ClassMethodAssignManipulator
     {
         $referencedVariables = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
             &$referencedVariables
         ) {
             if (! $node instanceof Variable) {

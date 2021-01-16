@@ -61,7 +61,7 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
      * @required
      */
     public function autowireAbstractPropertyRenamer(
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         NotPrivatePropertyGuard $notPrivatePropertyGuard,
         RamseyUuidInterfaceGuard $ramseyUuidInterfaceGuard,

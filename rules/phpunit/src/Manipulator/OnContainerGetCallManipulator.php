@@ -29,7 +29,7 @@ final class OnContainerGetCallManipulator
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var ServiceNaming
@@ -57,7 +57,7 @@ final class OnContainerGetCallManipulator
     private $formerVariablesByMethodCollector;
 
     public function __construct(
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
         NodeNameResolver $nodeNameResolver,
         NodesToRemoveCollector $nodesToRemoveCollector,
@@ -66,7 +66,7 @@ final class OnContainerGetCallManipulator
         FormerVariablesByMethodCollector $formerVariablesByMethodCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->serviceNaming = $serviceNaming;
         $this->kernelTestCaseNodeAnalyzer = $kernelTestCaseNodeAnalyzer;
         $this->valueResolver = $valueResolver;
@@ -80,39 +80,42 @@ final class OnContainerGetCallManipulator
      */
     public function replaceFormerVariablesWithPropertyFetch(Class_ $class): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node): ?PropertyFetch {
-            if (! $node instanceof Variable) {
-                return null;
-            }
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            $class->stmts,
+            function (Node $node): ?PropertyFetch {
+                if (! $node instanceof Variable) {
+                    return null;
+                }
 
-            $variableName = $this->nodeNameResolver->getName($node);
-            if ($variableName === null) {
-                return null;
-            }
+                $variableName = $this->nodeNameResolver->getName($node);
+                if ($variableName === null) {
+                    return null;
+                }
 
-            /** @var string|null $methodName */
-            $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
-            if ($methodName === null) {
-                return null;
-            }
+                /** @var string|null $methodName */
+                $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
+                if ($methodName === null) {
+                    return null;
+                }
 
-            $serviceType = $this->formerVariablesByMethodCollector->getTypeByVariableByMethod(
+                $serviceType = $this->formerVariablesByMethodCollector->getTypeByVariableByMethod(
                 $methodName,
                 $variableName
             );
-            if ($serviceType === null) {
-                return null;
+                if ($serviceType === null) {
+                    return null;
+                }
+
+                $propertyName = $this->serviceNaming->resolvePropertyNameFromServiceType($serviceType);
+
+                return new PropertyFetch(new Variable('this'), $propertyName);
             }
-
-            $propertyName = $this->serviceNaming->resolvePropertyNameFromServiceType($serviceType);
-
-            return new PropertyFetch(new Variable('this'), $propertyName);
-        });
+        );
     }
 
     public function removeAndCollectFormerAssignedVariables(Class_ $class, bool $skipSetUpMethod = true): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             $skipSetUpMethod
         ): ?PropertyFetch {
             if (! $node instanceof MethodCall) {

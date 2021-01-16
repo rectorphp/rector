@@ -38,7 +38,7 @@ final class ListeningMethodsCollector
     /**
      * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var ValueResolver
@@ -51,11 +51,11 @@ final class ListeningMethodsCollector
     private $eventClassNaming;
 
     public function __construct(
-        SimpleCallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         EventClassNaming $eventClassNaming,
         ValueResolver $valueResolver
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->valueResolver = $valueResolver;
         $this->eventClassNaming = $eventClassNaming;
     }
@@ -72,7 +72,7 @@ final class ListeningMethodsCollector
 
         $this->eventClassesAndClassMethods = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable(
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $getSubscribedEventsClassMethod->stmts,
             function (Node $node) use ($classLike, $type) {
                 $classMethod = $this->matchClassMethodByArrayItem($node, $classLike);
