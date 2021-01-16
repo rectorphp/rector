@@ -18,6 +18,7 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
+use Rector\CodeQuality\NodeManipulator\ExprBoolCaster;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
@@ -30,26 +31,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyIfReturnBoolRector extends AbstractRector
 {
     /**
-     * @var StaticTypeAnalyzer
-     */
-    private $staticTypeAnalyzer;
-
-    /**
      * @var CommentsMerger
      */
     private $commentsMerger;
 
     /**
-     * @var \Rector\CodeQuality\NodeManipulator\ExprBoolCaster
+     * @var ExprBoolCaster
      */
     private $exprBoolCaster;
 
-    public function __construct(
-        CommentsMerger $commentsMerger,
-        StaticTypeAnalyzer $staticTypeAnalyzer,
-        \Rector\CodeQuality\NodeManipulator\ExprBoolCaster $exprBoolCaster
-    ) {
-        $this->staticTypeAnalyzer = $staticTypeAnalyzer;
+    public function __construct(CommentsMerger $commentsMerger, ExprBoolCaster $exprBoolCaster)
+    {
         $this->commentsMerger = $commentsMerger;
         $this->exprBoolCaster = $exprBoolCaster;
     }

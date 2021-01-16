@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
@@ -90,7 +91,7 @@ final class CallableClassMethodMatcher
         return null;
     }
 
-    private function popFirstObjectType(\PHPStan\Type\Type $type): \PHPStan\Type\Type
+    private function popFirstObjectType(Type $type): Type
     {
         if ($type instanceof UnionType) {
             foreach ($type->getTypes() as $unionedType) {

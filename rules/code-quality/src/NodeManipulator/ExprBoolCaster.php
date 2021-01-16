@@ -12,18 +12,12 @@ use PhpParser\Node\Expr\Cast\Bool_;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 final class ExprBoolCaster
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     /**
      * @var NodeTypeResolver
      */
@@ -45,13 +39,11 @@ final class ExprBoolCaster
     private $nodeFactory;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         TypeUnwrapper $typeUnwrapper,
                                 StaticTypeAnalyzer $staticTypeAnalyzer,
         NodeFactory $nodeFactory
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;

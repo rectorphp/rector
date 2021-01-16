@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
+use Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher;
+use Rector\CodeQuality\NodeFactory\AnonymousFunctionFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -28,17 +30,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
     /**
-     * @var \Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher
+     * @var CallableClassMethodMatcher
      */
     private $callableClassMethodMatcher;
 
     /**
-     * @var \Rector\CodeQuality\NodeFactory\AnonymousFunctionFactory
+     * @var AnonymousFunctionFactory
      */
     private $anonymousFunctionFactory;
 
-    public function __construct(\Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher $callableClassMethodMatcher,
-    \Rector\CodeQuality\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory)
+    public function __construct(CallableClassMethodMatcher $callableClassMethodMatcher,
+    AnonymousFunctionFactory $anonymousFunctionFactory)
     {
         $this->callableClassMethodMatcher = $callableClassMethodMatcher;
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
