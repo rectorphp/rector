@@ -28,4 +28,9 @@ final class ComposerModifier
             $composerRector->refactor($composerJson);
         }
     }
+
+    public function enabled(): bool
+    {
+        return $this->composerRectors !== [];
+    }
 }

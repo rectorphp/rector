@@ -10,14 +10,6 @@ jobs:
             matrix:
                 actions:
                     -
-                        name: 'PHPStan'
-                        run: vendor/bin/phpstan analyse --ansi --error-format symplify
-
-                    -
-                        name: 'PHPStan for config'
-                        run: composer phpstan-config
-
-                    -
                         name: 'Show command'
                         run: bin/rector show --ansi
 

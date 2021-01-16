@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Composer\Processor;
 
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
-use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Configuration\Configuration;
 use Symfony\Component\Process\Process;
@@ -43,11 +42,6 @@ final class ComposerProcessor
     private $errorAndDiffCollector;
 
     /**
-     * @var ComposerRectorInterface[]
-     */
-    private $composerRectors = [];
-
-    /**
      * @var SmartFileSystem
      */
     private $smartFileSystem;
@@ -57,23 +51,18 @@ final class ComposerProcessor
      */
     private $composerModifier;
 
-    /**
-     * @param ComposerRectorInterface[] $composerRectors
-     */
     public function __construct(
         ComposerJsonFactory $composerJsonFactory,
         ComposerJsonPrinter $composerJsonPrinter,
         Configuration $configuration,
         ErrorAndDiffCollector $errorAndDiffCollector,
         SmartFileSystem $smartFileSystem,
-        ComposerModifier $composerModifier,
-        array $composerRectors
+        ComposerModifier $composerModifier
     ) {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->composerJsonPrinter = $composerJsonPrinter;
         $this->configuration = $configuration;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
-        $this->composerRectors = $composerRectors;
         $this->smartFileSystem = $smartFileSystem;
         $this->composerModifier = $composerModifier;
     }
@@ -85,7 +74,7 @@ final class ComposerProcessor
         }
 
         // to avoid modification of file
-        if ($this->composerRectors === []) {
+        if (! $this->composerModifier->enabled()) {
             return;
         }
 
@@ -93,9 +82,7 @@ final class ComposerProcessor
         $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
 
         $oldComposerJson = clone $composerJson;
-        foreach ($this->composerRectors as $composerRector) {
-            $composerRector->refactor($composerJson);
-        }
+        $this->composerModifier->modify($composerJson);
 
         // nothing has changed
         if ($oldComposerJson->getJsonArray() === $composerJson->getJsonArray()) {
