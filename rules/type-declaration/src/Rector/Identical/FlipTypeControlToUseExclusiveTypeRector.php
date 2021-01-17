@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\Rector\Identical;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Instanceof_;
@@ -85,14 +87,7 @@ CODE_SAMPLE
             : $node->left;
 
         /** @var Assign|null $assign */
-        $assign = $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use ($variable): bool {
-            if (! $node instanceof Assign) {
-                return false;
-            }
-
-            return $this->areNodesEqual($node->var, $variable);
-        });
-
+        $assign = $this->getVariableAssign($node, $variable);
         if (! $assign instanceof Assign) {
             return null;
         }
@@ -107,48 +102,85 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var VarTagValueNode|null $tagValueNode */
-        $tagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (! $tagValueNode instanceof VarTagValueNode) {
-            return null;
-        }
-
-        if (! $tagValueNode->type instanceof AttributeAwareUnionTypeNode) {
-            return null;
-        }
-
-        if (count($tagValueNode->type->types) > 2) {
-            return null;
-        }
-
         /** @var AttributeAwareIdentifierTypeNode[] $types */
-        $types = $tagValueNode->type->types;
-        foreach ($tagValueNode->type->types as $type) {
-            if (! $type instanceof AttributeAwareIdentifierTypeNode) {
-                return null;
-            }
-        }
-
-        if ($types[0]->name === $types[1]->name) {
+        $types = $this->getTypes($phpDocInfo);
+        if ($this->skipNotNullOneOf($types)) {
             return null;
         }
 
-        if ($types[0]->name !== 'null' && $types[1]->name !== 'null') {
-            return null;
-        }
+        return $this->processConvertToExclusiveType($types, $variable);
+    }
 
+    /**
+     * @param AttributeAwareIdentifierTypeNode[] $types
+     */
+    private function processConvertToExclusiveType(array $types, Expr $expr): ?BooleanNot
+    {
         $type = $types[0]->name === 'null'
             ? $types[1]->name
             : $types[0]->name;
 
-        if (class_exists($type)) {
-            return new BooleanNot(new Instanceof_($variable, new FullyQualified($type)));
+        if (! class_exists($type) && ! interface_exists($type)) {
+            return null;
         }
 
-        if (interface_exists($type)) {
-            return new BooleanNot(new Instanceof_($variable, new FullyQualified($type)));
+        return new BooleanNot(new Instanceof_($expr, new FullyQualified($type)));
+    }
+
+    /**
+     * @return TypeNode[]
+     */
+    private function getTypes(PhpDocInfo $phpDocInfo): array
+    {
+        /** @var VarTagValueNode|null $tagValueNode */
+        $tagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (! $tagValueNode instanceof VarTagValueNode) {
+            return [];
         }
 
-        return null;
+        if (! $tagValueNode->type instanceof AttributeAwareUnionTypeNode) {
+            return [];
+        }
+
+        if (count($tagValueNode->type->types) > 2) {
+            return [];
+        }
+
+        return $tagValueNode->type->types;
+    }
+
+    private function getVariableAssign(Identical $identical, Expr $expr): ?Node
+    {
+        return $this->betterNodeFinder->findFirstPrevious($identical, function (Node $node) use ($expr): bool {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            return $this->areNodesEqual($node->var, $expr);
+        });
+    }
+
+    /**
+     * @param AttributeAwareIdentifierTypeNode[] $types
+     */
+    private function skipNotNullOneOf(array $types): bool
+    {
+        if ($types === []) {
+            return true;
+        }
+
+        foreach ($types as $type) {
+            if (! $type instanceof AttributeAwareIdentifierTypeNode) {
+                return true;
+            }
+        }
+
+        if ($types[0]->name === $types[1]->name) {
+            return true;
+        }
+        if ($types[0]->name === 'null') {
+            return false;
+        }
+        return $types[1]->name !== 'null';
     }
 }
