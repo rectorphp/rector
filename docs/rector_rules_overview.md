@@ -6782,7 +6782,7 @@ This Rector adds new default arguments in calls of defined methods and class typ
 - class: `Rector\Generic\Rector\ClassMethod\ArgumentAdderRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -6792,7 +6792,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+            ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
             ]),
         ]]);
@@ -6810,7 +6810,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -6820,7 +6820,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+            ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
             ]),
         ]]);
