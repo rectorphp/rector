@@ -123,7 +123,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo->removeTagValueNodeFromNode($phpDocInfo->getVarTagValueNode());
+        /** @var VarTagValueNode $tagValueNode */
+        $tagValueNode = $phpDocInfo->getVarTagValueNode();
+        $phpDocInfo->removeTagValueNodeFromNode($tagValueNode);
         return new BooleanNot(new Instanceof_($expr, new FullyQualified($type)));
     }
 
