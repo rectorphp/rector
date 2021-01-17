@@ -10,14 +10,14 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\FlipTypeControlToUseExclusiveTypeRectorTest
@@ -96,7 +96,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $expression = $assign->getAttribute(Attributekey::PARENT_NODE);
+        $expression = $assign->getAttribute(AttributeKey::PARENT_NODE);
         if (! $expression instanceof Expression) {
             return null;
         }
@@ -140,7 +140,11 @@ CODE_SAMPLE
             ? $types[1]->name
             : $types[0]->name;
 
-        if (class_exists($type) || interface_exists($type)) {
+        if (class_exists($type)) {
+            return new Instanceof_($variable, new FullyQualified($type));
+        }
+
+        if (interface_exists($type)) {
             return new Instanceof_($variable, new FullyQualified($type));
         }
 
