@@ -85,7 +85,6 @@ CODE_SAMPLE
             ? $node->right
             : $node->left;
 
-        /** @var Assign|null $assign */
         $assign = $this->getVariableAssign($node, $variable);
         if (! $assign instanceof Assign) {
             return null;
@@ -134,7 +133,6 @@ CODE_SAMPLE
      */
     private function getTypes(PhpDocInfo $phpDocInfo): array
     {
-        /** @var VarTagValueNode|null $tagValueNode */
         $tagValueNode = $phpDocInfo->getVarTagValueNode();
         if (! $tagValueNode instanceof VarTagValueNode) {
             return [];
