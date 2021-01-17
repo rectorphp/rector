@@ -9,6 +9,9 @@ use PhpParser\Node\Expr\Assign;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\Assign\FlipTypeControlToUseExclusiveTypeRector\FlipTypeControlToUseExclusiveTypeRectorTest
@@ -66,6 +69,30 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $expression = $node->getAttribute(Attributekey::PARENT_NODE);
+        $phpDocInfo = $expression->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
+
+        $tagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (! $tagValueNode->type instanceof AttributeAwareUnionTypeNode) {
+            return null;
+        }
+
+        if (count($tagValueNode->type->types) !== 2) {
+            return null;
+        }
+
+        if ($tagValueNode->type->types[0]->name === $tagValueNode->type->types[1]->name) {
+            return null;
+        }
+
+        if ($tagValueNode->type->types[0]->name !== 'null' && $tagValueNode->type->types[1]->name !== 'null') {
+            return null;
+        }
+
         return $node;
     }
 }
