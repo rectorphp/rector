@@ -92,9 +92,9 @@ services:
         arguments:
             maxClassCognitiveComplexity: 50
             limitsByTypes:
-                Rector\Core\Rector\AbstractRector: 33
-                Symfony\Component\Console\Command\Command: 40
+                Rector\Core\Rector\AbstractRector: 30
                 PHPStan\Rule\Rule: 30
+                Symfony\Component\Console\Command\Command: 40
 
     # require constant in argument position
     -

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector;
 
 use Iterator;
+use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeContainerBuilder;
 use Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeParentClient;
@@ -34,7 +35,7 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
     {
         return [
             ArgumentAdderRector::class => [
-                ArgumentAdderRector::ADDED_ARGUMENTS => [
+                ArgumentAddingScope::ADDED_ARGUMENTS => [
                     // covers https://github.com/rectorphp/rector/issues/4267
                     new ArgumentAdder(
                         SomeContainerBuilder::class,
@@ -56,7 +57,7 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
                         'serverParameters',
                         [],
                         'array',
-                        ArgumentAdderRector::SCOPE_PARENT_CALL
+                        ArgumentAddingScope::SCOPE_PARENT_CALL
                     ),
                     new ArgumentAdder(
                         SomeParentClient::class,
@@ -65,7 +66,7 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
                         'serverParameters',
                         [],
                         'array',
-                        ArgumentAdderRector::SCOPE_CLASS_METHOD
+                        ArgumentAddingScope::SCOPE_CLASS_METHOD
                     ),
                 ],
             ],

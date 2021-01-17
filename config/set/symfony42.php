@@ -6,6 +6,7 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 
 use Rector\Core\ValueObject\Visibility;
+use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
@@ -65,7 +66,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+            ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 // https://github.com/symfony/symfony/commit/fa2063efe43109aea093d6fbfc12d675dba82146
                 // https://github.com/symfony/symfony/commit/e3aa90f852f69040be19da3d8729cdf02d238ec7
                 new ArgumentAdder(
@@ -75,7 +76,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'serverParameters',
                     [],
                     null,
-                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                    ArgumentAddingScope::SCOPE_METHOD_CALL
                 ),
                 new ArgumentAdder(
                     'Symfony\Component\DomCrawler\Crawler',
@@ -84,7 +85,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     null,
                     null,
-                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                    ArgumentAddingScope::SCOPE_METHOD_CALL
                 ),
                 new ArgumentAdder(
                     'Symfony\Component\Finder\Finder',
@@ -93,7 +94,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     false,
                     null,
-                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                    ArgumentAddingScope::SCOPE_METHOD_CALL
                 ),
                 new ArgumentAdder(
                     'Symfony\Bridge\Monolog\Processor\DebugProcessor',
@@ -102,7 +103,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     null,
                     null,
-                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                    ArgumentAddingScope::SCOPE_METHOD_CALL
                 ),
                 new ArgumentAdder(
                     'Symfony\Bridge\Monolog\Processor\DebugProcessor',
@@ -111,7 +112,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'default_value',
                     null,
                     null,
-                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                    ArgumentAddingScope::SCOPE_METHOD_CALL
                 ),
                 new ArgumentAdder(
                     'Symfony\Bridge\Monolog\Logger',
@@ -120,7 +121,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'default_value',
                     null,
                     null,
-                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                    ArgumentAddingScope::SCOPE_METHOD_CALL
                 ),
                 new ArgumentAdder(
                     'Symfony\Bridge\Monolog\Logger',
@@ -129,7 +130,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'default_value',
                     null,
                     null,
-                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                    ArgumentAddingScope::SCOPE_METHOD_CALL
                 ),
                 new ArgumentAdder(
                     'Symfony\Component\Serializer\Normalizer',
@@ -138,7 +139,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     null,
                     null,
-                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                    ArgumentAddingScope::SCOPE_METHOD_CALL
                 ),
                 new ArgumentAdder(
                     'Symfony\Component\Serializer\Normalizer',
@@ -147,7 +148,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     null,
                     null,
-                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                    ArgumentAddingScope::SCOPE_METHOD_CALL
                 ),
             ]),
         ]]);

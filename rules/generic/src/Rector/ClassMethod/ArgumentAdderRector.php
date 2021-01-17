@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -31,34 +32,24 @@ use Webmozart\Assert\Assert;
 final class ArgumentAdderRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var string
-     */
-    public const ADDED_ARGUMENTS = 'added_arguments';
-
-    /**
-     * @var string
-     */
-    public const SCOPE_PARENT_CALL = 'parent_call';
-
-    /**
-     * @var string
-     */
-    public const SCOPE_METHOD_CALL = 'method_call';
-
-    /**
-     * @var string
-     */
-    public const SCOPE_CLASS_METHOD = 'class_method';
-
-    /**
      * @var ArgumentAdder[]
      */
     private $addedArguments = [];
 
+    /**
+     * @var ArgumentAddingScope
+     */
+    private $argumentAddingScope;
+
+    public function __construct(ArgumentAddingScope $argumentAddingScope)
+    {
+        $this->argumentAddingScope = $argumentAddingScope;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         $exampleConfiguration = [
-            self::ADDED_ARGUMENTS => [
+            ArgumentAddingScope::ADDED_ARGUMENTS => [
                 new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType'),
             ],
         ];
@@ -137,7 +128,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? [];
+        $addedArguments = $configuration[ArgumentAddingScope::ADDED_ARGUMENTS] ?? [];
         Assert::allIsInstanceOf($addedArguments, ArgumentAdder::class);
         $this->addedArguments = $addedArguments;
     }
@@ -217,7 +208,7 @@ CODE_SAMPLE
         }
 
         // is correct scope?
-        return ! $this->isInCorrectScope($node, $argumentAdder);
+        return ! $this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
     }
 
     /**
@@ -259,36 +250,5 @@ CODE_SAMPLE
         }
 
         $staticCall->args[$position] = new Arg(new Variable($argumentName));
-    }
-
-    /**
-     * @param ClassMethod|MethodCall|StaticCall $node
-     */
-    private function isInCorrectScope(Node $node, ArgumentAdder $argumentAdder): bool
-    {
-        if ($argumentAdder->getScope() === null) {
-            return true;
-        }
-
-        $scope = $argumentAdder->getScope();
-
-        if ($node instanceof ClassMethod) {
-            return $scope === self::SCOPE_CLASS_METHOD;
-        }
-
-        if ($node instanceof StaticCall) {
-            if (! $node->class instanceof Name) {
-                return false;
-            }
-
-            if ($this->isName($node->class, 'parent')) {
-                return $scope === self::SCOPE_PARENT_CALL;
-            }
-
-            return $scope === self::SCOPE_METHOD_CALL;
-        }
-
-        // MethodCall
-        return $scope === self::SCOPE_METHOD_CALL;
     }
 }

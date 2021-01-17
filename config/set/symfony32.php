@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -12,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+            ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentAdder(
                     'Symfony\Component\DependencyInjection\ContainerBuilder',
                     'addCompilerPass',
