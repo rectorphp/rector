@@ -20,6 +20,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\MatchersManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\NodeFactory\AssertMethodCallFactory;
+use Rector\PhpSpecToPHPUnit\NodeFactory\BeConstructedWithAssignFactory;
+use Rector\PhpSpecToPHPUnit\NodeFactory\DuringMethodCallFactory;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
 /**
@@ -111,12 +113,12 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     private $assertMethodCallFactory;
 
     /**
-     * @var \Rector\PhpSpecToPHPUnit\NodeFactory\BeConstructedWithAssignFactory
+     * @var BeConstructedWithAssignFactory
      */
     private $beConstructedWithAssignFactory;
 
     /**
-     * @var \Rector\PhpSpecToPHPUnit\NodeFactory\DuringMethodCallFactory
+     * @var DuringMethodCallFactory
      */
     private $duringMethodCallFactory;
 
@@ -124,8 +126,8 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         MatchersManipulator $matchersManipulator,
         PhpSpecRenaming $phpSpecRenaming,
         AssertMethodCallFactory $assertMethodCallFactory,
-        \Rector\PhpSpecToPHPUnit\NodeFactory\BeConstructedWithAssignFactory $beConstructedWithAssignFactory,
-        \Rector\PhpSpecToPHPUnit\NodeFactory\DuringMethodCallFactory $duringMethodCallFactory
+        BeConstructedWithAssignFactory $beConstructedWithAssignFactory,
+        DuringMethodCallFactory $duringMethodCallFactory
     ) {
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->matchersManipulator = $matchersManipulator;

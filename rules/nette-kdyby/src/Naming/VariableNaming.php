@@ -102,15 +102,19 @@ final class VariableNaming
         }
 
         if (Strings::contains($name, '\\')) {
-            $name = Strings::after($name, '\\', - 1);
+            $name = (string) Strings::after($name, '\\', - 1);
         }
 
         $countedValueName = $this->createCountedValueName($name, $scope);
         return lcfirst($countedValueName);
     }
 
-    public function createCountedValueName(string $valueName, Scope $scope): string
+    public function createCountedValueName(string $valueName, ?Scope $scope): string
     {
+        if ($scope === null) {
+            return $valueName;
+        }
+
         // make sure variable name is unique
         if (! $scope->hasVariableType($valueName)->yes()) {
             return $valueName;
