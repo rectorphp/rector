@@ -34,13 +34,11 @@ class InterfaceType
 {
     public function run()
     {
-        /** @var DateTimeInterface|null $dateTimeInterface */
         $dateTimeInterface = $this->getdateTimeInterface();
         if (!$dateTimeInterface instanceof \DateTimeInterface) {
             return;
         }
 
-        /** @var null|DateTimeInterface $dateTimeInterface */
         $dateTimeInterface = $this->getdateTimeInterface();
         if (!$dateTimeInterface instanceof \DateTimeInterface) {
             return;

@@ -21,12 +21,24 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\DeadDocBlock\TagRemover\VarTagRemover;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\FlipTypeControlToUseExclusiveTypeRectorTest
  */
 final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
 {
+    /**
+     * @var VarTagRemover
+     */
+    private $varTagRemover;
+
+    public function __construct(
+        VarTagRemover $varTagRemover
+    ) {
+        $this->varTagRemover = $varTagRemover;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -52,7 +64,6 @@ class SomeClass
 {
     public function __construct(array $values)
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
@@ -108,13 +119,13 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->processConvertToExclusiveType($types, $variable);
+        return $this->processConvertToExclusiveType($types, $variable, $phpDocInfo);
     }
 
     /**
      * @param AttributeAwareIdentifierTypeNode[] $types
      */
-    private function processConvertToExclusiveType(array $types, Expr $expr): ?BooleanNot
+    private function processConvertToExclusiveType(array $types, Expr $expr, PhpDocInfo $phpDocInfo): ?BooleanNot
     {
         $type = $types[0]->name === 'null'
             ? $types[1]->name
@@ -124,6 +135,7 @@ CODE_SAMPLE
             return null;
         }
 
+        $phpDocInfo->removeTagValueNodeFromNode($phpDocInfo->getVarTagValueNode());
         return new BooleanNot(new Instanceof_($expr, new FullyQualified($type)));
     }
 
