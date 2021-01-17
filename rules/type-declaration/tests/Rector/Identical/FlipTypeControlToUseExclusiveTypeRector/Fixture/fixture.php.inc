@@ -36,13 +36,13 @@ class Fixture
     {
         /** @var stdClass|null $stdClass */
         $stdClass = $this->getStdClass();
-        if ($stdClass instanceof \stdClass) {
+        if (!$stdClass instanceof \stdClass) {
             return;
         }
 
         /** @var null|stdClass $stdClass */
         $stdClass = $this->getStdClass();
-        if ($stdClass instanceof \stdClass) {
+        if (!$stdClass instanceof \stdClass) {
             return;
         }
     }

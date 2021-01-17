@@ -18,6 +18,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node\Expr\BooleanNot;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\FlipTypeControlToUseExclusiveTypeRectorTest
@@ -141,11 +142,11 @@ CODE_SAMPLE
             : $types[0]->name;
 
         if (class_exists($type)) {
-            return new Instanceof_($variable, new FullyQualified($type));
+            return new BooleanNot(new Instanceof_($variable, new FullyQualified($type)));
         }
 
         if (interface_exists($type)) {
-            return new Instanceof_($variable, new FullyQualified($type));
+            return new BooleanNot(new Instanceof_($variable, new FullyQualified($type)));
         }
 
         return null;
