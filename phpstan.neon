@@ -540,3 +540,8 @@ parameters:
                 - rules/removing-static/tests/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector/config/some_config.php
 
         - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method "mapToPhpParserNode\(\)" in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'
+
+        # defined in Application, part of abstract
+        -
+            message: '#Argument and options "debug", "clear\-cache" got confused#'
+            path: src/Console/Command/AbstractCommand.php

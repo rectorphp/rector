@@ -29,17 +29,17 @@ abstract class AbstractCommand extends Command
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $application = $this->getApplication();
+        if ($application === null) {
+            throw new ShouldNotHappenException();
+        }
 
         $optionDebug = (bool) $input->getOption(Option::OPTION_DEBUG);
         if ($optionDebug) {
-            if ($application === null) {
-                throw new ShouldNotHappenException();
-            }
-
             $application->setCatchExceptions(false);
 
             // clear cache
             $this->changedFilesDetector->clear();
+            return;
         }
 
         // clear cache
