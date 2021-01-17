@@ -54,7 +54,7 @@ class SomeClass
     {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo instanceof PhpDocInfo) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }
     }
