@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\If_;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
@@ -74,7 +73,23 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $expression = $node->getAttribute(Attributekey::PARENT_NODE);
+        if (! $this->isNull($node->left) && ! $this->isNull($node->right)) {
+            return null;
+        }
+
+        $variable = $this->isNull($node->left)
+            ? $node->right
+            : $node->left;
+
+        $assign = $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use ($variable): bool {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            return $this->areNodesEqual($node->var, $variable);
+        });
+
+        $expression = $assign->getAttribute(Attributekey::PARENT_NODE);
         if (! $expression instanceof Expression) {
             return null;
         }
@@ -101,35 +116,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $type = $tagValueNode->type->types[0]->name === null
+        $type = $tagValueNode->type->types[0]->name === 'null'
             ? $tagValueNode->type->types[1]->name
             : $tagValueNode->type->types[0]->name;
 
         if (class_exists($type) || interface_exists($type)) {
-            $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
-            if (! $next instanceof If_) {
-                return null;
-            }
-
-            if (! $next->cond instanceof Identical) {
-                return null;
-            }
-
-            if (! $this->isNull($next->cond->left) && ! $this->isNull($next->cond->right)) {
-                return null;
-            }
-
-            $variable = $this->isNull($next->cond->left)
-                ? $next->cond->right
-                : $next->cond->left;
-
-            if (! $this->areNodesEqual($node->var, $variable)) {
-                return null;
-            }
-
-            $next->cond = new Instanceof_($node->var, new FullyQualified($type));
+            return new Instanceof_($variable, new FullyQualified($type));
         }
 
-        return $node;
+        return null;
     }
 }
