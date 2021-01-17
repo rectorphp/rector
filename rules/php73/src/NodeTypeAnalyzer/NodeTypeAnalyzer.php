@@ -44,9 +44,9 @@ final class NodeTypeAnalyzer
                 if (! $this->isStringType($intersectionedType)) {
                     return false;
                 }
-
-                return true;
             }
+
+            return true;
         }
 
         return false;
