@@ -137,11 +137,10 @@ final class ConsoleApplication extends Application
 
     private function getNewWorkingDir(InputInterface $input): string
     {
-        $workingDir = $input->getParameterOption(['--working-dir', '-d']);
+        $workingDir = $input->getParameterOption('--working-dir');
         if ($workingDir !== false && ! is_dir($workingDir)) {
-            throw new InvalidConfigurationException(
-                'Invalid working directory specified, ' . $workingDir . ' does not exist.'
-            );
+            $errorMessage = sprintf('Invalid working directory specified, "%s" does not exist.', $workingDir);
+            throw new InvalidConfigurationException($errorMessage);
         }
 
         return (string) $workingDir;
@@ -204,8 +203,8 @@ final class ConsoleApplication extends Application
         ));
 
         $inputDefinition->addOption(new InputOption(
-            '--working-dir',
-            '-d',
+            'working-dir',
+            null,
             InputOption::VALUE_REQUIRED,
             'If specified, use the given directory as working directory.'
         ));
