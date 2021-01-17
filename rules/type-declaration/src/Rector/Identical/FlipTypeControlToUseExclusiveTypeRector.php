@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Rector\Assign;
+namespace Rector\TypeDeclaration\Rector\Identical;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -66,11 +66,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Assign::class];
+        return [Identical::class];
     }
 
     /**
-     * @param Assign $node
+     * @param Identical $node
      */
     public function refactor(Node $node): ?Node
     {
