@@ -251,36 +251,4 @@ CODE_SAMPLE
 
         $staticCall->args[$position] = new Arg(new Variable($argumentName));
     }
-
-//
-//    /**
-//     * @param ClassMethod|MethodCall|StaticCall $node
-//     */
-//    private function isInCorrectScope(Node $node, ArgumentAdder $argumentAdder): bool
-//    {
-//        if ($argumentAdder->getScope() === null) {
-//            return true;
-//        }
-//
-//        $scope = $argumentAdder->getScope();
-//
-//        if ($node instanceof ClassMethod) {
-//            return $scope === self::SCOPE_CLASS_METHOD;
-//        }
-//
-//        if ($node instanceof StaticCall) {
-//            if (! $node->class instanceof Name) {
-//                return false;
-//            }
-//
-//            if ($this->isName($node->class, 'parent')) {
-//                return $scope === self::SCOPE_PARENT_CALL;
-//            }
-//
-//            return $scope === self::SCOPE_METHOD_CALL;
-//        }
-//
-//        // MethodCall
-//        return $scope === self::SCOPE_METHOD_CALL;
-//    }
 }
