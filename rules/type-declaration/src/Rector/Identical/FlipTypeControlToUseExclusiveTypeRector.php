@@ -18,25 +18,18 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadDocBlock\TagRemover\VarTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\DeadDocBlock\TagRemover\VarTagRemover;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\FlipTypeControlToUseExclusiveTypeRectorTest
  */
 final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
 {
-    /**
-     * @var VarTagRemover
-     */
-    private $varTagRemover;
-
-    public function __construct(
-        VarTagRemover $varTagRemover
-    ) {
-        $this->varTagRemover = $varTagRemover;
+    public function __construct()
+    {
     }
 
     public function getRuleDefinition(): RuleDefinition
