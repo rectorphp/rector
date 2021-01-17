@@ -7,8 +7,8 @@ namespace Rector\Php73\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
-use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -33,6 +33,16 @@ final class StringifyStrNeedlesRector extends AbstractRector
         'strrchr',
         'stristr',
     ];
+
+    /**
+     * @var NodeTypeAnalyzer
+     */
+    private $nodeTypeAnalyzer;
+
+    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer)
+    {
+        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -71,8 +81,7 @@ CODE_SAMPLE
         // is argument string?
         $needleArgNode = $node->args[1]->value;
 
-        $nodeStaticType = $this->getStaticType($needleArgNode);
-        if ($nodeStaticType instanceof StringType) {
+        if ($this->nodeTypeAnalyzer->isStringTypeExpr($needleArgNode)) {
             return null;
         }
 
