@@ -28,10 +28,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
 {
-    public function __construct()
-    {
-    }
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
