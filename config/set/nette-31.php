@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Rector\Composer\Rector\ChangePackageVersionRector;
 use Rector\Composer\Rector\RemovePackageRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
+use Rector\Nette\Rector\Assign\ArrayAccessAddRouteToAddRouteMethodCallRector;
+use Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
@@ -19,7 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameClassRector::class)->call('configure', [[
         RenameClassRector::OLD_TO_NEW_CLASSES => [
             // https://github.com/nette/application/compare/v3.0.7...v3.1.0
-            'Nette\Application\IRouter' => 'Nette\Routing\Router',  // TODO not sure about this, it is not simple rename, Nette\Routing\Router already exists in nette/routing
+            'Nette\Application\IRouter' => 'Nette\Routing\Router',
             'Nette\Application\IResponse' => 'Nette\Application\Response',
             'Nette\Application\UI\IRenderable' => 'Nette\Application\UI\Renderable',
             'Nette\Application\UI\ISignalReceiver' => 'Nette\Application\UI\SignalReceiver',
@@ -90,9 +92,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    // TODO change $router[] = new Router() to $router->addRoute() because of deprecated flags
+    $services->set(ArrayAccessAddRouteToAddRouteMethodCallRector::class);
 
-    // TODO Presenter->getContext() and Presenter->context is deprecated
+    $services->set(ContextGetByTypeToConstructorInjectionRector::class);
 
     $services->set(ChangePackageVersionRector::class)
         ->call('configure', [[
