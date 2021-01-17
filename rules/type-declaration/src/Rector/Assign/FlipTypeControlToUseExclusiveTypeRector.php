@@ -6,12 +6,17 @@ namespace Rector\TypeDeclaration\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Name\FullyQualified;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\Assign\FlipTypeControlToUseExclusiveTypeRector\FlipTypeControlToUseExclusiveTypeRectorTest
@@ -70,8 +75,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $expression = $node->getAttribute(Attributekey::PARENT_NODE);
-        $phpDocInfo = $expression->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $expression instanceof Expression) {
+            return null;
+        }
 
+        $phpDocInfo = $expression->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
@@ -81,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($tagValueNode->type->types) !== 2) {
+        if (count($tagValueNode->type->types) > 2) {
             return null;
         }
 
@@ -91,6 +99,35 @@ CODE_SAMPLE
 
         if ($tagValueNode->type->types[0]->name !== 'null' && $tagValueNode->type->types[1]->name !== 'null') {
             return null;
+        }
+
+        $type = $tagValueNode->type->types[0]->name === null
+            ? $tagValueNode->type->types[1]->name
+            : $tagValueNode->type->types[0]->name;
+
+        if (class_exists($type) || interface_exists($type)) {
+            $next               = $expression->getAttribute(AttributeKey::NEXT_NODE);
+            if (! $next instanceof If_) {
+                return null;
+            }
+
+            if (! $next->cond instanceof Identical) {
+                return null;
+            }
+
+            if (! $this->isNull($next->cond->left) && ! $this->isNull($next->cond->right)) {
+                return null;
+            }
+
+            $variable = $this->isNull($next->cond->left)
+                ? $next->cond->right
+                : $next->cond->left;
+
+            if (! $this->areNodesEqual($node->var, $variable)) {
+                return null;
+            }
+
+            $next->cond = new Instanceof_($node->var, new FullyQualified($type));
         }
 
         return $node;
