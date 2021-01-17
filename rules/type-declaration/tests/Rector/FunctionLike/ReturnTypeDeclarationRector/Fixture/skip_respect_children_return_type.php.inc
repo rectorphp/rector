@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
-class RespectChildrenReturnType
+class SkipRespectChildrenReturnTypeParent
 {
     public function run()
     {
@@ -10,7 +10,7 @@ class RespectChildrenReturnType
     }
 }
 
-class RespectChildrenReturnType2 extends RespectChildrenReturnType {    
+class RespectChildrenReturnType extends SkipRespectChildrenReturnTypeParent {    
     public function run() : Baba {
        return new Baba();        
     }
