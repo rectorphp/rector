@@ -6,7 +6,6 @@ use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
-use Rector\Php80\Rector\Assign\FalseableCountToZeroRector;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
@@ -77,5 +76,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'pg_setclientencoding' => 'pg_set_client_encoding',
         ],
     ]]);
-    $services->set(FalseableCountToZeroRector::class);
 };
