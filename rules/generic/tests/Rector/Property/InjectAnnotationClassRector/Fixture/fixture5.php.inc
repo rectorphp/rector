@@ -22,10 +22,6 @@ use JMS\DiExtraBundle\Annotation as DI;
 
 class SomeController2
 {
-    /**
-     * @var \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeEntityManager
-     */
-    private $entityManager;
     public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeEntityManager $entityManager)
     {
     }
