@@ -7,7 +7,6 @@ namespace Rector\Transform\NodeFactory;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeNameResolver\NodeNameResolver;
 
 final class PropertyFetchFactory
 {
@@ -16,15 +15,9 @@ final class PropertyFetchFactory
      */
     private $propertyNaming;
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(PropertyNaming $propertyNaming, NodeNameResolver $nodeNameResolver)
+    public function __construct(PropertyNaming $propertyNaming)
     {
         $this->propertyNaming = $propertyNaming;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function createFromType(string $type): PropertyFetch
