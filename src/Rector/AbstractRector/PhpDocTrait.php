@@ -6,11 +6,9 @@ namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoManipulator;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -48,11 +46,7 @@ trait PhpDocTrait
 
     protected function hasTagByName(Node $node, string $tagName): bool
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return false;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         return $phpDocInfo->hasByName($tagName);
     }
 
@@ -63,23 +57,13 @@ trait PhpDocTrait
 
     protected function hasPhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): bool
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         return $phpDocInfo->hasByType($phpDocTagNodeClass);
     }
 
     protected function removePhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $phpDocInfo->removeByType($phpDocTagNodeClass);
     }
 }

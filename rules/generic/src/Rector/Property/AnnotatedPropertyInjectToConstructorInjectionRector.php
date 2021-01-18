@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $phpDocInfo->removeByName(self::INJECT_ANNOTATION);
 
         if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($node)) {
@@ -117,12 +117,7 @@ CODE_SAMPLE
 
     private function shouldSkipProperty(Property $property): bool
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return true;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if (! $phpDocInfo->hasByName(self::INJECT_ANNOTATION)) {
             return true;
         }

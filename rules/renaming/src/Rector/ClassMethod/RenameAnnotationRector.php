@@ -89,7 +89,7 @@ CODE_SAMPLE
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($phpDocInfo === null) {
             return null;
         }

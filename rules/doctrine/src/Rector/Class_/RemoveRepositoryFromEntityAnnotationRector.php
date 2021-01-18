@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -62,18 +61,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
+        /** @var EntityTagValueNode|null $entityTagValueNode */
+        $entityTagValueNode = $phpDocInfo->getByType(EntityTagValueNode::class);
+        if ($entityTagValueNode === null) {
             return null;
         }
 
-        /** @var EntityTagValueNode|null $doctrineEntityTag */
-        $doctrineEntityTag = $phpDocInfo->getByType(EntityTagValueNode::class);
-        if ($doctrineEntityTag === null) {
-            return null;
-        }
-
-        $doctrineEntityTag->removeRepositoryClass();
+        $entityTagValueNode->removeRepositoryClass();
 
         return $node;
     }

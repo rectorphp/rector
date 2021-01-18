@@ -180,7 +180,6 @@ final class DocBlockManipulator
 
         if ($node->getComments() !== []) {
             $commentsContent = implode(PHP_EOL, $node->getComments());
-
             if ($this->removeSpacesAndAsterisks($commentsContent) === $this->removeSpacesAndAsterisks($phpDoc)) {
                 return false;
             }
@@ -203,12 +202,16 @@ final class DocBlockManipulator
     {
         $startComments = '';
         foreach ($node->getComments() as $comment) {
-            // skip non-simple comments
-            if (! Strings::startsWith($comment->getText(), '//')) {
+            // skip simple comments
+            if (Strings::startsWith($comment->getText(), '//')) {
                 continue;
             }
 
-            $startComments .= $comment->getText();
+            if (Strings::startsWith($comment->getText(), '#')) {
+                continue;
+            }
+
+            $startComments .= $comment->getText() . PHP_EOL;
         }
 
         if ($startComments === '') {

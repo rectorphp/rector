@@ -16,7 +16,6 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TreeRootTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TreeTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -140,10 +139,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($classPhpDocInfo === null) {
-            return null;
-        }
+        $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $hasTypeTreeTagValueNode = $classPhpDocInfo->hasByType(TreeTagValueNode::class);
 
         if (! $hasTypeTreeTagValueNode) {
@@ -161,10 +157,7 @@ CODE_SAMPLE
         $removedPropertyNames = [];
 
         foreach ($node->getProperties() as $property) {
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
-                continue;
-            }
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
             if (! $this->shouldRemoveProperty($propertyPhpDocInfo)) {
                 continue;

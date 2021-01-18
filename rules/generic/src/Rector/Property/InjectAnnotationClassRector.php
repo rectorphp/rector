@@ -142,7 +142,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
@@ -210,7 +210,7 @@ CODE_SAMPLE
 
         if ($phpDocTagValueNode instanceof PHPDIInjectTagValueNode) {
             /** @var PhpDocInfo $phpDocInfo */
-            $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
             return $phpDocInfo->getVarType();
         }
@@ -227,7 +227,7 @@ CODE_SAMPLE
         $propertyName = $this->getName($property);
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
         $phpDocInfo->removeByType($tagClass);
@@ -269,7 +269,7 @@ CODE_SAMPLE
 
         // 3. service is in @var annotation
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $varType = $phpDocInfo->getVarType();
         if (! $varType instanceof MixedType) {

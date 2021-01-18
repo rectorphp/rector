@@ -178,7 +178,7 @@ CODE_SAMPLE
         }
 
         /** @var PhpDocInfo|null $propertyPhpDocInfo */
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($propertyPhpDocInfo === null) {
             return true;
         }
@@ -231,7 +231,7 @@ CODE_SAMPLE
     private function mirrorPhpDocInfoToUuid(Property $property): void
     {
         /** @var PhpDocInfo $propertyPhpDocInfo */
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $newPropertyPhpDocInfo = clone $propertyPhpDocInfo;
 

@@ -644,7 +644,7 @@ final class NodeFactory
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($value);
 
         if (! $staticType instanceof MixedType) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);
         }
 

@@ -11,7 +11,6 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\LoggableTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\VersionedTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -94,10 +93,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // change the node
-        $classPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($classPhpDocInfo === null) {
-            return null;
-        }
+        $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $hasTypeLoggableTagValueNode = $classPhpDocInfo->hasByType(LoggableTagValueNode::class);
 
         if (! $hasTypeLoggableTagValueNode) {
@@ -119,10 +115,8 @@ CODE_SAMPLE
     private function removeVersionedTagFromProperties(Class_ $class): void
     {
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
-                continue;
-            }
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+
             $hasTypeVersionedTagValueNode = $propertyPhpDocInfo->hasByType(VersionedTagValueNode::class);
 
             if (! $hasTypeVersionedTagValueNode) {

@@ -311,7 +311,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         foreach ($stmts as $key => $ifStmt) {
             if ($key === 0) {
                 // move /* */ doc block from if to first element to keep it
-                $currentPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+                $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
                 $ifStmt->setAttribute(AttributeKey::PHP_DOC_INFO, $currentPhpDocInfo);
 
                 // move // comments

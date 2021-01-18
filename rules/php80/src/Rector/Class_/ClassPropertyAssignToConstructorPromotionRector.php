@@ -139,7 +139,7 @@ CODE_SAMPLE
 
     private function decorateParamWithPropertyPhpDocInfo(Property $property, Param $param): void
     {
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if (! $propertyPhpDocInfo instanceof PhpDocInfo) {
             return;
         }
@@ -157,7 +157,7 @@ CODE_SAMPLE
 
     private function removeClassMethodParam(ClassMethod $classMethod, string $paramName): void
     {
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }

@@ -18,10 +18,8 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\OverrideGuard\ClassMethodReturnTypeOverrideGuard;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -150,12 +148,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferedType);
 
         return $node;
@@ -183,11 +176,10 @@ CODE_SAMPLE
         return $currentPhpDocReturnType instanceof IterableType;
     }
 
-    private function getNodeReturnPhpDocType(ClassMethod $classMethod): ?Type
+    private function getNodeReturnPhpDocType(ClassMethod $classMethod): Type
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        return $phpDocInfo !== null ? $phpDocInfo->getReturnType() : null;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        return $phpDocInfo->getReturnType();
     }
 
     /**
@@ -252,11 +244,7 @@ CODE_SAMPLE
 
     private function hasArrayShapeNode(ClassMethod $classMethod): bool
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return false;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
         $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
         if (! $attributeAwareReturnTagValueNode instanceof ReturnTagValueNode) {
@@ -280,11 +268,7 @@ CODE_SAMPLE
 
     private function hasInheritDoc(ClassMethod $classMethod): bool
     {
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return false;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         return $phpDocInfo->hasInheritDoc();
     }
 }
