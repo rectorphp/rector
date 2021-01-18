@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\StaticTypeMapper\ValueObject\Type;
 
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\VerbosityLevel;
 
 /**
  * Special case for union types
@@ -12,7 +13,7 @@ use PHPStan\Type\BooleanType;
  */
 final class FalseBooleanType extends BooleanType
 {
-    public function describe(\PHPStan\Type\VerbosityLevel $level) : string
+    public function describe(VerbosityLevel $verbosityLevel): string
     {
         return 'false';
     }

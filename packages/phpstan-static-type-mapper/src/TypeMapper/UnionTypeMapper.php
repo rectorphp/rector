@@ -11,6 +11,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\BooleanType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -206,10 +207,19 @@ final class UnionTypeMapper implements TypeMapperInterface
         $phpParserUnionType = $this->matchPhpParserUnionType($unionType);
         if ($phpParserUnionType !== null) {
             if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+                // maybe all one type?
+                if ($this->isBoolUnionType($unionType)) {
+                    return new Name('bool');
+                }
+
                 return null;
             }
 
             return $phpParserUnionType;
+        }
+
+        if ($this->isBoolUnionType($unionType)) {
+            return new Name('bool');
         }
 
         // the type should be compatible with all other types, e.g. A extends B, B
@@ -291,5 +301,16 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return is_a($secondType->getClassName(), $firstType->getClassName(), true);
+    }
+
+    private function isBoolUnionType(UnionType $unionType): bool
+    {
+        foreach ($unionType->getTypes() as $unionedType) {
+            if (! $unionedType instanceof BooleanType) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
