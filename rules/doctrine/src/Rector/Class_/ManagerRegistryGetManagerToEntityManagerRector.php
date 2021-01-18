@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -179,7 +180,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $classMethod->params[] = $this->createEntityManagerParam();
+            // $classMethod->params[] = $this->createEntityManagerParam();
 
             return $param;
         }
@@ -251,8 +252,10 @@ CODE_SAMPLE
         string $name,
         FullyQualifiedObjectType $fullyQualifiedObjectType
     ): void {
-        $assign = $this->nodeFactory->createPropertyAssignment($name);
-        $classMethod->stmts[] = new Expression($assign);
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+            $assign = $this->nodeFactory->createPropertyAssignment($name);
+            $classMethod->stmts[] = new Expression($assign);
+        }
 
         $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $name);
     }

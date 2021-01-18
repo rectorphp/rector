@@ -40,10 +40,9 @@ class DoNotRemoveRegistryOnNonGetRepoCall
      */
     private $managerRegistry;
 
-    public function __construct(ManagerRegistry $managerRegistry, \Doctrine\ORM\EntityManagerInterface $entityManager, private \Doctrine\ORM\EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $managerRegistry, private \Doctrine\ORM\EntityManagerInterface $entityManager)
     {
         $this->managerRegistry = $managerRegistry;
-        $this->entityManager = $entityManager;
     }
 
     public function run()
