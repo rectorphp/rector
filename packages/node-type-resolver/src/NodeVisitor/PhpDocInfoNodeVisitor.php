@@ -22,10 +22,8 @@ final class PhpDocInfoNodeVisitor extends NodeVisitorAbstract
 
     public function enterNode(Node $node): ?Node
     {
-        dump(1);
         // also binds to the node
         $this->phpDocInfoFactory->createFromNode($node);
-        dump(2);
 
         return $node;
     }
