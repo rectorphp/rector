@@ -25,6 +25,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 
 final class UnionTypeMapper implements TypeMapperInterface
@@ -50,7 +51,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     private $doctrineTypeAnalyzer;
 
     /**
-     * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer
+     * @var BoolUnionTypeAnalyzer
      */
     private $boolUnionTypeAnalyzer;
 
@@ -58,7 +59,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         PhpVersionProvider $phpVersionProvider,
         UnionTypeAnalyzer $unionTypeAnalyzer,
-        \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer
+        BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer
     ) {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
@@ -110,10 +111,12 @@ final class UnionTypeMapper implements TypeMapperInterface
             return $arrayNode;
         }
 
-        if ($this->boolUnionTypeAnalyzer->isNullableBoolUnionType($type)) {
-            if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
-                return new NullableType(new Name('bool'));
-            }
+        if ($this->boolUnionTypeAnalyzer->isNullableBoolUnionType(
+            $type
+        ) && ! $this->phpVersionProvider->isAtLeastPhpVersion(
+            PhpVersionFeature::UNION_TYPES
+        )) {
+            return new NullableType(new Name('bool'));
         }
 
         // special case for nullable
