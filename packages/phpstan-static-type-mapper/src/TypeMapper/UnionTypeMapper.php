@@ -19,6 +19,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture\Nullable;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -103,6 +104,12 @@ final class UnionTypeMapper implements TypeMapperInterface
             return $arrayNode;
         }
 
+        if ($this->isNullableBoolUnionType($type)) {
+            if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+                return new NullableType(new Name('bool'));
+            }
+        }
+
         // special case for nullable
         $nullabledType = $this->matchTypeForNullableUnionType($type);
         if ($nullabledType === null) {
@@ -177,6 +184,25 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return new Name($type);
+    }
+
+    private function isNullableBoolUnionType(UnionType $unionType): bool
+    {
+        $hasNullable = false;
+        foreach ($unionType->getTypes() as $unionedType) {
+            if ($unionedType instanceof NullType) {
+                $hasNullable = true;
+                continue;
+            }
+
+            if ($unionedType instanceof BooleanType) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return $hasNullable;
     }
 
     private function matchTypeForNullableUnionType(UnionType $unionType): ?Type
