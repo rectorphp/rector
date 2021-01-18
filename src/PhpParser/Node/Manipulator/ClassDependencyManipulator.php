@@ -7,13 +7,16 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\Type;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
@@ -46,18 +49,25 @@ final class ClassDependencyManipulator
      */
     private $classInsertManipulator;
 
+    /**
+     * @var PhpVersionProvider
+     */
+    private $phpVersionProvider;
+
     public function __construct(
         ChildAndParentClassManipulator $childAndParentClassManipulator,
         ClassInsertManipulator $classInsertManipulator,
         ClassMethodAssignManipulator $classMethodAssignManipulator,
         NodeFactory $nodeFactory,
-        StmtsManipulator $stmtsManipulator
+        StmtsManipulator $stmtsManipulator,
+        PhpVersionProvider $phpVersionProvider
     ) {
         $this->classMethodAssignManipulator = $classMethodAssignManipulator;
         $this->nodeFactory = $nodeFactory;
         $this->childAndParentClassManipulator = $childAndParentClassManipulator;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
 
     public function addConstructorDependency(Class_ $class, string $name, ?Type $type): void
@@ -66,10 +76,16 @@ final class ClassDependencyManipulator
             return;
         }
 
-        $this->classInsertManipulator->addPropertyToClass($class, $name, $type);
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+            $this->classInsertManipulator->addPropertyToClass($class, $name, $type);
+        }
 
-        $assign = $this->nodeFactory->createPropertyAssignment($name);
-        $this->addConstructorDependencyWithCustomAssign($class, $name, $type, $assign);
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+            $this->addPromotedProperty($class, $name, $type);
+        } else {
+            $assign = $this->nodeFactory->createPropertyAssignment($name);
+            $this->addConstructorDependencyWithCustomAssign($class, $name, $type, $assign);
+        }
     }
 
     public function addConstructorDependencyWithCustomAssign(
@@ -203,5 +219,19 @@ final class ClassDependencyManipulator
         }
 
         return $propertyReflections;
+    }
+
+    private function addPromotedProperty(Class_ $class, string $name, ?Type $type): void
+    {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        $param = $this->nodeFactory->createPromotedPropertyParam($name, $type);
+
+        if ($constructClassMethod instanceof ClassMethod) {
+            $constructClassMethod->params[] = $param;
+        } else {
+            $constructClassMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
+            $constructClassMethod->params[] = $param;
+            $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
+        }
     }
 }

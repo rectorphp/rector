@@ -38,9 +38,7 @@ final class Php80Test extends AbstractRectorTestCase
     {
         return [
             NewToConstructorInjectionRector::class => [
-                NewToConstructorInjectionRector::TYPES_TO_CONSTRUCTOR_INJECTION => [
-                    DummyValidator::class
-                ],
+                NewToConstructorInjectionRector::TYPES_TO_CONSTRUCTOR_INJECTION => [DummyValidator::class],
             ],
         ];
     }

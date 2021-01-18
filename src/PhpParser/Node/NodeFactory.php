@@ -509,6 +509,22 @@ final class NodeFactory
         return new ConstFetch(new Name('null'));
     }
 
+    public function createPromotedPropertyParam(string $name, ?Type $type): Param
+    {
+        $paramBuilder = new ParamBuilder($name);
+        if ($type !== null) {
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
+            if ($typeNode !== null) {
+                $paramBuilder->setType($typeNode);
+            }
+        }
+
+        $param = $paramBuilder->getNode();
+        $param->flags = Class_::MODIFIER_PRIVATE;
+
+        return $param;
+    }
+
     private function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
     {
         $classConstFetchNode = $this->builderFactory->classConstFetch($className, $constantName);
