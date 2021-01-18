@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\Assign\ArrayAccessAddRouteToAddRouteMethodCallRector\Fixture;
+namespace Rector\Generic\Tests\Rector\Assign\DimFetchAssignToMethodCallRector\Fixture;
 
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
@@ -19,7 +19,7 @@ class RouterFactory
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\Assign\ArrayAccessAddRouteToAddRouteMethodCallRector\Fixture;
+namespace Rector\Generic\Tests\Rector\Assign\DimFetchAssignToMethodCallRector\Fixture;
 
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;

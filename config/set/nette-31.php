@@ -5,7 +5,8 @@ declare(strict_types=1);
 use Rector\Composer\Rector\ChangePackageVersionRector;
 use Rector\Composer\Rector\RemovePackageRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
-use Rector\Nette\Rector\Assign\ArrayAccessAddRouteToAddRouteMethodCallRector;
+use Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector;
+use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
 use Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -92,7 +93,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    $services->set(ArrayAccessAddRouteToAddRouteMethodCallRector::class);
+    $services->set(DimFetchAssignToMethodCallRector::class)
+        ->call('configure', [[
+            DimFetchAssignToMethodCallRector::DIM_FETCH_ASSIGN_TO_METHOD_CALL => ValueObjectInliner::inline([
+                new DimFetchAssignToMethodCall(
+                    'Nette\Application\Routers\RouteList',
+                    'Nette\Application\Routers\Route',
+                    'addRoute'
+                ),
+            ])
+        ]]);
 
     $services->set(ContextGetByTypeToConstructorInjectionRector::class);
 
