@@ -77,7 +77,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->hasPhpDocTagValueNode($node, DoctrineRelationTagValueNodeInterface::class)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if (! $phpDocInfo->hasByType(DoctrineRelationTagValueNodeInterface::class)) {
             return null;
         }
 

@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -34,11 +33,6 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements Zer
      * @see https://regex101.com/r/FXhI9M/1
      */
     private const CONTROLLER_PRESENTER_SUFFIX_REGEX = '#(Controller|Presenter)$#';
-
-    /**
-     * @var string
-     */
-    private const API = 'api';
 
     /**
      * @var ClassMethodVisibilityVendorLockResolver
@@ -136,7 +130,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->hasTagByName($classMethod, self::API)) {
+        if ($this->hasTagByName($classMethod, TagName::API)) {
             return true;
         }
 
@@ -158,7 +152,7 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        return $phpDocInfo->hasByNames([self::API, TagName::REQUIRED]);
+        return $phpDocInfo->hasByNames([TagName::API, TagName::REQUIRED]);
     }
 
     private function isControllerAction(Class_ $class, ClassMethod $classMethod): bool
@@ -178,18 +172,13 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
         return $phpDocInfo->hasByName('inject');
     }
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        if ($this->hasTagByName($classMethod, self::API)) {
+        if ($this->hasTagByName($classMethod, TagName::API)) {
             return true;
         }
 
@@ -228,6 +217,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->hasTagByName($class, self::API);
+        return $this->hasTagByName($class, TagName::API);
     }
 }

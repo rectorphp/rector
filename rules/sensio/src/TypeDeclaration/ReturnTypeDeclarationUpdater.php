@@ -6,11 +6,10 @@ namespace Rector\Sensio\TypeDeclaration;
 
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\FullyQualifiedIdentifierTypeNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoManipulator;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -34,20 +33,20 @@ final class ReturnTypeDeclarationUpdater
     private $nodeNameResolver;
 
     /**
-     * @var PhpDocInfoManipulator
+     * @var PhpDocInfoFactory
      */
-    private $phpDocInfoManipulator;
+    private $phpDocInfoFactory;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        PhpDocInfoManipulator $phpDocInfoManipulator,
         PhpVersionProvider $phpVersionProvider,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->phpDocInfoManipulator = $phpDocInfoManipulator;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function updateClassMethod(ClassMethod $classMethod, string $className): void
@@ -58,11 +57,9 @@ final class ReturnTypeDeclarationUpdater
 
     private function updatePhpDoc(ClassMethod $classMethod, string $className): void
     {
-        /** @var ReturnTagValueNode|null $returnTagValueNode */
-        $returnTagValueNode = $this->phpDocInfoManipulator->getPhpDocTagValueNode(
-            $classMethod,
-            ReturnTagValueNode::class
-        );
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+
         if ($returnTagValueNode === null) {
             return;
         }

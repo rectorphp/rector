@@ -548,3 +548,6 @@ parameters:
 
         - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireRector" class\. Use unique content or abstract service instead#'
         - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or abstract service instead#'
+        - '#Parameter \#1 \$type of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:hasByType\(\) expects class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>, string given#'
+        - '#Parameter \#1 \$type of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:hasByType\(\) expects class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>, string given#'
+

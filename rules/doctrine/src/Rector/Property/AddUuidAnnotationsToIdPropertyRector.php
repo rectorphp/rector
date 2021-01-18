@@ -99,7 +99,6 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType(UuidInterface::class);

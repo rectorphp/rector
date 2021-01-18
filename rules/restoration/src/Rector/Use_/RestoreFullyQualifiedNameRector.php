@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Restoration\NameMatcher\FullyQualifiedNameMatcher;
 use Rector\Restoration\NameMatcher\PhpDocTypeNodeNameMatcher;
@@ -147,12 +146,7 @@ CODE_SAMPLE
 
     private function refactorReturnTagValueNode(ClassMethod $classMethod): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return;
-        }
-
         $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
         if ($attributeAwareReturnTagValueNode === null) {
             return;

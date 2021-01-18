@@ -6,7 +6,6 @@ namespace Rector\DeadDocBlock\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadDocBlock\DeadParamTagValueNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -76,9 +75,6 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
 
         $hasChanged = false;
         foreach ($phpDocInfo->getParamTagValueNodes() as $paramTagValueNode) {

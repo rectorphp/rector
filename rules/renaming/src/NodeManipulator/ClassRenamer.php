@@ -15,6 +15,9 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpDoc\PhpDocClassRenamer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -62,13 +65,25 @@ final class ClassRenamer
      */
     private $betterNodeFinder;
 
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         ClassNaming $classNaming,
         DocBlockManipulator $docBlockManipulator,
         NodeNameResolver $nodeNameResolver,
-        PhpDocClassRenamer $phpDocClassRenamer
+        PhpDocClassRenamer $phpDocClassRenamer,
+        PhpDocTypeChanger $phpDocTypeChanger,
+        PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -76,6 +91,8 @@ final class ClassRenamer
         $this->phpDocClassRenamer = $phpDocClassRenamer;
         $this->classNaming = $classNaming;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -108,7 +125,8 @@ final class ClassRenamer
      */
     private function refactorPhpDoc(Node $node, array $oldToNewClasses): void
     {
-        if (! $this->docBlockManipulator->hasNodeTypeTags($node)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if (! $phpDocInfo->hasByType(TypeAwareTagValueNodeInterface::class)) {
             return;
         }
 
@@ -116,7 +134,7 @@ final class ClassRenamer
             $oldClassType = new ObjectType($oldClass);
             $newClassType = new FullyQualifiedObjectType($newClass);
 
-            $this->docBlockManipulator->changeType($node, $oldClassType, $newClassType);
+            $this->docBlockManipulator->changeType($phpDocInfo, $node, $oldClassType, $newClassType);
         }
 
         $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $oldToNewClasses);

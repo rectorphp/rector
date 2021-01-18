@@ -12,8 +12,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\ValueObject\RenameAnnotation;
@@ -48,17 +48,23 @@ final class DocBlockManipulator
      */
     private $docBlockClassRenamer;
 
-    public function __construct(DocBlockClassRenamer $docBlockClassRenamer, PhpDocInfoPrinter $phpDocInfoPrinter)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        DocBlockClassRenamer $docBlockClassRenamer,
+        PhpDocInfoPrinter $phpDocInfoPrinter,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
-    public function changeType(Node $node, Type $oldType, Type $newType): void
+    public function changeType(PhpDocInfo $phpDocInfo, Node $node, Type $oldType, Type $newType): void
     {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
     }
 
@@ -88,20 +94,6 @@ final class DocBlockManipulator
                 $phpDocChildNode->name = $newTag;
             }
         }
-    }
-
-    /**
-     * For better performance
-     */
-    public function hasNodeTypeTags(Node $node): bool
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
-        return $phpDocInfo->hasByType(TypeAwareTagValueNodeInterface::class);
     }
 
     public function updateNodeWithPhpDocInfo(Node $node): void

@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser;
 use Iterator;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\Helper\TagValueToPhpParserNodeMap;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -35,6 +36,11 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
      */
     private $phpDocInfoPrinter;
 
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
@@ -43,6 +49,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
 
         $this->betterNodeFinder = $this->getService(BetterNodeFinder::class);
         $this->phpDocInfoPrinter = $this->getService(PhpDocInfoPrinter::class);
+        $this->phpDocInfoFactory = $this->getService(PhpDocInfoFactory::class);
     }
 
     /**
@@ -106,11 +113,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
 
     private function printNodePhpDocInfoToString(Node $node): string
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            throw new ShouldNotHappenException();
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
     }
 

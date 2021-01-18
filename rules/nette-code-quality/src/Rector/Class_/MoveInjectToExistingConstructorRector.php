@@ -7,7 +7,6 @@ namespace Rector\NetteCodeQuality\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -132,7 +131,6 @@ CODE_SAMPLE
 
     private function removeInjectAnnotation(Property $property): void
     {
-        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $phpDocInfo->removeByName('inject');
     }
@@ -153,6 +151,6 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        return (bool) $phpDocInfo->getTagsByName('inject');
+        return $phpDocInfo->hasByName('inject');
     }
 }

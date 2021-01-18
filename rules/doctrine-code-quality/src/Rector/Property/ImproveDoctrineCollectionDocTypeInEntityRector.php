@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
@@ -132,13 +131,10 @@ CODE_SAMPLE
 
     private function refactorProperty(Property $property): ?Property
     {
-        if (! $this->hasNodeTagValueNode($property, OneToManyTagValueNode::class)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        if (! $phpDocInfo->hasByType(OneToManyTagValueNode::class)) {
             return null;
         }
-
-        // @todo make an own local property on enter node?
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $attributeAwareVarTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
         if ($attributeAwareVarTagValueNode !== null) {
@@ -185,7 +181,6 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
         $param = $classMethod->params[0];
@@ -194,12 +189,6 @@ CODE_SAMPLE
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $collectionObjectType, $param, $parameterName);
 
         return $classMethod;
-    }
-
-    private function hasNodeTagValueNode(Property $property, string $tagValueNodeClass): bool
-    {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        return $phpDocInfo->hasByType($tagValueNodeClass);
     }
 
     private function resolveCollectionSetterAssignType(ClassMethod $classMethod): ?Type

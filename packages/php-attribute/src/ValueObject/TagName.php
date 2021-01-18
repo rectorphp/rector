@@ -12,4 +12,9 @@ final class TagName
      * @var string
      */
     public const REQUIRED = 'required';
+
+    /**
+     * @var string
+     */
+    public const API = 'api';
 }
