@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
@@ -116,17 +115,17 @@ CODE_SAMPLE
     private function processConvertToExclusiveType(array $types, Expr $expr, PhpDocInfo $phpDocInfo): ?BooleanNot
     {
         $type = $types[0]->name === 'null'
-            ? $types[1]
-            : $types[0];
+            ? $types[1]->name
+            : $types[0]->name;
 
-        if (! $type instanceof IdentifierTypeNode) {
+        if (! class_exists($type) && ! interface_exists($type)) {
             return null;
         }
 
         /** @var VarTagValueNode $tagValueNode */
         $tagValueNode = $phpDocInfo->getVarTagValueNode();
         $phpDocInfo->removeTagValueNodeFromNode($tagValueNode);
-        return new BooleanNot(new Instanceof_($expr, new FullyQualified($type->name)));
+        return new BooleanNot(new Instanceof_($expr, new FullyQualified($type)));
     }
 
     /**
