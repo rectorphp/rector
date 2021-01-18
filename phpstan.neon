@@ -545,5 +545,3 @@ parameters:
         -
             message: '#Argument and options "debug", "clear\-cache" got confused#'
             path: src/Console/Command/AbstractCommand.php
-
-        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireRector" class\. Use unique content or abstract service instead#'
