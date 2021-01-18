@@ -47,6 +47,7 @@ final class ExtractAttributeRouteNameConstantsRector extends AbstractRector
      * @var ConstantNameAndValueResolver
      */
     private $constantNameAndValueResolver;
+
     /**
      * @var SmartFileSystem
      */
