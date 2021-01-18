@@ -13,6 +13,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\StaticTypeMapper\ValueObject\Type\FalseBooleanType;
 
 final class BooleanTypeMapper implements TypeMapperInterface
 {
@@ -36,6 +37,10 @@ final class BooleanTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
+        if ($type instanceof FalseBooleanType) {
+            return new AttributeAwareIdentifierTypeNode('false');
+        }
+
         return new AttributeAwareIdentifierTypeNode('bool');
     }
 
@@ -46,6 +51,10 @@ final class BooleanTypeMapper implements TypeMapperInterface
     {
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return null;
+        }
+
+        if ($type instanceof FalseBooleanType) {
+            return new Name('false');
         }
 
         return new Name('bool');
