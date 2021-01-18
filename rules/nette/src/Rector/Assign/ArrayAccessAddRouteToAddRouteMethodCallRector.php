@@ -74,13 +74,14 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $node->expr instanceof Node\Expr\New_) {
+            return null;
+        }
+
         /** @var ArrayDimFetch $arrayDimFetch */
         $arrayDimFetch = $node->var;
 
-        /** @var Node\Expr\New_ $newRoute */
-        $newRoute = $node->expr;
-
-        return new MethodCall($arrayDimFetch->var, 'addRoute', $newRoute->args);
+        return new MethodCall($arrayDimFetch->var, 'addRoute', $node->expr->args);
     }
 
     private function isAssignOfRouteToRouteListDimFetch(Assign $assign): bool
