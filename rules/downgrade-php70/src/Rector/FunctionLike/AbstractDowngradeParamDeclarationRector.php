@@ -14,6 +14,7 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp70\Contract\Rector\DowngradeParamDeclarationRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -21,6 +22,19 @@ use Traversable;
 
 abstract class AbstractDowngradeParamDeclarationRector extends AbstractRector implements DowngradeParamDeclarationRectorInterface
 {
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    /**
+     * @required
+     */
+    public function autowireAbstractDowngradeParamDeclarationRector(PhpDocTypeChanger $phpDocTypeChanger): void
+    {
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    }
+
     /**
      * @return string[]
      */
@@ -81,7 +95,7 @@ abstract class AbstractDowngradeParamDeclarationRector extends AbstractRector im
             }
 
             $paramName = $this->getName($param->var) ?? '';
-            $phpDocInfo->changeParamType($type, $param, $paramName);
+            $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
         }
     }
 }

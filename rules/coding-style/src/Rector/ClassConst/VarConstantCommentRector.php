@@ -31,6 +31,7 @@ final class VarConstantCommentRector extends AbstractRector
      * @var TypeComparator
      */
     private $typeComparator;
+
     /**
      * @var PhpDocTypeChanger
      */

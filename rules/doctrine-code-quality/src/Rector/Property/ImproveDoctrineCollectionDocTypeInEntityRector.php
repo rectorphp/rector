@@ -46,6 +46,7 @@ final class ImproveDoctrineCollectionDocTypeInEntityRector extends AbstractRecto
      * @var CollectionVarTagValueNodeResolver
      */
     private $collectionVarTagValueNodeResolver;
+
     /**
      * @var PhpDocTypeChanger
      */
@@ -189,7 +190,8 @@ CODE_SAMPLE
 
         $param = $classMethod->params[0];
         $parameterName = $this->getName($param);
-        $phpDocInfo->changeParamType($collectionObjectType, $param, $parameterName);
+
+        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $collectionObjectType, $param, $parameterName);
 
         return $classMethod;
     }

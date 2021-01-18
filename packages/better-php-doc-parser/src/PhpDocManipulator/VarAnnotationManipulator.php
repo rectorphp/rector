@@ -21,6 +21,7 @@ final class VarAnnotationManipulator
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
+
     /**
      * @var PhpDocTypeChanger
      */

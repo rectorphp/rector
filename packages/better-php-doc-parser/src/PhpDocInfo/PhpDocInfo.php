@@ -344,11 +344,6 @@ final class PhpDocInfo
         return $this->tokens === [];
     }
 
-    public function changeParamType(Type $type, Param $param, string $paramName): void
-    {
-        $this->phpDocTypeChanger->changeParamType($this, $type, $param, $paramName);
-    }
-
     /**
      * @return class-string[]
      */

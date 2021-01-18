@@ -111,6 +111,7 @@ final class NodeFactory
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
+
     /**
      * @var PhpDocTypeChanger
      */

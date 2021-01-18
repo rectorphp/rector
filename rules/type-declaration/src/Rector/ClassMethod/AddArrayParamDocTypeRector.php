@@ -11,6 +11,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
@@ -29,9 +30,15 @@ final class AddArrayParamDocTypeRector extends AbstractRector
      */
     private $paramTypeInferer;
 
-    public function __construct(ParamTypeInferer $paramTypeInferer)
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(ParamTypeInferer $paramTypeInferer, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->paramTypeInferer = $paramTypeInferer;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -107,7 +114,7 @@ CODE_SAMPLE
             }
 
             $paramName = $this->getName($param);
-            $phpDocInfo->changeParamType($type, $param, $paramName);
+            $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
             return $node;
         }
     }

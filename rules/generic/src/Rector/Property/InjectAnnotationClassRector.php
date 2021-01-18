@@ -70,6 +70,7 @@ final class InjectAnnotationClassRector extends AbstractRector implements Config
      * @var ServiceMapProvider
      */
     private $serviceMapProvider;
+
     /**
      * @var PhpDocTypeChanger
      */

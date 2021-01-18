@@ -46,6 +46,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
+
     /**
      * @var PhpDocInfoFactory
      */

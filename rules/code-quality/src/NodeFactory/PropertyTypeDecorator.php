@@ -27,13 +27,17 @@ final class PropertyTypeDecorator
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
+
     /**
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
 
-    public function __construct(PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper, PhpDocTypeChanger $phpDocTypeChanger)
-    {
+    public function __construct(
+        PhpVersionProvider $phpVersionProvider,
+        StaticTypeMapper $staticTypeMapper,
+        PhpDocTypeChanger $phpDocTypeChanger
+    ) {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocTypeChanger = $phpDocTypeChanger;

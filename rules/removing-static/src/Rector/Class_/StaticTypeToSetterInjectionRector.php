@@ -46,6 +46,7 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector implements 
      * @var PropertyNaming
      */
     private $propertyNaming;
+
     /**
      * @var PhpDocTypeChanger
      */

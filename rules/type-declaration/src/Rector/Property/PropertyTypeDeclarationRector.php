@@ -26,6 +26,7 @@ final class PropertyTypeDeclarationRector extends AbstractRector
      * @var PropertyTypeInferer
      */
     private $propertyTypeInferer;
+
     /**
      * @var PhpDocTypeChanger
      */

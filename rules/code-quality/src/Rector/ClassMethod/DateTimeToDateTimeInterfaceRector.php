@@ -21,6 +21,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -47,9 +48,15 @@ final class DateTimeToDateTimeInterfaceRector extends AbstractRector
      */
     private $nodeTypeResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -149,7 +156,8 @@ CODE_SAMPLE
         if ($paramName === null) {
             throw new ShouldNotHappenException();
         }
-        $phpDocInfo->changeParamType(new UnionType($types), $param, $paramName);
+
+        $this->phpDocTypeChanger->changeParamType($phpDocInfo, new UnionType($types), $param, $paramName);
     }
 
     private function refactorMethodCalls(Param $param, ClassMethod $classMethod): void

@@ -19,7 +19,7 @@ abstract class AbstractDowngradeTypedPropertyRector extends AbstractRector imple
      */
     private $phpDocTypeChanger;
 
-    public function autowireAbstractDowngradeTypedPropertyRector(PhpDocTypeChanger $phpDocTypeChanger)
+    public function autowireAbstractDowngradeTypedPropertyRector(PhpDocTypeChanger $phpDocTypeChanger): void
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }

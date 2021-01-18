@@ -51,6 +51,7 @@ final class UniqueObjectFactoryFactory
      * @var NodeFactory
      */
     private $nodeFactory;
+
     /**
      * @var PhpDocTypeChanger
      */
