@@ -30,16 +30,19 @@ final class ReturnTagRemover
         }
 
         // remove existing type
-        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if ($returnTagValueNode === null) {
+        $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if ($attributeAwareReturnTagValueNode === null) {
             return;
         }
 
-        $isReturnTagValueDead = $this->deadReturnTagValueNodeAnalyzer->isDead($returnTagValueNode, $functionLike);
-        if ($isReturnTagValueDead === false) {
+        $isReturnTagValueDead = $this->deadReturnTagValueNodeAnalyzer->isDead(
+            $attributeAwareReturnTagValueNode,
+            $functionLike
+        );
+        if (! $isReturnTagValueDead) {
             return;
         }
 
-        $phpDocInfo->removeTagValueNodeFromNode($returnTagValueNode);
+        $phpDocInfo->removeTagValueNodeFromNode($attributeAwareReturnTagValueNode);
     }
 }

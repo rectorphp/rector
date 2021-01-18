@@ -39,7 +39,7 @@ final class ParamTagRemover
             }
 
             $isParamTagValueDead = $this->deadParamTagValueNodeAnalyzer->isDead($paramTagValueNode, $functionLike);
-            if ($isParamTagValueDead === false) {
+            if (! $isParamTagValueDead) {
                 continue;
             }
 

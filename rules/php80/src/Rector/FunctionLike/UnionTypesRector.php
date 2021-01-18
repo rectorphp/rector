@@ -14,6 +14,7 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadDocBlock\TagRemover\ParamTagRemover;
 use Rector\DeadDocBlock\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -30,14 +31,12 @@ final class UnionTypesRector extends AbstractRector
     private $returnTagRemover;
 
     /**
-     * @var \Rector\DeadDocBlock\TagRemover\ParamTagRemover
+     * @var ParamTagRemover
      */
     private $paramTagRemover;
 
-    public function __construct(
-        ReturnTagRemover $returnTagRemover,
-        \Rector\DeadDocBlock\TagRemover\ParamTagRemover $paramTagRemover
-    ) {
+    public function __construct(ReturnTagRemover $returnTagRemover, ParamTagRemover $paramTagRemover)
+    {
         $this->returnTagRemover = $returnTagRemover;
         $this->paramTagRemover = $paramTagRemover;
     }
