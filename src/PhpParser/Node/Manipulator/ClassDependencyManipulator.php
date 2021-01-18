@@ -124,11 +124,9 @@ final class ClassDependencyManipulator
         $constructorMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
 
         $this->classMethodAssignManipulator->addParameterAndAssignToMethod($constructorMethod, $name, $type, $assign);
-
-        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructorMethod);
-
         $this->classInsertManipulator->addAsFirstMethod($class, $constructorMethod);
 
+        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructorMethod);
         $this->childAndParentClassManipulator->completeChildConstructors($class, $constructorMethod);
     }
 
@@ -201,5 +199,8 @@ final class ClassDependencyManipulator
             $constructClassMethod->params[] = $param;
             $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
         }
+
+        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructClassMethod);
+        $this->childAndParentClassManipulator->completeChildConstructors($class, $constructClassMethod);
     }
 }

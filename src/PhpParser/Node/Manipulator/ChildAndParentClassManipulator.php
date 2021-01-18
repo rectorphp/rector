@@ -36,16 +36,23 @@ final class ChildAndParentClassManipulator
      */
     private $nodeRepository;
 
+    /**
+     * @var \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner
+     */
+    private $promotedPropertyParamCleaner;
+
     public function __construct(
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         ParsedNodeCollector $parsedNodeCollector,
-        NodeRepository $nodeRepository
+        NodeRepository $nodeRepository,
+        \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner $promotedPropertyParamCleaner
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeRepository = $nodeRepository;
+        $this->promotedPropertyParamCleaner = $promotedPropertyParamCleaner;
     }
 
     /**
@@ -80,10 +87,10 @@ final class ChildAndParentClassManipulator
             return;
         }
 
-        $childClassNodes = $this->nodeRepository->findChildrenOfClass($className);
+        $childClasses = $this->nodeRepository->findChildrenOfClass($className);
 
-        foreach ($childClassNodes as $childClassNode) {
-            $childConstructorClassMethod = $childClassNode->getMethod(MethodName::CONSTRUCT);
+        foreach ($childClasses as $childClass) {
+            $childConstructorClassMethod = $childClass->getMethod(MethodName::CONSTRUCT);
             if ($childConstructorClassMethod === null) {
                 continue;
             }
@@ -112,8 +119,10 @@ final class ChildAndParentClassManipulator
             return;
         }
 
+        $cleanParams = $this->promotedPropertyParamCleaner->cleanFromFlags($firstParentConstructMethodNode->params);
+
         // replicate parent parameters
-        $classMethod->params = array_merge($firstParentConstructMethodNode->params, $classMethod->params);
+        $classMethod->params = array_merge($cleanParams, $classMethod->params);
 
         $staticCall = $this->nodeFactory->createParentConstructWithParams($firstParentConstructMethodNode->params);
 

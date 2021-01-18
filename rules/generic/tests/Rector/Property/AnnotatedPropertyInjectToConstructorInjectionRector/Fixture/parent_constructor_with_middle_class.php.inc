@@ -45,7 +45,6 @@ class ClassWithInjects10 extends ClassWithInjects10Parent
 {
     public function __construct(\DateTimeInterface $dateTime, private \stdClass $property)
     {
-        $this->property = $property;
         parent::__construct($dateTime);
     }
 }
