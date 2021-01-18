@@ -172,7 +172,6 @@ CODE_SAMPLE
                  * Getting a ReflectionNamedType works from PHP 7.1 onwards
                  * @see https://www.php.net/manual/en/reflectionparameter.gettype.php#125334
                  */
-                /** @var ReflectionNamedType|null $reflectionParamType */
                 $reflectionParamType = $reflectionParameter->getType();
                 /**
                  * If the type is null, we don't have enough information
