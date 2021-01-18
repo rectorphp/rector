@@ -178,7 +178,7 @@ CODE_SAMPLE
                  * If the type is null, we don't have enough information
                  * to check if they are different. Then do nothing
                  */
-                if ($reflectionParamType === null) {
+                if (! $reflectionParamType instanceof ReflectionNamedType) {
                     continue;
                 }
                 if ($reflectionParamType->getName() !== $paramTypeName) {

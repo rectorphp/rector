@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Naming;
 
+use Closure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
@@ -94,9 +95,8 @@ final class VariableRenamer
 
     private function isParamInParentFunction(Variable $variable): bool
     {
-        /** @var Closure|null $closure */
         $closure = $variable->getAttribute(AttributeKey::CLOSURE_NODE);
-        if ($closure === null) {
+        if (! $closure instanceof Closure) {
             return false;
         }
 
