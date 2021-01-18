@@ -101,8 +101,8 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $hasChanged = false;
 
         foreach ($node->getParams() as $param) {
             if ($this->shouldSkipParam($param)) {
@@ -114,9 +114,16 @@ CODE_SAMPLE
             }
 
             $paramName = $this->getName($param);
+
             $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
+            $hasChanged = true;
+        }
+
+        if ($hasChanged) {
             return $node;
         }
+
+        return null;
     }
 
     private function shouldSkipParam(Param $param): bool

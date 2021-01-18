@@ -80,15 +80,17 @@ abstract class AbstractDowngradeParamDeclarationRector extends AbstractRector im
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
 
-        if ($param->type !== null) {
-            $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-
-            if ($type instanceof IterableType) {
-                $type = new UnionType([$type, new IntersectionType([new ObjectType(Traversable::class)])]);
-            }
-
-            $paramName = $this->getName($param->var) ?? '';
-            $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
+        if ($param->type === null) {
+            return;
         }
+
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+
+        if ($type instanceof IterableType) {
+            $type = new UnionType([$type, new IntersectionType([new ObjectType(Traversable::class)])]);
+        }
+
+        $paramName = $this->getName($param->var) ?? '';
+        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
     }
 }
