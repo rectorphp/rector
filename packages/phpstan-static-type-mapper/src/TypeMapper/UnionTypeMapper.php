@@ -11,7 +11,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -50,14 +49,21 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     private $doctrineTypeAnalyzer;
 
+    /**
+     * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer
+     */
+    private $boolUnionTypeAnalyzer;
+
     public function __construct(
         DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         PhpVersionProvider $phpVersionProvider,
-        UnionTypeAnalyzer $unionTypeAnalyzer
+        UnionTypeAnalyzer $unionTypeAnalyzer,
+        \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer
     ) {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
+        $this->boolUnionTypeAnalyzer = $boolUnionTypeAnalyzer;
     }
 
     /**
@@ -104,7 +110,7 @@ final class UnionTypeMapper implements TypeMapperInterface
             return $arrayNode;
         }
 
-        if ($this->isNullableBoolUnionType($type)) {
+        if ($this->boolUnionTypeAnalyzer->isNullableBoolUnionType($type)) {
             if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
                 return new NullableType(new Name('bool'));
             }
@@ -186,25 +192,6 @@ final class UnionTypeMapper implements TypeMapperInterface
         return new Name($type);
     }
 
-    private function isNullableBoolUnionType(UnionType $unionType): bool
-    {
-        $hasNullable = false;
-        foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof NullType) {
-                $hasNullable = true;
-                continue;
-            }
-
-            if ($unionedType instanceof BooleanType) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return $hasNullable;
-    }
-
     private function matchTypeForNullableUnionType(UnionType $unionType): ?Type
     {
         if (count($unionType->getTypes()) !== 2) {
@@ -234,7 +221,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($phpParserUnionType !== null) {
             if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
                 // maybe all one type?
-                if ($this->isBoolUnionType($unionType)) {
+                if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
                     return new Name('bool');
                 }
 
@@ -244,7 +231,7 @@ final class UnionTypeMapper implements TypeMapperInterface
             return $phpParserUnionType;
         }
 
-        if ($this->isBoolUnionType($unionType)) {
+        if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
             return new Name('bool');
         }
 
@@ -290,7 +277,7 @@ final class UnionTypeMapper implements TypeMapperInterface
             return 'Doctrine\Common\Collections\Collection';
         }
 
-        if (! $this->isUnionTypeWithTypeClassNameOnly($unionType)) {
+        if (! $this->unionTypeAnalyzer->hasTypeClassNameOnly($unionType)) {
             return null;
         }
 
@@ -309,17 +296,6 @@ final class UnionTypeMapper implements TypeMapperInterface
         return null;
     }
 
-    private function isUnionTypeWithTypeClassNameOnly(UnionType $unionType): bool
-    {
-        foreach ($unionType->getTypes() as $unionedType) {
-            if (! $unionedType instanceof TypeWithClassName) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType): bool
     {
         if (is_a($firstType->getClassName(), $secondType->getClassName(), true)) {
@@ -327,16 +303,5 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return is_a($secondType->getClassName(), $firstType->getClassName(), true);
-    }
-
-    private function isBoolUnionType(UnionType $unionType): bool
-    {
-        foreach ($unionType->getTypes() as $unionedType) {
-            if (! $unionedType instanceof BooleanType) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
