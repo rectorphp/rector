@@ -2,11 +2,10 @@
 
 namespace Rector\Php80\Tests\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-class Fixture
+final class UsefulParamComment
 {
     /**
-     * @param array|int $number
-     * @return bool|float
+     * @param array|int $number some comment
      */
     public function go($number)
     {
@@ -19,9 +18,12 @@ class Fixture
 
 namespace Rector\Php80\Tests\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-class Fixture
+final class UsefulParamComment
 {
-    public function go(array|int $number): bool|float
+    /**
+     * @param array|int $number some comment
+     */
+    public function go(array|int $number)
     {
     }
 }
