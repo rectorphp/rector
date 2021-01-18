@@ -26,6 +26,7 @@ final class ParentClassWithInConstructCall extends ThisClassCallsMethodInConstru
 {
     public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
     {
+        parent::__construct();
     }
     protected function doSomethingFancy()
     {

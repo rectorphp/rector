@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -109,10 +110,12 @@ CODE_SAMPLE
 
         foreach ($injectProperties as $injectProperty) {
             $this->removeInjectAnnotation($injectProperty);
-
             $this->changePropertyVisibility($injectProperty);
-
             $this->addPropertyToCollector($injectProperty);
+
+            if ($this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+                $this->removeNode($injectProperty);
+            }
         }
 
         return $node;

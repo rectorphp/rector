@@ -30,11 +30,6 @@ namespace Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstr
 final class Fixture
 {
     /**
-     * @var SomeDependency
-     */
-    private $someDependency;
-
-    /**
      * @var OtherDependency
      */
     private $otherDependency;

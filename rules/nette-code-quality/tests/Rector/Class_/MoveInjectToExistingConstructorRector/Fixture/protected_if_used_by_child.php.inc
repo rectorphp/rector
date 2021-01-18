@@ -35,12 +35,7 @@ use Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorR
 
 class ProtectedIfUsedByChild
 {
-    /**
-     * @var SomeDependency
-     */
-    protected $someDependency;
-
-    public function __construct(private \Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\Source\SomeDependency $someDependency)
+    public function __construct(protected \Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\Source\SomeDependency $someDependency)
     {
     }
 }

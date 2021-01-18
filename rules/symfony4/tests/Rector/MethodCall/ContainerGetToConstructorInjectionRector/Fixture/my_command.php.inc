@@ -28,6 +28,7 @@ final class MyCommand extends ContainerAwareParentCommand
 {
     public function __construct(private \stdClass $stdClass)
     {
+        parent::__construct();
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
