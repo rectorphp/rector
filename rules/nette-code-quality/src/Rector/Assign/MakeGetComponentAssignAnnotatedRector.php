@@ -214,6 +214,10 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
+        if (! $arrayDimFetch->dim instanceof String_) {
+            return new MixedType();
+        }
+
         return $this->resolveTypeFromShortControlNameAndVariable($arrayDimFetch->dim, $scope, $arrayDimFetch->var);
     }
 

@@ -70,15 +70,9 @@ final class VarAnnotationManipulator
     {
         $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if ($currentStmt instanceof Expression) {
-            /** @var PhpDocInfo|null $phpDocInfo */
-            $phpDocInfo = $currentStmt->getAttribute(AttributeKey::PHP_DOC_INFO);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($currentStmt);
         } else {
-            /** @var PhpDocInfo|null $phpDocInfo */
-            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        }
-
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         }
 
         $phpDocInfo->makeSingleLined();
