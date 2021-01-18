@@ -116,7 +116,6 @@ final class PhpDocTypeChanger
     public function changeParamType(PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName): void
     {
         $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
 
         // override existing type

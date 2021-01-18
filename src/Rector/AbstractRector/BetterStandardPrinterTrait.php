@@ -7,7 +7,6 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -26,21 +25,14 @@ trait BetterStandardPrinterTrait
     protected $betterStandardPrinter;
 
     /**
-     * @var SmartFileSystem
-     */
-    protected $smartFileSystem;
-
-    /**
      * @required
      */
     public function autowireBetterStandardPrinterTrait(
         BetterStandardPrinter $betterStandardPrinter,
-        BetterNodeFinder $betterNodeFinder,
-        SmartFileSystem $smartFileSystem
+        BetterNodeFinder $betterNodeFinder
     ): void {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**

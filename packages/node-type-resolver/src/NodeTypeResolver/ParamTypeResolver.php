@@ -13,6 +13,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -46,12 +47,19 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      */
     private $staticTypeMapper;
 
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -138,21 +146,17 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     private function resolveFromFunctionDocBlock(Param $param): Type
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
-        if ($phpDocInfo === null) {
-            return new MixedType();
-        }
-
         $paramName = $this->nodeNameResolver->getName($param);
         return $phpDocInfo->getParamType($paramName);
     }
 
-    private function getFunctionLikePhpDocInfo(Param $param): ?PhpDocInfo
+    private function getFunctionLikePhpDocInfo(Param $param): PhpDocInfo
     {
         $parentNode = $param->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof FunctionLike) {
             throw new ShouldNotHappenException();
         }
 
-        return $parentNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+        return $this->phpDocInfoFactory->createFromNodeOrEmpty($parentNode);
     }
 }

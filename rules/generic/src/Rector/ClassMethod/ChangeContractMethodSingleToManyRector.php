@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -27,12 +28,22 @@ final class ChangeContractMethodSingleToManyRector extends AbstractRector implem
      * @api
      * @var string
      */
-    public const OLD_TO_NEW_METHOD_BY_TYPE = '$oldToNewMethodByType';
+    public const OLD_TO_NEW_METHOD_BY_TYPE = 'old_to_new_method_by_type';
 
     /**
      * @var mixed[]
      */
     private $oldToNewMethodByType = [];
+
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    {
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -128,7 +139,7 @@ CODE_SAMPLE
 
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->changeReturnType($arrayType);
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $arrayType);
     }
 
     private function wrapReturnValueToArray(ClassMethod $classMethod): void

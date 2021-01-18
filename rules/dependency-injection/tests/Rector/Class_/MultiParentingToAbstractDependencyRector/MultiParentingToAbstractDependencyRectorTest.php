@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector;
 
 use Iterator;
+use Rector\Core\ValueObject\FrameworkName;
 use Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -31,7 +32,7 @@ final class MultiParentingToAbstractDependencyRectorTest extends AbstractRectorT
     {
         return [
             MultiParentingToAbstractDependencyRector::class => [
-                MultiParentingToAbstractDependencyRector::FRAMEWORK => 'nette',
+                MultiParentingToAbstractDependencyRector::FRAMEWORK => FrameworkName::NETTE,
             ],
         ];
     }

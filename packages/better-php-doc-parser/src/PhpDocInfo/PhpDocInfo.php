@@ -27,7 +27,6 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
@@ -76,11 +75,6 @@ final class PhpDocInfo
     private $node;
 
     /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
      * @var PhpDocRemover
      */
     private $phpDocRemover;
@@ -99,7 +93,6 @@ final class PhpDocInfo
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
         Node $node,
-        PhpDocTypeChanger $phpDocTypeChanger,
         PhpDocRemover $phpDocRemover,
         AttributeAwareNodeFactory $attributeAwareNodeFactory
     ) {
@@ -109,7 +102,6 @@ final class PhpDocInfo
         $this->originalContent = $originalContent;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocRemover = $phpDocRemover;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
@@ -327,16 +319,6 @@ final class PhpDocInfo
         return $paramTypesByName;
     }
 
-    public function changeVarType(Type $type): void
-    {
-        $this->phpDocTypeChanger->changeVarType($this, $type);
-    }
-
-    public function changeReturnType(Type $newType): void
-    {
-        $this->phpDocTypeChanger->changeReturnType($this, $newType);
-    }
-
     public function addBareTag(string $tag): void
     {
         $tag = '@' . ltrim($tag, '@');
@@ -360,11 +342,6 @@ final class PhpDocInfo
         }
 
         return $this->tokens === [];
-    }
-
-    public function changeParamType(Type $type, Param $param, string $paramName): void
-    {
-        $this->phpDocTypeChanger->changeParamType($this, $type, $param, $paramName);
     }
 
     /**

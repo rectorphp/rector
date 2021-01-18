@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -46,16 +47,23 @@ final class ImproveDoctrineCollectionDocTypeInEntityRector extends AbstractRecto
      */
     private $collectionVarTagValueNodeResolver;
 
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
     public function __construct(
         CollectionTypeFactory $collectionTypeFactory,
         AssignManipulator $assignManipulator,
         CollectionTypeResolver $collectionTypeResolver,
-        CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver
+        CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver,
+        PhpDocTypeChanger $phpDocTypeChanger
     ) {
         $this->collectionTypeFactory = $collectionTypeFactory;
         $this->assignManipulator = $assignManipulator;
         $this->collectionTypeResolver = $collectionTypeResolver;
         $this->collectionVarTagValueNodeResolver = $collectionVarTagValueNodeResolver;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -144,7 +152,7 @@ CODE_SAMPLE
             }
 
             $newVarType = $this->collectionTypeFactory->createType($collectionObjectType);
-            $phpDocInfo->changeVarType($newVarType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newVarType);
         } else {
             $collectionObjectType = $this->collectionTypeResolver->resolveFromOneToManyProperty($property);
             if ($collectionObjectType === null) {
@@ -152,7 +160,7 @@ CODE_SAMPLE
             }
 
             $newVarType = $this->collectionTypeFactory->createType($collectionObjectType);
-            $phpDocInfo->changeVarType($newVarType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newVarType);
         }
 
         return $property;
@@ -182,7 +190,8 @@ CODE_SAMPLE
 
         $param = $classMethod->params[0];
         $parameterName = $this->getName($param);
-        $phpDocInfo->changeParamType($collectionObjectType, $param, $parameterName);
+
+        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $collectionObjectType, $param, $parameterName);
 
         return $classMethod;
     }

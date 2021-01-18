@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Ramsey\Uuid\UuidInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
@@ -24,6 +25,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddUuidAnnotationsToIdPropertyRector extends AbstractRector
 {
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    {
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add uuid annotations to $id property', [
@@ -93,7 +104,8 @@ CODE_SAMPLE
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType(UuidInterface::class);
-        $phpDocInfo->changeVarType($fullyQualifiedObjectType);
+
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $fullyQualifiedObjectType);
 
         $phpDocInfo->removeByType(GeneratedValueTagValueNode::class);
         $this->changeColumnTypeToUuidBinary($phpDocInfo);

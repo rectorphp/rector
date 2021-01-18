@@ -20,7 +20,7 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -47,9 +47,15 @@ final class DateTimeToDateTimeInterfaceRector extends AbstractRector
      */
     private $nodeTypeResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -134,12 +140,6 @@ CODE_SAMPLE
 
     private function refactorParamDocBlock(Param $param, ClassMethod $classMethod): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
-        }
-
         $types = [new ObjectType(DateTime::class), new ObjectType(DateTimeImmutable::class)];
         if ($param->type instanceof NullableType) {
             $types[] = new NullType();
@@ -149,7 +149,9 @@ CODE_SAMPLE
         if ($paramName === null) {
             throw new ShouldNotHappenException();
         }
-        $phpDocInfo->changeParamType(new UnionType($types), $param, $paramName);
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $this->phpDocTypeChanger->changeParamType($phpDocInfo, new UnionType($types), $param, $paramName);
     }
 
     private function refactorMethodCalls(Param $param, ClassMethod $classMethod): void

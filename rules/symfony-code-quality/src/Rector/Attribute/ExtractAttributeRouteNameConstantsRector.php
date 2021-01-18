@@ -14,6 +14,7 @@ use Rector\SymfonyCodeQuality\ValueObject\ClassName;
 use Symfony\Component\Routing\Annotation\Route;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ExtraFileCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * @see https://tomasvotruba.com/blog/2020/12/21/5-new-combos-opened-by-symfony-52-and-php-80/
@@ -47,14 +48,21 @@ final class ExtractAttributeRouteNameConstantsRector extends AbstractRector
      */
     private $constantNameAndValueResolver;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
         RouteNameClassFactory $routeNameClassFactory,
         ConstantNameAndValueMatcher $constantNameAndValueMatcher,
-        ConstantNameAndValueResolver $constantNameAndValueResolver
+        ConstantNameAndValueResolver $constantNameAndValueResolver,
+        SmartFileSystem $smartFileSystem
     ) {
         $this->routeNameClassFactory = $routeNameClassFactory;
         $this->constantNameAndValueMatcher = $constantNameAndValueMatcher;
         $this->constantNameAndValueResolver = $constantNameAndValueResolver;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function getRuleDefinition(): RuleDefinition
