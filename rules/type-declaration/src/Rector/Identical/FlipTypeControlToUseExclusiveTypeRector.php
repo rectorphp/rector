@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -115,6 +115,8 @@ CODE_SAMPLE
             ? $types[1]->name
             : $types[0]->name;
 
+        dump($types);
+
         if (! class_exists($type) && ! interface_exists($type)) {
             return null;
         }
@@ -122,7 +124,7 @@ CODE_SAMPLE
         /** @var VarTagValueNode $tagValueNode */
         $tagValueNode = $phpDocInfo->getVarTagValueNode();
         $phpDocInfo->removeTagValueNodeFromNode($tagValueNode);
-        return new BooleanNot(new Instanceof_($expr, new FullyQualified($type)));
+        return new BooleanNot(new Instanceof_($expr, new Name($type)));
     }
 
     /**
