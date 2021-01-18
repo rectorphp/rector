@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -127,6 +128,10 @@ CODE_SAMPLE
     private function refactorMethodCall(MethodCall $methodCall): ?MethodCall
     {
         foreach ($this->typesToConstructorInjection as $typeToConstructorInjection) {
+            if (! $methodCall->var instanceof Variable) {
+                continue;
+            }
+
             if (! $this->isObjectType($methodCall->var, $typeToConstructorInjection)) {
                 continue;
             }
