@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Composer\Rector;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
+use Rector\Composer\Guard\VersionGuard;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -24,6 +25,16 @@ final class AddPackageToRequireDevRector implements ComposerRectorInterface
      * @var PackageAndVersion[]
      */
     private $packageAndVersions = [];
+
+    /**
+     * @var VersionGuard
+     */
+    private $versionGuard;
+
+    public function __construct(VersionGuard $versionGuard)
+    {
+        $this->versionGuard = $versionGuard;
+    }
 
     public function refactor(ComposerJson $composerJson): void
     {
@@ -62,6 +73,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->packageAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? [];
+        $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? [];
+        $this->versionGuard->validate($packagesAndVersions);
+        $this->packageAndVersions = $packagesAndVersions;
     }
 }

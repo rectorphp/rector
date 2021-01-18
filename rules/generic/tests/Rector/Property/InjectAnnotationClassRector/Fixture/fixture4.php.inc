@@ -22,13 +22,8 @@ use JMS\DiExtraBundle\Annotation as DI;
 
 class ClassWithPublicInjects
 {
-    /**
-     * @var \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface
-     */
-    public $translator;
-    public function __construct(\Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $translator)
+    public function __construct(public \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $translator)
     {
-        $this->translator = $translator;
     }
 }
 

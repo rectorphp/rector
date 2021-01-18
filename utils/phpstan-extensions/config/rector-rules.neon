@@ -1,9 +1,5 @@
 services:
     -
-        class: Symplify\PHPStanRules\Rules\PreventDuplicateClassMethodRule
-        tags: [phpstan.rules.rule]
-
-    -
         class: Symplify\PHPStanRules\Rules\PreferredMethodCallOverIdenticalCompareRule
         tags: [phpstan.rules.rule]
         arguments:

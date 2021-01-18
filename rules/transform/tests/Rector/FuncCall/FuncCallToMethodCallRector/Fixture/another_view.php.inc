@@ -23,10 +23,8 @@ use function view;
 
 class AnotherView
 {
-    private \Namespaced\SomeRenderer $someRenderer;
-    public function __construct(\Namespaced\SomeRenderer $someRenderer)
+    public function __construct(private \Namespaced\SomeRenderer $someRenderer)
     {
-        $this->someRenderer = $someRenderer;
     }
     public function someMethod()
     {

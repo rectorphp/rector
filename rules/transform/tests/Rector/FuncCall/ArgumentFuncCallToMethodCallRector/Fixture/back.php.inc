@@ -23,10 +23,8 @@ namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRec
 
 class Back
 {
-    private \Illuminate\Routing\Redirector $redirector;
-    public function __construct(\Illuminate\Routing\Redirector $redirector)
+    public function __construct(private \Illuminate\Routing\Redirector $redirector)
     {
-        $this->redirector = $redirector;
     }
     public function action()
     {

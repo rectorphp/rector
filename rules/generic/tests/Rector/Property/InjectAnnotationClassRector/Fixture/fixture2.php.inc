@@ -33,19 +33,8 @@ use Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInj
 
 class ClassWithInjects7
 {
-    /**
-     * @var SomeInterface
-     */
-    private $session;
-
-    /**
-     * @var SomeProductWithInterface
-     */
-    private $product;
-    public function __construct(\Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface $session, \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface $product)
+    public function __construct(private \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface $session, private \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface $product)
     {
-        $this->session = $session;
-        $this->product = $product;
     }
 }
 

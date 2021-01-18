@@ -261,7 +261,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function getPhpVersion(): int
     {
         // to be implemented
-        return 0;
+        return self::PHP_VERSION_UNDEFINED;
     }
 
     protected function assertFileMissing(string $temporaryFilePath): void

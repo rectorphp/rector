@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject;
 
+use Rector\Composer\Contract\VersionAwareInterface;
 use Rector\Composer\Rector\ChangePackageVersionRector;
 use Webmozart\Assert\Assert;
 
-final class ReplacePackageAndVersion
+final class ReplacePackageAndVersion implements VersionAwareInterface
 {
     /**
      * @var string
@@ -22,9 +23,9 @@ final class ReplacePackageAndVersion
     /**
      * @var string
      */
-    private $targetVersion;
+    private $version;
 
-    public function __construct(string $oldPackageName, string $newPackageName, string $targetVersion)
+    public function __construct(string $oldPackageName, string $newPackageName, string $version)
     {
         Assert::notSame(
             $oldPackageName,
@@ -34,7 +35,7 @@ final class ReplacePackageAndVersion
 
         $this->oldPackageName = $oldPackageName;
         $this->newPackageName = $newPackageName;
-        $this->targetVersion = $targetVersion;
+        $this->version = $version;
     }
 
     public function getOldPackageName(): string
@@ -47,8 +48,8 @@ final class ReplacePackageAndVersion
         return $this->newPackageName;
     }
 
-    public function getTargetVersion(): string
+    public function getVersion(): string
     {
-        return $this->targetVersion;
+        return $this->version;
     }
 }

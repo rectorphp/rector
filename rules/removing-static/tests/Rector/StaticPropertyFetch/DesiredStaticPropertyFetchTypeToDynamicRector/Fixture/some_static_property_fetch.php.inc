@@ -26,10 +26,8 @@ use Rector\RemovingStatic\Tests\Rector\StaticPropertyFetch\DesiredStaticProperty
 
 final class SomeStaticPropertyFetch
 {
-    private \Rector\RemovingStatic\Tests\Rector\StaticPropertyFetch\DesiredStaticPropertyFetchTypeToDynamicRector\Source\SomeStaticType $someStaticType;
-    public function __construct(\Rector\RemovingStatic\Tests\Rector\StaticPropertyFetch\DesiredStaticPropertyFetchTypeToDynamicRector\Source\SomeStaticType $someStaticType)
+    public function __construct(private \Rector\RemovingStatic\Tests\Rector\StaticPropertyFetch\DesiredStaticPropertyFetchTypeToDynamicRector\Source\SomeStaticType $someStaticType)
     {
-        $this->someStaticType = $someStaticType;
     }
     public function run()
     {

@@ -18,10 +18,8 @@ namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRec
 
 class Route
 {
-    private \Illuminate\Routing\UrlGenerator $urlGenerator;
-    public function __construct(\Illuminate\Routing\UrlGenerator $urlGenerator)
+    public function __construct(private \Illuminate\Routing\UrlGenerator $urlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
     }
     public function action()
     {

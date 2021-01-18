@@ -22,10 +22,8 @@ use Illuminate\Support\Facades\Response;
 
 class ExampleController
 {
-    private \Illuminate\Contracts\Routing\ResponseFactory $responseFactory;
-    public function __construct(\Illuminate\Contracts\Routing\ResponseFactory $responseFactory)
+    public function __construct(private \Illuminate\Contracts\Routing\ResponseFactory $responseFactory)
     {
-        $this->responseFactory = $responseFactory;
     }
     public function store()
     {

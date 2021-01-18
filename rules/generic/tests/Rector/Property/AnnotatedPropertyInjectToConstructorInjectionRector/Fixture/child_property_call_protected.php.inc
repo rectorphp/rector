@@ -39,13 +39,8 @@ class ChildPropertyCallProtected extends SomeParentWithInject
 
 class SomeParentWithInject
 {
-    /**
-     * @var SomeProductWithInterface
-     */
-    protected $someProductWith;
-    public function __construct(\Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface $someProductWith)
+    public function __construct(protected \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface $someProductWith)
     {
-        $this->someProductWith = $someProductWith;
     }
 }
 

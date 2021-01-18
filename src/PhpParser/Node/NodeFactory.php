@@ -50,6 +50,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
@@ -507,6 +508,24 @@ final class NodeFactory
     public function createNull(): ConstFetch
     {
         return new ConstFetch(new Name('null'));
+    }
+
+    public function createPromotedPropertyParam(PropertyMetadata $propertyMetadata): Param
+    {
+        $paramBuilder = new ParamBuilder($propertyMetadata->getName());
+        $propertyType = $propertyMetadata->getType();
+        if ($propertyType !== null) {
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
+            if ($typeNode !== null) {
+                $paramBuilder->setType($typeNode);
+            }
+        }
+
+        $param = $paramBuilder->getNode();
+        $propertyFlags = $propertyMetadata->getFlags();
+        $param->flags = $propertyFlags !== 0 ? $propertyFlags : Class_::MODIFIER_PRIVATE;
+
+        return $param;
     }
 
     private function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
