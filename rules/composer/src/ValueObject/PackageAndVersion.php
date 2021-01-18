@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Composer\ValueObject;
 
-final class PackageAndVersion
+use Rector\Composer\Contract\VersionAwareInterface;
+
+final class PackageAndVersion implements VersionAwareInterface
 {
     /**
      * @var string
