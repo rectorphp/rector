@@ -58,7 +58,7 @@ final class FunctionLikeFirstLevelStatementResolver
     private function matchMultiplierClosure(Node $node): ?Closure
     {
         $closure = $node->getAttribute(AttributeKey::CLOSURE_NODE);
-        if (! $closure instanceof \Closure) {
+        if (! $closure instanceof Closure) {
             return null;
         }
 

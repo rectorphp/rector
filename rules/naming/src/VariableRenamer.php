@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming;
 
-use Closure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
