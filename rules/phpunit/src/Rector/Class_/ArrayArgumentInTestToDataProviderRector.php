@@ -224,7 +224,7 @@ CODE_SAMPLE
         $dataProviderTagNode = $this->createDataProviderTagNode($dataProviderMethodName);
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->addPhpDocTagNode($dataProviderTagNode);
     }
 
@@ -271,7 +271,7 @@ CODE_SAMPLE
         $classMethod->params = $this->createParams($paramAndArgs);
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
         foreach ($paramAndArgs as $paramAndArg) {
             $staticType = $paramAndArg->getType();

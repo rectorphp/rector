@@ -149,7 +149,7 @@ CODE_SAMPLE
     private function hasRequiredAnnotation(ClassMethod $classMethod): bool
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         if ($phpDocInfo === null) {
             return false;
         }

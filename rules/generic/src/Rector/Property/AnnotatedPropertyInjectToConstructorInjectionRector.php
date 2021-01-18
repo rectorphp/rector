@@ -118,7 +118,7 @@ CODE_SAMPLE
     private function shouldSkipProperty(Property $property): bool
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($phpDocInfo === null) {
             return true;
         }

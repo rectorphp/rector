@@ -134,10 +134,6 @@ CODE_SAMPLE
             }
 
             $varType = $this->resolveVarType($node);
-//            if ($varType === null) {
-//                return null;
-//            }
-
             if (! $this->iterableTypeAnalyzer->detect($varType)) {
                 return null;
             }

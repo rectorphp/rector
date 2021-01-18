@@ -12,14 +12,12 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Throw_;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\DocBlock\ThrowsFactory;
 use Rector\CodingStyle\NodeAnalyzer\ThrowAnalyzer;
 use Rector\Core\PhpParser\Node\Value\ClassResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ClassMethodReflectionHelper;
 use Rector\Core\Reflection\FunctionAnnotationResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionFunction;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -172,7 +170,8 @@ CODE_SAMPLE
             return;
         }
 
-        $phpDocInfo = $callee->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($callee);
+
         foreach ($this->throwablesToAnnotate as $throwableToAnnotate) {
             $docComment = $this->throwsFactory->crateDocTagNodeFromClass($throwableToAnnotate);
             $phpDocInfo->addPhpDocTagNode($docComment);
@@ -230,12 +229,7 @@ CODE_SAMPLE
             return [];
         }
 
-        /** @var PhpDocInfo|null $callePhpDocInfo */
-        $callePhpDocInfo = $callee->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($callePhpDocInfo === null) {
-            return [];
-        }
-
+        $callePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($callee);
         return $callePhpDocInfo->getThrowsClassNames();
     }
 

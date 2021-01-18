@@ -158,7 +158,7 @@ CODE_SAMPLE
         }
 
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         if ($phpDocInfo === null) {
             return false;
         }
@@ -184,7 +184,7 @@ CODE_SAMPLE
         }
 
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         if ($phpDocInfo === null) {
             return false;
         }

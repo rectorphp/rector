@@ -138,7 +138,7 @@ CODE_SAMPLE
         $arrayType = new ArrayType(new MixedType(), $staticType);
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $arrayType);
     }
 

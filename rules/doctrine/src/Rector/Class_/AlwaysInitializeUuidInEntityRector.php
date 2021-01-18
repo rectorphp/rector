@@ -14,7 +14,6 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -127,10 +126,7 @@ CODE_SAMPLE
     private function resolveUuidPropertyFromClass(Class_ $class): ?Property
     {
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDoc = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDoc === null) {
-                continue;
-            }
+            $propertyPhpDoc = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
             $varType = $propertyPhpDoc->getVarType();
             if (! $varType instanceof ObjectType) {

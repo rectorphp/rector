@@ -139,7 +139,7 @@ CODE_SAMPLE
         }
 
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($phpDocInfo === null) {
             return false;
         }

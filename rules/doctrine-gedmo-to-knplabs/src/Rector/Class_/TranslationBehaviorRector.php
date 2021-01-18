@@ -198,10 +198,7 @@ CODE_SAMPLE
         $removedPropertyNameToPhpDocInfo = [];
 
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
-                continue;
-            }
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             $hasTypeLocaleTagValueNode = $propertyPhpDocInfo->hasByType(LocaleTagValueNode::class);
 
             if ($hasTypeLocaleTagValueNode) {

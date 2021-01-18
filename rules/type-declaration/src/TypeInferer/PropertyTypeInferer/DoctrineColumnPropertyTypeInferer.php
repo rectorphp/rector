@@ -14,9 +14,8 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 
@@ -35,7 +34,12 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
      */
     private $typeFactory;
 
-    public function __construct(TypeFactory $typeFactory)
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(TypeFactory $typeFactory, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->typeFactory = $typeFactory;
 
@@ -75,15 +79,12 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
             'time' => new ObjectType(DateTimeInterface::class),
             'year' => new ObjectType(DateTimeInterface::class),
         ];
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function inferProperty(Property $property): Type
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return new MixedType();
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $doctrineColumnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
         if ($doctrineColumnTagValueNode === null) {

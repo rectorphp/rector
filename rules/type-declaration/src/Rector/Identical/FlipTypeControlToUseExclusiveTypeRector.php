@@ -95,10 +95,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo = $expression->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);
 
         /** @var AttributeAwareIdentifierTypeNode[] $types */
         $types = $this->getTypes($phpDocInfo);

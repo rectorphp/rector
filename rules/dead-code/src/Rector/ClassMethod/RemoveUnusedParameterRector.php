@@ -181,7 +181,7 @@ CODE_SAMPLE
     private function clearPhpDocInfo(ClassMethod $classMethod, array $unusedParameters): void
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         if ($phpDocInfo === null) {
             return;
         }

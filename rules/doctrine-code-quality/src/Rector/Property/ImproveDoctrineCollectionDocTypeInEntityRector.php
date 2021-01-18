@@ -138,7 +138,7 @@ CODE_SAMPLE
 
         // @todo make an own local property on enter node?
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $attributeAwareVarTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
         if ($attributeAwareVarTagValueNode !== null) {
@@ -186,7 +186,7 @@ CODE_SAMPLE
         }
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
         $param = $classMethod->params[0];
         $parameterName = $this->getName($param);
@@ -198,7 +198,7 @@ CODE_SAMPLE
 
     private function hasNodeTagValueNode(Property $property, string $tagValueNodeClass): bool
     {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return false;
         }

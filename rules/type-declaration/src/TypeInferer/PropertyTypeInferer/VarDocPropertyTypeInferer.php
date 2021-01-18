@@ -6,24 +6,23 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 
 final class VarDocPropertyTypeInferer
 {
-    public function inferProperty(Property $property): ?Type
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    }
 
-        // is empty
-        if ($phpDocInfo->getPhpDocNode()->children === []) {
-            return null;
-        }
-
+    public function inferProperty(Property $property): Type
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         return $phpDocInfo->getVarType();
     }
 }
