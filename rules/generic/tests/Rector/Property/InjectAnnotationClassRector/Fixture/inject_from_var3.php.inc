@@ -39,21 +39,8 @@ use DI\Annotation\Inject;
 
 class InjectFromVarWithTypeOfSameName
 {
-    /**
-     *
-     * @var Bar
-     */
-    private $someBarDependency;
-
-    /**
-     *
-     * @var Foo
-     */
-    private $someFooDependency;
-    public function __construct(\Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\Bar $someBarDependency, \Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\Foo $someFooDependency)
+    public function __construct(private \Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\Bar $someBarDependency, private \Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\Foo $someFooDependency)
     {
-        $this->someBarDependency = $someBarDependency;
-        $this->someFooDependency = $someFooDependency;
     }
 }
 

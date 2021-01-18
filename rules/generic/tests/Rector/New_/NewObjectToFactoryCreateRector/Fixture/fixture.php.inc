@@ -22,10 +22,8 @@ use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyCla
 
 final class SomeController
 {
-    private \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory;
-    public function __construct(\Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory)
+    public function __construct(private \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory)
     {
-        $this->myClassFactory = $myClassFactory;
     }
     public function default()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTypedProperty;
+namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixturePhp74;
 
 use stdClass;
 
@@ -16,7 +16,7 @@ class TypedProperty
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTypedProperty;
+namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixturePhp74;
 
 use stdClass;
 

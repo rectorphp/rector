@@ -22,10 +22,8 @@ use Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Sourc
 
 class ClassWithNamedServiceAndParentTrait extends ParentClassWithGetTrait
 {
-    private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator;
-    public function __construct(\Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
+    public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
     {
-        $this->someTranslator = $someTranslator;
     }
     public function render()
     {

@@ -22,6 +22,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\ServiceMapProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -227,7 +228,12 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $this->addConstructorDependencyToClass($classLike, $type, $propertyName);
+        $this->addConstructorDependencyToClass($classLike, $type, $propertyName, $property->flags);
+
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+            $this->removeNode($property);
+            return null;
+        }
 
         return $property;
     }

@@ -23,10 +23,8 @@ namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRec
 
 class Config
 {
-    private \Illuminate\Contracts\Config\Repository $configRepository;
-    public function __construct(\Illuminate\Contracts\Config\Repository $configRepository)
+    public function __construct(private \Illuminate\Contracts\Config\Repository $configRepository)
     {
-        $this->configRepository = $configRepository;
     }
     public function actionGet()
     {

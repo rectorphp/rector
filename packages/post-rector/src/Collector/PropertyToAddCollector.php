@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 
 final class PropertyToAddCollector implements NodeCollectorInterface
 {
@@ -23,7 +24,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     private $nodeNameResolver;
 
     /**
-     * @var Type[][]|null[][]
+     * @var array<string, PropertyMetadata[]>
      */
     private $propertiesByClass = [];
 
@@ -50,9 +51,14 @@ final class PropertyToAddCollector implements NodeCollectorInterface
         return $this->constantsByClass !== [];
     }
 
-    public function addPropertyToClass(string $propertyName, ?Type $propertyType, Class_ $class): void
-    {
-        $this->propertiesByClass[spl_object_hash($class)][$propertyName] = $propertyType;
+    public function addPropertyToClass(
+        Class_ $class,
+        string $propertyName,
+        ?Type $propertyType,
+        int $propertyFlags
+    ): void {
+        $uniqueHash = spl_object_hash($class);
+        $this->propertiesByClass[$uniqueHash][] = new PropertyMetadata($propertyName, $propertyType, $propertyFlags);
     }
 
     public function addConstantToClass(Class_ $class, ClassConst $classConst): void
@@ -80,7 +86,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     }
 
     /**
-     * @return Type[]|null[]
+     * @return PropertyMetadata[]
      */
     public function getPropertiesByClass(Class_ $class): array
     {

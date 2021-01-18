@@ -24,10 +24,8 @@ use Rector\Symfony4\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRe
 
 final class FirstClass extends ContainerAwareParentClass
 {
-    private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator;
-    public function __construct(\Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
+    public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
     {
-        $this->someTranslator = $someTranslator;
     }
     protected function execute()
     {

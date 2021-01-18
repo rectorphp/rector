@@ -19,10 +19,8 @@ namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRec
 
 class View
 {
-    private \Illuminate\Contracts\View\Factory $viewFactory;
-    public function __construct(\Illuminate\Contracts\View\Factory $viewFactory)
+    public function __construct(private \Illuminate\Contracts\View\Factory $viewFactory)
     {
-        $this->viewFactory = $viewFactory;
     }
     public function action()
     {

@@ -20,10 +20,8 @@ namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRec
 
 class Session
 {
-    private \Illuminate\Session\SessionManager $sessionManager;
-    public function __construct(\Illuminate\Session\SessionManager $sessionManager)
+    public function __construct(private \Illuminate\Session\SessionManager $sessionManager)
     {
-        $this->sessionManager = $sessionManager;
     }
     public function action()
     {
