@@ -161,6 +161,6 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
             throw new ShouldNotHappenException();
         }
 
-        return $this->phpDocInfoFactory->createFromNode($parentNode);
+        return $this->phpDocInfoFactory->createFromNodeOrEmpty($parentNode);
     }
 }

@@ -70,6 +70,7 @@ final class PhpDocInfoFactory
 
     public function createFromNodeOrEmpty(Node $node): PhpDocInfo
     {
+        // already added
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo instanceof PhpDocInfo) {
             return $phpDocInfo;
