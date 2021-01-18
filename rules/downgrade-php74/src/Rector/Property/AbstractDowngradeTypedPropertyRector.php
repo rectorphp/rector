@@ -7,12 +7,23 @@ namespace Rector\DowngradePhp74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp74\Contract\Rector\DowngradeTypedPropertyRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractDowngradeTypedPropertyRector extends AbstractRector implements DowngradeTypedPropertyRectorInterface
 {
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function autowireAbstractDowngradeTypedPropertyRector(PhpDocTypeChanger $phpDocTypeChanger)
+    {
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    }
+
     /**
      * @return string[]
      */
@@ -54,6 +65,7 @@ abstract class AbstractDowngradeTypedPropertyRector extends AbstractRector imple
         }
 
         $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
-        $phpDocInfo->changeVarType($newType);
+
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newType);
     }
 }

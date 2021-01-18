@@ -10,6 +10,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
@@ -30,10 +31,15 @@ final class VarConstantCommentRector extends AbstractRector
      * @var TypeComparator
      */
     private $typeComparator;
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
 
-    public function __construct(TypeComparator $typeComparator)
+    public function __construct(TypeComparator $typeComparator, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->typeComparator = $typeComparator;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -106,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo->changeVarType($constType);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $constType);
 
         return $node;
     }

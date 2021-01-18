@@ -21,10 +21,15 @@ final class VarAnnotationManipulator
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
 
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function decorateNodeWithInlineVarType(
@@ -62,7 +67,7 @@ final class VarAnnotationManipulator
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
         }
 
-        $phpDocInfo->changeVarType($staticType);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);
     }
 
     private function resolvePhpDocInfo(Node $node): PhpDocInfo

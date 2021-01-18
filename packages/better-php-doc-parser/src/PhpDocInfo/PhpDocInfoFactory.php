@@ -49,11 +49,6 @@ final class PhpDocInfoFactory
     private $attributeAwareNodeFactory;
 
     /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
      * @var PhpDocRemover
      */
     private $phpDocRemover;
@@ -64,7 +59,6 @@ final class PhpDocInfoFactory
         Lexer $lexer,
         BetterPhpDocParser $betterPhpDocParser,
         PhpDocRemover $phpDocRemover,
-        PhpDocTypeChanger $phpDocTypeChanger,
         StaticTypeMapper $staticTypeMapper
     ) {
         $this->betterPhpDocParser = $betterPhpDocParser;
@@ -72,7 +66,6 @@ final class PhpDocInfoFactory
         $this->currentNodeProvider = $currentNodeProvider;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocRemover = $phpDocRemover;
     }
 
@@ -173,7 +166,6 @@ final class PhpDocInfoFactory
             $content,
             $this->staticTypeMapper,
             $node,
-            $this->phpDocTypeChanger,
             $this->phpDocRemover,
             $this->attributeAwareNodeFactory
         );

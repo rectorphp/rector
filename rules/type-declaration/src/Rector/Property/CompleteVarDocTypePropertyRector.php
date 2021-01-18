@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -24,10 +25,15 @@ final class CompleteVarDocTypePropertyRector extends AbstractRector
      * @var PropertyTypeInferer
      */
     private $propertyTypeInferer;
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
 
-    public function __construct(PropertyTypeInferer $propertyTypeInferer)
+    public function __construct(PropertyTypeInferer $propertyTypeInferer, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->propertyTypeInferer = $propertyTypeInferer;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -91,7 +97,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $phpDocInfo->changeVarType($propertyType);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
 
         return $node;
     }

@@ -10,6 +10,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -26,11 +27,16 @@ final class PropertyTypeDecorator
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
 
-    public function __construct(PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper)
+    public function __construct(PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function decorateProperty(Property $property, Type $propertyType): void
@@ -45,7 +51,7 @@ final class PropertyTypeDecorator
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         if ($this->isNonMixedArrayType($propertyType)) {
-            $phpDocInfo->changeVarType($propertyType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
             $property->type = new Identifier('array');
             return;
         }
@@ -54,10 +60,10 @@ final class PropertyTypeDecorator
             $phpParserNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
             if ($phpParserNode === null) {
                 // fallback to doc type in PHP 7.4
-                $phpDocInfo->changeVarType($propertyType);
+                $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
             }
         } else {
-            $phpDocInfo->changeVarType($propertyType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
         }
     }
 

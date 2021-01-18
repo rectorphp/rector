@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
@@ -50,17 +51,23 @@ final class UniqueObjectFactoryFactory
      * @var NodeFactory
      */
     private $nodeFactory;
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
 
     public function __construct(
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         PropertyNaming $propertyNaming,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        PhpDocTypeChanger $phpDocTypeChanger
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeFactory = $nodeFactory;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function createFactoryClass(Class_ $class, ObjectType $objectType): Class_
@@ -113,7 +120,7 @@ final class UniqueObjectFactoryFactory
 
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->changeVarType($objectType);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $objectType);
 
         $properties[] = $property;
 

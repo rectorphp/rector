@@ -44,6 +44,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\MethodName;
@@ -110,19 +111,25 @@ final class NodeFactory
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
 
     public function __construct(
         BuilderFactory $builderFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpVersionProvider $phpVersionProvider,
         StaticTypeMapper $staticTypeMapper,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        PhpDocTypeChanger $phpDocTypeChanger
     ) {
         $this->builderFactory = $builderFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     /**
@@ -610,14 +617,14 @@ final class NodeFactory
                 $property->type = $phpParserType;
 
                 if ($type instanceof GenericObjectType) {
-                    $phpDocInfo->changeVarType($type);
+                    $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
                 }
 
                 return;
             }
         }
 
-        $phpDocInfo->changeVarType($type);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
     }
 
     private function decorateParentPropertyProperty(Property $property): void
@@ -643,7 +650,7 @@ final class NodeFactory
 
         if (! $staticType instanceof MixedType) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
-            $phpDocInfo->changeVarType($staticType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);
         }
 
         return $classConst;

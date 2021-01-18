@@ -13,6 +13,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -45,13 +46,19 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
 
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -153,6 +160,6 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
             throw new ShouldNotHappenException();
         }
 
-        return $parentNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+        return $this->phpDocInfoFactory->createFromNode($parentNode);
     }
 }

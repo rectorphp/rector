@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
@@ -45,10 +46,15 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector implements 
      * @var PropertyNaming
      */
     private $propertyNaming;
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
 
-    public function __construct(PropertyNaming $propertyNaming)
+    public function __construct(PropertyNaming $propertyNaming, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->propertyNaming = $propertyNaming;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -168,7 +174,7 @@ CODE_SAMPLE
 
             /** @var PhpDocInfo $phpDocInfo */
             $phpDocInfo = $entityFactoryProperty->getAttribute(AttributeKey::PHP_DOC_INFO);
-            $phpDocInfo->changeVarType($objectType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $objectType);
 
             $class->stmts = array_merge([$entityFactoryProperty, $setEntityFactoryMethod], $class->stmts);
 
