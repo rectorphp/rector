@@ -157,12 +157,7 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
         return $phpDocInfo->hasByNames([self::API, TagName::REQUIRED]);
     }
 

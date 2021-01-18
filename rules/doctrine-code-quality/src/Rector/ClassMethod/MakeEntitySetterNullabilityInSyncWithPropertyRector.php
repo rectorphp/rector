@@ -7,7 +7,6 @@ namespace Rector\DoctrineCodeQuality\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ManyToOneTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DoctrineCodeQuality\NodeAnalyzer\SetterClassMethodAnalyzer;
@@ -107,11 +106,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($phpDocInfo === null) {
-            return null;
-        }
 
         $manyToOneTagValueNode = $phpDocInfo->getByType(ManyToOneTagValueNode::class);
         if ($manyToOneTagValueNode === null) {

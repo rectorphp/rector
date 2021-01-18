@@ -117,12 +117,7 @@ CODE_SAMPLE
 
     private function shouldSkipProperty(Property $property): bool
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($phpDocInfo === null) {
-            return true;
-        }
-
         if (! $phpDocInfo->hasByName(self::INJECT_ANNOTATION)) {
             return true;
         }

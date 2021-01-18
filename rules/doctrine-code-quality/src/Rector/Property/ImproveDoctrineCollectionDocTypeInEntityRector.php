@@ -199,10 +199,6 @@ CODE_SAMPLE
     private function hasNodeTagValueNode(Property $property, string $tagValueNodeClass): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return false;
-        }
-
         return $phpDocInfo->hasByType($tagValueNodeClass);
     }
 

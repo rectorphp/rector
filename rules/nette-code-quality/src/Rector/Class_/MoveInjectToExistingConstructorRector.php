@@ -152,12 +152,7 @@ CODE_SAMPLE
             return false;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
         return (bool) $phpDocInfo->getTagsByName('inject');
     }
 }

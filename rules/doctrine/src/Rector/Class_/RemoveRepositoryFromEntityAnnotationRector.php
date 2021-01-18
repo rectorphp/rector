@@ -63,13 +63,13 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        /** @var EntityTagValueNode|null $doctrineEntityTag */
-        $doctrineEntityTag = $phpDocInfo->getByType(EntityTagValueNode::class);
-        if ($doctrineEntityTag === null) {
+        /** @var EntityTagValueNode|null $entityTagValueNode */
+        $entityTagValueNode = $phpDocInfo->getByType(EntityTagValueNode::class);
+        if ($entityTagValueNode === null) {
             return null;
         }
 
-        $doctrineEntityTag->removeRepositoryClass();
+        $entityTagValueNode->removeRepositoryClass();
 
         return $node;
     }

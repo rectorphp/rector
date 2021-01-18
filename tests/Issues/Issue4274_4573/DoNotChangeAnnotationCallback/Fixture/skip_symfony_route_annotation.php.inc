@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class Controller
 {
     /**
-     * @Route("/route/{view}.{_format}", name="views.test", defaults={"_format": "json"}, methods={"POST"})
+     * @Route("/route/{view}.{_format}", name="views.test", defaults={"_format":"json"}, methods={"POST"})
      */
     public function updateAction()
     {
