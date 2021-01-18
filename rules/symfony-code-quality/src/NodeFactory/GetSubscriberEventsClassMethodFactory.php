@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\Manipulator\VisibilityManipulator;
 use Rector\Core\PhpParser\Node\NodeFactory;
@@ -49,16 +50,23 @@ final class GetSubscriberEventsClassMethodFactory
      */
     private $phpDocInfoFactory;
 
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
     public function __construct(
         NodeFactory $nodeFactory,
         VisibilityManipulator $visibilityManipulator,
-    PhpVersionProvider $phpVersionProvider,
-        PhpDocInfoFactory $phpDocInfoFactory
+        PhpVersionProvider $phpVersionProvider,
+        PhpDocInfoFactory $phpDocInfoFactory,
+        PhpDocTypeChanger $phpDocTypeChanger
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     /**
@@ -177,7 +185,7 @@ final class GetSubscriberEventsClassMethodFactory
 
         $returnType = new ArrayType(new MixedType(), new MixedType(true));
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->changeReturnType($returnType);
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $returnType);
     }
 
     /**

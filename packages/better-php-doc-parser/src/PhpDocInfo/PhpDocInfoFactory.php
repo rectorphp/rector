@@ -14,7 +14,6 @@ use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -49,11 +48,6 @@ final class PhpDocInfoFactory
     private $attributeAwareNodeFactory;
 
     /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
      * @var PhpDocRemover
      */
     private $phpDocRemover;
@@ -64,7 +58,6 @@ final class PhpDocInfoFactory
         Lexer $lexer,
         BetterPhpDocParser $betterPhpDocParser,
         PhpDocRemover $phpDocRemover,
-        PhpDocTypeChanger $phpDocTypeChanger,
         StaticTypeMapper $staticTypeMapper
     ) {
         $this->betterPhpDocParser = $betterPhpDocParser;
@@ -72,14 +65,19 @@ final class PhpDocInfoFactory
         $this->currentNodeProvider = $currentNodeProvider;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocRemover = $phpDocRemover;
     }
 
     public function createFromNodeOrEmpty(Node $node): PhpDocInfo
     {
+        // already added
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            return $phpDocInfo;
+        }
+
         $phpDocInfo = $this->createFromNode($node);
-        if ($phpDocInfo !== null) {
+        if ($phpDocInfo instanceof PhpDocInfo) {
             return $phpDocInfo;
         }
 
@@ -173,7 +171,6 @@ final class PhpDocInfoFactory
             $content,
             $this->staticTypeMapper,
             $node,
-            $this->phpDocTypeChanger,
             $this->phpDocRemover,
             $this->attributeAwareNodeFactory
         );

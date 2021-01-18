@@ -42,8 +42,8 @@ use PhpParser\Node\UnionType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\MethodName;
@@ -111,18 +111,25 @@ final class NodeFactory
      */
     private $nodeNameResolver;
 
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
     public function __construct(
         BuilderFactory $builderFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpVersionProvider $phpVersionProvider,
         StaticTypeMapper $staticTypeMapper,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        PhpDocTypeChanger $phpDocTypeChanger
     ) {
         $this->builderFactory = $builderFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     /**
@@ -247,12 +254,7 @@ final class NodeFactory
         $this->decorateParentPropertyProperty($property);
 
         // add @inject
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($property);
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $phpDocInfo->addBareTag('inject');
 
         return $property;
@@ -610,14 +612,14 @@ final class NodeFactory
                 $property->type = $phpParserType;
 
                 if ($type instanceof GenericObjectType) {
-                    $phpDocInfo->changeVarType($type);
+                    $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
                 }
 
                 return;
             }
         }
 
-        $phpDocInfo->changeVarType($type);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
     }
 
     private function decorateParentPropertyProperty(Property $property): void
@@ -643,7 +645,7 @@ final class NodeFactory
 
         if (! $staticType instanceof MixedType) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
-            $phpDocInfo->changeVarType($staticType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);
         }
 
         return $classConst;

@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -35,9 +35,15 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
      */
     private $rectorChangeCollector;
 
-    public function __construct(RectorChangeCollector $rectorChangeCollector)
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(RectorChangeCollector $rectorChangeCollector, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->rectorChangeCollector = $rectorChangeCollector;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -302,14 +308,10 @@ CODE_SAMPLE
             return;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
         $paramName = $this->getName($param);
         $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        $phpDocInfo->changeParamType($mappedCurrentParamType, $param, $paramName);
+        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $mappedCurrentParamType, $param, $paramName);
     }
 }

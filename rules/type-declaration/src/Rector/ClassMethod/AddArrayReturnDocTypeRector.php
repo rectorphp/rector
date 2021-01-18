@@ -19,6 +19,7 @@ use PHPStan\Type\VoidType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\OverrideGuard\ClassMethodReturnTypeOverrideGuard;
@@ -55,14 +56,21 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
      */
     private $advancedArrayAnalyzer;
 
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
     public function __construct(
         ReturnTypeInferer $returnTypeInferer,
         ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
-        AdvancedArrayAnalyzer $advancedArrayAnalyzer
+        AdvancedArrayAnalyzer $advancedArrayAnalyzer,
+        PhpDocTypeChanger $phpDocTypeChanger
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->advancedArrayAnalyzer = $advancedArrayAnalyzer;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -148,7 +156,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo->changeReturnType($inferedType);
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferedType);
 
         return $node;
     }
