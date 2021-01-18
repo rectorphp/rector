@@ -138,7 +138,7 @@ CODE_SAMPLE
             $returnType = $this->returnTypeInferer->inferFunctionLike($returnClassMethod);
 
             /** @var PhpDocInfo|null $currentPhpDocInfo */
-            $currentPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+            $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
             if ($currentPhpDocInfo === null) {
                 $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
             }

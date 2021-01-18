@@ -16,7 +16,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodeQualityStrict\NodeFactory\ClassConstFetchFactory;
 use Rector\CodeQualityStrict\TypeAnalyzer\SubTypeAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -88,7 +87,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($phpDocInfo === null) {
             return null;
         }

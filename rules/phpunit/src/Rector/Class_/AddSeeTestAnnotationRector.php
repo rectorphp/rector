@@ -92,7 +92,7 @@ CODE_SAMPLE
         }
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $seeTagNode = $this->createSeePhpDocTagNode($testCaseClassName);
         $phpDocInfo->addPhpDocTagNode($seeTagNode);

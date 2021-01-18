@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $phpDocInfo->removeByName(self::INJECT_ANNOTATION);
 
         if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($node)) {

@@ -94,10 +94,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // change the node
-        $classPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($classPhpDocInfo === null) {
-            return null;
-        }
+        $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $hasTypeLoggableTagValueNode = $classPhpDocInfo->hasByType(LoggableTagValueNode::class);
 
         if (! $hasTypeLoggableTagValueNode) {

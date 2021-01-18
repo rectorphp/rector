@@ -140,10 +140,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($classPhpDocInfo === null) {
-            return null;
-        }
+        $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $hasTypeTreeTagValueNode = $classPhpDocInfo->hasByType(TreeTagValueNode::class);
 
         if (! $hasTypeTreeTagValueNode) {
