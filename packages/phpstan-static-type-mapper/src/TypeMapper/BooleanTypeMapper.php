@@ -37,9 +37,7 @@ final class BooleanTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
-        if ($type instanceof FalseBooleanType && $this->phpVersionProvider->isAtLeastPhpVersion(
-            PhpVersionFeature::UNION_TYPES
-        )) {
+        if ($this->isFalseBooleanTypeWithUnion($type)) {
             return new AttributeAwareIdentifierTypeNode('false');
         }
 
@@ -55,9 +53,7 @@ final class BooleanTypeMapper implements TypeMapperInterface
             return null;
         }
 
-        if ($type instanceof FalseBooleanType && $this->phpVersionProvider->isAtLeastPhpVersion(
-            PhpVersionFeature::UNION_TYPES
-        )) {
+        if ($this->isFalseBooleanTypeWithUnion($type)) {
             return new Name('false');
         }
 
@@ -69,12 +65,19 @@ final class BooleanTypeMapper implements TypeMapperInterface
      */
     public function mapToDocString(Type $type, ?Type $parentType = null): string
     {
-        if ($type instanceof FalseBooleanType && $this->phpVersionProvider->isAtLeastPhpVersion(
-            PhpVersionFeature::UNION_TYPES
-        )) {
+        if ($this->isFalseBooleanTypeWithUnion($type)) {
             return 'false';
         }
 
         return 'bool';
+    }
+
+    private function isFalseBooleanTypeWithUnion(Type $type): bool
+    {
+        if (! $type instanceof FalseBooleanType) {
+            return false;
+        }
+
+        return $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES);
     }
 }
