@@ -50,6 +50,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
@@ -509,18 +510,24 @@ final class NodeFactory
         return new ConstFetch(new Name('null'));
     }
 
-    public function createPromotedPropertyParam(string $name, ?Type $type): Param
+    public function createPromotedPropertyParam(PropertyMetadata $propertyMetadata): Param
     {
-        $paramBuilder = new ParamBuilder($name);
-        if ($type !== null) {
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
+        $paramBuilder = new ParamBuilder($propertyMetadata->getPropertyName());
+        $propertyType = $propertyMetadata->getPropertyType();
+        if ($propertyType !== null) {
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
             if ($typeNode !== null) {
                 $paramBuilder->setType($typeNode);
             }
         }
 
         $param = $paramBuilder->getNode();
-        $param->flags = Class_::MODIFIER_PRIVATE;
+        $propertyFlags = $propertyMetadata->getPropertyFlags();
+        if ($propertyFlags !== 0) {
+            $param->flags = $propertyFlags;
+        } else {
+            $param->flags = Class_::MODIFIER_PRIVATE;
+        }
 
         return $param;
     }

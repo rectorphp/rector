@@ -101,15 +101,15 @@ CODE_SAMPLE
 
     private function addProperties(Class_ $class): void
     {
-        $properties = $this->propertyToAddCollector->getPropertiesByClass($class);
+        $propertiesMetadatas = $this->propertyToAddCollector->getPropertiesByClass($class);
 
         $isNetteInjectPreferred = $this->netteInjectDetector->isNetteInjectPreferred($class);
 
-        foreach ($properties as $propertyName => $propertyType) {
+        foreach ($propertiesMetadatas as $propertyMetadata) {
             if (! $isNetteInjectPreferred) {
-                $this->classDependencyManipulator->addConstructorDependency($class, $propertyName, $propertyType);
+                $this->classDependencyManipulator->addConstructorDependency($class, $propertyMetadata);
             } else {
-                $this->classDependencyManipulator->addInjectProperty($class, $propertyName, $propertyType);
+                $this->classDependencyManipulator->addInjectProperty($class, $propertyMetadata);
             }
         }
     }

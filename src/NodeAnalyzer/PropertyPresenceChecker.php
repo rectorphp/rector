@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -18,6 +17,7 @@ final class PropertyPresenceChecker
      * @var PromotedPropertyResolver
      */
     private $promotedPropertyResolver;
+
     /**
      * @var NodeNameResolver
      */
@@ -81,5 +81,4 @@ final class PropertyPresenceChecker
 
         return $propertyReflections;
     }
-
 }

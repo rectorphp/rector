@@ -17,10 +17,8 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
-use ReflectionProperty;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 
 final class ClassDependencyManipulator
 {
@@ -53,6 +51,7 @@ final class ClassDependencyManipulator
      * @var PhpVersionProvider
      */
     private $phpVersionProvider;
+
     /**
      * @var \Rector\Core\NodeAnalyzer\PropertyPresenceChecker
      */
@@ -76,21 +75,30 @@ final class ClassDependencyManipulator
         $this->propertyPresenceChecker = $propertyPresenceChecker;
     }
 
-    public function addConstructorDependency(Class_ $class, string $name, ?Type $type): void
+    public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $name)) {
+        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $propertyMetadata->getPropertyName())) {
             return;
         }
 
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
-            $this->classInsertManipulator->addPropertyToClass($class, $name, $type);
+            $this->classInsertManipulator->addPropertyToClass(
+                $class,
+                $propertyMetadata->getPropertyName(),
+                $propertyMetadata->getPropertyType()
+            );
         }
 
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
-            $this->addPromotedProperty($class, $name, $type);
+            $this->addPromotedProperty($class, $propertyMetadata);
         } else {
-            $assign = $this->nodeFactory->createPropertyAssignment($name);
-            $this->addConstructorDependencyWithCustomAssign($class, $name, $type, $assign);
+            $assign = $this->nodeFactory->createPropertyAssignment($propertyMetadata->getPropertyName());
+            $this->addConstructorDependencyWithCustomAssign(
+                $class,
+                $propertyMetadata->getPropertyName(),
+                $propertyMetadata->getPropertyType(),
+                $assign
+            );
         }
     }
 
@@ -155,15 +163,14 @@ final class ClassDependencyManipulator
         $classMethod->stmts = array_merge($stmts, (array) $classMethod->stmts);
     }
 
-    public function addInjectProperty(Class_ $class, string $propertyName, ?Type $propertyType): void
+    public function addInjectProperty(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->isPropertyAlreadyAvailableInTheClassOrItsParents($class, $propertyName)) {
+        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $propertyMetadata->getPropertyName())) {
             return;
         }
 
-        $this->classInsertManipulator->addInjectPropertyToClass($class, $propertyName, $propertyType);
+        $this->classInsertManipulator->addInjectPropertyToClass($class, $propertyMetadata);
     }
-
 
     private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
     {
@@ -182,10 +189,10 @@ final class ClassDependencyManipulator
         return new Expression($staticCall);
     }
 
-    private function addPromotedProperty(Class_ $class, string $name, ?Type $type): void
+    private function addPromotedProperty(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        $param = $this->nodeFactory->createPromotedPropertyParam($name, $type);
+        $param = $this->nodeFactory->createPromotedPropertyParam($propertyMetadata);
 
         if ($constructClassMethod instanceof ClassMethod) {
             $constructClassMethod->params[] = $param;

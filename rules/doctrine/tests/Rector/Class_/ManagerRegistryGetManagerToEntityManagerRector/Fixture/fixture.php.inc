@@ -35,7 +35,6 @@ class CustomRepository
 {
     public function __construct(private \Doctrine\ORM\EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function run()
