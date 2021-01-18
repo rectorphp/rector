@@ -146,15 +146,11 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     private function resolveFromFunctionDocBlock(Param $param): Type
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
-        if ($phpDocInfo === null) {
-            return new MixedType();
-        }
-
         $paramName = $this->nodeNameResolver->getName($param);
         return $phpDocInfo->getParamType($paramName);
     }
 
-    private function getFunctionLikePhpDocInfo(Param $param): ?PhpDocInfo
+    private function getFunctionLikePhpDocInfo(Param $param): PhpDocInfo
     {
         $parentNode = $param->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof FunctionLike) {
