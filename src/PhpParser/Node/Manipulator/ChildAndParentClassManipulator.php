@@ -7,6 +7,7 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
@@ -37,7 +38,7 @@ final class ChildAndParentClassManipulator
     private $nodeRepository;
 
     /**
-     * @var \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner
+     * @var PromotedPropertyParamCleaner
      */
     private $promotedPropertyParamCleaner;
 
@@ -46,7 +47,7 @@ final class ChildAndParentClassManipulator
         NodeNameResolver $nodeNameResolver,
         ParsedNodeCollector $parsedNodeCollector,
         NodeRepository $nodeRepository,
-        \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner $promotedPropertyParamCleaner
+        PromotedPropertyParamCleaner $promotedPropertyParamCleaner
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;

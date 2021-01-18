@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver;
 use Rector\Doctrine\NodeManipulator\DependencyRemover;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -37,7 +38,7 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRecto
     private const ENTITY_MANAGER = 'entityManager';
 
     /**
-     * @var \Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver
+     * @var MethodCallNameOnTypeResolver
      */
     private $methodCallNameOnTypeResolver;
 
@@ -47,7 +48,7 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRecto
     private $dependencyRemover;
 
     public function __construct(
-        \Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver $methodCallNameOnTypeResolver,
+        MethodCallNameOnTypeResolver $methodCallNameOnTypeResolver,
         DependencyRemover $dependencyRemover
     ) {
         $this->methodCallNameOnTypeResolver = $methodCallNameOnTypeResolver;

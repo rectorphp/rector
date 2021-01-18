@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\Type;
+use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
@@ -53,7 +54,7 @@ final class ClassDependencyManipulator
     private $phpVersionProvider;
 
     /**
-     * @var \Rector\Core\NodeAnalyzer\PropertyPresenceChecker
+     * @var PropertyPresenceChecker
      */
     private $propertyPresenceChecker;
 
@@ -64,7 +65,7 @@ final class ClassDependencyManipulator
         NodeFactory $nodeFactory,
         StmtsManipulator $stmtsManipulator,
         PhpVersionProvider $phpVersionProvider,
-        \Rector\Core\NodeAnalyzer\PropertyPresenceChecker $propertyPresenceChecker
+        PropertyPresenceChecker $propertyPresenceChecker
     ) {
         $this->classMethodAssignManipulator = $classMethodAssignManipulator;
         $this->nodeFactory = $nodeFactory;

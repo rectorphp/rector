@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeRemoval\NodeRemover;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class DependencyRemover
@@ -28,14 +29,14 @@ final class DependencyRemover
     private $simpleCallableNodeTraverser;
 
     /**
-     * @var \Rector\NodeRemoval\NodeRemover
+     * @var NodeRemover
      */
     private $nodeRemover;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        \Rector\NodeRemoval\NodeRemover $nodeRemover
+        NodeRemover $nodeRemover
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;

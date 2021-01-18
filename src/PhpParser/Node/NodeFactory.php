@@ -523,11 +523,7 @@ final class NodeFactory
 
         $param = $paramBuilder->getNode();
         $propertyFlags = $propertyMetadata->getFlags();
-        if ($propertyFlags !== 0) {
-            $param->flags = $propertyFlags;
-        } else {
-            $param->flags = Class_::MODIFIER_PRIVATE;
-        }
+        $param->flags = $propertyFlags !== 0 ? $propertyFlags : Class_::MODIFIER_PRIVATE;
 
         return $param;
     }

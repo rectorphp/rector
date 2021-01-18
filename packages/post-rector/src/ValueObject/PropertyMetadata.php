@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\PostRector\ValueObject;
 
+use PHPStan\Type\Type;
+
 final class PropertyMetadata
 {
     /**
@@ -12,7 +14,7 @@ final class PropertyMetadata
     private $name;
 
     /**
-     * @var \PHPStan\Type\Type|null
+     * @var Type|null
      */
     private $type;
 
@@ -21,7 +23,7 @@ final class PropertyMetadata
      */
     private $flags;
 
-    public function __construct(string $name, ?\PHPStan\Type\Type $type, int $falgs)
+    public function __construct(string $name, ?Type $type, int $falgs)
     {
         $this->name = $name;
         $this->type = $type;
@@ -33,7 +35,7 @@ final class PropertyMetadata
         return $this->name;
     }
 
-    public function getType(): ?\PHPStan\Type\Type
+    public function getType(): ?Type
     {
         return $this->type;
     }
