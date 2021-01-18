@@ -12,11 +12,9 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp70\Contract\Rector\DowngradeReturnDeclarationRectorInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Traversable;
 
 abstract class AbstractDowngradeReturnDeclarationRector extends AbstractRector implements DowngradeReturnDeclarationRectorInterface
@@ -62,15 +60,11 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractRector i
      */
     private function decorateFunctionLikeWithReturnTagValueNode(FunctionLike $functionLike): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($functionLike);
-        }
-
         if ($functionLike->returnType === null) {
             return;
         }
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
 
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
         if ($type instanceof IterableType) {

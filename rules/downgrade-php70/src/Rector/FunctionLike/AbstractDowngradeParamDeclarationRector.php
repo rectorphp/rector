@@ -13,11 +13,9 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp70\Contract\Rector\DowngradeParamDeclarationRectorInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Traversable;
 
 abstract class AbstractDowngradeParamDeclarationRector extends AbstractRector implements DowngradeParamDeclarationRectorInterface
@@ -80,12 +78,7 @@ abstract class AbstractDowngradeParamDeclarationRector extends AbstractRector im
      */
     private function decorateWithDocBlock(FunctionLike $functionLike, Param $param): void
     {
-        $node = $functionLike;
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
 
         if ($param->type !== null) {
             $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);

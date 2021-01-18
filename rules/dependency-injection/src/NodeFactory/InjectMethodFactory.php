@@ -10,7 +10,6 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpAttribute\ValueObject\TagName;
@@ -85,10 +84,8 @@ final class InjectMethodFactory
 
         $classMethod = $methodBuilder->getNode();
 
-        if ($framework === MultiParentingToAbstractDependencyRector::FRAMEWORK_SYMFONY) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
-            $phpDocInfo->addBareTag(TagName::REQUIRED);
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $phpDocInfo->addBareTag(TagName::REQUIRED);
 
         return $classMethod;
     }

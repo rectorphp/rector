@@ -12,7 +12,6 @@ use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -92,7 +91,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo = $this->getOrCreatePhpDocInfo($node);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         // skip big arrays and mixed[] constants
         if ($constType instanceof ConstantArrayType) {
@@ -116,16 +115,5 @@ CODE_SAMPLE
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $constType);
 
         return $node;
-    }
-
-    private function getOrCreatePhpDocInfo(ClassConst $classConst): PhpDocInfo
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
-        }
-
-        return $phpDocInfo;
     }
 }

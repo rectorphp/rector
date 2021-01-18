@@ -20,7 +20,6 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -141,12 +140,6 @@ CODE_SAMPLE
 
     private function refactorParamDocBlock(Param $param, ClassMethod $classMethod): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
-        }
-
         $types = [new ObjectType(DateTime::class), new ObjectType(DateTimeImmutable::class)];
         if ($param->type instanceof NullableType) {
             $types[] = new NullType();
@@ -157,6 +150,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, new UnionType($types), $param, $paramName);
     }
 
