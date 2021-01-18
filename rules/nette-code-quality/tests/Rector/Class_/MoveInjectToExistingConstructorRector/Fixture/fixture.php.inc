@@ -39,10 +39,9 @@ final class Fixture
      */
     private $otherDependency;
 
-    public function __construct(OtherDependency $otherDependency, \Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\Fixture\SomeDependency $someDependency)
+    public function __construct(OtherDependency $otherDependency, private \Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\Fixture\SomeDependency $someDependency)
     {
         $this->otherDependency = $otherDependency;
-        $this->someDependency = $someDependency;
     }
 }
 

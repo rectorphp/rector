@@ -26,11 +26,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class MyCommand extends ContainerAwareParentCommand
 {
-    private \stdClass $stdClass;
-    public function __construct(\stdClass $stdClass)
+    public function __construct(private \stdClass $stdClass)
     {
-        $this->stdClass = $stdClass;
-        parent::__construct();
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {

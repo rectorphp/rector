@@ -27,9 +27,8 @@ class InjectFromVar
      * @var \Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\ExistingDependency
      */
     private $someDependency;
-    public function __construct(\Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\ExistingDependency $someDependency)
+    public function __construct(private \Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\Source\ExistingDependency $someDependency)
     {
-        $this->someDependency = $someDependency;
     }
 }
 

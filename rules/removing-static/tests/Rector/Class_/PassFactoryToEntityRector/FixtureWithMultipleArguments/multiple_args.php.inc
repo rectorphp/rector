@@ -37,10 +37,8 @@ use Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\T
 
 class SomeClassWithMoreArguments
 {
-    private \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClassWithMoreArgumentsFactory $anotherClassWithMoreArgumentsFactory;
-    public function __construct(\Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClassWithMoreArgumentsFactory $anotherClassWithMoreArgumentsFactory)
+    public function __construct(private \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClassWithMoreArgumentsFactory $anotherClassWithMoreArgumentsFactory)
     {
-        $this->anotherClassWithMoreArgumentsFactory = $anotherClassWithMoreArgumentsFactory;
     }
     public function run()
     {
@@ -51,12 +49,10 @@ class SomeClassWithMoreArguments
 class AnotherClassWithMoreArguments
 {
     private $number;
-    private \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService $turnMeToService;
 
-    public function __construct($number, \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService $turnMeToService)
+    public function __construct($number, private \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService $turnMeToService)
     {
         $this->number = $number;
-        $this->turnMeToService = $turnMeToService;
     }
 
     public function someFun()

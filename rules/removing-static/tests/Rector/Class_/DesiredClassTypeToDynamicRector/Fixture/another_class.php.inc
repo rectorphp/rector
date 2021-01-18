@@ -22,10 +22,8 @@ use Rector\RemovingStatic\Tests\Rector\Class_\DesiredClassTypeToDynamicRector\So
 
 class AnotherClass
 {
-    private \Rector\RemovingStatic\Tests\Rector\Class_\DesiredClassTypeToDynamicRector\Source\FirstStaticClass $firstStaticClass;
-    public function __construct(\Rector\RemovingStatic\Tests\Rector\Class_\DesiredClassTypeToDynamicRector\Source\FirstStaticClass $firstStaticClass)
+    public function __construct(private \Rector\RemovingStatic\Tests\Rector\Class_\DesiredClassTypeToDynamicRector\Source\FirstStaticClass $firstStaticClass)
     {
-        $this->firstStaticClass = $firstStaticClass;
     }
     public function run()
     {

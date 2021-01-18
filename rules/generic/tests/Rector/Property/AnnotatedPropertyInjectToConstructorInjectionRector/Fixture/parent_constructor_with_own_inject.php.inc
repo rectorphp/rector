@@ -36,9 +36,8 @@ class ClassWithInjects8Parent
      * @var DateTimeInterface
      */
     private $dateTime;
-    public function __construct(\DateTimeInterface $dateTime)
+    public function __construct(private \DateTimeInterface $dateTime)
     {
-        $this->dateTime = $dateTime;
     }
 }
 
@@ -48,10 +47,8 @@ class ClassWithInjects8 extends ClassWithInjects8Parent
      * @var \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct
      */
     private $property;
-    public function __construct(\DateTimeInterface $dateTime, \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct $property)
+    public function __construct(private \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct $property)
     {
-        $this->property = $property;
-        parent::__construct($dateTime);
     }
 }
 

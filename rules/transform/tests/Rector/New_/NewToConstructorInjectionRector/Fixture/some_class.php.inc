@@ -23,10 +23,8 @@ use Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\Source\Du
 
 class SomeClass
 {
-    private \Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator $dummyValidator;
-    public function __construct(\Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator $dummyValidator)
+    public function __construct(private \Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator $dummyValidator)
     {
-        $this->dummyValidator = $dummyValidator;
     }
     public function run()
     {
