@@ -10,6 +10,7 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\ValueObject\FrameworkName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpAttribute\ValueObject\TagName;
@@ -84,8 +85,10 @@ final class InjectMethodFactory
 
         $classMethod = $methodBuilder->getNode();
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->addBareTag(TagName::REQUIRED);
+        if ($framework === FrameworkName::SYMFONY) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            $phpDocInfo->addBareTag(TagName::REQUIRED);
+        }
 
         return $classMethod;
     }
