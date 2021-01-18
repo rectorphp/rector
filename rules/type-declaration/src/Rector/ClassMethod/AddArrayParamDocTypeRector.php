@@ -100,15 +100,17 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
         $hasChanged = false;
 
         foreach ($node->getParams() as $param) {
             if ($this->shouldSkipParam($param)) {
-                return null;
+                continue;
             }
+
             $type = $this->paramTypeInferer->inferParam($param);
             if ($type instanceof MixedType) {
-                return null;
+                continue;
             }
 
             $paramName = $this->getName($param);
