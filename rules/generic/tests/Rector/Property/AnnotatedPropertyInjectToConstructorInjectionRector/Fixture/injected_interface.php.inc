@@ -23,10 +23,6 @@ use Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInj
 
 class ClassWithInjects4
 {
-    /**
-     * @var SomeProductWithInterface
-     */
-    private $property;
     public function __construct(private \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface $property)
     {
     }

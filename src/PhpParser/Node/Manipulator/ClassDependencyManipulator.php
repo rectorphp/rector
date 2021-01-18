@@ -77,26 +77,26 @@ final class ClassDependencyManipulator
 
     public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $propertyMetadata->getPropertyName())) {
+        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $propertyMetadata->getName())) {
             return;
         }
 
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
             $this->classInsertManipulator->addPropertyToClass(
                 $class,
-                $propertyMetadata->getPropertyName(),
-                $propertyMetadata->getPropertyType()
+                $propertyMetadata->getName(),
+                $propertyMetadata->getType()
             );
         }
 
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
             $this->addPromotedProperty($class, $propertyMetadata);
         } else {
-            $assign = $this->nodeFactory->createPropertyAssignment($propertyMetadata->getPropertyName());
+            $assign = $this->nodeFactory->createPropertyAssignment($propertyMetadata->getName());
             $this->addConstructorDependencyWithCustomAssign(
                 $class,
-                $propertyMetadata->getPropertyName(),
-                $propertyMetadata->getPropertyType(),
+                $propertyMetadata->getName(),
+                $propertyMetadata->getType(),
                 $assign
             );
         }
@@ -165,7 +165,7 @@ final class ClassDependencyManipulator
 
     public function addInjectProperty(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $propertyMetadata->getPropertyName())) {
+        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $propertyMetadata->getName())) {
             return;
         }
 

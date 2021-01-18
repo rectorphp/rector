@@ -85,13 +85,13 @@ final class ClassInsertManipulator
 
     public function addInjectPropertyToClass(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->hasClassProperty($class, $propertyMetadata->getPropertyName())) {
+        if ($this->hasClassProperty($class, $propertyMetadata->getName())) {
             return;
         }
 
         $propertyNode = $this->nodeFactory->createPublicInjectPropertyFromNameAndType(
-            $propertyMetadata->getPropertyName(),
-            $propertyMetadata->getPropertyType()
+            $propertyMetadata->getName(),
+            $propertyMetadata->getType()
         );
         $this->addAsFirstMethod($class, $propertyNode);
     }

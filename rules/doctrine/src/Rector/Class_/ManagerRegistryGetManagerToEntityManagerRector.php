@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -41,6 +40,7 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRecto
      * @var \Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver
      */
     private $methodCallNameOnTypeResolver;
+
     /**
      * @var DependencyRemover
      */
@@ -197,7 +197,12 @@ CODE_SAMPLE
             unset($classMethod->params[$key]);
         }
 
-        $this->dependencyRemover->removeByType($class, $classMethod, $registryParam, 'Doctrine\Common\Persistence\ManagerRegistry');
+        $this->dependencyRemover->removeByType(
+            $class,
+            $classMethod,
+            $registryParam,
+            'Doctrine\Common\Persistence\ManagerRegistry'
+        );
     }
 
     /**

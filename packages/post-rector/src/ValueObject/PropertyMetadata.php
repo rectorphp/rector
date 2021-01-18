@@ -9,37 +9,37 @@ final class PropertyMetadata
     /**
      * @var string
      */
-    private $propertyName;
+    private $name;
 
     /**
      * @var \PHPStan\Type\Type|null
      */
-    private $propertyType;
+    private $type;
 
     /**
      * @var int
      */
-    private $propertyFlags;
+    private $flags;
 
-    public function __construct(string $propertyName, ?\PHPStan\Type\Type $propertyType, int $propertyFlags)
+    public function __construct(string $name, ?\PHPStan\Type\Type $type, int $falgs)
     {
-        $this->propertyName = $propertyName;
-        $this->propertyType = $propertyType;
-        $this->propertyFlags = $propertyFlags;
+        $this->name = $name;
+        $this->type = $type;
+        $this->flags = $falgs;
     }
 
-    public function getPropertyName(): string
+    public function getName(): string
     {
-        return $this->propertyName;
+        return $this->name;
     }
 
-    public function getPropertyType(): ?\PHPStan\Type\Type
+    public function getType(): ?\PHPStan\Type\Type
     {
-        return $this->propertyType;
+        return $this->type;
     }
 
-    public function getPropertyFlags(): int
+    public function getFlags(): int
     {
-        return $this->propertyFlags;
+        return $this->flags;
     }
 }

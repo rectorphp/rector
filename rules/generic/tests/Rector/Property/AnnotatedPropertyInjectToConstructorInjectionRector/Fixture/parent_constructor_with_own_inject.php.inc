@@ -32,10 +32,6 @@ use DateTimeInterface;
 
 class ClassWithInjects8Parent
 {
-    /**
-     * @var DateTimeInterface
-     */
-    private $dateTime;
     public function __construct(private \DateTimeInterface $dateTime)
     {
     }
@@ -43,12 +39,9 @@ class ClassWithInjects8Parent
 
 class ClassWithInjects8 extends ClassWithInjects8Parent
 {
-    /**
-     * @var \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct
-     */
-    private $property;
-    public function __construct(private \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct $property)
+    public function __construct(\DateTimeInterface $dateTime, private \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct $property)
     {
+        parent::__construct($dateTime);
     }
 }
 

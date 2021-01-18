@@ -512,8 +512,8 @@ final class NodeFactory
 
     public function createPromotedPropertyParam(PropertyMetadata $propertyMetadata): Param
     {
-        $paramBuilder = new ParamBuilder($propertyMetadata->getPropertyName());
-        $propertyType = $propertyMetadata->getPropertyType();
+        $paramBuilder = new ParamBuilder($propertyMetadata->getName());
+        $propertyType = $propertyMetadata->getType();
         if ($propertyType !== null) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
             if ($typeNode !== null) {
@@ -522,7 +522,7 @@ final class NodeFactory
         }
 
         $param = $paramBuilder->getNode();
-        $propertyFlags = $propertyMetadata->getPropertyFlags();
+        $propertyFlags = $propertyMetadata->getFlags();
         if ($propertyFlags !== 0) {
             $param->flags = $propertyFlags;
         } else {
