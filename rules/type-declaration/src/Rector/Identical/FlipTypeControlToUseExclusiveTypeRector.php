@@ -115,8 +115,6 @@ CODE_SAMPLE
             ? $types[1]->name
             : $types[0]->name;
 
-        dump($types);
-
         if (! class_exists($type) && ! interface_exists($type)) {
             return null;
         }

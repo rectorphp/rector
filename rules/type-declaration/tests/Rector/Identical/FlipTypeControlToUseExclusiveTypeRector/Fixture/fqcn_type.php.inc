@@ -2,19 +2,11 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\Fixture;
 
-use stdClass;
-
-class Fixture
+class FqcnType
 {
     public function run()
     {
-        /** @var stdClass|null $stdClass */
-        $stdClass = $this->getStdClass();
-        if ($stdClass === null) {
-            return;
-        }
-
-        /** @var null|stdClass $stdClass */
+        /** @var \stdClass|null $stdClass */
         $stdClass = $this->getStdClass();
         if ($stdClass === null) {
             return;
@@ -28,19 +20,12 @@ class Fixture
 
 namespace Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\Fixture;
 
-use stdClass;
-
-class Fixture
+class FqcnType
 {
     public function run()
     {
         $stdClass = $this->getStdClass();
-        if (!$stdClass instanceof stdClass) {
-            return;
-        }
-
-        $stdClass = $this->getStdClass();
-        if (!$stdClass instanceof stdClass) {
+        if (!$stdClass instanceof \stdClass) {
             return;
         }
     }
