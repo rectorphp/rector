@@ -89,7 +89,7 @@ CODE_SAMPLE
         }
 
         $sensioRouteTagValueNode = $phpDocInfo->getByType(SensioRouteTagValueNode::class);
-        if (! $sensioRouteTagValueNode instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioRouteTagValueNode) {
+        if (! $sensioRouteTagValueNode instanceof SensioRouteTagValueNode) {
             return null;
         }
 

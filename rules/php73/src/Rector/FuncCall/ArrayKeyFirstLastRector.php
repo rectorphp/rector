@@ -107,7 +107,7 @@ CODE_SAMPLE
             return $this->areNodesEqual($resetOrEndFuncCall->args[0], $node->args[0]);
         });
 
-        if (! $keyFuncCall instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (! $keyFuncCall instanceof FuncCall) {
             return null;
         }
 

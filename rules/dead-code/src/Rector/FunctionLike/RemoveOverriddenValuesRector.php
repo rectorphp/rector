@@ -208,7 +208,7 @@ CODE_SAMPLE
         VariableNodeUse $nodeByTypeAndPosition
     ): bool {
         // this node was just used, skip to next one
-        if (! $previousNode instanceof \Rector\DeadCode\ValueObject\VariableNodeUse) {
+        if (! $previousNode instanceof VariableNodeUse) {
             return false;
         }
 

@@ -201,7 +201,7 @@ CODE_SAMPLE
         }
 
         $nodeScope = $variable->getAttribute(AttributeKey::SCOPE);
-        if (! $nodeScope instanceof \PHPStan\Analyser\Scope) {
+        if (! $nodeScope instanceof Scope) {
             return true;
         }
 

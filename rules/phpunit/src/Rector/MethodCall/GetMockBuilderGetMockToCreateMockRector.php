@@ -72,7 +72,7 @@ CODE_SAMPLE
             'disableOriginalConstructor'
         ) ? $node->var->var : $node->var;
 
-        if (! $getMockBuilderMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (! $getMockBuilderMethodCall instanceof MethodCall) {
             return null;
         }
 

@@ -89,7 +89,7 @@ CODE_SAMPLE
         $ifNode->stmts = $this->removeBreakNodes($firstCase->stmts);
 
         // just one condition
-        if (! $secondCase instanceof \PhpParser\Node\Stmt\Case_) {
+        if (! $secondCase instanceof Case_) {
             return $ifNode;
         }
 

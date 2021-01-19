@@ -92,7 +92,7 @@ final class DoctrineEntityManipulator
         }
 
         $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return false;
         }
 

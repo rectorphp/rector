@@ -194,7 +194,7 @@ CODE_SAMPLE
 
     private function processIfMayInNextNode(?Node $nextNode = null): ?Node
     {
-        if (! $nextNode instanceof \PhpParser\Node) {
+        if (! $nextNode instanceof Node) {
             return null;
         }
 

@@ -90,7 +90,7 @@ final class DocBlockManipulator
     {
         // nothing to change
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }
 

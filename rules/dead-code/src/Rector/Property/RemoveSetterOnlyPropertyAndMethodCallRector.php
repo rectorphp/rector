@@ -172,7 +172,7 @@ CODE_SAMPLE
             }
 
             $classMethod = $propertyFetch->getAttribute(AttributeKey::METHOD_NODE);
-            if (! $classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            if (! $classMethod instanceof ClassMethod) {
                 continue;
             }
 
