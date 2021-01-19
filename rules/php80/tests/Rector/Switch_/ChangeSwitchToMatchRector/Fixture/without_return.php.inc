@@ -6,18 +6,19 @@ class WithoutReturn
 {
     public function run($value)
     {
-        $action = fn ($var): void => return;
-        
         switch ($value) {
             case 1:
-                $action($value);
+                $this->x($value);
                 break;
 
             default:
-                $action($value);
+                $this->y($value);
                 break;
         }
     }
+    
+    private function x($value) {}
+    private function y($value) {}
 }
 
 ?>
@@ -30,13 +31,14 @@ class WithReturn
 {
     public function run($value)
     {
-        $action = fn ($var): void => return;
-        
         match ($value) {
-            1 => $action($value),
-            default => $action($value),
+            1 => $this->x($value),
+            default => $this->y($value),
         };
     }
+    
+    private function x($value) {}
+    private function y($value) {}
 }
 
 ?>
