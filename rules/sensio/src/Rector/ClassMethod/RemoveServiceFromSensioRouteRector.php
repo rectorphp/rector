@@ -69,9 +69,8 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        /** @var SensioRouteTagValueNode|null $sensioRouteTagValueNode */
         $sensioRouteTagValueNode = $phpDocInfo->getByType(SensioRouteTagValueNode::class);
-        if ($sensioRouteTagValueNode === null) {
+        if (! $sensioRouteTagValueNode instanceof SensioRouteTagValueNode) {
             return null;
         }
 

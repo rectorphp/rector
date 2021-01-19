@@ -158,9 +158,10 @@ CODE_SAMPLE
     private function shouldSkipFuncCall(FuncCall $funcCall): bool
     {
         // we can inject only in injectable class method  context
+        // we can inject only in injectable class method  context
         /** @var ClassMethod|null $classMethod */
         $classMethod = $funcCall->getAttribute(AttributeKey::METHOD_NODE);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return true;
         }
 

@@ -260,9 +260,8 @@ final class AssertManipulator
         $this->nodesToAddCollector->addNodesAfterNode($closure->stmts, $staticCall);
         $this->nodesToRemoveCollector->addNodeToRemove($staticCall);
 
-        /** @var ClassMethod|null $classMethod */
         $classMethod = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return;
         }
 

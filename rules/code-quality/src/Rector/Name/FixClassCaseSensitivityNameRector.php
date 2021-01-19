@@ -124,9 +124,8 @@ CODE_SAMPLE
             return $this->getName($name);
         }
 
-        /** @var Name|null $originalName */
         $originalName = $name->getAttribute(AttributeKey::ORIGINAL_NAME);
-        if ($originalName === null) {
+        if (! $originalName instanceof \PhpParser\Node\Name) {
             return $this->getName($name);
         }
 

@@ -86,9 +86,8 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
 
-        /** @var DataProviderTagValueNode|null $attributeAwareDataProviderTagValueNode */
         $attributeAwareDataProviderTagValueNode = $phpDocInfo->getByType(DataProviderTagValueNode::class);
-        if ($attributeAwareDataProviderTagValueNode === null) {
+        if (! $attributeAwareDataProviderTagValueNode instanceof DataProviderTagValueNode) {
             return null;
         }
 

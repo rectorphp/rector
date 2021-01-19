@@ -147,11 +147,12 @@ CODE_SAMPLE
         }
 
         // ClassMethod
+        // ClassMethod
         /** @var Class_|null $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         // anonymous class
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             return false;
         }
 

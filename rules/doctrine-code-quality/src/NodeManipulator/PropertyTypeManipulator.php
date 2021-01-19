@@ -30,9 +30,8 @@ final class PropertyTypeManipulator
             throw new NotImplementedYetException();
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }
 

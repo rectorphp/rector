@@ -214,9 +214,8 @@ CODE_SAMPLE
 
     private function hasLastReturnResponse(ClassMethod $classMethod): bool
     {
-        /** @var Return_|null $lastReturn */
         $lastReturn = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
-        if ($lastReturn === null) {
+        if (! $lastReturn instanceof Return_) {
             return false;
         }
 

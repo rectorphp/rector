@@ -85,17 +85,15 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        /** @var SensioMethodTagValueNode|null $sensioMethodTagValueNode */
         $sensioMethodTagValueNode = $phpDocInfo->getByType(SensioMethodTagValueNode::class);
-        if ($sensioMethodTagValueNode === null) {
+        if (! $sensioMethodTagValueNode instanceof SensioMethodTagValueNode) {
             return null;
         }
 
         $methods = $sensioMethodTagValueNode->getMethods();
 
-        /** @var SymfonyRouteTagValueNode|null $symfonyRouteTagValueNode */
         $symfonyRouteTagValueNode = $phpDocInfo->getByType(SymfonyRouteTagValueNode::class);
-        if ($symfonyRouteTagValueNode === null) {
+        if (! $symfonyRouteTagValueNode instanceof SymfonyRouteTagValueNode) {
             return null;
         }
 

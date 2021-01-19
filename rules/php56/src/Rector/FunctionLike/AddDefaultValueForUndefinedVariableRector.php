@@ -200,9 +200,8 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var Scope|null $nodeScope */
         $nodeScope = $variable->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope === null) {
+        if (! $nodeScope instanceof \PHPStan\Analyser\Scope) {
             return true;
         }
 

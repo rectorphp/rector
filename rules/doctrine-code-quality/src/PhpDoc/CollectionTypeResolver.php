@@ -55,9 +55,8 @@ final class CollectionTypeResolver
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
-        /** @var OneToManyTagValueNode|null $oneToManyTagValueNode */
         $oneToManyTagValueNode = $phpDocInfo->getByType(OneToManyTagValueNode::class);
-        if ($oneToManyTagValueNode === null) {
+        if (! $oneToManyTagValueNode instanceof OneToManyTagValueNode) {
             return null;
         }
 

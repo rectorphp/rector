@@ -72,7 +72,6 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Case_|null $secondCase */
         $secondCase = array_shift($node->cases);
 
         // special case with empty first case → ||
@@ -90,7 +89,7 @@ CODE_SAMPLE
         $ifNode->stmts = $this->removeBreakNodes($firstCase->stmts);
 
         // just one condition
-        if ($secondCase === null) {
+        if (! $secondCase instanceof \PhpParser\Node\Stmt\Case_) {
             return $ifNode;
         }
 

@@ -167,7 +167,9 @@ CODE_SAMPLE
         if ($types[0] === $types[1]) {
             return true;
         }
-
-        return ! $types[0] instanceof NullType && ! $types[1] instanceof NullType;
+        if ($types[0] instanceof NullType) {
+            return false;
+        }
+        return ! $types[1] instanceof NullType;
     }
 }

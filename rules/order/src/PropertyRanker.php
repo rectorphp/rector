@@ -41,9 +41,8 @@ final class PropertyRanker
 
     public function rank(Property $property): int
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return 1;
         }
 

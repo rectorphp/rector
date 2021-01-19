@@ -103,10 +103,9 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
         ArrayDimFetch $arrayDimFetch,
         string $variableName
     ): bool {
-        /** @var ClassMethod|null $classMethod */
         $classMethod = $arrayDimFetch->getAttribute(AttributeKey::METHOD_NODE);
 
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return false;
         }
 

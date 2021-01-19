@@ -91,9 +91,8 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var ClassMethod|null $classMethod */
         $classMethod = $classLike->getMethod($methodName);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return null;
         }
 

@@ -79,9 +79,8 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
     {
         $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($fileInfo);
 
-        /** @var Property|null $property */
         $property = $this->betterNodeFinder->findFirstInstanceOf($nodes, Property::class);
-        if ($property === null) {
+        if (! $property instanceof Property) {
             throw new ShouldNotHappenException();
         }
 

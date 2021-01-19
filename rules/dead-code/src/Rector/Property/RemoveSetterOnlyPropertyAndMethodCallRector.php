@@ -171,9 +171,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var ClassMethod|null $classMethod */
             $classMethod = $propertyFetch->getAttribute(AttributeKey::METHOD_NODE);
-            if ($classMethod === null) {
+            if (! $classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 continue;
             }
 

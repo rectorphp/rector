@@ -77,9 +77,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             // possibly trait
             return null;
         }
@@ -145,9 +144,8 @@ CODE_SAMPLE
             return false;
         }
 
-        /** @var Class_|null $classLike */
         $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             return false;
         }
 

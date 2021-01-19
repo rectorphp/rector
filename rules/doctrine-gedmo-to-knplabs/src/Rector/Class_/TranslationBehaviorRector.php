@@ -249,9 +249,8 @@ CODE_SAMPLE
      */
     private function dumpEntityTranslation(Class_ $class, array $translatedPropertyToPhpDocInfos): void
     {
-        /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $class->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if (! $fileInfo instanceof SmartFileInfo) {
             throw new ShouldNotHappenException();
         }
 

@@ -113,9 +113,8 @@ CODE_SAMPLE
         foreach ($node->getProperties() as $property) {
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
-            /** @var SlugTagValueNode|null $slugTagValueNode */
             $slugTagValueNode = $propertyPhpDocInfo->getByType(SlugTagValueNode::class);
-            if ($slugTagValueNode === null) {
+            if (! $slugTagValueNode instanceof SlugTagValueNode) {
                 continue;
             }
 

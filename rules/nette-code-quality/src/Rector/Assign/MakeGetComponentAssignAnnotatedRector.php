@@ -188,9 +188,8 @@ CODE_SAMPLE
 
     private function resolveCreateComponentMethodCallReturnType(MethodCall $methodCall): Type
     {
-        /** @var Scope|null $scope */
         $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             return new MixedType();
         }
 
@@ -208,9 +207,8 @@ CODE_SAMPLE
 
     private function resolveArrayDimFetchControlType(ArrayDimFetch $arrayDimFetch): Type
     {
-        /** @var Scope|null $scope */
         $scope = $arrayDimFetch->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             throw new ShouldNotHappenException();
         }
 

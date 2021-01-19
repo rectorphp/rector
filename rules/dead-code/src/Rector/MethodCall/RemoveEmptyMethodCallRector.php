@@ -76,9 +76,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Scope|null $scope */
         $scope = $node->var->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             return null;
         }
 

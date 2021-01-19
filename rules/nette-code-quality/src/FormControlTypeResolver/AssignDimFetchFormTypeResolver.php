@@ -40,10 +40,10 @@ final class AssignDimFetchFormTypeResolver implements FormControlTypeResolverInt
             return [];
         }
         // traverse up and find all $this['some_name'] = $type
-
+        // traverse up and find all $this['some_name'] = $type
         /** @var Assign|null $formVariableAssign */
         $formVariableAssign = $this->betterNodeFinder->findPreviousAssignToExpr($node);
-        if ($formVariableAssign === null) {
+        if (! $formVariableAssign instanceof Assign) {
             return [];
         }
 

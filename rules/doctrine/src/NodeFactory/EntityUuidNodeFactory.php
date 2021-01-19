@@ -113,9 +113,8 @@ final class EntityUuidNodeFactory
             return;
         }
 
-        /** @var SerializerTypeTagValueNode|null $serializerTypeTagValueNode */
         $serializerTypeTagValueNode = $phpDocInfo->getByType(SerializerTypeTagValueNode::class);
-        if ($serializerTypeTagValueNode === null) {
+        if (! $serializerTypeTagValueNode instanceof SerializerTypeTagValueNode) {
             return;
         }
 

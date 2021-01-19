@@ -128,9 +128,8 @@ CODE_SAMPLE
 
     private function getDifferentReturnTypeNameFromAncestorClass(ClassMethod $classMethod): ?string
     {
-        /** @var Scope|null $scope */
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             // possibly trait
             return null;
         }

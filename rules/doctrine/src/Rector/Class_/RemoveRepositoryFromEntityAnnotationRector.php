@@ -63,9 +63,8 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        /** @var EntityTagValueNode|null $entityTagValueNode */
         $entityTagValueNode = $phpDocInfo->getByType(EntityTagValueNode::class);
-        if ($entityTagValueNode === null) {
+        if (! $entityTagValueNode instanceof EntityTagValueNode) {
             return null;
         }
 

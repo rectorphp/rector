@@ -130,9 +130,8 @@ CODE_SAMPLE
             return false;
         }
 
-        /** @var ClassLike|null $classLike */
         $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return false;
         }
 

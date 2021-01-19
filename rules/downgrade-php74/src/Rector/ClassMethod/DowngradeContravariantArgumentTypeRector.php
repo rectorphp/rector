@@ -97,9 +97,8 @@ CODE_SAMPLE
 
     private function getDifferentParamTypeFromAncestorClass(Param $param, FunctionLike $functionLike): ?string
     {
-        /** @var Scope|null $scope */
         $scope = $functionLike->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             // possibly trait
             return null;
         }
