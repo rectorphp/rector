@@ -23,7 +23,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     private const INVERSE_JOIN_COLUMNS = 'inverseJoinColumns';
 
     /**
-     * @var string
+     * @var string|null
      */
     private $name;
 
@@ -57,7 +57,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
      * @param JoinColumnTagValueNode[] $inverseJoinColumns
      */
     public function __construct(
-        string $name,
+        ?string $name,
         ?string $schema = null,
         array $joinColumns = [],
         array $inverseJoinColumns = [],
@@ -93,8 +93,10 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     public function getAttributableItems(): array
     {
         $items = [];
-
-        $items['name'] = $this->name;
+        
+        if ($this->name !== null) {
+            $items['name'] = $this->name;
+        }
 
         if ($this->schema !== null) {
             $items['schema'] = $this->schema;
@@ -133,7 +135,9 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     {
         $items = [];
 
-        $items['name'] = sprintf('"%s"', $this->name);
+        if ($this->name !== null) {
+            $items['name'] = sprintf('"%s"', $this->name);
+        }
 
         if ($this->schema !== null) {
             $items['schema'] = sprintf('"%s"', $this->schema);
