@@ -29,9 +29,8 @@ final class RenameAnnotationReaderClassRector extends AbstractRector implements 
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Class_|null $firstClass */
         $firstClass = $this->betterNodeFinder->findFirstInstanceOf($node, Class_::class);
-        if ($firstClass === null) {
+        if (! $firstClass instanceof Class_) {
             return null;
         }
 

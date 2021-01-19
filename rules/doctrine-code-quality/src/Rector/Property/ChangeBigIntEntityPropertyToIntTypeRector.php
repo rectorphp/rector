@@ -10,8 +10,8 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,20 +26,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeBigIntEntityPropertyToIntTypeRector extends AbstractRector
 {
     /**
-     * @var DoctrinePropertyAnalyzer
-     */
-    private $doctrinePropertyAnalyzer;
-
-    /**
      * @var DocBlockClassRenamer
      */
     private $docBlockClassRenamer;
 
-    public function __construct(
-        DoctrinePropertyAnalyzer $doctrinePropertyAnalyzer,
-        DocBlockClassRenamer $docBlockClassRenamer
-    ) {
-        $this->doctrinePropertyAnalyzer = $doctrinePropertyAnalyzer;
+    public function __construct(DocBlockClassRenamer $docBlockClassRenamer)
+    {
         $this->docBlockClassRenamer = $docBlockClassRenamer;
     }
 
@@ -98,16 +90,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $columnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
-        if ($columnTagValueNode === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
+        $columnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
+        if (! $columnTagValueNode instanceof ColumnTagValueNode) {
             return null;
         }
 
         if ($columnTagValueNode->getType() !== 'bigint') {
             return null;
         }
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValueNode();
         if ($attributeAwareVarTagValueNode === null) {

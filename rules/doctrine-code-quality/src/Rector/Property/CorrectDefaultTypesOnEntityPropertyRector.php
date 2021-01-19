@@ -10,9 +10,9 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,16 +23,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CorrectDefaultTypesOnEntityPropertyRector extends AbstractRector
 {
-    /**
-     * @var DoctrinePropertyAnalyzer
-     */
-    private $doctrinePropertyAnalyzer;
-
-    public function __construct(DoctrinePropertyAnalyzer $doctrinePropertyAnalyzer)
-    {
-        $this->doctrinePropertyAnalyzer = $doctrinePropertyAnalyzer;
-    }
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -87,8 +77,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $columnTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
-        if ($columnTagValueNode === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $columnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
+        if (! $columnTagValueNode instanceof ColumnTagValueNode) {
             return null;
         }
 
