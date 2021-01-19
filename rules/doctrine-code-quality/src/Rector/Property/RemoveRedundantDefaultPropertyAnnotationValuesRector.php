@@ -178,7 +178,7 @@ CODE_SAMPLE
     private function refactorManyToOneAnnotation(PhpDocInfo $phpDocInfo): void
     {
         $manyToOneTagValueNode = $phpDocInfo->getByType(ManyToOneTagValueNode::class);
-        if (! $manyToOneTagValueNode instanceof ManyToManyTagValueNode) {
+        if (! $manyToOneTagValueNode instanceof ManyToOneTagValueNode) {
             return;
         }
 

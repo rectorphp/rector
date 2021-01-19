@@ -13,6 +13,7 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\TypeDeclaration\TypeNormalizer;
 
@@ -40,12 +41,14 @@ final class AdvancedArrayAnalyzer
             return false;
         }
 
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+
         $arrayType = $this->typeNormalizer->convertConstantArrayTypeToArrayType($arrayType);
         if ($arrayType === null) {
             return false;
         }
 
-        $currentReturnType = $this->getNodeReturnPhpDocType($classMethod);
+        $currentReturnType = $phpDocInfo->getReturnType();
         if (! $currentReturnType instanceof ArrayType) {
             return false;
         }
@@ -57,18 +60,21 @@ final class AdvancedArrayAnalyzer
         return $arrayType->getItemType() instanceof StringType;
     }
 
-    public function isMixedOfSpecificOverride(ArrayType $arrayType, ClassMethod $classMethod): bool
+    public function isMixedOfSpecificOverride(ArrayType $arrayType, PhpDocInfo $phpDocInfo): bool
     {
         if (! $arrayType->getItemType() instanceof MixedType) {
             return false;
         }
 
-        $currentReturnType = $this->getNodeReturnPhpDocType($classMethod);
+        $currentReturnType = $phpDocInfo->getReturnType();
         return $currentReturnType instanceof ArrayType;
     }
 
-    public function isMoreSpecificArrayTypeOverride(Type $newType, ClassMethod $classMethod): bool
-    {
+    public function isMoreSpecificArrayTypeOverride(
+        Type $newType,
+        ClassMethod $classMethod,
+        PhpDocInfo $phpDocInfo
+    ): bool {
         if (! $newType instanceof ConstantArrayType) {
             return false;
         }
@@ -77,7 +83,7 @@ final class AdvancedArrayAnalyzer
             return false;
         }
 
-        $phpDocReturnType = $this->getNodeReturnPhpDocType($classMethod);
+        $phpDocReturnType = $phpDocInfo->getReturnType();
         if (! $phpDocReturnType instanceof ArrayType) {
             return false;
         }
@@ -85,9 +91,9 @@ final class AdvancedArrayAnalyzer
         return ! $phpDocReturnType->getItemType() instanceof VoidType;
     }
 
-    public function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, ClassMethod $classMethod): bool
+    public function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, PhpDocInfo $phpDocInfo): bool
     {
-        $currentReturnType = $this->getNodeReturnPhpDocType($classMethod);
+        $currentReturnType = $phpDocInfo->getReturnType();
         if (! $currentReturnType instanceof ArrayType) {
             return false;
         }
@@ -99,11 +105,5 @@ final class AdvancedArrayAnalyzer
         return $currentReturnType->getItemType()
             ->isCallable()
             ->yes();
-    }
-
-    private function getNodeReturnPhpDocType(ClassMethod $classMethod): ?Type
-    {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        return $phpDocInfo->getReturnType();
     }
 }
