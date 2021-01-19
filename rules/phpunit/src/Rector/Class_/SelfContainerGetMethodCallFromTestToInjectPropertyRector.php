@@ -54,7 +54,6 @@ final class SelfContainerGetMethodCallFromTestToInjectPropertyRector extends Abs
     private $formerVariablesByMethodCollector;
 
     public function __construct(
-
         ClassManipulator $classManipulator,
         KernelTestCaseNodeFactory $kernelTestCaseNodeFactory,
         OnContainerGetCallManipulator $onContainerGetCallManipulator,

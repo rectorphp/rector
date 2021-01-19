@@ -34,7 +34,6 @@ final class ConstructClassMethodToSetUpTestCaseRector extends AbstractPHPUnitRec
     private $staticCallAnalyzer;
 
     public function __construct(
-
         SetUpClassMethodNodeManipulator $setUpClassMethodNodeManipulator,
         StaticCallAnalyzer $staticCallAnalyzer
     ) {

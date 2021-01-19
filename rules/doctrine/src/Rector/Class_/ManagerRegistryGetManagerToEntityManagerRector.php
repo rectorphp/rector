@@ -48,7 +48,6 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRecto
     private $dependencyRemover;
 
     public function __construct(
-
         MethodCallNameOnTypeResolver $methodCallNameOnTypeResolver,
         DependencyRemover $dependencyRemover
     ) {

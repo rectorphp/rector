@@ -35,7 +35,6 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
     private $classDependencyManipulator;
 
     public function __construct(
-
         ClassDependencyManipulator $classDependencyManipulator,
         EntityUuidNodeFactory $entityUuidNodeFactory
     ) {

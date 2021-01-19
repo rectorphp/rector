@@ -34,7 +34,6 @@ final class RemoveDeadRecursiveClassMethodRector extends AbstractRector implemen
     private $classMethodVendorLockResolver;
 
     public function __construct(
-
         ClassMethodAndCallMatcher $classMethodAndCallMatcher,
         ClassMethodVendorLockResolver $classMethodVendorLockResolver
     ) {

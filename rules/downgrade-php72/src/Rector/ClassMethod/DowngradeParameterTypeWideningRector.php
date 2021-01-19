@@ -40,7 +40,6 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
     private $phpDocTypeChanger;
 
     public function __construct(
-
         RectorChangeCollector $rectorChangeCollector,
         PhpDocTypeChanger $phpDocTypeChanger
     ) {
@@ -160,17 +159,6 @@ CODE_SAMPLE
             /** @var string $parentClassName */
             $parentClassName = $ancestorClassOrInterface->getAttribute(AttributeKey::CLASS_NAME);
             $classMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
-            /**
-             * If it doesn't find the method, it's because the method
-             * lives somewhere else.
-             * For instance, in test "interface_on_parent_class.php.inc",
-             * the ancestor abstract class is also retrieved
-             * as containing the method, but it does not: it is
-             * in its implemented interface. That happens because
-             * `ReflectionMethod` doesn't allow to do do the distinction.
-             * The interface is also retrieve though, so that method
-             * will eventually be refactored.
-             */
             /**
              * If it doesn't find the method, it's because the method
              * lives somewhere else.

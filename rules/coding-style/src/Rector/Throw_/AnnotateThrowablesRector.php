@@ -58,7 +58,6 @@ final class AnnotateThrowablesRector extends AbstractRector
     private $throwsFactory;
 
     public function __construct(
-
         ClassMethodReflectionHelper $classMethodReflectionHelper,
         ClassResolver $classResolver,
         FunctionAnnotationResolver $functionAnnotationResolver,

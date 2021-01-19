@@ -45,7 +45,6 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
     private $renamedClassesDataCollector;
 
     public function __construct(
-
         RenamedClassesDataCollector $renamedClassesDataCollector,
         ClassRenamer $classRenamer
     ) {

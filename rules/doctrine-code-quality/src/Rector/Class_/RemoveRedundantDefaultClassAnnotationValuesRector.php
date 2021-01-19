@@ -22,9 +22,8 @@ final class RemoveRedundantDefaultClassAnnotationValuesRector extends AbstractRe
      */
     private $doctrineItemDefaultValueManipulator;
 
-    public function __construct(
-        DoctrineItemDefaultValueManipulator $doctrineItemDefaultValueManipulator
-    ) {
+    public function __construct(DoctrineItemDefaultValueManipulator $doctrineItemDefaultValueManipulator)
+    {
         $this->doctrineItemDefaultValueManipulator = $doctrineItemDefaultValueManipulator;
     }
 

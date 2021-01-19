@@ -44,7 +44,6 @@ final class UnderscoreToCamelCaseVariableNameRector extends AbstractRector
     private $paramRenamer;
 
     public function __construct(
-
         ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
         ParamRenameFactory $paramRenameFactory,
         ParamRenamer $underscoreCamelCaseParamRenamer,

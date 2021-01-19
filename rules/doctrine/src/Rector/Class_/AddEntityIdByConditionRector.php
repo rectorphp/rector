@@ -45,7 +45,6 @@ final class AddEntityIdByConditionRector extends AbstractRector implements Confi
     private $classInsertManipulator;
 
     public function __construct(
-
         ClassManipulator $classManipulator,
         EntityIdNodeFactory $entityIdNodeFactory,
         ClassInsertManipulator $classInsertManipulator

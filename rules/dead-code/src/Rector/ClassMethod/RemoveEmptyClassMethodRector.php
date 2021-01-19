@@ -30,7 +30,6 @@ final class RemoveEmptyClassMethodRector extends AbstractRector
     private $controllerClassMethodManipulator;
 
     public function __construct(
-
         ClassMethodManipulator $classMethodManipulator,
         ControllerClassMethodManipulator $controllerClassMethodManipulator
     ) {

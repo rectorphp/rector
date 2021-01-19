@@ -70,11 +70,8 @@ final class AdvancedArrayAnalyzer
         return $currentReturnType instanceof ArrayType;
     }
 
-    public function isMoreSpecificArrayTypeOverride(
-        Type $newType,
-        ClassMethod $classMethod,
-        PhpDocInfo $phpDocInfo
-    ): bool {
+    public function isMoreSpecificArrayTypeOverride(Type $newType, PhpDocInfo $phpDocInfo): bool
+    {
         if (! $newType instanceof ConstantArrayType) {
             return false;
         }

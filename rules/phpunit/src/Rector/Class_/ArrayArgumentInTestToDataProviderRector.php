@@ -65,7 +65,6 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
     private $paramAndArgFromArrayResolver;
 
     public function __construct(
-
         DataProviderClassMethodFactory $dataProviderClassMethodFactory,
         ParamAndArgFromArrayResolver $paramAndArgFromArrayResolver
     ) {

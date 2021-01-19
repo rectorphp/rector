@@ -47,7 +47,6 @@ final class TranslationBehaviorRector extends AbstractRector
     private $translationClassNodeFactory;
 
     public function __construct(
-
         ClassInsertManipulator $classInsertManipulator,
         ClassManipulator $classManipulator,
         TranslationClassNodeFactory $translationClassNodeFactory

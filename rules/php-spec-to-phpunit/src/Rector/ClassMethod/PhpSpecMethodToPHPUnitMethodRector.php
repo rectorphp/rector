@@ -29,7 +29,6 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
     private $phpUnitTypeDeclarationDecorator;
 
     public function __construct(
-
         PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
         PhpSpecRenaming $phpSpecRenaming
     ) {

@@ -38,7 +38,6 @@ final class RemoveOverriddenValuesRector extends AbstractRector
     private $variableUseFinder;
 
     public function __construct(
-
         ContextAnalyzer $contextAnalyzer,
         NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector,
         VariableUseFinder $variableUseFinder

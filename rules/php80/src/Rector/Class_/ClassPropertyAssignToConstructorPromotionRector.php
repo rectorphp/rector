@@ -49,7 +49,6 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
     private $phpDocTagRemover;
 
     public function __construct(
-
         PromotedPropertyResolver $promotedPropertyResolver,
         VariableRenamer $variableRenamer,
         VarTagRemover $varTagRemover,
@@ -167,9 +166,6 @@ CODE_SAMPLE
     private function removeClassMethodParam(ClassMethod $classMethod, string $paramName): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return;
-        }
 
         $attributeAwareParamTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
         if ($attributeAwareParamTagValueNode === null) {

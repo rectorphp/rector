@@ -37,7 +37,6 @@ final class AddProphecyTraitRector extends AbstractPHPUnitRector
     private $classManipulator;
 
     public function __construct(
-
         ClassInsertManipulator $classInsertManipulator,
         ClassManipulator $classManipulator
     ) {

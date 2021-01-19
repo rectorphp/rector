@@ -37,7 +37,6 @@ final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends Abstr
     private $propertyFetchWithConstFetchReplacer;
 
     public function __construct(
-
         PropertyManipulator $propertyManipulator,
         ClassConstantFactory $classConstantFactory,
         PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer

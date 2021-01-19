@@ -44,7 +44,6 @@ final class RemoveIniGetSetFuncCallRector extends AbstractRector implements Conf
     private $commentableNodeResolver;
 
     public function __construct(
-
         BreakingRemovalGuard $breakingRemovalGuard,
         CommentableNodeResolver $commentableNodeResolver
     ) {

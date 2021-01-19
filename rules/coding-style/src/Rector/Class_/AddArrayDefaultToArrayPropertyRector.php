@@ -42,7 +42,6 @@ final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
     private $iterableTypeAnalyzer;
 
     public function __construct(
-
         PropertyFetchManipulator $propertyFetchManipulator,
         IterableTypeAnalyzer $iterableTypeAnalyzer
     ) {

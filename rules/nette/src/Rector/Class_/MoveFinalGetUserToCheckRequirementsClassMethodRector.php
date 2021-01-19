@@ -29,7 +29,6 @@ final class MoveFinalGetUserToCheckRequirementsClassMethodRector extends Abstrac
     private $classInsertManipulator;
 
     public function __construct(
-
         CheckRequirementsClassMethodFactory $checkRequirementsClassMethodFactory,
         ClassInsertManipulator $classInsertManipulator
     ) {

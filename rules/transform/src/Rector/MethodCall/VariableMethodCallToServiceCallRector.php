@@ -115,10 +115,6 @@ CODE_SAMPLE
             }
 
             $firstArgValue = $node->args[0]->value;
-
-            dump($this->getValue($firstArgValue));
-            dump($variableMethodCallsToServiceCalls->getArgumentValue());
-
             if (! $this->isValue($firstArgValue, $variableMethodCallsToServiceCalls->getArgumentValue())) {
                 continue;
             }

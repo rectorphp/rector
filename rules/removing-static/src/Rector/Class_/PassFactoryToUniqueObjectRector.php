@@ -63,7 +63,6 @@ final class PassFactoryToUniqueObjectRector extends AbstractRector implements Co
     private $staticTypesInClassResolver;
 
     public function __construct(
-
         StaticTypesInClassResolver $staticTypesInClassResolver,
         PropertyNaming $propertyNaming,
         UniqueObjectOrServiceDetector $uniqueObjectOrServiceDetector,

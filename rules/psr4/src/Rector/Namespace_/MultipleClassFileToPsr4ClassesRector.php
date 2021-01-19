@@ -34,7 +34,6 @@ final class MultipleClassFileToPsr4ClassesRector extends AbstractRector
     private $fileInfoDeletionAnalyzer;
 
     public function __construct(
-
         NamespaceManipulator $namespaceManipulator,
         FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
     ) {

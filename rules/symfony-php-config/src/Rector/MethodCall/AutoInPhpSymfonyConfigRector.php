@@ -35,7 +35,6 @@ final class AutoInPhpSymfonyConfigRector extends AbstractRector
     private $fluentChainMethodCallNodeAnalyzer;
 
     public function __construct(
-
         SymfonyPhpConfigClosureAnalyzer $symfonyPhpConfigClosureAnalyzer,
         FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
     ) {

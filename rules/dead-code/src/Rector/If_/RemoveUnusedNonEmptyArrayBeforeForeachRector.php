@@ -35,7 +35,6 @@ final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractRector
     private $countManipulator;
 
     public function __construct(
-
         CountManipulator $countManipulator,
         IfManipulator $ifManipulator,
         UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector

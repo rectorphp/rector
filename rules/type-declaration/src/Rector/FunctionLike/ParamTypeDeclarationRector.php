@@ -48,7 +48,6 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
     private $reflectionProvider;
 
     public function __construct(
-
         ChildParamPopulator $childParamPopulator,
         ParamTypeInferer $paramTypeInferer,
         NodeTypeResolver $nodeTypeResolver,

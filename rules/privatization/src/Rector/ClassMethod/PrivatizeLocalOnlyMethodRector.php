@@ -45,7 +45,6 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements Zer
     private $classMethodExternalCallNodeAnalyzer;
 
     public function __construct(
-
         ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer,
         ClassMethodVisibilityVendorLockResolver $classMethodVisibilityVendorLockResolver
     ) {

@@ -53,7 +53,6 @@ final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCa
     private $phpDocTagRemover;
 
     public function __construct(
-
         ClassManipulator $classManipulator,
         MagicMethodDetector $magicMethodDetector,
         VariadicFunctionLikeDetector $variadicFunctionLikeDetector,

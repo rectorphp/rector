@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Rector\DeadDocBlock\TagRemover;
 
 use PhpParser\Node\FunctionLike;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\DeadDocBlock\DeadReturnTagValueNodeAnalyzer;
 
 final class ReturnTagRemover
@@ -21,6 +22,7 @@ final class ReturnTagRemover
      * @var PhpDocTagRemover
      */
     private $phpDocTagRemover;
+
     /**
      * @var PhpDocInfoFactory
      */
@@ -28,12 +30,10 @@ final class ReturnTagRemover
 
     public function __construct(
         DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer,
-        PhpDocTagRemover $phpDocTagRemover,
-        PhpDocInfoFactory $phpDocInfoFactory
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->deadReturnTagValueNodeAnalyzer = $deadReturnTagValueNodeAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function removeReturnTagIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike): void

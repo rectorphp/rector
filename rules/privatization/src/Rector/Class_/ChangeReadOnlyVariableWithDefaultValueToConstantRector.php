@@ -40,7 +40,6 @@ final class ChangeReadOnlyVariableWithDefaultValueToConstantRector extends Abstr
     private $varAnnotationManipulator;
 
     public function __construct(
-
         ClassMethodAssignManipulator $classMethodAssignManipulator,
         VarAnnotationManipulator $varAnnotationManipulator
     ) {

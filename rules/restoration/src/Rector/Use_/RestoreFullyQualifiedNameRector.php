@@ -34,7 +34,6 @@ final class RestoreFullyQualifiedNameRector extends AbstractRector
     private $phpDocTypeNodeNameMatcher;
 
     public function __construct(
-
         FullyQualifiedNameMatcher $fullyQualifiedNameMatcher,
         PhpDocTypeNodeNameMatcher $phpDocTypeNodeNameMatcher
     ) {

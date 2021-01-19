@@ -7,7 +7,6 @@ namespace Rector\DeadDocBlock\TagRemover;
 use PhpParser\Node\FunctionLike;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadDocBlock\DeadParamTagValueNodeAnalyzer;
 
 final class ParamTagRemover
