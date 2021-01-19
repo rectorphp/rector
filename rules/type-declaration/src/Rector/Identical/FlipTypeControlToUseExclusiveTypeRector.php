@@ -156,7 +156,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Types[] $types
+     * @param Type[] $types
      */
     private function skipNotNullOneOf(array $types): bool
     {
