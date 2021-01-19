@@ -87,7 +87,6 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
             }
 
             // what is return type?
-            /** @var ClassMethod|null $classMethod */
             $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
             if (! $classMethod instanceof ClassMethod) {
                 return null;
