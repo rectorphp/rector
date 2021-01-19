@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpDoc\PhpDocClassRenamer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -66,11 +65,6 @@ final class ClassRenamer
     private $betterNodeFinder;
 
     /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
@@ -82,7 +76,6 @@ final class ClassRenamer
         DocBlockManipulator $docBlockManipulator,
         NodeNameResolver $nodeNameResolver,
         PhpDocClassRenamer $phpDocClassRenamer,
-        PhpDocTypeChanger $phpDocTypeChanger,
         PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
@@ -91,7 +84,6 @@ final class ClassRenamer
         $this->phpDocClassRenamer = $phpDocClassRenamer;
         $this->classNaming = $classNaming;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 

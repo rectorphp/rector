@@ -58,19 +58,19 @@ final class ReturnTypeDeclarationUpdater
     private function updatePhpDoc(ClassMethod $classMethod, string $className): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
 
-        if ($returnTagValueNode === null) {
+        if ($attributeAwareReturnTagValueNode === null) {
             return;
         }
 
         $returnStaticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
-            $returnTagValueNode->type,
+            $attributeAwareReturnTagValueNode->type,
             $classMethod
         );
 
         if ($returnStaticType instanceof ArrayType || $returnStaticType instanceof UnionType) {
-            $returnTagValueNode->type = new FullyQualifiedIdentifierTypeNode($className);
+            $attributeAwareReturnTagValueNode->type = new FullyQualifiedIdentifierTypeNode($className);
         }
     }
 
