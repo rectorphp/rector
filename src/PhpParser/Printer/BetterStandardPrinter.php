@@ -14,7 +14,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
@@ -23,11 +22,12 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
+use Rector\Comments\CommentRemover;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Core\Tests\PhpParser\Printer\BetterStandardPrinterTest
@@ -39,12 +39,6 @@ final class BetterStandardPrinter extends Standard
      * @see https://regex101.com/r/jUFizd/1
      */
     private const NEWLINE_END_REGEX = "#\n$#";
-
-    /**
-     * @var string
-     * @see https://regex101.com/r/w5E8Rh/1
-     */
-    private const FOUR_SPACE_START_REGEX = '#^ {4}#m';
 
     /**
      * @var string
@@ -88,15 +82,25 @@ final class BetterStandardPrinter extends Standard
     private $commentRemover;
 
     /**
-     * @var ContentPatcher
+     * @var AnnotationFormatRestorer
      */
-    private $contentPatcher;
+    private $annotationFormatRestorer;
+
+    /**
+     * @var IndentCharacterDetector
+     */
+    private $indentCharacterDetector;
 
     /**
      * @param mixed[] $options
      */
-    public function __construct(CommentRemover $commentRemover, ContentPatcher $contentPatcher, array $options = [])
-    {
+    public function __construct(
+        CommentRemover $commentRemover,
+        AnnotationFormatRestorer $annotationFormatRestorer,
+        IndentCharacterDetector $indentCharacterDetector,
+        DocBlockManipulator $docBlockManipulator,
+        array $options = []
+    ) {
         parent::__construct($options);
 
         // print return type double colon right after the bracket "function(): string"
@@ -106,14 +110,8 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Expr_Closure->returnType'] = [')', false, ': ', null];
 
         $this->commentRemover = $commentRemover;
-        $this->contentPatcher = $contentPatcher;
-    }
-
-    /**
-     * @required
-     */
-    public function autowireBetterStandardPrinter(DocBlockManipulator $docBlockManipulator): void
-    {
+        $this->annotationFormatRestorer = $annotationFormatRestorer;
+        $this->indentCharacterDetector = $indentCharacterDetector;
         $this->docBlockManipulator = $docBlockManipulator;
     }
 
@@ -127,54 +125,12 @@ final class BetterStandardPrinter extends Standard
         $newStmts = $this->resolveNewStmts($stmts);
 
         // detect per print
-        $this->detectTabOrSpaceIndentCharacter($newStmts);
+        $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($newStmts);
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
         $contentOriginal = $this->print($origStmts);
 
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_STRING_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_STRING_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_ROUTE_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_ROUTE_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_COMMENT_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_COMMENT_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_CONSTRAINT_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_CONSTRAINT_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_ROUTE_OPTION_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_ROUTE_OPTION_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX
-        );
-        $content = $this->contentPatcher->rollbackDuplicateComment($contentOriginal, $content);
+        $content = $this->annotationFormatRestorer->restore($contentOriginal, $content);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
@@ -189,10 +145,9 @@ final class BetterStandardPrinter extends Standard
      */
     public function printWithoutComments($node): string
     {
-        $printerNode = $this->print($node);
-
-        $nodeWithoutComments = $this->commentRemover->remove($printerNode);
-        return trim($nodeWithoutComments);
+        $node = $this->commentRemover->removeFromNode($node);
+        $content = $this->print($node);
+        return trim($content);
     }
 
     /**
@@ -265,6 +220,26 @@ final class BetterStandardPrinter extends Standard
         }
 
         return false;
+    }
+
+    /**
+     * Checks even clone nodes
+     */
+    public function areSameNode(Node $firstNode, Node $secondNode): bool
+    {
+        if ($firstNode === $secondNode) {
+            return true;
+        }
+
+        if ($firstNode->getStartTokenPos() !== $secondNode->getStartTokenPos()) {
+            return false;
+        }
+
+        if ($firstNode->getEndTokenPos() !== $secondNode->getEndTokenPos()) {
+            return false;
+        }
+
+        return get_class($firstNode) === get_class($secondNode);
     }
 
     /**
@@ -492,12 +467,16 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pStmt_Use(Use_ $use): string
     {
-        if ($use->type === Use_::TYPE_NORMAL) {
-            foreach ($use->uses as $useUse) {
-                if ($useUse->name instanceof FullyQualified) {
-                    $useUse->name = new Name($useUse->name);
-                }
+        if ($use->type !== Use_::TYPE_NORMAL) {
+            return parent::pStmt_Use($use);
+        }
+
+        foreach ($use->uses as $useUse) {
+            if (! $useUse->name instanceof FullyQualified) {
+                continue;
             }
+
+            $useUse->name = new Name($useUse->name->toString());
         }
 
         return parent::pStmt_Use($use);
@@ -539,36 +518,6 @@ final class BetterStandardPrinter extends Standard
         }
 
         return $stmts;
-    }
-
-    /**
-     * Solves https://github.com/rectorphp/rector/issues/1964
-     *
-     * Some files have spaces, some have tabs. Keep the original indent if possible.
-     *
-     * @param Stmt[] $stmts
-     */
-    private function detectTabOrSpaceIndentCharacter(array $stmts): void
-    {
-        // use space by default
-        $this->tabOrSpaceIndentCharacter = ' ';
-
-        foreach ($stmts as $stmt) {
-            if (! $stmt instanceof Node) {
-                continue;
-            }
-
-            $fileInfo = $stmt->getAttribute(AttributeKey::FILE_INFO);
-            if (! $fileInfo instanceof SmartFileInfo) {
-                continue;
-            }
-
-            $whitespaces = count(Strings::matchAll($fileInfo->getContents(), self::FOUR_SPACE_START_REGEX));
-            $tabs = count(Strings::matchAll($fileInfo->getContents(), '#^\t#m'));
-
-            // tab vs space
-            $this->tabOrSpaceIndentCharacter = ($whitespaces <=> $tabs) >= 0 ? ' ' : "\t";
-        }
     }
 
     /**

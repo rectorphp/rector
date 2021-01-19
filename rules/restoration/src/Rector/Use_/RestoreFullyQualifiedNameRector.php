@@ -103,7 +103,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $useUse->name = $fullyQualifiedName;
+            $useUse->name = new Name($fullyQualifiedName->toString());
         }
 
         return $use;

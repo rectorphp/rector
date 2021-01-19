@@ -145,7 +145,6 @@ CODE_SAMPLE
 
     private function isVariableTypeInScope(Assign $assign): bool
     {
-        /** @var Scope|null $scope */
         $scope = $assign->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return false;
@@ -174,7 +173,7 @@ CODE_SAMPLE
      */
     private function isNestedAssign(Assign $assign): bool
     {
-        $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentNode instanceof Assign;
+        $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        return $parent instanceof Assign;
     }
 }

@@ -93,7 +93,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     public function getAttributableItems(): array
     {
         $items = [];
-        
+
         if ($this->name !== null) {
             $items['name'] = $this->name;
         }
