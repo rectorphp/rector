@@ -25,7 +25,8 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticInstanceOf;
@@ -75,11 +76,6 @@ final class PhpDocInfo
     private $node;
 
     /**
-     * @var PhpDocRemover
-     */
-    private $phpDocRemover;
-
-    /**
      * @var AttributeAwareNodeFactory
      */
     private $attributeAwareNodeFactory;
@@ -95,6 +91,16 @@ final class PhpDocInfo
     private $annotationNaming;
 
     /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    /**
+     * @var RectorChangeCollector
+     */
+    private $rectorChangeCollector;
+
+    /**
      * @param mixed[] $tokens
      */
     public function __construct(
@@ -103,9 +109,10 @@ final class PhpDocInfo
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
         Node $node,
-        PhpDocRemover $phpDocRemover,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
-        AnnotationNaming $annotationNaming
+        AnnotationNaming $annotationNaming,
+        CurrentNodeProvider $currentNodeProvider,
+        RectorChangeCollector $rectorChangeCollector
     ) {
         $this->phpDocNode = $attributeAwarePhpDocNode;
         $this->tokens = $tokens;
@@ -113,9 +120,10 @@ final class PhpDocInfo
         $this->originalContent = $originalContent;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
-        $this->phpDocRemover = $phpDocRemover;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->annotationNaming = $annotationNaming;
+        $this->currentNodeProvider = $currentNodeProvider;
+        $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
     public function getOriginalContent(): string
@@ -217,11 +225,6 @@ final class PhpDocInfo
         return $this->getTypeOrMixed($this->getReturnTagValue());
     }
 
-    public function removeTagValueNodeFromNode(PhpDocTagValueNode $phpDocTagValueNode): void
-    {
-        $this->phpDocRemover->removeTagValueFromNode($this, $phpDocTagValueNode);
-    }
-
     /**
      * @template T as \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
      * @param class-string<T> $type
@@ -320,11 +323,6 @@ final class PhpDocInfo
 
             unset($this->phpDocNode->children[$key]);
         }
-    }
-
-    public function removeByName(string $name): void
-    {
-        $this->phpDocRemover->removeByName($this, $name);
     }
 
     /**
@@ -442,6 +440,11 @@ final class PhpDocInfo
     public function markAsChanged(): void
     {
         $this->hasChanged = true;
+
+        $node = $this->currentNodeProvider->getNode();
+        if ($node !== null) {
+            $this->rectorChangeCollector->notifyNodeFileInfo($node);
+        }
     }
 
     public function hasChanged(): bool

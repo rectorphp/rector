@@ -6,6 +6,7 @@ namespace Rector\PHPUnit\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionMethodCallFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -36,9 +37,17 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
      */
     private $expectExceptionMethodCallFactory;
 
-    public function __construct(ExpectExceptionMethodCallFactory $expectExceptionMethodCallFactory)
-    {
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(
+        ExpectExceptionMethodCallFactory $expectExceptionMethodCallFactory,
+        PhpDocTagRemover $phpDocTagRemover
+    ) {
         $this->expectExceptionMethodCallFactory = $expectExceptionMethodCallFactory;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -100,7 +109,7 @@ CODE_SAMPLE
             );
             $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
 
-            $phpDocInfo->removeByName($annotationName);
+            $this->phpDocTagRemover->removeByName($phpDocInfo, $annotationName);
         }
 
         return $node;

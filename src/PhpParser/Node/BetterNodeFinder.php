@@ -17,6 +17,7 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\PackageBuilder\Php\TypeChecker;
 use Webmozart\Assert\Assert;
 
 /**
@@ -40,14 +41,21 @@ final class BetterNodeFinder
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var TypeChecker
+     */
+    private $typeChecker;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         NodeFinder $nodeFinder,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        TypeChecker $typeChecker
     ) {
         $this->nodeFinder = $nodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->typeChecker = $typeChecker;
     }
 
     /**
@@ -329,15 +337,7 @@ final class BetterNodeFinder
     public function findFirstPreviousOfTypes(Node $mainNode, array $types): ?Node
     {
         return $this->findFirstPrevious($mainNode, function (Node $node) use ($types): bool {
-            foreach ($types as $type) {
-                if (! is_a($node, $type, true)) {
-                    continue;
-                }
-
-                return true;
-            }
-
-            return false;
+            return $this->typeChecker->isInstanceOf($node, $types);
         });
     }
 

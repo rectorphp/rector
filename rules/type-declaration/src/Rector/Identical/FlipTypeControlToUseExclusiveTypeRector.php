@@ -17,6 +17,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -28,6 +29,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
 {
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocRemover;
+
+    public function __construct(PhpDocTagRemover $phpDocRemover)
+    {
+        $this->phpDocRemover = $phpDocRemover;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -127,7 +138,8 @@ CODE_SAMPLE
 
         /** @var VarTagValueNode $tagValueNode */
         $tagValueNode = $phpDocInfo->getVarTagValueNode();
-        $phpDocInfo->removeTagValueNodeFromNode($tagValueNode);
+        $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $tagValueNode);
+
         return new BooleanNot(new Instanceof_($expr, new FullyQualified($type->getClassName())));
     }
 

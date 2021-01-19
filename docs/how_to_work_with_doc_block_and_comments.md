@@ -40,9 +40,15 @@ var_dump($returnType);
 
 ```php
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+
+public function __construct(
+    private PhpDocTagRemover $phpDocTagRemover
+) {
+}
 
 /** @var PhpDocInfo $phpDocInfo */
-$phpDocInfo->removeByName('return');
+$this->phpDocTagRemover->removeByName($phpDocInfo, 'return');
 ```
 
 ## How create PhpDocInfo for a new node?
