@@ -49,9 +49,11 @@ final class VariableMethodCallToServiceCallRector extends AbstractRector impleme
         return new RuleDefinition('Replace variable method call to a service one', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
+use PhpParser\Node;
+
 class SomeClass
 {
-    public function run(\PhpParser\Node $node)
+    public function run(Node $node)
     {
         $phpDocInfo = $node->getAttribute('php_doc_info');
     }
@@ -59,13 +61,16 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use PhpParser\Node;
+
 class SomeClass
 {
-    public function (\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function run(\PhpParser\Node $node)
+    public function run(Node $node)
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
     }

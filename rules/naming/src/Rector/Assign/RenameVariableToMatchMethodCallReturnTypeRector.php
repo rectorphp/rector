@@ -229,8 +229,11 @@ CODE_SAMPLE
 
     private function renameVariable(VariableAndCallAssign $variableAndCallAssign, string $expectedName): void
     {
+        $assign = $variableAndCallAssign->getAssign();
+        $assignPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($assign);
+
         $this->varTagValueNodeRenamer->renameAssignVarTagVariableName(
-            $variableAndCallAssign->getAssign(),
+            $assignPhpDocInfo,
             $variableAndCallAssign->getVariableName(),
             $expectedName
         );

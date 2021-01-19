@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Ramsey\Uuid\Uuid;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
@@ -71,8 +72,10 @@ final class EntityUuidNodeFactory
 
     private function decoratePropertyWithUuidAnnotations(Property $property, bool $isNullable, bool $isId): void
     {
-        $this->clearVarAndOrmAnnotations($property);
-        $this->replaceIntSerializerTypeWithString($property);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+
+        $this->clearVarAndOrmAnnotations($phpDocInfo);
+        $this->replaceIntSerializerTypeWithString($phpDocInfo);
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
@@ -99,10 +102,8 @@ final class EntityUuidNodeFactory
         $phpDocInfo->addTagValueNodeWithShortName($generatedValueTagValueNode);
     }
 
-    private function clearVarAndOrmAnnotations(Property $property): void
+    private function clearVarAndOrmAnnotations(PhpDocInfo $phpDocInfo): void
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-
         $phpDocInfo->removeByType(VarTagValueNode::class);
         $phpDocInfo->removeByType(DoctrineTagNodeInterface::class);
     }
@@ -110,15 +111,16 @@ final class EntityUuidNodeFactory
     /**
      * See https://github.com/ramsey/uuid-doctrine/issues/50#issuecomment-348123520.
      */
-    private function replaceIntSerializerTypeWithString(Property $property): void
+    private function replaceIntSerializerTypeWithString(PhpDocInfo $phpDocInfo): void
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-
         $serializerTypeTagValueNode = $phpDocInfo->getByType(SerializerTypeTagValueNode::class);
         if (! $serializerTypeTagValueNode instanceof SerializerTypeTagValueNode) {
             return;
         }
 
-        $serializerTypeTagValueNode->replaceName('int', 'string');
+        $hasReplaced = $serializerTypeTagValueNode->replaceName('int', 'string');
+        if ($hasReplaced) {
+            $phpDocInfo->markAsChanged();
+        }
     }
 }

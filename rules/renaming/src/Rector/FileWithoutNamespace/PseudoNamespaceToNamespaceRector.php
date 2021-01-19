@@ -144,9 +144,11 @@ CODE_SAMPLE
                 return null;
             }
 
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
             // replace on @var/@param/@return/@throws
             foreach ($this->pseudoNamespacesToNamespaces as $namespacePrefixWithExcludedClasses) {
-                $this->phpDocTypeRenamer->changeUnderscoreType($node, $namespacePrefixWithExcludedClasses);
+                $this->phpDocTypeRenamer->changeUnderscoreType($phpDocInfo, $node, $namespacePrefixWithExcludedClasses);
             }
             if ($node instanceof Name) {
                 return $this->processNameOrIdentifier($node);
