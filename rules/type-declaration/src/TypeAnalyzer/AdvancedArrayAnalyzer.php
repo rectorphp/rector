@@ -13,9 +13,7 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeNormalizer;
 
 final class AdvancedArrayAnalyzer
@@ -24,6 +22,7 @@ final class AdvancedArrayAnalyzer
      * @var TypeNormalizer
      */
     private $typeNormalizer;
+
     /**
      * @var PhpDocInfoFactory
      */

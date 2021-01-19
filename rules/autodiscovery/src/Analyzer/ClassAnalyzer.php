@@ -7,13 +7,11 @@ namespace Rector\Autodiscovery\Analyzer;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ClassAnalyzer
@@ -37,6 +35,7 @@ final class ClassAnalyzer
      * @var ParsedNodeCollector
      */
     private $parsedNodeCollector;
+
     /**
      * @var PhpDocInfoFactory
      */
