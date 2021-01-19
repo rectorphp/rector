@@ -263,8 +263,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $targetEntity = $doctrineRelationTagValueNode->getFullyQualifiedTargetEntity();
-        if ($targetEntity === null) {
+        $fullyQualifiedTargetEntity = $doctrineRelationTagValueNode->getFullyQualifiedTargetEntity();
+        if ($fullyQualifiedTargetEntity === null) {
             return null;
         }
 
@@ -274,7 +274,7 @@ CODE_SAMPLE
         }
 
         // get the class property and remove "mappedBy/inversedBy" from annotation
-        $relatedEntityClass = $this->nodeRepository->findClass($targetEntity);
+        $relatedEntityClass = $this->nodeRepository->findClass($fullyQualifiedTargetEntity);
         if (! $relatedEntityClass instanceof Class_) {
             return null;
         }
