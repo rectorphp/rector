@@ -173,7 +173,7 @@ CODE_SAMPLE
      */
     private function isNestedAssign(Assign $assign): bool
     {
-        $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentNode instanceof Assign;
+        $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        return $parent instanceof Assign;
     }
 }

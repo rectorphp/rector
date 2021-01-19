@@ -32,7 +32,9 @@ final class CommentRemover
             return null;
         }
 
-        $nodes = is_array($node) ? $node : [$node];
+        $copiedNodes = $node;
+
+        $nodes = is_array($copiedNodes) ? $copiedNodes : [$copiedNodes];
         return $this->commentRemovingNodeTraverser->traverse($nodes);
     }
 }
