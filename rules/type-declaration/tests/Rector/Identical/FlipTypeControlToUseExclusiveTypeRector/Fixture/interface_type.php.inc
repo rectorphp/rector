@@ -35,12 +35,12 @@ class InterfaceType
     public function run()
     {
         $dateTimeInterface = $this->getdateTimeInterface();
-        if (!$dateTimeInterface instanceof DateTimeInterface) {
+        if (!$dateTimeInterface instanceof \DateTimeInterface) {
             return;
         }
 
         $dateTimeInterface = $this->getdateTimeInterface();
-        if (!$dateTimeInterface instanceof DateTimeInterface) {
+        if (!$dateTimeInterface instanceof \DateTimeInterface) {
             return;
         }
     }

@@ -35,12 +35,12 @@ class Fixture
     public function run()
     {
         $stdClass = $this->getStdClass();
-        if (!$stdClass instanceof stdClass) {
+        if (!$stdClass instanceof \stdClass) {
             return;
         }
 
         $stdClass = $this->getStdClass();
-        if (!$stdClass instanceof stdClass) {
+        if (!$stdClass instanceof \stdClass) {
             return;
         }
     }

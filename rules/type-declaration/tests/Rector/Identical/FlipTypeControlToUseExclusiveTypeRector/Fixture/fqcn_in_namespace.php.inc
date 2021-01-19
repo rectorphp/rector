@@ -29,7 +29,7 @@ class FqcnInNamespace
     public function run()
     {
         $stdClass = $this->getStdClass();
-        if (!$stdClass instanceof stdClass) {
+        if (!$stdClass instanceof \Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\Source\stdClass) {
             return;
         }
     }
