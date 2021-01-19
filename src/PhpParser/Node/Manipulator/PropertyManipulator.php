@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -27,6 +26,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
+use Symplify\PackageBuilder\Php\TypeChecker;
 
 /**
  * "private $property"
@@ -75,6 +75,16 @@ final class PropertyManipulator
      */
     private $phpDocInfoFactory;
 
+    /**
+     * @var TypeChecker
+     */
+    private $typeChecker;
+
+    /**
+     * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
+     */
+    private $propertyFetchFinder;
+
     public function __construct(
         AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
@@ -83,7 +93,9 @@ final class PropertyManipulator
         VariableToConstantGuard $variableToConstantGuard,
         NodeRepository $nodeRepository,
         ReadWritePropertyAnalyzer $readWritePropertyAnalyzer,
-        PhpDocInfoFactory $phpDocInfoFactory
+        PhpDocInfoFactory $phpDocInfoFactory,
+        TypeChecker $typeChecker,
+        \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -93,47 +105,8 @@ final class PropertyManipulator
         $this->nodeRepository = $nodeRepository;
         $this->readWritePropertyAnalyzer = $readWritePropertyAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-    }
-
-    /**
-     * @return PropertyFetch[]|StaticPropertyFetch[]
-     */
-    public function getPrivatePropertyFetches(Property $property): array
-    {
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return [];
-        }
-
-        $nodesToSearch = $this->nodeRepository->findUsedTraitsInClass($classLike);
-        $nodesToSearch[] = $classLike;
-
-        $singleProperty = $property->props[0];
-
-        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use (
-            $singleProperty,
-            $nodesToSearch
-        ): bool {
-            // property + static fetch
-            if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
-                return false;
-            }
-
-            // itself
-            if ($this->betterStandardPrinter->areNodesEqual($node, $singleProperty)) {
-                return false;
-            }
-
-            // is it the name match?
-            if (! $this->nodeNameResolver->areNamesEqual($node, $singleProperty)) {
-                return false;
-            }
-
-            return in_array($node->getAttribute(AttributeKey::CLASS_NODE), $nodesToSearch, true);
-        });
-
-        return $propertyFetches;
+        $this->typeChecker = $typeChecker;
+        $this->propertyFetchFinder = $propertyFetchFinder;
     }
 
     public function isPropertyUsedInReadContext(Property $property): bool
@@ -147,7 +120,7 @@ final class PropertyManipulator
             return true;
         }
 
-        $privatePropertyFetches = $this->getPrivatePropertyFetches($property);
+        $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
         foreach ($privatePropertyFetches as $propertyFetch) {
             if ($this->readWritePropertyAnalyzer->isRead($propertyFetch)) {
                 return true;
@@ -173,7 +146,7 @@ final class PropertyManipulator
 
     public function isPropertyChangeable(Property $property): bool
     {
-        $propertyFetches = $this->getPrivatePropertyFetches($property);
+        $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
 
         foreach ($propertyFetches as $propertyFetch) {
             if ($this->isChangeableContext($propertyFetch)) {
@@ -190,8 +163,16 @@ final class PropertyManipulator
     private function isChangeableContext(Node $node): bool
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof PreInc || $parent instanceof PreDec || $parent instanceof PostInc || $parent instanceof PostDec) {
+        if (! $parent instanceof Node) {
+            return false;
+        }
+
+        if ($this->typeChecker->isInstanceOf($parent, [PreInc::class, PreDec::class, PostInc::class, PostDec::class])) {
             $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        if (! $parent instanceof Node) {
+            return false;
         }
 
         if ($parent instanceof Arg) {

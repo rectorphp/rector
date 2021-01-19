@@ -142,9 +142,11 @@ CODE_SAMPLE
         if (! $this->isLoopMatch($node->loop)) {
             return null;
         }
+
         if ($this->iteratedExpr === null) {
             return null;
         }
+
         if ($this->keyValueName === null) {
             return null;
         }
@@ -352,12 +354,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($this->assignManipulator->isNodePartOfAssign($parentNode)) {
-                return null;
-            }
-
-            if ($this->isArgParentCount($parentNode)) {
+            if ($this->shouldSkipNode($node)) {
                 return null;
             }
 
@@ -404,16 +401,31 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isArgParentCount(?Node $node): bool
+    private function isArgParentCount(Node $node): bool
     {
-        if ($node instanceof Arg) {
-            /** @var Node $parentNode */
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($this->isFuncCallName($parentNode, self::COUNT)) {
-                return true;
-            }
+        if (! $node instanceof Arg) {
+            return false;
         }
 
-        return false;
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Node) {
+            return false;
+        }
+
+        return $this->isFuncCallName($parent, self::COUNT);
+    }
+
+    private function shouldSkipNode(ArrayDimFetch $arrayDimFetch): bool
+    {
+        $parentNode = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Node) {
+            return false;
+        }
+
+        if ($this->assignManipulator->isNodePartOfAssign($parentNode)) {
+            return true;
+        }
+
+        return $this->isArgParentCount($parentNode);
     }
 }
