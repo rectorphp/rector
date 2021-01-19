@@ -27,7 +27,7 @@ class WithoutReturn
 
 namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
-class WithReturn
+class WithoutReturn
 {
     public function run($value)
     {
