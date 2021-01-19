@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -24,9 +25,15 @@ final class CollectionTypeResolver
      */
     private $nameScopeFactory;
 
-    public function __construct(NameScopeFactory $nameScopeFactory)
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(NameScopeFactory $nameScopeFactory, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->nameScopeFactory = $nameScopeFactory;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function resolveFromTypeNode(TypeNode $typeNode, Node $node): ?FullyQualifiedObjectType
@@ -51,10 +58,8 @@ final class CollectionTypeResolver
 
     public function resolveFromOneToManyProperty(Property $property): ?FullyQualifiedObjectType
     {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+
         $oneToManyTagValueNode = $phpDocInfo->getByType(OneToManyTagValueNode::class);
         if (! $oneToManyTagValueNode instanceof OneToManyTagValueNode) {
             return null;

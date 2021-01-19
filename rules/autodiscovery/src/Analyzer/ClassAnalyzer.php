@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
@@ -36,15 +37,21 @@ final class ClassAnalyzer
      * @var ParsedNodeCollector
      */
     private $parsedNodeCollector;
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ParsedNodeCollector $parsedNodeCollector
+        ParsedNodeCollector $parsedNodeCollector,
+        PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function isValueObjectClass(Class_ $class): bool
@@ -112,11 +119,7 @@ final class ClassAnalyzer
                 continue;
             }
 
-            $phpDocInfo = $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if (! $phpDocInfo instanceof PhpDocInfo) {
-                continue;
-            }
-
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($stmt);
             if ($phpDocInfo->hasByType(SerializerTypeTagValueNode::class)) {
                 continue;
             }

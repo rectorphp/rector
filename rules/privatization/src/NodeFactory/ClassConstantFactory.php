@@ -37,7 +37,8 @@ final class ClassConstantFactory
         $classConst = new ClassConst([$const]);
         $classConst->flags = $property->flags & ~ Class_::MODIFIER_STATIC;
 
-        $classConst->setAttribute(AttributeKey::PHP_DOC_INFO, $property->getAttribute(AttributeKey::PHP_DOC_INFO));
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $classConst->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
 
         return $classConst;
     }

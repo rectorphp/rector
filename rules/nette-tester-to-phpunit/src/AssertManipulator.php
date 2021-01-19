@@ -17,6 +17,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\BooleanType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -109,6 +110,10 @@ final class AssertManipulator
      * @var NodesToAddCollector
      */
     private $nodesToAddCollector;
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
@@ -116,7 +121,8 @@ final class AssertManipulator
         NodesToAddCollector $nodesToAddCollector,
         NodesToRemoveCollector $nodesToRemoveCollector,
         StringTypeAnalyzer $stringTypeAnalyzer,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -124,6 +130,7 @@ final class AssertManipulator
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -265,8 +272,7 @@ final class AssertManipulator
             return;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->addBareTag('@doesNotPerformAssertions');
     }
 

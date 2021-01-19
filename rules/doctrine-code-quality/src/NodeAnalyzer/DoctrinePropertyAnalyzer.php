@@ -21,13 +21,6 @@ final class DoctrinePropertyAnalyzer
         return $phpDocInfo->getByType(ColumnTagValueNode::class);
     }
 
-    public function matchDoctrineOneToManyTagValueNode(Property $property): ?OneToManyTagValueNode
-    {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        return $phpDocInfo->getByType(OneToManyTagValueNode::class);
-    }
-
     public function matchDoctrineManyToOneTagValueNode(Property $property): ?ManyToOneTagValueNode
     {
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
