@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
@@ -81,7 +82,7 @@ final class PropertyManipulator
     private $typeChecker;
 
     /**
-     * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
+     * @var PropertyFetchFinder
      */
     private $propertyFetchFinder;
 
@@ -95,7 +96,7 @@ final class PropertyManipulator
         ReadWritePropertyAnalyzer $readWritePropertyAnalyzer,
         PhpDocInfoFactory $phpDocInfoFactory,
         TypeChecker $typeChecker,
-        \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder
+        PropertyFetchFinder $propertyFetchFinder
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;

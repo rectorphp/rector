@@ -74,11 +74,6 @@ final class PropertyFetchFinder
                 return false;
             }
 
-            // itself
-//            if ($this->betterStandardPrinter->areNodesEqual($node, $singleProperty)) {
-//                return false;
-//            }
-
             // is it the name match?
             if (! $this->nodeNameResolver->areNamesEqual($node, $singleProperty)) {
                 return false;

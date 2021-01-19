@@ -7,6 +7,9 @@ namespace Rector\Comments;
 use PhpParser\Node;
 use Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser;
 
+/**
+ * @see \Rector\Comments\Tests\CommentRemover\CommentRemoverTest
+ */
 final class CommentRemover
 {
     /**
@@ -21,20 +24,15 @@ final class CommentRemover
 
     /**
      * @param Node[]|Node|null $node
-     * @return Node[]|Node|null
+     * @return Node[]|null
      */
-    public function removeFromNode($node)
+    public function removeFromNode($node): ?array
     {
         if ($node === null) {
             return null;
         }
 
-        if (! is_array($node)) {
-            $nodes = [$node];
-        } else {
-            $nodes = $node;
-        }
-
+        $nodes = is_array($node) ? $node : [$node];
         return $this->commentRemovingNodeTraverser->traverse($nodes);
     }
 }
