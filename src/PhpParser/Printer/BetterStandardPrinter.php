@@ -89,15 +89,18 @@ final class BetterStandardPrinter extends Standard
     private $commentRemover;
 
     /**
-     * @var ContentPatcher
+     * @var AnnotationFormatRestorer
      */
-    private $contentPatcher;
+    private $annotationFormatRestorer;
 
     /**
      * @param mixed[] $options
      */
-    public function __construct(CommentRemover $commentRemover, ContentPatcher $contentPatcher, array $options = [])
-    {
+    public function __construct(
+        CommentRemover $commentRemover,
+        AnnotationFormatRestorer $annotationFormatRestorer,
+        array $options = []
+    ) {
         parent::__construct($options);
 
         // print return type double colon right after the bracket "function(): string"
@@ -107,7 +110,7 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Expr_Closure->returnType'] = [')', false, ': ', null];
 
         $this->commentRemover = $commentRemover;
-        $this->contentPatcher = $contentPatcher;
+        $this->annotationFormatRestorer = $annotationFormatRestorer;
     }
 
     /**
@@ -133,49 +136,7 @@ final class BetterStandardPrinter extends Standard
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
         $contentOriginal = $this->print($origStmts);
 
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_STRING_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_STRING_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_ROUTE_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_ROUTE_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_COMMENT_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_COMMENT_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_CONSTRAINT_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_CONSTRAINT_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_ROUTE_OPTION_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_ROUTE_OPTION_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_ROUTE_LOCALIZATION_REGEX
-        );
-        $content = $this->contentPatcher->rollbackValidAnnotation(
-            $contentOriginal,
-            $content,
-            ContentPatcher::VALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX,
-            ContentPatcher::INVALID_ANNOTATION_VAR_RETURN_EXPLICIT_FORMAT_REGEX
-        );
-        $content = $this->contentPatcher->rollbackDuplicateComment($contentOriginal, $content);
+        $content = $this->annotationFormatRestorer->restore($contentOriginal, $content);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {

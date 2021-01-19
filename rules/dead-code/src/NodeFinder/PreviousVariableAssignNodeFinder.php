@@ -21,13 +21,17 @@ final class PreviousVariableAssignNodeFinder
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
+
     /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, BetterStandardPrinter $betterStandardPrinter)
-    {
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        NodeNameResolver $nodeNameResolver,
+        BetterStandardPrinter $betterStandardPrinter
+    ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
