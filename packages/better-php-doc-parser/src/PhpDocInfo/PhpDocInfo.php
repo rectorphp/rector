@@ -262,8 +262,9 @@ final class PhpDocInfo
     }
 
     /**
-     * @param class-string $type
-     * @return PhpDocTagValueNode[]
+     * @template T of \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
+     * @param class-string<T> $type
+     * @return T[]
      */
     public function findAllByType(string $type): array
     {
@@ -417,11 +418,7 @@ final class PhpDocInfo
 
     public function hasInheritDoc(): bool
     {
-        if ($this->hasByName('inheritdoc')) {
-            return true;
-        }
-
-        return $this->hasByName('inheritDoc');
+        return $this->hasByNames(['inheritdoc', 'inheritDoc']);
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type
