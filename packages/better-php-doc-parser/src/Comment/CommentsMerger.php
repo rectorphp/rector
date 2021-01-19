@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\Comment;
 
 use PhpParser\Comment;
 use PhpParser\Node;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
@@ -16,9 +17,17 @@ final class CommentsMerger
      */
     private $simpleCallableNodeTraverser;
 
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -49,15 +58,15 @@ final class CommentsMerger
             return;
         }
 
-        $arrayPhpDocInfo = $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $arrayComments = $parent->getComments();
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($parent);
+        $comments = $parent->getComments();
 
-        if ($arrayPhpDocInfo === null && $arrayComments === []) {
+        if ($phpDocInfo === null && $comments === []) {
             return;
         }
 
-        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $arrayPhpDocInfo);
-        $newNode->setAttribute(AttributeKey::COMMENTS, $arrayComments);
+        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+        $newNode->setAttribute(AttributeKey::COMMENTS, $comments);
     }
 
     public function keepChildren(Node $newNode, Node $oldNode): void

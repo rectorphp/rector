@@ -66,12 +66,10 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        foreach ($class->stmts as $classStmt) {
-            if (! $classStmt instanceof Property) {
-                continue;
-            }
-
-            if ($this->hasPropertyDoctrineIdTag($classStmt)) {
+        // $class->stmts - explore
+        foreach ($class->getProperties() as $property) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+            if ($phpDocInfo->hasByType(IdTagValueNode::class)) {
                 return true;
             }
         }
@@ -81,22 +79,14 @@ final class DoctrineDocBlockResolver
 
     public function getTargetEntity(Property $property): ?string
     {
-        $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
-        if ($doctrineRelationTagValueNode === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+
+        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+        if (! $doctrineRelationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
             return null;
         }
 
         return $doctrineRelationTagValueNode->getTargetEntity();
-    }
-
-    public function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
-    {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
-        return $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
     }
 
     public function isDoctrineProperty(Property $property): bool
@@ -118,12 +108,7 @@ final class DoctrineDocBlockResolver
     private function isDoctrineEntityClassNode(Class_ $class): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-
-        if ($phpDocInfo->hasByType(EntityTagValueNode::class)) {
-            return true;
-        }
-
-        return $phpDocInfo->hasByType(EmbeddableTagValueNode::class);
+        return $phpDocInfo->hasByTypes([EntityTagValueNode::class, EmbeddableTagValueNode::class]);
     }
 
     private function isStringClassEntity(string $class): bool
@@ -143,12 +128,5 @@ final class DoctrineDocBlockResolver
         $docCommentContent = (string) $reflectionClass->getDocComment();
 
         return (bool) Strings::match($docCommentContent, self::ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX);
-    }
-
-    private function hasPropertyDoctrineIdTag(Property $property): bool
-    {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        return $phpDocInfo ? $phpDocInfo->hasByType(IdTagValueNode::class) : false;
     }
 }
