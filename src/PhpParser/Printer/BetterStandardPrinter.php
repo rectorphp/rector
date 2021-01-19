@@ -492,12 +492,16 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pStmt_Use(Use_ $use): string
     {
-        if ($use->type === Use_::TYPE_NORMAL) {
-            foreach ($use->uses as $useUse) {
-                if ($useUse->name instanceof FullyQualified) {
-                    $useUse->name = new Name($useUse->name);
-                }
+        if ($use->type !== Use_::TYPE_NORMAL) {
+            return parent::pStmt_Use($use);
+        }
+
+        foreach ($use->uses as $key => $useUse) {
+            if (! $useUse->name instanceof FullyQualified) {
+                continue;
             }
+
+            $useUse->name = new Name($useUse->name->toString());
         }
 
         return parent::pStmt_Use($use);
