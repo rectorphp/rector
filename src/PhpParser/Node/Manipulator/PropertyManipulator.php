@@ -20,10 +20,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTa
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
@@ -42,16 +39,6 @@ final class PropertyManipulator
     private $betterNodeFinder;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var AssignManipulator
      */
     private $assignManipulator;
@@ -60,11 +47,6 @@ final class PropertyManipulator
      * @var VariableToConstantGuard
      */
     private $variableToConstantGuard;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
 
     /**
      * @var ReadWritePropertyAnalyzer
@@ -89,21 +71,15 @@ final class PropertyManipulator
     public function __construct(
         AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
-        NodeNameResolver $nodeNameResolver,
         VariableToConstantGuard $variableToConstantGuard,
-        NodeRepository $nodeRepository,
         ReadWritePropertyAnalyzer $readWritePropertyAnalyzer,
         PhpDocInfoFactory $phpDocInfoFactory,
         TypeChecker $typeChecker,
         PropertyFetchFinder $propertyFetchFinder
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->assignManipulator = $assignManipulator;
         $this->variableToConstantGuard = $variableToConstantGuard;
-        $this->nodeRepository = $nodeRepository;
         $this->readWritePropertyAnalyzer = $readWritePropertyAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeChecker = $typeChecker;

@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -28,11 +27,6 @@ final class PropertyFetchFinder
     private $betterNodeFinder;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -40,12 +34,10 @@ final class PropertyFetchFinder
     public function __construct(
         NodeRepository $nodeRepository,
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
-                                NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeRepository = $nodeRepository;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -59,15 +51,15 @@ final class PropertyFetchFinder
             return [];
         }
 
-        $nodesToSearch = $this->nodeRepository->findUsedTraitsInClass($classLike);
-        $nodesToSearch[] = $classLike;
+        $classLikesToSearch = $this->nodeRepository->findUsedTraitsInClass($classLike);
+        $classLikesToSearch[] = $classLike;
 
         $singleProperty = $property->props[0];
 
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use (
+        $propertyFetches = $this->betterNodeFinder->find($classLikesToSearch, function (Node $node) use (
             $singleProperty,
-            $nodesToSearch
+            $classLikesToSearch
         ): bool {
             // property + static fetch
             if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
@@ -79,7 +71,8 @@ final class PropertyFetchFinder
                 return false;
             }
 
-            return in_array($node->getAttribute(AttributeKey::CLASS_NODE), $nodesToSearch, true);
+            $currentClassLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+            return in_array($currentClassLike, $classLikesToSearch, true);
         });
 
         return $propertyFetches;

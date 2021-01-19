@@ -163,7 +163,7 @@ CODE_SAMPLE
         string $paramName,
         string $paramTypeName
     ): ?string {
-        /** @var ReflectionParameter[] */
+        /** @var ReflectionParameter[] $parentReflectionMethodParams */
         $parentReflectionMethodParams = $parentReflectionMethod->getParameters();
         foreach ($parentReflectionMethodParams as $reflectionParameter) {
             if ($reflectionParameter->name === $paramName) {

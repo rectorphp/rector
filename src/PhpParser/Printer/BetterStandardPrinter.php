@@ -496,7 +496,7 @@ final class BetterStandardPrinter extends Standard
             return parent::pStmt_Use($use);
         }
 
-        foreach ($use->uses as $key => $useUse) {
+        foreach ($use->uses as $useUse) {
             if (! $useUse->name instanceof FullyQualified) {
                 continue;
             }
