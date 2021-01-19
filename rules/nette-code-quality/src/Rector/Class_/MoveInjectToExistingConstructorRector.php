@@ -11,6 +11,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -132,7 +133,7 @@ CODE_SAMPLE
     private function removeInjectAnnotation(Property $property): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $phpDocInfo->removeByName('inject');
+        $phpDocInfo->removeByName(TagName::INJECT);
     }
 
     private function changePropertyVisibility(Property $injectProperty): void
@@ -151,6 +152,6 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        return $phpDocInfo->hasByName('inject');
+        return $phpDocInfo->hasByName(TagName::INJECT);
     }
 }

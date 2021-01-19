@@ -28,7 +28,7 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
         // Symfony DI
         TagName::REQUIRED,
         // other DI
-        'inject',
+        TagName::INJECT,
     ];
 
     /**

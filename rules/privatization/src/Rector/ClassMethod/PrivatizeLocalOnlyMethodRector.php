@@ -173,7 +173,7 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        return $phpDocInfo->hasByName('inject');
+        return $phpDocInfo->hasByName(TagName::INJECT);
     }
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
