@@ -58,9 +58,8 @@ final class BetterNodeFinder
     {
         Assert::isAOf($type, Node::class);
 
-        /** @var Node|null $parent */
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent === null) {
+        if (! $parent instanceof Node) {
             return null;
         }
 
@@ -85,9 +84,8 @@ final class BetterNodeFinder
     {
         Assert::allIsAOf($types, Node::class);
 
-        /** @var Node|null $parent */
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent === null) {
+        if (! $parent instanceof Node) {
             return null;
         }
 

@@ -129,9 +129,8 @@ trait ComplexRemovalTrait
      */
     private function shouldSkipPropertyForClassMethod(Expr $expr, array $classMethodNamesToSkip): bool
     {
-        /** @var ClassMethod|null $classMethodNode */
         $classMethodNode = $expr->getAttribute(AttributeKey::METHOD_NODE);
-        if ($classMethodNode === null) {
+        if (! $classMethodNode instanceof ClassMethod) {
             return false;
         }
 

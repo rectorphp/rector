@@ -558,9 +558,8 @@ final class BetterStandardPrinter extends Standard
                 continue;
             }
 
-            /** @var SmartFileInfo|null $fileInfo */
             $fileInfo = $stmt->getAttribute(AttributeKey::FILE_INFO);
-            if ($fileInfo === null) {
+            if (! $fileInfo instanceof SmartFileInfo) {
                 continue;
             }
 

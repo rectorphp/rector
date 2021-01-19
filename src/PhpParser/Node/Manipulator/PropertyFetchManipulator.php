@@ -56,9 +56,8 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        /** @var Class_|null $classLike */
         $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             return false;
         }
 

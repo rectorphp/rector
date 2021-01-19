@@ -196,9 +196,8 @@ trait NodeTypeResolverTrait
         }
 
         if ($node instanceof ClassMethod) {
-            /** @var Class_|null $classLike */
             $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-            if ($classLike === null) {
+            if (! $classLike instanceof Class_) {
                 return false;
             }
 
