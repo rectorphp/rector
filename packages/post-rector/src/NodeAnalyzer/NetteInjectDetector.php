@@ -47,9 +47,11 @@ final class NetteInjectDetector
             }
 
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            if ($phpDocInfo->hasByName(TagName::INJECT)) {
-                return true;
+            if (! $phpDocInfo->hasByName(TagName::INJECT)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;

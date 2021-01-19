@@ -9,6 +9,7 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -42,10 +43,19 @@ final class DocBlockManipulator
      */
     private $docBlockClassRenamer;
 
-    public function __construct(DocBlockClassRenamer $docBlockClassRenamer, PhpDocInfoPrinter $phpDocInfoPrinter)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        DocBlockClassRenamer $docBlockClassRenamer,
+        PhpDocInfoPrinter $phpDocInfoPrinter,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function changeType(PhpDocInfo $phpDocInfo, Node $node, Type $oldType, Type $newType): void
@@ -55,12 +65,7 @@ final class DocBlockManipulator
 
     public function updateNodeWithPhpDocInfo(Node $node): void
     {
-        // nothing to change
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $phpDoc = $this->printPhpDocInfoToString($phpDocInfo);
 
         // make sure, that many separated comments are not removed

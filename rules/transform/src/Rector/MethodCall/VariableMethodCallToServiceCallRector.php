@@ -57,14 +57,15 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
+,
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function (\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
+
     public function run(\PhpParser\Node $node)
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
