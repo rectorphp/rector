@@ -21,14 +21,14 @@ final class ReturnTagRemover
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
     public function __construct(
         DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer,
-        PhpDocTagRemover $phpDocRemover
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->deadReturnTagValueNodeAnalyzer = $deadReturnTagValueNodeAnalyzer;
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function removeReturnTagIfUseless(FunctionLike $functionLike): void
@@ -52,6 +52,6 @@ final class ReturnTagRemover
             return;
         }
 
-        $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $attributeAwareReturnTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $attributeAwareReturnTagValueNode);
     }
 }

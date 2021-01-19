@@ -43,16 +43,16 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
     public function __construct(
         PhpDocTagNodeFactory $phpDocTagNodeFactory,
         UuidMigrationDataCollector $uuidMigrationDataCollector,
-        PhpDocTagRemover $phpDocRemover
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -271,7 +271,7 @@ CODE_SAMPLE
         $doctrineJoinColumnTagValueNode = $phpDocInfo->getByType(JoinColumnTagValueNode::class);
         if ($doctrineJoinColumnTagValueNode !== null) {
             // replace @ORM\JoinColumn with @ORM\JoinTable
-            $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $doctrineJoinColumnTagValueNode);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineJoinColumnTagValueNode);
         }
 
         $joinTableTagNode = $this->phpDocTagNodeFactory->createJoinTableTagNode($property);

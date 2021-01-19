@@ -20,14 +20,14 @@ final class ParamTagRemover
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
     public function __construct(
         DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer,
-        PhpDocTagRemover $phpDocRemover
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function removeParamTagsIfUseless(FunctionLike $functionLike): void
@@ -52,7 +52,7 @@ final class ParamTagRemover
                 continue;
             }
 
-            $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
         }
     }
 }

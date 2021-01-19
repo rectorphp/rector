@@ -50,20 +50,20 @@ final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCa
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
     public function __construct(
         ClassManipulator $classManipulator,
         MagicMethodDetector $magicMethodDetector,
         VariadicFunctionLikeDetector $variadicFunctionLikeDetector,
         UnusedParameterResolver $unusedParameterResolver,
-        PhpDocTagRemover $phpDocRemover
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->classManipulator = $classManipulator;
         $this->magicMethodDetector = $magicMethodDetector;
         $this->variadicFunctionLikeDetector = $variadicFunctionLikeDetector;
         $this->unusedParameterResolver = $unusedParameterResolver;
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -204,7 +204,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
         }
     }
 

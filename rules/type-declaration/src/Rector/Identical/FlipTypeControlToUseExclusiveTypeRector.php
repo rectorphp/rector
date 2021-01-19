@@ -32,11 +32,11 @@ final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
-    public function __construct(PhpDocTagRemover $phpDocRemover)
+    public function __construct(PhpDocTagRemover $phpDocTagRemover)
     {
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -138,7 +138,7 @@ CODE_SAMPLE
 
         /** @var VarTagValueNode $tagValueNode */
         $tagValueNode = $phpDocInfo->getVarTagValueNode();
-        $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $tagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $tagValueNode);
 
         return new BooleanNot(new Instanceof_($expr, new FullyQualified($type->getClassName())));
     }

@@ -28,11 +28,11 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
-    public function __construct(PhpDocTagRemover $phpDocRemover)
+    public function __construct(PhpDocTagRemover $phpDocTagRemover)
     {
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -107,7 +107,7 @@ CODE_SAMPLE
         /** @var SensioRouteTagValueNode $sensioRouteTagValueNode */
         $sensioRouteTagValueNode = $phpDocInfo->getByType(SensioRouteTagValueNode::class);
 
-        $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $sensioRouteTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioRouteTagValueNode);
 
         // unset service, that is deprecated
         $items = $sensioRouteTagValueNode->getItems();

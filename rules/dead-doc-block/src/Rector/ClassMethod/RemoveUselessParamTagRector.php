@@ -25,14 +25,14 @@ final class RemoveUselessParamTagRector extends AbstractRector
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
     public function __construct(
         DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer,
-        PhpDocTagRemover $phpDocRemover
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -90,7 +90,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
         }
 
         if ($phpDocInfo->hasChanged()) {

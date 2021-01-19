@@ -25,11 +25,11 @@ final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
-    public function __construct(PhpDocTagRemover $phpDocRemover)
+    public function __construct(PhpDocTagRemover $phpDocTagRemover)
     {
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -110,7 +110,7 @@ CODE_SAMPLE
 
         $symfonyRouteTagValueNode->changeMethods($methods);
 
-        $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $sensioMethodTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioMethodTagValueNode);
 
         return $node;
     }

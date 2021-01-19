@@ -25,14 +25,14 @@ final class RemoveUselessReturnTagRector extends AbstractRector
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
     public function __construct(
         DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer,
-        PhpDocTagRemover $phpDocRemover
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->deadReturnTagValueNodeAnalyzer = $deadReturnTagValueNodeAnalyzer;
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -94,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $attributeAwareReturnTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $attributeAwareReturnTagValueNode);
 
         return $node;
     }

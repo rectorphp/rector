@@ -46,18 +46,18 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
     public function __construct(
         PromotedPropertyResolver $promotedPropertyResolver,
         VariableRenamer $variableRenamer,
         VarTagRemover $varTagRemover,
-        PhpDocTagRemover $phpDocRemover
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->variableRenamer = $variableRenamer;
         $this->varTagRemover = $varTagRemover;
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -175,6 +175,6 @@ CODE_SAMPLE
             return;
         }
 
-        $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $attributeAwareParamTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $attributeAwareParamTagValueNode);
     }
 }
