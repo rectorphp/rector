@@ -43,6 +43,11 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
      */
     private $smartFileSystem;
 
+    /**
+     * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer
+     */
+    private $docBlockTagReplacer;
+
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
@@ -50,6 +55,9 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
         $this->phpDocInfoPrinter = $this->getService(PhpDocInfoPrinter::class);
         $this->docBlockManipulator = $this->getService(DocBlockManipulator::class);
         $this->smartFileSystem = $this->getService(SmartFileSystem::class);
+        $this->docBlockTagReplacer = $this->getService(
+            \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer::class
+        );
 
         $this->phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/Source/doc.txt');
     }
@@ -75,8 +83,7 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
     public function testReplaceTagByAnother(): void
     {
         $phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/Source/test-tag.txt');
-
-        $this->docBlockManipulator->replaceTagByAnother($phpDocInfo->getPhpDocNode(), 'test', 'flow');
+        $this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, 'test', 'flow');
 
         $printedPhpDocInfo = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
         $this->assertStringEqualsFile(__DIR__ . '/Source/expected-replaced-tag.txt', $printedPhpDocInfo);

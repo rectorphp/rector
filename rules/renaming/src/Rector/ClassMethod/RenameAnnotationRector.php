@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
 use Rector\Renaming\ValueObject\RenameAnnotation;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,7 +30,17 @@ final class RenameAnnotationRector extends AbstractPHPUnitRector implements Conf
     /**
      * @var RenameAnnotation[]
      */
-    private $renamedAnnotationInTypes = [];
+    private $renamedAnnotations = [];
+
+    /**
+     * @var DocBlockTagReplacer
+     */
+    private $docBlockTagReplacer;
+
+    public function __construct(DocBlockTagReplacer $docBlockTagReplacer)
+    {
+        $this->docBlockTagReplacer = $docBlockTagReplacer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -88,7 +99,7 @@ CODE_SAMPLE
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        foreach ($this->renamedAnnotationInTypes as $renamedAnnotationInType) {
+        foreach ($this->renamedAnnotations as $renamedAnnotationInType) {
             if (! $this->isObjectType($classLike, $renamedAnnotationInType->getType())) {
                 continue;
             }
@@ -97,7 +108,11 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->docBlockManipulator->replaceAnnotationInNode($node, $renamedAnnotationInType);
+            $this->docBlockTagReplacer->replaceTagByAnother(
+                $phpDocInfo,
+                $renamedAnnotationInType->getNewAnnotation(),
+                $renamedAnnotationInType->getOldAnnotation()
+            );
         }
 
         return $node;
@@ -107,6 +122,6 @@ CODE_SAMPLE
     {
         $renamedAnnotationsInTypes = $configuration[self::RENAMED_ANNOTATIONS_IN_TYPES] ?? [];
         Assert::allIsInstanceOf($renamedAnnotationsInTypes, RenameAnnotation::class);
-        $this->renamedAnnotationInTypes = $renamedAnnotationsInTypes;
+        $this->renamedAnnotations = $renamedAnnotationsInTypes;
     }
 }

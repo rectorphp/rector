@@ -283,6 +283,11 @@ final class PhpDocInfo
                 continue;
             }
 
+            if ($type === PhpDocTagNode::class) {
+                $foundTagsValueNodes[] = $phpDocChildNode;
+                continue;
+            }
+
             if (! is_a($phpDocChildNode->value, $type, true)) {
                 continue;
             }
@@ -449,7 +454,10 @@ final class PhpDocInfo
     private function ensureTypeIsTagValueNode(string $type, string $location): void
     {
         if (StaticInstanceOf::isOneOf($type, [
-            PhpDocTagValueNode::class, TypeAwareTagValueNodeInterface::class, PhpAttributableTagNodeInterface::class,
+            PhpDocTagValueNode::class,
+            PhpDocTagNode::class,
+            TypeAwareTagValueNodeInterface::class,
+            PhpAttributableTagNodeInterface::class,
         ])) {
             return;
         }

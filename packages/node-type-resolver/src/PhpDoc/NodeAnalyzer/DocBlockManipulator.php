@@ -7,15 +7,11 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Renaming\ValueObject\RenameAnnotation;
 
 final class DocBlockManipulator
 {
@@ -65,33 +61,6 @@ final class DocBlockManipulator
     public function changeType(PhpDocInfo $phpDocInfo, Node $node, Type $oldType, Type $newType): void
     {
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
-    }
-
-    public function replaceAnnotationInNode(Node $node, RenameAnnotation $renameAnnotation): void
-    {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-
-        $this->replaceTagByAnother(
-            $phpDocInfo->getPhpDocNode(),
-            $renameAnnotation->getOldAnnotation(),
-            $renameAnnotation->getNewAnnotation()
-        );
-    }
-
-    public function replaceTagByAnother(PhpDocNode $phpDocNode, string $oldTag, string $newTag): void
-    {
-        $oldTag = StaticAnnotationNaming::normalizeName($oldTag);
-        $newTag = StaticAnnotationNaming::normalizeName($newTag);
-
-        foreach ($phpDocNode->children as $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if ($phpDocChildNode->name === $oldTag) {
-                $phpDocChildNode->name = $newTag;
-            }
-        }
     }
 
     public function updateNodeWithPhpDocInfo(Node $node): void
