@@ -13,13 +13,11 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\InversedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class DoctrineEntityManipulator
@@ -91,39 +89,29 @@ final class DoctrineEntityManipulator
             return false;
         }
 
-        $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return false;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         // is parent entity
-        if ($phpDocInfo->hasByType(InheritanceTypeTagValueNode::class)) {
-            return false;
-        }
-
-        return $phpDocInfo->hasByType(EntityTagValueNode::class);
+        return $phpDocInfo->hasByTypes([InheritanceTypeTagValueNode::class, EntityTagValueNode::class]);
     }
 
     public function removeMappedByOrInversedByFromProperty(Property $property): void
     {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
 
-        $shouldUpdate = false;
         if ($relationTagValueNode instanceof MappedByNodeInterface && $relationTagValueNode->getMappedBy()) {
-            $shouldUpdate = true;
             $relationTagValueNode->removeMappedBy();
         }
 
-        if ($relationTagValueNode instanceof InversedByNodeInterface && $relationTagValueNode->getInversedBy()) {
-            $shouldUpdate = true;
-            $relationTagValueNode->removeInversedBy();
-        }
-
-        if (! $shouldUpdate) {
+        if (! $relationTagValueNode instanceof InversedByNodeInterface) {
             return;
         }
+
+        if (! $relationTagValueNode->getInversedBy()) {
+            return;
+        }
+
+        $relationTagValueNode->removeInversedBy();
     }
 
     public function isMethodCallOnDoctrineEntity(Node $node, string $methodName): bool

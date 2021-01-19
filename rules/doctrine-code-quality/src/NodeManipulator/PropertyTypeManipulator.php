@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\NodeManipulator;
 
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\NotImplementedYetException;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
@@ -18,9 +17,15 @@ final class PropertyTypeManipulator
      */
     private $docBlockClassRenamer;
 
-    public function __construct(DocBlockClassRenamer $docBlockClassRenamer)
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(DocBlockClassRenamer $docBlockClassRenamer, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->docBlockClassRenamer = $docBlockClassRenamer;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function changePropertyType(Property $property, string $oldClass, string $newClass): void
@@ -30,13 +35,10 @@ final class PropertyTypeManipulator
             throw new NotImplementedYetException();
         }
 
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $this->docBlockClassRenamer->renamePhpDocType(
-            $phpDocInfo->getPhpDocNode(),
+            $phpDocInfo,
             new FullyQualifiedObjectType($oldClass),
             new FullyQualifiedObjectType($newClass),
             $property

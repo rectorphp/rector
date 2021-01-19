@@ -19,8 +19,8 @@ final class VarTagValueNodeRenamer
             return;
         }
 
-        $varTagValueNode = $phpDocInfo->getByType(VarTagValueNode::class);
-        if ($varTagValueNode === null) {
+        $varTagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (! $varTagValueNode instanceof VarTagValueNode) {
             return;
         }
 

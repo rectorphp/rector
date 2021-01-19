@@ -49,15 +49,15 @@ final class CommentsMerger
             return;
         }
 
-        $arrayPhpDocInfo = $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $arrayComments = $parent->getComments();
+        $phpDocInfo = $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $comments = $parent->getComments();
 
-        if ($arrayPhpDocInfo === null && $arrayComments === []) {
+        if ($phpDocInfo === null && $comments === []) {
             return;
         }
 
-        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $arrayPhpDocInfo);
-        $newNode->setAttribute(AttributeKey::COMMENTS, $arrayComments);
+        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+        $newNode->setAttribute(AttributeKey::COMMENTS, $comments);
     }
 
     public function keepChildren(Node $newNode, Node $oldNode): void

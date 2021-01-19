@@ -50,7 +50,7 @@ final class DocBlockManipulator
 
     public function changeType(PhpDocInfo $phpDocInfo, Node $node, Type $oldType, Type $newType): void
     {
-        $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
+        $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldType, $newType, $node);
     }
 
     public function updateNodeWithPhpDocInfo(Node $node): void

@@ -234,11 +234,10 @@ CODE_SAMPLE
 
     private function mirrorPhpDocInfoToUuid(Property $property): void
     {
-        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $newPropertyPhpDocInfo = clone $propertyPhpDocInfo;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $newPropertyPhpDocInfo = clone $phpDocInfo;
 
-        /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
-        $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
+        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
 
         if ($doctrineRelationTagValueNode instanceof ToManyTagNodeInterface) {
             $this->refactorToManyPropertyPhpDocInfo($newPropertyPhpDocInfo, $property);
@@ -252,11 +251,15 @@ CODE_SAMPLE
         string $oldPropertyName,
         string $uuidPropertyName
     ): void {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+
+        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+        if (! $doctrineRelationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
+            return;
+        }
+
         /** @var string $className */
         $className = $property->getAttribute(AttributeKey::CLASS_NAME);
-
-        /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
-        $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
 
         $this->uuidMigrationDataCollector->addClassToManyRelationProperty(
             $className,

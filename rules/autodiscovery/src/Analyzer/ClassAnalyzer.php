@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Autodiscovery\Analyzer;
 
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
@@ -113,12 +112,8 @@ final class ClassAnalyzer
 
     private function hasAllPropertiesWithSerialize(Class_ $class): bool
     {
-        foreach ($class->stmts as $stmt) {
-            if (! $stmt instanceof Property) {
-                continue;
-            }
-
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($stmt);
+        foreach ($class->getProperties() as $property) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             if ($phpDocInfo->hasByType(SerializerTypeTagValueNode::class)) {
                 continue;
             }

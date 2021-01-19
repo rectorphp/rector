@@ -13,7 +13,7 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -29,10 +29,19 @@ final class VarTagRemover
      */
     private $staticTypeMapper;
 
-    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, StaticTypeMapper $staticTypeMapper)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        StaticTypeMapper $staticTypeMapper,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -45,14 +54,10 @@ final class VarTagRemover
             return;
         }
 
-        $propertyPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        // nothing to remove
-        if ($propertyPhpDocInfo === null) {
-            return;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        $varTagValueNode = $propertyPhpDocInfo->getByType(VarTagValueNode::class);
-        if ($varTagValueNode === null) {
+        $varTagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (! $varTagValueNode instanceof VarTagValueNode) {
             return;
         }
 
@@ -71,7 +76,7 @@ final class VarTagRemover
             return;
         }
 
-        $propertyPhpDocInfo->removeByType(VarTagValueNode::class);
+        $phpDocInfo->removeByType(VarTagValueNode::class);
     }
 
     /**

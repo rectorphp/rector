@@ -8,7 +8,6 @@ use PhpParser\Node\FunctionLike;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\DeadDocBlock\DeadParamTagValueNodeAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ParamTagRemover
 {
@@ -30,13 +29,8 @@ final class ParamTagRemover
         $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
-    public function removeParamTagsIfUseless(FunctionLike $functionLike): void
+    public function removeParamTagsIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike): void
     {
-        $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return;
-        }
-
         foreach ($phpDocInfo->getParamTagValueNodes() as $paramTagValueNode) {
             $paramName = $paramTagValueNode->parameterName;
 

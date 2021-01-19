@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Rector\PostRector\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\ValueObject\TagName;
 use ReflectionClass;
 use ReflectionMethod;
@@ -20,9 +19,15 @@ final class NetteInjectDetector
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function isNetteInjectPreferred(Class_ $class): bool
@@ -41,17 +46,10 @@ final class NetteInjectDetector
                 continue;
             }
 
-            $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if (! $phpDocInfo instanceof PhpDocInfo) {
-                continue;
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+            if ($phpDocInfo->hasByName(TagName::INJECT)) {
+                return true;
             }
-            $injectPhpDocInfoTagsName = $phpDocInfo->getTagsByName(TagName::INJECT);
-
-            if ($injectPhpDocInfoTagsName === []) {
-                continue;
-            }
-
-            return true;
         }
 
         return false;
