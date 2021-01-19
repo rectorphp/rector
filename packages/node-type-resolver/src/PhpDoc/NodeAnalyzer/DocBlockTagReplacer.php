@@ -5,22 +5,36 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
 final class DocBlockTagReplacer
 {
+    /**
+     * @var AnnotationNaming
+     */
+    private $annotationNaming;
+
+    public function __construct(AnnotationNaming $annotationNaming)
+    {
+        $this->annotationNaming = $annotationNaming;
+    }
+
     public function replaceTagByAnother(PhpDocInfo $phpDocInfo, string $oldTag, string $newTag): void
     {
-        $oldTag = StaticAnnotationNaming::normalizeName($oldTag);
-        $newTag = StaticAnnotationNaming::normalizeName($newTag);
+        $oldTag = $this->annotationNaming->normalizeName($oldTag);
+        $newTag = $this->annotationNaming->normalizeName($newTag);
 
-        foreach ($phpDocInfo->findAllByType(PhpDocTagNode::class) as $phpDocChildNode) {
-            if ($phpDocChildNode->name !== $oldTag) {
+        /** @var PhpDocTagNode[] $phpDocTagNodes */
+        $phpDocTagNodes = $phpDocInfo->findAllByType(PhpDocTagNode::class);
+
+        foreach ($phpDocTagNodes as $phpDocTagNode) {
+            if ($phpDocTagNode->name !== $oldTag) {
                 continue;
             }
 
-            $phpDocChildNode->name = $newTag;
+            $phpDocTagNode->name = $newTag;
             $phpDocInfo->markAsChanged();
         }
     }

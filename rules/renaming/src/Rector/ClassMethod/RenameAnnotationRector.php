@@ -95,23 +95,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Class_ $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return null;
+        }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
         foreach ($this->renamedAnnotations as $renamedAnnotationInType) {
             if (! $this->isObjectType($classLike, $renamedAnnotationInType->getType())) {
                 continue;
             }
 
-            if (! $phpDocInfo->hasByName($renamedAnnotationInType->getOldAnnotation())) {
-                continue;
-            }
-
             $this->docBlockTagReplacer->replaceTagByAnother(
                 $phpDocInfo,
-                $renamedAnnotationInType->getNewAnnotation(),
-                $renamedAnnotationInType->getOldAnnotation()
+                $renamedAnnotationInType->getOldAnnotation(),
+                $renamedAnnotationInType->getNewAnnotation()
             );
         }
 
