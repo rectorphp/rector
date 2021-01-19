@@ -15,17 +15,16 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticInstanceOf;
@@ -75,16 +74,6 @@ final class PhpDocInfo
     private $node;
 
     /**
-     * @var PhpDocRemover
-     */
-    private $phpDocRemover;
-
-    /**
-     * @var AttributeAwareNodeFactory
-     */
-    private $attributeAwareNodeFactory;
-
-    /**
      * @var bool
      */
     private $hasChanged = false;
@@ -95,6 +84,16 @@ final class PhpDocInfo
     private $annotationNaming;
 
     /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    /**
+     * @var RectorChangeCollector
+     */
+    private $rectorChangeCollector;
+
+    /**
      * @param mixed[] $tokens
      */
     public function __construct(
@@ -103,9 +102,9 @@ final class PhpDocInfo
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
         Node $node,
-        PhpDocRemover $phpDocRemover,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory,
-        AnnotationNaming $annotationNaming
+        AnnotationNaming $annotationNaming,
+        CurrentNodeProvider $currentNodeProvider,
+        RectorChangeCollector $rectorChangeCollector
     ) {
         $this->phpDocNode = $attributeAwarePhpDocNode;
         $this->tokens = $tokens;
@@ -113,9 +112,9 @@ final class PhpDocInfo
         $this->originalContent = $originalContent;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
-        $this->phpDocRemover = $phpDocRemover;
-        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->annotationNaming = $annotationNaming;
+        $this->currentNodeProvider = $currentNodeProvider;
+        $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
     public function getOriginalContent(): string
@@ -215,11 +214,6 @@ final class PhpDocInfo
     public function getReturnType(): Type
     {
         return $this->getTypeOrMixed($this->getReturnTagValue());
-    }
-
-    public function removeTagValueNodeFromNode(PhpDocTagValueNode $phpDocTagValueNode): void
-    {
-        $this->phpDocRemover->removeTagValueFromNode($this, $phpDocTagValueNode);
     }
 
     /**
@@ -322,11 +316,6 @@ final class PhpDocInfo
         }
     }
 
-    public function removeByName(string $name): void
-    {
-        $this->phpDocRemover->removeByName($this, $name);
-    }
-
     /**
      * @return array<string, Type>
      */
@@ -411,19 +400,9 @@ final class PhpDocInfo
         return $returnTagValueNodes[0] ?? null;
     }
 
-    public function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
+    public function getParamTagValueByName(string $name): ?ParamTagValueNode
     {
-        $paramTagValueNode = $this->phpDocNode->getParam($name);
-        if ($paramTagValueNode === null) {
-            return null;
-        }
-
-        $attributeAwareParamTagValueNode = $this->attributeAwareNodeFactory->createFromNode($paramTagValueNode, '');
-        if (! $attributeAwareParamTagValueNode instanceof AttributeAwareParamTagValueNode) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $attributeAwareParamTagValueNode;
+        return $this->phpDocNode->getParam($name);
     }
 
     /**
@@ -442,6 +421,11 @@ final class PhpDocInfo
     public function markAsChanged(): void
     {
         $this->hasChanged = true;
+
+        $node = $this->currentNodeProvider->getNode();
+        if ($node !== null) {
+            $this->rectorChangeCollector->notifyNodeFileInfo($node);
+        }
     }
 
     public function hasChanged(): bool

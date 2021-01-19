@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -46,16 +47,23 @@ final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCa
      */
     private $unusedParameterResolver;
 
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
     public function __construct(
         ClassManipulator $classManipulator,
         MagicMethodDetector $magicMethodDetector,
         VariadicFunctionLikeDetector $variadicFunctionLikeDetector,
-        UnusedParameterResolver $unusedParameterResolver
+        UnusedParameterResolver $unusedParameterResolver,
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->classManipulator = $classManipulator;
         $this->magicMethodDetector = $magicMethodDetector;
         $this->variadicFunctionLikeDetector = $variadicFunctionLikeDetector;
         $this->unusedParameterResolver = $unusedParameterResolver;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -196,7 +204,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $phpDocInfo->removeTagValueNodeFromNode($paramTagValueNode);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
         }
     }
 

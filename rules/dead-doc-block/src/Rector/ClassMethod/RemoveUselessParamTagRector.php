@@ -6,6 +6,7 @@ namespace Rector\DeadDocBlock\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadDocBlock\DeadParamTagValueNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,9 +22,17 @@ final class RemoveUselessParamTagRector extends AbstractRector
      */
     private $deadParamTagValueNodeAnalyzer;
 
-    public function __construct(DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer)
-    {
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(
+        DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer,
+        PhpDocTagRemover $phpDocTagRemover
+    ) {
         $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -76,20 +85,18 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        $hasChanged = false;
         foreach ($phpDocInfo->getParamTagValueNodes() as $paramTagValueNode) {
             if (! $this->deadParamTagValueNodeAnalyzer->isDead($paramTagValueNode, $node)) {
                 continue;
             }
 
-            $phpDocInfo->removeTagValueNodeFromNode($paramTagValueNode);
-            $hasChanged = true;
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
         }
 
-        if (! $hasChanged) {
-            return null;
+        if ($phpDocInfo->hasChanged()) {
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 }

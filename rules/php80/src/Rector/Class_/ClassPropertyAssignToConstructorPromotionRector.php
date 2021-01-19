@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadDocBlock\TagRemover\VarTagRemover;
@@ -42,14 +43,21 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      */
     private $varTagRemover;
 
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
     public function __construct(
         PromotedPropertyResolver $promotedPropertyResolver,
         VariableRenamer $variableRenamer,
-        VarTagRemover $varTagRemover
+        VarTagRemover $varTagRemover,
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->variableRenamer = $variableRenamer;
         $this->varTagRemover = $varTagRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -167,6 +175,6 @@ CODE_SAMPLE
             return;
         }
 
-        $phpDocInfo->removeTagValueNodeFromNode($attributeAwareParamTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $attributeAwareParamTagValueNode);
     }
 }
