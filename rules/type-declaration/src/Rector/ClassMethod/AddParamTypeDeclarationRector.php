@@ -131,7 +131,7 @@ CODE_SAMPLE
         }
 
         $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        if (! $classLike instanceof ClassLike) {
             return true;
         }
 
