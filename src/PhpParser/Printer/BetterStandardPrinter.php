@@ -87,7 +87,7 @@ final class BetterStandardPrinter extends Standard
     private $annotationFormatRestorer;
 
     /**
-     * @var Whitespace\IndentCharacterDetector
+     * @var IndentCharacterDetector
      */
     private $indentCharacterDetector;
 
