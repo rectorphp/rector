@@ -147,6 +147,8 @@ CODE_SAMPLE
     private function decorateParamWithPropertyPhpDocInfo(Property $property, Param $param): void
     {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $propertyPhpDocInfo->markAsChanged();
+
         $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
 
         // make sure the docblock is useful

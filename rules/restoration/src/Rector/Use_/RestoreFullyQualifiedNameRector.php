@@ -153,6 +153,7 @@ CODE_SAMPLE
         if (! $attributeAwareReturnTagValueNode instanceof AttributeAwareReturnTagValueNode) {
             return;
         }
+
         if (! $phpDocInfo->getReturnType() instanceof MixedType) {
             return;
         }
@@ -166,6 +167,7 @@ CODE_SAMPLE
             }
 
             $attributeAwareReturnTagValueNode->type = $fullyQualifiedTypeNode;
+            $phpDocInfo->markAsChanged();
         }
     }
 }

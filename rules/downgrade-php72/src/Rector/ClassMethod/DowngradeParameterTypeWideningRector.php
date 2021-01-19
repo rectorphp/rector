@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
@@ -30,18 +29,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeParameterTypeWideningRector extends AbstractRector
 {
     /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
-    /**
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
 
-    public function __construct(RectorChangeCollector $rectorChangeCollector, PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
     {
-        $this->rectorChangeCollector = $rectorChangeCollector;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 

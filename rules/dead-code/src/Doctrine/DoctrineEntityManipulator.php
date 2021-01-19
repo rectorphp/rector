@@ -13,6 +13,7 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\InversedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
@@ -94,9 +95,8 @@ final class DoctrineEntityManipulator
         return $phpDocInfo->hasByTypes([InheritanceTypeTagValueNode::class, EntityTagValueNode::class]);
     }
 
-    public function removeMappedByOrInversedByFromProperty(Property $property): void
+    public function removeMappedByOrInversedByFromProperty(PhpDocInfo $phpDocInfo): void
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
 
         if ($relationTagValueNode instanceof MappedByNodeInterface && $relationTagValueNode->getMappedBy()) {
@@ -111,6 +111,7 @@ final class DoctrineEntityManipulator
             return;
         }
 
+        $phpDocInfo->markAsChanged();
         $relationTagValueNode->removeInversedBy();
     }
 

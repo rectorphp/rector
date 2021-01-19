@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
@@ -187,7 +188,7 @@ CODE_SAMPLE
                 $this->removeNode($this->collectionByPropertyName[$propertyName]);
             }
 
-            $this->removeInversedByOrMappedByOnRelatedProperty($property);
+            $this->removeInversedByOrMappedByOnRelatedProperty($phpDocInfo, $property);
         }
 
         return $class;
@@ -228,14 +229,15 @@ CODE_SAMPLE
         return $usedPropertyNames;
     }
 
-    private function removeInversedByOrMappedByOnRelatedProperty(Property $property): void
+    private function removeInversedByOrMappedByOnRelatedProperty(PhpDocInfo $phpDocInfo, Property $property): void
     {
-        $otherRelationProperty = $this->getOtherRelationProperty($property);
+        $otherRelationProperty = $this->getOtherRelationProperty($phpDocInfo, $property);
         if (! $otherRelationProperty instanceof Property) {
             return;
         }
 
-        $this->doctrineEntityManipulator->removeMappedByOrInversedByFromProperty($otherRelationProperty);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($otherRelationProperty);
+        $this->doctrineEntityManipulator->removeMappedByOrInversedByFromProperty($phpDocInfo);
     }
 
     private function isPropertyFetchAssignOfArrayCollection(PropertyFetch $propertyFetch): bool
@@ -255,9 +257,8 @@ CODE_SAMPLE
         return $this->isName($new->class, ArrayCollection::class);
     }
 
-    private function getOtherRelationProperty(Property $property): ?Property
+    private function getOtherRelationProperty(PhpDocInfo $phpDocInfo, Property $property): ?Property
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
         if (! $doctrineRelationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
             return null;

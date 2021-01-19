@@ -43,7 +43,7 @@ final class PhpDocTypeRenamer
 
         $this->phpDocNodeTraverser->traverseWithCallable($attributeAwarePhpDocNode, '', function (
             PhpDocParserNode $node
-        ) use ($pseudoNamespaceToNamespace, $phpParserNode): PhpDocParserNode {
+        ) use ($pseudoNamespaceToNamespace, $phpParserNode, $phpDocInfo): PhpDocParserNode {
             if (! $node instanceof TypeNode) {
                 return $node;
             }
@@ -61,6 +61,8 @@ final class PhpDocTypeRenamer
             // change underscore to \\
             $slashedName = '\\' . Strings::replace($staticType->getClassName(), '#_#', '\\');
             $node->name = $slashedName;
+
+            $phpDocInfo->markAsChanged();
 
             return $node;
         });

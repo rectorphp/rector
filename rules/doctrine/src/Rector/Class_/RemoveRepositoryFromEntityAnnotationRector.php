@@ -69,6 +69,7 @@ CODE_SAMPLE
         }
 
         $entityTagValueNode->removeRepositoryClass();
+        $phpDocInfo->markAsChanged();
 
         return $node;
     }

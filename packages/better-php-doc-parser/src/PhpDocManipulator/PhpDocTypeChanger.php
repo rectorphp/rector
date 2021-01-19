@@ -13,7 +13,6 @@ use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
@@ -31,11 +30,6 @@ final class PhpDocTypeChanger
     private $staticTypeMapper;
 
     /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
      * @var ParamPhpDocNodeFactory
      */
     private $paramPhpDocNodeFactory;
@@ -43,12 +37,10 @@ final class PhpDocTypeChanger
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         TypeComparator $typeComparator,
-        CurrentNodeProvider $currentNodeProvider,
         ParamPhpDocNodeFactory $paramPhpDocNodeFactory
     ) {
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->currentNodeProvider = $currentNodeProvider;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
     }
 

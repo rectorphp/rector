@@ -14,7 +14,7 @@ final class MissingPHPStanTypeMappersResolver
     /**
      * @var SupportedTypeMappersDataProvider
      */
-    private $supportedTypeMappersResolver;
+    private $supportedTypeMappersDataProvider;
 
     /**
      * @var PHPStanTypeClassFinder
@@ -23,9 +23,9 @@ final class MissingPHPStanTypeMappersResolver
 
     public function __construct(
         PHPStanTypeClassFinder $phpStanTypeClassFinder,
-        SupportedTypeMappersDataProvider $supportedTypeMappersResolver
+        SupportedTypeMappersDataProvider $supportedTypeMappersDataProvider
     ) {
-        $this->supportedTypeMappersResolver = $supportedTypeMappersResolver;
+        $this->supportedTypeMappersDataProvider = $supportedTypeMappersDataProvider;
         $this->phpStanTypeClassFinder = $phpStanTypeClassFinder;
     }
 
@@ -35,7 +35,7 @@ final class MissingPHPStanTypeMappersResolver
     public function resolve(): array
     {
         $typeClasses = $this->phpStanTypeClassFinder->find();
-        $supportedTypeClasses = $this->supportedTypeMappersResolver->provide();
+        $supportedTypeClasses = $this->supportedTypeMappersDataProvider->provide();
 
         $unsupportedTypeClasses = [];
         foreach ($typeClasses as $phpStanTypeClass) {

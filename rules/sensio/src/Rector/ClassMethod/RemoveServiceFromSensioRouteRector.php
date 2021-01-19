@@ -75,6 +75,7 @@ CODE_SAMPLE
         }
 
         $sensioRouteTagValueNode->removeService();
+        $phpDocInfo->markAsChanged();
 
         return $node;
     }
