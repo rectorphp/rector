@@ -33,16 +33,16 @@ final class AnnotationToAttributeConverter
     /**
      * @var PhpDocTagRemover
      */
-    private $phpDocRemover;
+    private $phpDocTagRemover;
 
     public function __construct(
         PhpAttributteGroupFactory $phpAttributteGroupFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        PhpDocTagRemover $phpDocRemover
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->phpAttributteGroupFactory = $phpAttributteGroupFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->phpDocRemover = $phpDocRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     /**
@@ -69,7 +69,7 @@ final class AnnotationToAttributeConverter
 
         // 2. remove tags
         foreach ($phpAttributableTagNodes as $phpAttributableTagNode) {
-            $this->phpDocRemover->removeTagValueFromNode($phpDocInfo, $phpAttributableTagNode);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $phpAttributableTagNode);
         }
 
         // 3. convert annotations to attributes

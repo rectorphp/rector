@@ -15,7 +15,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
@@ -401,7 +400,7 @@ final class PhpDocInfo
         return $returnTagValueNodes[0] ?? null;
     }
 
-    public function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
+    public function getParamTagValueByName(string $name): ?ParamTagValueNode
     {
         return $this->phpDocNode->getParam($name);
     }
