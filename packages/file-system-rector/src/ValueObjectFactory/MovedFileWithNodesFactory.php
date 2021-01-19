@@ -92,7 +92,6 @@ final class MovedFileWithNodesFactory
         );
 
         // 3. update fully qualifed name of the class like - will be used further
-        // 3. update fully qualifed name of the class like - will be used further
         $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, ClassLike::class);
         if (! $classLike instanceof ClassLike) {
             return null;
