@@ -13,7 +13,6 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\ValueObject\RenameAnnotation;
@@ -48,19 +47,10 @@ final class DocBlockManipulator
      */
     private $docBlockClassRenamer;
 
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(
-        DocBlockClassRenamer $docBlockClassRenamer,
-        PhpDocInfoPrinter $phpDocInfoPrinter,
-        PhpDocInfoFactory $phpDocInfoFactory
-    ) {
+    public function __construct(DocBlockClassRenamer $docBlockClassRenamer, PhpDocInfoPrinter $phpDocInfoPrinter)
+    {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function changeType(PhpDocInfo $phpDocInfo, Node $node, Type $oldType, Type $newType): void
