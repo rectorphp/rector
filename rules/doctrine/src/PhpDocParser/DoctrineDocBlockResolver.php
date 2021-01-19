@@ -108,7 +108,6 @@ final class DoctrineDocBlockResolver
 
     public function isInDoctrineEntityClass(Node $node): bool
     {
-        /** @var ClassLike|null $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
             return false;
