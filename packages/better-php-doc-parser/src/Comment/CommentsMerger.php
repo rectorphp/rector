@@ -45,7 +45,7 @@ final class CommentsMerger
     public function keepParent(Node $newNode, Node $oldNode): void
     {
         $parent = $oldNode->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent === null) {
+        if (! $parent instanceof Node) {
             return;
         }
 

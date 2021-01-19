@@ -9,6 +9,7 @@ use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
@@ -52,13 +53,19 @@ final class PhpDocInfoFactory
      */
     private $phpDocRemover;
 
+    /**
+     * @var AnnotationNaming
+     */
+    private $annotationNaming;
+
     public function __construct(
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         CurrentNodeProvider $currentNodeProvider,
         Lexer $lexer,
         BetterPhpDocParser $betterPhpDocParser,
         PhpDocRemover $phpDocRemover,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        AnnotationNaming $annotationNaming
     ) {
         $this->betterPhpDocParser = $betterPhpDocParser;
         $this->lexer = $lexer;
@@ -66,6 +73,7 @@ final class PhpDocInfoFactory
         $this->staticTypeMapper = $staticTypeMapper;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->phpDocRemover = $phpDocRemover;
+        $this->annotationNaming = $annotationNaming;
     }
 
     public function createFromNodeOrEmpty(Node $node): PhpDocInfo
@@ -172,7 +180,8 @@ final class PhpDocInfoFactory
             $this->staticTypeMapper,
             $node,
             $this->phpDocRemover,
-            $this->attributeAwareNodeFactory
+            $this->attributeAwareNodeFactory,
+            $this->annotationNaming
         );
 
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
