@@ -169,7 +169,8 @@ CODE_SAMPLE
     private function removeClassPrivatePropertiesByNames(Class_ $class, array $unusedPropertyNames): Class_
     {
         foreach ($class->getProperties() as $property) {
-            if ($this->hasPhpDocTagValueNode($property, IdTagValueNode::class)) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+            if ($phpDocInfo->hasByType(IdTagValueNode::class)) {
                 continue;
             }
 

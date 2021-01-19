@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -43,10 +43,19 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
      */
     private $traitNodeScopeCollector;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, TraitNodeScopeCollector $traitNodeScopeCollector)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        TraitNodeScopeCollector $traitNodeScopeCollector,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -58,32 +67,28 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
     }
 
     /**
-     * @param Variable $variableNode
+     * @param Variable $node
      */
-    public function resolve(Node $variableNode): Type
+    public function resolve(Node $node): Type
     {
-        $parentNode = $variableNode->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Param) {
-            return $this->nodeTypeResolver->resolve($parentNode);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Param) {
+            return $this->nodeTypeResolver->resolve($parent);
         }
 
-        $variableName = $this->nodeNameResolver->getName($variableNode);
+        $variableName = $this->nodeNameResolver->getName($node);
         if ($variableName === null) {
             return new MixedType();
         }
 
-        $scopeType = $this->resolveTypesFromScope($variableNode, $variableName);
+        $scopeType = $this->resolveTypesFromScope($node, $variableName);
         if (! $scopeType instanceof MixedType) {
             return $scopeType;
         }
 
         // get from annotation
-        $phpDocInfo = $variableNode->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            $phpDocInfo->getVarType();
-        }
-
-        return new MixedType();
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        return $phpDocInfo->getVarType();
     }
 
     /**

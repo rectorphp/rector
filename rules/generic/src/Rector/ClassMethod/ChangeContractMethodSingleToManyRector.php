@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -137,7 +136,6 @@ CODE_SAMPLE
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($oldReturnType);
         $arrayType = new ArrayType(new MixedType(), $staticType);
 
-        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $arrayType);
     }

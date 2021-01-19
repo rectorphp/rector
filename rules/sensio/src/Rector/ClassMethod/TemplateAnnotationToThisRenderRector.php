@@ -136,9 +136,10 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var SensioTemplateTagValueNode|null $sensioTemplateTagValueNode */
-        $sensioTemplateTagValueNode = $this->getPhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
-        if ($sensioTemplateTagValueNode === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+
+        $sensioTemplateTagValueNode = $phpDocInfo->getByType(SensioTemplateTagValueNode::class);
+        if (! $sensioTemplateTagValueNode instanceof SensioTemplateTagValueNode) {
             return null;
         }
 
@@ -150,7 +151,8 @@ CODE_SAMPLE
     private function classHasTemplateAnnotations(Class_ $class): bool
     {
         foreach ($class->getMethods() as $classMethod) {
-            if ($this->hasPhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class)) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            if ($phpDocInfo->hasByType(SensioTemplateTagValueNode::class)) {
                 return true;
             }
         }

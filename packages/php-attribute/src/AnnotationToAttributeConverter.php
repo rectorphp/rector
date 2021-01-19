@@ -13,8 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Printer\PhpAttributteGroupFactory;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -26,9 +25,17 @@ final class AnnotationToAttributeConverter
      */
     private $phpAttributteGroupFactory;
 
-    public function __construct(PhpAttributteGroupFactory $phpAttributteGroupFactory)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        PhpAttributteGroupFactory $phpAttributteGroupFactory,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->phpAttributteGroupFactory = $phpAttributteGroupFactory;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -36,11 +43,7 @@ final class AnnotationToAttributeConverter
      */
     public function convertNode(Node $node): ?Node
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $hasNewAttrGroups = false;
 

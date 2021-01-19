@@ -7,12 +7,12 @@ namespace Rector\Generic\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -27,11 +27,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const INJECT_ANNOTATION = 'inject';
-
     /**
      * @var PropertyUsageAnalyzer
      */
@@ -95,9 +90,8 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $phpDocInfo->removeByName(self::INJECT_ANNOTATION);
+        $phpDocInfo->removeByName(TagName::INJECT);
 
         if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($node)) {
             $this->makeProtected($node);
@@ -118,7 +112,7 @@ CODE_SAMPLE
     private function shouldSkipProperty(Property $property): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if (! $phpDocInfo->hasByName(self::INJECT_ANNOTATION)) {
+        if (! $phpDocInfo->hasByName(TagName::INJECT)) {
             return true;
         }
 

@@ -14,6 +14,7 @@ use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInte
 use Rector\BetterPhpDocParser\Contract\Doctrine\InversedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
@@ -38,20 +39,26 @@ final class DoctrineEntityManipulator
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
     public function __construct(
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
         NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function resolveOtherProperty(Property $property): ?string
     {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
         if ($relationTagValueNode === null) {

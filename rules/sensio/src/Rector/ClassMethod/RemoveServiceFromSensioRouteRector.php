@@ -7,7 +7,6 @@ namespace Rector\Sensio\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioRouteTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -68,11 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($phpDocInfo === null) {
-            return null;
-        }
 
         /** @var SensioRouteTagValueNode|null $sensioRouteTagValueNode */
         $sensioRouteTagValueNode = $phpDocInfo->getByType(SensioRouteTagValueNode::class);

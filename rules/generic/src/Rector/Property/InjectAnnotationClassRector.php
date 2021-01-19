@@ -14,7 +14,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
@@ -143,10 +142,6 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
-
         foreach ($this->annotationClasses as $annotationClass) {
             $this->ensureAnnotationClassIsSupported($annotationClass);
 
@@ -209,9 +204,7 @@ CODE_SAMPLE
         }
 
         if ($phpDocTagValueNode instanceof PHPDIInjectTagValueNode) {
-            /** @var PhpDocInfo $phpDocInfo */
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-
             return $phpDocInfo->getVarType();
         }
 
@@ -226,7 +219,6 @@ CODE_SAMPLE
 
         $propertyName = $this->getName($property);
 
-        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
@@ -268,7 +260,6 @@ CODE_SAMPLE
         }
 
         // 3. service is in @var annotation
-        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $varType = $phpDocInfo->getVarType();

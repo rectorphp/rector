@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -88,12 +87,7 @@ CODE_SAMPLE
         /** @var Class_ $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
         foreach ($this->renamedAnnotationInTypes as $renamedAnnotationInType) {
             if (! $this->isObjectType($classLike, $renamedAnnotationInType->getType())) {
                 continue;

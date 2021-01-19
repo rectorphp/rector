@@ -6,6 +6,8 @@ namespace Rector\DoctrineCodeQuality\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ManyToManyTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToOneTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
 use Rector\DoctrineCodeQuality\NodeManipulator\DoctrineItemDefaultValueManipulator;
@@ -167,8 +169,9 @@ CODE_SAMPLE
 
     private function refactorManyToManyAnnotation(Property $property): void
     {
-        $manyToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineManyToManyTagValueNode($property);
-        if ($manyToManyTagValueNode === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $manyToManyTagValueNode = $phpDocInfo->getByType(ManyToManyTagValueNode::class);
+        if (! $manyToManyTagValueNode instanceof ManyToManyTagValueNode) {
             return;
         }
 
@@ -199,8 +202,9 @@ CODE_SAMPLE
 
     private function refactorOneToOneAnnotation(Property $property): void
     {
-        $oneToOneTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineOneToOneTagValueNode($property);
-        if ($oneToOneTagValueNode === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $oneToOneTagValueNode = $phpDocInfo->getByType(OneToOneTagValueNode::class);
+        if (! $oneToOneTagValueNode instanceof OneToOneTagValueNode) {
             return;
         }
 

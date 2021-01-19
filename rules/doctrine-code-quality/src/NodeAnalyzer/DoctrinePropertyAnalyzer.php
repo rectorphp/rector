@@ -8,10 +8,8 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ManyToManyTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ManyToOneTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToOneTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class DoctrinePropertyAnalyzer
@@ -30,38 +28,21 @@ final class DoctrinePropertyAnalyzer
         return $phpDocInfo->getByType(OneToManyTagValueNode::class);
     }
 
-    public function matchDoctrineOneToOneTagValueNode(Property $property): ?OneToOneTagValueNode
-    {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        return $phpDocInfo->getByType(OneToOneTagValueNode::class);
-    }
-
-    public function matchDoctrineManyToManyTagValueNode(Property $property): ?ManyToManyTagValueNode
-    {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        return $phpDocInfo->getByType(ManyToManyTagValueNode::class);
-    }
-
     public function matchDoctrineManyToOneTagValueNode(Property $property): ?ManyToOneTagValueNode
     {
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-
         return $phpDocInfo->getByType(ManyToOneTagValueNode::class);
     }
 
     public function matchDoctrineJoinColumnTagValueNode(Property $property): ?JoinColumnTagValueNode
     {
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-
         return $phpDocInfo->getByType(JoinColumnTagValueNode::class);
     }
 
     public function matchDoctrineGeneratedValueTagValueNode(Property $property): ?GeneratedValueTagValueNode
     {
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-
         return $phpDocInfo->getByType(GeneratedValueTagValueNode::class);
     }
 }

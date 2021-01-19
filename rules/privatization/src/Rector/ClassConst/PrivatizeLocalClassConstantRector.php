@@ -10,6 +10,7 @@ use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Privatization\NodeFinder\ParentClassConstantNodeFinder;
 use Rector\Privatization\Reflection\ParentConstantReflectionResolver;
 use Rector\Privatization\ValueObject\ConstantVisibility;
@@ -149,7 +150,7 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
-        if ($phpDocInfo->hasByName('api')) {
+        if ($phpDocInfo->hasByName(TagName::API)) {
             return true;
         }
 

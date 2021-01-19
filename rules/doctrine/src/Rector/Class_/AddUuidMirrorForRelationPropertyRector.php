@@ -177,11 +177,7 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var PhpDocInfo|null $propertyPhpDocInfo */
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($propertyPhpDocInfo === null) {
-            return true;
-        }
 
         $oneToOneTagValueNode = $propertyPhpDocInfo->getByType(OneToOneTagValueNode::class);
         // skip mappedBy oneToOne, as the column doesn't really exist
@@ -230,9 +226,7 @@ CODE_SAMPLE
 
     private function mirrorPhpDocInfoToUuid(Property $property): void
     {
-        /** @var PhpDocInfo $propertyPhpDocInfo */
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-
         $newPropertyPhpDocInfo = clone $propertyPhpDocInfo;
 
         /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
