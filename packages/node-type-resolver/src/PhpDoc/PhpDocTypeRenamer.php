@@ -38,9 +38,8 @@ final class PhpDocTypeRenamer
         Node $node,
         PseudoNamespaceToNamespace $pseudoNamespaceToNamespace
     ): void {
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }
 

@@ -13,9 +13,8 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
 {
     public function isVendorLocked(ClassMethod $classMethod, int $paramPosition): bool
     {
-        /** @var Class_|null $classNode */
         $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        if (! $classNode instanceof Class_) {
             return false;
         }
 

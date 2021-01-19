@@ -103,13 +103,12 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
 
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
             if ($classNode instanceof Trait_) {
                 /** @var string $traitName */
                 $traitName = $classNode->getAttribute(AttributeKey::CLASS_NAME);
 
-                /** @var Scope|null $scope */
                 $scope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
             }
         }
