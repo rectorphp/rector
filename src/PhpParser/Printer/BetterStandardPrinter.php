@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
+use Rector\Comments\CommentRemover;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -189,10 +190,9 @@ final class BetterStandardPrinter extends Standard
      */
     public function printWithoutComments($node): string
     {
-        $printerNode = $this->print($node);
-
-        $nodeWithoutComments = $this->commentRemover->remove($printerNode);
-        return trim($nodeWithoutComments);
+        $node = $this->commentRemover->removeFromNode($node);
+        $content = $this->print($node);
+        return trim($content);
     }
 
     /**
