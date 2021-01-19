@@ -90,8 +90,8 @@ CODE_SAMPLE
         $this->refactorParamTypes($node, $phpDocInfo);
         $this->refactorReturnType($node, $phpDocInfo);
 
-        $this->paramTagRemover->removeParamTagsIfUseless($node);
-        $this->returnTagRemover->removeReturnTagIfUseless($node);
+        $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
+        $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
 
         return $node;
     }

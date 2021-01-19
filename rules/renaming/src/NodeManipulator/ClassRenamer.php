@@ -129,7 +129,7 @@ final class ClassRenamer
             $this->docBlockManipulator->changeType($phpDocInfo, $node, $oldClassType, $newClassType);
         }
 
-        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $oldToNewClasses);
+        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($phpDocInfo, $oldToNewClasses);
     }
 
     /**

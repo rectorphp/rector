@@ -103,9 +103,15 @@ final class DoctrineEntityManipulator
             $relationTagValueNode->removeMappedBy();
         }
 
-        if ($relationTagValueNode instanceof InversedByNodeInterface && $relationTagValueNode->getInversedBy()) {
-            $relationTagValueNode->removeInversedBy();
+        if (! $relationTagValueNode instanceof InversedByNodeInterface) {
+            return;
         }
+
+        if (! $relationTagValueNode->getInversedBy()) {
+            return;
+        }
+
+        $relationTagValueNode->removeInversedBy();
     }
 
     public function isMethodCallOnDoctrineEntity(Node $node, string $methodName): bool

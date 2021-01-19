@@ -107,7 +107,7 @@ CODE_SAMPLE
         }
 
         $this->docBlockClassRenamer->renamePhpDocTypes(
-            $phpDocInfo->getPhpDocNode(),
+            $phpDocInfo,
             [new IntegerType(), new FloatType(), new BooleanType()],
             new StringType(),
             $node

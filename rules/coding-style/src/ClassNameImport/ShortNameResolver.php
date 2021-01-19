@@ -18,7 +18,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -47,12 +47,19 @@ final class ShortNameResolver
      */
     private $currentFileInfoProvider;
 
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        CurrentFileInfoProvider $currentFileInfoProvider
+        CurrentFileInfoProvider $currentFileInfoProvider,
+        PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -170,11 +177,10 @@ final class ShortNameResolver
     {
         $shortNames = [];
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (&$shortNames) {
-            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if (! $phpDocInfo instanceof PhpDocInfo) {
-                return null;
-            }
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (
+            &$shortNames
+        ): void {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
             foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
                 $shortTagName = $this->resolveShortTagNameFromPhpDocChildNode($phpDocChildNode);

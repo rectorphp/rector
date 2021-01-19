@@ -66,7 +66,6 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        // $class->stmts - explore
         foreach ($class->getProperties() as $property) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             if ($phpDocInfo->hasByType(IdTagValueNode::class)) {

@@ -23,8 +23,13 @@ abstract class AbstractExpectedNameResolver implements ExpectedNameResolverInter
      */
     protected $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
-    {
+    /**
+     * @required
+     */
+    public function autowireAbstractExpectedNameResolver(
+        NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver
+    ): void {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

@@ -58,7 +58,7 @@ final class CommentsMerger
             return;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($parent);
+        $phpDocInfo = $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
         $comments = $parent->getComments();
 
         if ($phpDocInfo === null && $comments === []) {
