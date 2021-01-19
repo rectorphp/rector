@@ -118,7 +118,6 @@ final class MethodCallManipulator
     public function findMethodCallsOnVariable(Variable $variable): array
     {
         // get scope node, e.g. parent function call, method call or anonymous function
-        // get scope node, e.g. parent function call, method call or anonymous function
         $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
         if (! $classMethod instanceof ClassMethod) {
             return [];
