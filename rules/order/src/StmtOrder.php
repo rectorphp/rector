@@ -80,7 +80,7 @@ final class StmtOrder
     }
 
     /**
-     * @return array<int,string>
+     * @return array<int, string>
      */
     public function getStmtsOfTypeOrder(ClassLike $classLike, string $type): array
     {

@@ -98,7 +98,6 @@ final class TokenManipulator
                 return null;
             }
 
-            /** @var ArrayDimFetch $node */
             $tokenStaticType = $this->nodeTypeResolver->getStaticType($node->var);
             if (! $tokenStaticType instanceof ArrayType) {
                 return null;
@@ -289,17 +288,9 @@ final class TokenManipulator
         });
     }
 
-    private function isArrayDimFetchWithDimIntegerValue(Node $node, int $value): bool
+    private function isArrayDimFetchWithDimIntegerValue(ArrayDimFetch $arrayDimFetch, int $value): bool
     {
-        if (! $node instanceof ArrayDimFetch) {
-            return false;
-        }
-
-        if ($node->dim === null) {
-            return false;
-        }
-
-        return $this->valueResolver->isValue($node->dim, $value);
+        return $this->valueResolver->isValue($arrayDimFetch->dim, $value);
     }
 
     private function matchArrayDimFetchAndConstFetch(Identical $identical): ?ArrayDimFetchAndConstFetch

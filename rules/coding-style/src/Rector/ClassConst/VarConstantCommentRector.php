@@ -105,10 +105,7 @@ CODE_SAMPLE
             }
         }
 
-        if ($phpDocInfo instanceof PhpDocInfo && $this->typeComparator->isSubtype(
-            $constType,
-            $phpDocInfo->getVarType()
-        )) {
+        if ($this->typeComparator->isSubtype($constType, $phpDocInfo->getVarType())) {
             return null;
         }
 

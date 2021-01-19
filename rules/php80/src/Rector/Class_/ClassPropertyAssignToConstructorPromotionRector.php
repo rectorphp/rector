@@ -124,7 +124,6 @@ CODE_SAMPLE
             $this->removeNode($promotionCandidate->getAssign());
 
             $property = $promotionCandidate->getProperty();
-
             $this->decorateParamWithPropertyPhpDocInfo($property, $param);
 
             /** @var string $oldName */
@@ -148,10 +147,6 @@ CODE_SAMPLE
     private function decorateParamWithPropertyPhpDocInfo(Property $property, Param $param): void
     {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if (! $propertyPhpDocInfo instanceof PhpDocInfo) {
-            return;
-        }
-
         $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
 
         // make sure the docblock is useful
@@ -166,9 +161,6 @@ CODE_SAMPLE
     private function removeClassMethodParam(ClassMethod $classMethod, string $paramName): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return;
-        }
 
         $attributeAwareParamTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
         if ($attributeAwareParamTagValueNode === null) {
