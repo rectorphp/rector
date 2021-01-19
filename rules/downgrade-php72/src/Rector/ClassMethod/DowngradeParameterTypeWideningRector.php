@@ -256,8 +256,6 @@ CODE_SAMPLE
 
         // Remove the type
         $param->type = null;
-
-        $this->rectorChangeCollector->notifyNodeFileInfo($param);
     }
 
     private function removeParamTypeFromMethodForChildren(

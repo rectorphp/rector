@@ -61,16 +61,20 @@ final class DocBlockManipulator
             return;
         }
 
+        if (! $phpDocInfo->hasChanged()) {
+            return;
+        }
+
         $phpDoc = $this->printPhpDocInfoToString($phpDocInfo);
 
         // make sure, that many separated comments are not removed
-        if ($phpDoc === '' && count($node->getComments()) > 1) {
-            foreach ($node->getComments() as $comment) {
-                $phpDoc .= $comment->getText() . PHP_EOL;
-            }
-        }
-
         if ($phpDoc === '') {
+            if (count($node->getComments()) > 1) {
+                foreach ($node->getComments() as $comment) {
+                    $phpDoc .= $comment->getText() . PHP_EOL;
+                }
+            }
+
             if ($phpDocInfo->getOriginalPhpDocNode()->children !== []) {
                 // all comments were removed → null
                 $node->setAttribute(AttributeKey::COMMENTS, null);
