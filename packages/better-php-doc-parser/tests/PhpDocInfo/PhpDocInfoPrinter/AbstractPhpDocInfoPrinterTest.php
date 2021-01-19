@@ -10,7 +10,6 @@ use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
@@ -45,13 +44,7 @@ abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
     protected function createPhpDocInfoFromDocCommentAndNode(string $docComment, Node $node): PhpDocInfo
     {
         $node->setDocComment(new Doc($docComment));
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if ($phpDocInfo === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $phpDocInfo;
+        return $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
     }
 
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator

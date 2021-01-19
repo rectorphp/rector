@@ -180,7 +180,7 @@ CODE_SAMPLE
         }
 
         $property = $classLike->getProperty($propertyName);
-        if ($property === null) {
+        if (! $property instanceof \PhpParser\Node\Stmt\Property) {
             return new MixedType();
         }
 

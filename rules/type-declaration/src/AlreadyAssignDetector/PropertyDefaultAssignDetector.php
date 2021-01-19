@@ -11,7 +11,7 @@ final class PropertyDefaultAssignDetector
     public function detect(ClassLike $classLike, string $propertyName): bool
     {
         $property = $classLike->getProperty($propertyName);
-        if ($property === null) {
+        if (! $property instanceof \PhpParser\Node\Stmt\Property) {
             return false;
         }
 

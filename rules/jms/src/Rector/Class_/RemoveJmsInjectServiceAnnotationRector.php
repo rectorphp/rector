@@ -62,10 +62,6 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if (! $phpDocInfo->hasByType(JMSServiceValueNode::class)) {
-            return null;
-        }
-
         $phpDocInfo->removeByType(JMSServiceValueNode::class);
 
         return $node;

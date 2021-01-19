@@ -290,6 +290,10 @@ final class TokenManipulator
 
     private function isArrayDimFetchWithDimIntegerValue(ArrayDimFetch $arrayDimFetch, int $value): bool
     {
+        if ($arrayDimFetch->dim === null) {
+            return false;
+        }
+
         return $this->valueResolver->isValue($arrayDimFetch->dim, $value);
     }
 

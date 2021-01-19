@@ -203,7 +203,7 @@ CODE_SAMPLE
         }
 
         $property = $this->matchPropertyFetchToClassProperty($propertyFetches[0]);
-        if ($property === null) {
+        if (! $property instanceof \PhpParser\Node\Stmt\Property) {
             return null;
         }
 

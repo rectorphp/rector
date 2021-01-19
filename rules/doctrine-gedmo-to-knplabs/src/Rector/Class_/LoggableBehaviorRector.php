@@ -116,13 +116,6 @@ CODE_SAMPLE
     {
         foreach ($class->getProperties() as $property) {
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-
-            $hasTypeVersionedTagValueNode = $propertyPhpDocInfo->hasByType(VersionedTagValueNode::class);
-
-            if (! $hasTypeVersionedTagValueNode) {
-                continue;
-            }
-
             $propertyPhpDocInfo->removeByType(VersionedTagValueNode::class);
         }
     }

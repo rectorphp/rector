@@ -104,7 +104,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $property = $this->setterClassMethodAnalyzer->matchDateTimeSetterProperty($node);
-        if ($property === null) {
+        if (! $property instanceof \PhpParser\Node\Stmt\Property) {
             return null;
         }
 
