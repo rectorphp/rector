@@ -20,7 +20,6 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
@@ -76,11 +75,6 @@ final class PhpDocInfo
     private $node;
 
     /**
-     * @var AttributeAwareNodeFactory
-     */
-    private $attributeAwareNodeFactory;
-
-    /**
      * @var bool
      */
     private $hasChanged = false;
@@ -109,7 +103,6 @@ final class PhpDocInfo
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
         Node $node,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory,
         AnnotationNaming $annotationNaming,
         CurrentNodeProvider $currentNodeProvider,
         RectorChangeCollector $rectorChangeCollector
@@ -120,7 +113,6 @@ final class PhpDocInfo
         $this->originalContent = $originalContent;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
-        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->annotationNaming = $annotationNaming;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->rectorChangeCollector = $rectorChangeCollector;
@@ -411,17 +403,7 @@ final class PhpDocInfo
 
     public function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
-        $paramTagValueNode = $this->phpDocNode->getParam($name);
-        if ($paramTagValueNode === null) {
-            return null;
-        }
-
-        $attributeAwareParamTagValueNode = $this->attributeAwareNodeFactory->createFromNode($paramTagValueNode, '');
-        if (! $attributeAwareParamTagValueNode instanceof AttributeAwareParamTagValueNode) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $attributeAwareParamTagValueNode;
+        return $this->phpDocNode->getParam($name);
     }
 
     /**

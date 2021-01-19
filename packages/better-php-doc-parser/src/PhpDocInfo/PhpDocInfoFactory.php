@@ -179,7 +179,6 @@ final class PhpDocInfoFactory
             $content,
             $this->staticTypeMapper,
             $node,
-            $this->attributeAwareNodeFactory,
             $this->annotationNaming,
             $this->currentNodeProvider,
             $this->rectorChangeCollector
