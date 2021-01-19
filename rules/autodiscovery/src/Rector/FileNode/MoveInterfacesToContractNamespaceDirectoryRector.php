@@ -71,9 +71,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Interface_|null $interface */
         $interface = $this->betterNodeFinder->findFirstInstanceOf([$node], Interface_::class);
-        if ($interface === null) {
+        if (! $interface instanceof Interface_) {
             return null;
         }
 

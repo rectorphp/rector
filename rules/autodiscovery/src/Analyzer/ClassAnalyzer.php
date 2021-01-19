@@ -112,9 +112,8 @@ final class ClassAnalyzer
                 continue;
             }
 
-            /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($phpDocInfo === null) {
+            if (! $phpDocInfo instanceof PhpDocInfo) {
                 continue;
             }
 

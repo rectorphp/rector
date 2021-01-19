@@ -174,7 +174,6 @@ CODE_SAMPLE
         $nodesToRemove = [];
 
         foreach ($assignedVariableNames as $assignedVariableName) {
-            /** @var VariableNodeUse|null $previousNode */
             $previousNode = null;
 
             foreach ($nodesByTypeAndPosition as $nodeByTypeAndPosition) {
@@ -209,7 +208,7 @@ CODE_SAMPLE
         VariableNodeUse $nodeByTypeAndPosition
     ): bool {
         // this node was just used, skip to next one
-        if ($previousNode === null) {
+        if (! $previousNode instanceof VariableNodeUse) {
             return false;
         }
 

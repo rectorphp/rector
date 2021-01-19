@@ -129,9 +129,8 @@ CODE_SAMPLE
             return;
         }
 
-        /** @var Scope|null $scope */
         $scope = $functionLike->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             // possibly trait
             return;
         }

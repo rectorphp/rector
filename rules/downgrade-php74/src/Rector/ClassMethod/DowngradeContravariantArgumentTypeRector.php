@@ -97,9 +97,8 @@ CODE_SAMPLE
 
     private function getDifferentParamTypeFromAncestorClass(Param $param, FunctionLike $functionLike): ?string
     {
-        /** @var Scope|null $scope */
         $scope = $functionLike->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             // possibly trait
             return null;
         }
@@ -172,13 +171,12 @@ CODE_SAMPLE
                  * Getting a ReflectionNamedType works from PHP 7.1 onwards
                  * @see https://www.php.net/manual/en/reflectionparameter.gettype.php#125334
                  */
-                /** @var ReflectionNamedType|null $reflectionParamType */
                 $reflectionParamType = $reflectionParameter->getType();
                 /**
                  * If the type is null, we don't have enough information
                  * to check if they are different. Then do nothing
                  */
-                if ($reflectionParamType === null) {
+                if (! $reflectionParamType instanceof ReflectionNamedType) {
                     continue;
                 }
                 if ($reflectionParamType->getName() !== $paramTypeName) {

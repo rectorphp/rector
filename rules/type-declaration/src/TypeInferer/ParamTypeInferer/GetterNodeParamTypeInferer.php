@@ -48,9 +48,8 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
 
     public function inferParam(Param $param): Type
     {
-        /** @var Class_|null $classLike */
         $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             return new MixedType();
         }
 
@@ -87,7 +86,6 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
             }
 
             // what is return type?
-            /** @var ClassMethod|null $classMethod */
             $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
             if (! $classMethod instanceof ClassMethod) {
                 return null;

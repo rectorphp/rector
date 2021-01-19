@@ -171,9 +171,8 @@ CODE_SAMPLE
         $propertyName = $this->getName($property);
         $onlyProperty = $property->props[0];
 
-        /** @var Expr|null $defaultExpr */
         $defaultExpr = $onlyProperty->default;
-        if ($defaultExpr === null) {
+        if (! $defaultExpr instanceof Expr) {
             return;
         }
 

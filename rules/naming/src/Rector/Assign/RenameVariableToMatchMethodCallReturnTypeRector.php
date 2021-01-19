@@ -141,9 +141,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var VariableAndCallAssign|null $variableAndCallAssign */
         $variableAndCallAssign = $this->variableAndCallAssignMatcher->match($node);
-        if ($variableAndCallAssign === null) {
+        if (! $variableAndCallAssign instanceof VariableAndCallAssign) {
             return null;
         }
 

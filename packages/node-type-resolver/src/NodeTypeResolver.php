@@ -190,12 +190,11 @@ final class NodeTypeResolver
             return $this->resolve($node);
         }
 
-        /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $node instanceof Expr) {
             return new MixedType();
         }
-        if ($nodeScope === null) {
+        if (! $nodeScope instanceof Scope) {
             return new MixedType();
         }
 
@@ -380,9 +379,8 @@ final class NodeTypeResolver
             return $type;
         }
 
-        /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope === null) {
+        if (! $nodeScope instanceof Scope) {
             return new MixedType();
         }
         if (! $node instanceof Expr) {

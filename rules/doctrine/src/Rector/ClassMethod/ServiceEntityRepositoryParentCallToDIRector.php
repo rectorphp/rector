@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -118,7 +117,6 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var ClassLike|null $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
             return null;

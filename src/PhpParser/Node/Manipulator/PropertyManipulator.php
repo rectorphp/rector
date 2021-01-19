@@ -100,9 +100,8 @@ final class PropertyManipulator
      */
     public function getPrivatePropertyFetches(Property $property): array
     {
-        /** @var Class_|null $classLike */
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             return [];
         }
 

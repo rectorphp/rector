@@ -22,9 +22,8 @@ final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInfe
 {
     public function inferProperty(Property $property): Type
     {
-        /** @var Class_|null $classLike */
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             // anonymous class
             return new MixedType();
         }

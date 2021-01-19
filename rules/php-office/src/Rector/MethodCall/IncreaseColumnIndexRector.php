@@ -115,9 +115,8 @@ CODE_SAMPLE
 
     private function findPreviousForWithVariable(Variable $variable): ?LNumber
     {
-        /** @var For_|null $for */
         $for = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [For_::class]);
-        if ($for === null) {
+        if (! $for instanceof For_) {
             return null;
         }
 

@@ -13,9 +13,8 @@ final class DoctrineClassAnalyzer
 {
     public function matchDoctrineEntityTagValueNode(Class_ $class): ?EntityTagValueNode
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
 

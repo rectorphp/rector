@@ -30,9 +30,8 @@ final class MatchPropertyTypeExpectedNameResolver extends AbstractExpectedNameRe
      */
     public function resolve(Node $node): ?string
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
 

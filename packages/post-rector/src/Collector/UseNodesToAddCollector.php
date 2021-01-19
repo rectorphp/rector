@@ -72,9 +72,8 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
 
     public function removeShortUse(Node $node, string $shortUse): void
     {
-        /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if (! $fileInfo instanceof SmartFileInfo) {
             return;
         }
 

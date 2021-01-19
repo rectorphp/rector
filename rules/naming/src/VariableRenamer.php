@@ -94,9 +94,8 @@ final class VariableRenamer
 
     private function isParamInParentFunction(Variable $variable): bool
     {
-        /** @var Closure|null $closure */
         $closure = $variable->getAttribute(AttributeKey::CLOSURE_NODE);
-        if ($closure === null) {
+        if (! $closure instanceof Closure) {
             return false;
         }
 

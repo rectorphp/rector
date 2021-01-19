@@ -7,7 +7,6 @@ namespace Rector\Doctrine\PhpDocParser;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -108,7 +107,6 @@ final class DoctrineDocBlockResolver
 
     public function isInDoctrineEntityClass(Node $node): bool
     {
-        /** @var ClassLike|null $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
             return false;

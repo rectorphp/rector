@@ -124,9 +124,8 @@ CODE_SAMPLE
 
     private function changeSerializerTypeToString(PhpDocInfo $phpDocInfo): void
     {
-        /** @var SerializerTypeTagValueNode|null $serializerTypeTagValueNode */
         $serializerTypeTagValueNode = $phpDocInfo->getByType(SerializerTypeTagValueNode::class);
-        if ($serializerTypeTagValueNode === null) {
+        if (! $serializerTypeTagValueNode instanceof SerializerTypeTagValueNode) {
             return;
         }
 

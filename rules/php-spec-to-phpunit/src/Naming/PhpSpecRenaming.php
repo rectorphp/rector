@@ -78,9 +78,8 @@ final class PhpSpecRenaming
 
     public function renameNamespace(Class_ $class): void
     {
-        /** @var Namespace_|null $namespace */
         $namespace = $class->getAttribute(AttributeKey::NAMESPACE_NODE);
-        if ($namespace === null) {
+        if (! $namespace instanceof Namespace_) {
             return;
         }
 

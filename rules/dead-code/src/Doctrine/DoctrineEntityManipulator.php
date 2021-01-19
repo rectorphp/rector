@@ -91,9 +91,8 @@ final class DoctrineEntityManipulator
             return false;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return false;
         }
 

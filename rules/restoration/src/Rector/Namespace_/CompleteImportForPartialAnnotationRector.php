@@ -79,9 +79,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Class_|null $class */
         $class = $this->betterNodeFinder->findFirstInstanceOf($node->stmts, Class_::class);
-        if ($class === null) {
+        if (! $class instanceof Class_) {
             return null;
         }
 

@@ -79,9 +79,8 @@ CODE_SAMPLE
             return $this->refactorUse($node);
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($phpDocInfo === null) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
 
@@ -89,9 +88,8 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var SensioRouteTagValueNode|null $sensioRouteTagValueNode */
         $sensioRouteTagValueNode = $phpDocInfo->getByType(SensioRouteTagValueNode::class);
-        if ($sensioRouteTagValueNode === null) {
+        if (! $sensioRouteTagValueNode instanceof SensioRouteTagValueNode) {
             return null;
         }
 

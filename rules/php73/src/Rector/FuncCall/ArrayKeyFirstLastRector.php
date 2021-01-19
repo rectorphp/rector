@@ -93,7 +93,6 @@ CODE_SAMPLE
 
         $resetOrEndFuncCall = $node;
 
-        /** @var FuncCall|null $keyFuncCall */
         $keyFuncCall = $this->betterNodeFinder->findFirst($nextExpression, function (Node $node) use (
             $resetOrEndFuncCall
         ): bool {
@@ -108,7 +107,7 @@ CODE_SAMPLE
             return $this->areNodesEqual($resetOrEndFuncCall->args[0], $node->args[0]);
         });
 
-        if ($keyFuncCall === null) {
+        if (! $keyFuncCall instanceof FuncCall) {
             return null;
         }
 

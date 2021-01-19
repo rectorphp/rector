@@ -157,7 +157,6 @@ CODE_SAMPLE
         /** @var Expression $expression */
         $expression = $assign->getAttribute(AttributeKey::PARENT_NODE);
 
-        /** @var Node|null $nextNode */
         $nextNode = $expression->getAttribute(AttributeKey::NEXT_NODE);
 
         /** @var NullsafeMethodCall|NullsafePropertyFetch $nullSafe */
@@ -195,7 +194,7 @@ CODE_SAMPLE
 
     private function processIfMayInNextNode(?Node $nextNode = null): ?Node
     {
-        if ($nextNode === null) {
+        if (! $nextNode instanceof Node) {
             return null;
         }
 

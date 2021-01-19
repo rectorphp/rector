@@ -38,9 +38,8 @@ final class AssignedVariablesMethodCallsFormTypeResolver implements FormControlT
             return [];
         }
 
-        /** @var Assign|null $formVariableAssign */
         $formVariableAssign = $this->betterNodeFinder->findPreviousAssignToExpr($node);
-        if ($formVariableAssign === null) {
+        if (! $formVariableAssign instanceof Assign) {
             return [];
         }
 
