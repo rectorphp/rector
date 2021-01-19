@@ -43,6 +43,13 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      *
      * @var string
      */
+
+    /**
+     * Package "nette/application" is required for DEV, might not exist for PROD.
+     * So access the class throgh the string
+     *
+     * @var string
+     */
     private const ROUTE_LIST_CLASS = 'Nette\Application\Routers\RouteList';
 
     /**
@@ -61,6 +68,7 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $explicitRouteAnnotationDecorator;
 
     public function __construct(
+
         ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator,
         ReturnTypeInferer $returnTypeInferer,
         RouteInfoFactory $routeInfoFactory

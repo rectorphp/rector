@@ -41,6 +41,7 @@ final class FunctionToStaticMethodRector extends AbstractRector
     private $fullyQualifiedNameResolver;
 
     public function __construct(
+
         ClassNaming $classNaming,
         StaticMethodClassFactory $staticMethodClassFactory,
         FullyQualifiedNameResolver $fullyQualifiedNameResolver

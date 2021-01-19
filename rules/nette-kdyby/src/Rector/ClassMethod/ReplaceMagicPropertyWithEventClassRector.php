@@ -38,6 +38,7 @@ final class ReplaceMagicPropertyWithEventClassRector extends AbstractKdybyEventS
     private $eventAndListenerTreeProvider;
 
     public function __construct(
+
         EventAndListenerTreeProvider $eventAndListenerTreeProvider,
         EventClassNaming $eventClassNaming,
         ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator

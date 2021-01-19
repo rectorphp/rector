@@ -66,6 +66,10 @@ final class DocBlockManipulator
     public function updateNodeWithPhpDocInfo(Node $node): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if ($phpDocInfo->hasChanged()) {
+            return;
+        }
+
         $phpDoc = $this->printPhpDocInfoToString($phpDocInfo);
 
         // make sure, that many separated comments are not removed

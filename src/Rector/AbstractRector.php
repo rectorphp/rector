@@ -292,7 +292,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     protected function mirrorComments(Node $newNode, Node $oldNode): void
     {
-        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $oldNode->getAttribute(AttributeKey::PHP_DOC_INFO));
+        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $this->phpDocInfoFactory->createFromNodeOrEmpty($oldNode));
         $newNode->setAttribute(self::COMMENTS, $oldNode->getAttribute(self::COMMENTS));
     }
 

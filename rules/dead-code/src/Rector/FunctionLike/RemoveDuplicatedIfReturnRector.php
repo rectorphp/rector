@@ -34,6 +34,7 @@ final class RemoveDuplicatedIfReturnRector extends AbstractRector
     private $modifiedVariableNamesCollector;
 
     public function __construct(
+
         IfManipulator $ifManipulator,
         ModifiedVariableNamesCollector $modifiedVariableNamesCollector
     ) {

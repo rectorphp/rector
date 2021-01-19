@@ -28,6 +28,7 @@ final class ActionSuffixRemoverRector extends AbstractRector
     private $identifierManipulator;
 
     public function __construct(
+
         ControllerMethodAnalyzer $controllerMethodAnalyzer,
         IdentifierManipulator $identifierManipulator
     ) {

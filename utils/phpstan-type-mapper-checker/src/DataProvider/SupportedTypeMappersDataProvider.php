@@ -11,7 +11,7 @@ final class SupportedTypeMappersDataProvider
     /**
      * @var TypeMapperInterface[]
      */
-    private $typeMappers;
+    private $typeMappers = [];
 
     /**
      * @param TypeMapperInterface[] $typeMappers

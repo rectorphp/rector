@@ -227,13 +227,13 @@ final class ValueResolver
         $classConstNode = $this->parsedNodeCollector->findClassConstant($class, $constant);
 
         if ($classConstNode === null) {
-            $classReference = $class . '::' . $constant;
+            $classConstant = $class . '::' . $constant;
             if (! class_exists($class) && ! interface_exists($class)) {
-                return $classReference;
+                return $classConstant;
             }
 
             // fallback to the name
-            return constant($classReference);
+            return constant($classConstant);
         }
 
         return $this->constExprEvaluator->evaluateDirectly($classConstNode->consts[0]->value);

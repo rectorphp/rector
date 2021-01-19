@@ -45,6 +45,7 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
     private $actionRenderFactory;
 
     public function __construct(
+
         ActionRenderFactory $actionRenderFactory,
         TemplatePropertyAssignCollector $templatePropertyAssignCollector
     ) {

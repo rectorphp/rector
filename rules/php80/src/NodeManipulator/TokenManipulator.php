@@ -289,17 +289,13 @@ final class TokenManipulator
         });
     }
 
-    private function isArrayDimFetchWithDimIntegerValue(Node $node, int $value): bool
+    private function isArrayDimFetchWithDimIntegerValue(ArrayDimFetch $arrayDimFetch, int $value): bool
     {
-        if (! $node instanceof ArrayDimFetch) {
+        if ($arrayDimFetch->dim === null) {
             return false;
         }
 
-        if ($node->dim === null) {
-            return false;
-        }
-
-        return $this->valueResolver->isValue($node->dim, $value);
+        return $this->valueResolver->isValue($arrayDimFetch->dim, $value);
     }
 
     private function matchArrayDimFetchAndConstFetch(Identical $identical): ?ArrayDimFetchAndConstFetch

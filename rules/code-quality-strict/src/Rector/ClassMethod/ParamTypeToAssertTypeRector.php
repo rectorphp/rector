@@ -99,18 +99,18 @@ CODE_SAMPLE
         }
 
         $toBeProcessedTypes = [];
-        foreach ($docParamTypes as $key => $docParamType) {
+        foreach ($docParamTypes as $paramName => $docParamType) {
             if (! $this->isExclusivelyObjectType($docParamType)) {
                 continue;
             }
 
             /** @var ObjectType|UnionType $docParamType */
-            $assertionTypes = $this->getToBeProcessedTypes($params, $key, $docParamType);
+            $assertionTypes = $this->getToBeProcessedTypes($params, $paramName, $docParamType);
             if ($assertionTypes === null) {
                 continue;
             }
 
-            $variableName = ltrim($key, '$');
+            $variableName = ltrim($paramName, '$');
             $toBeProcessedTypes[$variableName] = $assertionTypes;
         }
 
@@ -141,10 +141,10 @@ CODE_SAMPLE
      * @param ObjectType|UnionType $type
      * @return ObjectType|UnionType
      */
-    private function getToBeProcessedTypes(array $params, string $key, Type $type): ?Type
+    private function getToBeProcessedTypes(array $params, string $paramName, Type $type): ?Type
     {
         foreach ($params as $param) {
-            $paramName = ltrim($key, '$');
+            $paramName = ltrim($paramName, '$');
             if (! $this->isName($param->var, $paramName)) {
                 continue;
             }

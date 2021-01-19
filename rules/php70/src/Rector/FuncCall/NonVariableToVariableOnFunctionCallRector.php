@@ -53,6 +53,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
     private $parentScopeFinder;
 
     public function __construct(
+
         CallReflectionResolver $callReflectionResolver,
         VariableNaming $variableNaming,
         ParentScopeFinder $parentScopeFinder

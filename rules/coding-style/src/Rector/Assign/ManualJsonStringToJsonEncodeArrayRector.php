@@ -66,6 +66,7 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
     private $jsonArrayFactory;
 
     public function __construct(
+
         ConcatJoiner $concatJoiner,
         ConcatManipulator $concatManipulator,
         JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory,

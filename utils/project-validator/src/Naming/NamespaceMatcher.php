@@ -19,7 +19,12 @@ final class NamespaceMatcher
         if ($countMatchAll === 1 && $matchAll[0][1] === $expectedNamespace) {
             return true;
         }
-
-        return $countMatchAll === 2 && $matchAll[0][1] === $expectedNamespace && $matchAll[1][1] === $expectedNamespace;
+        if ($countMatchAll !== 2) {
+            return false;
+        }
+        if ($matchAll[0][1] !== $expectedNamespace) {
+            return false;
+        }
+        return $matchAll[1][1] === $expectedNamespace;
     }
 }

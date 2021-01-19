@@ -35,6 +35,7 @@ final class UnderscoreToCamelCasePropertyNameRector extends AbstractRector
     private $underscoreCamelCaseExpectedNameResolver;
 
     public function __construct(
+
         UnderscoreCamelCasePropertyRenamer $underscoreCamelCasePropertyRenamer,
         PropertyRenameFactory $propertyRenameFactory,
         UnderscoreCamelCaseExpectedNameResolver $underscoreCamelCaseExpectedNameResolver

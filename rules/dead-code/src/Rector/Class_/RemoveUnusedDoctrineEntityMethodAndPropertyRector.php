@@ -49,6 +49,7 @@ final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRe
     private $doctrineEntityManipulator;
 
     public function __construct(
+
         ClassManipulator $classManipulator,
         ClassUnusedPrivateClassMethodResolver $classUnusedPrivateClassMethodResolver,
         DoctrineEntityManipulator $doctrineEntityManipulator

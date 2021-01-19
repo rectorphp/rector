@@ -49,6 +49,7 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
     private $propertyFetchWithVariableReplacer;
 
     public function __construct(
+
         ClassManipulator $classManipulator,
         PropertyFetchManipulator $propertyFetchManipulator,
         PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer

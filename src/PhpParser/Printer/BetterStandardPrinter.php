@@ -345,6 +345,13 @@ final class BetterStandardPrinter extends Standard
      * ↓
      * "use ("
      */
+
+    /**
+     * Add space:
+     * "use("
+     * ↓
+     * "use ("
+     */
     protected function pExpr_Closure(Closure $closure): string
     {
         $closureContent = parent::pExpr_Closure($closure);
@@ -373,6 +380,11 @@ final class BetterStandardPrinter extends Standard
             $shouldAddBrackets ? ')' : ''
         );
     }
+
+    /**
+     * Print arrays in short [] by default,
+     * to prevent manual explicit array shortening.
+     */
 
     /**
      * Print arrays in short [] by default,
@@ -416,6 +428,12 @@ final class BetterStandardPrinter extends Standard
 
         return parent::pStmts($nodes, $indent);
     }
+
+    /**
+     * "...$params) : ReturnType"
+     * ↓
+     * "...$params): ReturnType"
+     */
 
     /**
      * "...$params) : ReturnType"

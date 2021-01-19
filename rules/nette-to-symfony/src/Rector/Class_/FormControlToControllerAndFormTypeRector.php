@@ -46,6 +46,7 @@ final class FormControlToControllerAndFormTypeRector extends AbstractRector
     private $symfonyMethodCallsFactory;
 
     public function __construct(
+
         OnFormVariableMethodCallsCollector $onFormVariableMethodCallsCollector,
         SymfonyControllerFactory $symfonyControllerFactory,
         BuildFormClassMethodFactory $buildFormClassMethodFactory,

@@ -123,6 +123,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     private $duringMethodCallFactory;
 
     public function __construct(
+
         MatchersManipulator $matchersManipulator,
         PhpSpecRenaming $phpSpecRenaming,
         AssertMethodCallFactory $assertMethodCallFactory,

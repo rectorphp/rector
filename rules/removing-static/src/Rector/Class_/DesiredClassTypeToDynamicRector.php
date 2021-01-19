@@ -43,6 +43,7 @@ final class DesiredClassTypeToDynamicRector extends AbstractRector
     private $staticCallPresenceAnalyzer;
 
     public function __construct(
+
         PropertyNaming $propertyNaming,
         StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer,
         ParameterProvider $parameterProvider

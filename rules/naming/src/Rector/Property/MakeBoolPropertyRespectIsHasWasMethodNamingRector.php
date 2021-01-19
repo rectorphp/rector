@@ -35,6 +35,7 @@ final class MakeBoolPropertyRespectIsHasWasMethodNamingRector extends AbstractRe
     private $boolPropertyExpectedNameResolver;
 
     public function __construct(
+
         BoolPropertyRenamer $boolPropertyRenamer,
         PropertyRenameFactory $propertyRenameFactory,
         BoolPropertyExpectedNameResolver $boolPropertyExpectedNameResolver

@@ -14,7 +14,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ValidateFixtureNamespaceCommand extends Command
@@ -24,11 +23,6 @@ final class ValidateFixtureNamespaceCommand extends Command
      * @see https://regex101.com/r/5KtBi8/2
      */
     private const NAMESPACE_REGEX = '#^namespace (.*);$#msU';
-
-    /**
-     * @var FinderSanitizer
-     */
-    private $finderSanitizer;
 
     /**
      * @var SymfonyStyle
@@ -61,14 +55,12 @@ final class ValidateFixtureNamespaceCommand extends Command
     private $expectedNameResolver;
 
     public function __construct(
-        FinderSanitizer $finderSanitizer,
         SymfonyStyle $symfonyStyle,
         SmartFileSystem $smartFileSystem,
         FixtureFinder $fixtureFinder,
         NamespaceMatcher $namespaceMatcher,
         ExpectedNameResolver $expectedNameResolver
     ) {
-        $this->finderSanitizer = $finderSanitizer;
         $this->symfonyStyle = $symfonyStyle;
         $this->currentDirectory = getcwd();
         $this->smartFileSystem = $smartFileSystem;
@@ -100,7 +92,7 @@ final class ValidateFixtureNamespaceCommand extends Command
                 continue;
             }
 
-            $path = ltrim(substr($paths[0], strlen($this->currentDirectory)) . '/tests', '/');
+            $path = ltrim(Strings::substring($paths[0], strlen($this->currentDirectory)) . '/tests', '/');
             $expectedNamespace = $this->expectedNameResolver->resolve($path, $paths[1]);
 
             if ($expectedNamespace === null) {
@@ -157,7 +149,7 @@ final class ValidateFixtureNamespaceCommand extends Command
             'namespace ' . $expectedNamespace,
             $incorrectFileContent
         );
-        $this->smartFileSystem->dumpFile((string) $incorrectNamespaceFile, $newContent);
+        $this->smartFileSystem->dumpFile($incorrectNamespaceFile, $newContent);
     }
 
     /**

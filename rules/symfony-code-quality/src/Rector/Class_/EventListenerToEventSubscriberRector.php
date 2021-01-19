@@ -59,6 +59,7 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     private $getSubscriberEventsClassMethodFactory;
 
     public function __construct(
+
         ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,
         GetSubscriberEventsClassMethodFactory $getSubscriberEventsClassMethodFactory
     ) {

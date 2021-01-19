@@ -26,8 +26,8 @@ final class PropertyDocBlockManipulator
     public function renameParameterNameInDocBlock(RenameValueObjectInterface $renameValueObject): void
     {
         $functionLike = $renameValueObject->getFunctionLike();
-
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
+
         $paramTagValueNode = $phpDocInfo->getParamTagValueNodeByName($renameValueObject->getCurrentName());
         if ($paramTagValueNode === null) {
             return;

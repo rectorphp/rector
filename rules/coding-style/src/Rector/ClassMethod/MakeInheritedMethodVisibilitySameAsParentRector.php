@@ -196,6 +196,13 @@ CODE_SAMPLE
      * or
      * public static someMethod() { return new static(); }
      */
+
+    /**
+     * Looks for:
+     * public static someMethod() { return new self(); }
+     * or
+     * public static someMethod() { return new static(); }
+     */
     private function isStaticNamedConstructor(ClassMethod $classMethod): bool
     {
         if (! $classMethod->isPublic()) {

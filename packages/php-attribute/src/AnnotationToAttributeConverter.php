@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Rector\PhpAttribute;
 
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -52,8 +50,6 @@ final class AnnotationToAttributeConverter
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        $hasNewAttrGroups = false;
-
         // 0. has 0 nodes, nothing to change
         /** @var PhpAttributableTagNodeInterface[] $phpAttributableTagNodes */
         $phpAttributableTagNodes = $phpDocInfo->findAllByType(PhpAttributableTagNodeInterface::class);
@@ -63,9 +59,6 @@ final class AnnotationToAttributeConverter
 
         // 1. keep only those, whom's attribute class exists
         $phpAttributableTagNodes = $this->filterOnlyExistingAttributes($phpAttributableTagNodes);
-        if ($phpAttributableTagNodes !== []) {
-            $hasNewAttrGroups = true;
-        }
 
         // 2. remove tags
         foreach ($phpAttributableTagNodes as $phpAttributableTagNode) {
@@ -76,7 +69,7 @@ final class AnnotationToAttributeConverter
         $newAttrGroups = $this->phpAttributteGroupFactory->create($phpAttributableTagNodes);
         $node->attrGroups = array_merge($node->attrGroups, $newAttrGroups);
 
-        if ($hasNewAttrGroups) {
+        if ($phpDocInfo->hasChanged()) {
             return $node;
         }
 

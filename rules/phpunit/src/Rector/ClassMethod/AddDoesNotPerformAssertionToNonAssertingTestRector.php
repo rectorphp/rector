@@ -44,6 +44,12 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
      * Without it, it might end-up with segfault
      * @var int
      */
+
+    /**
+     * This should prevent segfaults while going too deep into to parsed code.
+     * Without it, it might end-up with segfault
+     * @var int
+     */
     private $classMethodNestingLevel = 0;
 
     /**
@@ -67,6 +73,7 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
     private $analyzedMethodsInFileName = [];
 
     public function __construct(
+
         ClassMethodReflectionFactory $classMethodReflectionFactory,
         DocBlockManipulator $docBlockManipulator,
         FileInfoParser $fileInfoParser

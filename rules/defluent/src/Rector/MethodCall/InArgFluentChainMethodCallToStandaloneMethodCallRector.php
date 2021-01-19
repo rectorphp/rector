@@ -35,6 +35,7 @@ final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends Abstr
     private $variableFromNewFactory;
 
     public function __construct(
+
         NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
         VariableFromNewFactory $variableFromNewFactory
     ) {

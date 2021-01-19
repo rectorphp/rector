@@ -34,6 +34,7 @@ final class AddMockConsoleOutputFalseToConsoleTestsRector extends AbstractRector
     private $setUpClassMethodNodeManipulator;
 
     public function __construct(
+
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         SetUpClassMethodNodeManipulator $setUpClassMethodNodeManipulator
     ) {

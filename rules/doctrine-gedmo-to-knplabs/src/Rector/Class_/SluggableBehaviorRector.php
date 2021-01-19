@@ -37,8 +37,11 @@ final class SluggableBehaviorRector extends AbstractRector
      */
     private $phpDocTypeChanger;
 
-    public function __construct(ClassInsertManipulator $classInsertManipulator, PhpDocTypeChanger $phpDocTypeChanger)
-    {
+    public function __construct(
+
+        ClassInsertManipulator $classInsertManipulator,
+        PhpDocTypeChanger $phpDocTypeChanger
+    ) {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }

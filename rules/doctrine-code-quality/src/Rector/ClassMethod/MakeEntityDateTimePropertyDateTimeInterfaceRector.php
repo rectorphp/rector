@@ -32,6 +32,7 @@ final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends AbstractRe
     private $propertyTypeManipulator;
 
     public function __construct(
+
         SetterClassMethodAnalyzer $setterClassMethodAnalyzer,
         PropertyTypeManipulator $propertyTypeManipulator
     ) {

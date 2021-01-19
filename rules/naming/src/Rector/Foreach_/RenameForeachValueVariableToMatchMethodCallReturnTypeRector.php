@@ -47,6 +47,7 @@ final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends 
     private $namingConventionAnalyzer;
 
     public function __construct(
+
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ExpectedNameResolver $expectedNameResolver,
         NamingConventionAnalyzer $namingConventionAnalyzer,

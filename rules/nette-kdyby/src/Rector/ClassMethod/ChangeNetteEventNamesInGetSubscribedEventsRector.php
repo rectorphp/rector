@@ -41,6 +41,7 @@ final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractKdy
     private $listeningMethodsCollector;
 
     public function __construct(
+
         GetSubscribedEventsArrayManipulator $getSubscribedEventsArrayManipulator,
         ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
         ListeningMethodsCollector $listeningMethodsCollector

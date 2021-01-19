@@ -38,6 +38,7 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
     private $entityWithMissingUuidProvider;
 
     public function __construct(
+
         EntityUuidNodeFactory $entityUuidNodeFactory,
         EntityWithMissingUuidProvider $entityWithMissingUuidProvider,
         UuidMigrationDataCollector $uuidMigrationDataCollector

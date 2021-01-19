@@ -76,6 +76,7 @@ final class InjectAnnotationClassRector extends AbstractRector implements Config
     private $phpDocTypeChanger;
 
     public function __construct(
+
         ServiceMapProvider $serviceMapProvider,
         ErrorAndDiffCollector $errorAndDiffCollector,
         PhpDocTypeChanger $phpDocTypeChanger
