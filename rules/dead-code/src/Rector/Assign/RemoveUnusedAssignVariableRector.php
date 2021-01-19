@@ -145,7 +145,6 @@ CODE_SAMPLE
 
     private function isVariableTypeInScope(Assign $assign): bool
     {
-        /** @var Scope|null $scope */
         $scope = $assign->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return false;
