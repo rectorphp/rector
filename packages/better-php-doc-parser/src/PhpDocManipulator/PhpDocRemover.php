@@ -24,6 +24,8 @@ final class PhpDocRemover
             }
 
             unset($attributeAwarePhpDocNode->children[$key]);
+
+            $phpDocInfo->markAsChanged();
         }
     }
 
@@ -41,6 +43,8 @@ final class PhpDocRemover
             }
 
             unset($attributeAwarePhpDocNode->children[$key]);
+
+            $phpDocInfo->markAsChanged();
         }
     }
 

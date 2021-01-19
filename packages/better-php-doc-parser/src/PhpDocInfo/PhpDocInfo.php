@@ -85,6 +85,11 @@ final class PhpDocInfo
     private $attributeAwareNodeFactory;
 
     /**
+     * @var bool
+     */
+    private $hasChanged = false;
+
+    /**
      * @param mixed[] $tokens
      */
     public function __construct(
@@ -420,6 +425,16 @@ final class PhpDocInfo
     public function hasInheritDoc(): bool
     {
         return $this->hasByNames(['inheritdoc', 'inheritDoc']);
+    }
+
+    public function markAsChanged(): void
+    {
+        $this->hasChanged = true;
+    }
+
+    public function hasChanged(): bool
+    {
+        return $this->hasChanged;
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type

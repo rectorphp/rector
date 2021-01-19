@@ -10,7 +10,7 @@ namespace Rector\Core\Util;
 final class StaticInstanceOf
 {
     /**
-     * @param class-string|object|null $element
+     * @param string|object|null $element
      * @param class-string[] $array
      */
     public static function isOneOf($element, array $array): bool
