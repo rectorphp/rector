@@ -28,6 +28,7 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -432,15 +433,9 @@ final class PhpDocInfo
 
     private function ensureTypeIsTagValueNode(string $type, string $location): void
     {
-        if (is_a($type, PhpDocTagValueNode::class, true)) {
-            return;
-        }
-
-        if (is_a($type, TypeAwareTagValueNodeInterface::class, true)) {
-            return;
-        }
-
-        if (is_a($type, PhpAttributableTagNodeInterface::class, true)) {
+        if (StaticInstanceOf::isOneOf($type, [
+            PhpDocTagValueNode::class, TypeAwareTagValueNodeInterface::class, PhpAttributableTagNodeInterface::class,
+        ])) {
             return;
         }
 
