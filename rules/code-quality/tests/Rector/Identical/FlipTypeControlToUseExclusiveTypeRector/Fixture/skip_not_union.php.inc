@@ -1,14 +1,14 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\Fixture;
 
 use stdClass;
 
-class SkipArray
+class SkipNotUnion
 {
     public function run()
     {
-        /** @var stdClass[]|null $stdClass */
+        /** @var stdClass $stdClass */
         $stdClass = $this->getStdClass();
         if ($stdClass === null) {
             return;

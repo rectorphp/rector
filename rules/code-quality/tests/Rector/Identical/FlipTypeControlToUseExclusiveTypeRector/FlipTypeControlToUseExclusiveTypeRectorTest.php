@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
+namespace Rector\CodeQuality\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 
 use Iterator;
+use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FlipTypeControlToUseExclusiveTypeRectorTest extends AbstractRectorTestCase

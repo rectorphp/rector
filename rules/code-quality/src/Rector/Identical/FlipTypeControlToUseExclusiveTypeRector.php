@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Rector\Identical;
+namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\FlipTypeControlToUseExclusiveTypeRectorTest
+ * @see \Rector\CodeQuality\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\FlipTypeControlToUseExclusiveTypeRectorTest
  */
 final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
 {
@@ -121,7 +121,7 @@ CODE_SAMPLE
 
         /** @var Type[] $types */
         $types = $this->getTypes($type);
-        if ($this->skipNotNullOneOf($types)) {
+        if ($this->isNotNullOneOf($types)) {
             return null;
         }
 
@@ -176,7 +176,7 @@ CODE_SAMPLE
     /**
      * @param Type[] $types
      */
-    private function skipNotNullOneOf(array $types): bool
+    private function isNotNullOneOf(array $types): bool
     {
         if ($types === []) {
             return true;
@@ -188,6 +188,7 @@ CODE_SAMPLE
         if ($types[0] instanceof NullType) {
             return false;
         }
+
         return ! $types[1] instanceof NullType;
     }
 }

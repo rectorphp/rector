@@ -7,7 +7,6 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
-use Rector\TypeDeclaration\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -21,6 +20,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddArrayParamDocTypeRector::class);
     $services->set(AddArrayReturnDocTypeRector::class);
-
-    $services->set(FlipTypeControlToUseExclusiveTypeRector::class);
 };

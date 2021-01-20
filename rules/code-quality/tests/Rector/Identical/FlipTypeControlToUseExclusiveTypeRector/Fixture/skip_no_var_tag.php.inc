@@ -1,14 +1,14 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\Fixture;
 
 use stdClass;
 
-class SkipNotUnion
+class SkipNoVarTag
 {
     public function run()
     {
-        /** @var stdClass $stdClass */
+        /** a comment */
         $stdClass = $this->getStdClass();
         if ($stdClass === null) {
             return;
