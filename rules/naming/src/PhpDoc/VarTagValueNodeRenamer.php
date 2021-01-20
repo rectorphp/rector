@@ -24,5 +24,6 @@ final class VarTagValueNodeRenamer
         }
 
         $varTagValueNode->variableName = '$' . $expectedName;
+        $phpDocInfo->markAsChanged();
     }
 }

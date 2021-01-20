@@ -7,12 +7,16 @@ namespace Rector\DeadCode\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\UnusedNodeResolver\UnusedClassResolver;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Class_\RemoveUnusedClassesRector\RemoveUnusedClassesRectorTest
@@ -24,9 +28,17 @@ final class RemoveUnusedClassesRector extends AbstractRector implements ZeroCach
      */
     private $unusedClassResolver;
 
-    public function __construct(UnusedClassResolver $unusedClassResolver)
-    {
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
+    public function __construct(
+        UnusedClassResolver $unusedClassResolver,
+        DoctrineDocBlockResolver $doctrineDocBlockResolver
+    ) {
         $this->unusedClassResolver = $unusedClassResolver;
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -92,7 +104,12 @@ CODE_SAMPLE
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             $this->removeNode($node);
         } else {
-            $this->removeFile($this->getFileInfo());
+            $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+            if (! $smartFileInfo instanceof SmartFileInfo) {
+                throw new ShouldNotHappenException();
+            }
+
+            $this->removeFile($smartFileInfo);
         }
 
         return null;
@@ -104,7 +121,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isDoctrineEntityClass($class)) {
+        if ($this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
             return true;
         }
 

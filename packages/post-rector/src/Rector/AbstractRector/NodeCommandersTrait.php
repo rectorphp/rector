@@ -210,7 +210,7 @@ trait NodeCommandersTrait
         }
     }
 
-    protected function notifyNodeFileInfo(Node $node): void
+    private function notifyNodeFileInfo(Node $node): void
     {
         $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }

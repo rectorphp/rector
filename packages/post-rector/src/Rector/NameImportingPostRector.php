@@ -73,11 +73,7 @@ final class NameImportingPostRector extends AbstractPostRector
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-
-        $hasChanged = $this->docBlockNameImporter->importNames($phpDocInfo, $node);
-        if (! $hasChanged) {
-            return null;
-        }
+        $this->docBlockNameImporter->importNames($phpDocInfo, $node);
 
         return $node;
     }

@@ -72,13 +72,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->doctrineItemDefaultValueManipulator->resetHasModifiedAnnotation();
         if ($node instanceof Class_) {
             $this->refactorClassAnnotations($node);
-        }
-
-        if (! $this->doctrineItemDefaultValueManipulator->hasModifiedAnnotation()) {
-            return null;
         }
 
         return $node;
@@ -98,6 +93,6 @@ CODE_SAMPLE
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($entityTagValueNode, 'readOnly', false);
+        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $entityTagValueNode, 'readOnly', false);
     }
 }

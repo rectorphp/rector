@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
@@ -44,12 +45,19 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements Zer
      */
     private $classMethodExternalCallNodeAnalyzer;
 
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
     public function __construct(
         ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer,
-        ClassMethodVisibilityVendorLockResolver $classMethodVisibilityVendorLockResolver
+        ClassMethodVisibilityVendorLockResolver $classMethodVisibilityVendorLockResolver,
+        DoctrineDocBlockResolver $doctrineDocBlockResolver
     ) {
         $this->classMethodVisibilityVendorLockResolver = $classMethodVisibilityVendorLockResolver;
         $this->classMethodExternalCallNodeAnalyzer = $classMethodExternalCallNodeAnalyzer;
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -209,7 +217,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isDoctrineEntityClass($class)) {
+        if ($this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
             return true;
         }
 

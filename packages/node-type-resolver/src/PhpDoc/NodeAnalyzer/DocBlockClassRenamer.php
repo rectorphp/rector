@@ -17,11 +17,6 @@ use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class DocBlockClassRenamer
 {
     /**
-     * @var bool
-     */
-    private $hasNodeChanged = false;
-
-    /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -56,11 +51,11 @@ final class DocBlockClassRenamer
         Type $oldType,
         Type $newType,
         Node $phpParserNode
-    ): bool {
+    ): void {
         $this->phpDocNodeTraverser->traverseWithCallable(
             $phpDocInfo->getPhpDocNode(),
             '',
-            function (PhpDocParserNode $node) use ($phpParserNode, $oldType, $newType): PhpDocParserNode {
+            function (PhpDocParserNode $node) use ($phpDocInfo, $phpParserNode, $oldType, $newType): PhpDocParserNode {
                 if (! $node instanceof IdentifierTypeNode) {
                     return $node;
                 }
@@ -76,12 +71,10 @@ final class DocBlockClassRenamer
                     return $node;
                 }
 
-                $this->hasNodeChanged = true;
+                $phpDocInfo->markAsChanged();
 
                 return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
             }
         );
-
-        return $this->hasNodeChanged;
     }
 }

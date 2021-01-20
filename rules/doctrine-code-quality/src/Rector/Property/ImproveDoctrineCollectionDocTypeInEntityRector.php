@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeFactory;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeResolver;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionVarTagValueNodeResolver;
@@ -53,18 +54,25 @@ final class ImproveDoctrineCollectionDocTypeInEntityRector extends AbstractRecto
      */
     private $phpDocTypeChanger;
 
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
     public function __construct(
         CollectionTypeFactory $collectionTypeFactory,
         AssignManipulator $assignManipulator,
         CollectionTypeResolver $collectionTypeResolver,
         CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver,
-        PhpDocTypeChanger $phpDocTypeChanger
+        PhpDocTypeChanger $phpDocTypeChanger,
+        DoctrineDocBlockResolver $doctrineDocBlockResolver
     ) {
         $this->collectionTypeFactory = $collectionTypeFactory;
         $this->assignManipulator = $assignManipulator;
         $this->collectionTypeResolver = $collectionTypeResolver;
         $this->collectionVarTagValueNodeResolver = $collectionVarTagValueNodeResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -166,7 +174,7 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        if (! $this->isInDoctrineEntityClass($classMethod)) {
+        if (! $this->doctrineDocBlockResolver->isInDoctrineEntityClass($classMethod)) {
             return null;
         }
 

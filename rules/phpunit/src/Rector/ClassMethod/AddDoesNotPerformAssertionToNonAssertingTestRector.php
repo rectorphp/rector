@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\Reflection\ClassMethodReflectionFactory;
 use Rector\FileSystemRector\Parser\FileInfoParser;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -69,10 +68,8 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
 
     public function __construct(
         ClassMethodReflectionFactory $classMethodReflectionFactory,
-        DocBlockManipulator $docBlockManipulator,
         FileInfoParser $fileInfoParser
     ) {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->fileInfoParser = $fileInfoParser;
         $this->classMethodReflectionFactory = $classMethodReflectionFactory;
     }

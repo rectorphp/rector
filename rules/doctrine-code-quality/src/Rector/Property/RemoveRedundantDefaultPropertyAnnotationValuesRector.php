@@ -104,13 +104,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->doctrineItemDefaultValueManipulator->resetHasModifiedAnnotation();
         if ($node instanceof Property) {
             $this->refactorPropertyAnnotations($node);
-        }
-
-        if (! $this->doctrineItemDefaultValueManipulator->hasModifiedAnnotation()) {
-            return null;
         }
 
         return $node;
@@ -136,10 +131,10 @@ CODE_SAMPLE
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($columnTagValueNode, 'nullable', false);
-        $this->doctrineItemDefaultValueManipulator->remove($columnTagValueNode, 'unique', false);
-        $this->doctrineItemDefaultValueManipulator->remove($columnTagValueNode, 'precision', 0);
-        $this->doctrineItemDefaultValueManipulator->remove($columnTagValueNode, 'scale', 0);
+        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $columnTagValueNode, 'nullable', false);
+        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $columnTagValueNode, 'unique', false);
+        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $columnTagValueNode, 'precision', 0);
+        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $columnTagValueNode, 'scale', 0);
     }
 
     private function refactorGeneratedValueAnnotation(PhpDocInfo $phpDocInfo): void
@@ -149,7 +144,12 @@ CODE_SAMPLE
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($generatedValueTagValueNode, 'strategy', 'AUTO');
+        $this->doctrineItemDefaultValueManipulator->remove(
+            $phpDocInfo,
+            $generatedValueTagValueNode,
+            'strategy',
+            'AUTO'
+        );
     }
 
     private function refactorJoinColumnAnnotation(PhpDocInfo $phpDocInfo): void
@@ -159,9 +159,14 @@ CODE_SAMPLE
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($joinColumnTagValueNode, 'nullable', true);
-        $this->doctrineItemDefaultValueManipulator->remove($joinColumnTagValueNode, 'referencedColumnName', 'id');
-        $this->doctrineItemDefaultValueManipulator->remove($joinColumnTagValueNode, 'unique', false);
+        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $joinColumnTagValueNode, 'nullable', true);
+        $this->doctrineItemDefaultValueManipulator->remove(
+            $phpDocInfo,
+            $joinColumnTagValueNode,
+            'referencedColumnName',
+            'id'
+        );
+        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $joinColumnTagValueNode, 'unique', false);
     }
 
     private function refactorManyToManyAnnotation(PhpDocInfo $phpDocInfo): void
@@ -171,8 +176,18 @@ CODE_SAMPLE
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($manyToManyTagValueNode, self::ORPHAN_REMOVAL, false);
-        $this->doctrineItemDefaultValueManipulator->remove($manyToManyTagValueNode, self::FETCH, self::LAZY);
+        $this->doctrineItemDefaultValueManipulator->remove(
+            $phpDocInfo,
+            $manyToManyTagValueNode,
+            self::ORPHAN_REMOVAL,
+            false
+        );
+        $this->doctrineItemDefaultValueManipulator->remove(
+            $phpDocInfo,
+            $manyToManyTagValueNode,
+            self::FETCH,
+            self::LAZY
+        );
     }
 
     private function refactorManyToOneAnnotation(PhpDocInfo $phpDocInfo): void
@@ -182,7 +197,12 @@ CODE_SAMPLE
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($manyToOneTagValueNode, self::FETCH, self::LAZY);
+        $this->doctrineItemDefaultValueManipulator->remove(
+            $phpDocInfo,
+            $manyToOneTagValueNode,
+            self::FETCH,
+            self::LAZY
+        );
     }
 
     private function refactorOneToManyAnnotation(PhpDocInfo $phpDocInfo): void
@@ -192,8 +212,18 @@ CODE_SAMPLE
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($oneToManyTagValueNode, self::ORPHAN_REMOVAL, false);
-        $this->doctrineItemDefaultValueManipulator->remove($oneToManyTagValueNode, self::FETCH, self::LAZY);
+        $this->doctrineItemDefaultValueManipulator->remove(
+            $phpDocInfo,
+            $oneToManyTagValueNode,
+            self::ORPHAN_REMOVAL,
+            false
+        );
+        $this->doctrineItemDefaultValueManipulator->remove(
+            $phpDocInfo,
+            $oneToManyTagValueNode,
+            self::FETCH,
+            self::LAZY
+        );
     }
 
     private function refactorOneToOneAnnotation(PhpDocInfo $phpDocInfo): void
@@ -203,7 +233,12 @@ CODE_SAMPLE
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($oneToOneTagValueNode, self::ORPHAN_REMOVAL, false);
-        $this->doctrineItemDefaultValueManipulator->remove($oneToOneTagValueNode, self::FETCH, self::LAZY);
+        $this->doctrineItemDefaultValueManipulator->remove(
+            $phpDocInfo,
+            $oneToOneTagValueNode,
+            self::ORPHAN_REMOVAL,
+            false
+        );
+        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $oneToOneTagValueNode, self::FETCH, self::LAZY);
     }
 }

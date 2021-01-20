@@ -301,6 +301,7 @@ parameters:
                 - packages/better-php-doc-parser/src/Comment/CommentsMerger.php
                 - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php
                 - rules/coding-style/src/Node/DocAliasResolver.php
+                - packages/comments/src/NodeDocBlock/DocBlockUpdater.php
                 - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfoFactory.php
                 - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php
 

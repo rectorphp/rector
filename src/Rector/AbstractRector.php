@@ -21,7 +21,6 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
@@ -29,7 +28,6 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\Core\ValueObject\ProjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -58,11 +56,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     ];
 
     /**
-     * @var string
-     */
-    private const COMMENTS = 'comments';
-
-    /**
      * @var BuilderFactory
      */
     protected $builderFactory;
@@ -78,19 +71,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $phpVersionProvider;
 
     /**
-     * @var DocBlockManipulator
-     */
-    protected $docBlockManipulator;
-
-    /**
      * @var StaticTypeMapper
      */
     protected $staticTypeMapper;
-
-    /**
-     * @var SmartFileInfo
-     */
-    private $currentFileInfo;
 
     /**
      * @var SymfonyStyle
@@ -135,7 +118,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager,
-        DocBlockManipulator $docBlockManipulator,
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
@@ -147,7 +129,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
         $this->exclusionManager = $exclusionManager;
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
@@ -167,34 +148,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @param string[] $types
-     */
-    public function hasParentTypes(Node $node, array $types): bool
-    {
-        foreach ($types as $type) {
-            if (! is_a($type, Node::class, true)) {
-                throw new ShouldNotHappenException(__METHOD__);
-            }
-
-            if ($this->hasParentType($node, $type)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function hasParentType(Node $node, string $type): bool
-    {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Node) {
-            return false;
-        }
-
-        return is_a($parent, $type, true);
-    }
-
-    /**
      * @return Expression|Node|null
      */
     final public function enterNode(Node $node)
@@ -204,24 +157,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
-        $this->currentFileInfo = $node->getAttribute(SmartFileInfo::class);
-
         $this->currentRectorProvider->changeCurrentRector($this);
-
-        // mostly for PHP doc and change notifications
+        // for PHP doc info factory and change notifier
         $this->currentNodeProvider->setNode($node);
 
         // already removed
-        if ($this->isNodeRemoved($node)) {
-            return null;
-        }
-
-        if ($this->exclusionManager->isNodeSkippedByRector($node, $this)) {
-            return null;
-        }
-
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo instanceof SmartFileInfo && $this->skipper->shouldSkipElementAndFileInfo($this, $fileInfo)) {
+        if ($this->shouldSkipCurrentNode($node)) {
             return null;
         }
 
@@ -293,7 +234,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected function mirrorComments(Node $newNode, Node $oldNode): void
     {
         $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $oldNode->getAttribute(AttributeKey::PHP_DOC_INFO));
-        $newNode->setAttribute(self::COMMENTS, $oldNode->getAttribute(self::COMMENTS));
+        $newNode->setAttribute(AttributeKey::COMMENTS, $oldNode->getAttribute(AttributeKey::COMMENTS));
     }
 
     protected function rollbackComments(Node $node, Comment $comment): void
@@ -315,7 +256,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
                 $ifStmt->setAttribute(AttributeKey::PHP_DOC_INFO, $currentPhpDocInfo);
 
                 // move // comments
-                $ifStmt->setAttribute(self::COMMENTS, $node->getComments());
+                $ifStmt->setAttribute(AttributeKey::COMMENTS, $node->getComments());
             }
 
             $this->addNodeAfterNode($ifStmt, $node);
@@ -371,15 +312,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return $newArgs;
-    }
-
-    protected function getFileInfo(): SmartFileInfo
-    {
-        if ($this->currentFileInfo === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $this->currentFileInfo;
     }
 
     protected function unwrapExpression(Stmt $stmt): Node
@@ -471,5 +403,23 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // names are the same
         return $this->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
+    }
+
+    private function shouldSkipCurrentNode(Node $node): bool
+    {
+        if ($this->isNodeRemoved($node)) {
+            return true;
+        }
+
+        if ($this->exclusionManager->isNodeSkippedByRector($node, $this)) {
+            return true;
+        }
+
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        if (! $fileInfo instanceof SmartFileInfo) {
+            return false;
+        }
+
+        return $this->skipper->shouldSkipElementAndFileInfo($this, $fileInfo);
     }
 }

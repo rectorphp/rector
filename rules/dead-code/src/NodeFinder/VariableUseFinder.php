@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\FlowControl;
+namespace Rector\DeadCode\NodeFinder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;

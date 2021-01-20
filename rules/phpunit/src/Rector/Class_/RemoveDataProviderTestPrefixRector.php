@@ -120,6 +120,8 @@ CODE_SAMPLE
                 $newMethodName = trim($newMethodName, '()');
 
                 $this->providerMethodNamesToNewNames[$oldMethodName] = $newMethodName;
+
+                $phpDocInfo->markAsChanged();
             }
         }
     }
