@@ -70,18 +70,6 @@ trait NodeTypeResolverTrait
         $this->typeUnwrapper = $typeUnwrapper;
     }
 
-    public function isInObjectType(Node $node, string $type): bool
-    {
-        $objectType = $this->nodeTypeResolver->resolve($node);
-
-        $desiredObjectType = new ObjectType($type);
-        if ($objectType->isSuperTypeOf($desiredObjectType)->yes()) {
-            return true;
-        }
-
-        return $objectType->equals($desiredObjectType);
-    }
-
     public function isPropertyBoolean(Property $property): bool
     {
         return $this->nodeTypeResolver->isPropertyBoolean($property);

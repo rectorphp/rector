@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
+use Rector\Nette\NodeFinder\ParamFinder;
 use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -22,6 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/nette/component-model/commit/1fb769f4602cf82694941530bac1111b3c5cd11b
+ * This only applied to child of \Nette\Application\UI\Control, not Forms! Forms still need to be attached to their parents
  *
  * @see \Rector\Nette\Tests\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector\RemoveParentAndNameFromComponentConstructorRectorTest
  */
@@ -60,12 +61,19 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
      */
     private $methodReflectionProvider;
 
+    /**
+     * @var ParamFinder
+     */
+    private $paramFinder;
+
     public function __construct(
+        ParamFinder $paramFinder,
         StaticCallAnalyzer $staticCallAnalyzer,
         MethodReflectionProvider $methodReflectionProvider
     ) {
         $this->staticCallAnalyzer = $staticCallAnalyzer;
         $this->methodReflectionProvider = $methodReflectionProvider;
+        $this->paramFinder = $paramFinder;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -126,7 +134,7 @@ CODE_SAMPLE
             return $this->refactorStaticCall($node);
         }
 
-        if ($node instanceof New_ && $this->isObjectType($node->class, self::COMPONENT_CONTAINER_CLASS)) {
+        if ($this->isObjectType($node->class, self::CONTROL_CLASS)) {
             return $this->refactorNew($node);
         }
 
@@ -135,7 +143,7 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        if (! $this->isInObjectType($classMethod, self::CONTROL_CLASS)) {
+        if (! $this->isInsideNetteControlClass($classMethod)) {
             return null;
         }
 
@@ -146,30 +154,21 @@ CODE_SAMPLE
         return $this->removeClassMethodParams($classMethod);
     }
 
-    private function removeClassMethodParams(ClassMethod $classMethod): ?ClassMethod
+    private function removeClassMethodParams(ClassMethod $classMethod): ClassMethod
     {
-        $hasClassMethodChanged = false;
         foreach ($classMethod->params as $param) {
-            if ($this->isInAssign($classMethod, $param)) {
+            if ($this->paramFinder->isInAssign((array) $classMethod->stmts, $param)) {
                 continue;
             }
 
-            if ($this->isName($param, self::PARENT) && $param->type !== null && $this->isName(
-                $param->type,
-                    self::COMPONENT_CONTAINER_CLASS
-            )) {
+            if ($this->isObjectType($param, self::COMPONENT_CONTAINER_CLASS)) {
                 $this->removeNode($param);
-                $hasClassMethodChanged = true;
+                continue;
             }
 
             if ($this->isName($param, self::NAME)) {
                 $this->removeNode($param);
-                $hasClassMethodChanged = true;
             }
-        }
-
-        if (! $hasClassMethodChanged) {
-            return null;
         }
 
         return $classMethod;
@@ -177,13 +176,14 @@ CODE_SAMPLE
 
     private function refactorStaticCall(StaticCall $staticCall): ?StaticCall
     {
+        if (! $this->isInsideNetteControlClass($staticCall)) {
+            return null;
+        }
+
         if (! $this->staticCallAnalyzer->isParentCallNamed($staticCall, MethodName::CONSTRUCT)) {
             return null;
         }
 
-        $hasStaticCallChanged = false;
-
-        /** @var Arg $staticCallArg */
         foreach ($staticCall->args as $staticCallArg) {
             if (! $staticCallArg->value instanceof Variable) {
                 continue;
@@ -196,11 +196,6 @@ CODE_SAMPLE
             }
 
             $this->removeNode($staticCallArg);
-            $hasStaticCallChanged = true;
-        }
-
-        if (! $hasStaticCallChanged) {
-            return null;
         }
 
         if ($this->shouldRemoveEmptyCall($staticCall)) {
@@ -211,11 +206,10 @@ CODE_SAMPLE
         return $staticCall;
     }
 
-    private function refactorNew(New_ $new): ?New_
+    private function refactorNew(New_ $new): New_
     {
         $parameterNames = $this->methodReflectionProvider->provideParameterNamesByNew($new);
 
-        $hasNewChanged = false;
         foreach ($new->args as $position => $arg) {
             // is on position of $parent or $name?
             if (! isset($parameterNames[$position])) {
@@ -227,12 +221,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $hasNewChanged = true;
             $this->removeNode($arg);
-        }
-
-        if (! $hasNewChanged) {
-            return null;
         }
 
         return $new;
@@ -251,18 +240,13 @@ CODE_SAMPLE
         return true;
     }
 
-    private function isInAssign(ClassMethod $classMethod, Param $param): bool
+    private function isInsideNetteControlClass(Node $node): bool
     {
-        $variable = $param->var;
-        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
-            $variable
-        ): bool {
-            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $parent instanceof Assign) {
-                return false;
-            }
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return false;
+        }
 
-            return $this->areNodesEqual($node, $variable);
-        });
+        return $this->isObjectType($classLike, self::CONTROL_CLASS);
     }
 }
