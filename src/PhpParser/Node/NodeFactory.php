@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
@@ -553,6 +554,7 @@ final class NodeFactory
             || $item instanceof FuncCall
             || $item instanceof Concat
             || $item instanceof Scalar
+            || $item instanceof Cast
         ) {
             $arrayItem = new ArrayItem($item);
         } elseif ($item instanceof Identifier) {
