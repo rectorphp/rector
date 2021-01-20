@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -27,6 +28,16 @@ final class MoveEntitiesToEntityDirectoryRector extends AbstractRector
      * @see https://regex101.com/r/auSMk3/1
      */
     private const ENTITY_PATH_REGEX = '#\bEntity\b#';
+
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
+    public function __construct(DoctrineDocBlockResolver $doctrineDocBlockResolver)
+    {
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -109,6 +120,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isDoctrineEntityClass($class);
+        return $this->doctrineDocBlockResolver->isDoctrineEntityClass($class);
     }
 }

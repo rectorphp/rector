@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToOne
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -45,14 +46,21 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
      */
     private $phpDocTagRemover;
 
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
     public function __construct(
         PhpDocTagNodeFactory $phpDocTagNodeFactory,
         UuidMigrationDataCollector $uuidMigrationDataCollector,
-        PhpDocTagRemover $phpDocTagRemover
+        PhpDocTagRemover $phpDocTagRemover,
+        DoctrineDocBlockResolver $doctrineDocBlockResolver
     ) {
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
         $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -148,7 +156,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isDoctrineEntityClass($node)) {
+        if (! $this->doctrineDocBlockResolver->isDoctrineEntityClass($node)) {
             return null;
         }
 
@@ -176,7 +184,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $targetEntity = $this->getTargetEntity($property);
+        $targetEntity = $this->doctrineDocBlockResolver->getTargetEntity($property);
         if ($targetEntity === null) {
             return true;
         }

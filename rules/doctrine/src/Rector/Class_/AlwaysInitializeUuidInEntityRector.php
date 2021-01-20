@@ -15,6 +15,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -35,12 +36,19 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
      */
     private $classDependencyManipulator;
 
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
     public function __construct(
         ClassDependencyManipulator $classDependencyManipulator,
-        EntityUuidNodeFactory $entityUuidNodeFactory
+        EntityUuidNodeFactory $entityUuidNodeFactory,
+        DoctrineDocBlockResolver $doctrineDocBlockResolver
     ) {
         $this->entityUuidNodeFactory = $entityUuidNodeFactory;
         $this->classDependencyManipulator = $classDependencyManipulator;
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -102,7 +110,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isDoctrineEntityClass($node)) {
+        if (! $this->doctrineDocBlockResolver->isDoctrineEntityClass($node)) {
             return null;
         }
 

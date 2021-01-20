@@ -10,6 +10,7 @@ use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\UnusedNodeResolver\UnusedClassResolver;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -27,9 +28,17 @@ final class RemoveUnusedClassesRector extends AbstractRector implements ZeroCach
      */
     private $unusedClassResolver;
 
-    public function __construct(UnusedClassResolver $unusedClassResolver)
-    {
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
+    public function __construct(
+        UnusedClassResolver $unusedClassResolver,
+        DoctrineDocBlockResolver $doctrineDocBlockResolver
+    ) {
         $this->unusedClassResolver = $unusedClassResolver;
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -112,7 +121,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isDoctrineEntityClass($class)) {
+        if ($this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
             return true;
         }
 
