@@ -9,13 +9,14 @@ use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -48,24 +49,31 @@ final class PhpDocInfoFactory
     private $attributeAwareNodeFactory;
 
     /**
-     * @var PhpDocRemover
+     * @var AnnotationNaming
      */
-    private $phpDocRemover;
+    private $annotationNaming;
+
+    /**
+     * @var RectorChangeCollector
+     */
+    private $rectorChangeCollector;
 
     public function __construct(
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         CurrentNodeProvider $currentNodeProvider,
         Lexer $lexer,
         BetterPhpDocParser $betterPhpDocParser,
-        PhpDocRemover $phpDocRemover,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        AnnotationNaming $annotationNaming,
+        RectorChangeCollector $rectorChangeCollector
     ) {
         $this->betterPhpDocParser = $betterPhpDocParser;
         $this->lexer = $lexer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
-        $this->phpDocRemover = $phpDocRemover;
+        $this->annotationNaming = $annotationNaming;
+        $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
     public function createFromNodeOrEmpty(Node $node): PhpDocInfo
@@ -171,8 +179,9 @@ final class PhpDocInfoFactory
             $content,
             $this->staticTypeMapper,
             $node,
-            $this->phpDocRemover,
-            $this->attributeAwareNodeFactory
+            $this->annotationNaming,
+            $this->currentNodeProvider,
+            $this->rectorChangeCollector
         );
 
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);

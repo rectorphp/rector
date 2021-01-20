@@ -66,9 +66,8 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
                 continue;
             }
 
-            /** @var Scope|null $nodeScope */
             $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-            if ($nodeScope === null) {
+            if (! $nodeScope instanceof Scope) {
                 return $classType;
             }
 

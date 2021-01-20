@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
@@ -105,10 +104,7 @@ CODE_SAMPLE
             }
         }
 
-        if ($phpDocInfo instanceof PhpDocInfo && $this->typeComparator->isSubtype(
-            $constType,
-            $phpDocInfo->getVarType()
-        )) {
+        if ($this->typeComparator->isSubtype($constType, $phpDocInfo->getVarType())) {
             return null;
         }
 

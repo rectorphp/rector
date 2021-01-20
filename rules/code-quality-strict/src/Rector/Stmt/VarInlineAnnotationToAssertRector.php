@@ -88,10 +88,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $docVariableName = $this->getVarDocVariableName($phpDocInfo);
         if ($docVariableName === null) {

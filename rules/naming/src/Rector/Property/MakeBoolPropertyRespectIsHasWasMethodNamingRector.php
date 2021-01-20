@@ -104,7 +104,7 @@ CODE_SAMPLE
         }
 
         $property = $this->boolPropertyRenamer->rename($propertyRename);
-        if ($property === null) {
+        if (! $property instanceof \PhpParser\Node\Stmt\Property) {
             return null;
         }
 

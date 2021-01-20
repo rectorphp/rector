@@ -10,6 +10,7 @@ use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\Annotations\Reader;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingAnnotationReader;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
+use Rector\PhpAttribute\ValueObject\TagName;
 
 final class AnnotationReaderFactory
 {
@@ -38,7 +39,7 @@ final class AnnotationReaderFactory
         'Gedmo\Versioned',
         'Versioned',
         // nette @inject dummy annotation
-        'inject',
+        TagName::INJECT,
     ];
 
     public function create(): Reader

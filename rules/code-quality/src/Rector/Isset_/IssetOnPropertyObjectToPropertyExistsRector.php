@@ -122,10 +122,9 @@ CODE_SAMPLE
 
     private function getType(Expr $expr): ?Type
     {
-        /** @var Scope|null $scope */
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
 
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             return null;
         }
 

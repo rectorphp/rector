@@ -6,7 +6,7 @@ namespace Rector\Symfony3\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioMethodTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\Core\Rector\AbstractRector;
@@ -22,6 +22,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
 {
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(PhpDocTagRemover $phpDocTagRemover)
+    {
+        $this->phpDocTagRemover = $phpDocTagRemover;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -84,29 +94,23 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        /** @var SensioMethodTagValueNode|null $sensioMethodTagValueNode */
         $sensioMethodTagValueNode = $phpDocInfo->getByType(SensioMethodTagValueNode::class);
-        if ($sensioMethodTagValueNode === null) {
+        if (! $sensioMethodTagValueNode instanceof SensioMethodTagValueNode) {
             return null;
         }
 
         $methods = $sensioMethodTagValueNode->getMethods();
 
-        /** @var SymfonyRouteTagValueNode|null $symfonyRouteTagValueNode */
         $symfonyRouteTagValueNode = $phpDocInfo->getByType(SymfonyRouteTagValueNode::class);
-        if ($symfonyRouteTagValueNode === null) {
+        if (! $symfonyRouteTagValueNode instanceof SymfonyRouteTagValueNode) {
             return null;
         }
 
         $symfonyRouteTagValueNode->changeMethods($methods);
 
-        $phpDocInfo->removeTagValueNodeFromNode($sensioMethodTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioMethodTagValueNode);
 
         return $node;
     }

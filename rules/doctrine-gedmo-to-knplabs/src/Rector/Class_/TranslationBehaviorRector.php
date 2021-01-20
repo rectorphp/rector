@@ -198,10 +198,7 @@ CODE_SAMPLE
         $removedPropertyNameToPhpDocInfo = [];
 
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
-                continue;
-            }
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             $hasTypeLocaleTagValueNode = $propertyPhpDocInfo->hasByType(LocaleTagValueNode::class);
 
             if ($hasTypeLocaleTagValueNode) {
@@ -252,9 +249,8 @@ CODE_SAMPLE
      */
     private function dumpEntityTranslation(Class_ $class, array $translatedPropertyToPhpDocInfos): void
     {
-        /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $class->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if (! $fileInfo instanceof SmartFileInfo) {
             throw new ShouldNotHappenException();
         }
 

@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -137,11 +136,7 @@ CODE_SAMPLE
 
             $returnType = $this->returnTypeInferer->inferFunctionLike($returnClassMethod);
 
-            /** @var PhpDocInfo|null $currentPhpDocInfo */
-            $currentPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($currentPhpDocInfo === null) {
-                $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-            }
+            $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
             $paramType = $this->constantReturnToParamTypeConverter->convert($returnType);
             if ($paramType === null) {

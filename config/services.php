@@ -25,6 +25,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\PackageBuilder\Strings\StringFormatConverter;
@@ -102,4 +103,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->factory([service(InflectorFactory::class), 'build']);
 
     $services->set(VersionParser::class);
+
+    $services->set(TypeChecker::class);
 };

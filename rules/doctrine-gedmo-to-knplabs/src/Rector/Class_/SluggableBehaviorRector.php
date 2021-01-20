@@ -16,7 +16,6 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\SlugTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -112,14 +111,10 @@ CODE_SAMPLE
         $matchedProperty = null;
 
         foreach ($node->getProperties() as $property) {
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
-                continue;
-            }
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
-            /** @var SlugTagValueNode|null $slugTagValueNode */
             $slugTagValueNode = $propertyPhpDocInfo->getByType(SlugTagValueNode::class);
-            if ($slugTagValueNode === null) {
+            if (! $slugTagValueNode instanceof SlugTagValueNode) {
                 continue;
             }
 

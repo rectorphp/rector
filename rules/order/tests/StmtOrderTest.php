@@ -75,9 +75,9 @@ final class StmtOrderTest extends AbstractKernelTestCase
 
     /**
      * @dataProvider dataProvider
-     * @param array<int,string> $desiredStmtOrder
-     * @param array<int,string> $currentStmtOrder
-     * @param array<int,int> $expected
+     * @param array<int, string> $desiredStmtOrder
+     * @param array<int, string> $currentStmtOrder
+     * @param array<int, int> $expected
      */
     public function testCreateOldToNewKeys(array $desiredStmtOrder, array $currentStmtOrder, array $expected): void
     {

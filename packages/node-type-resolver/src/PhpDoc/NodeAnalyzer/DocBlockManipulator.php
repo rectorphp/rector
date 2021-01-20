@@ -7,16 +7,10 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
-use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Renaming\ValueObject\RenameAnnotation;
 
 final class DocBlockManipulator
 {
@@ -54,62 +48,16 @@ final class DocBlockManipulator
         $this->docBlockClassRenamer = $docBlockClassRenamer;
     }
 
-    public function changeType(Node $node, Type $oldType, Type $newType): void
+    public function changeType(PhpDocInfo $phpDocInfo, Node $node, Type $oldType, Type $newType): void
     {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
-    }
-
-    public function replaceAnnotationInNode(Node $node, RenameAnnotation $renameAnnotation): void
-    {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        $this->replaceTagByAnother(
-            $phpDocInfo->getPhpDocNode(),
-            $renameAnnotation->getOldAnnotation(),
-            $renameAnnotation->getNewAnnotation()
-        );
-    }
-
-    public function replaceTagByAnother(PhpDocNode $phpDocNode, string $oldTag, string $newTag): void
-    {
-        $oldTag = StaticAnnotationNaming::normalizeName($oldTag);
-        $newTag = StaticAnnotationNaming::normalizeName($newTag);
-
-        foreach ($phpDocNode->children as $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if ($phpDocChildNode->name === $oldTag) {
-                $phpDocChildNode->name = $newTag;
-            }
-        }
-    }
-
-    /**
-     * For better performance
-     */
-    public function hasNodeTypeTags(Node $node): bool
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
-        return $phpDocInfo->hasByType(TypeAwareTagValueNodeInterface::class);
+        $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldType, $newType, $node);
     }
 
     public function updateNodeWithPhpDocInfo(Node $node): void
     {
         // nothing to change
-        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }
 
@@ -141,19 +89,6 @@ final class DocBlockManipulator
         $node->setDocComment(new Doc($phpDoc));
     }
 
-    public function getDoctrineFqnTargetEntity(Node $node): ?string
-    {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
-        if ($doctrineRelationTagValueNode === null) {
-            return null;
-        }
-
-        return $doctrineRelationTagValueNode->getFullyQualifiedTargetEntity();
-    }
-
     private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo): string
     {
         // new node, needs to be reparsed
@@ -180,7 +115,6 @@ final class DocBlockManipulator
 
         if ($node->getComments() !== []) {
             $commentsContent = implode(PHP_EOL, $node->getComments());
-
             if ($this->removeSpacesAndAsterisks($commentsContent) === $this->removeSpacesAndAsterisks($phpDoc)) {
                 return false;
             }
@@ -203,12 +137,16 @@ final class DocBlockManipulator
     {
         $startComments = '';
         foreach ($node->getComments() as $comment) {
-            // skip non-simple comments
-            if (! Strings::startsWith($comment->getText(), '//')) {
+            // skip simple comments
+            if (Strings::startsWith($comment->getText(), '//')) {
                 continue;
             }
 
-            $startComments .= $comment->getText();
+            if (Strings::startsWith($comment->getText(), '#')) {
+                continue;
+            }
+
+            $startComments .= $comment->getText() . PHP_EOL;
         }
 
         if ($startComments === '') {

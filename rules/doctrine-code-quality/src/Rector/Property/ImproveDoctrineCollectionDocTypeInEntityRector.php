@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
@@ -132,13 +131,10 @@ CODE_SAMPLE
 
     private function refactorProperty(Property $property): ?Property
     {
-        if (! $this->hasNodeTagValueNode($property, OneToManyTagValueNode::class)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        if (! $phpDocInfo->hasByType(OneToManyTagValueNode::class)) {
             return null;
         }
-
-        // @todo make an own local property on enter node?
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         $attributeAwareVarTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
         if ($attributeAwareVarTagValueNode !== null) {
@@ -185,8 +181,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
         $param = $classMethod->params[0];
         $parameterName = $this->getName($param);
@@ -194,16 +189,6 @@ CODE_SAMPLE
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $collectionObjectType, $param, $parameterName);
 
         return $classMethod;
-    }
-
-    private function hasNodeTagValueNode(Property $property, string $tagValueNodeClass): bool
-    {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return false;
-        }
-
-        return $phpDocInfo->hasByType($tagValueNodeClass);
     }
 
     private function resolveCollectionSetterAssignType(ClassMethod $classMethod): ?Type
@@ -218,7 +203,7 @@ CODE_SAMPLE
         }
 
         $property = $this->matchPropertyFetchToClassProperty($propertyFetches[0]);
-        if ($property === null) {
+        if (! $property instanceof Property) {
             return null;
         }
 

@@ -16,9 +16,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\Exception\NotImplementedException;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 
 final class PropertyRanker
 {
@@ -39,13 +37,19 @@ final class PropertyRanker
         CallableType::class => 35,
     ];
 
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
+    {
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    }
+
     public function rank(Property $property): int
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return 1;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $varType = $phpDocInfo->getVarType();
         foreach (self::TYPE_TO_RANK as $type => $rank) {
@@ -54,6 +58,7 @@ final class PropertyRanker
             }
         }
 
-        throw new NotImplementedException(get_class($varType));
+        // fallback
+        return 1;
     }
 }

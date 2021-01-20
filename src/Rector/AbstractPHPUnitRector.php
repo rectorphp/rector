@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
@@ -36,13 +35,8 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return true;
         }
 
-        $phpDocInfo = $classMethod->getAttribute(PhpDocInfo::class);
-
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            return $phpDocInfo->hasByName('test');
-        }
-
-        return false;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        return $phpDocInfo->hasByName('test');
     }
 
     protected function isPHPUnitMethodName(Node $node, string $name): bool

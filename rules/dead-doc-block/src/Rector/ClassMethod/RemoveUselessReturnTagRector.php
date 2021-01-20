@@ -6,10 +6,9 @@ namespace Rector\DeadDocBlock\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadDocBlock\DeadReturnTagValueNodeAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,9 +22,17 @@ final class RemoveUselessReturnTagRector extends AbstractRector
      */
     private $deadReturnTagValueNodeAnalyzer;
 
-    public function __construct(DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer)
-    {
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(
+        DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer,
+        PhpDocTagRemover $phpDocTagRemover
+    ) {
         $this->deadReturnTagValueNodeAnalyzer = $deadReturnTagValueNodeAnalyzer;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -76,10 +83,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
         if ($attributeAwareReturnTagValueNode === null) {
@@ -90,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo->removeTagValueNodeFromNode($attributeAwareReturnTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $attributeAwareReturnTagValueNode);
 
         return $node;
     }

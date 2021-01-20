@@ -271,9 +271,8 @@ CODE_SAMPLE
 
     private function isFunctionLikeReturnsVoid(If_ $if): bool
     {
-        /** @var FunctionLike|null $functionLike */
         $functionLike = $this->betterNodeFinder->findParentType($if, FunctionLike::class);
-        if ($functionLike === null) {
+        if (! $functionLike instanceof FunctionLike) {
             return true;
         }
 

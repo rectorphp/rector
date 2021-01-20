@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
@@ -169,7 +170,8 @@ CODE_SAMPLE
     private function removeClassPrivatePropertiesByNames(Class_ $class, array $unusedPropertyNames): Class_
     {
         foreach ($class->getProperties() as $property) {
-            if ($this->hasPhpDocTagValueNode($property, IdTagValueNode::class)) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+            if ($phpDocInfo->hasByType(IdTagValueNode::class)) {
                 continue;
             }
 
@@ -255,8 +257,14 @@ CODE_SAMPLE
 
     private function getOtherRelationProperty(Property $property): ?Property
     {
-        $targetEntity = $this->docBlockManipulator->getDoctrineFqnTargetEntity($property);
-        if ($targetEntity === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+        if (! $doctrineRelationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
+            return null;
+        }
+
+        $fullyQualifiedTargetEntity = $doctrineRelationTagValueNode->getFullyQualifiedTargetEntity();
+        if ($fullyQualifiedTargetEntity === null) {
             return null;
         }
 
@@ -266,7 +274,7 @@ CODE_SAMPLE
         }
 
         // get the class property and remove "mappedBy/inversedBy" from annotation
-        $relatedEntityClass = $this->nodeRepository->findClass($targetEntity);
+        $relatedEntityClass = $this->nodeRepository->findClass($fullyQualifiedTargetEntity);
         if (! $relatedEntityClass instanceof Class_) {
             return null;
         }

@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpDoc;
 
-use PhpParser\Node;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertChoiceTagValueNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PhpDocClassRenamer
 {
@@ -19,11 +17,8 @@ final class PhpDocClassRenamer
      *
      * @param string[] $oldToNewClasses
      */
-    public function changeTypeInAnnotationTypes(Node $node, array $oldToNewClasses): void
+    public function changeTypeInAnnotationTypes(PhpDocInfo $phpDocInfo, array $oldToNewClasses): void
     {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
         $this->processAssertChoiceTagValueNode($oldToNewClasses, $phpDocInfo);
         $this->processDoctrineRelationTagValueNode($oldToNewClasses, $phpDocInfo);
         $this->processSerializerTypeTagValueNode($oldToNewClasses, $phpDocInfo);
@@ -45,6 +40,7 @@ final class PhpDocClassRenamer
             }
 
             $assertChoiceTagValueNode->changeCallbackClass($newClass);
+            $phpDocInfo->markAsChanged();
             break;
         }
     }
@@ -65,6 +61,7 @@ final class PhpDocClassRenamer
             }
 
             $doctrineRelationTagValueNode->changeTargetEntity($newClass);
+            $phpDocInfo->markAsChanged();
             break;
         }
     }
@@ -80,7 +77,10 @@ final class PhpDocClassRenamer
         }
 
         foreach ($oldToNewClasses as $oldClass => $newClass) {
-            $serializerTypeTagValueNode->replaceName($oldClass, $newClass);
+            $hasReplaced = $serializerTypeTagValueNode->replaceName($oldClass, $newClass);
+            if ($hasReplaced) {
+                $phpDocInfo->markAsChanged();
+            }
         }
     }
 }

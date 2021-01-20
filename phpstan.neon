@@ -56,6 +56,7 @@ parameters:
         - packages/better-php-doc-parser/src/ValueObject/PhpDocNode/AbstractTagValueNode.php
         - packages/testing/src/PHPUnit/*.php
         - packages/node-type-resolver/tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
+        - rules/downgrade-php70/src/Rector/FunctionLike/AbstractDowngradeParamDeclarationRector.php
 
         # phsptan bug
         - utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
@@ -268,6 +269,7 @@ parameters:
                 - src/Rector/AbstractRector.php
                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
                 - rules/code-quality/src/Rector/For_/ForToForeachRector.php
+                - rules/phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php
 
         # symplify 9
         - '#Use decoupled factory service to create "(.*?)" object#'
@@ -318,17 +320,14 @@ parameters:
                 - utils/doctrine-annotation-parser-syncer/src/Rector/*
 
         -
-            message: '#Unreachable statement \- code above always terminates#'
-            paths:
-                - src/Rector/AbstractRector/NodeTypeResolverTrait.php
-
-        -
             message: '#Do not use setter on a service#'
             paths:
                 - packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php
                 - src/Configuration/Configuration.php
                 # prevent circular dependnecy
                 - packages/static-type-mapper/src/Naming/NameScopeFactory.php
+
+                - rules/composer/src/Modifier/ComposerModifier.php
 
         # class-string vs string
         - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
@@ -379,13 +378,6 @@ parameters:
 
         # soo many false positive naming - fix later with Recto rule
         - '#Method "(.*?)\(\)" returns bool type, so the name should start with is/has/was#'
-
-
-        # false positives
-        -
-             message: '#Unreachable statement \- code above always terminates#'
-             paths:
-                 - rules/php70/src/Rector/FuncCall/MultiDirnameRector.php
 
         -
             message: '#Comparison operation "<" between 0 and 2 is always true#'
@@ -454,7 +446,10 @@ parameters:
 
         -
             message: '#Unreachable statement \- code above always terminates#'
-            path: 'bin/rector.php'
+            paths:
+                - bin/rector.php
+                - src/Rector/AbstractRector/NodeTypeResolverTrait.php
+                - rules/php70/src/Rector/FuncCall/MultiDirnameRector.php
 
         -
             message: '#Class cognitive complexity is 42, keep it under 40#'
@@ -503,21 +498,11 @@ parameters:
         - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'
 
         -
-             message: '#Do not use setter on a service#'
-             paths:
-                 - rules/composer/src/Modifier/ComposerModifier.php
-
-        -
              message: '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name\:\:toString\(\)#'
              paths:
                 - utils/phpstan-extensions/src/ReturnTypeExtension/NodeFinder/FindFirstInstanceOfReturnTypeExtension.php
 
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node#'
-
-        -
-            message:  '#Class cognitive complexity is \d+, keep it under \d+#'
-            paths:
-                - rules/phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php
 
         -
              message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\.#'
@@ -547,3 +532,10 @@ parameters:
             path: src/Console/Command/AbstractCommand.php
 
         - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or abstract service instead#'
+        - '#Content of method "getNodeReturnPhpDocType\(\)" is duplicated with method "inferFunctionLike\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\\ReturnTagReturnTypeInferer" class\. Use unique content or abstract service instead#'
+        - '#Parameter \#1 \$type of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:hasByType\(\) expects class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>, string given#'
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:findAllByType\(\) should return array<T of PHPStan\\PhpDocParser\\Ast\\Node\> but returns array<int, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|\(PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode&T of PHPStan\\PhpDocParser\\Ast\\Node\)\>#'
+        - '#Content of method "inferFunctionLike\(\)" is duplicated with method "getNodeReturnPhpDocType\(\)" in "Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddArrayReturnDocTypeRector" class\. Use unique content or abstract service instead#'
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:getParamTagValueByName\(\) should return Rector\\AttributeAwarePhpDoc\\Ast\\PhpDoc\\AttributeAwareParamTagValueNode\|null but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ParamTagValueNode\|null#'
+        - '#Instanceof between Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\Doctrine\\Property_\\ManyToOneTagValueNode\|null and Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\Doctrine\\Property_\\ManyToManyTagValueNode will always evaluate to false#'

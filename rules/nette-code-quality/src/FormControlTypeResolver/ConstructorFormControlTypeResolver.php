@@ -50,9 +50,8 @@ final class ConstructorFormControlTypeResolver implements FormControlTypeResolve
             return [];
         }
 
-        /** @var Variable|null $thisVariable */
         $thisVariable = $this->betterNodeFinder->findVariableOfName($node, 'this');
-        if ($thisVariable === null) {
+        if (! $thisVariable instanceof Variable) {
             return [];
         }
 

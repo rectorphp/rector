@@ -80,6 +80,7 @@
         ],
         "psr-4": {
             "Rector\\Testing\\": "packages/testing/src",
+            "Rector\\Comments\\": "packages/comments/src",
             "Rector\\Architecture\\": "rules/architecture/src",
             "Rector\\AttributeAwarePhpDoc\\": "packages/attribute-aware-php-doc/src",
             "Rector\\Autodiscovery\\": "rules/autodiscovery/src",
@@ -224,6 +225,7 @@
             "Rector\\DependencyInjection\\Tests\\": "rules/dependency-injection/tests",
             "Rector\\DoctrineCodeQuality\\Tests\\": "rules/doctrine-code-quality/tests",
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "rules/doctrine-gedmo-to-knplabs/tests",
+            "Rector\\Comments\\Tests\\": "packages/comments/tests",
             "Rector\\Doctrine\\Tests\\": "rules/doctrine/tests",
             "Rector\\DowngradePhp70\\Tests\\": "rules/downgrade-php70/tests",
             "Rector\\DowngradePhp71\\Tests\\": "rules/downgrade-php71/tests",

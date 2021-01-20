@@ -90,9 +90,8 @@ final class MethodCallManipulator
 
     public function findAssignToVariable(Variable $variable): ?Assign
     {
-        /** @var Node|null $parentNode */
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode === null) {
+        if (! $parentNode instanceof Node) {
             return null;
         }
 
@@ -119,9 +118,8 @@ final class MethodCallManipulator
     public function findMethodCallsOnVariable(Variable $variable): array
     {
         // get scope node, e.g. parent function call, method call or anonymous function
-        /** @var ClassMethod|null $classMethod */
         $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return [];
         }
 

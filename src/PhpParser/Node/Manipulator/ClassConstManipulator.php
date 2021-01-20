@@ -60,9 +60,8 @@ final class ClassConstManipulator
      */
     public function getAllClassConstFetch(ClassConst $classConst): array
     {
-        /** @var Class_|null $classLike */
         $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             return [];
         }
 

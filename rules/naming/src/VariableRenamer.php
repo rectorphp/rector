@@ -12,6 +12,8 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -34,14 +36,21 @@ final class VariableRenamer
      */
     private $varTagValueNodeRenamer;
 
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
-        VarTagValueNodeRenamer $varTagValueNodeRenamer
+        VarTagValueNodeRenamer $varTagValueNodeRenamer,
+        PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -94,9 +103,8 @@ final class VariableRenamer
 
     private function isParamInParentFunction(Variable $variable): bool
     {
-        /** @var Closure|null $closure */
         $closure = $variable->getAttribute(AttributeKey::CLOSURE_NODE);
-        if ($closure === null) {
+        if (! $closure instanceof Closure) {
             return false;
         }
 
@@ -121,8 +129,23 @@ final class VariableRenamer
         }
 
         $variable->name = $expectedName;
-        $this->varTagValueNodeRenamer->renameAssignVarTagVariableName($variable, $oldName, $expectedName);
+
+        $variablePhpDocInfo = $this->resolvePhpDocInfo($variable);
+        $this->varTagValueNodeRenamer->renameAssignVarTagVariableName($variablePhpDocInfo, $oldName, $expectedName);
 
         return $variable;
+    }
+
+    /**
+     * Expression doc block has higher priority
+     */
+    private function resolvePhpDocInfo(Variable $variable): PhpDocInfo
+    {
+        $expression = $variable->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if ($expression instanceof Node) {
+            return $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);
+        }
+
+        return $this->phpDocInfoFactory->createFromNodeOrEmpty($variable);
     }
 }

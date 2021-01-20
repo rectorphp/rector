@@ -8,7 +8,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
-final class PhpDocRemover
+final class PhpDocTagRemover
 {
     public function removeByName(PhpDocInfo $phpDocInfo, string $name): void
     {
@@ -24,6 +24,8 @@ final class PhpDocRemover
             }
 
             unset($attributeAwarePhpDocNode->children[$key]);
+
+            $phpDocInfo->markAsChanged();
         }
     }
 
@@ -41,6 +43,8 @@ final class PhpDocRemover
             }
 
             unset($attributeAwarePhpDocNode->children[$key]);
+
+            $phpDocInfo->markAsChanged();
         }
     }
 

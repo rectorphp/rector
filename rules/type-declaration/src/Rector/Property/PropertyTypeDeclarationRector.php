@@ -7,10 +7,8 @@ namespace Rector\TypeDeclaration\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -93,20 +91,16 @@ CODE_SAMPLE
             return null;
         }
 
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
         // is already set
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo !== null && ! $phpDocInfo->getVarType() instanceof MixedType) {
+        if (! $phpDocInfo->getVarType() instanceof MixedType) {
             return null;
         }
 
         $type = $this->propertyTypeInferer->inferProperty($node);
         if ($type instanceof MixedType) {
             return null;
-        }
-
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
         }
 
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);

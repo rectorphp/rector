@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\ValueObject\TagName;
@@ -25,11 +24,11 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
      * @var string[]
      */
     private const ANNOTATIONS_REQUIRING_PUBLIC = [
-        'api',
+        TagName::API,
         // Symfony DI
         TagName::REQUIRED,
         // other DI
-        'inject',
+        TagName::INJECT,
     ];
 
     /**
@@ -138,12 +137,7 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         foreach (self::ANNOTATIONS_REQUIRING_PUBLIC as $annotationRequiringPublic) {
             if ($phpDocInfo->hasByName($annotationRequiringPublic)) {
                 return true;

@@ -15,6 +15,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\DataProviderTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -38,10 +40,19 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
      */
     private $typeFactory;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, TypeFactory $typeFactory)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        TypeFactory $typeFactory,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->typeFactory = $typeFactory;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -74,13 +85,9 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     private function resolveDataProviderClassMethod(Param $param): ?ClassMethod
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
-        if ($phpDocInfo === null) {
-            return null;
-        }
 
-        /** @var DataProviderTagValueNode|null $attributeAwareDataProviderTagValueNode */
         $attributeAwareDataProviderTagValueNode = $phpDocInfo->getByType(DataProviderTagValueNode::class);
-        if ($attributeAwareDataProviderTagValueNode === null) {
+        if (! $attributeAwareDataProviderTagValueNode instanceof DataProviderTagValueNode) {
             return null;
         }
 
@@ -128,13 +135,13 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         return $this->typeFactory->createMixedPassedOrUnionType($paramOnPositionTypes);
     }
 
-    private function getFunctionLikePhpDocInfo(Param $param): ?PhpDocInfo
+    private function getFunctionLikePhpDocInfo(Param $param): PhpDocInfo
     {
         $parent = $param->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof FunctionLike) {
-            return null;
+            throw new ShouldNotHappenException();
         }
 
-        return $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
+        return $this->phpDocInfoFactory->createFromNodeOrEmpty($parent);
     }
 }

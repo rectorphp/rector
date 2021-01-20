@@ -12,4 +12,14 @@ final class TagName
      * @var string
      */
     public const REQUIRED = 'required';
+
+    /**
+     * @var string
+     */
+    public const API = 'api';
+
+    /**
+     * @var string
+     */
+    public const INJECT = 'inject';
 }

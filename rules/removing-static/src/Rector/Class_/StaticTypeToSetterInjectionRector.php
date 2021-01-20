@@ -15,12 +15,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -173,8 +171,7 @@ CODE_SAMPLE
 
             $entityFactoryProperty = $this->nodeFactory->createPrivateProperty($variableName);
 
-            /** @var PhpDocInfo $phpDocInfo */
-            $phpDocInfo = $entityFactoryProperty->getAttribute(AttributeKey::PHP_DOC_INFO);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($entityFactoryProperty);
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $objectType);
 
             $class->stmts = array_merge([$entityFactoryProperty, $setEntityFactoryMethod], $class->stmts);

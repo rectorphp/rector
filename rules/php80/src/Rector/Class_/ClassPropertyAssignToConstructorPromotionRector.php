@@ -9,7 +9,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadDocBlock\TagRemover\VarTagRemover;
@@ -42,14 +42,21 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      */
     private $varTagRemover;
 
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
     public function __construct(
         PromotedPropertyResolver $promotedPropertyResolver,
         VariableRenamer $variableRenamer,
-        VarTagRemover $varTagRemover
+        VarTagRemover $varTagRemover,
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->variableRenamer = $variableRenamer;
         $this->varTagRemover = $varTagRemover;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -116,7 +123,6 @@ CODE_SAMPLE
             $this->removeNode($promotionCandidate->getAssign());
 
             $property = $promotionCandidate->getProperty();
-
             $this->decorateParamWithPropertyPhpDocInfo($property, $param);
 
             /** @var string $oldName */
@@ -139,11 +145,7 @@ CODE_SAMPLE
 
     private function decorateParamWithPropertyPhpDocInfo(Property $property, Param $param): void
     {
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $propertyPhpDocInfo instanceof PhpDocInfo) {
-            return;
-        }
-
+        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
 
         // make sure the docblock is useful
@@ -157,16 +159,13 @@ CODE_SAMPLE
 
     private function removeClassMethodParam(ClassMethod $classMethod, string $paramName): void
     {
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
         $attributeAwareParamTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
         if ($attributeAwareParamTagValueNode === null) {
             return;
         }
 
-        $phpDocInfo->removeTagValueNodeFromNode($attributeAwareParamTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $attributeAwareParamTagValueNode);
     }
 }

@@ -181,9 +181,8 @@ CODE_SAMPLE
 
     private function processStaticCall(StaticCall $staticCall): ?MethodCall
     {
-        /** @var Class_|null $classLike */
         $classLike = $staticCall->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             return null;
         }
 

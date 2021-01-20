@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\DeadDocBlock\Rector\Node;
 
-use Nette\Utils\Strings;
 use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
@@ -20,9 +20,8 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -50,6 +49,16 @@ final class RemoveNonExistingVarAnnotationRector extends AbstractRector
         Switch_::class,
         Nop::class,
     ];
+
+    /**
+     * @var TypeChecker
+     */
+    private $typeChecker;
+
+    public function __construct(TypeChecker $typeChecker)
+    {
+        $this->typeChecker = $typeChecker;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -96,26 +105,14 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $varTagValueNode = $phpDocInfo->getVarTagValueNode();
+        if ($varTagValueNode === null) {
             return null;
         }
 
-        $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if ($attributeAwareVarTagValueNode === null) {
-            return null;
-        }
-
-        $variableName = $attributeAwareVarTagValueNode->variableName;
-        if ($variableName === '') {
-            return null;
-        }
-
-        $nodeContentWithoutPhpDoc = $this->printWithoutComments($node);
-
-        // it's there
-        if (Strings::match($nodeContentWithoutPhpDoc, '#' . preg_quote($variableName, '#') . '\b#')) {
+        $variableName = ltrim($varTagValueNode->variableName, '$');
+        if ($this->hasVariableName($node, $variableName)) {
             return null;
         }
 
@@ -135,14 +132,17 @@ CODE_SAMPLE
             return true;
         }
 
-        foreach (self::NODES_TO_MATCH as $nodeToMatch) {
-            if (! is_a($node, $nodeToMatch, true)) {
-                continue;
+        return ! $this->typeChecker->isInstanceOf($node, self::NODES_TO_MATCH);
+    }
+
+    private function hasVariableName(Node $node, string $variableName): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) use ($variableName): bool {
+            if (! $node instanceof Variable) {
+                return false;
             }
 
-            return false;
-        }
-
-        return true;
+            return $this->isName($node, $variableName);
+        });
     }
 }

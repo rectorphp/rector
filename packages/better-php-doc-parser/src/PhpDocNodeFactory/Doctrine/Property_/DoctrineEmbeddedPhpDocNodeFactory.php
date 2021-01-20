@@ -29,9 +29,8 @@ final class DoctrineEmbeddedPhpDocNodeFactory extends AbstractPhpDocNodeFactory 
         TokenIterator $tokenIterator,
         string $annotationClass
     ): ?PhpDocTagValueNode {
-        /** @var Embedded|null $annotation */
         $annotation = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
-        if ($annotation === null) {
+        if (! $annotation instanceof Embedded) {
             return null;
         }
 

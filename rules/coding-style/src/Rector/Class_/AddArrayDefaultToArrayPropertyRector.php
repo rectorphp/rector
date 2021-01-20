@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\TypeAnalyzer\IterableTypeAnalyzer;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -135,10 +134,6 @@ CODE_SAMPLE
             }
 
             $varType = $this->resolveVarType($node);
-            if ($varType === null) {
-                return null;
-            }
-
             if (! $this->iterableTypeAnalyzer->detect($varType)) {
                 return null;
             }
@@ -244,18 +239,13 @@ CODE_SAMPLE
         });
     }
 
-    private function resolveVarType(PropertyProperty $propertyProperty): ?Type
+    private function resolveVarType(PropertyProperty $propertyProperty): Type
     {
         /** @var Property $property */
         $property = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
 
-        // we need docblock
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $propertyPhpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
-
-        return $propertyPhpDocInfo->getVarType();
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        return $phpDocInfo->getVarType();
     }
 
     /**

@@ -13,5 +13,7 @@ class SkipMultiAssign
         if ($values) {
             return true;
         }
+
+        return false;
     }
 }

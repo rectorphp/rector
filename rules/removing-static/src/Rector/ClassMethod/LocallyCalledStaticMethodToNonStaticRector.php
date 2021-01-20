@@ -141,9 +141,8 @@ CODE_SAMPLE
 
     private function isInStaticClassMethod(StaticCall $staticCall): bool
     {
-        /** @var ClassMethod|null $locationClassMethod */
         $locationClassMethod = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
-        if ($locationClassMethod === null) {
+        if (! $locationClassMethod instanceof ClassMethod) {
             return false;
         }
 

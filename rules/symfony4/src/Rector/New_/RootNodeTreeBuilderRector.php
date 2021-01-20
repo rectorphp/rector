@@ -67,9 +67,8 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var MethodCall|null $rootMethodCallNode */
         $rootMethodCallNode = $this->getRootMethodCallNode($node);
-        if ($rootMethodCallNode === null) {
+        if (! $rootMethodCallNode instanceof MethodCall) {
             return null;
         }
 

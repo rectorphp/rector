@@ -12,9 +12,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Printer\PhpAttributteGroupFactory;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -26,9 +25,24 @@ final class AnnotationToAttributeConverter
      */
     private $phpAttributteGroupFactory;
 
-    public function __construct(PhpAttributteGroupFactory $phpAttributteGroupFactory)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(
+        PhpAttributteGroupFactory $phpAttributteGroupFactory,
+        PhpDocInfoFactory $phpDocInfoFactory,
+        PhpDocTagRemover $phpDocTagRemover
+    ) {
         $this->phpAttributteGroupFactory = $phpAttributteGroupFactory;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     /**
@@ -36,11 +50,7 @@ final class AnnotationToAttributeConverter
      */
     public function convertNode(Node $node): ?Node
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $hasNewAttrGroups = false;
 
@@ -59,8 +69,7 @@ final class AnnotationToAttributeConverter
 
         // 2. remove tags
         foreach ($phpAttributableTagNodes as $phpAttributableTagNode) {
-            /** @var PhpDocTagValueNode $phpAttributableTagNode */
-            $phpDocInfo->removeTagValueNodeFromNode($phpAttributableTagNode);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $phpAttributableTagNode);
         }
 
         // 3. convert annotations to attributes

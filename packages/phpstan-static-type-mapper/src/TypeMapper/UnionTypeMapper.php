@@ -113,9 +113,7 @@ final class UnionTypeMapper implements TypeMapperInterface
 
         if ($this->boolUnionTypeAnalyzer->isNullableBoolUnionType(
             $type
-        ) && ! $this->phpVersionProvider->isAtLeastPhpVersion(
-            PhpVersionFeature::UNION_TYPES
-        )) {
+        ) && ! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             return new NullableType(new Name('bool'));
         }
 

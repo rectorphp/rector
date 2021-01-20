@@ -81,9 +81,8 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             return null;
         }
 

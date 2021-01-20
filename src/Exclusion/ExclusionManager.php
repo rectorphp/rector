@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -22,6 +22,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ExclusionManager
 {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
+    {
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    }
+
     public function isNodeSkippedByRector(Node $node, PhpRectorInterface $phpRector): bool
     {
         if ($node instanceof PropertyProperty || $node instanceof Const_) {
@@ -46,10 +56,7 @@ final class ExclusionManager
 
     private function hasNoRectorPhpDocTagMatch(Node $node, PhpRectorInterface $phpRector): bool
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return false;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         /** @var PhpDocTagNode[] $noRectorTags */
         $noRectorTags = array_merge($phpDocInfo->getTagsByName('noRector'), $phpDocInfo->getTagsByName('norector'));
