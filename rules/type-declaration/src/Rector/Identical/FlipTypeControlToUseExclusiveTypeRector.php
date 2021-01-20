@@ -14,6 +14,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -111,6 +112,10 @@ CODE_SAMPLE
         $type = $phpDocInfo->getVarType();
 
         if (! $type instanceof UnionType) {
+            $type = $this->getObjectType($assign->expr);
+        }
+
+        if (! $type instanceof UnionType) {
             return null;
         }
 
@@ -132,13 +137,14 @@ CODE_SAMPLE
             ? $types[1]
             : $types[0];
 
-        if (! $type instanceof FullyQualifiedObjectType) {
+        if (! $type instanceof FullyQualifiedObjectType && ! $type instanceof ObjectType) {
             return null;
         }
 
-        /** @var VarTagValueNode $tagValueNode */
         $tagValueNode = $phpDocInfo->getVarTagValueNode();
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $tagValueNode);
+        if ($tagValueNode instanceof VarTagValueNode) {
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $tagValueNode);
+        }
 
         return new BooleanNot(new Instanceof_($expr, new FullyQualified($type->getClassName())));
     }
