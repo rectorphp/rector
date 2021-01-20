@@ -1,12 +1,12 @@
 <?php
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPublicMethodRector\Fixture;
 
-final class Fixture
+final class SkipConstructor
 {
-    public function __construct() 
+    public function __construct()
     {
     }
 }
 
-new Fixture();
+new SkipConstructor();
 ?>
