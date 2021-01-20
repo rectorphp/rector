@@ -81,7 +81,7 @@ CODE_SAMPLE
             }
 
             $assign = $this->createAssign($node->var);
-            if ($assign === null) {
+            if (! $assign instanceof Node) {
                 return null;
             }
 

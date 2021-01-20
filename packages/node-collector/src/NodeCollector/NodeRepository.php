@@ -147,7 +147,7 @@ final class NodeRepository
         // array callable - [$this, 'someCall']
         if ($node instanceof Array_) {
             $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($node);
-            if ($arrayCallable === null) {
+            if (! $arrayCallable instanceof ArrayCallable) {
                 return;
             }
 

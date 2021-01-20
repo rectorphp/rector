@@ -92,7 +92,7 @@ final class ChildAndParentClassManipulator
 
         foreach ($childClasses as $childClass) {
             $childConstructorClassMethod = $childClass->getMethod(MethodName::CONSTRUCT);
-            if ($childConstructorClassMethod === null) {
+            if (! $childConstructorClassMethod instanceof ClassMethod) {
                 continue;
             }
 
@@ -116,7 +116,7 @@ final class ChildAndParentClassManipulator
     private function completeParentConstructorBasedOnParentNode(Class_ $parentClassNode, ClassMethod $classMethod): void
     {
         $firstParentConstructMethodNode = $this->findFirstParentConstructor($parentClassNode);
-        if ($firstParentConstructMethodNode === null) {
+        if (! $firstParentConstructMethodNode instanceof ClassMethod) {
             return;
         }
 

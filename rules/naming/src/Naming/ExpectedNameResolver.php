@@ -20,6 +20,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
+use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -119,7 +120,7 @@ final class ExpectedNameResolver
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($className);
 
         $expectedName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
-        if ($expectedName === null) {
+        if (! $expectedName instanceof ExpectedName) {
             return null;
         }
 
@@ -190,7 +191,7 @@ final class ExpectedNameResolver
 
         if ($returnedType instanceof ArrayType) {
             $returnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
-            if ($returnedType === null) {
+            if (! $returnedType instanceof Type) {
                 return null;
             }
         }
@@ -202,7 +203,7 @@ final class ExpectedNameResolver
         }
 
         $expectedNameFromMethodName = $this->propertyNaming->getExpectedNameFromMethodName($name);
-        if ($expectedNameFromMethodName === null) {
+        if (! $expectedNameFromMethodName instanceof ExpectedName) {
             return null;
         }
 

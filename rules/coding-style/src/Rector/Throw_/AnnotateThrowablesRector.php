@@ -166,7 +166,7 @@ CODE_SAMPLE
     private function annotateThrowables(Node $node): void
     {
         $callee = $this->identifyCaller($node);
-        if ($callee === null) {
+        if (! $callee instanceof Node) {
             return;
         }
 
@@ -225,7 +225,7 @@ CODE_SAMPLE
     private function extractAlreadyAnnotatedThrowables(Node $node): array
     {
         $callee = $this->identifyCaller($node);
-        if ($callee === null) {
+        if (! $callee instanceof Node) {
             return [];
         }
 

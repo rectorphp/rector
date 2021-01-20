@@ -6,6 +6,7 @@ namespace Rector\NetteCodeQuality\FormControlTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\Contract\MethodNamesByInputNamesResolverAwareInterface;
@@ -51,7 +52,7 @@ final class NewFormControlTypeResolver implements FormControlTypeResolverInterfa
         }
 
         $constructorClassMethod = $this->nodeRepository->findClassMethod($className, MethodName::CONSTRUCT);
-        if ($constructorClassMethod === null) {
+        if (! $constructorClassMethod instanceof ClassMethod) {
             return [];
         }
 

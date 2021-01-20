@@ -111,18 +111,18 @@ CODE_SAMPLE
     private function processNullSafeOperatorIdentical(If_ $if, bool $isStartIf = true): ?Node
     {
         $comparedNode = $this->ifManipulator->matchIfValueReturnValue($if);
-        if ($comparedNode === null) {
+        if (! $comparedNode instanceof \PhpParser\Node\Expr) {
             return null;
         }
 
         $prevNode = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
 
-        if ($prevNode === null) {
+        if (! $prevNode instanceof \PhpParser\Node) {
             return null;
         }
 
-        if ($nextNode === null) {
+        if (! $nextNode instanceof \PhpParser\Node) {
             return null;
         }
 
@@ -145,7 +145,7 @@ CODE_SAMPLE
     private function processNullSafeOperatorNotIdentical(If_ $if, ?Expr $expr = null): ?Node
     {
         $assign = $this->ifManipulator->matchIfNotNullNextAssignment($if);
-        if ($assign === null) {
+        if (! $assign instanceof Assign) {
             return null;
         }
 

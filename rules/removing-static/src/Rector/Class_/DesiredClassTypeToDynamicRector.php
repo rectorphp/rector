@@ -150,7 +150,7 @@ CODE_SAMPLE
     private function completeDependencyToConstructorOnly(Class_ $class, string $classType): void
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
+        if (! $constructClassMethod instanceof ClassMethod) {
             return;
         }
 

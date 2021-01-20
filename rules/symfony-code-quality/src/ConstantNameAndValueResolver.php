@@ -43,7 +43,7 @@ final class ConstantNameAndValueResolver
                 }
 
                 $constantNameAndValue = $this->constantNameAndValueMatcher->matchFromArg($arg, $prefixForNumeric);
-                if ($constantNameAndValue === null) {
+                if (! $constantNameAndValue instanceof ConstantNameAndValue) {
                     continue;
                 }
 

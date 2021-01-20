@@ -76,7 +76,7 @@ final class ListeningMethodsCollector
             (array) $getSubscribedEventsClassMethod->stmts,
             function (Node $node) use ($classLike, $type) {
                 $classMethod = $this->matchClassMethodByArrayItem($node, $classLike);
-                if ($classMethod === null) {
+                if (! $classMethod instanceof ClassMethod) {
                     return null;
                 }
 
@@ -106,7 +106,7 @@ final class ListeningMethodsCollector
                     $eventClass
                 );
 
-                if ($eventClassAndClassMethod === null) {
+                if (! $eventClassAndClassMethod instanceof EventClassAndClassMethod) {
                     return null;
                 }
 
@@ -186,7 +186,7 @@ final class ListeningMethodsCollector
             );
         }
 
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return null;
         }
 

@@ -19,6 +19,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony3\NodeFactory\BuilderFormNodeFactory;
 use Rector\Symfony3\NodeFactory\ConfigureOptionsNodeFactory;
 use ReflectionClass;
+use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -144,7 +145,7 @@ CODE_SAMPLE
                 $argValue->args
             );
 
-            if ($methodCall === null) {
+            if (! $methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
                 return null;
             }
         }
@@ -157,7 +158,7 @@ CODE_SAMPLE
     private function refactorCollectionOptions(MethodCall $methodCall): void
     {
         $optionsArray = $this->matchOptionsArray($methodCall);
-        if ($optionsArray === null) {
+        if (! $optionsArray instanceof Array_) {
             return;
         }
 
@@ -216,14 +217,14 @@ CODE_SAMPLE
         }
 
         $formTypeClass = $this->nodeRepository->findClass($className);
-        if ($formTypeClass === null) {
+        if (! $formTypeClass instanceof Class_) {
             return null;
         }
 
         $constructorClassMethod = $formTypeClass->getMethod(MethodName::CONSTRUCT);
 
         // nothing we can do, out of scope
-        if ($constructorClassMethod === null) {
+        if (! $constructorClassMethod instanceof ClassMethod) {
             return null;
         }
 
@@ -245,7 +246,7 @@ CODE_SAMPLE
         $reflectionClass = new ReflectionClass($className);
         $constructorReflectionMethod = $reflectionClass->getConstructor();
 
-        if ($constructorReflectionMethod === null) {
+        if (! $constructorReflectionMethod instanceof ReflectionMethod) {
             return [];
         }
 

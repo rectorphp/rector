@@ -30,7 +30,7 @@ final class ClassMethodReflectionFactory
                 }
 
                 $methodReflection = $this->createFromPHPStanTypeAndMethodName($unionedType, $methodName);
-                if ($methodReflection === null) {
+                if (! $methodReflection instanceof ReflectionMethod) {
                     continue;
                 }
 

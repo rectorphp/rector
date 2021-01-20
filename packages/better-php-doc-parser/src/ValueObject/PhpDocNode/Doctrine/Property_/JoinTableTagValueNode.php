@@ -155,7 +155,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         $items = [];
 
         if ($this->joinColumns !== []) {
-            if ($this->joinColumnsAroundSpaces === null) {
+            if (! $this->joinColumnsAroundSpaces instanceof AroundSpaces) {
                 throw new ShouldNotHappenException();
             }
 
@@ -168,7 +168,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         }
 
         if ($this->inverseJoinColumns !== []) {
-            if ($this->inverseJoinColumnsAroundSpaces === null) {
+            if (! $this->inverseJoinColumnsAroundSpaces instanceof AroundSpaces) {
                 throw new ShouldNotHappenException();
             }
 

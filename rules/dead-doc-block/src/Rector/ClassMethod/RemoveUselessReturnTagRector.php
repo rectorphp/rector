@@ -6,6 +6,7 @@ namespace Rector\DeadDocBlock\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadDocBlock\DeadReturnTagValueNodeAnalyzer;
@@ -86,7 +87,7 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if ($attributeAwareReturnTagValueNode === null) {
+        if (! $attributeAwareReturnTagValueNode instanceof AttributeAwareReturnTagValueNode) {
             return null;
         }
 

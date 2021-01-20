@@ -42,7 +42,7 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
     public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer): ?MethodReflection
     {
         $constantArrayTypeAndMethod = $this->findTypeAndMethodName($type);
-        if ($constantArrayTypeAndMethod === null) {
+        if (! $constantArrayTypeAndMethod instanceof ConstantArrayTypeAndMethod) {
             return null;
         }
         if ($constantArrayTypeAndMethod->isUnknown()) {

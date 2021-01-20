@@ -115,7 +115,7 @@ CODE_SAMPLE
     private function changeColumnTypeToUuidBinary(PhpDocInfo $phpDocInfo): void
     {
         $columnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
-        if ($columnTagValueNode === null) {
+        if (! $columnTagValueNode instanceof ColumnTagValueNode) {
             return;
         }
 

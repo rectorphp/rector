@@ -29,7 +29,7 @@ final class RectorRecipeProvider
 
     public function provide(): RectorRecipe
     {
-        if ($this->rectorRecipe === null) {
+        if (! $this->rectorRecipe instanceof RectorRecipe) {
             throw new ConfigurationException(self::MESSAGE);
         }
 

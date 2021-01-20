@@ -162,7 +162,7 @@ CODE_SAMPLE
         }
 
         $classMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return null;
         }
 
@@ -173,7 +173,7 @@ CODE_SAMPLE
 
         foreach ($childrenClasses as $childrenClass) {
             $constructorClassMethod = $childrenClass->getMethod(MethodName::CONSTRUCT);
-            if ($constructorClassMethod === null) {
+            if (! $constructorClassMethod instanceof ClassMethod) {
                 continue;
             }
 
@@ -202,7 +202,7 @@ CODE_SAMPLE
     private function resolveConstructorParamClassTypes(Class_ $class): array
     {
         $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructorClassMethod === null) {
+        if (! $constructorClassMethod instanceof ClassMethod) {
             return [];
         }
 

@@ -104,7 +104,7 @@ CODE_SAMPLE
         }
 
         $getterClassMethodReturnedExpr = $this->matchIsserClassMethodReturnedExpr($node);
-        if ($getterClassMethodReturnedExpr === null) {
+        if (! $getterClassMethodReturnedExpr instanceof Expr) {
             return null;
         }
 

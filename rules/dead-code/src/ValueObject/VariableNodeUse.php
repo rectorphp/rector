@@ -83,7 +83,7 @@ final class VariableNodeUse
     public function getParentNode(): Node
     {
         $parentNode = $this->variable->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode === null) {
+        if (! $parentNode instanceof Node) {
             throw new ShouldNotHappenException();
         }
 

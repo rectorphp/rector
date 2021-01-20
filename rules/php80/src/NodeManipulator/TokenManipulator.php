@@ -176,7 +176,7 @@ final class TokenManipulator
             }
 
             $arrayDimFetchAndConstFetch = $this->matchArrayDimFetchAndConstFetch($node);
-            if ($arrayDimFetchAndConstFetch === null) {
+            if (! $arrayDimFetchAndConstFetch instanceof ArrayDimFetchAndConstFetch) {
                 return null;
             }
 

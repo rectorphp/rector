@@ -231,7 +231,7 @@ CODE_SAMPLE
     private function removeInversedByOrMappedByOnRelatedProperty(Property $property): void
     {
         $otherRelationProperty = $this->getOtherRelationProperty($property);
-        if ($otherRelationProperty === null) {
+        if (! $otherRelationProperty instanceof Property) {
             return;
         }
 

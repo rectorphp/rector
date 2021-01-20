@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\PropertyProperty;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\PropertyProperty;
@@ -57,7 +58,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $defaultValueNode = $node->default;
-        if ($defaultValueNode === null) {
+        if (! $defaultValueNode instanceof Expr) {
             return null;
         }
 

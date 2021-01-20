@@ -27,6 +27,7 @@ use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
+use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 
 final class UnionTypeMapper implements TypeMapperInterface
 {
@@ -119,7 +120,7 @@ final class UnionTypeMapper implements TypeMapperInterface
 
         // special case for nullable
         $nullabledType = $this->matchTypeForNullableUnionType($type);
-        if ($nullabledType === null) {
+        if (! $nullabledType instanceof Type) {
             // use first unioned type in case of unioned object types
             return $this->matchTypeForUnionedObjectTypes($type);
         }
@@ -166,7 +167,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     private function shouldSkipIterable(UnionType $unionType): bool
     {
         $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
-        if ($unionTypeAnalysis === null) {
+        if (! $unionTypeAnalysis instanceof UnionTypeAnalysis) {
             return false;
         }
         if (! $unionTypeAnalysis->hasIterable()) {
@@ -181,7 +182,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     private function matchArrayTypes(UnionType $unionType): ?Node
     {
         $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
-        if ($unionTypeAnalysis === null) {
+        if (! $unionTypeAnalysis instanceof UnionTypeAnalysis) {
             return null;
         }
 

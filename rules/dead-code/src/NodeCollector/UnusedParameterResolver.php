@@ -52,7 +52,7 @@ final class UnusedParameterResolver
 
         foreach ($childrenOfClass as $childClassNode) {
             $methodOfChild = $childClassNode->getMethod($methodName);
-            if ($methodOfChild === null) {
+            if (! $methodOfChild instanceof ClassMethod) {
                 continue;
             }
 

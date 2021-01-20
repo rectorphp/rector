@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony3\FormHelper;
 
 use Nette\Utils\Strings;
+use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\ServiceMapProvider;
 
 final class FormTypeStringToTypeProvider
@@ -97,7 +98,7 @@ final class FormTypeStringToTypeProvider
         $formTypeServiceDefinitions = $serviceMap->getServicesByTag('form.type');
         foreach ($formTypeServiceDefinitions as $formTypeServiceDefinition) {
             $formTypeTag = $formTypeServiceDefinition->getTag('form.type');
-            if ($formTypeTag === null) {
+            if (! $formTypeTag instanceof TagInterface) {
                 continue;
             }
 

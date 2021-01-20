@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony3\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioMethodTagValueNode;
@@ -86,7 +87,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 

@@ -101,7 +101,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $factoryMethod = $this->matchTypeAndMethodName($node);
-        if ($factoryMethod === null) {
+        if (! $factoryMethod instanceof FactoryMethod) {
             return null;
         }
 

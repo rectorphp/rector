@@ -88,7 +88,7 @@ CODE_SAMPLE
         }
 
         $tearDownClassMethod = $node->getMethod(MethodName::TEAR_DOWN);
-        if ($tearDownClassMethod === null) {
+        if (! $tearDownClassMethod instanceof ClassMethod) {
             $node->stmts[] = $this->createTearDownMethodWithMockeryClose();
         } elseif (! $this->containsMockeryClose($tearDownClassMethod)) {
             $tearDownClassMethod->stmts[] = $this->createMockeryClose();

@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
 use Rector\Core\Rector\AbstractRector;
@@ -113,7 +114,7 @@ CODE_SAMPLE
 
             $rightArrayItem = $rightArray->items[$key];
 
-            if ($rightArrayItem === null) {
+            if (! $rightArrayItem instanceof ArrayItem) {
                 continue;
             }
 

@@ -44,7 +44,7 @@ final class ContextAnalyzer
         $stopNodes = array_merge(self::LOOP_NODES, self::BREAK_NODES);
 
         $firstParent = $this->betterNodeFinder->findParentTypes($node, $stopNodes);
-        if ($firstParent === null) {
+        if (! $firstParent instanceof Node) {
             return false;
         }
 
@@ -57,7 +57,7 @@ final class ContextAnalyzer
 
         $previousNode = $this->betterNodeFinder->findParentTypes($node, $breakNodes);
 
-        if ($previousNode === null) {
+        if (! $previousNode instanceof Node) {
             return false;
         }
 

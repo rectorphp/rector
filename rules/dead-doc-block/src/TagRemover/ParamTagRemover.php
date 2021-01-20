@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadDocBlock\TagRemover;
 
 use PhpParser\Node\FunctionLike;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\DeadDocBlock\DeadParamTagValueNodeAnalyzer;
@@ -37,7 +38,7 @@ final class ParamTagRemover
             // remove existing type
 
             $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
-            if ($paramTagValueNode === null) {
+            if (! $paramTagValueNode instanceof ParamTagValueNode) {
                 continue;
             }
 

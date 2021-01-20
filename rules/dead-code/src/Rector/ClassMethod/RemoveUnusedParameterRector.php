@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
@@ -132,7 +133,7 @@ CODE_SAMPLE
 
         foreach ($childrenOfClass as $childClassNode) {
             $methodOfChild = $childClassNode->getMethod($methodName);
-            if ($methodOfChild === null) {
+            if (! $methodOfChild instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 continue;
             }
 
@@ -196,7 +197,7 @@ CODE_SAMPLE
             }
 
             $paramTagValueNode = $phpDocInfo->getParamTagValueByName($parameterName);
-            if ($paramTagValueNode === null) {
+            if (! $paramTagValueNode instanceof ParamTagValueNode) {
                 continue;
             }
 

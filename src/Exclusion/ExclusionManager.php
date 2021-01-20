@@ -36,7 +36,7 @@ final class ExclusionManager
     {
         if ($node instanceof PropertyProperty || $node instanceof Const_) {
             $node = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($node === null) {
+            if (! $node instanceof Node) {
                 return false;
             }
         }

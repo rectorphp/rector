@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser;
 
 use Iterator;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
@@ -69,7 +70,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($fileInfo, $nodeType);
 
         $docComment = $nodeWithPhpDocInfo->getDocComment();
-        if ($docComment === null) {
+        if (! $docComment instanceof Doc) {
             throw new ShouldNotHappenException(sprintf('Doc comments for "%s" file cannot not be empty', $fileInfo));
         }
 

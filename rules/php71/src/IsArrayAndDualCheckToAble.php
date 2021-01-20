@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Php71\ValueObject\TwoNodeMatch;
 
 final class IsArrayAndDualCheckToAble
 {
@@ -40,7 +41,7 @@ final class IsArrayAndDualCheckToAble
             FuncCall::class
         );
 
-        if ($twoNodeMatch === null) {
+        if (! $twoNodeMatch instanceof TwoNodeMatch) {
             return null;
         }
 

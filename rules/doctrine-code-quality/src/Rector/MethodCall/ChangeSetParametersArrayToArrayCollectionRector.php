@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassLike;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -115,7 +116,7 @@ CODE_SAMPLE
     private function shouldSkipMethodCall(MethodCall $methodCall): bool
     {
         $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return true;
         }
 

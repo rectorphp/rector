@@ -6,6 +6,7 @@ namespace Rector\DoctrineCodeQuality\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -102,7 +103,7 @@ CODE_SAMPLE
         }
 
         $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if ($attributeAwareVarTagValueNode === null) {
+        if (! $attributeAwareVarTagValueNode instanceof VarTagValueNode) {
             return null;
         }
 

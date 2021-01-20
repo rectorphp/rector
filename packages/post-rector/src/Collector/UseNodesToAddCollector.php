@@ -52,10 +52,10 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     {
         /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $positionNode->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if (! $fileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
             // fallback for freshly created Name nodes
             $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-            if ($fileInfo === null) {
+            if (! $fileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
                 return;
             }
         }
@@ -187,7 +187,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         }
 
         $smartFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($smartFileInfo === null) {
+        if (! $smartFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
             return null;
         }
 

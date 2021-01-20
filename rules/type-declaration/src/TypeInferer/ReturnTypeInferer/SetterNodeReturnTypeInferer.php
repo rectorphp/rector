@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\Manipulator\FunctionLikeManipulator;
@@ -36,7 +37,7 @@ final class SetterNodeReturnTypeInferer extends AbstractTypeInferer implements R
     public function inferFunctionLike(FunctionLike $functionLike): Type
     {
         $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return new MixedType();
         }
 

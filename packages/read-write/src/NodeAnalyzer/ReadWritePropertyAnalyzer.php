@@ -64,7 +64,7 @@ final class ReadWritePropertyAnalyzer
         Assert::isAnyOf($node, [PropertyFetch::class, StaticPropertyFetch::class]);
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent === null) {
+        if (! $parent instanceof Node) {
             throw new MissingParentNodeException();
         }
 
@@ -93,7 +93,7 @@ final class ReadWritePropertyAnalyzer
     {
         if ($node instanceof PreInc || $node instanceof PreDec || $node instanceof PostInc || $node instanceof PostDec) {
             $node = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($node === null) {
+            if (! $node instanceof Node) {
                 throw new MissingParentNodeException();
             }
         }
@@ -104,7 +104,7 @@ final class ReadWritePropertyAnalyzer
     private function isArrayDimFetchRead(ArrayDimFetch $arrayDimFetch): bool
     {
         $parentParent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentParent === null) {
+        if (! $parentParent instanceof Node) {
             throw new MissingParentNodeException();
         }
 

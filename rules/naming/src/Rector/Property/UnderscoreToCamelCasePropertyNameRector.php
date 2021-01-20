@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\UnderscoreCamelCaseExpectedNameResolver;
 use Rector\Naming\PropertyRenamer\UnderscoreCamelCasePropertyRenamer;
+use Rector\Naming\ValueObject\PropertyRename;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -94,7 +95,7 @@ CODE_SAMPLE
         }
 
         $propertyRename = $this->propertyRenameFactory->create($node, $this->underscoreCamelCaseExpectedNameResolver);
-        if ($propertyRename === null) {
+        if (! $propertyRename instanceof PropertyRename) {
             return null;
         }
         $property = $this->underscoreCamelCasePropertyRenamer->rename($propertyRename);

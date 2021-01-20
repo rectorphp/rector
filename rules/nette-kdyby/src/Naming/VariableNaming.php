@@ -165,7 +165,7 @@ final class VariableNaming
             return $this->resolveFromNode($node->name);
         }
 
-        if ($node === null) {
+        if (! $node instanceof Node) {
             throw new NotImplementedException();
         }
 
@@ -253,7 +253,7 @@ final class VariableNaming
 
     private function isCall(?Node $node): bool
     {
-        if ($node === null) {
+        if (! $node instanceof Node) {
             return false;
         }
 
@@ -262,7 +262,7 @@ final class VariableNaming
 
     private function resolveFromMethodCall(?Node $node): ?string
     {
-        if ($node === null) {
+        if (! $node instanceof Node) {
             return null;
         }
 

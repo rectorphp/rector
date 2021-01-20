@@ -6,11 +6,13 @@ namespace Rector\NetteToSymfony\Rector\ClassMethod;
 
 use Composer\Script\Event;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
@@ -87,7 +89,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 
@@ -125,11 +127,11 @@ CODE_SAMPLE
             }
 
             $eventInfo = $this->matchStringKeys($arrayItem);
-            if ($eventInfo === null) {
+            if (! $eventInfo instanceof EventInfo) {
                 $eventInfo = $this->matchClassConstKeys($arrayItem);
             }
 
-            if ($eventInfo === null) {
+            if (! $eventInfo instanceof EventInfo) {
                 continue;
             }
 
@@ -180,7 +182,7 @@ CODE_SAMPLE
     private function processMethodArgument(string $class, string $method, EventInfo $eventInfo): void
     {
         $classMethodNode = $this->nodeRepository->findClassMethod($class, $method);
-        if ($classMethodNode === null) {
+        if (! $classMethodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
 
@@ -195,7 +197,7 @@ CODE_SAMPLE
     {
         foreach ($eventInfo->getOldClassConstAliases() as $netteClassConst) {
             $classConstFetchNode = $arrayItem->key;
-            if ($classConstFetchNode === null) {
+            if (! $classConstFetchNode instanceof Expr) {
                 continue;
             }
 

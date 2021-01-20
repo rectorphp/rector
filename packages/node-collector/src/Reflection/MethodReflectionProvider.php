@@ -86,7 +86,7 @@ final class MethodReflectionProvider
     public function provideParameterTypesByStaticCall(StaticCall $staticCall): array
     {
         $methodReflection = $this->provideByStaticCall($staticCall);
-        if ($methodReflection === null) {
+        if (! $methodReflection instanceof MethodReflection) {
             return [];
         }
 
@@ -120,7 +120,7 @@ final class MethodReflectionProvider
     public function provideParameterTypesByClassMethod(ClassMethod $classMethod): array
     {
         $methodReflection = $this->provideByClassMethod($classMethod);
-        if ($methodReflection === null) {
+        if (! $methodReflection instanceof MethodReflection) {
             return [];
         }
 

@@ -163,7 +163,7 @@ CODE_SAMPLE
         AddParamTypeDeclaration $addParamTypeDeclaration
     ): void {
         $parameter = $classMethod->params[$addParamTypeDeclaration->getPosition()] ?? null;
-        if ($parameter === null) {
+        if (! $parameter instanceof Param) {
             return;
         }
 

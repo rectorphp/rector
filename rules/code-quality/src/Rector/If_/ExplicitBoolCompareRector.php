@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
 
         $newConditionNode = $this->resolveNewConditionNode($conditionNode, $isNegated);
-        if ($newConditionNode === null) {
+        if (! $newConditionNode instanceof BinaryOp) {
             return null;
         }
 

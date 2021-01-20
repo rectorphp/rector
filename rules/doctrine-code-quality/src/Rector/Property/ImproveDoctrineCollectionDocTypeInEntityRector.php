@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
@@ -18,6 +19,7 @@ use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeFactory;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeResolver;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionVarTagValueNodeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -143,7 +145,7 @@ CODE_SAMPLE
                 $property
             );
 
-            if ($collectionObjectType === null) {
+            if (! $collectionObjectType instanceof FullyQualifiedObjectType) {
                 return null;
             }
 
@@ -151,7 +153,7 @@ CODE_SAMPLE
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newVarType);
         } else {
             $collectionObjectType = $this->collectionTypeResolver->resolveFromOneToManyProperty($property);
-            if ($collectionObjectType === null) {
+            if (! $collectionObjectType instanceof FullyQualifiedObjectType) {
                 return null;
             }
 
@@ -173,7 +175,7 @@ CODE_SAMPLE
         }
 
         $collectionObjectType = $this->resolveCollectionSetterAssignType($classMethod);
-        if ($collectionObjectType === null) {
+        if (! $collectionObjectType instanceof Type) {
             return null;
         }
 
@@ -208,7 +210,7 @@ CODE_SAMPLE
         }
 
         $varTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
-        if ($varTagValueNode === null) {
+        if (! $varTagValueNode instanceof VarTagValueNode) {
             return null;
         }
 

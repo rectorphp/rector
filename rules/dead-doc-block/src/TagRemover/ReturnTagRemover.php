@@ -6,6 +6,7 @@ namespace Rector\DeadDocBlock\TagRemover;
 
 use PhpParser\Node\FunctionLike;
 use PHPStan\Type\Type;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\DeadDocBlock\DeadReturnTagValueNodeAnalyzer;
@@ -34,7 +35,7 @@ final class ReturnTagRemover
     {
         // remove existing type
         $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if ($attributeAwareReturnTagValueNode === null) {
+        if (! $attributeAwareReturnTagValueNode instanceof AttributeAwareReturnTagValueNode) {
             return;
         }
 

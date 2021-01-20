@@ -166,7 +166,7 @@ CODE_SAMPLE
         }
 
         $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return false;
         }
 

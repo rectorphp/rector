@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
@@ -320,7 +321,7 @@ CODE_SAMPLE
     private function setTypeIfNotNull(ParamAndArg $paramAndArg, Param $param): void
     {
         $staticType = $paramAndArg->getType();
-        if ($staticType === null) {
+        if (! $staticType instanceof Type) {
             return;
         }
 

@@ -103,7 +103,7 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
     {
         $nodeScope = $this->resolveNodeScope($variable);
 
-        if ($nodeScope === null) {
+        if (! $nodeScope instanceof Scope) {
             return new MixedType();
         }
 
@@ -147,7 +147,7 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
             }
 
             $parentNodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
-            if ($parentNodeScope === null) {
+            if (! $parentNodeScope instanceof Scope) {
                 continue;
             }
 

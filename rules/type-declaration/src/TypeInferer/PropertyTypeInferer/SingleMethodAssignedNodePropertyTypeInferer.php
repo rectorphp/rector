@@ -29,14 +29,14 @@ final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInfe
         }
 
         $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return new MixedType();
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
 
         $assignedNode = $this->resolveAssignedNodeToProperty($classMethod, $propertyName);
-        if ($assignedNode === null) {
+        if (! $assignedNode instanceof Expr) {
             return new MixedType();
         }
 

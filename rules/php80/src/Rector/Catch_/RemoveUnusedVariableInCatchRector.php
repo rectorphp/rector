@@ -63,7 +63,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $caughtVar = $node->var;
-        if ($caughtVar === null) {
+        if (! $caughtVar instanceof Variable) {
             return null;
         }
 

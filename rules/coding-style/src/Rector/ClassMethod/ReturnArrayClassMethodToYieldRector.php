@@ -121,7 +121,7 @@ CODE_SAMPLE
             }
 
             $arrayNode = $this->collectReturnArrayNodesFromClassMethod($node);
-            if ($arrayNode === null) {
+            if (! $arrayNode instanceof Array_) {
                 continue;
             }
 
@@ -173,7 +173,7 @@ CODE_SAMPLE
 
         // remove whole return node
         $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode === null) {
+        if (! $parentNode instanceof Node) {
             throw new ShouldNotHappenException();
         }
 

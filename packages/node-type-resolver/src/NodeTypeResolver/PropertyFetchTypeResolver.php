@@ -113,14 +113,14 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             }
         }
 
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
             // fallback to class, since property fetches are not scoped by PHPStan
             if ($classNode instanceof ClassLike) {
                 $scope = $classNode->getAttribute(AttributeKey::SCOPE);
             }
 
-            if ($scope === null) {
+            if (! $scope instanceof Scope) {
                 return new MixedType();
             }
         }

@@ -161,7 +161,7 @@ CODE_SAMPLE
     {
         // is previous variable node as part of assign?
         $previousVariableAssign = $this->previousVariableAssignNodeFinder->find($assign);
-        if ($previousVariableAssign === null) {
+        if (! $previousVariableAssign instanceof Node) {
             return false;
         }
 

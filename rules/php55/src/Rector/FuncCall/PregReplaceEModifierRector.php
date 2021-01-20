@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php55\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
@@ -88,7 +90,7 @@ CODE_SAMPLE
 
         $firstArgumentValue = $node->args[0]->value;
         $patternWithoutE = $this->regexMatcher->resolvePatternExpressionWithoutEIfFound($firstArgumentValue);
-        if ($patternWithoutE === null) {
+        if (! $patternWithoutE instanceof Expr) {
             return null;
         }
 
@@ -96,7 +98,7 @@ CODE_SAMPLE
         $anonymousFunction = $this->anonymousFunctionNodeFactory->createAnonymousFunctionFromString(
             $secondArgumentValue
         );
-        if ($anonymousFunction === null) {
+        if (! $anonymousFunction instanceof Closure) {
             return null;
         }
 

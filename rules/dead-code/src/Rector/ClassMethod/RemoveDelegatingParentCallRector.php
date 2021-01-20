@@ -92,7 +92,7 @@ CODE_SAMPLE
         }
 
         $staticCall = $this->matchStaticCall($onlyStmt);
-        if ($staticCall === null) {
+        if (! $staticCall instanceof StaticCall) {
             return null;
         }
 

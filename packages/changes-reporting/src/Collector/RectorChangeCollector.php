@@ -45,14 +45,14 @@ final class RectorChangeCollector
     public function notifyNodeFileInfo(Node $node): void
     {
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if (! $fileInfo instanceof SmartFileInfo) {
             // this file was changed before and this is a sub-new node
             // array Traverse to all new nodes would have to be used, but it's not worth the performance
             return;
         }
 
         $currentRector = $this->currentRectorProvider->getCurrentRector();
-        if ($currentRector === null) {
+        if (! $currentRector instanceof RectorInterface) {
             throw new ShouldNotHappenException();
         }
 

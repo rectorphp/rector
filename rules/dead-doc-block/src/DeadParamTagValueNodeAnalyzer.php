@@ -31,7 +31,7 @@ final class DeadParamTagValueNodeAnalyzer
     public function isDead(ParamTagValueNode $paramTagValueNode, FunctionLike $functionLike): bool
     {
         $param = $this->matchParamByName($paramTagValueNode->parameterName, $functionLike);
-        if ($param === null) {
+        if (! $param instanceof Param) {
             return false;
         }
 

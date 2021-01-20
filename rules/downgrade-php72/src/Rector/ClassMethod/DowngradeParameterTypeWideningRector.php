@@ -135,7 +135,7 @@ CODE_SAMPLE
         }
 
         $classReflection = $scope->getClassReflection();
-        if ($classReflection === null) {
+        if (! $classReflection instanceof ClassReflection) {
             return;
         }
 
@@ -168,7 +168,7 @@ CODE_SAMPLE
              * The interface is also retrieve though, so that method
              * will eventually be refactored.
              */
-            if ($classMethod === null) {
+            if (! $classMethod instanceof ClassMethod) {
                 continue;
             }
             $this->removeParamTypeFromMethod($ancestorClassOrInterface, $position, $classMethod);
@@ -236,7 +236,7 @@ CODE_SAMPLE
     ): void {
         $classMethodName = $this->getName($classMethod);
         $currentClassMethod = $classLike->getMethod($classMethodName);
-        if ($currentClassMethod === null) {
+        if (! $currentClassMethod instanceof ClassMethod) {
             return;
         }
 
@@ -272,7 +272,7 @@ CODE_SAMPLE
                 continue;
             }
             $childClassMethod = $this->nodeRepository->findClassMethod($childClassName, $methodName);
-            if ($childClassMethod === null) {
+            if (! $childClassMethod instanceof ClassMethod) {
                 continue;
             }
             $this->removeParamTypeFromMethod($childClassLike, $position, $childClassMethod);

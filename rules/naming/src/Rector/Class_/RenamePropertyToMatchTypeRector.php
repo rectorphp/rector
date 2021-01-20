@@ -7,7 +7,9 @@ namespace Rector\Naming\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -15,6 +17,7 @@ use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
 use Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer;
 use Rector\Naming\PropertyRenamer\PropertyFetchRenamer;
+use Rector\Naming\ValueObject\PropertyRename;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -138,12 +141,12 @@ CODE_SAMPLE
                 $property,
                 $this->matchPropertyTypeExpectedNameResolver
             );
-            if ($propertyRename === null) {
+            if (! $propertyRename instanceof PropertyRename) {
                 continue;
             }
 
             $renameProperty = $this->matchTypePropertyRenamer->rename($propertyRename);
-            if ($renameProperty === null) {
+            if (! $renameProperty instanceof Property) {
                 continue;
             }
 
@@ -158,7 +161,7 @@ CODE_SAMPLE
         }
 
         $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
+        if (! $constructClassMethod instanceof ClassMethod) {
             return;
         }
 

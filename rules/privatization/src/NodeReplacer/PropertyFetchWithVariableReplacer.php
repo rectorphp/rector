@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
@@ -39,7 +40,7 @@ final class PropertyFetchWithVariableReplacer
         foreach ($methodsByPropertyName as $propertyName => $methodNames) {
             $methodName = $methodNames[0];
             $classMethod = $class->getMethod($methodName);
-            if ($classMethod === null) {
+            if (! $classMethod instanceof ClassMethod) {
                 continue;
             }
 

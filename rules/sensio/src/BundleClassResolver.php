@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Sensio;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\CodingStyle\Naming\ClassNaming;
@@ -92,7 +93,7 @@ final class BundleClassResolver
         $this->addFullyQualifiedNamesToNodes($nodes);
 
         $classLike = $this->betterNodeFinder->findFirstNonAnonymousClass($nodes);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 

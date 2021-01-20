@@ -6,6 +6,7 @@ namespace Rector\Symfony3\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Node\Manipulator\ArrayManipulator;
@@ -73,7 +74,7 @@ CODE_SAMPLE
         }
 
         $optionsArray = $this->matchOptionsArray($node);
-        if ($optionsArray === null) {
+        if (! $optionsArray instanceof Array_) {
             return null;
         }
         if (! $optionsArray instanceof Array_) {
@@ -81,7 +82,7 @@ CODE_SAMPLE
         }
 
         $readOnlyArrayItem = $this->arrayManipulator->findItemInInArrayByKeyAndUnset($optionsArray, 'read_only');
-        if ($readOnlyArrayItem === null) {
+        if (! $readOnlyArrayItem instanceof ArrayItem) {
             return null;
         }
 

@@ -167,7 +167,7 @@ CODE_SAMPLE
         for ($i = $listItemsCount - 1; $i >= 0; --$i) {
             $listItem = $listItems[$i];
             // Also include null items, since they can be removed
-            if ($listItem === null || $listItem->byRef) {
+            if (! $listItem instanceof ArrayItem || $listItem->byRef) {
                 ++$count;
                 continue;
             }
@@ -200,7 +200,7 @@ CODE_SAMPLE
         // After filtering, their original position is kept in the array
         $newNodes = [];
         foreach ($listItems as $position => $listItem) {
-            if ($listItem === null) {
+            if (! $listItem instanceof ArrayItem) {
                 continue;
             }
             if ($listItem->value instanceof Variable && ! $listItem->byRef) {

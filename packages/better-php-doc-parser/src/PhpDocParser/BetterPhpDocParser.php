@@ -176,7 +176,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $tagValueNode = null;
 
         $currentPhpNode = $this->currentNodeProvider->getNode();
-        if ($currentPhpNode === null) {
+        if (! $currentPhpNode instanceof \PhpParser\Node) {
             throw new ShouldNotHappenException();
         }
 
@@ -297,7 +297,7 @@ final class BetterPhpDocParser extends PhpDocParser
     private function matchTagToPhpDocNodeFactory(string $tag): ?PhpDocNodeFactoryInterface
     {
         $currentPhpNode = $this->currentNodeProvider->getNode();
-        if ($currentPhpNode === null) {
+        if (! $currentPhpNode instanceof \PhpParser\Node) {
             throw new ShouldNotHappenException();
         }
 

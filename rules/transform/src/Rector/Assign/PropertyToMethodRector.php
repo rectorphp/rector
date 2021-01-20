@@ -109,7 +109,7 @@ CODE_SAMPLE
         $propertyFetchNode = $assign->var;
 
         $propertyToMethodCall = $this->matchPropertyFetchCandidate($propertyFetchNode);
-        if ($propertyToMethodCall === null) {
+        if (! $propertyToMethodCall instanceof PropertyToMethod) {
             return null;
         }
 
@@ -131,7 +131,7 @@ CODE_SAMPLE
         $propertyFetchNode = $assign->expr;
 
         $propertyToMethodCall = $this->matchPropertyFetchCandidate($propertyFetchNode);
-        if ($propertyToMethodCall === null) {
+        if (! $propertyToMethodCall instanceof PropertyToMethod) {
             return null;
         }
 

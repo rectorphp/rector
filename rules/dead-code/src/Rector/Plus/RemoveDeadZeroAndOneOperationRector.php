@@ -104,7 +104,7 @@ CODE_SAMPLE
             }
 
             // nothing more to change, return last node
-            if ($changedNode === null) {
+            if (! $changedNode instanceof Node) {
                 return $previousNode;
             }
         }

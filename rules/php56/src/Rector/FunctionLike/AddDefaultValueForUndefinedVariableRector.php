@@ -178,7 +178,7 @@ CODE_SAMPLE
     private function shouldSkipVariable(Variable $variable): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode === null) {
+        if (! $parentNode instanceof Node) {
             return true;
         }
 
