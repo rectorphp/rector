@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -23,6 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/nette/component-model/commit/1fb769f4602cf82694941530bac1111b3c5cd11b
+ * This only applied to child of \Nette\Application\UI\Control, not Forms! Forms still need to be attached to their parents
  *
  * @see \Rector\Nette\Tests\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector\RemoveParentAndNameFromComponentConstructorRectorTest
  */
@@ -136,12 +137,7 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
-            return null;
-        }
-
-        if (! $this->isObjectType($classLike, self::CONTROL_CLASS)) {
+        if (! $this->isInsideNetteControlClass($classMethod)) {
             return null;
         }
 
@@ -183,6 +179,10 @@ CODE_SAMPLE
 
     private function refactorStaticCall(StaticCall $staticCall): ?StaticCall
     {
+        if (! $this->isInsideNetteControlClass($staticCall)) {
+            return null;
+        }
+
         if (! $this->staticCallAnalyzer->isParentCallNamed($staticCall, MethodName::CONSTRUCT)) {
             return null;
         }
@@ -270,5 +270,15 @@ CODE_SAMPLE
 
             return $this->areNodesEqual($node, $variable);
         });
+    }
+
+    private function isInsideNetteControlClass(Node $node): bool
+    {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return false;
+        }
+
+        return $this->isObjectType($classLike, self::CONTROL_CLASS);
     }
 }
