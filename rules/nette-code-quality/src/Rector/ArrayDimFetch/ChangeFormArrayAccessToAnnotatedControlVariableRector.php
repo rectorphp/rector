@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($this->typeChecker->isInstanceOf($node, [Isset_::class, Unset_::class])) {
+        if ($this->typeChecker->isInstanceOf($parent, [Isset_::class, Unset_::class])) {
             return null;
         }
 
