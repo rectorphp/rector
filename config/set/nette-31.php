@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\UnionType;
 use Rector\Composer\Rector\ChangePackageVersionRector;
 use Rector\Composer\Rector\RemovePackageRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
@@ -13,6 +16,8 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -21,6 +26,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)->call('configure', [[
         RenameClassRector::OLD_TO_NEW_CLASSES => [
+            'Nette\Bridges\ApplicationLatte\Template' => 'Nette\Bridges\ApplicationLatte\DefaultTemplate',
+
             // https://github.com/nette/application/compare/v3.0.7...v3.1.0
             'Nette\Application\IRouter' => 'Nette\Routing\Router',
             'Nette\Application\IResponse' => 'Nette\Application\Response',
@@ -82,6 +89,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new MethodCallRename('Nette\Forms\Container', 'addImage', 'addImageButton'),
             // https://github.com/nette/utils/commit/d0427c1811462dbb6c503143eabe5478b26685f7
             new MethodCallRename('Nette\Utils\Arrays', 'searchKey', 'getKeyOffset'),
+            new MethodCallRename('Nette\Configurator', 'addParameters', 'addStaticParameters'),
         ]),
     ]]);
 
@@ -102,6 +110,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'addRoute'
                 ),
             ])
+        ]]);
+
+    $services->set(AddParamTypeDeclarationRector::class)
+        ->call('configure', [[
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
+                new AddParamTypeDeclaration(
+                    'Nette\Application\UI\Presenter',
+                    'sendTemplate',
+                    0,
+                    new UnionType([new ObjectType('Nette\Application\UI\Template'), new NullType()])
+                )
+            ]),
         ]]);
 
     $services->set(ContextGetByTypeToConstructorInjectionRector::class);
@@ -129,6 +149,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new PackageAndVersion('nette/utils', '^3.2'),
                 new PackageAndVersion('latte/latte', '^2.9'),
                 new PackageAndVersion('tracy/tracy', '^2.8'),
+
+                // contributte
+                new PackageAndVersion('contributte/console', '^0.9'),
+                new PackageAndVersion('contributte/event-dispatcher', '^0.8'),
+                new PackageAndVersion('contributte/event-dispatcher-extra', '^0.8'),
+
+                // netrinne
+                new PackageAndVersion('nettrine/annotations', '^0.7'),
+                new PackageAndVersion('nettrine/cache', '^0.3'),
             ]),
         ]]);
 
