@@ -101,50 +101,6 @@ final class TypeNormalizer
         return $this->createUnionedTypesFromArrayTypes($this->collectedNestedArrayTypes);
     }
 
-    public function uniqueateConstantArrayType(Type $type): Type
-    {
-        if (! $type instanceof ConstantArrayType) {
-            return $type;
-        }
-
-        // nothing to normalize
-        if ($type->getValueTypes() === []) {
-            return $type;
-        }
-
-        $uniqueTypes = [];
-        $removedKeys = [];
-        foreach ($type->getValueTypes() as $key => $valueType) {
-            $typeHash = $this->typeHasher->createTypeHash($valueType);
-
-            $valueType = $this->uniqueateConstantArrayType($valueType);
-            $valueType = $this->normalizeArrayOfUnionToUnionArray($valueType);
-
-            if (! isset($uniqueTypes[$typeHash])) {
-                $uniqueTypes[$typeHash] = $valueType;
-            } else {
-                $removedKeys[] = $key;
-            }
-        }
-
-        // re-index keys
-        $uniqueTypes = array_values($uniqueTypes);
-
-        $keyTypes = [];
-        foreach ($type->getKeyTypes() as $key => $keyType) {
-            if (in_array($key, $removedKeys, true)) {
-                // remove it
-                continue;
-            }
-
-            $keyTypes[$key] = $keyType;
-        }
-
-        return $type;
-//
-//        return new ConstantArrayType($keyTypes, $uniqueTypes);
-    }
-
     /**
      * From "string[]|mixed[]" based on empty array to to "string[]"
      */

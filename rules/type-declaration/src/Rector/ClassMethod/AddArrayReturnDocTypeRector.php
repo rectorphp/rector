@@ -139,9 +139,6 @@ CODE_SAMPLE
             [ReturnTypeDeclarationReturnTypeInferer::class]
         );
 
-//        dump($inferedType);
-//        die;
-
         $currentReturnType = $phpDocInfo->getReturnType();
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
             $currentReturnType,
