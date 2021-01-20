@@ -12,6 +12,8 @@ use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NetteCodeQuality\NodeResolver\FormVariableInputNameTypeResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -27,9 +29,17 @@ final class ChangeFormArrayAccessToAnnotatedControlVariableRector extends Abstra
      */
     private $formVariableInputNameTypeResolver;
 
-    public function __construct(FormVariableInputNameTypeResolver $formVariableInputNameTypeResolver)
-    {
+    /**
+     * @var TypeChecker
+     */
+    private $typeChecker;
+
+    public function __construct(
+        FormVariableInputNameTypeResolver $formVariableInputNameTypeResolver,
+        TypeChecker $typeChecker
+    ) {
         $this->formVariableInputNameTypeResolver = $formVariableInputNameTypeResolver;
+        $this->typeChecker = $typeChecker;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -91,7 +101,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->hasParentTypes($node, [Isset_::class, Unset_::class])) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($this->typeChecker->isInstanceOf($node, [Isset_::class, Unset_::class])) {
             return null;
         }
 

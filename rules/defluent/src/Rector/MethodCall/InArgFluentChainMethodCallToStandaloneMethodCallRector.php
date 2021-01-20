@@ -95,14 +95,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->hasParentType($node, Arg::class)) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Arg) {
             return null;
         }
 
-        /** @var Arg $arg */
-        $arg = $node->getAttribute(AttributeKey::PARENT_NODE);
-        /** @var Node|null $parentMethodCall */
-        $parentMethodCall = $arg->getAttribute(AttributeKey::PARENT_NODE);
+        $parentMethodCall = $parent->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentMethodCall instanceof MethodCall) {
             return null;
         }
@@ -171,5 +169,15 @@ CODE_SAMPLE
         $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
 
         $this->removeNode($parentParent);
+    }
+
+    private function hasParentType(Node $node, string $type): bool
+    {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent === null) {
+            return false;
+        }
+
+        return is_a($parent, $type, true);
     }
 }

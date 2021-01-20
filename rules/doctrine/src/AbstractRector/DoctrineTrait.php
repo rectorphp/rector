@@ -24,11 +24,6 @@ trait DoctrineTrait
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
-    protected function isDoctrineProperty(Property $property): bool
-    {
-        return $this->doctrineDocBlockResolver->isDoctrineProperty($property);
-    }
-
     /**
      * @param Class_|string $class
      */

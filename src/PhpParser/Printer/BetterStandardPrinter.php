@@ -74,7 +74,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * @var DocBlockUpdater
      */
-    private $docBlockManipulator;
+    private $docBlockUpdater;
 
     /**
      * @var CommentRemover
@@ -98,7 +98,7 @@ final class BetterStandardPrinter extends Standard
         CommentRemover $commentRemover,
         AnnotationFormatRestorer $annotationFormatRestorer,
         IndentCharacterDetector $indentCharacterDetector,
-        DocBlockUpdater $docBlockManipulator,
+        DocBlockUpdater $docBlockUpdater,
         array $options = []
     ) {
         parent::__construct($options);
@@ -112,7 +112,7 @@ final class BetterStandardPrinter extends Standard
         $this->commentRemover = $commentRemover;
         $this->annotationFormatRestorer = $annotationFormatRestorer;
         $this->indentCharacterDetector = $indentCharacterDetector;
-        $this->docBlockManipulator = $docBlockManipulator;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
 
     /**
@@ -531,7 +531,7 @@ final class BetterStandardPrinter extends Standard
                 continue;
             }
 
-            $this->docBlockManipulator->updateNodeWithPhpDocInfo($node);
+            $this->docBlockUpdater->updateNodeWithPhpDocInfo($node);
         }
     }
 
