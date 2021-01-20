@@ -211,7 +211,7 @@ final class BetterNodeFinder
         foreach ($types as $type) {
             $nodeFinderFindFirstInstanceOf = $this->nodeFinder->findFirstInstanceOf($nodes, $type);
 
-            if ($nodeFinderFindFirstInstanceOf === null) {
+            if (! $nodeFinderFindFirstInstanceOf instanceof Node) {
                 continue;
             }
 

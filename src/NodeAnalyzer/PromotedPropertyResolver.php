@@ -6,6 +6,7 @@ namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\ValueObject\MethodName;
 
 final class PromotedPropertyResolver
@@ -16,7 +17,7 @@ final class PromotedPropertyResolver
     public function resolveFromClass(Class_ $class): array
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
+        if (! $constructClassMethod instanceof ClassMethod) {
             return [];
         }
 
