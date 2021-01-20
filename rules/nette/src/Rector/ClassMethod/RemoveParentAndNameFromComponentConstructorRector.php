@@ -154,9 +154,8 @@ CODE_SAMPLE
         return $this->removeClassMethodParams($classMethod);
     }
 
-    private function removeClassMethodParams(ClassMethod $classMethod): ?ClassMethod
+    private function removeClassMethodParams(ClassMethod $classMethod): ClassMethod
     {
-        $hasClassMethodChanged = false;
         foreach ($classMethod->params as $param) {
             if ($this->paramFinder->isInAssign((array) $classMethod->stmts, $param)) {
                 continue;
@@ -164,17 +163,12 @@ CODE_SAMPLE
 
             if ($this->isObjectType($param, self::COMPONENT_CONTAINER_CLASS)) {
                 $this->removeNode($param);
-                $hasClassMethodChanged = true;
+                continue;
             }
 
             if ($this->isName($param, self::NAME)) {
                 $this->removeNode($param);
-                $hasClassMethodChanged = true;
             }
-        }
-
-        if (! $hasClassMethodChanged) {
-            return null;
         }
 
         return $classMethod;
@@ -190,8 +184,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $hasStaticCallChanged = false;
-
         foreach ($staticCall->args as $staticCallArg) {
             if (! $staticCallArg->value instanceof Variable) {
                 continue;
@@ -204,11 +196,6 @@ CODE_SAMPLE
             }
 
             $this->removeNode($staticCallArg);
-            $hasStaticCallChanged = true;
-        }
-
-        if (! $hasStaticCallChanged) {
-            return null;
         }
 
         if ($this->shouldRemoveEmptyCall($staticCall)) {
@@ -219,11 +206,10 @@ CODE_SAMPLE
         return $staticCall;
     }
 
-    private function refactorNew(New_ $new): ?New_
+    private function refactorNew(New_ $new): New_
     {
         $parameterNames = $this->methodReflectionProvider->provideParameterNamesByNew($new);
 
-        $hasNewChanged = false;
         foreach ($new->args as $position => $arg) {
             // is on position of $parent or $name?
             if (! isset($parameterNames[$position])) {
@@ -235,12 +221,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $hasNewChanged = true;
             $this->removeNode($arg);
-        }
-
-        if (! $hasNewChanged) {
-            return null;
         }
 
         return $new;
