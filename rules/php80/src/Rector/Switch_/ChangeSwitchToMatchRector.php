@@ -191,7 +191,7 @@ CODE_SAMPLE
 
             $condExpr = $condAndExpr->getCondExpr();
 
-            $condList = ! $condExpr instanceof Expr ? null : [$condExpr];
+            $condList = $condExpr instanceof Expr ? [$condExpr] : null;
             $matchArms[] = new MatchArm($condList, $expr);
         }
 
