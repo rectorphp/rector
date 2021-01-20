@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector;
+namespace Rector\Php80\Tests\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 
-use Iterator;
-use Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector;
+use Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class PreslashSimpleFunctionRectorTest extends AbstractRectorTestCase
+final class OptionalParametersAfterRequiredRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -19,13 +18,13 @@ final class PreslashSimpleFunctionRectorTest extends AbstractRectorTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideData(): Iterator
+    public function provideData(): \Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string
     {
-        return PreslashSimpleFunctionRector::class;
+        return OptionalParametersAfterRequiredRector::class;
     }
 }
