@@ -110,7 +110,7 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $manyToOneTagValueNode = $phpDocInfo->getByType(ManyToOneTagValueNode::class);
-        if ($manyToOneTagValueNode === null) {
+        if (! $manyToOneTagValueNode instanceof ManyToOneTagValueNode) {
             return null;
         }
 

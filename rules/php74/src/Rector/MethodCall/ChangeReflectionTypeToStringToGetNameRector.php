@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -164,7 +165,7 @@ CODE_SAMPLE
     {
         $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
         // just added node → skip it
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             return true;
         }
 

@@ -46,7 +46,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
-        if ($relationTagValueNode === null) {
+        if (! $relationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
             return new MixedType();
         }
 
@@ -93,7 +93,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         }
 
         // nullable by default
-        if ($joinColumnTagValueNode === null || $joinColumnTagValueNode->isNullable()) {
+        if (! $joinColumnTagValueNode instanceof JoinColumnTagValueNode || $joinColumnTagValueNode->isNullable()) {
             $types[] = new NullType();
         }
 

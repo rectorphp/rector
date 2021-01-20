@@ -231,7 +231,7 @@ CODE_SAMPLE
 
             // jump to next one
             $currentNode = $this->getNextExpression($currentNode);
-            if ($currentNode === null) {
+            if (! $currentNode instanceof Node) {
                 return $concatExpressionJoinData;
             }
         }

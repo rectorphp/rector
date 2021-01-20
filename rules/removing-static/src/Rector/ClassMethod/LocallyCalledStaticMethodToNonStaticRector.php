@@ -98,7 +98,7 @@ CODE_SAMPLE
     private function refactorStaticCall(StaticCall $staticCall): ?MethodCall
     {
         $classMethod = $this->nodeRepository->findClassMethodByStaticCall($staticCall);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return null;
         }
 

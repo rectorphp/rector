@@ -76,7 +76,7 @@ CODE_SAMPLE
     private function determineDelimiter(FuncCall $funcCall): ?string
     {
         $concat = $this->getUppermostConcat($funcCall);
-        if ($concat === null) {
+        if (! $concat instanceof Concat) {
             return null;
         }
 

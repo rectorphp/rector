@@ -116,7 +116,7 @@ CODE_SAMPLE
     private function shouldSkip(Property $property): bool
     {
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return true;
         }
 

@@ -172,7 +172,7 @@ final class ClassRenamer
         }
 
         $classLike = $this->getClassOfNamespaceToRefactor($namespace, $oldToNewClasses);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 

@@ -139,7 +139,7 @@ CODE_SAMPLE
 
                 $this->removeExistingConnectionParameter($node);
 
-                if ($connectionVariable === null) {
+                if (! $connectionVariable instanceof Expr) {
                     return null;
                 }
 

@@ -6,6 +6,7 @@ namespace Rector\SymfonyPHPUnit\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\PHPUnit\Manipulator\OnContainerGetCallManipulator;
@@ -128,7 +129,7 @@ CODE_SAMPLE
 
         // 2. put them to setUp() method
         $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
-        if ($setUpClassMethod === null) {
+        if (! $setUpClassMethod instanceof ClassMethod) {
             $setUpClassMethod = $this->kernelTestCaseNodeFactory->createSetUpClassMethodWithGetTypes(
                 $node,
                 $serviceTypes

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
@@ -296,7 +298,7 @@ final class PropertyNaming
     private function getPrefixedClassMethods(Property $property): array
     {
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return [];
         }
 
@@ -333,7 +335,7 @@ final class PropertyNaming
             }
 
             $node = $return->expr;
-            if ($node === null) {
+            if (! $node instanceof Expr) {
                 return false;
             }
 

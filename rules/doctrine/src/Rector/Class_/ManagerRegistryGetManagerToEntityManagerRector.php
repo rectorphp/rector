@@ -124,7 +124,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $constructorClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if ($constructorClassMethod === null) {
+        if (! $constructorClassMethod instanceof ClassMethod) {
             return null;
         }
 
@@ -140,7 +140,7 @@ CODE_SAMPLE
         $managerRegistryParam = $this->resolveManagerRegistryParam($constructorClassMethod);
 
         // no registry manager in the constructor
-        if ($managerRegistryParam === null) {
+        if (! $managerRegistryParam instanceof Param) {
             return null;
         }
 

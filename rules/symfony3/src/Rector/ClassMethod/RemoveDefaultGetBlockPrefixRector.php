@@ -71,7 +71,7 @@ CODE_SAMPLE
         }
 
         $returnedExpr = $this->resolveOnlyStmtReturnExpr($node);
-        if ($returnedExpr === null) {
+        if (! $returnedExpr instanceof Expr) {
             return null;
         }
 

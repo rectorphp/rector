@@ -95,7 +95,7 @@ CODE_SAMPLE
         $foreachValueVar = $node->valueVar;
 
         $twoNodeMatch = $this->matchNodes($ifCondition, $foreachValueVar);
-        if ($twoNodeMatch === null) {
+        if (! $twoNodeMatch instanceof TwoNodeMatch) {
             return null;
         }
 
@@ -148,7 +148,7 @@ CODE_SAMPLE
         }
 
         $nextNode = $foreach->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextNode === null) {
+        if (! $nextNode instanceof Node) {
             return true;
         }
         if (! $nextNode instanceof Return_) {
@@ -157,7 +157,7 @@ CODE_SAMPLE
 
         $returnExpression = $nextNode->expr;
 
-        if ($returnExpression === null) {
+        if (! $returnExpression instanceof Expr) {
             return true;
         }
 

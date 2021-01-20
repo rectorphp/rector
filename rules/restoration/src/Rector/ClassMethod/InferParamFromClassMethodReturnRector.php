@@ -130,7 +130,7 @@ CODE_SAMPLE
 
         foreach ($this->inferParamFromClassMethodReturn as $inferParamFromClassMethodReturn) {
             $returnClassMethod = $this->matchReturnClassMethod($node, $inferParamFromClassMethodReturn);
-            if ($returnClassMethod === null) {
+            if (! $returnClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 continue;
             }
 
@@ -139,7 +139,7 @@ CODE_SAMPLE
             $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
             $paramType = $this->constantReturnToParamTypeConverter->convert($returnType);
-            if ($paramType === null) {
+            if (! $paramType instanceof Type) {
                 continue;
             }
 

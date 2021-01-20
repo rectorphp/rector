@@ -57,7 +57,7 @@ CODE_SAMPLE
         foreach ($node->parts as $index => $nodePart) {
             if ($nodePart instanceof Variable) {
                 $previousNode = $nodePart->getAttribute(AttributeKey::PREVIOUS_NODE);
-                $previousNodeEndTokenPosition = $previousNode === null ? $startTokenPos : $previousNode->getEndTokenPos();
+                $previousNodeEndTokenPosition = ! $previousNode instanceof Node ? $startTokenPos : $previousNode->getEndTokenPos();
 
                 if ($previousNodeEndTokenPosition + 1 === $nodePart->getStartTokenPos()) {
                     $hasVariableBeenWrapped = true;

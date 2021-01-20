@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Legacy\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -88,7 +89,7 @@ CODE_SAMPLE
         }
 
         $propertyAndClassMethodName = $this->matchStaticPropertyFetchAndGetSingletonMethodName($node);
-        if ($propertyAndClassMethodName === null) {
+        if (! $propertyAndClassMethodName instanceof PropertyAndClassMethodName) {
             return null;
         }
 
@@ -103,7 +104,7 @@ CODE_SAMPLE
             }
 
             $staticPropertyFetch = $this->singletonClassMethodAnalyzer->matchStaticPropertyFetch($classMethod);
-            if ($staticPropertyFetch === null) {
+            if (! $staticPropertyFetch instanceof StaticPropertyFetch) {
                 return null;
             }
 

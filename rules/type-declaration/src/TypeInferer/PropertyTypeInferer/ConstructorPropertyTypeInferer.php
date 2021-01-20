@@ -48,14 +48,14 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         }
 
         $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return new MixedType();
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
 
         $param = $this->classMethodPropertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
-        if ($param === null) {
+        if (! $param instanceof Param) {
             return new MixedType();
         }
 

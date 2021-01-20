@@ -118,7 +118,7 @@ CODE_SAMPLE
         }
 
         $ifReturn = $this->getIfReturn($node);
-        if ($ifReturn === null) {
+        if (! $ifReturn instanceof Stmt) {
             return null;
         }
 
@@ -303,7 +303,7 @@ CODE_SAMPLE
     private function isLastIfOrBeforeLastReturn(If_ $if): bool
     {
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextNode === null) {
+        if (! $nextNode instanceof Node) {
             return true;
         }
         return $nextNode instanceof Return_;

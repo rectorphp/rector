@@ -89,7 +89,7 @@ CODE_SAMPLE
         if ($firstArgumentValue instanceof Variable) {
             // check if for() value, rather update that
             $lNumber = $this->findPreviousForWithVariable($firstArgumentValue);
-            if ($lNumber === null) {
+            if (! $lNumber instanceof LNumber) {
                 $node->args[0]->value = new Plus($firstArgumentValue, new LNumber(1));
                 return null;
             }

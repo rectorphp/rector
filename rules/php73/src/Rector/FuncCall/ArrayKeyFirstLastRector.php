@@ -87,7 +87,7 @@ CODE_SAMPLE
         }
 
         $nextExpression = $this->getNextExpression($node);
-        if ($nextExpression === null) {
+        if (! $nextExpression instanceof Node) {
             return null;
         }
 

@@ -31,7 +31,7 @@ final class ServiceMap
     public function getServiceType(string $id): ?Type
     {
         $serviceDefinition = $this->getService($id);
-        if ($serviceDefinition === null) {
+        if (! $serviceDefinition instanceof ServiceDefinition) {
             return null;
         }
 

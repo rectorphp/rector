@@ -87,7 +87,7 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $doctrineColumnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
-        if ($doctrineColumnTagValueNode === null) {
+        if (! $doctrineColumnTagValueNode instanceof ColumnTagValueNode) {
             return new MixedType();
         }
 
@@ -97,7 +97,7 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         }
 
         $scalarType = $this->doctrineTypeToScalarType[$type] ?? null;
-        if ($scalarType === null) {
+        if (! $scalarType instanceof Type) {
             return new MixedType();
         }
 

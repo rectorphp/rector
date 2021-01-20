@@ -131,7 +131,7 @@ final class ClassMethodExternalCallNodeAnalyzer
         }
 
         $getSubscribedEventsClassMethod = $classLike->getMethod('getSubscribedEvents');
-        if ($getSubscribedEventsClassMethod === null) {
+        if (! $getSubscribedEventsClassMethod instanceof ClassMethod) {
             return false;
         }
 

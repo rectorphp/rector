@@ -94,7 +94,7 @@ CODE_SAMPLE
 
         foreach ($this->replaceStringWithClassConstants as $replaceStringWithClassConstant) {
             $desiredArg = $this->matchArg($node, $replaceStringWithClassConstant);
-            if ($desiredArg === null) {
+            if (! $desiredArg instanceof Arg) {
                 continue;
             }
 
@@ -103,7 +103,7 @@ CODE_SAMPLE
                 $replaceStringWithClassConstant->getClassWithConstants()
             );
 
-            if ($classConstFetch === null) {
+            if (! $classConstFetch instanceof ClassConstFetch) {
                 continue;
             }
 
@@ -139,7 +139,7 @@ CODE_SAMPLE
         }
 
         $desiredArg = $methodCall->args[$replaceStringWithClassConstant->getArgPosition()] ?? null;
-        if ($desiredArg === null) {
+        if (! $desiredArg instanceof Arg) {
             return null;
         }
 

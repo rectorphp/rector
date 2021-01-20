@@ -137,12 +137,12 @@ final class NonInformativeReturnTagRemover
         PhpDocInfo $phpDocInfo
     ): void {
         $nullabledReturnType = $this->matchNullabledType($returnType);
-        if ($nullabledReturnType === null) {
+        if (! $nullabledReturnType instanceof Type) {
             return;
         }
 
         $nullabledReturnTagValueNode = $this->matchNullabledReturnTagValueNode($attributeAwareReturnTagValueNode);
-        if ($nullabledReturnTagValueNode === null) {
+        if (! $nullabledReturnTagValueNode instanceof TypeNode) {
             return;
         }
 

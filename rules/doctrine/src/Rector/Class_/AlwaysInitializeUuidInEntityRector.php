@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
@@ -106,7 +107,7 @@ CODE_SAMPLE
         }
 
         $uuidProperty = $this->resolveUuidPropertyFromClass($node);
-        if ($uuidProperty === null) {
+        if (! $uuidProperty instanceof Property) {
             return null;
         }
 
@@ -146,7 +147,7 @@ CODE_SAMPLE
     private function hasUuidInitAlreadyAdded(Class_ $class, string $uuidPropertyName): bool
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
+        if (! $constructClassMethod instanceof ClassMethod) {
             return false;
         }
 

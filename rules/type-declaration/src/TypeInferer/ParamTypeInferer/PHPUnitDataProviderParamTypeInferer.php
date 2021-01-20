@@ -67,7 +67,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     public function inferParam(Param $param): Type
     {
         $dataProviderClassMethod = $this->resolveDataProviderClassMethod($param);
-        if ($dataProviderClassMethod === null) {
+        if (! $dataProviderClassMethod instanceof ClassMethod) {
             return new MixedType();
         }
 

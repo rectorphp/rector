@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Php71\ValueObject\TwoNodeMatch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -90,7 +91,7 @@ final class SimplifyConditionsRector extends AbstractRector
             }
         );
 
-        if ($twoNodeMatch === null) {
+        if (! $twoNodeMatch instanceof TwoNodeMatch) {
             return $twoNodeMatch;
         }
 

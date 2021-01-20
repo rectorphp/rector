@@ -101,7 +101,7 @@ CODE_SAMPLE
         $this->newExpressions = [];
 
         $exceptionVariable = $tryCatch->catches[0]->var;
-        if ($exceptionVariable === null) {
+        if (! $exceptionVariable instanceof Variable) {
             return null;
         }
 

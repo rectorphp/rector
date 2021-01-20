@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
@@ -71,7 +72,7 @@ CODE_SAMPLE
 
     private function shortenElseIf(If_ $node): ?If_
     {
-        if ($node->else === null) {
+        if (! $node->else instanceof Else_) {
             return null;
         }
 

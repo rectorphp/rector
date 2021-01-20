@@ -129,7 +129,7 @@ CODE_SAMPLE
         }
 
         $rootMethodCall = $this->fluentChainMethodCallNodeAnalyzer->resolveRootMethodCall($methodCall);
-        if ($rootMethodCall === null) {
+        if (! $rootMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
             return true;
         }
 

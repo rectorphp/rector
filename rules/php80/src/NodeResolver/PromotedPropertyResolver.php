@@ -51,7 +51,7 @@ final class PromotedPropertyResolver
     public function resolveFromClass(Class_ $class): array
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
+        if (! $constructClassMethod instanceof ClassMethod) {
             return [];
         }
 
@@ -62,7 +62,7 @@ final class PromotedPropertyResolver
             }
 
             $propertyPromotionCandidate = $this->matchPropertyPromotionCandidate($property, $constructClassMethod);
-            if ($propertyPromotionCandidate === null) {
+            if (! $propertyPromotionCandidate instanceof PropertyPromotionCandidate) {
                 continue;
             }
 
@@ -106,7 +106,7 @@ final class PromotedPropertyResolver
             }
 
             $matchedParam = $this->matchClassMethodParamByAssignedVariable($constructClassMethod, $assignedExpr);
-            if ($matchedParam === null) {
+            if (! $matchedParam instanceof Param) {
                 continue;
             }
 
@@ -155,7 +155,7 @@ final class PromotedPropertyResolver
                 return $this->nodeNameResolver->isName($node, $paramName);
             });
 
-            if ($firstParamVariable === null) {
+            if (! $firstParamVariable instanceof Node) {
                 continue;
             }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Generic\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -85,7 +86,7 @@ CODE_SAMPLE
     {
         foreach ($this->propertyToVisibilityByClass as $type => $propertyToVisibility) {
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-            if ($classNode === null) {
+            if (! $classNode instanceof ClassLike) {
                 continue;
             }
 

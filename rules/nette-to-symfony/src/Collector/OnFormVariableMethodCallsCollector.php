@@ -47,7 +47,7 @@ final class OnFormVariableMethodCallsCollector
     public function collectFromClassMethod(ClassMethod $classMethod): array
     {
         $newFormVariable = $this->resolveNewFormVariable($classMethod);
-        if ($newFormVariable === null) {
+        if (! $newFormVariable instanceof Expr) {
             return [];
         }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Node;
 
 use Nette\Utils\Strings;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -50,7 +51,7 @@ final class DocAliasResolver
             &$possibleDocAliases
         ): void {
             $docComment = $node->getDocComment();
-            if ($docComment === null) {
+            if (! $docComment instanceof Doc) {
                 return;
             }
 

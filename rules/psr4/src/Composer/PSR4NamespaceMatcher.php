@@ -34,7 +34,7 @@ final class PSR4NamespaceMatcher implements PSR4AutoloadNamespaceMatcherInterfac
     public function getExpectedNamespace(Node $node): ?string
     {
         $smartFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($smartFileInfo === null) {
+        if (! $smartFileInfo instanceof SmartFileInfo) {
             throw new ShouldNotHappenException();
         }
 

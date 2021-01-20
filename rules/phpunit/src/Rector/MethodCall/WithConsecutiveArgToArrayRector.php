@@ -6,6 +6,7 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
@@ -158,13 +159,13 @@ CODE_SAMPLE
     private function inferMockedClassName(MethodCall $methodCall): ?string
     {
         $variable = $this->findRootVariableOfChainCall($methodCall);
-        if ($variable === null) {
+        if (! $variable instanceof Variable) {
             return null;
         }
 
         // look for "$this->createMock(X)"
         $assignToVariable = $this->methodCallManipulator->findAssignToVariable($variable);
-        if ($assignToVariable === null) {
+        if (! $assignToVariable instanceof Assign) {
             return null;
         }
 

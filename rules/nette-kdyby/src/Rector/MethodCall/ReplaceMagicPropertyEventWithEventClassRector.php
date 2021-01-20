@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NetteKdyby\DataProvider\EventAndListenerTreeProvider;
+use Rector\NetteKdyby\ValueObject\EventAndListenerTree;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -100,7 +101,7 @@ CODE_SAMPLE
     {
         // 1. is onProperty? call
         $eventAndListenerTree = $this->eventAndListenerTreeProvider->matchMethodCall($node);
-        if ($eventAndListenerTree === null) {
+        if (! $eventAndListenerTree instanceof EventAndListenerTree) {
             return null;
         }
 

@@ -97,7 +97,7 @@ final class FluentChainMethodCallNodeAnalyzer
         $nextNode = $methodCall->getAttribute(AttributeKey::NEXT_NODE);
 
         // is last chain call
-        return $nextNode === null;
+        return ! $nextNode instanceof Node;
     }
 
     /**

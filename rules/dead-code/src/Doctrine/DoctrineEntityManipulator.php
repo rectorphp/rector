@@ -59,7 +59,7 @@ final class DoctrineEntityManipulator
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
-        if ($relationTagValueNode === null) {
+        if (! $relationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
             return null;
         }
 

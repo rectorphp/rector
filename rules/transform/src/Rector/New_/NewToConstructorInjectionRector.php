@@ -14,6 +14,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -172,7 +173,7 @@ CODE_SAMPLE
 
             $objectType = new ObjectType($typeToConstructorInjection);
             $expectedPropertyName = $this->propertyNaming->getExpectedNameFromType($objectType);
-            if ($expectedPropertyName === null) {
+            if (! $expectedPropertyName instanceof ExpectedName) {
                 continue;
             }
 

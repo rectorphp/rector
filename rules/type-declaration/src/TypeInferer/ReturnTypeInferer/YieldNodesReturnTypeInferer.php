@@ -50,7 +50,7 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
         $types = [];
         foreach ($yieldNodes as $yieldNode) {
             $value = $this->resolveYieldValue($yieldNode);
-            if ($value === null) {
+            if (! $value instanceof Expr) {
                 continue;
             }
 

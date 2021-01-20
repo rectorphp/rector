@@ -30,7 +30,7 @@ final class FunctionLikeDocParamTypeInferer extends AbstractTypeInferer implemen
     public function inferParam(Param $param): Type
     {
         $functionLike = $this->resolveScopeNode($param);
-        if ($functionLike === null) {
+        if (! $functionLike instanceof FunctionLike) {
             return new MixedType();
         }
 

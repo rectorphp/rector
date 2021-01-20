@@ -78,7 +78,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $callWithParamRename = $this->matchTypeAndMethodName($node);
-        if ($callWithParamRename === null) {
+        if (! $callWithParamRename instanceof RenameMethodCallBasedOnParameter) {
             return null;
         }
 

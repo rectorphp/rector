@@ -75,7 +75,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $argValue = $this->matchWhereDateThirdArgValue($node);
-        if ($argValue === null) {
+        if (! $argValue instanceof Expr) {
             return null;
         }
 

@@ -10,6 +10,8 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Defluent\NodeFactory\ReturnFluentMethodCallFactory;
 use Rector\Defluent\NodeFactory\SeparateReturnMethodCallFactory;
 use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
+use Rector\Defluent\ValueObject\FirstAssignFluentCall;
+use Rector\Defluent\ValueObject\FluentMethodCalls;
 use Rector\Defluent\ValueObjectFactory\FluentMethodCallsFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -84,7 +86,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $methodCall = $this->matchReturnMethodCall($node);
-        if ($methodCall === null) {
+        if (! $methodCall instanceof MethodCall) {
             return null;
         }
 
@@ -109,7 +111,7 @@ CODE_SAMPLE
     private function createStandaloneNodesToAddFromReturnFluentMethodCalls(MethodCall $methodCall): array
     {
         $fluentMethodCalls = $this->fluentMethodCallsFactory->createFromLastMethodCall($methodCall);
-        if ($fluentMethodCalls === null) {
+        if (! $fluentMethodCalls instanceof FluentMethodCalls) {
             return [];
         }
 
@@ -117,7 +119,7 @@ CODE_SAMPLE
             $fluentMethodCalls
         );
 
-        if ($firstAssignFluentCall === null) {
+        if (! $firstAssignFluentCall instanceof FirstAssignFluentCall) {
             return [];
         }
 

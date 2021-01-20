@@ -145,7 +145,7 @@ CODE_SAMPLE
     private function processPreviousAssign(Node $node, Expr $firstArgumentExpr): void
     {
         $previousNodeAssign = $this->findPreviousNodeAssign($node, $firstArgumentExpr);
-        if ($previousNodeAssign === null) {
+        if (! $previousNodeAssign instanceof Assign) {
             return;
         }
 

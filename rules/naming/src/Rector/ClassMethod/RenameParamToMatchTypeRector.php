@@ -13,6 +13,7 @@ use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\ParamRenamer\ParamRenamer;
+use Rector\Naming\ValueObject\ParamRename;
 use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -119,12 +120,12 @@ CODE_SAMPLE
             }
 
             $paramRename = $this->paramRenameFactory->create($param, $this->matchParamTypeExpectedNameResolver);
-            if ($paramRename === null) {
+            if (! $paramRename instanceof ParamRename) {
                 continue;
             }
 
             $matchTypeParamRenamerRename = $this->paramRenamer->rename($paramRename);
-            if ($matchTypeParamRenamerRename === null) {
+            if (! $matchTypeParamRenamerRename instanceof Param) {
                 continue;
             }
 

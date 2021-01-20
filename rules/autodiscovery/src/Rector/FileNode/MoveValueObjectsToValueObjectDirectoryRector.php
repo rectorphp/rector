@@ -11,6 +11,7 @@ use Rector\Autodiscovery\Analyzer\ClassAnalyzer;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -151,7 +152,7 @@ CODE_SAMPLE
             'ValueObject'
         );
 
-        if ($movedFileWithNodes === null) {
+        if (! $movedFileWithNodes instanceof MovedFileWithNodes) {
             return null;
         }
 
