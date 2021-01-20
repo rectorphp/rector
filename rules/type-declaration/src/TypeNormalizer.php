@@ -14,7 +14,6 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 
@@ -33,15 +32,9 @@ final class TypeNormalizer
      */
     private $typeFactory;
 
-    /**
-     * @var TypeHasher
-     */
-    private $typeHasher;
-
-    public function __construct(TypeFactory $typeFactory, TypeHasher $typeHasher)
+    public function __construct(TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;
-        $this->typeHasher = $typeHasher;
     }
 
     public function convertConstantArrayTypeToArrayType(ConstantArrayType $constantArrayType): ?ArrayType
