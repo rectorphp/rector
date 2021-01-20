@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
+namespace Rector\Comments\NodeDocBlock;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
@@ -10,7 +10,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class DocBlockManipulator
+final class DocBlockUpdater
 {
     /**
      * @var string

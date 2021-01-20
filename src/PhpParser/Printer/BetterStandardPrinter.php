@@ -23,11 +23,11 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Comments\CommentRemover;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 
 /**
  * @see \Rector\Core\Tests\PhpParser\Printer\BetterStandardPrinterTest
@@ -72,7 +72,7 @@ final class BetterStandardPrinter extends Standard
     private $tabOrSpaceIndentCharacter = ' ';
 
     /**
-     * @var DocBlockManipulator
+     * @var DocBlockUpdater
      */
     private $docBlockManipulator;
 
@@ -98,7 +98,7 @@ final class BetterStandardPrinter extends Standard
         CommentRemover $commentRemover,
         AnnotationFormatRestorer $annotationFormatRestorer,
         IndentCharacterDetector $indentCharacterDetector,
-        DocBlockManipulator $docBlockManipulator,
+        DocBlockUpdater $docBlockManipulator,
         array $options = []
     ) {
         parent::__construct($options);
