@@ -293,7 +293,7 @@ final class NodeTypeResolver
         }
 
         $defaultNodeValue = $property->props[0]->default;
-        if ($defaultNodeValue === null) {
+        if (! $defaultNodeValue instanceof \PhpParser\Node\Expr) {
             return false;
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
+use PhpParser\Node;
 use PhpParser\Node\Param;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
@@ -143,7 +144,7 @@ final class PhpDocTypeChanger
     private function notifyChange(): void
     {
         $node = $this->currentNodeProvider->getNode();
-        if ($node === null) {
+        if (! $node instanceof Node) {
             throw new ShouldNotHappenException();
         }
 

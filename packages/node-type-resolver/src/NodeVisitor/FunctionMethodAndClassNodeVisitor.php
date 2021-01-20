@@ -170,7 +170,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     private function setClassNodeAndName(?ClassLike $classLike): void
     {
         $this->classLike = $classLike;
-        if ($classLike === null || $classLike->name === null) {
+        if (! $classLike instanceof ClassLike || $classLike->name === null) {
             $this->className = null;
         } elseif (property_exists($classLike, 'namespacedName')) {
             $this->className = $classLike->namespacedName->toString();

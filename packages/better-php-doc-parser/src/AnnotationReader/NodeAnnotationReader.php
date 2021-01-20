@@ -87,7 +87,7 @@ final class NodeAnnotationReader
     public function readPropertyAnnotation(Property $property, string $annotationClassName): ?object
     {
         $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
-        if ($propertyReflection === null) {
+        if (! $propertyReflection instanceof ReflectionProperty) {
             return null;
         }
 

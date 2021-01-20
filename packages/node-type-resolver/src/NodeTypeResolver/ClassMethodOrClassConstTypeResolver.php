@@ -7,6 +7,7 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
@@ -43,7 +44,7 @@ final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInter
     public function resolve(Node $node): Type
     {
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             // anonymous class
             return new ObjectWithoutClassType();
         }
