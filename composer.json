@@ -41,6 +41,7 @@
         "symfony/dependency-injection": "^5.1",
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
+        "symfony/process": "^4.4.8|^5.1",
         "symplify/astral": "^9.0.34",
         "symplify/autowire-array-parameter": "^9.0.34",
         "symplify/console-color-diff": "^9.0.34",
