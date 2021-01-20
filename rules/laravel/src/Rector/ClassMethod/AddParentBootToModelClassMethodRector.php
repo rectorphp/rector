@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\Laravel\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -82,7 +84,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInObjectType($node, 'Illuminate\Database\Eloquent\Model')) {
+        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof ClassLike) {
+            return null;
+        }
+
+        if (! $this->isObjectType($class, 'Illuminate\Database\Eloquent\Model')) {
             return null;
         }
 

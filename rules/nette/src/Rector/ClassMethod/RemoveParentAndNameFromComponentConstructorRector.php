@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -135,7 +136,12 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        if (! $this->isInObjectType($classMethod, self::CONTROL_CLASS)) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof ClassLike) {
+            return null;
+        }
+
+        if (! $this->isObjectType($classLike, self::CONTROL_CLASS)) {
             return null;
         }
 
