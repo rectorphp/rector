@@ -26,7 +26,7 @@ final class DimFetchAssignToMethodCallRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return array<string, array<int, DimFetchAssignToMethodCall[]>>
+     * @return array<string, array<string, DimFetchAssignToMethodCall[]>>
      */
     protected function getRectorsWithConfiguration(): array
     {

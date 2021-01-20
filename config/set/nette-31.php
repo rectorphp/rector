@@ -109,7 +109,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Nette\Application\Routers\Route',
                     'addRoute'
                 ),
-            ])
+            ]),
         ]]);
 
     $services->set(AddParamTypeDeclarationRector::class)
@@ -120,7 +120,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'sendTemplate',
                     0,
                     new UnionType([new ObjectType('Nette\Application\UI\Template'), new NullType()])
-                )
+                ),
             ]),
         ]]);
 
@@ -163,9 +163,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RemovePackageRector::class)
         ->call('configure', [[
-            RemovePackageRector::PACKAGE_NAMES => [
-                'nette/component-model',
-                'nette/neon'
-            ],
+            RemovePackageRector::PACKAGE_NAMES => ['nette/component-model', 'nette/neon'],
         ]]);
 };

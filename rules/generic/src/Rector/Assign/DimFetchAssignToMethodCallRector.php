@@ -130,10 +130,7 @@ CODE_SAMPLE
             if ($this->isObjectType(
                 $arrayDimFetch->var,
                 $dimFetchAssignToMethodCall->getListClass()
-            ) && $this->isObjectType(
-                $assign->expr,
-                $dimFetchAssignToMethodCall->getItemClass()
-            )) {
+            ) && $this->isObjectType($assign->expr, $dimFetchAssignToMethodCall->getItemClass())) {
                 return $dimFetchAssignToMethodCall;
             }
         }

@@ -140,7 +140,9 @@ final class TypeNormalizer
             $keyTypes[$key] = $keyType;
         }
 
-        return new ConstantArrayType($keyTypes, $uniqueTypes);
+        return $type;
+//
+//        return new ConstantArrayType($keyTypes, $uniqueTypes);
     }
 
     /**
