@@ -84,12 +84,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof ClassLike) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 
-        if (! $this->isObjectType($class, 'Illuminate\Database\Eloquent\Model')) {
+        if (! $this->isObjectType($classLike, 'Illuminate\Database\Eloquent\Model')) {
             return null;
         }
 

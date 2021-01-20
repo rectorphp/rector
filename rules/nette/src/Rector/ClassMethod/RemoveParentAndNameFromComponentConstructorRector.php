@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -16,6 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
+use Rector\Nette\NodeFinder\ParamFinder;
 use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -62,12 +61,19 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
      */
     private $methodReflectionProvider;
 
+    /**
+     * @var ParamFinder
+     */
+    private $paramFinder;
+
     public function __construct(
+        ParamFinder $paramFinder,
         StaticCallAnalyzer $staticCallAnalyzer,
         MethodReflectionProvider $methodReflectionProvider
     ) {
         $this->staticCallAnalyzer = $staticCallAnalyzer;
         $this->methodReflectionProvider = $methodReflectionProvider;
+        $this->paramFinder = $paramFinder;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -128,7 +134,7 @@ CODE_SAMPLE
             return $this->refactorStaticCall($node);
         }
 
-        if ($node instanceof New_ && $this->isObjectType($node->class, self::COMPONENT_CONTAINER_CLASS)) {
+        if ($this->isObjectType($node->class, self::CONTROL_CLASS)) {
             return $this->refactorNew($node);
         }
 
@@ -152,14 +158,11 @@ CODE_SAMPLE
     {
         $hasClassMethodChanged = false;
         foreach ($classMethod->params as $param) {
-            if ($this->isInAssign($classMethod, $param)) {
+            if ($this->paramFinder->isInAssign((array) $classMethod->stmts, $param)) {
                 continue;
             }
 
-            if ($this->isName($param, self::PARENT) && $param->type !== null && $this->isName(
-                $param->type,
-                    self::COMPONENT_CONTAINER_CLASS
-            )) {
+            if ($this->isObjectType($param, self::COMPONENT_CONTAINER_CLASS)) {
                 $this->removeNode($param);
                 $hasClassMethodChanged = true;
             }
@@ -189,7 +192,6 @@ CODE_SAMPLE
 
         $hasStaticCallChanged = false;
 
-        /** @var Arg $staticCallArg */
         foreach ($staticCall->args as $staticCallArg) {
             if (! $staticCallArg->value instanceof Variable) {
                 continue;
@@ -255,21 +257,6 @@ CODE_SAMPLE
         }
 
         return true;
-    }
-
-    private function isInAssign(ClassMethod $classMethod, Param $param): bool
-    {
-        $variable = $param->var;
-        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
-            $variable
-        ): bool {
-            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $parent instanceof Assign) {
-                return false;
-            }
-
-            return $this->areNodesEqual($node, $variable);
-        });
     }
 
     private function isInsideNetteControlClass(Node $node): bool
