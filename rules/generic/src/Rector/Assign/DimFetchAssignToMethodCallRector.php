@@ -22,6 +22,9 @@ use Webmozart\Assert\Assert;
  */
 final class DimFetchAssignToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
     public const DIM_FETCH_ASSIGN_TO_METHOD_CALL = 'dim_fetch_assign_to_method_call';
 
     /**
@@ -48,7 +51,8 @@ class RouterFactory
         return $routeList;
     }
 }
-CODE_SAMPLE,
+CODE_SAMPLE
+,
                     <<<'CODE_SAMPLE'
 use Nette\Application\Routers\RouteList;
 
@@ -61,14 +65,15 @@ class RouterFactory
         return $routeList;
     }
 }
-CODE_SAMPLE,
+CODE_SAMPLE
+,
                     [
                         self::DIM_FETCH_ASSIGN_TO_METHOD_CALL => [
                             new DimFetchAssignToMethodCall(
                                 'Nette\Application\Routers\RouteList',
                                 'Nette\Application\Routers\Route',
                                 'addRoute'
-                            )
+                            ),
                         ],
                     ]
                 ),
@@ -102,11 +107,18 @@ CODE_SAMPLE,
         }
 
         $dimFetchAssignToMethodCall = $this->findDimFetchAssignToMethodCall($node);
-        if ($dimFetchAssignToMethodCall === null) {
+        if (! $dimFetchAssignToMethodCall instanceof DimFetchAssignToMethodCall) {
             return null;
         }
 
         return new MethodCall($arrayDimFetch->var, $dimFetchAssignToMethodCall->getAddMethod(), $node->expr->args);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $dimFetchAssignToMethodCalls = $configuration[self::DIM_FETCH_ASSIGN_TO_METHOD_CALL] ?? [];
+        Assert::allIsInstanceOf($dimFetchAssignToMethodCalls, DimFetchAssignToMethodCall::class);
+        $this->dimFetchAssignToMethodCalls = $dimFetchAssignToMethodCalls;
     }
 
     private function findDimFetchAssignToMethodCall(Assign $assign): ?DimFetchAssignToMethodCall
@@ -115,17 +127,13 @@ CODE_SAMPLE,
         $arrayDimFetch = $assign->var;
 
         foreach ($this->dimFetchAssignToMethodCalls as $dimFetchAssignToMethodCall) {
-            if ($this->isObjectType($arrayDimFetch->var, $dimFetchAssignToMethodCall->getListClass()) && $this->isObjectType($assign->expr, $dimFetchAssignToMethodCall->getItemClass())) {
+            if ($this->isObjectType(
+                $arrayDimFetch->var,
+                $dimFetchAssignToMethodCall->getListClass()
+            ) && $this->isObjectType($assign->expr, $dimFetchAssignToMethodCall->getItemClass())) {
                 return $dimFetchAssignToMethodCall;
             }
         }
         return null;
-    }
-
-    public function configure(array $configuration): void
-    {
-        $dimFetchAssignToMethodCalls = $configuration[self::DIM_FETCH_ASSIGN_TO_METHOD_CALL] ?? [];
-        Assert::allIsInstanceOf($dimFetchAssignToMethodCalls, DimFetchAssignToMethodCall::class);
-        $this->dimFetchAssignToMethodCalls = $dimFetchAssignToMethodCalls;
     }
 }

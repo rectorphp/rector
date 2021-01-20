@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Rector\Generic\ValueObject;
 
@@ -26,25 +26,16 @@ final class DimFetchAssignToMethodCall
         $this->addMethod = $addMethod;
     }
 
-    /**
-     * @return string
-     */
     public function getListClass(): string
     {
         return $this->listClass;
     }
 
-    /**
-     * @return string
-     */
     public function getItemClass(): string
     {
         return $this->itemClass;
     }
 
-    /**
-     * @return string
-     */
     public function getAddMethod(): string
     {
         return $this->addMethod;

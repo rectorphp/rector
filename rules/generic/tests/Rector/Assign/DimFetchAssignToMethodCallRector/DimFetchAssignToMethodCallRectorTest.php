@@ -25,6 +25,9 @@ final class DimFetchAssignToMethodCallRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return array<string, array<string, DimFetchAssignToMethodCall[]>>
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [
