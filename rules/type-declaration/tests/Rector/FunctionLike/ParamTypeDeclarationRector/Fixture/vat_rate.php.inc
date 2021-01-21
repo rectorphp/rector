@@ -1,4 +1,6 @@
 <?php
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
+
 interface SimpleValueObjectInterface
 {
     /**
@@ -15,8 +17,6 @@ interface VatRateInterface extends SimpleValueObjectInterface
     public function __construct($countryCode);
 }
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
-
 final class VatRate implements VatRateInterface
 {
     /**
@@ -28,4 +28,3 @@ final class VatRate implements VatRateInterface
 }
 ?>
 -----
-?>
