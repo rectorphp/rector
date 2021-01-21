@@ -540,3 +540,8 @@ parameters:
         - '#Content of method "inferFunctionLike\(\)" is duplicated with method "getNodeReturnPhpDocType\(\)" in "Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddArrayReturnDocTypeRector" class\. Use unique content or abstract service instead#'
         - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:getParamTagValueByName\(\) should return Rector\\AttributeAwarePhpDoc\\Ast\\PhpDoc\\AttributeAwareParamTagValueNode\|null but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ParamTagValueNode\|null#'
         - '#Instanceof between Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\Doctrine\\Property_\\ManyToOneTagValueNode\|null and Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\Doctrine\\Property_\\ManyToManyTagValueNode will always evaluate to false#'
+
+        -
+            message: '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\ChangePackageVersionRector" class\. Use unique content or abstract service instead#'
+            paths:
+                - rules/composer/src/Rector/AddPackageToRequireRector.php #71

@@ -10,19 +10,20 @@ use Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class PreslashSimpleFunctionRectorTest extends AbstractRectorTestCase
+final class AutoImportTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
     {
+        $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
         $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureAutoImport');
     }
 
     protected function getRectorClass(): string
