@@ -39,6 +39,15 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class PhpDocInfo
 {
     /**
+     * @var array<string, string>
+     */
+    private const TAGS_TYPES_TO_NAMES = [
+        ReturnTagValueNode::class => '@return',
+        ParamTagValueNode::class => '@param',
+        VarTagValueNode::class => '@var',
+    ];
+
+    /**
      * @var string
      */
     private $originalContent;
@@ -379,22 +388,18 @@ final class PhpDocInfo
     }
 
     /**
-     * @return class-string[]
+     * @return string[]
      */
     public function getThrowsClassNames(): array
     {
         $throwsClasses = [];
         foreach ($this->getThrowsTypes() as $throwsType) {
             if ($throwsType instanceof ShortenedObjectType) {
-                /** @var class-string $className */
-                $className = $throwsType->getFullyQualifiedName();
-                $throwsClasses[] = $className;
+                $throwsClasses[] = $throwsType->getFullyQualifiedName();
             }
 
             if ($throwsType instanceof FullyQualifiedObjectType) {
-                /** @var class-string $className */
-                $className = $throwsType->getClassName();
-                $throwsClasses[] = $className;
+                $throwsClasses[] = $throwsType->getClassName();
             }
         }
 
@@ -485,16 +490,10 @@ final class PhpDocInfo
 
     private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): string
     {
-        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
-            return '@return';
-        }
-
-        if ($phpDocTagValueNode instanceof ParamTagValueNode) {
-            return '@param';
-        }
-
-        if ($phpDocTagValueNode instanceof VarTagValueNode) {
-            return '@var';
+        foreach (self::TAGS_TYPES_TO_NAMES as $tagValueNodeType => $name) {
+            if ($phpDocTagValueNode instanceof $tagValueNodeType) {
+                return $name;
+            }
         }
 
         throw new NotImplementedException();

@@ -220,7 +220,7 @@ CODE_SAMPLE
 
     /**
      * @param Throw_|MethodCall|FuncCall $node
-     * @return class-string[]
+     * @return string[]
      */
     private function extractAlreadyAnnotatedThrowables(Node $node): array
     {

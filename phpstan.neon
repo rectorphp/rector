@@ -545,3 +545,7 @@ parameters:
             message: '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\ChangePackageVersionRector" class\. Use unique content or abstract service instead#'
             paths:
                 - rules/composer/src/Rector/AddPackageToRequireRector.php #71
+
+        # buggy phpstan clas-string
+        - '#Method (.*?) should return class\-string but returns string#'
+        - '#Method (.*?) should return array<class\-string\> but returns array<int, string\>#'
