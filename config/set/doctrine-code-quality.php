@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\QueryBuilder;
 use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
@@ -36,10 +34,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             [
                 ReplaceStringWithClassConstantRector::REPLACE_STRING_WITH_CLASS_CONSTANT => ValueObjectInliner::inline([
                     new ReplaceStringWithClassConstant(
-                        QueryBuilder::class,
+                        'Doctrine\ORM\QueryBuilder',
                         'orderBy',
                         1,
-                        Criteria::class
+                        'Doctrine\Common\Collections\Criteria'
                     ),
                 ]),
             ],
