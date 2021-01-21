@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\QueryBuilder;
 use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
@@ -12,7 +14,10 @@ use Rector\DoctrineCodeQuality\Rector\Property\ChangeBigIntEntityPropertyToIntTy
 use Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector;
 use Rector\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector;
 use Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector;
+use Rector\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector;
+use Rector\Privatization\ValueObject\ReplaceStringWithClassConstant;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -26,4 +31,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ImproveDoctrineCollectionDocTypeInEntityRector::class);
     $services->set(RemoveRedundantDefaultPropertyAnnotationValuesRector::class);
     $services->set(RemoveRedundantDefaultClassAnnotationValuesRector::class);
+    $services->set(ReplaceStringWithClassConstantRector::class)
+        ->call('configure', [
+            [
+                ReplaceStringWithClassConstantRector::REPLACE_STRING_WITH_CLASS_CONSTANT => ValueObjectInliner::inline([
+                    new ReplaceStringWithClassConstant(
+                        QueryBuilder::class,
+                        'orderBy',
+                        1,
+                        Criteria::class
+                    ),
+                ]),
+            ],
+        ]);
 };
