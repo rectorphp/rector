@@ -225,7 +225,12 @@ final class NameImporter
             return;
         }
 
+        $fullName = $name->toString();
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Node && strpos($fullName, '\\') === false && function_exists($name->toString())) {
+            return;
+        }
+
         if ($parentNode instanceof FuncCall) {
             $this->useNodesToAddCollector->addFunctionUseImport($name, $fullyQualifiedObjectType);
         } else {
