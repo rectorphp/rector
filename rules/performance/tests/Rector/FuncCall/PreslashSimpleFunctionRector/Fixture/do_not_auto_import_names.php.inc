@@ -6,6 +6,7 @@ class DoNotAutoImportNames
 {
     public function shorten($value)
     {
+        new \stdClass;
         return trim($value);
     }
 }
@@ -16,6 +17,7 @@ class DoNotAutoImportNames
 
 namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
 
+use stdClass;
 class DoNotAutoImportNames
 {
     public function shorten($value)
