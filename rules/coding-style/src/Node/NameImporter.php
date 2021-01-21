@@ -227,7 +227,7 @@ final class NameImporter
         }
 
         $fullName = $name->toString();
-        if (strpos($fullName, '\\') === false && function_exists($name->toString())) {
+        if (strpos($fullName, '\\') === false && function_exists($fullName)) {
             return;
         }
 
