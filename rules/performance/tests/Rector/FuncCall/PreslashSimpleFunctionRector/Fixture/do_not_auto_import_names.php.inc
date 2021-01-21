@@ -2,7 +2,7 @@
 
 namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
 
-class AutoImportNames
+class DoNotAutoImportNames
 {
     public function shorten($value)
     {
@@ -16,7 +16,7 @@ class AutoImportNames
 
 namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
 
-class AutoImportNames
+class DoNotAutoImportNames
 {
     public function shorten($value)
     {
