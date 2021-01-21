@@ -227,7 +227,8 @@ final class NameImporter
         }
 
         $fullName = $name->toString();
-        if (! Strings::contains($fullName, '\\') && function_exists($fullName)) {
+        $autoImportNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
+        if ($autoImportNames && ! Strings::contains($fullName, '\\') && function_exists($fullName)) {
             return;
         }
 
