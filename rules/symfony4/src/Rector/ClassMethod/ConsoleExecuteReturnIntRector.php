@@ -108,7 +108,8 @@ CODE_SAMPLE
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
 
-            if ($node instanceof Int_) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Return_ && $node instanceof Int_) {
                 $hasReturn = true;
                 return null;
             }
