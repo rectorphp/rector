@@ -388,7 +388,7 @@ final class PhpDocInfo
     }
 
     /**
-     * @return class-string[]
+     * @return string[]
      */
     public function getThrowsClassNames(): array
     {
