@@ -108,6 +108,11 @@ CODE_SAMPLE
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
 
+            if ($node instanceof Int_) {
+                $hasReturn = true;
+                return null;
+            }
+
             if (! $node instanceof Return_) {
                 return null;
             }
