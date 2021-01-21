@@ -76,11 +76,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $autoImportNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
-        if ($autoImportNames) {
-            $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, false);
-        }
-
         $node->name = new FullyQualified($functionName);
 
         return $node;

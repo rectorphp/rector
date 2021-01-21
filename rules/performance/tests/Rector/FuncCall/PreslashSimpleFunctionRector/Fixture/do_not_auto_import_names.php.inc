@@ -22,7 +22,8 @@ class DoNotAutoImportNames
 {
     public function shorten($value)
     {
-        return \trim($value);
+        new stdClass;
+        return trim($value);
     }
 }
 

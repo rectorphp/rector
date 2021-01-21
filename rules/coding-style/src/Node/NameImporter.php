@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Node;
 
+use Nette\Utils\Strings;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -222,6 +223,11 @@ final class NameImporter
     private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
         if ($this->useNodesToAddCollector->hasImport($name, $fullyQualifiedObjectType)) {
+            return;
+        }
+
+        $fullName = $name->toString();
+        if (! Strings::contains($fullName, '\\') && function_exists($fullName)) {
             return;
         }
 
