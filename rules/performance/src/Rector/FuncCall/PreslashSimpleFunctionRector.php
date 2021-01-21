@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -72,6 +73,11 @@ CODE_SAMPLE
         }
 
         if (Strings::contains($functionName, '\\')) {
+            return null;
+        }
+
+        $autoImportNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
+        if ($autoImportNames) {
             return null;
         }
 
