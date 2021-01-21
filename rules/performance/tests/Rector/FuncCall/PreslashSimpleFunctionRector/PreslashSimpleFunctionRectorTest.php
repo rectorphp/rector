@@ -8,7 +8,6 @@ use Iterator;
 use Rector\Core\Configuration\Option;
 use Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\SmartFileSystem\Exception\FileNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PreslashSimpleFunctionRectorTest extends AbstractRectorTestCase
