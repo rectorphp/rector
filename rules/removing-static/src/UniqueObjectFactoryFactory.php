@@ -180,6 +180,17 @@ final class UniqueObjectFactoryFactory
         return $methodBuilder->getNode();
     }
 
+    private function createPropertyFromObjectType(ObjectType $objectType): Property
+    {
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
+        $property = $this->nodeFactory->createPrivateProperty($propertyName);
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $objectType);
+
+        return $property;
+    }
+
     /**
      * @param Param[] $params
      *
@@ -196,16 +207,5 @@ final class UniqueObjectFactoryFactory
         }
 
         return $assigns;
-    }
-
-    private function createPropertyFromObjectType(ObjectType $objectType): Property
-    {
-        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $property = $this->nodeFactory->createPrivateProperty($propertyName);
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $objectType);
-
-        return $property;
     }
 }

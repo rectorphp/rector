@@ -184,6 +184,22 @@ CODE_SAMPLE
     }
 
     /**
+     * @param Param[] $parameters1
+     * @param Param[] $parameters2
+     * @return Param[]
+     */
+    private function getParameterOverlap(array $parameters1, array $parameters2): array
+    {
+        return array_uintersect(
+            $parameters1,
+            $parameters2,
+            function (Param $firstParam, Param $secondParam): int {
+                return $this->betterStandardPrinter->areNodesEqual($firstParam, $secondParam) ? 0 : 1;
+            }
+        );
+    }
+
+    /**
      * @param Param[] $unusedParameters
      */
     private function clearPhpDocInfo(ClassMethod $classMethod, array $unusedParameters): void
@@ -259,21 +275,5 @@ CODE_SAMPLE
 
         // can be opened
         return $classMethod->isProtected();
-    }
-
-    /**
-     * @param Param[] $parameters1
-     * @param Param[] $parameters2
-     * @return Param[]
-     */
-    private function getParameterOverlap(array $parameters1, array $parameters2): array
-    {
-        return array_uintersect(
-            $parameters1,
-            $parameters2,
-            function (Param $firstParam, Param $secondParam): int {
-                return $this->betterStandardPrinter->areNodesEqual($firstParam, $secondParam) ? 0 : 1;
-            }
-        );
     }
 }

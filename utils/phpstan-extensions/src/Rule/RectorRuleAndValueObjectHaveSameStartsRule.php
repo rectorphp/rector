@@ -99,11 +99,6 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
         );
     }
 
-    private function resolveShortClass(string $class): string
-    {
-        return (string) Strings::after($class, '\\', -1);
-    }
-
     private function resolveRectorShortClass(MethodCall $methodCall): ?string
     {
         $setFirstArgValue = $methodCall->args[0]->value;
@@ -132,5 +127,10 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
         }
 
         return $this->resolveShortClass($valueObjectClass);
+    }
+
+    private function resolveShortClass(string $class): string
+    {
+        return (string) Strings::after($class, '\\', -1);
     }
 }

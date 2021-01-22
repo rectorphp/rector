@@ -163,6 +163,23 @@ CODE_SAMPLE
         return $phpDocInfo->hasByNames([TagName::API, TagName::REQUIRED]);
     }
 
+    private function shouldSkipClassLike(Class_ $class): bool
+    {
+        if ($this->isAnonymousClass($class)) {
+            return true;
+        }
+
+        if ($this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
+            return true;
+        }
+
+        if ($this->isObjectType($class, 'PHPUnit\Framework\TestCase')) {
+            return true;
+        }
+
+        return $this->hasTagByName($class, TagName::API);
+    }
+
     private function isControllerAction(Class_ $class, ClassMethod $classMethod): bool
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
@@ -209,22 +226,5 @@ CODE_SAMPLE
 
         // possibly container service factories
         return $this->isNames($classMethod, ['create', 'create*']);
-    }
-
-    private function shouldSkipClassLike(Class_ $class): bool
-    {
-        if ($this->isAnonymousClass($class)) {
-            return true;
-        }
-
-        if ($this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
-            return true;
-        }
-
-        if ($this->isObjectType($class, 'PHPUnit\Framework\TestCase')) {
-            return true;
-        }
-
-        return $this->hasTagByName($class, TagName::API);
     }
 }

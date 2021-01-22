@@ -48,6 +48,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::NETTE_UTILS_CODE_QUALITY,
         SetList::PRIVATIZATION,
         SetList::NAMING,
+        SetList::ORDER,
         SetList::DEFLUENT,
         SetList::TYPE_DECLARATION,
         SetList::PHPUNIT_CODE_QUALITY,

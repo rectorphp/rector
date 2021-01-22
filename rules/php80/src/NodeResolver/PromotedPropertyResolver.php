@@ -121,21 +121,6 @@ final class PromotedPropertyResolver
         return null;
     }
 
-    private function matchClassMethodParamByAssignedVariable(
-        ClassMethod $classMethod,
-        Variable $variable
-    ): ?Param {
-        foreach ($classMethod->params as $param) {
-            if (! $this->betterStandardPrinter->areNodesEqual($variable, $param->var)) {
-                continue;
-            }
-
-            return $param;
-        }
-
-        return null;
-    }
-
     /**
      * @return array<string, int>
      */
@@ -163,6 +148,21 @@ final class PromotedPropertyResolver
         }
 
         return $paramByFirstUsage;
+    }
+
+    private function matchClassMethodParamByAssignedVariable(
+        ClassMethod $classMethod,
+        Variable $variable
+    ): ?Param {
+        foreach ($classMethod->params as $param) {
+            if (! $this->betterStandardPrinter->areNodesEqual($variable, $param->var)) {
+                continue;
+            }
+
+            return $param;
+        }
+
+        return null;
     }
 
     /**

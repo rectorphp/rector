@@ -108,6 +108,31 @@ final class GetSubscriberEventsClassMethodFactory
     }
 
     /**
+     * @param EventNameToClassAndConstant[] $eventNamesToClassConstants
+     * @return String_|ClassConstFetch
+     */
+    private function createEventName(string $eventName, array $eventNamesToClassConstants): Node
+    {
+        if (class_exists($eventName)) {
+            return $this->nodeFactory->createClassConstReference($eventName);
+        }
+
+        // is string a that could be caught in constant, e.g. KernelEvents?
+        foreach ($eventNamesToClassConstants as $eventNameToClassConstant) {
+            if ($eventNameToClassConstant->getEventName() !== $eventName) {
+                continue;
+            }
+
+            return $this->nodeFactory->createClassConstFetch(
+                $eventNameToClassConstant->getEventClass(),
+                $eventNameToClassConstant->getEventConstant()
+            );
+        }
+
+        return new String_($eventName);
+    }
+
+    /**
      * @param ClassConstFetch|String_ $expr
      * @param ServiceDefinition[] $methodNamesWithPriorities
      */
@@ -211,30 +236,5 @@ final class GetSubscriberEventsClassMethodFactory
         }
 
         return new ArrayItem(new String_($eventListenerTag->getMethod()));
-    }
-
-    /**
-     * @param EventNameToClassAndConstant[] $eventNamesToClassConstants
-     * @return String_|ClassConstFetch
-     */
-    private function createEventName(string $eventName, array $eventNamesToClassConstants): Node
-    {
-        if (class_exists($eventName)) {
-            return $this->nodeFactory->createClassConstReference($eventName);
-        }
-
-        // is string a that could be caught in constant, e.g. KernelEvents?
-        foreach ($eventNamesToClassConstants as $eventNameToClassConstant) {
-            if ($eventNameToClassConstant->getEventName() !== $eventName) {
-                continue;
-            }
-
-            return $this->nodeFactory->createClassConstFetch(
-                $eventNameToClassConstant->getEventClass(),
-                $eventNameToClassConstant->getEventConstant()
-            );
-        }
-
-        return new String_($eventName);
     }
 }

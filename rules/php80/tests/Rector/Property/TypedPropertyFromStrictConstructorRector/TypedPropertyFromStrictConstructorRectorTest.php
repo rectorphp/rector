@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector;
+namespace Rector\Php80\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector;
 
 use Iterator;
-use Rector\Order\Rector\Class_\OrderPropertyByComplexityRector;
+use Rector\Php80\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class OrderPropertyByComplexityRectorTest extends AbstractRectorTestCase
+/**
+ * @requires PHP 7.4
+ */
+final class TypedPropertyFromStrictConstructorRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +29,6 @@ final class OrderPropertyByComplexityRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return OrderPropertyByComplexityRector::class;
+        return TypedPropertyFromStrictConstructorRector::class;
     }
 }

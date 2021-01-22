@@ -93,6 +93,16 @@ final class ComposerProcessor
         $this->reportFileContentChange($composerJson, $smartFileInfo);
     }
 
+    private function addComposerJsonFileDiff(
+        ComposerJson $oldComposerJson,
+        ComposerJson $newComposerJson,
+        SmartFileInfo $smartFileInfo
+    ): void {
+        $newContents = $this->composerJsonPrinter->printToString($newComposerJson);
+        $oldContents = $this->composerJsonPrinter->printToString($oldComposerJson);
+        $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $newContents, $oldContents);
+    }
+
     private function reportFileContentChange(ComposerJson $composerJson, SmartFileInfo $smartFileInfo): void
     {
         if ($this->configuration->isDryRun()) {
@@ -106,15 +116,5 @@ final class ComposerProcessor
             // $type is always err https://github.com/composer/composer/issues/3795#issuecomment-76401013
             echo $message;
         });
-    }
-
-    private function addComposerJsonFileDiff(
-        ComposerJson $oldComposerJson,
-        ComposerJson $newComposerJson,
-        SmartFileInfo $smartFileInfo
-    ): void {
-        $newContents = $this->composerJsonPrinter->printToString($newComposerJson);
-        $oldContents = $this->composerJsonPrinter->printToString($oldComposerJson);
-        $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $newContents, $oldContents);
     }
 }

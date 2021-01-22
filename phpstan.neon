@@ -549,3 +549,8 @@ parameters:
         # buggy phpstan clas-string
         - '#Method (.*?) should return class\-string but returns string#'
         - '#Method (.*?) should return array<class\-string\> but returns array<int, string\>#'
+
+        -
+            message: '#Unreachable statement \- code above always terminates#'
+            paths:
+                - rules/php80/src/Rector/Property/TypedPropertyFromStrictConstructorRector.php

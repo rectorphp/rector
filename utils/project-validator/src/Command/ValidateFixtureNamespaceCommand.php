@@ -137,20 +137,6 @@ final class ValidateFixtureNamespaceCommand extends Command
         return ShellCode::SUCCESS;
     }
 
-    private function fixNamespace(
-        string $incorrectNamespaceFile,
-        string $incorrectNamespace,
-        string $incorrectFileContent,
-        string $expectedNamespace
-    ): void {
-        $newContent = str_replace(
-            'namespace ' . $incorrectNamespace,
-            'namespace ' . $expectedNamespace,
-            $incorrectFileContent
-        );
-        $this->smartFileSystem->dumpFile($incorrectNamespaceFile, $newContent);
-    }
-
     /**
      * @param array<int, array<int, string>> $matchAll
      */
@@ -165,5 +151,19 @@ final class ValidateFixtureNamespaceCommand extends Command
         return $matchAll[0][1] !== $expectedNamespace
             ? $matchAll[0][1]
             : $matchAll[1][1];
+    }
+
+    private function fixNamespace(
+        string $incorrectNamespaceFile,
+        string $incorrectNamespace,
+        string $incorrectFileContent,
+        string $expectedNamespace
+    ): void {
+        $newContent = str_replace(
+            'namespace ' . $incorrectNamespace,
+            'namespace ' . $expectedNamespace,
+            $incorrectFileContent
+        );
+        $this->smartFileSystem->dumpFile($incorrectNamespaceFile, $newContent);
     }
 }
