@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Tests\Rector\Class_\TypedPropertyFromStrictConstructorRector;
+namespace Rector\Php80\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector;
 
+use Rector\Php80\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @requires PHP 7.4
+ */
 final class TypedPropertyFromStrictConstructorRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -23,6 +27,6 @@ final class TypedPropertyFromStrictConstructorRectorTest extends AbstractRectorT
 
     protected function getRectorClass(): string
     {
-        return \Rector\Php80\Rector\Class_\TypedPropertyFromStrictConstructorRector::class;
+        return TypedPropertyFromStrictConstructorRector::class;
     }
 }

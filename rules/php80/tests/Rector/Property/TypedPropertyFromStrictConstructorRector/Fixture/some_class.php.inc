@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\TypedPropertyFromStrictConstructorRector\Fixture;
+namespace Rector\Php80\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector\Fixture;
 
-class SomeObject
+class SomeClass
 {
     private $name;
 
@@ -16,9 +16,9 @@ class SomeObject
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\TypedPropertyFromStrictConstructorRector\Fixture;
+namespace Rector\Php80\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector\Fixture;
 
-class SomeObject
+class SomeClass
 {
     private string $name;
 

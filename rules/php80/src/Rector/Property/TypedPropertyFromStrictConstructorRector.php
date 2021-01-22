@@ -2,20 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Rector\Class_;
+namespace Rector\Php80\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Php80\Tests\Rector\Class_\TypedPropertyFromStrictConstructorRector\TypedPropertyFromStrictConstructorRectorTest
+ * @see \Rector\Php80\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector\TypedPropertyFromStrictConstructorRectorTest
  */
 final class TypedPropertyFromStrictConstructorRector extends AbstractRector
 {
+    /**
+     * @var ConstructorPropertyTypeInferer
+     */
+    private $constructorPropertyTypeInferer;
+
+    public function __construct(ConstructorPropertyTypeInferer $constructorPropertyTypeInferer)
+    {
+        $this->constructorPropertyTypeInferer = $constructorPropertyTypeInferer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add typed properties based only on strict constructor types', [
@@ -54,11 +67,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Property::class];
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\Class_ $node
+     * @param Property $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -66,16 +79,25 @@ CODE_SAMPLE
             return null;
         }
 
-        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
+        if ($node->type !== null) {
             return null;
         }
 
-        // @todo resolve param to propery assign
-        foreach ($constructClassMethod->getParams() as $parameter) {
+        $varType = $this->constructorPropertyTypeInferer->inferProperty($node);
+        if ($varType instanceof MixedType) {
+            return null;
         }
 
-        // change the node
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+            $varType,
+            PHPStanStaticTypeMapper::KIND_PROPERTY
+        );
+
+        if ($propertyTypeNode === null) {
+            return null;
+        }
+
+        $node->type = $propertyTypeNode;
 
         return $node;
     }
