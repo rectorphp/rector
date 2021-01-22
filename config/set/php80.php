@@ -11,6 +11,7 @@ use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\Php80\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector;
+use Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 use Rector\Php80\Rector\ClassMethod\SetStateToStaticRector;
 use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
 use Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector;
@@ -38,6 +39,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveUnusedVariableInCatchRector::class);
     $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
     $services->set(ChangeSwitchToMatchRector::class);
+
     // nette\utils and Strings::replace()
     $services->set(ArgumentAdderRector::class)->call('configure', [[
         ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
@@ -76,4 +78,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'pg_setclientencoding' => 'pg_set_client_encoding',
         ],
     ]]);
+    $services->set(OptionalParametersAfterRequiredRector::class);
 };
