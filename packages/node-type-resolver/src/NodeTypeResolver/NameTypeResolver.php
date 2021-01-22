@@ -66,7 +66,6 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     private function resolveFullyQualifiedName(Name $name): string
     {
         $nameValue = $name->toString();
-
         if (in_array($nameValue, ['self', 'static', 'this'], true)) {
             /** @var string|null $class */
             $class = $name->getAttribute(AttributeKey::CLASS_NAME);

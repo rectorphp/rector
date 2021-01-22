@@ -12,20 +12,20 @@ final class RequireOptionalParamResolver
 {
     /**
      * @param ClassMethod $functionLike
-     * @return Param[]
+     * @return array<int, Param>
      */
     public function resolve(FunctionLike $functionLike): array
     {
         $optionalParams = [];
         $requireParams = [];
-        foreach ($functionLike->getParams() as $param) {
+        foreach ($functionLike->getParams() as $position => $param) {
             if ($param->default === null) {
-                $requireParams[] = $param;
+                $requireParams[$position] = $param;
             } else {
-                $optionalParams[] = $param;
+                $optionalParams[$position] = $param;
             }
         }
 
-        return array_merge($requireParams, $optionalParams);
+        return $requireParams + $optionalParams;
     }
 }

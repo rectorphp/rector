@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeCollector\Reflection;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -93,14 +92,6 @@ final class MethodReflectionProvider
         return $this->provideParameterTypesFromMethodReflection($methodReflection);
     }
 
-    public function provideByNew(New_ $new): ?MethodReflection
-    {
-        $objectType = $this->nodeTypeResolver->resolve($new->class);
-        $classes = TypeUtils::getDirectClassNames($objectType);
-
-        return $this->provideByClassNamesAndMethodName($classes, MethodName::CONSTRUCT, $new);
-    }
-
     public function provideByStaticCall(StaticCall $staticCall): ?MethodReflection
     {
         $objectType = $this->nodeTypeResolver->resolve($staticCall->class);
@@ -184,10 +175,13 @@ final class MethodReflectionProvider
     /**
      * @param string[] $classes
      */
-    private function provideByClassNamesAndMethodName(array $classes, string $methodName, Node $node): ?MethodReflection
-    {
+    private function provideByClassNamesAndMethodName(
+        array $classes,
+        string $methodName,
+        StaticCall $staticCall
+    ): ?MethodReflection {
         /** @var Scope|null $scope */
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             throw new ShouldNotHappenException();
         }
