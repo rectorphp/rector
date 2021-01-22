@@ -38,12 +38,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(AutoInPhpSymfonyConfigRector::class);
-    $services->set(OrderPublicInterfaceMethodRector::class)
-        ->call('configure', [[
-            OrderPublicInterfaceMethodRector::METHOD_ORDER_BY_INTERFACES => [
-                PhpRectorInterface::class => ['getNodeTypes', 'getRuleDefinition', 'refactor'],
-            ],
-        ]]);
 
     $parameters = $containerConfigurator->parameters();
 

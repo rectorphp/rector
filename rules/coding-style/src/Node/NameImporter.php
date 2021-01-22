@@ -198,9 +198,7 @@ final class NameImporter
         if ($autoImportNames && ! $parentNode instanceof Node && ! Strings::contains(
             $fullName,
             '\\'
-        ) && function_exists(
-            $fullName
-        )) {
+        ) && function_exists($fullName)) {
             return true;
         }
 
