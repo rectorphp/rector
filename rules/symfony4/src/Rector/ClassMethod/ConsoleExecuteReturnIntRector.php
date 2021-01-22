@@ -109,7 +109,10 @@ CODE_SAMPLE
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Return_ && $this->areNodesEqual($parentNode->expr, $node) && $node instanceof Int_) {
+            if ($parentNode instanceof Return_ && $this->areNodesEqual(
+                $parentNode->expr,
+                $node
+            ) && $node instanceof Int_) {
                 $hasReturn = true;
                 return null;
             }
