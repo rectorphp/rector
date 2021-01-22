@@ -178,9 +178,6 @@ final class FluentChainMethodCallNodeAnalyzer
             }
 
             $node = $node->var;
-            if ($node instanceof MethodCall) {
-                continue;
-            }
         }
 
         $variableType = $this->nodeTypeResolver->resolve($node);

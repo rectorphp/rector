@@ -554,3 +554,33 @@ parameters:
             message: '#Unreachable statement \- code above always terminates#'
             paths:
                 - rules/php80/src/Rector/Property/TypedPropertyFromStrictConstructorRector.php
+
+        -
+            message: '#\$this as argument is not allowed\. Refator method to service composition#'
+            paths:
+                - src/Rector/AbstractRector.php
+                # setter to avoid circular dependency in nested collector
+                - rules/nette-code-quality/src/NodeResolver/MethodNamesByInputNamesResolver.php
+                - packages/static-type-mapper/src/StaticTypeMapper.php
+                - packages/better-php-doc-parser/src/Attributes/Ast/AttributeAwareNodeFactory.php
+                - packages/phpstan-static-type-mapper/src/PHPStanStaticTypeMapper.php
+                # refactor later
+                - packages/better-php-doc-parser/src/PhpDocParser/BetterPhpDocParser.php
+
+        -
+            message: '#Assign in loop is not allowed#'
+            paths:
+                # buggy - see https://github.com/symplify/symplify/issues/2847
+                - src/PhpParser/Node/Manipulator/ClassInsertManipulator.php
+                - rules/type-declaration/src/PHPStan/Type/ObjectTypeSpecifier.php
+                - rules/php73/src/Rector/FuncCall/RemoveMissingCompactVariableRector.php
+                - rules/generic/src/Rector/Class_/RemoveTraitRector.php
+                - rules/doctrine-gedmo-to-knplabs/src/Rector/Class_/BlameableBehaviorRector.php
+                - rules/defluent/src/NodeAnalyzer/FluentChainMethodCallNodeAnalyzer.php
+                - packages/post-rector/src/Application/PostFileProcessor.php
+                - packages/node-nesting-scope/src/NodeFinder/ScopeAwareNodeFinder.php
+                - rules/generic/src/Rector/FuncCall/SwapFuncCallArgumentsRector.php
+                - packages/node-type-resolver/src/NodeTypeResolver/StaticCallTypeResolver.php
+
+                # weird case
+                - packages/better-php-doc-parser/src/PhpDocParser/AnnotationContentResolver.php

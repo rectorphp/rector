@@ -249,10 +249,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     protected function unwrapStmts(array $stmts, Node $node): void
     {
+        // move /* */ doc block from if to first element to keep it
+        $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
         foreach ($stmts as $key => $ifStmt) {
             if ($key === 0) {
-                // move /* */ doc block from if to first element to keep it
-                $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
                 $ifStmt->setAttribute(AttributeKey::PHP_DOC_INFO, $currentPhpDocInfo);
 
                 // move // comments

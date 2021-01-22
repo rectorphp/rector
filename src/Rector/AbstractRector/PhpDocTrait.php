@@ -31,10 +31,4 @@ trait PhpDocTrait
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         return $phpDocInfo->hasByName($tagName);
     }
-
-    protected function removePhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): void
-    {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $phpDocInfo->removeByType($phpDocTagNodeClass);
-    }
 }

@@ -209,7 +209,7 @@ CODE_SAMPLE
                 $isPropertyReadInIf = $this->refactorIf($node, $privatePropertyName);
             }
 
-            $isPropertyChanging = $this->isPropertyChanging($node, $this, $privatePropertyName);
+            $isPropertyChanging = $this->isPropertyChanging($node, $privatePropertyName);
             if (! $isPropertyChanging) {
                 return null;
             }
@@ -243,11 +243,12 @@ CODE_SAMPLE
         return $isPropertyReadInIf;
     }
 
-    private function isPropertyChanging(Node $node, self $this__, string $privatePropertyName): bool
+    private function isPropertyChanging(Node $node, string $privatePropertyName): bool
     {
         $isPropertyChanging = false;
         // here cannot be any property assign
-        $this__->traverseNodesWithCallable($node, function (Node $node) use (
+
+        $this->traverseNodesWithCallable($node, function (Node $node) use (
             &$isPropertyChanging,
             $privatePropertyName
         ): ?int {

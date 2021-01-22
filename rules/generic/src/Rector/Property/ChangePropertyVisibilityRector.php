@@ -84,13 +84,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->propertyToVisibilityByClass as $type => $propertyToVisibility) {
-            $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-            if (! $classNode instanceof ClassLike) {
-                continue;
-            }
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof ClassLike) {
+            return null;
+        }
 
-            if (! $this->isObjectType($classNode, $type)) {
+        foreach ($this->propertyToVisibilityByClass as $type => $propertyToVisibility) {
+            if (! $this->isObjectType($classLike, $type)) {
                 continue;
             }
 

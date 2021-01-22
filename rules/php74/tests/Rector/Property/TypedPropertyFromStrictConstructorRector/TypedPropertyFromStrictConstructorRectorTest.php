@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector;
+namespace Rector\Php74\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector;
 
 use Iterator;
-use Rector\Php80\Rector\Property\TypedPropertyFromStrictConstructorRector;
+use Rector\Php74\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

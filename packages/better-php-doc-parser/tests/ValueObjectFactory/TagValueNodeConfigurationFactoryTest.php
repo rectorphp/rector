@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\ValueObjectFactory;
 
 use Iterator;
-use PHPUnit\Framework\TestCase;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
+use Rector\Core\HttpKernel\RectorKernel;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class TagValueNodeConfigurationFactoryTest extends TestCase
+final class TagValueNodeConfigurationFactoryTest extends AbstractKernelTestCase
 {
     /**
      * @var TagValueNodeConfigurationFactory
@@ -19,7 +20,8 @@ final class TagValueNodeConfigurationFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory();
+        $this->bootKernel(RectorKernel::class);
+        $this->tagValueNodeConfigurationFactory = $this->getService(TagValueNodeConfigurationFactory::class);
     }
 
     public function test(): void

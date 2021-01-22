@@ -254,7 +254,8 @@ CODE_SAMPLE
 
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
 
-        $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $phpDocInfo->removeByType(SensioTemplateTagValueNode::class);
     }
 
     private function refactorReturnWithValue(
@@ -289,7 +290,8 @@ CODE_SAMPLE
         }
 
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
-        $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $phpDocInfo->removeByType(SensioTemplateTagValueNode::class);
     }
 
     private function processClassMethodWithoutReturn(
