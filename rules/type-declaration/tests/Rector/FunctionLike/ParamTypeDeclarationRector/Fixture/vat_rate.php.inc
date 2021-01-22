@@ -1,7 +1,7 @@
 <?php
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
-interface SimpleValueObjectInterface
+interface ParentInterface
 {
     /**
      * @param float|int|string $value
@@ -9,7 +9,7 @@ interface SimpleValueObjectInterface
     public function __construct($value);
 }
 
-interface VatRateInterface extends SimpleValueObjectInterface
+interface IntermediateInterface extends ParentInterface
 {
     /**
      * @param string $countryCode
@@ -17,7 +17,7 @@ interface VatRateInterface extends SimpleValueObjectInterface
     public function __construct($countryCode);
 }
 
-final class SkipDifferentWithInterface implements VatRateInterface
+final class SkipDifferentWithInterface implements IntermediateInterface
 {
     /**
      * @param string $countryCode
