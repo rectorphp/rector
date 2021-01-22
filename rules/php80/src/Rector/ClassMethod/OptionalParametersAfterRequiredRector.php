@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
@@ -18,6 +19,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class OptionalParametersAfterRequiredRector extends AbstractRector
 {
+    /**
+     * @var \Rector\Php80\NodeResolver\RequireOptionalParamResolver
+     */
+    private $requireOptionalParamResolver;
+
+    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver)
+    {
+        $this->requireOptionalParamResolver = $requireOptionalParamResolver;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Move required parameters after optional ones', [
@@ -50,22 +61,28 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [ClassMethod::class, New_::class];
     }
 
     /**
-     * @param ClassMethod $node
+     * @param ClassMethod|New_ $node
      */
     public function refactor(Node $node): ?Node
+    {
+        if ($node instanceof ClassMethod) {
+            return $this->refactorClassMethod($node);
+        }
+
+        return $this->refactorNew($node);
+    }
+
+    private function refactorClassMethod(ClassMethod $node): ?ClassMethod
     {
         if ($node->params === []) {
             return null;
         }
 
-        $requireParams = $this->resolveRequiredParams($node);
-        $optionalParams = $this->resolveOptionalParams($node);
-
-        $expectedOrderParams = array_merge($requireParams, $optionalParams);
+        $expectedOrderParams = $this->requireOptionalParamResolver->resolve($node);
         if ($node->params === $expectedOrderParams) {
             return null;
         }
@@ -75,37 +92,9 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @return array<int, Param>
-     */
-    private function resolveOptionalParams(ClassMethod $classMethod): array
+    private function refactorNew(New_ $new): ?New_
     {
-        $paramsByPosition = [];
-        foreach ($classMethod->params as $position => $param) {
-            if ($param->default === null) {
-                continue;
-            }
-
-            $paramsByPosition[$position] = $param;
-        }
-
-        return $paramsByPosition;
-    }
-
-    /**
-     * @return Param[]
-     */
-    private function resolveRequiredParams(ClassMethod $classMethod): array
-    {
-        $paramsByPosition = [];
-        foreach ($classMethod->params as $param) {
-            if ($param->default !== null) {
-                continue;
-            }
-
-            $paramsByPosition[] = $param;
-        }
-
-        return $paramsByPosition;
+        dump($new);
+        die;
     }
 }
