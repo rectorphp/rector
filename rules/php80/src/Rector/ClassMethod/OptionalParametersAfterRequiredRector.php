@@ -142,7 +142,7 @@ CODE_SAMPLE
     private function refactorMethodCall(MethodCall $methodCall): ?MethodCall
     {
         $classMethod = $this->nodeRepository->findClassMethodByMethodCall($methodCall);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return null;
         }
 
