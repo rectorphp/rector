@@ -128,25 +128,15 @@ CODE_SAMPLE
         return $this->processConvertToExclusiveType($types, $variable, $phpDocInfo);
     }
 
-    /**
-     * @param Type[] $types
-     */
-    private function processConvertToExclusiveType(array $types, Expr $expr, PhpDocInfo $phpDocInfo): ?BooleanNot
+    private function getVariableAssign(Identical $identical, Expr $expr): ?Node
     {
-        $type = $types[0] instanceof NullType
-            ? $types[1]
-            : $types[0];
+        return $this->betterNodeFinder->findFirstPrevious($identical, function (Node $node) use ($expr): bool {
+            if (! $node instanceof Assign) {
+                return false;
+            }
 
-        if (! $type instanceof FullyQualifiedObjectType && ! $type instanceof ObjectType) {
-            return null;
-        }
-
-        $tagValueNode = $phpDocInfo->getVarTagValueNode();
-        if ($tagValueNode instanceof VarTagValueNode) {
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $tagValueNode);
-        }
-
-        return new BooleanNot(new Instanceof_($expr, new FullyQualified($type->getClassName())));
+            return $this->areNodesEqual($node->var, $expr);
+        });
     }
 
     /**
@@ -160,17 +150,6 @@ CODE_SAMPLE
         }
 
         return $types;
-    }
-
-    private function getVariableAssign(Identical $identical, Expr $expr): ?Node
-    {
-        return $this->betterNodeFinder->findFirstPrevious($identical, function (Node $node) use ($expr): bool {
-            if (! $node instanceof Assign) {
-                return false;
-            }
-
-            return $this->areNodesEqual($node->var, $expr);
-        });
     }
 
     /**
@@ -190,5 +169,26 @@ CODE_SAMPLE
         }
 
         return ! $types[1] instanceof NullType;
+    }
+
+    /**
+     * @param Type[] $types
+     */
+    private function processConvertToExclusiveType(array $types, Expr $expr, PhpDocInfo $phpDocInfo): ?BooleanNot
+    {
+        $type = $types[0] instanceof NullType
+            ? $types[1]
+            : $types[0];
+
+        if (! $type instanceof FullyQualifiedObjectType && ! $type instanceof ObjectType) {
+            return null;
+        }
+
+        $tagValueNode = $phpDocInfo->getVarTagValueNode();
+        if ($tagValueNode instanceof VarTagValueNode) {
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $tagValueNode);
+        }
+
+        return new BooleanNot(new Instanceof_($expr, new FullyQualified($type->getClassName())));
     }
 }

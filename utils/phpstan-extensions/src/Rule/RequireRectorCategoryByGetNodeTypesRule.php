@@ -37,7 +37,7 @@ final class RequireRectorCategoryByGetNodeTypesRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $rectorClassReflection = $this->resolveRectorClassReflection($node, $scope);
-        if ($rectorClassReflection === null) {
+        if (! $rectorClassReflection instanceof ClassReflection) {
             return [];
         }
 
@@ -65,7 +65,7 @@ final class RequireRectorCategoryByGetNodeTypesRule implements Rule
         }
 
         $classReflection = $scope->getClassReflection();
-        if ($classReflection === null) {
+        if (! $classReflection instanceof ClassReflection) {
             return null;
         }
 

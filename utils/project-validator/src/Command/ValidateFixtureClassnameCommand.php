@@ -240,6 +240,14 @@ final class ValidateFixtureClassnameCommand extends Command
         return $incorrectClassNameFiles;
     }
 
+    /**
+     * @param array<int, array<int, string>> $matchAll
+     */
+    private function getClassName(array $matchAll): string
+    {
+        return $matchAll[0][2];
+    }
+
     private function fixClassName(
         string $incorrectClassNameFile,
         string $incorrectClassName,
@@ -248,13 +256,5 @@ final class ValidateFixtureClassnameCommand extends Command
     ): void {
         $newContent = str_replace('class ' . $incorrectClassName, 'class ' . $expectedClassName, $incorrectFileContent);
         $this->smartFileSystem->dumpFile($incorrectClassNameFile, $newContent);
-    }
-
-    /**
-     * @param array<int, array<int, string>> $matchAll
-     */
-    private function getClassName(array $matchAll): string
-    {
-        return $matchAll[0][2];
     }
 }

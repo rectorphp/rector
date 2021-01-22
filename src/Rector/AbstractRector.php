@@ -334,6 +334,24 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return false;
     }
 
+    private function shouldSkipCurrentNode(Node $node): bool
+    {
+        if ($this->isNodeRemoved($node)) {
+            return true;
+        }
+
+        if ($this->exclusionManager->isNodeSkippedByRector($node, $this)) {
+            return true;
+        }
+
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        if (! $fileInfo instanceof SmartFileInfo) {
+            return false;
+        }
+
+        return $this->skipper->shouldSkipElementAndFileInfo($this, $fileInfo);
+    }
+
     private function printDebugApplying(): void
     {
         if (! $this->symfonyStyle->isDebug()) {
@@ -403,23 +421,5 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // names are the same
         return $this->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
-    }
-
-    private function shouldSkipCurrentNode(Node $node): bool
-    {
-        if ($this->isNodeRemoved($node)) {
-            return true;
-        }
-
-        if ($this->exclusionManager->isNodeSkippedByRector($node, $this)) {
-            return true;
-        }
-
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if (! $fileInfo instanceof SmartFileInfo) {
-            return false;
-        }
-
-        return $this->skipper->shouldSkipElementAndFileInfo($this, $fileInfo);
     }
 }

@@ -82,19 +82,6 @@ final class AnonymousFunctionFactory
     }
 
     /**
-     * @param Return_[] $nodes
-     */
-    private function hasClassMethodReturn(array $nodes): bool
-    {
-        foreach ($nodes as $node) {
-            if ($node->expr !== null) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @param Param[] $params
      * @return Param[]
      */
@@ -109,5 +96,18 @@ final class AnonymousFunctionFactory
         }
 
         return $newParams;
+    }
+
+    /**
+     * @param Return_[] $nodes
+     */
+    private function hasClassMethodReturn(array $nodes): bool
+    {
+        foreach ($nodes as $node) {
+            if ($node->expr !== null) {
+                return true;
+            }
+        }
+        return false;
     }
 }

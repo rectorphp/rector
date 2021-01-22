@@ -654,6 +654,15 @@ final class NodeFactory
         return $classConst;
     }
 
+    private function createClassPart(string $class): Name
+    {
+        if (in_array($class, self::REFERENCES, true)) {
+            return new Name($class);
+        }
+
+        return new FullyQualified($class);
+    }
+
     /**
      * @param int|string|null $key
      */
@@ -664,14 +673,5 @@ final class NodeFactory
         }
 
         return $arrayItem;
-    }
-
-    private function createClassPart(string $class): Name
-    {
-        if (in_array($class, self::REFERENCES, true)) {
-            return new Name($class);
-        }
-
-        return new FullyQualified($class);
     }
 }

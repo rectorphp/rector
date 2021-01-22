@@ -120,15 +120,21 @@ CODE_SAMPLE
             ]);
     }
 
-    private function resolveClassFileLocation(string $classLikeName): string
+    private function shouldSkipInterface(string $implementedInterfaceName): bool
     {
-        $reflectionClass = new ReflectionClass($classLikeName);
-        $fileName = $reflectionClass->getFileName();
-        if (! $fileName) {
-            throw new ShouldNotHappenException();
+        if (! interface_exists($implementedInterfaceName)) {
+            return true;
         }
 
-        return $fileName;
+        // is native PHP interface?
+        $reflectionClass = new ReflectionClass($implementedInterfaceName);
+        if ($reflectionClass->isInternal()) {
+            return true;
+        }
+
+        // is interface in /vendor? probably useful
+        $classFileLocation = $this->resolveClassFileLocation($implementedInterfaceName);
+        return Strings::contains($classFileLocation, 'vendor');
     }
 
     /**
@@ -154,6 +160,17 @@ CODE_SAMPLE
         } else {
             unset($class->implements[$key]);
         }
+    }
+
+    private function resolveClassFileLocation(string $classLikeName): string
+    {
+        $reflectionClass = new ReflectionClass($classLikeName);
+        $fileName = $reflectionClass->getFileName();
+        if (! $fileName) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $fileName;
     }
 
     private function removeInterfaceFile(string $interfaceName, string $classFileLocation): void
@@ -185,22 +202,5 @@ CODE_SAMPLE
 
         // get first parent interface
         return $reflectionClass->getInterfaceNames()[0] ?? null;
-    }
-
-    private function shouldSkipInterface(string $implementedInterfaceName): bool
-    {
-        if (! interface_exists($implementedInterfaceName)) {
-            return true;
-        }
-
-        // is native PHP interface?
-        $reflectionClass = new ReflectionClass($implementedInterfaceName);
-        if ($reflectionClass->isInternal()) {
-            return true;
-        }
-
-        // is interface in /vendor? probably useful
-        $classFileLocation = $this->resolveClassFileLocation($implementedInterfaceName);
-        return Strings::contains($classFileLocation, 'vendor');
     }
 }

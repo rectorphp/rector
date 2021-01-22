@@ -401,20 +401,6 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isArgParentCount(Node $node): bool
-    {
-        if (! $node instanceof Arg) {
-            return false;
-        }
-
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Node) {
-            return false;
-        }
-
-        return $this->isFuncCallName($parent, self::COUNT);
-    }
-
     private function shouldSkipNode(ArrayDimFetch $arrayDimFetch): bool
     {
         $parentNode = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
@@ -427,5 +413,19 @@ CODE_SAMPLE
         }
 
         return $this->isArgParentCount($parentNode);
+    }
+
+    private function isArgParentCount(Node $node): bool
+    {
+        if (! $node instanceof Arg) {
+            return false;
+        }
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Node) {
+            return false;
+        }
+
+        return $this->isFuncCallName($parent, self::COUNT);
     }
 }

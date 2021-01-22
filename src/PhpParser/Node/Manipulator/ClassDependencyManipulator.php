@@ -171,23 +171,6 @@ final class ClassDependencyManipulator
         $this->classInsertManipulator->addInjectPropertyToClass($class, $propertyMetadata);
     }
 
-    private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
-    {
-        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName === null) {
-            return false;
-        }
-
-        return method_exists($parentClassName, $methodName);
-    }
-
-    private function createParentClassMethodCall(string $methodName): Expression
-    {
-        $staticCall = new StaticCall(new Name('parent'), $methodName);
-
-        return new Expression($staticCall);
-    }
-
     private function addPromotedProperty(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
@@ -203,5 +186,22 @@ final class ClassDependencyManipulator
 
         $this->childAndParentClassManipulator->completeParentConstructor($class, $constructClassMethod);
         $this->childAndParentClassManipulator->completeChildConstructors($class, $constructClassMethod);
+    }
+
+    private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
+    {
+        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        if ($parentClassName === null) {
+            return false;
+        }
+
+        return method_exists($parentClassName, $methodName);
+    }
+
+    private function createParentClassMethodCall(string $methodName): Expression
+    {
+        $staticCall = new StaticCall(new Name('parent'), $methodName);
+
+        return new Expression($staticCall);
     }
 }

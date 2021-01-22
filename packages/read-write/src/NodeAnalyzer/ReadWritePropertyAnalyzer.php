@@ -84,11 +84,6 @@ final class ReadWritePropertyAnalyzer
         return ! $this->assignManipulator->isLeftPartOfAssign($node);
     }
 
-    private function isNotInsideIssetUnset(ArrayDimFetch $arrayDimFetch): bool
-    {
-        return ! (bool) $this->betterNodeFinder->findParentTypes($arrayDimFetch, [Isset_::class, Unset_::class]);
-    }
-
     private function unwrapPostPreIncDec(Node $node): Node
     {
         if ($node instanceof PreInc || $node instanceof PreDec || $node instanceof PostInc || $node instanceof PostDec) {
@@ -99,6 +94,11 @@ final class ReadWritePropertyAnalyzer
         }
 
         return $node;
+    }
+
+    private function isNotInsideIssetUnset(ArrayDimFetch $arrayDimFetch): bool
+    {
+        return ! (bool) $this->betterNodeFinder->findParentTypes($arrayDimFetch, [Isset_::class, Unset_::class]);
     }
 
     private function isArrayDimFetchRead(ArrayDimFetch $arrayDimFetch): bool
