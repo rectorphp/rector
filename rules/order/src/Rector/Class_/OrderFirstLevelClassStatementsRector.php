@@ -20,6 +20,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class OrderFirstLevelClassStatementsRector extends AbstractRector
 {
+    /**
+     * @var array<string, int>
+     */
+    private const TYPE_TO_RANK = [
+        ClassMethod::class => 3,
+        Property::class => 2,
+        ClassConst::class => 1,
+    ];
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Orders first level Class statements', [
@@ -86,16 +95,10 @@ CODE_SAMPLE
 
     private function resolveClassElementRank(Stmt $stmt): int
     {
-        if ($stmt instanceof ClassMethod) {
-            return 3;
-        }
-
-        if ($stmt instanceof Property) {
-            return 2;
-        }
-
-        if ($stmt instanceof ClassConst) {
-            return 1;
+        foreach (self::TYPE_TO_RANK as $type => $rank) {
+            if (is_a($stmt, $type, true)) {
+                return $rank;
+            }
         }
 
         // TraitUse

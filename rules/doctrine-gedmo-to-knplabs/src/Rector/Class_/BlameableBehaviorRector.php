@@ -161,7 +161,6 @@ CODE_SAMPLE
     {
         foreach ($class->getMethods() as $classMethod) {
             foreach ($removedPropertyNames as $removedPropertyName) {
-
                 // remove methods
                 $setMethodName = 'set' . ucfirst($removedPropertyName);
                 $getMethodName = 'get' . ucfirst($removedPropertyName);

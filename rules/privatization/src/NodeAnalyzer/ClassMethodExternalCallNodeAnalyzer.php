@@ -106,8 +106,9 @@ final class ClassMethodExternalCallNodeAnalyzer
             return $node instanceof ArrayCallable;
         });
 
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+
         foreach ($arrayCallables as $arrayCallable) {
-            $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === $arrayCallable->getClass() && $methodName === $arrayCallable->getMethod()) {
                 return true;
             }

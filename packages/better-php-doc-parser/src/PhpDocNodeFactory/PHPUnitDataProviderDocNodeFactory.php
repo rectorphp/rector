@@ -49,6 +49,9 @@ final class PHPUnitDataProviderDocNodeFactory
         }
     }
 
+    /**
+     * @deprecated Refactor to remove dependency on phpdoc parser
+     */
     public function setPhpDocParser(PhpDocParser $phpDocParser): void
     {
         $this->phpDocParser = $phpDocParser;

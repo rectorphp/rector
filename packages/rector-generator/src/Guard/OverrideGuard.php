@@ -37,6 +37,8 @@ final class OverrideGuard
         RectorRecipe $rectorRecipe,
         string $targetDirectory
     ): bool {
+        $message = sprintf('Files for "%s" rule already exist. Should we override them?', $rectorRecipe->getName());
+
         foreach ($templateFileInfos as $templateFileInfo) {
             if (! $this->doesFileInfoAlreadyExist(
                 $templateVariables,
@@ -47,7 +49,6 @@ final class OverrideGuard
                 continue;
             }
 
-            $message = sprintf('Files for "%s" rule already exist. Should we override them?', $rectorRecipe->getName());
             return ! $this->symfonyStyle->confirm($message);
         }
 
