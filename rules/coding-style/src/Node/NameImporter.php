@@ -195,7 +195,12 @@ final class NameImporter
 
         $fullName = $name->toString();
         $autoImportNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
-        if ($autoImportNames && ! $parentNode instanceof Node && ! Strings::contains($fullName, '\\') && function_exists($fullName)) {
+        if ($autoImportNames && ! $parentNode instanceof Node && ! Strings::contains(
+            $fullName,
+            '\\'
+        ) && function_exists(
+            $fullName
+        )) {
             return true;
         }
 

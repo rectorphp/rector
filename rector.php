@@ -6,9 +6,11 @@ use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
+use Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
@@ -36,6 +38,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(AutoInPhpSymfonyConfigRector::class);
+    $services->set(OrderPublicInterfaceMethodRector::class)
+        ->call('configure', [[
+            OrderPublicInterfaceMethodRector::METHOD_ORDER_BY_INTERFACES => [
+                PhpRectorInterface::class => ['getNodeTypes', 'getRuleDefinition', 'refactor'],
+            ],
+        ]]);
 
     $parameters = $containerConfigurator->parameters();
 
@@ -48,6 +56,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::NETTE_UTILS_CODE_QUALITY,
         SetList::PRIVATIZATION,
         SetList::NAMING,
+        SetList::ORDER,
         SetList::DEFLUENT,
         SetList::TYPE_DECLARATION,
         SetList::PHPUNIT_CODE_QUALITY,
