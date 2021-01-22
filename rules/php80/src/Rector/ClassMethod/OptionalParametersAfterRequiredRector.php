@@ -6,6 +6,7 @@ namespace Rector\Php80\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -49,11 +50,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod $node
+     * @param ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -77,7 +78,7 @@ CODE_SAMPLE
     /**
      * @return array<int, Param>
      */
-    private function resolveOptionalParams(Node\Stmt\ClassMethod $classMethod): array
+    private function resolveOptionalParams(ClassMethod $classMethod): array
     {
         $paramsByPosition = [];
         foreach ($classMethod->params as $position => $param) {
@@ -94,10 +95,10 @@ CODE_SAMPLE
     /**
      * @return Param[]
      */
-    private function resolveRequiredParams(Node\Stmt\ClassMethod $classMethod): array
+    private function resolveRequiredParams(ClassMethod $classMethod): array
     {
         $paramsByPosition = [];
-        foreach ($classMethod->params as $position => $param) {
+        foreach ($classMethod->params as $param) {
             if ($param->default !== null) {
                 continue;
             }

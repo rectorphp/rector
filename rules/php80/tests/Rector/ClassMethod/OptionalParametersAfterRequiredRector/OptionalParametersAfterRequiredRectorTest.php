@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Php80\Tests\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 
+use Iterator;
 use Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -18,7 +19,7 @@ final class OptionalParametersAfterRequiredRectorTest extends AbstractRectorTest
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideData(): \Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
