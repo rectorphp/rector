@@ -103,7 +103,8 @@ CODE_SAMPLE
             $classMethod->returnType = new Identifier('void');
         }
 
-        $this->removePhpDocTagValueNode($classMethod, ReturnTagValueNode::class);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $phpDocInfo->removeByType(ReturnTagValueNode::class);
 
         return null;
     }

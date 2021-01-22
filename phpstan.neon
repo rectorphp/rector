@@ -554,3 +554,8 @@ parameters:
             message: '#Unreachable statement \- code above always terminates#'
             paths:
                 - rules/php80/src/Rector/Property/TypedPropertyFromStrictConstructorRector.php
+
+        -
+            message: '#\$this as argument is not allowed\. Refator method to service composition#'
+            paths:
+                - src/Rector/AbstractRector.php
