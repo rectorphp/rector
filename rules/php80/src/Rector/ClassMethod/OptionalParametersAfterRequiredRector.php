@@ -81,20 +81,20 @@ CODE_SAMPLE
         return $this->refactorNew($node);
     }
 
-    private function refactorClassMethod(ClassMethod $node): ?ClassMethod
+    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        if ($node->params === []) {
+        if ($classMethod->params === []) {
             return null;
         }
 
-        $expectedOrderParams = $this->requireOptionalParamResolver->resolve($node);
-        if ($node->params === $expectedOrderParams) {
+        $expectedOrderParams = $this->requireOptionalParamResolver->resolve($classMethod);
+        if ($classMethod->params === $expectedOrderParams) {
             return null;
         }
 
-        $node->params = $expectedOrderParams;
+        $classMethod->params = $expectedOrderParams;
 
-        return $node;
+        return $classMethod;
     }
 
     private function refactorNew(New_ $new): ?New_
@@ -139,7 +139,7 @@ CODE_SAMPLE
             $className->getClassName(),
             MethodName::CONSTRUCT
         );
-        if ($constructorClassMethod === null) {
+        if (! $constructorClassMethod instanceof ClassMethod) {
             return null;
         }
 
@@ -159,7 +159,7 @@ CODE_SAMPLE
         $oldToNewPositions = array_keys($expectedOrderedParams);
 
         $newArgs = [];
-        foreach ($new->args as $position => $arg) {
+        foreach (array_keys($new->args) as $position) {
             $newPosition = $oldToNewPositions[$position] ?? null;
             if ($newPosition === null) {
                 continue;
