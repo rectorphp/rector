@@ -27,4 +27,3 @@ final class VatRate implements VatRateInterface
     }
 }
 ?>
------
