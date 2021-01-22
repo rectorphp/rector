@@ -105,17 +105,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function createRenderMethodCall(
-        ClassMethod $classMethod,
-        MagicTemplatePropertyCalls $magicTemplatePropertyCalls
-    ): MethodCall {
-        if ($this->isObjectType($classMethod, 'Nette\Application\UI\Presenter')) {
-            return $this->actionRenderFactory->createThisTemplateRenderMethodCall($magicTemplatePropertyCalls);
-        }
-
-        return $this->actionRenderFactory->createThisRenderMethodCall($magicTemplatePropertyCalls);
-    }
-
     private function shouldSkip(ClassMethod $classMethod): bool
     {
         $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
@@ -132,5 +121,16 @@ CODE_SAMPLE
         }
 
         return ! $classMethod->isPublic();
+    }
+
+    private function createRenderMethodCall(
+        ClassMethod $classMethod,
+        MagicTemplatePropertyCalls $magicTemplatePropertyCalls
+    ): MethodCall {
+        if ($this->isObjectType($classMethod, 'Nette\Application\UI\Presenter')) {
+            return $this->actionRenderFactory->createThisTemplateRenderMethodCall($magicTemplatePropertyCalls);
+        }
+
+        return $this->actionRenderFactory->createThisRenderMethodCall($magicTemplatePropertyCalls);
     }
 }
