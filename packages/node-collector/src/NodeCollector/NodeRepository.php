@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -31,6 +32,7 @@ use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -512,6 +514,25 @@ final class NodeRepository
     public function findAttributes(string $class): array
     {
         return $this->attributes[$class] ?? [];
+    }
+
+    public function findClassMethodConstructorByNew(New_ $new): ?ClassMethod
+    {
+        $className = $this->nodeTypeResolver->resolve($new->class);
+        if (! $className instanceof TypeWithClassName) {
+            return null;
+        }
+
+        $constructorClassMethod = $this->findClassMethod($className->getClassName(), MethodName::CONSTRUCT);
+        if (! $constructorClassMethod instanceof ClassMethod) {
+            return null;
+        }
+
+        if ($constructorClassMethod->getParams() === []) {
+            return null;
+        }
+
+        return $constructorClassMethod;
     }
 
     private function addMethod(ClassMethod $classMethod): void
