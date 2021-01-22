@@ -130,6 +130,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (count($new->args) !== count($constructorClassMethod->getParams())) {
+            return null;
+        }
+
         $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedOrderedParams);
         if ($new->args === $newArgs) {
             return null;
@@ -154,6 +158,10 @@ CODE_SAMPLE
 
         $expectedOrderedParams = $this->requireOptionalParamResolver->resolve($originalClassMethod);
         if ($expectedOrderedParams === $classMethod->getParams()) {
+            return null;
+        }
+
+        if (count($methodCall->args) !== count($classMethod->getParams())) {
             return null;
         }
 
