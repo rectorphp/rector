@@ -52,6 +52,11 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
     private const CONTROL_CLASS = 'Nette\Application\UI\Control';
 
     /**
+     * @var string
+     */
+    private const PRESENTER_CLASS = 'Nette\Application\UI\Presenter';
+
+    /**
      * @var StaticCallAnalyzer
      */
     private $staticCallAnalyzer;
@@ -143,7 +148,7 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        if (! $this->isInsideNetteControlClass($classMethod)) {
+        if (! $this->isInsideNetteComponentClass($classMethod)) {
             return null;
         }
 
@@ -176,7 +181,7 @@ CODE_SAMPLE
 
     private function refactorStaticCall(StaticCall $staticCall): ?StaticCall
     {
-        if (! $this->isInsideNetteControlClass($staticCall)) {
+        if (! $this->isInsideNetteComponentClass($staticCall)) {
             return null;
         }
 
@@ -240,10 +245,14 @@ CODE_SAMPLE
         return true;
     }
 
-    private function isInsideNetteControlClass(Node $node): bool
+    private function isInsideNetteComponentClass(Node $node): bool
     {
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
+            return false;
+        }
+
+        if ($this->isObjectType($classLike, self::PRESENTER_CLASS)) {
             return false;
         }
 
