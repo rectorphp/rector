@@ -17,7 +17,7 @@ interface VatRateInterface extends SimpleValueObjectInterface
     public function __construct($countryCode);
 }
 
-final class VatRate implements VatRateInterface
+final class SkipDifferentWithInterface implements VatRateInterface
 {
     /**
      * @param string $countryCode
