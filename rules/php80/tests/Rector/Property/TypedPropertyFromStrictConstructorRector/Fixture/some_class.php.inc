@@ -4,6 +4,9 @@ namespace Rector\Php80\Tests\Rector\Property\TypedPropertyFromStrictConstructorR
 
 class SomeClass
 {
+    /**
+     * @var string
+     */
     private $name;
 
     public function __construct(string $name)

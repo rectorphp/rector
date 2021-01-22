@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\DeadDocBlock\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -24,9 +25,17 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector
      */
     private $constructorPropertyTypeInferer;
 
-    public function __construct(ConstructorPropertyTypeInferer $constructorPropertyTypeInferer)
-    {
+    /**
+     * @var VarTagRemover
+     */
+    private $varTagRemover;
+
+    public function __construct(
+        ConstructorPropertyTypeInferer $constructorPropertyTypeInferer,
+        VarTagRemover $varTagRemover
+    ) {
         $this->constructorPropertyTypeInferer = $constructorPropertyTypeInferer;
+        $this->varTagRemover = $varTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -98,6 +107,7 @@ CODE_SAMPLE
         }
 
         $node->type = $propertyTypeNode;
+        $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($node, $varType);
 
         return $node;
     }
