@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,9 +28,17 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector
      */
     private $requireOptionalParamResolver;
 
-    public function __construct(RequireOptionalParamResolver $requireOptionalParamResolver)
-    {
+    /**
+     * @var ArgumentSorter
+     */
+    private $argumentSorter;
+
+    public function __construct(
+        RequireOptionalParamResolver $requireOptionalParamResolver,
+        ArgumentSorter $argumentSorter
+    ) {
         $this->requireOptionalParamResolver = $requireOptionalParamResolver;
+        $this->argumentSorter = $argumentSorter;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -66,11 +73,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class, New_::class];
+        return [ClassMethod::class, New_::class, MethodCall::class];
     }
 
     /**
-     * @param ClassMethod|New_ $node
+     * @param ClassMethod|New_|MethodCall $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -78,7 +85,11 @@ CODE_SAMPLE
             return $this->refactorClassMethod($node);
         }
 
-        return $this->refactorNew($node);
+        if ($node instanceof New_) {
+            return $this->refactorNew($node);
+        }
+
+        return $this->refactorMethodCall($node);
     }
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
@@ -103,7 +114,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $constructorClassMethod = $this->findClassMethodConstructorByNew($new);
+        $constructorClassMethod = $this->nodeRepository->findClassMethodConstructorByNew($new);
         if (! $constructorClassMethod instanceof ClassMethod) {
             return null;
         }
@@ -115,11 +126,11 @@ CODE_SAMPLE
         }
 
         $expectedOrderedParams = $this->requireOptionalParamResolver->resolve($originalClassMethod);
-        if ($expectedOrderedParams === $originalClassMethod->getParams()) {
+        if ($expectedOrderedParams === $constructorClassMethod->getParams()) {
             return null;
         }
 
-        $newArgs = $this->resolveNewArgsOrderedByRequiredParams($expectedOrderedParams, $new);
+        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedOrderedParams);
         if ($new->args === $newArgs) {
             return null;
         }
@@ -128,45 +139,30 @@ CODE_SAMPLE
         return $new;
     }
 
-    private function findClassMethodConstructorByNew(New_ $new): ?ClassMethod
+    private function refactorMethodCall(MethodCall $methodCall): ?MethodCall
     {
-        $className = $this->getObjectType($new->class);
-        if (! $className instanceof TypeWithClassName) {
+        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($methodCall);
+        if ($classMethod === null) {
             return null;
         }
 
-        $constructorClassMethod = $this->nodeRepository->findClassMethod(
-            $className->getClassName(),
-            MethodName::CONSTRUCT
-        );
-        if (! $constructorClassMethod instanceof ClassMethod) {
+        // because parameters can be already changed
+        $originalClassMethod = $classMethod->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if (! $originalClassMethod instanceof ClassMethod) {
             return null;
         }
 
-        if ($constructorClassMethod->getParams() === []) {
+        $expectedOrderedParams = $this->requireOptionalParamResolver->resolve($originalClassMethod);
+        if ($expectedOrderedParams === $classMethod->getParams()) {
             return null;
         }
 
-        return $constructorClassMethod;
-    }
-
-    /**
-     * @param array<int, Param> $expectedOrderedParams
-     * @return array<int, Arg>
-     */
-    private function resolveNewArgsOrderedByRequiredParams(array $expectedOrderedParams, New_ $new): array
-    {
-        $oldToNewPositions = array_keys($expectedOrderedParams);
-
-        $newArgs = [];
-        foreach (array_keys($new->args) as $position) {
-            $newPosition = $oldToNewPositions[$position] ?? null;
-            if ($newPosition === null) {
-                continue;
-            }
-
-            $newArgs[$position] = $new->args[$newPosition];
+        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($methodCall->args, $expectedOrderedParams);
+        if ($methodCall->args === $newArgs) {
+            return null;
         }
-        return $newArgs;
+
+        $methodCall->args = $newArgs;
+        return $methodCall;
     }
 }

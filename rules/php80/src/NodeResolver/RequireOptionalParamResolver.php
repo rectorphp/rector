@@ -12,7 +12,7 @@ final class RequireOptionalParamResolver
 {
     /**
      * @param ClassMethod $functionLike
-     * @return array<int, Param>
+     * @return Param[]
      */
     public function resolve(FunctionLike $functionLike): array
     {
