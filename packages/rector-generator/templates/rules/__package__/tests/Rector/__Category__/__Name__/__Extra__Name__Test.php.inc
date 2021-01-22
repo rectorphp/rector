@@ -19,7 +19,7 @@ final class __Name__Test extends AbstractRectorTestCase
 
     public function provideData(): \Iterator
     {
-        yield [new \Symplify\SmartFileSystem\SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'), '__ExtraFileName__', __DIR__ . '/Source/extra_file.php'];
+        yield [new \Symplify\SmartFileSystem\SmartFileInfo(__DIR__ . '/Fixture/some_class.php.inc'), '__ExtraFileName__', __DIR__ . '/Source/extra_file.php'];
     }
 
     protected function getRectorClass(): string

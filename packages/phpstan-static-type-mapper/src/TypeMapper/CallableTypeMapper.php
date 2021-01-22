@@ -9,6 +9,7 @@ use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\CallableType;
+use PHPStan\Type\ClosureType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareCallableTypeNode;
@@ -46,7 +47,7 @@ final class CallableTypeMapper implements TypeMapperInterface
     }
 
     /**
-     * @param CallableType $type
+     * @param CallableType|ClosureType $type
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
