@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector\Fixture;
+namespace Rector\Php74\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector\Fixture;
 
 class SkipAlreadyType
 {
