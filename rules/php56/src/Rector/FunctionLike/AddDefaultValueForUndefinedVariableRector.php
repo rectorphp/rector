@@ -6,6 +6,7 @@ namespace Rector\Php56\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
@@ -14,6 +15,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
@@ -103,12 +105,40 @@ CODE_SAMPLE
                 continue;
             }
 
-            $variablesInitiation[] = new Expression(new Assign(new Variable($undefinedVariable), $this->createNull()));
+            $value = $this->isArray($undefinedVariable, $node->stmts)
+                ? new Array_([])
+                : $this->createNull();
+
+            $variablesInitiation[] = new Expression(new Assign(new Variable($undefinedVariable), $value));
         }
 
         $node->stmts = array_merge($variablesInitiation, (array) $node->stmts);
 
         return $node;
+    }
+
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function isArray(string $undefinedVariable, array $stmts): bool
+    {
+        foreach ($stmts as $stmt) {
+            $isUndefinedArrayFound = (bool) $this->betterNodeFinder->findFirst($stmt, function (Node $node) use (
+                $undefinedVariable
+            ): bool {
+                if (! $node instanceof ArrayDimFetch) {
+                    return false;
+                }
+
+                return $this->isName($node->var, $undefinedVariable);
+            });
+
+            if ($isUndefinedArrayFound) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
