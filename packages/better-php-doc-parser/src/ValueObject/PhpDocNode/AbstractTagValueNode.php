@@ -168,9 +168,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
     protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
     {
-        $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory(
-            new TypeChecker()
-        );
+        $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory(new TypeChecker());
 
         // prevent override
         if ($this->tagValueNodeConfiguration !== null) {
