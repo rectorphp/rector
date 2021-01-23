@@ -118,22 +118,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Stmt[] $stmts
-     */
-    private function isArray(string $undefinedVariable, array $stmts): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node) use (
-            $undefinedVariable
-        ): bool {
-            if (! $node instanceof ArrayDimFetch) {
-                return false;
-            }
-
-            return $this->isName($node->var, $undefinedVariable);
-        });
-    }
-
-    /**
      * @param ClassMethod|Function_|Closure $node
      * @return string[]
      */
@@ -177,6 +161,22 @@ CODE_SAMPLE
         });
 
         return array_unique($undefinedVariables);
+    }
+
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function isArray(string $undefinedVariable, array $stmts): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node) use (
+            $undefinedVariable
+        ): bool {
+            if (! $node instanceof ArrayDimFetch) {
+                return false;
+            }
+
+            return $this->isName($node->var, $undefinedVariable);
+        });
     }
 
     private function collectDefinedVariablesFromForeach(Foreach_ $foreach): void
