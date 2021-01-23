@@ -2,7 +2,7 @@
 
 namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
 
-final class DemoFile
+final class UndefinedArray
 {
     public function run()
     {
@@ -17,7 +17,7 @@ final class DemoFile
 
 namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
 
-final class DemoFile
+final class UndefinedArray
 {
     public function run()
     {
