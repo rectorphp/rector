@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,6 +20,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class LocallyCalledStaticMethodToNonStaticRector extends AbstractRector
 {
+    /**
+     * @var ClassMethodVisibilityGuard
+     */
+    private $classMethodVisibilityGuard;
+
+    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard)
+    {
+        $this->classMethodVisibilityGuard = $classMethodVisibilityGuard;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -86,6 +97,10 @@ CODE_SAMPLE
         }
 
         if (! $this->isClassMethodWithOnlyLocalStaticCalls($classMethod)) {
+            return null;
+        }
+
+        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($classMethod)) {
             return null;
         }
 
