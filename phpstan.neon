@@ -584,3 +584,7 @@ parameters:
 
                 # weird case
                 - packages/better-php-doc-parser/src/PhpDocParser/AnnotationContentResolver.php
+
+        -
+            message: '#Class cognitive complexity is 32, keep it under 30#'
+            path: rules/php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php #41

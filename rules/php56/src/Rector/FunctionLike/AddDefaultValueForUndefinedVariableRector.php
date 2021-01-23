@@ -105,7 +105,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $value = $this->isArray($undefinedVariable, $node->stmts)
+            $value = $this->isArray($undefinedVariable, (array) $node->stmts)
                 ? new Array_([])
                 : $this->createNull();
 
