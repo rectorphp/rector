@@ -17,7 +17,7 @@ interface IntermediateInterface extends ParentInterface
     public function __construct($countryCode);
 }
 
-final class SkipDifferentWithInterface implements IntermediateInterface
+final class SkipInterfaceExtends implements IntermediateInterface
 {
     /**
      * @param string $countryCode
