@@ -82,11 +82,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($node, $classLike)) {
+        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($node)) {
             return null;
         }
 
-        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByTrait($node, $classLike)) {
+        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByTrait($node)) {
             return null;
         }
 
