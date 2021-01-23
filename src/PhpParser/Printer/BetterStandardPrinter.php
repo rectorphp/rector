@@ -82,11 +82,6 @@ final class BetterStandardPrinter extends Standard
     private $commentRemover;
 
     /**
-     * @var AnnotationFormatRestorer
-     */
-    private $annotationFormatRestorer;
-
-    /**
      * @var IndentCharacterDetector
      */
     private $indentCharacterDetector;
@@ -96,7 +91,6 @@ final class BetterStandardPrinter extends Standard
      */
     public function __construct(
         CommentRemover $commentRemover,
-        AnnotationFormatRestorer $annotationFormatRestorer,
         IndentCharacterDetector $indentCharacterDetector,
         DocBlockUpdater $docBlockUpdater,
         array $options = []
@@ -110,7 +104,6 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Expr_Closure->returnType'] = [')', false, ': ', null];
 
         $this->commentRemover = $commentRemover;
-        $this->annotationFormatRestorer = $annotationFormatRestorer;
         $this->indentCharacterDetector = $indentCharacterDetector;
         $this->docBlockUpdater = $docBlockUpdater;
     }
@@ -129,8 +122,6 @@ final class BetterStandardPrinter extends Standard
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
         $contentOriginal = $this->print($origStmts);
-
-        $content = $this->annotationFormatRestorer->restore($contentOriginal, $content);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
