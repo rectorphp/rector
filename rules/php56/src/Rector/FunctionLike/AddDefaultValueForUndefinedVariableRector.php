@@ -122,23 +122,15 @@ CODE_SAMPLE
      */
     private function isArray(string $undefinedVariable, array $stmts): bool
     {
-        foreach ($stmts as $stmt) {
-            $isUndefinedArrayFound = (bool) $this->betterNodeFinder->findFirst($stmt, function (Node $node) use (
-                $undefinedVariable
-            ): bool {
-                if (! $node instanceof ArrayDimFetch) {
-                    return false;
-                }
-
-                return $this->isName($node->var, $undefinedVariable);
-            });
-
-            if ($isUndefinedArrayFound) {
-                return true;
+        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node) use (
+            $undefinedVariable
+        ): bool {
+            if (! $node instanceof ArrayDimFetch) {
+                return false;
             }
-        }
 
-        return false;
+            return $this->isName($node->var, $undefinedVariable);
+        });
     }
 
     /**
