@@ -128,7 +128,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
         try {
             return parent::parse($tokenIterator);
-        } catch (ShouldNotHappenException $e) {
+        } catch (ShouldNotHappenException $shouldNotHappenException) {
             return $this->parseString('/** **/');
         }
     }
