@@ -40,6 +40,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use ReflectionMethod;
 
 /**
  * @rector-doc
@@ -291,12 +292,15 @@ final class NodeRepository
         });
     }
 
-    public function findClassMethodByMethodReflection(MethodReflection $methodReflection): ?ClassMethod
+    /**
+     * @param MethodReflection|ReflectionMethod $methodReflection
+     */
+    public function findClassMethodByMethodReflection(object $methodReflection): ?ClassMethod
     {
         $methodName = $methodReflection->getName();
 
-        $classReflection = $methodReflection->getDeclaringClass();
-        $className = $classReflection->getName();
+        $declaringClass = $methodReflection->getDeclaringClass();
+        $className = $declaringClass->getName();
 
         return $this->findClassMethod($className, $methodName);
     }

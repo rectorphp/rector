@@ -28,7 +28,7 @@ class Fixture
         $values = $this->giveMeMore();
     }
 
-    public function giveMeMore()
+    private function giveMeMore()
     {
         return 'more';
     }
