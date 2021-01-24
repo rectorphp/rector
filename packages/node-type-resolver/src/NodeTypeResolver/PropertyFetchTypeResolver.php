@@ -161,11 +161,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return $varObjectType;
         }
 
-        // property is used
-        if (! isset($tagValueNode)) {
-            return new MixedType();
-        }
-
         $typeNode = $tagValueNode->type;
         if (! $typeNode instanceof TypeNode) {
             return new MixedType();
