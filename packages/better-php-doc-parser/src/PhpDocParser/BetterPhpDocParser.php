@@ -96,7 +96,6 @@ final class BetterPhpDocParser extends PhpDocParser
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
-        Lexer $lexer,
         AnnotationContentResolver $annotationContentResolver,
         PHPUnitDataProviderDocNodeFactory $phpUnitDataProviderDocNodeFactory,
         array $phpDocNodeFactories = []
