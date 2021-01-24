@@ -158,7 +158,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
 
         $tagValueNode = $phpDocInfo->getVarTagValueNode();
         if (! $tagValueNode instanceof VarTagValueNode) {
-            return $varObjectType;
+            return new MixedType();
         }
 
         $typeNode = $tagValueNode->type;
