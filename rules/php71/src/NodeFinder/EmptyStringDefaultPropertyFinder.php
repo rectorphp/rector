@@ -10,7 +10,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class EmptyStringDefaultPropertyFinder
@@ -25,15 +24,9 @@ final class EmptyStringDefaultPropertyFinder
      */
     private $propertyPropertiesByClassName = [];
 
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    public function __construct(BetterNodeFinder $betterNodeFinder, ValueResolver $valueResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->valueResolver = $valueResolver;
     }
 
     /**
@@ -56,7 +49,7 @@ final class EmptyStringDefaultPropertyFinder
         }
 
         /** @var PropertyProperty[] $propertyProperties */
-        $propertyProperties = $this->betterNodeFinder->find($classLike, function (Node $node) {
+        $propertyProperties = $this->betterNodeFinder->find($classLike, function (Node $node): bool {
             if (! $node instanceof PropertyProperty) {
                 return false;
             }
