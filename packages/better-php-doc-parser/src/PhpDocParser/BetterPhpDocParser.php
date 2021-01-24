@@ -77,11 +77,6 @@ final class BetterPhpDocParser extends PhpDocParser
     private $classAnnotationMatcher;
 
     /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
      * @var AnnotationContentResolver
      */
     private $annotationContentResolver;
@@ -114,7 +109,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
-        $this->lexer = $lexer;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->phpUnitDataProviderDocNodeFactory = $phpUnitDataProviderDocNodeFactory;
 

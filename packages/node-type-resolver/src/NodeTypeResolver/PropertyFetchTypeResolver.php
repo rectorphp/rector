@@ -16,7 +16,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -46,11 +45,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     private $nodeNameResolver;
 
     /**
-     * @var BetterPhpDocParser
-     */
-    private $betterPhpDocParser;
-
-    /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -61,7 +55,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     private $traitNodeScopeCollector;
 
     public function __construct(
-        BetterPhpDocParser $betterPhpDocParser,
         NodeNameResolver $nodeNameResolver,
         ParsedNodeCollector $parsedNodeCollector,
         StaticTypeMapper $staticTypeMapper,
@@ -69,7 +62,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     ) {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterPhpDocParser = $betterPhpDocParser;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
