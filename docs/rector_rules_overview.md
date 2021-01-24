@@ -1,4 +1,4 @@
-# 671 Rules Overview
+# 674 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [Carbon](#carbon) (2)
 
-- [CodeQuality](#codequality) (63)
+- [CodeQuality](#codequality) (64)
 
 - [CodeQualityStrict](#codequalitystrict) (4)
 
@@ -50,7 +50,7 @@
 
 - [FileSystemRector](#filesystemrector) (1)
 
-- [Generic](#generic) (34)
+- [Generic](#generic) (35)
 
 - [JMS](#jms) (2)
 
@@ -80,7 +80,7 @@
 
 - [NetteUtilsCodeQuality](#netteutilscodequality) (1)
 
-- [Order](#order) (9)
+- [Order](#order) (7)
 
 - [PHPOffice](#phpoffice) (14)
 
@@ -112,7 +112,7 @@
 
 - [Php73](#php73) (10)
 
-- [Php74](#php74) (15)
+- [Php74](#php74) (16)
 
 - [Php80](#php80) (16)
 
@@ -150,7 +150,7 @@
 
 - [SymfonyPhpConfig](#symfonyphpconfig) (1)
 
-- [Transform](#transform) (12)
+- [Transform](#transform) (14)
 
 - [Twig](#twig) (1)
 
@@ -984,6 +984,29 @@ Change miss-typed case sensitivity name to correct one
 
  final class AnotherClass
  {
+ }
+```
+
+<br>
+
+### FlipTypeControlToUseExclusiveTypeRector
+
+Flip type control to use exclusive type
+
+- class: `Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector`
+
+```diff
+ class SomeClass
+ {
+     public function __construct(array $values)
+     {
+-        /** @var PhpDocInfo|null $phpDocInfo */
+         $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
+-        if ($phpDocInfo === null) {
++        if (! $phpDocInfo instanceof PhpDocInfo) {
+             return;
+         }
+     }
  }
 ```
 
@@ -6782,7 +6805,7 @@ This Rector adds new default arguments in calls of defined methods and class typ
 - class: `Rector\Generic\Rector\ClassMethod\ArgumentAdderRector`
 
 ```php
-use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -6792,7 +6815,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+            'added_arguments' => ValueObjectInliner::inline([
                 new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
             ]),
         ]]);
@@ -6810,7 +6833,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -6820,7 +6843,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+            'added_arguments' => ValueObjectInliner::inline([
                 new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
             ]),
         ]]);
@@ -7086,6 +7109,52 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  {
 -    public $someProperty;
 +    protected $someProperty;
+ }
+```
+
+<br>
+
+### DimFetchAssignToMethodCallRector
+
+Change magic array access add to `$list,` to explicit `$list->$addMethod(...)`
+
+:wrench: **configure it!**
+
+- class: `Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector`
+
+```php
+use Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector;
+use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DimFetchAssignToMethodCallRector::class)
+        ->call('configure', [[
+            DimFetchAssignToMethodCallRector::DIM_FETCH_ASSIGN_TO_METHOD_CALL => ValueObjectInliner::inline([
+                new DimFetchAssignToMethodCall('Nette\Application\Routers\RouteList', 'Nette\Application\Routers\Route', 'addRoute'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+-use Nette\Application\Routers\Route;
+ use Nette\Application\Routers\RouteList;
+
+ class RouterFactory
+ {
+     public static function createRouter()
+     {
+         $routeList = new RouteList();
+-        $routeList[] = new Route('<module>/<presenter>/<action>[/<id>]', 'Homepage:default');
++        $routeList->addRoute('<module>/<presenter>/<action>[/<id>]', 'Homepage:default');
+         return $routeList;
+     }
  }
 ```
 
@@ -10148,82 +10217,6 @@ Orders properties by visibility
 
 <br>
 
-### OrderPropertyByComplexityRector
-
-Order properties by complexity, from the simplest like scalars to the most complex, like union or collections
-
-- class: `Rector\Order\Rector\Class_\OrderPropertyByComplexityRector`
-
-```diff
--class SomeClass
-+class SomeClass implements FoodRecipeInterface
- {
-     /**
-      * @var string
-      */
-     private $name;
-
-     /**
--     * @var Type
-+     * @var int
-      */
--    private $service;
-+    private $price;
-
-     /**
--     * @var int
-+     * @var Type
-      */
--    private $price;
-+    private $service;
- }
-```
-
-<br>
-
-### OrderPublicInterfaceMethodRector
-
-Order public methods required by interface in custom orderer
-
-:wrench: **configure it!**
-
-- class: `Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector`
-
-```php
-use Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(OrderPublicInterfaceMethodRector::class)
-        ->call('configure', [[
-            OrderPublicInterfaceMethodRector::METHOD_ORDER_BY_INTERFACES => [
-                'FoodRecipeInterface' => ['getDescription', 'process'],
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass implements FoodRecipeInterface
- {
--    public function process()
-+    public function getDescription()
-     {
-     }
--
--    public function getDescription()
-+    public function process()
-     {
-     }
- }
-```
-
-<br>
-
 ## PHPOffice
 
 ### AddRemovedDefaultValuesRector
@@ -13047,6 +13040,27 @@ Add null default to properties with PHP 7.4 property nullable type
 
 <br>
 
+### TypedPropertyFromStrictConstructorRector
+
+Add typed properties based only on strict constructor types
+
+- class: `Rector\Php74\Rector\Property\TypedPropertyFromStrictConstructorRector`
+
+```diff
+ class SomeObject
+ {
+-    private $name;
++    private string $name;
+
+     public function __construct(string $name)
+     {
+         $this->name = $name;
+     }
+ }
+```
+
+<br>
+
 ### TypedPropertyRector
 
 Changes property `@var` annotations from annotation to type.
@@ -13181,25 +13195,6 @@ Change simple property init and assign to constructor promotion
 
 <br>
 
-### FalseableCountToZeroRector
-
-Convert false of `pg_num_rows()` to zero
-
-- class: `Rector\Php80\Rector\Assign\FalseableCountToZeroRector`
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $value = pg_num_rows('...');
-+        $value = (int) pg_num_rows('...');
-     }
- }
-```
-
-<br>
-
 ### FinalPrivateToPrivateVisibilityRector
 
 Changes method visibility from final private to only private
@@ -13255,6 +13250,24 @@ Change if null check with nullsafe operator ?-> with full short circuiting
 -
 -        return $someObject2->mayFail2();
 +        return $someObject->mayFail1()?->mayFail2();
+     }
+ }
+```
+
+<br>
+
+### OptionalParametersAfterRequiredRector
+
+Move required parameters after optional ones
+
+- class: `Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector`
+
+```diff
+ class SomeObject
+ {
+-    public function run($optional = 1, $required)
++    public function run($required, $optional = 1)
+     {
      }
  }
 ```
@@ -13420,10 +13433,10 @@ Change docs types to union types, where possible (properties are covered by Type
 ```diff
  class SomeClass
  {
-     /**
-      * @param array|int $number
-      * @return bool|float
-      */
+-    /**
+-     * @param array|int $number
+-     * @return bool|float
+-     */
 -    public function go($number)
 +    public function go(array|int $number): bool|float
      {
@@ -14133,7 +14146,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceStringWithClassConstantRector::class)
         ->call('configure', [[
             ReplaceStringWithClassConstantRector::REPLACE_STRING_WITH_CLASS_CONSTANT => ValueObjectInliner::inline([
-                new ReplaceStringWithClassConstant('SomeClass', 'call', 0, 'Placeholder'),
+                new ReplaceStringWithClassConstant('SomeClass', 'call', 'Placeholder', 0),
             ]),
         ]]);
 };
@@ -16465,6 +16478,54 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+### NewToConstructorInjectionRector
+
+Change defined new type to constructor injection
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\New_\NewToConstructorInjectionRector`
+
+```php
+use Rector\Transform\Rector\New_\NewToConstructorInjectionRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(NewToConstructorInjectionRector::class)
+        ->call('configure', [[
+            NewToConstructorInjectionRector::TYPES_TO_CONSTRUCTOR_INJECTION => ['Validator'],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
++    /**
++     * @var Validator
++     */
++    private $validator;
++
++    public function __construct(Validator $validator)
++    {
++        $this->validator = $validator;
++    }
++
+     public function run()
+     {
+-        $validator = new Validator();
+-        $validator->validate(1000);
++        $this->validator->validate(1000);
+     }
+ }
+```
+
+<br>
+
 ### NewToStaticCallRector
 
 Change new Object to static call
@@ -16809,6 +16870,60 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      {
 -        return FileSystem::write('file', 'content');
 +        return $this->smartFileSystem->dumpFile('file', 'content');
+     }
+ }
+```
+
+<br>
+
+### VariableMethodCallToServiceCallRector
+
+Replace variable method call to a service one
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\MethodCall\VariableMethodCallToServiceCallRector`
+
+```php
+use Rector\Transform\Rector\MethodCall\VariableMethodCallToServiceCallRector;
+use Rector\Transform\ValueObject\VariableMethodCallToServiceCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(VariableMethodCallToServiceCallRector::class)
+        ->call('configure', [[
+            VariableMethodCallToServiceCallRector::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS => ValueObjectInliner::inline([
+                new VariableMethodCallToServiceCall(
+                    'PhpParser\Node',
+                    'getAttribute',
+                    'php_doc_info',
+                    'Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory',
+                    'createFromNodeOrEmpty'
+                ),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
++use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+ use PhpParser\Node;
+
+ class SomeClass
+ {
++    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
++    {
++        $this->phpDocInfoFactory = $phpDocInfoFactory;
++    }
+     public function run(Node $node)
+     {
+-        $phpDocInfo = $node->getAttribute('php_doc_info');
++        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
      }
  }
 ```
