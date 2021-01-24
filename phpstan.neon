@@ -584,7 +584,3 @@ parameters:
 
                 # weird case
                 - packages/better-php-doc-parser/src/PhpDocParser/AnnotationContentResolver.php
-
-        -
-            message: '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\\PropertyFetchTypeResolver\:\:getVendorPropertyFetchType\(\)" is 10, keep it under 9#'
-            path: packages/node-type-resolver/src/NodeTypeResolver/PropertyFetchTypeResolver.php #132
