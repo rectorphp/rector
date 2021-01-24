@@ -151,12 +151,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        // property is used
-        $reflectionProperty = new ReflectionProperty($varObjectType->getClassName(), $propertyName);
-        if (! $reflectionProperty->getDocComment()) {
-            return new MixedType();
-        }
-
         if (! $varObjectType instanceof ThisType) {
             $scope = $propertyFetch->var->getAttribute(AttributeKey::SCOPE);
             if (! $scope instanceof Scope) {
@@ -164,6 +158,12 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             }
 
             return $scope->getType($propertyFetch->var);
+        }
+
+        // property is used
+        $reflectionProperty = new ReflectionProperty($varObjectType->getClassName(), $propertyName);
+        if (! $reflectionProperty->getDocComment()) {
+            return new MixedType();
         }
 
         $phpDocNode = $this->betterPhpDocParser->parseString((string) $propertyFetch->getDocComment());
