@@ -22,6 +22,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Php71\NodeFinder\EmptyStringDefaultPropertyFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -35,7 +36,17 @@ final class AssignArrayToStringRector extends AbstractRector
     /**
      * @var PropertyProperty[]
      */
-    private $emptyStringPropertyNodes = [];
+    private $emptyStringProperties = [];
+
+    /**
+     * @var EmptyStringDefaultPropertyFinder
+     */
+    private $emptyStringDefaultPropertyFinder;
+
+    public function __construct(EmptyStringDefaultPropertyFinder $emptyStringDefaultPropertyFinder)
+    {
+        $this->emptyStringDefaultPropertyFinder = $emptyStringDefaultPropertyFinder;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -66,73 +77,54 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $this->emptyStringProperties = $this->emptyStringDefaultPropertyFinder->find($node);
+
         // only array with no explicit key assign, e.g. "$value[] = 5";
         if (! $node->var instanceof ArrayDimFetch) {
             return null;
         }
+
         if ($node->var->dim !== null) {
             return null;
         }
+
         $arrayDimFetchNode = $node->var;
 
-        /** @var Variable|PropertyFetch|StaticPropertyFetch|Expr $variableNode */
-        $variableNode = $arrayDimFetchNode->var;
+        /** @var Variable|PropertyFetch|StaticPropertyFetch|Expr $variable */
+        $variable = $arrayDimFetchNode->var;
 
         // set default value to property
-        if (($variableNode instanceof PropertyFetch || $variableNode instanceof StaticPropertyFetch) &&
-            $this->processProperty($variableNode)
+        if (($variable instanceof PropertyFetch || $variable instanceof StaticPropertyFetch) &&
+            $this->refactorPropertyFetch($variable)
         ) {
             return $node;
         }
 
         // fallback to variable, property or static property = '' set
-        if ($this->processVariable($node, $variableNode)) {
+        if ($this->processVariable($node, $variable)) {
             return $node;
         }
 
         // there is "$string[] = ...;", which would cause error in PHP 7+
         // fallback - if no array init found, retype to (array)
         $assign = new Assign($arrayDimFetchNode->var, new ArrayCast($arrayDimFetchNode->var));
-
         $this->addNodeAfterNode(clone $node, $node);
 
         return $assign;
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]|null
+     * @param PropertyFetch|StaticPropertyFetch $propertyFetchExpr
      */
-    public function beforeTraverse(array $nodes): ?array
+    private function refactorPropertyFetch(Expr $propertyFetchExpr): bool
     {
-        // collect all known "{anything} = '';" assigns
-        $this->traverseNodesWithCallable($nodes, function (Node $node): void {
-            if (! $node instanceof PropertyProperty) {
-                return;
+        foreach ($this->emptyStringProperties as $emptyStringProperty) {
+            if (! $this->areNamesEqual($emptyStringProperty, $propertyFetchExpr)) {
+                continue;
             }
-            if ($node->default === null) {
-                return;
-            }
-            if (! $this->isEmptyStringNode($node->default)) {
-                return;
-            }
-            $this->emptyStringPropertyNodes[] = $node;
-        });
 
-        return $nodes;
-    }
-
-    /**
-     * @param PropertyFetch|StaticPropertyFetch $propertyNode
-     */
-    private function processProperty(Node $propertyNode): bool
-    {
-        foreach ($this->emptyStringPropertyNodes as $emptyStringPropertyNode) {
-            if ($this->areNamesEqual($emptyStringPropertyNode, $propertyNode)) {
-                $emptyStringPropertyNode->default = new Array_();
-
-                return true;
-            }
+            $emptyStringProperty->default = new Array_();
+            return true;
         }
 
         return false;
@@ -155,8 +147,13 @@ CODE_SAMPLE
             if (! $this->areNodesEqual($node->var, $expr)) {
                 return false;
             }
+
             // we look for variable assign = string
-            return $this->isEmptyStringNode($node->expr);
+            if (! $node->expr instanceof String_) {
+                return false;
+            }
+
+            return $this->isValue($node->expr, '');
         });
 
         if ($variableAssign instanceof Assign) {
@@ -165,14 +162,6 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    private function isEmptyStringNode(Node $node): bool
-    {
-        if (! $node instanceof String_) {
-            return false;
-        }
-        return $node->value === '';
     }
 
     private function shouldSkipVariable(Expr $expr): bool
