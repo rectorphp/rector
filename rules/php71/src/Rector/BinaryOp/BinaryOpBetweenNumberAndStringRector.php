@@ -70,10 +70,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Concat || $node instanceof Coalesce) {
+        if ($node instanceof Concat) {
             return null;
         }
-
+        if ($node instanceof Coalesce) {
+            return null;
+        }
         if ($this->isStringOrStaticNonNumbericString($node->left) && $this->isNumberType($node->right)) {
             $node->left = new LNumber(0);
 
