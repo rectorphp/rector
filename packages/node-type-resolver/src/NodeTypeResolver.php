@@ -460,7 +460,7 @@ final class NodeTypeResolver
     private function resolveByNodeTypeResolvers(Node $node): ?Type
     {
         foreach ($this->nodeTypeResolvers as $nodeClass => $nodeTypeResolver) {
-            if (! is_a($node, $nodeClass)) {
+            if (! is_a($node, $nodeClass, true)) {
                 continue;
             }
 
