@@ -121,14 +121,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->setPhpDocNodeFactories($phpDocNodeFactories);
     }
 
-    public function parseString(string $docBlock): PhpDocNode
-    {
-        $tokens = $this->lexer->tokenize($docBlock);
-        $tokenIterator = new TokenIterator($tokens);
-
-        return parent::parse($tokenIterator);
-    }
-
     /**
      * @return AttributeAwarePhpDocNode|PhpDocNode
      */

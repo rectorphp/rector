@@ -24,7 +24,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use ReflectionProperty;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
@@ -163,19 +162,11 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         }
 
         // property is used
-        $reflectionProperty = new ReflectionProperty($varObjectType->getClassName(), $propertyName);
-        if (! $reflectionProperty->getDocComment()) {
+        if (! isset($tagValueNode)) {
             return new MixedType();
         }
 
-        $phpDocNode = $this->betterPhpDocParser->parseString((string) $reflectionProperty->getDocComment());
-        $varTagValues = $phpDocNode->getVarTagValues();
-
-        if (! isset($varTagValues[0])) {
-            return new MixedType();
-        }
-
-        $typeNode = $varTagValues[0]->type;
+        $typeNode = $tagValueNode->type;
         if (! $typeNode instanceof TypeNode) {
             return new MixedType();
         }
