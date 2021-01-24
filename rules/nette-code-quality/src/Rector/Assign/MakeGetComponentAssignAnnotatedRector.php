@@ -226,6 +226,7 @@ CODE_SAMPLE
     ): Type {
         $componentName = $this->getValue($shortControlString);
         $componentName = ucfirst($componentName);
+
         $methodName = sprintf('createComponent%s', $componentName);
 
         $calledOnType = $scope->getType($expr);

@@ -189,7 +189,7 @@ CODE_SAMPLE
         $classes = [];
         foreach ($ancestorClassNames as $ancestorClassName) {
             $class = $this->nodeRepository->findClass($ancestorClassName);
-            if ($class === null) {
+            if (! $class instanceof Class_) {
                 continue;
             }
 
@@ -224,7 +224,7 @@ CODE_SAMPLE
         $interfaces = [];
         foreach ($refactorableInterfaceClassNames as $refactorableInterfaceClassName) {
             $interface = $this->nodeRepository->findInterface($refactorableInterfaceClassName);
-            if ($interface === null) {
+            if (! $interface instanceof Interface_) {
                 continue;
             }
 
