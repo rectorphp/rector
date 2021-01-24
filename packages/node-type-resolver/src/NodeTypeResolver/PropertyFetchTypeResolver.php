@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -153,6 +154,11 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
 
         $phpDocInfo = $propertyFetch->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo) {
+            return $varObjectType;
+        }
+
+        $tagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (! $tagValueNode instanceof VarTagValueNode) {
             return $varObjectType;
         }
 
