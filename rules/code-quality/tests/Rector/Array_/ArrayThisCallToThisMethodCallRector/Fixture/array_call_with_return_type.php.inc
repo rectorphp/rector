@@ -11,7 +11,7 @@ final class ArrayCallWithReturnType
         ];
     }
 
-    private function currency($value): string
+    public function currency($value): string
     {
         return $value . ' €';
     }

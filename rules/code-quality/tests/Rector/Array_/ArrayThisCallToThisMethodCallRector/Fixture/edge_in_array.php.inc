@@ -11,7 +11,7 @@ final class EdgeInArray
         ];
     }
 
-    private function currency($value)
+    public function currency($value)
     {
         return $value . ' €';
     }
