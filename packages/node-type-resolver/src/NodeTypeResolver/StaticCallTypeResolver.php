@@ -61,17 +61,18 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
         }
 
         $classNames = TypeUtils::getDirectClassNames($classType);
+
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return $classType;
+        }
+
         foreach ($classNames as $className) {
             if (! method_exists($className, $methodName)) {
                 continue;
             }
 
-            $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-            if (! $nodeScope instanceof Scope) {
-                return $classType;
-            }
-
-            return $nodeScope->getType($node);
+            return $scope->getType($node);
         }
 
         return $classType;

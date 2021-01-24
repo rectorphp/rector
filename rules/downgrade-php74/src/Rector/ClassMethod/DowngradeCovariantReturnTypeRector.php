@@ -154,21 +154,23 @@ CODE_SAMPLE
         $methodName = $this->getName($classMethod->name);
 
         // Either Ancestor classes or implemented interfaces
-        $parentClassNames = array_merge(
-            $classReflection->getParentClassesNames(),
-            array_map(
-                function (ClassReflection $interfaceReflection): string {
-                    return $interfaceReflection->getName();
-                },
-                $classReflection->getInterfaces()
-            )
+        $interfaceName = array_map(
+            function (ClassReflection $interfaceReflection): string {
+                return $interfaceReflection->getName();
+            },
+            $classReflection->getInterfaces()
         );
-        foreach ($parentClassNames as $parentClassName) {
-            if (! method_exists($parentClassName, $methodName)) {
+
+        $parentClassesNames = $classReflection->getParentClassesNames();
+
+        $parentClassLikes = array_merge($parentClassesNames, $interfaceName);
+
+        foreach ($parentClassLikes as $parentClassLike) {
+            if (! method_exists($parentClassLike, $methodName)) {
                 continue;
             }
 
-            $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
+            $parentReflectionMethod = new ReflectionMethod($parentClassLike, $methodName);
             $parentReflectionMethodReturnType = $parentReflectionMethod->getReturnType();
             if (! $parentReflectionMethodReturnType instanceof ReflectionNamedType || $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
                 continue;

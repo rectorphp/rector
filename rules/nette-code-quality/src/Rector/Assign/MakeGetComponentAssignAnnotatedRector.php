@@ -225,7 +225,9 @@ CODE_SAMPLE
         Expr $expr
     ): Type {
         $componentName = $this->getValue($shortControlString);
-        $methodName = sprintf('createComponent%s', ucfirst($componentName));
+        $componentName = ucfirst($componentName);
+
+        $methodName = sprintf('createComponent%s', $componentName);
 
         $calledOnType = $scope->getType($expr);
         if (! $calledOnType instanceof TypeWithClassName) {

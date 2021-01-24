@@ -179,18 +179,24 @@ CODE_SAMPLE
         string $paramName
     ): array {
         // 1. All ancestor classes with different signature
-        $refactorableAncestorClassNames = array_filter(
+        $ancestorClassNames = array_filter(
             $classReflection->getParentClassesNames(),
             function (string $ancestorClassName) use ($methodName, $paramName): bool {
                 return $this->hasMethodWithTypedParam($ancestorClassName, $methodName, $paramName);
             }
         );
-        return array_filter(array_map(
-            function (string $ancestorClassName): ?Class_ {
-                return $this->nodeRepository->findClass($ancestorClassName);
-            },
-            $refactorableAncestorClassNames
-        ));
+
+        $classes = [];
+        foreach ($ancestorClassNames as $ancestorClassName) {
+            $class = $this->nodeRepository->findClass($ancestorClassName);
+            if (! $class instanceof Class_) {
+                continue;
+            }
+
+            $classes[] = $class;
+        }
+
+        return $classes;
     }
 
     /**
@@ -214,12 +220,18 @@ CODE_SAMPLE
                 return $this->hasMethodWithTypedParam($interfaceClassName, $methodName, $paramName);
             }
         );
-        return array_filter(array_map(
-            function (string $interfaceClassName): ?Interface_ {
-                return $this->nodeRepository->findInterface($interfaceClassName);
-            },
-            $refactorableInterfaceClassNames
-        ));
+
+        $interfaces = [];
+        foreach ($refactorableInterfaceClassNames as $refactorableInterfaceClassName) {
+            $interface = $this->nodeRepository->findInterface($refactorableInterfaceClassName);
+            if (! $interface instanceof Interface_) {
+                continue;
+            }
+
+            $interfaces[] = $interface;
+        }
+
+        return $interfaces;
     }
 
     private function removeParamTypeFromMethod(

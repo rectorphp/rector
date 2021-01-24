@@ -104,14 +104,16 @@ CODE_SAMPLE
     {
         [$prefix, $table] = explode('.', $string->value);
 
-        $table = array_map(
+        $tableParts = explode('/', $table);
+
+        $pascalCaseTableParts = array_map(
             function (string $token): string {
                 return StaticRectorStrings::underscoreToPascalCase($token);
             },
-            explode('/', $table)
+            $tableParts
         );
 
-        $table = implode('/', $table);
+        $table = implode('/', $pascalCaseTableParts);
 
         $string->value = sprintf('%s.%s', $prefix, $table);
     }
