@@ -8,6 +8,7 @@ use Nette\Utils\Json;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\CodingStyle\NodeAnalyzer\ImplodeAnalyzer;
@@ -70,7 +71,7 @@ final class JsonArrayFactory
         ): ?Expr {
             if ($node instanceof Array_ && count($node->items) === 1) {
                 $onlyItem = $node->items[0];
-                if ($onlyItem === null) {
+                if (! $onlyItem instanceof ArrayItem) {
                     throw new ShouldNotHappenException();
                 }
 
