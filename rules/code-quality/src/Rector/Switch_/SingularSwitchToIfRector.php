@@ -94,9 +94,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $ifNode = new If_(new Identical($node->cond, $onlyCase->cond));
-        $ifNode->stmts = $this->switchManipulator->removeBreakNodes($onlyCase->stmts);
+        $if = new If_(new Identical($node->cond, $onlyCase->cond));
+        $if->stmts = $this->switchManipulator->removeBreakNodes($onlyCase->stmts);
 
-        return $ifNode;
+        return $if;
     }
 }
