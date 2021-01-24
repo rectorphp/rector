@@ -99,7 +99,6 @@ CODE_SAMPLE
         return [Node::class];
     }
 
-
     public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
