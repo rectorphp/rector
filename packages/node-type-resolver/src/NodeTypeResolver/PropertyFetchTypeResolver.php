@@ -166,7 +166,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        $phpDocNode = $this->betterPhpDocParser->parseString((string) $propertyFetch->getDocComment());
+        $phpDocNode = $this->betterPhpDocParser->parseString((string) $reflectionProperty->getDocComment());
         $varTagValues = $phpDocNode->getVarTagValues();
 
         if (! isset($varTagValues[0])) {
