@@ -142,8 +142,10 @@ CODE_SAMPLE
      */
     private function getInterfaceImplementers(string $interfaceName): array
     {
+        $declaredClasses = get_declared_classes();
+
         return array_filter(
-            get_declared_classes(),
+            $declaredClasses,
             function (string $className) use ($interfaceName): bool {
                 /** @var string[] $classImplements */
                 $classImplements = (array) class_implements($className);

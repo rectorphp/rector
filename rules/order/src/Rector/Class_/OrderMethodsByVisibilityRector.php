@@ -113,6 +113,7 @@ CODE_SAMPLE
      */
     private function applyPreferredPosition(array $classMethods): array
     {
-        return array_unique(array_merge(self::PREFERRED_ORDER, $classMethods));
+        $mergedMethods = array_merge(self::PREFERRED_ORDER, $classMethods);
+        return array_unique($mergedMethods);
     }
 }

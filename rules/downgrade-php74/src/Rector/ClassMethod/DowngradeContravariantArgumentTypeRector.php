@@ -129,22 +129,23 @@ CODE_SAMPLE
         $methodName = $this->getName($functionLike);
 
         // Either Ancestor classes or implemented interfaces
-        $parentClassNames = array_merge(
-            $classReflection->getParentClassesNames(),
-            array_map(
-                function (ClassReflection $interfaceReflection): string {
-                    return $interfaceReflection->getName();
-                },
-                $classReflection->getInterfaces()
-            )
+        $interfaceNames = array_map(
+            function (ClassReflection $interfaceReflection): string {
+                return $interfaceReflection->getName();
+            },
+            $classReflection->getInterfaces()
         );
-        foreach ($parentClassNames as $parentClassName) {
-            if (! method_exists($parentClassName, $methodName)) {
+
+        $parentClassesNames = $classReflection->getParentClassesNames();
+        $parentClassLikes = array_merge($parentClassesNames, $interfaceNames);
+
+        foreach ($parentClassLikes as $parentClassLike) {
+            if (! method_exists($parentClassLike, $methodName)) {
                 continue;
             }
 
             // Find the param we're looking for
-            $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
+            $parentReflectionMethod = new ReflectionMethod($parentClassLike, $methodName);
             $differentAncestorParamTypeName = $this->getDifferentParamTypeFromReflectionMethod(
                 $parentReflectionMethod,
                 $paramName,

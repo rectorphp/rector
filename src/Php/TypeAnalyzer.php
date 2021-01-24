@@ -57,13 +57,15 @@ final class TypeAnalyzer
     {
         $types = explode('|', $type);
 
+        $reservedTypes = array_merge($this->phpSupportedTypes, self::EXTRA_TYPES);
+
         foreach ($types as $singleType) {
             $singleType = strtolower($singleType);
 
             // remove [] from arrays
             $singleType = Strings::replace($singleType, self::SQUARE_BRACKET_REGEX, '');
 
-            if (in_array($singleType, array_merge($this->phpSupportedTypes, self::EXTRA_TYPES), true)) {
+            if (in_array($singleType, $reservedTypes, true)) {
                 return true;
             }
         }
@@ -73,23 +75,24 @@ final class TypeAnalyzer
 
     public function normalizeType(string $type): string
     {
-        if (strtolower($type) === 'boolean') {
+        $loweredType = strtolower($type);
+        if ($loweredType === 'boolean') {
             return 'bool';
         }
 
-        if (in_array(strtolower($type), ['double', 'real'], true)) {
+        if (in_array($loweredType, ['double', 'real'], true)) {
             return 'float';
         }
 
-        if (strtolower($type) === 'integer') {
+        if ($loweredType === 'integer') {
             return 'int';
         }
 
-        if (strtolower($type) === 'callback') {
+        if ($loweredType === 'callback') {
             return 'callable';
         }
 
-        if (Strings::match(strtolower($type), self::ARRAY_TYPE_REGEX)) {
+        if (Strings::match($loweredType, self::ARRAY_TYPE_REGEX)) {
             return 'array';
         }
 

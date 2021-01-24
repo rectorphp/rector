@@ -104,7 +104,8 @@ final class ClassUnusedPrivateClassMethodResolver
 
         $interfaceMethods = [];
         foreach ($interfaces as $interface) {
-            $interfaceMethods = array_merge($interfaceMethods, get_class_methods($interface));
+            $currentInterfaceMethods = get_class_methods($interface);
+            $interfaceMethods = array_merge($interfaceMethods, $currentInterfaceMethods);
         }
 
         return array_diff($unusedMethods, $interfaceMethods);

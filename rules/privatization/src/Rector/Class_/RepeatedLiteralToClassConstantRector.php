@@ -253,11 +253,13 @@ CODE_SAMPLE
         }
 
         // convert camelcase parts to underscore
+        $parts = explode(self::UNDERSCORE, $value);
+
         $parts = array_map(
-            function (string $v): string {
-                return StaticRectorStrings::camelCaseToUnderscore($v);
+            function (string $value): string {
+                return StaticRectorStrings::camelCaseToUnderscore($value);
             },
-            explode(self::UNDERSCORE, $value)
+            $parts
         );
 
         // apply "CONST" prefix if constant beginning with number

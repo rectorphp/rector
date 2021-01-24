@@ -175,11 +175,14 @@ CODE_SAMPLE
             return;
         }
 
-        throw new NotImplementedException(sprintf(
+        $availableAnnotations = array_keys(self::ANNOTATION_TO_TAG_CLASS);
+        $errorMessage = sprintf(
             'Annotation class "%s" is not implemented yet. Use one of "%s" or add custom tag for it to Rector.',
             $annotationClass,
-            implode('", "', array_keys(self::ANNOTATION_TO_TAG_CLASS))
-        ));
+            implode('", "', $availableAnnotations)
+        );
+
+        throw new NotImplementedException($errorMessage);
     }
 
     private function isParameterInject(PhpDocTagValueNode $phpDocTagValueNode): bool
