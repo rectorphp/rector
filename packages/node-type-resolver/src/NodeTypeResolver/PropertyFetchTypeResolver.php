@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
@@ -156,7 +157,12 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        $phpDocNode = $this->betterPhpDocParser->parseString((string) $reflectionProperty->getDocComment());
+        if (! $propertyFetch->var instanceof ThisType) {
+            $scope = $propertyFetch->var->getAttribute(AttributeKey::SCOPE);
+            return $scope->getType($propertyFetch->var);
+        }
+
+        $phpDocNode = $this->betterPhpDocParser->parseString((string) $propertyFetch->getDocComment());
         $varTagValues = $phpDocNode->getVarTagValues();
 
         if (! isset($varTagValues[0])) {
