@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
-use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
@@ -42,7 +41,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // nette\utils and Strings::replace()
     $services->set(ArgumentAdderRector::class)->call('configure', [[
-        ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+        ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
             new ArgumentAdder('Nette\Utils\Strings', 'replace', 2, 'replacement', ''),
         ]),
     ]]);

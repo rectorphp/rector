@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
 
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
@@ -83,7 +82,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#workflow
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentAdder(
                     'Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface',
                     'setMarking',

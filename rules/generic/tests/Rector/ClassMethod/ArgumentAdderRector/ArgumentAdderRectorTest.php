@@ -35,7 +35,7 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
     {
         return [
             ArgumentAdderRector::class => [
-                ArgumentAddingScope::ADDED_ARGUMENTS => [
+                ArgumentAdderRector::ADDED_ARGUMENTS => [
                     // covers https://github.com/rectorphp/rector/issues/4267
                     new ArgumentAdder(
                         SomeContainerBuilder::class,

@@ -7,14 +7,13 @@ namespace Rector\CodingStyle\Rector\Switch_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Renaming\NodeManipulator\SwitchManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,6 +22,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class BinarySwitchToIfElseRector extends AbstractRector
 {
+    /**
+     * @var SwitchManipulator
+     */
+    private $switchManipulator;
+
+    public function __construct(SwitchManipulator $switchManipulator)
+    {
+        $this->switchManipulator = $switchManipulator;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes switch with 2 options to if-else', [
@@ -80,13 +89,13 @@ CODE_SAMPLE
             $else = new BooleanOr(new Equal($node->cond, $firstCase->cond), new Equal($node->cond, $secondCase->cond));
 
             $ifNode = new If_($else);
-            $ifNode->stmts = $this->removeBreakNodes($secondCase->stmts);
+            $ifNode->stmts = $this->switchManipulator->removeBreakNodes($secondCase->stmts);
 
             return $ifNode;
         }
 
         $ifNode = new If_(new Equal($node->cond, $firstCase->cond));
-        $ifNode->stmts = $this->removeBreakNodes($firstCase->stmts);
+        $ifNode->stmts = $this->switchManipulator->removeBreakNodes($firstCase->stmts);
 
         // just one condition
         if (! $secondCase instanceof Case_) {
@@ -96,27 +105,12 @@ CODE_SAMPLE
         if ($secondCase->cond !== null) {
             // has condition
             $equal = new Equal($node->cond, $secondCase->cond);
-            $ifNode->elseifs[] = new ElseIf_($equal, $this->removeBreakNodes($secondCase->stmts));
+            $ifNode->elseifs[] = new ElseIf_($equal, $this->switchManipulator->removeBreakNodes($secondCase->stmts));
         } else {
             // defaults
-            $ifNode->else = new Else_($this->removeBreakNodes($secondCase->stmts));
+            $ifNode->else = new Else_($this->switchManipulator->removeBreakNodes($secondCase->stmts));
         }
 
         return $ifNode;
-    }
-
-    /**
-     * @param Stmt[] $stmts
-     * @return Stmt[]
-     */
-    private function removeBreakNodes(array $stmts): array
-    {
-        foreach ($stmts as $key => $node) {
-            if ($node instanceof Break_) {
-                unset($stmts[$key]);
-            }
-        }
-
-        return $stmts;
     }
 }

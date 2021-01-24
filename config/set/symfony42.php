@@ -66,7 +66,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 // https://github.com/symfony/symfony/commit/fa2063efe43109aea093d6fbfc12d675dba82146
                 // https://github.com/symfony/symfony/commit/e3aa90f852f69040be19da3d8729cdf02d238ec7
                 new ArgumentAdder(
