@@ -299,8 +299,8 @@ final class NodeRepository
     {
         $methodName = $methodReflection->getName();
 
-        $classReflection = $methodReflection->getDeclaringClass();
-        $className = $classReflection->getName();
+        $declaringClass = $methodReflection->getDeclaringClass();
+        $className = $declaringClass->getName();
 
         return $this->findClassMethod($className, $methodName);
     }
