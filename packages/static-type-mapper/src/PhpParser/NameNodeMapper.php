@@ -50,7 +50,11 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
             return new FullyQualifiedObjectType($name);
         }
 
-        $className = (string) $node->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return new MixedType();
+        }
+
         if ($name === 'static') {
             return new StaticType($className);
         }
