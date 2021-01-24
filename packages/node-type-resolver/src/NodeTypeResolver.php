@@ -464,7 +464,7 @@ final class NodeTypeResolver
                 continue;
             }
 
-            $nodeTypeResolver->resolve($node);
+            return $nodeTypeResolver->resolve($node);
         }
 
         return null;
