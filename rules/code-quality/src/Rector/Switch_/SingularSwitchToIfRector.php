@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Renaming\NodeManipulator\SwitchManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,11 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SingularSwitchToIfRector extends AbstractRector
 {
     /**
-     * @var \Rector\Renaming\NodeManipulator\SwitchManipulator
+     * @var SwitchManipulator
      */
     private $switchManipulator;
 
-    public function __construct(\Rector\Renaming\NodeManipulator\SwitchManipulator $switchManipulator)
+    public function __construct(SwitchManipulator $switchManipulator)
     {
         $this->switchManipulator = $switchManipulator;
     }

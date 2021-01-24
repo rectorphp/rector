@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Switch_\SingularSwitchToIfRector\Fixture;
 
-class SomeObject
+class SomeClass
 {
     public function run($value)
     {
@@ -22,7 +22,7 @@ class SomeObject
 
 namespace Rector\CodeQuality\Tests\Rector\Switch_\SingularSwitchToIfRector\Fixture;
 
-class SomeObject
+class SomeClass
 {
     public function run($value)
     {
