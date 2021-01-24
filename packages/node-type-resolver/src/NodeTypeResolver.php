@@ -464,7 +464,11 @@ final class NodeTypeResolver
                 continue;
             }
 
-            return $nodeTypeResolver->resolve($node);
+            try {
+                $nodeTypeResolver->resolve($node);
+            }  catch (\Rector\Core\Exception\ShouldNotHappenException $e) {
+                continue;
+            }
         }
 
         return null;
