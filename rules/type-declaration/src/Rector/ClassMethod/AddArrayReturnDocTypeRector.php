@@ -21,6 +21,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
 use Rector\TypeDeclaration\OverrideGuard\ClassMethodReturnTypeOverrideGuard;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -60,16 +61,23 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
      */
     private $phpDocTypeChanger;
 
+    /**
+     * @var NormalizeTypeToRespectArrayScalarType
+     */
+    private $normalizeTypeToRespectArrayScalarType;
+
     public function __construct(
         ReturnTypeInferer $returnTypeInferer,
         ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
         AdvancedArrayAnalyzer $advancedArrayAnalyzer,
-        PhpDocTypeChanger $phpDocTypeChanger
+        PhpDocTypeChanger $phpDocTypeChanger,
+        NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->advancedArrayAnalyzer = $advancedArrayAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->normalizeTypeToRespectArrayScalarType = $normalizeTypeToRespectArrayScalarType;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -129,30 +137,33 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-
         if ($this->shouldSkip($node, $phpDocInfo)) {
             return null;
         }
 
-        $inferedType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
+        $inferredReturnType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
             $node,
             [ReturnTypeDeclarationReturnTypeInferer::class]
+        );
+
+        $inferredReturnType = $this->normalizeTypeToRespectArrayScalarType->normalizeToArray(
+            $inferredReturnType,
+            $node->returnType
         );
 
         $currentReturnType = $phpDocInfo->getReturnType();
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
             $currentReturnType,
-            $inferedType
+            $inferredReturnType
         )) {
             return null;
         }
 
-        if ($this->shouldSkipType($inferedType, $node, $phpDocInfo)) {
+        if ($this->shouldSkipType($inferredReturnType, $node, $phpDocInfo)) {
             return null;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferedType);
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);
 
         return $node;
     }
@@ -202,9 +213,11 @@ CODE_SAMPLE
         if ($this->advancedArrayAnalyzer->isMoreSpecificArrayTypeOverride($newType, $classMethod, $phpDocInfo)) {
             return true;
         }
+
         if (! $newType instanceof ConstantArrayType) {
             return false;
         }
+
         return count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
     }
 

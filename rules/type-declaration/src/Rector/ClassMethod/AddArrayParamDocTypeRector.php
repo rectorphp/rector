@@ -101,8 +101,6 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        $hasChanged = false;
-
         foreach ($node->getParams() as $param) {
             if ($this->shouldSkipParam($param)) {
                 continue;
@@ -116,10 +114,9 @@ CODE_SAMPLE
             $paramName = $this->getName($param);
 
             $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
-            $hasChanged = true;
         }
 
-        if ($hasChanged) {
+        if ($phpDocInfo->hasChanged()) {
             return $node;
         }
 
