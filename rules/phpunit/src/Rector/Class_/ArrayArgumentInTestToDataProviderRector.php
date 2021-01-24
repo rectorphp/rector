@@ -169,7 +169,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ArrayArgumentToDataProvider[] $arrayArgumentsToDataProviders
+     * @param array<int, ArrayArgumentToDataProvider[]> $arrayArgumentsToDataProviders
      */
     public function configure(array $arrayArgumentsToDataProviders): void
     {

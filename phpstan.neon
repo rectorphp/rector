@@ -584,7 +584,3 @@ parameters:
 
                 # weird case
                 - packages/better-php-doc-parser/src/PhpDocParser/AnnotationContentResolver.php
-
-        -
-            message: '#Property Rector\\PHPUnit\\Rector\\Class_\\ArrayArgumentInTestToDataProviderRector\:\:\$arrayArgumentsToDataProviders \(array<Rector\\PHPUnit\\ValueObject\\ArrayArgumentToDataProvider\>\) does not accept array\|Rector\\PHPUnit\\ValueObject\\ArrayArgumentToDataProvider#'
-            path: rules/phpunit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php

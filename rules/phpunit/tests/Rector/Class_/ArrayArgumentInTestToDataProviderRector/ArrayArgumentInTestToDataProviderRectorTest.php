@@ -26,7 +26,7 @@ final class ArrayArgumentInTestToDataProviderRectorTest extends AbstractRectorTe
     }
 
     /**
-     * @return array<string, mixed[]>
+     * @return array<string, ArrayArgumentToDataProvider[]>
      */
     protected function getRectorsWithConfiguration(): array
     {
