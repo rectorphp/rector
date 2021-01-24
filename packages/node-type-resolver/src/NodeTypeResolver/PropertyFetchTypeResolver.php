@@ -157,7 +157,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        if (! $propertyFetch->var instanceof ThisType) {
+        if (! $varObjectType instanceof ThisType) {
             $scope = $propertyFetch->var->getAttribute(AttributeKey::SCOPE);
             if (! $scope instanceof Scope) {
                 return new MixedType();
