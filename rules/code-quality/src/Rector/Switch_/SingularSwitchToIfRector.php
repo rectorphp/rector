@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Switch_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Equal;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -71,11 +72,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Stmt\Switch_::class];
+        return [Switch_::class];
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\Switch_ $node
+     * @param Switch_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -85,9 +86,16 @@ CODE_SAMPLE
 
         $onlyCase = $node->cases[0];
 
-        $ifNode = new If_(new Equal($node->cond, $onlyCase->cond));
+        // only default → basically unwrap
+        if ($onlyCase->cond === null) {
+            $this->addNodesAfterNode($onlyCase->stmts, $node);
+            $this->removeNode($node);
+            return null;
+        }
+
+        $ifNode = new If_(new Identical($node->cond, $onlyCase->cond));
         $ifNode->stmts = $this->switchManipulator->removeBreakNodes($onlyCase->stmts);
 
-        return $node;
+        return $ifNode;
     }
 }

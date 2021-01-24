@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Core\ValueObject\Visibility;
-use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
@@ -98,7 +97,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAddingScope::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 // https://github.com/laravel/framework/commit/6c1e014943a508afb2c10869c3175f7783a004e1
                 new ArgumentAdder('Illuminate\Database\Capsule\Manager', 'table', 1, 'as', 'null'),
                 new ArgumentAdder('Illuminate\Database\Connection', 'table', 1, 'as', 'null'),

@@ -30,11 +30,6 @@ final class ArgumentAddingScope
     public const SCOPE_CLASS_METHOD = 'class_method';
 
     /**
-     * @var string
-     */
-    public const ADDED_ARGUMENTS = 'added_arguments';
-
-    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;

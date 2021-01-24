@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Tests\Rector\Switch_\SingularSwitchToIfRector;
 
+use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SingularSwitchToIfRectorTest extends AbstractRectorTestCase
@@ -23,6 +24,6 @@ final class SingularSwitchToIfRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return \Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector::class;
+        return SingularSwitchToIfRector::class;
     }
 }

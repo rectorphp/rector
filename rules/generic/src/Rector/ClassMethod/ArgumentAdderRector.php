@@ -32,6 +32,11 @@ use Webmozart\Assert\Assert;
 final class ArgumentAdderRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @var string
+     */
+    public const ADDED_ARGUMENTS = 'added_arguments';
+
+    /**
      * @var ArgumentAdder[]
      */
     private $addedArguments = [];
@@ -49,7 +54,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     public function getRuleDefinition(): RuleDefinition
     {
         $exampleConfiguration = [
-            ArgumentAddingScope::ADDED_ARGUMENTS => [
+            self::ADDED_ARGUMENTS => [
                 new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType'),
             ],
         ];
@@ -124,11 +129,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param mixed[] $configuration
+     * @param array<string, ArgumentAdder[]> $configuration
      */
     public function configure(array $configuration): void
     {
-        $addedArguments = $configuration[ArgumentAddingScope::ADDED_ARGUMENTS] ?? [];
+        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? [];
         Assert::allIsInstanceOf($addedArguments, ArgumentAdder::class);
         $this->addedArguments = $addedArguments;
     }
