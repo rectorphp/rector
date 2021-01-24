@@ -7,6 +7,7 @@ namespace Rector\Php71\Rector\BinaryOp;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
@@ -69,7 +70,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Concat) {
+        if ($node instanceof Concat || $node instanceof Coalesce) {
             return null;
         }
 
