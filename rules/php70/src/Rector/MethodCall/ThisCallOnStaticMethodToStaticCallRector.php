@@ -129,10 +129,8 @@ CODE_SAMPLE
         }
 
         $methodReflection = $this->methodReflectionProvider->provideByMethodCall($methodCall);
-        if ($methodReflection instanceof ReflectionMethod) {
-            if ($methodReflection->isPrivate()) {
-                return 'self';
-            }
+        if ($methodReflection instanceof ReflectionMethod && $methodReflection->isPrivate()) {
+            return 'self';
         }
 
         return 'static';

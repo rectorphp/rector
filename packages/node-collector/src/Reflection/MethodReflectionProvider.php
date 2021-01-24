@@ -78,6 +78,10 @@ final class MethodReflectionProvider
         }
 
         $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        if ($methodName === null) {
+            return null;
+        }
+
         if (! method_exists($className, $methodName)) {
             return null;
         }

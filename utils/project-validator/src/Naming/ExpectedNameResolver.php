@@ -20,7 +20,9 @@ final class ExpectedNameResolver
 
     public function resolve(string $path, string $relativePath): ?string
     {
-        $relativePath = str_replace('/', '\\', dirname($relativePath, PATHINFO_DIRNAME));
+        $directory = dirname($relativePath, PATHINFO_DIRNAME);
+        $relativePath = str_replace('/', '\\', $directory);
+
         foreach ($this->psr4autoloadPaths as $prefix => $psr4autoloadPath) {
             if (! is_string($psr4autoloadPath)) {
                 continue;
