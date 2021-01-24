@@ -23,18 +23,9 @@ jobs:
 
                             vendor/bin/phpunit-merger coverage build/logs clover.xml
 
-                            # backup old composer files
-                            cp composer.json composer.json.backup
-                            cp composer.lock composer.lock.backup
-
                             # Coveralls.io
                             composer require --dev php-coveralls/php-coveralls:^2.4
                             vendor/bin/php-coveralls --coverage_clover=clover.xml -v
-
-                            # clean up
-                            rm -rf build
-                            mv composer.json.backup composer.json
-                            mv composer.lock.backup composer.lock
                         branch: 'master'
 
         name: ${{ matrix.actions.name }}
