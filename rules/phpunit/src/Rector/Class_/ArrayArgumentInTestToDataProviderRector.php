@@ -168,6 +168,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param ArrayArgumentToDataProvider[] $arrayArgumentsToDataProviders
+     */
     public function configure(array $arrayArgumentsToDataProviders): void
     {
         $arrayArgumentsToDataProviders = $arrayArgumentsToDataProviders[self::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS] ?? [];
