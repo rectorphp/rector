@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ThisType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
@@ -151,7 +151,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        if (! $varObjectType instanceof ThisType) {
+        if ($varObjectType instanceof ObjectType) {
             return $varObjectType;
         }
 
