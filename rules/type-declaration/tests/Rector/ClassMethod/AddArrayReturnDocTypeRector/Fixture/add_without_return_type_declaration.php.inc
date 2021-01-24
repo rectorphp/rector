@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-class AddWithoutReturnTypeDeclaration
+final class AddWithoutReturnTypeDeclaration
 {
     /**
      * @var int[]
@@ -21,7 +21,7 @@ class AddWithoutReturnTypeDeclaration
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-class AddWithoutReturnTypeDeclaration
+final class AddWithoutReturnTypeDeclaration
 {
     /**
      * @var int[]

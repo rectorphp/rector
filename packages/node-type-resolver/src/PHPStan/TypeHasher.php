@@ -31,7 +31,7 @@ final class TypeHasher
     public function createTypeHash(Type $type): string
     {
         if ($type instanceof MixedType) {
-            return serialize($type);
+            return serialize($type) . $type->isExplicitMixed();
         }
 
         if ($type instanceof ArrayType) {
