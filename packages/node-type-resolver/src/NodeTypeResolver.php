@@ -466,7 +466,7 @@ final class NodeTypeResolver
 
             try {
                 $nodeTypeResolver->resolve($node);
-            }  catch (\Rector\Core\Exception\ShouldNotHappenException $e) {
+            } catch (ShouldNotHappenException $e) {
                 continue;
             }
         }
