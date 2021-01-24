@@ -464,11 +464,11 @@ final class NodeTypeResolver
                 continue;
             }
 
-            try {
-                $nodeTypeResolver->resolve($node);
-            } catch (ShouldNotHappenException $e) {
+            if (! method_exists($nodeTypeResolver, 'resolve')) {
                 continue;
             }
+
+            $nodeTypeResolver->resolve($node);
         }
 
         return null;
