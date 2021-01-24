@@ -126,7 +126,11 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokens = $this->lexer->tokenize($docBlock);
         $tokenIterator = new TokenIterator($tokens);
 
-        return parent::parse($tokenIterator);
+        try {
+            return parent::parse($tokenIterator);
+        } catch (ShouldNotHappenException $e) {
+            return $this->parseString('/** **/');
+        }
     }
 
     /**

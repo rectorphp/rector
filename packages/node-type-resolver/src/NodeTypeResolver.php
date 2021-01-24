@@ -464,10 +464,6 @@ final class NodeTypeResolver
                 continue;
             }
 
-            if (! method_exists($nodeTypeResolver, 'resolve')) {
-                continue;
-            }
-
             $nodeTypeResolver->resolve($node);
         }
 
