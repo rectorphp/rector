@@ -45,6 +45,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\MethodName;
@@ -118,13 +119,19 @@ final class NodeFactory
      */
     private $phpDocTypeChanger;
 
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
     public function __construct(
         BuilderFactory $builderFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpVersionProvider $phpVersionProvider,
         StaticTypeMapper $staticTypeMapper,
         NodeNameResolver $nodeNameResolver,
-        PhpDocTypeChanger $phpDocTypeChanger
+        PhpDocTypeChanger $phpDocTypeChanger,
+        CurrentNodeProvider $currentNodeProvider
     ) {
         $this->builderFactory = $builderFactory;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -132,6 +139,7 @@ final class NodeFactory
         $this->phpVersionProvider = $phpVersionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     /**
@@ -534,10 +542,21 @@ final class NodeFactory
 
     private function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
     {
-        $classConstFetchNode = $this->builderFactory->classConstFetch($className, $constantName);
-        $classConstFetchNode->class->setAttribute(AttributeKey::RESOLVED_NAME, (string) $className);
+        $classConstFetch = $this->builderFactory->classConstFetch($className, $constantName);
 
-        return $classConstFetchNode;
+        $classNameString = $className->toString();
+        if (in_array($classNameString, ['self', 'static'], true)) {
+            $currentNode = $this->currentNodeProvider->getNode();
+            if ($currentNode !== null) {
+                $className = $currentNode->getAttribute(AttributeKey::CLASS_NAME);
+                $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $className);
+                $classConstFetch->class->setAttribute(AttributeKey::CLASS_NAME, $className);
+            }
+        } else {
+            $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $classNameString);
+        }
+
+        return $classConstFetch;
     }
 
     /**

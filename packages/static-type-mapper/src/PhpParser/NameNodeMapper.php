@@ -45,24 +45,45 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
     public function mapToPHPStan(Node $node): Type
     {
         $name = $node->toString();
-
         if ($this->isExistingClass($name)) {
             return new FullyQualifiedObjectType($name);
         }
 
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        if (in_array($name, ['static', 'self'], true)) {
+            return $this->createClassReferenceType($node, $name);
+        }
+
+        return $this->createScalarType($name);
+    }
+
+    private function isExistingClass(string $name): bool
+    {
+        if (ClassExistenceStaticHelper::doesClassLikeExist($name)) {
+            return true;
+        }
+
+        // to be existing class names
+        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
+
+        return in_array($name, $oldToNewClasses, true);
+    }
+
+    private function createClassReferenceType(Name $name, string $reference): Type
+    {
+        $className = $name->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return new MixedType();
         }
 
-        if ($name === 'static') {
+        if ($reference === 'static') {
             return new StaticType($className);
         }
 
-        if ($name === 'self') {
-            return new ThisType($className);
-        }
+        return new ThisType($className);
+    }
 
+    private function createScalarType(string $name): Type
+    {
         if ($name === 'array') {
             return new ArrayType(new MixedType(), new MixedType());
         }
@@ -88,17 +109,5 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         }
 
         return new MixedType();
-    }
-
-    private function isExistingClass(string $name): bool
-    {
-        if (ClassExistenceStaticHelper::doesClassLikeExist($name)) {
-            return true;
-        }
-
-        // to be existing class names
-        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
-
-        return in_array($name, $oldToNewClasses, true);
     }
 }
