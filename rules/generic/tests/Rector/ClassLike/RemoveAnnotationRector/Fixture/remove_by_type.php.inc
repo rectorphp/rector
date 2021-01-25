@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\JMS\Tests\Rector\ClassMethod\RemoveJmsInjectParamsAnnotationRector\Fixture;
+namespace Rector\Generic\Tests\Rector\ClassLike\RemoveAnnotationRector\Fixture;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-class SomeClass
+final class RemoveByType
 {
     /**
      * @DI\InjectParams({
@@ -12,7 +12,8 @@ class SomeClass
      *     "ipService" = @DI\Inject("app.util.service.ip")
      * })
      */
-    public function __construct() {
+    public function __construct()
+    {
     }
 }
 
@@ -20,13 +21,14 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\JMS\Tests\Rector\ClassMethod\RemoveJmsInjectParamsAnnotationRector\Fixture;
+namespace Rector\Generic\Tests\Rector\ClassLike\RemoveAnnotationRector\Fixture;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-class SomeClass
+final class RemoveByType
 {
-    public function __construct() {
+    public function __construct()
+    {
     }
 }
 
