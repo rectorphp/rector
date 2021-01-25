@@ -130,9 +130,11 @@ services:
         class: Symplify\PHPStanRules\Rules\ClassNameRespectsParentSuffixRule
         tags: [phpstan.rules.rule]
         arguments:
+            # @todo fix so the child clases respect this suffix
             parentClasses:
-                - Rector
-                - Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface
+                - Rector\Core\Rector\AbstractRector
+                - Rector\PostRector\Rector\AbstractPostRector
+                - Rector\Composer\Contract\Rector\ComposerRectorInterface
 
     -
         class: Symplify\PHPStanRules\Rules\PreferredClassRule
