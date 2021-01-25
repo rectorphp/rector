@@ -14,7 +14,7 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-final class NodeRemovingRector extends AbstractPostRector
+final class NodeRemovingPostRector extends AbstractPostRector
 {
     /**
      * @var NodesToRemoveCollector
