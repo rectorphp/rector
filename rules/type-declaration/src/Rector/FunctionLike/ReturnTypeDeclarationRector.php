@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -190,9 +191,13 @@ CODE_SAMPLE
         }
 
         $parent = $functionLike->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Class_ && $parent->extends instanceof Name) {
+        if ($parent instanceof Class_ && $parent->extends instanceof FullyQualified) {
             $parentName = $parent->extends->toString();
             $reflectionClass = new ReflectionClass($parentName);
+            if ($reflectionClass->isInternal()) {
+                return true;
+            }
+
             $fileName = $reflectionClass->getFileName();
             return Strings::contains((string) $fileName, 'vendor');
         }
