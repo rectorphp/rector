@@ -94,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (in_array($this->getName($node), ObjectMagicMethods::METHOD_NAMES, true)) {
+        if ($this->isNames($node, ObjectMagicMethods::METHOD_NAMES)) {
             return null;
         }
 
