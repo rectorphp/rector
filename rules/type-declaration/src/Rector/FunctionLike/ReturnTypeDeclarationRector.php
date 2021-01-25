@@ -198,19 +198,28 @@ CODE_SAMPLE
             return true;
         }
 
-        $parent = $functionLike->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Class_ && $parent->extends instanceof FullyQualified) {
-            $parentName = $parent->extends->toString();
-            $reflectionClass = new ReflectionClass($parentName);
-            if ($reflectionClass->isInternal()) {
-                return true;
-            }
+        return $this->isParentInVendor($functionLike);
+    }
 
-            $fileName = $reflectionClass->getFileName();
-            return Strings::contains((string) $fileName, 'vendor');
+    private function isParentInVendor(ClassMethod $classMethod): bool
+    {
+        $parent = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Class_) {
+            return false;
         }
 
-        return false;
+        if (! $parent->extends instanceof FullyQualified) {
+            return false;
+        }
+
+        $parentName = $parent->extends->toString();
+        $reflectionClass = new ReflectionClass($parentName);
+        if ($reflectionClass->isInternal()) {
+            return true;
+        }
+
+        $fileName = $reflectionClass->getFileName();
+        return Strings::contains((string) $fileName, 'vendor');
     }
 
     /**
