@@ -93,10 +93,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (is_a($annotationToRemove, PhpDocTagValueNode::class, true)) {
-                if ($phpDocInfo->hasByType($annotationToRemove)) {
-                    $phpDocInfo->removeByType($annotationToRemove);
-                }
+            if (is_a($annotationToRemove, PhpDocTagValueNode::class, true) && $phpDocInfo->hasByType(
+                $annotationToRemove
+            )) {
+                $phpDocInfo->removeByType($annotationToRemove);
             }
         }
 
